@@ -1,11 +1,6 @@
 name: "Build and deploy aap-innsyn to labs"
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "main"
-    paths-ignore:
-      - '**.md'
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}-labs"
 jobs:

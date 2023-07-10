@@ -46,9 +46,6 @@ jobs:
       - name: Print env
         run: cat .env.local
 
-      - name: check diff on translations
-        run: yarn intl:diff
-
       - name: Bygg klient(yarn run build)
         run: yarn run build --profile --debug
 
