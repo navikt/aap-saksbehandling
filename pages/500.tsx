@@ -7,7 +7,7 @@ const Custom500 = () => {
     <Layout>
       <Section>
         <Heading level="2" size="medium" spacing>
-          Det har oppstått en feil.
+          Det har oppstått en feil 🙃.
         </Heading>
       </Section>
     </Layout>
