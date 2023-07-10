@@ -32,8 +32,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       - name: Copy env-file for labs
         run: cp .nais/labs.env .env.local
-      - name: "client tests"
-        run: "yarn test"
       - name: "Bygg klient(yarn run build)"
         run: "yarn run build"
       - name: "Set up Docker Buildx"

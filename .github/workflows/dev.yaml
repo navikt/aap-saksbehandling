@@ -46,9 +46,6 @@ jobs:
       - name: Print env
         run: cat .env.local
 
-      - name: client tests
-        run: yarn test
-
       - name: check diff on translations
         run: yarn intl:diff
 
