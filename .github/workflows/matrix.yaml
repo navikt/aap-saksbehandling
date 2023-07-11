@@ -1,4 +1,4 @@
-name: "Build and deploy aap-innsyn matrix"
+name: "Build and deploy aap-saksbehandling matrix"
 on:
   workflow_dispatch:
 #  push:
@@ -63,7 +63,7 @@ jobs:
         with:
           cdn-team-name: aap
           source: ./.next/static
-          destination: /aap-innsyn/_next
+          destination: /aap-saksbehandling/_next
 
       -   name: Setter tag-navn
           run: echo "TAG=$(date +%Y.%m.%d.%H%M%S)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
