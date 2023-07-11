@@ -94,7 +94,7 @@ jobs:
   deploy:
     strategy:
       matrix:
-        cluster: [ dev, prod]
+        cluster: [ dev ]
     name: Deploy app to ${{matrix.cluster}}-gcp
     needs: build
     runs-on: ubuntu-latest
