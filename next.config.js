@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: '/aap/aap-saksbehandling',
   trailingSlash: true,
   reactStrictMode: true,
   output: 'standalone',
