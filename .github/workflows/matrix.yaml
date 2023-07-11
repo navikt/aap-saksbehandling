@@ -106,5 +106,4 @@ jobs:
           IMAGE: ${{needs.build.outputs.image}}
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: ${{matrix.cluster}}-gcp
-          RESOURCE: .nais/nais.yaml,.nais/alerts.yaml
           VARS: .nais/${{matrix.cluster}}.yaml
