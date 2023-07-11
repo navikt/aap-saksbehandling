@@ -4,7 +4,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "50M"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "90"
-  name: "saksbehandling-frontend"
+  name: "aap-saksbehandling"
   namespace: "aap"
   labels:
     "team": "aap"
@@ -31,12 +31,6 @@ spec:
   prometheus:
     enabled: true
     path: /aap/aap-saksbehandling/api/internal/prometheus/
-  idporten:
-    enabled: true
-    sidecar:
-      enabled: true
-      autoLogin: true
-      level: Level4
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
