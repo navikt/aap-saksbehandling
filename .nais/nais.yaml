@@ -31,6 +31,12 @@ spec:
   prometheus:
     enabled: true
     path: /aap/aap-saksbehandling/api/internal/prometheus/
+  azure:
+    application:
+      enabled: true
+      allowAllUsers: true
+      sidecar:
+        enabled: true
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
@@ -44,9 +50,6 @@ spec:
     enabled: true
   accessPolicy:
     outbound:
-      rules:
-        - application: nav-dekoratoren
-          namespace: personbruker
       external:
         {{#each externals as |host|}}
         - host: {{host}}

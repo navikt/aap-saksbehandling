@@ -17,9 +17,6 @@ export interface Søknad {
   manglendeVedlegg?: Array<VedleggType>;
 }
 
-export interface MellomlagretSøknad {
-  timestamp: string;
-}
 
 export interface Vedleggskrav {
   type: 'STUDIESTED' | 'FOSTERFORELDER' | 'ANNET';
