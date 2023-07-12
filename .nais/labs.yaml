@@ -1,7 +1,0 @@
-ingresses:
-- "https://aap-saksbehandling.ekstern.dev.nav.no/"
-env:
-- name: APP_URL
-  value: "https://aap-saksbehandling.ekstern.dev.nav.no/"
-externals:
-  - "dekoratoren.ekstern.dev.nav.no"

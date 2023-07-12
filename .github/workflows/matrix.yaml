@@ -12,7 +12,7 @@ jobs:
   build:
     strategy:
       matrix:
-        env: [ dev, prod]
+        env: [ dev ]
     name: build  ${{matrix.env}}
     runs-on: ubuntu-latest
     outputs:
