@@ -3,7 +3,6 @@ import { Link } from '@navikt/ds-react';
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
 
 import styles from 'components/appheader/AppHeader.module.css';
-import useSWR from "swr";
 
 interface Brukerinfo {
   name: string;
@@ -66,12 +65,9 @@ const Brukermeny = ({ brukerinfo }: { brukerinfo: Brukerinfo | undefined }) => {
 };
 
 const AppHeader = () => {
-
-
-
   return (
     <InternalHeader className={styles.app__header}>
-      <InternalHeader.Title href="/saksoversikt">Kelvin</InternalHeader.Title>
+      <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
       <Systemmeny />
         {/*<Brukermeny brukerinfo={brukerinfo}/>*/}
     </InternalHeader>

@@ -1,10 +1,10 @@
 import "@navikt/ds-css"
 import type { AppProps } from 'next/app'
-import {useEffect, useMemo} from "react";
+import { useEffect, useMemo } from "react";
 import { initializeFaro } from '@grafana/faro-web-sdk';
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import { logger } from "@navikt/aap-felles-utils"
-import {AppHeader} from "../components/appheader/AppHeader";
+import { AppHeader } from "../components/appheader/AppHeader";
 
 
 function MyApp({ Component, pageProps }: AppProps) {

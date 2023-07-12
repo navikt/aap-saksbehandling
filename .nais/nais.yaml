@@ -30,7 +30,7 @@ spec:
       memory: 512Mi
   prometheus:
     enabled: true
-    path: /aap/aap-saksbehandling/api/internal/prometheus/
+    path: /api/internal/prometheus/
   azure:
     application:
       enabled: true
