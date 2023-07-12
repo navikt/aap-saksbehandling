@@ -10,7 +10,7 @@ import { AppHeader } from "../components/appheader/AppHeader";
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  useMemo(()=>{
+  useEffect(()=>{
     logger.info("page init")
   },[])
 
