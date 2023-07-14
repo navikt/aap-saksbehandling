@@ -11,7 +11,7 @@ export default function Home() {
         <title>Kelvin</title>
       </Head>
       <main>
-        <SaksoversiktPage />
+        login
       </main>
     </>
   )
