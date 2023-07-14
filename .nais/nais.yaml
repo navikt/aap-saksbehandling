@@ -35,9 +35,9 @@ spec:
     application:
       enabled: true
       allowAllUsers: true
-      sidecar:
-        enabled: true
-        autoLogin: true
+    sidecar:
+      enabled: true
+      autoLogin: true
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
