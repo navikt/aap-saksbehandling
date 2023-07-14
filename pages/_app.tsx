@@ -7,7 +7,6 @@ import { initializeFaro } from '@grafana/faro-web-sdk';
 import { useRouter } from "next/router";
 import { logger } from "@navikt/aap-felles-utils"
 import { AppHeader } from "../components/appheader/AppHeader";
-import * as console from "console";
 
 
 function MyApp({ Component, pageProps }: AppProps) {
