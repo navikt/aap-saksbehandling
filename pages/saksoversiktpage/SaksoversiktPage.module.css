@@ -1,0 +1,8 @@
+.saksliste__innhold {
+    width: var(--page-width);
+}
+
+.saksliste__tabell {
+    background-color: var(--container-background-color);
+    border: 1px solid var(--container-border-color);
+}
