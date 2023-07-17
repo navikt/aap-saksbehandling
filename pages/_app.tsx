@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       initializeFaro({
         url: process.env.NEXT_PUBLIC_FARO_URL,
         app: {
-          name: 'aap-mine-aap',
+          name: 'aap-saksbehandling',
           version: process.env.NEXT_PUBLIC_ENVIRONMENT ?? '',
         },
       });
