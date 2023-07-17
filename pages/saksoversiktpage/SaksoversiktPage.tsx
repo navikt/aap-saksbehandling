@@ -1,13 +1,27 @@
-import {Heading, Table, ToggleGroup} from '@navikt/ds-react'
+import {Alert, Heading, Loader, Table, ToggleGroup} from '@navikt/ds-react'
 import styles from './SaksoversiktPage.module.css'
-import {List} from "postcss/lib/list";
 const SaksoversiktPage = () => {
 
     const data = {}
+    const error = true
     const søkere:Array<string> = []
     const kanSorteres = søkere && søkere?.length > 1;
 
+    if (!data) {
+        return (
+            <div className={styles.loader}>
+                <Loader size={'2xlarge'} />
+                {error && (
+                    <Alert variant={'error'} className={styles.warning}>
+                        Det oppstod en feil under henting av data. Prøver på nytt...
+                    </Alert>
+                )}
+            </div>
+        );
+    }
+
     return (
+        <div className={styles.main__content}>
         <section className={styles.saksliste__innhold}>
             <Heading size={'large'} level={'1'}>
                 Oppgaver AAP
@@ -35,6 +49,7 @@ const SaksoversiktPage = () => {
 
 
         </section>
+        </div>
     )
 
 }
