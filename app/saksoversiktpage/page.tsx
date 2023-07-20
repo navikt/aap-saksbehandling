@@ -1,7 +1,9 @@
+'use client';
+
 import { listeMedSøkereOgSaker } from '../../lib/mock/saksliste';
 import { søkerSchema } from '../../lib/types/types';
 import { DATO_FORMATER, formaterDatoBirthDate } from '../../lib/utils/date';
-import styles from './SaksoversiktPage.module.css';
+import styles from 'app/saksoversiktpage/saksoversiktPage.module.css';
 import { ErrorFilled, SuccessFilled } from '@navikt/ds-icons';
 import { Alert, BodyShort, Heading, Link, Loader, Table, ToggleGroup } from '@navikt/ds-react';
 
@@ -24,7 +26,7 @@ const Saksrad = ({ søker }: { søker: søkerSchema }) => {
     </Table.Row>
   );
 };
-const SaksoversiktPage = () => {
+const Page = () => {
   const data = {};
   const error = true;
   const søkere: Array<søkerSchema> = listeMedSøkereOgSaker;
@@ -46,7 +48,7 @@ const SaksoversiktPage = () => {
       ?.sort(
         (søker1: søkerSchema, søker2: søkerSchema) =>
           new Date(søker2.sak.søknadstidspunkt).valueOf() -
-          new Date(søker1.sak.søknadstidspunkt).valueOf()
+          new Date(søker1.sak.søknadstidspunkt).valueOf(),
       )
       .map((søker: søkerSchema) => <Saksrad key={søker.personident} søker={søker} />);
   };
@@ -95,4 +97,4 @@ const SaksoversiktPage = () => {
   );
 };
 
-export default SaksoversiktPage;
+export default Page;

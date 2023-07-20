@@ -1,3 +1,5 @@
+'use client';
+
 import { ExternalLink, System } from '@navikt/ds-icons';
 import { Link } from '@navikt/ds-react';
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
@@ -31,7 +33,9 @@ const Systemmeny = () => (
     </InternalHeader.Button>
     <Dropdown.Menu>
       <Dropdown.Menu.GroupedList>
-        <Dropdown.Menu.GroupedList.Heading>Systemer og oppslagsverk</Dropdown.Menu.GroupedList.Heading>
+        <Dropdown.Menu.GroupedList.Heading>
+          Systemer og oppslagsverk
+        </Dropdown.Menu.GroupedList.Heading>
         {links.map((link) => (
           <Dropdown.Menu.GroupedList.Item key={link.label}>
             <Link href={link.href} target={'_blank'}>
@@ -69,7 +73,7 @@ const AppHeader = () => {
     <InternalHeader className={styles.app__header}>
       <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
       <Systemmeny />
-        {/*<Brukermeny brukerinfo={brukerinfo}/>*/}
+      {/*<Brukermeny brukerinfo={brukerinfo}/>*/}
     </InternalHeader>
   );
 };
