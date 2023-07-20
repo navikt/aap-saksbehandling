@@ -19,7 +19,7 @@
     "@navikt/ds-react": "^4.7.1",
     "@navikt/ds-react-internal": "^3.4.3",
     "@navikt/ds-tailwind": "^4.7.1",
-    "next": "13.4.9",
+    "next": "^13.4.10",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-intl": "^6.4.2"
@@ -37,7 +37,7 @@
     "@typescript-eslint/eslint-plugin": "5.62.1-alpha.0",
     "@typescript-eslint/parser": "5.62.1-alpha.0",
     "eslint": "^8.43.0",
-    "eslint-config-next": "^13.4.7",
+    "eslint-config-next": "^13.4.10",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-jest": "^27.2.2",
     "eslint-plugin-jsx-a11y": "^6.7.1",
