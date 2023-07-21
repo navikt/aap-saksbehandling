@@ -6,6 +6,8 @@ import { DATO_FORMATER, formaterDatoBirthDate } from '../../lib/utils/date';
 import styles from 'app/saksoversiktpage/saksoversiktPage.module.css';
 import { ErrorFilled, SuccessFilled } from '@navikt/ds-icons';
 import { Alert, BodyShort, Heading, Link, Loader, Table, ToggleGroup } from '@navikt/ds-react';
+import useSWR from 'swr';
+import { sakerUrl } from '../api/apiUrls';
 
 const Saksrad = ({ søker }: { søker: søkerSchema }) => {
   return (
@@ -27,8 +29,7 @@ const Saksrad = ({ søker }: { søker: søkerSchema }) => {
   );
 };
 const Page = () => {
-  const data = {};
-  const error = true;
+  const { data, error } = useSWR<søkerSchema[]>(sakerUrl());
   const søkere: Array<søkerSchema> = listeMedSøkereOgSaker;
   const kanSorteres = søkere && søkere?.length > 1;
 
