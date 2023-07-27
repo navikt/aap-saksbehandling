@@ -3,9 +3,9 @@
 import { listeMedSøkereOgSaker } from '../../lib/mock/saksliste';
 import { søkerSchema } from '../../lib/types/types';
 import { DATO_FORMATER, formaterDatoBirthDate } from '../../lib/utils/date';
-import styles from 'app/saksoversiktpage/saksoversiktPage.module.css';
+import styles from '../saksoversiktpage/page.module.css';
 import { ErrorFilled, SuccessFilled } from '@navikt/ds-icons';
-import { Alert, BodyShort, Heading, Link, Loader, Table, ToggleGroup } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Link, Loader, Table } from '@navikt/ds-react';
 import useSWR from 'swr';
 import { sakerUrl } from '../api/apiUrls';
 
@@ -54,7 +54,8 @@ const Page = () => {
       .map((søker: søkerSchema) => <Saksrad key={søker.personident} søker={søker} />);
   };
 
-  if (!data) {
+  if (data) {
+    //TODO: Legg til ! når data er klar
     return (
       <div className={styles.loader}>
         <Loader size={'2xlarge'} />

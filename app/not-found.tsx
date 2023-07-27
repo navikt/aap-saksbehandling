@@ -1,8 +1,8 @@
 'use client';
 
 import { Heading } from '@navikt/ds-react';
-import { Layout } from 'components/Layout/Layout';
-import { Section } from 'components/Section/Section';
+import { Layout } from '../components/Layout/Layout';
+import { Section } from '../components/Section/Section';
 
 //404 Page
 const notFound = () => {

@@ -4,7 +4,7 @@ import { ExternalLink, System } from '@navikt/ds-icons';
 import { Link } from '@navikt/ds-react';
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
 
-import styles from 'components/appheader/AppHeader.module.css';
+import styles from '../../components/appheader/AppHeader.module.css';
 
 interface Brukerinfo {
   name: string;

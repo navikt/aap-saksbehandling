@@ -1,5 +1,7 @@
+'use client';
+
 import { Loader } from '@navikt/ds-react';
-import styles from 'app/SakPage.module.css';
+import styles from './SakPage.module.css';
 
 const Page = () => {
   const søker = true; //useSøker();
