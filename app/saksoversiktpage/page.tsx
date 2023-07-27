@@ -9,6 +9,8 @@ import { Alert, BodyShort, Heading, Link, Loader, Table } from '@navikt/ds-react
 import useSWR from 'swr';
 import { sakerUrl } from '../api/apiUrls';
 
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
 const Saksrad = ({ søker }: { søker: søkerSchema }) => {
   return (
     <Table.Row key={søker.sak.saksid}>
@@ -29,9 +31,8 @@ const Saksrad = ({ søker }: { søker: søkerSchema }) => {
   );
 };
 const Page = () => {
-  const { data, error } = useSWR<søkerSchema[]>(sakerUrl());
-  const søkere: Array<søkerSchema> = listeMedSøkereOgSaker;
-  const kanSorteres = søkere && søkere?.length > 1;
+  const { data, error } = useSWR<søkerSchema[]>(sakerUrl(), fetcher);
+  const kanSorteres = data && data?.length > 1;
 
   const IngenSakerFunnet = () => (
     <Table.Row>
@@ -42,10 +43,10 @@ const Page = () => {
   );
 
   const tabellInnhold = () => {
-    if (søkere?.length === 0) {
+    if (data?.length === 0) {
       return <IngenSakerFunnet />;
     }
-    return søkere
+    return data
       ?.sort(
         (søker1: søkerSchema, søker2: søkerSchema) =>
           new Date(søker2.sak.søknadstidspunkt).valueOf() -
@@ -54,8 +55,8 @@ const Page = () => {
       .map((søker: søkerSchema) => <Saksrad key={søker.personident} søker={søker} />);
   };
 
-  if (data) {
-    //TODO: Legg til ! når data er klar
+  if (!data) {
+    console.log(data);
     return (
       <div className={styles.loader}>
         <Loader size={'2xlarge'} />
