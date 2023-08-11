@@ -5,7 +5,7 @@ export const listeMedSøkereOgSaker: søkerSchema[] = [
   {
     personident: '01090200432',
     sisteVersjon: true,
-    fødselsdato: new Date('1976-03-08'),
+    fødselsdato: '1976-03-08',
     skjermet: false,
     sak: {
       saksid: 'uuid-2',
@@ -18,7 +18,7 @@ export const listeMedSøkereOgSaker: søkerSchema[] = [
   {
     personident: '10987654322',
     sisteVersjon: true,
-    fødselsdato: new Date('1996-03-08'),
+    fødselsdato: '1996-03-08',
     skjermet: true,
     sak: {
       saksid: 'uuid-4',
@@ -31,7 +31,7 @@ export const listeMedSøkereOgSaker: søkerSchema[] = [
   {
     personident: '06826999576',
     sisteVersjon: true,
-    fødselsdato: new Date('1969-02-06'),
+    fødselsdato: '1969-02-06',
     skjermet: true,
     sak: {
       saksid: 'uuid-3',
@@ -43,7 +43,7 @@ export const listeMedSøkereOgSaker: søkerSchema[] = [
   {
     personident: '12838121301',
     sisteVersjon: true,
-    fødselsdato: new Date('1981-03-12'),
+    fødselsdato: '1981-03-12',
     skjermet: false,
     sak: {
       saksid: 'uuid-9345',
@@ -55,7 +55,7 @@ export const listeMedSøkereOgSaker: søkerSchema[] = [
   {
     personident: '409876543219',
     sisteVersjon: true,
-    fødselsdato: new Date('1986-03-08'),
+    fødselsdato: '1986-03-08',
     skjermet: false,
     sak: {
       saksid: 'uuid-1',

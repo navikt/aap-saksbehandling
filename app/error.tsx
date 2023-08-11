@@ -1,8 +1,11 @@
+'use client';
+
 import { Heading } from '@navikt/ds-react';
 import { Layout } from 'components/Layout/Layout';
 import { Section } from 'components/Section/Section';
 
-const Custom500 = () => {
+//500 Page
+const Error = () => {
   return (
     <Layout>
       <Section>
@@ -14,4 +17,4 @@ const Custom500 = () => {
   );
 };
 
-export default Custom500;
+export default Error;

@@ -1,9 +1,15 @@
+'use client';
+
 import { listeMedSøkereOgSaker } from '../../lib/mock/saksliste';
 import { søkerSchema } from '../../lib/types/types';
 import { DATO_FORMATER, formaterDatoBirthDate } from '../../lib/utils/date';
-import styles from './SaksoversiktPage.module.css';
+import styles from '../saksoversiktpage/page.module.css';
 import { ErrorFilled, SuccessFilled } from '@navikt/ds-icons';
-import { Alert, BodyShort, Heading, Link, Loader, Table, ToggleGroup } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Link, Loader, Table } from '@navikt/ds-react';
+import useSWR from 'swr';
+import { sakerUrl } from '../api/apiUrls';
+
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 const Saksrad = ({ søker }: { søker: søkerSchema }) => {
   return (
@@ -24,11 +30,9 @@ const Saksrad = ({ søker }: { søker: søkerSchema }) => {
     </Table.Row>
   );
 };
-const SaksoversiktPage = () => {
-  const data = {};
-  const error = true;
-  const søkere: Array<søkerSchema> = listeMedSøkereOgSaker;
-  const kanSorteres = søkere && søkere?.length > 1;
+const Page = () => {
+  const { data, error } = useSWR<søkerSchema[]>(sakerUrl(), fetcher);
+  const kanSorteres = data && data?.length > 1;
 
   const IngenSakerFunnet = () => (
     <Table.Row>
@@ -39,19 +43,20 @@ const SaksoversiktPage = () => {
   );
 
   const tabellInnhold = () => {
-    if (søkere?.length === 0) {
+    if (data?.length === 0) {
       return <IngenSakerFunnet />;
     }
-    return søkere
+    return data
       ?.sort(
         (søker1: søkerSchema, søker2: søkerSchema) =>
           new Date(søker2.sak.søknadstidspunkt).valueOf() -
-          new Date(søker1.sak.søknadstidspunkt).valueOf()
+          new Date(søker1.sak.søknadstidspunkt).valueOf(),
       )
       .map((søker: søkerSchema) => <Saksrad key={søker.personident} søker={søker} />);
   };
 
   if (!data) {
+    console.log(data);
     return (
       <div className={styles.loader}>
         <Loader size={'2xlarge'} />
@@ -95,4 +100,4 @@ const SaksoversiktPage = () => {
   );
 };
 
-export default SaksoversiktPage;
+export default Page;

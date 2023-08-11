@@ -1,8 +1,11 @@
-import { Heading } from '@navikt/ds-react';
-import {Layout} from "components/Layout/Layout";
-import {Section} from "components/Section/Section";
+'use client';
 
-const Custom404 = () => {
+import { Heading } from '@navikt/ds-react';
+import { Layout } from '../components/Layout/Layout';
+import { Section } from '../components/Section/Section';
+
+//404 Page
+const notFound = () => {
   return (
     <Layout>
       <Section>
@@ -14,4 +17,4 @@ const Custom404 = () => {
   );
 };
 
-export default Custom404;
+export default notFound;

@@ -30,7 +30,7 @@ const refineDato = (dato: string) => isValid(parseISO(dato));
 
 export interface søkerSchema {
   personident: string;
-  fødselsdato: Date;
+  fødselsdato: string;
   sak: sakSchema;
   skjermet: boolean;
   sisteVersjon: boolean;
