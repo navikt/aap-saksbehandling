@@ -1,5 +1,3 @@
-import { isValid, parseISO } from 'date-fns';
-
 export interface Dokument {
   journalpostId?: string;
   dokumentId?: string;
@@ -25,8 +23,6 @@ interface sakSchema {
   type: string; // 11-5, SP-erstattning, Student, Uføre
   aktiv?: boolean; // TODO Hva betyr egentlig dette? Tilstand? Bruke eksplisitte booleans?, Denne ligger ikke i modellen
 }
-
-const refineDato = (dato: string) => isValid(parseISO(dato));
 
 export interface søkerSchema {
   personident: string;

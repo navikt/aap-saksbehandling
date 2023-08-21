@@ -48,7 +48,7 @@ const Systemmeny = () => (
   </Dropdown>
 );
 
-const Brukermeny = ({ brukerinfo }: { brukerinfo: Brukerinfo | undefined }) => {
+const Brukermeny = ({ brukerinfo }: { brukerinfo?: Brukerinfo }) => {
   if (!brukerinfo) {
     return <></>;
   }
@@ -73,7 +73,7 @@ const AppHeader = () => {
     <InternalHeader className={styles.app__header}>
       <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
       <Systemmeny />
-      {/*<Brukermeny brukerinfo={brukerinfo}/>*/}
+      <Brukermeny />
     </InternalHeader>
   );
 };

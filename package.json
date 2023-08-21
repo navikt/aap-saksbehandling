@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "prettier": "@navikt/aap-felles-prettier",
   "dependencies": {
     "@grafana/faro-web-sdk": "^1.1.1",
     "@navikt/aap-felles-css": "^0.0.72",
@@ -48,8 +49,7 @@
     "jest-environment-jsdom": "^29.1.1",
     "json-diff": "^1.0.6",
     "lint-staged": "^14.0.1",
-    "long": "^5.2.3",
-    "prettier": "^3.0.0",
+    "prettier": "^3.0.2",
     "typescript": "^5.1.6"
   },
   "msw": {
