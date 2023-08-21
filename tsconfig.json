@@ -23,7 +23,10 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "test-utils": ["./test-utils"]
+    }
   },
   "include": [
     "next-env.d.ts",
