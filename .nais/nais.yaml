@@ -35,6 +35,9 @@ spec:
     sidecar:
       enabled: true
       autoLogin: true
+  observability:
+    tracing:
+      enabled: true
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
