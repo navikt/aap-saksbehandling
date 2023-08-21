@@ -1,15 +1,11 @@
 'use client';
 
-import { listeMedSøkereOgSaker } from '../../lib/mock/saksliste';
-import { søkerSchema } from '../../lib/types/types';
-import { DATO_FORMATER, formaterDatoBirthDate } from '../../lib/utils/date';
-import styles from '../saksoversiktpage/page.module.css';
-import { ErrorFilled, SuccessFilled } from '@navikt/ds-icons';
-import { Alert, BodyShort, Heading, Link, Loader, Table } from '@navikt/ds-react';
-import useSWR from 'swr';
-import { sakerUrl } from '../api/apiUrls';
-
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { søkerSchema } from 'lib/types/types';
+import { DATO_FORMATER, formaterDatoBirthDate } from 'lib/utils/date';
+import styles from './page.module.css';
+import { XMarkIcon, CheckmarkIcon } from '@navikt/aksel-icons';
+import { BodyShort, Heading, Link, Table } from '@navikt/ds-react';
+import { listeMedSøkereOgSaker } from 'lib/mock/saksliste';
 
 const Saksrad = ({ søker }: { søker: søkerSchema }) => {
   return (
@@ -25,13 +21,13 @@ const Saksrad = ({ søker }: { søker: søkerSchema }) => {
       <Table.DataCell>&nbsp;</Table.DataCell>
       <Table.DataCell>SaksTag Kommer</Table.DataCell>
       <Table.DataCell>
-        {søker.sisteVersjon ? <SuccessFilled color={'green'} /> : <ErrorFilled color={'red'} />}
+        {søker.sisteVersjon ? <CheckmarkIcon color={'green'} /> : <XMarkIcon color={'red'} />}
       </Table.DataCell>
     </Table.Row>
   );
 };
 const Page = () => {
-  const { data, error } = useSWR<søkerSchema[]>(sakerUrl(), fetcher);
+  const data = listeMedSøkereOgSaker;
   const kanSorteres = data && data?.length > 1;
 
   const IngenSakerFunnet = () => (
@@ -54,20 +50,6 @@ const Page = () => {
       )
       .map((søker: søkerSchema) => <Saksrad key={søker.personident} søker={søker} />);
   };
-
-  if (!data) {
-    console.log(data);
-    return (
-      <div className={styles.loader}>
-        <Loader size={'2xlarge'} />
-        {error && (
-          <Alert variant={'error'} className={styles.warning}>
-            Det oppstod en feil under henting av data. Prøver på nytt...
-          </Alert>
-        )}
-      </div>
-    );
-  }
 
   return (
     <div className={styles.main__content}>

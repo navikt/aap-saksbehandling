@@ -1,6 +1,6 @@
 'use client';
 
-import { ExternalLink, System } from '@navikt/ds-icons';
+import { ExternalLinkIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { Link } from '@navikt/ds-react';
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
 
@@ -29,7 +29,7 @@ const links: LinkElement[] = [
 const Systemmeny = () => (
   <Dropdown>
     <InternalHeader.Button as={Dropdown.Toggle} style={{ marginLeft: 'auto' }}>
-      <System style={{ fontSize: '1.5rem' }} title={'Systemer og oppslagsverk'} />
+      <MenuGridIcon style={{ fontSize: '1.5rem' }} title={'Systemer og oppslagsverk'} />
     </InternalHeader.Button>
     <Dropdown.Menu>
       <Dropdown.Menu.GroupedList>
@@ -39,7 +39,7 @@ const Systemmeny = () => (
         {links.map((link) => (
           <Dropdown.Menu.GroupedList.Item key={link.label}>
             <Link href={link.href} target={'_blank'}>
-              {link.label} <ExternalLink />
+              {link.label} <ExternalLinkIcon />
             </Link>
           </Dropdown.Menu.GroupedList.Item>
         ))}
