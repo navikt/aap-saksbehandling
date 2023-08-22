@@ -16,6 +16,7 @@ jobs:
       cluster: dev-gcp
       appname: 'aap-saksbehandling'
       playwright: false
+      cdn: true
 
   deployDev:
     needs: buildDev
