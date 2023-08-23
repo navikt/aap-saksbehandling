@@ -1,9 +1,14 @@
 'use client';
 
-import { Sakstabell } from '../../components/Sakstabell/Sakstabell';
+import { opprettSak } from '../../lib/api';
 
 const Page = () => {
-  return <Sakstabell />;
+  return (
+    <>
+      <h1>Saksoversikt page</h1>
+      <button onClick={opprettSak}>Opprett test sak</button>
+    </>
+  );
 };
 
 export default Page;
