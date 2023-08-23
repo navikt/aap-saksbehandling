@@ -1,13 +1,4 @@
-export interface Dokument {
-  journalpostId?: string;
-  dokumentId?: string;
-  tittel: string;
-  type: 'I' | 'U' | 'N';
-  innsendingsId: string;
-  dato: string;
-}
-
-export enum sakTilstandEnum {
+export enum SakTilstand {
   'UNDER_BEHANDLING',
   'KVALITETSSIKRES',
   'FATTET',
@@ -15,19 +6,18 @@ export enum sakTilstandEnum {
   'IVERKSATT',
 }
 
-interface sakSchema {
+interface Sak {
   saksid: string;
   søknadstidspunkt: string;
-  tilstand?: sakTilstandEnum;
-  ansvarlig?: string; // TODO Sette opp granulert tildeling (flere personer kan "eie") aktiv / venter, Denne ligger ikke i modellen
-  type: string; // 11-5, SP-erstattning, Student, Uføre
-  aktiv?: boolean; // TODO Hva betyr egentlig dette? Tilstand? Bruke eksplisitte booleans?, Denne ligger ikke i modellen
+  tilstand?: SakTilstand;
+  ansvarlig?: string;
+  type: string;
 }
 
-export interface søkerSchema {
+export interface Søker {
   personident: string;
   fødselsdato: string;
-  sak: sakSchema;
+  sak: Sak;
   skjermet: boolean;
   sisteVersjon: boolean;
 }
