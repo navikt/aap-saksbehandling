@@ -1,4 +1,10 @@
-async function fetcher(url: string, method: 'GET' | 'POST', body?: object) {
+import { BehandlingsInfo, OpprettTestcase, UtvidetSaksInfo } from './types/types';
+
+async function fetcher<ResponseBody>(
+  url: string,
+  method: 'GET' | 'POST',
+  body?: object
+): Promise<ResponseBody | undefined> {
   try {
     const res = await fetch(url, {
       method,
@@ -13,46 +19,31 @@ async function fetcher(url: string, method: 'GET' | 'POST', body?: object) {
       return await res.json();
     } else {
       console.error('Noe gikk galt i try');
+      return undefined;
     }
   } catch (e) {
     throw new Error('Noe gikk galt i catch');
   }
 }
 
-/**
- * Sak
- */
-
 // /api/sak/hent/{saksnummer}
 export function hentSak(saksnummer: string) {
-  return fetcher(`http://localhost:8080/api/sak/hent/${saksnummer}`, 'GET');
+  return fetcher<UtvidetSaksInfo>(`http://localhost:8080/api/sak/hent/${saksnummer}`, 'GET');
 }
 
 // /api/sak/finn
 export function finnSak(ident: string) {
-  return fetcher('http://localhost:8080/api/sak/finn', 'POST', { ident: ident });
+  return fetcher<{ saksnummer: string; periode: string }[]>('http://localhost:8080/api/sak/finn', 'POST', {
+    ident: ident,
+  });
 }
 
 // /api/behandling/hent/{referanse}
 export function hentBehandling(referanse: string) {
-  return fetcher(`http://localhost:8080/api/behandling/hent/${referanse}`, 'GET');
+  return fetcher<BehandlingsInfo>(`http://localhost:8080/api/behandling/hent/${referanse}`, 'GET');
 }
-
-/**
- * Test
- */
 
 // /test/opprett
-export function opprettSak() {
-  const nySak = {
-    fødselsdato: '1995-02-19',
-    ident: '12345678910',
-    yrkesskade: true,
-  };
-  return fetcher('http://localhost:8080/test/opprett', 'POST', nySak);
-}
-
-// /test/opprett/tid
-export function opprettSakTid() {
-  return fetcher('http://localhost:8080/test/opprett/tid', 'GET');
+export function opprettSak(sak: OpprettTestcase) {
+  return fetcher('http://localhost:8080/test/opprett', 'POST', sak);
 }
