@@ -1,4 +1,5 @@
 import '@navikt/ds-css';
+import { verifyUserLoggedIn } from 'lib/auth/authentication';
 import 'styles/globals.css';
 
 import { AppHeader } from 'components/appheader/AppHeader';
@@ -8,8 +9,8 @@ export const metadata = {
   description: 'Saksbehandlingssystem for AAP',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // TODO: Gjøre auth her
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  await verifyUserLoggedIn();
 
   return (
     <html lang="nb">
