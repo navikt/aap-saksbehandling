@@ -1,29 +1,5 @@
 import { components } from './schema';
 
-export enum SakTilstand {
-  'UNDER_BEHANDLING',
-  'KVALITETSSIKRES',
-  'FATTET',
-  'VENTER_SYKEPENGER',
-  'IVERKSATT',
-}
-
-interface Sak {
-  saksid: string;
-  søknadstidspunkt: string;
-  tilstand?: SakTilstand;
-  ansvarlig?: string;
-  type: string;
-}
-
-export interface Søker {
-  personident: string;
-  fødselsdato: string;
-  sak: Sak;
-  skjermet: boolean;
-  sisteVersjon: boolean;
-}
-
 export type BehandlingsInfo = components['schemas']['BehandlinginfoDTO'];
 export type DetaljertBehandling = components['schemas']['DetaljertBehandlingDTO'];
 export type AvklaringsBehov = components['schemas']['AvklaringsbehovDTO'];
