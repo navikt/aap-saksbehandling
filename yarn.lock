@@ -914,6 +914,16 @@
   resolved "https://npm.pkg.github.com/download/@navikt/eslint-config-aap/0.0.72/1b581edec43443f07ec62dd435aba6031042c701#1b581edec43443f07ec62dd435aba6031042c701"
   integrity sha512-kEMCnYPeznLBcPTyrJju/QRHCemedXSxtI4Q/wMXp3ieLL6/3MyclNWjSJEdyFwBX8vHaJaQaXnrDbyvnHYCGA==
 
+"@navikt/next-auth-wonderwall@^1.5.0":
+  version "1.5.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/next-auth-wonderwall/1.5.0/643addd5bb139ccf885908e0e27c5cb7b4a6a44d#643addd5bb139ccf885908e0e27c5cb7b4a6a44d"
+  integrity sha512-1EnG5KbEJ7Vy8PXpzH3CEupfy6NIfMDhx0aH29kWhsFn2lfl6fxd8+LgqmLd4Weo0HVOpfL9gTptD7SK1Pf/hg==
+  dependencies:
+    jose "^4.14.4"
+    node-cache "^5.1.2"
+    openid-client "^5.4.3"
+    zod "^3.22.2"
+
 "@next/env@13.4.19":
   version "13.4.19"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-13.4.19.tgz#46905b4e6f62da825b040343cbc233144e9578d3"
@@ -2535,6 +2545,11 @@ cliui@^8.0.1:
     string-width "^4.2.0"
     strip-ansi "^6.0.1"
     wrap-ansi "^7.0.0"
+
+clone@2.x:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
+  integrity sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==
 
 clsx@^1.2.1:
   version "1.2.1"
@@ -4848,6 +4863,13 @@ next@^13.4.10:
     "@next/swc-win32-ia32-msvc" "13.4.19"
     "@next/swc-win32-x64-msvc" "13.4.19"
 
+node-cache@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/node-cache/-/node-cache-5.1.2.tgz#f264dc2ccad0a780e76253a694e9fd0ed19c398d"
+  integrity sha512-t1QzWwnk4sjLWaQAS8CHgOJ+RAfmHpxFWmc36IWTiWHQfs0w5JDMBS1b1ZxQteo0vVVuWJvIUKHDkkeK7vIGCg==
+  dependencies:
+    clone "2.x"
+
 node-int64@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
@@ -5008,7 +5030,7 @@ openapi-typescript@6.5.3:
     undici "^5.23.0"
     yargs-parser "^21.1.1"
 
-openid-client@^5.3.1:
+openid-client@^5.3.1, openid-client@^5.4.3:
   version "5.4.3"
   resolved "https://registry.yarnpkg.com/openid-client/-/openid-client-5.4.3.tgz#c75d2f6d07a25d383a72c8ff34605a36b7e2cd73"
   integrity sha512-sVQOvjsT/sbSfYsQI/9liWQGVZH/Pp3rrtlGEwgk/bbHfrUDZ24DN57lAagIwFtuEu+FM9Ev7r85s8S/yPjimQ==
@@ -6332,3 +6354,8 @@ zod@3.21.4:
   version "3.21.4"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.21.4.tgz#10882231d992519f0a10b5dd58a38c9dabbb64db"
   integrity sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==
+
+zod@^3.22.2:
+  version "3.22.2"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.2.tgz#3add8c682b7077c05ac6f979fea6998b573e157b"
+  integrity sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==
