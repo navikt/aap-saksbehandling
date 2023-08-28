@@ -13,6 +13,29 @@ export interface paths {
         };
       };
       responses: {
+        /** @description Successful Request */
+        200: {
+          headers: {
+          };
+          content: {
+            "application/json": components["schemas"]["SaksinfoDTO"][];
+          };
+        };
+      };
+    };
+  };
+  "/api/sak/alle": {
+    /** @description Endepunkt for å hente ut alle saker. NB! Fjernes senere */
+    get: {
+      responses: {
+        /** @description Successful Request */
+        200: {
+          headers: {
+          };
+          content: {
+            "application/json": components["schemas"]["SaksinfoDTO"][];
+          };
+        };
       };
     };
   };
@@ -62,6 +85,12 @@ export interface paths {
         };
       };
       responses: {
+        /** @description Opprettet testcase, søk opp via ident */
+        201: {
+          headers: {
+          };
+          content: never;
+        };
       };
     };
   };
@@ -74,6 +103,11 @@ export interface components {
     FinnSakForIdentDTO: {
       ident?: string;
     };
+    Periode: Record<string, never>;
+    SaksinfoDTO: {
+      periode?: components["schemas"]["Periode"];
+      saksnummer?: string;
+    };
     BehandlinginfoDTO: {
       /** Format: date-time */
       opprettet?: string;
@@ -82,7 +116,6 @@ export interface components {
       status?: components["schemas"]["Status-1"];
       type?: string;
     };
-    Periode: Record<string, never>;
     /** @enum {string} */
     "Status-1": "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
     /** @enum {string} */

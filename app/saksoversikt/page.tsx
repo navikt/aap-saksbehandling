@@ -10,7 +10,7 @@ const Page = () => {
 
       console.log('finn', finnSakResponse);
 
-      if (finnSakResponse) {
+      if (finnSakResponse && finnSakResponse[0].saksnummer) {
         const sak = await hentSak(finnSakResponse[0].saksnummer);
 
         console.log('sak', sak);

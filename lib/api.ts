@@ -33,7 +33,7 @@ export function hentSak(saksnummer: string) {
 
 // /api/sak/finn
 export function finnSak(ident: string) {
-  return fetcher<{ saksnummer: string; periode: string }[]>('http://localhost:8080/api/sak/finn', 'POST', {
+  return fetcher<SaksInfo[]>('http://localhost:8080/api/sak/finn', 'POST', {
     ident: ident,
   });
 }
