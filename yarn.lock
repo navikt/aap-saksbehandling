@@ -306,7 +306,14 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
-"@babel/runtime@^7.13.10", "@babel/runtime@^7.20.7", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.13.10":
+  version "7.22.11"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.11.tgz#7a9ba3bbe406ad6f9e8dd4da2ece453eb23a77a4"
+  integrity sha512-ee7jVNlWN09+KftVOu9n7S8gQzD/Z6hN/I8VBRXW4P1+Xe7kJGXMwu8vds4aGIMHZnNbdpSWCfZZtinytpcAvA==
+  dependencies:
+    regenerator-runtime "^0.14.0"
+
+"@babel/runtime@^7.20.7", "@babel/runtime@^7.9.2":
   version "7.22.10"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.10.tgz#ae3e9631fd947cb7e3610d3e9d8fef5f76696682"
   integrity sha512-21t/fkKLMZI4pqP2wlmsQAWnYW1PDyKyyUV4vCi+B25ydmdaYTKXPwCj0BzSUnZf4seIiYvSA3jcZ3gdsMFkLQ==
@@ -849,10 +856,10 @@
   resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/2.9.8/04e4868d2f8f1022b52e9de54668127f6d0f5052#04e4868d2f8f1022b52e9de54668127f6d0f5052"
   integrity sha512-HANk2yejzzQxj4UefLg5Q8YXqkwh98SN98fNJUIlfonnh1bla1XB2h690QZJiY5SghHDnb2RGo/aojc8BwI8kQ==
 
-"@navikt/aksel-icons@^5.0.2", "@navikt/aksel-icons@^5.0.3":
-  version "5.0.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/5.0.3/26013b244ff878d6bd423761a397e752078e3064#26013b244ff878d6bd423761a397e752078e3064"
-  integrity sha512-WyGBiz5JTPsxVAug19YyfXfsk5+f1Jj97BQRF0NJja87J7YR+sqbwijjWzZMjX0O2tr7US9rABevGlkbtjrhvw==
+"@navikt/aksel-icons@^5.0.2", "@navikt/aksel-icons@^5.2.1":
+  version "5.2.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/5.2.1/535985bb4d5495cec982eecb8a857aba764b7995#535985bb4d5495cec982eecb8a857aba764b7995"
+  integrity sha512-ErjEWB8oKQkkxfOEEQzancRpNwgeunEeVaGAekn9A/byxeHZ1kuaaYNZwMIofz362tFGM2rWaLmtxfY64FGBiw==
 
 "@navikt/ds-css@^2.0.5":
   version "2.9.8"
@@ -860,9 +867,9 @@
   integrity sha512-6MnIJpH/pX9VYXGcO2hUn9WWqUTk1WdIiPVQQbj3jTZhUKNwnT2bofcB+OrIfCST9o0qDyYeGVfVsuAyQpZxRA==
 
 "@navikt/ds-css@^5.0.2":
-  version "5.0.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/5.0.3/a346a595fd895d36b26186ede8fba6f67c8af462#a346a595fd895d36b26186ede8fba6f67c8af462"
-  integrity sha512-MuclDAsUVgCNVtBS/A7PlapE745IC18udnUkBVdpZNrxGquNZwizWzzq/4QC1SLSEeiUCzEQdpvNJBTm5GPCFw==
+  version "5.2.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/5.2.1/32c364033ff71a9cb0fcbc4cdcdeee810b42a8af#32c364033ff71a9cb0fcbc4cdcdeee810b42a8af"
+  integrity sha512-LphHIgAl/d0Bi/k6rlxCW4UW/Mr/GaOLlq7vx8VBV6sNqJ9seZas1EH4HfDULBNr4Ob5HTq3j+G7/hGDECYTCw==
 
 "@navikt/ds-icons@^2.0.5", "@navikt/ds-icons@^2.9.8":
   version "2.9.8"
@@ -885,12 +892,12 @@
     react-modal "3.15.1"
 
 "@navikt/ds-react@^5.0.2":
-  version "5.0.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/5.0.3/0a323bc38af95bca37f068b6caea828516fd8de5#0a323bc38af95bca37f068b6caea828516fd8de5"
-  integrity sha512-6ouDhMWxPsR/7wRYssRSt1XERc2tQzTffNFEQqiPXeKg8i60IhCp3cbhRN5ZYgaxoLJMhvGk9kgJmUaJytn43Q==
+  version "5.2.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/5.2.1/c43b6af3e53f69a4fa47741729610f17535c40d1#c43b6af3e53f69a4fa47741729610f17535c40d1"
+  integrity sha512-FLwZCNzQ4t0h0rk6k0JvrKaVqAPJvfXHehFixdpUrVokj2XLM8Lyxl1xHPbUviT0MFBprD/A92VzYOpMuOQGQg==
   dependencies:
     "@floating-ui/react" "0.24.1"
-    "@navikt/aksel-icons" "^5.0.3"
+    "@navikt/aksel-icons" "^5.2.1"
     "@radix-ui/react-tabs" "1.0.0"
     "@radix-ui/react-toggle-group" "1.0.0"
     clsx "^1.2.1"
