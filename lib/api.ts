@@ -1,4 +1,4 @@
-import { BehandlingsInfo, OpprettTestcase, UtvidetSaksInfo } from './types/types';
+import { BehandlingsInfo, OpprettTestcase, SaksInfo, UtvidetSaksInfo } from './types/types';
 
 async function fetcher<ResponseBody>(
   url: string,

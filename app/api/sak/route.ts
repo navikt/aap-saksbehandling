@@ -1,5 +1,3 @@
-import { listeMedSøkereOgSaker } from '../../../lib/mock/saksliste';
-
 export async function GET() {
-  return new Response(JSON.stringify(listeMedSøkereOgSaker), { status: 200 });
+  return new Response(JSON.stringify({ sak: 'hei' }), { status: 200 });
 }
