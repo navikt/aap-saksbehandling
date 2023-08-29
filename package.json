@@ -22,7 +22,7 @@
     "@navikt/ds-react": "^5.0.2",
     "@navikt/next-auth-wonderwall": "^1.5.0",
     "@vercel/otel": "^0.3.0",
-    "next": "^13.4.10",
+    "next": "^13.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
