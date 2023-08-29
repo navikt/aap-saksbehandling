@@ -32,7 +32,7 @@ export function hentAlleSaker() {
 
 // /api/sak/hent/{saksnummer}
 export function hentSak(saksnummer: string) {
-  return fetcher<UtvidetSaksInfo>(`http://localhost:8080/api/sak/hent/${saksnummer}`, 'GET');
+  return fetcher<UtvidetSaksInfo>(`http://localhost:3000/api/sak/hent/${saksnummer}`, 'GET');
 }
 
 // /api/sak/finn
