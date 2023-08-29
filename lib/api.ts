@@ -49,5 +49,5 @@ export function hentBehandling(referanse: string) {
 
 // /test/opprett
 export function opprettSak(sak: OpprettTestcase) {
-  return fetcher('http://localhost:8080/test/opprett', 'POST', sak);
+  return fetcher('http://localhost:3000/api/test/opprett', 'POST', sak);
 }
