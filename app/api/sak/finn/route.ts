@@ -17,6 +17,6 @@ export async function POST(req: Request) {
   if (res.ok) {
     return new Response(JSON.stringify(data), { status: 200 });
   } else {
-    return new Response(JSON.stringify({ message: 'Noe gikk galt ved henting av sak.' }), { status: 200 });
+    return new Response(JSON.stringify({ message: 'Kunne ikke finne sak.' }), { status: 500 });
   }
 }

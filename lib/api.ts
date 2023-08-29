@@ -26,6 +26,10 @@ async function fetcher<ResponseBody>(
   }
 }
 
+export function hentAlleSaker() {
+  return fetcher<SaksInfo[]>('http://localhost:3000/api/sak/alle', 'GET');
+}
+
 // /api/sak/hent/{saksnummer}
 export function hentSak(saksnummer: string) {
   return fetcher<UtvidetSaksInfo>(`http://localhost:8080/api/sak/hent/${saksnummer}`, 'GET');
