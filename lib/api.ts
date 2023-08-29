@@ -44,7 +44,7 @@ export function finnSak(ident: string) {
 
 // /api/behandling/hent/{referanse}
 export function hentBehandling(referanse: string) {
-  return fetcher<BehandlingsInfo>(`http://localhost:8080/api/behandling/hent/${referanse}`, 'GET');
+  return fetcher<BehandlingsInfo>(`http://localhost:3000/api/behandling/hent/${referanse}`, 'GET');
 }
 
 // /test/opprett
