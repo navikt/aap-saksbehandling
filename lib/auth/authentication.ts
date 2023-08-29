@@ -23,10 +23,10 @@ export async function verifyUserLoggedIn(): Promise<void> {
 
   const validationResult = await validateAzureToken(bearerToken);
   if (validationResult !== 'valid') {
-    const error = new Error(
-      `Invalid JWT token found (cause: ${validationResult.errorType} ${validationResult.message}, redirecting to login.`,
-      { cause: validationResult.error }
-    );
+    // const error = new Error(
+    //   `Invalid JWT token found (cause: ${validationResult.errorType} ${validationResult.message}, redirecting to login.`,
+    //   { cause: validationResult.error }
+    // );
     //logger.warn(error);
 
     redirect(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/oauth2/login?redirect=${redirectPath}`);
