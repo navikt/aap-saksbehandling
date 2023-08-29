@@ -1,11 +1,15 @@
 'use client';
 
-import { finnSak, hentBehandling, hentSak, opprettSak } from '../../lib/api';
+import { finnSak, hentAlleSaker, hentBehandling, hentSak, opprettSak } from '../../lib/api';
 import { useEffect } from 'react';
 
 const Page = () => {
   useEffect(() => {
-    async function doThis() {
+    async function fetchEverything() {
+      const alleSaker = await hentAlleSaker();
+
+      console.log('alleSaker', alleSaker);
+
       const finnSakResponse = await finnSak('12345678910');
 
       console.log('finn', finnSakResponse);
@@ -25,7 +29,7 @@ const Page = () => {
         }
       }
     }
-    doThis();
+    fetchEverything();
   });
 
   return (
