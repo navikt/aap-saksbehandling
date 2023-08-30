@@ -25,7 +25,10 @@ export interface paths {
     };
   };
   "/api/sak/alle": {
-    /** @description Endepunkt for å hente ut alle saker. NB! Fjernes senere */
+    /**
+     * @deprecated
+     * @description Endepunkt for å hente ut alle saker. NB! Fjernes senere
+     */
     get: {
       responses: {
         /** @description Successful Request */
@@ -73,6 +76,29 @@ export interface paths {
           content: {
             "application/json": components["schemas"]["DetaljertBehandlingDTO"];
           };
+        };
+      };
+    };
+  };
+  "/api/behandling/løs-behov": {
+    post: {
+      requestBody?: {
+        content: {
+          "application/json": components["schemas"]["LøsAvklaringsbehovPåBehandling"];
+        };
+      };
+      responses: {
+        /** @description Lagrer ned og prosesserer behov */
+        202: {
+          headers: {
+          };
+          content: never;
+        };
+        /** @description Behandling ikke i tilstand for å kunne */
+        400: {
+          headers: {
+          };
+          content: never;
         };
       };
     };
@@ -142,6 +168,17 @@ export interface components {
     };
     /** @enum {string} */
     StegType: "START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_YRKESSKADE" | "INNHENT_REGISTERDATA" | "INNGANGSVILKÅR" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
+    /** @enum {string} */
+    Utfall: "IKKE_VURDERT" | "IKKE_RELEVANT" | "OPPFYLT" | "IKKE_OPPFYLT";
+    VilkrDTO: {
+      perioder?: components["schemas"]["VilkrsperiodeDTO"][];
+      "vilkårstype"?: components["schemas"]["Vilkrstype"];
+    };
+    VilkrsperiodeDTO: {
+      periode?: components["schemas"]["Periode"];
+      utfall?: components["schemas"]["Utfall"];
+    };
+    Vilkrstype: string;
     DetaljertBehandlingDTO: {
       aktivtSteg?: components["schemas"]["StegType"];
       avklaringsbehov?: components["schemas"]["AvklaringsbehovDTO"][];
@@ -151,6 +188,19 @@ export interface components {
       referanse?: string;
       status?: components["schemas"]["Status-2"];
       type?: string;
+      "vilkår"?: components["schemas"]["VilkrDTO"][];
+    };
+    "AvklaringsbehovLsning-1": {
+      begrunnelse?: string;
+      endretAv?: string;
+    };
+    "AvklaringsbehovLsning-2": components["schemas"]["AvklaringsbehovLsning-1"];
+    "LøsAvklaringsbehovPåBehandling": {
+      /** Format: int64 */
+      behandlingVersjon?: number;
+      behov?: components["schemas"]["AvklaringsbehovLsning-2"];
+      /** Format: uuid */
+      referanse?: string;
     };
     OpprettTestcaseDTO: {
       /** Format: date */
