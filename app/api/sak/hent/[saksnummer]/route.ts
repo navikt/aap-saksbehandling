@@ -1,14 +1,7 @@
 import { NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest) {
-  const url = req.url;
-
-  // TODO Her må det finnes en bedre måte vell? req.query finnes ikke i app route
-  const trimmedString = url.replace(/\/$/, '');
-  const lastIndex = trimmedString.lastIndexOf('/');
-  const saksnummer = lastIndex !== -1 ? trimmedString.slice(lastIndex + 1) : null;
-
-  const res = await fetch(`http://localhost:8080/api/sak/hent/${saksnummer}`, {
+export async function GET(req: NextRequest, { params }: { params: { saksnummer: string } }) {
+  const res = await fetch(`http://localhost:8080/api/sak/hent/${params.saksnummer}`, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

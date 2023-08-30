@@ -1,0 +1,15 @@
+.søkerinfoBanner {
+    background-color: var(--a-bg-subtle);
+    padding-block: 0.5rem;
+    padding-inline-start: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.stegMeny {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
