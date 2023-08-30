@@ -1,4 +1,4 @@
-const Page = ({ params }: { params: { saksId: string } }) => {
+const Page = async ({ params }: { params: { saksId: string } }) => {
   return <div>Sakspage {params.saksId}</div>;
 };
 

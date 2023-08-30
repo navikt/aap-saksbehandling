@@ -1,11 +1,27 @@
-.søkerinfoBanner {
+.saksinfoBanner {
     background-color: var(--a-bg-subtle);
-    padding-block: 0.5rem;
-    padding-inline-start: 2rem;
+    padding-block: var(--a-spacing-3);
+    padding-inline-start: var(--a-spacing-8);
+    padding-inline-end: var(--a-spacing-4);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--a-border-strong) ;
+}
 
+.søkerinfo {
+    display: flex;
+    flex-direction: row;
+    gap: var(--a-spacing-4);
+    align-items: center;}
+
+.ikon {
+    /* TODO: Bytte ut med et faktisk ikon etterhvert */
+    border: 1px solid black;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
 }
 
 .stegMeny {
