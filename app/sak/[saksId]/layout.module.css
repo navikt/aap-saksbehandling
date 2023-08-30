@@ -1,7 +1,7 @@
 .saksinfoBanner {
     background-color: var(--a-bg-subtle);
     padding-block: var(--a-spacing-3);
-    padding-inline-start: var(--a-spacing-8);
+    padding-inline-start: var(--a-spacing-6);
     padding-inline-end: var(--a-spacing-4);
     display: flex;
     flex-direction: row;
@@ -13,7 +13,7 @@
 .søkerinfo {
     display: flex;
     flex-direction: row;
-    gap: var(--a-spacing-4);
+    gap: var(--a-spacing-2);
     align-items: center;}
 
 .ikon {

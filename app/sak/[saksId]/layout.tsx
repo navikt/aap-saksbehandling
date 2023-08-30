@@ -1,21 +1,12 @@
 import { Detail, Label } from '@navikt/ds-react/esm/typography';
+import { hentSaksinfo } from 'lib/api';
 
 import { Tag } from 'components/DsClient';
 
 import styles from './layout.module.css';
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
-  const saksInfo = {
-    søker: {
-      navn: 'Peder Ås',
-      fnr: '123456 78910',
-    },
-    labels: [{ type: 'Førstegangsbehandling' }, { type: 'Fra sykepenger' }],
-    sistEndret: {
-      navn: 'Marte Kirkerud',
-      tidspunkt: '12.12.2020 kl 12:12',
-    },
-  };
+const Layout = async ({ children }: { children: React.ReactNode }) => {
+  const saksInfo = await hentSaksinfo('123');
 
   return (
     <div>

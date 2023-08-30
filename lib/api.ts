@@ -45,3 +45,30 @@ export function hentBehandling(referanse: string) {
 export function opprettSak(sak: OpprettTestcase) {
   return fetcher('http://localhost:3000/api/test/opprett', 'POST', sak);
 }
+
+export async function hentSaksinfo(saksnummer: string) {
+  console.log('saksnummer', saksnummer);
+  return {
+    søker: {
+      navn: 'Peder Ås',
+      fnr: '123456 78910',
+    },
+    labels: [{ type: 'Førstegangsbehandling' }, { type: 'Fra sykepenger' }, { type: 'Lokalkontor: NAV Grünerløkka' }],
+    sistEndret: {
+      navn: 'Marte Kirkerud',
+      tidspunkt: '12.12.2020 kl 12:12',
+    },
+  };
+}
+
+export async function hentAldersvurdering(saksnummer: string) {
+  console.log('saksnummer', saksnummer);
+  return {
+    detaljer: {
+      name: 'Fødselsdato',
+      value: '12.12.2020 (18 år)',
+    },
+    saksopplysninger: [{ kilde: 'Digital søknad', dato: '10.10.2023' }],
+    behandlingsform: 'AUTOMATISK',
+  };
+}
