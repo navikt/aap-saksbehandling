@@ -1,0 +1,19 @@
+.kolonner {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  height: 100vh;
+}
+
+.kolonne {
+  height: 100%;
+  padding: 1rem;
+  border-top: 1px solid gray;
+}
+
+.venstrekolonne {
+  border-right: 1px solid gray;
+}
+
+.høyrekolonne {
+  border-left: 1px solid gray;
+}
