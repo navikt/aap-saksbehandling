@@ -36,7 +36,7 @@ const Layout = async ({ children }: Props) => {
         <ol className={styles.stegMeny}>
           <li>Alder</li>
           <li>Medlemsskap</li>
-          <li>Yrkesskade</li>
+          <li>Sykdom</li>
         </ol>
       </div>
       {children}
