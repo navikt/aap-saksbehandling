@@ -14,3 +14,5 @@ export type AvklaringsBehovLøsning2 = components['schemas']['AvklaringsbehovLsn
 export type LøsAvklaringsbehovPåBehandling = components['schemas']['LøsAvklaringsbehovPåBehandling'];
 export type Vilkårsperiode = components['schemas']['VilkrsperiodeDTO'];
 export type VilkårsType = components['schemas']['Vilkrstype'];
+export type StegType = components['schemas']['StegType'];
+export type Definisjon = components['schemas']['Definisjon'];

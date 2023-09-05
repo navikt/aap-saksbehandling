@@ -158,7 +158,7 @@ export interface components {
       status?: components["schemas"]["Status-1"];
     };
     /** @enum {string} */
-    Definisjon: "MANUELT_SATT_PÅ_VENT" | "AVKLAR_YRKESSKADE" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK";
+    Definisjon: "MANUELT_SATT_PÅ_VENT" | "AVKLAR_SYKDOM" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK";
     EndringDTO: {
       begrunnelse?: string;
       endretAv?: string;
@@ -167,7 +167,7 @@ export interface components {
       tidsstempel?: string;
     };
     /** @enum {string} */
-    StegType: "START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_YRKESSKADE" | "INNHENT_REGISTERDATA" | "INNGANGSVILKÅR" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
+    StegType: "START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "INNGANGSVILKÅR" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
     /** @enum {string} */
     Utfall: "IKKE_VURDERT" | "IKKE_RELEVANT" | "OPPFYLT" | "IKKE_OPPFYLT";
     VilkrDTO: {
@@ -175,10 +175,12 @@ export interface components {
       "vilkårstype"?: components["schemas"]["Vilkrstype"];
     };
     VilkrsperiodeDTO: {
+      manuellVurdering?: boolean;
       periode?: components["schemas"]["Periode"];
       utfall?: components["schemas"]["Utfall"];
     };
-    Vilkrstype: string;
+    /** @enum {string} */
+    Vilkrstype: "ALDERSVILKÅRET" | "SYKDOMSVILKÅRET" | "GRUNNLAGET";
     DetaljertBehandlingDTO: {
       aktivtSteg?: components["schemas"]["StegType"];
       avklaringsbehov?: components["schemas"]["AvklaringsbehovDTO"][];
