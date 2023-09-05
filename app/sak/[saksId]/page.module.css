@@ -1,13 +1,11 @@
 .kolonner {
-  display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
   height: 100vh;
+  border-top: 1px solid gray;
 }
 
 .kolonne {
   height: 100%;
   padding: 1rem;
-  border-top: 1px solid gray;
 }
 
 .venstrekolonne {
