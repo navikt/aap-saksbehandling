@@ -58,6 +58,7 @@ const Layout = async ({ children, params }: Props) => {
           ))}
         </ol>
       </div>
+      <div className={styles.space} />
       {children}
     </div>
   );
