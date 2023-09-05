@@ -1,13 +1,14 @@
 import { Detail, Label } from '@navikt/ds-react/esm/typography';
-import { hentSaksinfo } from 'lib/api';
+import { hentBehandling, hentSaksinfo } from 'lib/api';
 import { ReactNode } from 'react';
 
 import { Tag } from 'components/DsClient';
 import { Steg } from 'components/steg/Steg';
 
 import styles from './layout.module.css';
+import { StegType } from '../../../../lib/types/types';
 
-const StegNavn = [
+const StegNavn: StegType[] = [
   'START_BEHANDLING',
   'VURDER_ALDER',
   'AVKLAR_SYKDOM',
@@ -31,6 +32,7 @@ interface Props {
 
 const Layout = async ({ children, params }: Props) => {
   const saksInfo = await hentSaksinfo(params.saksId); // TODO: Litt metadata om søker, skal skrives om
+  const behandling = await hentBehandling(params.behandlingsReferanse);
 
   return (
     <div>
@@ -52,9 +54,14 @@ const Layout = async ({ children, params }: Props) => {
         </Detail>
       </div>
       <div>
-        <ol className={styles.stegMeny}>
-          {StegNavn.map((steg) => (
-            <Steg key={steg} navn={steg} erFullført={true} aktivtSteg={false} />
+        <ol type="1" className={styles.stegMeny}>
+          {StegNavn.filter((steg) => ['VURDER_ALDER', 'AVKLAR_SYKDOM'].includes(steg)).map((steg) => (
+            <Steg
+              key={steg}
+              navn={steg}
+              erFullført={behandling?.aktivtSteg !== steg}
+              aktivtSteg={behandling?.aktivtSteg === steg}
+            />
           ))}
         </ol>
       </div>

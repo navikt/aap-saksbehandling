@@ -1,7 +1,16 @@
+.steg {
+  color: var(--a-surface-action);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--a-spacing-1);
+  padding: var(--a-spacing-2);
+}
+
 .aktivtSteg {
-    color: yellow;
+  border-bottom: 5px solid var(--a-surface-action);
 }
 
 .erFullført {
-    color: green;
+  color: var(--a-icon-success);
 }
