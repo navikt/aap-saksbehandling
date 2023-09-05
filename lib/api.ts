@@ -1,4 +1,10 @@
-import { BehandlingsInfo, OpprettTestcase, SaksInfo, UtvidetSaksInfo } from './types/types';
+import {
+  DetaljertBehandling,
+  LøsAvklaringsbehovPåBehandling,
+  OpprettTestcase,
+  SaksInfo,
+  UtvidetSaksInfo,
+} from './types/types';
 
 export async function fetcher<ResponseBody>(
   url: string,
@@ -39,11 +45,15 @@ export function finnSak(ident: string) {
 }
 
 export function hentBehandling(referanse: string) {
-  return fetcher<BehandlingsInfo>(`http://localhost:3000/api/behandling/hent/${referanse}`, 'GET');
+  return fetcher<DetaljertBehandling>(`http://localhost:3000/api/behandling/hent/${referanse}`, 'GET');
 }
 
 export function opprettSak(sak: OpprettTestcase) {
   return fetcher('http://localhost:3000/api/test/opprett', 'POST', sak);
+}
+
+export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
+  return fetcher('http://localhost:3000/api/behandling/los-behov', 'POST', avklaringsBehov);
 }
 
 export async function hentSaksinfo(saksnummer: string) {

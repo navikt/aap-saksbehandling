@@ -8,6 +8,7 @@ export async function GET() {
 
   const data = await res.json();
 
+  console.log('data', data);
   if (res.ok) {
     return new Response(JSON.stringify(data), { status: 200 });
   } else {

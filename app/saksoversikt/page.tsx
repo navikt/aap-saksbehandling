@@ -1,16 +1,20 @@
-'use client';
+import Link from 'next/link';
 
-import { opprettSak } from '../../lib/api';
+import { OpprettSakButton } from 'components/OpprettSakButton';
 
-const Page = () => {
+import { hentAlleSaker } from '../../lib/api';
+
+const Page = async () => {
+  const alleSaker = await hentAlleSaker();
   return (
     <>
       <h1>Saksoversikt page</h1>
-      <button
-        onClick={async () => await opprettSak({ yrkesskade: true, fødselsdato: '1995-02-19', ident: '12345678910' })}
-      >
-        Opprett test sak
-      </button>
+      <OpprettSakButton />
+      {alleSaker?.map((sak) => (
+        <div key={sak.saksnummer}>
+          <Link href={`/sak/${sak.saksnummer}/`}>{sak.saksnummer}</Link>
+        </div>
+      ))}
     </>
   );
 };

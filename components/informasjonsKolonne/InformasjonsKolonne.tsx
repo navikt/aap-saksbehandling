@@ -1,8 +1,8 @@
 interface Props {
   className: string;
-  saksId: string;
+  behandlingsReferanse: string;
 }
 
-export const InformasjonsKolonne = ({ saksId, className }: Props) => {
-  return <div className={className}>SaksId: {saksId}</div>;
+export const InformasjonsKolonne = ({ behandlingsReferanse, className }: Props) => {
+  return <div className={className}>BehandlingsReferanse: {behandlingsReferanse}</div>;
 };

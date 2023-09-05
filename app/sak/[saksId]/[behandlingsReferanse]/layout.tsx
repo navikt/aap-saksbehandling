@@ -1,17 +1,18 @@
 import { Detail, Label } from '@navikt/ds-react/esm/typography';
 import { hentSaksinfo } from 'lib/api';
+import { ReactNode } from 'react';
 
 import { Tag } from 'components/DsClient';
 
 import styles from './layout.module.css';
-import { ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
+  params: { saksId: string };
 }
 
-const Layout = async ({ children }: Props) => {
-  const saksInfo = await hentSaksinfo('123');
+const Layout = async ({ children, params }: Props) => {
+  const saksInfo = await hentSaksinfo(params.saksId); // TODO: Litt metadata om søker, skal skrives om
 
   return (
     <div>
