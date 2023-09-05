@@ -4,8 +4,13 @@ import { hentSaksinfo } from 'lib/api';
 import { Tag } from 'components/DsClient';
 
 import styles from './layout.module.css';
+import { ReactNode } from 'react';
 
-const Layout = async ({ children }: { children: React.ReactNode }) => {
+interface Props {
+  children: ReactNode;
+}
+
+const Layout = async ({ children }: Props) => {
   const saksInfo = await hentSaksinfo('123');
 
   return (
