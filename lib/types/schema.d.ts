@@ -5,6 +5,20 @@
 
 
 export interface paths {
+  "/config/definisjoner": {
+    get: {
+      responses: {
+        /** @description Lister ut alle definisjoner */
+        200: {
+          headers: {
+          };
+          content: {
+            "application/json": components["schemas"]["Definisjon"][];
+          };
+        };
+      };
+    };
+  };
   "/api/sak/finn": {
     post: {
       requestBody?: {
@@ -126,6 +140,8 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    /** @enum {string} */
+    Definisjon: "MANUELT_SATT_PÅ_VENT" | "AVKLAR_SYKDOM" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK";
     FinnSakForIdentDTO: {
       ident?: string;
     };
@@ -157,8 +173,6 @@ export interface components {
       endringer?: components["schemas"]["EndringDTO"][];
       status?: components["schemas"]["Status-1"];
     };
-    /** @enum {string} */
-    Definisjon: "MANUELT_SATT_PÅ_VENT" | "AVKLAR_SYKDOM" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK";
     EndringDTO: {
       begrunnelse?: string;
       endretAv?: string;
@@ -175,6 +189,7 @@ export interface components {
       "vilkårstype"?: components["schemas"]["Vilkrstype"];
     };
     VilkrsperiodeDTO: {
+      begrunnelse?: string;
       manuellVurdering?: boolean;
       periode?: components["schemas"]["Periode"];
       utfall?: components["schemas"]["Utfall"];
