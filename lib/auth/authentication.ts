@@ -1,5 +1,6 @@
 //import { logger } from '@navikt/aap-felles-utils';
 import { validateAzureToken } from '@navikt/next-auth-wonderwall';
+import { isLocal } from 'lib/utils/environment';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -31,4 +32,10 @@ export async function verifyUserLoggedIn(): Promise<void> {
 
     redirect(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/oauth2/login?redirect=${redirectPath}`);
   }
+}
+
+export function getToken(headers: Headers): string {
+  if (isLocal()) return 'fake-token';
+
+  return headers.get('authorization')?.replace('Bearer ', '') ?? ''; // TODO: Bedre håndtering av token
 }

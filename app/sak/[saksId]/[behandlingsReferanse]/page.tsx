@@ -1,4 +1,4 @@
-import { hentBehandling } from 'lib/api';
+import { hentBehandling } from 'lib/services/saksbehandlingService';
 
 import { HGrid } from 'components/DsClient';
 import { InformasjonsKolonne } from 'components/informasjonsKolonne/InformasjonsKolonne';
@@ -7,7 +7,7 @@ import { OppgaveKolonne } from 'components/oppgavekolonne/OppgaveKolonne';
 import styles from './page.module.css';
 
 const Page = async ({ params }: { params: { behandlingsReferanse: string } }) => {
-  const behandling = await hentBehandling(params.behandlingsReferanse); // TODO: Brukes for å hente referanser til oppgaver
+  const behandling = await hentBehandling(params.behandlingsReferanse, '123'); // TODO: Brukes for å hente referanser til oppgaver
 
   console.log(behandling);
 
