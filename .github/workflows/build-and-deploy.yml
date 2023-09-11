@@ -11,6 +11,10 @@ on:
 jobs:
   buildDev:
     uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@main
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
     secrets: inherit
     with:
       cluster: dev-gcp
@@ -21,6 +25,9 @@ jobs:
   deployDev:
     needs: buildDev
     uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
+    permissions:
+      contents: read
+      id-token: write
     secrets: inherit
     with:
       cluster: dev-gcp
