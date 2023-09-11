@@ -1,4 +1,6 @@
+import { getToken } from 'lib/auth/authentication';
 import { hentBehandling } from 'lib/services/saksbehandlingService';
+import { headers } from 'next/headers';
 
 import { HGrid } from 'components/DsClient';
 import { InformasjonsKolonne } from 'components/informasjonsKolonne/InformasjonsKolonne';
@@ -7,9 +9,7 @@ import { OppgaveKolonne } from 'components/oppgavekolonne/OppgaveKolonne';
 import styles from './page.module.css';
 
 const Page = async ({ params }: { params: { behandlingsReferanse: string } }) => {
-  const behandling = await hentBehandling(params.behandlingsReferanse, '123'); // TODO: Brukes for å hente referanser til oppgaver
-
-  console.log(behandling);
+  const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
 
   if (behandling === undefined) {
     return <div>Behandling ikke funnet</div>;

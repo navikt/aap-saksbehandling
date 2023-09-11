@@ -1,12 +1,15 @@
 import { Detail, Label } from '@navikt/ds-react/esm/typography';
-import { hentBehandling, hentSaksinfo } from 'lib/api';
+import { hentSaksinfo } from 'lib/api';
+import { getToken } from 'lib/auth/authentication';
+import { hentBehandling } from 'lib/services/saksbehandlingService';
+import { headers } from 'next/headers';
 import { ReactNode } from 'react';
 
 import { Tag } from 'components/DsClient';
 import { Steg } from 'components/steg/Steg';
 
-import styles from './layout.module.css';
 import { StegType } from '../../../../lib/types/types';
+import styles from './layout.module.css';
 
 const StegNavn: StegType[] = [
   'START_BEHANDLING',
@@ -32,7 +35,7 @@ interface Props {
 
 const Layout = async ({ children, params }: Props) => {
   const saksInfo = await hentSaksinfo(params.saksId); // TODO: Litt metadata om søker, skal skrives om
-  const behandling = await hentBehandling(params.behandlingsReferanse);
+  const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
 
   return (
     <div>
