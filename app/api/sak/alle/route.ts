@@ -1,15 +1,13 @@
-export async function GET() {
-  const res = await fetch('http://localhost:8080/api/sak/alle', {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  });
+import { getToken } from 'lib/auth/authentication';
+import { hentAlleSaker } from 'lib/services/saksbehandlingService';
+import { NextRequest } from 'next/server';
 
-  const data = await res.json();
+export async function GET(req: NextRequest) {
+  const token = getToken(req.headers);
 
-  console.log('data', data);
-  if (res.ok) {
+  const data = await hentAlleSaker(token);
+
+  if (data !== undefined) {
     return new Response(JSON.stringify(data), { status: 200 });
   } else {
     return new Response(JSON.stringify({ message: 'Ingen saker funnet.' }), { status: 500 });

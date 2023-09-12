@@ -1,10 +1,4 @@
-import {
-  DetaljertBehandling,
-  LøsAvklaringsbehovPåBehandling,
-  OpprettTestcase,
-  SaksInfo,
-  UtvidetSaksInfo,
-} from './types/types';
+import { LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo } from './types/types';
 
 export async function fetcher<ResponseBody>(
   url: string,
@@ -30,22 +24,10 @@ export async function fetcher<ResponseBody>(
   }
 }
 
-export function hentAlleSaker() {
-  return fetcher<SaksInfo[]>('http://localhost:3000/api/sak/alle', 'GET');
-}
-
-export function hentSak(saksnummer: string) {
-  return fetcher<UtvidetSaksInfo>(`http://localhost:3000/api/sak/hent/${saksnummer}`, 'GET');
-}
-
 export function finnSak(ident: string) {
   return fetcher<SaksInfo[]>('http://localhost:3000/api/sak/finn', 'POST', {
     ident: ident,
   });
-}
-
-export function hentBehandling(referanse: string) {
-  return fetcher<DetaljertBehandling>(`http://localhost:3000/api/behandling/hent/${referanse}`, 'GET');
 }
 
 export function opprettSak(sak: OpprettTestcase) {
@@ -56,8 +38,7 @@ export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
   return fetcher('http://localhost:3000/api/behandling/los-behov', 'POST', avklaringsBehov);
 }
 
-export async function hentSaksinfo(saksnummer: string) {
-  console.log('saksnummer', saksnummer);
+export async function hentSaksinfo() {
   return {
     søker: {
       navn: 'Peder Ås',
@@ -71,8 +52,7 @@ export async function hentSaksinfo(saksnummer: string) {
   };
 }
 
-export async function hentAldersvurdering(saksnummer: string) {
-  console.log('saksnummer', saksnummer);
+export async function hentAldersvurdering() {
   return {
     detaljer: {
       name: 'Fødselsdato',

@@ -1,16 +1,12 @@
+import { getToken } from 'lib/auth/authentication';
+import { hentSak } from 'lib/services/saksbehandlingService';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest, { params }: { params: { saksnummer: string } }) {
-  const res = await fetch(`http://localhost:8080/api/sak/hent/${params.saksnummer}`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  });
+  const token = getToken(req.headers);
+  const data = await hentSak(params.saksnummer, token);
 
-  const data = await res.json();
-
-  if (res.ok) {
+  if (data !== undefined) {
     return new Response(JSON.stringify(data), { status: 200 });
   } else {
     return new Response(JSON.stringify({ message: 'Ingen sak funnet.' }), { status: 500 });

@@ -1,31 +1,29 @@
-import { grantAzureOboToken, isInvalidTokenSet } from '@navikt/next-auth-wonderwall';
-import { DetaljertBehandling } from 'lib/types/types';
-import { isLocal } from 'lib/utils/environment';
+import { DetaljertBehandling, LøsAvklaringsbehovPåBehandling, SaksInfo, UtvidetSaksInfo } from 'lib/types/types';
+
+import { fetchProxy } from './fetchProxy';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingScope = process.env.BEHANDLING_API_SCOPE ?? '';
 
 export const hentBehandling = async (
   behandlingsReferanse: string,
-  accesToken: string
+  accessToken: string
 ): Promise<DetaljertBehandling | undefined> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/hent/${behandlingsReferanse}`;
-  if (isLocal()) {
-    const response = await fetch(url);
-    return await response.json();
-  }
+  return await fetchProxy<DetaljertBehandling>(url, accessToken, saksbehandlingScope);
+};
 
-  const oboToken = await grantAzureOboToken(accesToken, saksbehandlingScope);
-  if (isInvalidTokenSet(oboToken)) {
-    throw new Error(`Unable to get accessToken: ${oboToken.message}`);
-  }
+export const hentSak = async (saksnummer: string, accessToken: string): Promise<UtvidetSaksInfo | undefined> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/hent/${saksnummer}`;
+  return await fetchProxy<UtvidetSaksInfo>(url, accessToken, saksbehandlingScope);
+};
 
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${oboToken}`,
-    },
-  });
+export const hentAlleSaker = async (accessToken: string): Promise<SaksInfo[]> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;
+  return await fetchProxy<SaksInfo[]>(url, accessToken, saksbehandlingScope);
+};
 
-  const data = await response.json();
-  return data;
+export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling, accessToken: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/løs-behov`;
+  return await fetchProxy<void>(url, accessToken, saksbehandlingScope, 'POST', avklaringsBehov);
 };

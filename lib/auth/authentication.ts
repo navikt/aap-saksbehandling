@@ -1,4 +1,5 @@
 //import { logger } from '@navikt/aap-felles-utils';
+import { logger } from '@navikt/aap-felles-utils';
 import { validateAzureToken } from '@navikt/next-auth-wonderwall';
 import { isLocal } from 'lib/utils/environment';
 import { headers } from 'next/headers';
@@ -8,7 +9,7 @@ export async function verifyUserLoggedIn(): Promise<void> {
   const requestHeaders = headers();
 
   if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'localhost') {
-    console.log('Running locally, skipping authentication');
+    logger.info('Running locally, skipping authentication');
     return;
   }
 
@@ -37,5 +38,5 @@ export async function verifyUserLoggedIn(): Promise<void> {
 export function getToken(headers: Headers): string {
   if (isLocal()) return 'fake-token';
 
-  return headers.get('authorization')?.replace('Bearer ', '') ?? ''; // TODO: Bedre håndtering av token
+  return headers.get('Authorization')?.replace('Bearer ', '') ?? ''; // TODO: Bedre håndtering av token
 }

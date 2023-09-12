@@ -1,8 +1,10 @@
-import { hentSak } from 'lib/api';
+import { getToken } from 'lib/auth/authentication';
+import { hentSak } from 'lib/services/saksbehandlingService';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 
 const Page = async ({ params }: { params: { saksId: string } }) => {
-  const sak = await hentSak(params.saksId); // TODO: Brukes for å hente referanser til behandlinger
+  const sak = await hentSak(params.saksId, getToken(headers())); // TODO: Brukes for å hente referanser til behandlinger
 
   return (
     <div>
