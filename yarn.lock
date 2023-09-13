@@ -320,7 +320,7 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
-"@babel/runtime@^7.13.10", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.13.10", "@babel/runtime@^7.21.0", "@babel/runtime@^7.9.2":
   version "7.22.15"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.15.tgz#38f46494ccf6cf020bd4eed7124b425e83e523b8"
   integrity sha512-T0O+aa+4w0u06iNmapipJXMV4HoUir03hpx3/YqXXhu9xim3w+dVphjFWl1OH8NbZHw5Lbm9k45drDkgq2VNNA==
@@ -459,19 +459,12 @@
   dependencies:
     heap ">= 0.2.0"
 
-"@floating-ui/core@^1.3.1", "@floating-ui/core@^1.4.1":
+"@floating-ui/core@^1.4.1":
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.4.1.tgz#0d633f4b76052668afb932492ac452f7ebe97f17"
   integrity sha512-jk3WqquEJRlcyu7997NtR5PibI+y5bi+LS3hPmguVClypenMsCY3CBa3LAQnozRCtCrYWSEtAdiskpamuJRFOQ==
   dependencies:
     "@floating-ui/utils" "^0.1.1"
-
-"@floating-ui/dom@^1.2.1":
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.4.4.tgz#cf859dde33995a4e7b6ded16c98cb73b2ebfffd0"
-  integrity sha512-21hhDEPOiWkGp0Ys4Wi6Neriah7HweToKra626CIK712B5m9qkdz54OP9gVldUg+URnBTpv/j/bi/skmGdstXQ==
-  dependencies:
-    "@floating-ui/core" "^1.3.1"
 
 "@floating-ui/dom@^1.5.1":
   version "1.5.1"
@@ -481,28 +474,12 @@
     "@floating-ui/core" "^1.4.1"
     "@floating-ui/utils" "^0.1.1"
 
-"@floating-ui/react-dom@^1.2.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-1.3.0.tgz#4d35d416eb19811c2b0e9271100a6aa18c1579b3"
-  integrity sha512-htwHm67Ji5E/pROEAr7f8IKFShuiCKHwUC/UY4vC3I5jiSvGFAYnSYiZO5MlGmads+QqvUkR9ANHEguGrDv72g==
-  dependencies:
-    "@floating-ui/dom" "^1.2.1"
-
 "@floating-ui/react-dom@^2.0.0":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-2.0.2.tgz#fab244d64db08e6bed7be4b5fcce65315ef44d20"
   integrity sha512-5qhlDvjaLmAst/rKb3VdlCinwTF4EYMiVxuuc/HVUjs46W0zgtbMmAZ1UTsDrRTxRmUEzl92mOtWbeeXL26lSQ==
   dependencies:
     "@floating-ui/dom" "^1.5.1"
-
-"@floating-ui/react@0.17.0":
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/@floating-ui/react/-/react-0.17.0.tgz#f3a2fcb5c198df6cdc0aedac56bd3b2a6c0bb089"
-  integrity sha512-LYlTmiB1O2TmeNub1agGYJrO7Qkw1B0Q53aElN5dgZDO5v3yzYJmrGm/xmfD+0T03yEECzPKdwlSFCEPWKMLEQ==
-  dependencies:
-    "@floating-ui/react-dom" "^1.2.0"
-    aria-hidden "^1.1.3"
-    tabbable "^6.0.1"
 
 "@floating-ui/react@0.24.1":
   version "0.24.1"
@@ -815,42 +792,41 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@navikt/aap-felles-css@^0.0.72":
-  version "0.0.72"
-  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-css/0.0.72/943bbe40daa5d7361bfdb96a0af69b882eb75ad5#943bbe40daa5d7361bfdb96a0af69b882eb75ad5"
-  integrity sha512-bhvJtBQv+a0B/8dk6e4Nq/Jp7N2unjwEfsBWTmrvz/GOvobAo+hoqhDCWnEtkZhYAUoRUhnH9IM8Fidy30NBbg==
+"@navikt/aap-felles-css@^0.0.77":
+  version "0.0.77"
+  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-css/0.0.77/624663e4446ffa8c697dba5c46aa51bc4981beed#624663e4446ffa8c697dba5c46aa51bc4981beed"
+  integrity sha512-25vb21Btx+OoKb3li7CNfLlVgN090E0TgpnjC/XU/UpH/ch43/7Wg+BU7rUmWqiJjTFzdToNyU5DCBe+R7fOFQ==
 
-"@navikt/aap-felles-prettier@^0.0.72":
-  version "0.0.72"
-  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-prettier/0.0.72/6de0235b8c1e3bed7d8462a13eb83bfdf74c6607#6de0235b8c1e3bed7d8462a13eb83bfdf74c6607"
-  integrity sha512-MP6QhRSQHmq7IXi5PzeR3AW6P3/dbY2BhhqOKMy/Dw5kiWXdovpnxaJSPuWia+s+u436Atxzi8lDgzlWV3npfQ==
+"@navikt/aap-felles-prettier@^0.0.77":
+  version "0.0.77"
+  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-prettier/0.0.77/e9f8a9233f8f9ef63b0dc943c2aa1699360eb052#e9f8a9233f8f9ef63b0dc943c2aa1699360eb052"
+  integrity sha512-MAy1WAlRxwG/RHY5Z04UVSwXcTNccjlr36/8zp1TZvUVak2NQj8ilWrVRT4RhDwUH0n0eXYz77JGsMp2UYa1Kg==
   dependencies:
-    "@trivago/prettier-plugin-sort-imports" "^4.1.1"
-    prettier "^2.8.7"
+    "@trivago/prettier-plugin-sort-imports" "^4.2.0"
+    prettier "^3.0.3"
 
-"@navikt/aap-felles-react@^0.0.72":
-  version "0.0.72"
-  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-react/0.0.72/9564c87167487f0d021e6271fa59d5eae9434c62#9564c87167487f0d021e6271fa59d5eae9434c62"
-  integrity sha512-InpndvdyqH+Ka/PxnRLlqT088X1KA+0fgengWQ1/4Qy/0V3JrvmK96gTgcjmPqe0yewv+H4sxHKYAtcno+EH0w==
+"@navikt/aap-felles-react@^0.0.77":
+  version "0.0.77"
+  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-react/0.0.77/65645347d241cb28bf5f71c826eabd390911948a#65645347d241cb28bf5f71c826eabd390911948a"
+  integrity sha512-iIDUkMN7OPD2LMiLjY46IYo8ydpLH+AyH/Rrl7+pGX+xy++X5+YpclT4coXTUWF5w59mznMTcWS0xhVizWxppQ==
   dependencies:
-    "@navikt/ds-css" "^2.0.5"
-    "@navikt/ds-icons" "^2.0.5"
-    "@navikt/ds-react" "^2.0.5"
-    "@navikt/ds-tokens" "^2.0.5"
+    "@navikt/aksel-icons" "^5.4.1"
+    "@navikt/ds-css" "^5.4.1"
+    "@navikt/ds-react" "^5.4.1"
     prop-types "^15.8.1"
     react "^18.2.0"
 
-"@navikt/aap-felles-utils-client@^0.0.72":
-  version "0.0.72"
-  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-utils-client/0.0.72/cb93b6a179f7b74b4893139a03ccbe50d5385e56#cb93b6a179f7b74b4893139a03ccbe50d5385e56"
-  integrity sha512-pxNpRq9hehePkYN5Dx2cHV0hmBDEK/Vm3ABzIJ/sanPKiTFYLmGS4flOvxk4KWnsG+23JXLFQrTqZzIVWZewrQ==
+"@navikt/aap-felles-utils-client@^0.0.77":
+  version "0.0.77"
+  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-utils-client/0.0.77/a820b4ad0fa32202fab5cbac0063018a9eaa5839#a820b4ad0fa32202fab5cbac0063018a9eaa5839"
+  integrity sha512-Jy1AjQ3rZvEVU3mcRPrG0y/bNEsAQgLfHXdIAFAgDipyGHJe+QEtuRmv9ltlzl+38ugK60zd2B63g7QmGR1J0w==
   dependencies:
-    date-fns "2.29.3"
+    date-fns "^2.30.0"
 
-"@navikt/aap-felles-utils@^0.0.72":
-  version "0.0.72"
-  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-utils/0.0.72/c677dc3336dfb2c36bc848d13ff0dc4dcb0f56e9#c677dc3336dfb2c36bc848d13ff0dc4dcb0f56e9"
-  integrity sha512-Uj7dXGDkixxbRnUQKoYmtS+KTvDtR8hrZ1MNaWTJGs+uqX9uJKyAUxfUzWNrDRz2NOzNtn5TEK7/uHOny0lQoA==
+"@navikt/aap-felles-utils@^0.0.77":
+  version "0.0.77"
+  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-utils/0.0.77/c4b07d4ad045860d8e656d6638e36dbd086b72e3#c4b07d4ad045860d8e656d6638e36dbd086b72e3"
+  integrity sha512-9XHABKIpG0fUFbhH8EW/2UBGS12A0lI17lK5ml7m79jtvLyhZhat58/fKA/jK9TMtWMt6qrjv5g+wqsAKklGfA==
   dependencies:
     "@elastic/ecs-pino-format" "1.3.0"
     axios "^1.2.1"
@@ -860,68 +836,33 @@
     pino "^8.8.0"
     prom-client "^14.1.0"
 
-"@navikt/aksel-icons@^2.9.8":
-  version "2.9.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/2.9.8/04e4868d2f8f1022b52e9de54668127f6d0f5052#04e4868d2f8f1022b52e9de54668127f6d0f5052"
-  integrity sha512-HANk2yejzzQxj4UefLg5Q8YXqkwh98SN98fNJUIlfonnh1bla1XB2h690QZJiY5SghHDnb2RGo/aojc8BwI8kQ==
+"@navikt/aksel-icons@^5.4.1":
+  version "5.4.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/5.4.1/ff7b887a287ef24a443bccef0471a04f4c299387#ff7b887a287ef24a443bccef0471a04f4c299387"
+  integrity sha512-PWjCtiLXSWvUDeeLsRUHCNl69AZpihdVqe8jcOM6sCYwIBv6QFw/HG4rQKtD1VirrsXvk+yOeENTC75zEJXiTw==
 
-"@navikt/aksel-icons@^5.0.2", "@navikt/aksel-icons@^5.4.0":
-  version "5.4.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/5.4.0/0d0096c7f57e1edb0c2f009aecdb77b1185ad89c#0d0096c7f57e1edb0c2f009aecdb77b1185ad89c"
-  integrity sha512-PblayoRxJ5PdTDl5j2ahYKqHKgFVmGIPxR6DSGUuN4Cx2TX/rB69S6OPZIVNbzqme/Veuuh3uxRz5pe+5vO8xw==
+"@navikt/ds-css@^5.4.1":
+  version "5.4.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/5.4.1/261168dc8c8a5bd8739f301d45238d634bab95c3#261168dc8c8a5bd8739f301d45238d634bab95c3"
+  integrity sha512-f/Fs5i4vv54dORLa8cq0muXielCUQy6asO7ugFzkzBdfzqa49gizQ14kQAbpGoEkEsfa09oSgyqL/KgH8tPX1g==
 
-"@navikt/ds-css@^2.0.5":
-  version "2.9.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/2.9.8/f620f8fc013050d272d89485bb46042819363cc2#f620f8fc013050d272d89485bb46042819363cc2"
-  integrity sha512-6MnIJpH/pX9VYXGcO2hUn9WWqUTk1WdIiPVQQbj3jTZhUKNwnT2bofcB+OrIfCST9o0qDyYeGVfVsuAyQpZxRA==
-
-"@navikt/ds-css@^5.0.2":
-  version "5.4.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/5.4.0/76a0b7beb365998b3120b9570d86e0fadbd0dbb8#76a0b7beb365998b3120b9570d86e0fadbd0dbb8"
-  integrity sha512-6SK53ZwDIrHMTM8Sl7EJVSp/O+0b0bH8/zCDm385Ea1Sd/LlEuWmMizJDyf80Rfemh3lgjYp7MtBgVRhcXJq6g==
-
-"@navikt/ds-icons@^2.0.5", "@navikt/ds-icons@^2.9.8":
-  version "2.9.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/2.9.8/b6f22493a3b836e00762dcc0a4397c64beb634e0#b6f22493a3b836e00762dcc0a4397c64beb634e0"
-  integrity sha512-5IdVN4rmpXnznQMUz5YPxDoY17nykV3Oy/YCpq6gF69JRbhjwgQ+4LI/eV1tFFLaM/EW73qFCaEzhP0DY3prEw==
-
-"@navikt/ds-react@^2.0.5":
-  version "2.9.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/2.9.8/73242362d3e36916cac4ab99b14994a89c4e7737#73242362d3e36916cac4ab99b14994a89c4e7737"
-  integrity sha512-xwiXR0K1imgCXZjfExDqUlPaq6IdJqrFqxeZBITnN6sIQheEee83RpOxxOLCoBCW9fkl4ZZSofCRYLh+i3Lo2w==
-  dependencies:
-    "@floating-ui/react" "0.17.0"
-    "@navikt/aksel-icons" "^2.9.8"
-    "@navikt/ds-icons" "^2.9.8"
-    "@radix-ui/react-tabs" "1.0.0"
-    "@radix-ui/react-toggle-group" "1.0.0"
-    clsx "^1.2.1"
-    date-fns "2.29.3"
-    react-day-picker "8.3.4"
-    react-modal "3.15.1"
-
-"@navikt/ds-react@^5.0.2":
-  version "5.4.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/5.4.0/d3b4dba40957c7544e84900aa8cf14fc9a4a6302#d3b4dba40957c7544e84900aa8cf14fc9a4a6302"
-  integrity sha512-A1hzsPnhuDPchSUosW1L/dGc3KUsM4xjDk6HFkF20tvuGDArGPyEnpM1sVcaT98XYIrNKDZUForlBDNlK066Fg==
+"@navikt/ds-react@^5.4.1":
+  version "5.4.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/5.4.1/7813d0cb086b3ba77c98bc915cee5d31589ba1ed#7813d0cb086b3ba77c98bc915cee5d31589ba1ed"
+  integrity sha512-23QOU3eBJj/x5dRy4CqmOWoFz+tSq14yvD3IDUbiqlGklCHziz9TNSSThW+vINQwVz4T7FNQZRdUsbS9P9RWlA==
   dependencies:
     "@floating-ui/react" "0.24.1"
-    "@navikt/aksel-icons" "^5.4.0"
+    "@navikt/aksel-icons" "^5.4.1"
     "@radix-ui/react-tabs" "1.0.0"
     "@radix-ui/react-toggle-group" "1.0.0"
     clsx "^1.2.1"
     date-fns "2.29.3"
     react-day-picker "8.3.4"
 
-"@navikt/ds-tokens@^2.0.5":
-  version "2.9.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/2.9.8/0200414612d0c42371c5a8b02e479227f7c8a4b8#0200414612d0c42371c5a8b02e479227f7c8a4b8"
-  integrity sha512-orzf/CIGEO8w4WZ2TaRyqNMQ2OAKR5RA4RcBnPCuLut3R/gPBX/4X3xsxYkHOnvZCkyjxIC9wMF+mvxm/0UEfw==
-
-"@navikt/eslint-config-aap@^0.0.72":
-  version "0.0.72"
-  resolved "https://npm.pkg.github.com/download/@navikt/eslint-config-aap/0.0.72/1b581edec43443f07ec62dd435aba6031042c701#1b581edec43443f07ec62dd435aba6031042c701"
-  integrity sha512-kEMCnYPeznLBcPTyrJju/QRHCemedXSxtI4Q/wMXp3ieLL6/3MyclNWjSJEdyFwBX8vHaJaQaXnrDbyvnHYCGA==
+"@navikt/eslint-config-aap@^0.0.77":
+  version "0.0.77"
+  resolved "https://npm.pkg.github.com/download/@navikt/eslint-config-aap/0.0.77/b2f69afc3ae7db2b96f2d7ca0b25600e00de9245#b2f69afc3ae7db2b96f2d7ca0b25600e00de9245"
+  integrity sha512-ubmdSUW3239niRnYRujIm7/0I7iwDEM1mCViRVTwuxt3FmXT+A9f+LyvBpt0Y0kI7zQw8tRldd13WEf4AVmWew==
 
 "@navikt/next-auth-wonderwall@^1.5.0":
   version "1.5.0"
@@ -1631,10 +1572,10 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
-"@trivago/prettier-plugin-sort-imports@^4.1.1":
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/@trivago/prettier-plugin-sort-imports/-/prettier-plugin-sort-imports-4.1.1.tgz#71c3c1ae770c3738b6fc85710714844477574ffd"
-  integrity sha512-dQ2r2uzNr1x6pJsuh/8x0IRA3CBUB+pWEW3J/7N98axqt7SQSm+2fy0FLNXvXGg77xEDC7KHxJlHfLYyi7PDcw==
+"@trivago/prettier-plugin-sort-imports@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@trivago/prettier-plugin-sort-imports/-/prettier-plugin-sort-imports-4.2.0.tgz#b240366f9e2bda8e14edb18b14ea084e0ec25968"
+  integrity sha512-YBepjbt+ZNBVmN3ev1amQH3lWCmHyt5qTbLCp/syXJRu/Kw2koXh44qayB1gMRxcL/gV8egmjN5xWSrYyfUtyw==
   dependencies:
     "@babel/generator" "7.17.7"
     "@babel/parser" "^7.20.5"
@@ -2689,6 +2630,13 @@ date-fns@2.29.3:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
   integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
 
+date-fns@^2.30.0:
+  version "2.30.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
+  integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+
 debug@4, debug@4.3.4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.2, debug@^4.3.4:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
@@ -3318,11 +3266,6 @@ execa@^5.0.0:
     onetime "^5.1.2"
     signal-exit "^3.0.3"
     strip-final-newline "^2.0.0"
-
-exenv@^1.2.0:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
-  integrity sha512-Z+ktTxTwv9ILfgKCk32OX3n/doe+OcLTRtqK9pcL+JsP3J1/VW8Uvl4ZjLlKqeW4rzK4oesDOGMEMRIZqtP4Iw==
 
 exit@^0.1.2:
   version "0.1.2"
@@ -4720,7 +4663,7 @@ long@^5.0.0:
   resolved "https://registry.yarnpkg.com/long/-/long-5.2.3.tgz#a3ba97f3877cf1d778eccbcb048525ebb77499e1"
   integrity sha512-lcHwpNoggQTObv5apGNCTdJrO69eHOZMi4BNC+rTLER8iHAqGrUVeLh/irVIM7zTw2bOXA8T6uNPeujwOLg/2Q==
 
-loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
+loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
@@ -5247,12 +5190,7 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prettier@^2.8.7:
-  version "2.8.8"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.8.tgz#e8c5d7e98a4305ffe3de2e1fc4aca1a71c28b1da"
-  integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
-
-prettier@^3.0.2:
+prettier@^3.0.2, prettier@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.0.3.tgz#432a51f7ba422d1469096c0fdc28e235db8f9643"
   integrity sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==
@@ -5305,7 +5243,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -5394,21 +5332,6 @@ react-is@^18.0.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
-
-react-lifecycles-compat@^3.0.0:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
-  integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
-
-react-modal@3.15.1:
-  version "3.15.1"
-  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.15.1.tgz#950ce67bfef80971182dd0ed38f2d9b1a681288b"
-  integrity sha512-duB9bxOaYg7Zt6TMFldIFxQRtSP+Dg3F1ZX3FXxSUn+3tZZ/9JCgeAQKDg7rhZSAqopq8TFRw3yIbnx77gyFTw==
-  dependencies:
-    exenv "^1.2.0"
-    prop-types "^15.7.2"
-    react-lifecycles-compat "^3.0.0"
-    warning "^4.0.3"
 
 react@18.2.0, react@^18.2.0:
   version "18.2.0"
@@ -6175,13 +6098,6 @@ walker@^1.0.8:
   integrity sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ==
   dependencies:
     makeerror "1.0.12"
-
-warning@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
-  integrity sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==
-  dependencies:
-    loose-envify "^1.0.0"
 
 watchpack@2.4.0:
   version "2.4.0"
