@@ -10,3 +10,7 @@ export const DATO_FORMATER = {
 export function formaterDatoFødselsdag(dato: string, datoformat?: string): string {
   return format(parseISO(dato), datoformat || DATO_FORMATER.ddMMyyyy, { locale: nb });
 }
+
+export function formaterDato(dato: Date): string {
+  return format(dato, DATO_FORMATER.ddMMyyyy, { locale: nb });
+}
