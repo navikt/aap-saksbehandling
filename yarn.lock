@@ -495,22 +495,22 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.1.1.tgz#1a5b1959a528e374e8037c4396c3e825d6cf4a83"
   integrity sha512-m0G6wlnhm/AX0H12IOWtK8gASEMffnX08RtKkCgTdHb9JpHKGloI7icFfLg9ZmQeavcvR0PKmzxClyuFPSjKWw==
 
-"@grafana/faro-core@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@grafana/faro-core/-/faro-core-1.1.4.tgz#45c2ea7a64db38f4efcdcda73b61b98f05cf039f"
-  integrity sha512-JpxtCXHsjkvuWE4gZ/EmsXAXY/buPtLaB3kWQsVMnlNglxoyFM+FXS0VB48Ip66cDmYZcdtxAW1NW3SqaW2O+g==
+"@grafana/faro-core@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@grafana/faro-core/-/faro-core-1.2.0.tgz#ad58f8d504c1cbe4fb57f9ede66f17115faaaa3e"
+  integrity sha512-ITkem5LgH39GuMRiBPXaLyG1+TCPT0iLIymFFFX+ZJTWkx6Uy0J9N9+HWy/gXPnRFb+kCRt1CNCrFZYWGt8ZxA==
   dependencies:
     "@opentelemetry/api" "^1.4.1"
     "@opentelemetry/api-metrics" "^0.33.0"
     "@opentelemetry/otlp-transformer" "^0.41.2"
     murmurhash-js "^1.0.0"
 
-"@grafana/faro-web-sdk@^1.1.1":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@grafana/faro-web-sdk/-/faro-web-sdk-1.1.4.tgz#bf4f93e234f0dabf60b7641c795690074c0bf506"
-  integrity sha512-eyrwi01VWkoaBZVYo3fbyakW/nN6Dhz/dYgaWHOx3Mt0pH+q8IrIAF5oNoy9QGNCsdmld/sbIL+jV6yoyojYDA==
+"@grafana/faro-web-sdk@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@grafana/faro-web-sdk/-/faro-web-sdk-1.2.0.tgz#3b40b9cf8ab535214ad517ebad6f8a125426d518"
+  integrity sha512-fQCbEq4Gyn96K/GatpUCBP6iQyK48EBpnf/RvWoLTUmN+ac0/dn+3c+NPZULhqMBHI10cAv9ol9wsGKXj4yYzw==
   dependencies:
-    "@grafana/faro-core" "^1.1.4"
+    "@grafana/faro-core" "^1.2.0"
     ua-parser-js "^1.0.32"
     web-vitals "^3.1.1"
 
@@ -841,10 +841,20 @@
   resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/5.4.1/ff7b887a287ef24a443bccef0471a04f4c299387#ff7b887a287ef24a443bccef0471a04f4c299387"
   integrity sha512-PWjCtiLXSWvUDeeLsRUHCNl69AZpihdVqe8jcOM6sCYwIBv6QFw/HG4rQKtD1VirrsXvk+yOeENTC75zEJXiTw==
 
+"@navikt/aksel-icons@^5.5.0":
+  version "5.5.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/5.5.0/b382aa387897f3f4850fbc16c3b95d6a57b7ef38#b382aa387897f3f4850fbc16c3b95d6a57b7ef38"
+  integrity sha512-KKq28Ed4lYwnrESIyyOxnBGr7ef1RqTPZoLAJE1YXNGHfVMN/TEZCoZQlPialhZK8g36ngNgvtsZeEm5oCxoxQ==
+
 "@navikt/ds-css@^5.4.1":
   version "5.4.1"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-css/5.4.1/261168dc8c8a5bd8739f301d45238d634bab95c3#261168dc8c8a5bd8739f301d45238d634bab95c3"
   integrity sha512-f/Fs5i4vv54dORLa8cq0muXielCUQy6asO7ugFzkzBdfzqa49gizQ14kQAbpGoEkEsfa09oSgyqL/KgH8tPX1g==
+
+"@navikt/ds-css@^5.5.0":
+  version "5.5.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/5.5.0/1802dd367f4fc83a892bbc250068efc6f5f5c205#1802dd367f4fc83a892bbc250068efc6f5f5c205"
+  integrity sha512-8QFCSyBY1B49L7w65xf+eBHSVjGHPFmhq5vrIijyeq7CbFGxH5ZQNkGZuQr5WE+cKhHk/ViOmA/FJUR++VWBCA==
 
 "@navikt/ds-react@^5.4.1":
   version "5.4.1"
@@ -858,6 +868,25 @@
     clsx "^1.2.1"
     date-fns "2.29.3"
     react-day-picker "8.3.4"
+
+"@navikt/ds-react@^5.5.0":
+  version "5.5.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/5.5.0/9dd060472b85eaaf0f7cf344a93d20bb0bbd9d42#9dd060472b85eaaf0f7cf344a93d20bb0bbd9d42"
+  integrity sha512-sBX0q7MjkAVBYvE8mrNkb2YwF0Cx/TNLIjN96bnLOnqfHRB8CV2+lkYNR6u+c/8qOuPZXgyH25dqye9kMC4VdQ==
+  dependencies:
+    "@floating-ui/react" "0.24.1"
+    "@navikt/aksel-icons" "^5.5.0"
+    "@navikt/ds-tokens" "^5.5.0"
+    "@radix-ui/react-tabs" "1.0.0"
+    "@radix-ui/react-toggle-group" "1.0.0"
+    clsx "^1.2.1"
+    date-fns "2.29.3"
+    react-day-picker "8.3.4"
+
+"@navikt/ds-tokens@^5.5.0":
+  version "5.5.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/5.5.0/f963d7872d9b6eb74198f19f107b6073bfa8c6a5#f963d7872d9b6eb74198f19f107b6073bfa8c6a5"
+  integrity sha512-zV9TfGNjiRgpX1Ec11gK8BtgkiR+HN+qwjVbWt5NA6ux8xIQYdaFqLJWQa585vLl6DEOhwrlzb0FhT+KDvG3Rg==
 
 "@navikt/eslint-config-aap@^0.0.77":
   version "0.0.77"
