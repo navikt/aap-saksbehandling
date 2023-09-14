@@ -52,7 +52,7 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: "behandlingsfly"
+        - application: "behandlingsflyt"
       external:
         {{#each externals as |host|}}
         - host: {{host}}
