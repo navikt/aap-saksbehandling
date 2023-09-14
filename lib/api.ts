@@ -31,7 +31,7 @@ export function finnSak(ident: string) {
 }
 
 export function opprettSak(sak: OpprettTestcase) {
-  return fetcher('http://localhost:3000/api/test/opprett', 'POST', sak);
+  return fetcher('/api/test/opprett', 'POST', sak);
 }
 
 export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {

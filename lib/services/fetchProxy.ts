@@ -6,15 +6,24 @@ export const fetchProxy = async <ResponseBody>(
   accessToken: string,
   scope: string,
   method: 'GET' | 'POST' = 'GET',
-  requestBody?: object
-): Promise<ResponseBody> => {
+  requestBody?: object,
+  parseBody?: boolean
+): Promise<ResponseBody | undefined> => {
   /* TODO: Implementere feilhåndtering +++ */
   if (isLocal()) {
     const response = await fetch(url, {
       method,
       body: JSON.stringify(requestBody),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
     });
-    return await response.json();
+
+    if (parseBody) { 
+      return await response.json();
+    }
+    return undefined;
   }
 
   const oboToken = await grantAzureOboToken(accessToken, scope);
@@ -27,6 +36,8 @@ export const fetchProxy = async <ResponseBody>(
     body: JSON.stringify(requestBody),
     headers: {
       Authorization: `Bearer ${oboToken}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
     },
   });
 
@@ -34,6 +45,8 @@ export const fetchProxy = async <ResponseBody>(
     throw new Error(`Unable to fetch ${url}: ${response.statusText}`);
   }
 
-  const data = await response.json();
-  return data;
+  if (parseBody) { 
+    return await response.json();
+  }
+  return undefined;
 };
