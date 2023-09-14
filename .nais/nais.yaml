@@ -51,6 +51,8 @@ spec:
     enabled: true
   accessPolicy:
     outbound:
+      rules:
+        - application: "behandlingsfly"
       external:
         {{#each externals as |host|}}
         - host: {{host}}
