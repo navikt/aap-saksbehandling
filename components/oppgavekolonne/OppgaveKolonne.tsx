@@ -1,10 +1,11 @@
 'use client';
 
-import { Button, TextField } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { Dokument, DokumentTabell } from 'components/DokumentTabell/DokumentTabell';
 import { løsBehov } from 'lib/api';
-import { LøsAvklaringsbehovPåBehandling } from 'lib/types/types';
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useConfigForm } from '../../hooks/FormHook';
+import { FormField } from '../input/formfield/FormField';
 
 interface Props {
   className: string;
@@ -21,33 +22,39 @@ const dokumenter: Dokument[] = [
   },
 ];
 
-export const OppgaveKolonne = ({ className, behandlingsReferanse }: Props) => {
-  const initialAvklaringsbehov: LøsAvklaringsbehovPåBehandling = {
-    behandlingVersjon: 0,
-    behov: {
-      // @ts-ignore Feil generert type i backend
-      begrunnelse: '',
-      // @ts-ignore Feil generert type i backend
-      endretAv: '',
-    },
-    referanse: behandlingsReferanse,
-  };
-  const [begrunnelse, setBegrunnelse] = useState<string>('');
+interface FormFields {
+  begrunnelse: string;
+}
 
-  const onButtonClick = async () => {
-    // @ts-ignore Feil generert type i backend
-    await løsBehov({ ...initialAvklaringsbehov, behov: { ...initialAvklaringsbehov.behov, begrunnelse: begrunnelse } });
-  };
+export const OppgaveKolonne = ({ className, behandlingsReferanse }: Props) => {
+  const form = useForm<FormFields>();
+  const { formFields } = useConfigForm<FormFields>({
+    begrunnelse: {
+      type: 'textarea',
+      label: 'Løs et avklaringsbehov med begrunnelse',
+    },
+  });
 
   return (
     <div className={className}>
       <DokumentTabell dokumenter={dokumenter} onTilknyttetClick={() => {}} onVedleggClick={() => {}} />
-      <TextField
-        label="Løs et avklaringsbehov med begrunnelse"
-        value={begrunnelse}
-        onChange={(event) => setBegrunnelse(event.target.value)}
-      />
-      <Button onClick={onButtonClick}>Løs avklaringsbehov</Button>
+      <form
+        onSubmit={form.handleSubmit(async (data) => {
+          await løsBehov({
+            behandlingVersjon: 0,
+            behov: {
+              // @ts-ignore Feil generert type i backend
+              begrunnelse: data.begrunnelse,
+              // @ts-ignore Feil generert type i backend
+              endretAv: '',
+            },
+            referanse: behandlingsReferanse,
+          });
+        })}
+      >
+        <FormField form={form} formField={formFields.begrunnelse} />
+        <Button>Løs avklaringsbehov</Button>
+      </form>
     </div>
   );
 };
