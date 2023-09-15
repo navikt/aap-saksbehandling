@@ -11,13 +11,15 @@ interface Props {
   behandlingsReferanse: string;
 }
 
-const dokumenter: Dokument[] = [{
-  journalpostId: '123',
-  dokumentId: '123',
-  tittel: 'Tittel',
-  åpnet: new Date(),
-  erTilknyttet: false
-}]
+const dokumenter: Dokument[] = [
+  {
+    journalpostId: '123',
+    dokumentId: '123',
+    tittel: 'Tittel',
+    åpnet: new Date(),
+    erTilknyttet: false,
+  },
+];
 
 export const OppgaveKolonne = ({ className, behandlingsReferanse }: Props) => {
   const initialAvklaringsbehov: LøsAvklaringsbehovPåBehandling = {

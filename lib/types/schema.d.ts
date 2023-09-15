@@ -8,12 +8,10 @@ export interface paths {
   "/config/definisjoner": {
     get: {
       responses: {
-        /** @description Lister ut alle definisjoner */
+        /** @description OK */
         200: {
-          headers: {
-          };
           content: {
-            "application/json": components["schemas"]["Definisjon"][];
+            "application/json": ("MANUELT_SATT_PÅ_VENT(kode='9001')" | "AVKLAR_SYKDOM(kode='5001')" | "FORESLÅ_VEDTAK(kode='5098')" | "FATTE_VEDTAK(kode='5099')")[];
           };
         };
       };
@@ -23,34 +21,34 @@ export interface paths {
     post: {
       requestBody?: {
         content: {
-          "application/json": components["schemas"]["FinnSakForIdentDTO"];
+          "application/json": components["schemas"]["no.nav.aap.flate.sak.FinnSakForIdentDTO"];
         };
       };
       responses: {
-        /** @description Successful Request */
+        /** @description OK */
         200: {
-          headers: {
-          };
           content: {
-            "application/json": components["schemas"]["SaksinfoDTO"][];
+            "application/json": components["schemas"]["no.nav.aap.flate.sak.SaksinfoDTO"][];
           };
+        };
+        /** @description No Content */
+        204: {
+          content: never;
+        };
+        /** @description Bad Request */
+        400: {
+          content: never;
         };
       };
     };
   };
   "/api/sak/alle": {
-    /**
-     * @deprecated
-     * @description Endepunkt for å hente ut alle saker. NB! Fjernes senere
-     */
     get: {
       responses: {
-        /** @description Successful Request */
+        /** @description OK */
         200: {
-          headers: {
-          };
           content: {
-            "application/json": components["schemas"]["SaksinfoDTO"][];
+            "application/json": components["schemas"]["no.nav.aap.flate.sak.SaksinfoDTO"][];
           };
         };
       };
@@ -60,16 +58,15 @@ export interface paths {
     get: {
       parameters: {
         path: {
+          /** @description saksnummer */
           saksnummer: string;
         };
       };
       responses: {
-        /** @description Successful Request */
+        /** @description OK */
         200: {
-          headers: {
-          };
           content: {
-            "application/json": components["schemas"]["UtvidetSaksinfoDTO"];
+            "application/json": components["schemas"]["no.nav.aap.flate.sak.UtvidetSaksinfoDTO"];
           };
         };
       };
@@ -79,17 +76,24 @@ export interface paths {
     get: {
       parameters: {
         path: {
+          /** @description referanse */
           referanse: string;
         };
       };
       responses: {
-        /** @description Successful Request */
+        /** @description OK */
         200: {
-          headers: {
-          };
           content: {
-            "application/json": components["schemas"]["DetaljertBehandlingDTO"];
+            "application/json": components["schemas"]["no.nav.aap.flate.behandling.DetaljertBehandlingDTO"];
           };
+        };
+        /** @description No Content */
+        204: {
+          content: never;
+        };
+        /** @description Bad Request */
+        400: {
+          content: never;
         };
       };
     };
@@ -98,20 +102,17 @@ export interface paths {
     post: {
       requestBody?: {
         content: {
-          "application/json": components["schemas"]["LøsAvklaringsbehovPåBehandling"];
+          "application/json": components["schemas"]["no.nav.aap.flate.behandling.avklaringsbehov.LøsAvklaringsbehovPåBehandling"];
         };
       };
       responses: {
-        /** @description Lagrer ned og prosesserer behov */
         202: {
-          headers: {
+          content: {
+            "application/json": components["schemas"]["no.nav.aap.flate.behandling.avklaringsbehov.LøsAvklaringsbehovPåBehandling"];
           };
-          content: never;
         };
-        /** @description Behandling ikke i tilstand for å kunne */
+        /** @description Bad Request */
         400: {
-          headers: {
-          };
           content: never;
         };
       };
@@ -121,15 +122,14 @@ export interface paths {
     post: {
       requestBody?: {
         content: {
-          "application/json": components["schemas"]["OpprettTestcaseDTO"];
+          "application/json": components["schemas"]["no.nav.aap.OpprettTestcaseDTO"];
         };
       };
       responses: {
-        /** @description Opprettet testcase, søk opp via ident */
-        201: {
-          headers: {
+        202: {
+          content: {
+            "application/json": components["schemas"]["no.nav.aap.OpprettTestcaseDTO"];
           };
-          content: never;
         };
       };
     };
@@ -140,90 +140,95 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    /** @enum {string} */
-    Definisjon: "MANUELT_SATT_PÅ_VENT" | "AVKLAR_SYKDOM" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK";
-    FinnSakForIdentDTO: {
-      ident?: string;
+    "no.nav.aap.OpprettTestcaseDTO": {
+      /**
+       * Format: date
+       * @example 2023-09-15
+       */
+      "fødselsdato": string;
+      ident: string;
+      yrkesskade: boolean;
     };
-    Periode: Record<string, never>;
-    SaksinfoDTO: {
-      periode?: components["schemas"]["Periode"];
-      saksnummer?: string;
+    "no.nav.aap.avklaringsbehov.AvklaringsbehovLøsning": Record<string, never>;
+    "no.nav.aap.domene.Periode": Record<string, never>;
+    "no.nav.aap.flate.behandling.AvklaringsbehovDTO": {
+      /** @enum {string} */
+      definisjon: "MANUELT_SATT_PÅ_VENT(kode='9001')" | "AVKLAR_SYKDOM(kode='5001')" | "FORESLÅ_VEDTAK(kode='5098')" | "FATTE_VEDTAK(kode='5099')";
+      endringer: components["schemas"]["no.nav.aap.flate.behandling.EndringDTO"][];
+      /** @enum {string} */
+      status: "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
     };
-    BehandlinginfoDTO: {
-      /** Format: date-time */
-      opprettet?: string;
+    "no.nav.aap.flate.behandling.DetaljertBehandlingDTO": {
+      /** @enum {string} */
+      aktivtSteg: "START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "INNGANGSVILKÅR" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
+      avklaringsbehov: components["schemas"]["no.nav.aap.flate.behandling.AvklaringsbehovDTO"][];
+      /**
+       * Format: date-time
+       * @example 2023-09-15T13:39:48.825763
+       */
+      opprettet: string;
       /** Format: uuid */
-      referanse?: string;
-      status?: components["schemas"]["Status-1"];
-      type?: string;
+      referanse: string;
+      /** @enum {string} */
+      status: "OPPRETTET" | "UTREDES" | "IVERKSETTES" | "AVSLUTTET" | "HENLAGT" | "PÅ_VENT";
+      type: string;
+      "vilkår": components["schemas"]["no.nav.aap.flate.behandling.VilkårDTO"][];
     };
-    /** @enum {string} */
-    "Status-1": "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
-    /** @enum {string} */
-    "Status-2": "OPPRETTET" | "UTREDES" | "IVERKSETTES" | "AVSLUTTET" | "HENLAGT";
-    UtvidetSaksinfoDTO: {
-      behandlinger?: components["schemas"]["BehandlinginfoDTO"][];
-      periode?: components["schemas"]["Periode"];
-      saksnummer?: string;
-      status?: components["schemas"]["Status-2"];
+    "no.nav.aap.flate.behandling.EndringDTO": {
+      begrunnelse: string;
+      endretAv: string;
+      /** @enum {string} */
+      status: "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
+      /**
+       * Format: date-time
+       * @example 2023-09-15T13:39:48.825763
+       */
+      tidsstempel: string;
     };
-    AvklaringsbehovDTO: {
-      definisjon?: components["schemas"]["Definisjon"];
-      endringer?: components["schemas"]["EndringDTO"][];
-      status?: components["schemas"]["Status-1"];
+    "no.nav.aap.flate.behandling.VilkårDTO": {
+      perioder: components["schemas"]["no.nav.aap.flate.behandling.VilkårsperiodeDTO"][];
+      /** @enum {string} */
+      "vilkårstype": "ALDERSVILKÅRET" | "SYKDOMSVILKÅRET" | "GRUNNLAGET";
     };
-    EndringDTO: {
-      begrunnelse?: string;
-      endretAv?: string;
-      status?: components["schemas"]["Status-1"];
-      /** Format: date-time */
-      tidsstempel?: string;
+    "no.nav.aap.flate.behandling.VilkårsperiodeDTO": {
+      begrunnelse?: string | null;
+      manuellVurdering: boolean;
+      periode: components["schemas"]["no.nav.aap.domene.Periode"];
+      /** @enum {string} */
+      utfall: "IKKE_VURDERT" | "IKKE_RELEVANT" | "OPPFYLT" | "IKKE_OPPFYLT";
     };
-    /** @enum {string} */
-    StegType: "START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "INNGANGSVILKÅR" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
-    /** @enum {string} */
-    Utfall: "IKKE_VURDERT" | "IKKE_RELEVANT" | "OPPFYLT" | "IKKE_OPPFYLT";
-    VilkrDTO: {
-      perioder?: components["schemas"]["VilkrsperiodeDTO"][];
-      "vilkårstype"?: components["schemas"]["Vilkrstype"];
-    };
-    VilkrsperiodeDTO: {
-      begrunnelse?: string;
-      manuellVurdering?: boolean;
-      periode?: components["schemas"]["Periode"];
-      utfall?: components["schemas"]["Utfall"];
-    };
-    /** @enum {string} */
-    Vilkrstype: "ALDERSVILKÅRET" | "SYKDOMSVILKÅRET" | "GRUNNLAGET";
-    DetaljertBehandlingDTO: {
-      aktivtSteg?: components["schemas"]["StegType"];
-      avklaringsbehov?: components["schemas"]["AvklaringsbehovDTO"][];
-      /** Format: date-time */
-      opprettet?: string;
-      /** Format: uuid */
-      referanse?: string;
-      status?: components["schemas"]["Status-2"];
-      type?: string;
-      "vilkår"?: components["schemas"]["VilkrDTO"][];
-    };
-    "AvklaringsbehovLsning-1": {
-      begrunnelse?: string;
-      endretAv?: string;
-    };
-    "AvklaringsbehovLsning-2": components["schemas"]["AvklaringsbehovLsning-1"];
-    "LøsAvklaringsbehovPåBehandling": {
+    "no.nav.aap.flate.behandling.avklaringsbehov.LøsAvklaringsbehovPåBehandling": {
       /** Format: int64 */
-      behandlingVersjon?: number;
-      behov?: components["schemas"]["AvklaringsbehovLsning-2"];
+      behandlingVersjon: number;
+      behov: components["schemas"]["no.nav.aap.avklaringsbehov.AvklaringsbehovLøsning"];
       /** Format: uuid */
-      referanse?: string;
+      referanse: string;
     };
-    OpprettTestcaseDTO: {
-      /** Format: date */
-      "fødselsdato"?: string;
-      ident?: string;
-      yrkesskade?: boolean;
+    "no.nav.aap.flate.sak.BehandlinginfoDTO": {
+      /**
+       * Format: date-time
+       * @example 2023-09-15T13:39:48.825763
+       */
+      opprettet: string;
+      /** Format: uuid */
+      referanse: string;
+      /** @enum {string} */
+      status: "OPPRETTET" | "UTREDES" | "IVERKSETTES" | "AVSLUTTET" | "HENLAGT" | "PÅ_VENT";
+      type: string;
+    };
+    "no.nav.aap.flate.sak.FinnSakForIdentDTO": {
+      ident: string;
+    };
+    "no.nav.aap.flate.sak.SaksinfoDTO": {
+      periode: components["schemas"]["no.nav.aap.domene.Periode"];
+      saksnummer: string;
+    };
+    "no.nav.aap.flate.sak.UtvidetSaksinfoDTO": {
+      behandlinger: components["schemas"]["no.nav.aap.flate.sak.BehandlinginfoDTO"][];
+      periode: components["schemas"]["no.nav.aap.domene.Periode"];
+      saksnummer: string;
+      /** @enum {string} */
+      status: "OPPRETTET" | "UTREDES" | "LØPENDE" | "AVSLUTTET";
     };
   };
   responses: never;
