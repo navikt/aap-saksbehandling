@@ -25,7 +25,9 @@ export const OppgaveKolonne = ({ className, behandlingsReferanse }: Props) => {
   const initialAvklaringsbehov: LøsAvklaringsbehovPåBehandling = {
     behandlingVersjon: 0,
     behov: {
+      // @ts-ignore Feil generert type i backend
       begrunnelse: '',
+      // @ts-ignore Feil generert type i backend
       endretAv: '',
     },
     referanse: behandlingsReferanse,
@@ -33,6 +35,7 @@ export const OppgaveKolonne = ({ className, behandlingsReferanse }: Props) => {
   const [begrunnelse, setBegrunnelse] = useState<string>('');
 
   const onButtonClick = async () => {
+    // @ts-ignore Feil generert type i backend
     await løsBehov({ ...initialAvklaringsbehov, behov: { ...initialAvklaringsbehov.behov, begrunnelse: begrunnelse } });
   };
 
