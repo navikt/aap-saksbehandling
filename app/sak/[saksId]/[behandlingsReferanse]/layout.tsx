@@ -1,7 +1,7 @@
 import { Detail, Label } from '@navikt/ds-react/esm/typography';
 import { hentSaksinfo } from 'lib/api';
 import { getToken } from 'lib/auth/authentication';
-import { hentBehandling } from 'lib/services/saksbehandlingService';
+import { hentBehandling, hentSak } from 'lib/services/saksbehandlingService';
 import { headers } from 'next/headers';
 import { ReactNode } from 'react';
 
@@ -10,6 +10,7 @@ import { Steg } from 'components/steg/Steg';
 
 import { StegType } from '../../../../lib/types/types';
 import styles from './layout.module.css';
+import { hentPersonInformasjonForIdent } from '../../../../lib/services/pdlService';
 
 const StegNavn: StegType[] = [
   'START_BEHANDLING',
@@ -36,15 +37,17 @@ interface Props {
 const Layout = async ({ children, params }: Props) => {
   const saksInfo = await hentSaksinfo(); // TODO: Litt metadata om søker, skal skrives om
   const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
+  const sak = await hentSak(params.saksId, getToken(headers()));
+  const personInformasjon = await hentPersonInformasjonForIdent(sak.ident);
 
   return (
     <div>
       <div className={styles.saksinfoBanner}>
         <div className={styles.søkerinfo}>
           <div className={styles.ikon} />
-          <Label size="small">{saksInfo.søker.navn}</Label>
+          <Label size="small">{personInformasjon.navn}</Label>
           <span aria-hidden>/</span>
-          <Detail>{saksInfo.søker.fnr}</Detail>
+          <Detail>{sak?.ident}</Detail>
           {saksInfo.labels.map((label) => (
             <Tag variant="info" size="xsmall" key={label.type}>
               {label.type}

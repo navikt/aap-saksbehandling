@@ -143,7 +143,7 @@ export interface components {
     "no.nav.aap.OpprettTestcaseDTO": {
       /**
        * Format: date
-       * @example 2023-09-15
+       * @example 2023-09-18
        */
       "fødselsdato": string;
       ident: string;
@@ -164,7 +164,7 @@ export interface components {
       avklaringsbehov: components["schemas"]["no.nav.aap.flate.behandling.AvklaringsbehovDTO"][];
       /**
        * Format: date-time
-       * @example 2023-09-15T13:39:48.825763
+       * @example 2023-09-18T14:12:30.186812
        */
       opprettet: string;
       /** Format: uuid */
@@ -181,7 +181,7 @@ export interface components {
       status: "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
       /**
        * Format: date-time
-       * @example 2023-09-15T13:39:48.825763
+       * @example 2023-09-18T14:12:30.186812
        */
       tidsstempel: string;
     };
@@ -207,7 +207,7 @@ export interface components {
     "no.nav.aap.flate.sak.BehandlinginfoDTO": {
       /**
        * Format: date-time
-       * @example 2023-09-15T13:39:48.825763
+       * @example 2023-09-18T14:12:30.186812
        */
       opprettet: string;
       /** Format: uuid */
@@ -225,6 +225,7 @@ export interface components {
     };
     "no.nav.aap.flate.sak.UtvidetSaksinfoDTO": {
       behandlinger: components["schemas"]["no.nav.aap.flate.sak.BehandlinginfoDTO"][];
+      ident: string;
       periode: components["schemas"]["no.nav.aap.domene.Periode"];
       saksnummer: string;
       /** @enum {string} */

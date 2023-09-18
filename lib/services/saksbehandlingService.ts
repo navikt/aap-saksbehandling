@@ -1,4 +1,10 @@
-import { DetaljertBehandling, LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo, UtvidetSaksInfo } from 'lib/types/types';
+import {
+  DetaljertBehandling,
+  LøsAvklaringsbehovPåBehandling,
+  OpprettTestcase,
+  SaksInfo,
+  UtvidetSaksInfo,
+} from 'lib/types/types';
 
 import { fetchProxy } from './fetchProxy';
 
@@ -13,9 +19,14 @@ export const hentBehandling = async (
   return await fetchProxy<DetaljertBehandling>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
 };
 
-export const hentSak = async (saksnummer: string, accessToken: string): Promise<UtvidetSaksInfo | undefined> => {
+export const hentSak = async (saksnummer: string, accessToken: string): Promise<UtvidetSaksInfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/hent/${saksnummer}`;
-  return await fetchProxy<UtvidetSaksInfo>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
+  const response = await fetchProxy<UtvidetSaksInfo>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
+  if (response) {
+    return response;
+  }
+
+  throw new Error('Fant ingen sak.');
 };
 
 export const hentAlleSaker = async (accessToken: string): Promise<SaksInfo[] | undefined> => {
@@ -31,5 +42,4 @@ export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovP�
 export const opprettTestSak = async (sak: OpprettTestcase, accessToken: string) => {
   const url = `${saksbehandlingApiBaseUrl}/test/opprett`;
   return await fetchProxy<void>(url, accessToken, saksbehandlingScope, 'POST', sak);
-
-}
+};
