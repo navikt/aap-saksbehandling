@@ -1,14 +1,9 @@
 'use client';
 
-import { ExternalLinkIcon, MenuGridIcon } from '@navikt/aksel-icons';
-import { Link } from '@navikt/ds-react';
-import { Dropdown, InternalHeader } from '@navikt/ds-react';
+import { Dropdown, ExternalLinkIcon, InternalHeader, Link, MenuGridIcon } from '../DsClient';
 
 import styles from '../../components/appheader/AppHeader.module.css';
-
-interface Brukerinfo {
-  name: string;
-}
+import { BrukerInformasjon } from '../../lib/services/azureUserService';
 
 interface LinkElement {
   label: string;
@@ -33,9 +28,7 @@ const Systemmeny = () => (
     </InternalHeader.Button>
     <Dropdown.Menu>
       <Dropdown.Menu.GroupedList>
-        <Dropdown.Menu.GroupedList.Heading>
-          Systemer og oppslagsverk
-        </Dropdown.Menu.GroupedList.Heading>
+        <Dropdown.Menu.GroupedList.Heading>Systemer og oppslagsverk</Dropdown.Menu.GroupedList.Heading>
         {links.map((link) => (
           <Dropdown.Menu.GroupedList.Item key={link.label}>
             <Link href={link.href} target={'_blank'}>
@@ -48,13 +41,10 @@ const Systemmeny = () => (
   </Dropdown>
 );
 
-const Brukermeny = ({ brukerinfo }: { brukerinfo?: Brukerinfo }) => {
-  if (!brukerinfo) {
-    return <></>;
-  }
+const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => {
   return (
     <Dropdown>
-      <InternalHeader.UserButton name={brukerinfo.name} as={Dropdown.Toggle} />
+      <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
       <Dropdown.Menu>
         <Dropdown.Menu.List>
           <Dropdown.Menu.List.Item>
@@ -68,12 +58,12 @@ const Brukermeny = ({ brukerinfo }: { brukerinfo?: Brukerinfo }) => {
   );
 };
 
-const AppHeader = () => {
+const AppHeader = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => {
   return (
     <InternalHeader className={styles.app__header}>
       <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
       <Systemmeny />
-      <Brukermeny />
+      <Brukermeny brukerInformasjon={brukerInformasjon} />
     </InternalHeader>
   );
 };

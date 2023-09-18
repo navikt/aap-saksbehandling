@@ -1,8 +1,10 @@
 import '@navikt/ds-css';
-import { verifyUserLoggedIn } from 'lib/auth/authentication';
+import { getToken, verifyUserLoggedIn } from 'lib/auth/authentication';
 import 'styles/globals.css';
 
 import { AppHeader } from 'components/appheader/AppHeader';
+import { hentBrukerInformasjon } from '../lib/services/azureUserService';
+import { headers } from 'next/headers';
 
 export const metadata = {
   title: 'Kelvin',
@@ -11,11 +13,12 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   await verifyUserLoggedIn();
+  const brukerInformasjon = await hentBrukerInformasjon(getToken(headers()));
 
   return (
     <html lang="nb">
       <body>
-        <AppHeader />
+        <AppHeader brukerInformasjon={brukerInformasjon} />
         {children}
       </body>
     </html>
