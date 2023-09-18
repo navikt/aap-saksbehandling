@@ -1,5 +1,5 @@
 import { getToken } from 'lib/auth/authentication';
-import { løsAvklaringsbehov } from 'lib/services/saksbehandlingService';
+import { løsAvklaringsbehov } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {

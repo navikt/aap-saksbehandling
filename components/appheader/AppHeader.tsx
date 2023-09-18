@@ -3,7 +3,7 @@
 import { Dropdown, ExternalLinkIcon, InternalHeader, Link, MenuGridIcon } from '../DsClient';
 
 import styles from '../../components/appheader/AppHeader.module.css';
-import { BrukerInformasjon } from '../../lib/services/azureUserService';
+import { BrukerInformasjon } from '../../lib/services/azureuserservice/azureUserService';
 
 interface LinkElement {
   label: string;

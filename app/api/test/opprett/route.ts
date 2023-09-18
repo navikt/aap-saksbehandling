@@ -1,5 +1,5 @@
 import { getToken } from 'lib/auth/authentication';
-import { opprettTestSak } from 'lib/services/saksbehandlingService';
+import { opprettTestSak } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
 import { revalidatePath } from 'next/cache';
 

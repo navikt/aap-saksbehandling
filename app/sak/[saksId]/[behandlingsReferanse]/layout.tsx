@@ -1,7 +1,7 @@
 import { Detail, Label } from '@navikt/ds-react/esm/typography';
 import { hentSaksinfo } from 'lib/api';
 import { getToken } from 'lib/auth/authentication';
-import { hentBehandling, hentSak } from 'lib/services/saksbehandlingService';
+import { hentBehandling, hentSak } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
 import { headers } from 'next/headers';
 import { ReactNode } from 'react';
 
@@ -10,7 +10,7 @@ import { Steg } from 'components/steg/Steg';
 
 import { StegType } from '../../../../lib/types/types';
 import styles from './layout.module.css';
-import { hentPersonInformasjonForIdent } from '../../../../lib/services/pdlService';
+import { hentPersonInformasjonForIdent } from '../../../../lib/services/pdlservice/pdlService';
 
 const StegNavn: StegType[] = [
   'START_BEHANDLING',

@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 
 import { AppHeader } from './AppHeader';
-import { BrukerInformasjon } from '../../lib/services/azureUserService';
+import { BrukerInformasjon } from '../../lib/services/azureuserservice/azureUserService';
 
 const brukerInformasjon: BrukerInformasjon = {
   navn: 'Kjell T Ringen',

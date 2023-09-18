@@ -4,9 +4,9 @@ import {
   OpprettTestcase,
   SaksInfo,
   UtvidetSaksInfo,
-} from 'lib/types/types';
+} from '../../types/types';
 
-import { fetchProxy } from './fetchProxy';
+import { fetchProxy } from '../fetchProxy';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingScope = process.env.BEHANDLING_API_SCOPE ?? '';
