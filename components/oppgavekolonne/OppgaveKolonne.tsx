@@ -39,9 +39,8 @@ export const OppgaveKolonne = ({ className, behandlingsReferanse }: Props) => {
 
   return (
     <div className={className}>
-      <DokumentTabell dokumenter={dokumenter} onTilknyttetClick={() => {}} onVedleggClick={() => {}} />
-
       <VilkårsKort heading={'Avklaringsbehov'} icon={<Buldings2Icon />}>
+        <DokumentTabell dokumenter={dokumenter} onTilknyttetClick={() => {}} onVedleggClick={() => {}} />
         <form
           onSubmit={form.handleSubmit(async (data) => {
             await løsBehov({
