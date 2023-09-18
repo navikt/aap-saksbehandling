@@ -3,14 +3,14 @@ import { hentAlleSaker } from 'lib/services/saksbehandlingService';
 import { headers } from 'next/headers';
 import Link from 'next/link';
 
-import { OpprettSakButton } from 'components/OpprettSakButton';
+import { OpprettSak } from '../../components/opprettsak/OpprettSak';
 
 const Page = async () => {
   const alleSaker = await hentAlleSaker(getToken(headers()));
   return (
     <>
       <h1>Saksoversikt page</h1>
-      <OpprettSakButton />
+      <OpprettSak />
       {alleSaker?.map((sak) => (
         <div key={sak.saksnummer}>
           <Link href={`/sak/${sak.saksnummer}/`}>{sak.saksnummer}</Link>
