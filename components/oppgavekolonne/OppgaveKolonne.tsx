@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@navikt/ds-react';
-import { Dokument, DokumentTabell } from 'components/DokumentTabell/DokumentTabell';
+import { Dokument, DokumentTabell } from '../dokumenttabell/DokumentTabell';
 import { løsBehov } from 'lib/api';
 import { useForm } from 'react-hook-form';
 import { useConfigForm } from '../../hooks/FormHook';
