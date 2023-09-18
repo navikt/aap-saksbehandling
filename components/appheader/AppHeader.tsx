@@ -41,31 +41,27 @@ const Systemmeny = () => (
   </Dropdown>
 );
 
-const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => {
-  return (
-    <Dropdown>
-      <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
-      <Dropdown.Menu>
-        <Dropdown.Menu.List>
-          <Dropdown.Menu.List.Item>
-            <Link href={'/oauth2/logout'} className={styles.link}>
-              Logg ut
-            </Link>
-          </Dropdown.Menu.List.Item>
-        </Dropdown.Menu.List>
-      </Dropdown.Menu>
-    </Dropdown>
-  );
-};
+const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => (
+  <Dropdown>
+    <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
+    <Dropdown.Menu>
+      <Dropdown.Menu.List>
+        <Dropdown.Menu.List.Item>
+          <Link href={'/oauth2/logout'} className={styles.link}>
+            Logg ut
+          </Link>
+        </Dropdown.Menu.List.Item>
+      </Dropdown.Menu.List>
+    </Dropdown.Menu>
+  </Dropdown>
+);
 
-const AppHeader = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => {
-  return (
-    <InternalHeader className={styles.app__header}>
-      <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
-      <Systemmeny />
-      <Brukermeny brukerInformasjon={brukerInformasjon} />
-    </InternalHeader>
-  );
-};
+const AppHeader = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => (
+  <InternalHeader className={styles.app__header}>
+    <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
+    <Systemmeny />
+    <Brukermeny brukerInformasjon={brukerInformasjon} />
+  </InternalHeader>
+);
 
 export { AppHeader };
