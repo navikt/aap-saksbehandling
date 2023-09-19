@@ -1,13 +1,20 @@
 'use client';
 
-import { Button } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Label, ReadMore } from '@navikt/ds-react';
 import { Dokument, DokumentTabell } from '../dokumenttabell/DokumentTabell';
 import { løsBehov } from 'lib/api';
 import { useForm } from 'react-hook-form';
 import { useConfigForm } from '../../hooks/FormHook';
 import { FormField } from '../input/formfield/FormField';
 import { VilkårsKort } from '../vilkårskort/VilkårsKort';
-import { Buldings2Icon } from '@navikt/aksel-icons';
+import { Buldings2Icon, VitalsIcon } from '@navikt/aksel-icons';
+
+import styles from './OppgaveKolonne.module.css';
+
+enum JaEllerNei {
+  Ja = 'ja',
+  Nei = 'nei',
+}
 
 interface Props {
   className: string;
@@ -25,40 +32,154 @@ const dokumenter: Dokument[] = [
 ];
 
 interface FormFields {
-  begrunnelse: string;
+  yrkesskade_dokumentasjonMangler: string[];
+  yrkesskade_årssakssammenheng: string;
+  yrkesskade_begrunnelse: string;
+  yrkesskade_dato: string;
+  arbeidsevne_dokumentasjonMangler: string[];
+  arbeidsevne_erSykdom: string;
+  arbeidsevne_nedsattMinst50: string;
+  arbeidsevne_begrunnelse: string;
+  arbeidsevne_dato: string;
 }
 
 export const OppgaveKolonne = ({ className, behandlingsReferanse }: Props) => {
   const form = useForm<FormFields>();
   const { formFields } = useConfigForm<FormFields>({
-    begrunnelse: {
+    yrkesskade_dokumentasjonMangler: {
+      type: 'checkbox',
+      label: 'Dokumentasjon mangler',
+      options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
+    },
+    yrkesskade_årssakssammenheng: {
+      type: 'radio',
+      label: 'Er vilkåret (årssakssammenheng) i 11.22 oppfylt?',
+      options: [
+        { label: 'Ja', value: JaEllerNei.Ja },
+        { label: 'Nei', value: JaEllerNei.Nei },
+      ],
+    },
+    yrkesskade_begrunnelse: {
       type: 'textarea',
-      label: 'Løs et avklaringsbehov med begrunnelse',
+      label: 'Vurder om yrkesskaden er medvirkende årsak til den nedsatte arbeidsevnen',
+      description: 'Se eksempel på vilkårsvurderingstekst',
+    },
+    yrkesskade_dato: {
+      type: 'date',
+      label: 'Dato for skadetidspunkt for yrkesskaden',
+    },
+    arbeidsevne_dokumentasjonMangler: {
+      type: 'checkbox',
+      label: 'Dokumentasjon mangler',
+      options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
+    },
+    arbeidsevne_erSykdom: {
+      type: 'radio',
+      label: 'Er det sykdom, skade eller lyte som fører til nedsatt arbeidsevne?',
+      options: [
+        { label: 'Ja', value: JaEllerNei.Ja },
+        { label: 'Nei', value: JaEllerNei.Nei },
+      ],
+    },
+    arbeidsevne_nedsattMinst50: {
+      type: 'radio',
+      label: 'Er arbeidsevnen nedsatt med minst 50%?',
+      options: [
+        { label: 'Ja', value: JaEllerNei.Ja },
+        { label: 'Nei', value: JaEllerNei.Nei },
+      ],
+    },
+    arbeidsevne_begrunnelse: {
+      type: 'textarea',
+      label: 'Vurder den nedsatte arbeidsevnen',
+      description:
+        'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst 50%?',
+    },
+    arbeidsevne_dato: {
+      type: 'date',
+      label: 'Dato for nedsatt arbeidsevne med minst 50%',
     },
   });
 
   return (
     <div className={className}>
-      <VilkårsKort heading={'Avklaringsbehov'} icon={<Buldings2Icon />}>
-        <DokumentTabell dokumenter={dokumenter} onTilknyttetClick={() => {}} onVedleggClick={() => {}} />
-        <form
-          onSubmit={form.handleSubmit(async (data) => {
-            await løsBehov({
-              behandlingVersjon: 0,
-              behov: {
-                // @ts-ignore Feil generert type i backend
-                begrunnelse: data.begrunnelse,
-                // @ts-ignore Feil generert type i backend
-                endretAv: '',
-              },
-              referanse: behandlingsReferanse,
-            });
-          })}
-        >
-          <FormField form={form} formField={formFields.begrunnelse} />
-          <Button>Løs avklaringsbehov</Button>
-        </form>
-      </VilkårsKort>
+      <form
+        className={styles.form}
+        onSubmit={form.handleSubmit(async (data) => {
+          console.log('løser behov', data);
+          await løsBehov({
+            behandlingVersjon: 0,
+            behov: {
+              // @ts-ignore Feil generert type i backend
+              begrunnelse: data.begrunnelse,
+              // @ts-ignore Feil generert type i backend
+              endretAv: '',
+            },
+            referanse: behandlingsReferanse,
+          });
+        })}
+      >
+        <VilkårsKort heading={'Yrkesskade - § 11.22'} icon={<Buldings2Icon />}>
+          <Alert variant="warning">Vi har funnet en eller flere registrerte yrkesskader</Alert>
+          <div>
+            <Label as="p" spacing>
+              Har søker godkjent yrkesskade
+            </Label>
+            <BodyShort>Ja</BodyShort>
+          </div>
+          <div>
+            <Label as="p" spacing>
+              Saksopplysninger
+            </Label>
+            <BodyShort>Det er registrert en yrkesskade på søker</BodyShort>
+          </div>
+        </VilkårsKort>
+        <VilkårsKort heading={'Yrkesskade - årsakssammenheng § 11.22'} icon={<Buldings2Icon />}>
+          <div>
+            <Label as="p" spacing>
+              Dokumenter funnet som er relevante for vurdering av årsakssammenheng § 11.22
+            </Label>
+            <BodyShort>Les dokumentene og tilknytt minst ett dokument til 11.22 vurderingen</BodyShort>
+          </div>
+          <DokumentTabell dokumenter={dokumenter} onTilknyttetClick={() => {}} onVedleggClick={() => {}} />
+
+          <FormField form={form} formField={formFields.yrkesskade_dokumentasjonMangler} />
+
+          <FormField form={form} formField={formFields.yrkesskade_årssakssammenheng} />
+
+          <ReadMore header="Slik vurderes vilkåret">
+            <BodyShort spacing>Søker må ha søkt om...</BodyShort>
+          </ReadMore>
+
+          <FormField form={form} formField={formFields.yrkesskade_begrunnelse} />
+
+          <FormField form={form} formField={formFields.yrkesskade_dato} />
+        </VilkårsKort>
+
+        <VilkårsKort heading={'Nedsatt arbeidsevne - § 11.5'} icon={<VitalsIcon />}>
+          <Alert variant="warning">Legeerklæring er av gammel dato, vurder å be om en ny fra behandler</Alert>
+          <div>
+            <Label as="p" spacing>
+              Registrert behandler
+            </Label>
+            <BodyShort>Fast Lege</BodyShort>
+            <BodyShort>Lillegrensen Legesenter</BodyShort>
+            <BodyShort>0123 Legeby, 815 493 00</BodyShort>
+          </div>
+
+          <FormField form={form} formField={formFields.arbeidsevne_dokumentasjonMangler} />
+
+          <FormField form={form} formField={formFields.arbeidsevne_erSykdom} />
+
+          <FormField form={form} formField={formFields.arbeidsevne_nedsattMinst50} />
+
+          <FormField form={form} formField={formFields.arbeidsevne_begrunnelse} />
+
+          <FormField form={form} formField={formFields.arbeidsevne_dato} />
+
+          <Button>Lagre og gå til neste steg</Button>
+        </VilkårsKort>
+      </form>
     </div>
   );
 };
