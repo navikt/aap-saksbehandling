@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, BodyShort, Button, Label, ReadMore } from '@navikt/ds-react';
-import { Dokument, DokumentTabell } from '../dokumenttabell/DokumentTabell';
+import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { løsBehov } from 'lib/api';
 import { useForm } from 'react-hook-form';
 import { useConfigForm } from '../../hooks/FormHook';
@@ -10,6 +10,7 @@ import { VilkårsKort } from '../vilkårskort/VilkårsKort';
 import { Buldings2Icon, VitalsIcon } from '@navikt/aksel-icons';
 
 import styles from './OppgaveKolonne.module.css';
+import { Dokument } from 'lib/types/types';
 
 enum JaEllerNei {
   Ja = 'ja',

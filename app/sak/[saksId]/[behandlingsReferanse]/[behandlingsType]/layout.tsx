@@ -5,8 +5,9 @@ import { headers } from 'next/headers';
 import { HGrid } from 'components/DsClient';
 
 import styles from './page.module.css';
+import { ReactNode } from 'react';
 
-const Page = async ({ params }: { params: { behandlingsReferanse: string } }) => {
+const Layout = async ({ params, children }: { params: { behandlingsReferanse: string }; children: ReactNode }) => {
   const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
 
   if (behandling === undefined) {
@@ -15,9 +16,10 @@ const Page = async ({ params }: { params: { behandlingsReferanse: string } }) =>
 
   return (
     <HGrid columns={'1fr 3fr 1fr'} className={styles.kolonner}>
+      {children}
       <div className={`${styles.kolonne} ${styles.høyrekolonne}`} />
     </HGrid>
   );
 };
 
-export default Page;
+export default Layout;

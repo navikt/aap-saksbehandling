@@ -15,12 +15,12 @@ export const hentBehandling = async (
   behandlingsReferanse: string,
   accessToken: string
 ): Promise<DetaljertBehandling | undefined> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/hent/${behandlingsReferanse}`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}`;
   return await fetchProxy<DetaljertBehandling>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
 };
 
 export const hentSak = async (saksnummer: string, accessToken: string): Promise<UtvidetSaksInfo> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/hent/${saksnummer}`;
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}`;
   const response = await fetchProxy<UtvidetSaksInfo>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
   if (response) {
     return response;

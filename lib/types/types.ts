@@ -19,6 +19,14 @@ export type Vilkårsperiode = components['schemas']['no.nav.aap.flate.behandling
 // export type StegType = components['schemas']['StegType'];
 // export type Definisjon = components['schemas']['Definisjon'];
 
+export interface Dokument {
+  journalpostId: string;
+  dokumentId: string;
+  tittel: string;
+  åpnet?: Date;
+  erTilknyttet: boolean;
+}
+
 export type StegType =
   | 'START_BEHANDLING'
   | 'VURDER_ALDER'

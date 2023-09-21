@@ -9,6 +9,7 @@ import { headers } from 'next/headers';
 const Page = async ({ params }: { params: { behandlingsReferanse: string; behandlingsType: string } }) => {
   const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
 
+  console.log(behandling);
   return (
     <>
       <InformasjonsKolonne

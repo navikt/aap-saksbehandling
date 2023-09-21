@@ -54,7 +54,7 @@ export interface paths {
       };
     };
   };
-  "/api/sak/hent/{saksnummer}": {
+  "/api/sak/{saksnummer}": {
     get: {
       parameters: {
         path: {
@@ -72,7 +72,7 @@ export interface paths {
       };
     };
   };
-  "/api/behandling/hent/{referanse}": {
+  "/api/behandling/{referanse}": {
     get: {
       parameters: {
         path: {
@@ -98,7 +98,7 @@ export interface paths {
       };
     };
   };
-  "/api/behandling/hent/{referanse}/grunnlag/sykdom": {
+  "/api/behandling/{referanse}/grunnlag/sykdom": {
     get: {
       parameters: {
         path: {
@@ -111,6 +111,24 @@ export interface paths {
         200: {
           content: {
             "application/json": components["schemas"]["no.nav.aap.flate.behandling.SykdomsGrunnlagDto"];
+          };
+        };
+      };
+    };
+  };
+  "/api/behandling/{referanse}/flyt": {
+    get: {
+      parameters: {
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["no.nav.aap.flate.behandling.BehandlingFlytOgTilstandDto"];
           };
         };
       };
@@ -168,6 +186,29 @@ export interface components {
       yrkesskade: boolean;
     };
     "no.nav.aap.avklaringsbehov.AvklaringsbehovLøsning": Record<string, never>;
+    "no.nav.aap.avklaringsbehov.sykdom.Sykdomsvurdering": {
+      begrunnelse: string;
+      dokumenterBruktIVurdering: components["schemas"]["no.nav.aap.domene.behandling.dokumenter.JournalpostId"][];
+      "erNedsettelseIArbeidsevneHøyereEnnNedreGrense"?: boolean | null;
+      erSkadeSykdomEllerLyteVesentligdel: boolean;
+      /** @enum {string|null} */
+      nedreGrense?: "TRETTI" | "FEMTI" | null;
+      /**
+       * Format: date
+       * @example 2023-09-21
+       */
+      skadetidspunkt?: string | null;
+    };
+    "no.nav.aap.avklaringsbehov.sykdom.Yrkesskadevurdering": {
+      begrunnelse: string;
+      dokumenterBruktIVurdering: components["schemas"]["no.nav.aap.domene.behandling.dokumenter.JournalpostId"][];
+      "erÅrsakssammenheng": boolean;
+      /**
+       * Format: date
+       * @example 2023-09-21
+       */
+      skadetidspunkt?: string | null;
+    };
     "no.nav.aap.domene.Periode": Record<string, never>;
     "no.nav.aap.domene.behandling.dokumenter.JournalpostId": {
       identifikator: string;
@@ -179,13 +220,16 @@ export interface components {
       /** @enum {string} */
       status: "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
     };
+    "no.nav.aap.flate.behandling.BehandlingFlytOgTilstandDto": {
+      flyt: ("START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING")[];
+    };
     "no.nav.aap.flate.behandling.DetaljertBehandlingDTO": {
       /** @enum {string} */
       aktivtSteg: "START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
       avklaringsbehov: components["schemas"]["no.nav.aap.flate.behandling.AvklaringsbehovDTO"][];
       /**
        * Format: date-time
-       * @example 2023-09-21T12:03:35.115055
+       * @example 2023-09-21T13:13:39.332482
        */
       opprettet: string;
       /** Format: uuid */
@@ -202,7 +246,7 @@ export interface components {
       status: "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
       /**
        * Format: date-time
-       * @example 2023-09-21T12:03:35.115055
+       * @example 2023-09-21T13:13:39.332482
        */
       tidsstempel: string;
     };
@@ -217,21 +261,8 @@ export interface components {
     };
     "no.nav.aap.flate.behandling.SykdomsGrunnlagDto": {
       opplysninger: components["schemas"]["no.nav.aap.flate.behandling.InnhentetSykdomsOpplysninger"];
-      sykdomsvurdering?: components["schemas"]["no.nav.aap.flate.behandling.Sykdomsvurdering"];
-      yrkesskadevurdering?: components["schemas"]["no.nav.aap.flate.behandling.Yrkesskadevurdering"];
-    };
-    "no.nav.aap.flate.behandling.Sykdomsvurdering": {
-      begrunnelse: string;
-      dokumenterBruktIVurdering: components["schemas"]["no.nav.aap.domene.behandling.dokumenter.JournalpostId"][];
-      "erNedsettelseIArbeidsevneHøyereEnnNedreGrense"?: boolean | null;
-      erSkadeSykdomEllerLyteVesentligdel: boolean;
-      /** @enum {string|null} */
-      nedreGrense?: "TRETTI" | "FEMTI" | null;
-      /**
-       * Format: date
-       * @example 2023-09-21
-       */
-      skadetidspunkt?: string | null;
+      sykdomsvurdering?: components["schemas"]["no.nav.aap.avklaringsbehov.sykdom.Sykdomsvurdering"];
+      yrkesskadevurdering?: components["schemas"]["no.nav.aap.avklaringsbehov.sykdom.Yrkesskadevurdering"];
     };
     "no.nav.aap.flate.behandling.VilkårDTO": {
       perioder: components["schemas"]["no.nav.aap.flate.behandling.VilkårsperiodeDTO"][];
@@ -245,16 +276,6 @@ export interface components {
       /** @enum {string} */
       utfall: "IKKE_VURDERT" | "IKKE_RELEVANT" | "OPPFYLT" | "IKKE_OPPFYLT";
     };
-    "no.nav.aap.flate.behandling.Yrkesskadevurdering": {
-      begrunnelse: string;
-      dokumenterBruktIVurdering: components["schemas"]["no.nav.aap.domene.behandling.dokumenter.JournalpostId"][];
-      "erÅrsakssammenheng": boolean;
-      /**
-       * Format: date
-       * @example 2023-09-21
-       */
-      skadetidspunkt?: string | null;
-    };
     "no.nav.aap.flate.behandling.avklaringsbehov.LøsAvklaringsbehovPåBehandling": {
       /** Format: int64 */
       behandlingVersjon: number;
@@ -265,7 +286,7 @@ export interface components {
     "no.nav.aap.flate.sak.BehandlinginfoDTO": {
       /**
        * Format: date-time
-       * @example 2023-09-21T12:03:35.115055
+       * @example 2023-09-21T13:13:39.332482
        */
       opprettet: string;
       /** Format: uuid */

@@ -16,11 +16,13 @@ export const fetchProxy = async <ResponseBody>(
       body: JSON.stringify(requestBody),
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
 
-    if (parseBody) { 
+    console.log('status', response.status);
+
+    if (parseBody) {
       return await response.json();
     }
     return undefined;
@@ -37,7 +39,7 @@ export const fetchProxy = async <ResponseBody>(
     headers: {
       Authorization: `Bearer ${oboToken}`,
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
   });
 
@@ -45,7 +47,7 @@ export const fetchProxy = async <ResponseBody>(
     throw new Error(`Unable to fetch ${url}: ${response.statusText}`);
   }
 
-  if (parseBody) { 
+  if (parseBody) {
     return await response.json();
   }
   return undefined;
