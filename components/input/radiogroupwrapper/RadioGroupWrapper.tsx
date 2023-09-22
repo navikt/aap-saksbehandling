@@ -24,7 +24,6 @@ export const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
   label,
   horisontal = false,
 }: RadioProps<FormFieldValues>) => {
-  console.log('Rendering!!!!', control);
   return (
     <div className={styles.radiogroup}>
       <Controller
@@ -32,7 +31,6 @@ export const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
         control={control}
         rules={rules}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
-          console.log({ value });
           return (
             <RadioGroup
               id={name}
