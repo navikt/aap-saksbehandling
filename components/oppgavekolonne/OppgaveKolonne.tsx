@@ -173,8 +173,11 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
             {sykdomsGrunnlag?.opplysninger.innhentedeYrkesskader.map((innhentetYrkesskade) => (
               <div key={innhentetYrkesskade.ref}>
                 <BodyShort spacing>{innhentetYrkesskade.kilde}</BodyShort>
-                {/* @ts-ignore-line TODO: Periode kommer som en record 😡 */}
-                <BodyShort spacing>Periode: {innhentetYrkesskade.periode}</BodyShort>
+                <Label as="p" spacing>
+                  Periode
+                </Label>
+                <BodyShort spacing>Fra: {format(new Date(innhentetYrkesskade.periode.fom), 'dd.MM.yyyy')}</BodyShort>
+                <BodyShort spacing>Til: {format(new Date(innhentetYrkesskade.periode.tom), 'dd.MM.yyyy')}</BodyShort>
               </div>
             ))}
             {sykdomsGrunnlag?.opplysninger.innhentedeYrkesskader.length === 0 && (
