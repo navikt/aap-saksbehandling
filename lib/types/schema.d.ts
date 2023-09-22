@@ -179,7 +179,7 @@ export interface components {
     "no.nav.aap.OpprettTestcaseDTO": {
       /**
        * Format: date
-       * @example 2023-09-21
+       * @example 2023-09-22
        */
       "fødselsdato": string;
       ident: string;
@@ -195,7 +195,7 @@ export interface components {
       nedreGrense?: "TRETTI" | "FEMTI" | null;
       /**
        * Format: date
-       * @example 2023-09-21
+       * @example 2023-09-22
        */
       skadetidspunkt?: string | null;
     };
@@ -205,7 +205,7 @@ export interface components {
       "erÅrsakssammenheng": boolean;
       /**
        * Format: date
-       * @example 2023-09-21
+       * @example 2023-09-22
        */
       skadetidspunkt?: string | null;
     };
@@ -229,7 +229,7 @@ export interface components {
       avklaringsbehov: components["schemas"]["no.nav.aap.flate.behandling.AvklaringsbehovDTO"][];
       /**
        * Format: date-time
-       * @example 2023-09-21T13:13:39.332482
+       * @example 2023-09-22T09:23:58.12293
        */
       opprettet: string;
       /** Format: uuid */
@@ -246,7 +246,7 @@ export interface components {
       status: "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
       /**
        * Format: date-time
-       * @example 2023-09-21T13:13:39.332482
+       * @example 2023-09-22T09:23:58.12293
        */
       tidsstempel: string;
     };
@@ -270,6 +270,8 @@ export interface components {
       "vilkårstype": "ALDERSVILKÅRET" | "SYKDOMSVILKÅRET" | "GRUNNLAGET";
     };
     "no.nav.aap.flate.behandling.VilkårsperiodeDTO": {
+      /** @enum {string|null} */
+      "avslagsårsak"?: "BRUKER_UNDER_18" | "BRUKER_OVER_67" | "MANGLENDE_DOKUMENTASJON" | null;
       begrunnelse?: string | null;
       manuellVurdering: boolean;
       periode: components["schemas"]["no.nav.aap.domene.Periode"];
@@ -286,7 +288,7 @@ export interface components {
     "no.nav.aap.flate.sak.BehandlinginfoDTO": {
       /**
        * Format: date-time
-       * @example 2023-09-21T13:13:39.332482
+       * @example 2023-09-22T09:23:58.12293
        */
       opprettet: string;
       /** Format: uuid */

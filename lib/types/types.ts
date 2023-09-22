@@ -13,6 +13,7 @@ export type Vilkår = components['schemas']['no.nav.aap.flate.behandling.Vilkår
 export type LøsAvklaringsbehovPåBehandling =
   components['schemas']['no.nav.aap.flate.behandling.avklaringsbehov.LøsAvklaringsbehovPåBehandling'];
 export type Vilkårsperiode = components['schemas']['no.nav.aap.flate.behandling.VilkårsperiodeDTO'];
+export type SykdomsGrunnlag = components['schemas']['no.nav.aap.flate.behandling.SykdomsGrunnlagDto'];
 
 //TODO Disse blir ikke generert riktig av swagger
 // export type VilkårsType = components['schemas']['Vilkrstype'];

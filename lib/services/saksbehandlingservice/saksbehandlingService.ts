@@ -3,6 +3,7 @@ import {
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
   SaksInfo,
+  SykdomsGrunnlag,
   UtvidetSaksInfo,
 } from '../../types/types';
 
@@ -32,6 +33,11 @@ export const hentSak = async (saksnummer: string, accessToken: string): Promise<
 export const hentAlleSaker = async (accessToken: string): Promise<SaksInfo[] | undefined> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;
   return await fetchProxy<SaksInfo[]>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
+};
+
+export const hentSykdomsGrunnlag = async (behandlingsReferanse: string, accessToken: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom`;
+  return await fetchProxy<SykdomsGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
 };
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling, accessToken: string) => {

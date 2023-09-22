@@ -2,12 +2,15 @@ import { InformasjonsKolonne } from 'components/informasjonskolonne/Informasjons
 import { OppgaveKolonne } from 'components/oppgavekolonne/OppgaveKolonne';
 
 import styles from './page.module.css';
-import { hentBehandling } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBehandling, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
 
 const Page = async ({ params }: { params: { behandlingsReferanse: string; behandlingsType: string } }) => {
   const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
+  const sykdomsGrunnlag = await hentSykdomsGrunnlag(params.behandlingsReferanse, getToken(headers()));
+
+  console.log('sykdomsgrunnlag', sykdomsGrunnlag);
 
   console.log(behandling);
   return (
@@ -16,7 +19,11 @@ const Page = async ({ params }: { params: { behandlingsReferanse: string; behand
         className={`${styles.kolonne} ${styles.venstrekolonne}`}
         behandlingsReferanse={behandling?.referanse ?? ''}
       />
-      <OppgaveKolonne className={styles.kolonne} behandlingsReferanse={behandling?.referanse ?? ''} />
+      <OppgaveKolonne
+        className={styles.kolonne}
+        sykdomsGrunnlag={sykdomsGrunnlag}
+        behandlingsReferanse={behandling?.referanse ?? ''}
+      />
     </>
   );
 };

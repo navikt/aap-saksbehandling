@@ -10,7 +10,7 @@ import { VilkårsKort } from '../vilkårskort/VilkårsKort';
 import { Buldings2Icon, VitalsIcon } from '@navikt/aksel-icons';
 
 import styles from './OppgaveKolonne.module.css';
-import { Dokument } from 'lib/types/types';
+import { Dokument, SykdomsGrunnlag } from 'lib/types/types';
 
 enum JaEllerNei {
   Ja = 'ja',
@@ -19,6 +19,7 @@ enum JaEllerNei {
 
 interface Props {
   className: string;
+  sykdomsGrunnlag?: SykdomsGrunnlag;
   behandlingsReferanse: string;
 }
 
@@ -44,7 +45,7 @@ interface FormFields {
   arbeidsevne_dato: string;
 }
 
-export const OppgaveKolonne = ({ className, behandlingsReferanse }: Props) => {
+export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferanse }: Props) => {
   const form = useForm<FormFields>();
   const { formFields } = useConfigForm<FormFields>({
     yrkesskade_dokumentasjonMangler: {
@@ -124,15 +125,23 @@ export const OppgaveKolonne = ({ className, behandlingsReferanse }: Props) => {
           <Alert variant="warning">Vi har funnet en eller flere registrerte yrkesskader</Alert>
           <div>
             <Label as="p" spacing>
-              Har søker godkjent yrkesskade
+              Har søker oppgitt at de har en yrkesskade i søknaden?
             </Label>
-            <BodyShort>Ja</BodyShort>
+            <BodyShort>{sykdomsGrunnlag?.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}</BodyShort>
           </div>
           <div>
             <Label as="p" spacing>
               Saksopplysninger
             </Label>
-            <BodyShort>Det er registrert en yrkesskade på søker</BodyShort>
+            {sykdomsGrunnlag?.opplysninger.innhentedeYrkesskader.map((innhentetYrkesskade) => (
+              <div key={innhentetYrkesskade.ref}>
+                <BodyShort spacing>{innhentetYrkesskade.kilde}</BodyShort>
+                <BodyShort spacing>Periode: {innhentetYrkesskade.periode}</BodyShort>
+              </div>
+            ))}
+            {sykdomsGrunnlag?.opplysninger.innhentedeYrkesskader.length === 0 && (
+              <BodyShort>Ingen innhentede yrkesskader</BodyShort>
+            )}
           </div>
         </VilkårsKort>
         <VilkårsKort heading={'Yrkesskade - årsakssammenheng § 11.22'} icon={<Buldings2Icon />}>
