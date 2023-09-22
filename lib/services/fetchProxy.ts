@@ -22,6 +22,12 @@ export const fetchProxy = async <ResponseBody>(
 
     console.log('status', response.status);
 
+    if (!response.ok) {
+      const responseBody = await response.text();
+      console.log('responseBody', responseBody);
+      throw new Error(`Unable to fetch ${url}: ${response.statusText}`);
+    }
+
     if (parseBody) {
       return await response.json();
     }

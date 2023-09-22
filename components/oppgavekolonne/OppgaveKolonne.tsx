@@ -11,6 +11,7 @@ import { Buldings2Icon, VitalsIcon } from '@navikt/aksel-icons';
 
 import styles from './OppgaveKolonne.module.css';
 import { Dokument, SykdomsGrunnlag } from 'lib/types/types';
+import { format } from 'date-fns';
 
 enum JaEllerNei {
   Ja = 'ja',
@@ -45,8 +46,30 @@ interface FormFields {
   arbeidsevne_dato: string;
 }
 
+export const getJaNeiEllerUndefined = (value?: boolean) => {
+  if (value === undefined) {
+    return undefined;
+  }
+  return value ? JaEllerNei.Ja : JaEllerNei.Nei;
+};
+
 export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferanse }: Props) => {
-  const form = useForm<FormFields>();
+  const form = useForm<FormFields>({
+    defaultValues: {
+      //yrkesskade_årssakssammenheng: getJaNeiEllerUndefined(sykdomsGrunnlag?.yrkesskadevurdering?.erÅrsakssammenheng),
+      /*yrkesskade_dokumentasjonMangler: [],
+      //
+      yrkesskade_begrunnelse: sykdomsGrunnlag?.yrkesskadevurdering?.begrunnelse,
+      yrkesskade_dato: sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt
+        ? format(new Date(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt), 'yyyy-MM-dd')
+        : undefined,
+      arbeidsevne_dokumentasjonMangler: [],
+      arbeidsevne_erSykdom: '',
+      arbeidsevne_nedsattMinst50: '',
+      arbeidsevne_begrunnelse: sykdomsGrunnlag?.sykdomsvurdering?.begrunnelse,
+      arbeidsevne_dato: format(new Date(), 'dd.MM.yyyy'),*/
+    },
+  });
   const { formFields } = useConfigForm<FormFields>({
     yrkesskade_dokumentasjonMangler: {
       type: 'checkbox',
@@ -113,15 +136,29 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
             behandlingVersjon: 0,
             behov: {
               // @ts-ignore Feil generert type i backend
-              begrunnelse: data.begrunnelse,
+              '@type': '5001',
               // @ts-ignore Feil generert type i backend
-              endretAv: '',
+              yrkesskadevurdering: {
+                begrunnelse: data.yrkesskade_begrunnelse,
+                dokumenterBruktIVurdering: [],
+                erÅrsakssammenheng: data.yrkesskade_årssakssammenheng === JaEllerNei.Ja,
+                skadetidspunkt: format(new Date(data.yrkesskade_dato), 'yyyy-MM-dd'),
+              },
+              // @ts-ignore Feil generert type i backend
+              sykdomsvurdering: {
+                begrunnelse: data.arbeidsevne_begrunnelse,
+                dokumenterBruktIVurdering: [],
+                erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.arbeidsevne_nedsattMinst50 === JaEllerNei.Ja,
+                erSkadeSykdomEllerLyteVesentligdel: data.arbeidsevne_erSykdom === JaEllerNei.Ja,
+                nedreGrense: data.yrkesskade_årssakssammenheng === JaEllerNei.Ja ? 'TRETTI' : 'FEMTI',
+                nedsattArbeidsevneDato: format(new Date(data.arbeidsevne_dato), 'yyyy-MM-dd'),
+              },
             },
             referanse: behandlingsReferanse,
           });
         })}
       >
-        <VilkårsKort heading={'Yrkesskade - § 11.22'} icon={<Buldings2Icon />}>
+        <VilkårsKort heading={'Yrkesskade - § 11-22'} icon={<Buldings2Icon />}>
           <Alert variant="warning">Vi har funnet en eller flere registrerte yrkesskader</Alert>
           <div>
             <Label as="p" spacing>
@@ -136,6 +173,7 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
             {sykdomsGrunnlag?.opplysninger.innhentedeYrkesskader.map((innhentetYrkesskade) => (
               <div key={innhentetYrkesskade.ref}>
                 <BodyShort spacing>{innhentetYrkesskade.kilde}</BodyShort>
+                {/* @ts-ignore-line TODO: Periode kommer som en record 😡 */}
                 <BodyShort spacing>Periode: {innhentetYrkesskade.periode}</BodyShort>
               </div>
             ))}
@@ -144,7 +182,7 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
             )}
           </div>
         </VilkårsKort>
-        <VilkårsKort heading={'Yrkesskade - årsakssammenheng § 11.22'} icon={<Buldings2Icon />}>
+        <VilkårsKort heading={'Yrkesskade - årsakssammenheng § 11-22'} icon={<Buldings2Icon />}>
           <div>
             <Label as="p" spacing>
               Dokumenter funnet som er relevante for vurdering av årsakssammenheng § 11.22
@@ -166,7 +204,7 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
           <FormField form={form} formField={formFields.yrkesskade_dato} />
         </VilkårsKort>
 
-        <VilkårsKort heading={'Nedsatt arbeidsevne - § 11.5'} icon={<VitalsIcon />}>
+        {/* <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} icon={<VitalsIcon />}>
           <Alert variant="warning">Legeerklæring er av gammel dato, vurder å be om en ny fra behandler</Alert>
           <div>
             <Label as="p" spacing>
@@ -188,7 +226,7 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
           <FormField form={form} formField={formFields.arbeidsevne_dato} />
 
           <Button>Lagre og gå til neste steg</Button>
-        </VilkårsKort>
+            </VilkårsKort>*/}
       </form>
     </div>
   );

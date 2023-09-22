@@ -35,7 +35,7 @@ export function opprettSak(sak: OpprettTestcase) {
 }
 
 export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
-  return fetcher('http://localhost:3000/api/behandling/los-behov', 'POST', avklaringsBehov);
+  return fetcher('http://localhost:3000/api/behandling/los-behov/', 'POST', avklaringsBehov);
 }
 
 export async function hentSaksinfo() {

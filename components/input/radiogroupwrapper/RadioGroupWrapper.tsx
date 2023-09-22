@@ -24,26 +24,30 @@ export const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
   label,
   horisontal = false,
 }: RadioProps<FormFieldValues>) => {
+  console.log('Rendering!!!!', control);
   return (
     <div className={styles.radiogroup}>
       <Controller
         name={name}
         control={control}
         rules={rules}
-        render={({ field: { onChange, value }, fieldState: { error } }) => (
-          <RadioGroup
-            id={name}
-            value={value || ''}
-            name={name}
-            legend={label}
-            error={error?.message}
-            onChange={onChange}
-            description={description}
-            className={horisontal ? styles.horizontal : ''}
-          >
-            {children}
-          </RadioGroup>
-        )}
+        render={({ field: { onChange, value }, fieldState: { error } }) => {
+          console.log({ value });
+          return (
+            <RadioGroup
+              id={name}
+              value={value}
+              name={name}
+              legend={label}
+              error={error?.message}
+              onChange={onChange}
+              description={description}
+              className={horisontal ? styles.horizontal : ''}
+            >
+              {children}
+            </RadioGroup>
+          );
+        }}
       />
     </div>
   );
