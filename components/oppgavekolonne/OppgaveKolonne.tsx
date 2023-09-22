@@ -12,6 +12,7 @@ import { Buldings2Icon, VitalsIcon } from '@navikt/aksel-icons';
 import styles from './OppgaveKolonne.module.css';
 import { Dokument, SykdomsGrunnlag } from 'lib/types/types';
 import { format } from 'date-fns';
+import { useEffect } from 'react';
 
 enum JaEllerNei {
   Ja = 'ja',
@@ -46,28 +47,41 @@ interface FormFields {
   arbeidsevne_dato: string;
 }
 
-export const getJaNeiEllerUndefined = (value?: boolean) => {
-  if (value === undefined) {
+export const getJaNeiEllerUndefined = (value?: boolean | null) => {
+  if (value === undefined || value === null) {
     return undefined;
   }
   return value ? JaEllerNei.Ja : JaEllerNei.Nei;
 };
 
+const parseDato = (value?: string | null) => {
+  if (!value) {
+    return undefined;
+  }
+  return format(new Date(value), 'dd.MM.yyyy');
+};
+
 export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferanse }: Props) => {
   const form = useForm<FormFields>({
     defaultValues: {
-      //yrkesskade_årssakssammenheng: getJaNeiEllerUndefined(sykdomsGrunnlag?.yrkesskadevurdering?.erÅrsakssammenheng),
-      /*yrkesskade_dokumentasjonMangler: [],
-      //
       yrkesskade_begrunnelse: sykdomsGrunnlag?.yrkesskadevurdering?.begrunnelse,
+      arbeidsevne_begrunnelse: sykdomsGrunnlag?.sykdomsvurdering?.begrunnelse,
+      yrkesskade_årssakssammenheng: getJaNeiEllerUndefined(sykdomsGrunnlag?.yrkesskadevurdering?.erÅrsakssammenheng),
+      arbeidsevne_erSykdom: getJaNeiEllerUndefined(
+        sykdomsGrunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel
+      ),
+      arbeidsevne_nedsattMinst50: getJaNeiEllerUndefined(
+        sykdomsGrunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
+      ),
+      yrkesskade_dato: parseDato(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt),
+      /*
+      yrkesskade_dokumentasjonMangler: [],
       yrkesskade_dato: sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt
         ? format(new Date(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt), 'yyyy-MM-dd')
         : undefined,
       arbeidsevne_dokumentasjonMangler: [],
-      arbeidsevne_erSykdom: '',
-      arbeidsevne_nedsattMinst50: '',
-      arbeidsevne_begrunnelse: sykdomsGrunnlag?.sykdomsvurdering?.begrunnelse,
-      arbeidsevne_dato: format(new Date(), 'dd.MM.yyyy'),*/
+      arbeidsevne_dato: format(new Date(), 'dd.MM.yyyy'),
+      */
     },
   });
   const { formFields } = useConfigForm<FormFields>({
@@ -125,6 +139,10 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
       label: 'Dato for nedsatt arbeidsevne med minst 50%',
     },
   });
+
+  useEffect(() => {
+    form.reset();
+  }, [form, sykdomsGrunnlag]);
 
   return (
     <div className={className}>
@@ -207,7 +225,7 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
           <FormField form={form} formField={formFields.yrkesskade_dato} />
         </VilkårsKort>
 
-        {/* <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} icon={<VitalsIcon />}>
+        <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} icon={<VitalsIcon />}>
           <Alert variant="warning">Legeerklæring er av gammel dato, vurder å be om en ny fra behandler</Alert>
           <div>
             <Label as="p" spacing>
@@ -229,7 +247,7 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
           <FormField form={form} formField={formFields.arbeidsevne_dato} />
 
           <Button>Lagre og gå til neste steg</Button>
-            </VilkårsKort>*/}
+        </VilkårsKort>
       </form>
     </div>
   );
