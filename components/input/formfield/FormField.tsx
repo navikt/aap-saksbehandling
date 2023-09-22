@@ -61,6 +61,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           fromDate={formField.fromDate}
           disableWeekend={formField.disableWeekends}
           disabled={formField.disabled}
+          selected={form.getValues(formField.name)}
         />
       )}
       {formField.type === 'radio' && (

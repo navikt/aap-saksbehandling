@@ -14,6 +14,7 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   control: Control<FormFieldValues>;
   fromDate?: Date;
   disabled?: Matcher[];
+  selected?: Date;
 }
 
 const FRA_DATO = subYears(new Date(), 80);
@@ -27,8 +28,9 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
   disableWeekend = false,
   fromDate = FRA_DATO,
   disabled,
+  selected,
 }: DateProps<FormFieldValues>) => {
-  const { datepickerProps, inputProps } = useDatepicker();
+  const { datepickerProps, inputProps } = useDatepicker({ defaultSelected: selected });
 
   return (
     <Controller

@@ -11,7 +11,7 @@ import { Buldings2Icon, VitalsIcon } from '@navikt/aksel-icons';
 
 import styles from './OppgaveKolonne.module.css';
 import { Dokument, SykdomsGrunnlag } from 'lib/types/types';
-import { format } from 'date-fns';
+import { format, isValid, parse } from 'date-fns';
 import { useEffect } from 'react';
 
 enum JaEllerNei {
@@ -39,7 +39,8 @@ interface FormFields {
   yrkesskade_dokumentasjonMangler: string[];
   yrkesskade_årssakssammenheng: string;
   yrkesskade_begrunnelse: string;
-  yrkesskade_dato: string;
+  // yrkesskade_dato: string;
+  yrkesskade_dato: Date;
   arbeidsevne_dokumentasjonMangler: string[];
   arbeidsevne_erSykdom: string;
   arbeidsevne_nedsattMinst50: string;
@@ -54,11 +55,19 @@ export const getJaNeiEllerUndefined = (value?: boolean | null) => {
   return value ? JaEllerNei.Ja : JaEllerNei.Nei;
 };
 
-const parseDato = (value?: string | null) => {
+// const parseDato = (value?: string | null) => {
+//   if (!value) {
+//     return undefined;
+//   }
+//   return format(new Date(value), 'dd.MM.yyyy');
+// };
+
+const stringToDate = (value?: string | null) => {
   if (!value) {
     return undefined;
   }
-  return format(new Date(value), 'dd.MM.yyyy');
+  const parsed = parse(value, 'yyyy-MM-dd', new Date());
+  return isValid(parsed) ? parsed : undefined;
 };
 
 export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferanse }: Props) => {
@@ -73,7 +82,7 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
       arbeidsevne_nedsattMinst50: getJaNeiEllerUndefined(
         sykdomsGrunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
       ),
-      yrkesskade_dato: parseDato(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt),
+      yrkesskade_dato: stringToDate(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt),
       /*
       yrkesskade_dokumentasjonMangler: [],
       yrkesskade_dato: sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt
@@ -143,7 +152,7 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
   useEffect(() => {
     form.reset();
   }, [form, sykdomsGrunnlag]);
-
+  console.log(form.watch());
   return (
     <div className={className}>
       <form
@@ -160,7 +169,8 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
                 begrunnelse: data.yrkesskade_begrunnelse,
                 dokumenterBruktIVurdering: [],
                 erÅrsakssammenheng: data.yrkesskade_årssakssammenheng === JaEllerNei.Ja,
-                skadetidspunkt: format(new Date(data.yrkesskade_dato), 'yyyy-MM-dd'),
+                // skadetidspunkt: format(new Date(data.yrkesskade_dato), 'yyyy-MM-dd'),
+                skadetidspunkt: format(data.yrkesskade_dato, 'yyyy-MM-dd'),
               },
               // @ts-ignore Feil generert type i backend
               sykdomsvurdering: {
