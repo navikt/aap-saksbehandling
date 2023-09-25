@@ -34,7 +34,7 @@ export const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
           return (
             <RadioGroup
               id={name}
-              value={value}
+              value={value || ''}
               name={name}
               legend={label}
               error={error?.message}

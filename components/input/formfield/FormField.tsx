@@ -26,10 +26,6 @@ interface Props<FormFieldIds extends FieldValues> {
 export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFieldIds>) => {
   const { formField, form, children, horizontalRadio } = props;
 
-  if (formField.type === 'radio') {
-    console.log('Rendering formfield');
-  }
-
   return (
     <>
       {(formField.type === 'text' || formField.type === 'number') && (
