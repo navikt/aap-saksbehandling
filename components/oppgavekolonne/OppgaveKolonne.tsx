@@ -39,13 +39,12 @@ interface FormFields {
   yrkesskade_dokumentasjonMangler: string[];
   yrkesskade_årssakssammenheng: string;
   yrkesskade_begrunnelse: string;
-  // yrkesskade_dato: string;
   yrkesskade_dato: Date;
   arbeidsevne_dokumentasjonMangler: string[];
   arbeidsevne_erSykdom: string;
   arbeidsevne_nedsattMinst50: string;
   arbeidsevne_begrunnelse: string;
-  arbeidsevne_dato: string;
+  arbeidsevne_dato: Date;
 }
 
 export const getJaNeiEllerUndefined = (value?: boolean | null) => {
@@ -83,14 +82,7 @@ export const OppgaveKolonne = ({ className, sykdomsGrunnlag, behandlingsReferans
         sykdomsGrunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
       ),
       yrkesskade_dato: stringToDate(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt),
-      /*
-      yrkesskade_dokumentasjonMangler: [],
-      yrkesskade_dato: sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt
-        ? format(new Date(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt), 'yyyy-MM-dd')
-        : undefined,
-      arbeidsevne_dokumentasjonMangler: [],
-      arbeidsevne_dato: format(new Date(), 'dd.MM.yyyy'),
-      */
+      arbeidsevne_dato: stringToDate(sykdomsGrunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
     },
   });
   const { formFields } = useConfigForm<FormFields>({

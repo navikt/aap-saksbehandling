@@ -1,4 +1,5 @@
 import {
+  BehandlingFlytOgTilstand,
   DetaljertBehandling,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
@@ -38,6 +39,14 @@ export const hentAlleSaker = async (accessToken: string): Promise<SaksInfo[] | u
 export const hentSykdomsGrunnlag = async (behandlingsReferanse: string, accessToken: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom`;
   return await fetchProxy<SykdomsGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
+};
+
+export const hentFlyt = async (
+  behandlingsReferanse: string,
+  accessToken: string
+): Promise<BehandlingFlytOgTilstand | undefined> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
+  return await fetchProxy<BehandlingFlytOgTilstand>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
 };
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling, accessToken: string) => {

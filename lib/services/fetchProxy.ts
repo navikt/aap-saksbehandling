@@ -20,7 +20,7 @@ export const fetchProxy = async <ResponseBody>(
       },
     });
 
-    console.log('status', response.status);
+    console.log('status', { status: response.status, url });
 
     if (!response.ok) {
       const responseBody = await response.text();

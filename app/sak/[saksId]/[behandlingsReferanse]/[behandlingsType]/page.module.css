@@ -1,18 +1,4 @@
-.kolonner {
-  height: 100vh;
-  border-top: 1px solid gray;
-}
-
-.kolonne {
-  height: 100%;
-  padding: 1rem;
-  border-top: 1px solid var(--a-border-default);
-}
-
 .venstrekolonne {
   border-right: 1px solid var(--a-border-default);
 }
 
-.høyrekolonne {
-  border-left: 1px solid var(--a-border-default);
-}

@@ -1,7 +1,10 @@
 'use client';
+
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import styles from './Steg.module.css';
 import { StegType } from '../../lib/types/types';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 interface Props {
   navn: StegType;
@@ -13,9 +16,11 @@ export const Steg = ({ navn, erFullført, aktivtSteg }: Props) => {
   const erFullførtStyle = erFullført ? styles.erFullført : '';
   const aktivtStegStyle = aktivtSteg ? styles.aktivtSteg : '';
 
+  const params = useParams();
+
   return (
     <li className={`${aktivtStegStyle} ${styles.steg}`}>
-      <span>{mapStegTypeToStegNavn(navn)}</span>
+      <Link href={`/sak/${params.saksId}/${params.behandlingsReferanse}/${navn}`}>{mapStegTypeToStegNavn(navn)}</Link>
       {erFullført && <CheckmarkCircleIcon className={erFullførtStyle} />}
     </li>
   );

@@ -7,10 +7,14 @@
   padding: var(--a-spacing-2);
 }
 
-.aktivtSteg {
+.aktivtSteg, .steg:hover {
   border-bottom: 5px solid var(--a-surface-action);
 }
 
 .erFullført {
   color: var(--a-icon-success);
+}
+
+.steg a {
+  text-decoration: none;
 }

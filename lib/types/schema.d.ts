@@ -232,7 +232,9 @@ export interface components {
       status: "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
     };
     "no.nav.aap.flate.behandling.BehandlingFlytOgTilstandDto": {
-      flyt: ("START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING")[];
+      /** @enum {string} */
+      aktivtSteg: "START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
+      flyt: components["schemas"]["no.nav.aap.flate.behandling.FlytSteg"][];
     };
     "no.nav.aap.flate.behandling.DetaljertBehandlingDTO": {
       /** @enum {string} */
@@ -240,7 +242,7 @@ export interface components {
       avklaringsbehov: components["schemas"]["no.nav.aap.flate.behandling.AvklaringsbehovDTO"][];
       /**
        * Format: date-time
-       * @example 2023-09-25T08:34:28.202417
+       * @example 2023-09-25T13:25:46.613671
        */
       opprettet: string;
       /** Format: uuid */
@@ -257,9 +259,15 @@ export interface components {
       status: "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
       /**
        * Format: date-time
-       * @example 2023-09-25T08:34:28.202417
+       * @example 2023-09-25T13:25:46.613671
        */
       tidsstempel: string;
+    };
+    "no.nav.aap.flate.behandling.FlytSteg": {
+      avklaringsbehov: components["schemas"]["no.nav.aap.flate.behandling.AvklaringsbehovDTO"][];
+      /** @enum {string} */
+      stegType: "START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
+      "vilkårDTO"?: components["schemas"]["no.nav.aap.flate.behandling.VilkårDTO"];
     };
     "no.nav.aap.flate.behandling.InnhentetSykdomsOpplysninger": {
       innhentedeYrkesskader: components["schemas"]["no.nav.aap.flate.behandling.RegistrertYrkesskade"][];
@@ -299,7 +307,7 @@ export interface components {
     "no.nav.aap.flate.sak.BehandlinginfoDTO": {
       /**
        * Format: date-time
-       * @example 2023-09-25T08:34:28.202417
+       * @example 2023-09-25T13:25:46.613671
        */
       opprettet: string;
       /** Format: uuid */
