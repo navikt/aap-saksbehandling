@@ -21,7 +21,7 @@ export const Steg = ({ navn, erFullført, aktivtSteg }: Props) => {
   return (
     <li className={`${aktivtStegStyle} ${styles.steg}`}>
       <Link href={`/sak/${params.saksId}/${params.behandlingsReferanse}/${navn}`}>{mapStegTypeToStegNavn(navn)}</Link>
-      {erFullført && <CheckmarkCircleIcon className={erFullførtStyle} />}
+      {erFullført && <CheckmarkCircleIcon title="Fullført" className={erFullførtStyle} />}
     </li>
   );
 };
