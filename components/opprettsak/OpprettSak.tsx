@@ -11,10 +11,12 @@ import styles from './OpprettSak.module.css';
 interface FormFields {
   ident: string;
   fødselsdato: string;
-  yrkesskade: boolean;
+  yrkesskade: string;
 }
 export const OpprettSak = () => {
-  const form = useForm<FormFields>();
+  const form = useForm<FormFields>({
+    defaultValues: { ident: '12345678910', fødselsdato: '2020-01-01', yrkesskade: 'true' },
+  });
   const { formFields } = useConfigForm<FormFields>({
     ident: {
       type: 'text',
@@ -37,7 +39,7 @@ export const OpprettSak = () => {
   return (
     <form
       onSubmit={form.handleSubmit(async (data) => {
-        await opprettSak(data);
+        await opprettSak({ ...data, yrkesskade: data.yrkesskade === 'true' });
       })}
       className={styles.form}
     >
