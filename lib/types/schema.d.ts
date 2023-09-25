@@ -179,7 +179,7 @@ export interface components {
     "no.nav.aap.OpprettTestcaseDTO": {
       /**
        * Format: date
-       * @example 2023-09-22
+       * @example 2023-09-25
        */
       "fødselsdato": string;
       ident: string;
@@ -195,9 +195,9 @@ export interface components {
       nedreGrense?: "TRETTI" | "FEMTI" | null;
       /**
        * Format: date
-       * @example 2023-09-22
+       * @example 2023-09-25
        */
-      skadetidspunkt?: string | null;
+      nedsattArbeidsevneDato?: string | null;
     };
     "no.nav.aap.avklaringsbehov.sykdom.Yrkesskadevurdering": {
       begrunnelse: string;
@@ -205,11 +205,22 @@ export interface components {
       "erÅrsakssammenheng": boolean;
       /**
        * Format: date
-       * @example 2023-09-22
+       * @example 2023-09-25
        */
       skadetidspunkt?: string | null;
     };
-    "no.nav.aap.domene.Periode": Record<string, never>;
+    "no.nav.aap.domene.Periode": {
+      /**
+       * Format: date
+       * @example 2023-09-25
+       */
+      fom: string;
+      /**
+       * Format: date
+       * @example 2023-09-25
+       */
+      tom: string;
+    };
     "no.nav.aap.domene.behandling.dokumenter.JournalpostId": {
       identifikator: string;
     };
@@ -229,7 +240,7 @@ export interface components {
       avklaringsbehov: components["schemas"]["no.nav.aap.flate.behandling.AvklaringsbehovDTO"][];
       /**
        * Format: date-time
-       * @example 2023-09-22T09:23:58.12293
+       * @example 2023-09-25T08:34:28.202417
        */
       opprettet: string;
       /** Format: uuid */
@@ -246,7 +257,7 @@ export interface components {
       status: "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
       /**
        * Format: date-time
-       * @example 2023-09-22T09:23:58.12293
+       * @example 2023-09-25T08:34:28.202417
        */
       tidsstempel: string;
     };
@@ -288,7 +299,7 @@ export interface components {
     "no.nav.aap.flate.sak.BehandlinginfoDTO": {
       /**
        * Format: date-time
-       * @example 2023-09-22T09:23:58.12293
+       * @example 2023-09-25T08:34:28.202417
        */
       opprettet: string;
       /** Format: uuid */
