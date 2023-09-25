@@ -60,7 +60,6 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           description={formField.description}
           fromDate={formField.fromDate}
           disableWeekend={formField.disableWeekends}
-          disabled={formField.disabled}
           selected={form.getValues(formField.name)}
         />
       )}

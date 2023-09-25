@@ -1,7 +1,6 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import { subYears } from 'date-fns';
 import React from 'react';
-import { Matcher } from 'react-day-picker';
 import { Control, Controller, FieldValues, RegisterOptions } from 'react-hook-form';
 import { FieldPath } from 'react-hook-form/dist/types';
 
@@ -13,7 +12,6 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   rules?: RegisterOptions<FormFieldValues>;
   control: Control<FormFieldValues>;
   fromDate?: Date;
-  disabled?: Matcher[];
   selected?: Date;
 }
 
@@ -27,7 +25,6 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
   rules,
   disableWeekend = false,
   fromDate = FRA_DATO,
-  disabled,
   selected,
 }: DateProps<FormFieldValues>) => {
   const { datepickerProps, inputProps } = useDatepicker({ defaultSelected: selected });
@@ -48,7 +45,6 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
             dropdownCaption
             fromDate={fromDate}
             toDate={new Date()}
-            disabled={disabled}
           >
             <DatePicker.Input
               onChange={onChange}

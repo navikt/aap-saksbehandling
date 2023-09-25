@@ -1,4 +1,3 @@
-import { Matcher } from 'react-day-picker';
 import { RegisterOptions } from 'react-hook-form';
 import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 
@@ -34,7 +33,6 @@ interface FormFieldDate<FormFieldIds extends FieldValues> extends BaseFormField<
   type: 'date';
   fromDate?: Date;
   disableWeekends?: boolean;
-  disabled?: Matcher[];
 }
 
 interface FormFieldWithOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
