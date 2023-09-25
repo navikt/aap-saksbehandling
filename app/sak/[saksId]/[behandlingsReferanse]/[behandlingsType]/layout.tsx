@@ -36,7 +36,7 @@ const Layout = async ({
                 erFullført={
                   (steg.vilkårDTO?.perioder?.filter((periode) => periode.utfall === 'OPPFYLT').length ?? 0) > 0
                 }
-                aktivtSteg={params.behandlingsType === steg.stegType}
+                aktivtSteg={decodeURI(params.behandlingsType) === steg.stegType}
               />
             );
           })}
