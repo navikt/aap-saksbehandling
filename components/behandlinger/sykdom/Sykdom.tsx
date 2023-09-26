@@ -1,18 +1,21 @@
 'use client';
 
 import { Buldings2Icon, VitalsIcon } from '@navikt/aksel-icons';
-import { Alert, Label, BodyShort, ReadMore, Button } from '@navikt/ds-react';
+import { Alert, Label, BodyShort, ReadMore } from '@navikt/ds-react';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { FormField } from 'components/input/formfield/FormField';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { format, isValid, parse } from 'date-fns';
+import { format } from 'date-fns';
 import { useConfigForm } from 'hooks/FormHook';
-import { løsBehov } from 'lib/api';
-import { Dokument, SykdomsGrunnlag } from 'lib/types/types';
+import { hentFlyt, løsBehov } from 'lib/api';
+import { BehandlingFlytOgTilstand, Dokument, SykdomsGrunnlag } from 'lib/types/types';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import styles from './Sykdom.module.css';
+import { JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { stringToDate } from 'lib/utils/date';
+import { Form } from '../Form';
+import { useParams, useRouter } from 'next/navigation';
 
 const dokumenter: Dokument[] = [
   {
@@ -36,26 +39,6 @@ interface FormFields {
   arbeidsevne_dato: Date;
 }
 
-enum JaEllerNei {
-  Ja = 'ja',
-  Nei = 'nei',
-}
-
-export const getJaNeiEllerUndefined = (value?: boolean | null) => {
-  if (value === undefined || value === null) {
-    return undefined;
-  }
-  return value ? JaEllerNei.Ja : JaEllerNei.Nei;
-};
-
-const stringToDate = (value?: string | null) => {
-  if (!value) {
-    return undefined;
-  }
-  const parsed = parse(value, 'yyyy-MM-dd', new Date());
-  return isValid(parsed) ? parsed : undefined;
-};
-
 export const Sykdom = ({
   sykdomsGrunnlag,
   behandlingsReferanse,
@@ -63,6 +46,9 @@ export const Sykdom = ({
   sykdomsGrunnlag?: SykdomsGrunnlag;
   behandlingsReferanse: string;
 }) => {
+  const router = useRouter();
+  const params = useParams();
+
   const form = useForm<FormFields>({
     defaultValues: {
       yrkesskade_begrunnelse: sykdomsGrunnlag?.yrkesskadevurdering?.begrunnelse,
@@ -139,8 +125,7 @@ export const Sykdom = ({
   }, [form, sykdomsGrunnlag]);
 
   return (
-    <form
-      className={styles.form}
+    <Form
       onSubmit={form.handleSubmit(async (data) => {
         console.log('løser behov', data);
         await løsBehov({
@@ -168,6 +153,11 @@ export const Sykdom = ({
           },
           referanse: behandlingsReferanse,
         });
+
+        const flyt = await hentFlyt(behandlingsReferanse);
+
+        // TODO: Lytte på endringer i backend og redirecte til neste steg
+        router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${flyt?.aktivtSteg}`);
       })}
     >
       <VilkårsKort heading={'Yrkesskade - § 11-22'} icon={<Buldings2Icon />}>
@@ -239,9 +229,7 @@ export const Sykdom = ({
         <FormField form={form} formField={formFields.arbeidsevne_begrunnelse} />
 
         <FormField form={form} formField={formFields.arbeidsevne_dato} />
-
-        <Button>Lagre og gå til neste steg</Button>
       </VilkårsKort>
-    </form>
+    </Form>
   );
 };

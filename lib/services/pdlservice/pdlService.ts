@@ -2,7 +2,7 @@ interface PdlInformasjon {
   navn: string;
 }
 
-export const hentPersonInformasjonForIdent = (ident: string): PdlInformasjon => {
+export const hentPersonInformasjonForIdent = async (ident: string): Promise<PdlInformasjon> => {
   console.log(ident);
-  return { navn: 'Peder Ås' };
+  return Promise.resolve({ navn: 'Peder Ås' });
 };

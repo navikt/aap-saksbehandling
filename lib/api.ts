@@ -1,4 +1,4 @@
-import { LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo } from './types/types';
+import { BehandlingFlytOgTilstand, LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo } from './types/types';
 
 export async function fetcher<ResponseBody>(
   url: string,
@@ -34,8 +34,12 @@ export function opprettSak(sak: OpprettTestcase) {
   return fetcher('/api/test/opprett', 'POST', sak);
 }
 
+export function hentFlyt(referanse: string) {
+  return fetcher<BehandlingFlytOgTilstand>('/api/behandling/hent/' + referanse + '/flyt', 'GET');
+}
+
 export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
-  return fetcher('http://localhost:3000/api/behandling/los-behov/', 'POST', avklaringsBehov);
+  return fetcher('/api/behandling/los-behov/', 'POST', avklaringsBehov);
 }
 
 export async function hentSaksinfo() {

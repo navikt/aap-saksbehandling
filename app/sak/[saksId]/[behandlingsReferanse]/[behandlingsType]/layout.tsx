@@ -7,6 +7,7 @@ import { HGrid } from 'components/DsClient';
 import styles from './layout.module.css';
 import { ReactNode } from 'react';
 import { Steg } from 'components/steg/Steg';
+import { StegType } from 'lib/types/types';
 
 const Layout = async ({
   params,
@@ -32,7 +33,7 @@ const Layout = async ({
             return (
               <Steg
                 key={steg.stegType}
-                navn={steg.stegType}
+                navn={steg.stegType as StegType}
                 erFullført={
                   (steg.vilkårDTO?.perioder?.filter((periode) => periode.utfall === 'OPPFYLT').length ?? 0) > 0
                 }
