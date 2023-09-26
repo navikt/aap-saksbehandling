@@ -116,6 +116,24 @@ export interface paths {
       };
     };
   };
+  "/api/behandling/{referanse}/grunnlag/medlemskap": {
+    get: {
+      parameters: {
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["no.nav.aap.flate.behandling.MedlemskapGrunnlagDto"];
+          };
+        };
+      };
+    };
+  };
   "/api/behandling/{referanse}/flyt": {
     get: {
       parameters: {
@@ -179,7 +197,7 @@ export interface components {
     "no.nav.aap.OpprettTestcaseDTO": {
       /**
        * Format: date
-       * @example 2023-09-25
+       * @example 2023-09-26
        */
       "fødselsdato": string;
       ident: string;
@@ -195,7 +213,7 @@ export interface components {
       nedreGrense?: "TRETTI" | "FEMTI" | null;
       /**
        * Format: date
-       * @example 2023-09-25
+       * @example 2023-09-26
        */
       nedsattArbeidsevneDato?: string | null;
     };
@@ -205,19 +223,19 @@ export interface components {
       "erÅrsakssammenheng": boolean;
       /**
        * Format: date
-       * @example 2023-09-25
+       * @example 2023-09-26
        */
       skadetidspunkt?: string | null;
     };
     "no.nav.aap.domene.Periode": {
       /**
        * Format: date
-       * @example 2023-09-25
+       * @example 2023-09-26
        */
       fom: string;
       /**
        * Format: date
-       * @example 2023-09-25
+       * @example 2023-09-26
        */
       tom: string;
     };
@@ -233,16 +251,16 @@ export interface components {
     };
     "no.nav.aap.flate.behandling.BehandlingFlytOgTilstandDto": {
       /** @enum {string} */
-      aktivtSteg: "START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
+      aktivtSteg: "START_BEHANDLING" | "VURDER_ALDER" | "VURDER_LOVVALG" | "VURDER_MEDLEMSKAP" | "VURDER_BISTANDSBEHOV" | "BARNETILLEGG" | "SAMORDNING" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
       flyt: components["schemas"]["no.nav.aap.flate.behandling.FlytSteg"][];
     };
     "no.nav.aap.flate.behandling.DetaljertBehandlingDTO": {
       /** @enum {string} */
-      aktivtSteg: "START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
+      aktivtSteg: "START_BEHANDLING" | "VURDER_ALDER" | "VURDER_LOVVALG" | "VURDER_MEDLEMSKAP" | "VURDER_BISTANDSBEHOV" | "BARNETILLEGG" | "SAMORDNING" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
       avklaringsbehov: components["schemas"]["no.nav.aap.flate.behandling.AvklaringsbehovDTO"][];
       /**
        * Format: date-time
-       * @example 2023-09-25T13:25:46.613671
+       * @example 2023-09-26T10:34:57.894992
        */
       opprettet: string;
       /** Format: uuid */
@@ -259,20 +277,21 @@ export interface components {
       status: "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
       /**
        * Format: date-time
-       * @example 2023-09-25T13:25:46.613671
+       * @example 2023-09-26T10:34:57.894992
        */
       tidsstempel: string;
     };
     "no.nav.aap.flate.behandling.FlytSteg": {
       avklaringsbehov: components["schemas"]["no.nav.aap.flate.behandling.AvklaringsbehovDTO"][];
       /** @enum {string} */
-      stegType: "START_BEHANDLING" | "VURDER_ALDER" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
+      stegType: "START_BEHANDLING" | "VURDER_ALDER" | "VURDER_LOVVALG" | "VURDER_MEDLEMSKAP" | "VURDER_BISTANDSBEHOV" | "BARNETILLEGG" | "SAMORDNING" | "AVKLAR_SYKDOM" | "INNHENT_REGISTERDATA" | "FASTSETT_GRUNNLAG" | "FASTSETT_UTTAK" | "BEREGN_TILKJENT_YTELSE" | "SIMULERING" | "FORESLÅ_VEDTAK" | "FATTE_VEDTAK" | "IVERKSETT_VEDTAK" | "UDEFINERT" | "AVSLUTT_BEHANDLING";
       "vilkårDTO"?: components["schemas"]["no.nav.aap.flate.behandling.VilkårDTO"];
     };
     "no.nav.aap.flate.behandling.InnhentetSykdomsOpplysninger": {
       innhentedeYrkesskader: components["schemas"]["no.nav.aap.flate.behandling.RegistrertYrkesskade"][];
       "oppgittYrkesskadeISøknad": boolean;
     };
+    "no.nav.aap.flate.behandling.MedlemskapGrunnlagDto": Record<string, never>;
     "no.nav.aap.flate.behandling.RegistrertYrkesskade": {
       kilde: string;
       periode: components["schemas"]["no.nav.aap.domene.Periode"];
@@ -307,7 +326,7 @@ export interface components {
     "no.nav.aap.flate.sak.BehandlinginfoDTO": {
       /**
        * Format: date-time
-       * @example 2023-09-25T13:25:46.613671
+       * @example 2023-09-26T10:34:57.894992
        */
       opprettet: string;
       /** Format: uuid */
