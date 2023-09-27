@@ -7,6 +7,6 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
 
   await opprettTestSak(body, getToken(req.headers));
-  revalidatePath('/saksoversikt');
+  revalidatePath('/saksoversikt', 'page');
   return new Response(JSON.stringify({ message: 'Sak opprettet' }), { status: 200 });
 }

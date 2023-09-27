@@ -8,7 +8,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { format } from 'date-fns';
 import { useConfigForm } from 'hooks/FormHook';
 import { hentFlyt, løsBehov } from 'lib/api';
-import { BehandlingFlytOgTilstand, Dokument, SykdomsGrunnlag } from 'lib/types/types';
+import { Dokument, SykdomsGrunnlag } from 'lib/types/types';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -124,6 +124,22 @@ export const Sykdom = ({
     form.reset();
   }, [form, sykdomsGrunnlag]);
 
+  // TODO: Gjøre mer generisk, kjøre som onClick på alle steg
+  const listenSSE = () => {
+    const eventSource = new EventSource(`/api/behandling/hent/${behandlingsReferanse}/AVKLAR_SYKDOM/nesteSteg/`, {
+      withCredentials: true,
+    });
+    console.log('Lytter på SSE', eventSource);
+    eventSource.onmessage = (event: any) => {
+      console.log('event onMessage', event);
+      router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${event.data}`);
+      eventSource.close();
+    };
+    eventSource.onerror = (event: any) => {
+      console.log('event onError', event);
+    };
+  };
+
   return (
     <Form
       onSubmit={form.handleSubmit(async (data) => {
@@ -154,10 +170,12 @@ export const Sykdom = ({
           referanse: behandlingsReferanse,
         });
 
-        const flyt = await hentFlyt(behandlingsReferanse);
+        listenSSE();
+
+        //const flyt = await hentFlyt(behandlingsReferanse);
 
         // TODO: Lytte på endringer i backend og redirecte til neste steg
-        router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${flyt?.aktivtSteg}`);
+        //router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${flyt?.aktivtSteg}`);
       })}
     >
       <VilkårsKort heading={'Yrkesskade - § 11-22'} icon={<Buldings2Icon />}>
