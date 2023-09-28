@@ -7,7 +7,7 @@ import { FormField } from 'components/input/formfield/FormField';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { format } from 'date-fns';
 import { useConfigForm } from 'hooks/FormHook';
-import { hentFlyt, løsBehov } from 'lib/api';
+import { løsBehov } from 'lib/api';
 import { Dokument, SykdomsGrunnlag } from 'lib/types/types';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
