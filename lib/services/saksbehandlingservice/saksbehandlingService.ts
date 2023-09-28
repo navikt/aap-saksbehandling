@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import {
   BehandlingFlytOgTilstand,
   DetaljertBehandling,
@@ -16,37 +17,42 @@ const saksbehandlingScope = process.env.BEHANDLING_API_SCOPE ?? '';
 export const hentBehandling = async (
   behandlingsReferanse: string,
   accessToken: string
-): Promise<DetaljertBehandling | undefined> => {
+): Promise<DetaljertBehandling> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}`;
-  return await fetchProxy<DetaljertBehandling>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
+  try {
+    return await fetchProxy<DetaljertBehandling>(url, accessToken, saksbehandlingScope, 'GET', undefined);
+  } catch (e) {
+    console.log(`Fant ikke behandling med referanse ${behandlingsReferanse}`);
+    notFound();
+  }
 };
 
 export const hentSak = async (saksnummer: string, accessToken: string): Promise<UtvidetSaksInfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}`;
-  const response = await fetchProxy<UtvidetSaksInfo>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
-  if (response) {
-    return response;
+  try {
+    return await fetchProxy<UtvidetSaksInfo>(url, accessToken, saksbehandlingScope, 'GET', undefined);
+  } catch (e) {
+    console.log(`Fant ikke sak med referanse ${saksnummer}`);
+    notFound();
   }
-
-  throw new Error('Fant ingen sak.');
 };
 
-export const hentAlleSaker = async (accessToken: string): Promise<SaksInfo[] | undefined> => {
+export const hentAlleSaker = async (accessToken: string): Promise<SaksInfo[]> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;
-  return await fetchProxy<SaksInfo[]>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
+  return await fetchProxy<SaksInfo[]>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 
 export const hentSykdomsGrunnlag = async (behandlingsReferanse: string, accessToken: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom`;
-  return await fetchProxy<SykdomsGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
+  return await fetchProxy<SykdomsGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 
 export const hentFlyt = async (
   behandlingsReferanse: string,
   accessToken: string
-): Promise<BehandlingFlytOgTilstand | undefined> => {
+): Promise<BehandlingFlytOgTilstand> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
-  return await fetchProxy<BehandlingFlytOgTilstand>(url, accessToken, saksbehandlingScope, 'GET', undefined, true);
+  return await fetchProxy<BehandlingFlytOgTilstand>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling, accessToken: string) => {
