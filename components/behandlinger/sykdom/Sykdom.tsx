@@ -40,6 +40,10 @@ interface FormFields {
   arbeidsevne_dato: Date;
 }
 
+const harSvartJaPåSykdomsvurdering = (arbeidsevne50?: string, arbeidsevne30?: string) => {
+  return arbeidsevne50 === JaEllerNei.Ja || arbeidsevne30 === JaEllerNei.Ja;
+};
+
 export const Sykdom = ({
   sykdomsGrunnlag,
   behandlingsReferanse,
@@ -64,6 +68,7 @@ export const Sykdom = ({
       yrkesskade_dato: stringToDate(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt),
       arbeidsevne_dato: stringToDate(sykdomsGrunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
     },
+    shouldUnregister: true,
   });
   const { formFields } = useConfigForm<FormFields>({
     yrkesskade_dokumentasjonMangler: {
@@ -91,8 +96,8 @@ export const Sykdom = ({
       label: 'Dato for skadetidspunkt for yrkesskaden',
       rules: {
         validate: {
-          required: (value) => {
-            if (!value && form.getValues('yrkesskade_årssakssammenheng') === JaEllerNei.Ja) {
+          required: (value, formValues) => {
+            if (!value && formValues.yrkesskade_årssakssammenheng === JaEllerNei.Ja) {
               return 'Du må sette en dato for skadetidspunktet';
             }
           },
@@ -122,8 +127,8 @@ export const Sykdom = ({
       ],
       rules: {
         validate: {
-          required: (value) => {
-            if (!value && form.getValues('yrkesskade_årssakssammenheng') === JaEllerNei.Nei) {
+          required: (value, formValues) => {
+            if (!value && formValues.yrkesskade_årssakssammenheng === JaEllerNei.Nei) {
               return 'Du må svare på om arbeidsevnen er nedsatt med minst 50%';
             }
           },
@@ -139,8 +144,8 @@ export const Sykdom = ({
       ],
       rules: {
         validate: {
-          required: (value) => {
-            if (!value && form.getValues('yrkesskade_årssakssammenheng') === JaEllerNei.Ja) {
+          required: (value, formValues) => {
+            if (!value && formValues.yrkesskade_årssakssammenheng === JaEllerNei.Ja) {
               return 'Du må svare på om arbeidsevnen er nedsatt med minst 30%';
             }
           },
@@ -159,10 +164,10 @@ export const Sykdom = ({
       label: 'Dato for nedsatt arbeidsevne',
       rules: {
         validate: {
-          required: (value) => {
+          required: (value, formValues) => {
             if (
-              (!value && form.getValues('arbeidsevne_nedsattMinst50') === JaEllerNei.Ja) ||
-              form.getValues('arbeidsevne_nedsattMinst30') === JaEllerNei.Ja
+              !value &&
+              harSvartJaPåSykdomsvurdering(formValues.arbeidsevne_nedsattMinst50, formValues.arbeidsevne_nedsattMinst30)
             ) {
               return 'Du må svare på når arbeidsevnen ble nedsatt';
             }
