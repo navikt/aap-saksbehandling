@@ -35,6 +35,7 @@ interface FormFields {
   arbeidsevne_dokumentasjonMangler: string[];
   arbeidsevne_erSykdom: string;
   arbeidsevne_nedsattMinst50: string;
+  arbeidsevne_nedsattMinst30: string;
   arbeidsevne_begrunnelse: string;
   arbeidsevne_dato: Date;
 }
@@ -77,15 +78,26 @@ export const Sykdom = ({
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
       ],
+      rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
     },
     yrkesskade_begrunnelse: {
       type: 'textarea',
       label: 'Vurder om yrkesskaden er medvirkende årsak til den nedsatte arbeidsevnen',
       description: 'Se eksempel på vilkårsvurderingstekst',
+      rules: { required: 'Du må begrunne' },
     },
     yrkesskade_dato: {
       type: 'date',
       label: 'Dato for skadetidspunkt for yrkesskaden',
+      rules: {
+        validate: {
+          required: (value) => {
+            if (!value && form.getValues('yrkesskade_årssakssammenheng') === JaEllerNei.Ja) {
+              return 'Du må sette en dato for skadetidspunktet';
+            }
+          },
+        },
+      },
     },
     arbeidsevne_dokumentasjonMangler: {
       type: 'checkbox',
@@ -99,6 +111,7 @@ export const Sykdom = ({
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
       ],
+      rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
     },
     arbeidsevne_nedsattMinst50: {
       type: 'radio',
@@ -107,16 +120,55 @@ export const Sykdom = ({
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
       ],
+      rules: {
+        validate: {
+          required: (value) => {
+            if (!value && form.getValues('yrkesskade_årssakssammenheng') === JaEllerNei.Nei) {
+              return 'Du må svare på om arbeidsevnen er nedsatt med minst 50%';
+            }
+          },
+        },
+      },
+    },
+    arbeidsevne_nedsattMinst30: {
+      type: 'radio',
+      label: 'Er arbeidsevnen nedsatt med minst 30%?',
+      options: [
+        { label: 'Ja', value: JaEllerNei.Ja },
+        { label: 'Nei', value: JaEllerNei.Nei },
+      ],
+      rules: {
+        validate: {
+          required: (value) => {
+            if (!value && form.getValues('yrkesskade_årssakssammenheng') === JaEllerNei.Ja) {
+              return 'Du må svare på om arbeidsevnen er nedsatt med minst 30%';
+            }
+          },
+        },
+      },
     },
     arbeidsevne_begrunnelse: {
       type: 'textarea',
       label: 'Vurder den nedsatte arbeidsevnen',
       description:
         'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst 50%?',
+      rules: { required: 'Du må begrunne' },
     },
     arbeidsevne_dato: {
       type: 'date',
-      label: 'Dato for nedsatt arbeidsevne med minst 50%',
+      label: 'Dato for nedsatt arbeidsevne',
+      rules: {
+        validate: {
+          required: (value) => {
+            if (
+              (!value && form.getValues('arbeidsevne_nedsattMinst50') === JaEllerNei.Ja) ||
+              form.getValues('arbeidsevne_nedsattMinst30') === JaEllerNei.Ja
+            ) {
+              return 'Du må svare på når arbeidsevnen ble nedsatt';
+            }
+          },
+        },
+      },
     },
   });
 
@@ -224,7 +276,9 @@ export const Sykdom = ({
 
         <FormField form={form} formField={formFields.yrkesskade_begrunnelse} />
 
-        <FormField form={form} formField={formFields.yrkesskade_dato} />
+        {form.watch('yrkesskade_årssakssammenheng') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.yrkesskade_dato} />
+        )}
       </VilkårsKort>
 
       <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} icon={<VitalsIcon />}>
@@ -242,11 +296,19 @@ export const Sykdom = ({
 
         <FormField form={form} formField={formFields.arbeidsevne_erSykdom} />
 
-        <FormField form={form} formField={formFields.arbeidsevne_nedsattMinst50} />
+        {form.watch('yrkesskade_årssakssammenheng') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.arbeidsevne_nedsattMinst30} />
+        )}
+        {form.watch('yrkesskade_årssakssammenheng') === JaEllerNei.Nei && (
+          <FormField form={form} formField={formFields.arbeidsevne_nedsattMinst50} />
+        )}
 
         <FormField form={form} formField={formFields.arbeidsevne_begrunnelse} />
 
-        <FormField form={form} formField={formFields.arbeidsevne_dato} />
+        {(form.watch('arbeidsevne_nedsattMinst50') === JaEllerNei.Ja ||
+          form.watch('arbeidsevne_nedsattMinst30') === JaEllerNei.Ja) && (
+          <FormField form={form} formField={formFields.arbeidsevne_dato} />
+        )}
       </VilkårsKort>
     </Form>
   );
