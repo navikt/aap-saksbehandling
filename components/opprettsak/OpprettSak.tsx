@@ -1,7 +1,6 @@
 'use client';
 
 import { opprettSak } from '../../lib/api';
-import { useForm } from 'react-hook-form';
 import { useConfigForm } from '../../hooks/FormHook';
 import { FormField } from '../input/formfield/FormField';
 import { Button } from '@navikt/ds-react';
@@ -14,21 +13,21 @@ interface FormFields {
   yrkesskade: string;
 }
 export const OpprettSak = () => {
-  const form = useForm<FormFields>({
-    defaultValues: { ident: '12345678910', fødselsdato: '2020-01-01', yrkesskade: 'true' },
-  });
-  const { formFields } = useConfigForm<FormFields>({
+  const { formFields, form } = useConfigForm<FormFields>({
     ident: {
       type: 'text',
+      defaultValue: '12345678910',
       label: 'Ident',
     },
     fødselsdato: {
       type: 'text',
+      defaultValue: '2020-01-01',
       label: 'Fødselsdato',
     },
     yrkesskade: {
       type: 'radio',
       label: 'Yrkesskade?',
+      defaultValue: 'true',
       options: [
         { label: 'Ja', value: 'true' },
         { label: 'Nei', value: 'false' },
