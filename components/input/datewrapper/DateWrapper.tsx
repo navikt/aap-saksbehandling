@@ -13,6 +13,7 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   control: Control<FormFieldValues>;
   fromDate?: Date;
   selected?: Date;
+  readOnly?: boolean;
 }
 
 const FRA_DATO = subYears(new Date(), 80);
@@ -26,6 +27,7 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
   disableWeekend = false,
   fromDate = FRA_DATO,
   selected,
+  readOnly,
 }: DateProps<FormFieldValues>) => {
   const { datepickerProps, inputProps } = useDatepicker({ defaultSelected: selected });
 
@@ -54,6 +56,7 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
               description={description}
               error={error && error.message}
               label={label}
+              readOnly={readOnly}
               {...inputProps}
             />
           </DatePicker>

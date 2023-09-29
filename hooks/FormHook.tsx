@@ -20,6 +20,7 @@ interface BaseFormField<FormFieldIds extends FieldValues> {
   label: string;
   description?: string;
   rules?: RegisterOptions<FormFieldIds>;
+  readOnly?: boolean;
 }
 
 interface FormFieldText<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
@@ -70,7 +71,7 @@ interface FormFieldName<FormFieldIds extends FieldValues> {
 
 export function useConfigForm<FormFieldIds extends FieldValues>(
   config: FormFieldsConfig<FieldPath<FormFieldIds>, FormFieldIds>,
-  configForForm?: Omit<UseFormProps<FormFieldIds>, 'defaultValues'>
+  configForForm?: Omit<UseFormProps<FormFieldIds>, 'defaultValues'> & { readOnly?: boolean }
 ): {
   formFields: FormFields<FieldPath<FormFieldIds>, FormFieldIds>;
   form: UseFormReturn<FormFieldIds>;
@@ -81,7 +82,7 @@ export function useConfigForm<FormFieldIds extends FieldValues>(
   const entries = Object.entries(config) as Array<[FieldPath<FormFieldIds>, FormFieldConfig<FormFieldIds>]>;
 
   entries.forEach(([id, formFieldConfig]) => {
-    formFields[id] = { ...formFieldConfig, name: id };
+    formFields[id] = { ...formFieldConfig, name: id, readOnly: configForForm?.readOnly };
 
     if (formFieldConfig.defaultValue) {
       defaultValues[id] = formFieldConfig.defaultValue;

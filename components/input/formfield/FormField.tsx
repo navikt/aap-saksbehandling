@@ -36,6 +36,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           control={form.control}
           rules={formField.rules}
           description={formField.description}
+          readOnly={formField.readOnly}
         />
       )}
       {formField.type === 'textarea' && (
@@ -45,6 +46,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           control={form.control}
           rules={formField.rules}
           description={formField.description}
+          readOnly={formField.readOnly}
         />
       )}
       {formField.type === 'date' && (
@@ -57,6 +59,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           fromDate={formField.fromDate}
           disableWeekend={formField.disableWeekends}
           selected={form.getValues(formField.name)}
+          readOnly={formField.readOnly}
         />
       )}
       {formField.type === 'radio' && (
@@ -67,6 +70,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           description={formField.description}
           rules={formField.rules}
           horisontal={horizontalRadio}
+          readOnly={formField.readOnly}
         >
           {formField.options.map(mapToValuePair).map((option) => (
             <Radio key={option.value} value={option.value}>
@@ -82,6 +86,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           control={form.control}
           rules={formField.rules}
           description={formField.description}
+          readOnly={formField.readOnly}
         >
           {formField.options.map(mapToValuePair).map((option) => (
             <Checkbox value={option.value} key={option.value}>
@@ -97,6 +102,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           description={formField.description}
           control={form.control}
           rules={formField.rules}
+          readOnly={formField.readOnly}
         >
           {formField.options.map(mapToValuePair).map((option) => (
             <option key={option.value} value={option.value}>
@@ -112,6 +118,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           description={formField.description}
           control={form.control}
           rules={formField.rules}
+          readOnly={formField.readOnly}
         >
           {children}
         </CheckboxWrapper>
@@ -124,6 +131,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           description={formField.description}
           control={form.control}
           rules={formField.rules}
+          readOnly={formField.readOnly}
         >
           {children}
         </RadioGroupWrapper>

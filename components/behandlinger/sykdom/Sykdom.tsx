@@ -46,9 +46,11 @@ const harSvartJaPåSykdomsvurdering = (arbeidsevne50?: string, arbeidsevne30?: s
 export const Sykdom = ({
   sykdomsGrunnlag,
   behandlingsReferanse,
+  readOnly,
 }: {
   sykdomsGrunnlag?: SykdomsGrunnlag;
   behandlingsReferanse: string;
+  readOnly?: boolean;
 }) => {
   const router = useRouter();
   const params = useParams();
@@ -172,7 +174,7 @@ export const Sykdom = ({
         },
       },
     },
-    { shouldUnregister: true }
+    { shouldUnregister: true, readOnly: readOnly }
   );
 
   useEffect(() => {
@@ -233,6 +235,7 @@ export const Sykdom = ({
         //router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${flyt?.aktivtSteg}`);
       })}
     >
+      {readOnly && <Alert variant="warning">Du har kun lesetilgang til dette steget</Alert>}
       <VilkårsKort heading={'Yrkesskade - § 11-22'} icon={<Buldings2Icon />}>
         <Alert variant="warning">Vi har funnet en eller flere registrerte yrkesskader</Alert>
         <div>
