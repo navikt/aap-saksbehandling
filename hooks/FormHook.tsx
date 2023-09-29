@@ -18,31 +18,35 @@ export type FormFieldConfig<FormFieldIds extends FieldValues> =
 interface BaseFormField<FormFieldIds extends FieldValues> {
   label: string;
   description?: string;
-  defaultValue?: string;
   rules?: RegisterOptions<FormFieldIds>;
 }
 
 interface FormFieldText<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
   type: 'text' | 'number';
+  defaultValue?: string;
 }
 
 interface FormFieldTextArea<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
   type: 'textarea';
+  defaultValue?: string;
 }
 
 interface FormFieldDate<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
   type: 'date';
   fromDate?: Date;
+  defaultValue?: Date;
   disableWeekends?: boolean;
 }
 
 interface FormFieldWithOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
   type: 'radio' | 'checkbox' | 'select';
   options: Array<string | ValuePair>;
+  defaultValue?: string;
 }
 
 interface FormFieldWithNestedOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
   type: 'radio_nested' | 'checkbox_nested';
+  defaultValue?: string;
 }
 
 export type FormFields<FormFieldId extends FieldPath<FormFieldIds>, FormFieldIds extends FieldValues> = Record<
