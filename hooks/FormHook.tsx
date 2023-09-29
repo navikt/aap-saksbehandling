@@ -1,4 +1,4 @@
-import { RegisterOptions } from 'react-hook-form';
+import { DefaultValues, RegisterOptions, useForm, UseFormProps, UseFormReturn } from 'react-hook-form';
 import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 
 import { ValuePair } from '../components/input/formfield/FormField';
@@ -18,6 +18,7 @@ export type FormFieldConfig<FormFieldIds extends FieldValues> =
 interface BaseFormField<FormFieldIds extends FieldValues> {
   label: string;
   description?: string;
+  defaultValue?: string;
   rules?: RegisterOptions<FormFieldIds>;
 }
 
@@ -57,22 +58,29 @@ interface FormFieldName<FormFieldIds extends FieldValues> {
 }
 
 export function useConfigForm<FormFieldIds extends FieldValues>(
-  config: FormFieldsConfig<FieldPath<FormFieldIds>, FormFieldIds>
+  config: FormFieldsConfig<FieldPath<FormFieldIds>, FormFieldIds>,
+  configForForm?: Omit<UseFormProps<FormFieldIds>, 'defaultValues'>
 ): {
   formFields: FormFields<FieldPath<FormFieldIds>, FormFieldIds>;
+  form: UseFormReturn<FormFieldIds>;
 } {
-  const formFields: FormFields<FieldPath<FormFieldIds>, FormFieldIds> = {} as FormFields<
-    FieldPath<FormFieldIds>,
-    FormFieldIds
-  >;
-  const entries = Object.entries(config) as [[FieldPath<FormFieldIds>, FormFieldConfig<FormFieldIds>]];
+  const defaultValues = {} as DefaultValues<FormFieldIds>[FieldPath<FormFieldIds>];
+  const formFields = {} as FormFields<FieldPath<FormFieldIds>, FormFieldIds>;
+
+  const entries = Object.entries(config) as Array<[FieldPath<FormFieldIds>, FormFieldConfig<FormFieldIds>]>;
 
   entries.forEach(([id, formFieldConfig]) => {
-    formFields[id] = {
-      ...formFieldConfig,
-      name: id,
-    };
+    formFields[id] = { ...formFieldConfig, name: id };
+
+    if (formFieldConfig.defaultValue) {
+      defaultValues[id] = formFieldConfig.defaultValue;
+    }
   });
 
-  return { formFields };
+  const form = useForm<FormFieldIds>({
+    ...configForForm,
+    defaultValues,
+  });
+
+  return { formFields, form };
 }
