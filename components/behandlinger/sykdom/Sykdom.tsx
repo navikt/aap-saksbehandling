@@ -54,128 +54,127 @@ export const Sykdom = ({
   const router = useRouter();
   const params = useParams();
 
-  const form = useForm<FormFields>({
-    defaultValues: {
-      yrkesskade_begrunnelse: sykdomsGrunnlag?.yrkesskadevurdering?.begrunnelse,
-      arbeidsevne_begrunnelse: sykdomsGrunnlag?.sykdomsvurdering?.begrunnelse,
-      yrkesskade_årssakssammenheng: getJaNeiEllerUndefined(sykdomsGrunnlag?.yrkesskadevurdering?.erÅrsakssammenheng),
-      arbeidsevne_erSykdom: getJaNeiEllerUndefined(
-        sykdomsGrunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel
-      ),
-      arbeidsevne_nedsattMinst50: getJaNeiEllerUndefined(
-        sykdomsGrunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
-      ),
-      yrkesskade_dato: stringToDate(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt),
-      arbeidsevne_dato: stringToDate(sykdomsGrunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
-    },
-    shouldUnregister: true,
-  });
-  const { formFields } = useConfigForm<FormFields>({
-    yrkesskade_dokumentasjonMangler: {
-      type: 'checkbox',
-      label: 'Dokumentasjon mangler',
-      options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
-    },
-    yrkesskade_årssakssammenheng: {
-      type: 'radio',
-      label: 'Er vilkåret (årssakssammenheng) i 11.22 oppfylt?',
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
-      rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
-    },
-    yrkesskade_begrunnelse: {
-      type: 'textarea',
-      label: 'Vurder om yrkesskaden er medvirkende årsak til den nedsatte arbeidsevnen',
-      description: 'Se eksempel på vilkårsvurderingstekst',
-      rules: { required: 'Du må begrunne' },
-    },
-    yrkesskade_dato: {
-      type: 'date',
-      label: 'Dato for skadetidspunkt for yrkesskaden',
-      rules: {
-        validate: {
-          required: (value, formValues) => {
-            if (!value && formValues.yrkesskade_årssakssammenheng === JaEllerNei.Ja) {
-              return 'Du må sette en dato for skadetidspunktet';
-            }
+  const { formFields, form } = useConfigForm<FormFields>(
+    {
+      yrkesskade_dokumentasjonMangler: {
+        type: 'checkbox',
+        label: 'Dokumentasjon mangler',
+        options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
+      },
+      yrkesskade_årssakssammenheng: {
+        type: 'radio',
+        label: 'Er vilkåret (årssakssammenheng) i 11.22 oppfylt?',
+        defaultValue: getJaNeiEllerUndefined(sykdomsGrunnlag?.yrkesskadevurdering?.erÅrsakssammenheng),
+        options: [
+          { label: 'Ja', value: JaEllerNei.Ja },
+          { label: 'Nei', value: JaEllerNei.Nei },
+        ],
+        rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
+      },
+      yrkesskade_begrunnelse: {
+        type: 'textarea',
+        label: 'Vurder om yrkesskaden er medvirkende årsak til den nedsatte arbeidsevnen',
+        description: 'Se eksempel på vilkårsvurderingstekst',
+        defaultValue: sykdomsGrunnlag?.yrkesskadevurdering?.begrunnelse,
+        rules: { required: 'Du må begrunne' },
+      },
+      yrkesskade_dato: {
+        type: 'date',
+        label: 'Dato for skadetidspunkt for yrkesskaden',
+        defaultValue: stringToDate(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt),
+        rules: {
+          validate: {
+            required: (value, formValues) => {
+              if (!value && formValues.yrkesskade_årssakssammenheng === JaEllerNei.Ja) {
+                return 'Du må sette en dato for skadetidspunktet';
+              }
+            },
+          },
+        },
+      },
+      arbeidsevne_dokumentasjonMangler: {
+        type: 'checkbox',
+        label: 'Dokumentasjon mangler',
+        options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
+      },
+      arbeidsevne_erSykdom: {
+        type: 'radio',
+        label: 'Er det sykdom, skade eller lyte som fører til nedsatt arbeidsevne?',
+        defaultValue: getJaNeiEllerUndefined(sykdomsGrunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
+        options: [
+          { label: 'Ja', value: JaEllerNei.Ja },
+          { label: 'Nei', value: JaEllerNei.Nei },
+        ],
+        rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
+      },
+      arbeidsevne_nedsattMinst50: {
+        type: 'radio',
+        label: 'Er arbeidsevnen nedsatt med minst 50%?',
+        defaultValue: getJaNeiEllerUndefined(
+          sykdomsGrunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
+        ),
+        options: [
+          { label: 'Ja', value: JaEllerNei.Ja },
+          { label: 'Nei', value: JaEllerNei.Nei },
+        ],
+        rules: {
+          validate: {
+            required: (value, formValues) => {
+              if (!value && formValues.yrkesskade_årssakssammenheng === JaEllerNei.Nei) {
+                return 'Du må svare på om arbeidsevnen er nedsatt med minst 50%';
+              }
+            },
+          },
+        },
+      },
+      arbeidsevne_nedsattMinst30: {
+        type: 'radio',
+        label: 'Er arbeidsevnen nedsatt med minst 30%?',
+        options: [
+          { label: 'Ja', value: JaEllerNei.Ja },
+          { label: 'Nei', value: JaEllerNei.Nei },
+        ],
+        rules: {
+          validate: {
+            required: (value, formValues) => {
+              if (!value && formValues.yrkesskade_årssakssammenheng === JaEllerNei.Ja) {
+                return 'Du må svare på om arbeidsevnen er nedsatt med minst 30%';
+              }
+            },
+          },
+        },
+      },
+      arbeidsevne_begrunnelse: {
+        type: 'textarea',
+        label: 'Vurder den nedsatte arbeidsevnen',
+        description:
+          'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst 50%?',
+        defaultValue: sykdomsGrunnlag?.sykdomsvurdering?.begrunnelse,
+        rules: { required: 'Du må begrunne' },
+      },
+      arbeidsevne_dato: {
+        type: 'date',
+        label: 'Dato for nedsatt arbeidsevne',
+        defaultValue: stringToDate(sykdomsGrunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
+        rules: {
+          validate: {
+            required: (value, formValues) => {
+              if (
+                !value &&
+                harSvartJaPåSykdomsvurdering(
+                  formValues.arbeidsevne_nedsattMinst50,
+                  formValues.arbeidsevne_nedsattMinst30
+                )
+              ) {
+                return 'Du må svare på når arbeidsevnen ble nedsatt';
+              }
+            },
           },
         },
       },
     },
-    arbeidsevne_dokumentasjonMangler: {
-      type: 'checkbox',
-      label: 'Dokumentasjon mangler',
-      options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
-    },
-    arbeidsevne_erSykdom: {
-      type: 'radio',
-      label: 'Er det sykdom, skade eller lyte som fører til nedsatt arbeidsevne?',
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
-      rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
-    },
-    arbeidsevne_nedsattMinst50: {
-      type: 'radio',
-      label: 'Er arbeidsevnen nedsatt med minst 50%?',
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
-      rules: {
-        validate: {
-          required: (value, formValues) => {
-            if (!value && formValues.yrkesskade_årssakssammenheng === JaEllerNei.Nei) {
-              return 'Du må svare på om arbeidsevnen er nedsatt med minst 50%';
-            }
-          },
-        },
-      },
-    },
-    arbeidsevne_nedsattMinst30: {
-      type: 'radio',
-      label: 'Er arbeidsevnen nedsatt med minst 30%?',
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
-      rules: {
-        validate: {
-          required: (value, formValues) => {
-            if (!value && formValues.yrkesskade_årssakssammenheng === JaEllerNei.Ja) {
-              return 'Du må svare på om arbeidsevnen er nedsatt med minst 30%';
-            }
-          },
-        },
-      },
-    },
-    arbeidsevne_begrunnelse: {
-      type: 'textarea',
-      label: 'Vurder den nedsatte arbeidsevnen',
-      description:
-        'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst 50%?',
-      rules: { required: 'Du må begrunne' },
-    },
-    arbeidsevne_dato: {
-      type: 'date',
-      label: 'Dato for nedsatt arbeidsevne',
-      rules: {
-        validate: {
-          required: (value, formValues) => {
-            if (
-              !value &&
-              harSvartJaPåSykdomsvurdering(formValues.arbeidsevne_nedsattMinst50, formValues.arbeidsevne_nedsattMinst30)
-            ) {
-              return 'Du må svare på når arbeidsevnen ble nedsatt';
-            }
-          },
-        },
-      },
-    },
-  });
+    { shouldUnregister: true }
+  );
 
   useEffect(() => {
     form.reset();
