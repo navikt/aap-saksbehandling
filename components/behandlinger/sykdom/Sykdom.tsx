@@ -1,7 +1,7 @@
 'use client';
 
 import { Buldings2Icon, VitalsIcon } from '@navikt/aksel-icons';
-import { Alert, Label, BodyShort, ReadMore } from '@navikt/ds-react';
+import { Alert, BodyShort, Label, ReadMore } from '@navikt/ds-react';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { FormField } from 'components/input/formfield/FormField';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
@@ -10,9 +10,8 @@ import { useConfigForm } from 'hooks/FormHook';
 import { løsBehov } from 'lib/api';
 import { Dokument, SykdomsGrunnlag } from 'lib/types/types';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 
-import { JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { stringToDate } from 'lib/utils/date';
 import { Form } from '../Form';
 import { useParams, useRouter } from 'next/navigation';

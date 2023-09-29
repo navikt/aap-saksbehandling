@@ -13,6 +13,7 @@ export type FormFieldConfig<FormFieldIds extends FieldValues> =
   | FormFieldTextArea<FormFieldIds>
   | FormFieldDate<FormFieldIds>
   | FormFieldWithOptions<FormFieldIds>
+  | FormFieldCheckbox<FormFieldIds>
   | FormFieldWithNestedOptions<FormFieldIds>;
 
 interface BaseFormField<FormFieldIds extends FieldValues> {
@@ -42,6 +43,12 @@ interface FormFieldWithOptions<FormFieldIds extends FieldValues> extends BaseFor
   type: 'radio' | 'checkbox' | 'select';
   options: Array<string | ValuePair>;
   defaultValue?: string;
+}
+
+interface FormFieldCheckbox<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
+  type: 'checkbox';
+  options: Array<string | ValuePair>;
+  defaultValue?: Array<string>;
 }
 
 interface FormFieldWithNestedOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {

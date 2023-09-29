@@ -1,7 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useForm } from 'react-hook-form';
 
 import { useConfigForm } from '../../../hooks/FormHook';
 import { FormField } from './FormField';
@@ -65,12 +64,12 @@ interface Props {
 }
 
 function SelectForm(props: Props) {
-  const form = useForm<FormFields>({ defaultValues: { type: props.defaultValue } });
-  const { formFields } = useConfigForm<FormFields>({
+  const { formFields, form } = useConfigForm<FormFields>({
     type: {
       type: 'select',
       label: 'Velg type',
       description: 'Velg en type',
+      defaultValue: props.defaultValue,
       options: ['', 'Alternativ 1', 'Alternativ 2', 'Alternativ 3'],
       rules: { required: 'Du må velge type' },
     },

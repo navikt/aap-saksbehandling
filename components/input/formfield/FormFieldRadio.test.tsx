@@ -1,4 +1,3 @@
-import { useForm } from 'react-hook-form';
 import { useConfigForm } from '../../../hooks/FormHook';
 import { FormField } from './FormField';
 import { Button } from '@navikt/ds-react';
@@ -89,12 +88,12 @@ interface Props {
 }
 function FormMedRadios(props: Props) {
   const onSubmitMock = jest.fn();
-  const form = useForm<FormFields>({ defaultValues: { størrelse: props.defaultValue } });
-  const { formFields } = useConfigForm<FormFields>({
+  const { formFields, form } = useConfigForm<FormFields>({
     størrelse: {
       type: 'radio',
       label: 'Er arbeidsevnen nedsatt med minst 50 prosent?',
       description: 'Nedsettelse med minst 50 prosent er et krav.',
+      defaultValue: props.defaultValue,
       rules: { required: 'Du må ta stilling til om arbeidsevnen er nedsatt med minst 50 prosent' },
       options: [
         { label: 'Ja', value: 'true' },

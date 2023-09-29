@@ -1,5 +1,4 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { useForm } from 'react-hook-form';
 import { useConfigForm } from '../../../hooks/FormHook';
 import { FormField } from './FormField';
 import { Button } from '@navikt/ds-react';
@@ -70,12 +69,12 @@ interface Props {
 }
 function FormMedCheckbox(props: Props) {
   const onSubmitMock = jest.fn();
-  const form = useForm<FormFields>({ defaultValues: { erDuSikker: props.defaultValue || [] } });
-  const { formFields } = useConfigForm<FormFields>({
+  const { formFields, form } = useConfigForm<FormFields>({
     erDuSikker: {
       type: 'checkbox',
       label: 'Er du sikker?',
       description: 'Du må velge et av valgene.',
+      defaultValue: props.defaultValue,
       rules: { required: 'Du må foreta et valg!' },
       options: ['Ja', 'Nei', 'Vet ikke'],
     },

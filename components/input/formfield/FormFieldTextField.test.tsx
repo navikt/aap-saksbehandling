@@ -1,4 +1,3 @@
-import { useForm } from 'react-hook-form';
 import { useConfigForm } from '../../../hooks/FormHook';
 import { FormField } from './FormField';
 import { Button } from '@navikt/ds-react';
@@ -59,12 +58,12 @@ interface Props {
 }
 
 function TextfieldForm(props: Props) {
-  const form = useForm<FormFields>({ defaultValues: { begrunnelse: props.defaultValue } });
-  const { formFields } = useConfigForm<FormFields>({
+  const { formFields, form } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'text',
       label: 'Begrunnelse',
       description: 'Skriv en kort begrunnelse',
+      defaultValue: props.defaultValue,
       rules: { maxLength: { value: 10, message: 'Teksten er for lang' } },
     },
   });
