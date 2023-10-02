@@ -1,7 +1,7 @@
 'use client';
 
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
-import styles from './Steg.module.css';
+import styles from './GruppeElement.module.css';
 import { StegType } from '../../lib/types/types';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -12,7 +12,7 @@ interface Props {
   aktivtSteg: boolean;
 }
 
-export const Steg = ({ navn, erFullført, aktivtSteg }: Props) => {
+export const GruppeElement = ({ navn, erFullført, aktivtSteg }: Props) => {
   const erFullførtStyle = erFullført ? styles.erFullført : '';
   const aktivtStegStyle = aktivtSteg ? styles.aktivtSteg : '';
 
@@ -20,13 +20,13 @@ export const Steg = ({ navn, erFullført, aktivtSteg }: Props) => {
 
   return (
     <li className={`${aktivtStegStyle} ${styles.steg}`}>
-      <Link href={`/sak/${params.saksId}/${params.behandlingsReferanse}/${navn}`}>{mapStegTypeToStegNavn(navn)}</Link>
+      <Link href={`/sak/${params.saksId}/${params.behandlingsReferanse}/${navn}`}>{mapStegTypeToGruppeNavn(navn)}</Link>
       {erFullført && <CheckmarkCircleIcon title="Fullført" className={erFullførtStyle} />}
     </li>
   );
 };
 
-export function mapStegTypeToStegNavn(steg: StegType): string {
+export function mapStegTypeToGruppeNavn(steg: StegType): string {
   switch (steg) {
     case 'AVKLAR_SYKDOM':
       return 'Sykdomsvurdering';

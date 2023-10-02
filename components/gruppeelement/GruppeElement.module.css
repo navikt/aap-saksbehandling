@@ -7,7 +7,8 @@
   padding: var(--a-spacing-2);
 }
 
-.aktivtSteg, .steg:hover {
+.aktivtSteg,
+.steg:hover {
   border-bottom: 5px solid var(--a-surface-action);
 }
 

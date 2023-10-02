@@ -6,7 +6,7 @@ import { HGrid } from 'components/DsClient';
 
 import styles from './layout.module.css';
 import { ReactNode } from 'react';
-import { Steg } from 'components/steg/Steg';
+import { GruppeElement } from '../../../../../components/gruppeelement/GruppeElement';
 import { StegType } from 'lib/types/types';
 
 const Layout = async ({
@@ -31,7 +31,7 @@ const Layout = async ({
         <ol type="1" className={styles.stegMeny}>
           {flyt?.flyt.map((steg) => {
             return (
-              <Steg
+              <GruppeElement
                 key={steg.stegType}
                 navn={steg.stegType as StegType}
                 erFullført={
