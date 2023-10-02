@@ -1,7 +1,7 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { BehovsType, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { stringToDate } from 'lib/utils/date';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { FormField } from 'components/input/formfield/FormField';
@@ -106,7 +106,7 @@ export const Sykdomsvurdering = ({ sykdomsgrunnlag, behandlingsReferanse }: Prop
             behandlingVersjon: 0,
             behov: {
               // @ts-ignore Feil generert type i backend
-              '@type': '5001',
+              '@type': BehovsType.SYKDOMSVURDERING,
               // @ts-ignore Feil generert type i backend
               begrunnelse: data.begrunnelse,
               // @ts-ignore Feil generert type i backend

@@ -26,7 +26,6 @@ export const Form = ({ onSubmit, children, behandlingsReferanse }: Props) => {
     eventSource.onmessage = (event: any) => {
       console.log('event onMessage', event);
       const eventData = JSON.parse(event.data);
-      console.log(eventData);
       if (eventData.skalBytteGruppe) {
         router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}`);
       }
