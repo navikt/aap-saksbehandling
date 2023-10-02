@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import styles from './Form.module.css';
+import styles from 'components/form/Form.module.css';
 import { Button } from '@navikt/ds-react';
 import { useParams, useRouter } from 'next/navigation';
 

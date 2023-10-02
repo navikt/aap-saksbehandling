@@ -9,7 +9,7 @@ import { løsBehov } from '../../../../lib/api';
 import { format } from 'date-fns';
 import { Buldings2Icon } from '@navikt/aksel-icons';
 import { VilkårsKort } from '../../../vilkårskort/VilkårsKort';
-import { Form } from '../../Form';
+import { Form } from 'components/form/Form';
 
 interface Props {
   behandlingsReferanse: string;

@@ -5,7 +5,7 @@ import { BehovsType, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { stringToDate } from 'lib/utils/date';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { FormField } from 'components/input/formfield/FormField';
-import { Form } from 'components/behandlinger/Form';
+import { Form } from 'components/form/Form';
 import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
