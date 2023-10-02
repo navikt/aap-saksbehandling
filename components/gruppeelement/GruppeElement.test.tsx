@@ -1,11 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'lib/test/setUpTests';
 import { GruppeElement } from './GruppeElement';
-
-jest.mock('next/navigation', () => ({
-  useParams: jest
-    .fn()
-    .mockReturnValue({ saksId: '123', behandlingsReferanse: '123', behandlingsType: 'AVKLAR_SYKDOM' }),
-}));
 
 describe('Steg', () => {
   it('skal skal ha riktig navn', () => {
