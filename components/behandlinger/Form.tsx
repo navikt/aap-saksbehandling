@@ -7,17 +7,16 @@ import { useParams, useRouter } from 'next/navigation';
 
 interface Props {
   onSubmit: () => void;
-  behandlingsReferanse: string;
   children: ReactNode;
 }
 
-export const Form = ({ onSubmit, children, behandlingsReferanse }: Props) => {
+export const Form = ({ onSubmit, children }: Props) => {
   const router = useRouter();
   const params = useParams();
   // TODO: Gjøre mer generisk, kjøre som onClick på alle steg
   const listenSSE = () => {
     const eventSource = new EventSource(
-      `/api/behandling/hent/${behandlingsReferanse}/SYKDOM/AVKLAR_SYKDOM/nesteSteg/`,
+      `/api/behandling/hent/${params.behandlingsReferanse}/SYKDOM/AVKLAR_SYKDOM/nesteSteg/`,
       {
         withCredentials: true,
       }

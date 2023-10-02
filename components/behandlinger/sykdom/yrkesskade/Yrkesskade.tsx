@@ -78,7 +78,6 @@ export const Yrkesskade = ({ sykdomsgrunnlag, behandlingsReferanse }: Props) => 
             },
           });
         })}
-        behandlingsReferanse={behandlingsReferanse}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.årssakssammenheng} />
