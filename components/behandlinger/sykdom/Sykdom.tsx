@@ -274,13 +274,12 @@ export const Sykdom = ({
 
         <FormField form={form} formField={formFields.yrkesskade_dokumentasjonMangler} />
 
+        <FormField form={form} formField={formFields.yrkesskade_begrunnelse} />
         <FormField form={form} formField={formFields.yrkesskade_årssakssammenheng} />
 
         <ReadMore header="Slik vurderes vilkåret">
           <BodyShort spacing>Søker må ha søkt om...</BodyShort>
         </ReadMore>
-
-        <FormField form={form} formField={formFields.yrkesskade_begrunnelse} />
 
         {form.watch('yrkesskade_årssakssammenheng') === JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.yrkesskade_dato} />
@@ -300,6 +299,8 @@ export const Sykdom = ({
 
         <FormField form={form} formField={formFields.arbeidsevne_dokumentasjonMangler} />
 
+        <FormField form={form} formField={formFields.arbeidsevne_begrunnelse} />
+
         <FormField form={form} formField={formFields.arbeidsevne_erSykdom} />
 
         {form.watch('yrkesskade_årssakssammenheng') === JaEllerNei.Ja && (
@@ -308,8 +309,6 @@ export const Sykdom = ({
         {form.watch('yrkesskade_årssakssammenheng') === JaEllerNei.Nei && (
           <FormField form={form} formField={formFields.arbeidsevne_nedsattMinst50} />
         )}
-
-        <FormField form={form} formField={formFields.arbeidsevne_begrunnelse} />
 
         {(form.watch('arbeidsevne_nedsattMinst50') === JaEllerNei.Ja ||
           form.watch('arbeidsevne_nedsattMinst30') === JaEllerNei.Ja) && (
