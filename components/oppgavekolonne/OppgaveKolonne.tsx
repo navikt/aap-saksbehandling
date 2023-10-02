@@ -2,23 +2,22 @@ import { Sykdom } from 'components/behandlinger/sykdom/Sykdom';
 import { hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
-import { ForeslåVedtak } from 'components/behandlinger/foreslåVedtak/ForeslåVedtak';
+import { StegGruppe } from '../../lib/types/types';
 
 interface Props {
   className: string;
   behandlingsReferanse: string;
-  behandlingsType: string;
+  aktivGruppe: StegGruppe;
 }
 
-export const OppgaveKolonne = async ({ className, behandlingsReferanse, behandlingsType }: Props) => {
+export const OppgaveKolonne = async ({ className, behandlingsReferanse, aktivGruppe }: Props) => {
   const sykdomsGrunnlag = await hentSykdomsGrunnlag(behandlingsReferanse, getToken(headers()));
 
   return (
     <div className={className}>
-      {behandlingsType === 'AVKLAR_SYKDOM' && (
+      {aktivGruppe === 'SYKDOM' && (
         <Sykdom sykdomsGrunnlag={sykdomsGrunnlag} behandlingsReferanse={behandlingsReferanse} />
       )}
-      {behandlingsType === 'FORESLÅ_VEDTAK' && <ForeslåVedtak />}
     </div>
   );
 };

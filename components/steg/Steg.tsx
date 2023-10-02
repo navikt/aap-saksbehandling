@@ -32,8 +32,6 @@ export function mapStegTypeToStegNavn(steg: StegType): string {
       return 'Sykdomsvurdering';
     case 'VURDER_ALDER':
       return 'Alder';
-    case 'AVSLUTT_BEHANDLING':
-      return 'Avslutt behandling';
     case 'FASTSETT_GRUNNLAG':
       return 'Fastsette grunnlag';
     case 'BEREGN_TILKJENT_YTELSE':
@@ -44,8 +42,6 @@ export function mapStegTypeToStegNavn(steg: StegType): string {
       return 'Fatte vedtak';
     case 'FORESLÅ_VEDTAK':
       return 'Foreslå vedtak';
-    case 'INNGANGSVILKÅR':
-      return 'Inngangsvilkår';
     case 'INNHENT_REGISTERDATA':
       return 'Innhente registerdata';
     case 'IVERKSETT_VEDTAK':
@@ -54,7 +50,21 @@ export function mapStegTypeToStegNavn(steg: StegType): string {
       return 'Simulering';
     case 'START_BEHANDLING':
       return 'Start behandling';
+    case 'AVKLAR_YRKESSKADE':
+      return 'Yrkesskade';
+    case 'VURDER_LOVVALG':
+      return 'Vurder lovvalg';
+    case 'VURDER_MEDLEMSKAP':
+      return 'Vurder medlemskap';
+    case 'BARNETILLEGG':
+      return 'Barnetillegg';
+    case 'SAMORDNING':
+      return 'Samordning';
+    case 'VURDER_BISTANDSBEHOV':
+      return 'Vurder bistandsbehov';
     case 'UDEFINERT':
       return 'Udefinert';
+    default:
+      return steg;
   }
 }

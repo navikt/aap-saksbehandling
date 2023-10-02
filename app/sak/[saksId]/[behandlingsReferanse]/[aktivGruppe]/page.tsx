@@ -5,11 +5,16 @@ import styles from './page.module.css';
 import { hentBehandling } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
+import { notFound } from 'next/navigation';
+import { StegGruppe } from '../../../../../lib/types/types';
 
-const Page = async ({ params }: { params: { behandlingsReferanse: string; behandlingsType: string } }) => {
+const Page = async ({ params }: { params: { behandlingsReferanse: string; aktivGruppe: StegGruppe } }) => {
   const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
 
-  console.log(behandling);
+  if (params.aktivGruppe !== 'SYKDOM') {
+    notFound();
+  }
+
   return (
     <>
       <InformasjonsKolonne
@@ -19,7 +24,7 @@ const Page = async ({ params }: { params: { behandlingsReferanse: string; behand
       <OppgaveKolonne
         className={styles.kolonne}
         behandlingsReferanse={behandling?.referanse ?? ''}
-        behandlingsType={decodeURI(params.behandlingsType)}
+        aktivGruppe={decodeURI(params.aktivGruppe) as StegGruppe}
       />
     </>
   );
