@@ -44,7 +44,7 @@ export const Form = ({ onSubmit, children, behandlingsReferanse }: Props) => {
       }}
     >
       {children}
-      <Button>Bekreft</Button>
+      <Button className={styles.button}>Bekreft</Button>
     </form>
   );
 };
