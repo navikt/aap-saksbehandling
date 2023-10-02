@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { Yrkesskade } from './yrkesskade/Yrkesskade';
 import { Sykdomsvurdering } from './sykdomsvurdering/Sykdomsvurdering';
+import style from './Sykdom.module.css';
 
 interface Props {
   sykdomsGrunnlag?: SykdomsGrunnlag;
@@ -16,7 +17,7 @@ interface Props {
 
 export const Sykdom = ({ sykdomsGrunnlag, behandlingsReferanse, readOnly }: Props) => {
   return (
-    <div>
+    <div className={style.sykdom}>
       {readOnly && <Alert variant="warning">Du har kun lesetilgang til dette steget</Alert>}
       <VilkårsKort heading={'Yrkesskade - § 11-22'} icon={<Buldings2Icon />}>
         <Alert variant="warning">Vi har funnet en eller flere registrerte yrkesskader</Alert>
