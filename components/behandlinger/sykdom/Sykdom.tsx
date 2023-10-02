@@ -8,15 +8,13 @@ import { SykdomsGrunnlag } from 'lib/types/types';
 import { Yrkesskade } from './yrkesskade/Yrkesskade';
 import { Sykdomsvurdering } from './sykdomsvurdering/Sykdomsvurdering';
 
-export const Sykdom = ({
-  sykdomsGrunnlag,
-  behandlingsReferanse,
-  readOnly,
-}: {
+interface Props {
   sykdomsGrunnlag?: SykdomsGrunnlag;
   behandlingsReferanse: string;
   readOnly?: boolean;
-}) => {
+}
+
+export const Sykdom = ({ sykdomsGrunnlag, behandlingsReferanse, readOnly }: Props) => {
   return (
     <div>
       {readOnly && <Alert variant="warning">Du har kun lesetilgang til dette steget</Alert>}
