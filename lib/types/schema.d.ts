@@ -205,8 +205,8 @@ export interface components {
       ident: string;
       yrkesskade: boolean;
     };
-    "no.nav.aap.avklaringsbehov.AvklaringsbehovLøsning": Record<string, never>;
-    "no.nav.aap.avklaringsbehov.sykdom.Sykdomsvurdering": {
+    "no.nav.aap.behandlingsflyt.avklaringsbehov.AvklaringsbehovLøsning": Record<string, never>;
+    "no.nav.aap.behandlingsflyt.avklaringsbehov.sykdom.Sykdomsvurdering": {
       begrunnelse: string;
       dokumenterBruktIVurdering: components["schemas"]["no.nav.aap.domene.behandling.dokumenter.JournalpostId"][];
       "erNedsettelseIArbeidsevneHøyereEnnNedreGrense"?: boolean | null;
@@ -219,7 +219,7 @@ export interface components {
        */
       nedsattArbeidsevneDato?: string | null;
     };
-    "no.nav.aap.avklaringsbehov.sykdom.Yrkesskadevurdering": {
+    "no.nav.aap.behandlingsflyt.avklaringsbehov.sykdom.Yrkesskadevurdering": {
       begrunnelse: string;
       dokumenterBruktIVurdering: components["schemas"]["no.nav.aap.domene.behandling.dokumenter.JournalpostId"][];
       "erÅrsakssammenheng": boolean;
@@ -269,7 +269,7 @@ export interface components {
       avklaringsbehov: components["schemas"]["no.nav.aap.flate.behandling.AvklaringsbehovDTO"][];
       /**
        * Format: date-time
-       * @example 2023-10-02T11:13:11.918847
+       * @example 2023-10-02T13:03:32.650384
        */
       opprettet: string;
       /** Format: uuid */
@@ -286,7 +286,7 @@ export interface components {
       status: "OPPRETTET" | "AVSLUTTET" | "AVBRUTT";
       /**
        * Format: date-time
-       * @example 2023-10-02T11:13:11.918847
+       * @example 2023-10-02T13:03:32.650384
        */
       tidsstempel: string;
     };
@@ -313,8 +313,8 @@ export interface components {
     };
     "no.nav.aap.flate.behandling.SykdomsGrunnlagDto": {
       opplysninger: components["schemas"]["no.nav.aap.flate.behandling.InnhentetSykdomsOpplysninger"];
-      sykdomsvurdering?: components["schemas"]["no.nav.aap.avklaringsbehov.sykdom.Sykdomsvurdering"];
-      yrkesskadevurdering?: components["schemas"]["no.nav.aap.avklaringsbehov.sykdom.Yrkesskadevurdering"];
+      sykdomsvurdering?: components["schemas"]["no.nav.aap.behandlingsflyt.avklaringsbehov.sykdom.Sykdomsvurdering"];
+      yrkesskadevurdering?: components["schemas"]["no.nav.aap.behandlingsflyt.avklaringsbehov.sykdom.Yrkesskadevurdering"];
     };
     "no.nav.aap.flate.behandling.VilkårDTO": {
       perioder: components["schemas"]["no.nav.aap.flate.behandling.VilkårsperiodeDTO"][];
@@ -333,14 +333,14 @@ export interface components {
     "no.nav.aap.flate.behandling.avklaringsbehov.LøsAvklaringsbehovPåBehandling": {
       /** Format: int64 */
       behandlingVersjon: number;
-      behov: components["schemas"]["no.nav.aap.avklaringsbehov.AvklaringsbehovLøsning"];
+      behov: components["schemas"]["no.nav.aap.behandlingsflyt.avklaringsbehov.AvklaringsbehovLøsning"];
       /** Format: uuid */
       referanse: string;
     };
     "no.nav.aap.flate.sak.BehandlinginfoDTO": {
       /**
        * Format: date-time
-       * @example 2023-10-02T11:13:11.918847
+       * @example 2023-10-02T13:03:32.650384
        */
       opprettet: string;
       /** Format: uuid */

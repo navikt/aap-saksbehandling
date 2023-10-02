@@ -3,17 +3,51 @@
 import { ReactNode } from 'react';
 import styles from './Form.module.css';
 import { Button } from '@navikt/ds-react';
+import { useParams, useRouter } from 'next/navigation';
 
 interface Props {
-  onSubmit: () => void; // TODO: Bedre type
+  onSubmit: () => void;
+  behandlingsReferanse: string;
   children: ReactNode;
 }
 
-export const Form = ({ onSubmit, children }: Props) => {
+export const Form = ({ onSubmit, children, behandlingsReferanse }: Props) => {
+  const router = useRouter();
+  const params = useParams();
+  // TODO: Gjøre mer generisk, kjøre som onClick på alle steg
+  const listenSSE = () => {
+    const eventSource = new EventSource(
+      `/api/behandling/hent/${behandlingsReferanse}/SYKDOM/AVKLAR_SYKDOM/nesteSteg/`,
+      {
+        withCredentials: true,
+      }
+    );
+    console.log('Lytter på SSE', eventSource);
+    eventSource.onmessage = (event: any) => {
+      console.log('event onMessage', event);
+      const eventData = JSON.parse(event.data);
+      console.log(eventData);
+      if (eventData.skalBytteGruppe) {
+        router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}`);
+      }
+      eventSource.close();
+    };
+    eventSource.onerror = (event: any) => {
+      console.log('event onError', event);
+    };
+  };
+
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
+    <form
+      className={styles.form}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+        listenSSE();
+      }}
+    >
       {children}
-      <Button>Lagre og gå til neste steg</Button>
+      <Button>Bekreft</Button>
     </form>
   );
 };

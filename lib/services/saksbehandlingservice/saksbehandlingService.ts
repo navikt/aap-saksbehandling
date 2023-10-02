@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import {
   BehandlingFlytOgTilstand,
+  BehandlingFlytOgTilstand2,
   DetaljertBehandling,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
@@ -53,6 +54,14 @@ export const hentFlyt = async (
 ): Promise<BehandlingFlytOgTilstand> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
   return await fetchProxy<BehandlingFlytOgTilstand>(url, accessToken, saksbehandlingScope, 'GET', undefined);
+};
+
+export const hentFlyt2 = async (
+  behandlingsReferanse: string,
+  accessToken: string
+): Promise<BehandlingFlytOgTilstand2> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt-2`;
+  return await fetchProxy<BehandlingFlytOgTilstand2>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling, accessToken: string) => {
