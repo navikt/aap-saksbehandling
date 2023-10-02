@@ -22,9 +22,7 @@ export const Form = ({ onSubmit, children, behandlingsReferanse }: Props) => {
         withCredentials: true,
       }
     );
-    console.log('Lytter på SSE', eventSource);
     eventSource.onmessage = (event: any) => {
-      console.log('event onMessage', event);
       const eventData = JSON.parse(event.data);
       if (eventData.skalBytteGruppe) {
         router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}`);
@@ -32,7 +30,7 @@ export const Form = ({ onSubmit, children, behandlingsReferanse }: Props) => {
       eventSource.close();
     };
     eventSource.onerror = (event: any) => {
-      console.log('event onError', event);
+      throw new Error('event onError', event);
     };
   };
 
