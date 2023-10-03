@@ -5,9 +5,13 @@ import { Form } from 'components/form/Form';
 import { BodyShort } from '@navikt/ds-react';
 import { FigureIcon } from '@navikt/aksel-icons';
 
+import style from './Meldeplikt.module.css';
+
 interface FormFields {
   begrunnelse: string;
   unntakFraMeldeplikt: string[];
+  startDato: Date;
+  sluttDato: Date;
 }
 
 export const Meldeplikt = () => {
@@ -21,6 +25,14 @@ export const Meldeplikt = () => {
       type: 'checkbox',
       label: 'Det vurderes at søker kan unntas fra meldeplikten',
       options: ['Unntak fra meldeplikten'],
+    },
+    startDato: {
+      type: 'date',
+      label: 'Startdato for fritak fra meldeplikt',
+    },
+    sluttDato: {
+      type: 'date',
+      label: 'Sluttdato for fritak fra meldeplikt',
     },
   });
 
@@ -40,6 +52,13 @@ export const Meldeplikt = () => {
 
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.unntakFraMeldeplikt} />
+
+        {form.watch('unntakFraMeldeplikt') && form.watch('unntakFraMeldeplikt').includes('Unntak fra meldeplikten') && (
+          <div className={style.datofelter}>
+            <FormField form={form} formField={formFields.startDato} />
+            <FormField form={form} formField={formFields.sluttDato} />
+          </div>
+        )}
       </Form>
     </VilkårsKort>
   );
