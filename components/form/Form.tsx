@@ -16,7 +16,7 @@ export const Form = ({ onSubmit, children }: Props) => {
   // TODO: Gjøre mer generisk, kjøre som onClick på alle steg
   const listenSSE = () => {
     const eventSource = new EventSource(
-      `/api/behandling/hent/${params.behandlingsReferanse}/SYKDOM/AVKLAR_SYKDOM/nesteSteg/`,
+      `/api/behandling/hent/${params.behandlingsReferanse}/${params.aktivGruppe}/AVKLAR_YRKESSKADE/nesteSteg/`,
       {
         withCredentials: true,
       }
