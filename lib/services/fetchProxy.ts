@@ -50,7 +50,9 @@ const fetchWithRetry = async <ResponseBody>(
 
   if (!response.ok) {
     if (response.status === 500) {
-      throw new Error(`Unable to fetch ${url}: ${response.statusText}`);
+      const responseJson = await response.json();
+      console.log('errorMessage in fetchWithRetry', responseJson);
+      throw new Error(`Unable to fetch ${url}: ${responseJson.message}`);
     }
     if (response.status === 404) {
       throw new Error(`Ikke funnet: ${url}`);

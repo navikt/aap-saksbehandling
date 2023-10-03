@@ -1,14 +1,14 @@
 'use client';
 
-import { useConfigForm } from '../../../../hooks/FormHook';
-import { BehovsType, getJaNeiEllerUndefined, JaEllerNei } from '../../../../lib/utils/form';
-import { stringToDate } from '../../../../lib/utils/date';
-import { SykdomsGrunnlag } from '../../../../lib/types/types';
-import { FormField } from '../../../input/formfield/FormField';
-import { løsBehov } from '../../../../lib/api';
+import { useConfigForm } from 'hooks/FormHook';
+import { BehovsType, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { stringToDate } from 'lib/utils/date';
+import { SykdomsGrunnlag } from 'lib/types/types';
+import { FormField } from 'components/input/formfield/FormField';
+import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
 import { Buldings2Icon } from '@navikt/aksel-icons';
-import { VilkårsKort } from '../../../vilkårskort/VilkårsKort';
+import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 
 interface Props {
@@ -68,13 +68,16 @@ export const Yrkesskade = ({ sykdomsgrunnlag, behandlingsReferanse }: Props) => 
               // @ts-ignore
               '@type': BehovsType.YRKESSKADE,
               // @ts-ignore
-              begrunnelse: data.yrkesskade_begrunnelse,
-              // @ts-ignore
-              dokumenterBruktIVurdering: [],
-              // @ts-ignore
-              erÅrsakssammenheng: data.årssakssammenheng === JaEllerNei.Ja,
-              // @ts-ignore
-              skadetidspunkt: format(data.dato, 'yyyy-MM-dd'),
+              yrkesskadevurdering: {
+                // @ts-ignore
+                begrunnelse: data.begrunnelse,
+                // @ts-ignore
+                dokumenterBruktIVurdering: [],
+                // @ts-ignore
+                erÅrsakssammenheng: data.årssakssammenheng === JaEllerNei.Ja,
+                // @ts-ignore
+                skadetidspunkt: data.dato ? format(data.dato, 'yyyy-MM-dd') : undefined,
+              },
             },
           });
         })}
