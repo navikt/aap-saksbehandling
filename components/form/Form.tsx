@@ -38,7 +38,7 @@ export const Form = ({ onSubmit, children }: Props) => {
       className={styles.form}
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit();
+        //onSubmit();
         listenSSE();
       }}
     >

@@ -2,6 +2,9 @@ import { getToken } from 'lib/auth/authentication';
 import { hentFlyt2 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { headers } from 'next/headers';
 
+const DEFAULT_TIMEOUT_IN_MS = 1000;
+const RETRIES = 0;
+
 const gruppeEllerStegErEndret = (
   aktivGruppe: string,
   aktivtSteg: string,
@@ -14,31 +17,34 @@ export async function GET(__request, context: { params: { referanse: string; gru
   let responseStream = new TransformStream();
   const writer = responseStream.writable.getWriter();
 
-  let timeout = 1000;
-  const getTimeout = () => timeout;
-  let flyt = await hentFlyt2(context.params.referanse, getToken(headers()));
-  for (let retries = 0; retries < 10; retries++) {
-    console.log({ timeout, retries });
-    console.log(context.params);
-    console.log(flyt.aktivGruppe + '::' + flyt.aktivtSteg);
-    if (gruppeEllerStegErEndret(context.params.gruppe, context.params.steg, flyt.aktivGruppe, flyt.aktivtSteg)) {
-      console.log('Gruppe eller steg er endret!');
-      const json = {
-        aktivGruppe: flyt.aktivGruppe,
-        aktivtSteg: flyt.aktivtSteg,
-        skalBytteGruppe: flyt?.aktivGruppe !== context.params.gruppe,
-      };
-
-      writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-      writer.close();
-      break;
-    }
+  /* TODO: Ikke for prod prod, bør bruke noe mer async som funker der */
+  const pollFlytMedTimeoutOgRetry = async (timeout: number, retries: number) => {
     setTimeout(async () => {
-      flyt = await hentFlyt2(context.params.referanse, getToken(headers()));
-      console.log('Har hentet data');
-    }, getTimeout());
-    timeout = timeout * 2;
-  }
+      console.log({ timeout, retries });
+      if (retries > 10) {
+        // TODO: Gi beskjed om at vi gir opp 🤷‍♀️
+        writer.close();
+        return;
+      }
+      const flyt = await hentFlyt2(context.params.referanse, getToken(headers()));
+      if (gruppeEllerStegErEndret(context.params.gruppe, context.params.steg, flyt.aktivGruppe, flyt.aktivtSteg)) {
+        console.log('Gruppe eller steg er endret!');
+        const json = {
+          aktivGruppe: flyt.aktivGruppe,
+          aktivtSteg: flyt.aktivtSteg,
+          skalBytteGruppe: flyt?.aktivGruppe !== context.params.gruppe,
+        };
+
+        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        writer.close();
+        return;
+      } else {
+        pollFlytMedTimeoutOgRetry(timeout * 2, retries + 1);
+      }
+    }, timeout);
+  };
+
+  await pollFlytMedTimeoutOgRetry(DEFAULT_TIMEOUT_IN_MS, RETRIES);
 
   return new Response(responseStream.readable, {
     headers: {
