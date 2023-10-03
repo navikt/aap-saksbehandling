@@ -1,32 +1,51 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import styles from 'components/form/Form.module.css';
-import { Button } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import { useParams, useRouter } from 'next/navigation';
+import {
+  ServerSentEventData,
+  ServerSentEventStatus,
+} from 'app/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
+import { StegType } from 'lib/types/types';
 
 interface Props {
+  steg: StegType;
   onSubmit: () => void;
   children: ReactNode;
 }
 
-export const Form = ({ onSubmit, children }: Props) => {
+export const Form = ({ steg, onSubmit, children }: Props) => {
+  const [status, setStatus] = useState<ServerSentEventStatus | undefined>();
   const router = useRouter();
   const params = useParams();
   // TODO: Gjøre mer generisk, kjøre som onClick på alle steg
   const listenSSE = () => {
+    setStatus(undefined);
     const eventSource = new EventSource(
-      `/api/behandling/hent/${params.behandlingsReferanse}/${params.aktivGruppe}/AVKLAR_YRKESSKADE/nesteSteg/`,
+      `/api/behandling/hent/${params.behandlingsReferanse}/${params.aktivGruppe}/${steg}/nesteSteg/`,
       {
         withCredentials: true,
       }
     );
     eventSource.onmessage = (event: any) => {
-      const eventData = JSON.parse(event.data);
-      if (eventData.skalBytteGruppe) {
-        router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}`);
+      const eventData: ServerSentEventData = JSON.parse(event.data);
+      if (eventData.status === 'DONE') {
+        if (eventData.skalBytteGruppe) {
+          router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}`);
+        }
+        eventSource.close();
       }
-      eventSource.close();
+      if (eventData.status === 'ERROR') {
+        console.log('ERROR', eventData);
+        setStatus(eventData.status);
+        eventSource.close();
+      }
+      if (eventData.status === 'POLLING') {
+        setStatus(eventData.status);
+        console.log('POLLING', eventData);
+      }
     };
     eventSource.onerror = (event: any) => {
       throw new Error('event onError', event);
@@ -38,11 +57,18 @@ export const Form = ({ onSubmit, children }: Props) => {
       className={styles.form}
       onSubmit={(e) => {
         e.preventDefault();
-        //onSubmit();
+        onSubmit();
         listenSSE();
       }}
+      id={steg}
     >
       {children}
+      {status === 'ERROR' && (
+        <Alert variant="error">Det tok for lang tid å hente neste steg fra baksystemet. Kom tilbake senere. 🤷‍♀️</Alert>
+      )}
+      {status === 'POLLING' && (
+        <Alert variant="info">Maskinen bruker litt lengre tid på å jobbe enn vanlig. Ta deg en kopp kaffe ☕️</Alert>
+      )}
       <Button className={styles.button}>Bekreft</Button>
     </form>
   );

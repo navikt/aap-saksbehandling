@@ -78,6 +78,7 @@ export const Yrkesskade = ({ sykdomsgrunnlag, behandlingsReferanse }: Props) => 
             },
           });
         })}
+        steg={'AVKLAR_YRKESSKADE'}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.årssakssammenheng} />

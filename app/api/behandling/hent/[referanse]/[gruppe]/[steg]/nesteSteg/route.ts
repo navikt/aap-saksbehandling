@@ -5,6 +5,15 @@ import { headers } from 'next/headers';
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;
 
+export interface ServerSentEventData {
+  aktivGruppe?: string;
+  aktivtSteg?: string;
+  skalBytteGruppe?: boolean;
+  status: ServerSentEventStatus;
+}
+
+export type ServerSentEventStatus = 'POLLING' | 'ERROR' | 'DONE';
+
 const gruppeEllerStegErEndret = (
   aktivGruppe: string,
   aktivtSteg: string,
@@ -21,25 +30,36 @@ export async function GET(__request, context: { params: { referanse: string; gru
   const pollFlytMedTimeoutOgRetry = async (timeout: number, retries: number) => {
     setTimeout(async () => {
       console.log({ timeout, retries });
-      if (retries > 10) {
-        // TODO: Gi beskjed om at vi gir opp 🤷‍♀️
+      if (retries > 8) {
+        const json: ServerSentEventData = {
+          status: 'ERROR',
+        };
+        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         writer.close();
         return;
+      }
+      if (retries === 3) {
+        const json: ServerSentEventData = {
+          status: 'POLLING',
+        };
+
+        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
       }
       const flyt = await hentFlyt2(context.params.referanse, getToken(headers()));
       if (gruppeEllerStegErEndret(context.params.gruppe, context.params.steg, flyt.aktivGruppe, flyt.aktivtSteg)) {
         console.log('Gruppe eller steg er endret!');
-        const json = {
+        const json: ServerSentEventData = {
           aktivGruppe: flyt.aktivGruppe,
           aktivtSteg: flyt.aktivtSteg,
-          skalBytteGruppe: flyt?.aktivGruppe !== context.params.gruppe,
+          skalBytteGruppe: flyt.aktivGruppe !== context.params.gruppe,
+          status: 'DONE',
         };
 
         writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         writer.close();
         return;
       } else {
-        pollFlytMedTimeoutOgRetry(timeout * 2, retries + 1);
+        await pollFlytMedTimeoutOgRetry(timeout * 1.3, retries + 1);
       }
     }, timeout);
   };

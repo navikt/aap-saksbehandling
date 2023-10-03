@@ -121,6 +121,7 @@ export const Sykdomsvurdering = ({ sykdomsgrunnlag, behandlingsReferanse }: Prop
             referanse: behandlingsReferanse,
           });
         })}
+        steg={'AVKLAR_SYKDOM'}
       >
         <FormField form={form} formField={formFields.dokumentasjonMangler} />
         <FormField form={form} formField={formFields.begrunnelse} />
