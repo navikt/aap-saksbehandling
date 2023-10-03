@@ -10,8 +10,8 @@ import style from './Meldeplikt.module.css';
 interface FormFields {
   begrunnelse: string;
   unntakFraMeldeplikt: string[];
-  startDato: Date;
-  sluttDato: Date;
+  startDato?: Date;
+  sluttDato?: Date;
 }
 
 export const Meldeplikt = () => {

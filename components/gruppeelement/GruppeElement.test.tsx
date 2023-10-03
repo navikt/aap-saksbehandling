@@ -3,18 +3,15 @@ import { GruppeElement } from './GruppeElement';
 
 describe('Steg', () => {
   it('skal skal ha riktig navn', () => {
-    render(<GruppeElement navn="AVKLAR_SYKDOM" erFullført={false} aktivtSteg={false} />);
-    expect(screen.getByText('Sykdomsvurdering')).toBeVisible();
+    render(<GruppeElement navn="SYKDOM" erFullført={false} aktivtSteg={false} />);
+    expect(screen.getByText('Sykdom')).toBeVisible();
   });
   it('skal ha riktig url', () => {
-    render(<GruppeElement navn="AVKLAR_SYKDOM" erFullført={false} aktivtSteg={false} />);
-    expect(screen.getByRole('link', { name: 'Sykdomsvurdering' })).toHaveAttribute(
-      'href',
-      '/sak/123/123/AVKLAR_SYKDOM'
-    );
+    render(<GruppeElement navn="SYKDOM" erFullført={false} aktivtSteg={false} />);
+    expect(screen.getByRole('link', { name: 'Sykdom' })).toHaveAttribute('href', '/sak/123/123/SYKDOM');
   });
   it('skal ha checkmark for fullført steg', () => {
-    render(<GruppeElement navn="AVKLAR_SYKDOM" erFullført={true} aktivtSteg={false} />);
+    render(<GruppeElement navn="SYKDOM" erFullført={true} aktivtSteg={false} />);
     expect(screen.getByRole('img')).toBeVisible();
     expect(screen.getByTitle('Fullført')).toBeInTheDocument();
   });

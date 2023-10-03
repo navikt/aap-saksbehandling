@@ -1,29 +1,27 @@
 .kolonner {
-    height: 100vh;
-    border-top: 1px solid gray;
-  }
-  
-  .kolonne {
-    height: 100%;
-    padding: 1rem;
-    border-top: 1px solid var(--a-border-default);
-  }
-  
-  
+  height: 100vh;
+  border-top: 1px solid gray;
+}
+
+.kolonne {
+  height: 100%;
+  padding: 1rem;
+}
+
 .høyrekolonne {
-    border-left: 1px solid var(--a-border-default);
-  }
-  
-  .stegMeny {
-    display: flex;
-    flex-direction: row;
-    gap: var(--a-spacing-4);
-    margin: var(--a-spacing-1) 0;
-    align-items: flex-start;
-  }
-  
-  .space {
-    height: 4rem;
-    background-color: var(--a-surface-selected);
-    border-top: 2px solid var(--a-border-default);
-  }
+  border-left: 1px solid var(--a-border-default);
+}
+
+.stegMeny {
+  display: flex;
+  flex-direction: row;
+  gap: var(--a-spacing-4);
+  margin: var(--a-spacing-1) 0;
+  align-items: flex-start;
+}
+
+.space {
+  height: 4rem;
+  background-color: var(--a-surface-selected);
+  border-top: 2px solid var(--a-border-default);
+}

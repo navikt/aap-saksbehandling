@@ -1,13 +1,12 @@
 import { getToken } from 'lib/auth/authentication';
-import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBehandling, hentFlyt2 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { headers } from 'next/headers';
 
 import { HGrid } from 'components/DsClient';
 
 import styles from './layout.module.css';
 import { ReactNode } from 'react';
-import { GruppeElement } from '../../../../../components/gruppeelement/GruppeElement';
-import { StegType } from 'lib/types/types';
+import { GruppeElement } from 'components/gruppeelement/GruppeElement';
 
 const Layout = async ({
   params,
@@ -17,9 +16,7 @@ const Layout = async ({
   children: ReactNode;
 }) => {
   const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
-  const flyt = await hentFlyt(params.behandlingsReferanse, getToken(headers()));
-
-  console.log('behabdlingsType', params.behandlingsType);
+  const flyt = await hentFlyt2(params.behandlingsReferanse, getToken(headers()));
 
   if (behandling === undefined) {
     return <div>Behandling ikke funnet</div>;
@@ -29,18 +26,18 @@ const Layout = async ({
     <>
       <div>
         <ol type="1" className={styles.stegMeny}>
-          {flyt?.flyt.map((steg) => {
-            return (
-              <GruppeElement
-                key={steg.stegType}
-                navn={steg.stegType as StegType}
-                erFullført={
-                  (steg.vilkårDTO?.perioder?.filter((periode) => periode.utfall === 'OPPFYLT').length ?? 0) > 0
-                }
-                aktivtSteg={decodeURI(params.behandlingsType) === steg.stegType}
-              />
-            );
-          })}
+          {flyt?.flyt
+            .filter((gruppe) => ['SYKDOM', 'FORESLÅ_VEDTAK'].includes(gruppe.stegGruppe))
+            .map((gruppe) => {
+              return (
+                <GruppeElement
+                  key={gruppe.stegGruppe}
+                  navn={gruppe.stegGruppe}
+                  erFullført={false}
+                  aktivtSteg={flyt.aktivGruppe === gruppe.stegGruppe}
+                />
+              );
+            })}
         </ol>
 
         <div className={styles.space} />
