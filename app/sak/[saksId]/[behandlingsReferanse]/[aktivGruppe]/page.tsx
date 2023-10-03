@@ -6,7 +6,7 @@ import { hentBehandling } from 'lib/services/saksbehandlingservice/saksbehandlin
 import { getToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { StegGruppe } from '../../../../../lib/types/types';
+import { StegGruppe } from 'lib/types/types';
 
 const Page = async ({ params }: { params: { behandlingsReferanse: string; aktivGruppe: StegGruppe } }) => {
   const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
