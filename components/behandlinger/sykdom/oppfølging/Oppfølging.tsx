@@ -42,7 +42,7 @@ export const Oppfølging = () => {
       <Form steg="VURDER_BISTANDSBEHOV" onSubmit={() => {}}>
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.vilkårOppfylt} />
-        <FormField form={form} formField={formFields.grunner} />
+        {form.watch('vilkårOppfylt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.grunner} />}
       </Form>
     </VilkårsKort>
   );

@@ -9,6 +9,7 @@ import { Yrkesskade } from './yrkesskade/Yrkesskade';
 import { Sykdomsvurdering } from './sykdomsvurdering/Sykdomsvurdering';
 import style from './Sykdom.module.css';
 import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
+import { Oppfølging } from 'components/behandlinger/sykdom/oppfølging/Oppfølging';
 
 interface Props {
   sykdomsGrunnlag?: SykdomsGrunnlag;
@@ -53,6 +54,8 @@ export const Sykdom = ({ sykdomsGrunnlag, behandlingsReferanse, readOnly }: Prop
       <Sykdomsvurdering behandlingsReferanse={behandlingsReferanse} sykdomsgrunnlag={sykdomsGrunnlag} />
 
       <Meldeplikt />
+
+      <Oppfølging />
     </div>
   );
 };

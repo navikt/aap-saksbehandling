@@ -1,4 +1,4 @@
-import { render, screen, within } from 'lib/test/setUpTests';
+import { render, screen } from 'lib/test/setUpTests';
 import userEvent from '@testing-library/user-event';
 import { Oppfølging } from './Oppfølging';
 
@@ -37,5 +37,28 @@ describe('Oppfølging', () => {
     await user.click(oppfyltJa);
     const checkboxGroup = await screen.findByRole('group', { name: 'Velg minst én grunn for at § 11-6 er oppfylt' });
     expect(checkboxGroup).toBeVisible();
+  });
+
+  it('Skal ikke vise felt for grunn dersom § 11-6 ikke er besvart', () => {
+    render(<Oppfølging />);
+    const oppfyltJa = screen.getByRole('radio', { name: /Ja/i });
+    const oppfyltNei = screen.getByRole('radio', { name: /Nei/i });
+    expect(oppfyltJa).not.toBeChecked();
+    expect(oppfyltNei).not.toBeChecked();
+
+    const checkboxGroup = screen.queryByRole('group', { name: 'Velg minst én grunn for at § 11-6 er oppfylt' });
+    expect(checkboxGroup).not.toBeInTheDocument();
+  });
+
+  it('Skal ikke vise felt for grunn dersom § 11-6 ikke er oppfylt', async () => {
+    render(<Oppfølging />);
+    const oppfyltNei = screen.getByRole('radio', { name: /Nei/i });
+
+    await user.click(oppfyltNei);
+
+    expect(oppfyltNei).toBeChecked();
+
+    const checkboxGroup = screen.queryByRole('group', { name: 'Velg minst én grunn for at § 11-6 er oppfylt' });
+    expect(checkboxGroup).not.toBeInTheDocument();
   });
 });
