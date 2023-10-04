@@ -8,7 +8,8 @@
     "test": "jest test",
     "start": "next start",
     "lint": "next lint",
-    "gentypes": "npx openapi-typescript http://localhost:8080/openapi.json -o lib/types/schema.d.ts"
+    "gentypes": "npx openapi-typescript http://localhost:8080/openapi.json -o lib/types/schema.d.ts",
+    "prepare": "husky install"
   },
   "prettier": "@navikt/aap-felles-prettier",
   "dependencies": {
