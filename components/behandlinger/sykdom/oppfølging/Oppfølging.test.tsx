@@ -6,7 +6,7 @@ describe('Oppfølging', () => {
   const user = userEvent.setup();
 
   it('Skal ha en overskrift', () => {
-    render(<Oppfølging d />);
+    render(<Oppfølging />);
 
     const heading = screen.getByText('Behov for oppfølging § 11-6');
     expect(heading).toBeVisible();
