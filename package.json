@@ -58,5 +58,10 @@
     "openapi-typescript": "6.7.0",
     "prettier": "^3.0.2",
     "typescript": "^5.1.6"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": "eslint --cache --fix",
+    "*.{js,ts,tsx,css,md}": "prettier --write",
+    "*.{ts, tsx}": "tsc"
   }
 }
