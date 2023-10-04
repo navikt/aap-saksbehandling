@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
+import { CheckmarkIcon } from '@navikt/aksel-icons';
 import styles from './GruppeElement.module.css';
 import { StegGruppe } from 'lib/types/types';
 import Link from 'next/link';
@@ -8,22 +8,29 @@ import { useParams } from 'next/navigation';
 
 interface Props {
   navn: StegGruppe;
+  nummer: number;
   erFullført: boolean;
   aktivtSteg: boolean;
 }
 
-export const GruppeElement = ({ navn, erFullført, aktivtSteg }: Props) => {
+export const GruppeElement = ({ navn, nummer, erFullført, aktivtSteg }: Props) => {
   const erFullførtStyle = erFullført ? styles.erFullført : '';
-  const aktivtStegStyle = aktivtSteg ? styles.aktivtSteg : '';
+  const aktivtStegStyle = aktivtSteg ? styles.aktivtSteg : styles.steg;
+  const nummerStyle = aktivtSteg || erFullført ? styles.nummerAktiv : styles.nummer;
 
   const params = useParams();
 
+  const label = mapGruppeTypeToGruppeNavn(navn);
+
   return (
-    <li className={`${aktivtStegStyle} ${styles.steg}`}>
-      <Link href={`/sak/${params.saksId}/${params.behandlingsReferanse}/${navn}`}>
-        {mapGruppeTypeToGruppeNavn(navn)}
-      </Link>
-      {erFullført && <CheckmarkCircleIcon title="Fullført" className={erFullførtStyle} />}
+    <li className={`${aktivtStegStyle} ${styles.steg} ${erFullførtStyle}`}>
+      <div className={nummerStyle}>{erFullført ? <CheckmarkIcon title="Fullført" /> : nummer}</div>
+
+      {aktivtSteg || erFullført ? (
+        <Link href={`/sak/${params.saksId}/${params.behandlingsReferanse}/${navn}`}>{label}</Link>
+      ) : (
+        <span>{label}</span>
+      )}
     </li>
   );
 };

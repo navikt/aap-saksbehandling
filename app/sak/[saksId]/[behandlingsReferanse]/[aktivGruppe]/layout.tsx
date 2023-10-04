@@ -27,13 +27,14 @@ const Layout = async ({
       <div>
         <ol type="1" className={styles.stegMeny}>
           {flyt?.flyt
-            .filter((gruppe) => ['SYKDOM', 'FORESLÅ_VEDTAK'].includes(gruppe.stegGruppe))
-            .map((gruppe) => {
+            .filter((gruppe) => ['SYKDOM', 'FORESLÅ_VEDTAK', 'ALDER'].includes(gruppe.stegGruppe))
+            .map((gruppe, index) => {
               return (
                 <GruppeElement
                   key={gruppe.stegGruppe}
                   navn={gruppe.stegGruppe}
-                  erFullført={false}
+                  nummer={index + 1}
+                  erFullført={gruppe.stegGruppe === 'ALDER'}
                   aktivtSteg={flyt.aktivGruppe === gruppe.stegGruppe}
                 />
               );

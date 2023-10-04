@@ -1,5 +1,4 @@
 .steg {
-  color: var(--a-surface-action);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8,14 +7,31 @@
 }
 
 .aktivtSteg,
-.steg:hover {
+.erFullført:hover {
   border-bottom: 5px solid var(--a-surface-action);
-}
-
-.erFullført {
-  color: var(--a-icon-success);
 }
 
 .steg a {
   text-decoration: none;
+}
+
+.nummerAktiv,
+.nummer {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nummerAktiv {
+  border: 1px solid var(--a-surface-action);
+  background-color: var(--a-surface-action);
+  color: var(--a-bg-default);
+}
+
+.nummer {
+  border: 1px solid var(--a-border-default);
+  color: var(--a-text-subtle);
 }
