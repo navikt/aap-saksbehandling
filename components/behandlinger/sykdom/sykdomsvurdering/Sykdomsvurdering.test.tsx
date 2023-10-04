@@ -24,7 +24,9 @@ describe('sykdomsvurdering', () => {
 
   it('Skal ha et felt for om sykdom, skade eller lyte er årsaken til nedsatt arbeidsevne', () => {
     render(<Sykdomsvurdering behandlingsReferanse={'123'} />);
-    const radioGroup = screen.getByRole('textbox', { name: /vurder den nedsatte arbeidsevnen/i });
+    const radioGroup = screen.getByRole('group', {
+      name: /Er det sykdom, skade eller lyte som fører til nedsatt arbeidsevne\?/i,
+    });
     expect(radioGroup).toBeVisible();
   });
 
