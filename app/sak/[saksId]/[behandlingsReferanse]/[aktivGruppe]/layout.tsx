@@ -39,8 +39,6 @@ const Layout = async ({
               );
             })}
         </ol>
-
-        <div className={styles.space} />
       </div>
       <HGrid columns={'1fr 3fr 1fr'} className={styles.kolonner}>
         {children}
