@@ -1,16 +1,16 @@
 import { render, screen } from 'lib/test/setUpTests';
 import userEvent from '@testing-library/user-event';
 import { Oppfølging } from './Oppfølging';
-import {within} from "@testing-library/dom";
 
 describe('Oppfølging', () => {
   const user = userEvent.setup();
 
   it('Skal ha en overskrift', () => {
-    render(<Oppfølgingd />);
+    render(<Oppfølging />);
+
     const heading = screen.getByText('Behov for oppfølging § 11-6');
     expect(heading).toBeVisible();
-  })
+  });
 
   it('Skal ha felt for begrunnelse', () => {
     render(<Oppfølging />);
