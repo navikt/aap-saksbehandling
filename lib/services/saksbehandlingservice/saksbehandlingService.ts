@@ -8,7 +8,7 @@ import {
   SaksInfo,
   SykdomsGrunnlag,
   UtvidetSaksInfo,
-} from '../../types/types';
+} from 'lib/types/types';
 
 import { fetchProxy } from '../fetchProxy';
 
