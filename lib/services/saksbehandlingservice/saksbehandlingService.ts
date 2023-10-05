@@ -47,21 +47,14 @@ export const hentSykdomsGrunnlag = async (behandlingsReferanse: string, accessTo
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom`;
   return await fetchProxy<SykdomsGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
-export const hentYrkesskadeGrunnlag = (): Omit<SykdomsGrunnlag, 'sykdomsvurdering'> => {
-  // const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/yrkesskade`;
-  // return await fetchProxy<SykdomsGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
-  return {
-    yrkesskadevurdering: {
-      begrunnelse: '',
-      dokumenterBruktIVurdering: [],
-      skadetidspunkt: '2022-12-02',
-      erÅrsakssammenheng: true,
-    },
-    opplysninger: {
-      innhentedeYrkesskader: [],
-      oppgittYrkesskadeISøknad: false,
-    },
-  };
+export const hentYrkesskadeGrunnlag = async (
+  behandlingsReferanse: string,
+  accessToken: string
+): Promise<Omit<SykdomsGrunnlag, 'sykdomsvurdering'>> => {
+  // TODO I påvente av endringer i backend
+  const grunnlag = await hentSykdomsGrunnlag(behandlingsReferanse, accessToken);
+
+  return { opplysninger: grunnlag.opplysninger, yrkesskadevurdering: grunnlag.yrkesskadevurdering };
 };
 
 export const hentFlyt = async (

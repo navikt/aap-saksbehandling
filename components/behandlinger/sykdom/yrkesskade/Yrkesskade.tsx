@@ -60,31 +60,6 @@ export const Yrkesskade = ({ grunnlag, behandlingsReferanse }: Props) => {
 
   return (
     <VilkårsKort heading={'Yrkesskade - årsakssammenheng § 11-22'} icon={<Buldings2Icon />}>
-      <Alert variant="warning">Vi har funnet en eller flere registrerte yrkesskader</Alert>
-      <div>
-        <Label as="p" spacing>
-          Har søker oppgitt at de har en yrkesskade i søknaden?
-        </Label>
-        <BodyShort>{grunnlag?.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}</BodyShort>
-      </div>
-      <div>
-        <Label as="p" spacing>
-          Saksopplysninger
-        </Label>
-        {grunnlag?.opplysninger.innhentedeYrkesskader.map((innhentetYrkesskade) => (
-          <div key={innhentetYrkesskade.ref}>
-            <BodyShort spacing>{innhentetYrkesskade.kilde}</BodyShort>
-            <Label as="p" spacing>
-              Periode
-            </Label>
-            <BodyShort spacing>Fra: {format(new Date(innhentetYrkesskade.periode.fom), 'dd.MM.yyyy')}</BodyShort>
-            <BodyShort spacing>Til: {format(new Date(innhentetYrkesskade.periode.tom), 'dd.MM.yyyy')}</BodyShort>
-          </div>
-        ))}
-        {grunnlag?.opplysninger.innhentedeYrkesskader.length === 0 && (
-          <BodyShort>Ingen innhentede yrkesskader</BodyShort>
-        )}
-      </div>
       <Form
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({
@@ -109,6 +84,27 @@ export const Yrkesskade = ({ grunnlag, behandlingsReferanse }: Props) => {
         })}
         steg={'AVKLAR_YRKESSKADE'}
       >
+        <Alert variant="warning">Vi har funnet en eller flere registrerte yrkesskader</Alert>
+        <div>
+          <Label as="p">Har søker oppgitt at de har en yrkesskade i søknaden?</Label>
+          <BodyShort>{grunnlag?.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}</BodyShort>
+        </div>
+        <div>
+          <Label as="p">Saksopplysninger</Label>
+          {grunnlag?.opplysninger.innhentedeYrkesskader.map((innhentetYrkesskade) => (
+            <div key={innhentetYrkesskade.ref}>
+              <BodyShort spacing>{innhentetYrkesskade.kilde}</BodyShort>
+              <Label as="p" spacing>
+                Periode
+              </Label>
+              <BodyShort spacing>Fra: {format(new Date(innhentetYrkesskade.periode.fom), 'dd.MM.yyyy')}</BodyShort>
+              <BodyShort spacing>Til: {format(new Date(innhentetYrkesskade.periode.tom), 'dd.MM.yyyy')}</BodyShort>
+            </div>
+          ))}
+          {grunnlag?.opplysninger.innhentedeYrkesskader.length === 0 && (
+            <BodyShort>Ingen innhentede yrkesskader</BodyShort>
+          )}
+        </div>
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.årssakssammenheng} />
         {form.watch('årssakssammenheng') === JaEllerNei.Ja && <FormField form={form} formField={formFields.dato} />}
