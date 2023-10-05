@@ -14,7 +14,7 @@ import { Alert, BodyShort, Label } from '@navikt/ds-react';
 
 interface Props {
   behandlingsReferanse: string;
-  sykdomsGrunnlag?: SykdomsGrunnlag;
+  grunnlag?: Omit<SykdomsGrunnlag, 'sykdomsvurdering'>;
 }
 
 interface FormFields {
@@ -23,19 +23,19 @@ interface FormFields {
   dato: Date;
 }
 
-export const Yrkesskade = ({ sykdomsGrunnlag, behandlingsReferanse }: Props) => {
+export const Yrkesskade = ({ grunnlag, behandlingsReferanse }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
       label: 'Vurder om yrkesskaden er medvirkende årsak til den nedsatte arbeidsevnen',
       description: 'Se eksempel på vilkårsvurderingstekst',
-      defaultValue: sykdomsGrunnlag?.yrkesskadevurdering?.begrunnelse,
+      defaultValue: grunnlag?.yrkesskadevurdering?.begrunnelse,
       rules: { required: 'Du må begrunne' },
     },
     årssakssammenheng: {
       type: 'radio',
       label: 'Er vilkåret (årssakssammenheng) i 11.22 oppfylt?',
-      defaultValue: getJaNeiEllerUndefined(sykdomsGrunnlag?.yrkesskadevurdering?.erÅrsakssammenheng),
+      defaultValue: getJaNeiEllerUndefined(grunnlag?.yrkesskadevurdering?.erÅrsakssammenheng),
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
@@ -45,7 +45,7 @@ export const Yrkesskade = ({ sykdomsGrunnlag, behandlingsReferanse }: Props) => 
     dato: {
       type: 'date',
       label: 'Dato for skadetidspunkt for yrkesskaden',
-      defaultValue: stringToDate(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt),
+      defaultValue: stringToDate(grunnlag?.yrkesskadevurdering?.skadetidspunkt),
       rules: {
         validate: {
           required: (value, formValues) => {
@@ -65,13 +65,13 @@ export const Yrkesskade = ({ sykdomsGrunnlag, behandlingsReferanse }: Props) => 
         <Label as="p" spacing>
           Har søker oppgitt at de har en yrkesskade i søknaden?
         </Label>
-        <BodyShort>{sykdomsGrunnlag?.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}</BodyShort>
+        <BodyShort>{grunnlag?.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}</BodyShort>
       </div>
       <div>
         <Label as="p" spacing>
           Saksopplysninger
         </Label>
-        {sykdomsGrunnlag?.opplysninger.innhentedeYrkesskader.map((innhentetYrkesskade) => (
+        {grunnlag?.opplysninger.innhentedeYrkesskader.map((innhentetYrkesskade) => (
           <div key={innhentetYrkesskade.ref}>
             <BodyShort spacing>{innhentetYrkesskade.kilde}</BodyShort>
             <Label as="p" spacing>
@@ -81,7 +81,7 @@ export const Yrkesskade = ({ sykdomsGrunnlag, behandlingsReferanse }: Props) => 
             <BodyShort spacing>Til: {format(new Date(innhentetYrkesskade.periode.tom), 'dd.MM.yyyy')}</BodyShort>
           </div>
         ))}
-        {sykdomsGrunnlag?.opplysninger.innhentedeYrkesskader.length === 0 && (
+        {grunnlag?.opplysninger.innhentedeYrkesskader.length === 0 && (
           <BodyShort>Ingen innhentede yrkesskader</BodyShort>
         )}
       </div>
