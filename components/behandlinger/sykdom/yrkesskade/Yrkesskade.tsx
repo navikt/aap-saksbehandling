@@ -10,10 +10,11 @@ import { format } from 'date-fns';
 import { Buldings2Icon } from '@navikt/aksel-icons';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
+import { Alert, BodyShort, Label } from '@navikt/ds-react';
 
 interface Props {
   behandlingsReferanse: string;
-  sykdomsgrunnlag?: SykdomsGrunnlag;
+  sykdomsGrunnlag?: SykdomsGrunnlag;
 }
 
 interface FormFields {
@@ -22,19 +23,19 @@ interface FormFields {
   dato: Date;
 }
 
-export const Yrkesskade = ({ sykdomsgrunnlag, behandlingsReferanse }: Props) => {
+export const Yrkesskade = ({ sykdomsGrunnlag, behandlingsReferanse }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
       label: 'Vurder om yrkesskaden er medvirkende årsak til den nedsatte arbeidsevnen',
       description: 'Se eksempel på vilkårsvurderingstekst',
-      defaultValue: sykdomsgrunnlag?.yrkesskadevurdering?.begrunnelse,
+      defaultValue: sykdomsGrunnlag?.yrkesskadevurdering?.begrunnelse,
       rules: { required: 'Du må begrunne' },
     },
     årssakssammenheng: {
       type: 'radio',
       label: 'Er vilkåret (årssakssammenheng) i 11.22 oppfylt?',
-      defaultValue: getJaNeiEllerUndefined(sykdomsgrunnlag?.yrkesskadevurdering?.erÅrsakssammenheng),
+      defaultValue: getJaNeiEllerUndefined(sykdomsGrunnlag?.yrkesskadevurdering?.erÅrsakssammenheng),
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
@@ -44,7 +45,7 @@ export const Yrkesskade = ({ sykdomsgrunnlag, behandlingsReferanse }: Props) => 
     dato: {
       type: 'date',
       label: 'Dato for skadetidspunkt for yrkesskaden',
-      defaultValue: stringToDate(sykdomsgrunnlag?.yrkesskadevurdering?.skadetidspunkt),
+      defaultValue: stringToDate(sykdomsGrunnlag?.yrkesskadevurdering?.skadetidspunkt),
       rules: {
         validate: {
           required: (value, formValues) => {
@@ -59,6 +60,31 @@ export const Yrkesskade = ({ sykdomsgrunnlag, behandlingsReferanse }: Props) => 
 
   return (
     <VilkårsKort heading={'Yrkesskade - årsakssammenheng § 11-22'} icon={<Buldings2Icon />}>
+      <Alert variant="warning">Vi har funnet en eller flere registrerte yrkesskader</Alert>
+      <div>
+        <Label as="p" spacing>
+          Har søker oppgitt at de har en yrkesskade i søknaden?
+        </Label>
+        <BodyShort>{sykdomsGrunnlag?.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}</BodyShort>
+      </div>
+      <div>
+        <Label as="p" spacing>
+          Saksopplysninger
+        </Label>
+        {sykdomsGrunnlag?.opplysninger.innhentedeYrkesskader.map((innhentetYrkesskade) => (
+          <div key={innhentetYrkesskade.ref}>
+            <BodyShort spacing>{innhentetYrkesskade.kilde}</BodyShort>
+            <Label as="p" spacing>
+              Periode
+            </Label>
+            <BodyShort spacing>Fra: {format(new Date(innhentetYrkesskade.periode.fom), 'dd.MM.yyyy')}</BodyShort>
+            <BodyShort spacing>Til: {format(new Date(innhentetYrkesskade.periode.tom), 'dd.MM.yyyy')}</BodyShort>
+          </div>
+        ))}
+        {sykdomsGrunnlag?.opplysninger.innhentedeYrkesskader.length === 0 && (
+          <BodyShort>Ingen innhentede yrkesskader</BodyShort>
+        )}
+      </div>
       <Form
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({

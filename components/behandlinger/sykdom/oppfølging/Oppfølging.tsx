@@ -1,3 +1,5 @@
+'use client';
+
 import { PersonGroupIcon } from '@navikt/aksel-icons';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
