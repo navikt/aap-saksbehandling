@@ -3,7 +3,7 @@
 import { useConfigForm } from 'hooks/FormHook';
 import { BehovsType, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { stringToDate } from 'lib/utils/date';
-import { SykdomsGrunnlag } from 'lib/types/types';
+import { YrkesskadeGrunnlag } from 'lib/types/types';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
@@ -14,7 +14,7 @@ import { Alert, BodyShort, Label } from '@navikt/ds-react';
 
 interface Props {
   behandlingsReferanse: string;
-  grunnlag?: Omit<SykdomsGrunnlag, 'sykdomsvurdering'>;
+  grunnlag: YrkesskadeGrunnlag;
 }
 
 interface FormFields {
@@ -35,7 +35,7 @@ export const Yrkesskade = ({ grunnlag, behandlingsReferanse }: Props) => {
     årssakssammenheng: {
       type: 'radio',
       label: 'Er vilkåret (årssakssammenheng) i 11.22 oppfylt?',
-      defaultValue: getJaNeiEllerUndefined(grunnlag?.yrkesskadevurdering?.erÅrsakssammenheng),
+      defaultValue: getJaNeiEllerUndefined(grunnlag.yrkesskadevurdering?.erÅrsakssammenheng),
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },

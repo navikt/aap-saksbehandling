@@ -1,9 +1,13 @@
 import { render, screen, within } from 'lib/test/setUpTests';
 import { Yrkesskade } from './Yrkesskade';
 import userEvent from '@testing-library/user-event';
+import { YrkesskadeGrunnlag } from 'lib/types/types';
 
+const grunnlag: YrkesskadeGrunnlag = {
+  opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
+};
 beforeEach(() => {
-  render(<Yrkesskade behandlingsReferanse={'123'} />);
+  render(<Yrkesskade behandlingsReferanse={'123'} grunnlag={grunnlag} />);
 });
 
 describe('yrkesskade', () => {
