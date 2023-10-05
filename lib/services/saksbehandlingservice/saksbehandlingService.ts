@@ -8,6 +8,7 @@ import {
   SaksInfo,
   SykdomsGrunnlag,
   UtvidetSaksInfo,
+  YrkesskadeGrunnlag,
 } from 'lib/types/types';
 
 import { fetchProxy } from '../fetchProxy';
@@ -43,18 +44,20 @@ export const hentAlleSaker = async (accessToken: string): Promise<SaksInfo[]> =>
   return await fetchProxy<SaksInfo[]>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 
-export const hentSykdomsGrunnlag = async (behandlingsReferanse: string, accessToken: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom`;
-  return await fetchProxy<SykdomsGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
-};
 export const hentYrkesskadeGrunnlag = async (
   behandlingsReferanse: string,
   accessToken: string
-): Promise<Omit<SykdomsGrunnlag, 'sykdomsvurdering'>> => {
-  // TODO I påvente av endringer i backend
-  const grunnlag = await hentSykdomsGrunnlag(behandlingsReferanse, accessToken);
+): Promise<YrkesskadeGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/yrkesskade`;
+  return await fetchProxy<YrkesskadeGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
+};
 
-  return { opplysninger: grunnlag.opplysninger, yrkesskadevurdering: grunnlag.yrkesskadevurdering };
+export const hentSykdomsGrunnlag = async (
+  behandlingsReferanse: string,
+  accessToken: string
+): Promise<SykdomsGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/sykdom`;
+  return await fetchProxy<SykdomsGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 
 export const hentFlyt = async (

@@ -34,7 +34,7 @@ const Layout = async ({
                   key={gruppe.stegGruppe}
                   navn={gruppe.stegGruppe}
                   nummer={index + 1}
-                  erFullført={gruppe.stegGruppe === 'ALDER'}
+                  erFullført={gruppe.erFullført}
                   aktivtSteg={flyt.aktivGruppe === gruppe.stegGruppe}
                 />
               );

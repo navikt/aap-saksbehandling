@@ -5,13 +5,13 @@ import styles from './page.module.css';
 import { hentBehandling } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
-import { notFound } from 'next/navigation';
 import { StegGruppe } from 'lib/types/types';
+import { notFound } from 'next/navigation';
 
 const Page = async ({ params }: { params: { behandlingsReferanse: string; aktivGruppe: StegGruppe } }) => {
   const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
 
-  if (params.aktivGruppe !== 'SYKDOM') {
+  if (!['SYKDOM', 'FORESLÅ_VEDTAK'].includes(decodeURI(params.aktivGruppe))) {
     notFound();
   }
 

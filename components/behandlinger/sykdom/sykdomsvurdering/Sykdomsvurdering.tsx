@@ -9,12 +9,12 @@ import { Form } from 'components/form/Form';
 import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Alert, BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react';
 import { VitalsIcon } from '@navikt/aksel-icons';
 
 interface Props {
   behandlingsReferanse: string;
-  sykdomsgrunnlag?: SykdomsGrunnlag;
+  grunnlag: SykdomsGrunnlag;
 }
 
 interface FormFields {
@@ -25,7 +25,7 @@ interface FormFields {
   dato: Date;
 }
 
-export const Sykdomsvurdering = ({ sykdomsgrunnlag, behandlingsReferanse }: Props) => {
+export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
     dokumentasjonMangler: {
       type: 'checkbox',
@@ -35,7 +35,7 @@ export const Sykdomsvurdering = ({ sykdomsgrunnlag, behandlingsReferanse }: Prop
     erSykdom: {
       type: 'radio',
       label: 'Er det sykdom, skade eller lyte som fører til nedsatt arbeidsevne?',
-      defaultValue: getJaNeiEllerUndefined(sykdomsgrunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
+      defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
@@ -44,12 +44,10 @@ export const Sykdomsvurdering = ({ sykdomsgrunnlag, behandlingsReferanse }: Prop
     },
     arbeidsevneNedsatt: {
       type: 'radio',
-      label: sykdomsgrunnlag?.yrkesskadevurdering?.erÅrsakssammenheng
+      label: grunnlag?.erÅrsakssammenheng
         ? 'Er arbeidsevnen nedsatt med minst 30%?'
         : 'Er arbeidsevnen nedsatt med minst 50%?',
-      defaultValue: getJaNeiEllerUndefined(
-        sykdomsgrunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
-      ),
+      defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
@@ -60,13 +58,13 @@ export const Sykdomsvurdering = ({ sykdomsgrunnlag, behandlingsReferanse }: Prop
       label: 'Vurder den nedsatte arbeidsevnen',
       description:
         'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst 50%?',
-      defaultValue: sykdomsgrunnlag?.sykdomsvurdering?.begrunnelse,
+      defaultValue: grunnlag?.sykdomsvurdering?.begrunnelse,
       rules: { required: 'Du må begrunne' },
     },
     dato: {
       type: 'date',
       label: 'Dato for nedsatt arbeidsevne',
-      defaultValue: stringToDate(sykdomsgrunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
+      defaultValue: stringToDate(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
       rules: {
         validate: {
           required: (value, formValues) => {
@@ -81,15 +79,6 @@ export const Sykdomsvurdering = ({ sykdomsgrunnlag, behandlingsReferanse }: Prop
 
   return (
     <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} icon={<VitalsIcon />}>
-      <Alert variant="warning">Legeerklæring er av gammel dato, vurder å be om en ny fra behandler</Alert>
-      <div>
-        <Label as="p" spacing>
-          Registrert behandler
-        </Label>
-        <BodyShort>Fast Lege</BodyShort>
-        <BodyShort>Lillegrensen Legesenter</BodyShort>
-        <BodyShort>0123 Legeby, 815 493 00</BodyShort>
-      </div>
       <Form
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({
@@ -108,7 +97,7 @@ export const Sykdomsvurdering = ({ sykdomsgrunnlag, behandlingsReferanse }: Prop
                 // @ts-ignore Feil generert type i backend
                 erSkadeSykdomEllerLyteVesentligdel: data.erSykdom === JaEllerNei.Ja,
                 // @ts-ignore Feil generert type i backend
-                nedreGrense: sykdomsgrunnlag?.yrkesskadevurdering?.erÅrsakssammenheng ? 'TRETTI' : 'FEMTI',
+                nedreGrense: grunnlag?.erÅrsakssammenheng ? 'TRETTI' : 'FEMTI',
                 // @ts-ignore Feil generert type i backend
                 nedsattArbeidsevneDato: data.dato ? format(new Date(data.dato), 'yyyy-MM-dd') : undefined,
               },
@@ -118,6 +107,12 @@ export const Sykdomsvurdering = ({ sykdomsgrunnlag, behandlingsReferanse }: Prop
         })}
         steg={'AVKLAR_SYKDOM'}
       >
+        <div>
+          <Label as="p">Registrert behandler</Label>
+          <BodyShort>Fast Lege</BodyShort>
+          <BodyShort>Lillegrensen Legesenter</BodyShort>
+          <BodyShort>0123 Legeby, 815 493 00</BodyShort>
+        </div>
         <FormField form={form} formField={formFields.dokumentasjonMangler} />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erSykdom} />
