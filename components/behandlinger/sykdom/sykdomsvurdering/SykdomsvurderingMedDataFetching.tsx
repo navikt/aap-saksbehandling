@@ -5,10 +5,11 @@ import { headers } from 'next/headers';
 
 interface Props {
   behandlingsReferanse: string;
+  status: 'OPPRETTET' | 'AVSLUTTET';
 }
 
-export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse }: Props) => {
+export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, status }: Props) => {
   const grunnlag = await hentSykdomsGrunnlag(behandlingsReferanse, getToken(headers()));
 
-  return <Sykdomsvurdering behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} />;
+  return <Sykdomsvurdering behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} status={status} />;
 };

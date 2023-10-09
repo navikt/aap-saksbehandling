@@ -13,10 +13,11 @@ import { headers } from 'next/headers';
 
 interface Props {
   behandlingsReferanse: string;
+  status: 'OPPRETTET' | 'AVSLUTTET';
 }
 
-export const YrkesskadeMedDataFetching = async ({ behandlingsReferanse }: Props) => {
+export const YrkesskadeMedDataFetching = async ({ behandlingsReferanse, status }: Props) => {
   const grunnlag = await hentYrkesskadeGrunnlag(behandlingsReferanse, getToken(headers()));
 
-  return <Yrkesskade behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} />;
+  return <Yrkesskade behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} status={status} />;
 };

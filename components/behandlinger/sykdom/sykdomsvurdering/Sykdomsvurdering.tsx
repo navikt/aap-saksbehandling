@@ -15,6 +15,7 @@ import { VitalsIcon } from '@navikt/aksel-icons';
 interface Props {
   behandlingsReferanse: string;
   grunnlag: SykdomsGrunnlag;
+  status: 'OPPRETTET' | 'AVSLUTTET';
 }
 
 interface FormFields {
@@ -25,57 +26,62 @@ interface FormFields {
   dato: Date;
 }
 
-export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
-  const { formFields, form } = useConfigForm<FormFields>({
-    dokumentasjonMangler: {
-      type: 'checkbox',
-      label: 'Dokumentasjon mangler',
-      options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
-    },
-    erSykdom: {
-      type: 'radio',
-      label: 'Er det sykdom, skade eller lyte som fører til nedsatt arbeidsevne?',
-      defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
-      rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
-    },
-    arbeidsevneNedsatt: {
-      type: 'radio',
-      label: grunnlag?.erÅrsakssammenheng
-        ? 'Er arbeidsevnen nedsatt med minst 30%?'
-        : 'Er arbeidsevnen nedsatt med minst 50%?',
-      defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
-    },
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Vurder den nedsatte arbeidsevnen',
-      description:
-        'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst 50%?',
-      defaultValue: grunnlag?.sykdomsvurdering?.begrunnelse,
-      rules: { required: 'Du må begrunne' },
-    },
-    dato: {
-      type: 'date',
-      label: 'Dato for nedsatt arbeidsevne',
-      defaultValue: stringToDate(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
-      rules: {
-        validate: {
-          required: (value, formValues) => {
-            if (!value && formValues.arbeidsevneNedsatt === JaEllerNei.Ja) {
-              return 'Du må svare på når arbeidsevnen ble nedsatt';
-            }
+export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, status }: Props) => {
+  const { formFields, form } = useConfigForm<FormFields>(
+    {
+      dokumentasjonMangler: {
+        type: 'checkbox',
+        label: 'Dokumentasjon mangler',
+        options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
+      },
+      erSykdom: {
+        type: 'radio',
+        label: 'Er det sykdom, skade eller lyte som fører til nedsatt arbeidsevne?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
+        options: [
+          { label: 'Ja', value: JaEllerNei.Ja },
+          { label: 'Nei', value: JaEllerNei.Nei },
+        ],
+        rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
+      },
+      arbeidsevneNedsatt: {
+        type: 'radio',
+        label: grunnlag?.erÅrsakssammenheng
+          ? 'Er arbeidsevnen nedsatt med minst 30%?'
+          : 'Er arbeidsevnen nedsatt med minst 50%?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
+        options: [
+          { label: 'Ja', value: JaEllerNei.Ja },
+          { label: 'Nei', value: JaEllerNei.Nei },
+        ],
+      },
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Vurder den nedsatte arbeidsevnen',
+        description:
+          'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst 50%?',
+        defaultValue: grunnlag?.sykdomsvurdering?.begrunnelse,
+        rules: { required: 'Du må begrunne' },
+      },
+      dato: {
+        type: 'date',
+        label: 'Dato for nedsatt arbeidsevne',
+        defaultValue: stringToDate(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
+        rules: {
+          validate: {
+            required: (value, formValues) => {
+              if (!value && formValues.arbeidsevneNedsatt === JaEllerNei.Ja) {
+                return 'Du må svare på når arbeidsevnen ble nedsatt';
+              }
+            },
           },
         },
       },
     },
-  });
+    {
+      readOnly: status === 'AVSLUTTET',
+    }
+  );
 
   return (
     <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} icon={<VitalsIcon />}>

@@ -32,10 +32,11 @@ export const Form = ({ steg, onSubmit, children }: Props) => {
     eventSource.onmessage = (event: any) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
       if (eventData.status === 'DONE') {
+        eventSource.close();
         if (eventData.skalBytteGruppe) {
           router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}`);
         }
-        eventSource.close();
+        router.refresh();
       }
       if (eventData.status === 'ERROR') {
         console.log('ERROR', eventData);
