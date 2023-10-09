@@ -7,6 +7,7 @@ import { HGrid } from 'components/DsClient';
 import styles from './layout.module.css';
 import { ReactNode } from 'react';
 import { GruppeElement } from 'components/gruppeelement/GruppeElement';
+import { notFound } from 'next/navigation';
 
 const Layout = async ({
   params,
@@ -19,7 +20,7 @@ const Layout = async ({
   const flyt = await hentFlyt2(params.behandlingsReferanse, getToken(headers()));
 
   if (behandling === undefined) {
-    return <div>Behandling ikke funnet</div>;
+    notFound();
   }
 
   return (
