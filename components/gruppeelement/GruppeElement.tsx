@@ -47,12 +47,8 @@ export function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Uttak';
     case 'TILKJENT_YTELSE':
       return 'Tilkjent ytelse';
-    case 'FATTE_VEDTAK':
-      return 'Fatte vedtak';
-    case 'FORESLÅ_VEDTAK':
-      return 'Foreslå vedtak';
-    case 'IVERKSETT_VEDTAK':
-      return 'Iverksette vedtak';
+    case 'VEDTAK':
+      return 'Vedtak';
     case 'SIMULERING':
       return 'Simulering';
     case 'START_BEHANDLING':

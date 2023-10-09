@@ -240,7 +240,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2023-10-05
+       * @example 2023-10-09
        */
       fødselsdato: string;
       ident: string;
@@ -256,7 +256,7 @@ export interface components {
       nedreGrense?: 'TRETTI' | 'FEMTI' | null;
       /**
        * Format: date
-       * @example 2023-10-05
+       * @example 2023-10-09
        */
       nedsattArbeidsevneDato?: string | null;
     };
@@ -266,7 +266,7 @@ export interface components {
       erÅrsakssammenheng: boolean;
       /**
        * Format: date
-       * @example 2023-10-05
+       * @example 2023-10-09
        */
       skadetidspunkt?: string | null;
     };
@@ -278,12 +278,12 @@ export interface components {
     'no.nav.aap.behandlingsflyt.domene.Periode': {
       /**
        * Format: date
-       * @example 2023-10-05
+       * @example 2023-10-09
        */
       fom: string;
       /**
        * Format: date
-       * @example 2023-10-05
+       * @example 2023-10-09
        */
       tom: string;
     };
@@ -316,9 +316,7 @@ export interface components {
         | 'UTTAK'
         | 'TILKJENT_YTELSE'
         | 'SIMULERING'
-        | 'FORESLÅ_VEDTAK'
-        | 'FATTE_VEDTAK'
-        | 'IVERKSETT_VEDTAK'
+        | 'VEDTAK'
         | 'UDEFINERT';
       /** @enum {string} */
       aktivtSteg:
@@ -326,8 +324,10 @@ export interface components {
         | 'VURDER_ALDER'
         | 'VURDER_LOVVALG'
         | 'VURDER_MEDLEMSKAP'
+        | 'INNHENT_MEDLEMSKAP'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'AVKLAR_YRKESSKADE'
@@ -335,6 +335,7 @@ export interface components {
         | 'INNHENT_PERSONOPPLYSNINGER'
         | 'INNHENT_YRKESSKADE'
         | 'FASTSETT_GRUNNLAG'
+        | 'INNHENT_INNTEKTSOPPLYSNINGER'
         | 'FASTSETT_UTTAK'
         | 'BEREGN_TILKJENT_YTELSE'
         | 'SIMULERING'
@@ -351,8 +352,10 @@ export interface components {
         | 'VURDER_ALDER'
         | 'VURDER_LOVVALG'
         | 'VURDER_MEDLEMSKAP'
+        | 'INNHENT_MEDLEMSKAP'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'AVKLAR_YRKESSKADE'
@@ -360,6 +363,7 @@ export interface components {
         | 'INNHENT_PERSONOPPLYSNINGER'
         | 'INNHENT_YRKESSKADE'
         | 'FASTSETT_GRUNNLAG'
+        | 'INNHENT_INNTEKTSOPPLYSNINGER'
         | 'FASTSETT_UTTAK'
         | 'BEREGN_TILKJENT_YTELSE'
         | 'SIMULERING'
@@ -376,8 +380,10 @@ export interface components {
         | 'VURDER_ALDER'
         | 'VURDER_LOVVALG'
         | 'VURDER_MEDLEMSKAP'
+        | 'INNHENT_MEDLEMSKAP'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'AVKLAR_YRKESSKADE'
@@ -385,6 +391,7 @@ export interface components {
         | 'INNHENT_PERSONOPPLYSNINGER'
         | 'INNHENT_YRKESSKADE'
         | 'FASTSETT_GRUNNLAG'
+        | 'INNHENT_INNTEKTSOPPLYSNINGER'
         | 'FASTSETT_UTTAK'
         | 'BEREGN_TILKJENT_YTELSE'
         | 'SIMULERING'
@@ -395,7 +402,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2023-10-05T15:47:35.71741
+       * @example 2023-10-09T12:59:36.115131
        */
       opprettet: string;
       /** Format: uuid */
@@ -412,7 +419,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2023-10-05T15:47:35.71741
+       * @example 2023-10-09T12:59:36.115131
        */
       tidsstempel: string;
     };
@@ -432,9 +439,7 @@ export interface components {
         | 'UTTAK'
         | 'TILKJENT_YTELSE'
         | 'SIMULERING'
-        | 'FORESLÅ_VEDTAK'
-        | 'FATTE_VEDTAK'
-        | 'IVERKSETT_VEDTAK'
+        | 'VEDTAK'
         | 'UDEFINERT';
     };
     'no.nav.aap.behandlingsflyt.flate.behandling.FlytSteg': {
@@ -445,8 +450,10 @@ export interface components {
         | 'VURDER_ALDER'
         | 'VURDER_LOVVALG'
         | 'VURDER_MEDLEMSKAP'
+        | 'INNHENT_MEDLEMSKAP'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'AVKLAR_YRKESSKADE'
@@ -454,6 +461,7 @@ export interface components {
         | 'INNHENT_PERSONOPPLYSNINGER'
         | 'INNHENT_YRKESSKADE'
         | 'FASTSETT_GRUNNLAG'
+        | 'INNHENT_INNTEKTSOPPLYSNINGER'
         | 'FASTSETT_UTTAK'
         | 'BEREGN_TILKJENT_YTELSE'
         | 'SIMULERING'
@@ -466,7 +474,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.flate.behandling.VilkårDTO': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.VilkårsperiodeDTO'][];
       /** @enum {string} */
-      vilkårstype: 'ALDERSVILKÅRET' | 'SYKDOMSVILKÅRET' | 'GRUNNLAGET';
+      vilkårstype: 'ALDERSVILKÅRET' | 'SYKDOMSVILKÅRET' | 'BISTANDSVILKÅRET' | 'GRUNNLAGET';
     };
     'no.nav.aap.behandlingsflyt.flate.behandling.VilkårsperiodeDTO': {
       /** @enum {string|null} */
@@ -487,7 +495,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.flate.sak.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2023-10-05T15:47:35.71741
+       * @example 2023-10-09T12:59:36.115131
        */
       opprettet: string;
       /** Format: uuid */

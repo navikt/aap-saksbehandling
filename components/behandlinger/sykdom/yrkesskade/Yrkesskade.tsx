@@ -15,7 +15,6 @@ import { Alert, BodyShort, Label } from '@navikt/ds-react';
 interface Props {
   behandlingsReferanse: string;
   grunnlag: YrkesskadeGrunnlag;
-  status: 'OPPRETTET' | 'AVSLUTTET';
 }
 
 interface FormFields {
@@ -24,45 +23,40 @@ interface FormFields {
   dato: Date;
 }
 
-export const Yrkesskade = ({ grunnlag, behandlingsReferanse, status }: Props) => {
-  const { formFields, form } = useConfigForm<FormFields>(
-    {
-      begrunnelse: {
-        type: 'textarea',
-        label: 'Vurder om yrkesskaden er medvirkende årsak til den nedsatte arbeidsevnen',
-        description: 'Se eksempel på vilkårsvurderingstekst',
-        defaultValue: grunnlag?.yrkesskadevurdering?.begrunnelse,
-        rules: { required: 'Du må begrunne' },
-      },
-      årssakssammenheng: {
-        type: 'radio',
-        label: 'Er vilkåret (årssakssammenheng) i 11.22 oppfylt?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag.yrkesskadevurdering?.erÅrsakssammenheng),
-        options: [
-          { label: 'Ja', value: JaEllerNei.Ja },
-          { label: 'Nei', value: JaEllerNei.Nei },
-        ],
-        rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
-      },
-      dato: {
-        type: 'date',
-        label: 'Dato for skadetidspunkt for yrkesskaden',
-        defaultValue: stringToDate(grunnlag?.yrkesskadevurdering?.skadetidspunkt),
-        rules: {
-          validate: {
-            required: (value, formValues) => {
-              if (!value && formValues.årssakssammenheng === JaEllerNei.Ja) {
-                return 'Du må sette en dato for skadetidspunktet';
-              }
-            },
+export const Yrkesskade = ({ grunnlag, behandlingsReferanse }: Props) => {
+  const { formFields, form } = useConfigForm<FormFields>({
+    begrunnelse: {
+      type: 'textarea',
+      label: 'Vurder om yrkesskaden er medvirkende årsak til den nedsatte arbeidsevnen',
+      description: 'Se eksempel på vilkårsvurderingstekst',
+      defaultValue: grunnlag?.yrkesskadevurdering?.begrunnelse,
+      rules: { required: 'Du må begrunne' },
+    },
+    årssakssammenheng: {
+      type: 'radio',
+      label: 'Er vilkåret (årssakssammenheng) i 11.22 oppfylt?',
+      defaultValue: getJaNeiEllerUndefined(grunnlag.yrkesskadevurdering?.erÅrsakssammenheng),
+      options: [
+        { label: 'Ja', value: JaEllerNei.Ja },
+        { label: 'Nei', value: JaEllerNei.Nei },
+      ],
+      rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
+    },
+    dato: {
+      type: 'date',
+      label: 'Dato for skadetidspunkt for yrkesskaden',
+      defaultValue: stringToDate(grunnlag?.yrkesskadevurdering?.skadetidspunkt),
+      rules: {
+        validate: {
+          required: (value, formValues) => {
+            if (!value && formValues.årssakssammenheng === JaEllerNei.Ja) {
+              return 'Du må sette en dato for skadetidspunktet';
+            }
           },
         },
       },
     },
-    {
-      readOnly: status === 'AVSLUTTET',
-    }
-  );
+  });
 
   return (
     <VilkårsKort heading={'Yrkesskade - årsakssammenheng § 11-22'} icon={<Buldings2Icon />}>

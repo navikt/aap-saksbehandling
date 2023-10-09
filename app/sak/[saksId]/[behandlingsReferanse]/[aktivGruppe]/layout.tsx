@@ -28,7 +28,7 @@ const Layout = async ({
       <div>
         <ol type="1" className={styles.stegMeny}>
           {flyt?.flyt
-            .filter((gruppe) => ['SYKDOM', 'FORESLÅ_VEDTAK', 'ALDER'].includes(gruppe.stegGruppe))
+            .filter((gruppe) => ['SYKDOM', 'VEDTAK', 'ALDER'].includes(gruppe.stegGruppe))
             .map((gruppe, index) => {
               return (
                 <GruppeElement

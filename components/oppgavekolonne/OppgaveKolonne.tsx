@@ -1,19 +1,19 @@
 import { Sykdom } from 'components/behandlinger/sykdom/Sykdom';
 import { StegGruppe } from 'lib/types/types';
-import { ForeslåVedtak } from 'components/behandlinger/foreslåvedtak/ForeslåVedtak';
+import { Vedtak } from 'components/behandlinger/vedtak/Vedtak';
+import styles from './OppgaveKolonne.module.css';
 
 interface Props {
-  className: string;
   behandlingsReferanse: string;
   aktivGruppe: StegGruppe;
 }
 
-export const OppgaveKolonne = async ({ className, behandlingsReferanse, aktivGruppe }: Props) => {
+export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Props) => {
   return (
-    <div className={className}>
+    <div className={styles.kolonne}>
       {aktivGruppe === 'ALDER' && <div>ALDER</div>}
       {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'FORESLÅ_VEDTAK' && <ForeslåVedtak />}
+      {aktivGruppe === 'VEDTAK' && <Vedtak />}
     </div>
   );
 };

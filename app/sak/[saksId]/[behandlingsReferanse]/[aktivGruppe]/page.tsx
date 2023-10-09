@@ -5,8 +5,10 @@ import styles from './page.module.css';
 import { StegGruppe } from 'lib/types/types';
 import { notFound } from 'next/navigation';
 
+const grupper: StegGruppe[] = ['ALDER', 'SYKDOM', 'VEDTAK'];
+
 const Page = async ({ params }: { params: { behandlingsReferanse: string; aktivGruppe: StegGruppe } }) => {
-  if (!['ALDER', 'SYKDOM', 'FORESLÅ_VEDTAK'].includes(decodeURI(params.aktivGruppe))) {
+  if (!grupper.includes(decodeURI(params.aktivGruppe) as StegGruppe)) {
     notFound();
   }
 
@@ -17,7 +19,6 @@ const Page = async ({ params }: { params: { behandlingsReferanse: string; aktivG
         behandlingsReferanse={params.behandlingsReferanse ?? ''}
       />
       <OppgaveKolonne
-        className={styles.kolonne}
         behandlingsReferanse={params.behandlingsReferanse ?? ''}
         aktivGruppe={decodeURI(params.aktivGruppe) as StegGruppe}
       />
