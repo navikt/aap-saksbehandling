@@ -13,7 +13,7 @@ const Layout = async ({
   params,
   children,
 }: {
-  params: { behandlingsReferanse: string; behandlingsType: string };
+  params: { behandlingsReferanse: string; aktivGruppe: string };
   children: ReactNode;
 }) => {
   const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
@@ -36,7 +36,8 @@ const Layout = async ({
                   navn={gruppe.stegGruppe}
                   nummer={index + 1}
                   erFullført={gruppe.erFullført}
-                  aktivtSteg={flyt.aktivGruppe === gruppe.stegGruppe}
+                  aktivtSteg={decodeURI(params.aktivGruppe) === gruppe.stegGruppe}
+                  kanNavigeresTil={gruppe.erFullført || flyt.aktivGruppe === gruppe.stegGruppe}
                 />
               );
             })}

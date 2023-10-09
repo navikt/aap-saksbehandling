@@ -6,6 +6,8 @@ import { hentFlyt2 } from 'lib/services/saksbehandlingservice/saksbehandlingServ
 import { getToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
 import { BehandlingFlytOgTilstand2, StegType } from 'lib/types/types';
+import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
+import { Oppfølging } from 'components/behandlinger/sykdom/oppfølging/Oppfølging';
 
 const getStegSomSkalVises = (
   flyt: BehandlingFlytOgTilstand2
@@ -56,9 +58,9 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
         }
       })}
 
-      {/*<Meldeplikt />
+      <Meldeplikt />
 
-    <Oppfølging />*/}
+      <Oppfølging />
     </div>
   );
 };

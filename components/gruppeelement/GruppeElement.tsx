@@ -11,11 +11,13 @@ interface Props {
   nummer: number;
   erFullført: boolean;
   aktivtSteg: boolean;
+  kanNavigeresTil: boolean;
 }
 
-export const GruppeElement = ({ navn, nummer, erFullført, aktivtSteg }: Props) => {
+export const GruppeElement = ({ navn, nummer, erFullført, aktivtSteg, kanNavigeresTil }: Props) => {
   const erFullførtStyle = erFullført ? styles.erFullført : '';
   const aktivtStegStyle = aktivtSteg ? styles.aktivtSteg : styles.steg;
+  const kanNavigeresTilStyle = kanNavigeresTil ? styles.kanNavigeresTil : '';
   const nummerStyle = aktivtSteg || erFullført ? styles.nummerAktiv : styles.nummer;
 
   const params = useParams();
@@ -23,10 +25,10 @@ export const GruppeElement = ({ navn, nummer, erFullført, aktivtSteg }: Props) 
   const label = mapGruppeTypeToGruppeNavn(navn);
 
   return (
-    <li className={`${aktivtStegStyle} ${styles.steg} ${erFullførtStyle}`}>
+    <li className={`${aktivtStegStyle} ${styles.steg} ${erFullførtStyle} ${kanNavigeresTilStyle}`}>
       <div className={nummerStyle}>{erFullført ? <CheckmarkIcon title="Fullført" /> : nummer}</div>
 
-      {aktivtSteg || erFullført ? (
+      {aktivtSteg || erFullført || kanNavigeresTil ? (
         <Link href={`/sak/${params.saksId}/${params.behandlingsReferanse}/${navn}`}>{label}</Link>
       ) : (
         <span>{label}</span>

@@ -6,7 +6,7 @@ import { StegGruppe } from 'lib/types/types';
 import { notFound } from 'next/navigation';
 
 const Page = async ({ params }: { params: { behandlingsReferanse: string; aktivGruppe: StegGruppe } }) => {
-  if (!['SYKDOM', 'FORESLÅ_VEDTAK'].includes(decodeURI(params.aktivGruppe))) {
+  if (!['ALDER', 'SYKDOM', 'FORESLÅ_VEDTAK'].includes(decodeURI(params.aktivGruppe))) {
     notFound();
   }
 

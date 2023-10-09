@@ -11,6 +11,7 @@ interface Props {
 export const OppgaveKolonne = async ({ className, behandlingsReferanse, aktivGruppe }: Props) => {
   return (
     <div className={className}>
+      {aktivGruppe === 'ALDER' && <div>ALDER</div>}
       {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'FORESLÅ_VEDTAK' && <ForeslåVedtak />}
     </div>
