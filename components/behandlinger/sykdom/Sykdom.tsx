@@ -5,9 +5,11 @@ import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/
 import { hentFlyt2 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
-import { BehandlingFlytOgTilstand2 } from 'lib/types/types';
+import { BehandlingFlytOgTilstand2, StegType } from 'lib/types/types';
 
-const getStegSomSkalVises = (flyt: BehandlingFlytOgTilstand2) => {
+const getStegSomSkalVises = (
+  flyt: BehandlingFlytOgTilstand2
+): Array<{ type: StegType; status: 'AVSLUTTET' | 'OPPRETTET' }> => {
   const sykdomsgruppe = flyt.flyt.find((flyt2) => flyt2.stegGruppe === 'SYKDOM');
   return (
     sykdomsgruppe?.steg
