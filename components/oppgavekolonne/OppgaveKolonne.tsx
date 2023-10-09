@@ -13,7 +13,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Prop
     <div className={styles.kolonne}>
       {aktivGruppe === 'ALDER' && <div>ALDER</div>}
       {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'VEDTAK' && <Vedtak />}
+      {aktivGruppe === 'VEDTAK' && <Vedtak behandlingsReferanse={behandlingsReferanse} />}
     </div>
   );
 };

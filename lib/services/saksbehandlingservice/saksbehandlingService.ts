@@ -4,6 +4,7 @@ import {
   BehandlingFlytOgTilstand2,
   BistandsGrunnlag,
   DetaljertBehandling,
+  FatteVedtakGrunnlag,
   FritakMeldepliktGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
@@ -76,6 +77,14 @@ export const hentBistandsbehovGrunnlag = async (
 ): Promise<BistandsGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/bistand`;
   return await fetchProxy<BistandsGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
+};
+
+export const hentFatteVedtakGrunnlang = async (
+  behandlingsReferanse: string,
+  accessToken: string
+): Promise<FatteVedtakGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/fatte-vedtak`;
+  return await fetchProxy<FatteVedtakGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 
 export const hentFlyt = async (

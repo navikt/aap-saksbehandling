@@ -20,6 +20,8 @@ export type YrkesskadeGrunnlag =
 export type BistandsGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.flate.BistandGrunnlagDto'];
 export type FritakMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.flate.FritakMeldepliktGrunnlagDto'];
+export type FatteVedtakGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.flate.FatteVedtakGrunnlagDto'];
 export type BehandlingFlytOgTilstand =
   components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.BehandlingFlytOgTilstand2Dto'];
 export type BehandlingFlytOgTilstand2 =
