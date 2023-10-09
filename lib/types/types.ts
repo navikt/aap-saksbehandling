@@ -21,6 +21,7 @@ export type BehandlingFlytOgTilstand =
   components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.BehandlingFlytOgTilstand2Dto'];
 export type BehandlingFlytOgTilstand2 =
   components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.BehandlingFlytOgTilstand2Dto'];
+export type FlytGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.FlytGruppe'];
 
 //TODO Disse blir ikke generert riktig av swagger
 // export type VilkårsType = components['schemas']['Vilkrstype'];
