@@ -4,9 +4,9 @@ import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/
 import { hentFlyt2 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
-import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { OppfølgingMedDataFetching } from 'components/behandlinger/sykdom/oppfølging/OppfølgingMedDataFetching';
+import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -35,7 +35,11 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           );
         }
         if (steg === 'FRITAK_MELDEPLIKT') {
-          return <Meldeplikt key={steg} />;
+          return (
+            <StegSuspense key={steg}>
+              <MeldepliktMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+            </StegSuspense>
+          );
         }
         if (steg === 'VURDER_BISTANDSBEHOV') {
           return (
