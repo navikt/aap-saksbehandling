@@ -6,6 +6,8 @@ export enum JaEllerNei {
 export enum BehovsType {
   SYKDOMSVURDERING = '5001',
   YRKESSKADE = '5002',
+  AVKLAR_BISTANDSBEHOV = '5003',
+  FRITAK_MELDEPLIKT = '5004',
   FATTE_VEDTAK = '5099',
   FORESLÅ_VEDTAK = '5098',
 }

@@ -2,7 +2,9 @@ import { notFound } from 'next/navigation';
 import {
   BehandlingFlytOgTilstand,
   BehandlingFlytOgTilstand2,
+  BistandsGrunnlag,
   DetaljertBehandling,
+  FritakMeldepliktGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
   SaksInfo,
@@ -58,6 +60,22 @@ export const hentSykdomsGrunnlag = async (
 ): Promise<SykdomsGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/sykdom`;
   return await fetchProxy<SykdomsGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
+};
+
+export const hentUnntakMeldepliktGrunnlag = async (
+  behandlingsReferanse: string,
+  accessToken: string
+): Promise<FritakMeldepliktGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/fritak-meldeplikt`;
+  return await fetchProxy<FritakMeldepliktGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
+};
+
+export const hentBistandsbehovGrunnlag = async (
+  behandlingsReferanse: string,
+  accessToken: string
+): Promise<BistandsGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/bistand`;
+  return await fetchProxy<BistandsGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 
 export const hentFlyt = async (

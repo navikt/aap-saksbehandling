@@ -5,7 +5,14 @@ import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
-import { JaEllerNei } from 'lib/utils/form';
+import { løsBehov } from 'lib/api';
+import { BistandsGrunnlag } from 'lib/types/types';
+import { BehovsType, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
+
+interface Props {
+  behandlingsReferanse: string;
+  grunnlag: BistandsGrunnlag;
+}
 
 interface FormFields {
   begrunnelse: string;
@@ -13,17 +20,21 @@ interface FormFields {
   grunner: string[];
 }
 
-export const Oppfølging = () => {
+export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
       label: 'Vurder om søker har behov for oppfølging',
       description:
         'Beskriv oppfølgingsbehov, behovet for arbeidsrettet oppfølging og vurdering om det er en mulighet for å komme tilbake i arbeid og eventuell annen oppfølging fra nav',
+      defaultValue: grunnlag?.vurdering?.begrunnelse,
+      rules: { required: 'Du må begrunne' },
     },
     vilkårOppfylt: {
       type: 'radio',
       label: 'Er vilkårene i § 11-6 oppfylt?',
+      defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForBistand),
+      rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
@@ -41,7 +52,26 @@ export const Oppfølging = () => {
   });
   return (
     <VilkårsKort heading="Behov for oppfølging § 11-6" icon={<PersonGroupIcon />}>
-      <Form steg="VURDER_BISTANDSBEHOV" onSubmit={() => {}}>
+      <Form
+        steg="VURDER_BISTANDSBEHOV"
+        onSubmit={form.handleSubmit(async (data) => {
+          await løsBehov({
+            behandlingVersjon: 0,
+            behov: {
+              // @ts-ignore Feil generert type i backend
+              '@type': BehovsType.AVKLAR_BISTANDSBEHOV,
+              // @ts-ignore Feil generert type i backend
+              bistandsVurdering: {
+                // @ts-ignore Feil generert type i backend
+                begrunnelse: data.begrunnelse,
+                // @ts-ignore Feil generert type i backend
+                erBehovForBistand: data.vilkårOppfylt === JaEllerNei.Ja,
+              },
+            },
+            referanse: behandlingsReferanse,
+          });
+        })}
+      >
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.vilkårOppfylt} />
         {form.watch('vilkårOppfylt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.grunner} />}

@@ -13,6 +13,8 @@ export interface paths {
             'application/json': (
               | "MANUELT_SATT_PÅ_VENT(kode='9001')"
               | "AVKLAR_SYKDOM(kode='5001')"
+              | "AVKLAR_BISTANDSBEHOV(kode='5003')"
+              | "FRITAK_MELDEPLIKT(kode='5004')"
               | "AVKLAR_YRKESSKADE(kode='5002')"
               | "FORESLÅ_VEDTAK(kode='5098')"
               | "FATTE_VEDTAK(kode='5099')"
@@ -177,6 +179,42 @@ export interface paths {
       };
     };
   };
+  '/api/behandling/{referanse}/grunnlag/bistand': {
+    get: {
+      parameters: {
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.flate.BistandGrunnlagDto'];
+          };
+        };
+      };
+    };
+  };
+  '/api/behandling/{referanse}/grunnlag/fritak-meldeplikt': {
+    get: {
+      parameters: {
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.flate.FritakMeldepliktGrunnlagDto'];
+          };
+        };
+      };
+    };
+  };
   '/api/behandling/{referanse}/grunnlag/fatte-vedtak': {
     get: {
       parameters: {
@@ -247,6 +285,15 @@ export interface components {
       yrkesskade: boolean;
     };
     'no.nav.aap.behandlingsflyt.avklaringsbehov.AvklaringsbehovLøsning': Record<string, never>;
+    'no.nav.aap.behandlingsflyt.avklaringsbehov.bistand.BistandsVurdering': {
+      begrunnelse: string;
+      erBehovForBistand: boolean;
+    };
+    'no.nav.aap.behandlingsflyt.avklaringsbehov.meldeplikt.Fritaksvurdering': {
+      begrunnelse: string;
+      harFritak: boolean;
+      periode: components['schemas']['no.nav.aap.behandlingsflyt.domene.Periode'];
+    };
     'no.nav.aap.behandlingsflyt.avklaringsbehov.sykdom.Sykdomsvurdering': {
       begrunnelse: string;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.behandlingsflyt.domene.behandling.dokumenter.JournalpostId'][];
@@ -295,6 +342,8 @@ export interface components {
       definisjon:
         | "MANUELT_SATT_PÅ_VENT(kode='9001')"
         | "AVKLAR_SYKDOM(kode='5001')"
+        | "AVKLAR_BISTANDSBEHOV(kode='5003')"
+        | "FRITAK_MELDEPLIKT(kode='5004')"
         | "AVKLAR_YRKESSKADE(kode='5002')"
         | "FORESLÅ_VEDTAK(kode='5098')"
         | "FATTE_VEDTAK(kode='5099')";
@@ -402,7 +451,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2023-10-09T12:59:36.115131
+       * @example 2023-10-09T14:20:08.336411
        */
       opprettet: string;
       /** Format: uuid */
@@ -419,7 +468,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2023-10-09T12:59:36.115131
+       * @example 2023-10-09T14:20:08.336411
        */
       tidsstempel: string;
     };
@@ -495,7 +544,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.flate.sak.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2023-10-09T12:59:36.115131
+       * @example 2023-10-09T14:20:08.336411
        */
       opprettet: string;
       /** Format: uuid */
@@ -519,8 +568,14 @@ export interface components {
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'LØPENDE' | 'AVSLUTTET';
     };
+    'no.nav.aap.behandlingsflyt.grunnlag.flate.BistandGrunnlagDto': {
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.bistand.BistandsVurdering'];
+    };
     'no.nav.aap.behandlingsflyt.grunnlag.flate.FatteVedtakGrunnlagDto': {
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.vedtak.TotrinnsVurdering'][];
+    };
+    'no.nav.aap.behandlingsflyt.grunnlag.flate.FritakMeldepliktGrunnlagDto': {
+      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.meldeplikt.Fritaksvurdering'][];
     };
     'no.nav.aap.behandlingsflyt.grunnlag.flate.InnhentetSykdomsOpplysninger': {
       innhentedeYrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.flate.RegistrertYrkesskade'][];

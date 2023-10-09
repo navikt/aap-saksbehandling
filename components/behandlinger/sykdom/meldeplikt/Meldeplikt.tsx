@@ -8,6 +8,15 @@ import { BodyShort } from '@navikt/ds-react';
 import { FigureIcon } from '@navikt/aksel-icons';
 
 import style from './Meldeplikt.module.css';
+import { FritakMeldepliktGrunnlag } from 'lib/types/types';
+import { løsBehov } from 'lib/api';
+import { format } from 'date-fns';
+import { BehovsType } from 'lib/utils/form';
+
+interface Props {
+  behandlingsReferanse: string;
+  grunnlag: FritakMeldepliktGrunnlag;
+}
 
 interface FormFields {
   begrunnelse: string;
@@ -16,16 +25,20 @@ interface FormFields {
   sluttDato?: Date;
 }
 
-export const Meldeplikt = () => {
+export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
       description: 'Begrunn vurderingen',
       label: 'Vurder om det vil være unødig tyngende for søker å overholde meldeplikten',
+      rules: { required: 'Du må begrunne' },
+      // TODO: Her må vi gjøre noe lurt dersom det er flere vurderinger
+      defaultValue: grunnlag?.vurderinger[0]?.begrunnelse,
     },
     unntakFraMeldeplikt: {
       type: 'checkbox',
       label: 'Det vurderes at søker kan unntas fra meldeplikten',
+      rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
       options: ['Unntak fra meldeplikten'],
     },
     startDato: {
@@ -41,8 +54,24 @@ export const Meldeplikt = () => {
   return (
     <VilkårsKort heading={'Unntak fra meldeplikt § 11-10'} icon={<FigureIcon fontSize={'inherit'} />}>
       <Form
-        onSubmit={form.handleSubmit((data) => {
-          console.log({ data });
+        onSubmit={form.handleSubmit(async (data) => {
+          await løsBehov({
+            behandlingVersjon: 0,
+            behov: {
+              // @ts-ignore Feil generert type i backend
+              '@type': BehovsType.FRITAK_MELDEPLIKT,
+              // @ts-ignore Feil generert type i backend
+              vurdering: {
+                begrunnelse: data.begrunnelse,
+                harFritak: data.unntakFraMeldeplikt.includes('Unntak fra meldeplikten'),
+                periode: {
+                  fom: data.startDato ? format(new Date(data.startDato), 'yyyy-MM-dd') : undefined,
+                  tom: data.sluttDato ? format(new Date(data.sluttDato), 'yyyy-MM-dd') : undefined,
+                },
+              },
+            },
+            referanse: behandlingsReferanse,
+          });
         })}
         steg={'BARNETILLEGG'}
       >
