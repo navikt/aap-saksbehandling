@@ -1,4 +1,4 @@
-import { render, screen } from 'lib/test/setUpTests';
+import { render, screen } from '@testing-library/react';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import userEvent from '@testing-library/user-event';
 

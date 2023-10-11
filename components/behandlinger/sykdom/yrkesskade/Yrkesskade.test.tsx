@@ -1,4 +1,4 @@
-import { render, screen, within } from 'lib/test/setUpTests';
+import { render, screen, within } from '@testing-library/react';
 import { Yrkesskade } from './Yrkesskade';
 import userEvent from '@testing-library/user-event';
 import { YrkesskadeGrunnlag } from 'lib/types/types';

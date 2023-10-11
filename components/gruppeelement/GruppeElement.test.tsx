@@ -1,4 +1,4 @@
-import { render, screen } from 'lib/test/setUpTests';
+import { render, screen } from '@testing-library/react';
 import { GruppeElement } from './GruppeElement';
 
 describe('Steg', () => {

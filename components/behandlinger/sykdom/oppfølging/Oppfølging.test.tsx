@@ -1,4 +1,4 @@
-import { render, screen } from 'lib/test/setUpTests';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Oppfølging } from './Oppfølging';
 
