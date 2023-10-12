@@ -6,13 +6,13 @@ describe('Meldeplikt', () => {
   const user = userEvent.setup();
 
   it('Skal ha en overskrift', () => {
-    render(<Meldeplikt />);
+    render(<Meldeplikt behandlingsReferanse={'123'} />);
     const heading = screen.getByText('Unntak fra meldeplikt § 11-10');
     expect(heading).toBeVisible();
   });
 
   it('Skal ha et begrunnelse felt', () => {
-    render(<Meldeplikt />);
+    render(<Meldeplikt behandlingsReferanse={'123'} />);
     const textbox = screen.getByRole('textbox', {
       name: /vurder om det vil være unødig tyngende for søker å overholde meldeplikten/i,
     });
@@ -20,13 +20,13 @@ describe('Meldeplikt', () => {
   });
 
   it('Skal ha et felt for om søker kan unntas fra meldeplikten', () => {
-    render(<Meldeplikt />);
+    render(<Meldeplikt behandlingsReferanse={'123'} />);
     const checkBoxGroup = screen.getByRole('group', { name: /det vurderes at søker kan unntas fra meldeplikten/i });
     expect(checkBoxGroup).toBeVisible();
   });
 
   it('Skal ha informasjonstekst om unntak fra meldeplikten', () => {
-    render(<Meldeplikt />);
+    render(<Meldeplikt behandlingsReferanse={'123'} />);
     expect(screen.getByText('Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:')).toBeVisible();
     expect(
       screen.getByText('a) vurderer at det vil være unødig tyngende for søker å overholde meldeplikten')
@@ -37,7 +37,7 @@ describe('Meldeplikt', () => {
   });
 
   it('Skal vise felt for startdato og sluttdato dersom unntak fra meldeplikten er valgt', async () => {
-    render(<Meldeplikt />);
+    render(<Meldeplikt behandlingsReferanse={'123'} />);
 
     const unntakFraMeldeepliktenValg = screen.getByRole('checkbox', { name: /unntak fra meldeplikten/i });
 
@@ -53,7 +53,7 @@ describe('Meldeplikt', () => {
   });
 
   it('Skal ikke vise felt for startdato og sluttdato dersom unntak fra meldeplikten ikke er valgt', async () => {
-    render(<Meldeplikt />);
+    render(<Meldeplikt behandlingsReferanse={'123'} />);
 
     const unntakFraMeldeepliktenValg = screen.getByRole('checkbox', { name: /unntak fra meldeplikten/i });
     expect(unntakFraMeldeepliktenValg).not.toBeChecked();

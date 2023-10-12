@@ -11,7 +11,7 @@ import { BehovsType, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
-  grunnlag: BistandsGrunnlag;
+  grunnlag?: BistandsGrunnlag;
 }
 
 interface FormFields {

@@ -15,7 +15,7 @@ import { BehovsType } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
-  grunnlag: FritakMeldepliktGrunnlag;
+  grunnlag?: FritakMeldepliktGrunnlag;
 }
 
 interface FormFields {
