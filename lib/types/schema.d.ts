@@ -16,6 +16,7 @@ export interface paths {
               | "AVKLAR_BISTANDSBEHOV(kode='5003')"
               | "FRITAK_MELDEPLIKT(kode='5004')"
               | "AVKLAR_YRKESSKADE(kode='5002')"
+              | "AVKLAR_SYKEPENGEERSTATNING(kode='5005')"
               | "FORESLÅ_VEDTAK(kode='5098')"
               | "FATTE_VEDTAK(kode='5099')"
             )[];
@@ -278,7 +279,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2023-10-09
+       * @example 2023-10-13
        */
       fødselsdato: string;
       ident: string;
@@ -303,7 +304,7 @@ export interface components {
       nedreGrense?: 'TRETTI' | 'FEMTI' | null;
       /**
        * Format: date
-       * @example 2023-10-09
+       * @example 2023-10-13
        */
       nedsattArbeidsevneDato?: string | null;
     };
@@ -313,7 +314,7 @@ export interface components {
       erÅrsakssammenheng: boolean;
       /**
        * Format: date
-       * @example 2023-10-09
+       * @example 2023-10-13
        */
       skadetidspunkt?: string | null;
     };
@@ -325,12 +326,12 @@ export interface components {
     'no.nav.aap.behandlingsflyt.domene.Periode': {
       /**
        * Format: date
-       * @example 2023-10-09
+       * @example 2023-10-13
        */
       fom: string;
       /**
        * Format: date
-       * @example 2023-10-09
+       * @example 2023-10-13
        */
       tom: string;
     };
@@ -345,6 +346,7 @@ export interface components {
         | "AVKLAR_BISTANDSBEHOV(kode='5003')"
         | "FRITAK_MELDEPLIKT(kode='5004')"
         | "AVKLAR_YRKESSKADE(kode='5002')"
+        | "AVKLAR_SYKEPENGEERSTATNING(kode='5005')"
         | "FORESLÅ_VEDTAK(kode='5098')"
         | "FATTE_VEDTAK(kode='5099')";
       endringer: components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.EndringDTO'][];
@@ -451,7 +453,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2023-10-09T14:20:08.336411
+       * @example 2023-10-13T09:36:44.500477
        */
       opprettet: string;
       /** Format: uuid */
@@ -468,7 +470,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2023-10-09T14:20:08.336411
+       * @example 2023-10-13T09:36:44.500477
        */
       tidsstempel: string;
     };
@@ -523,7 +525,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.flate.behandling.VilkårDTO': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.VilkårsperiodeDTO'][];
       /** @enum {string} */
-      vilkårstype: 'ALDERSVILKÅRET' | 'SYKDOMSVILKÅRET' | 'BISTANDSVILKÅRET' | 'GRUNNLAGET';
+      vilkårstype: 'ALDERSVILKÅRET' | 'SYKDOMSVILKÅRET' | 'BISTANDSVILKÅRET' | 'GRUNNLAGET' | 'SYKEPENGEERSTATNING';
     };
     'no.nav.aap.behandlingsflyt.flate.behandling.VilkårsperiodeDTO': {
       /** @enum {string|null} */
@@ -544,7 +546,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.flate.sak.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2023-10-09T14:20:08.336411
+       * @example 2023-10-13T09:36:44.500477
        */
       opprettet: string;
       /** Format: uuid */
