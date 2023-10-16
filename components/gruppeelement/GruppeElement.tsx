@@ -41,6 +41,8 @@ export function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
   switch (steg) {
     case 'MEDLEMSKAP':
       return 'Medlemskap';
+    case 'STUDENT':
+      return 'Studentsak';
     case 'SYKDOM':
       return 'Sykdom';
     case 'UTTAK':
