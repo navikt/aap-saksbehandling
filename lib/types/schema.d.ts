@@ -279,7 +279,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2023-10-13
+       * @example 2023-10-11
        */
       fødselsdato: string;
       ident: string;
@@ -304,7 +304,7 @@ export interface components {
       nedreGrense?: 'TRETTI' | 'FEMTI' | null;
       /**
        * Format: date
-       * @example 2023-10-13
+       * @example 2023-10-11
        */
       nedsattArbeidsevneDato?: string | null;
     };
@@ -314,7 +314,7 @@ export interface components {
       erÅrsakssammenheng: boolean;
       /**
        * Format: date
-       * @example 2023-10-13
+       * @example 2023-10-11
        */
       skadetidspunkt?: string | null;
     };
@@ -326,12 +326,12 @@ export interface components {
     'no.nav.aap.behandlingsflyt.domene.Periode': {
       /**
        * Format: date
-       * @example 2023-10-13
+       * @example 2023-10-11
        */
       fom: string;
       /**
        * Format: date
-       * @example 2023-10-13
+       * @example 2023-10-11
        */
       tom: string;
     };
@@ -453,7 +453,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2023-10-13T09:36:44.500477
+       * @example 2023-10-11T15:52:58.118518
        */
       opprettet: string;
       /** Format: uuid */
@@ -470,7 +470,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2023-10-13T09:36:44.500477
+       * @example 2023-10-11T15:52:58.118518
        */
       tidsstempel: string;
     };
@@ -546,7 +546,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.flate.sak.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2023-10-13T09:36:44.500477
+       * @example 2023-10-11T15:52:58.118518
        */
       opprettet: string;
       /** Format: uuid */

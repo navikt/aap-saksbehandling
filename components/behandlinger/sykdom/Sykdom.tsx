@@ -7,6 +7,7 @@ import { headers } from 'next/headers';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { OppfølgingMedDataFetching } from 'components/behandlinger/sykdom/oppfølging/OppfølgingMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
+import { Sykepengeerstatning } from 'components/behandlinger/sykdom/sykepengeerstatning/Sykepengeerstatning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -47,6 +48,10 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
               <OppfølgingMedDataFetching behandlingsReferanse={behandlingsReferanse} />
             </StegSuspense>
           );
+        }
+
+        if (steg === 'VURDER_SYKEPENGEERSTATNING') {
+          return <Sykepengeerstatning key={steg} behandlingsReferanse={behandlingsReferanse} />;
         }
       })}
     </>
