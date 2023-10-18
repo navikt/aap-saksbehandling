@@ -10,10 +10,12 @@ import { løsBehov } from 'lib/api';
 import { BehovsType, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
 import { format } from 'date-fns';
 import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
+import { StudentGrunnlag } from 'lib/types/types';
+import { stringToDate } from 'lib/utils/date';
 
 interface Props {
   behandlingsReferanse: string;
-  grunnlag?: unknown;
+  grunnlag?: StudentGrunnlag;
 }
 
 interface FormFields {
@@ -23,7 +25,7 @@ interface FormFields {
   avbruttStudieDato?: Date;
 }
 
-export const Student = ({ behandlingsReferanse }: Props) => {
+export const Student = ({ behandlingsReferanse, grunnlag }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
@@ -31,12 +33,12 @@ export const Student = ({ behandlingsReferanse }: Props) => {
       label: 'Vurder... ............',
       rules: { required: 'Du må begrunne' },
       // TODO: Her må vi gjøre noe lurt dersom det er flere vurderinger
-      defaultValue: undefined,
+      defaultValue: grunnlag?.studentvurdering?.begrunnelse,
     },
     oppfyller11_14: {
       type: 'radio',
       label: 'Har søker oppfyllt vilkårene i § 11-14?',
-      defaultValue: getJaNeiEllerUndefined(undefined),
+      defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.oppfyller11_14),
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
@@ -47,7 +49,7 @@ export const Student = ({ behandlingsReferanse }: Props) => {
       type: 'radio',
       label:
         'Har søker oppfyllt vilkårene i forskriften § 7? (behov for aktiv behandling for å komme tilbake til studiet)',
-      defaultValue: getJaNeiEllerUndefined(undefined),
+      defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.oppfyller7),
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
@@ -57,6 +59,7 @@ export const Student = ({ behandlingsReferanse }: Props) => {
     avbruttStudieDato: {
       type: 'date',
       label: 'Første dag med avbrutt studie',
+      defaultValue: stringToDate(grunnlag?.studentvurdering?.avbruttStudieDato),
     },
   });
 

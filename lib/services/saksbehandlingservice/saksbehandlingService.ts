@@ -9,6 +9,7 @@ import {
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
   SaksInfo,
+  StudentGrunnlag,
   SykdomsGrunnlag,
   UtvidetSaksInfo,
   YrkesskadeGrunnlag,
@@ -45,6 +46,14 @@ export const hentSak = async (saksnummer: string, accessToken: string): Promise<
 export const hentAlleSaker = async (accessToken: string): Promise<SaksInfo[]> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;
   return await fetchProxy<SaksInfo[]>(url, accessToken, saksbehandlingScope, 'GET', undefined);
+};
+
+export const hentStudentGrunnlag = async (
+  behandlingsReferanse: string,
+  accessToken: string
+): Promise<StudentGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/student`;
+  return await fetchProxy<StudentGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 
 export const hentYrkesskadeGrunnlag = async (

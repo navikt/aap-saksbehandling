@@ -14,6 +14,7 @@ export type Vilkår = components['schemas']['no.nav.aap.behandlingsflyt.flate.be
 export type LøsAvklaringsbehovPåBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.avklaringsbehov.LøsAvklaringsbehovPåBehandling'];
 export type Vilkårsperiode = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.VilkårsperiodeDTO'];
+export type StudentGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.flate.StudentGrunnlagDto'];
 export type SykdomsGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.flate.SykdomsGrunnlagDto'];
 export type YrkesskadeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.flate.YrkesskadeGrunnlagDto'];
