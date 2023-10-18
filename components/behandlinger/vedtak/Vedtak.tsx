@@ -14,8 +14,6 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
 
   const stegSomSkalVises = getStegSomSkalVises('VEDTAK', flyt);
 
-  console.log('stegSomSkalVises', stegSomSkalVises);
-
   return (
     <>
       {stegSomSkalVises.map((steg) => {

@@ -1,7 +1,7 @@
 import { DefaultValues, RegisterOptions, useForm, UseFormProps, UseFormReturn } from 'react-hook-form';
 import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 
-import { ValuePair } from '../components/input/formfield/FormField';
+import { ValuePair } from 'components/input/formfield/FormField';
 
 export type FormFieldsConfig<FormFieldId extends FieldPath<FormFieldIds>, FormFieldIds extends FieldValues> = Record<
   FormFieldId,
@@ -69,9 +69,14 @@ interface FormFieldName<FormFieldIds extends FieldValues> {
   name: FieldPath<FormFieldIds>;
 }
 
+type ReactFormHookConfigruation<FormFieldIds extends FieldValues> = Omit<
+  UseFormProps<FormFieldIds>,
+  'defaultValues'
+> & { readOnly?: boolean };
+
 export function useConfigForm<FormFieldIds extends FieldValues>(
   config: FormFieldsConfig<FieldPath<FormFieldIds>, FormFieldIds>,
-  configForForm?: Omit<UseFormProps<FormFieldIds>, 'defaultValues'> & { readOnly?: boolean }
+  rfhConfig?: ReactFormHookConfigruation<FormFieldIds>
 ): {
   formFields: FormFields<FieldPath<FormFieldIds>, FormFieldIds>;
   form: UseFormReturn<FormFieldIds>;
@@ -82,7 +87,7 @@ export function useConfigForm<FormFieldIds extends FieldValues>(
   const entries = Object.entries(config) as Array<[FieldPath<FormFieldIds>, FormFieldConfig<FormFieldIds>]>;
 
   entries.forEach(([id, formFieldConfig]) => {
-    formFields[id] = { ...formFieldConfig, name: id, readOnly: configForForm?.readOnly };
+    formFields[id] = { ...formFieldConfig, name: id, readOnly: rfhConfig?.readOnly };
 
     if (formFieldConfig.defaultValue) {
       defaultValues[id] = formFieldConfig.defaultValue;
@@ -90,7 +95,7 @@ export function useConfigForm<FormFieldIds extends FieldValues>(
   });
 
   const form = useForm<FormFieldIds>({
-    ...configForForm,
+    ...rfhConfig,
     defaultValues,
   });
 
