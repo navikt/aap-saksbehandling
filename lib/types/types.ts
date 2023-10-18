@@ -83,4 +83,5 @@ export type StegGruppe =
   | 'TILKJENT_YTELSE'
   | 'SIMULERING'
   | 'VEDTAK'
+  | 'SYKEPENGEERSTATNING'
   | 'UDEFINERT';

@@ -4,7 +4,7 @@ import { VilkårsKort } from './VilkårsKort';
 describe('VilkårsKort', () => {
   it('skal vise overskrift', () => {
     render(
-      <VilkårsKort heading={'Dette er en overskrift'}>
+      <VilkårsKort heading={'Dette er en overskrift'} steg={'UDEFINERT'}>
         <span>Dette er innhold</span>
       </VilkårsKort>
     );
@@ -13,7 +13,7 @@ describe('VilkårsKort', () => {
 
   it('skal vise innhold', async () => {
     render(
-      <VilkårsKort heading={'Dette er en overskrift'}>
+      <VilkårsKort heading={'Dette er en overskrift'} steg={'UDEFINERT'}>
         <span>Dette er innhold</span>
       </VilkårsKort>
     );
@@ -21,5 +21,3 @@ describe('VilkårsKort', () => {
     expect(screen.getByText('Dette er innhold')).toBeVisible();
   });
 });
-
-

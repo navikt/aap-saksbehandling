@@ -65,6 +65,8 @@ export function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Grunnlag';
     case 'LOVVALG':
       return 'Lovvalg';
+    case 'SYKEPENGEERSTATNING':
+      return 'Sykepengeerstatning';
     case 'UDEFINERT':
       return 'Udefinert';
   }

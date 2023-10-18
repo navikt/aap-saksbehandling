@@ -25,7 +25,7 @@ export const ForeslåVedtak = ({ behandlingsReferanse, grunnlag }: Props) => {
     },
   });
   return (
-    <VilkårsKort heading="Foreslå vedtak :)">
+    <VilkårsKort heading="Foreslå vedtak :)" steg={'FORESLÅ_VEDTAK'}>
       <Form steg="FORESLÅ_VEDTAK" onSubmit={() => {}}>
         <FormField form={form} formField={formFields.begrunnelse} />
       </Form>
