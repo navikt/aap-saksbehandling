@@ -8,6 +8,7 @@ import { Buldings2Icon } from '@navikt/aksel-icons';
 
 import { løsBehov } from 'lib/api';
 import { BehovsType, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { format } from 'date-fns';
 
 interface Props {
   behandlingsReferanse: string;
@@ -66,16 +67,22 @@ export const Student = ({ behandlingsReferanse }: Props) => {
             behandlingVersjon: 0,
             behov: {
               // @ts-ignore Feil generert type i backend
-              '@type': BehovsType.FRITAK_MELDEPLIKT,
+              '@type': BehovsType.AVKLAR_STUDENT,
               // @ts-ignore Feil generert type i backend
-              vurdering: {
+              studentvurdering: {
                 begrunnelse: data.begrunnelse,
+                dokumenterBruktIVurdering: [],
+                oppfyller11_14: data.oppfyller11_14 === JaEllerNei.Ja,
+                oppfyller7: data.oppfyller7 === JaEllerNei.Ja,
+                avbruttStudieDato: data.avbruttStudieDato
+                  ? format(new Date(data.avbruttStudieDato), 'yyyy-MM-dd')
+                  : undefined,
               },
             },
             referanse: behandlingsReferanse,
           });
         })}
-        steg={'BARNETILLEGG'}
+        steg={'AVKLAR_STUDENT'}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
 

@@ -17,7 +17,7 @@ export const Student = async ({ behandlingsReferanse }: Props) => {
   return (
     <>
       {stegSomSkalVises.map((steg) => {
-        if (steg === 'VURDER_STUDENT') {
+        if (steg === 'AVKLAR_STUDENT') {
           return (
             <StegSuspense key={steg}>
               <StudentMedDataFetching behandlingsReferanse={behandlingsReferanse} />
