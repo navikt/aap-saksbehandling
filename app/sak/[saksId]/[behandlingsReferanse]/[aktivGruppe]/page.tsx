@@ -1,7 +1,5 @@
-import { InformasjonsKolonne } from 'components/informasjonskolonne/InformasjonsKolonne';
 import { OppgaveKolonne } from 'components/oppgavekolonne/OppgaveKolonne';
 
-import styles from './page.module.css';
 import { StegGruppe } from 'lib/types/types';
 import { notFound } from 'next/navigation';
 
@@ -13,16 +11,10 @@ const Page = async ({ params }: { params: { behandlingsReferanse: string; aktivG
   }
 
   return (
-    <>
-      <InformasjonsKolonne
-        className={`${styles.kolonne} ${styles.venstrekolonne}`}
-        behandlingsReferanse={params.behandlingsReferanse ?? ''}
-      />
-      <OppgaveKolonne
-        behandlingsReferanse={params.behandlingsReferanse ?? ''}
-        aktivGruppe={decodeURI(params.aktivGruppe) as StegGruppe}
-      />
-    </>
+    <OppgaveKolonne
+      behandlingsReferanse={params.behandlingsReferanse ?? ''}
+      aktivGruppe={decodeURI(params.aktivGruppe) as StegGruppe}
+    />
   );
 };
 

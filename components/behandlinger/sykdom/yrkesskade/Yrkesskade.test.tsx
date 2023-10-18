@@ -13,7 +13,7 @@ beforeEach(() => {
 describe('yrkesskade', () => {
   const user = userEvent.setup();
   it('Skal ha riktig heading', () => {
-    const heading = screen.getByText('Yrkesskade - årsakssammenheng § 11-22');
+    const heading = screen.getByText('Yrkesskade - § 11-22');
     expect(heading).toBeVisible();
   });
 

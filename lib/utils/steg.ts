@@ -10,3 +10,46 @@ export const getStegSomSkalVises = (gruppe: StegGruppe, flyt: BehandlingFlytOgTi
       .map((steg) => steg.stegType) ?? []
   );
 };
+
+export interface DetaljertSteg {
+  navn: string;
+  paragraf: string;
+}
+
+export const mapStegTypeTilDetaljertSteg = (stegType: StegType): DetaljertSteg => {
+  switch (stegType) {
+    case 'AVKLAR_STUDENT':
+      return {
+        navn: 'Student',
+        paragraf: '11-14',
+      };
+    case 'AVKLAR_YRKESSKADE':
+      return {
+        navn: 'Yrkesskade',
+        paragraf: '11-22',
+      };
+    case 'AVKLAR_SYKDOM':
+      return {
+        navn: 'Nedsatt arbeidsevne',
+        paragraf: '11-5',
+      };
+    case 'VURDER_BISTANDSBEHOV':
+      return {
+        navn: 'Behov for oppfølging',
+        paragraf: '11-6',
+      };
+    case 'FRITAK_MELDEPLIKT':
+      return {
+        navn: 'Unntak fra meldeplikt',
+        paragraf: '11-10',
+      };
+    default:
+      return {
+        navn: stegType,
+        paragraf: '',
+      };
+  }
+};
+
+export const getHeaderForSteg = (detaljertSteg: DetaljertSteg): string =>
+  `${detaljertSteg.navn} - § ${detaljertSteg.paragraf}`;

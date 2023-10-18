@@ -52,7 +52,11 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
   });
 
   return (
-    <VilkårsKort heading={'Unntak fra meldeplikt § 11-10'} icon={<FigureIcon fontSize={'inherit'} />}>
+    <VilkårsKort
+      heading={'Unntak fra meldeplikt § 11-10'}
+      steg="FRITAK_MELDEPLIKT"
+      icon={<FigureIcon fontSize={'inherit'} />}
+    >
       <Form
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({

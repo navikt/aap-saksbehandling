@@ -11,6 +11,7 @@ import { Buldings2Icon } from '@navikt/aksel-icons';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { Alert, BodyShort, Label } from '@navikt/ds-react';
+import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
@@ -59,7 +60,11 @@ export const Yrkesskade = ({ grunnlag, behandlingsReferanse }: Props) => {
   });
 
   return (
-    <VilkårsKort heading={'Yrkesskade - årsakssammenheng § 11-22'} icon={<Buldings2Icon />}>
+    <VilkårsKort
+      heading={getHeaderForSteg(mapStegTypeTilDetaljertSteg('AVKLAR_YRKESSKADE'))}
+      steg="AVKLAR_YRKESSKADE"
+      icon={<Buldings2Icon />}
+    >
       <Form
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({

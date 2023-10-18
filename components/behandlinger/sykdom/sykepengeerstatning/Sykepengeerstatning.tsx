@@ -37,7 +37,7 @@ export const Sykepengeerstatning = ({ behandlingsReferanse }: Props) => {
     },
   });
   return (
-    <VilkårsKort heading={'Sykepengeerstatning § 11-13'} icon={<FigureIcon />}>
+    <VilkårsKort heading={'Sykepengeerstatning § 11-13'} steg="VURDER_SYKEPENGEERSTATNING" icon={<FigureIcon />}>
       <Form
         onSubmit={() => {
           console.warn(`TODO, post løsning for ${behandlingsReferanse}`);

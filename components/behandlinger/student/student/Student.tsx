@@ -9,6 +9,7 @@ import { Buldings2Icon } from '@navikt/aksel-icons';
 import { løsBehov } from 'lib/api';
 import { BehovsType, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
 import { format } from 'date-fns';
+import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
@@ -60,7 +61,11 @@ export const Student = ({ behandlingsReferanse }: Props) => {
   });
 
   return (
-    <VilkårsKort heading={'Student - § 11-14'} icon={<Buldings2Icon fontSize={'inherit'} />}>
+    <VilkårsKort
+      heading={getHeaderForSteg(mapStegTypeTilDetaljertSteg('AVKLAR_STUDENT'))}
+      steg={'AVKLAR_STUDENT'}
+      icon={<Buldings2Icon fontSize={'inherit'} />}
+    >
       <Form
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({

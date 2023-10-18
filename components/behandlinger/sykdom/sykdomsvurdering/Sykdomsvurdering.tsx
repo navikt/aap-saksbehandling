@@ -78,7 +78,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
   });
 
   return (
-    <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} icon={<VitalsIcon />}>
+    <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} steg="AVKLAR_SYKDOM" icon={<VitalsIcon />}>
       <Form
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({

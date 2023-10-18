@@ -8,6 +8,9 @@ import styles from './layout.module.css';
 import { ReactNode } from 'react';
 import { GruppeElement } from 'components/gruppeelement/GruppeElement';
 import { notFound } from 'next/navigation';
+import { InformasjonsKolonne } from 'components/informasjonskolonne/InformasjonsKolonne';
+import { getStegSomSkalVises } from 'lib/utils/steg';
+import { StegGruppe } from 'lib/types/types';
 
 const Layout = async ({
   params,
@@ -17,17 +20,19 @@ const Layout = async ({
   children: ReactNode;
 }) => {
   const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
-  const flyt = await hentFlyt2(params.behandlingsReferanse, getToken(headers()));
+  const flytResponse = await hentFlyt2(params.behandlingsReferanse, getToken(headers()));
 
   if (behandling === undefined) {
     notFound();
   }
 
+  const stegSomSkalVises = getStegSomSkalVises(decodeURI(params.aktivGruppe) as StegGruppe, flytResponse);
+
   return (
     <>
       <div>
         <ol type="1" className={styles.stegMeny}>
-          {flyt?.flyt
+          {flytResponse?.flyt
             .filter((gruppe) => ['SYKDOM', 'STUDENT', 'VEDTAK', 'ALDER'].includes(gruppe.stegGruppe))
             .map((gruppe, index) => {
               return (
@@ -37,13 +42,17 @@ const Layout = async ({
                   nummer={index + 1}
                   erFullført={gruppe.erFullført}
                   aktivtSteg={decodeURI(params.aktivGruppe) === gruppe.stegGruppe}
-                  kanNavigeresTil={gruppe.erFullført || flyt.aktivGruppe === gruppe.stegGruppe}
+                  kanNavigeresTil={gruppe.erFullført || flytResponse.aktivGruppe === gruppe.stegGruppe}
                 />
               );
             })}
         </ol>
       </div>
       <HGrid columns={'1fr 3fr 1fr'} className={styles.kolonner}>
+        <InformasjonsKolonne
+          stegSomSkalVises={stegSomSkalVises}
+          className={`${styles.kolonne} ${styles.venstrekolonne}`}
+        />
         {children}
         <div className={`${styles.kolonne} ${styles.høyrekolonne}`} />
       </HGrid>
