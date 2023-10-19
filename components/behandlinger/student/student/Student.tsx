@@ -21,7 +21,6 @@ interface Props {
 interface FormFields {
   begrunnelse: string;
   oppfyller11_14: string;
-  oppfyller7: string;
   avbruttStudieDato?: Date;
 }
 
@@ -45,21 +44,19 @@ export const Student = ({ behandlingsReferanse, grunnlag }: Props) => {
       ],
       rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
     },
-    oppfyller7: {
-      type: 'radio',
-      label:
-        'Har søker oppfyllt vilkårene i forskriften § 7? (behov for aktiv behandling for å komme tilbake til studiet)',
-      defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.oppfyller7),
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
-      rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
-    },
     avbruttStudieDato: {
       type: 'date',
       label: 'Første dag med avbrutt studie',
       defaultValue: stringToDate(grunnlag?.studentvurdering?.avbruttStudieDato),
+      rules: {
+        validate: {
+          required: (value, formValues) => {
+            if (!value && formValues.oppfyller11_14 === JaEllerNei.Ja) {
+              return 'Du må svare på når studiet ble avbrutt';
+            }
+          },
+        },
+      },
     },
   });
 
@@ -81,7 +78,7 @@ export const Student = ({ behandlingsReferanse, grunnlag }: Props) => {
                 begrunnelse: data.begrunnelse,
                 dokumenterBruktIVurdering: [],
                 oppfyller11_14: data.oppfyller11_14 === JaEllerNei.Ja,
-                oppfyller7: data.oppfyller7 === JaEllerNei.Ja,
+
                 avbruttStudieDato: data.avbruttStudieDato
                   ? format(new Date(data.avbruttStudieDato), 'yyyy-MM-dd')
                   : undefined,
@@ -96,9 +93,9 @@ export const Student = ({ behandlingsReferanse, grunnlag }: Props) => {
 
         <FormField form={form} formField={formFields.oppfyller11_14} />
 
-        <FormField form={form} formField={formFields.oppfyller7} />
-
-        <FormField form={form} formField={formFields.avbruttStudieDato} />
+        {form.watch('oppfyller11_14') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.avbruttStudieDato} />
+        )}
       </Form>
     </VilkårsKort>
   );
