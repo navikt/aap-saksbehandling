@@ -3,7 +3,7 @@ import { OppgaveKolonne } from 'components/oppgavekolonne/OppgaveKolonne';
 import { StegGruppe } from 'lib/types/types';
 import { notFound } from 'next/navigation';
 
-const grupper: StegGruppe[] = ['ALDER', 'STUDENT', 'SYKDOM', 'VEDTAK'];
+const grupper: StegGruppe[] = ['ALDER', 'SYKDOM', 'VEDTAK'];
 
 const Page = async ({ params }: { params: { behandlingsReferanse: string; aktivGruppe: StegGruppe } }) => {
   if (!grupper.includes(decodeURI(params.aktivGruppe) as StegGruppe)) {

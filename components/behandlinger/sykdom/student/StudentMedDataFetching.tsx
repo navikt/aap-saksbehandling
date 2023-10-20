@@ -1,4 +1,4 @@
-import { Student } from 'components/behandlinger/student/student/Student';
+import { Student } from 'components/behandlinger/sykdom/student/Student';
 import { getToken } from 'lib/auth/authentication';
 import { hentStudentGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { headers } from 'next/headers';

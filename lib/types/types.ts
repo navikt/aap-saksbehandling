@@ -83,7 +83,6 @@ export type StegGruppe =
   | 'ALDER'
   | 'LOVVALG'
   | 'MEDLEMSKAP'
-  | 'STUDENT'
   | 'BARNETILLEGG'
   | 'SAMORDNING'
   | 'SYKDOM'

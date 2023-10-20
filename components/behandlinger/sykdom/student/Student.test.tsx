@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Student } from 'components/behandlinger/student/student/Student';
+import { Student } from 'components/behandlinger/sykdom/student/Student';
 
 describe('Student', () => {
   const user = userEvent.setup();

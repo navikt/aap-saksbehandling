@@ -8,6 +8,7 @@ import { getStegSomSkalVises } from 'lib/utils/steg';
 import { OppfølgingMedDataFetching } from 'components/behandlinger/sykdom/oppfølging/OppfølgingMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
 import { Sykepengeerstatning } from 'components/behandlinger/sykdom/sykepengeerstatning/Sykepengeerstatning';
+import { StudentMedDataFetching } from 'components/behandlinger/sykdom/student/StudentMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -21,6 +22,13 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   return (
     <>
       {stegSomSkalVises.map((steg) => {
+        if (steg === 'AVKLAR_STUDENT') {
+          return (
+            <StegSuspense key={steg}>
+              <StudentMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+            </StegSuspense>
+          );
+        }
         if (steg === 'AVKLAR_YRKESSKADE') {
           return (
             <StegSuspense key={steg}>
