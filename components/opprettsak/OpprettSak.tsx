@@ -1,8 +1,8 @@
 'use client';
 
-import { opprettSak } from '../../lib/api';
-import { useConfigForm } from '../../hooks/FormHook';
-import { FormField } from '../input/formfield/FormField';
+import { opprettSak } from 'lib/api';
+import { useConfigForm } from 'hooks/FormHook';
+import { FormField } from 'components/input/formfield/FormField';
 import { Button } from '@navikt/ds-react';
 
 import styles from './OpprettSak.module.css';
