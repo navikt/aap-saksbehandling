@@ -1,9 +1,9 @@
 import { getToken } from 'lib/auth/authentication';
 import { hentAlleSaker } from '../../lib/services/saksbehandlingservice/saksbehandlingService';
 import { headers } from 'next/headers';
-import Link from 'next/link';
 
 import { OpprettSak } from '../../components/opprettsak/OpprettSak';
+import { AlleSakerListe } from 'components/saksliste/AlleSakerListe';
 
 const Page = async () => {
   const alleSaker = await hentAlleSaker(getToken(headers()));
@@ -11,11 +11,7 @@ const Page = async () => {
     <>
       <h1>Saksoversikt page</h1>
       <OpprettSak />
-      {alleSaker?.map((sak) => (
-        <div key={sak.saksnummer}>
-          <Link href={`/sak/${sak.saksnummer}/`}>{sak.saksnummer}</Link>
-        </div>
-      ))}
+      <AlleSakerListe alleSaker={alleSaker} />
     </>
   );
 };

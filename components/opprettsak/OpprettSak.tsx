@@ -6,6 +6,7 @@ import { FormField } from '../input/formfield/FormField';
 import { Button } from '@navikt/ds-react';
 
 import styles from './OpprettSak.module.css';
+import { mutate } from 'swr';
 
 interface FormFields {
   ident: string;
@@ -39,6 +40,7 @@ export const OpprettSak = () => {
     <form
       onSubmit={form.handleSubmit(async (data) => {
         await opprettSak({ ...data, yrkesskade: data.yrkesskade === 'true' });
+        mutate('api/sak/alle');
       })}
       className={styles.form}
     >

@@ -38,6 +38,10 @@ export function hentFlyt(referanse: string) {
   return fetcher<BehandlingFlytOgTilstand>('/api/behandling/hent/' + referanse + '/flyt', 'GET');
 }
 
+export function hentAlleSaker() {
+  return fetcher<SaksInfo[]>('/api/sak/alle', 'GET');
+}
+
 export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
   return fetcher('/api/behandling/los-behov/', 'POST', avklaringsBehov);
 }
