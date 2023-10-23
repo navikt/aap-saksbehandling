@@ -35,7 +35,7 @@ export const Yrkesskade = ({ grunnlag, behandlingsReferanse }: Props) => {
     },
     årssakssammenheng: {
       type: 'radio',
-      label: 'Er vilkåret (årssakssammenheng) i 11.22 oppfylt?',
+      label: 'Er vilkåret (årssakssammenheng) i § 11-22 oppfylt?',
       defaultValue: getJaNeiEllerUndefined(grunnlag.yrkesskadevurdering?.erÅrsakssammenheng),
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },

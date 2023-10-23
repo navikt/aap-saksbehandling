@@ -27,14 +27,14 @@ describe('yrkesskade', () => {
 
   it('Skal ha radio group for årsakssammenheng ', async () => {
     const radiogroup = screen.getByRole('group', {
-      name: /er vilkåret \(årssakssammenheng\) i 11\.22 oppfylt\?/i,
+      name: /er vilkåret \(årssakssammenheng\) i § 11-22 oppfylt\?/i,
     });
 
     expect(radiogroup).toBeVisible();
   });
 
-  it('Skal vise dato felt for skadetidspunkt dersom vilkåret i 11.22 er oppfylt', async () => {
-    const group = screen.getByRole('group', { name: /er vilkåret \(årssakssammenheng\) i 11\.22 oppfylt\?/i });
+  it('Skal vise dato felt for skadetidspunkt dersom vilkåret i § 11-22 er oppfylt', async () => {
+    const group = screen.getByRole('group', { name: /er vilkåret \(årssakssammenheng\) i § 11-22 oppfylt\?/i });
     const jaValg = within(group).getByRole('radio', { name: /ja/i });
 
     expect(
@@ -46,8 +46,8 @@ describe('yrkesskade', () => {
     expect(await screen.findByRole('textbox', { name: /dato for skadetidspunkt for yrkesskaden/i })).toBeVisible();
   });
 
-  it('Skal ikke vise dato felt for skadetidspunkt dersom vilkåret i 11.22 ikke er oppfylt', async () => {
-    const group = screen.getByRole('group', { name: /er vilkåret \(årssakssammenheng\) i 11\.22 oppfylt\?/i });
+  it('Skal ikke vise dato felt for skadetidspunkt dersom vilkåret i § 11-22 ikke er oppfylt', async () => {
+    const group = screen.getByRole('group', { name: /er vilkåret \(årssakssammenheng\) i § 11-22 oppfylt\?/i });
     const neiValg = within(group).getByRole('radio', { name: /nei/i });
 
     await user.click(neiValg);
@@ -71,8 +71,8 @@ describe('yrkesskade', () => {
     expect(await screen.findByText('Du må svare på om vilkåret er oppfyllt')).toBeVisible();
   });
 
-  it('Skal vise feilmelding dersom vilkåret i 11.22 er oppfylt og dato for skadetidspunkt ikke har blitt besvart', async () => {
-    const group = screen.getByRole('group', { name: /er vilkåret \(årssakssammenheng\) i 11\.22 oppfylt\?/i });
+  it('Skal vise feilmelding dersom vilkåret i § 11-22 er oppfylt og dato for skadetidspunkt ikke har blitt besvart', async () => {
+    const group = screen.getByRole('group', { name: /er vilkåret \(årssakssammenheng\) i § 11-22 oppfylt\?/i });
     const jaValg = within(group).getByRole('radio', { name: /ja/i });
 
     await user.click(jaValg);
