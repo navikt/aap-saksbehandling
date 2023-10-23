@@ -298,7 +298,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2023-10-19
+       * @example 2023-10-23
        */
       fødselsdato: string;
       ident: string;
@@ -317,13 +317,12 @@ export interface components {
     'no.nav.aap.behandlingsflyt.avklaringsbehov.student.StudentVurdering': {
       /**
        * Format: date
-       * @example 2023-10-19
+       * @example 2023-10-23
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.behandlingsflyt.domene.behandling.dokumenter.JournalpostId'][];
       oppfyller11_14?: boolean | null;
-      oppfyller7?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.avklaringsbehov.sykdom.Sykdomsvurdering': {
       begrunnelse: string;
@@ -334,7 +333,7 @@ export interface components {
       nedreGrense?: 'TRETTI' | 'FEMTI' | null;
       /**
        * Format: date
-       * @example 2023-10-19
+       * @example 2023-10-23
        */
       nedsattArbeidsevneDato?: string | null;
     };
@@ -344,7 +343,7 @@ export interface components {
       erÅrsakssammenheng: boolean;
       /**
        * Format: date
-       * @example 2023-10-19
+       * @example 2023-10-23
        */
       skadetidspunkt?: string | null;
     };
@@ -356,12 +355,12 @@ export interface components {
     'no.nav.aap.behandlingsflyt.domene.Periode': {
       /**
        * Format: date
-       * @example 2023-10-19
+       * @example 2023-10-23
        */
       fom: string;
       /**
        * Format: date
-       * @example 2023-10-19
+       * @example 2023-10-23
        */
       tom: string;
     };
@@ -391,7 +390,6 @@ export interface components {
         | 'ALDER'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
-        | 'STUDENT'
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'SYKDOM'
@@ -409,14 +407,13 @@ export interface components {
         | 'VURDER_LOVVALG'
         | 'VURDER_MEDLEMSKAP'
         | 'INNHENT_MEDLEMSKAP'
-        | 'VURDER_STUDENT'
+        | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'AVKLAR_YRKESSKADE'
-        | 'AVKLAR_STUDENT'
         | 'AVKLAR_SYKDOM'
         | 'INNHENT_PERSONOPPLYSNINGER'
         | 'INNHENT_YRKESSKADE'
@@ -439,14 +436,13 @@ export interface components {
         | 'VURDER_LOVVALG'
         | 'VURDER_MEDLEMSKAP'
         | 'INNHENT_MEDLEMSKAP'
-        | 'VURDER_STUDENT'
+        | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'AVKLAR_YRKESSKADE'
-        | 'AVKLAR_STUDENT'
         | 'AVKLAR_SYKDOM'
         | 'INNHENT_PERSONOPPLYSNINGER'
         | 'INNHENT_YRKESSKADE'
@@ -469,14 +465,13 @@ export interface components {
         | 'VURDER_LOVVALG'
         | 'VURDER_MEDLEMSKAP'
         | 'INNHENT_MEDLEMSKAP'
-        | 'VURDER_STUDENT'
+        | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'AVKLAR_YRKESSKADE'
-        | 'AVKLAR_STUDENT'
         | 'AVKLAR_SYKDOM'
         | 'INNHENT_PERSONOPPLYSNINGER'
         | 'INNHENT_YRKESSKADE'
@@ -492,7 +487,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2023-10-19T09:46:10.322
+       * @example 2023-10-23T13:56:27.974478
        */
       opprettet: string;
       /** Format: uuid */
@@ -509,7 +504,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2023-10-19T09:46:10.322
+       * @example 2023-10-23T13:56:27.974478
        */
       tidsstempel: string;
     };
@@ -522,7 +517,6 @@ export interface components {
         | 'ALDER'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
-        | 'STUDENT'
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'SYKDOM'
@@ -543,14 +537,13 @@ export interface components {
         | 'VURDER_LOVVALG'
         | 'VURDER_MEDLEMSKAP'
         | 'INNHENT_MEDLEMSKAP'
-        | 'VURDER_STUDENT'
+        | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'AVKLAR_YRKESSKADE'
-        | 'AVKLAR_STUDENT'
         | 'AVKLAR_SYKDOM'
         | 'INNHENT_PERSONOPPLYSNINGER'
         | 'INNHENT_YRKESSKADE'
@@ -568,17 +561,17 @@ export interface components {
     'no.nav.aap.behandlingsflyt.flate.behandling.VilkårDTO': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.VilkårsperiodeDTO'][];
       /** @enum {string} */
-      vilkårtype:
-        | 'ALDERSVILKÅRET'
-        | 'STUDENTVILKÅRET'
-        | 'SYKDOMSVILKÅRET'
-        | 'BISTANDSVILKÅRET'
-        | 'GRUNNLAGET'
-        | 'SYKEPENGEERSTATNING';
+      vilkårtype: 'ALDERSVILKÅRET' | 'SYKDOMSVILKÅRET' | 'BISTANDSVILKÅRET' | 'GRUNNLAGET' | 'SYKEPENGEERSTATNING';
     };
     'no.nav.aap.behandlingsflyt.flate.behandling.VilkårsperiodeDTO': {
       /** @enum {string|null} */
-      avslagsårsak?: 'BRUKER_UNDER_18' | 'BRUKER_OVER_67' | 'MANGLENDE_DOKUMENTASJON' | null;
+      avslagsårsak?:
+        | 'BRUKER_UNDER_18'
+        | 'BRUKER_OVER_67'
+        | 'MANGLENDE_DOKUMENTASJON'
+        | 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL'
+        | 'IKKE_NOK_REDUSERT_ARBEIDSEVNE'
+        | null;
       begrunnelse?: string | null;
       manuellVurdering: boolean;
       periode: components['schemas']['no.nav.aap.behandlingsflyt.domene.Periode'];
@@ -595,7 +588,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.flate.sak.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2023-10-19T09:46:10.322
+       * @example 2023-10-23T13:56:27.974478
        */
       opprettet: string;
       /** Format: uuid */
