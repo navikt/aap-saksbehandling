@@ -43,6 +43,12 @@ export const mapStegTypeTilDetaljertSteg = (stegType: StegType): DetaljertSteg =
         navn: 'Unntak fra meldeplikt',
         paragraf: '11-10',
       };
+    case 'VURDER_SYKEPENGEERSTATNING': {
+      return {
+        navn: 'Sykepengeerstatning',
+        paragraf: '11-13',
+      };
+    }
     default:
       return {
         navn: stegType,

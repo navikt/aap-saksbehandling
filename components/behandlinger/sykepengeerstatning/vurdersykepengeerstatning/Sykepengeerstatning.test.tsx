@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { Sykepengeerstatning } from './Sykepengeerstatning';
+import { Sykepengeerstatning } from 'components/behandlinger/sykepengeerstatning/vurdersykepengeerstatning/Sykepengeerstatning';
 import userEvent from '@testing-library/user-event';
 
 describe('Sykepengeerstatning', () => {
