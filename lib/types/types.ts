@@ -2,25 +2,23 @@ import { components } from './schema';
 
 // Grunnlag
 export type StudentGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.student.flate.StudentGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.student.flate.StudentGrunnlagDto'];
 export type SykdomsGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.sykdom.flate.SykdomsGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.sykdom.flate.SykdomsGrunnlagDto'];
 export type YrkesskadeGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.sykdom.flate.YrkesskadeGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.sykdom.flate.YrkesskadeGrunnlagDto'];
 export type BistandsGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.bistand.flate.BistandGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bistand.flate.BistandGrunnlagDto'];
 export type FritakMeldepliktGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.meldeplikt.flate.FritakMeldepliktGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.meldeplikt.flate.FritakMeldepliktGrunnlagDto'];
 export type FatteVedtakGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.grunnlag.flate.FatteVedtakGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.flate.FatteVedtakGrunnlagDto'];
 
 // Behandling
 export type BehandlingsInfo = components['schemas']['no.nav.aap.behandlingsflyt.flate.sak.BehandlinginfoDTO'];
 export type DetaljertBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.DetaljertBehandlingDTO'];
 export type BehandlingFlytOgTilstand =
-  components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.BehandlingFlytOgTilstand2Dto'];
-export type BehandlingFlytOgTilstand2 =
   components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.BehandlingFlytOgTilstand2Dto'];
 export type FlytGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.FlytGruppe'];
 export type FlytSteg = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.FlytSteg'];
@@ -57,7 +55,6 @@ export type StegType =
   | 'VURDER_ALDER'
   | 'VURDER_LOVVALG'
   | 'VURDER_MEDLEMSKAP'
-  | 'INNHENT_MEDLEMSKAP'
   | 'AVKLAR_STUDENT'
   | 'VURDER_BISTANDSBEHOV'
   | 'VURDER_SYKEPENGEERSTATNING'
@@ -66,10 +63,7 @@ export type StegType =
   | 'SAMORDNING'
   | 'AVKLAR_YRKESSKADE'
   | 'AVKLAR_SYKDOM'
-  | 'INNHENT_PERSONOPPLYSNINGER'
-  | 'INNHENT_YRKESSKADE'
   | 'FASTSETT_GRUNNLAG'
-  | 'INNHENT_INNTEKTSOPPLYSNINGER'
   | 'FASTSETT_UTTAK'
   | 'BEREGN_TILKJENT_YTELSE'
   | 'SIMULERING'
