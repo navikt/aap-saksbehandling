@@ -15,3 +15,6 @@ Object.defineProperty(window, 'EventSource', {
     addEventListener: jest.fn(),
   })),
 });
+
+// Mocker scrollIntoView da jsdom ikke implementerer denne
+window.HTMLElement.prototype.scrollIntoView = function () {};
