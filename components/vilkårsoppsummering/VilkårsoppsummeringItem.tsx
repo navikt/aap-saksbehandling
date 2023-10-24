@@ -37,5 +37,3 @@ export const VilkårsoppsummeringItem = ({ gruppeSteg }: Props) => {
     </Accordion.Item>
   );
 };
-
-//TODO Hva er det som bestemmer om et steg er oppfylt eller avslått?

@@ -1,18 +1,3 @@
-/*.vilkårsoppsummering {*/
-/*  --ac-expansioncard-bg: none;*/
-/*  --ac-expansioncard-header-bg: none;*/
-/*  --ac-expansioncard-header-open-bg: none;*/
-/*  --ac-expansioncard-header-bg-hover: none;*/
-/*  --ac-expansioncard-border-radius: none;*/
-/*  --ac-expansioncard-border-hover-color: none;*/
-/*  --ac-expansioncard-border-color: none;*/
-/*  --ac-expansioncard-border-open-color: none;*/
-/*  --ac-expansioncard-button-border-radius: none;*/
-/*  box-shadow: none;*/
-/*  padding: 0;*/
-/*  margin: 0;*/
-/*}*/
-
 .title {
   display: flex;
   flex-direction: row;
