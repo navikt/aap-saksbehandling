@@ -1,4 +1,4 @@
-import { BehandlingFlytOgTilstand2, FlytGruppe } from 'lib/types/types';
+import { BehandlingFlytOgTilstand, FlytGruppe } from 'lib/types/types';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 
 const flytAlder: FlytGruppe = {
@@ -46,7 +46,7 @@ const flytSykdomOgAvklaringsbehovAvbrutt: FlytGruppe = {
   ],
 };
 
-const flyt: BehandlingFlytOgTilstand2 = {
+const flyt: BehandlingFlytOgTilstand = {
   aktivGruppe: 'SYKDOM',
   aktivtSteg: 'AVKLAR_SYKDOM',
   flyt: [],
