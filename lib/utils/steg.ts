@@ -51,5 +51,23 @@ export const mapStegTypeTilDetaljertSteg = (stegType: StegType): DetaljertSteg =
   }
 };
 
+export const mapStegTypeTilStegNavn = (stegType: StegType): string => {
+  switch (stegType) {
+    case 'AVKLAR_STUDENT':
+      return 'Student';
+    case 'AVKLAR_YRKESSKADE':
+      return 'Yrkesskade';
+    case 'AVKLAR_SYKDOM':
+      return 'Nedsatt arbeidsevne';
+    case 'VURDER_BISTANDSBEHOV':
+      return 'Behov for oppfølging';
+    case 'FRITAK_MELDEPLIKT':
+      return 'Unntak fra meldeplikt';
+    case 'FATTE_VEDTAK':
+      return 'Fatte vedtak';
+    default:
+      return stegType;
+  }
+};
 export const getHeaderForSteg = (detaljertSteg: DetaljertSteg): string =>
   `${detaljertSteg.navn} - § ${detaljertSteg.paragraf}`;

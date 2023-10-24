@@ -23,6 +23,7 @@ export type BehandlingFlytOgTilstand =
 export type BehandlingFlytOgTilstand2 =
   components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.BehandlingFlytOgTilstand2Dto'];
 export type FlytGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.FlytGruppe'];
+export type FlytSteg = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.FlytSteg'];
 
 // Sak
 export type SaksInfo = components['schemas']['no.nav.aap.behandlingsflyt.flate.sak.SaksinfoDTO'];
