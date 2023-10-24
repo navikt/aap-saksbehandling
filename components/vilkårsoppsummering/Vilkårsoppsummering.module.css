@@ -12,3 +12,7 @@
 .avslåttIcon {
   color: var(--a-surface-danger);
 }
+
+.vilkårsoppsummering {
+  --ac-accordion-header-border: none;
+}
