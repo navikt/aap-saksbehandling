@@ -20,7 +20,7 @@ export const InformasjonsKolonne = ({ stegSomSkalVises, className }: Props) => {
         return (
           <a href={`#${steg}`} key={steg}>
             <Label as="p">{detaljertSteg.navn}</Label>
-            <Detail>$ {detaljertSteg.paragraf}</Detail>
+            <Detail>§ {detaljertSteg.paragraf}</Detail>
           </a>
         );
       })}
