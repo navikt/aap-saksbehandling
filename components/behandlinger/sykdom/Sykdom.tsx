@@ -8,6 +8,7 @@ import { getStegSomSkalVises } from 'lib/utils/steg';
 import { OppfølgingMedDataFetching } from 'components/behandlinger/sykdom/oppfølging/OppfølgingMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
 import { StudentMedDataFetching } from 'components/behandlinger/sykdom/student/StudentMedDataFetching';
+import { UutnyttetArbeidsevneMedDataFetching } from 'components/behandlinger/sykdom/uutnyttetarbeidsevne/UutnyttetArbeidsevneMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -53,6 +54,13 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           return (
             <StegSuspense key={steg}>
               <OppfølgingMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+            </StegSuspense>
+          );
+        }
+        if (steg === 'VURDER_UUTNYTTET_ARBEIDSEVNE') {
+          return (
+            <StegSuspense key={steg}>
+              <UutnyttetArbeidsevneMedDataFetching />
             </StegSuspense>
           );
         }

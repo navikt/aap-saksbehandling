@@ -70,7 +70,8 @@ export type StegType =
   | 'FORESLÅ_VEDTAK'
   | 'FATTE_VEDTAK'
   | 'IVERKSETT_VEDTAK'
-  | 'UDEFINERT';
+  | 'UDEFINERT'
+  | 'VURDER_UUTNYTTET_ARBEIDSEVNE'; // TODO manuelt lagt inn, må få rett type fra backend
 
 export type StegGruppe =
   | 'START_BEHANDLING'
