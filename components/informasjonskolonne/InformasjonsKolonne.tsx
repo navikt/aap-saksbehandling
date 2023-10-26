@@ -12,19 +12,21 @@ interface Props {
 
 export const InformasjonsKolonne = ({ stegSomSkalVises, className }: Props) => {
   return (
-    <div className={`${className} ${styles.infoColumnContainer}`}>
-      <Heading level="2" size="small" spacing>
-        Vilkårsvurderinger
-      </Heading>
-      {stegSomSkalVises.map((steg) => {
-        const detaljertSteg = mapStegTypeTilDetaljertSteg(steg);
-        return (
-          <a href={`#${steg}`} key={steg}>
-            <Label as="p">{detaljertSteg.navn}</Label>
-            <Detail>§ {detaljertSteg.paragraf}</Detail>
-          </a>
-        );
-      })}
+    <div className={className}>
+      <div className={styles.infoColumnContainer}>
+        <Heading level="2" size="small" spacing>
+          Vilkårsvurderinger
+        </Heading>
+        {stegSomSkalVises.map((steg) => {
+          const detaljertSteg = mapStegTypeTilDetaljertSteg(steg);
+          return (
+            <a href={`#${steg}`} key={steg}>
+              <Label as="p">{detaljertSteg.navn}</Label>
+              <Detail>§ {detaljertSteg.paragraf}</Detail>
+            </a>
+          );
+        })}
+      </div>
     </div>
   );
 };
