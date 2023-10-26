@@ -3,6 +3,7 @@
 import { Detail, Heading, Label } from '@navikt/ds-react';
 import { StegType } from 'lib/types/types';
 import { mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
+import styles from './InformasjonsKolonne.module.css';
 
 interface Props {
   stegSomSkalVises: StegType[];
@@ -11,7 +12,7 @@ interface Props {
 
 export const InformasjonsKolonne = ({ stegSomSkalVises, className }: Props) => {
   return (
-    <div className={className}>
+    <div className={`${className} ${styles.infoColumnContainer}`}>
       <Heading level="2" size="small" spacing>
         Vilkårsvurderinger
       </Heading>
