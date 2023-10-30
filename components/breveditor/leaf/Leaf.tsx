@@ -5,9 +5,10 @@ import styles from 'components/breveditor/leaf/Leaf.module.css';
 export const Leaf = (props: RenderLeafProps) => {
   const boldStyle = props.leaf.bold ? styles.bold : '';
   const italicStyle = props.leaf.italic ? styles.italic : '';
+  const undderlineStyle = props.leaf.underline ? styles.underline : '';
 
   return (
-    <span {...props.attributes} className={`${boldStyle} ${italicStyle}`}>
+    <span {...props.attributes} className={`${boldStyle} ${italicStyle} ${undderlineStyle}`}>
       {props.children}
     </span>
   );
