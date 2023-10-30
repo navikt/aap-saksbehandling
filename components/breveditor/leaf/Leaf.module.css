@@ -1,0 +1,7 @@
+.bold {
+  font-weight: var(--a-font-weight-bold);
+}
+
+.italic {
+  font-style: italic;
+}
