@@ -8,8 +8,14 @@ import { Leaf } from 'components/breveditor/leaf/Leaf';
 
 import styles from 'components/breveditor/BrevEditor.module.css';
 import { Element } from 'components/breveditor/element/Element';
+import { BlockButton } from './block/BlockButton';
 
-type CustomElement = { type: 'paragraph'; children: CustomText[] };
+export type CustomElementType = 'paragraph' | 'heading-one' | 'heading-two' | 'heading-three' | 'heading-four';
+
+type CustomElement = {
+  type: CustomElementType;
+  children: CustomText[];
+};
 export type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean };
 
 declare module 'slate' {
@@ -25,6 +31,10 @@ const initialValue: CustomElement[] = [
     type: 'paragraph',
     children: [{ text: 'A line of text in a paragraph.' }],
   },
+  {
+    type: 'heading-one',
+    children: [{ text: 'Hello pello' }],
+  },
 ];
 
 export const BrevEditor = () => {
@@ -38,6 +48,9 @@ export const BrevEditor = () => {
         <Mark title={'Bold'} type={'bold'} />
         <Mark title={'Italic'} type={'italic'} />
         <Mark title={'Underline'} type={'underline'} />
+      </div>
+      <div>
+        <BlockButton title={'H1'} type={'heading-one'} />
       </div>
       <Editable className={styles.editor} renderElement={renderElement} renderLeaf={renderLeaf} />
     </Slate>
