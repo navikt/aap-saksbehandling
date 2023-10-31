@@ -1,10 +1,10 @@
 import { useSlate } from 'slate-react';
 import { Editor } from 'slate';
-import { CustomText } from 'components/breveditor/BrevEditor';
+import { CustomLeafType } from 'components/breveditor/BrevEditor';
 
 interface Props {
   title: string;
-  type: keyof Omit<CustomText, 'text'>;
+  type: CustomLeafType;
 }
 
 export const MarkButton = ({ type, title }: Props) => {

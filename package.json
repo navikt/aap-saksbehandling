@@ -30,6 +30,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "7.47.0",
     "slate": "0.100.0",
+    "slate-hyperscript": "0.100.0",
     "slate-react": "0.100.0",
     "swr": "^2.2.4"
   },

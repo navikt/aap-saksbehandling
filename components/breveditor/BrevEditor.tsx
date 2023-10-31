@@ -9,14 +9,16 @@ import { Leaf } from 'components/breveditor/leaf/Leaf';
 import styles from 'components/breveditor/BrevEditor.module.css';
 import { Element } from 'components/breveditor/element/Element';
 import { BlockButton } from 'components/breveditor/blockbutton/BlockButton';
+import { withHtml } from 'components/breveditor/inputparser/InputParser';
 
 export type CustomElementType = 'paragraph' | 'heading-one' | 'heading-two' | 'heading-three' | 'heading-four';
+export type CustomLeafType = keyof Omit<CustomText, 'text'>;
+export type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean };
 
 type CustomElement = {
   type: CustomElementType;
   children: CustomText[];
 };
-export type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean };
 
 declare module 'slate' {
   interface CustomTypes {
@@ -38,7 +40,7 @@ const initialValue: CustomElement[] = [
 ];
 
 export const BrevEditor = () => {
-  const editor = useMemo(() => withReact(createEditor()), []);
+  const editor = useMemo(() => withHtml(withReact(createEditor())), []);
   const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, []);
   const renderElement = useCallback((props: RenderElementProps) => <Element {...props} />, []);
 

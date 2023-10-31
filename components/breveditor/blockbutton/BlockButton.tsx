@@ -4,7 +4,6 @@ import { CustomElementType } from '../BrevEditor';
 
 const isBlockActive = (editor: Editor, type: string) => {
   const { selection } = editor;
-  console.log('selection', selection);
   if (!selection) return false;
 
   const [match] = Array.from(
@@ -15,7 +14,6 @@ const isBlockActive = (editor: Editor, type: string) => {
       },
     })
   );
-  console.log('match', match);
 
   return !!match;
 };
@@ -32,8 +30,10 @@ interface Props {
   title: string;
   type: CustomElementType;
 }
+
 export const BlockButton = ({ title, type }: Props) => {
   const editor = useSlate();
+
   return (
     <button
       style={isBlockActive(editor, type) ? { backgroundColor: 'red' } : {}}
