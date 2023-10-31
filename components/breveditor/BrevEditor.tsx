@@ -10,7 +10,7 @@ import styles from 'components/breveditor/BrevEditor.module.css';
 import { Element } from 'components/breveditor/element/Element';
 
 type CustomElement = { type: 'paragraph'; children: CustomText[] };
-type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean };
+export type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean };
 
 declare module 'slate' {
   interface CustomTypes {
