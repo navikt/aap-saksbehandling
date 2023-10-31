@@ -7,7 +7,7 @@ interface Props {
   type: keyof Omit<CustomText, 'text'>;
 }
 
-export const Mark = ({ type, title }: Props) => {
+export const MarkButton = ({ type, title }: Props) => {
   const editor = useSlate();
 
   const marks = Editor.marks(editor);

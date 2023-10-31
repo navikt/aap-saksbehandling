@@ -37,7 +37,7 @@ export const BlockButton = ({ title, type }: Props) => {
   return (
     <button
       style={isBlockActive(editor, type) ? { backgroundColor: 'red' } : {}}
-      onMouseDown={(event) => {
+      onClick={(event) => {
         event.preventDefault();
         toggleBlock(editor, type);
       }}
