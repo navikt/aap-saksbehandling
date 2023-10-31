@@ -1,0 +1,12 @@
+.button {
+  --ac-button-border-radius: 0;
+  --ac-button-primary-text: var(--a-gray-900);
+}
+
+.active {
+  background-color: var(--a-gray-300);
+}
+
+.inactive {
+  background-color: var(--a-gray-100);
+}

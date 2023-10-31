@@ -1,6 +1,9 @@
 import { Editor, Element, Transforms } from 'slate';
 import { useSlate } from 'slate-react';
 import { CustomElementType } from '../BrevEditor';
+import { Button } from '@navikt/ds-react';
+
+import styles from '../markbutton/MarkButton.module.css';
 
 const isBlockActive = (editor: Editor, type: string) => {
   const { selection } = editor;
@@ -34,15 +37,17 @@ interface Props {
 export const BlockButton = ({ title, type }: Props) => {
   const editor = useSlate();
 
+  const buttonStyle = isBlockActive(editor, type) ? styles.active : styles.inactive;
+
   return (
-    <button
-      style={isBlockActive(editor, type) ? { backgroundColor: 'red' } : {}}
+    <Button
+      className={`${buttonStyle} ${styles.button}`}
       onClick={(event) => {
         event.preventDefault();
         toggleBlock(editor, type);
       }}
     >
       {title}
-    </button>
+    </Button>
   );
 };

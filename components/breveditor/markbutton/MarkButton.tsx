@@ -1,6 +1,9 @@
 import { useSlate } from 'slate-react';
 import { Editor } from 'slate';
 import { CustomLeafType } from 'components/breveditor/BrevEditor';
+import { Button } from '@navikt/ds-react';
+
+import styles from './MarkButton.module.css';
 
 interface Props {
   title: string;
@@ -21,9 +24,11 @@ export const MarkButton = ({ type, title }: Props) => {
     }
   };
 
+  const buttonStyle = isMarkActive ? styles.active : styles.inactive;
+
   return (
-    <button style={isMarkActive ? { backgroundColor: 'red' } : {}} onClick={() => toggleMark()}>
+    <Button className={`${buttonStyle} ${styles.button}`} onClick={toggleMark}>
       {title}
-    </button>
+    </Button>
   );
 };
