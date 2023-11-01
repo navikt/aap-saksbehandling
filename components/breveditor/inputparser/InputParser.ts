@@ -52,11 +52,7 @@ function deserialize(htmlElement: HTMLElement | ChildNode): any {
     parent = htmlElement.childNodes[0];
   }
 
-  console.log(parent);
-
   let children = Array.from(parent.childNodes).map(deserialize).flat();
-
-  console.log('children', children, nodeName, htmlElement.nodeType);
 
   if (children.length === 0) {
     children = [{ text: '' }];
