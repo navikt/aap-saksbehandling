@@ -12,30 +12,30 @@ export type BistandsGrunnlag =
 export type FritakMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.meldeplikt.flate.FritakMeldepliktGrunnlagDto'];
 export type FatteVedtakGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.flate.FatteVedtakGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.vedtak.flate.FatteVedtakGrunnlagDto'];
 
 // Behandling
-export type BehandlingsInfo = components['schemas']['no.nav.aap.behandlingsflyt.flate.sak.BehandlinginfoDTO'];
+export type BehandlingsInfo = components['schemas']['no.nav.aap.behandlingsflyt.sak.flate.BehandlinginfoDTO'];
 export type DetaljertBehandling =
-  components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.DetaljertBehandlingDTO'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.flate.DetaljertBehandlingDTO'];
 export type BehandlingFlytOgTilstand =
-  components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.BehandlingFlytOgTilstand2Dto'];
-export type FlytGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.FlytGruppe'];
-export type FlytSteg = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.FlytSteg'];
+  components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingFlytOgTilstand2Dto'];
+export type FlytGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.FlytGruppe'];
+export type FlytSteg = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.FlytSteg'];
 
 // Sak
-export type SaksInfo = components['schemas']['no.nav.aap.behandlingsflyt.flate.sak.SaksinfoDTO'];
-export type UtvidetSaksInfo = components['schemas']['no.nav.aap.behandlingsflyt.flate.sak.UtvidetSaksinfoDTO'];
+export type SaksInfo = components['schemas']['no.nav.aap.behandlingsflyt.sak.flate.SaksinfoDTO'];
+export type UtvidetSaksInfo = components['schemas']['no.nav.aap.behandlingsflyt.sak.flate.UtvidetSaksinfoDTO'];
 export type OpprettTestcase = components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
-export type FinnSakForIdent = components['schemas']['no.nav.aap.behandlingsflyt.flate.sak.FinnSakForIdentDTO'];
+export type FinnSakForIdent = components['schemas']['no.nav.aap.behandlingsflyt.sak.flate.FinnSakForIdentDTO'];
 
-export type AvklaringsBehov = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.AvklaringsbehovDTO'];
-export type EndringDto = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.EndringDTO'];
-export type Periode = components['schemas']['no.nav.aap.behandlingsflyt.domene.Periode'];
-export type Vilkår = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.VilkårDTO'];
+export type AvklaringsBehov = components['schemas']['no.nav.aap.behandlingsflyt.behandling.flate.AvklaringsbehovDTO'];
+export type EndringDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.flate.EndringDTO'];
+export type Periode = components['schemas']['no.nav.aap.behandlingsflyt.Periode'];
+export type Vilkår = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårDTO'];
 export type LøsAvklaringsbehovPåBehandling =
-  components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.avklaringsbehov.LøsAvklaringsbehovPåBehandling'];
-export type Vilkårsperiode = components['schemas']['no.nav.aap.behandlingsflyt.flate.behandling.VilkårsperiodeDTO'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.flate.avklaringsbehov.LøsAvklaringsbehovPåBehandling'];
+export type Vilkårsperiode = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO'];
 
 //TODO Disse blir ikke generert riktig av swagger
 // export type VilkårsType = components['schemas']['Vilkrstype'];
