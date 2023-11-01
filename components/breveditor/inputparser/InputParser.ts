@@ -8,7 +8,6 @@ export function withHtml(editor: BaseEditor & ReactEditor) {
 
   editor.insertData = (data) => {
     const html = data.getData('text/html');
-
     if (html) {
       const parsed = new DOMParser().parseFromString(html, 'text/html');
       const fragment = deserialize(parsed.body);
@@ -26,7 +25,13 @@ export function withHtml(editor: BaseEditor & ReactEditor) {
 
 function deserialize(htmlElement: HTMLElement | ChildNode): any {
   if (htmlElement.nodeType === 3) {
-    if (htmlElement.textContent?.includes('\n')) {
+    const inneholderTekstOgNewLine = new RegExp(/\w+\n\w+/);
+    const newlineRegex = new RegExp(/\n/g);
+    const kunNewLines = new RegExp(/\n+/);
+    if (htmlElement.textContent?.match(inneholderTekstOgNewLine)) {
+      return htmlElement.textContent?.replaceAll(newlineRegex, ' ');
+    }
+    if (htmlElement.textContent?.match(kunNewLines)) {
       return null;
     }
     return htmlElement.textContent;
