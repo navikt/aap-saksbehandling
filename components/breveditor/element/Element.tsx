@@ -35,4 +35,16 @@ export const Element = (props: RenderElementProps) => {
       </Heading>
     );
   }
+
+  if (props.element.type === 'bullet-list') {
+    return <ul>{props.children}</ul>;
+  }
+
+  if (props.element.type === 'ordered-list') {
+    return <ol>{props.children}</ol>;
+  }
+
+  if (props.element.type === 'list-item') {
+    return <li>{props.children}</li>;
+  }
 };

@@ -5,7 +5,7 @@ import { Button } from '@navikt/ds-react';
 
 import styles from '../markbutton/MarkButton.module.css';
 
-const isBlockActive = (editor: Editor, type: string) => {
+const isBlockActive = (editor: Editor, type: CustomElementType) => {
   const { selection } = editor;
   if (!selection) return false;
 
@@ -23,9 +23,27 @@ const isBlockActive = (editor: Editor, type: string) => {
 export const toggleBlock = (editor: Editor, type: CustomElementType) => {
   const isActive = isBlockActive(editor, type);
 
-  let newProperties: Partial<Element> = {
-    type: isActive ? 'paragraph' : type,
-  };
+  const isList = ['ordered-list', 'bullet-list'].includes(type);
+
+  Transforms.unwrapNodes(editor, {
+    match: (n) => !Editor.isEditor(n) && Element.isElement(n) && ['ordered-list', 'bullet-list'].includes(n.type),
+    split: true,
+  });
+
+  let newProperties: Partial<Element> = {};
+  if (isActive) {
+    newProperties.type = 'paragraph';
+  } else if (isList) {
+    newProperties.type = 'list-item';
+  } else {
+    newProperties.type = type;
+  }
+
+  if (!isActive && isList) {
+    const block = { type, children: [] };
+    Transforms.wrapNodes(editor, block);
+  }
+
   Transforms.setNodes<Element>(editor, newProperties);
 };
 

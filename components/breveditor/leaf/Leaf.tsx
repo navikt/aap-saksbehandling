@@ -13,7 +13,5 @@ export const Leaf = ({ leaf, children, attributes }: RenderLeafProps) => {
     children = <u>{children}</u>;
   }
 
-  console.log(children);
-
   return <span {...attributes}>{children}</span>;
 };

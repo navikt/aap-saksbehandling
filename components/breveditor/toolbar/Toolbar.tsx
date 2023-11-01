@@ -13,6 +13,8 @@ export const Toolbar = () => {
       <BlockButton title={'H2'} type={'heading-two'} />
       <BlockButton title={'H3'} type={'heading-three'} />
       <BlockButton title={'H4'} type={'heading-four'} />
+      <BlockButton title={'Ordered List'} type={'ordered-list'} />
+      <BlockButton title={'Bullet list'} type={'bullet-list'} />
     </div>
   );
 };

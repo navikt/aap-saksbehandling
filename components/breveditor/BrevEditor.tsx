@@ -10,7 +10,15 @@ import { Element } from 'components/breveditor/element/Element';
 import { withHtml } from 'components/breveditor/inputparser/InputParser';
 import { Toolbar } from 'components/breveditor/toolbar/Toolbar';
 
-export type CustomElementType = 'paragraph' | 'heading-one' | 'heading-two' | 'heading-three' | 'heading-four';
+export type CustomElementType =
+  | 'paragraph'
+  | 'heading-one'
+  | 'heading-two'
+  | 'heading-three'
+  | 'heading-four'
+  | 'bullet-list'
+  | 'ordered-list'
+  | 'list-item';
 export type CustomLeafType = keyof Omit<CustomText, 'text'>;
 export type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean };
 
