@@ -11,7 +11,6 @@ export function withHtml(editor: BaseEditor & ReactEditor) {
     if (html) {
       const parsed = new DOMParser().parseFromString(html, 'text/html');
       const fragment = deserialize(parsed.body);
-      console.log('fragment', fragment);
 
       Transforms.insertFragment(editor, fragment);
       return;
@@ -89,6 +88,12 @@ function getBlockAttributes(nodeName: string): BlockAttribute | undefined {
       return { type: 'heading-four' };
     case 'P':
       return { type: 'paragraph' };
+    case 'UL':
+      return { type: 'bullet-list' };
+    case 'OL':
+      return { type: 'ordered-list' };
+    case 'LI':
+      return { type: 'list-item' };
   }
 }
 
