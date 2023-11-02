@@ -1,5 +1,5 @@
 import { Editor, Element, Transforms } from 'slate';
-import { useSlate } from 'slate-react';
+import { ReactEditor, useSlate } from 'slate-react';
 import { CustomElementType } from '../BrevEditor';
 import { Button } from '@navikt/ds-react';
 
@@ -45,6 +45,7 @@ export const toggleBlock = (editor: Editor, type: CustomElementType) => {
   }
 
   Transforms.setNodes<Element>(editor, newProperties);
+  ReactEditor.focus(editor);
 };
 
 interface Props {

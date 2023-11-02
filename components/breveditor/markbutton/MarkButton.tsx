@@ -1,4 +1,4 @@
-import { useSlate } from 'slate-react';
+import { ReactEditor, useSlate } from 'slate-react';
 import { Editor } from 'slate';
 import { CustomLeafType } from 'components/breveditor/BrevEditor';
 import { Button } from '@navikt/ds-react';
@@ -22,6 +22,8 @@ export const MarkButton = ({ type, title }: Props) => {
     } else {
       Editor.addMark(editor, type, true);
     }
+
+    ReactEditor.focus(editor);
   };
 
   const buttonStyle = isMarkActive ? styles.active : styles.inactive;
