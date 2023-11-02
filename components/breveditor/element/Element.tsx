@@ -36,7 +36,7 @@ export const Element = (props: RenderElementProps) => {
     );
   }
 
-  if (props.element.type === 'bullet-list') {
+  if (props.element.type === 'bulleted-list') {
     return <ul>{props.children}</ul>;
   }
 

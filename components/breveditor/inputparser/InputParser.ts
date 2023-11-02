@@ -89,7 +89,7 @@ function getBlockAttributes(nodeName: string): BlockAttribute | undefined {
     case 'P':
       return { type: 'paragraph' };
     case 'UL':
-      return { type: 'bullet-list' };
+      return { type: 'bulleted-list' };
     case 'OL':
       return { type: 'ordered-list' };
     case 'LI':

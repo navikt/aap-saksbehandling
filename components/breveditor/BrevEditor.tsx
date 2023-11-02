@@ -16,7 +16,7 @@ export type CustomElementType =
   | 'heading-two'
   | 'heading-three'
   | 'heading-four'
-  | 'bullet-list'
+  | 'bulleted-list'
   | 'ordered-list'
   | 'list-item';
 export type CustomLeafType = keyof Omit<CustomText, 'text'>;

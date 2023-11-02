@@ -23,10 +23,10 @@ const isBlockActive = (editor: Editor, type: CustomElementType) => {
 export const toggleBlock = (editor: Editor, type: CustomElementType) => {
   const isActive = isBlockActive(editor, type);
 
-  const isList = ['ordered-list', 'bullet-list'].includes(type);
+  const isList = ['ordered-list', 'bulleted-list'].includes(type);
 
   Transforms.unwrapNodes(editor, {
-    match: (n) => !Editor.isEditor(n) && Element.isElement(n) && ['ordered-list', 'bullet-list'].includes(n.type),
+    match: (n) => !Editor.isEditor(n) && Element.isElement(n) && ['ordered-list', 'bulleted-list'].includes(n.type),
     split: true,
   });
 
