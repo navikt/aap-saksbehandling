@@ -1,0 +1,34 @@
+.container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.editorPane {
+  margin: 1rem;
+  min-height: 10rem;
+}
+
+.editorPane :global(.tiptap) {
+  border: 1px solid #000;
+}
+
+.menu {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.menubutton {
+  padding: 0.5rem;
+  font-family: Monospaced, serif;
+}
+
+.isActive {
+  background: hotpink;
+}
+
+.preview {
+  font-size: 0.8rem;
+  padding: 0.25rem;
+  border: 1px solid #000;
+  margin: 1rem;
+}
