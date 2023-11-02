@@ -1,9 +1,7 @@
 import { ReactEditor, useSlate } from 'slate-react';
 import { Editor } from 'slate';
 import { CustomLeafType } from 'components/breveditor/BrevEditor';
-import { Button } from '@navikt/ds-react';
-
-import styles from './MarkButton.module.css';
+import { EditorButton } from 'components/breveditor/editorbutton/EditorButton';
 
 interface Props {
   title: string;
@@ -14,7 +12,7 @@ export const MarkButton = ({ type, title }: Props) => {
   const editor = useSlate();
 
   const marks = Editor.marks(editor);
-  const isMarkActive = marks && marks[type] === true;
+  const isMarkActive = marks !== null && marks[type] === true;
 
   const toggleMark = () => {
     if (isMarkActive) {
@@ -26,11 +24,5 @@ export const MarkButton = ({ type, title }: Props) => {
     ReactEditor.focus(editor);
   };
 
-  const buttonStyle = isMarkActive ? styles.active : styles.inactive;
-
-  return (
-    <Button className={`${buttonStyle} ${styles.button}`} onClick={toggleMark}>
-      {title}
-    </Button>
-  );
+  return <EditorButton title={title} onClick={toggleMark} isActive={isMarkActive} />;
 };
