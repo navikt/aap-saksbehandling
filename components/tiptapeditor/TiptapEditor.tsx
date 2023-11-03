@@ -66,6 +66,13 @@ export const TiptapEditor = () => {
       >
         ≡
       </button>
+      <button
+        type={'button'}
+        onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+        className={`${styles.menubutton} ${ohHiMark('orderedList')}`}
+      >
+        123
+      </button>
     </div>
   );
 
