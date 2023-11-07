@@ -504,22 +504,22 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.1.1.tgz#1a5b1959a528e374e8037c4396c3e825d6cf4a83"
   integrity sha512-m0G6wlnhm/AX0H12IOWtK8gASEMffnX08RtKkCgTdHb9JpHKGloI7icFfLg9ZmQeavcvR0PKmzxClyuFPSjKWw==
 
-"@grafana/faro-core@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@grafana/faro-core/-/faro-core-1.2.3.tgz#03faae6ee93664cfda39dfd3059f42bbdb7aeae0"
-  integrity sha512-y2cfow8JLMrvSC4/Pd64/hByoAw5MWOPHmvpAueWNL0Cohj0XOGbKllQjTjnmCnDuLjAARS0pKAVdyVPjw9s6Q==
+"@grafana/faro-core@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@grafana/faro-core/-/faro-core-1.2.4.tgz#040a9ca046883a7a378874d45ec44aeb4772aa4d"
+  integrity sha512-iXbwp5q+qDPOZqnbiCfcH1EwE4Jps7dYp4SfbPweCgRuF44zcUhTtwipLmCJhESCunwG6K/INQ5RMVDxDau8DQ==
   dependencies:
     "@opentelemetry/api" "^1.4.1"
     "@opentelemetry/api-metrics" "^0.33.0"
     "@opentelemetry/otlp-transformer" "^0.41.2"
     murmurhash-js "^1.0.0"
 
-"@grafana/faro-web-sdk@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@grafana/faro-web-sdk/-/faro-web-sdk-1.2.3.tgz#310b5ddee76f75e3775f2ad41d56c18882bb1eef"
-  integrity sha512-c/CcwPVIiSCZC3ux2IAHfVWd0xIa1QUMoBd0n7lQzYFVnC3iufq9Ukp1Hgejqud6peH5VxIBXffNOv2inltv1g==
+"@grafana/faro-web-sdk@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@grafana/faro-web-sdk/-/faro-web-sdk-1.2.4.tgz#f8be04f04186583989b8a9fd42cf4329953c38b7"
+  integrity sha512-N91l1ov1oPUL/woB9j7Fx32ntUkRp6YTxt4RQ94Wiq700TVenw1M927UMLWCyHnvWYCyn0CeBnptrhUVqtk8cQ==
   dependencies:
-    "@grafana/faro-core" "^1.2.3"
+    "@grafana/faro-core" "^1.2.4"
     ua-parser-js "^1.0.32"
     web-vitals "^3.1.1"
 
