@@ -11,6 +11,7 @@ export enum BehovsType {
   AVKLAR_STUDENT = '5006',
   FATTE_VEDTAK = '5099',
   FORESLÅ_VEDTAK = '5098',
+  SYKEPENGEERSTATNING = '5005',
 }
 
 export const getJaNeiEllerUndefined = (value?: boolean | null) => {

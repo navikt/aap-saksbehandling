@@ -266,10 +266,6 @@ export interface paths {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.flate.avklaringsbehov.LøsAvklaringsbehovPåBehandling'];
           };
         };
-        /** @description Bad Request */
-        400: {
-          content: never;
-        };
       };
     };
   };
@@ -298,7 +294,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2023-11-01
+       * @example 2023-11-08
        */
       fødselsdato: string;
       ident: string;
@@ -307,12 +303,12 @@ export interface components {
     'no.nav.aap.behandlingsflyt.Periode': {
       /**
        * Format: date
-       * @example 2023-11-01
+       * @example 2023-11-08
        */
       fom: string;
       /**
        * Format: date
-       * @example 2023-11-01
+       * @example 2023-11-08
        */
       tom: string;
     };
@@ -329,7 +325,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.avklaringsbehov.student.StudentVurdering': {
       /**
        * Format: date
-       * @example 2023-11-01
+       * @example 2023-11-08
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
@@ -345,7 +341,7 @@ export interface components {
       nedreGrense?: 'TRETTI' | 'FEMTI' | null;
       /**
        * Format: date
-       * @example 2023-11-01
+       * @example 2023-11-08
        */
       nedsattArbeidsevneDato?: string | null;
     };
@@ -355,7 +351,7 @@ export interface components {
       erÅrsakssammenheng: boolean;
       /**
        * Format: date
-       * @example 2023-11-01
+       * @example 2023-11-08
        */
       skadetidspunkt?: string | null;
     };
@@ -409,7 +405,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.behandling.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2023-11-01T22:51:02.324913
+       * @example 2023-11-08T23:15:28.779815
        */
       opprettet: string;
       /** Format: uuid */
@@ -428,7 +424,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2023-11-01T22:51:02.324913
+       * @example 2023-11-08T23:15:28.779815
        */
       tidsstempel: string;
     };
@@ -480,7 +476,6 @@ export interface components {
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'SYKDOM'
-        | 'SYKEPENGEERSTATNING'
         | 'GRUNNLAG'
         | 'UTTAK'
         | 'TILKJENT_YTELSE'
@@ -550,7 +545,6 @@ export interface components {
         | 'BARNETILLEGG'
         | 'SAMORDNING'
         | 'SYKDOM'
-        | 'SYKEPENGEERSTATNING'
         | 'GRUNNLAG'
         | 'UTTAK'
         | 'TILKJENT_YTELSE'
@@ -609,7 +603,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2023-11-01T22:51:02.324913
+       * @example 2023-11-08T23:15:28.779815
        */
       opprettet: string;
       /** Format: uuid */
