@@ -18,8 +18,6 @@ interface FormFields {
 }
 
 export const ForeslåVedtak = ({ behandlingsReferanse, grunnlag, flytGrupper }: Props) => {
-  console.log({ behandlingsReferanse, grunnlag });
-
   const { formFields, form } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
@@ -32,7 +30,12 @@ export const ForeslåVedtak = ({ behandlingsReferanse, grunnlag, flytGrupper }: 
     <VilkårsKort heading="Vedtak og beregning" steg={'FORESLÅ_VEDTAK'}>
       <Vilkårsoppsummering flytGrupper={flytGrupper} />
 
-      <Form steg="FORESLÅ_VEDTAK" onSubmit={() => {}}>
+      <Form
+        steg="FORESLÅ_VEDTAK"
+        onSubmit={() => {
+          console.log(behandlingsReferanse, grunnlag);
+        }}
+      >
         <FormField form={form} formField={formFields.begrunnelse} />
       </Form>
     </VilkårsKort>

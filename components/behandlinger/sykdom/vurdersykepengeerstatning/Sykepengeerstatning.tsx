@@ -18,7 +18,6 @@ interface FormFields {
 }
 
 export const Sykepengeerstatning = ({ behandlingsReferanse }: Props) => {
-  console.log(behandlingsReferanse);
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -55,7 +54,7 @@ export const Sykepengeerstatning = ({ behandlingsReferanse }: Props) => {
     <VilkårsKort heading={'Sykepengeerstatning § 11-13'} steg="VURDER_SYKEPENGEERSTATNING" icon={<FigureIcon />}>
       <Form
         onSubmit={form.handleSubmit((data) => {
-          console.log('WOHO!', data);
+          console.log('WOHO!', data, behandlingsReferanse);
         })}
         steg={'VURDER_SYKEPENGEERSTATNING'}
       >

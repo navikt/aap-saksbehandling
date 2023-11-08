@@ -9,6 +9,7 @@ import { OppfÃ¸lgingMedDataFetching } from 'components/behandlinger/sykdom/oppfÃ
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
 import { StudentMedDataFetching } from 'components/behandlinger/sykdom/student/StudentMedDataFetching';
 import { UutnyttetArbeidsevneMedDataFetching } from 'components/behandlinger/sykdom/uutnyttetarbeidsevne/UutnyttetArbeidsevneMedDataFetching';
+import { SykepengeerstatningMedDataFetching } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -61,6 +62,13 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           return (
             <StegSuspense key={steg}>
               <UutnyttetArbeidsevneMedDataFetching />
+            </StegSuspense>
+          );
+        }
+        if (steg === 'VURDER_SYKEPENGEERSTATNING') {
+          return (
+            <StegSuspense key={steg}>
+              <SykepengeerstatningMedDataFetching behandlingsReferanse={behandlingsReferanse} />
             </StegSuspense>
           );
         }

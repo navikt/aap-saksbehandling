@@ -1,4 +1,4 @@
-import { Sykepengeerstatning } from 'components/behandlinger/sykepengeerstatning/vurdersykepengeerstatning/Sykepengeerstatning';
+import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/Sykepengeerstatning';
 
 interface Props {
   behandlingsReferanse: string;
