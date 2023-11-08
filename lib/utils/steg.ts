@@ -71,6 +71,10 @@ export const mapStegTypeTilStegNavn = (stegType: StegType): string => {
       return 'Unntak fra meldeplikt';
     case 'FATTE_VEDTAK':
       return 'Fatte vedtak';
+    case 'VURDER_SYKEPENGEERSTATNING':
+      return 'Sykepengeerstatning';
+    case 'VURDER_ALDER':
+      return 'Alder';
     default:
       return stegType;
   }
