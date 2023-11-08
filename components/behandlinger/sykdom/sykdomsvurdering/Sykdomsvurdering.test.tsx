@@ -73,12 +73,40 @@ describe('sykdomsvurdering', () => {
     expect(arbeidsevneNedsattMedMinst30Prosent).toBeInTheDocument();
   });
 
-  it('Skal vise felt for nedsatt minst 30 prosent dersom yrkesskadevurdering ikke har årsakssammenheng', async () => {
+  it('Skal vise felt for nedsatt minst 50 prosent dersom yrkesskadevurdering ikke har årsakssammenheng', async () => {
     render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={{ ...grunnlag, erÅrsakssammenheng: false }} />);
 
     const arbeidsevneNedsattMedMinst50Prosent = screen.getByRole('group', {
       name: /er arbeidsevnen nedsatt med minst 50%\?/i,
     });
     expect(arbeidsevneNedsattMedMinst50Prosent).toBeInTheDocument();
+  });
+
+  it('Skal vise korrekt label på begrunnelsesfelt dersom yrkesskadevurdering har årsakssammenheng', async () => {
+    render(
+      <Sykdomsvurdering
+        behandlingsReferanse={'123'}
+        grunnlag={{
+          opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
+          erÅrsakssammenheng: true,
+        }}
+      />
+    );
+
+    const label = screen.getByText(
+      /hvilken sykdom \/ skade \/ lyte\. hva er det mest vesentlige\. hvorfor vurderes nedsatt arbeidsevne med minst 30%\?/i
+    );
+
+    expect(label).toBeVisible();
+  });
+
+  it('Skal vise korrekt label på begrunnelsesfelt dersom yrkesskadevurdering ikke har årsakssammenheng', async () => {
+    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={{ ...grunnlag, erÅrsakssammenheng: false }} />);
+
+    const label = screen.getByText(
+      /hvilken sykdom \/ skade \/ lyte\. hva er det mest vesentlige\. hvorfor vurderes nedsatt arbeidsevne med minst 50%\?/i
+    );
+
+    expect(label).toBeVisible();
   });
 });

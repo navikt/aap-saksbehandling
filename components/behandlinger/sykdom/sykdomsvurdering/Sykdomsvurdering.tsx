@@ -56,8 +56,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
     begrunnelse: {
       type: 'textarea',
       label: 'Vurder den nedsatte arbeidsevnen',
-      description:
-        'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst 50%?',
+      description: `Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst ${
+        grunnlag?.erÅrsakssammenheng ? 30 : 50
+      }%?`,
       defaultValue: grunnlag?.sykdomsvurdering?.begrunnelse,
       rules: { required: 'Du må begrunne' },
     },
