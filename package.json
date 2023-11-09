@@ -32,7 +32,7 @@
     "slate": "0.100.0",
     "slate-history": "^0.100.0",
     "slate-hyperscript": "0.100.0",
-    "slate-react": "0.100.0",
+    "slate-react": "0.100.1",
     "swr": "^2.2.4"
   },
   "devDependencies": {
