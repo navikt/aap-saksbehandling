@@ -26,7 +26,6 @@
     "@tiptap/pm": "^2.1.12",
     "@tiptap/react": "^2.1.12",
     "@tiptap/starter-kit": "^2.1.12",
-    "@udecode/plate-common": "^25.0.0",
     "@vercel/otel": "^0.3.0",
     "date-fns": "^2.30.0",
     "next": "^14.0.1",
