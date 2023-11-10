@@ -1,10 +1,20 @@
 'use client';
 
 import { BrevEditor } from 'components/breveditor/BrevEditor';
+import { Descendant } from 'slate';
 
 const Page = () => {
-  async function hentPdfForhåndsvisning() {
-    const pdf = await fetch('/api/pdf-preview/vedtak', { method: 'POST', body: 'hei' }).then((r) => {
+  async function hentPdfForhåndsvisning(data: Descendant[]) {
+    const postData = {
+      mottaker: {
+        navn: 'Ola Nordmann',
+        ident: '12345678910',
+      },
+      saksnummer: 'AABBCC123',
+      dato: '11. august 2023',
+      underblokker: data,
+    };
+    const pdf = await fetch('/api/pdf-preview/vedtak', { method: 'POST', body: JSON.stringify(postData) }).then((r) => {
       return r.arrayBuffer();
     });
     const pdfBlob = new Blob([new Uint8Array(pdf, 0)], { type: 'application/pdf' });
@@ -27,9 +37,8 @@ const Page = () => {
   return (
     <div>
       <div style={{ padding: '3rem' }}>
-        <BrevEditor />
+        <BrevEditor onBrevSubmit={hentPdfForhåndsvisning} />
       </div>
-      <button onClick={() => hentPdfForhåndsvisning()}>Hent brev</button>
     </div>
   );
 };
