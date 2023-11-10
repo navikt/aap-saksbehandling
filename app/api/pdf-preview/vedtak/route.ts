@@ -17,7 +17,7 @@ const dummyBody = {
   ],
 };
 export async function POST() {
-  return fetch('http://127.0.0.1:8080/api/v1/genpdf/aap-saksbehandling-pdfgen/vedtak', {
+  return fetch('http://127.0.0.1:8020/api/v1/genpdf/aap-saksbehandling-pdfgen/vedtak', {
     method: 'POST',
     body: JSON.stringify(dummyBody),
     headers: {
