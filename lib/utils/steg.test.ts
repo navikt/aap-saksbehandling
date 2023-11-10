@@ -49,6 +49,7 @@ const flytSykdomOgAvklaringsbehovAvbrutt: FlytGruppe = {
 const flyt: BehandlingFlytOgTilstand = {
   aktivGruppe: 'SYKDOM',
   aktivtSteg: 'AVKLAR_SYKDOM',
+  behandlingVersjon: 0,
   flyt: [],
 };
 
