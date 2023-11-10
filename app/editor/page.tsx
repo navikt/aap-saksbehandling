@@ -2,6 +2,8 @@
 
 import { BrevEditor } from 'components/breveditor/BrevEditor';
 import { Descendant } from 'slate';
+import { useState } from 'react';
+import { Button } from '@navikt/ds-react';
 
 const Page = () => {
   async function hentPdfForhåndsvisning(data: Descendant[]) {
@@ -34,10 +36,13 @@ const Page = () => {
 
     document.body.appendChild(pdfViewer);
   }
+
+  const [text, setText] = useState<Descendant[]>([]);
   return (
     <div>
       <div style={{ padding: '3rem' }}>
-        <BrevEditor onBrevSubmit={hentPdfForhåndsvisning} />
+        <BrevEditor setText={setText} />
+        <Button onClick={() => hentPdfForhåndsvisning(text)}>Forhåndsvis brev</Button>
       </div>
     </div>
   );

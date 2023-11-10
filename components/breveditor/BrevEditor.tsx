@@ -2,7 +2,7 @@
 
 import { BaseEditor, createEditor, Descendant } from 'slate';
 import { Editable, ReactEditor, RenderElementProps, RenderLeafProps, Slate, withReact } from 'slate-react';
-import { useCallback, useMemo, useState } from 'react';
+import { Dispatch, useCallback, useMemo } from 'react';
 import { Leaf } from 'components/breveditor/leaf/Leaf';
 
 import styles from 'components/breveditor/BrevEditor.module.css';
@@ -34,9 +34,9 @@ declare module 'slate' {
     Text: CustomText;
   }
 }
-type Props = {
-  onBrevSubmit: (data: Descendant[]) => void;
-};
+interface Props {
+  setText: Dispatch<Descendant[]>;
+}
 
 const initialValue: CustomElement[] = [
   {
@@ -49,12 +49,11 @@ const initialValue: CustomElement[] = [
   },
 ];
 
-export const BrevEditor = ({ onBrevSubmit }: Props) => {
+export const BrevEditor = ({ setText }: Props) => {
   const editor = useMemo(() => withHtml(withReact(createEditor())), []);
   const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, []);
   const renderElement = useCallback((props: RenderElementProps) => <Element {...props} />, []);
-  const [text, setText] = useState<Descendant[]>([]);
-  console.log(text);
+
   return (
     <div>
       <Slate
@@ -67,13 +66,6 @@ export const BrevEditor = ({ onBrevSubmit }: Props) => {
         <Toolbar />
         <Editable className={styles.editor} renderElement={renderElement} renderLeaf={renderLeaf} />
       </Slate>
-      <button
-        onClick={() => {
-          onBrevSubmit(text);
-        }}
-      >
-        Hent brev
-      </button>
     </div>
   );
 };
