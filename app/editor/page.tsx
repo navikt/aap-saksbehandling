@@ -2,7 +2,7 @@
 
 import { BrevEditor } from 'components/breveditor/BrevEditor';
 
-const Page = async () => {
+const Page = () => {
   async function hentPdfForhåndsvisning() {
     const pdf = await fetch('/api/pdf-preview/vedtak', { method: 'POST', body: 'hei' }).then((r) => {
       return r.arrayBuffer();
