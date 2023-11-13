@@ -1,0 +1,7 @@
+.pageContainer {
+  display: flex;
+  flex-direction: row;
+}
+.pdfPreview {
+  width: 50%;
+}

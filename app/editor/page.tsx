@@ -1,12 +1,16 @@
 'use client';
 
+import styles from './page.module.css';
 import { BrevEditor } from 'components/breveditor/BrevEditor';
 import { Descendant } from 'slate';
+import PdfVisning from './PdfVisning';
 import { useState } from 'react';
 import { Button } from '@navikt/ds-react';
 
 const Page = () => {
-  async function hentPdfForhåndsvisning(data: Descendant[]) {
+  const [pdfString, setPdfString] = useState('');
+
+  async function hentPdfOgRerender(data: Descendant[]) {
     const postData = {
       mottaker: {
         navn: 'Ola Nordmann',
@@ -20,29 +24,25 @@ const Page = () => {
       return r.arrayBuffer();
     });
     const pdfBlob = new Blob([new Uint8Array(pdf, 0)], { type: 'application/pdf' });
-    const pdfViewer = document.createElement('iframe');
-
-    pdfViewer.src = URL.createObjectURL(pdfBlob);
-    pdfViewer.onload = () => URL.revokeObjectURL(pdfViewer.src);
-
-    // Styling related to demo
-    pdfViewer.style.height = '100vh';
-    pdfViewer.style.width = '100vw';
-    pdfViewer.style.border = '0';
-    pdfViewer.style.borderRadius = '6px';
-    document.body.style.overflow = 'hidden';
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
-
-    document.body.appendChild(pdfViewer);
+    let reader = new FileReader();
+    reader.readAsDataURL(pdfBlob);
+    reader.onloadend = () => {
+      if (typeof reader.result === 'string') {
+        const base64String: string = reader.result;
+        setPdfString(base64String?.slice(base64String?.indexOf(',') + 1));
+      }
+    };
   }
 
   const [text, setText] = useState<Descendant[]>([]);
   return (
-    <div>
+    <div className={styles.pageContainer}>
       <div style={{ padding: '3rem' }}>
         <BrevEditor setText={setText} />
-        <Button onClick={() => hentPdfForhåndsvisning(text)}>Forhåndsvis brev</Button>
+        <Button onClick={() => hentPdfOgRerender(text)}>Forhåndsvis brev</Button>
+      </div>
+      <div className={styles.pdfPreview} id={'pdf-preview'}>
+        {pdfString && <PdfVisning pdfFilInnhold={pdfString} />}
       </div>
     </div>
   );
