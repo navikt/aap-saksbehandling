@@ -1,9 +1,11 @@
 import { client } from 'sanity/client';
 import { Heading } from '@navikt/ds-react/esm/typography';
+import { PortableText } from '@portabletext/react';
+import { TypedObject } from '@sanity/types';
 
 interface Brevmal {
   name: string;
-  content: string;
+  content: TypedObject[];
 }
 
 export const SanityPlayground = async () => {
@@ -16,7 +18,8 @@ export const SanityPlayground = async () => {
         {queryResult.map((brevmal, index) => (
           <div key={index}>
             <Heading size={'medium'}>{brevmal.name}</Heading>
-            <p>{brevmal.content}</p>
+            <p>{JSON.stringify(brevmal, null, 4)}</p>
+            <PortableText value={brevmal.content} />
           </div>
         ))}
       </div>
