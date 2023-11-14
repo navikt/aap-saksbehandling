@@ -820,11 +820,6 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@juggle/resize-observer@^3.4.0":
-  version "3.4.0"
-  resolved "https://registry.npmjs.org/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
-  integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
-
 "@mapbox/node-pre-gyp@^1.0.0":
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.11.tgz#417db42b7f5323d79e93b34a6d7a2a12c0df43fa"
@@ -2015,11 +2010,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/is-hotkey@^0.1.8":
-  version "0.1.8"
-  resolved "https://registry.npmjs.org/@types/is-hotkey/-/is-hotkey-0.1.8.tgz#9b792299c8937dd65284d97c71f8077f682ea341"
-  integrity sha512-4zW6OgrfVWR14IqHt32L5zpsE5IJgAu9uimQmAOFPdKPdv+M5RgXeoB2UCJZSKvVNGzUdLgbKdtCSZ66N2HdTA==
-
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0", "@types/istanbul-lib-coverage@^2.0.1":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.4.tgz#8467d4b3c087805d63580480890791277ce35c44"
@@ -2065,11 +2055,6 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
-
-"@types/lodash@^4.14.200":
-  version "4.14.200"
-  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.200.tgz#435b6035c7eba9cdf1e039af8212c9e9281e7149"
-  integrity sha512-YI/M/4HRImtNf3pJgbF+W6FrXovqj+T+/HpENLTooK9PnkacBsDpeP3IpHab40CClUfhNmdM2WTNP2sa2dni5Q==
 
 "@types/long@^4.0.1":
   version "4.0.2"
@@ -3098,11 +3083,6 @@ commander@11.1.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-11.1.0.tgz#62fdce76006a68e5c1ab3314dc92e800eb83d906"
   integrity sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==
 
-compute-scroll-into-view@^3.0.2:
-  version "3.1.0"
-  resolved "https://registry.npmjs.org/compute-scroll-into-view/-/compute-scroll-into-view-3.1.0.tgz#753f11d972596558d8fe7c6bcbc8497690ab4c87"
-  integrity sha512-rj8l8pD4bJ1nx+dAkMhV1xB5RuZEyVysfxJqB1pRchh1KVvwOv9b7CGB8ZfjTImVv2oF+sYMUkMZq6Na5Ftmbg==
-
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -3354,11 +3334,6 @@ dir-glob@^3.0.1:
   integrity sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==
   dependencies:
     path-type "^4.0.0"
-
-direction@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/direction/-/direction-1.0.4.tgz#2b86fb686967e987088caf8b89059370d4837442"
-  integrity sha512-GYqKi1aH7PJXxdhTeZBFrg8vUBeKXi+cNprXsC1kpJcbcVnV9wBsrOu1cQEdG0WeQwlfHiy3XvnKfIrJ2R0NzQ==
 
 doctrine@^2.1.0:
   version "2.1.0"
@@ -4544,11 +4519,6 @@ ignore@^5.2.0, ignore@^5.2.4:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
   integrity sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==
 
-immer@^10.0.3:
-  version "10.0.3"
-  resolved "https://registry.npmjs.org/immer/-/immer-10.0.3.tgz#a8de42065e964aa3edf6afc282dfc7f7f34ae3c9"
-  integrity sha512-pwupu3eWfouuaowscykeckFmVTpqbzW+rXFCX8rQLkZzM9ftBmU/++Ra+o+L27mz03zJTlyV4UUr+fdKNffo4A==
-
 import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
@@ -4722,11 +4692,6 @@ is-glob@^4.0.0, is-glob@^4.0.1, is-glob@^4.0.3:
   integrity sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg==
   dependencies:
     is-extglob "^2.1.1"
-
-is-hotkey@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.npmjs.org/is-hotkey/-/is-hotkey-0.2.0.tgz#1835a68171a91e5c9460869d96336947c8340cef"
-  integrity sha512-UknnZK4RakDmTgz4PI1wIph5yxSs/mvChWs9ifnlXsKuXgWmOkY/hAE0H/k2MIqH0RlRye0i1oC07MCRSD28Mw==
 
 is-map@^2.0.1, is-map@^2.0.2:
   version "2.0.2"
@@ -7012,13 +6977,6 @@ scheduler@^0.23.0:
   dependencies:
     loose-envify "^1.1.0"
 
-scroll-into-view-if-needed@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.npmjs.org/scroll-into-view-if-needed/-/scroll-into-view-if-needed-3.1.0.tgz#fa9524518c799b45a2ef6bbffb92bcad0296d01f"
-  integrity sha512-49oNpRjWRvnU8NyGVmUaYG4jtTkNonFZI86MmGRDqBphEK2EXT9gdEUoQPZhuBM8yWHxCWbobltqYO5M4XrUvQ==
-  dependencies:
-    compute-scroll-into-view "^3.0.2"
-
 semver@^6.0.0, semver@^6.3.0, semver@^6.3.1:
   version "6.3.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.1.tgz#556d2ef8689146e46dcea4bfdd095f3434dffcb4"
@@ -7123,44 +7081,6 @@ slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
-
-slate-history@^0.100.0:
-  version "0.100.0"
-  resolved "https://registry.yarnpkg.com/slate-history/-/slate-history-0.100.0.tgz#a8549af61182a18db2dfedff6ebab7452c841666"
-  integrity sha512-x5rUuWLNtH97hs9PrFovGgt3Qc5zkTm/5mcUB+0NR/TK923eLax4HsL6xACLHMs245nI6aJElyM1y6hN0y5W/Q==
-  dependencies:
-    is-plain-object "^5.0.0"
-
-slate-hyperscript@0.100.0:
-  version "0.100.0"
-  resolved "https://registry.npmjs.org/slate-hyperscript/-/slate-hyperscript-0.100.0.tgz#79470c385e96bd3c5fb6477c610c2102d4a889a9"
-  integrity sha512-fb2KdAYg6RkrQGlqaIi4wdqz3oa0S4zKNBJlbnJbNOwa23+9FLD6oPVx9zUGqCSIpy+HIpOeqXrg0Kzwh/Ii4A==
-  dependencies:
-    is-plain-object "^5.0.0"
-
-slate-react@0.100.0:
-  version "0.100.0"
-  resolved "https://registry.npmjs.org/slate-react/-/slate-react-0.100.0.tgz#f53b11a8dde151d15cebbdb15ca40ee7f04ab4d6"
-  integrity sha512-cWq3tiOvYDJE96ISjnZrX/5IrGcqT4tVVW+PeGquUbrEK/Vq9/850juucjXMLl4zQAtXehy+fxWaJQWPeclUDQ==
-  dependencies:
-    "@juggle/resize-observer" "^3.4.0"
-    "@types/is-hotkey" "^0.1.8"
-    "@types/lodash" "^4.14.200"
-    direction "^1.0.4"
-    is-hotkey "^0.2.0"
-    is-plain-object "^5.0.0"
-    lodash "^4.17.21"
-    scroll-into-view-if-needed "^3.1.0"
-    tiny-invariant "1.3.1"
-
-slate@0.100.0:
-  version "0.100.0"
-  resolved "https://registry.npmjs.org/slate/-/slate-0.100.0.tgz#33e4b55192fe4d35f6c062d238bd49bbee0d9b8d"
-  integrity sha512-cK+xwLBrbQof4rEfTzgC8loBWsDFEXq8nOBY7QahwY59Zq4bsBNcwiMw2VIzTv+WGNsmyHp4eAk/HJbz2aAUkQ==
-  dependencies:
-    immer "^10.0.3"
-    is-plain-object "^5.0.0"
-    tiny-warning "^1.0.3"
 
 slice-ansi@^5.0.0:
   version "5.0.0"
@@ -7531,12 +7451,12 @@ through2@~2.0.3:
     readable-stream "~2.3.6"
     xtend "~4.0.1"
 
-tiny-invariant@1.3.1, tiny-invariant@^1.0.0:
+tiny-invariant@^1.0.0:
   version "1.3.1"
   resolved "https://registry.npmjs.org/tiny-invariant/-/tiny-invariant-1.3.1.tgz#8560808c916ef02ecfd55e66090df23a4b7aa642"
   integrity sha512-AD5ih2NlSssTCwsMznbvwMZpJ1cbhkGd2uueNxzv2jDlEeZdU04JQfRnggJQ8DrcVBGjAsCKwFBbDlVNtEMlzw==
 
-tiny-warning@^1.0.0, tiny-warning@^1.0.3:
+tiny-warning@^1.0.0:
   version "1.0.3"
   resolved "https://registry.npmjs.org/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
   integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
