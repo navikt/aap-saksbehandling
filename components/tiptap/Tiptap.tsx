@@ -1,14 +1,19 @@
 'use client';
 import { StarterKit } from '@tiptap/starter-kit';
-import { EditorContent, useEditor } from '@tiptap/react';
+import { Content, EditorContent, useEditor } from '@tiptap/react';
 
 import styles from './Tiptap.module.css';
 
+interface Props {
+  initialValue?: Content;
+}
+
 const extensions = [StarterKit];
 
-export const Tiptap = () => {
+export const Tiptap = ({ initialValue }: Props) => {
   const editor = useEditor({
     extensions,
+    content: initialValue,
   });
 
   const ohHiMark = (mark: string, attributes?: object) => {
