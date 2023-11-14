@@ -3,7 +3,7 @@
 import styles from './page.module.css';
 import { BrevEditor } from 'components/breveditor/BrevEditor';
 import { Descendant } from 'slate';
-import PdfVisning from './PdfVisning';
+import PdfVisning from 'components/pdfvisning/PdfVisning';
 import { useState } from 'react';
 import { Button } from '@navikt/ds-react';
 
