@@ -7,7 +7,7 @@ export interface PortableText {
   children: PortableTextChild[];
   markDefs?: PortableTextObject[];
   listItem?: string;
-  style?: string;
+  style?: PortableTextElement;
   level?: number;
 }
 
@@ -47,8 +47,7 @@ function mapPortableTextMarkToTipTapMark(value: PortableTextMark): TipTapMark {
 
 type PortableTextElement = 'normal';
 type TipTapElement = 'paragraph' | 'heading';
-
-function mapPortableTextElementToTipTapElement(value?: PortableTextElement | string): TipTapElement {
+function mapPortableTextElementToTipTapElement(value?: PortableTextElement): TipTapElement {
   switch (value) {
     case 'normal':
       return 'paragraph';
@@ -59,7 +58,7 @@ function mapPortableTextElementToTipTapElement(value?: PortableTextElement | str
 
 type PortableTextLeaf = 'span';
 type TipTapLeaf = 'text';
-function mapPortableTextLeafToTipTapLeaf(value?: PortableTextLeaf | string): TipTapLeaf {
+function mapPortableTextLeafToTipTapLeaf(value?: PortableTextLeaf): TipTapLeaf {
   switch (value) {
     case 'span':
       return 'text';
