@@ -1,7 +1,0 @@
-.brevredigerer {
-  border: 2px solid #000;
-}
-
-.brevredigerer :global(.ce-block__content) {
-  background-color: aliceblue;
-}

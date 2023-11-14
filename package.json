@@ -13,10 +13,6 @@
   },
   "prettier": "@navikt/aap-felles-prettier",
   "dependencies": {
-    "@editorjs/editorjs": "^2.28.2",
-    "@editorjs/header": "^2.8.1",
-    "@editorjs/list": "^1.9.0",
-    "@editorjs/paragraph": "^2.11.3",
     "@grafana/faro-web-sdk": "^1.2.5",
     "@navikt/aap-felles-css": "^0.0.91",
     "@navikt/aap-felles-react": "^0.0.91",
