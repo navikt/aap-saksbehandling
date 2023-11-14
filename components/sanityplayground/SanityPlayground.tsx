@@ -1,7 +1,7 @@
 import { client } from 'sanity/client';
 import { Heading } from '@navikt/ds-react/esm/typography';
 
-import { Tiptap } from 'components/tiptap/Tiptap';
+import { Breveditor } from 'components/breveditor/Breveditor';
 import { deserialize, PortableText } from 'lib/utils/sanity';
 
 interface Vilkårsvurdering {
@@ -20,7 +20,7 @@ export const SanityPlayground = async () => {
           <div key={index}>
             <Heading size={'medium'}>{brevmal.tittel}</Heading>
             <p>{JSON.stringify(brevmal, null, 4)}</p>
-            <Tiptap initialValue={deserialize(brevmal.innhold)} />
+            <Breveditor initialValue={deserialize(brevmal.innhold)} />
           </div>
         ))}
       </div>

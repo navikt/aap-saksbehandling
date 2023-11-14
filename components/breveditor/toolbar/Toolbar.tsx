@@ -1,92 +1,74 @@
-'use client';
-import { StarterKit } from '@tiptap/starter-kit';
-import { Content, EditorContent, useEditor } from '@tiptap/react';
+import { Editor } from '@tiptap/react';
 
-import styles from './Tiptap.module.css';
+import styles from './Toolbar.module.css';
 
 interface Props {
-  initialValue?: Content;
+  editor: Editor | null;
 }
 
-const extensions = [StarterKit];
-
-export const Tiptap = ({ initialValue }: Props) => {
-  const editor = useEditor({
-    extensions,
-    content: initialValue,
-  });
-
-  const ohHiMark = (mark: string, attributes?: object) => {
+export const Toolbar = ({ editor }: Props) => {
+  const stylingForMark = (mark: string, attributes?: object) => {
     return editor?.isActive(mark, attributes) ? `${styles.isActive}` : '';
   };
 
-  const Menu = () => (
-    <div className={styles.menu}>
+  return (
+    <div className={styles.toolbar}>
       <button
         type={'button'}
         onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={`${styles.menubutton} ${ohHiMark('heading', { level: 1 })}`}
+        className={`${styles.toolbarbutton} ${stylingForMark('heading', { level: 1 })}`}
       >
         H1
       </button>
       <button
         type={'button'}
         onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={`${styles.menubutton} ${ohHiMark('heading', { level: 2 })}`}
+        className={`${styles.toolbarbutton} ${stylingForMark('heading', { level: 2 })}`}
       >
         H2
       </button>
       <button
         type={'button'}
         onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={`${styles.menubutton} ${ohHiMark('heading', { level: 3 })}`}
+        className={`${styles.toolbarbutton} ${stylingForMark('heading', { level: 3 })}`}
       >
         H3
       </button>
       <button
         type={'button'}
         onClick={() => editor?.chain().focus().toggleHeading({ level: 4 }).run()}
-        className={`${styles.menubutton} ${ohHiMark('heading', { level: 4 })}`}
+        className={`${styles.toolbarbutton} ${stylingForMark('heading', { level: 4 })}`}
       >
         H4
       </button>
       <button
         type={'button'}
         onClick={() => editor?.chain().focus().toggleBold().run()}
-        className={`${styles.menubutton} ${ohHiMark('bold')}`}
+        className={`${styles.toolbarbutton} ${stylingForMark('bold')}`}
       >
         B
       </button>
       <button
         type={'button'}
         onClick={() => editor?.chain().focus().toggleItalic().run()}
-        className={`${styles.menubutton} ${ohHiMark('italic')}`}
+        className={`${styles.toolbarbutton} ${stylingForMark('italic')}`}
       >
         I
       </button>
       <button
         type={'button'}
         onClick={() => editor?.chain().focus().toggleBulletList().run()}
-        className={`${styles.menubutton} ${ohHiMark('bulletList')}`}
+        className={`${styles.toolbarbutton} ${stylingForMark('bulletList')}`}
       >
         ≡
       </button>
       <button
         type={'button'}
         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-        className={`${styles.menubutton} ${ohHiMark('orderedList')}`}
+        className={`${styles.toolbarbutton} ${stylingForMark('orderedList')}`}
       >
         123
       </button>
-    </div>
-  );
-
-  return (
-    <div className={styles.container}>
-      <div className={styles.editorPane}>
-        <Menu />
-        <EditorContent editor={editor} />
-      </div>
     </div>
   );
 };
