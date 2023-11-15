@@ -1,11 +1,12 @@
 'use client';
 import { StarterKit } from '@tiptap/starter-kit';
-import { Content, EditorContent, useEditor } from '@tiptap/react';
+import { BubbleMenu, Content, EditorContent, useEditor } from '@tiptap/react';
 
 import styles from 'components/breveditor/Breveditor.module.css';
 import { Toolbar } from 'components/breveditor/toolbar/Toolbar';
 import { JSONContent } from '@tiptap/core';
 import { Dispatch } from 'react';
+import { Boblemeny } from 'components/breveditor/toolbar/boblemeny/Boblemeny';
 
 interface Props {
   initialValue?: Content;
@@ -28,6 +29,11 @@ export const Breveditor = ({ initialValue, setContent }: Props) => {
     <div className={styles.container}>
       <div className={styles.editorPane}>
         <Toolbar editor={editor} />
+        {editor && (
+          <BubbleMenu editor={editor}>
+            <Boblemeny editor={editor} />
+          </BubbleMenu>
+        )}
         <EditorContent editor={editor} />
       </div>
     </div>

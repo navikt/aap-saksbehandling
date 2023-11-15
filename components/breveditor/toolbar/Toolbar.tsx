@@ -9,6 +9,9 @@ interface Props {
 }
 
 export const Toolbar = ({ editor }: Props) => {
+  if (!editor) {
+    return;
+  }
   const activeStyle = (mark: string, attributes?: object) => {
     return editor?.isActive(mark, attributes) ? `${styles.active}` : '';
   };
