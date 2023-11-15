@@ -1,5 +1,7 @@
 import { Editor } from '@tiptap/react';
 
+import { Button } from '@navikt/ds-react';
+
 import styles from './Toolbar.module.css';
 
 interface Props {
@@ -7,68 +9,76 @@ interface Props {
 }
 
 export const Toolbar = ({ editor }: Props) => {
-  const stylingForMark = (mark: string, attributes?: object) => {
-    return editor?.isActive(mark, attributes) ? `${styles.isActive}` : '';
+  const activeStyle = (mark: string, attributes?: object) => {
+    return editor?.isActive(mark, attributes) ? `${styles.active}` : '';
   };
 
   return (
     <div className={styles.toolbar}>
-      <button
+      <Button
         type={'button'}
+        variant={'tertiary-neutral'}
         onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={`${styles.toolbarbutton} ${stylingForMark('heading', { level: 1 })}`}
+        className={`${styles.toolbarbutton} ${activeStyle('heading', { level: 1 })}`}
       >
         H1
-      </button>
-      <button
+      </Button>
+      <Button
         type={'button'}
+        variant={'tertiary-neutral'}
         onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={`${styles.toolbarbutton} ${stylingForMark('heading', { level: 2 })}`}
+        className={`${styles.toolbarbutton} ${activeStyle('heading', { level: 2 })}`}
       >
         H2
-      </button>
-      <button
+      </Button>
+      <Button
         type={'button'}
+        variant={'tertiary-neutral'}
         onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={`${styles.toolbarbutton} ${stylingForMark('heading', { level: 3 })}`}
+        className={`${styles.toolbarbutton} ${activeStyle('heading', { level: 3 })}`}
       >
         H3
-      </button>
-      <button
+      </Button>
+      <Button
         type={'button'}
+        variant={'tertiary-neutral'}
         onClick={() => editor?.chain().focus().toggleHeading({ level: 4 }).run()}
-        className={`${styles.toolbarbutton} ${stylingForMark('heading', { level: 4 })}`}
+        className={`${styles.toolbarbutton} ${activeStyle('heading', { level: 4 })}`}
       >
         H4
-      </button>
-      <button
+      </Button>
+      <Button
         type={'button'}
+        variant={'tertiary-neutral'}
         onClick={() => editor?.chain().focus().toggleBold().run()}
-        className={`${styles.toolbarbutton} ${stylingForMark('bold')}`}
+        className={`${styles.toolbarbutton} ${activeStyle('bold')}`}
       >
         B
-      </button>
-      <button
+      </Button>
+      <Button
         type={'button'}
+        variant={'tertiary-neutral'}
         onClick={() => editor?.chain().focus().toggleItalic().run()}
-        className={`${styles.toolbarbutton} ${stylingForMark('italic')}`}
+        className={`${styles.toolbarbutton} ${activeStyle('italic')}`}
       >
         I
-      </button>
-      <button
+      </Button>
+      <Button
         type={'button'}
+        variant={'tertiary-neutral'}
         onClick={() => editor?.chain().focus().toggleBulletList().run()}
-        className={`${styles.toolbarbutton} ${stylingForMark('bulletList')}`}
+        className={`${styles.toolbarbutton} ${activeStyle('bulletList')}`}
       >
         ≡
-      </button>
-      <button
+      </Button>
+      <Button
         type={'button'}
+        variant={'tertiary-neutral'}
         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-        className={`${styles.toolbarbutton} ${stylingForMark('orderedList')}`}
+        className={`${styles.toolbarbutton} ${activeStyle('orderedList')}`}
       >
         123
-      </button>
+      </Button>
     </div>
   );
 };

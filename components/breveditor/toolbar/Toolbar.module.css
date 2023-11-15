@@ -1,9 +1,9 @@
 .toolbar {
   display: flex;
   gap: 0.25rem;
-  background-color: #e9e9ed;
+  background-color: var(--a-bg-subtle);
   padding: 0.25rem;
-  border: 2px solid #000;
+  border: 2px solid var(--a-border-strong);
   border-bottom: transparent;
 }
 
@@ -13,6 +13,6 @@
   border: none;
 }
 
-.isActive {
-  background: #a2a2a4;
+.active {
+  background: var(--a-surface-neutral-subtle-hover);
 }
