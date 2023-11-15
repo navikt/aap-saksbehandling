@@ -5,11 +5,11 @@ import { Content, EditorContent, useEditor } from '@tiptap/react';
 import styles from 'components/breveditor/Breveditor.module.css';
 import { Toolbar } from 'components/breveditor/toolbar/Toolbar';
 import { JSONContent } from '@tiptap/core';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch } from 'react';
 
 interface Props {
   initialValue?: Content;
-  setContent: Dispatch<SetStateAction<JSONContent>>;
+  setContent: Dispatch<JSONContent>;
 }
 
 const extensions = [StarterKit];

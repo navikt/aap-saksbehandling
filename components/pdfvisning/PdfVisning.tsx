@@ -4,7 +4,6 @@ import { Loader, Pagination, Alert } from '@navikt/ds-react';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
-// eslint-disable-next-line
 const pdfjsWorker = require('pdfjs-dist/build/pdf.worker.entry.js');
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -12,7 +11,7 @@ interface PdfVisningProps {
   pdfFilInnhold: unknown;
 }
 
-const PdfVisning = ({ pdfFilInnhold }: PdfVisningProps) => {
+export const PdfVisning = ({ pdfFilInnhold }: PdfVisningProps) => {
   const [numPages, setNumPages] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -39,5 +38,3 @@ const PdfVisning = ({ pdfFilInnhold }: PdfVisningProps) => {
     </div>
   );
 };
-
-export default PdfVisning;
