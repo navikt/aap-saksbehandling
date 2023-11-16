@@ -26,16 +26,14 @@ export const Breveditor = ({ initialValue, setContent }: Props) => {
   });
 
   return (
-    <div className={styles.container}>
-      <div className={styles.editorPane}>
-        <Toolbar editor={editor} />
-        {editor && (
-          <BubbleMenu editor={editor}>
-            <Boblemeny editor={editor} />
-          </BubbleMenu>
-        )}
-        <EditorContent editor={editor} />
-      </div>
+    <div className={styles.editor}>
+      <Toolbar editor={editor} />
+      {editor && (
+        <BubbleMenu editor={editor}>
+          <Boblemeny editor={editor} />
+        </BubbleMenu>
+      )}
+      <EditorContent editor={editor} className={styles.editorContent} />
     </div>
   );
 };
