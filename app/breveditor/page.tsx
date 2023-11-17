@@ -17,7 +17,7 @@ const Stack = ({ stack, children, className }: StackTypeProps) => {
 };
 
 const Page = () => {
-  const { pdf, setBrevData } = usePdfGenerator('fritekst');
+  const { pdf, setBrevData, brevData } = usePdfGenerator('fritekst');
   const [visPdf, setVisPdf] = useState<boolean>(false);
 
   return (
@@ -26,7 +26,7 @@ const Page = () => {
         <Button variant={'primary'} onClick={() => setVisPdf(!visPdf)}>
           {visPdf ? 'Skjul pdf' : 'Vis pdf'}
         </Button>
-        <Breveditor setContent={visPdf ? setBrevData : () => {}} />
+        <Breveditor initialValue={brevData} setContent={(data) => setBrevData(data, visPdf)} />
       </VStack>
 
       {visPdf && pdf && <PdfVisning pdfFilInnhold={pdf} />}

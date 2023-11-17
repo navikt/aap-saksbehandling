@@ -3,16 +3,22 @@ import { JSONContent } from '@tiptap/core';
 
 export const usePdfGenerator = (pdfmal: string) => {
   const [pdfString, setPdfString] = useState('');
+  const [oppdaterPdf, setOppdaterPdf] = useState<boolean>(true);
   const [brevData, setBrevData] = useState<JSONContent>({});
 
   useEffect(() => {
     const timeOut = setTimeout(async () => {
-      await hentPdfOgRerender(brevData);
+      await hentPdfOgRerender(brevData, oppdaterPdf);
     }, 2000);
     return () => clearTimeout(timeOut);
   }, [brevData]);
+  function setBrevDataOgPdfOppdatering(data: JSONContent, oppdaterPdf: boolean) {
+    setOppdaterPdf(oppdaterPdf);
+    setBrevData(data);
+  }
 
-  async function hentPdfOgRerender(data: JSONContent) {
+  async function hentPdfOgRerender(data: JSONContent, oppdaterPdf: boolean) {
+    if (!oppdaterPdf) return;
     const postData = {
       mottaker: {
         navn: 'Ola Nordmann',
@@ -40,6 +46,7 @@ export const usePdfGenerator = (pdfmal: string) => {
   }
   return {
     pdf: useMemo<string>(() => pdfString, [pdfString]),
-    setBrevData,
+    setBrevData: setBrevDataOgPdfOppdatering,
+    brevData,
   };
 };
