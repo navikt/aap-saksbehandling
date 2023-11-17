@@ -10,6 +10,7 @@ import { Boblemeny } from 'components/breveditor/toolbar/boblemeny/Boblemeny';
 
 interface Props {
   initialValue?: Content;
+  className?: string;
   setContent: Dispatch<JSONContent>;
 }
 

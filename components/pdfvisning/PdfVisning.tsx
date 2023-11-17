@@ -9,9 +9,10 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 interface PdfVisningProps {
   pdfFilInnhold: unknown;
+  className?: string;
 }
 
-export const PdfVisning = ({ pdfFilInnhold }: PdfVisningProps) => {
+export const PdfVisning = ({ pdfFilInnhold, className }: PdfVisningProps) => {
   const [numPages, setNumPages] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -23,7 +24,7 @@ export const PdfVisning = ({ pdfFilInnhold }: PdfVisningProps) => {
   }
 
   return (
-    <div>
+    <div className={className}>
       <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
       <Document
         file={`data:application/pdf;base64,${pdfFilInnhold}`}
