@@ -1,34 +1,73 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { Loader, Pagination, Alert } from '@navikt/ds-react';
+import { Alert, Loader, Pagination } from '@navikt/ds-react';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import { JSONContent } from '@tiptap/core';
 
 const pdfjsWorker = require('pdfjs-dist/build/pdf.worker.entry.js');
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 interface PdfVisningProps {
-  pdfFilInnhold: unknown;
-  className?: string;
+  content: JSONContent['content'];
 }
 
-export const PdfVisning = ({ pdfFilInnhold, className }: PdfVisningProps) => {
+export const PdfVisning = ({ content }: PdfVisningProps) => {
+  const [pdfFilInnhold, setPfdFilInnhold] = useState<string>();
   const [numPages, setNumPages] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState(1);
 
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
-    if (pageNumber > numPages) {
-      setPageNumber(numPages);
+  useEffect(() => {
+    async function hentPdf() {
+      const postData = {
+        mottaker: {
+          navn: 'Ola Nordmann',
+          ident: '12345678910',
+        },
+        saksnummer: 'AABBCC123',
+        dato: '11. august 2023',
+        underblokker: content,
+      };
+
+      const response = await fetch(`/api/pdf-preview/vedtaksbrev/fritekst`, {
+        method: 'POST',
+        body: JSON.stringify(postData),
+      });
+
+      const pdfBuffer = await response.arrayBuffer();
+      const pdfBlob = new Blob([new Uint8Array(pdfBuffer, 0)], { type: 'application/pdf' });
+
+      const base64String: string = await new Promise((resolve) => {
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+          if (typeof reader.result === 'string') {
+            resolve(reader.result);
+          }
+        };
+        reader.readAsDataURL(pdfBlob);
+      });
+
+      setPfdFilInnhold(base64String?.slice(base64String?.indexOf(',') + 1));
     }
-    setNumPages(numPages);
+
+    const timeOut = setTimeout(async () => {
+      await hentPdf();
+    }, 2000);
+
+    return () => clearTimeout(timeOut);
+  }, [content]);
+
+  if (!pdfFilInnhold) {
+    return null;
   }
 
   return (
-    <div className={className}>
+    <div>
       <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
       <Document
         file={`data:application/pdf;base64,${pdfFilInnhold}`}
-        onLoadSuccess={onDocumentLoadSuccess}
+        onLoadSuccess={(document) => setNumPages(document.numPages)}
         error={<Alert variant={'error'}>{'Ukjent feil ved henting av dokument.'} </Alert>}
         noData={<Alert variant={'error'}>{'Dokumentet er tomt'} </Alert>}
         loading={<Loader size={'xlarge'} variant="interaction" transparent={true} />}

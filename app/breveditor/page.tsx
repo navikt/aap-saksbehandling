@@ -1,36 +1,25 @@
 'use client';
 
 import { Breveditor } from 'components/breveditor/Breveditor';
-import { Button, HStack, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { PdfVisning } from 'components/pdfvisning/PdfVisning';
-import { usePdfGenerator } from 'components/pdfvisning/usePdfGenerator';
-import { ReactNode, useState } from 'react';
-
-type StackTypeProps = {
-  stack: typeof HStack | typeof VStack;
-  children: ReactNode;
-  className?: string;
-};
-const Stack = ({ stack, children, className }: StackTypeProps) => {
-  const StackComponent = stack;
-  return <StackComponent className={className}>{children}</StackComponent>;
-};
+import { useState } from 'react';
+import { JSONContent } from '@tiptap/core';
 
 const Page = () => {
-  const { pdf, setBrevData, brevData } = usePdfGenerator('fritekst');
-  const [visPdf, setVisPdf] = useState<boolean>(false);
+  const [brevData, setBrevData] = useState<JSONContent>({});
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <Stack stack={visPdf ? HStack : VStack}>
-      <VStack>
-        <Button variant={'primary'} onClick={() => setVisPdf(!visPdf)}>
-          {visPdf ? 'Skjul pdf' : 'Vis pdf'}
-        </Button>
-        <Breveditor initialValue={brevData} setContent={(data) => setBrevData(data, visPdf)} />
-      </VStack>
-
-      {visPdf && pdf && <PdfVisning pdfFilInnhold={pdf} />}
-    </Stack>
+    <div>
+      <Button variant={'primary'} onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? 'Skjul pdf' : 'Vis pdf'}
+      </Button>
+      <div style={isOpen ? { display: 'flex', flexDirection: 'row' } : undefined}>
+        <Breveditor setContent={(data) => setBrevData(data)} />
+        {isOpen && <PdfVisning content={brevData.content} />}
+      </div>
+    </div>
   );
 };
 export default Page;
