@@ -82,6 +82,22 @@ export const Toolbar = ({ editor }: Props) => {
       >
         123
       </Button>
+      <Button
+        type={'button'}
+        variant={'tertiary-neutral'}
+        className={styles.toolbarbutton}
+        onClick={() => editor?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
+      >
+        TBL
+      </Button>
+      <Button
+        type={'button'}
+        variant={'tertiary-neutral'}
+        className={styles.toolbarbutton}
+        onClick={() => editor?.chain().focus().deleteTable().run()}
+      >
+        NO TBL
+      </Button>
     </div>
   );
 };

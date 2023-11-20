@@ -7,6 +7,10 @@ import { Toolbar } from 'components/breveditor/toolbar/Toolbar';
 import { JSONContent } from '@tiptap/core';
 import { Dispatch } from 'react';
 import { Boblemeny } from 'components/breveditor/toolbar/boblemeny/Boblemeny';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { TableRow } from '@tiptap/extension-table-row';
+import { Table } from '@tiptap/extension-table';
 
 interface Props {
   initialValue?: Content;
@@ -14,7 +18,13 @@ interface Props {
   setContent: Dispatch<JSONContent>;
 }
 
-const extensions = [StarterKit];
+const extensions = [
+  StarterKit,
+  Table.configure({ HTMLAttributes: { class: styles.table } }),
+  TableCell,
+  TableHeader,
+  TableRow,
+];
 
 export const Breveditor = ({ initialValue, setContent }: Props) => {
   const editor = useEditor({

@@ -22,3 +22,11 @@
 
   box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.8);
 }
+
+.table {
+  border: 1px solid #000;
+}
+
+.table td {
+  border: 1px dotted #000;
+}
