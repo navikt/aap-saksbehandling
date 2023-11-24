@@ -3,6 +3,7 @@ import { Editor } from '@tiptap/react';
 import { Button } from '@navikt/ds-react';
 
 import styles from './Toolbar.module.css';
+import { BulletListIcon, NumberListIcon, TableIcon } from '@navikt/aksel-icons';
 
 interface Props {
   editor: Editor | null;
@@ -72,7 +73,7 @@ export const Toolbar = ({ editor }: Props) => {
         onClick={() => editor?.chain().focus().toggleBulletList().run()}
         className={`${styles.toolbarbutton} ${activeStyle('bulletList')}`}
       >
-        ≡
+        <BulletListIcon className={styles.icon} title={'Punktliste'} />
       </Button>
       <Button
         type={'button'}
@@ -80,7 +81,7 @@ export const Toolbar = ({ editor }: Props) => {
         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
         className={`${styles.toolbarbutton} ${activeStyle('orderedList')}`}
       >
-        123
+        <NumberListIcon className={styles.icon} title={'Nummerert liste'} />
       </Button>
       <Button
         type={'button'}
@@ -88,7 +89,7 @@ export const Toolbar = ({ editor }: Props) => {
         className={styles.toolbarbutton}
         onClick={() => editor?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
       >
-        TBL
+        <TableIcon className={styles.icon} title={'Sett inn tabell'} />
       </Button>
       <Button
         type={'button'}
