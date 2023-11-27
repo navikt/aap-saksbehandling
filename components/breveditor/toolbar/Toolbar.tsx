@@ -18,7 +18,7 @@ export const Toolbar = ({ editor }: Props) => {
   };
 
   return (
-    <div className={styles.toolbar}>
+    <div className={styles.toolbar} role={'toolbar'}>
       <Button
         type={'button'}
         variant={'tertiary-neutral'}

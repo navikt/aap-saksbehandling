@@ -7,6 +7,18 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
+// Mockes for testing av Tiptap. jsdom implementerer ikke denne
+Object.defineProperty(window, 'ClipboardEvent', {
+  writable: false,
+  value: jest.fn(),
+});
+
+// Mockes for testing av Tiptap. jsdom implementerer ikke denne
+Object.defineProperty(window, 'DragEvent', {
+  writable: false,
+  value: jest.fn(),
+});
+
 // Mocker eventsource ettersom vi bruker det i Form komponenten
 Object.defineProperty(window, 'EventSource', {
   writable: true,

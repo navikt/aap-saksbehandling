@@ -43,7 +43,7 @@ export const Breveditor = ({ initialValue, setContent }: Props) => {
           <Boblemeny editor={editor} />
         </BubbleMenu>
       )}
-      <EditorContent editor={editor} className={styles.editorContent} />
+      <EditorContent editor={editor} className={styles.editorContent} data-testid={'breveditor'} />
     </div>
   );
 };
