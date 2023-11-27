@@ -10,27 +10,19 @@ describe('ToolbarButton', () => {
   });
 
   test('har en label', () => {
-    render(
-      <ToolbarButton onClick={onClickMock} className={'klassenavn'}>
-        Knapp
-      </ToolbarButton>
-    );
+    render(<ToolbarButton onClick={onClickMock}>Knapp</ToolbarButton>);
     expect(screen.getByRole('button', { name: 'Knapp' })).toBeVisible();
   });
 
   test('kaller onClick på trykk', async () => {
-    render(
-      <ToolbarButton onClick={onClickMock} className={'klassenavn'}>
-        Knapp
-      </ToolbarButton>
-    );
+    render(<ToolbarButton onClick={onClickMock}>Knapp</ToolbarButton>);
     await user.click(screen.getByRole('button', { name: 'Knapp' }));
     expect(onClickMock.mock.calls).toHaveLength(1);
   });
 
   test('har en visuell indikator på at et valg er aktivt', () => {
     render(
-      <ToolbarButton onClick={onClickMock} className={'klassenavn active'}>
+      <ToolbarButton onClick={onClickMock} active={true}>
         Knapp
       </ToolbarButton>
     );

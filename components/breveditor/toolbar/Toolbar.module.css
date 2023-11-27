@@ -7,16 +7,6 @@
   border-bottom: transparent;
 }
 
-.toolbarbutton {
-  padding: 0.5rem;
-  font-family: Monospaced, serif;
-  border: none;
-}
-
-.active {
-  background: var(--a-surface-neutral-subtle-hover);
-}
-
 .icon {
   font-size: 1.5rem;
 }
