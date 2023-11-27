@@ -4,6 +4,11 @@
   min-width: 50vw;
 }
 
+.centerLoader {
+  display: flex;
+  justify-content: center;
+}
+
 .editorContent {
   border: 2px solid #000;
   background-color: var(--a-surface-active);

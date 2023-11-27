@@ -10,6 +10,7 @@ import { TableCell } from '@tiptap/extension-table-cell';
 import { TableHeader } from '@tiptap/extension-table-header';
 import { TableRow } from '@tiptap/extension-table-row';
 import { Table } from '@tiptap/extension-table';
+import { Loader } from '@navikt/ds-react';
 
 interface Props {
   initialValue?: Content;
@@ -34,6 +35,14 @@ export const Breveditor = ({ initialValue, setContent }: Props) => {
       setContent(editor.getJSON());
     },
   });
+
+  if (!editor) {
+    return (
+      <div className={styles.centerLoader}>
+        <Loader size={'2xlarge'} title={'Laster breveditor...'} />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.editor}>
