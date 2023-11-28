@@ -9,18 +9,44 @@ export const sanityservice = createClient({
   token: process.env.SANITY_API_TOKEN,
 });
 
-interface Tekster {
+interface Innhold {
   innhold: PortableText[];
+  _type: string;
 }
 
-interface Brevmal {
-  brevtype: string;
-  vilkarsvurderinger?: Tekster[];
-  standardtekster?: Tekster[];
+export interface Brevmal {
+  brevtittel: string;
+  innhold: Innhold[];
 }
 
 export async function hentBrevmalerFraSanity() {
   return await sanityservice.fetch<Array<Brevmal>>(
-    '*[_type == "brev"]{brevtype, standardtekster [] -> {innhold}, vilkarsvurderinger [] -> {innhold}}'
+    "*[_type=='brev']{\n" +
+      '  brevtittel,\n' +
+      '  innhold[] -> {\n' +
+      '    _type,\n' +
+      '      innhold[]{\n' +
+      "        _type == 'content' => {\n" +
+      '          ...,\n' +
+      '          children[] {\n' +
+      '            ...,\n' +
+      "            _type == 'systemVariabel' => {\n" +
+      '              ...,\n' +
+      '              "systemVariabel": @->.tekniskNavn\n' +
+      '            },\n' +
+      "            _type == 'inlineElement' => {\n" +
+      '              ...,\n' +
+      '              "text": @->.tekst\n' +
+      '            },\n' +
+      "            _type == 'blockElement' => {\n" +
+      '              ...,\n' +
+      "              'innhold': @->.innhold\n" +
+      '              \n' +
+      '            }\n' +
+      '          }\n' +
+      '        }\n' +
+      '      }\n' +
+      '    }\n' +
+      '  }'
   );
 }
