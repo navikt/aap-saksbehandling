@@ -9,20 +9,23 @@ export const sanityservice = createClient({
   token: process.env.SANITY_API_TOKEN,
 });
 
-interface Innhold {
+export interface Innhold {
   innhold: PortableText[];
-  _type: string;
+  kanRedigeres: boolean;
+  _type: 'standardtekst';
+  _id: string;
 }
 
-interface Systeminnhold {
-  _type: string;
+export interface Systeminnhold {
+  _type: 'systeminnhold';
+  _id: string;
   systemNokkel: string;
   overskrift?: string;
 }
 
 export interface Brevmal {
   brevtittel: string;
-  innhold: Innhold[] | Systeminnhold;
+  innhold: Innhold[] | Systeminnhold[];
 }
 
 const brevmalQuery = groq`
@@ -30,11 +33,13 @@ const brevmalQuery = groq`
   brevtittel,
   innhold[] -> {
     _type,
+    _id,
     _type == 'systeminnhold' => {
       systemNokkel,
       overskrift
     },
     _type == 'standardtekst' => {
+      kanRedigeres,
       innhold[]{
         _type == 'content' => {
           ...,

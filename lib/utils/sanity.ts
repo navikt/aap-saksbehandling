@@ -18,8 +18,8 @@ export interface PortableTextChild {
   marks: Array<PortableTextMark>;
 }
 
-export function deserialize(innhold: Array<PortableText>): Content {
-  const content = innhold.map((block) => {
+export function deserialize(innhold?: Array<PortableText>): Content {
+  const content = innhold?.map((block) => {
     const content = block.children.map((child) => {
       const marks = child.marks?.map((mark) => {
         return { type: mapPortableTextMarkToTipTapMark(mark) };

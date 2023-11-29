@@ -1,26 +1,50 @@
 import { hentBrevmalerFraSanity } from 'lib/services/sanityservice/sanityservice';
 import { BrevEditorMedSanity } from 'components/sanityplayground/BrevEditorMedSanity';
-import { deserialize } from 'lib/utils/sanity';
+import { PortableText, deserialize } from 'lib/utils/sanity';
 import { Heading } from '@navikt/ds-react/esm/typography';
+
+interface DelAvBrev {
+  type: string;
+  brukEditor: boolean;
+  id: string;
+}
+
+interface PortableTextMedRef {
+  innhold: PortableText[];
+  ref: string;
+}
 
 export default async function Page() {
   const brevmaler = await hentBrevmalerFraSanity();
 
-  const brevinnhold = brevmaler[0].innhold.map((i) => {
-    const innhold = i.innhold.map((x) => {
-      const children = x.children.map((child) => {
-        // @ts-ignore
-        if (child._type === 'systemVariabel') {
-          return { ...child, text: 'Må innhentes fra systemet' };
-        }
+  const portableTextMedRef: PortableTextMedRef[] = [];
+  const brevMedInnhold = brevmaler[0].innhold.map((innhold) => {
+    const delAvBrev: DelAvBrev = {
+      type: innhold._type,
+      brukEditor: false,
+      id: innhold._id,
+    };
+    if (innhold._type === 'standardtekst') {
+      delAvBrev.brukEditor = innhold.kanRedigeres;
+      const portableText = innhold?.innhold.map((x) => {
+        const children = x.children.map((child) => {
+          // @ts-ignore
+          if (child._type === 'systemVariabel') {
+            return { ...child, text: 'Må innhentes fra systemet' };
+          }
 
-        return child;
+          return child;
+        });
+
+        return { ...x, children: children.filter((child) => child.text) };
       });
-
-      return { ...x, children: children.filter((child) => child.text) };
-    });
-
-    return { ...i, innhold };
+      const standardtekst: PortableTextMedRef = {
+        innhold: portableText,
+        ref: innhold._id,
+      };
+      portableTextMedRef.push(standardtekst);
+    }
+    return delAvBrev;
   });
 
   return (
@@ -28,9 +52,17 @@ export default async function Page() {
       Brevmaler
       <div>
         <Heading size={'medium'}>{brevmaler[0].brevtittel}</Heading>
-        {brevinnhold.map((innhold, index) => (
-          <BrevEditorMedSanity initialValue={deserialize(innhold.innhold)} key={index} />
-        ))}
+        {brevMedInnhold.map((innhold, index) => {
+          if (innhold.brukEditor) {
+            return (
+              <BrevEditorMedSanity
+                initialValue={deserialize(portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold)}
+                key={index}
+              />
+            );
+          }
+          return <div key={index}>Ikke bruk editor</div>;
+        })}
       </div>
     </div>
   );
