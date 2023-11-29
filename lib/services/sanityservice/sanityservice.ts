@@ -14,9 +14,15 @@ interface Innhold {
   _type: string;
 }
 
+interface Systeminnhold {
+  _type: string;
+  systemNokkel: string;
+  overskrift?: string;
+}
+
 export interface Brevmal {
   brevtittel: string;
-  innhold: Innhold[];
+  innhold: Innhold[] | Systeminnhold;
 }
 
 const brevmalQuery = groq`
@@ -24,6 +30,11 @@ const brevmalQuery = groq`
   brevtittel,
   innhold[] -> {
     _type,
+    _type == 'systeminnhold' => {
+      systemNokkel,
+      overskrift
+    },
+    _type == 'standardtekst' => {
       innhold[]{
         _type == 'content' => {
           ...,
@@ -37,16 +48,14 @@ const brevmalQuery = groq`
               ...,
               "text": @->.tekst
             },
-            _type == 'blockElement' => {
-              ...,
-              'innhold': @->.innhold
-            }
           }
         }
       }
     }
-  }`;
+  }
+}`;
 
 export async function hentBrevmalerFraSanity() {
-  return await sanityservice.fetch<Array<Brevmal>>(brevmalQuery);
+  const brevmaler = await sanityservice.fetch<Array<Brevmal>>(brevmalQuery);
+  return brevmaler;
 }
