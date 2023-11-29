@@ -1,4 +1,4 @@
-import { createClient } from 'next-sanity';
+import { createClient, groq } from 'next-sanity';
 import { PortableText } from 'lib/utils/sanity';
 
 export const sanityservice = createClient({
@@ -19,34 +19,34 @@ export interface Brevmal {
   innhold: Innhold[];
 }
 
+const brevmalQuery = groq`
+*[_type=='brev']{
+  brevtittel,
+  innhold[] -> {
+    _type,
+      innhold[]{
+        _type == 'content' => {
+          ...,
+          children[] {
+            ...,
+            _type == 'systemVariabel' => {
+              ...,
+              "systemVariabel": @->.tekniskNavn
+            },
+            _type == 'inlineElement' => {
+              ...,
+              "text": @->.tekst
+            },
+            _type == 'blockElement' => {
+              ...,
+              'innhold': @->.innhold
+            }
+          }
+        }
+      }
+    }
+  }`;
+
 export async function hentBrevmalerFraSanity() {
-  return await sanityservice.fetch<Array<Brevmal>>(
-    "*[_type=='brev']{\n" +
-      '  brevtittel,\n' +
-      '  innhold[] -> {\n' +
-      '    _type,\n' +
-      '      innhold[]{\n' +
-      "        _type == 'content' => {\n" +
-      '          ...,\n' +
-      '          children[] {\n' +
-      '            ...,\n' +
-      "            _type == 'systemVariabel' => {\n" +
-      '              ...,\n' +
-      '              "systemVariabel": @->.tekniskNavn\n' +
-      '            },\n' +
-      "            _type == 'inlineElement' => {\n" +
-      '              ...,\n' +
-      '              "text": @->.tekst\n' +
-      '            },\n' +
-      "            _type == 'blockElement' => {\n" +
-      '              ...,\n' +
-      "              'innhold': @->.innhold\n" +
-      '              \n' +
-      '            }\n' +
-      '          }\n' +
-      '        }\n' +
-      '      }\n' +
-      '    }\n' +
-      '  }'
-  );
+  return await sanityservice.fetch<Array<Brevmal>>(brevmalQuery);
 }
