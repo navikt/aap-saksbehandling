@@ -26,8 +26,8 @@ export default async function Page() {
     };
     if (innhold._type === 'standardtekst') {
       delAvBrev.brukEditor = innhold.kanRedigeres;
-      const portableText = innhold?.innhold.map((x) => {
-        const children = x.children.map((child) => {
+      const portableText = innhold?.innhold.map((portableTextElement) => {
+        const children = portableTextElement.children.map((child) => {
           // @ts-ignore
           if (child._type === 'systemVariabel') {
             return { ...child, text: 'Må innhentes fra systemet' };
@@ -36,7 +36,7 @@ export default async function Page() {
           return child;
         });
 
-        return { ...x, children: children.filter((child) => child.text) };
+        return { ...portableTextElement, children: children.filter((child) => child.text) };
       });
       const standardtekst: PortableTextMedRef = {
         innhold: portableText,
