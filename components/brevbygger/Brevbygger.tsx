@@ -23,6 +23,19 @@ function byggBrev(brevMedInnhold: DelAvBrev[], portableTextMedRef: PortableTextM
 }
 export const Brevbygger = ({ brevMedInnhold, portableTextMedRef }: Props) => {
   const [brevData, setBrevData] = useState<BrevData[]>(byggBrev(brevMedInnhold, portableTextMedRef));
+  function updateBrevdata(content: JSONContent, id: string) {
+    setBrevData(
+      brevData.map((brev) => {
+        if (brev._id === id) {
+          return {
+            ...brev,
+            content,
+          };
+        }
+        return brev;
+      })
+    );
+  }
 
   return (
     <>
@@ -30,11 +43,12 @@ export const Brevbygger = ({ brevMedInnhold, portableTextMedRef }: Props) => {
         {brevMedInnhold.map((innhold, index) => {
           return (
             <BrevEditorMedSanity
-              id={innhold.id}
               initialValue={deserialize(portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold)}
               brukEditor={innhold.brukEditor}
               key={index}
-              setBrevData={setBrevData}
+              setBrevData={(content) => {
+                updateBrevdata(content, innhold.id);
+              }}
             />
           );
         })}

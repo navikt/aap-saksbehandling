@@ -17,7 +17,6 @@ export const PdfVisning = ({ content }: PdfVisningProps) => {
   const [numPages, setNumPages] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState(1);
 
-  console.log(content);
   useEffect(() => {
     async function hentPdf() {
       const postData = {
