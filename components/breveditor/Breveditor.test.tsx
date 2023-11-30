@@ -5,12 +5,12 @@ describe('Breveditor', () => {
   const setContentMock = jest.fn();
 
   test('tegner breveditoren', () => {
-    render(<Breveditor setContent={setContentMock} />);
+    render(<Breveditor brukEditor={true} setContent={setContentMock} />);
     expect(screen.getByTestId('breveditor')).toBeInTheDocument();
   });
 
   test('har en menylinje', () => {
-    render(<Breveditor setContent={setContentMock} />);
+    render(<Breveditor brukEditor={true} setContent={setContentMock} />);
     expect(screen.getByRole('toolbar')).toBeVisible();
   });
 });

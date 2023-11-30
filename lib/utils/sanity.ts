@@ -1,5 +1,5 @@
-import { Content } from '@tiptap/react';
 import { PortableTextObject } from '@sanity/types/src/portableText/types';
+import { JSONContent } from '@tiptap/core';
 
 export interface PortableText {
   _type: string;
@@ -18,7 +18,7 @@ export interface PortableTextChild {
   marks: Array<PortableTextMark>;
 }
 
-export function deserialize(innhold?: Array<PortableText>): Content {
+export function deserialize(innhold?: Array<PortableText>): JSONContent {
   const content = innhold?.map((block) => {
     const content = block.children.map((child) => {
       const marks = child.marks?.map((mark) => {

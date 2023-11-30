@@ -1,5 +1,5 @@
 import { StarterKit } from '@tiptap/starter-kit';
-import { BubbleMenu, Content, EditorContent, useEditor } from '@tiptap/react';
+import { BubbleMenu, EditorContent, useEditor } from '@tiptap/react';
 
 import styles from 'components/breveditor/Breveditor.module.css';
 import { Toolbar } from 'components/breveditor/toolbar/Toolbar';
@@ -13,9 +13,10 @@ import { Table } from '@tiptap/extension-table';
 import { Loader } from '@navikt/ds-react';
 
 interface Props {
-  initialValue?: Content;
+  initialValue?: JSONContent;
   className?: string;
   setContent: Dispatch<JSONContent>;
+  brukEditor: boolean;
 }
 
 const extensions = [
@@ -26,7 +27,7 @@ const extensions = [
   TableRow,
 ];
 
-export const Breveditor = ({ initialValue, setContent }: Props) => {
+export const Breveditor = ({ initialValue, setContent, brukEditor }: Props) => {
   const editor = useEditor({
     extensions,
     content: initialValue,
@@ -34,6 +35,7 @@ export const Breveditor = ({ initialValue, setContent }: Props) => {
       console.log('tiptapjson', editor.getJSON());
       setContent(editor.getJSON());
     },
+    editable: brukEditor,
   });
 
   if (!editor) {
@@ -46,7 +48,7 @@ export const Breveditor = ({ initialValue, setContent }: Props) => {
 
   return (
     <div className={styles.editor}>
-      <Toolbar editor={editor} />
+      {brukEditor && <Toolbar editor={editor} />}
       {editor && (
         <BubbleMenu editor={editor}>
           <Boblemeny editor={editor} />

@@ -3,13 +3,13 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { Alert, Loader, Pagination } from '@navikt/ds-react';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import { JSONContent } from '@tiptap/core';
+import { Content } from '@tiptap/core';
 
 const pdfjsWorker = require('pdfjs-dist/build/pdf.worker.entry.js');
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 interface PdfVisningProps {
-  content: JSONContent['content'];
+  content: Content;
 }
 
 export const PdfVisning = ({ content }: PdfVisningProps) => {
@@ -17,6 +17,7 @@ export const PdfVisning = ({ content }: PdfVisningProps) => {
   const [numPages, setNumPages] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState(1);
 
+  console.log(content);
   useEffect(() => {
     async function hentPdf() {
       const postData = {

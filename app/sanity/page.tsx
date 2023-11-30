@@ -1,15 +1,15 @@
 import { hentBrevmalerFraSanity } from 'lib/services/sanityservice/sanityservice';
-import { BrevEditorMedSanity } from 'components/sanityplayground/BrevEditorMedSanity';
-import { PortableText, deserialize } from 'lib/utils/sanity';
+import { PortableText } from 'lib/utils/sanity';
 import { Heading } from '@navikt/ds-react/esm/typography';
+import { Brevbygger } from 'components/brevbygger/Brevbygger';
 
-interface DelAvBrev {
+export interface DelAvBrev {
   type: string;
   brukEditor: boolean;
   id: string;
 }
 
-interface PortableTextMedRef {
+export interface PortableTextMedRef {
   innhold: PortableText[];
   ref: string;
 }
@@ -24,6 +24,11 @@ export default async function Page() {
       brukEditor: false,
       id: innhold._id,
     };
+    if (innhold._type === 'systeminnhold') {
+      if (innhold.systemNokkel === 'fritekst') {
+        delAvBrev.brukEditor = true;
+      }
+    }
     if (innhold._type === 'standardtekst') {
       delAvBrev.brukEditor = innhold.kanRedigeres;
       const portableText = innhold?.innhold.map((portableTextElement) => {
@@ -52,17 +57,7 @@ export default async function Page() {
       Brevmaler
       <div>
         <Heading size={'medium'}>{brevmaler[0].brevtittel}</Heading>
-        {brevMedInnhold.map((innhold, index) => {
-          if (innhold.brukEditor) {
-            return (
-              <BrevEditorMedSanity
-                initialValue={deserialize(portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold)}
-                key={index}
-              />
-            );
-          }
-          return <div key={index}>Ikke bruk editor</div>;
-        })}
+        <Brevbygger brevMedInnhold={brevMedInnhold} portableTextMedRef={portableTextMedRef} />
       </div>
     </div>
   );
