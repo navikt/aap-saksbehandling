@@ -9,7 +9,7 @@ describe('Breveditor', () => {
     expect(screen.getByTestId('breveditor')).toBeInTheDocument();
   });
 
-  test('har en menylinje', () => {
+  test.skip('har en menylinje', () => {
     render(<Breveditor brukEditor={true} setContent={setContentMock} />);
     expect(screen.getByRole('toolbar')).toBeVisible();
   });

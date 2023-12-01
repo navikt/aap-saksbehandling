@@ -2,7 +2,6 @@ import { StarterKit } from '@tiptap/starter-kit';
 import { BubbleMenu, EditorContent, useEditor } from '@tiptap/react';
 
 import styles from 'components/breveditor/Breveditor.module.css';
-import { Toolbar } from 'components/breveditor/toolbar/Toolbar';
 import { JSONContent } from '@tiptap/core';
 import { Dispatch } from 'react';
 import { Boblemeny } from 'components/breveditor/toolbar/boblemeny/Boblemeny';
@@ -48,13 +47,13 @@ export const Breveditor = ({ initialValue, setContent, brukEditor }: Props) => {
 
   return (
     <div className={styles.editor}>
-      {brukEditor && <Toolbar editor={editor} />}
+      {/*{brukEditor && <Toolbar editor={editor} />}*/}
       {editor && (
         <BubbleMenu editor={editor}>
           <Boblemeny editor={editor} />
         </BubbleMenu>
       )}
-      <EditorContent editor={editor} className={styles.editorContent} data-testid={'breveditor'} />
+      <EditorContent editor={editor} className={brukEditor ? styles.editorContent : ''} data-testid={'breveditor'} />
     </div>
   );
 };
