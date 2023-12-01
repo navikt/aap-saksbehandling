@@ -3,7 +3,6 @@
 import { PdfVisning } from 'components/pdfvisning/PdfVisning';
 import { useState } from 'react';
 import { deserialize } from 'lib/utils/sanity';
-import { DelAvBrev, PortableTextMedRef } from 'app/sanity/page';
 import { JSONContent } from '@tiptap/core';
 import { Button } from '@navikt/ds-react';
 import { Breveditor } from 'components/breveditor/Breveditor';
@@ -11,6 +10,7 @@ import { Breveditor } from 'components/breveditor/Breveditor';
 import styles from './Brevbygger.module.css';
 import { Heading } from '@navikt/ds-react/esm/typography';
 import { Nivå } from 'lib/services/sanityservice/sanityservice';
+import { DelAvBrev, PortableTextMedRef } from 'components/brevmalvelger/BrevmalVelger';
 
 interface Props {
   brevMedInnhold: DelAvBrev[];
