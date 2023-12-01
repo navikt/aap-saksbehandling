@@ -77,7 +77,8 @@ export const BrevmalVelger = ({ brevmaler }: Props) => {
         label={'Velg brevmal'}
         onChange={(value) => setBrevmalId(value.target.value)}
       >
-        {brevmaler?.map((mal) => (
+        <option value={''}></option>
+        {brevmaler.map((mal) => (
           <option key={mal._id} value={mal._id}>
             {mal.brevtittel}
           </option>
