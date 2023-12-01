@@ -1,4 +1,4 @@
-import { hentBrevmalerFraSanity } from 'lib/services/sanityservice/sanityservice';
+import { hentBrevmalerFraSanity, Nivå } from 'lib/services/sanityservice/sanityservice';
 import { PortableText } from 'lib/utils/sanity';
 import { Heading } from '@navikt/ds-react/esm/typography';
 import { Brevbygger } from 'components/brevbygger/Brevbygger';
@@ -7,6 +7,8 @@ export interface DelAvBrev {
   type: string;
   brukEditor: boolean;
   id: string;
+  overskrift?: string;
+  niva?: Nivå;
 }
 
 export interface PortableTextMedRef {
@@ -18,17 +20,22 @@ export default async function Page() {
   const brevmaler = await hentBrevmalerFraSanity();
 
   const portableTextMedRef: PortableTextMedRef[] = [];
+
   const brevMedInnhold = brevmaler[0].innhold.map((innhold) => {
     const delAvBrev: DelAvBrev = {
       type: innhold._type,
       brukEditor: false,
       id: innhold._id,
+      overskrift: innhold.overskrift,
+      niva: innhold.niva,
     };
+
     if (innhold._type === 'systeminnhold') {
       if (innhold.systemNokkel === 'fritekst') {
         delAvBrev.brukEditor = true;
       }
     }
+
     if (innhold._type === 'standardtekst') {
       delAvBrev.brukEditor = innhold.kanRedigeres;
       const portableText = innhold?.innhold.map((portableTextElement) => {
@@ -43,12 +50,14 @@ export default async function Page() {
 
         return { ...portableTextElement, children: children.filter((child) => child.text) };
       });
+
       const standardtekst: PortableTextMedRef = {
         innhold: portableText,
         ref: innhold._id,
       };
       portableTextMedRef.push(standardtekst);
     }
+
     return delAvBrev;
   });
 

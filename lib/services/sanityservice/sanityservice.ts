@@ -9,38 +9,45 @@ export const sanityservice = createClient({
   token: process.env.SANITY_API_TOKEN,
 });
 
-export interface Innhold {
+export type Nivå = 'H1' | 'H2' | 'H3';
+
+interface Innhold {
+  _id: string;
+  overskrift?: string;
+  niva?: Nivå;
+}
+
+export interface StandardTekst extends Innhold {
   innhold: PortableText[];
   kanRedigeres: boolean;
   _type: 'standardtekst';
-  _id: string;
 }
 
-export interface Systeminnhold {
+export interface Systeminnhold extends Innhold {
   _type: 'systeminnhold';
-  _id: string;
   systemNokkel: string;
-  overskrift?: string;
 }
 
 export interface Brevmal {
   brevtittel: string;
-  innhold: Innhold[] | Systeminnhold[];
+  innhold: StandardTekst[] | Systeminnhold[];
 }
 
-const brevmalQuery = groq`
-*[_type=='brev']{
+const brevmalQuery = groq`*[_type=='brev']{
   brevtittel,
   innhold[] -> {
     _type,
     _id,
     _type == 'systeminnhold' => {
       systemNokkel,
-      overskrift
+      overskrift,
+      "niva": niva->.level
     },
     _type == 'standardtekst' => {
+      overskrift,
+      "niva": niva->.level,
       kanRedigeres,
-      innhold[]{
+        innhold[]{
         _type == 'content' => {
           ...,
           children[] {

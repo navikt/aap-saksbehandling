@@ -53,14 +53,18 @@ export const Brevbygger = ({ brevMedInnhold, portableTextMedRef }: Props) => {
           <div className={styles.brev}>
             {brevMedInnhold.map((innhold) => {
               return (
-                <Breveditor
-                  key={innhold.id}
-                  brukEditor={innhold.brukEditor}
-                  setContent={(content) => {
-                    updateBrevdata(content, innhold.id);
-                  }}
-                  initialValue={deserialize(portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold)}
-                />
+                <div key={innhold.id}>
+                  {innhold.overskrift && <div>{innhold.overskrift}</div>}
+                  <Breveditor
+                    brukEditor={innhold.brukEditor}
+                    setContent={(content) => {
+                      updateBrevdata(content, innhold.id);
+                    }}
+                    initialValue={deserialize(
+                      portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold
+                    )}
+                  />
+                </div>
               );
             })}
           </div>
