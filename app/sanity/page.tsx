@@ -8,7 +8,7 @@ export interface DelAvBrev {
   brukEditor: boolean;
   id: string;
   overskrift?: string;
-  niva?: Nivå;
+  nivå?: Nivå;
 }
 
 export interface PortableTextMedRef {
@@ -27,7 +27,7 @@ export default async function Page() {
       brukEditor: false,
       id: innhold._id,
       overskrift: innhold.overskrift,
-      niva: innhold.niva,
+      nivå: innhold.niva,
     };
 
     if (innhold._type === 'systeminnhold') {
@@ -38,7 +38,7 @@ export default async function Page() {
 
     if (innhold._type === 'standardtekst') {
       delAvBrev.brukEditor = innhold.kanRedigeres;
-      const portableText = innhold?.innhold.map((portableTextElement) => {
+      const portableText = innhold?.innhold?.map((portableTextElement) => {
         const children = portableTextElement.children.map((child) => {
           // @ts-ignore
           if (child._type === 'systemVariabel') {

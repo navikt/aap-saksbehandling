@@ -9,6 +9,8 @@ import { Button } from '@navikt/ds-react';
 import { Breveditor } from 'components/breveditor/Breveditor';
 
 import styles from './Brevbygger.module.css';
+import { Heading } from '@navikt/ds-react/esm/typography';
+import { Nivå } from 'lib/services/sanityservice/sanityservice';
 
 interface Props {
   brevMedInnhold: DelAvBrev[];
@@ -54,7 +56,11 @@ export const Brevbygger = ({ brevMedInnhold, portableTextMedRef }: Props) => {
             {brevMedInnhold.map((innhold) => {
               return (
                 <div key={innhold.id}>
-                  {innhold.overskrift && <div>{innhold.overskrift}</div>}
+                  {innhold.overskrift && innhold.nivå && (
+                    <Heading size={'small'} level={mapNivåToHeadingLevel(innhold.nivå)}>
+                      {innhold.overskrift}
+                    </Heading>
+                  )}
                   <Breveditor
                     brukEditor={innhold.brukEditor}
                     setContent={(content) => {
@@ -74,3 +80,14 @@ export const Brevbygger = ({ brevMedInnhold, portableTextMedRef }: Props) => {
     </>
   );
 };
+
+function mapNivåToHeadingLevel(nivå: Nivå): '1' | '2' | '3' {
+  switch (nivå) {
+    case 'H1':
+      return '1';
+    case 'H2':
+      return '2';
+    case 'H3':
+      return '3';
+  }
+}
