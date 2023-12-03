@@ -57,7 +57,7 @@ export const Brevbygger = ({ brevMedInnhold, portableTextMedRef }: Props) => {
               return (
                 <div key={innhold.id}>
                   {innhold.overskrift && innhold.nivå && (
-                    <Heading size={'small'} level={mapNivåToHeadingLevel(innhold.nivå)}>
+                    <Heading size={'small'} level={mapNivåToHeadingLevel(innhold.nivå)} className={styles.heading}>
                       {innhold.overskrift}
                     </Heading>
                   )}

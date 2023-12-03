@@ -10,3 +10,7 @@
   flex-direction: column;
   gap: 1rem;
 }
+
+.heading {
+  padding-inline: calc(2rem + 5px); /* FIXME vurder å trekke ut som variabler? */
+}
