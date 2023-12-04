@@ -80,7 +80,7 @@ export const BrevmalVelger = ({ brevmaler }: Props) => {
         <option value={''}></option>
         {brevmaler.map((mal) => (
           <option key={mal._id} value={mal._id}>
-            {mal.brevtittel}
+            {mal.brevtype}
           </option>
         ))}
       </Select>

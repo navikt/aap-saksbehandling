@@ -6,7 +6,7 @@ export const sanityservice = createClient({
   dataset: 'production',
   apiVersion: '2023-11-09',
   useCdn: false,
-  token: process.env.NEXT_PUBLIC_SANITY_API_TOKEN,
+  token: process.env.SANITY_API_TOKEN,
 });
 
 export type Nivå = 'H1' | 'H2' | 'H3';
@@ -33,8 +33,8 @@ export interface Brevmal {
   innhold: StandardTekst[] | Systeminnhold[];
 }
 
-export async function hentBrevmalerFraSanity(brevmalId: string) {
-  const brevmaler = await sanityservice.fetch<Brevmal>(groq`*[_id == "${brevmalId}"][0]{
+export async function hentBrevmalFraSanity(brevmalId: string) {
+  return await sanityservice.fetch<Brevmal>(groq`*[_id == "${brevmalId}"][0]{
   brevtittel,
   innhold[] -> {
     _type,
@@ -67,20 +67,19 @@ export async function hentBrevmalerFraSanity(brevmalId: string) {
     }
   }
 }`);
-  return brevmaler;
 }
-
-const query = groq`
-*[_type=='brev']{
-  brevtittel,
-    _id
-  }`;
 
 export interface Brevmaler {
   brevtittel: string;
+  brevtype: string;
   _id: string;
 }
 
 export function hentAlleBrevmaler() {
-  return sanityservice.fetch<Array<Brevmaler>>(query);
+  return sanityservice.fetch<Array<Brevmaler>>(groq`
+*[_type=='brev']{
+  brevtittel,
+    _id,
+    brevtype
+  }`);
 }
