@@ -1,5 +1,6 @@
 import { Brevmal } from 'lib/services/sanityservice/sanityservice';
 import { Dispatch, useCallback, useEffect, useState } from 'react';
+import { hentBrevmalFraSanity } from 'lib/api';
 
 export function useBrev(): {
   brevmal?: Brevmal;
@@ -9,7 +10,7 @@ export function useBrev(): {
   const [brevmalId, setBrevmalId] = useState<string>();
 
   const hentBrevmal = useCallback(() => {
-    brevmalId && fetch(`/api/sanity/brevmal/${brevmalId}`).then(async (data) => setBrevmal(await data.json()));
+    brevmalId && hentBrevmalFraSanity(brevmalId).then((data) => setBrevmal(data));
   }, [brevmalId]);
 
   useEffect(hentBrevmal, [hentBrevmal]);

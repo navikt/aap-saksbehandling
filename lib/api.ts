@@ -1,4 +1,5 @@
 import { BehandlingFlytOgTilstand, LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo } from './types/types';
+import { Brevmal } from 'lib/services/sanityservice/sanityservice';
 
 export async function fetcher<ResponseBody>(
   url: string,
@@ -44,6 +45,10 @@ export function hentAlleSaker() {
 
 export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
   return fetcher('/api/behandling/los-behov/', 'POST', avklaringsBehov);
+}
+
+export function hentBrevmalFraSanity(brevmalid: string) {
+  return fetcher<Brevmal>(`/api/sanity/brevmal/${brevmalid}`, 'GET');
 }
 
 export async function hentSaksinfo() {

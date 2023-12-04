@@ -33,42 +33,6 @@ export interface Brevmal {
   innhold: StandardTekst[] | Systeminnhold[];
 }
 
-export async function hentBrevmalFraSanity(brevmalId: string) {
-  return await sanityservice.fetch<Brevmal>(groq`*[_id == "${brevmalId}"][0]{
-  brevtittel,
-  innhold[] -> {
-    _type,
-    _id,
-    _type == 'systeminnhold' => {
-      systemNokkel,
-      overskrift,
-      "niva": niva->.level
-    },
-    _type == 'standardtekst' => {
-      overskrift,
-      "niva": niva->.level,
-      kanRedigeres,
-        innhold[]{
-        _type == 'content' => {
-          ...,
-          children[] {
-            ...,
-            _type == 'systemVariabel' => {
-              ...,
-              "systemVariabel": @->.tekniskNavn
-            },
-            _type == 'inlineElement' => {
-              ...,
-              "text": @->.tekst
-            },
-          }
-        }
-      }
-    }
-  }
-}`);
-}
-
 export interface Brevmaler {
   brevtittel: string;
   brevtype: string;
