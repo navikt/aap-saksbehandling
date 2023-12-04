@@ -57,7 +57,11 @@ export const Brevbygger = ({ brevMedInnhold, portableTextMedRef }: Props) => {
               return (
                 <div key={innhold.id}>
                   {innhold.overskrift && innhold.nivå && (
-                    <Heading size={'small'} level={mapNivåToHeadingLevel(innhold.nivå)} className={styles.heading}>
+                    <Heading
+                      size={mapNivåToHeadingSize(innhold.nivå)}
+                      level={mapNivåToHeadingLevel(innhold.nivå)}
+                      className={styles.heading}
+                    >
                       {innhold.overskrift}
                     </Heading>
                   )}
@@ -80,6 +84,17 @@ export const Brevbygger = ({ brevMedInnhold, portableTextMedRef }: Props) => {
     </>
   );
 };
+
+function mapNivåToHeadingSize(nivå: Nivå): 'small' | 'medium' | 'large' {
+  switch (nivå) {
+    case 'H1':
+      return 'large';
+    case 'H2':
+      return 'medium';
+    case 'H3':
+      return 'small';
+  }
+}
 
 function mapNivåToHeadingLevel(nivå: Nivå): '1' | '2' | '3' {
   switch (nivå) {
