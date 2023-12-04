@@ -5,6 +5,8 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import { Content } from '@tiptap/core';
 
+import styles from './PdfVisning.module.css';
+
 const pdfjsWorker = require('pdfjs-dist/build/pdf.worker.entry.js');
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -63,7 +65,7 @@ export const PdfVisning = ({ content }: PdfVisningProps) => {
   }
 
   return (
-    <div>
+    <div className={styles.pdfPreview}>
       <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
       <Document
         file={`data:application/pdf;base64,${pdfFilInnhold}`}
