@@ -74,7 +74,7 @@ export const PdfVisning = ({ content }: PdfVisningProps) => {
         noData={<Alert variant={'error'}>{'Dokumentet er tomt'} </Alert>}
         loading={<Loader size={'xlarge'} variant="interaction" transparent={true} />}
       >
-        <Page pageNumber={pageNumber} renderTextLayer={true} />
+        <Page pageNumber={pageNumber} renderTextLayer={true} className={styles.pdfPage} />
       </Document>
       <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
     </div>

@@ -4,3 +4,8 @@
 
   background-color: var(--a-bg-subtle);
 }
+
+.pdfPage {
+  box-shadow: 0 5px 5px var(--a-border-strong);
+  margin-block: var(--a-spacing-2);
+}
