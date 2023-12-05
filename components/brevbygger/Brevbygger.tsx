@@ -1,7 +1,7 @@
 'use client';
 
 import { PdfVisning } from 'components/pdfvisning/PdfVisning';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { deserialize } from 'lib/utils/sanity';
 import { JSONContent } from '@tiptap/core';
 import { Button } from '@navikt/ds-react';
@@ -35,6 +35,10 @@ function byggBrev(brevMedInnhold: DelAvBrev[], portableTextMedRef: PortableTextM
 export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props) => {
   const [brevData, setBrevData] = useState<BrevData[]>(byggBrev(brevMedInnhold, portableTextMedRef));
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    setBrevData(byggBrev(brevMedInnhold, portableTextMedRef));
+  }, [brevMedInnhold, portableTextMedRef]);
 
   function updateBrevdata(content: JSONContent, id: string) {
     setBrevData(

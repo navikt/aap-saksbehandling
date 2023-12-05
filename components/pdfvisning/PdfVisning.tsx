@@ -10,17 +10,15 @@ import { BrevData } from 'components/brevbygger/Brevbygger';
 const pdfjsWorker = require('pdfjs-dist/build/pdf.worker.entry.js');
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
-interface PdfVisningProps {
+interface Props {
   tittel: string;
   brevdata: BrevData[];
 }
 
-export const PdfVisning = ({ tittel, brevdata }: PdfVisningProps) => {
+export const PdfVisning = ({ tittel, brevdata }: Props) => {
   const [pdfFilInnhold, setPfdFilInnhold] = useState<string>();
   const [numPages, setNumPages] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState(1);
-
-  // content={brevData.flatMap((brev) => brev.content?.content)}
 
   useEffect(() => {
     async function hentPdf() {
@@ -68,7 +66,7 @@ export const PdfVisning = ({ tittel, brevdata }: PdfVisningProps) => {
     }, 2000);
 
     return () => clearTimeout(timeOut);
-  }, [brevdata]);
+  }, [brevdata, tittel]);
 
   if (!pdfFilInnhold) {
     return null;
