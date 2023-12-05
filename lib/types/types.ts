@@ -4,7 +4,7 @@ import { components } from './schema';
 export type StudentGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.student.flate.StudentGrunnlagDto'];
 export type SykdomsGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.sykdom.flate.SykdomsGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.sykdom.flate.SykdomGrunnlagDto'];
 export type YrkesskadeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.sykdom.flate.YrkesskadeGrunnlagDto'];
 export type BistandsGrunnlag =
@@ -65,6 +65,7 @@ export type StegType =
   | 'AVKLAR_SYKDOM'
   | 'FASTSETT_GRUNNLAG'
   | 'FASTSETT_UTTAK'
+  | 'FASTSETT_ARBEIDSEVNE'
   | 'BEREGN_TILKJENT_YTELSE'
   | 'SIMULERING'
   | 'FORESLÅ_VEDTAK'

@@ -75,6 +75,8 @@ export const Yrkesskade = ({ grunnlag, behandlingsReferanse }: Props) => {
               '@type': BehovsType.YRKESSKADE,
               // @ts-ignore
               yrkesskadevurdering: {
+                andelAvNedsettelse: 50,
+                antattÅrligInntekt: 50,
                 // @ts-ignore
                 begrunnelse: data.begrunnelse,
                 // @ts-ignore
