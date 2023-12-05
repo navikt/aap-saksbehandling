@@ -13,21 +13,26 @@ import { Nivå } from 'lib/services/sanityservice/sanityservice';
 import { DelAvBrev, PortableTextMedRef } from 'components/brevmalvelger/BrevmalVelger';
 
 interface Props {
+  tittel: string;
   brevMedInnhold: DelAvBrev[];
   portableTextMedRef: PortableTextMedRef[];
 }
-type BrevData = {
+export type BrevData = {
   _id: string;
+  overskrift?: string;
+  nivå?: Nivå;
   content: JSONContent;
 };
 function byggBrev(brevMedInnhold: DelAvBrev[], portableTextMedRef: PortableTextMedRef[]) {
   return brevMedInnhold.map((innhold) => ({
     _id: innhold.id,
+    overskrift: innhold.overskrift,
+    nivå: innhold.nivå,
     content: deserialize(portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold),
   }));
 }
 
-export const Brevbygger = ({ brevMedInnhold, portableTextMedRef }: Props) => {
+export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props) => {
   const [brevData, setBrevData] = useState<BrevData[]>(byggBrev(brevMedInnhold, portableTextMedRef));
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -79,7 +84,8 @@ export const Brevbygger = ({ brevMedInnhold, portableTextMedRef }: Props) => {
             })}
           </div>
         </div>
-        {isOpen && <PdfVisning content={brevData.flatMap((brev) => brev.content?.content)} />}
+
+        {isOpen && <PdfVisning tittel={tittel} brevdata={brevData} />}
       </div>
     </>
   );

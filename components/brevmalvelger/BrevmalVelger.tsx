@@ -86,7 +86,13 @@ export const BrevmalVelger = ({ brevmaler }: Props) => {
       </Select>
 
       <Heading size={'medium'}>{brevmal?.brevtittel}</Heading>
-      {brevMedInnhold && <Brevbygger brevMedInnhold={brevMedInnhold} portableTextMedRef={portableTextMedRef} />}
+      {brevMedInnhold && (
+        <Brevbygger
+          tittel={brevmal?.brevtittel ?? ''}
+          brevMedInnhold={brevMedInnhold}
+          portableTextMedRef={portableTextMedRef}
+        />
+      )}
     </div>
   );
 };

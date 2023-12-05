@@ -3,33 +3,43 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { Alert, Loader, Pagination } from '@navikt/ds-react';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import { Content } from '@tiptap/core';
 
 import styles from './PdfVisning.module.css';
+import { BrevData } from 'components/brevbygger/Brevbygger';
 
 const pdfjsWorker = require('pdfjs-dist/build/pdf.worker.entry.js');
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 interface PdfVisningProps {
-  content: Content;
+  tittel: string;
+  brevdata: BrevData[];
 }
 
-export const PdfVisning = ({ content }: PdfVisningProps) => {
+export const PdfVisning = ({ tittel, brevdata }: PdfVisningProps) => {
   const [pdfFilInnhold, setPfdFilInnhold] = useState<string>();
   const [numPages, setNumPages] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState(1);
 
+  // content={brevData.flatMap((brev) => brev.content?.content)}
+
   useEffect(() => {
     async function hentPdf() {
       const postData = {
+        tittel,
         mottaker: {
           navn: 'Ola Nordmann',
           ident: '12345678910',
         },
         saksnummer: 'AABBCC123',
         dato: '11. august 2023',
-        underblokker: content,
+        underblokker: brevdata.map((brev) => ({
+          overskrift: brev.overskrift,
+          nivå: brev.nivå,
+          content: brev.content?.content,
+        })),
       };
+
+      console.log('postData', postData);
 
       const response = await fetch(`/api/pdf-preview/vedtaksbrev/fritekst`, {
         method: 'POST',
@@ -58,7 +68,7 @@ export const PdfVisning = ({ content }: PdfVisningProps) => {
     }, 2000);
 
     return () => clearTimeout(timeOut);
-  }, [content]);
+  }, [brevdata]);
 
   if (!pdfFilInnhold) {
     return null;
