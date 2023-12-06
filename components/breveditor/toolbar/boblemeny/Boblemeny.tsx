@@ -2,6 +2,7 @@ import { Editor } from '@tiptap/react';
 import { Button } from '@navikt/ds-react';
 
 import styles from './Boblemeny.module.css';
+import { BulletListIcon } from '@navikt/aksel-icons';
 
 interface BubbleMenuProps {
   editor: Editor | null;
@@ -44,6 +45,14 @@ export const Boblemeny = ({ editor }: BubbleMenuProps) => {
         className={editor.isActive('strike') ? `${styles.active}` : ''}
       >
         <s>S</s>
+      </Button>
+      <Button
+        type={'button'}
+        variant={'tertiary-neutral'}
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={editor.isActive('bulletlist') ? `${styles.active}` : ''}
+      >
+        <BulletListIcon title={'Punktliste'} />
       </Button>
     </div>
   );
