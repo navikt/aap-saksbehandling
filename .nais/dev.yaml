@@ -1,8 +1,2 @@
 ingresses:
-- "https://aap-saksbehandling.intern.dev.nav.no"
-externals:
-- api.sanity.io
-- 948n95rd.api.sanity.io
-- apicdn.sanity.io
-- 948n95rd.apicdn.sanity.io
-- cdn.sanity.io
+  - 'https://aap-saksbehandling.intern.dev.nav.no'

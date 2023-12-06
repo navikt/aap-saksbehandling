@@ -55,6 +55,8 @@ spec:
         - application: "behandlingsflyt"
         - application: "saksbehandling-pdfgen"
       external:
-        {{#each externals as |host|}}
-        - host: {{host}}
-        {{/each}}
+        - host: api.sanity.io
+        - host: 948n95rd.api.sanity.io
+        - host: apicdn.sanity.io
+        - host: 948n95rd.apicdn.sanity.io
+        - host: cdn.sanity.io
