@@ -3,7 +3,7 @@
 import { Dropdown, ExternalLinkIcon, InternalHeader, Link, MenuGridIcon } from '../DsClient';
 
 import styles from '../../components/appheader/AppHeader.module.css';
-import { BrukerInformasjon } from '../../lib/services/azureuserservice/azureUserService';
+import { BrukerInformasjon } from 'lib/services/azureuserservice/azureUserService';
 
 interface LinkElement {
   label: string;
@@ -59,6 +59,9 @@ const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjo
 const AppHeader = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => (
   <InternalHeader className={styles.app__header}>
     <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
+    <Link href={'/sanity'} style={{ marginLeft: '1rem' }}>
+      Sanity
+    </Link>
     <Systemmeny />
     <Brukermeny brukerInformasjon={brukerInformasjon} />
   </InternalHeader>
