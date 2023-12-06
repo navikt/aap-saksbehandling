@@ -11,6 +11,7 @@
   gap: 1rem;
 }
 
-.heading {
+.heading,
+.brevtittel {
   padding-inline: calc(2rem + 5px); /* FIXME vurder å trekke ut som variabler? */
 }

@@ -1,6 +1,5 @@
 'use client';
 
-import { Heading } from '@navikt/ds-react/esm/typography';
 import { Brevbygger } from 'components/brevbygger/Brevbygger';
 import { Brevmaler, Nivå } from 'lib/services/sanityservice/sanityservice';
 import { Select } from '@navikt/ds-react';
@@ -85,7 +84,6 @@ export const BrevmalVelger = ({ brevmaler }: Props) => {
         ))}
       </Select>
 
-      <Heading size={'medium'}>{brevmal?.brevtittel}</Heading>
       {brevMedInnhold && (
         <Brevbygger
           tittel={brevmal?.brevtittel ?? ''}

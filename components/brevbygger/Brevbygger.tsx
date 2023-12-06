@@ -62,6 +62,9 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
       <div style={isOpen ? { display: 'flex', flexDirection: 'row' } : undefined}>
         <div className={styles.brevbygger}>
           <div className={styles.brev}>
+            <Heading size={'medium'} className={styles.brevtittel}>
+              {tittel}
+            </Heading>
             {brevMedInnhold.map((innhold) => {
               return (
                 <div key={innhold.id}>
