@@ -34,14 +34,16 @@ export function deserialize(innhold?: Array<PortableText>): JSONContent {
   return { type: 'doc', content };
 }
 
-type PortableTextMark = 'strong' | 'em';
-type TipTapMark = 'bold' | 'italic';
+type PortableTextMark = 'strong' | 'em' | 'underline';
+type TipTapMark = 'bold' | 'italic' | 'underline';
 function mapPortableTextMarkToTipTapMark(value: PortableTextMark): TipTapMark {
   switch (value) {
     case 'strong':
       return 'bold';
     case 'em':
       return 'italic';
+    case 'underline':
+      return 'underline';
   }
 }
 
