@@ -38,6 +38,8 @@ spec:
   observability:
     tracing:
       enabled: true
+  envFrom:
+    - secret: kelvin-env-local
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
