@@ -2,7 +2,7 @@ ingresses:
 - "https://aap-saksbehandling.intern.dev.nav.no"
 externals:
 - api.sanity.io
-- ib5361g9.api.sanity.io
+- 948n95rd.api.sanity.io
 - apicdn.sanity.io
-- ib5361g9.apicdn.sanity.io
+- 948n95rd.apicdn.sanity.io
 - cdn.sanity.io
