@@ -21,7 +21,6 @@ jobs:
       appname: 'aap-saksbehandling'
       playwright: false
       cdn: true
-      appsecrets: SANITY_API_TOKEN
 
   deployDev:
     needs: buildDev
