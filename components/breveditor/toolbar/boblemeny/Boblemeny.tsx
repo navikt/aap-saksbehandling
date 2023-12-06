@@ -16,6 +16,14 @@ export const Boblemeny = ({ editor }: BubbleMenuProps) => {
       <Button
         type={'button'}
         variant={'tertiary-neutral'}
+        onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
+        className={editor.isActive('heading', { level: 3 }) ? `${styles.active}` : ''}
+      >
+        H3
+      </Button>
+      <Button
+        type={'button'}
+        variant={'tertiary-neutral'}
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={editor.isActive('bold') ? `${styles.active}` : ''}
       >
