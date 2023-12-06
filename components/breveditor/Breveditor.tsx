@@ -10,6 +10,7 @@ import { TableHeader } from '@tiptap/extension-table-header';
 import { TableRow } from '@tiptap/extension-table-row';
 import { Table } from '@tiptap/extension-table';
 import { Loader } from '@navikt/ds-react';
+import { Underline } from '@tiptap/extension-underline';
 
 interface Props {
   initialValue?: JSONContent;
@@ -24,6 +25,7 @@ const extensions = [
   TableCell,
   TableHeader,
   TableRow,
+  Underline,
 ];
 
 export const Breveditor = ({ initialValue, setContent, brukEditor }: Props) => {

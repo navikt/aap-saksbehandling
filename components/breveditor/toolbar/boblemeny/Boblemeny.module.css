@@ -7,3 +7,7 @@
 .active {
   background: var(--a-surface-neutral-subtle-hover);
 }
+
+.underline {
+  text-decoration: underline;
+}
