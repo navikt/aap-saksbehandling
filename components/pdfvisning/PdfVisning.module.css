@@ -1,8 +1,16 @@
-.pdfPreview {
-  margin-left: var(--a-spacing-4);
-  padding: var(--a-spacing-4);
+.pdfContainer {
+  flex-grow: 1;
 
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+
+  margin-left: var(--a-spacing-4);
   background-color: var(--a-bg-subtle);
+}
+
+.pdfPreview {
+  padding: var(--a-spacing-4);
 }
 
 .pdfPage {

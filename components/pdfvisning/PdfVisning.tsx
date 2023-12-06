@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { Alert, Loader, Pagination } from '@navikt/ds-react';
+import { Alert, Loader, Pagination, Skeleton } from '@navikt/ds-react';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
@@ -69,22 +69,32 @@ export const PdfVisning = ({ tittel, brevdata }: Props) => {
   }, [brevdata, tittel]);
 
   if (!pdfFilInnhold) {
-    return null;
+    return (
+      <div className={styles.pdfContainer}>
+        <div>
+          <Skeleton width={595} height={25} variant={'text'} />
+          <Skeleton width={595} height={842} variant={'rectangle'} />
+          <Skeleton width={595} height={25} variant={'text'} />
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className={styles.pdfPreview}>
-      <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
-      <Document
-        file={`data:application/pdf;base64,${pdfFilInnhold}`}
-        onLoadSuccess={(document) => setNumPages(document.numPages)}
-        error={<Alert variant={'error'}>{'Ukjent feil ved henting av dokument.'} </Alert>}
-        noData={<Alert variant={'error'}>{'Dokumentet er tomt'} </Alert>}
-        loading={<Loader size={'xlarge'} variant="interaction" transparent={true} />}
-      >
-        <Page pageNumber={pageNumber} renderTextLayer={true} className={styles.pdfPage} />
-      </Document>
-      <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
+    <div className={styles.pdfContainer}>
+      <div className={styles.pdfPreview}>
+        <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
+        <Document
+          file={`data:application/pdf;base64,${pdfFilInnhold}`}
+          onLoadSuccess={(document) => setNumPages(document.numPages)}
+          error={<Alert variant={'error'}>{'Ukjent feil ved henting av dokument.'} </Alert>}
+          noData={<Alert variant={'error'}>{'Dokumentet er tomt'} </Alert>}
+          loading={<Loader size={'xlarge'} variant="interaction" transparent={true} />}
+        >
+          <Page pageNumber={pageNumber} renderTextLayer={true} className={styles.pdfPage} />
+        </Document>
+        <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
+      </div>
     </div>
   );
 };
