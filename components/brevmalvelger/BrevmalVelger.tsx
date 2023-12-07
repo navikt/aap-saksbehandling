@@ -16,6 +16,7 @@ export interface DelAvBrev {
   overskrift?: string;
   nivå?: Nivå;
   systemContent?: JSONContent;
+  hjelpetekst?: PortableText[];
 }
 
 export interface PortableTextMedRef {
@@ -96,6 +97,7 @@ export const BrevmalVelger = ({ brevmaler }: Props) => {
 
     if (innhold._type === 'standardtekst') {
       delAvBrev.brukEditor = innhold.kanRedigeres;
+      delAvBrev.hjelpetekst = innhold.hjelpetekst;
       const portableText = innhold?.innhold?.map((portableTextElement) => {
         const children = portableTextElement.children.map((child) => {
           // @ts-ignore

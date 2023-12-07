@@ -16,6 +16,7 @@ export async function GET(req: NextRequest, { params }: { params: { brevmalid: s
     _type == 'standardtekst' => {
       overskrift,
       "niva": niva->.level,
+      hjelpetekst,
       kanRedigeres,
         innhold[]{
         _type == 'content' => {

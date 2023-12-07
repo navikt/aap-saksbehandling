@@ -22,6 +22,7 @@
     "@navikt/ds-css": "5.11.3",
     "@navikt/ds-react": "5.11.3",
     "@navikt/next-auth-wonderwall": "^1.5.0",
+    "@portabletext/react": "^3.0.11",
     "@testing-library/user-event": "14.5.1",
     "@tiptap/extension-bubble-menu": "^2.1.13",
     "@tiptap/extension-table": "^2.1.13",

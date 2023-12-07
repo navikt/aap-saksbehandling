@@ -20,6 +20,7 @@ interface Innhold {
 export interface StandardTekst extends Innhold {
   innhold: PortableText[];
   kanRedigeres: boolean;
+  hjelpetekst?: PortableText[];
   _type: 'standardtekst';
 }
 
