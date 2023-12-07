@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
-import { Brevmal, sanityservice } from 'lib/services/sanityservice/sanityservice';
+import { sanityservice } from 'lib/services/sanityservice/sanityservice';
 import { groq } from 'next-sanity';
+import { Brevmal } from 'lib/utils/sanity';
 
 export async function GET(req: NextRequest, { params }: { params: { brevmalid: string } }) {
   const data = await sanityservice.fetch<Brevmal>(groq`*[_id == "${params.brevmalid}"][0]{

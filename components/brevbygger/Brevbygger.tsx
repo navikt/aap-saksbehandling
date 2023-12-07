@@ -2,14 +2,13 @@
 
 import { PdfVisning } from 'components/pdfvisning/PdfVisning';
 import { useEffect, useState } from 'react';
-import { deserialize } from 'lib/utils/sanity';
+import { deserialize, Nivå } from 'lib/utils/sanity';
 import { JSONContent } from '@tiptap/core';
 import { Button, HelpText } from '@navikt/ds-react';
 import { Breveditor } from 'components/breveditor/Breveditor';
 
 import styles from './Brevbygger.module.css';
 import { Heading } from '@navikt/ds-react/esm/typography';
-import { Nivå } from 'lib/services/sanityservice/sanityservice';
 import { DelAvBrev, PortableTextMedRef } from 'components/brevmalvelger/BrevmalVelger';
 
 import { PortableText } from '@portabletext/react';
@@ -69,7 +68,6 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
               {tittel}
             </Heading>
             {brevMedInnhold.map((innhold) => {
-              console.log('hjelpetekst', innhold.hjelpetekst);
               return (
                 <div key={innhold.id}>
                   <div className={styles.headerRow}>

@@ -1,6 +1,6 @@
-import { Brevmal } from 'lib/services/sanityservice/sanityservice';
 import { Dispatch, useCallback, useEffect, useState } from 'react';
 import { hentBrevmalFraSanity } from 'lib/api';
+import { Brevmal } from 'lib/utils/sanity';
 
 export function useBrev(): {
   brevmal?: Brevmal;

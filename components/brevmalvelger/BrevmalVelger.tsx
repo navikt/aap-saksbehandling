@@ -1,10 +1,9 @@
 'use client';
 
 import { Brevbygger } from 'components/brevbygger/Brevbygger';
-import { Brevmaler, Nivå } from 'lib/services/sanityservice/sanityservice';
 import { Select } from '@navikt/ds-react';
 import { useBrev } from 'hooks/BrevHook';
-import { PortableText } from 'lib/utils/sanity';
+import { Brevmaler, Nivå, PortableText } from 'lib/utils/sanity';
 
 import styles from './BrevmalVelger.module.css';
 import { JSONContent } from '@tiptap/react';
@@ -42,10 +41,6 @@ export const BrevmalVelger = ({ brevmaler }: Props) => {
     };
 
     if (innhold._type === 'systeminnhold') {
-      // Denne er tatt bort?
-      /*if (innhold.systemNokkel === 'fritekst') {
-        delAvBrev.brukEditor = true;
-      }*/
       if (innhold.systemNokkel === 'vedtak_vedlegg') {
         const jsonContent: JSONContent = {
           type: 'doc',
@@ -98,9 +93,9 @@ export const BrevmalVelger = ({ brevmaler }: Props) => {
     if (innhold._type === 'standardtekst') {
       delAvBrev.brukEditor = innhold.kanRedigeres;
       delAvBrev.hjelpetekst = innhold.hjelpetekst;
+
       const portableText = innhold?.innhold?.map((portableTextElement) => {
         const children = portableTextElement.children.map((child) => {
-          // @ts-ignore
           if (child._type === 'systemVariabel') {
             return { ...child, text: 'Må innhentes fra systemet' };
           }

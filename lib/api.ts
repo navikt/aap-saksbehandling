@@ -1,5 +1,5 @@
 import { BehandlingFlytOgTilstand, LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo } from './types/types';
-import { Brevmal } from 'lib/services/sanityservice/sanityservice';
+import { Brevmal } from 'lib/utils/sanity';
 
 export async function fetcher<ResponseBody>(
   url: string,

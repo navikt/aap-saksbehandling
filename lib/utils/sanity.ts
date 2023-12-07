@@ -18,6 +18,37 @@ export interface PortableTextChild {
   marks: Array<PortableTextMark>;
 }
 
+export type Nivå = 'H1' | 'H2' | 'H3';
+
+interface Innhold {
+  _id: string;
+  overskrift?: string;
+  niva?: Nivå;
+}
+
+export interface StandardTekst extends Innhold {
+  innhold: PortableText[];
+  kanRedigeres: boolean;
+  hjelpetekst?: PortableText[];
+  _type: 'standardtekst';
+}
+
+export interface Systeminnhold extends Innhold {
+  _type: 'systeminnhold';
+  systemNokkel: string;
+}
+
+export interface Brevmal {
+  brevtittel: string;
+  innhold: StandardTekst[] | Systeminnhold[];
+}
+
+export interface Brevmaler {
+  brevtittel: string;
+  brevtype: string;
+  _id: string;
+}
+
 export function deserialize(innhold?: Array<PortableText>): JSONContent {
   const content = innhold?.map((block) => {
     const content = block.children.map((child) => {
@@ -58,7 +89,7 @@ function mapPortableTextElementToTipTapElement(value?: PortableTextElement): Tip
   }
 }
 
-type PortableTextLeaf = 'span';
+type PortableTextLeaf = 'span' | 'inlineElement' | 'systemVariabel';
 type TipTapLeaf = 'text';
 function mapPortableTextLeafToTipTapLeaf(value?: PortableTextLeaf): TipTapLeaf {
   switch (value) {
