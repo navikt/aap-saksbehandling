@@ -7,6 +7,7 @@ import { useBrev } from 'hooks/BrevHook';
 import { PortableText } from 'lib/utils/sanity';
 
 import styles from './BrevmalVelger.module.css';
+import { JSONContent } from '@tiptap/react';
 
 export interface DelAvBrev {
   type: string;
@@ -14,6 +15,7 @@ export interface DelAvBrev {
   id: string;
   overskrift?: string;
   nivå?: Nivå;
+  systemContent?: JSONContent;
 }
 
 export interface PortableTextMedRef {
@@ -39,8 +41,43 @@ export const BrevmalVelger = ({ brevmaler }: Props) => {
     };
 
     if (innhold._type === 'systeminnhold') {
-      if (innhold.systemNokkel === 'fritekst') {
+      // Denne er tatt bort?
+      /*if (innhold.systemNokkel === 'fritekst') {
         delAvBrev.brukEditor = true;
+      }*/
+      if (innhold.systemNokkel === 'vedtak_vedlegg') {
+        const jsonContent: JSONContent = {
+          type: 'doc',
+          content: [
+            {
+              type: 'bulletList',
+              content: [
+                {
+                  type: 'listItem',
+                  content: [{ type: 'text', text: 'Søknad om arbeidsavklaringspenger' }],
+                },
+                {
+                  type: 'listItem',
+                  content: [{ type: 'text', text: 'Legeerklæring' }],
+                },
+                {
+                  type: 'listItem',
+                  content: [{ type: 'text', text: 'Inntektsmelding fra Skatteetaten' }],
+                },
+              ],
+            },
+            {
+              type: 'paragraph',
+              content: [
+                {
+                  type: 'text',
+                  text: 'Her kommer en standardtekst.',
+                },
+              ],
+            },
+          ],
+        };
+        delAvBrev.systemContent = jsonContent;
       }
     }
 

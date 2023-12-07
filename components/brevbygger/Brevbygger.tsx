@@ -28,7 +28,8 @@ function byggBrev(brevMedInnhold: DelAvBrev[], portableTextMedRef: PortableTextM
     _id: innhold.id,
     overskrift: innhold.overskrift,
     nivå: innhold.nivå,
-    content: deserialize(portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold),
+    content:
+      innhold.systemContent ?? deserialize(portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold),
   }));
 }
 
@@ -82,9 +83,10 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
                     setContent={(content) => {
                       updateBrevdata(content, innhold.id);
                     }}
-                    initialValue={deserialize(
-                      portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold
-                    )}
+                    initialValue={
+                      innhold.systemContent ??
+                      deserialize(portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold)
+                    }
                   />
                 </div>
               );
