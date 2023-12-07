@@ -71,7 +71,20 @@ export const BrevmalVelger = ({ brevmaler }: Props) => {
               content: [
                 {
                   type: 'text',
-                  text: 'Her kommer en standardtekst.',
+                  text: 'Du har rett til å se dokumentene i saken din. Du kan se dokumentene på ',
+                },
+                {
+                  type: 'text',
+                  marks: [
+                    {
+                      type: 'underline',
+                    },
+                  ],
+                  text: 'nav.no/mine-aap',
+                },
+                {
+                  type: 'text',
+                  text: '.',
                 },
               ],
             },
