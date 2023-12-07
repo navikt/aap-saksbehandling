@@ -1,4 +1,4 @@
-import { BehandlingFlytOgTilstand, LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo } from './types/types';
+import { LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo } from './types/types';
 import { Brevmal } from 'lib/utils/sanity';
 
 export async function fetcher<ResponseBody>(
@@ -33,10 +33,6 @@ export function finnSak(ident: string) {
 
 export function opprettSak(sak: OpprettTestcase) {
   return fetcher('/api/test/opprett', 'POST', sak);
-}
-
-export function hentFlyt(referanse: string) {
-  return fetcher<BehandlingFlytOgTilstand>('/api/behandling/hent/' + referanse + '/flyt', 'GET');
 }
 
 export function hentAlleSaker() {
