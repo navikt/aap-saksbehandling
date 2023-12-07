@@ -72,20 +72,22 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
               console.log('hjelpetekst', innhold.hjelpetekst);
               return (
                 <div key={innhold.id}>
-                  {innhold.overskrift && innhold.nivå && (
-                    <Heading
-                      size={mapNivåToHeadingSize(innhold.nivå)}
-                      level={mapNivåToHeadingLevel(innhold.nivå)}
-                      className={styles.heading}
-                    >
-                      {innhold.overskrift}
-                    </Heading>
-                  )}
-                  {innhold.hjelpetekst && (
-                    <HelpText>
-                      <PortableText value={innhold.hjelpetekst} />
-                    </HelpText>
-                  )}
+                  <div className={styles.headerRow}>
+                    {innhold.overskrift && innhold.nivå && (
+                      <Heading
+                        size={mapNivåToHeadingSize(innhold.nivå)}
+                        level={mapNivåToHeadingLevel(innhold.nivå)}
+                        className={styles.heading}
+                      >
+                        {innhold.overskrift}
+                      </Heading>
+                    )}
+                    {innhold.hjelpetekst && (
+                      <HelpText>
+                        <PortableText value={innhold.hjelpetekst} />
+                      </HelpText>
+                    )}
+                  </div>
                   <Breveditor
                     brukEditor={innhold.brukEditor}
                     setContent={(content) => {

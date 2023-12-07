@@ -13,5 +13,11 @@
 
 .heading,
 .brevtittel {
-  padding-inline: calc(2rem + 5px); /* FIXME vurder å trekke ut som variabler? */
+  padding-left: calc(2rem + 5px); /* FIXME vurder å trekke ut som variabler? */
+}
+
+.headerRow {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--a-spacing-1);
 }
