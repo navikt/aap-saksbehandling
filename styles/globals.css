@@ -1,0 +1,4 @@
+/* Må overstyre fokus i editor siden det ikke er mulig å styre dette via props */
+.ProseMirror-focused {
+  outline: none;
+}

@@ -4,7 +4,7 @@ import { PdfVisning } from 'components/pdfvisning/PdfVisning';
 import { useEffect, useState } from 'react';
 import { deserialize, Nivå } from 'lib/utils/sanity';
 import { JSONContent } from '@tiptap/core';
-import { Button, HelpText } from '@navikt/ds-react';
+import { Button, ReadMore } from '@navikt/ds-react';
 import { Breveditor } from 'components/breveditor/Breveditor';
 
 import styles from './Brevbygger.module.css';
@@ -69,7 +69,11 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
             </Heading>
             {brevMedInnhold.map((innhold) => {
               return (
-                <div key={innhold.id}>
+                <div
+                  key={innhold.id}
+                  style={{ padding: '1rem' }}
+                  className={innhold.brukEditor ? styles.editableContent : ''}
+                >
                   <div className={styles.headerRow}>
                     {innhold.overskrift && innhold.nivå && (
                       <Heading
@@ -81,9 +85,9 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
                       </Heading>
                     )}
                     {innhold.hjelpetekst && (
-                      <HelpText>
+                      <ReadMore header={'Få tips til skrivingen her'}>
                         <PortableText value={innhold.hjelpetekst} />
-                      </HelpText>
+                      </ReadMore>
                     )}
                   </div>
                   <Breveditor

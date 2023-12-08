@@ -8,12 +8,17 @@
 }
 
 .editorContent {
-  border-right: 5px solid;
-  border-left: 5px solid;
+  border: 2px solid;
   border-color: var(--a-blue-800);
   padding-block: 0.5rem;
+}
 
-  /*background-color: var(--a-surface-active);*/
+.editorContent > .ProseMirror-focused {
+  outline: none;
+}
+
+.editorContent:focus-within {
+  box-shadow: var(--a-shadow-focus);
 }
 
 .disabledEditor {
@@ -21,17 +26,9 @@
 }
 
 .editor :global(.tiptap) {
-  background-color: var(--a-surface-default);
   /* tilsvarer et a4-ark */
   max-width: 210mm;
-  /*min-height: 297mm;*/
-
   padding-inline: 2rem;
-  /*padding-block: 2rem;*/
-  /*margin-inline: auto;*/
-  /*margin-block: 1rem;*/
-
-  /*box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.8);*/
 }
 
 .table {
