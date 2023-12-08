@@ -13,6 +13,12 @@
   padding-block: 0.5rem;
 }
 
+/* Bytter margin med padding i tiptap paragrafer for å gjøre hele elementet klikkbart */
+.editorContent p {
+  margin-block: 0;
+  padding-block: 1rem;
+}
+
 .editorContent > .ProseMirror-focused {
   outline: none;
 }
@@ -26,8 +32,6 @@
 }
 
 .editor :global(.tiptap) {
-  /* tilsvarer et a4-ark */
-  max-width: 210mm;
   padding-inline: 2rem;
 }
 
