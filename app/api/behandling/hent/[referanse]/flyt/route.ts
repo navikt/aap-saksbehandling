@@ -1,10 +1,10 @@
 import { getToken } from 'lib/auth/authentication';
-import { hentFlyt2 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest, { params }: { params: { referanse: string } }) {
   const token = getToken(req.headers);
-  const data = await hentFlyt2(params.referanse, token);
+  const data = await hentFlyt(params.referanse, token);
 
   if (data !== undefined) {
     return new Response(JSON.stringify(data), { status: 200 });

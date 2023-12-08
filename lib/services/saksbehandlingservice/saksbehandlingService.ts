@@ -95,11 +95,11 @@ export const hentFatteVedtakGrunnlang = async (
   return await fetchProxy<FatteVedtakGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 
-export const hentFlyt2 = async (
+export const hentFlyt = async (
   behandlingsReferanse: string,
   accessToken: string
 ): Promise<BehandlingFlytOgTilstand> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt-2`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
   return await fetchProxy<BehandlingFlytOgTilstand>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 

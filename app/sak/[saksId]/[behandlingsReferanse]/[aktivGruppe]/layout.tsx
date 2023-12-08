@@ -1,5 +1,5 @@
 import { getToken } from 'lib/auth/authentication';
-import { hentBehandling, hentFlyt2 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { headers } from 'next/headers';
 
 import { HGrid } from 'components/DsClient';
@@ -20,7 +20,7 @@ const Layout = async ({
   children: ReactNode;
 }) => {
   const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
-  const flytResponse = await hentFlyt2(params.behandlingsReferanse, getToken(headers()));
+  const flytResponse = await hentFlyt(params.behandlingsReferanse, getToken(headers()));
 
   if (behandling === undefined) {
     notFound();

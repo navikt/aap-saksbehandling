@@ -1,7 +1,7 @@
 import { YrkesskadeMedDataFetching } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
-import { hentFlyt2 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
 import { getStegSomSkalVises } from 'lib/utils/steg';
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const Sykdom = async ({ behandlingsReferanse }: Props) => {
-  const flyt = await hentFlyt2(behandlingsReferanse, getToken(headers()));
+  const flyt = await hentFlyt(behandlingsReferanse, getToken(headers()));
 
   const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt);
 

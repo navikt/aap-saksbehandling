@@ -104,24 +104,6 @@ export interface paths {
         /** @description OK */
         200: {
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingFlytOgTilstandDto'];
-          };
-        };
-      };
-    };
-  };
-  '/api/behandling/{referanse}/flyt-2': {
-    get: {
-      parameters: {
-        path: {
-          /** @description referanse */
-          referanse: string;
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingFlytOgTilstand2Dto'];
           };
         };
@@ -295,7 +277,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2023-12-05
+       * @example 2023-12-08
        */
       fødselsdato: string;
       ident: string;
@@ -304,12 +286,12 @@ export interface components {
     'no.nav.aap.behandlingsflyt.Periode': {
       /**
        * Format: date
-       * @example 2023-12-05
+       * @example 2023-12-08
        */
       fom: string;
       /**
        * Format: date
-       * @example 2023-12-05
+       * @example 2023-12-08
        */
       tom: string;
     };
@@ -326,7 +308,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.avklaringsbehov.student.StudentVurdering': {
       /**
        * Format: date
-       * @example 2023-12-05
+       * @example 2023-12-08
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
@@ -342,7 +324,7 @@ export interface components {
       nedreGrense?: 'TRETTI' | 'FEMTI' | null;
       /**
        * Format: date
-       * @example 2023-12-05
+       * @example 2023-12-08
        */
       nedsattArbeidsevneDato?: string | null;
     };
@@ -354,7 +336,7 @@ export interface components {
       erÅrsakssammenheng: boolean;
       /**
        * Format: date
-       * @example 2023-12-05
+       * @example 2023-12-08
        */
       skadetidspunkt?: string | null;
     };
@@ -410,7 +392,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.behandling.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2023-12-05T15:02:41.584047
+       * @example 2023-12-08T10:50:24.205333
        */
       opprettet: string;
       /** Format: uuid */
@@ -429,7 +411,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2023-12-05T15:02:41.584047
+       * @example 2023-12-08T10:50:24.205333
        */
       tidsstempel: string;
     };
@@ -517,32 +499,6 @@ export interface components {
       behandlingVersjon: number;
       flyt: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.FlytGruppe'][];
     };
-    'no.nav.aap.behandlingsflyt.flyt.flate.BehandlingFlytOgTilstandDto': {
-      /** @enum {string} */
-      aktivtSteg:
-        | 'START_BEHANDLING'
-        | 'VURDER_ALDER'
-        | 'VURDER_LOVVALG'
-        | 'VURDER_MEDLEMSKAP'
-        | 'AVKLAR_STUDENT'
-        | 'VURDER_BISTANDSBEHOV'
-        | 'VURDER_SYKEPENGEERSTATNING'
-        | 'FRITAK_MELDEPLIKT'
-        | 'BARNETILLEGG'
-        | 'SAMORDNING'
-        | 'AVKLAR_YRKESSKADE'
-        | 'AVKLAR_SYKDOM'
-        | 'FASTSETT_ARBEIDSEVNE'
-        | 'FASTSETT_GRUNNLAG'
-        | 'FASTSETT_UTTAK'
-        | 'BEREGN_TILKJENT_YTELSE'
-        | 'SIMULERING'
-        | 'FORESLÅ_VEDTAK'
-        | 'FATTE_VEDTAK'
-        | 'IVERKSETT_VEDTAK'
-        | 'UDEFINERT';
-      flyt: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.FlytSteg'][];
-    };
     'no.nav.aap.behandlingsflyt.flyt.flate.FlytGruppe': {
       erFullført: boolean;
       steg: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.FlytSteg'][];
@@ -614,7 +570,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2023-12-05T15:02:41.584047
+       * @example 2023-12-08T10:50:24.205333
        */
       opprettet: string;
       /** Format: uuid */
