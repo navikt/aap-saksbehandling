@@ -36,7 +36,7 @@ function byggBrev(brevMedInnhold: DelAvBrev[], portableTextMedRef: PortableTextM
 
 export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props) => {
   const [brevData, setBrevData] = useState<BrevData[]>(byggBrev(brevMedInnhold, portableTextMedRef));
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setBrevData(byggBrev(brevMedInnhold, portableTextMedRef));
