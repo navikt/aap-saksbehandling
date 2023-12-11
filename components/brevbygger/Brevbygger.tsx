@@ -42,8 +42,6 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
     setBrevData(byggBrev(brevMedInnhold, portableTextMedRef));
   }, [brevMedInnhold, portableTextMedRef]);
 
-  console.log(brevMedInnhold);
-  console.log(portableTextMedRef);
   function updateBrevdata(content: JSONContent, id: string) {
     setBrevData(
       brevData.map((brev) => {
