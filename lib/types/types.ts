@@ -87,4 +87,5 @@ export type StegGruppe =
   | 'TILKJENT_YTELSE'
   | 'SIMULERING'
   | 'VEDTAK'
+  | 'BREV' // TODO manuelt lagt inn, må legges inn i backend
   | 'UDEFINERT';
