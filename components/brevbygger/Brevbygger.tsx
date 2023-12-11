@@ -4,15 +4,14 @@ import { PdfVisning } from 'components/pdfvisning/PdfVisning';
 import { useEffect, useState } from 'react';
 import { deserialize, Nivå } from 'lib/utils/sanity';
 import { JSONContent } from '@tiptap/core';
-import { Button, ReadMore } from '@navikt/ds-react';
+import { Button, ReadMore, Heading } from '@navikt/ds-react';
 import { Breveditor } from 'components/breveditor/Breveditor';
 
 import styles from './Brevbygger.module.css';
-import { Heading } from '@navikt/ds-react/esm/typography';
-import { DelAvBrev, PortableTextMedRef } from 'components/brevmalvelger/BrevmalVelger';
 
 import { PortableText } from '@portabletext/react';
 import { EyeIcon } from '@navikt/aksel-icons';
+import { DelAvBrev, PortableTextMedRef } from 'components/brevmalvelger/BrevmalVelger';
 
 interface Props {
   tittel: string;
@@ -43,6 +42,8 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
     setBrevData(byggBrev(brevMedInnhold, portableTextMedRef));
   }, [brevMedInnhold, portableTextMedRef]);
 
+  console.log(brevMedInnhold);
+  console.log(portableTextMedRef);
   function updateBrevdata(content: JSONContent, id: string) {
     setBrevData(
       brevData.map((brev) => {
@@ -64,7 +65,7 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
           Vedtak
         </Heading>
         <Button variant={'secondary'} size={'small'} icon={<EyeIcon />} onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? 'Skjul pdf' : 'Vis pdf'}
+          Forhåndsvis pdf
         </Button>
       </div>
       <div style={isOpen ? { display: 'flex', flexDirection: 'row' } : undefined}>
