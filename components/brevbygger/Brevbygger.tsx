@@ -18,21 +18,13 @@ interface Props {
   brevMedInnhold: DelAvBrev[];
   portableTextMedRef: PortableTextMedRef[];
 }
+
 export type BrevData = {
   _id: string;
   overskrift?: string;
   nivå?: Nivå;
   content: JSONContent;
 };
-function byggBrev(brevMedInnhold: DelAvBrev[], portableTextMedRef: PortableTextMedRef[]) {
-  return brevMedInnhold.map((innhold) => ({
-    _id: innhold.id,
-    overskrift: innhold.overskrift,
-    nivå: innhold.nivå,
-    content:
-      innhold.systemContent ?? deserialize(portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold),
-  }));
-}
 
 export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props) => {
   const [brevData, setBrevData] = useState<BrevData[]>(byggBrev(brevMedInnhold, portableTextMedRef));
@@ -63,7 +55,7 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
           Vedtak
         </Heading>
         <Button variant={'secondary'} size={'small'} icon={<EyeIcon />} onClick={() => setIsOpen(!isOpen)}>
-          Forhåndsvis pdf
+          Forhåndsvis brev
         </Button>
       </div>
       <div style={isOpen ? { display: 'flex', flexDirection: 'row' } : undefined}>
@@ -137,4 +129,14 @@ function mapNivåToHeadingLevel(nivå: Nivå): '1' | '2' | '3' {
     case 'H3':
       return '3';
   }
+}
+
+function byggBrev(brevMedInnhold: DelAvBrev[], portableTextMedRef: PortableTextMedRef[]) {
+  return brevMedInnhold.map((innhold) => ({
+    _id: innhold.id,
+    overskrift: innhold.overskrift,
+    nivå: innhold.nivå,
+    content:
+      innhold.systemContent ?? deserialize(portableTextMedRef.find((content) => content.ref === innhold.id)?.innhold),
+  }));
 }

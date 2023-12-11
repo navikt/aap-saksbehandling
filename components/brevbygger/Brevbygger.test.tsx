@@ -54,9 +54,9 @@ describe('Brevbygger', () => {
     expect(heading).toBeVisible();
   });
 
-  it('Skal vise knapp for forhåndsvisning av pdf', () => {
+  it('Skal vise knapp for forhåndsvisning av brev', () => {
     render(<Brevbygger brevMedInnhold={[]} portableTextMedRef={[]} tittel={'Brevbygger'} />);
-    const button = screen.getByRole('button', { name: 'Forhåndsvis pdf' });
+    const button = screen.getByRole('button', { name: 'Forhåndsvis brev' });
     expect(button).toBeVisible();
   });
 

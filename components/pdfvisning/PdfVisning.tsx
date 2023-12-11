@@ -74,16 +74,13 @@ export const PdfVisning = ({ tittel, brevdata, isOpen, setIsOpen }: Props) => {
     hentPdf();
   }, [brevdata, tittel, isOpen]);
 
-  console.log('pdfFilInnhold', pdfFilInnhold);
-  console.log('isLoading', isLoading);
-
   return (
     <Modal
       open={isOpen}
       onClose={() => setIsOpen(false)}
       header={{
-        heading: 'PDF Visning',
-        size: 'small',
+        heading: 'Forhåndsvisning av brev',
+        size: 'medium',
       }}
     >
       <Modal.Body>
