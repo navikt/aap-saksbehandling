@@ -1,5 +1,6 @@
 .pdfContainer {
-  flex-grow: 1;
+  min-width: 627px;
+  min-height: 937px;
 
   display: flex;
   justify-content: center;

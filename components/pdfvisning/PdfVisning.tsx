@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { Alert, Loader, Pagination, Skeleton } from '@navikt/ds-react';
+import { Alert, Loader, Modal, Pagination, Skeleton } from '@navikt/ds-react';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
@@ -13,15 +13,24 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 interface Props {
   tittel: string;
   brevdata: BrevData[];
+  isOpen: boolean;
+  setIsOpen: Dispatch<boolean>;
 }
 
-export const PdfVisning = ({ tittel, brevdata }: Props) => {
+export const PdfVisning = ({ tittel, brevdata, isOpen, setIsOpen }: Props) => {
   const [pdfFilInnhold, setPfdFilInnhold] = useState<string>();
   const [numPages, setNumPages] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function hentPdf() {
+      if (!isOpen) {
+        return;
+      }
+
+      setIsLoading(true);
+
       const postData = {
         tittel,
         mottaker: {
@@ -59,42 +68,51 @@ export const PdfVisning = ({ tittel, brevdata }: Props) => {
       });
 
       setPfdFilInnhold(base64String?.slice(base64String?.indexOf(',') + 1));
+      setIsLoading(false);
     }
 
-    const timeOut = setTimeout(async () => {
-      await hentPdf();
-    }, 2000);
+    hentPdf();
+  }, [brevdata, tittel, isOpen]);
 
-    return () => clearTimeout(timeOut);
-  }, [brevdata, tittel]);
-
-  if (!pdfFilInnhold) {
-    return (
-      <div className={styles.pdfContainer}>
-        <div>
-          <Skeleton width={595} height={25} variant={'text'} />
-          <Skeleton width={595} height={842} variant={'rectangle'} />
-          <Skeleton width={595} height={25} variant={'text'} />
-        </div>
-      </div>
-    );
-  }
+  console.log('pdfFilInnhold', pdfFilInnhold);
+  console.log('isLoading', isLoading);
 
   return (
-    <div className={styles.pdfContainer}>
-      <div className={styles.pdfPreview}>
-        <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
-        <Document
-          file={`data:application/pdf;base64,${pdfFilInnhold}`}
-          onLoadSuccess={(document) => setNumPages(document.numPages)}
-          error={<Alert variant={'error'}>{'Ukjent feil ved henting av dokument.'} </Alert>}
-          noData={<Alert variant={'error'}>{'Dokumentet er tomt'} </Alert>}
-          loading={<Loader size={'xlarge'} variant="interaction" transparent={true} />}
-        >
-          <Page pageNumber={pageNumber} renderTextLayer={true} className={styles.pdfPage} />
-        </Document>
-        <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
-      </div>
-    </div>
+    <Modal
+      open={isOpen}
+      onClose={() => setIsOpen(false)}
+      header={{
+        heading: 'PDF Visning',
+        size: 'small',
+      }}
+    >
+      <Modal.Body>
+        {pdfFilInnhold && !isLoading ? (
+          <div className={styles.pdfContainer}>
+            <div className={styles.pdfPreview}>
+              <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
+              <Document
+                file={`data:application/pdf;base64,${pdfFilInnhold}`}
+                onLoadSuccess={(document) => setNumPages(document.numPages)}
+                error={<Alert variant={'error'}>{'Ukjent feil ved henting av dokument.'} </Alert>}
+                noData={<Alert variant={'error'}>{'Dokumentet er tomt'} </Alert>}
+                loading={<Loader size={'xlarge'} variant="interaction" transparent={true} />}
+              >
+                <Page pageNumber={pageNumber} renderTextLayer={true} className={styles.pdfPage} />
+              </Document>
+              <Pagination page={pageNumber} count={numPages} onPageChange={setPageNumber} size="xsmall" />
+            </div>
+          </div>
+        ) : (
+          <div className={styles.pdfContainer}>
+            <div>
+              <Skeleton width={595} height={25} variant={'text'} />
+              <Skeleton width={595} height={842} variant={'rectangle'} />
+              <Skeleton width={595} height={25} variant={'text'} />
+            </div>
+          </div>
+        )}
+      </Modal.Body>
+    </Modal>
   );
 };

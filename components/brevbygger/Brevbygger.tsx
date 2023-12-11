@@ -12,6 +12,7 @@ import { Heading } from '@navikt/ds-react/esm/typography';
 import { DelAvBrev, PortableTextMedRef } from 'components/brevmalvelger/BrevmalVelger';
 
 import { PortableText } from '@portabletext/react';
+import { EyeIcon } from '@navikt/aksel-icons';
 
 interface Props {
   tittel: string;
@@ -57,10 +58,15 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
   }
 
   return (
-    <>
-      <Button variant={'primary'} onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? 'Skjul pdf' : 'Vis pdf'}
-      </Button>
+    <div>
+      <div className={styles.header}>
+        <Heading size={'small'} level={'2'}>
+          Vedtak
+        </Heading>
+        <Button variant={'secondary'} size={'small'} icon={<EyeIcon />} onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? 'Skjul pdf' : 'Vis pdf'}
+        </Button>
+      </div>
       <div style={isOpen ? { display: 'flex', flexDirection: 'row' } : undefined}>
         <div className={styles.brevbygger}>
           <div className={styles.brev}>
@@ -106,9 +112,9 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
           </div>
         </div>
 
-        {isOpen && <PdfVisning tittel={tittel} brevdata={brevData} />}
+        <PdfVisning tittel={tittel} brevdata={brevData} isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
-    </>
+    </div>
   );
 };
 

@@ -27,3 +27,12 @@
 .editableContent {
   background-color: var(--a-bg-default);
 }
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--a-blue-200);
+  padding: var(--a-spacing-4);
+}
