@@ -1659,10 +1659,10 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.4.0.tgz#77e948b9760bd22736a5d26e335a690f76fda37b"
   integrity sha512-cEjvTPU32OM9lUFegJagO0mRnIn+rbqrG89vV8/xLnLFX0DoR0r1oy5IlTga71Q7uT3Qus7qm7wgeiMT/+Irlg==
 
-"@sanity/client@^6.9.3":
-  version "6.9.3"
-  resolved "https://registry.yarnpkg.com/@sanity/client/-/client-6.9.3.tgz#adba44b9936ae06641111ac197fd18ffa9be148b"
-  integrity sha512-ba8fHqsncuuPNCGs5qTynpQqWdyeQzXmPQ6UzaNCn4/JNKmoucrdSNfCijE+3CsA23OJpZe51RqkF9JRvOpkdw==
+"@sanity/client@^6.10.0", "@sanity/client@^6.9.3":
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/@sanity/client/-/client-6.10.0.tgz#9f4161074afd1af1a01b6295be1032b62aaab0e7"
+  integrity sha512-TavtxGB6NWjro2BTGXSkzXNMKFZbS2il1ItV3IdRvO0luLqS31eIz37+5X4CmCC8hGFe6fDoCjnH/iJ81vKM7g==
   dependencies:
     "@sanity/eventsource" "^5.0.0"
     "@vercel/stega" "0.1.0"
@@ -1696,12 +1696,12 @@
     react-fast-compare "3.2.2"
     use-sync-external-store "1.2.0"
 
-"@sanity/types@^3.21.1":
-  version "3.21.1"
-  resolved "https://registry.yarnpkg.com/@sanity/types/-/types-3.21.1.tgz#b57d00e6dce572490ab906c5ffda1997340756b2"
-  integrity sha512-vdqr+Ci7PNv/hata2GGuJpeG7pvpP2k0Cs4uXN+Qd+31jGOaTjw2XRMl6b+6FzhlC74oiC5/dCANi1VYI7QVjg==
+"@sanity/types@^3.21.3":
+  version "3.21.3"
+  resolved "https://registry.yarnpkg.com/@sanity/types/-/types-3.21.3.tgz#ad4b2eed460dffd0791d3036838c35ae966d1504"
+  integrity sha512-Z2OZHGDBGPdXLJQjUtp9w/+32yZvhsne5Z4GqClTKsPnzzB4S37OqoUOVfCCi35yMl+xVZv+ILerLwZl9Uo7fA==
   dependencies:
-    "@sanity/client" "^6.9.3"
+    "@sanity/client" "^6.10.0"
     "@types/react" "^18.0.25"
 
 "@sanity/webhook@4.0.0":
@@ -2151,25 +2151,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "18.2.14"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.14.tgz#fa7a6fecf1ce35ca94e74874f70c56ce88f7a127"
-  integrity sha512-A0zjq+QN/O0Kpe30hA1GidzyFjatVvrpIvWLxD+xv67Vt91TWWgco9IvrJBkeyHm1trGaFS/FSGqPlhyeZRm0g==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@^18.0.25":
-  version "18.2.42"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.42.tgz#6f6b11a904f6d96dda3c2920328a97011a00aba7"
-  integrity sha512-c1zEr96MjakLYus/wPnuWDo1/zErfdU9rNsIGmE+NV71nx88FG9Ttgo5dqorXTu/LImX2f63WBP986gJkMPNbA==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@^18.2.43":
+"@types/react@*", "@types/react@^18.0.25", "@types/react@^18.2.43":
   version "18.2.43"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.43.tgz#c58e5abe241e6f71f60ce30e2a9aceb9d3a2a374"
   integrity sha512-nvOV01ZdBdd/KW6FahSbcNplt2jCJfyWdTos61RYHV+FVv5L/g9AOX1bmbVcWcLFL8+KHQfh1zVIQrud6ihyQA==
