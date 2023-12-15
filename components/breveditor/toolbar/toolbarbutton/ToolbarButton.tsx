@@ -4,14 +4,21 @@ import styles from './ToolbarButton.module.css';
 
 interface ToolbarButtonProps {
   onClick: () => void;
-  active?: boolean;
   children: ReactNode;
+  active?: boolean;
+  disabled?: boolean;
 }
 
-export const ToolbarButton = ({ onClick, active = false, children }: ToolbarButtonProps) => {
+export const ToolbarButton = ({ onClick, active = false, children, disabled = false }: ToolbarButtonProps) => {
   const classNames = `${styles.toolbarbutton} ${active ? styles.active : ''}`;
   return (
-    <Button type={'button'} variant={'tertiary-neutral'} onClick={() => onClick()} className={classNames}>
+    <Button
+      type={'button'}
+      variant={'tertiary-neutral'}
+      onClick={() => onClick()}
+      className={classNames}
+      disabled={disabled}
+    >
       {children}
     </Button>
   );

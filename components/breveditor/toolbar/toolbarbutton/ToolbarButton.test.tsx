@@ -28,4 +28,18 @@ describe('ToolbarButton', () => {
     );
     expect(screen.getByRole('button', { name: 'Knapp' })).toHaveClass('active');
   });
+
+  test('er enablet som standard', async () => {
+    render(<ToolbarButton onClick={onClickMock}>Knapp</ToolbarButton>);
+    expect(screen.getByRole('button', { name: /Knapp/ })).not.toBeDisabled();
+  });
+
+  test('kan disables', () => {
+    render(
+      <ToolbarButton onClick={onClickMock} disabled={true}>
+        Knapp
+      </ToolbarButton>
+    );
+    expect(screen.getByRole('button', { name: /Knapp/ })).toBeDisabled();
+  });
 });
