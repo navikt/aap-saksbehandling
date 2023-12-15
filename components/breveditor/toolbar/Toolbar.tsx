@@ -1,7 +1,7 @@
 import { Editor } from '@tiptap/react';
 
 import styles from './Toolbar.module.css';
-import { BulletListIcon, NumberListIcon, TableIcon } from '@navikt/aksel-icons';
+import { ArrowUndoIcon, BulletListIcon, NumberListIcon, TableIcon } from '@navikt/aksel-icons';
 import { ToolbarButton } from 'components/breveditor/toolbar/toolbarbutton/ToolbarButton';
 
 interface Props {
@@ -17,7 +17,10 @@ export const Toolbar = ({ editor }: Props) => {
   };
 
   return (
-    <div className={styles.toolbar} role={'toolbar'}>
+    <div className={`${styles.toolbar} ${editor.isFocused ? styles.visible : styles.hidden}`} role={'toolbar'}>
+      <ToolbarButton onClick={() => editor?.chain().focus().undo().run()} disabled={!editor.can().undo()}>
+        <ArrowUndoIcon className={styles.icon} title={'Angre'} />
+      </ToolbarButton>
       <ToolbarButton
         onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
         active={markIsActive('heading', { level: 1 })}
