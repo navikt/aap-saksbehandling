@@ -1696,10 +1696,10 @@
     react-fast-compare "3.2.2"
     use-sync-external-store "1.2.0"
 
-"@sanity/types@^3.21.3":
-  version "3.21.3"
-  resolved "https://registry.yarnpkg.com/@sanity/types/-/types-3.21.3.tgz#ad4b2eed460dffd0791d3036838c35ae966d1504"
-  integrity sha512-Z2OZHGDBGPdXLJQjUtp9w/+32yZvhsne5Z4GqClTKsPnzzB4S37OqoUOVfCCi35yMl+xVZv+ILerLwZl9Uo7fA==
+"@sanity/types@^3.23.1":
+  version "3.23.1"
+  resolved "https://registry.yarnpkg.com/@sanity/types/-/types-3.23.1.tgz#caa428d6445c1832e06af1221e777a855a9d7ea0"
+  integrity sha512-aeo/jLcCN4GskaXmg3D5zHnCAqFCTc/sgoUguLwVtxYyDN5Ex0fVmCiQf6XPBQZpw0dZOr8hQmVSpmeJ6AAckQ==
   dependencies:
     "@sanity/client" "^6.10.0"
     "@types/react" "^18.0.25"
@@ -2151,25 +2151,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "18.2.14"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.14.tgz#fa7a6fecf1ce35ca94e74874f70c56ce88f7a127"
-  integrity sha512-A0zjq+QN/O0Kpe30hA1GidzyFjatVvrpIvWLxD+xv67Vt91TWWgco9IvrJBkeyHm1trGaFS/FSGqPlhyeZRm0g==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@^18.0.25":
-  version "18.2.42"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.42.tgz#6f6b11a904f6d96dda3c2920328a97011a00aba7"
-  integrity sha512-c1zEr96MjakLYus/wPnuWDo1/zErfdU9rNsIGmE+NV71nx88FG9Ttgo5dqorXTu/LImX2f63WBP986gJkMPNbA==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@^18.2.45":
+"@types/react@*", "@types/react@^18.0.25", "@types/react@^18.2.45":
   version "18.2.45"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.45.tgz#253f4fac288e7e751ab3dc542000fb687422c15c"
   integrity sha512-TtAxCNrlrBp8GoeEp1npd5g+d/OejJHFxS3OWmrPBMFaVQMSN0OFySozJio5BHxTuTeug00AVXVAjfDSfk+lUg==
