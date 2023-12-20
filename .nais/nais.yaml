@@ -56,6 +56,7 @@ spec:
       rules:
         - application: "behandlingsflyt"
         - application: "saksbehandling-pdfgen"
+        - application: "brev"
       external:
         - host: api.sanity.io
         - host: 948n95rd.api.sanity.io
