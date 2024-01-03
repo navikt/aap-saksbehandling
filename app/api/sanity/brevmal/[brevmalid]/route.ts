@@ -1,43 +1,18 @@
 import { NextRequest } from 'next/server';
-import { sanityservice } from 'lib/services/sanityservice/sanityservice';
-import { groq } from 'next-sanity';
-import { Brevmal } from 'lib/utils/sanity';
 
 export async function GET(req: NextRequest, { params }: { params: { brevmalid: string } }) {
-  const data = await sanityservice.fetch<Brevmal>(groq`*[_id == "${params.brevmalid}"][0]{
-  brevtittel,
-  innhold[] -> {
-    _type,
-    _id,
-    _type == 'systeminnhold' => {
-      systemNokkel,
-      overskrift,
-      "niva": niva->.level
-    },
-    _type == 'standardtekst' => {
-      overskrift,
-      "niva": niva->.level,
-      hjelpetekst,
-      kanRedigeres,
-        innhold[]{
-        _type == 'content' => {
-          ...,
-          children[] {
-            ...,
-            _type == 'systemVariabel' => {
-              ...,
-              "systemVariabel": @->.tekniskNavn
-            },
-            _type == 'inlineElement' => {
-              ...,
-              "text": @->.tekst
-            },
-          }
-        }
-      }
-    }
-  }
-}`);
 
-  return new Response(JSON.stringify(data), { status: 200 });
+  const response = await fetch("http://aap-brev/${params.brevmalid}", {
+    method: GET,
+    headers: {
+      Accept: 'application/json',
+    },
+  });
+  
+  if (response.ok) {
+    const body = await response.json();
+    return new Response(JSON.stringify(body), { status: 200 });
+  } 
+
+  return new Response("klarte ikke finne brevmal", { status: 400 })
 }
