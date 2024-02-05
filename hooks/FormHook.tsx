@@ -69,14 +69,14 @@ interface FormFieldName<FormFieldIds extends FieldValues> {
   name: FieldPath<FormFieldIds>;
 }
 
-type ReactFormHookConfigruation<FormFieldIds extends FieldValues> = Omit<
+type ReactFormHookConfiguration<FormFieldIds extends FieldValues> = Omit<
   UseFormProps<FormFieldIds>,
   'defaultValues'
 > & { readOnly?: boolean };
 
 export function useConfigForm<FormFieldIds extends FieldValues>(
   config: FormFieldsConfig<FieldPath<FormFieldIds>, FormFieldIds>,
-  rfhConfig?: ReactFormHookConfigruation<FormFieldIds>
+  rfhConfig?: ReactFormHookConfiguration<FormFieldIds>
 ): {
   formFields: FormFields<FieldPath<FormFieldIds>, FormFieldIds>;
   form: UseFormReturn<FormFieldIds>;
