@@ -27,15 +27,15 @@
     "@sanity/overlays": "^2.3.0",
     "@sanity/react-loader": "^1.6.4",
     "@testing-library/user-event": "14.5.2",
-    "@tiptap/extension-bubble-menu": "^2.1.13",
-    "@tiptap/extension-table": "^2.1.13",
-    "@tiptap/extension-table-cell": "^2.1.13",
-    "@tiptap/extension-table-header": "^2.1.13",
-    "@tiptap/extension-table-row": "^2.1.13",
-    "@tiptap/extension-underline": "^2.1.13",
-    "@tiptap/pm": "^2.1.13",
-    "@tiptap/react": "^2.1.13",
-    "@tiptap/starter-kit": "^2.1.13",
+    "@tiptap/extension-bubble-menu": "^2.2.1",
+    "@tiptap/extension-table": "^2.2.1",
+    "@tiptap/extension-table-cell": "^2.2.1",
+    "@tiptap/extension-table-header": "^2.2.1",
+    "@tiptap/extension-table-row": "^2.2.1",
+    "@tiptap/extension-underline": "^2.2.1",
+    "@tiptap/pm": "^2.2.1",
+    "@tiptap/react": "^2.2.1",
+    "@tiptap/starter-kit": "^2.2.1",
     "@vercel/otel": "^1.2.1",
     "date-fns": "^3.0.6",
     "next": "^14.0.4",
@@ -81,5 +81,8 @@
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --cache --fix",
     "*.{js,ts,tsx,css,md}": "prettier --write"
+  },
+  "resolutions": {
+    "prosemirror-model": "1.19.4"
   }
 }
