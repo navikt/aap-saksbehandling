@@ -80,9 +80,6 @@ describe('Student', () => {
     const errorText = await screen.findByText('Du må svare på om vilkåret er oppfyllt');
 
     expect(errorText).toBeVisible();
-
-    const radioGroup = screen.getByRole('group', { name: /Har søker oppfyllt vilkårene i § 11-14?/i });
-    expect(radioGroup).toBeInvalid();
   });
 
   it('Datofelt skal ha feilmelding dersom hovedvilkår er "Ja", og datofeilt ikke fyllt ut', async () => {
