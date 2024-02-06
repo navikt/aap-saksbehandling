@@ -14,7 +14,7 @@ import {
   YrkesskadeGrunnlag,
 } from 'lib/types/types';
 
-import { fetchProxy } from '../fetchProxy';
+import { fetchProxy } from 'lib/services/fetchProxy';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingScope = process.env.BEHANDLING_API_SCOPE ?? '';

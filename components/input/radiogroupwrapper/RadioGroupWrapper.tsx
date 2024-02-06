@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { Control, Controller, RegisterOptions } from 'react-hook-form';
 import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 
-import styles from '../radiogroupwrapper/Radio.module.css';
+import styles from 'components/input/radiogroupwrapper/Radio.module.css';
 
 interface RadioProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;

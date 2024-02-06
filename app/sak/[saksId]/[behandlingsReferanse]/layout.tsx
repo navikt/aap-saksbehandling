@@ -1,14 +1,14 @@
+import { ReactNode } from 'react';
 import { Detail, Label } from '@navikt/ds-react/esm/typography';
 import { hentSaksinfo } from 'lib/api';
 import { getToken } from 'lib/auth/authentication';
-import { hentSak } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { headers } from 'next/headers';
-import { ReactNode } from 'react';
+import { hentPersonInformasjonForIdent } from 'lib/services/pdlservice/pdlService';
 
 import { Tag } from 'components/DsClient';
 
 import styles from './layout.module.css';
-import { hentPersonInformasjonForIdent } from '../../../../lib/services/pdlservice/pdlService';
 
 interface Props {
   children: ReactNode;

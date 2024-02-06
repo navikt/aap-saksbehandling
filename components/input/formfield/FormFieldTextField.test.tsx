@@ -1,4 +1,4 @@
-import { useConfigForm } from '../../../hooks/FormHook';
+import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from './FormField';
 import { Button } from '@navikt/ds-react';
 

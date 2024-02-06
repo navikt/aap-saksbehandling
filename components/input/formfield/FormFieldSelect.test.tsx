@@ -2,7 +2,7 @@ import { Button } from '@navikt/ds-react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { useConfigForm } from '../../../hooks/FormHook';
+import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from './FormField';
 
 describe('Select', () => {

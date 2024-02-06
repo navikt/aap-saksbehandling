@@ -1,5 +1,5 @@
 import { validerToken } from './azuread';
-import { isLocal } from '../../utils/environment';
+import { isLocal } from 'lib/utils/environment';
 
 export interface BrukerInformasjon {
   navn: string;

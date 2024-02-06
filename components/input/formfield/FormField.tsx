@@ -3,13 +3,13 @@ import React, { ReactNode } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { FieldValues } from 'react-hook-form/dist/types';
 
-import { FormFieldType } from '../../../hooks/FormHook';
-import { CheckboxWrapper } from '../checkboxwrapper/CheckboxWrapper';
-import { DateWrapper } from '../datewrapper/DateWrapper';
-import { RadioGroupWrapper } from '../radiogroupwrapper/RadioGroupWrapper';
-import { SelectWrapper } from '../selectwrapper/SelectWrapper';
-import { TextAreaWrapper } from '../textareawrapper/TextAreaWrapper';
-import { TextFieldWrapper } from '../textfieldwrapper/TextFieldWrapper';
+import { FormFieldType } from 'hooks/FormHook';
+import { CheckboxWrapper } from 'components/input/checkboxwrapper/CheckboxWrapper';
+import { DateWrapper } from 'components/input/datewrapper/DateWrapper';
+import { RadioGroupWrapper } from 'components/input/radiogroupwrapper/RadioGroupWrapper';
+import { SelectWrapper } from 'components/input/selectwrapper/SelectWrapper';
+import { TextAreaWrapper } from 'components/input/textareawrapper/TextAreaWrapper';
+import { TextFieldWrapper } from 'components/input/textfieldwrapper/TextFieldWrapper';
 
 export interface ValuePair {
   value: string;

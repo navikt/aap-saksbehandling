@@ -3,7 +3,7 @@ import { getToken, verifyUserLoggedIn } from 'lib/auth/authentication';
 import 'styles/globals.css';
 
 import { AppHeader } from 'components/appheader/AppHeader';
-import { hentBrukerInformasjon } from '../lib/services/azureuserservice/azureUserService';
+import { hentBrukerInformasjon } from 'lib/services/azureuserservice/azureUserService';
 import { headers } from 'next/headers';
 
 export const metadata = {

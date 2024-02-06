@@ -1,8 +1,8 @@
 'use client';
 
-import { Dropdown, ExternalLinkIcon, InternalHeader, Link, MenuGridIcon } from '../DsClient';
+import { Dropdown, ExternalLinkIcon, InternalHeader, Link, MenuGridIcon } from 'components/DsClient';
 
-import styles from '../../components/appheader/AppHeader.module.css';
+import styles from 'components/appheader/AppHeader.module.css';
 import { BrukerInformasjon } from 'lib/services/azureuserservice/azureUserService';
 
 interface LinkElement {

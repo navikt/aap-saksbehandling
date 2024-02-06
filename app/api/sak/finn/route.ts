@@ -1,4 +1,4 @@
-import { FinnSakForIdent } from '../../../../lib/types/types';
+import { FinnSakForIdent } from 'lib/types/types';
 
 export async function POST(req: Request) {
   const body: FinnSakForIdent = await req.json();

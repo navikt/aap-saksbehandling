@@ -1,5 +1,5 @@
 import { getToken } from 'lib/auth/authentication';
-import { hentSak } from '../../../../../lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest, { params }: { params: { saksnummer: string } }) {
