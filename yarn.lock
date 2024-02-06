@@ -1691,15 +1691,25 @@
     get-it "^8.4.4"
     rxjs "^7.0.0"
 
+"@sanity/client@^6.12.3":
+  version "6.12.3"
+  resolved "https://registry.yarnpkg.com/@sanity/client/-/client-6.12.3.tgz#240d50c55b3ed4e0f3a24a055c852d0aea992c89"
+  integrity sha512-oA9LkDZOpVN8nciGb6/h+1r4ElH0IUTC3bHyBdVsxB5namdWBJKZzuVjJiWQlsK8up7U1xsATB4hyimSgUCSjA==
+  dependencies:
+    "@sanity/eventsource" "^5.0.0"
+    "@vercel/stega" "0.1.0"
+    get-it "^8.4.6"
+    rxjs "^7.0.0"
+
 "@sanity/color@3.0.0-beta.9":
   version "3.0.0-beta.9"
   resolved "https://registry.yarnpkg.com/@sanity/color/-/color-3.0.0-beta.9.tgz#e33a2138f71ca8cec2c264fb9ac44c680be50a9c"
   integrity sha512-Mk7FRDtxz/U2SRlRM0BvUI62jU26W62aYsipaKFt/dk0rOyYa9yzfaojSM/QmW0E4W/nOw74RBA/HrapXUw+2Q==
 
-"@sanity/core-loader@1.3.2":
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@sanity/core-loader/-/core-loader-1.3.2.tgz#d8a3a87e055178fae74a5a1fb2549e393531f210"
-  integrity sha512-SX6bvSP5c1oRb419gICESpWLz72pOTWAJNwgZT0eOXcBKU5kja62liTPd6R6Wh7VfJ0WhWXhGDnMn3SuaUTuDg==
+"@sanity/core-loader@1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@sanity/core-loader/-/core-loader-1.4.1.tgz#a812287a62fb1a3be4b783d4eb9439426ff50062"
+  integrity sha512-oiH1j/pR0PSk4qTKLXAYkKvxWeUn8neccwuQ9231EjtXlQxUTRcN/Zb2LnOWGUt4gsL6Ojb0EIAaQckaLjFRTQ==
   dependencies:
     async-cache-dedupe "2.0.0"
 
@@ -1754,20 +1764,20 @@
     react-fast-compare "3.2.2"
     use-sync-external-store "1.2.0"
 
-"@sanity/react-loader@^1.6.4":
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/@sanity/react-loader/-/react-loader-1.6.4.tgz#a89bca08df6488dd45c92ea754ad53850633001b"
-  integrity sha512-yS2iZWHjPpdrRfB80GVH8fhUFIHtHeKDBepJ3pVjQzdTvY/mPjkQkrJyK3GopobX51sErKEYOCaGWcUUWCUlbQ==
+"@sanity/react-loader@^1.8.3":
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/@sanity/react-loader/-/react-loader-1.8.3.tgz#f8f743753fa498474eca1675239234ba968859f7"
+  integrity sha512-7tpKq7EvmQateRxA6gfzAXGAC1g94AL/42RIDquYnBNxYJQ0xgIERkoNXPeQUKcp5IYu56HmReI/dDazdpbF0g==
   dependencies:
-    "@sanity/core-loader" "1.3.2"
+    "@sanity/core-loader" "1.4.1"
     fast-deep-equal "3.1.3"
 
-"@sanity/types@^3.23.4":
-  version "3.23.4"
-  resolved "https://registry.yarnpkg.com/@sanity/types/-/types-3.23.4.tgz#f7477583772d4c935457ba83c7879b3641a3b211"
-  integrity sha512-v3EN73ECxlwHAScOhQhSnnfpZf62LX8vN62V3m6tY7+Umnc9XwKUoTtKiMQUKJy4XuZgarot3kM4/6GfB9Y3Mg==
+"@sanity/types@^3.27.1":
+  version "3.27.1"
+  resolved "https://registry.yarnpkg.com/@sanity/types/-/types-3.27.1.tgz#604c374b08e59672c4336acc6034b72ce3f66a15"
+  integrity sha512-NkUfz8BraO8BgE1exWUftvkr5WTzwJXV2lr4kMv2pIhDql3+lMczlCQwXa3WyAq6lLYApXjqU4s7SnhRef/I7A==
   dependencies:
-    "@sanity/client" "^6.10.0"
+    "@sanity/client" "^6.12.3"
     "@types/react" "^18.0.25"
 
 "@sanity/ui@2.0.0-beta.13":
@@ -4324,6 +4334,11 @@ follow-redirects@^1.15.2:
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.3.tgz#fe2f3ef2690afce7e82ed0b44db08165b207123a"
   integrity sha512-1VzOtuEM8pC9SFU1E+8KfTjZyMztRsgEfwQl44z8A25uy13jSzTj6dyK2Df52iV0vgHCfBwLhDWevLn95w5v6Q==
 
+follow-redirects@^1.15.4:
+  version "1.15.5"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.5.tgz#54d4d6d062c0fa7d9d17feb008461550e3ba8020"
+  integrity sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==
+
 for-each@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/for-each/-/for-each-0.3.3.tgz#69b447e88a0a5d32c3e7084f3f1710034b21376e"
@@ -4475,6 +4490,22 @@ get-it@^8.4.4:
     debug "^4.3.4"
     decompress-response "^7.0.0"
     follow-redirects "^1.15.2"
+    into-stream "^6.0.0"
+    is-plain-object "^5.0.0"
+    is-retry-allowed "^2.2.0"
+    is-stream "^2.0.1"
+    parse-headers "^2.0.5"
+    progress-stream "^2.0.0"
+    tunnel-agent "^0.6.0"
+
+get-it@^8.4.6:
+  version "8.4.6"
+  resolved "https://registry.yarnpkg.com/get-it/-/get-it-8.4.6.tgz#37af61bd72027364c73ec10ed3f1c45ccb28241a"
+  integrity sha512-omefjdbyRb2rRt0tnrZlbeWx9oZJm66o88K8JlYn13xELn+0+d6mJZOQHrJAdC3vxeJ4t/NHa4wh7Wlh+nvEJA==
+  dependencies:
+    debug "^4.3.4"
+    decompress-response "^7.0.0"
+    follow-redirects "^1.15.4"
     into-stream "^6.0.0"
     is-plain-object "^5.0.0"
     is-retry-allowed "^2.2.0"
