@@ -293,7 +293,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2024-02-05
+       * @example 2024-02-20
        */
       fødselsdato: string;
       ident: string;
@@ -343,7 +343,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurdering': {
       /**
        * Format: date
-       * @example 2024-02-05
+       * @example 2024-02-20
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
@@ -362,12 +362,12 @@ export interface components {
       nedreGrense?: 'TRETTI' | 'FEMTI' | null;
       /**
        * Format: date
-       * @example 2024-02-05
+       * @example 2024-02-20
        */
       nedsattArbeidsevneDato?: string | null;
       /**
        * Format: date
-       * @example 2024-02-05
+       * @example 2024-02-20
        */
       ytterligereNedsattArbeidsevneDato?: string | null;
     };
@@ -379,7 +379,7 @@ export interface components {
       erÅrsakssammenheng: boolean;
       /**
        * Format: date
-       * @example 2024-02-05
+       * @example 2024-02-20
        */
       skadetidspunkt?: string | null;
     };
@@ -445,7 +445,6 @@ export interface components {
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
-        | 'SAMORDNING'
         | 'AVKLAR_YRKESSKADE'
         | 'AVKLAR_SYKDOM'
         | 'FASTSETT_ARBEIDSEVNE'
@@ -473,7 +472,6 @@ export interface components {
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
-        | 'SAMORDNING'
         | 'AVKLAR_YRKESSKADE'
         | 'AVKLAR_SYKDOM'
         | 'FASTSETT_ARBEIDSEVNE'
@@ -488,7 +486,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-02-05T15:50:51.083383
+       * @example 2024-02-20T13:46:58.171733
        */
       opprettet: string;
       /** Format: uuid */
@@ -507,7 +505,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-02-05T15:50:51.083383
+       * @example 2024-02-20T13:46:58.171733
        */
       tidsstempel: string;
     };
@@ -543,7 +541,6 @@ export interface components {
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
-        | 'SAMORDNING'
         | 'AVKLAR_YRKESSKADE'
         | 'AVKLAR_SYKDOM'
         | 'FASTSETT_ARBEIDSEVNE'
@@ -585,7 +582,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-02-05T15:50:51.083383
+       * @example 2024-02-20T13:46:58.171733
        */
       opprettet: string;
       /** Format: uuid */
@@ -613,12 +610,12 @@ export interface components {
     'no.nav.aap.verdityper.Periode': {
       /**
        * Format: date
-       * @example 2024-02-05
+       * @example 2024-02-20
        */
       fom: string;
       /**
        * Format: date
-       * @example 2024-02-05
+       * @example 2024-02-20
        */
       tom: string;
     };
