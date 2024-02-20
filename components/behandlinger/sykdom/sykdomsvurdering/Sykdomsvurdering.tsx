@@ -2,7 +2,6 @@
 
 import { useConfigForm } from 'hooks/FormHook';
 import { BehovsType, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { stringToDate } from 'lib/utils/date';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
@@ -22,7 +21,6 @@ interface FormFields {
   erSykdom: string;
   arbeidsevneNedsatt: string;
   begrunnelse: string;
-  dato: Date;
 }
 
 export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
@@ -32,9 +30,17 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
       label: 'Dokumentasjon mangler',
       options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
     },
+    begrunnelse: {
+      type: 'textarea',
+      label: 'Vurder den nedsatte arbeidsevnen',
+      description:
+        'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst 50%?',
+      defaultValue: grunnlag?.sykdomsvurdering?.begrunnelse,
+      rules: { required: 'Du må begrunne' },
+    },
     erSykdom: {
       type: 'radio',
-      label: 'Er det sykdom, skade eller lyte som fører til nedsatt arbeidsevne?',
+      label: 'Er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne? (§ 11-5)',
       defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
@@ -44,37 +50,13 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
     },
     arbeidsevneNedsatt: {
       type: 'radio',
-      label: grunnlag?.erÅrsakssammenheng
-        ? 'Er arbeidsevnen nedsatt med minst 30%?'
-        : 'Er arbeidsevnen nedsatt med minst 50%?',
+      label: 'Er arbeidsevnen nedsatt med minst 50%?',
       defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
       ],
-    },
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Vurder den nedsatte arbeidsevnen',
-      description: `Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst ${
-        grunnlag?.erÅrsakssammenheng ? 30 : 50
-      }%?`,
-      defaultValue: grunnlag?.sykdomsvurdering?.begrunnelse,
-      rules: { required: 'Du må begrunne' },
-    },
-    dato: {
-      type: 'date',
-      label: 'Dato for nedsatt arbeidsevne',
-      defaultValue: stringToDate(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
-      rules: {
-        validate: {
-          required: (value, formValues) => {
-            if (!value && formValues.arbeidsevneNedsatt === JaEllerNei.Ja) {
-              return 'Du må svare på når arbeidsevnen ble nedsatt';
-            }
-          },
-        },
-      },
+      rules: { required: 'Du må svare på om arbeidsevnen er nedsatt med minst 50%' },
     },
   });
 
@@ -98,7 +80,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
                 // @ts-ignore Feil generert type i backend
                 erSkadeSykdomEllerLyteVesentligdel: data.erSykdom === JaEllerNei.Ja,
                 // @ts-ignore Feil generert type i backend
-                nedreGrense: grunnlag?.erÅrsakssammenheng ? 'TRETTI' : 'FEMTI',
+                nedreGrense: 'FEMTI',
                 // @ts-ignore Feil generert type i backend
                 nedsattArbeidsevneDato: data.dato ? format(new Date(data.dato), 'yyyy-MM-dd') : undefined,
               },
@@ -110,15 +92,14 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
       >
         <div>
           <Label as="p">Registrert behandler</Label>
-          <BodyShort>Fast Lege</BodyShort>
+          <BodyShort>Trond Ask</BodyShort>
           <BodyShort>Lillegrensen Legesenter</BodyShort>
-          <BodyShort>0123 Legeby, 815 493 00</BodyShort>
+          <BodyShort>0123 Legeby, 22 44 66 88</BodyShort>
         </div>
         <FormField form={form} formField={formFields.dokumentasjonMangler} />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erSykdom} />
         <FormField form={form} formField={formFields.arbeidsevneNedsatt} />
-        {form.watch('arbeidsevneNedsatt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.dato} />}
       </Form>
     </VilkårsKort>
   );

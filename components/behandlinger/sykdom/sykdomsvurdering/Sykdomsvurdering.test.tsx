@@ -2,14 +2,14 @@ import { render, screen } from '@testing-library/react';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import userEvent from '@testing-library/user-event';
 
-describe('sykdomsvurdering', () => {
+describe('sykdomsvurdering uten yrkesskade', () => {
   const user = userEvent.setup();
   const grunnlag = {
     opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
     erÅrsakssammenheng: true,
   };
 
-  it('Skal ha en heading', () => {
+  it('Skal ha korrekt heading', () => {
     render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
     const heading = screen.getByText('Nedsatt arbeidsevne - § 11-5');
     expect(heading).toBeVisible();
@@ -30,14 +30,14 @@ describe('sykdomsvurdering', () => {
   it('Skal ha et felt for om sykdom, skade eller lyte er årsaken til nedsatt arbeidsevne', () => {
     render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
     const radioGroup = screen.getByRole('group', {
-      name: /Er det sykdom, skade eller lyte som fører til nedsatt arbeidsevne\?/i,
+      name: /er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne\? \(§ 11-5\)/i,
     });
     expect(radioGroup).toBeVisible();
   });
 
   it('Skal ha et felt for om arbeidsevnen er nedsatt med minst 50 prosent', () => {
     render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
-    const radioGroup = screen.getByRole('group', { name: /er arbeidsevnen nedsatt med minst 30%\?/i });
+    const radioGroup = screen.getByRole('group', { name: /er arbeidsevnen nedsatt med minst 50%\?/i });
     expect(radioGroup).toBeVisible();
   });
 
@@ -57,7 +57,15 @@ describe('sykdomsvurdering', () => {
     expect(await screen.findByText('Du må svare på om vilkåret er oppfyllt')).toBeVisible();
   });
 
-  it('Skal vise felt for nedsatt minst 30 prosent dersom yrkesskadevurdering har årsakssammenheng', async () => {
+  it('Skal vise feilmelding dersom felt for om arbeidsevnen er nedsatt med minst 50% ikke er besvart', async () => {
+    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
+    const button = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(button);
+
+    expect(await screen.findByText('Du må svare på om arbeidsevnen er nedsatt med minst 50%')).toBeVisible();
+  });
+
+  it('Skal vise korrekt label på begrunnelsesfelt', async () => {
     render(
       <Sykdomsvurdering
         behandlingsReferanse={'123'}
@@ -67,41 +75,6 @@ describe('sykdomsvurdering', () => {
         }}
       />
     );
-    const arbeidsevneNedsattMedMinst30Prosent = screen.getByRole('group', {
-      name: /er arbeidsevnen nedsatt med minst 30%\?/i,
-    });
-    expect(arbeidsevneNedsattMedMinst30Prosent).toBeInTheDocument();
-  });
-
-  it('Skal vise felt for nedsatt minst 50 prosent dersom yrkesskadevurdering ikke har årsakssammenheng', async () => {
-    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={{ ...grunnlag, erÅrsakssammenheng: false }} />);
-
-    const arbeidsevneNedsattMedMinst50Prosent = screen.getByRole('group', {
-      name: /er arbeidsevnen nedsatt med minst 50%\?/i,
-    });
-    expect(arbeidsevneNedsattMedMinst50Prosent).toBeInTheDocument();
-  });
-
-  it('Skal vise korrekt label på begrunnelsesfelt dersom yrkesskadevurdering har årsakssammenheng', async () => {
-    render(
-      <Sykdomsvurdering
-        behandlingsReferanse={'123'}
-        grunnlag={{
-          opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
-          erÅrsakssammenheng: true,
-        }}
-      />
-    );
-
-    const label = screen.getByText(
-      /hvilken sykdom \/ skade \/ lyte\. hva er det mest vesentlige\. hvorfor vurderes nedsatt arbeidsevne med minst 30%\?/i
-    );
-
-    expect(label).toBeVisible();
-  });
-
-  it('Skal vise korrekt label på begrunnelsesfelt dersom yrkesskadevurdering ikke har årsakssammenheng', async () => {
-    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={{ ...grunnlag, erÅrsakssammenheng: false }} />);
 
     const label = screen.getByText(
       /hvilken sykdom \/ skade \/ lyte\. hva er det mest vesentlige\. hvorfor vurderes nedsatt arbeidsevne med minst 50%\?/i
