@@ -5,8 +5,6 @@ export type StudentGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.flate.StudentGrunnlagDto'];
 export type SykdomsGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomGrunnlagDto'];
-export type YrkesskadeGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadeGrunnlagDto'];
 export type BistandsGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.flate.BistandGrunnlagDto'];
 export type FritakMeldepliktGrunnlag =
@@ -61,7 +59,6 @@ export type StegType =
   | 'FRITAK_MELDEPLIKT'
   | 'BARNETILLEGG'
   | 'SAMORDNING'
-  | 'AVKLAR_YRKESSKADE'
   | 'AVKLAR_SYKDOM'
   | 'FASTSETT_GRUNNLAG'
   | 'FASTSETT_UTTAK'

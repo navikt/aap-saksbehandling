@@ -13,9 +13,9 @@ export interface paths {
             'application/json': (
               | "MANUELT_SATT_PÅ_VENT(kode='9001')"
               | "AVKLAR_STUDENT(kode='5001')"
-              | "AVKLAR_YRKESSKADE(kode='5002')"
               | "AVKLAR_SYKDOM(kode='5003')"
               | "FASTSETT_ARBEIDSEVNE(kode='5004')"
+              | "FASTSETT_BEREGNINGSTIDSPUNKT(kode='5008')"
               | "FRITAK_MELDEPLIKT(kode='5005')"
               | "AVKLAR_BISTANDSBEHOV(kode='5006')"
               | "AVKLAR_SYKEPENGEERSTATNING(kode='5007')"
@@ -218,24 +218,6 @@ export interface paths {
       };
     };
   };
-  '/api/behandling/{referanse}/grunnlag/sykdom/yrkesskade': {
-    get: {
-      parameters: {
-        path: {
-          /** @description referanse */
-          referanse: string;
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadeGrunnlagDto'];
-          };
-        };
-      };
-    };
-  };
   '/api/behandling/løs-behov': {
     post: {
       requestBody?: {
@@ -293,7 +275,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2024-02-20
+       * @example 2024-02-21
        */
       fødselsdato: string;
       ident: string;
@@ -343,7 +325,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurdering': {
       /**
        * Format: date
-       * @example 2024-02-20
+       * @example 2024-02-21
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
@@ -352,36 +334,6 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.flate.StudentGrunnlagDto': {
       studentvurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurdering'];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.Sykdomsvurdering': {
-      begrunnelse: string;
-      dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
-      erNedsettelseIArbeidsevneHøyereEnnNedreGrense?: boolean | null;
-      erSkadeSykdomEllerLyteVesentligdel: boolean;
-      /** @enum {string|null} */
-      nedreGrense?: 'TRETTI' | 'FEMTI' | null;
-      /**
-       * Format: date
-       * @example 2024-02-20
-       */
-      nedsattArbeidsevneDato?: string | null;
-      /**
-       * Format: date
-       * @example 2024-02-20
-       */
-      ytterligereNedsattArbeidsevneDato?: string | null;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.Yrkesskadevurdering': {
-      andelAvNedsettelse?: components['schemas']['no.nav.aap.verdityper.Prosent'];
-      antattÅrligInntekt?: components['schemas']['no.nav.aap.verdityper.Beløp'];
-      begrunnelse: string;
-      dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
-      erÅrsakssammenheng: boolean;
-      /**
-       * Format: date
-       * @example 2024-02-20
-       */
-      skadetidspunkt?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.InnhentetSykdomsOpplysninger': {
       innhentedeYrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.RegistrertYrkesskade'][];
@@ -393,22 +345,37 @@ export interface components {
       ref: string;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomGrunnlagDto': {
-      erÅrsakssammenheng?: boolean | null;
       opplysninger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.InnhentetSykdomsOpplysninger'];
-      sykdomsvurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.Sykdomsvurdering'];
+      skalVurdereYrkesskade: boolean;
+      sykdomsvurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingDto'];
     };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadeGrunnlagDto': {
-      opplysninger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.InnhentetSykdomsOpplysninger'];
-      yrkesskadevurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.Yrkesskadevurdering'];
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingDto': {
+      begrunnelse: string;
+      dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
+      erNedsettelseIArbeidsevneHøyereEnnNedreGrense?: boolean | null;
+      erSkadeSykdomEllerLyteVesentligdel: boolean;
+      /** @enum {string|null} */
+      nedreGrense?: 'TRETTI' | 'FEMTI' | null;
+      yrkesskadevurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadevurderingDto'];
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadevurderingDto': {
+      /** Format: int32 */
+      andelAvNedsettelse?: number | null;
+      erÅrsakssammenheng: boolean;
+      /**
+       * Format: date
+       * @example 2024-02-21
+       */
+      skadetidspunkt?: string | null;
     };
     'no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO': {
       /** @enum {string} */
       definisjon:
         | "MANUELT_SATT_PÅ_VENT(kode='9001')"
         | "AVKLAR_STUDENT(kode='5001')"
-        | "AVKLAR_YRKESSKADE(kode='5002')"
         | "AVKLAR_SYKDOM(kode='5003')"
         | "FASTSETT_ARBEIDSEVNE(kode='5004')"
+        | "FASTSETT_BEREGNINGSTIDSPUNKT(kode='5008')"
         | "FRITAK_MELDEPLIKT(kode='5005')"
         | "AVKLAR_BISTANDSBEHOV(kode='5006')"
         | "AVKLAR_SYKEPENGEERSTATNING(kode='5007')"
@@ -445,9 +412,9 @@ export interface components {
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
-        | 'AVKLAR_YRKESSKADE'
         | 'AVKLAR_SYKDOM'
         | 'FASTSETT_ARBEIDSEVNE'
+        | 'FASTSETT_BEREGNINGSTIDSPUNKT'
         | 'FASTSETT_GRUNNLAG'
         | 'FASTSETT_UTTAK'
         | 'BEREGN_TILKJENT_YTELSE'
@@ -472,9 +439,9 @@ export interface components {
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
-        | 'AVKLAR_YRKESSKADE'
         | 'AVKLAR_SYKDOM'
         | 'FASTSETT_ARBEIDSEVNE'
+        | 'FASTSETT_BEREGNINGSTIDSPUNKT'
         | 'FASTSETT_GRUNNLAG'
         | 'FASTSETT_UTTAK'
         | 'BEREGN_TILKJENT_YTELSE'
@@ -486,7 +453,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-02-20T13:46:58.171733
+       * @example 2024-02-21T14:08:41.507064
        */
       opprettet: string;
       /** Format: uuid */
@@ -505,7 +472,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-02-20T13:46:58.171733
+       * @example 2024-02-21T14:08:41.507064
        */
       tidsstempel: string;
     };
@@ -541,9 +508,9 @@ export interface components {
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
         | 'BARNETILLEGG'
-        | 'AVKLAR_YRKESSKADE'
         | 'AVKLAR_SYKDOM'
         | 'FASTSETT_ARBEIDSEVNE'
+        | 'FASTSETT_BEREGNINGSTIDSPUNKT'
         | 'FASTSETT_GRUNNLAG'
         | 'FASTSETT_UTTAK'
         | 'BEREGN_TILKJENT_YTELSE'
@@ -582,7 +549,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-02-20T13:46:58.171733
+       * @example 2024-02-21T14:08:41.507064
        */
       opprettet: string;
       /** Format: uuid */
@@ -606,20 +573,18 @@ export interface components {
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'LØPENDE' | 'AVSLUTTET';
     };
-    'no.nav.aap.verdityper.Beløp': Record<string, never>;
     'no.nav.aap.verdityper.Periode': {
       /**
        * Format: date
-       * @example 2024-02-20
+       * @example 2024-02-21
        */
       fom: string;
       /**
        * Format: date
-       * @example 2024-02-20
+       * @example 2024-02-21
        */
       tom: string;
     };
-    'no.nav.aap.verdityper.Prosent': Record<string, never>;
     'no.nav.aap.verdityper.TimerArbeid': {
       antallTimer: number;
     };
