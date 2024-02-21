@@ -6,10 +6,10 @@ import { SykdomsGrunnlag } from 'lib/types/types';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
 import { løsBehov } from 'lib/api';
-import { format } from 'date-fns';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { VitalsIcon } from '@navikt/aksel-icons';
+import { SykdomsvurderingDto } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -18,8 +18,8 @@ interface Props {
 
 interface FormFields {
   dokumentasjonMangler: string[];
-  erSykdom: string;
-  arbeidsevneNedsatt: string;
+  erSkadeSykdomEllerLyteVesentligdel: string;
+  erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   begrunnelse: string;
 }
 
@@ -38,7 +38,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
       defaultValue: grunnlag?.sykdomsvurdering?.begrunnelse,
       rules: { required: 'Du må begrunne' },
     },
-    erSykdom: {
+    erSkadeSykdomEllerLyteVesentligdel: {
       type: 'radio',
       label: 'Er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne? (§ 11-5)',
       defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
@@ -48,7 +48,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
       ],
       rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
     },
-    arbeidsevneNedsatt: {
+    erNedsettelseIArbeidsevneHøyereEnnNedreGrense: {
       type: 'radio',
       label: 'Er arbeidsevnen nedsatt med minst 50%?',
       defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
@@ -64,26 +64,23 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
     <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} steg="AVKLAR_SYKDOM" icon={<VitalsIcon />}>
       <Form
         onSubmit={form.handleSubmit(async (data) => {
+          const sykdomsVurdering: SykdomsvurderingDto = {
+            begrunnelse: data.begrunnelse,
+            dokumenterBruktIVurdering: [],
+            erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
+            nedreGrense: 'FEMTI',
+            erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
+              ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
+              : undefined,
+          };
+
           await løsBehov({
             behandlingVersjon: 0,
             behov: {
               // @ts-ignore Feil generert type i backend
               '@type': BehovsType.SYKDOMSVURDERING,
               // @ts-ignore Feil generert type i backend
-              sykdomsvurdering: {
-                // @ts-ignore Feil generert type i backend
-                begrunnelse: data.begrunnelse,
-                // @ts-ignore Feil generert type i backend
-                dokumenterBruktIVurdering: [],
-                // @ts-ignore Feil generert type i backend
-                erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.arbeidsevneNedsatt === JaEllerNei.Ja,
-                // @ts-ignore Feil generert type i backend
-                erSkadeSykdomEllerLyteVesentligdel: data.erSykdom === JaEllerNei.Ja,
-                // @ts-ignore Feil generert type i backend
-                nedreGrense: 'FEMTI',
-                // @ts-ignore Feil generert type i backend
-                nedsattArbeidsevneDato: data.dato ? format(new Date(data.dato), 'yyyy-MM-dd') : undefined,
-              },
+              sykdomsvurdering: sykdomsVurdering,
             },
             referanse: behandlingsReferanse,
           });
@@ -98,8 +95,8 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
         </div>
         <FormField form={form} formField={formFields.dokumentasjonMangler} />
         <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.erSykdom} />
-        <FormField form={form} formField={formFields.arbeidsevneNedsatt} />
+        <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
+        <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
       </Form>
     </VilkårsKort>
   );

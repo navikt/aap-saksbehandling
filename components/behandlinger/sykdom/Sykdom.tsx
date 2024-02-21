@@ -1,4 +1,3 @@
-import { SykdomsvurderingMedYrkesskadeMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingmedyrkesskade/SykdomsvurderingMedYrkesskadeMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
@@ -27,13 +26,6 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           return (
             <StegSuspense key={steg}>
               <StudentMedDataFetching behandlingsReferanse={behandlingsReferanse} />
-            </StegSuspense>
-          );
-        }
-        if (steg === 'AVKLAR_YRKESSKADE') {
-          return (
-            <StegSuspense key={steg}>
-              <SykdomsvurderingMedYrkesskadeMedDataFetching behandlingsReferanse={behandlingsReferanse} />
             </StegSuspense>
           );
         }
