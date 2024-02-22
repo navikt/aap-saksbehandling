@@ -6,12 +6,13 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { VitalsIcon } from '@navikt/aksel-icons';
-import { Alert } from '@navikt/ds-react';
+import { Alert, BodyShort, Label } from '@navikt/ds-react';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
 import { SykdomsvurderingDto } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
+import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 
 interface Props {
   behandlingsReferanse: string;
@@ -24,6 +25,7 @@ interface FormFields {
   erÅrsakssammenheng: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   skadetidspunkt: Date;
+  datoForNedsattArbeidsevne: Date;
 }
 
 export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }: Props) => {
@@ -77,6 +79,14 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         required: 'Du må sette en dato for skadetidspunktet',
       },
     },
+    datoForNedsattArbeidsevne: {
+      type: 'date',
+      label: 'Dato for nedsatt arbeidsevne',
+      defaultValue: stringToDate(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.skadetidspunkt),
+      rules: {
+        required: 'Du må sette en dato for nedsatt arbeidsevne',
+      },
+    },
   });
 
   return (
@@ -116,9 +126,23 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         })}
       >
         <Alert variant="warning">Vi har funnet en eller flere registrerte yrkesskader</Alert>
+        <div>
+          <Label as="p">Har søker godkjent yrkesskade?</Label>
+          <BodyShort>Ja</BodyShort>
+        </div>
+        <div>
+          <Label as="p">Saksopplysninger</Label>
+          <BodyShort>Yrkesskaderegisteret</BodyShort>
+          <BodyShort>Dato for skadetidspunkt: 03.09.2017</BodyShort>
+        </div>
+        <RegistrertBehandler />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
+
         <FormField form={form} formField={formFields.erÅrsakssammenheng} />
+        {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.skadetidspunkt} />
+        )}
         <FormField
           form={form}
           formField={{
@@ -129,8 +153,8 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
                 : 'Er arbeidsevnen nedsatt med minst 30%?',
           }}
         />
-        {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.skadetidspunkt} />
+        {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.datoForNedsattArbeidsevne} />
         )}
       </Form>
     </VilkårsKort>

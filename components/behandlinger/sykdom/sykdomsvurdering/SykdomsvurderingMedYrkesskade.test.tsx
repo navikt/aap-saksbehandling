@@ -3,16 +3,15 @@ import userEvent from '@testing-library/user-event';
 import { SykdomsvurderingMedYrkesskade } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedYrkesskade';
 import { SykdomsGrunnlag } from 'lib/types/types';
 
-const grunnlag: SykdomsGrunnlag = {
+const grunnlagFørBesvarelse: SykdomsGrunnlag = {
   skalVurdereYrkesskade: true,
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
 };
 
-beforeEach(() => {
-  render(<SykdomsvurderingMedYrkesskade behandlingsReferanse={'123'} grunnlag={grunnlag} />);
-});
-
 describe('Sykdomsvurdering med yrkesskade', () => {
+  beforeEach(() => {
+    render(<SykdomsvurderingMedYrkesskade behandlingsReferanse={'123'} grunnlag={grunnlagFørBesvarelse} />);
+  });
   const user = userEvent.setup();
 
   it('Skal ha riktig heading', () => {
@@ -155,5 +154,34 @@ describe('Sykdomsvurdering med yrkesskade', () => {
     await user.click(button);
 
     expect(await screen.findByText('Du må sette en dato for skadetidspunktet')).toBeVisible();
+  });
+
+  it('skal ha et felt for dato for nedsatt arbeidsevne dersom 11-5 er oppfylt', async () => {
+    expect(await screen.queryByRole('textbox', { name: /dato for nedsatt arbeidsevne/i })).not.toBeInTheDocument();
+
+    const erSykdomSkadeEllerLyteJaValg = within(
+      screen.getByRole('group', {
+        name: /er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne\? \(§ 11-5\)/i,
+      })
+    ).getByRole('radio', { name: /ja/i });
+
+    await user.click(erSykdomSkadeEllerLyteJaValg);
+
+    expect(await screen.findByRole('textbox', { name: /dato for nedsatt arbeidsevne/i })).toBeVisible();
+  });
+
+  it('skal vise feilmelding på felt for dato for nedsatt arbeidsevne dersom det ikke er besvart', async () => {
+    const erSykdomSkadeEllerLyteJaValg = within(
+      screen.getByRole('group', {
+        name: /er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne\? \(§ 11-5\)/i,
+      })
+    ).getByRole('radio', { name: /ja/i });
+
+    await user.click(erSykdomSkadeEllerLyteJaValg);
+
+    const bekreftKnapp = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(bekreftKnapp);
+
+    expect(await screen.findByText('Du må sette en dato for nedsatt arbeidsevne')).toBeVisible();
   });
 });
