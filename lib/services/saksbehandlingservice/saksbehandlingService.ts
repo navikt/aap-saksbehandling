@@ -11,7 +11,6 @@ import {
   StudentGrunnlag,
   SykdomsGrunnlag,
   UtvidetSaksInfo,
-  YrkesskadeGrunnlag,
 } from 'lib/types/types';
 
 import { fetchProxy } from 'lib/services/fetchProxy';
@@ -53,14 +52,6 @@ export const hentStudentGrunnlag = async (
 ): Promise<StudentGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/student`;
   return await fetchProxy<StudentGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
-};
-
-export const hentYrkesskadeGrunnlag = async (
-  behandlingsReferanse: string,
-  accessToken: string
-): Promise<YrkesskadeGrunnlag> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/yrkesskade`;
-  return await fetchProxy<YrkesskadeGrunnlag>(url, accessToken, saksbehandlingScope, 'GET', undefined);
 };
 
 export const hentSykdomsGrunnlag = async (

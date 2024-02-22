@@ -23,11 +23,6 @@ export const mapStegTypeTilDetaljertSteg = (stegType: StegType): DetaljertSteg =
         navn: 'Student',
         paragraf: '11-14',
       };
-    case 'AVKLAR_YRKESSKADE':
-      return {
-        navn: 'Yrkesskade',
-        paragraf: '11-22',
-      };
     case 'AVKLAR_SYKDOM':
       return {
         navn: 'Nedsatt arbeidsevne',
@@ -61,8 +56,6 @@ export const mapStegTypeTilStegNavn = (stegType: StegType): string => {
   switch (stegType) {
     case 'AVKLAR_STUDENT':
       return 'Student';
-    case 'AVKLAR_YRKESSKADE':
-      return 'Yrkesskade';
     case 'AVKLAR_SYKDOM':
       return 'Nedsatt arbeidsevne';
     case 'VURDER_BISTANDSBEHOV':

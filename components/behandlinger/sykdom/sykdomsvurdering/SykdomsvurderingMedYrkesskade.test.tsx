@@ -27,7 +27,7 @@ describe('Sykdomsvurdering med yrkesskade', () => {
 
   it('Skal ha et begrunnelsesfelt', async () => {
     const textbox = screen.getByRole('textbox', {
-      name: /vurder om yrkesskaden er medvirkende årsak til den nedsatte arbeidsevnen/i,
+      name: /Vurder den nedsatte arbeidsevnen/i,
     });
 
     expect(textbox).toBeVisible();

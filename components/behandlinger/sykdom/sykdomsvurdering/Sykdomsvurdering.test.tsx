@@ -1,12 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import userEvent from '@testing-library/user-event';
+import { SykdomsGrunnlag } from 'lib/types/types';
 
 describe('sykdomsvurdering uten yrkesskade', () => {
   const user = userEvent.setup();
-  const grunnlag = {
+  const grunnlag: SykdomsGrunnlag = {
+    skalVurdereYrkesskade: false,
     opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
-    erÅrsakssammenheng: true,
   };
 
   it('Skal ha korrekt heading', () => {
@@ -66,15 +67,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
   });
 
   it('Skal vise korrekt label på begrunnelsesfelt', async () => {
-    render(
-      <Sykdomsvurdering
-        behandlingsReferanse={'123'}
-        grunnlag={{
-          opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
-          erÅrsakssammenheng: true,
-        }}
-      />
-    );
+    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
 
     const label = screen.getByText(
       /hvilken sykdom \/ skade \/ lyte\. hva er det mest vesentlige\. hvorfor vurderes nedsatt arbeidsevne med minst 50%\?/i

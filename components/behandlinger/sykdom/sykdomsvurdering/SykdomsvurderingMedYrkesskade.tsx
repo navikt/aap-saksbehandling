@@ -30,8 +30,8 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
-      label: 'Vurder om yrkesskaden er medvirkende årsak til den nedsatte arbeidsevnen',
-      description: 'Se eksempel på vilkårsvurderingstekst',
+      label: 'Vurder den nedsatte arbeidsevnen',
+      description: 'Hvilken sykdom/skade/lyte? Hva er det mest vesentlige? Hvis yrkesskade er funnet: vurder mot YS',
       defaultValue: grunnlag.sykdomsvurdering?.begrunnelse,
       rules: { required: 'Du må begrunne' },
     },
