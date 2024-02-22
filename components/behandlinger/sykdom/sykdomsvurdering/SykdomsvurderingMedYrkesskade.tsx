@@ -156,6 +156,9 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.datoForNedsattArbeidsevne} />
         )}
+        {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Nei && (
+          <Alert variant={'warning'}>Avslag AAP søknad (Snakk med Therese om bedre tekst her)</Alert>
+        )}
       </Form>
     </VilkårsKort>
   );

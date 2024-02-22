@@ -11,6 +11,7 @@ import { VitalsIcon } from '@navikt/aksel-icons';
 import { SykdomsvurderingDto } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { stringToDate } from 'lib/utils/date';
+import { Alert } from '@navikt/ds-react';
 
 interface Props {
   behandlingsReferanse: string;
@@ -107,6 +108,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
           form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') === JaEllerNei.Ja && (
             <FormField form={form} formField={formFields.datoForNedsattArbeidsevne} />
           )}
+        {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Nei && (
+          <Alert variant={'warning'}>Avslag AAP søknad (Snakk med Therese om bedre tekst her)</Alert>
+        )}
       </Form>
     </VilkårsKort>
   );
