@@ -7,9 +7,10 @@ import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
 import { løsBehov } from 'lib/api';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { BodyShort, Label } from '@navikt/ds-react';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { SykdomsvurderingDto } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
+import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
+import { stringToDate } from 'lib/utils/date';
 
 interface Props {
   behandlingsReferanse: string;
@@ -20,6 +21,7 @@ interface FormFields {
   dokumentasjonMangler: string[];
   erSkadeSykdomEllerLyteVesentligdel: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
+  datoForNedsattArbeidsevne: Date;
   begrunnelse: string;
 }
 
@@ -58,6 +60,14 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
       ],
       rules: { required: 'Du må svare på om arbeidsevnen er nedsatt med minst 50%' },
     },
+    datoForNedsattArbeidsevne: {
+      type: 'date',
+      label: 'Dato for nedsatt arbeidsevne',
+      defaultValue: stringToDate(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.skadetidspunkt),
+      rules: {
+        required: 'Du må sette en dato for nedsatt arbeidsevne',
+      },
+    },
   });
 
   return (
@@ -87,16 +97,16 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
         })}
         steg={'AVKLAR_SYKDOM'}
       >
-        <div>
-          <Label as="p">Registrert behandler</Label>
-          <BodyShort>Trond Ask</BodyShort>
-          <BodyShort>Lillegrensen Legesenter</BodyShort>
-          <BodyShort>0123 Legeby, 22 44 66 88</BodyShort>
-        </div>
+        <RegistrertBehandler />
         <FormField form={form} formField={formFields.dokumentasjonMangler} />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
         <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
+
+        {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja &&
+          form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') === JaEllerNei.Ja && (
+            <FormField form={form} formField={formFields.datoForNedsattArbeidsevne} />
+          )}
       </Form>
     </VilkårsKort>
   );
