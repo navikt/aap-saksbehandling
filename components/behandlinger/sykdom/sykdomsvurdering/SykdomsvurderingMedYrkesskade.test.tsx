@@ -184,4 +184,33 @@ describe('Sykdomsvurdering med yrkesskade', () => {
 
     expect(await screen.findByText('Du må sette en dato for nedsatt arbeidsevne')).toBeVisible();
   });
+
+  it('skal vise alert på at søknaden blir avslått dersom 11-5 ikke er oppfylt', async () => {
+    expect(
+      await screen.queryByText('Avslag AAP søknad (Snakk med Therese om bedre tekst her)')
+    ).not.toBeInTheDocument();
+    const erSykdomSkadeEllerLyteNeiValg = within(
+      screen.getByRole('group', {
+        name: /er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne\? \(§ 11-5\)/i,
+      })
+    ).getByRole('radio', { name: /nei/i });
+
+    await user.click(erSykdomSkadeEllerLyteNeiValg);
+
+    expect(await screen.findByText('Avslag AAP søknad (Snakk med Therese om bedre tekst her)')).toBeVisible();
+  });
+
+  it('skal vise alert på at søknaden blir avslått dersom arbeidsevnen ikke er nedsatt med minst grenseverdi', async () => {
+    expect(
+      await screen.queryByText('Avslag AAP søknad (Snakk med Therese om bedre tekst her)')
+    ).not.toBeInTheDocument();
+
+    const erSykdomSkadeEllerLyteNeiValg = within(
+      screen.getByRole('group', { name: /er arbeidsevnen nedsatt med minst 50%\?/i })
+    ).getByRole('radio', { name: /nei/i });
+
+    await user.click(erSykdomSkadeEllerLyteNeiValg);
+
+    expect(await screen.findByText('Avslag AAP søknad (Snakk med Therese om bedre tekst her)')).toBeVisible();
+  });
 });
