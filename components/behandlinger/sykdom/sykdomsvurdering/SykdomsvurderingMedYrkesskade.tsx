@@ -13,6 +13,7 @@ import { format } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
 import { SykdomsvurderingDto } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
+import { useForm } from 'react-hook-form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -29,7 +30,8 @@ interface FormFields {
 }
 
 export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }: Props) => {
-  const { form, formFields } = useConfigForm<FormFields>({
+  const form = useForm<FormFields>();
+  const { formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
       label: 'Vurder den nedsatte arbeidsevnen',
@@ -63,7 +65,10 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
     },
     erNedsettelseIArbeidsevneHøyereEnnNedreGrense: {
       type: 'radio',
-      label: '', // Denne blir satt dynamisk i return metoden.
+      label:
+        form.watch('erÅrsakssammenheng') === JaEllerNei.Nei || !form.watch('erÅrsakssammenheng')
+          ? 'Er arbeidsevnen nedsatt med minst 50%?'
+          : 'Er arbeidsevnen nedsatt med minst 30%?', // Denne blir satt dynamisk i return metoden.
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
@@ -142,16 +147,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.skadetidspunkt} />
         )}
-        <FormField
-          form={form}
-          formField={{
-            ...formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense,
-            label:
-              form.watch('erÅrsakssammenheng') === JaEllerNei.Nei || !form.watch('erÅrsakssammenheng')
-                ? 'Er arbeidsevnen nedsatt med minst 50%?'
-                : 'Er arbeidsevnen nedsatt med minst 30%?',
-          }}
-        />
+        <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
         {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.datoForNedsattArbeidsevne} />
         )}
