@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { DokumentTabell } from './DokumentTabell';
 import { formaterDato } from 'lib/utils/date';
 import { Dokument } from 'lib/types/types';
-import { DokumentTabellRow } from './DokumentTabellRow';
+import { DokumentTabellRad } from 'components/dokumenttabell/DokumentTabellRad';
 
 const dokumenter: Dokument[] = [
   {
@@ -16,14 +16,15 @@ const dokumenter: Dokument[] = [
 
 describe('DokumentTabell', () => {
   it('Skal rendre en tabell', () => {
-    render(<DokumentTabell dokumenter={dokumenter} onTilknyttetClick={() => {}} onVedleggClick={() => {}} />);
-    const headers = ['Dokument', 'Journalpost ID', 'Åpnet', 'Tilknytt dokument til vurdering'];
+    render(<DokumentTabell dokumenter={dokumenter} />);
+    const headers = ['Dokument', 'Journalpostid', 'Åpnet', 'Tilknytt dokument til vurdering'];
     headers.forEach((header) => {
       expect(screen.getByRole('columnheader', { name: new RegExp(`^${header}$`) })).toBeVisible();
     });
   });
+
   it('Skal rendre en rad per dokument', () => {
-    render(<DokumentTabell dokumenter={dokumenter} onTilknyttetClick={() => {}} onVedleggClick={() => {}} />);
+    render(<DokumentTabell dokumenter={dokumenter} />);
     expect(screen.getAllByRole('row')).toHaveLength(2); // Inkluderer table header row
   });
 });
@@ -34,7 +35,7 @@ describe('DokumentTabellRow', () => {
     render(
       <table>
         <tbody>
-          <DokumentTabellRow dokument={dokument} onTilknyttetClick={() => {}} onVedleggClick={() => {}} />
+          <DokumentTabellRad dokument={dokument} />
         </tbody>
       </table>
     );
@@ -42,6 +43,6 @@ describe('DokumentTabellRow', () => {
     expect(screen.getByRole('link', { name: dokument.tittel })).toBeVisible();
     expect(screen.getByRole('cell', { name: dokument.journalpostId })).toBeVisible();
     expect(screen.getByRole('cell', { name: formaterDato(dokument.åpnet ?? new Date()) })).toBeVisible();
-    expect(screen.getByRole('checkbox', { name: 'Tilknytt dokument til vurdering' })).toBeVisible();
+    expect(screen.getByRole('checkbox')).toBeVisible();
   });
 });

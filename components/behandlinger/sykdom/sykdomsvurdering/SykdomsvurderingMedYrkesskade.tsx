@@ -6,7 +6,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { VitalsIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Label, List, ReadMore } from '@navikt/ds-react';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
@@ -14,6 +14,7 @@ import { stringToDate } from 'lib/utils/date';
 import { SykdomsvurderingDto } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { useForm } from 'react-hook-form';
+import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
 interface Props {
   behandlingsReferanse: string;
@@ -27,6 +28,8 @@ interface FormFields {
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   skadetidspunkt: Date;
   andelAvNedsettelse: number;
+  dokumenterBruktIVurderingen: string[];
+  dokumentasjonMangler: string[];
 }
 
 export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }: Props) => {
@@ -99,7 +102,19 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         },
       },
     },
+    dokumenterBruktIVurderingen: {
+      type: 'checkbox_nested',
+      defaultValue: ['Sykemelding'],
+      label: '',
+    },
+    dokumentasjonMangler: {
+      type: 'checkbox',
+      label: '',
+      options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
+    },
   });
+
+  const dokumenterBruktIVurderingen = form.watch('dokumenterBruktIVurderingen');
 
   return (
     <VilkårsKort
@@ -148,9 +163,22 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
           <BodyShort>Dato for skadetidspunkt: 03.09.2017</BodyShort>
         </div>
         <RegistrertBehandler />
+        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
+          <DokumentTabell />
+        </FormField>
+        <FormField form={form} formField={formFields.dokumentasjonMangler} />
+        <ReadMore header={'Slik vurderes vilkåret'}>
+          ref § ... Her kan vi gi en fin veiledning til hvordan man skal begrunne vilkårsvurderingen hvis de er usikre
+        </ReadMore>
         <FormField form={form} formField={formFields.begrunnelse} />
+        {dokumenterBruktIVurderingen && dokumenterBruktIVurderingen.length > 0 && (
+          <List as={'ul'} title={'Tilknyttede dokumenter'}>
+            {dokumenterBruktIVurderingen.map((dokument) => (
+              <List.Item key={dokument}>{dokument}</List.Item>
+            ))}
+          </List>
+        )}
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
-
         <FormField form={form} formField={formFields.erÅrsakssammenheng} />
         {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
           <>

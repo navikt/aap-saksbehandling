@@ -14,7 +14,8 @@ export type FormFieldConfig<FormFieldIds extends FieldValues> =
   | FormFieldDate<FormFieldIds>
   | FormFieldWithOptions<FormFieldIds>
   | FormFieldCheckbox<FormFieldIds>
-  | FormFieldWithNestedOptions<FormFieldIds>;
+  | FormFieldRadioWithNestedOptions<FormFieldIds>
+  | FormFieldCheckboxWithNestedOptions<FormFieldIds>;
 
 interface BaseFormField<FormFieldIds extends FieldValues> {
   label: string;
@@ -52,9 +53,14 @@ interface FormFieldCheckbox<FormFieldIds extends FieldValues> extends BaseFormFi
   defaultValue?: Array<string>;
 }
 
-interface FormFieldWithNestedOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
-  type: 'radio_nested' | 'checkbox_nested';
+interface FormFieldRadioWithNestedOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
+  type: 'radio_nested';
   defaultValue?: string;
+}
+
+interface FormFieldCheckboxWithNestedOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
+  type: 'checkbox_nested';
+  defaultValue?: string[];
 }
 
 export type FormFields<FormFieldId extends FieldPath<FormFieldIds>, FormFieldIds extends FieldValues> = Record<
