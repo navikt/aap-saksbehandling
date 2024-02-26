@@ -27,7 +27,7 @@ interface FormFields {
   erÅrsakssammenheng: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   skadetidspunkt: Date;
-  andelAvNedsettelse: number;
+  andelAvNedsettelse: string;
   dokumenterBruktIVurderingen: string[];
   dokumentasjonMangler: string[];
 }
@@ -71,7 +71,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
       label:
         form.watch('erÅrsakssammenheng') === JaEllerNei.Nei || !form.watch('erÅrsakssammenheng')
           ? 'Er arbeidsevnen nedsatt med minst 50%?'
-          : 'Er arbeidsevnen nedsatt med minst 30%?', // Denne blir satt dynamisk i return metoden.
+          : 'Er arbeidsevnen nedsatt med minst 30%?',
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
@@ -104,7 +104,6 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
     },
     dokumenterBruktIVurderingen: {
       type: 'checkbox_nested',
-      defaultValue: ['Sykemelding'],
       label: '',
     },
     dokumentasjonMangler: {
@@ -135,7 +134,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
               : undefined,
             yrkesskadevurdering: {
               erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
-              andelAvNedsettelse: data.andelAvNedsettelse,
+              andelAvNedsettelse: Number(data.andelAvNedsettelse),
               skadetidspunkt: data.skadetidspunkt ? format(new Date(data.skadetidspunkt), 'yyyy-MM-dd') : undefined,
             },
           };
@@ -162,15 +161,21 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
           <BodyShort>Yrkesskaderegisteret</BodyShort>
           <BodyShort>Dato for skadetidspunkt: 03.09.2017</BodyShort>
         </div>
+
         <RegistrertBehandler />
+
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
+
         <FormField form={form} formField={formFields.dokumentasjonMangler} />
+
         <ReadMore header={'Slik vurderes vilkåret'}>
           ref § ... Her kan vi gi en fin veiledning til hvordan man skal begrunne vilkårsvurderingen hvis de er usikre
         </ReadMore>
+
         <FormField form={form} formField={formFields.begrunnelse} />
+
         {dokumenterBruktIVurderingen && dokumenterBruktIVurderingen.length > 0 && (
           <List as={'ul'} title={'Tilknyttede dokumenter'}>
             {dokumenterBruktIVurderingen.map((dokument) => (
@@ -178,15 +183,20 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
             ))}
           </List>
         )}
+
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
+
         <FormField form={form} formField={formFields.erÅrsakssammenheng} />
+
         {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
           <>
             <FormField form={form} formField={formFields.skadetidspunkt} />
             <FormField form={form} formField={formFields.andelAvNedsettelse} />
           </>
         )}
+
         <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
+
         {(form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Nei ||
           form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') === JaEllerNei.Nei) && (
           <Alert variant={'warning'}>Avslag AAP søknad (Snakk med Therese om bedre tekst her)</Alert>
