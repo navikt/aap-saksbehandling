@@ -156,35 +156,6 @@ describe('Sykdomsvurdering med yrkesskade', () => {
     expect(await screen.findByText('Du må sette en dato for skadetidspunktet')).toBeVisible();
   });
 
-  it('skal ha et felt for dato for nedsatt arbeidsevne dersom 11-5 er oppfylt', async () => {
-    expect(await screen.queryByRole('textbox', { name: /dato for nedsatt arbeidsevne/i })).not.toBeInTheDocument();
-
-    const erSykdomSkadeEllerLyteJaValg = within(
-      screen.getByRole('group', {
-        name: /er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne\? \(§ 11-5\)/i,
-      })
-    ).getByRole('radio', { name: /ja/i });
-
-    await user.click(erSykdomSkadeEllerLyteJaValg);
-
-    expect(await screen.findByRole('textbox', { name: /dato for nedsatt arbeidsevne/i })).toBeVisible();
-  });
-
-  it('skal vise feilmelding på felt for dato for nedsatt arbeidsevne dersom det ikke er besvart', async () => {
-    const erSykdomSkadeEllerLyteJaValg = within(
-      screen.getByRole('group', {
-        name: /er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne\? \(§ 11-5\)/i,
-      })
-    ).getByRole('radio', { name: /ja/i });
-
-    await user.click(erSykdomSkadeEllerLyteJaValg);
-
-    const bekreftKnapp = screen.getByRole('button', { name: /bekreft/i });
-    await user.click(bekreftKnapp);
-
-    expect(await screen.findByText('Du må sette en dato for nedsatt arbeidsevne')).toBeVisible();
-  });
-
   it('skal vise alert på at søknaden blir avslått dersom 11-5 ikke er oppfylt', async () => {
     expect(
       await screen.queryByText('Avslag AAP søknad (Snakk med Therese om bedre tekst her)')

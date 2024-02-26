@@ -26,7 +26,6 @@ interface FormFields {
   erÅrsakssammenheng: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   skadetidspunkt: Date;
-  datoForNedsattArbeidsevne: Date;
 }
 
 export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }: Props) => {
@@ -82,13 +81,6 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
       defaultValue: stringToDate(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.skadetidspunkt),
       rules: {
         required: 'Du må sette en dato for skadetidspunktet',
-      },
-    },
-    datoForNedsattArbeidsevne: {
-      type: 'date',
-      label: 'Dato for nedsatt arbeidsevne',
-      rules: {
-        required: 'Du må sette en dato for nedsatt arbeidsevne',
       },
     },
   });
@@ -148,9 +140,6 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
           <FormField form={form} formField={formFields.skadetidspunkt} />
         )}
         <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
-        {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.datoForNedsattArbeidsevne} />
-        )}
         {(form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Nei ||
           form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') === JaEllerNei.Nei) && (
           <Alert variant={'warning'}>Avslag AAP søknad (Snakk med Therese om bedre tekst her)</Alert>

@@ -10,7 +10,6 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { SykdomsvurderingDto } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
-import { stringToDate } from 'lib/utils/date';
 import { Alert } from '@navikt/ds-react';
 
 interface Props {
@@ -22,7 +21,6 @@ interface FormFields {
   dokumentasjonMangler: string[];
   erSkadeSykdomEllerLyteVesentligdel: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
-  datoForNedsattArbeidsevne: Date;
   begrunnelse: string;
 }
 
@@ -61,14 +59,6 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
       ],
       rules: { required: 'Du må svare på om arbeidsevnen er nedsatt med minst 50%' },
     },
-    datoForNedsattArbeidsevne: {
-      type: 'date',
-      label: 'Dato for nedsatt arbeidsevne',
-      defaultValue: stringToDate(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.skadetidspunkt),
-      rules: {
-        required: 'Du må sette en dato for nedsatt arbeidsevne',
-      },
-    },
   });
 
   return (
@@ -104,10 +94,6 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
         <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
 
-        {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja &&
-          form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') === JaEllerNei.Ja && (
-            <FormField form={form} formField={formFields.datoForNedsattArbeidsevne} />
-          )}
         {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Nei && (
           <Alert variant={'warning'}>Avslag AAP søknad (Snakk med Therese om bedre tekst her)</Alert>
         )}
