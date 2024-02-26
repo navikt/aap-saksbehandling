@@ -26,6 +26,7 @@ interface FormFields {
   erÅrsakssammenheng: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   skadetidspunkt: Date;
+  andelAvNedsettelse: number;
 }
 
 export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }: Props) => {
@@ -83,6 +84,21 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         required: 'Du må sette en dato for skadetidspunktet',
       },
     },
+    andelAvNedsettelse: {
+      type: 'number',
+      label: 'Hvor stor andel av den nedsatte arbeidsevnen er nedsatt på grunn av yrkesskaden?',
+      description:
+        'Eksempel: hvis den nedsatte arbeidsevnen er 50% og yrkesskade er hele årsaken til dette settes 100%',
+      rules: {
+        required: 'Du må sette en andel av den nedsatte arbeidsevnen som er nedsatt på grunn av yrkesskaden',
+        validate: (value) => {
+          const valueFromString = Number(value);
+          if (valueFromString < 0 || valueFromString > 100) {
+            return 'Verdien må være mellom 0 og 100';
+          }
+        },
+      },
+    },
   });
 
   return (
@@ -104,7 +120,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
               : undefined,
             yrkesskadevurdering: {
               erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
-              andelAvNedsettelse: 50, // Skal vi lage eget felt for denne?
+              andelAvNedsettelse: data.andelAvNedsettelse,
               skadetidspunkt: data.skadetidspunkt ? format(new Date(data.skadetidspunkt), 'yyyy-MM-dd') : undefined,
             },
           };
@@ -137,7 +153,10 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
 
         <FormField form={form} formField={formFields.erÅrsakssammenheng} />
         {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.skadetidspunkt} />
+          <>
+            <FormField form={form} formField={formFields.skadetidspunkt} />
+            <FormField form={form} formField={formFields.andelAvNedsettelse} />
+          </>
         )}
         <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
         {(form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Nei ||
