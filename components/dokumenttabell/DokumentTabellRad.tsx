@@ -24,7 +24,7 @@ export const DokumentTabellRad = ({ dokument }: Props) => {
       <Table.DataCell>{dokument.åpnet ? formaterDato(dokument.åpnet) : 'Nei'}</Table.DataCell>
       <Table.DataCell>
         <Checkbox hideLabel value={dokument.tittel}>
-          {' '}
+          Tilknytt dokument til vurdering
         </Checkbox>
       </Table.DataCell>
     </Table.Row>
