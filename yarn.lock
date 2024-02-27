@@ -2164,7 +2164,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sanity/client@npm:^6.12.4, @sanity/client@npm:^6.13.3, @sanity/client@npm:^6.15.0":
+"@sanity/client@npm:^6.13.3, @sanity/client@npm:^6.15.0":
   version: 6.15.0
   resolution: "@sanity/client@npm:6.15.0"
   dependencies:
@@ -2208,33 +2208,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sanity/preview-kit-compat@npm:1.4.4":
-  version: 1.4.4
-  resolution: "@sanity/preview-kit-compat@npm:1.4.4"
+"@sanity/preview-kit-compat@npm:1.4.7":
+  version: 1.4.7
+  resolution: "@sanity/preview-kit-compat@npm:1.4.7"
   peerDependencies:
-    "@sanity/client": ^6.12.3
+    "@sanity/client": ^6.14.2
     react: ^18.2.0
-  checksum: 10c0/f0d4be48569ebcf209f815dee49f70488343e09e54f4c1e2268738f56f1361ffe737b7cd8919354bf3e5f20a4dd6ca097748e4056d83893d3d74902cd55ba197
+  checksum: 10c0/bdf1c896d53dcfa54004c20ef83b2491a841827270845dd1a649f6e9e806bd57e0511346d22a2897fd0d3637606507f61fd6645d294bd10b7a0a46805af85391
   languageName: node
   linkType: hard
 
-"@sanity/preview-kit@npm:5.0.20":
-  version: 5.0.20
-  resolution: "@sanity/preview-kit@npm:5.0.20"
+"@sanity/preview-kit@npm:5.0.24":
+  version: 5.0.24
+  resolution: "@sanity/preview-kit@npm:5.0.24"
   dependencies:
-    "@sanity/preview-kit-compat": "npm:1.4.4"
+    "@sanity/preview-kit-compat": "npm:1.4.7"
     "@vercel/stega": "npm:0.1.0"
     lru-cache: "npm:10.2.0"
     mendoza: "npm:3.0.4"
     react-fast-compare: "npm:3.2.2"
     use-sync-external-store: "npm:1.2.0"
   peerDependencies:
-    "@sanity/client": ^6.12.4
+    "@sanity/client": ^6.14.2
     react: ^18.0.0
   peerDependenciesMeta:
     react:
       optional: true
-  checksum: 10c0/291a63915a66e7fbe5c1c0013688e3115b9577c05b7974c5775c523c2743ebaea047f446dbe870d3c2dc2fa55c3bebdcca37bd73d794dd2d5f8f9aa08d5ef481
+  checksum: 10c0/9d1afc17610852a4cfd5e26c41b0dedc8954f98855e547c32111ffe4e0862bd8a019fbe4fdd39290658f8eeffca64f667fc3d7c691e464aa488c66045e3a7a9d
   languageName: node
   linkType: hard
 
@@ -2261,15 +2261,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sanity/visual-editing@npm:1.2.2":
-  version: 1.2.2
-  resolution: "@sanity/visual-editing@npm:1.2.2"
+"@sanity/visual-editing@npm:1.5.0":
+  version: 1.5.0
+  resolution: "@sanity/visual-editing@npm:1.5.0"
   dependencies:
     "@vercel/stega": "npm:0.1.0"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-is: "npm:18.2.0"
     scroll-into-view-if-needed: "npm:^3.1.0"
+    valibot: "npm:0.29.0"
   peerDependencies:
     "@remix-run/react": ">= 2"
     next: ">= 13"
@@ -2278,7 +2279,7 @@ __metadata:
       optional: true
     next:
       optional: true
-  checksum: 10c0/a45675e8753066a7f646708ce1163080bf2a2c8a5877bdca7caa1d8e0133e0f24df34429dc08aeb1c5441480db9ac4b939e1ae0ee4efb68b4e6cc0a9fd6f988e
+  checksum: 10c0/8f3701dd7bc167d183cfc11e4df8bbc80d8a6cf06909d5a30868788bf0474dfc3230e58af1f792de75a5a104816c3d29c5694ef3bd13fcf49b2079e8628388c4
   languageName: node
   linkType: hard
 
@@ -3408,7 +3409,7 @@ __metadata:
     json-diff: "npm:^1.0.6"
     lint-staged: "npm:^15.2.2"
     next: "npm:^14.1.0"
-    next-sanity: "npm:^7.1.4"
+    next-sanity: "npm:^8.0.3"
     node-loader: "npm:^2.0.0"
     openapi-typescript: "npm:6.7.4"
     prettier: "npm:^3.2.5"
@@ -8226,17 +8227,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-sanity@npm:^7.1.4":
-  version: 7.1.4
-  resolution: "next-sanity@npm:7.1.4"
+"next-sanity@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "next-sanity@npm:8.0.3"
   dependencies:
-    "@sanity/client": "npm:^6.12.4"
-    "@sanity/preview-kit": "npm:5.0.20"
-    "@sanity/visual-editing": "npm:1.2.2"
+    "@sanity/client": "npm:^6.15.0"
+    "@sanity/preview-kit": "npm:5.0.24"
+    "@sanity/visual-editing": "npm:1.5.0"
     "@sanity/webhook": "npm:4.0.0"
     groq: "npm:^3.19"
   peerDependencies:
-    "@sanity/client": ^6.12.4
+    "@sanity/client": ^6.15.0
     "@sanity/icons": ^2.8
     "@sanity/types": ^3.25
     "@sanity/ui": ^1.8 || ^2.0.0-beta || ^2.0
@@ -8244,7 +8245,7 @@ __metadata:
     react: ^18.2
     sanity: ^3.25
     styled-components: ^5.2 || ^6.0
-  checksum: 10c0/cbf16a630430895728645f93058d47b9f64eac8538696e27216869fdda0fd9ee5b2a0e0e3bb5d499a42b476880bae3d40118e935cdf4465c848d700fee5aed60
+  checksum: 10c0/9296ef3ded05d6f41a6930e3e10b7c98f584ace9c38a63c00d37828a28d72558cfb1bdb2d52d0c332b0a291b0bc19312e3dfebdb91ebb15d03ad5615e85e7b5a
   languageName: node
   linkType: hard
 
