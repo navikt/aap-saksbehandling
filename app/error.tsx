@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Heading } from '@navikt/ds-react/esm/typography';
+import { Heading } from '@navikt/ds-react';
 
 //500 Page
 const Error = () => {

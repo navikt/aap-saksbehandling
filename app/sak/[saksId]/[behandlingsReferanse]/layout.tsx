@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Detail, Label } from '@navikt/ds-react/esm/typography';
+import { Detail, Label } from '@navikt/ds-react';
 import { hentSaksinfo } from 'lib/api';
 import { getToken } from 'lib/auth/authentication';
 import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
