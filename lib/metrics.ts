@@ -1,4 +1,4 @@
-import { logger } from '@navikt/aap-felles-utils';
+import { logInfo } from '@navikt/aap-felles-utils';
 import { collectDefaultMetrics, Counter, Histogram } from 'prom-client';
 
 declare global {
@@ -7,7 +7,7 @@ declare global {
 
 export class AppMetrics {
   constructor() {
-    logger.info('Initializing metrics client');
+    logInfo('Initializing metrics client');
     collectDefaultMetrics();
   }
 
