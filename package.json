@@ -50,7 +50,7 @@
   "devDependencies": {
     "@navikt/aap-felles-prettier": "^0.0.97",
     "@navikt/eslint-config-aap": "^0.0.97",
-    "@sanity/types": "^3.30.0",
+    "@sanity/types": "^3.30.1",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@types/jest": "^29.5.12",
