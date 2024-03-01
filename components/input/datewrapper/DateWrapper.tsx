@@ -6,7 +6,7 @@ import { FieldPath } from 'react-hook-form/dist/types';
 
 export interface DateProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
-  label: string;
+  label?: string;
   description?: React.ReactNode;
   disableWeekend?: boolean;
   rules?: RegisterOptions<FormFieldValues>;

@@ -9,7 +9,7 @@ interface RadioProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
   control: Control<FormFieldValues>;
   children: ReactNode;
-  label: string;
+  label?: string;
   rules?: RegisterOptions<FormFieldValues>;
   description?: ReactNode;
   horisontal?: boolean;

@@ -5,7 +5,7 @@ import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 
 export interface SelectProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
-  label: string;
+  label?: string;
   control: Control<FormFieldValues>;
   children: React.ReactNode;
   rules?: RegisterOptions<FormFieldValues>;

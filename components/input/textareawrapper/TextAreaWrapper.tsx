@@ -6,7 +6,7 @@ import { FieldPath } from 'react-hook-form/dist/types';
 export interface TextAreaProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
   description?: React.ReactNode;
-  label: string;
+  label?: string;
   rules?: RegisterOptions<FormFieldValues>;
   control: Control<FormFieldValues>;
   maxLength?: number;

@@ -5,7 +5,7 @@ import { FieldPath } from 'react-hook-form/dist/types';
 
 export interface TextFieldProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
-  label: string;
+  label?: string;
   control: Control<FormFieldValues>;
   type: 'text' | 'number';
   description?: React.ReactNode;
