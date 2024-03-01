@@ -18,7 +18,7 @@ export type FormFieldConfig<FormFieldIds extends FieldValues> =
   | FormFieldCheckboxWithNestedOptions<FormFieldIds>;
 
 interface BaseFormField<FormFieldIds extends FieldValues> {
-  label: string;
+  label?: string;
   description?: string;
   rules?: RegisterOptions<FormFieldIds>;
   readOnly?: boolean;
