@@ -11,7 +11,6 @@ import { SykdomsGrunnlag } from 'lib/types/types';
 import { løsBehov } from 'lib/api';
 import { SykdomsvurderingDto } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
-import { useForm } from 'react-hook-form';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
 import styles from './SykdomsvurderingMedYrkesskade.module.css';
@@ -33,27 +32,12 @@ interface FormFields {
 }
 
 export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }: Props) => {
-  const form = useForm<FormFields>({
-    defaultValues: {
-      begrunnelse: grunnlag.sykdomsvurdering?.begrunnelse,
-      erSkadeSykdomEllerLyteVesentligdel: getJaNeiEllerUndefined(
-        grunnlag.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel
-      ),
-      erÅrsakssammenheng: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.erÅrsakssammenheng),
-      erNedsettelseIArbeidsevneHøyereEnnNedreGrense: getJaNeiEllerUndefined(
-        grunnlag.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
-      ),
-      skadetidspunkt: grunnlag?.sykdomsvurdering?.yrkesskadevurdering?.skadetidspunkt || undefined,
-      andelAvNedsettelse: getStringEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.andelAvNedsettelse),
-    },
-    shouldUnregister: true,
-  });
-
-  const { formFields } = useConfigForm<FormFields>({
+  const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
       label: 'Vurder den nedsatte arbeidsevnen',
       description: 'Hvilken sykdom/skade/lyte? Hva er det mest vesentlige? Hvis yrkesskade er funnet: vurder mot YS',
+      defaultValue: grunnlag.sykdomsvurdering?.begrunnelse,
       rules: { required: 'Du må begrunne' },
     },
     erSkadeSykdomEllerLyteVesentligdel: {
@@ -63,6 +47,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
       ],
+      defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
       rules: {
         required: 'Du må svare på om det er sykdom, skade eller lyte som er medvirkende til nedsatt arbeidsevne.',
       },
@@ -74,20 +59,18 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
       ],
+      defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.erÅrsakssammenheng),
       rules: {
         required: 'Du må svare på om yrkesskaden er helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen.',
       },
     },
     erNedsettelseIArbeidsevneHøyereEnnNedreGrense: {
       type: 'radio',
-      label:
-        form.watch('erÅrsakssammenheng') === JaEllerNei.Nei || !form.watch('erÅrsakssammenheng')
-          ? 'Er arbeidsevnen nedsatt med minst 50%?'
-          : 'Er arbeidsevnen nedsatt med minst 30%?',
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
         { label: 'Nei', value: JaEllerNei.Nei },
       ],
+      defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
       rules: { required: 'Du må svare på om arbeidsevnen er nedsatt.' },
     },
     skadetidspunkt: {
@@ -97,6 +80,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         { label: '03.09.2017', value: '2017-09-03' },
         { label: '20.10.2022', value: '2022-10-20' },
       ],
+      defaultValue: grunnlag?.sykdomsvurdering?.yrkesskadevurdering?.skadetidspunkt || undefined,
       rules: {
         required: 'Du må sette en dato for skadetidspunktet',
       },
@@ -106,6 +90,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
       label: 'Hvor stor andel av den nedsatte arbeidsevnen er nedsatt på grunn av yrkesskaden?',
       description:
         'Eksempel: hvis den nedsatte arbeidsevnen er 50% og yrkesskade er hele årsaken til dette settes 100%',
+      defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.andelAvNedsettelse),
       rules: {
         required: 'Du må sette en andel av den nedsatte arbeidsevnen som er nedsatt på grunn av yrkesskaden',
         validate: (value) => {
@@ -123,7 +108,6 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
     },
     dokumentasjonMangler: {
       type: 'checkbox',
-      label: '',
       options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
     }, //TODO Trenger vi denne?
   });
@@ -207,7 +191,16 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
 
         <FormField form={form} formField={formFields.erÅrsakssammenheng} />
 
-        <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
+        <FormField
+          form={form}
+          formField={{
+            ...formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense,
+            label:
+              form.watch('erÅrsakssammenheng') === JaEllerNei.Nei || !form.watch('erÅrsakssammenheng')
+                ? 'Er arbeidsevnen nedsatt med minst 50%?'
+                : 'Er arbeidsevnen nedsatt med minst 30%?',
+          }}
+        />
 
         {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja &&
           form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') == JaEllerNei.Ja && (
