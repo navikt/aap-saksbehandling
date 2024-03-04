@@ -1,5 +1,9 @@
 import { FastsettBeregning } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregning';
 
-export const FastsettBeregningMedDataFeching = async () => {
-  return <FastsettBeregning />;
+interface Props {
+  behandlingsReferanse: string;
+}
+
+export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse }: Props) => {
+  return <FastsettBeregning behandlingsReferanse={behandlingsReferanse} />;
 };

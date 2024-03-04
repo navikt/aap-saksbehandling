@@ -11,14 +11,13 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse, getToken(headers()));
 
   const stegSomSkalVises = getStegSomSkalVises('GRUNNLAG', flyt);
-  console.log('stegSomSkalvists', stegSomSkalVises);
   return (
     <>
       {stegSomSkalVises.map((steg) => {
         if (steg === 'FASTSETT_BEREGNINGSTIDSPUNKT') {
           return (
             <StegSuspense key={steg}>
-              <FastsettBeregningMedDataFeching />
+              <FastsettBeregningMedDataFeching behandlingsReferanse={behandlingsReferanse} />
             </StegSuspense>
           );
         }
