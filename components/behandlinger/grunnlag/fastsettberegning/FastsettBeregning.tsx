@@ -7,9 +7,11 @@ import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/api';
 import { BehovsType } from 'lib/utils/form';
 import { format } from 'date-fns';
+import { SykdomsGrunnlag } from 'lib/types/types';
 
 interface Props {
   behandlingsReferanse: string;
+  sykdomsgrunnlag: SykdomsGrunnlag;
 }
 
 interface FormFields {
@@ -26,13 +28,13 @@ interface BeregningVurdering {
   antattÅrligInntekt?: number;
 }
 
-// TODO Hent inn sykdomsgrunnlag for å vise korrekt label på ytterligereNedsattArbeidsevne
-
-export const FastsettBeregning = ({ behandlingsReferanse }: Props) => {
+export const FastsettBeregning = ({ behandlingsReferanse, sykdomsgrunnlag }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
     nedsattArbeidsevneDato: {
       type: 'date',
-      label: 'Dato for når arbeidsevnen ble nedsatt med minst x prosent',
+      label: sykdomsgrunnlag.sykdomsvurdering?.yrkesskadevurdering?.erÅrsakssammenheng
+        ? 'Dato for når arbeidsevnen ble nedsatt med minst 30 prosent'
+        : 'Dato for når arbeidsevnen ble nedsatt med minst 50 prosent',
     },
     begrunnelse: {
       type: 'text',
