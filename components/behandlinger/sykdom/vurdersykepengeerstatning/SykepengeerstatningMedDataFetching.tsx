@@ -5,7 +5,5 @@ interface Props {
 }
 
 export const SykepengeerstatningMedDataFetching = ({ behandlingsReferanse }: Props) => {
-  // TODO Hent noe fra backend her
-
   return <Sykepengeerstatning behandlingsReferanse={behandlingsReferanse} />;
 };

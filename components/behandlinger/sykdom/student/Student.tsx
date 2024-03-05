@@ -31,7 +31,7 @@ export const Student = ({ behandlingsReferanse, grunnlag }: Props) => {
       description: 'Begrunn vurderingen',
       label: 'Vurder... ............',
       rules: { required: 'Du må begrunne' },
-      // TODO: Her må vi gjøre noe lurt dersom det er flere vurderinger
+
       defaultValue: grunnlag?.studentvurdering?.begrunnelse,
     },
     oppfyller11_14: {

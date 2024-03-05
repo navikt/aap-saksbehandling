@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import Link from 'next/link';
 
 const Page = async ({ params }: { params: { saksId: string } }) => {
-  const sak = await hentSak(params.saksId, getToken(headers())); // TODO: Brukes for å hente referanser til behandlinger
+  const sak = await hentSak(params.saksId, getToken(headers()));
 
   return (
     <div>

@@ -13,7 +13,7 @@
 
 .heading,
 .brevtittel {
-  padding-left: calc(2rem + 5px); /* FIXME vurder å trekke ut som variabler? */
+  padding-left: calc(2rem + 5px);
 }
 
 .headerRow {
