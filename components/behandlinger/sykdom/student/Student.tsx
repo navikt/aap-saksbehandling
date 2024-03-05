@@ -7,7 +7,7 @@ import { Form } from 'components/form/Form';
 import { Buldings2Icon } from '@navikt/aksel-icons';
 
 import { løsBehov } from 'lib/api';
-import { BehovsType, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { format } from 'date-fns';
 import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 import { StudentGrunnlag } from 'lib/types/types';
@@ -70,19 +70,13 @@ export const Student = ({ behandlingsReferanse, grunnlag }: Props) => {
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
-            behov: {
-              // @ts-ignore Feil generert type i backend
-              '@type': BehovsType.AVKLAR_STUDENT,
-              // @ts-ignore Feil generert type i backend
-              studentvurdering: {
-                begrunnelse: data.begrunnelse,
-                dokumenterBruktIVurdering: [],
-                oppfyller11_14: data.oppfyller11_14 === JaEllerNei.Ja,
-
-                avbruttStudieDato: data.avbruttStudieDato
-                  ? format(new Date(data.avbruttStudieDato), 'yyyy-MM-dd')
-                  : undefined,
-              },
+            studentvurdering: {
+              begrunnelse: data.begrunnelse,
+              dokumenterBruktIVurdering: [],
+              oppfyller11_14: data.oppfyller11_14 === JaEllerNei.Ja,
+              avbruttStudieDato: data.avbruttStudieDato
+                ? format(new Date(data.avbruttStudieDato), 'yyyy-MM-dd')
+                : undefined,
             },
             referanse: behandlingsReferanse,
           });

@@ -11,7 +11,6 @@ import style from './Meldeplikt.module.css';
 import { FritakMeldepliktGrunnlag } from 'lib/types/types';
 import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
-import { BehovsType } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -61,17 +60,12 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
-            behov: {
-              // @ts-ignore Feil generert type i backend
-              '@type': BehovsType.FRITAK_MELDEPLIKT,
-              // @ts-ignore Feil generert type i backend
-              vurdering: {
-                begrunnelse: data.begrunnelse,
-                harFritak: data.unntakFraMeldeplikt.includes('Unntak fra meldeplikten'),
-                periode: {
-                  fom: data.startDato ? format(new Date(data.startDato), 'yyyy-MM-dd') : undefined,
-                  tom: data.sluttDato ? format(new Date(data.sluttDato), 'yyyy-MM-dd') : undefined,
-                },
+            fritaksvurdering: {
+              begrunnelse: data.begrunnelse,
+              harFritak: data.unntakFraMeldeplikt.includes('Unntak fra meldeplikten'),
+              periode: {
+                fom: data.startDato ? format(new Date(data.startDato), 'yyyy-MM-dd') : '',
+                tom: data.sluttDato ? format(new Date(data.sluttDato), 'yyyy-MM-dd') : '',
               },
             },
             referanse: behandlingsReferanse,

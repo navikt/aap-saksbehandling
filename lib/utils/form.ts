@@ -3,19 +3,6 @@ export enum JaEllerNei {
   Nei = 'nei',
 }
 
-export enum BehovsType {
-  AVKLAR_STUDENT = '5001',
-  SYKDOMSVURDERING = '5003',
-  FASTSETT_ARBEIDSEVNE = '5004',
-  FRITAK_MELDEPLIKT = '5005',
-  AVKLAR_BISTANDSBEHOV = '5006',
-  SYKEPENGEERSTATNING = '5007',
-  FASTSETT_BEREGNINGSTIDSPUNKT = '5008',
-  FORESLÅ_VEDTAK = '5098',
-  FATTE_VEDTAK = '5099',
-  MANUELT_SATT_PÅ_VENT = '9001',
-}
-
 export const getJaNeiEllerUndefined = (value?: boolean | null) => {
   if (value === undefined || value === null) {
     return undefined;

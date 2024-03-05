@@ -7,7 +7,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { løsBehov } from 'lib/api';
 import { BistandsGrunnlag } from 'lib/types/types';
-import { BehovsType, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -57,16 +57,9 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
-            behov: {
-              // @ts-ignore Feil generert type i backend
-              '@type': BehovsType.AVKLAR_BISTANDSBEHOV,
-              // @ts-ignore Feil generert type i backend
-              bistandsVurdering: {
-                // @ts-ignore Feil generert type i backend
-                begrunnelse: data.begrunnelse,
-                // @ts-ignore Feil generert type i backend
-                erBehovForBistand: data.vilkårOppfylt === JaEllerNei.Ja,
-              },
+            bistandVurdering: {
+              begrunnelse: data.begrunnelse,
+              erBehovForBistand: data.vilkårOppfylt === JaEllerNei.Ja,
             },
             referanse: behandlingsReferanse,
           });

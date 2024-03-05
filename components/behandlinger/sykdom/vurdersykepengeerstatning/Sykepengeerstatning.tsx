@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FigureIcon } from '@navikt/aksel-icons';
 import { useConfigForm } from 'hooks/FormHook';
-import { BehovsType, JaEllerNei } from 'lib/utils/form';
+import { JaEllerNei } from 'lib/utils/form';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/api';
@@ -57,15 +57,10 @@ export const Sykepengeerstatning = ({ behandlingsReferanse }: Props) => {
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
-            behov: {
-              // @ts-ignore Feil generert type i backend
-              '@type': BehovsType.SYKEPENGEERSTATNING,
-              // @ts-ignore Feil generert type i backend
-              vurdering: {
-                begrunnelse: data.begrunnelse,
-                dokumenterBruktIVurdering: [],
-                harRettPå: data.erOppfylt === JaEllerNei.Ja,
-              },
+            sykepengerVurdering: {
+              begrunnelse: data.begrunnelse,
+              dokumenterBruktIVurdering: [],
+              harRettPå: data.erOppfylt === JaEllerNei.Ja,
             },
             referanse: behandlingsReferanse,
           });

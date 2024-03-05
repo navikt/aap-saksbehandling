@@ -5,7 +5,6 @@ import { useConfigForm } from 'hooks/FormHook';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/api';
-import { BehovsType } from 'lib/utils/form';
 import { format } from 'date-fns';
 import { SykdomsGrunnlag } from 'lib/types/types';
 
@@ -19,13 +18,6 @@ interface FormFields {
   begrunnelse: string;
   ytterligereNedsattArbeidsevneDato: Date;
   antattÅrligInntekt: string;
-}
-
-interface BeregningVurdering {
-  begrunnelse: string;
-  nedsattArbeidsevneDato: string;
-  ytterligereNedsattArbeidsevneDato: string;
-  antattÅrligInntekt?: number;
 }
 
 export const FastsettBeregning = ({ behandlingsReferanse, sykdomsgrunnlag }: Props) => {
@@ -55,23 +47,15 @@ export const FastsettBeregning = ({ behandlingsReferanse, sykdomsgrunnlag }: Pro
       <Form
         steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
         onSubmit={form.handleSubmit(async (data) => {
-          const beregningVurdering: BeregningVurdering = {
-            begrunnelse: data.begrunnelse,
-            ytterligereNedsattArbeidsevneDato: format(new Date(data.ytterligereNedsattArbeidsevneDato), 'yyyy-MM-dd'),
-            nedsattArbeidsevneDato: format(new Date(data.nedsattArbeidsevneDato), 'yyyy-MM-dd'),
-            antattÅrligInntekt: data.antattÅrligInntekt ? Number(data.antattÅrligInntekt) : undefined,
-          };
-
           await løsBehov({
             behandlingVersjon: 0,
-            behov: {
-              // @ts-ignore Feil generert type i backend
-              '@type': BehovsType.FASTSETT_BEREGNINGSTIDSPUNKT,
-              // @ts-ignore Feil generert type i backend
-              vurdering: beregningVurdering,
+            beregningVurdering: {
+              begrunnelse: data.begrunnelse,
+              ytterligereNedsattArbeidsevneDato: format(new Date(data.ytterligereNedsattArbeidsevneDato), 'yyyy-MM-dd'),
+              nedsattArbeidsevneDato: format(new Date(data.nedsattArbeidsevneDato), 'yyyy-MM-dd'),
+              // @ts-ignore feil type fra backend
+              antattÅrligInntekt: data.antattÅrligInntekt ? Number(data.antattÅrligInntekt) : undefined,
             },
-            fastsettBeregningstidspunkt: null,
-            sykdomsvurdering: null,
             referanse: behandlingsReferanse,
           });
         })}

@@ -1,14 +1,13 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { BehovsType, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
 import { løsBehov } from 'lib/api';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
-import { SykdomsvurderingDto } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { Alert } from '@navikt/ds-react';
 
@@ -65,23 +64,16 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
     <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} steg="AVKLAR_SYKDOM" icon={<VitalsIcon />}>
       <Form
         onSubmit={form.handleSubmit(async (data) => {
-          const sykdomsVurdering: SykdomsvurderingDto = {
-            begrunnelse: data.begrunnelse,
-            dokumenterBruktIVurdering: [],
-            erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
-            nedreGrense: 'FEMTI',
-            erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
-              ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
-              : undefined,
-          };
-
           await løsBehov({
             behandlingVersjon: 0,
-            behov: {
-              // @ts-ignore Feil generert type i backend
-              '@type': BehovsType.SYKDOMSVURDERING,
-              // @ts-ignore Feil generert type i backend
-              sykdomsvurdering: sykdomsVurdering,
+            sykdomsvurderingDto: {
+              begrunnelse: data.begrunnelse,
+              dokumenterBruktIVurdering: [],
+              erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
+              nedreGrense: 'FEMTI',
+              erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
+                ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
+                : undefined,
             },
             referanse: behandlingsReferanse,
           });

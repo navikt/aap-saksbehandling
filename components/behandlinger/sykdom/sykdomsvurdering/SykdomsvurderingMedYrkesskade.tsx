@@ -1,7 +1,7 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { BehovsType, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
@@ -9,7 +9,6 @@ import { VitalsIcon } from '@navikt/aksel-icons';
 import { Alert, Label, Link, List, ReadMore } from '@navikt/ds-react';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { løsBehov } from 'lib/api';
-import { SykdomsvurderingDto } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
@@ -123,28 +122,21 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
       <Form
         steg={'AVKLAR_SYKDOM'}
         onSubmit={form.handleSubmit(async (data) => {
-          const sykdomsVurdering: SykdomsvurderingDto = {
-            begrunnelse: data.begrunnelse,
-            dokumenterBruktIVurdering: data.dokumenterBruktIVurderingen || [],
-            erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
-            nedreGrense: data.erÅrsakssammenheng === JaEllerNei.Ja ? 'TRETTI' : 'FEMTI',
-            erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
-              ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
-              : undefined,
-            yrkesskadevurdering: {
-              erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
-              andelAvNedsettelse: data.andelAvNedsettelse ? Number(data.andelAvNedsettelse) : undefined,
-              skadetidspunkt: data.skadetidspunkt,
-            },
-          };
-
           await løsBehov({
             behandlingVersjon: 0,
-            behov: {
-              // @ts-ignore Feil generert type i backend
-              '@type': BehovsType.SYKDOMSVURDERING,
-              // @ts-ignore Feil generert type i backend
-              sykdomsvurdering: sykdomsVurdering,
+            sykdomsvurderingDto: {
+              begrunnelse: data.begrunnelse,
+              dokumenterBruktIVurdering: [],
+              erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
+              nedreGrense: data.erÅrsakssammenheng === JaEllerNei.Ja ? 'TRETTI' : 'FEMTI',
+              erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
+                ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
+                : undefined,
+              yrkesskadevurdering: {
+                erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
+                andelAvNedsettelse: data.andelAvNedsettelse ? Number(data.andelAvNedsettelse) : undefined,
+                skadetidspunkt: data.skadetidspunkt,
+              },
             },
             referanse: behandlingsReferanse,
           });
