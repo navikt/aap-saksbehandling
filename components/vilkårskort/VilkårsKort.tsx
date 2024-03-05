@@ -12,18 +12,21 @@ interface Props {
   children: ReactNode;
   defaultOpen?: boolean;
   icon?: ReactNode;
+  erNav?: boolean;
 }
 
-export const VilkårsKort = ({ heading, steg, children, icon, defaultOpen = true }: Props) => {
+export const VilkårsKort = ({ heading, steg, children, icon, defaultOpen = true, erNav = false }: Props) => {
   const cardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     cardRef && cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, []);
 
+  const classNameBasertPåEnhet = erNav ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
+
   return (
     <ExpansionCard
       aria-label={heading}
-      className={styles.vilkårsKort}
+      className={classNameBasertPåEnhet}
       size={'small'}
       defaultOpen={defaultOpen}
       id={steg}

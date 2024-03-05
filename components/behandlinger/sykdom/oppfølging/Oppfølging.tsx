@@ -51,7 +51,12 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
     },
   });
   return (
-    <VilkårsKort heading="Behov for oppfølging § 11-6" steg="VURDER_BISTANDSBEHOV" icon={<PersonGroupIcon />}>
+    <VilkårsKort
+      heading="Behov for oppfølging § 11-6"
+      steg="VURDER_BISTANDSBEHOV"
+      icon={<PersonGroupIcon />}
+      erNav={true}
+    >
       <Form
         steg="VURDER_BISTANDSBEHOV"
         onSubmit={form.handleSubmit(async (data) => {

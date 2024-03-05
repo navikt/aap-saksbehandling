@@ -10,6 +10,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { Alert } from '@navikt/ds-react';
+import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
 interface Props {
   behandlingsReferanse: string;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 interface FormFields {
+  dokumenterBruktIVurderingen: string[];
   dokumentasjonMangler: string[];
   erSkadeSykdomEllerLyteVesentligdel: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
@@ -50,7 +52,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
     },
     erNedsettelseIArbeidsevneHøyereEnnNedreGrense: {
       type: 'radio',
-      label: 'Er arbeidsevnen nedsatt med minst 50%?',
+      label: grunnlag.skalVurdereYrkesskade
+        ? 'Er arbeidsevnen nedsatt med minst 30%?'
+        : 'Er arbeidsevnen nedsatt med minst 50%?',
       defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
       options: [
         { label: 'Ja', value: JaEllerNei.Ja },
@@ -58,10 +62,15 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
       ],
       rules: { required: 'Du må svare på om arbeidsevnen er nedsatt med minst 50%' },
     },
+    dokumenterBruktIVurderingen: {
+      type: 'checkbox_nested',
+      label: 'Dokumenter funnet som er relevant for vurdering av §11-5',
+      description: 'Tilknytt minst ett dokument §11-5 vurdering',
+    },
   });
 
   return (
-    <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} steg="AVKLAR_SYKDOM" icon={<VitalsIcon />}>
+    <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} steg="AVKLAR_SYKDOM" icon={<VitalsIcon />} erNav={true}>
       <Form
         onSubmit={form.handleSubmit(async (data) => {
           await løsBehov({
@@ -81,6 +90,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
         steg={'AVKLAR_SYKDOM'}
       >
         <RegistrertBehandler />
+        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
+          <DokumentTabell />
+        </FormField>
         <FormField form={form} formField={formFields.dokumentasjonMangler} />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
