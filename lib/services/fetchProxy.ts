@@ -2,6 +2,7 @@ import { isLocal } from 'lib/utils/environment';
 import { requestOboToken } from '@navikt/oasis';
 import { getAccessToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
+import { logError } from '@navikt/aap-felles-utils';
 
 const NUMBER_OF_RETRIES = 3;
 
@@ -14,6 +15,7 @@ export const fetchProxy = async <ResponseBody>(
   let oboToken;
   if (!isLocal()) {
     const token = getAccessToken(headers());
+    logError(`token ${token}`);
     oboToken = await requestOboToken(token, scope);
     if (!oboToken.ok) {
       throw new Error(`Unable to get accessToken: ${oboToken.error}`);
@@ -33,6 +35,8 @@ const fetchWithRetry = async <ResponseBody>(
   if (retries === 0) {
     throw new Error(`Unable to fetch ${url}: ${retries} retries left`);
   }
+
+  logError(`obotoken ${oboToken}`);
 
   const response = await fetch(url, {
     method,
