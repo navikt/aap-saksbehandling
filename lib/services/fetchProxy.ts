@@ -1,10 +1,32 @@
 import { isLocal } from 'lib/utils/environment';
-import { requestOboToken } from '@navikt/oasis';
+import { requestOboToken, validateToken } from '@navikt/oasis';
 import { getAccessToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
 import { logError } from '@navikt/aap-felles-utils';
 
 const NUMBER_OF_RETRIES = 3;
+
+export const getOnBefalfOfToken = async (audience: string, url: string): Promise<string> => {
+  const token = getAccessToken(headers());
+  if (!token) {
+    logError(`Token for ${url} er undefined`);
+    throw new Error('Token for simpleTokenXProxy is undefined');
+  }
+
+  const validation = await validateToken(token);
+  if (!validation.ok) {
+    logError(`Token for ${url} validerte ikke`);
+    throw new Error('Token for simpleTokenXProxy didnt validate');
+  }
+
+  const onBehalfOf = await requestOboToken(token, audience);
+  if (!onBehalfOf.ok) {
+    logError(`Henting av oboToken for ${url} feilet`);
+    throw new Error('Request oboToken for simpleTokenXProxy failed');
+  }
+
+  return onBehalfOf.token;
+};
 
 export const fetchProxy = async <ResponseBody>(
   url: string,
@@ -12,17 +34,12 @@ export const fetchProxy = async <ResponseBody>(
   method: 'GET' | 'POST' = 'GET',
   requestBody?: object
 ): Promise<ResponseBody> => {
-  let oboToken;
-  if (!isLocal()) {
-    const token = getAccessToken(headers());
-    logError(`token ${token}`);
-    oboToken = await requestOboToken(token, scope);
-    if (!oboToken.ok) {
-      throw new Error(`Unable to get accessToken: ${oboToken.error}`);
-    }
+  if (isLocal()) {
+    return await fetchWithRetry<ResponseBody>(url, method, '', NUMBER_OF_RETRIES, requestBody);
+  } else {
+    const oboToken = await getOnBefalfOfToken(scope, url);
+    return await fetchWithRetry<ResponseBody>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody);
   }
-
-  return await fetchWithRetry<ResponseBody>(url, method, oboToken?.token ?? '', NUMBER_OF_RETRIES, requestBody);
 };
 
 const fetchWithRetry = async <ResponseBody>(
