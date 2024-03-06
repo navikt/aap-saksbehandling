@@ -1,11 +1,7 @@
-import { getToken } from 'lib/auth/authentication';
 import { hentAlleSaker } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest) {
-  const token = getToken(req.headers);
-
-  const data = await hentAlleSaker(token);
+export async function GET() {
+  const data = await hentAlleSaker();
 
   if (data !== undefined) {
     return new Response(JSON.stringify(data), { status: 200 });

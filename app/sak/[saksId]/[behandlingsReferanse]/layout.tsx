@@ -1,9 +1,7 @@
 import { ReactNode } from 'react';
 import { Detail, Label } from '@navikt/ds-react';
 import { hentSaksinfo } from 'lib/api';
-import { getToken } from 'lib/auth/authentication';
 import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { headers } from 'next/headers';
 import { hentPersonInformasjonForIdent } from 'lib/services/pdlservice/pdlService';
 
 import { Tag } from 'components/DsClient';
@@ -17,7 +15,7 @@ interface Props {
 
 const Layout = async ({ children, params }: Props) => {
   const saksInfo = await hentSaksinfo(); // TODO: Litt metadata om søker, skal skrives om
-  const sak = await hentSak(params.saksId, getToken(headers()));
+  const sak = await hentSak(params.saksId);
   const personInformasjon = await hentPersonInformasjonForIdent(sak.ident);
 
   return (

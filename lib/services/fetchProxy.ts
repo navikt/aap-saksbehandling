@@ -1,24 +1,26 @@
-import { grantAzureOboToken, isInvalidTokenSet } from '@navikt/next-auth-wonderwall';
 import { isLocal } from 'lib/utils/environment';
+import { requestOboToken } from '@navikt/oasis';
+import { getAccessToken } from 'lib/auth/authentication';
+import { headers } from 'next/headers';
 
 const NUMBER_OF_RETRIES = 3;
 
 export const fetchProxy = async <ResponseBody>(
   url: string,
-  accessToken: string,
   scope: string,
   method: 'GET' | 'POST' = 'GET',
   requestBody?: object
 ): Promise<ResponseBody> => {
   let oboToken;
   if (!isLocal()) {
-    oboToken = await grantAzureOboToken(accessToken, scope);
-    if (isInvalidTokenSet(oboToken)) {
-      throw new Error(`Unable to get accessToken: ${oboToken.message}`);
+    const token = getAccessToken(headers());
+    oboToken = await requestOboToken(token, scope);
+    if (!oboToken.ok) {
+      throw new Error(`Unable to get accessToken: ${oboToken.error}`);
     }
   }
 
-  return await fetchWithRetry<ResponseBody>(url, method, oboToken ?? '', NUMBER_OF_RETRIES, requestBody);
+  return await fetchWithRetry<ResponseBody>(url, method, oboToken?.token ?? '', NUMBER_OF_RETRIES, requestBody);
 };
 
 const fetchWithRetry = async <ResponseBody>(

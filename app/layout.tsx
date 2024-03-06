@@ -1,5 +1,5 @@
 import '@navikt/ds-css';
-import { getToken, verifyUserLoggedIn } from 'lib/auth/authentication';
+import { getAccessToken, verifyUserLoggedIn } from 'lib/auth/authentication';
 import 'styles/globals.css';
 
 import { AppHeader } from 'components/appheader/AppHeader';
@@ -13,7 +13,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   await verifyUserLoggedIn();
-  const brukerInformasjon = await hentBrukerInformasjon(getToken(headers()));
+  const brukerInformasjon = await hentBrukerInformasjon(getAccessToken(headers()));
 
   return (
     <html lang="nb">

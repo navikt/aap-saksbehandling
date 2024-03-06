@@ -21,7 +21,7 @@
     "@navikt/aksel-icons": "6.1.0",
     "@navikt/ds-css": "6.1.0",
     "@navikt/ds-react": "6.1.0",
-    "@navikt/next-auth-wonderwall": "^1.6.0",
+    "@navikt/oasis": "^3.2.2",
     "@portabletext/react": "^3.0.11",
     "@sanity/client": "^6.15.1",
     "@sanity/overlays": "^2.3.21",

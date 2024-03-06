@@ -1,10 +1,8 @@
-import { getToken } from 'lib/auth/authentication';
 import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { headers } from 'next/headers';
 import Link from 'next/link';
 
 const Page = async ({ params }: { params: { saksId: string } }) => {
-  const sak = await hentSak(params.saksId, getToken(headers()));
+  const sak = await hentSak(params.saksId);
 
   return (
     <div>
