@@ -1,5 +1,6 @@
 import { grantAzureOboToken, isInvalidTokenSet } from '@navikt/next-auth-wonderwall';
 import { isLocal } from 'lib/utils/environment';
+import { logError } from '@navikt/aap-felles-utils';
 
 const NUMBER_OF_RETRIES = 3;
 
@@ -51,14 +52,14 @@ const fetchWithRetry = async <ResponseBody>(
   if (!response.ok) {
     if (response.status === 500) {
       const responseJson = await response.json();
-      console.log('errorMessage in fetchWithRetry', responseJson);
+      logError(`klarte ikke å hente ${url}: ${responseJson.message}`);
       throw new Error(`Unable to fetch ${url}: ${responseJson.message}`);
     }
     if (response.status === 404) {
       throw new Error(`Ikke funnet: ${url}`);
     }
 
-    console.log(
+    logError(
       `Kall mot ${url} feilet med statuskode ${response.status}, prøver på nytt. Antall forsøk igjen: ${retries}`
     );
     return await fetchWithRetry(url, method, oboToken, retries - 1, requestBody);
