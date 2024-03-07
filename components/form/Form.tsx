@@ -17,6 +17,7 @@ interface Props {
 }
 
 export const Form = ({ steg, onSubmit, children }: Props) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [status, setStatus] = useState<ServerSentEventStatus | undefined>();
   const router = useRouter();
   const params = useParams();
@@ -37,6 +38,7 @@ export const Form = ({ steg, onSubmit, children }: Props) => {
           router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}`);
         }
         router.refresh();
+        setIsLoading(false);
       }
       if (eventData.status === 'ERROR') {
         console.log('ERROR', eventData);
@@ -57,6 +59,7 @@ export const Form = ({ steg, onSubmit, children }: Props) => {
     <form
       className={styles.form}
       onSubmit={(e) => {
+        setIsLoading(true);
         e.preventDefault();
         onSubmit();
         listenSSE();
@@ -70,7 +73,9 @@ export const Form = ({ steg, onSubmit, children }: Props) => {
       {status === 'POLLING' && (
         <Alert variant="info">Maskinen bruker litt lengre tid på å jobbe enn vanlig. Ta deg en kopp kaffe ☕️</Alert>
       )}
-      <Button className={styles.button}>Bekreft</Button>
+      <Button className={styles.button} loading={isLoading}>
+        Bekreft
+      </Button>
     </form>
   );
 };
