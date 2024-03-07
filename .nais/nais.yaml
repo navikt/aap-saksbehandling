@@ -4,7 +4,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "50M"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "90"
-  name: "aap-saksbehandling"
+  name: "saksbehandling"
   namespace: "aap"
   labels:
     "team": "aap"
