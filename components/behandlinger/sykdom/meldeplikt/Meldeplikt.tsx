@@ -11,6 +11,7 @@ import style from './Meldeplikt.module.css';
 import { FritakMeldepliktGrunnlag } from 'lib/types/types';
 import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
+import { handleSubmitWithCallback } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -57,7 +58,7 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
       erNav={true}
     >
       <Form
-        onSubmit={form.handleSubmit(async (data) => {
+        onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
             fritaksvurdering: {

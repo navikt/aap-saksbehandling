@@ -7,7 +7,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { løsBehov } from 'lib/api';
 import { BistandsGrunnlag } from 'lib/types/types';
-import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -59,7 +59,7 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
     >
       <Form
         steg="VURDER_BISTANDSBEHOV"
-        onSubmit={form.handleSubmit(async (data) => {
+        onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
             bistandVurdering: {
