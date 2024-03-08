@@ -32,7 +32,7 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
       description: 'Begrunn vurderingen',
       label: 'Vurder om det vil være unødig tyngende for søker å overholde meldeplikten',
       rules: { required: 'Du må begrunne' },
-      defaultValue: grunnlag?.vurderinger && grunnlag?.vurderinger[0]?.begrunnelse,
+      defaultValue: grunnlag?.vurderinger?.[0]?.begrunnelse,
     },
     unntakFraMeldeplikt: {
       type: 'checkbox',
