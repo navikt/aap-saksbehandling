@@ -1,7 +1,7 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, getStringEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
@@ -121,7 +121,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
     >
       <Form
         steg={'AVKLAR_SYKDOM'}
-        onSubmit={form.handleSubmit(async (data) => {
+        onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
             sykdomsvurderingDto: {

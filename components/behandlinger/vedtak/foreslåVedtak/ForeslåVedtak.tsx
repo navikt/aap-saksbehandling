@@ -6,6 +6,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { FatteVedtakGrunnlag, FlytGruppe } from 'lib/types/types';
 import { Vilkårsoppsummering } from 'components/vilkårsoppsummering/Vilkårsoppsummering';
+import { handleSubmitWithCallback } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -32,9 +33,9 @@ export const ForeslåVedtak = ({ behandlingsReferanse, grunnlag, flytGrupper }: 
 
       <Form
         steg="FORESLÅ_VEDTAK"
-        onSubmit={() => {
+        onSubmit={handleSubmitWithCallback(form, () => {
           console.log(behandlingsReferanse, grunnlag);
-        }}
+        })}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
       </Form>

@@ -7,6 +7,7 @@ import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
 import { SykdomsGrunnlag } from 'lib/types/types';
+import { handleSubmitWithCallback } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -46,7 +47,7 @@ export const FastsettBeregning = ({ behandlingsReferanse, sykdomsgrunnlag }: Pro
     <VilkårsKort heading={'Fastsett beregning'} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}>
       <Form
         steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
-        onSubmit={form.handleSubmit(async (data) => {
+        onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
             beregningVurdering: {

@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { BaseSyntheticEvent, ReactNode, useState } from 'react';
 import styles from 'components/form/Form.module.css';
 import { Alert, Button } from '@navikt/ds-react';
 import { useParams, useRouter } from 'next/navigation';
@@ -12,7 +12,10 @@ import { StegType } from 'lib/types/types';
 
 interface Props {
   steg: StegType;
-  onSubmit: () => void;
+  onSubmit: (
+    callbackSuccess: () => void,
+    callbackError: () => void
+  ) => (e?: BaseSyntheticEvent<object, any, any> | undefined) => Promise<void>;
   children: ReactNode;
 }
 
@@ -60,9 +63,12 @@ export const Form = ({ steg, onSubmit, children }: Props) => {
       className={styles.form}
       onSubmit={(e) => {
         setIsLoading(true);
-        e.preventDefault();
-        onSubmit();
-        listenSSE();
+        return onSubmit(
+          () => {
+            listenSSE();
+          },
+          () => setIsLoading(false)
+        )(e);
       }}
       id={steg}
     >

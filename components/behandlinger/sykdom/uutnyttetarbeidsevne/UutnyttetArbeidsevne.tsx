@@ -4,6 +4,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
+import { handleSubmitWithCallback } from 'lib/utils/form';
 
 interface FormFields {
   begrunnelse: string;
@@ -28,7 +29,7 @@ export const UutnyttetArbeidsevne = () => {
   return (
     <VilkårsKort heading={'Uutnyttet arbeidsevne - § 11-23'} steg={'VURDER_UUTNYTTET_ARBEIDSEVNE'}>
       <Form
-        onSubmit={form.handleSubmit((data) => {
+        onSubmit={handleSubmitWithCallback(form, (data) => {
           console.log('Waddap!', data);
         })}
         steg={'VURDER_UUTNYTTET_ARBEIDSEVNE'}

@@ -7,7 +7,7 @@ import { Form } from 'components/form/Form';
 import { Buldings2Icon } from '@navikt/aksel-icons';
 
 import { løsBehov } from 'lib/api';
-import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
 import { format } from 'date-fns';
 import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 import { StudentGrunnlag } from 'lib/types/types';
@@ -67,7 +67,7 @@ export const Student = ({ behandlingsReferanse, grunnlag }: Props) => {
       icon={<Buldings2Icon fontSize={'inherit'} />}
     >
       <Form
-        onSubmit={form.handleSubmit(async (data) => {
+        onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
             studentvurdering: {
