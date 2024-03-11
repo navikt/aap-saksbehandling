@@ -7,7 +7,7 @@ import { Form } from 'components/form/Form';
 import { Buldings2Icon } from '@navikt/aksel-icons';
 
 import { løsBehov } from 'lib/api';
-import { getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei, Behovstype } from 'lib/utils/form';
 import { format } from 'date-fns';
 import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 import { StudentGrunnlag } from 'lib/types/types';
@@ -70,13 +70,16 @@ export const Student = ({ behandlingsReferanse, grunnlag }: Props) => {
         onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
-            studentvurdering: {
-              begrunnelse: data.begrunnelse,
-              dokumenterBruktIVurdering: [],
-              oppfyller11_14: data.oppfyller11_14 === JaEllerNei.Ja,
-              avbruttStudieDato: data.avbruttStudieDato
-                ? format(new Date(data.avbruttStudieDato), 'yyyy-MM-dd')
-                : undefined,
+            behov: {
+              behovstype: Behovstype.AVKLAR_STUDENT_KODE,
+              studentvurdering: {
+                begrunnelse: data.begrunnelse,
+                dokumenterBruktIVurdering: [],
+                oppfyller11_14: data.oppfyller11_14 === JaEllerNei.Ja,
+                avbruttStudieDato: data.avbruttStudieDato
+                  ? format(new Date(data.avbruttStudieDato), 'yyyy-MM-dd')
+                  : undefined,
+              },
             },
             referanse: behandlingsReferanse,
           });

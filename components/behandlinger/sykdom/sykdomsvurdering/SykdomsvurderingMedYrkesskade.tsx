@@ -1,7 +1,13 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { getJaNeiEllerUndefined, getStringEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
+import {
+  getJaNeiEllerUndefined,
+  getStringEllerUndefined,
+  handleSubmitWithCallback,
+  JaEllerNei,
+  Behovstype,
+} from 'lib/utils/form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
@@ -124,18 +130,21 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
-            sykdomsvurderingDto: {
-              begrunnelse: data.begrunnelse,
-              dokumenterBruktIVurdering: [],
-              erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
-              nedreGrense: data.erÅrsakssammenheng === JaEllerNei.Ja ? 'TRETTI' : 'FEMTI',
-              erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
-                ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
-                : undefined,
-              yrkesskadevurdering: {
-                erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
-                andelAvNedsettelse: data.andelAvNedsettelse ? Number(data.andelAvNedsettelse) : undefined,
-                skadetidspunkt: data.skadetidspunkt,
+            behov: {
+              behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
+              sykdomsvurdering: {
+                begrunnelse: data.begrunnelse,
+                dokumenterBruktIVurdering: [],
+                erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
+                nedreGrense: data.erÅrsakssammenheng === JaEllerNei.Ja ? 'TRETTI' : 'FEMTI',
+                erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
+                  ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
+                  : undefined,
+                yrkesskadevurdering: {
+                  erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
+                  andelAvNedsettelse: data.andelAvNedsettelse ? Number(data.andelAvNedsettelse) : undefined,
+                  skadetidspunkt: data.skadetidspunkt,
+                },
               },
             },
             referanse: behandlingsReferanse,

@@ -1,15 +1,15 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei, Behovstype } from 'lib/utils/form';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
 import { løsBehov } from 'lib/api';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
-import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { Alert } from '@navikt/ds-react';
+import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
 interface Props {
@@ -75,14 +75,17 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
         onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
-            sykdomsvurderingDto: {
-              begrunnelse: data.begrunnelse,
-              dokumenterBruktIVurdering: [],
-              erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
-              nedreGrense: 'FEMTI',
-              erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
-                ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
-                : undefined,
+            behov: {
+              behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
+              sykdomsvurdering: {
+                begrunnelse: data.begrunnelse,
+                dokumenterBruktIVurdering: [],
+                erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
+                nedreGrense: 'FEMTI',
+                erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
+                  ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
+                  : undefined,
+              },
             },
             referanse: behandlingsReferanse,
           });
