@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FigureIcon } from '@navikt/aksel-icons';
 import { useConfigForm } from 'hooks/FormHook';
-import { handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
+import { handleSubmitWithCallback, JaEllerNei, Behovstype } from 'lib/utils/form';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/api';
@@ -57,10 +57,13 @@ export const Sykepengeerstatning = ({ behandlingsReferanse }: Props) => {
         onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
-            sykepengerVurdering: {
-              begrunnelse: data.begrunnelse,
-              dokumenterBruktIVurdering: [],
-              harRettPå: data.erOppfylt === JaEllerNei.Ja,
+            behov: {
+              behovstype: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
+              sykepengeerstatningVurdering: {
+                begrunnelse: data.begrunnelse,
+                dokumenterBruktIVurdering: [],
+                harRettPå: data.erOppfylt === JaEllerNei.Ja,
+              },
             },
             referanse: behandlingsReferanse,
           });

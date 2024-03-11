@@ -7,7 +7,7 @@ import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
 import { SykdomsGrunnlag } from 'lib/types/types';
-import { handleSubmitWithCallback } from 'lib/utils/form';
+import { handleSubmitWithCallback, Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -50,12 +50,18 @@ export const FastsettBeregning = ({ behandlingsReferanse, sykdomsgrunnlag }: Pro
         onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
-            beregningVurdering: {
-              begrunnelse: data.begrunnelse,
-              ytterligereNedsattArbeidsevneDato: format(new Date(data.ytterligereNedsattArbeidsevneDato), 'yyyy-MM-dd'),
-              nedsattArbeidsevneDato: format(new Date(data.nedsattArbeidsevneDato), 'yyyy-MM-dd'),
-              // @ts-ignore feil type fra backend
-              antattÅrligInntekt: data.antattÅrligInntekt ? Number(data.antattÅrligInntekt) : undefined,
+            behov: {
+              behovstype: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
+              beregningVurdering: {
+                begrunnelse: data.begrunnelse,
+                ytterligereNedsattArbeidsevneDato: format(
+                  new Date(data.ytterligereNedsattArbeidsevneDato),
+                  'yyyy-MM-dd'
+                ),
+                nedsattArbeidsevneDato: format(new Date(data.nedsattArbeidsevneDato), 'yyyy-MM-dd'),
+                // @ts-ignore TODO feil type fra backend
+                antattÅrligInntekt: data.antattÅrligInntekt ? Number(data.antattÅrligInntekt) : undefined,
+              },
             },
             referanse: behandlingsReferanse,
           });

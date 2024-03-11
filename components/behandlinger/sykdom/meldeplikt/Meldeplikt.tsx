@@ -11,7 +11,7 @@ import style from './Meldeplikt.module.css';
 import { FritakMeldepliktGrunnlag } from 'lib/types/types';
 import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
-import { handleSubmitWithCallback } from 'lib/utils/form';
+import { handleSubmitWithCallback, Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -32,7 +32,7 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
       description: 'Begrunn vurderingen',
       label: 'Vurder om det vil være unødig tyngende for søker å overholde meldeplikten',
       rules: { required: 'Du må begrunne' },
-      defaultValue: grunnlag?.vurderinger[0]?.begrunnelse,
+      defaultValue: grunnlag?.vurderinger && grunnlag?.vurderinger[0]?.begrunnelse,
     },
     unntakFraMeldeplikt: {
       type: 'checkbox',
@@ -61,12 +61,15 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
         onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
-            fritaksvurdering: {
-              begrunnelse: data.begrunnelse,
-              harFritak: data.unntakFraMeldeplikt.includes('Unntak fra meldeplikten'),
-              periode: {
-                fom: data.startDato ? format(new Date(data.startDato), 'yyyy-MM-dd') : '',
-                tom: data.sluttDato ? format(new Date(data.sluttDato), 'yyyy-MM-dd') : '',
+            behov: {
+              behovstype: Behovstype.FRITAK_MELDEPLIKT_KODE,
+              vurdering: {
+                begrunnelse: data.begrunnelse,
+                harFritak: data.unntakFraMeldeplikt.includes('Unntak fra meldeplikten'),
+                periode: {
+                  fom: data.startDato ? format(new Date(data.startDato), 'yyyy-MM-dd') : '',
+                  tom: data.sluttDato ? format(new Date(data.sluttDato), 'yyyy-MM-dd') : '',
+                },
               },
             },
             referanse: behandlingsReferanse,

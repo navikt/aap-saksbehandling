@@ -7,7 +7,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { løsBehov } from 'lib/api';
 import { BistandsGrunnlag } from 'lib/types/types';
-import { getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei, Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -62,9 +62,12 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
         onSubmit={handleSubmitWithCallback(form, async (data) => {
           await løsBehov({
             behandlingVersjon: 0,
-            bistandVurdering: {
-              begrunnelse: data.begrunnelse,
-              erBehovForBistand: data.vilkårOppfylt === JaEllerNei.Ja,
+            behov: {
+              behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
+              bistandVurdering: {
+                begrunnelse: data.begrunnelse,
+                erBehovForBistand: data.vilkårOppfylt === JaEllerNei.Ja,
+              },
             },
             referanse: behandlingsReferanse,
           });

@@ -8,5 +8,7 @@ interface Props {
 export const MeldepliktMedDataFetching = async ({ behandlingsReferanse }: Props) => {
   const grunnlag = await hentUnntakMeldepliktGrunnlag(behandlingsReferanse);
 
+  console.log('grunnlag', grunnlag);
+
   return <Meldeplikt behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} />;
 };
