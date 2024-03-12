@@ -293,7 +293,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2024-03-11
+       * @example 2024-03-12
        */
       fødselsdato: string;
       ident: string;
@@ -321,7 +321,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.AvklarBistandsbehovLøsning': {
       behovstype: string;
-      bistandVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.BistandVurdering'];
+      bistandsVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.BistandVurdering'];
     };
     'no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.AvklarStudentLøsning': {
       behovstype: string;
@@ -382,12 +382,12 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2024-03-11
+       * @example 2024-03-12
        */
       nedsattArbeidsevneDato: string;
       /**
        * Format: date
-       * @example 2024-03-11
+       * @example 2024-03-12
        */
       ytterligereNedsattArbeidsevneDato?: string | null;
     };
@@ -410,7 +410,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurdering': {
       /**
        * Format: date
-       * @example 2024-03-11
+       * @example 2024-03-12
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
@@ -454,7 +454,7 @@ export interface components {
       erÅrsakssammenheng: boolean;
       /**
        * Format: date
-       * @example 2024-03-11
+       * @example 2024-03-12
        */
       skadetidspunkt?: string | null;
     };
@@ -543,7 +543,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-03-11T15:08:33.843383
+       * @example 2024-03-12T13:06:42.838807
        */
       opprettet: string;
       /** Format: uuid */
@@ -562,7 +562,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-03-11T15:08:33.843383
+       * @example 2024-03-12T13:06:42.838807
        */
       tidsstempel: string;
     };
@@ -639,7 +639,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-03-11T15:08:33.843383
+       * @example 2024-03-12T13:06:42.838807
        */
       opprettet: string;
       /** Format: uuid */
@@ -671,12 +671,12 @@ export interface components {
     'no.nav.aap.verdityper.Periode': {
       /**
        * Format: date
-       * @example 2024-03-11
+       * @example 2024-03-12
        */
       fom: string;
       /**
        * Format: date
-       * @example 2024-03-11
+       * @example 2024-03-12
        */
       tom: string;
     };
