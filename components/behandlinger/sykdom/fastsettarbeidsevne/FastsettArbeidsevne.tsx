@@ -1,3 +1,5 @@
+'use client';
+
 import { useConfigForm } from 'hooks/FormHook';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
