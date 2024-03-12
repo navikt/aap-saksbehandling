@@ -1,14 +1,13 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei, Behovstype } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
 import { løsBehov } from 'lib/api';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
-import { Alert } from '@navikt/ds-react';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
@@ -100,10 +99,6 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
         <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
-
-        {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Nei && (
-          <Alert variant={'warning'}>Avslag AAP søknad (Snakk med Therese om bedre tekst her)</Alert>
-        )}
       </Form>
     </VilkårsKort>
   );
