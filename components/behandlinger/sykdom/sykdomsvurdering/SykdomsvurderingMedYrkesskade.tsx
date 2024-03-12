@@ -1,13 +1,7 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import {
-  getJaNeiEllerUndefined,
-  getStringEllerUndefined,
-  handleSubmitWithCallback,
-  JaEllerNei,
-  Behovstype,
-} from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
@@ -30,8 +24,7 @@ interface FormFields {
   erSkadeSykdomEllerLyteVesentligdel: string;
   erÅrsakssammenheng: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
-  skadetidspunkt: string;
-  andelAvNedsettelse: string;
+  arbeidsevnenBleNedsatt: Date;
   dokumenterBruktIVurderingen: string[];
   dokumentasjonMangler: string[];
 }
@@ -78,38 +71,18 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
       defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
       rules: { required: 'Du må svare på om arbeidsevnen er nedsatt.' },
     },
-    skadetidspunkt: {
-      type: 'radio',
-      label: 'Dato for skadetidspunkt for yrkesskaden',
-      options: [
-        { label: '03.09.2017', value: '2017-09-03' },
-        { label: '20.10.2022', value: '2022-10-20' },
-      ],
-      defaultValue: grunnlag?.sykdomsvurdering?.yrkesskadevurdering?.skadetidspunkt || undefined,
+    arbeidsevnenBleNedsatt: {
+      type: 'date',
+      label: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)',
+      // defaultValue: grunnlag?.sykdomsvurdering?.yrkesskadevurdering?.skadetidspunkt || undefined, //TODO Fix this
       rules: {
         required: 'Du må sette en dato for skadetidspunktet',
-      },
-    },
-    andelAvNedsettelse: {
-      type: 'number',
-      label: 'Hvor stor andel av den nedsatte arbeidsevnen er nedsatt på grunn av yrkesskaden?',
-      description:
-        'Eksempel: hvis den nedsatte arbeidsevnen er 50% og yrkesskade er hele årsaken til dette settes 100%',
-      defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.andelAvNedsettelse),
-      rules: {
-        required: 'Du må sette en andel av den nedsatte arbeidsevnen som er nedsatt på grunn av yrkesskaden',
-        validate: (value) => {
-          const valueFromString = Number(value);
-          if (valueFromString < 0 || valueFromString > 100) {
-            return 'Verdien må være mellom 0 og 100';
-          }
-        },
       },
     },
     dokumenterBruktIVurderingen: {
       type: 'checkbox_nested',
       label: 'Dokumenter funnet som er relevant for vurdering av §11-22 1.ledd og §11-5',
-      description: 'Tilknytt minst ett dokument til §11-22 1.ledd oog §11-5 vurdering',
+      description: 'Tilknytt minst ett dokument til §11-22 1.ledd og §11-5 vurdering',
     },
     dokumentasjonMangler: {
       type: 'checkbox',
@@ -121,9 +94,10 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
 
   return (
     <VilkårsKort
-      heading={'Yrkesskade og nedsatt arbeidsevne § 11-22 1.ledd, 11-5'}
+      heading={'Yrkesskade og nedsatt arbeidsevne §§ 11-22 1.ledd, 11-5'}
       steg={'AVKLAR_SYKDOM'}
       icon={<VitalsIcon />}
+      erNav={true}
     >
       <Form
         steg={'AVKLAR_SYKDOM'}
@@ -142,8 +116,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
                   : undefined,
                 yrkesskadevurdering: {
                   erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
-                  andelAvNedsettelse: data.andelAvNedsettelse ? Number(data.andelAvNedsettelse) : undefined,
-                  skadetidspunkt: data.skadetidspunkt,
+                  // skadetidspunkt: data.skadetidspunkt, // TODO Fix this
                 },
               },
             },
@@ -203,18 +176,10 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
           }}
         />
 
-        {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja &&
+        {form.watch('erSkadeSykdomEllerLyteVesentligdel') == JaEllerNei.Ja &&
           form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') == JaEllerNei.Ja && (
-            <>
-              <FormField form={form} formField={formFields.skadetidspunkt} />
-              <FormField form={form} formField={formFields.andelAvNedsettelse} />
-            </>
+            <FormField form={form} formField={formFields.arbeidsevnenBleNedsatt} />
           )}
-
-        {(form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Nei ||
-          form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') === JaEllerNei.Nei) && (
-          <Alert variant={'warning'}>Avslag AAP søknad (Snakk med Therese om bedre tekst her)</Alert>
-        )}
       </Form>
     </VilkårsKort>
   );

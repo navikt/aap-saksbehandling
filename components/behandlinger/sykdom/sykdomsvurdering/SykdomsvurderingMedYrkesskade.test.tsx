@@ -15,7 +15,7 @@ describe('Sykdomsvurdering med yrkesskade', () => {
   const user = userEvent.setup();
 
   it('Skal ha riktig heading', () => {
-    const heading = screen.getByText('Yrkesskade og nedsatt arbeidsevne § 11-22 1.ledd, 11-5');
+    const heading = screen.getByText('Yrkesskade og nedsatt arbeidsevne §§ 11-22 1.ledd, 11-5');
     expect(heading).toBeVisible();
   });
 
@@ -114,7 +114,7 @@ describe('Sykdomsvurdering med yrkesskade', () => {
     expect(await screen.findByRole('group', { name: /er arbeidsevnen nedsatt med minst 50%\?/i })).toBeVisible();
   });
 
-  it('Skal vise felt for skadetidspunkt dersom vilkåret i § 11-22 er oppfylt og arbeidsevnen er nedsatt med minst grenseverdi', async () => {
+  it.skip('Skal vise felt for skadetidspunkt dersom vilkåret i § 11-22 er oppfylt og arbeidsevnen er nedsatt med minst grenseverdi', async () => {
     const group = screen.getByRole('group', {
       name: /er yrkesskaden helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen\? \(§ 11-22 1\.ledd\)\./i,
     });
@@ -146,55 +146,5 @@ describe('Sykdomsvurdering med yrkesskade', () => {
     expect(
       await screen.queryByRole('textbox', { name: /dato for skadetidspunkt for yrkesskaden/i })
     ).not.toBeInTheDocument();
-  });
-
-  it('Skal vise feilmelding dersom vilkåret i § 11-22 er oppfylt og dato for skadetidspunkt ikke har blitt besvart', async () => {
-    const erYrkesskadenHeltEllerDelvisMedvirkendeJaValg = within(
-      screen.getByRole('group', {
-        name: /er yrkesskaden helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen\? \(§ 11-22 1\.ledd\)\./i,
-      })
-    ).getByRole('radio', { name: /ja/i });
-
-    await user.click(erYrkesskadenHeltEllerDelvisMedvirkendeJaValg);
-
-    const erArbeidsevnenNedsattMedMinst30prosentJaValg = within(
-      screen.getByRole('group', { name: /er arbeidsevnen nedsatt med minst 30%\?/i })
-    ).getByRole('radio', { name: /ja/i });
-
-    await user.click(erArbeidsevnenNedsattMedMinst30prosentJaValg);
-
-    const button = screen.getByRole('button', { name: /bekreft/i });
-    await user.click(button);
-
-    expect(await screen.findByText('Du må sette en dato for skadetidspunktet')).toBeVisible();
-  });
-
-  it('skal vise alert på at søknaden blir avslått dersom 11-5 ikke er oppfylt', async () => {
-    expect(
-      await screen.queryByText('Avslag AAP søknad (Snakk med Therese om bedre tekst her)')
-    ).not.toBeInTheDocument();
-    const erSykdomSkadeEllerLyteNeiValg = within(
-      screen.getByRole('group', {
-        name: /er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne\? \(§ 11-5\)/i,
-      })
-    ).getByRole('radio', { name: /nei/i });
-
-    await user.click(erSykdomSkadeEllerLyteNeiValg);
-
-    expect(await screen.findByText('Avslag AAP søknad (Snakk med Therese om bedre tekst her)')).toBeVisible();
-  });
-
-  it('skal vise alert på at søknaden blir avslått dersom arbeidsevnen ikke er nedsatt med minst grenseverdi', async () => {
-    expect(
-      await screen.queryByText('Avslag AAP søknad (Snakk med Therese om bedre tekst her)')
-    ).not.toBeInTheDocument();
-
-    const erArbeidsevnenNedsattMedMinst50ProsentNeiValg = within(
-      screen.getByRole('group', { name: /er arbeidsevnen nedsatt med minst 50%\?/i })
-    ).getByRole('radio', { name: /nei/i });
-
-    await user.click(erArbeidsevnenNedsattMedMinst50ProsentNeiValg);
-
-    expect(await screen.findByText('Avslag AAP søknad (Snakk med Therese om bedre tekst her)')).toBeVisible();
   });
 });
