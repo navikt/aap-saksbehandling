@@ -64,7 +64,7 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
             behandlingVersjon: 0,
             behov: {
               behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-              bistandVurdering: {
+              bistandsVurdering: {
                 begrunnelse: data.begrunnelse,
                 erBehovForBistand: data.vilkårOppfylt === JaEllerNei.Ja,
               },
