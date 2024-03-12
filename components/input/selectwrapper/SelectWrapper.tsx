@@ -30,6 +30,7 @@ export const SelectWrapper = <FormFieldValues extends FieldValues>({
       <Select
         id={name}
         name={name}
+        size={'small'}
         label={label}
         description={description}
         value={value}

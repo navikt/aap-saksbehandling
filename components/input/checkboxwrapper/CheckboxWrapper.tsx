@@ -28,7 +28,7 @@ const CheckboxWrapper = <FormFieldValues extends FieldValues>({
     rules={rules}
     render={({ field: { onChange, value }, fieldState: { error } }) => (
       <CheckboxGroup
-        size={'medium'}
+        size={'small'}
         id={name}
         name={name}
         legend={label}

@@ -30,6 +30,7 @@ export const TextFieldWrapper = <FormFieldValues extends FieldValues>({
       <TextField
         id={name}
         name={name}
+        size={'small'}
         label={label}
         type={type}
         error={error?.message}
