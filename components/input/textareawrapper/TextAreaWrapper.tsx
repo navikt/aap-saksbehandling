@@ -30,6 +30,7 @@ export const TextAreaWrapper = <FormFieldValues extends FieldValues>({
       <Textarea
         id={name}
         label={label}
+        size={'small'}
         description={description}
         value={value}
         onChange={onChange}

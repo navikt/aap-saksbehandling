@@ -51,6 +51,7 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
             <DatePicker.Input
               onChange={onChange}
               onInput={onChange}
+              size={'small'}
               value={value}
               name={name}
               description={description}
