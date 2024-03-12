@@ -7,6 +7,7 @@ const nextConfig = {
 
   experimental: {
     instrumentationHook: true,
+    optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
   },
   webpack: (config) => {
     config.module.rules.push({
