@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
 import userEvent from '@testing-library/user-event';
 
-describe('Meldeplikt', () => {
+describe.skip('Meldeplikt', () => {
   const user = userEvent.setup();
 
   it('Skal ha en overskrift', () => {

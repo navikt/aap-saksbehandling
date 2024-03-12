@@ -56,6 +56,7 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
       steg="FRITAK_MELDEPLIKT"
       icon={<FigureIcon fontSize={'inherit'} />}
       erNav={true}
+      defaultOpen={false}
     >
       <Form
         onSubmit={handleSubmitWithCallback(form, async (data) => {
