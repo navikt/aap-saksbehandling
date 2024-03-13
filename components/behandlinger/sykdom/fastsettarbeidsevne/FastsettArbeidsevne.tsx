@@ -10,6 +10,8 @@ import {
   FastSettArbeidsevnePeriode,
   FastsettArbeidsevnePeriodeForm,
 } from 'components/fastsettarbeidsevneperiodeform/FastsettArbeidsevnePeriodeForm';
+import { FastsettArbeidsevnePeriodeListItem } from 'components/fastsettarbeidsevneperiodeform/FastsettArbeidsevnePeriodeListItem';
+import styles from './FastsettArbeidsevne.module.css';
 
 interface FormFields {
   dokumenterBruktIVurderingen: string[];
@@ -36,6 +38,12 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
     },
   });
 
+  const deletePeriode = (id: string) => {
+    const index = perioder.findIndex((periode) => periode.id === id);
+    const before = perioder.slice(0, index);
+    const after = perioder.slice(index + 1);
+    setPerioder([...before, ...after]);
+  };
   return (
     <VilkårsKort
       heading={'Reduksjon ved delvis nedsatt arbeidsevne - § 11-23 2.ledd'}
@@ -58,6 +66,11 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
 
         <FormField form={form} formField={formFields.begrunnelse} />
       </form>
+      <ul className={styles.fastsettArbeidsevnePerioderList}>
+        {perioder.map((periode) => (
+          <FastsettArbeidsevnePeriodeListItem key={periode.id} onDelete={deletePeriode} {...periode} />
+        ))}
+      </ul>
       <FastsettArbeidsevnePeriodeForm onSave={(periode) => setPerioder([...perioder, periode])} />
       <Button form={'fastsettArbeidsevne'}>Bekreft</Button>
     </VilkårsKort>

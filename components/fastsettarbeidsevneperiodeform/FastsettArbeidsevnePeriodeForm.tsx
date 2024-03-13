@@ -42,7 +42,7 @@ export const FastsettArbeidsevnePeriodeForm = ({ periode, onSave }: Props) => {
         if (periode) {
           onSave({ ...data, id: periode.id });
         } else {
-          onSave({ ...data, id: 'something' });
+          onSave({ ...data, id: `placeholder-id-${Math.floor(Math.random() * 1000)}` });
         }
       })}
       className={styles.fastsettArbeidsEvneForm}
