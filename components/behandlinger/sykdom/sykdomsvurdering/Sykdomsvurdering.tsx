@@ -18,7 +18,6 @@ interface Props {
 
 interface FormFields {
   dokumenterBruktIVurderingen: string[];
-  dokumentasjonMangler: string[];
   erSkadeSykdomEllerLyteVesentligdel: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   begrunnelse: string;
@@ -26,11 +25,6 @@ interface FormFields {
 
 export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
-    dokumentasjonMangler: {
-      type: 'checkbox',
-      label: 'Dokumentasjon mangler',
-      options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
-    },
     begrunnelse: {
       type: 'textarea',
       label: 'Vurder den nedsatte arbeidsevnen',
@@ -95,7 +89,6 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
-        <FormField form={form} formField={formFields.dokumentasjonMangler} />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
         <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />

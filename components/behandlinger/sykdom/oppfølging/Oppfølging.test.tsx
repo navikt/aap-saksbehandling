@@ -62,4 +62,10 @@ describe('Oppfølging', () => {
     const checkboxGroup = screen.queryByRole('group', { name: 'Velg minst én grunn for at § 11-6 er oppfylt' });
     expect(checkboxGroup).not.toBeInTheDocument();
   });
+
+  it('skal ha felt med tabell for relevant dokumentasjon', () => {
+    render(<Oppfølging behandlingsReferanse={'123'} />);
+    const felt = screen.getByRole('group', { name: /dokumenter funnet som er relevant for vurdering av §11-6/i });
+    expect(felt).toBeVisible();
+  });
 });

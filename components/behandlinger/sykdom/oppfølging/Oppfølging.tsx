@@ -7,7 +7,8 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { løsBehov } from 'lib/api';
 import { BistandsGrunnlag } from 'lib/types/types';
-import { getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei, Behovstype } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
+import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
 interface Props {
   behandlingsReferanse: string;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 interface FormFields {
+  dokumenterBruktIVurderingen: string[];
   begrunnelse: string;
   vilkårOppfylt: string;
   grunner: string[];
@@ -22,6 +24,11 @@ interface FormFields {
 
 export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
+    dokumenterBruktIVurderingen: {
+      type: 'checkbox_nested',
+      label: 'Dokumenter funnet som er relevant for vurdering av §11-6',
+      description: 'Tilknytt minst ett dokument som er relevant for vurderingen av §11-6',
+    },
     begrunnelse: {
       type: 'textarea',
       label: 'Vurder om søker har behov for oppfølging',
@@ -73,6 +80,9 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
           });
         })}
       >
+        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
+          <DokumentTabell />
+        </FormField>
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.vilkårOppfylt} />
         {form.watch('vilkårOppfylt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.grunner} />}

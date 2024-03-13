@@ -26,7 +26,6 @@ interface FormFields {
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   arbeidsevnenBleNedsatt: Date;
   dokumenterBruktIVurderingen: string[];
-  dokumentasjonMangler: string[];
 }
 
 export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }: Props) => {
@@ -84,10 +83,6 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
       label: 'Dokumenter funnet som er relevant for vurdering av §11-22 1.ledd og §11-5',
       description: 'Tilknytt minst ett dokument til §11-22 1.ledd og §11-5 vurdering',
     },
-    dokumentasjonMangler: {
-      type: 'checkbox',
-      options: [{ label: 'Dokumentasjon mangler', value: 'dokumentasjonMangler' }],
-    }, //TODO Trenger vi denne?
   });
 
   const dokumenterBruktIVurderingen = form.watch('dokumenterBruktIVurderingen');
@@ -144,8 +139,6 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
-
-        <FormField form={form} formField={formFields.dokumentasjonMangler} />
 
         <ReadMore header={'Slik vurderes vilkåret'}>
           ref § ... Her kan vi gi en fin veiledning til hvordan man skal begrunne vilkårsvurderingen hvis de er usikre
