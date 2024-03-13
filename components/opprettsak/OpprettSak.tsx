@@ -12,6 +12,7 @@ interface FormFields {
   ident: string;
   fødselsdato: string;
   yrkesskade: string;
+  student: string;
 }
 export const OpprettSak = () => {
   const { formFields, form } = useConfigForm<FormFields>({
@@ -34,12 +35,21 @@ export const OpprettSak = () => {
         { label: 'Nei', value: 'false' },
       ],
     },
+    student: {
+      type: 'radio',
+      label: 'Student?',
+      defaultValue: 'false',
+      options: [
+        { label: 'Ja', value: 'true' },
+        { label: 'Nei', value: 'false' },
+      ],
+    },
   });
 
   return (
     <form
       onSubmit={form.handleSubmit(async (data) => {
-        await opprettSak({ ...data, yrkesskade: data.yrkesskade === 'true' });
+        await opprettSak({ ...data, yrkesskade: data.yrkesskade === 'true', student: data.student === 'true' });
         mutate('api/sak/alle');
       })}
       className={styles.form}
@@ -47,6 +57,7 @@ export const OpprettSak = () => {
       <FormField form={form} formField={formFields.ident} />
       <FormField form={form} formField={formFields.fødselsdato} />
       <FormField form={form} formField={formFields.yrkesskade} />
+      <FormField form={form} formField={formFields.student} />
       <Button>Opprett test sak</Button>
     </form>
   );
