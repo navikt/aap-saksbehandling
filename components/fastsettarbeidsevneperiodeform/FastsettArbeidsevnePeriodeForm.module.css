@@ -1,0 +1,10 @@
+.fastsettArbeidsEvneForm {
+  padding: 1rem;
+  background-color: var(--a-gray-100);
+}
+
+.fastsettArbeidsEvneFormFelter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-4);
+}
