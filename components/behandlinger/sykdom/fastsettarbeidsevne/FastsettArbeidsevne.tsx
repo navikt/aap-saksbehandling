@@ -50,7 +50,7 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
   });
   return (
     <VilkårsKort
-      heading={'Vurder arbeidsevnen som ikke er utnyttet - § 11-23 2.ledd'}
+      heading={'Reduksjon ved delvis nedsatt arbeidsevne - § 11-23 2.ledd'}
       steg={'FASTSETT_ARBEIDSEVNE'}
       erNav={true}
       defaultOpen={false}
