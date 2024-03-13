@@ -12,6 +12,7 @@ import { FritakMeldepliktGrunnlag } from 'lib/types/types';
 import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
 import { handleSubmitWithCallback, Behovstype } from 'lib/utils/form';
+import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
 interface Props {
   behandlingsReferanse: string;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 interface FormFields {
+  dokumenterBruktIVurderingen: string[];
   begrunnelse: string;
   unntakFraMeldeplikt: string[];
   startDato?: Date;
@@ -27,6 +29,11 @@ interface FormFields {
 
 export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
+    dokumenterBruktIVurderingen: {
+      type: 'checkbox_nested',
+      label: 'Dokumenter funnet som er relevant for vurdering av §11-10',
+      description: 'Tilknytt minst ett dokument til §11-10',
+    },
     begrunnelse: {
       type: 'textarea',
       description: 'Begrunn vurderingen',
@@ -83,6 +90,10 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
           <BodyShort>a) vurderer at det vil være unødig tyngende for søker å overholde meldeplikten</BodyShort>
           <BodyShort>b) er usikker på om det vil være unødig tyngende for søker å overholde meldeplikten</BodyShort>
         </div>
+
+        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
+          <DokumentTabell />
+        </FormField>
 
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.unntakFraMeldeplikt} />

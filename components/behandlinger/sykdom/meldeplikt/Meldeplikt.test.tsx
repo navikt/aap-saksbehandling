@@ -1,9 +1,17 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
 import userEvent from '@testing-library/user-event';
 
-describe.skip('Meldeplikt', () => {
+describe('Meldeplikt', () => {
   const user = userEvent.setup();
+
+  it('skal være default lukket', async () => {
+    render(<Meldeplikt behandlingsReferanse={'123'} />);
+    const textbox = await screen.queryByRole('textbox', {
+      name: /vurder om det vil være unødig tyngende for søker å overholde meldeplikten/i,
+    });
+    expect(textbox).toBeNull();
+  });
 
   it('Skal ha en overskrift', () => {
     render(<Meldeplikt behandlingsReferanse={'123'} />);
@@ -11,22 +19,27 @@ describe.skip('Meldeplikt', () => {
     expect(heading).toBeVisible();
   });
 
-  it('Skal ha et begrunnelse felt', () => {
+  it('Skal ha et begrunnelse felt', async () => {
     render(<Meldeplikt behandlingsReferanse={'123'} />);
+    await openAccordionCard();
+
     const textbox = screen.getByRole('textbox', {
       name: /vurder om det vil være unødig tyngende for søker å overholde meldeplikten/i,
     });
     expect(textbox).toBeVisible();
   });
 
-  it('Skal ha et felt for om søker kan unntas fra meldeplikten', () => {
+  it('Skal ha et felt for om søker kan unntas fra meldeplikten', async () => {
     render(<Meldeplikt behandlingsReferanse={'123'} />);
+    await openAccordionCard();
+
     const checkBoxGroup = screen.getByRole('group', { name: /det vurderes at søker kan unntas fra meldeplikten/i });
     expect(checkBoxGroup).toBeVisible();
   });
 
   it('Skal ha informasjonstekst om unntak fra meldeplikten', () => {
     render(<Meldeplikt behandlingsReferanse={'123'} />);
+
     expect(screen.getByText('Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:')).toBeVisible();
     expect(
       screen.getByText('a) vurderer at det vil være unødig tyngende for søker å overholde meldeplikten')
@@ -38,6 +51,7 @@ describe.skip('Meldeplikt', () => {
 
   it('Skal vise felt for startdato og sluttdato dersom unntak fra meldeplikten er valgt', async () => {
     render(<Meldeplikt behandlingsReferanse={'123'} />);
+    await openAccordionCard();
 
     const unntakFraMeldeepliktenValg = screen.getByRole('checkbox', { name: /unntak fra meldeplikten/i });
 
@@ -54,6 +68,7 @@ describe.skip('Meldeplikt', () => {
 
   it('Skal ikke vise felt for startdato og sluttdato dersom unntak fra meldeplikten ikke er valgt', async () => {
     render(<Meldeplikt behandlingsReferanse={'123'} />);
+    await openAccordionCard();
 
     const unntakFraMeldeepliktenValg = screen.getByRole('checkbox', { name: /unntak fra meldeplikten/i });
     expect(unntakFraMeldeepliktenValg).not.toBeChecked();
@@ -64,4 +79,20 @@ describe.skip('Meldeplikt', () => {
     expect(sluttDatoFelt).not.toBeInTheDocument();
     expect(startDatoFelt).not.toBeInTheDocument();
   });
+
+  it('skal ha felt med tabell for relevant dokumentasjon', async () => {
+    render(<Meldeplikt behandlingsReferanse={'123'} />);
+    await openAccordionCard();
+
+    const felt = await screen.findByRole('group', {
+      name: /dokumenter funnet som er relevant for vurdering av §11-10/i,
+    });
+    expect(felt).toBeVisible();
+  });
+
+  async function openAccordionCard() {
+    const region = screen.getByRole('region', { name: /Unntak fra meldeplikt § 11-10/i });
+    const button = within(region).getByRole('button');
+    await user.click(button);
+  }
 });
