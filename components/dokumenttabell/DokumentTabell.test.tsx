@@ -27,6 +27,12 @@ describe('DokumentTabell', () => {
     render(<DokumentTabell dokumenter={dokumenter} />);
     expect(screen.getAllByRole('row')).toHaveLength(2); // Inkluderer table header row
   });
+
+  it('Skal ha et felt for om dokumentasjon mangler', () => {
+    render(<DokumentTabell dokumenter={dokumenter} />);
+    const dokumentasjonManglerCheckbox = screen.getByRole('checkbox', { name: /dokumentasjon mangler/i });
+    expect(dokumentasjonManglerCheckbox).toBeVisible();
+  });
 });
 
 describe('DokumentTabellRow', () => {
