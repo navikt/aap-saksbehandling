@@ -21,15 +21,7 @@ describe('FastsettArbeidsevne', () => {
     const region = screen.getByRole('region', { name: /Reduksjon ved delvis nedsatt arbeidsevne - § 11-23 2.ledd/i });
     const button = within(region).getByRole('button');
     await user.click(button);
-    const textbox = screen.getByRole('textbox', { name: /Vurder den nedsatte arbeidsevnen/i });
-    expect(textbox).toBeVisible();
-  });
-  it('Skal ha feltet arbeidsevne', async () => {
-    render(<FastsettArbeidsevne behandlingsReferanse={'1234'} />);
-    const region = screen.getByRole('region', { name: /Reduksjon ved delvis nedsatt arbeidsevne - § 11-23 2.ledd/i });
-    const button = within(region).getByRole('button');
-    await user.click(button);
-    const textbox = screen.getByRole('textbox', { name: /Hvor stor del av arbeidsevnen er ikke utnyttet?/i });
+    const textbox = screen.getByRole('textbox', { name: /Vurder om brukeren har arbeidsevne/i });
     expect(textbox).toBeVisible();
   });
 });
