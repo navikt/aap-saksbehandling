@@ -4,6 +4,8 @@ import { Checkbox, Table } from '@navikt/ds-react';
 import { Dokument } from 'lib/types/types';
 import { DokumentTabellRad } from 'components/dokumenttabell/DokumentTabellRad';
 
+import styles from './DokumentTabell.module.css';
+
 const defaultDokumenter: Dokument[] = [
   {
     dokumentId: '123',
@@ -31,7 +33,7 @@ interface Props {
 
 export const DokumentTabell = ({ dokumenter = defaultDokumenter }: Props) => {
   return (
-    <>
+    <div className={styles.dokumentTabell}>
       <Table>
         <Table.Header>
           <Table.Row>
@@ -50,6 +52,6 @@ export const DokumentTabell = ({ dokumenter = defaultDokumenter }: Props) => {
         )}
       </Table>
       <Checkbox value={'dokumentasjonMangler'}>Dokumentasjon mangler</Checkbox>
-    </>
+    </div>
   );
 };

@@ -7,12 +7,14 @@ import { handleSubmitWithCallback, JaEllerNei, Behovstype } from 'lib/utils/form
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/api';
+import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
 interface Props {
   behandlingsReferanse: string;
 }
 
 interface FormFields {
+  dokumenterBruktIVurderingen: string[];
   begrunnelse: string;
   erOppfylt: string;
   grunn: string[];
@@ -21,6 +23,11 @@ interface FormFields {
 export const Sykepengeerstatning = ({ behandlingsReferanse }: Props) => {
   const { form, formFields } = useConfigForm<FormFields>(
     {
+      dokumenterBruktIVurderingen: {
+        type: 'checkbox_nested',
+        label: 'Dokumenter funnet som er relevant for vurdering av §11-13',
+        description: 'Tilknytt minst ett dokument til vurdering',
+      },
       begrunnelse: {
         type: 'textarea',
         label: 'Vurder om søker har rett til sykepengeerstatning',
@@ -70,6 +77,9 @@ export const Sykepengeerstatning = ({ behandlingsReferanse }: Props) => {
         })}
         steg={'VURDER_SYKEPENGEERSTATNING'}
       >
+        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
+          <DokumentTabell />
+        </FormField>
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erOppfylt} />
         {form.watch('erOppfylt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.grunn} />}

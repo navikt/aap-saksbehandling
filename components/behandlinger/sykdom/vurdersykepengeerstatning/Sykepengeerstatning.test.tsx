@@ -66,4 +66,9 @@ describe('Sykepengeerstatning', () => {
     const feilmelding = await screen.findByText('Du må velge minst en grunn');
     expect(feilmelding).toBeVisible();
   });
+
+  it('skal ha felt med tabell for relevant dokumentasjon', () => {
+    const felt = screen.getByRole('group', { name: /dokumenter funnet som er relevant for vurdering av §11-13/i });
+    expect(felt).toBeVisible();
+  });
 });
