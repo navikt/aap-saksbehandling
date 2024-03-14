@@ -3,7 +3,19 @@ import { OppgaveKolonne } from 'components/oppgavekolonne/OppgaveKolonne';
 import { StegGruppe } from 'lib/types/types';
 import { notFound } from 'next/navigation';
 
-const grupper: StegGruppe[] = ['ALDER', 'SYKDOM', 'VEDTAK', 'MEDLEMSKAP', 'LOVVALG', 'BREV', 'GRUNNLAG'];
+const grupper: StegGruppe[] = [
+  'ALDER',
+  'SYKDOM',
+  'VEDTAK',
+  'MEDLEMSKAP',
+  'LOVVALG',
+  'BREV',
+  'GRUNNLAG',
+  'UTTAK',
+  'TILKJENT_YTELSE',
+  'SIMULERING',
+  'BARNETILLEGG',
+];
 
 const Page = async ({ params }: { params: { behandlingsReferanse: string; aktivGruppe: StegGruppe } }) => {
   if (!grupper.includes(decodeURI(params.aktivGruppe) as StegGruppe)) {
