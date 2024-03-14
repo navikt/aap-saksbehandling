@@ -10,8 +10,8 @@ import {
   FastSettArbeidsevnePeriode,
   FastsettArbeidsevnePeriodeForm,
 } from 'components/fastsettarbeidsevneperiodeform/FastsettArbeidsevnePeriodeForm';
-import { FastsettArbeidsevnePeriodeListItem } from 'components/fastsettarbeidsevneperiodeform/FastsettArbeidsevnePeriodeListItem';
-import styles from './FastsettArbeidsevne.module.css';
+import { FastsettArbeidsevnePeriodeTableItem } from 'components/fastsettarbeidsevneperiodetable/FastsettArbeidsevnePeriodeTableItem';
+import { FastsettArbeidsevnePeriodeTable } from 'components/fastsettarbeidsevneperiodetable/FastsettArbeidsevnePeriodeTable';
 
 interface FormFields {
   dokumenterBruktIVurderingen: string[];
@@ -66,11 +66,12 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
 
         <FormField form={form} formField={formFields.begrunnelse} />
       </form>
-      <ul className={styles.fastsettArbeidsevnePerioderList}>
+      <FastsettArbeidsevnePeriodeTable>
         {perioder.map((periode) => (
-          <FastsettArbeidsevnePeriodeListItem key={periode.id} onDelete={deletePeriode} {...periode} />
+          <FastsettArbeidsevnePeriodeTableItem key={periode.id} onDelete={deletePeriode} {...periode} />
         ))}
-      </ul>
+      </FastsettArbeidsevnePeriodeTable>
+
       <FastsettArbeidsevnePeriodeForm onSave={(periode) => setPerioder([...perioder, periode])} />
       <Button form={'fastsettArbeidsevne'}>Bekreft</Button>
     </VilkårsKort>
