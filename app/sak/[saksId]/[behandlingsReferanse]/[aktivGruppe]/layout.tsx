@@ -1,9 +1,7 @@
 import { getToken } from 'lib/auth/authentication';
 import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { headers } from 'next/headers';
-
 import { HGrid } from 'components/DsClient';
-
 import styles from './layout.module.css';
 import { ReactNode } from 'react';
 import { GruppeElement } from 'components/gruppeelement/GruppeElement';
