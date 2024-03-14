@@ -9,7 +9,6 @@ const grupper: StegGruppe[] = [
   'VEDTAK',
   'MEDLEMSKAP',
   'LOVVALG',
-  'BREV',
   'GRUNNLAG',
   'UTTAK',
   'TILKJENT_YTELSE',

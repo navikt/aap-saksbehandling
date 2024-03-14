@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { DokumentTabell } from './DokumentTabell';
+import { Dokument, DokumentTabell } from './DokumentTabell';
 import { formaterDato } from 'lib/utils/date';
-import { Dokument } from 'lib/types/types';
+
 import { DokumentTabellRad } from 'components/dokumenttabell/DokumentTabellRad';
 
 const dokumenter: Dokument[] = [

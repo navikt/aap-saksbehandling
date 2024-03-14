@@ -1,10 +1,17 @@
 'use client';
 
 import { Checkbox, Table } from '@navikt/ds-react';
-import { Dokument } from 'lib/types/types';
 import { DokumentTabellRad } from 'components/dokumenttabell/DokumentTabellRad';
 
 import styles from './DokumentTabell.module.css';
+
+export interface Dokument {
+  journalpostId: string;
+  dokumentId: string;
+  tittel: string;
+  åpnet?: Date;
+  erTilknyttet: boolean;
+}
 
 const defaultDokumenter: Dokument[] = [
   {

@@ -55,16 +55,12 @@ export function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Start behandling';
     case 'BARNETILLEGG':
       return 'Barnetillegg';
-    case 'SAMORDNING':
-      return 'Samordning';
     case 'ALDER':
       return 'Alder';
     case 'GRUNNLAG':
       return 'Grunnlag';
     case 'LOVVALG':
       return 'Lovvalg';
-    case 'BREV':
-      return 'Brev';
     case 'UDEFINERT':
       return 'Udefinert';
   }
