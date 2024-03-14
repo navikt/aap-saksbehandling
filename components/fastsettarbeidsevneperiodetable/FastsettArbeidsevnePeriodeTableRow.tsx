@@ -1,7 +1,7 @@
 import { FastSettArbeidsevnePeriode } from 'components/fastsettarbeidsevneperiodeform/FastsettArbeidsevnePeriodeForm';
 import { formaterDato } from 'lib/utils/date';
 import { Table } from '@navikt/ds-react';
-export const FastsettArbeidsevnePeriodeTableItem = ({
+export const FastsettArbeidsevnePeriodeTableRow = ({
   id,
   fraDato,
   arbeidsevne,
