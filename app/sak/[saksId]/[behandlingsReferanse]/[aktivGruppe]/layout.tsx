@@ -1,7 +1,6 @@
 import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 import { HGrid } from 'components/DsClient';
-
 import styles from './layout.module.css';
 import { ReactNode } from 'react';
 import { GruppeElement } from 'components/gruppeelement/GruppeElement';
