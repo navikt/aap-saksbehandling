@@ -9,6 +9,7 @@ export const FastsettArbeidsevnePeriodeTable = ({ children }: Props) => {
     <Table>
       <Table.Header>
         <Table.Row>
+          <Table.HeaderCell scope="col"></Table.HeaderCell>
           <Table.HeaderCell scope="col">Fra og med</Table.HeaderCell>
           <Table.HeaderCell scope="col">Arbeidsevne</Table.HeaderCell>
           <Table.HeaderCell scope="col">Tilknyttede dokumenter</Table.HeaderCell>
