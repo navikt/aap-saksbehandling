@@ -7,7 +7,7 @@ import {
   FastSettArbeidsevnePeriode,
   FastsettArbeidsevnePeriodeForm,
 } from 'components/fastsettarbeidsevneperiodeform/FastsettArbeidsevnePeriodeForm';
-import { FastsettArbeidsevnePeriodeTableItem } from 'components/fastsettarbeidsevneperiodetable/FastsettArbeidsevnePeriodeTableItem';
+import { FastsettArbeidsevnePeriodeTableRow } from 'components/fastsettarbeidsevneperiodetable/FastsettArbeidsevnePeriodeTableRow';
 import { FastsettArbeidsevnePeriodeTable } from 'components/fastsettarbeidsevneperiodetable/FastsettArbeidsevnePeriodeTable';
 
 interface Props {
@@ -29,7 +29,7 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
       </Heading>
       <FastsettArbeidsevnePeriodeTable>
         {perioder.map((periode) => (
-          <FastsettArbeidsevnePeriodeTableItem key={periode.id} {...periode} />
+          <FastsettArbeidsevnePeriodeTableRow key={periode.id} {...periode} />
         ))}
       </FastsettArbeidsevnePeriodeTable>
 
