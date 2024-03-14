@@ -1,8 +1,9 @@
 'use client';
 
 import { Checkbox, Link, Table } from '@navikt/ds-react';
-import { Dokument } from 'lib/types/types';
+
 import { formaterDato } from 'lib/utils/date';
+import { Dokument } from 'components/dokumenttabell/DokumentTabell';
 
 export interface Props {
   dokument: Dokument;
