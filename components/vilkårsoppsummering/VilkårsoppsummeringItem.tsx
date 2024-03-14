@@ -1,39 +1,38 @@
 import styles from 'components/vilkårsoppsummering/Vilkårsoppsummering.module.css';
-import { Accordion } from '@navikt/ds-react';
-import { FlytGruppe } from 'lib/types/types';
+import { Vilkår, VilkårType } from 'lib/types/types';
 import { CheckmarkCircleFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
-import { mapGruppeTypeToGruppeNavn } from 'components/gruppeelement/GruppeElement';
-import { mapStegTypeTilStegNavn } from 'lib/utils/steg';
-import { gruppeStegErOppfylt, stegErOppfylt } from 'components/vilkårsoppsummering/Vilkårsoppsummering';
+import { vilkårErOppfylt } from 'components/vilkårsoppsummering/Vilkårsoppsummering';
+import { BodyShort } from '@navikt/ds-react';
 
 interface Props {
-  gruppeSteg: FlytGruppe;
+  vilkår: Vilkår;
 }
-export const VilkårsoppsummeringItem = ({ gruppeSteg }: Props) => {
+export const VilkårsoppsummeringItem = ({ vilkår }: Props) => {
   return (
-    <Accordion.Item>
-      <Accordion.Header>
-        <div className={styles.title}>
-          {gruppeStegErOppfylt(gruppeSteg) ? (
-            <CheckmarkCircleFillIcon title="gruppesteg-oppfylt" className={styles.oppfyltIcon} />
-          ) : (
-            <XMarkOctagonFillIcon title={'gruppesteg-avslått'} className={styles.avslåttIcon} />
-          )}
-          {mapGruppeTypeToGruppeNavn(gruppeSteg.stegGruppe)}
-        </div>
-      </Accordion.Header>
-      <Accordion.Content>
-        {gruppeSteg.steg.map((steg) => (
-          <div key={steg.stegType} className={styles.title}>
-            {stegErOppfylt(steg) ? (
-              <CheckmarkCircleFillIcon title="steg-oppfylt" className={styles.oppfyltIcon} />
-            ) : (
-              <XMarkOctagonFillIcon title={'steg-avslått'} className={styles.avslåttIcon} />
-            )}
-            {mapStegTypeTilStegNavn(steg.stegType)}
-          </div>
-        ))}
-      </Accordion.Content>
-    </Accordion.Item>
+    <BodyShort className={styles.vilkårsitem}>
+      {vilkårErOppfylt(vilkår) ? (
+        <CheckmarkCircleFillIcon title="vilkår-oppfylt" className={styles.oppfyltIcon} />
+      ) : (
+        <XMarkOctagonFillIcon title={'vilkår-avslått'} className={styles.avslåttIcon} />
+      )}
+      {mapVilkårTypeTilVilkårNavn(vilkår.vilkårtype)}
+    </BodyShort>
   );
 };
+
+function mapVilkårTypeTilVilkårNavn(steg: VilkårType): string {
+  switch (steg) {
+    case 'ALDERSVILKÅRET':
+      return 'Alder';
+    case 'SYKDOMSVILKÅRET':
+      return 'Sykdom';
+    case 'BISTANDSVILKÅRET':
+      return 'Oppfølging';
+    case 'MEDLEMSKAP':
+      return 'Medlemskap';
+    case 'GRUNNLAGET':
+      return 'Grunnlaget';
+    case 'SYKEPENGEERSTATNING':
+      return 'Sykepengeerstatning';
+  }
+}

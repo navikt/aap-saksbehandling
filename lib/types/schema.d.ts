@@ -110,6 +110,24 @@ export interface paths {
       };
     };
   };
+  '/api/behandling/{referanse}/resultat': {
+    get: {
+      parameters: {
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingResultatDto'];
+          };
+        };
+      };
+    };
+  };
   '/api/behandling/{referanse}/grunnlag/fatte-vedtak': {
     get: {
       parameters: {
@@ -293,7 +311,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2024-03-13
+       * @example 2024-03-14
        */
       fødselsdato: string;
       ident: string;
@@ -386,12 +404,12 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2024-03-13
+       * @example 2024-03-14
        */
       nedsattArbeidsevneDato: string;
       /**
        * Format: date
-       * @example 2024-03-13
+       * @example 2024-03-14
        */
       ytterligereNedsattArbeidsevneDato?: string | null;
     };
@@ -414,7 +432,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurdering': {
       /**
        * Format: date
-       * @example 2024-03-13
+       * @example 2024-03-14
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
@@ -460,7 +478,7 @@ export interface components {
       erÅrsakssammenheng: boolean;
       /**
        * Format: date
-       * @example 2024-03-13
+       * @example 2024-03-14
        */
       skadetidspunkt?: string | null;
     };
@@ -489,7 +507,6 @@ export interface components {
         | 'LOVVALG'
         | 'MEDLEMSKAP'
         | 'BARNETILLEGG'
-        | 'SAMORDNING'
         | 'SYKDOM'
         | 'GRUNNLAG'
         | 'UTTAK'
@@ -523,6 +540,9 @@ export interface components {
       behandlingVersjon: number;
       flyt: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.FlytGruppe'][];
     };
+    'no.nav.aap.behandlingsflyt.flyt.flate.BehandlingResultatDto': {
+      vilkårene: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårDTO'][];
+    };
     'no.nav.aap.behandlingsflyt.flyt.flate.DetaljertBehandlingDTO': {
       /** @enum {string} */
       aktivtSteg:
@@ -549,7 +569,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-03-13T13:17:58.704461
+       * @example 2024-03-14T15:02:51.0903
        */
       opprettet: string;
       /** Format: uuid */
@@ -568,7 +588,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-03-13T13:17:58.704461
+       * @example 2024-03-14T15:02:51.0903
        */
       tidsstempel: string;
     };
@@ -582,7 +602,6 @@ export interface components {
         | 'LOVVALG'
         | 'MEDLEMSKAP'
         | 'BARNETILLEGG'
-        | 'SAMORDNING'
         | 'SYKDOM'
         | 'GRUNNLAG'
         | 'UTTAK'
@@ -620,7 +639,13 @@ export interface components {
     'no.nav.aap.behandlingsflyt.flyt.flate.VilkårDTO': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO'][];
       /** @enum {string} */
-      vilkårtype: 'ALDERSVILKÅRET' | 'SYKDOMSVILKÅRET' | 'BISTANDSVILKÅRET' | 'GRUNNLAGET' | 'SYKEPENGEERSTATNING';
+      vilkårtype:
+        | 'ALDERSVILKÅRET'
+        | 'SYKDOMSVILKÅRET'
+        | 'BISTANDSVILKÅRET'
+        | 'MEDLEMSKAP'
+        | 'GRUNNLAGET'
+        | 'SYKEPENGEERSTATNING';
     };
     'no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO': {
       /** @enum {string|null} */
@@ -642,7 +667,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-03-13T13:17:58.704461
+       * @example 2024-03-14T15:02:51.0903
        */
       opprettet: string;
       /** Format: uuid */
@@ -674,12 +699,12 @@ export interface components {
     'no.nav.aap.verdityper.Periode': {
       /**
        * Format: date
-       * @example 2024-03-13
+       * @example 2024-03-14
        */
       fom: string;
       /**
        * Format: date
-       * @example 2024-03-13
+       * @example 2024-03-14
        */
       tom: string;
     };
