@@ -28,7 +28,7 @@ export const ForeslåVedtak = ({ behandlingsReferanse, grunnlag, flytGrupper }: 
   });
 
   return (
-    <VilkårsKort heading="Vedtak og beregning" steg={'FORESLÅ_VEDTAK'}>
+    <VilkårsKort heading="Foreslå vedtak" steg={'FORESLÅ_VEDTAK'}>
       <Vilkårsoppsummering flytGrupper={flytGrupper} />
 
       <Form
