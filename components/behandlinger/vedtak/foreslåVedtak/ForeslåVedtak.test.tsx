@@ -41,7 +41,7 @@ const flytGruppeOppfylt: FlytGruppe[] = [
 describe('ForeslåVedtak', () => {
   it('Skal ha en overskrift', () => {
     render(<ForeslåVedtak behandlingsReferanse={'123'} grunnlag={grunnlag} flytGrupper={flytGruppeOppfylt} />);
-    const overskrift = screen.getByRole('heading', { name: 'Vedtak og beregning', level: 3 });
+    const overskrift = screen.getByRole('heading', { name: 'Foreslå vedtak', level: 3 });
     expect(overskrift).toBeVisible();
   });
 
