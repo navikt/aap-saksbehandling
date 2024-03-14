@@ -16,12 +16,6 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     expect(heading).toBeVisible();
   });
 
-  it('Skal ha et felt for om dokumentasjon mangler', () => {
-    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
-    const checkboxGroup = screen.getByRole('group', { name: /dokumentasjon mangler/i });
-    expect(checkboxGroup).toBeVisible();
-  });
-
   it('Skal ha et begrunnelsefelt', () => {
     render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
     const textbox = screen.getByRole('textbox', { name: /vurder den nedsatte arbeidsevnen/i });

@@ -1,8 +1,10 @@
 'use client';
 
-import { Table } from '@navikt/ds-react';
+import { Checkbox, Table } from '@navikt/ds-react';
 import { Dokument } from 'lib/types/types';
 import { DokumentTabellRad } from 'components/dokumenttabell/DokumentTabellRad';
+
+import styles from './DokumentTabell.module.css';
 
 const defaultDokumenter: Dokument[] = [
   {
@@ -31,22 +33,25 @@ interface Props {
 
 export const DokumentTabell = ({ dokumenter = defaultDokumenter }: Props) => {
   return (
-    <Table>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Dokument</Table.HeaderCell>
-          <Table.HeaderCell>Journalpostid</Table.HeaderCell>
-          <Table.HeaderCell>Åpnet</Table.HeaderCell>
-          <Table.HeaderCell>Tilknytt dokument til vurdering</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      {dokumenter.length > 0 && (
-        <Table.Body>
-          {dokumenter.map((dokument) => (
-            <DokumentTabellRad key={`${dokument.journalpostId}-${dokument.dokumentId}`} dokument={dokument} />
-          ))}
-        </Table.Body>
-      )}
-    </Table>
+    <div className={styles.dokumentTabell}>
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Dokument</Table.HeaderCell>
+            <Table.HeaderCell>Journalpostid</Table.HeaderCell>
+            <Table.HeaderCell>Åpnet</Table.HeaderCell>
+            <Table.HeaderCell>Tilknytt dokument til vurdering</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        {dokumenter.length > 0 && (
+          <Table.Body>
+            {dokumenter.map((dokument) => (
+              <DokumentTabellRad key={`${dokument.journalpostId}-${dokument.dokumentId}`} dokument={dokument} />
+            ))}
+          </Table.Body>
+        )}
+      </Table>
+      <Checkbox value={'dokumentasjonMangler'}>Dokumentasjon mangler</Checkbox>
+    </div>
   );
 };
