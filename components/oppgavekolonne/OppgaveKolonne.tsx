@@ -12,9 +12,15 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Prop
   return (
     <div className={styles.kolonne}>
       {aktivGruppe === 'ALDER' && <div>ALDER</div>}
+      {aktivGruppe === 'LOVVALG' && <div>LOVVALG</div>}
       {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'VEDTAK' && <Vedtak behandlingsReferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'MEDLEMSKAP' && <div>MEDLEMSKAP</div>}
       {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'UTTAK' && <div>UTTAK</div>}
+      {aktivGruppe === 'BARNETILLEGG' && <div>BARNETILLEGG</div>}
+      {aktivGruppe === 'TILKJENT_YTELSE' && <div>TILKJENT YTELSE</div>}
+      {aktivGruppe === 'SIMULERING' && <div>SIMULERING</div>}
+      {aktivGruppe === 'VEDTAK' && <Vedtak behandlingsReferanse={behandlingsReferanse} />}
     </div>
   );
 };
