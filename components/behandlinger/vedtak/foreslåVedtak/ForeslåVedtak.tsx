@@ -27,6 +27,8 @@ export const ForeslåVedtak = ({ behandlingsReferanse, grunnlag, behandlingResul
     },
   });
 
+  console.log(behandlingResultat);
+
   return (
     <VilkårsKort heading="Foreslå vedtak" steg={'FORESLÅ_VEDTAK'}>
       <Form

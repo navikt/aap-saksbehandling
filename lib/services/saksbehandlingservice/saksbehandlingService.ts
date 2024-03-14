@@ -87,3 +87,8 @@ export const hentResultat = async (referanse: string): Promise<BehandlingResulta
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/resultat`;
   return await fetchProxy<BehandlingResultat>(url, saksbehandlingApiScope, 'GET');
 };
+
+export const hentResultat = async (referanse: string, accessToken: string): Promise<BehandlingResultat> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/resultat`;
+  return await fetchProxy<BehandlingResultat>(url, accessToken, saksbehandlingScope);
+};
