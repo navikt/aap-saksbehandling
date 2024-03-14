@@ -1,8 +1,7 @@
-import { hentFatteVedtakGrunnlang, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentFatteVedtakGrunnlang, hentResultat } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
 import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslåVedtak/ForeslåVedtak';
-import { FlytGruppe } from 'lib/types/types';
 
 interface Props {
   behandlingsReferanse: string;
@@ -10,9 +9,15 @@ interface Props {
 
 export const ForeslåVedtakMedDataFetching = async ({ behandlingsReferanse }: Props) => {
   const grunnlag = await hentFatteVedtakGrunnlang(behandlingsReferanse, getToken(headers()));
-  const flyt = await hentFlyt(behandlingsReferanse, getToken(headers()));
+  const behandlingsResultat = await hentResultat(behandlingsReferanse, getToken(headers()));
 
-  const flytGrupper: FlytGruppe[] = flyt.flyt.filter((gruppe) => ['SYKDOM', 'ALDER'].includes(gruppe.stegGruppe));
+  console.log(behandlingsResultat);
 
-  return <ForeslåVedtak behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} flytGrupper={flytGrupper} />;
+  return (
+    <ForeslåVedtak
+      behandlingResultat={behandlingsResultat}
+      behandlingsReferanse={behandlingsReferanse}
+      grunnlag={grunnlag}
+    />
+  );
 };

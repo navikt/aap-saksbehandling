@@ -30,10 +30,14 @@ export type FinnSakForIdent =
 export type AvklaringsBehov = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'];
 export type EndringDto = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.EndringDTO'];
 export type Periode = components['schemas']['no.nav.aap.verdityper.Periode'];
-export type Vilkår = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårDTO'];
 export type LøsAvklaringsbehovPåBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.flate.LøsAvklaringsbehovPåBehandling'];
+export type Vilkår = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårDTO'];
+
+export type VilkårType = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårDTO']['vilkårtype'];
+
 export type Vilkårsperiode = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO'];
+export type BehandlingResultat = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingResultatDto'];
 
 //TODO Disse blir ikke generert riktig av swagger
 // export type VilkårsType = components['schemas']['Vilkrstype'];

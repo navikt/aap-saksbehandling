@@ -1,32 +1,32 @@
-import { FlytGruppe, FlytSteg } from 'lib/types/types';
-import { Accordion, BodyShort } from '@navikt/ds-react';
-
-import styles from './Vilkårsoppsummering.module.css';
+import { BehandlingResultat, Vilkår, Vilkårsperiode } from 'lib/types/types';
+import { BodyShort } from '@navikt/ds-react';
 import { VilkårsoppsummeringItem } from 'components/vilkårsoppsummering/VilkårsoppsummeringItem';
 
 interface Props {
-  flytGrupper: FlytGruppe[];
+  behandlingResultat: BehandlingResultat;
 }
 
-export const Vilkårsoppsummering = ({ flytGrupper }: Props) => {
+export const Vilkårsoppsummering = ({ behandlingResultat }: Props) => {
+  const antallStegSomErFullført = behandlingResultat.vilkårene.filter(vilkårErOppfylt);
+
   return (
-    <div>
+    <>
       <BodyShort>
-        {flytGrupper.filter(gruppeStegErOppfylt).length} av {flytGrupper.length} vilkår oppfylt
+        {antallStegSomErFullført.length} av {behandlingResultat.vilkårene.length} vilkår oppfylt
       </BodyShort>
-      <Accordion aria-label={'vilkårsoppsummering'} className={styles.vilkårsoppsummering} size={'small'}>
-        {flytGrupper.map((gruppeSteg) => {
-          return <VilkårsoppsummeringItem key={gruppeSteg.stegGruppe} gruppeSteg={gruppeSteg} />;
+      <div>
+        {behandlingResultat.vilkårene.map((vilkår) => {
+          return <VilkårsoppsummeringItem key={vilkår.vilkårtype} vilkår={vilkår} />;
         })}
-      </Accordion>
-    </div>
+      </div>
+    </>
   );
 };
 
-export function stegErOppfylt(steg: FlytSteg): boolean {
-  return !!steg.vilkårDTO?.perioder.find((periode) => periode.utfall === 'OPPFYLT');
+export function periodeErOppfylt(periode: Vilkårsperiode): boolean {
+  return periode.utfall === 'OPPFYLT';
 }
 
-export function gruppeStegErOppfylt(gruppeSteg: FlytGruppe): boolean {
-  return gruppeSteg.steg.every(stegErOppfylt);
+export function vilkårErOppfylt(vilkår: Vilkår): boolean {
+  return vilkår.perioder.every(periodeErOppfylt);
 }

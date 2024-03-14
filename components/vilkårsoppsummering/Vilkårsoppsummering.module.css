@@ -13,6 +13,7 @@
   color: var(--a-surface-danger);
 }
 
-.vilkårsoppsummering {
-  --ac-accordion-header-border: none;
+.vilkårsitem {
+  display: flex;
+  align-items: center;
 }
