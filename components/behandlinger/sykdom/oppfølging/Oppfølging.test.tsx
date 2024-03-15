@@ -68,4 +68,10 @@ describe('Oppfølging', () => {
     const felt = screen.getByRole('group', { name: /dokumenter funnet som er relevant for vurdering av §11-6/i });
     expect(felt).toBeVisible();
   });
+
+  it('Skal ha synlig vilkårsveiledning', () => {
+    render(<Oppfølging behandlingsReferanse={'123'} />);
+    const vilkårsveiledning = screen.getByText('Slik vurderes vilkåret');
+    expect(vilkårsveiledning).toBeVisible();
+  });
 });

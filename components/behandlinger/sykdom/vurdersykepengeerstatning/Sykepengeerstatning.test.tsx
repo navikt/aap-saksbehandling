@@ -71,4 +71,9 @@ describe('Sykepengeerstatning', () => {
     const felt = screen.getByRole('group', { name: /dokumenter funnet som er relevant for vurdering av §11-13/i });
     expect(felt).toBeVisible();
   });
+
+  it('Skal ha synlig vilkårsveiledning', () => {
+    const vilkårsveiledning = screen.getByText('Slik vurderes vilkåret');
+    expect(vilkårsveiledning).toBeVisible();
+  });
 });

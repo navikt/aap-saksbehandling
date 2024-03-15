@@ -9,6 +9,7 @@ import { løsBehov } from 'lib/api';
 import { BistandsGrunnlag } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
+import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -83,6 +84,7 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
+        <Vilkårsveildening />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.vilkårOppfylt} />
         {form.watch('vilkårOppfylt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.grunner} />}

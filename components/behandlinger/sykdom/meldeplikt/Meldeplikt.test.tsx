@@ -90,6 +90,12 @@ describe('Meldeplikt', () => {
     expect(felt).toBeVisible();
   });
 
+  it('Skal ha synlig vilkårsveiledning', () => {
+    render(<Meldeplikt behandlingsReferanse={'123'} />);
+    const vilkårsveiledning = screen.getByText('Slik vurderes vilkåret');
+    expect(vilkårsveiledning).toBeVisible();
+  });
+
   async function openAccordionCard() {
     const region = screen.getByRole('region', { name: /Unntak fra meldeplikt § 11-10/i });
     const button = within(region).getByRole('button');

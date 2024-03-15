@@ -8,6 +8,7 @@ import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/api';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
+import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -80,6 +81,7 @@ export const Sykepengeerstatning = ({ behandlingsReferanse }: Props) => {
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
+        <Vilkårsveildening />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erOppfylt} />
         {form.watch('erOppfylt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.grunn} />}

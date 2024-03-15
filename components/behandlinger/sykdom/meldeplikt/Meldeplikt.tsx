@@ -13,6 +13,7 @@ import { løsBehov } from 'lib/api';
 import { format } from 'date-fns';
 import { handleSubmitWithCallback, Behovstype } from 'lib/utils/form';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
+import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -94,6 +95,8 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
+
+        <Vilkårsveildening />
 
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.unntakFraMeldeplikt} />
