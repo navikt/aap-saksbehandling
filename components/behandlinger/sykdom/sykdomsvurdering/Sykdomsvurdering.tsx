@@ -10,6 +10,8 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
+import { stringToDate } from 'lib/utils/date';
+import { format } from 'date-fns';
 
 interface Props {
   behandlingsReferanse: string;
@@ -21,6 +23,7 @@ interface FormFields {
   erSkadeSykdomEllerLyteVesentligdel: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   begrunnelse: string;
+  nedsattArbeidsevneDato: Date;
 }
 
 export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
@@ -60,6 +63,14 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
       label: 'Dokumenter funnet som er relevant for vurdering av §11-5',
       description: 'Tilknytt minst ett dokument §11-5 vurdering',
     },
+    nedsattArbeidsevneDato: {
+      type: 'date',
+      label: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)',
+      defaultValue: stringToDate(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
+      rules: {
+        required: 'Du må sette en dato for skadetidspunktet',
+      },
+    },
   });
 
   return (
@@ -78,6 +89,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
                 erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
                   ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
                   : undefined,
+                nedsattArbeidsevneDato: format(new Date(data.nedsattArbeidsevneDato), 'yyyy-MM-dd'),
               },
             },
             referanse: behandlingsReferanse,
@@ -92,6 +104,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
         <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
+        <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
       </Form>
     </VilkårsKort>
   );

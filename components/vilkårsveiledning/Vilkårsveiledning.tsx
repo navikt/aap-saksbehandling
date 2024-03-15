@@ -1,9 +1,11 @@
 import { ReadMore } from '@navikt/ds-react';
 
-export const Vilkårsveildening = () => {
-  return (
-    <ReadMore header={'Slik vurderes vilkåret'}>
-      Her kommer det noe tekst som beskriver hvordan vilkåret skal vurderes
-    </ReadMore>
-  );
+interface Props {
+  tekst?: string;
+}
+
+export const Vilkårsveildening = ({
+  tekst = 'Her kommer det noe tekst som beskriver hvordan vilkåret skal vurderes',
+}: Props) => {
+  return <ReadMore header={'Slik vurderes vilkåret'}>{tekst}</ReadMore>;
 };
