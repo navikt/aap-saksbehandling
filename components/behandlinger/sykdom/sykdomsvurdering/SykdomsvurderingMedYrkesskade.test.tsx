@@ -24,6 +24,11 @@ describe('Sykdomsvurdering med yrkesskade', () => {
     expect(warningAlert).toBeVisible();
   });
 
+  it('Skal ha synlig vilkårsveiledning', () => {
+    const vilkårsveiledning = screen.getByText('Slik vurderes vilkåret');
+    expect(vilkårsveiledning).toBeVisible();
+  });
+
   it('Skal ha et begrunnelsesfelt', async () => {
     const textbox = screen.getByRole('textbox', {
       name: /Vurder den nedsatte arbeidsevnen/i,

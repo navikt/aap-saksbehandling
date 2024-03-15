@@ -1,9 +1,10 @@
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
 import { useState } from 'react';
-import { Button, Heading, ReadMore, ToggleGroup } from '@navikt/ds-react';
+import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 import styles from './FastsettArbeidsevnePeriodeForm.module.css';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
+import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
 
 interface Props {
   periode?: FastSettArbeidsevnePeriode;
@@ -68,9 +69,7 @@ export const FastsettArbeidsevnePeriodeForm = ({ periode, onSave }: Props) => {
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
-        <ReadMore header={'Slik vurderes vilkåret'}>
-          ref § ... Her kan vi gi en fin veiledning til hvordan man skal begrunne vilkårsvurderingen hvis de er usikre
-        </ReadMore>
+        <Vilkårsveildening />
 
         <FormField form={form} formField={formFields.begrunnelse} />
         <div>

@@ -6,13 +6,16 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { VitalsIcon } from '@navikt/aksel-icons';
-import { Alert, Label, Link, List, ReadMore } from '@navikt/ds-react';
+import { Alert, Label, Link, List } from '@navikt/ds-react';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { løsBehov } from 'lib/api';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
 import styles from './SykdomsvurderingMedYrkesskade.module.css';
+import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
+import { format } from 'date-fns';
+import { stringToDate } from 'lib/utils/date';
 
 interface Props {
   behandlingsReferanse: string;
@@ -24,7 +27,7 @@ interface FormFields {
   erSkadeSykdomEllerLyteVesentligdel: string;
   erÅrsakssammenheng: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
-  arbeidsevnenBleNedsatt: Date;
+  nedsattArbeidsevneDato: Date;
   dokumenterBruktIVurderingen: string[];
 }
 
@@ -70,10 +73,10 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
       defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
       rules: { required: 'Du må svare på om arbeidsevnen er nedsatt.' },
     },
-    arbeidsevnenBleNedsatt: {
+    nedsattArbeidsevneDato: {
       type: 'date',
       label: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)',
-      // defaultValue: grunnlag?.sykdomsvurdering?.yrkesskadevurdering?.skadetidspunkt || undefined, //TODO Fix this
+      defaultValue: stringToDate(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
       rules: {
         required: 'Du må sette en dato for skadetidspunktet',
       },
@@ -109,9 +112,9 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
                 erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
                   ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
                   : undefined,
+                nedsattArbeidsevneDato: format(new Date(data.nedsattArbeidsevneDato), 'yyyy-MM-dd'),
                 yrkesskadevurdering: {
                   erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
-                  // skadetidspunkt: data.skadetidspunkt, // TODO Fix this
                 },
               },
             },
@@ -140,9 +143,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
           <DokumentTabell />
         </FormField>
 
-        <ReadMore header={'Slik vurderes vilkåret'}>
-          ref § ... Her kan vi gi en fin veiledning til hvordan man skal begrunne vilkårsvurderingen hvis de er usikre
-        </ReadMore>
+        <Vilkårsveildening />
 
         <FormField form={form} formField={formFields.begrunnelse} />
 
@@ -171,7 +172,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
 
         {form.watch('erSkadeSykdomEllerLyteVesentligdel') == JaEllerNei.Ja &&
           form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') == JaEllerNei.Ja && (
-            <FormField form={form} formField={formFields.arbeidsevnenBleNedsatt} />
+            <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
           )}
       </Form>
     </VilkårsKort>
