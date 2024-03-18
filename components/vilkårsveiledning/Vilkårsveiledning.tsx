@@ -7,5 +7,9 @@ interface Props {
 export const Vilkårsveildening = ({
   tekst = 'Her kommer det noe tekst som beskriver hvordan vilkåret skal vurderes',
 }: Props) => {
-  return <ReadMore header={'Slik vurderes vilkåret'}>{tekst}</ReadMore>;
+  return (
+    <ReadMore header={'Slik vurderes vilkåret'} defaultOpen={true} size={'small'}>
+      {tekst}
+    </ReadMore>
+  );
 };
