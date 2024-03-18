@@ -8,7 +8,7 @@ describe('Vilkårsveildening', () => {
     expect(screen.getByText('Slik vurderes vilkåret')).toBeVisible();
   });
 
-  it('skal vise korrekt tekst for avklar student', async () => {
+  it('skal vise korrekt tekst for avklar student', () => {
     render(<Vilkårsveildening />);
     expect(screen.getByText('Her kommer det noe tekst som beskriver hvordan vilkåret skal vurderes')).toBeVisible();
   });
