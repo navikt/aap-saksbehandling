@@ -1,5 +1,5 @@
 import { isLocal } from 'lib/utils/environment';
-import { requestTokenxOboToken, validateToken } from '@navikt/oasis';
+import { requestAzureOboToken, validateToken } from '@navikt/oasis';
 import { getAccessToken } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
 import { logError } from '@navikt/aap-felles-utils';
@@ -19,7 +19,7 @@ export const getOnBefalfOfToken = async (audience: string, url: string): Promise
     throw new Error('Token for simpleTokenXProxy didnt validate');
   }
 
-  const onBehalfOf = await requestTokenxOboToken(token, audience);
+  const onBehalfOf = await requestAzureOboToken(token, audience);
   if (!onBehalfOf.ok) {
     logError(`Henting av oboToken for ${url} feilet`, onBehalfOf.error);
     throw new Error('Request oboToken for simpleTokenXProxy failed');
