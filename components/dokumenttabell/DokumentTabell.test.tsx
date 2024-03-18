@@ -28,6 +28,12 @@ describe('DokumentTabell', () => {
     expect(screen.getAllByRole('row')).toHaveLength(2); // Inkluderer table header row
   });
 
+  it('skal ha en knapp for å legge til et nytt dokument', () => {
+    render(<DokumentTabell dokumenter={dokumenter} />);
+    const knapp = screen.getByRole('button', { name: /Legg til dokument/i });
+    expect(knapp).toBeVisible();
+  });
+
   it('Skal ha et felt for om dokumentasjon mangler', () => {
     render(<DokumentTabell dokumenter={dokumenter} />);
     const dokumentasjonManglerCheckbox = screen.getByRole('checkbox', { name: /dokumentasjon mangler/i });

@@ -12,7 +12,7 @@ export interface Props {
 export const DokumentTabellRad = ({ dokument }: Props) => {
   return (
     <Table.Row key={`${dokument.journalpostId}-${dokument.dokumentId}`}>
-      <Table.DataCell>
+      <Table.DataCell textSize={'small'}>
         <Link
           href={`/api/dokument/${dokument.journalpostId}/${dokument.dokumentId}`}
           onClick={() => console.log('åpner dokument')}
@@ -21,10 +21,10 @@ export const DokumentTabellRad = ({ dokument }: Props) => {
           {dokument.tittel}
         </Link>
       </Table.DataCell>
-      <Table.DataCell>{dokument.journalpostId}</Table.DataCell>
-      <Table.DataCell>{dokument.åpnet ? formaterDato(dokument.åpnet) : 'Nei'}</Table.DataCell>
-      <Table.DataCell>
-        <Checkbox hideLabel value={dokument.tittel}>
+      <Table.DataCell textSize={'small'}>{dokument.journalpostId}</Table.DataCell>
+      <Table.DataCell textSize={'small'}>{dokument.åpnet ? formaterDato(dokument.åpnet) : 'Nei'}</Table.DataCell>
+      <Table.DataCell textSize={'small'}>
+        <Checkbox size={'small'} hideLabel value={dokument.tittel}>
           Tilknytt dokument til vurdering
         </Checkbox>
       </Table.DataCell>

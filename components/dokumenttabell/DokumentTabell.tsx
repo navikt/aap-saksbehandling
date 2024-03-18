@@ -1,9 +1,10 @@
 'use client';
 
-import { Checkbox, Table } from '@navikt/ds-react';
+import { Button, Checkbox, Table } from '@navikt/ds-react';
 import { DokumentTabellRad } from 'components/dokumenttabell/DokumentTabellRad';
 
 import styles from './DokumentTabell.module.css';
+import { PlusIcon } from '@navikt/aksel-icons';
 
 export interface Dokument {
   journalpostId: string;
@@ -44,10 +45,10 @@ export const DokumentTabell = ({ dokumenter = defaultDokumenter }: Props) => {
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Dokument</Table.HeaderCell>
-            <Table.HeaderCell>Journalpostid</Table.HeaderCell>
-            <Table.HeaderCell>Åpnet</Table.HeaderCell>
-            <Table.HeaderCell>Tilknytt dokument til vurdering</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Dokument</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Journalpostid</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Åpnet</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Tilknytt dokument til vurdering</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         {dokumenter.length > 0 && (
@@ -58,6 +59,17 @@ export const DokumentTabell = ({ dokumenter = defaultDokumenter }: Props) => {
           </Table.Body>
         )}
       </Table>
+      <div>
+        <Button
+          className={styles.leggTilDokumentKnapp}
+          size={'small'}
+          icon={<PlusIcon />}
+          variant={'tertiary'}
+          onClick={(e) => e.preventDefault()}
+        >
+          Legg til dokument
+        </Button>
+      </div>
       <Checkbox value={'dokumentasjonMangler'}>Dokumentasjon mangler</Checkbox>
     </div>
   );
