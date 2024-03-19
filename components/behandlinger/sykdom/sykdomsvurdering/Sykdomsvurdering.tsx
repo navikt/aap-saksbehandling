@@ -12,6 +12,7 @@ import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBe
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { stringToDate } from 'lib/utils/date';
 import { format } from 'date-fns';
+import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 
 interface Props {
   behandlingsReferanse: string;
@@ -102,6 +103,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
           <DokumentTabell />
         </FormField>
         <FormField form={form} formField={formFields.begrunnelse} />
+        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
         <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
         <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />

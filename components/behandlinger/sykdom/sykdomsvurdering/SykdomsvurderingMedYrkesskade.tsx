@@ -16,6 +16,7 @@ import styles from './SykdomsvurderingMedYrkesskade.module.css';
 import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
 import { format } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
+import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 
 interface Props {
   behandlingsReferanse: string;
@@ -147,13 +148,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
 
         <FormField form={form} formField={formFields.begrunnelse} />
 
-        {dokumenterBruktIVurderingen && dokumenterBruktIVurderingen.length > 0 && (
-          <List as={'ul'} title={'Tilknyttede dokumenter'}>
-            {dokumenterBruktIVurderingen.map((dokument) => (
-              <List.Item key={dokument}>{dokument}</List.Item>
-            ))}
-          </List>
-        )}
+        <TilknyttedeDokumenter dokumenter={dokumenterBruktIVurderingen} />
 
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
 
