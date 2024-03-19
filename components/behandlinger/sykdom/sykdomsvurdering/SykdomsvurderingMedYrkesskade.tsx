@@ -24,6 +24,7 @@ interface Props {
 }
 
 interface FormFields {
+  erArbeidsevnenNedsatt: string;
   begrunnelse: string;
   erSkadeSykdomEllerLyteVesentligdel: string;
   erÅrsakssammenheng: string;
@@ -33,61 +34,75 @@ interface FormFields {
 }
 
 export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }: Props) => {
-  const { form, formFields } = useConfigForm<FormFields>({
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Vurder den nedsatte arbeidsevnen',
-      description: 'Hvilken sykdom/skade/lyte? Hva er det mest vesentlige? Hvis yrkesskade er funnet: vurder mot YS',
-      defaultValue: grunnlag.sykdomsvurdering?.begrunnelse,
-      rules: { required: 'Du må begrunne' },
-    },
-    erSkadeSykdomEllerLyteVesentligdel: {
-      type: 'radio',
-      label: 'Er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne? (§ 11-5)',
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
-      defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
-      rules: {
-        required: 'Du må svare på om det er sykdom, skade eller lyte som er medvirkende til nedsatt arbeidsevne.',
+  const { form, formFields } = useConfigForm<FormFields>(
+    {
+      erArbeidsevnenNedsatt: {
+        type: 'radio',
+        label: 'Er arbeidsevnen nedsatt?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erArbeidsevnenNedsatt),
+        options: [
+          { label: 'Ja', value: JaEllerNei.Ja },
+          { label: 'Nei', value: JaEllerNei.Nei },
+        ],
+        rules: { required: 'Du må svare på om arbeidsevnen er nedsatt' },
+      },
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Vurder den nedsatte arbeidsevnen',
+        description: 'Hvilken sykdom/skade/lyte? Hva er det mest vesentlige? Hvis yrkesskade er funnet: vurder mot YS',
+        defaultValue: grunnlag.sykdomsvurdering?.begrunnelse,
+        rules: { required: 'Du må begrunne' },
+      },
+      erSkadeSykdomEllerLyteVesentligdel: {
+        type: 'radio',
+        label: 'Er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne? (§ 11-5)',
+        options: [
+          { label: 'Ja', value: JaEllerNei.Ja },
+          { label: 'Nei', value: JaEllerNei.Nei },
+        ],
+        defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
+        rules: {
+          required: 'Du må svare på om det er sykdom, skade eller lyte som er medvirkende til nedsatt arbeidsevne.',
+        },
+      },
+      erÅrsakssammenheng: {
+        type: 'radio',
+        label: 'Er yrkesskaden helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen? (§ 11-22 1.ledd).',
+        options: [
+          { label: 'Ja', value: JaEllerNei.Ja },
+          { label: 'Nei', value: JaEllerNei.Nei },
+        ],
+        defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.erÅrsakssammenheng),
+        rules: {
+          required:
+            'Du må svare på om yrkesskaden er helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen.',
+        },
+      },
+      erNedsettelseIArbeidsevneHøyereEnnNedreGrense: {
+        type: 'radio',
+        options: [
+          { label: 'Ja', value: JaEllerNei.Ja },
+          { label: 'Nei', value: JaEllerNei.Nei },
+        ],
+        defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
+        rules: { required: 'Du må svare på om arbeidsevnen er nedsatt.' },
+      },
+      nedsattArbeidsevneDato: {
+        type: 'date',
+        label: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)',
+        defaultValue: stringToDate(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
+        rules: {
+          required: 'Du må sette en dato for skadetidspunktet',
+        },
+      },
+      dokumenterBruktIVurderingen: {
+        type: 'checkbox_nested',
+        label: 'Dokumenter funnet som er relevant for vurdering av §11-22 1.ledd og §11-5',
+        description: 'Tilknytt minst ett dokument til §11-22 1.ledd og §11-5 vurdering',
       },
     },
-    erÅrsakssammenheng: {
-      type: 'radio',
-      label: 'Er yrkesskaden helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen? (§ 11-22 1.ledd).',
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
-      defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.erÅrsakssammenheng),
-      rules: {
-        required: 'Du må svare på om yrkesskaden er helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen.',
-      },
-    },
-    erNedsettelseIArbeidsevneHøyereEnnNedreGrense: {
-      type: 'radio',
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
-      defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
-      rules: { required: 'Du må svare på om arbeidsevnen er nedsatt.' },
-    },
-    nedsattArbeidsevneDato: {
-      type: 'date',
-      label: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)',
-      defaultValue: stringToDate(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
-      rules: {
-        required: 'Du må sette en dato for skadetidspunktet',
-      },
-    },
-    dokumenterBruktIVurderingen: {
-      type: 'checkbox_nested',
-      label: 'Dokumenter funnet som er relevant for vurdering av §11-22 1.ledd og §11-5',
-      description: 'Tilknytt minst ett dokument til §11-22 1.ledd og §11-5 vurdering',
-    },
-  });
+    { shouldUnregister: true }
+  );
 
   const dokumenterBruktIVurderingen = form.watch('dokumenterBruktIVurderingen');
 
@@ -106,14 +121,16 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
             behov: {
               behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
               sykdomsvurdering: {
+                erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
                 begrunnelse: data.begrunnelse,
                 dokumenterBruktIVurdering: [],
                 erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
                 nedreGrense: data.erÅrsakssammenheng === JaEllerNei.Ja ? 'TRETTI' : 'FEMTI',
-                erNedsettelseIArbeidsevneHøyereEnnNedreGrense: data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense
-                  ? data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja
+                erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
+                  data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
+                nedsattArbeidsevneDato: data.nedsattArbeidsevneDato
+                  ? format(new Date(data.nedsattArbeidsevneDato), 'yyyy-MM-dd')
                   : undefined,
-                nedsattArbeidsevneDato: format(new Date(data.nedsattArbeidsevneDato), 'yyyy-MM-dd'),
                 yrkesskadevurdering: {
                   erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
                 },
@@ -123,7 +140,9 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
           });
         })}
       >
-        <Alert variant="warning">Vi har funnet en eller flere registrerte yrkesskader</Alert>
+        <Alert variant="warning" size={'small'}>
+          Vi har funnet en eller flere registrerte yrkesskader
+        </Alert>
 
         <div className={styles.yrkesskader}>
           <Label as="p">Godkjente yrkesskade(r)</Label>
@@ -145,30 +164,31 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         </FormField>
 
         <Vilkårsveildening />
-
         <FormField form={form} formField={formFields.begrunnelse} />
-
+        <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
         <TilknyttedeDokumenter dokumenter={dokumenterBruktIVurderingen} />
 
-        <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
+        {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
+          <>
+            <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
+            <FormField form={form} formField={formFields.erÅrsakssammenheng} />
+            <FormField
+              form={form}
+              formField={{
+                ...formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense,
+                label:
+                  form.watch('erÅrsakssammenheng') === JaEllerNei.Nei || !form.watch('erÅrsakssammenheng')
+                    ? 'Er arbeidsevnen nedsatt med minst 50%?'
+                    : 'Er arbeidsevnen nedsatt med minst 30%?',
+              }}
+            />
 
-        <FormField form={form} formField={formFields.erÅrsakssammenheng} />
-
-        <FormField
-          form={form}
-          formField={{
-            ...formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense,
-            label:
-              form.watch('erÅrsakssammenheng') === JaEllerNei.Nei || !form.watch('erÅrsakssammenheng')
-                ? 'Er arbeidsevnen nedsatt med minst 50%?'
-                : 'Er arbeidsevnen nedsatt med minst 30%?',
-          }}
-        />
-
-        {form.watch('erSkadeSykdomEllerLyteVesentligdel') == JaEllerNei.Ja &&
-          form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') == JaEllerNei.Ja && (
-            <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
-          )}
+            {form.watch('erSkadeSykdomEllerLyteVesentligdel') == JaEllerNei.Ja &&
+              form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') == JaEllerNei.Ja && (
+                <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
+              )}
+          </>
+        )}
       </Form>
     </VilkårsKort>
   );
