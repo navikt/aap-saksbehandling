@@ -15,6 +15,11 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     const heading = screen.getByText('Nedsatt arbeidsevne - § 11-5');
     expect(heading).toBeVisible();
   });
+  it('skal ha en liste over tilknyttede dokumenter til vilkåret ', () => {
+    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
+    const tilknyttedeDokumenterListe = screen.getByRole('list', { name: /tilknyttede dokumenter/i });
+    expect(tilknyttedeDokumenterListe).toBeVisible();
+  });
 
   it('Skal ha et begrunnelsefelt', () => {
     render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);

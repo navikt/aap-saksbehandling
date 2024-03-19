@@ -29,6 +29,11 @@ describe('Sykdomsvurdering med yrkesskade', () => {
     expect(vilkårsveiledning).toBeVisible();
   });
 
+  it('skal ha en liste over tilknyttede dokumenter til vilkåret ', () => {
+    const tilknyttedeDokumenterListe = screen.getByRole('list', { name: /tilknyttede dokumenter/i });
+    expect(tilknyttedeDokumenterListe).toBeVisible();
+  });
+
   it('Skal ha et begrunnelsesfelt', async () => {
     const textbox = screen.getByRole('textbox', {
       name: /Vurder den nedsatte arbeidsevnen/i,
