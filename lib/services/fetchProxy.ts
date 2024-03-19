@@ -1,13 +1,13 @@
 import { isLocal } from 'lib/utils/environment';
 import { requestAzureOboToken, validateToken } from '@navikt/oasis';
-import { getAccessToken } from 'lib/auth/authentication';
+import { getAccessTokenOrRedirectToLogin } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
 import { logError } from '@navikt/aap-felles-utils';
 
 const NUMBER_OF_RETRIES = 3;
 
 export const getOnBefalfOfToken = async (audience: string, url: string): Promise<string> => {
-  const token = getAccessToken(headers());
+  const token = getAccessTokenOrRedirectToLogin(headers());
   if (!token) {
     logError(`Token for ${url} er undefined`);
     throw new Error('Token for simpleTokenXProxy is undefined');
