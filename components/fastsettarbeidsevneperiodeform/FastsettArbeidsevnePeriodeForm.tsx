@@ -41,11 +41,13 @@ export const FastsettArbeidsevnePeriodeForm = ({ periode, onSave }: Props) => {
       type: 'text',
       label: '',
       defaultValue: periode?.arbeidsevne,
+      rules: { required: 'Du må angi en arbeidsevne.' },
     },
     fraDato: {
       type: 'date',
       label: 'Arbeidsevnen gjelder fra og med',
       defaultValue: periode?.fraDato,
+      rules: { required: 'Du må angi når perioden med arbeidsevne starter.' },
     },
   });
   const labelTimer = 'Hvor stor er arbeidsevnen sett opp mot en arbeidsuke på 37,5 timer';
