@@ -12,5 +12,7 @@ export const MeldepliktMedDataFetching = async ({ behandlingsReferanse }: Props)
 
   console.log('grunnlag', grunnlag);
 
+  console.log('grunnlag', grunnlag);
+
   return <Meldeplikt behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} />;
 };
