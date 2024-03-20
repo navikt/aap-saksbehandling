@@ -1,25 +1,45 @@
-import { grantAzureOboToken, isInvalidTokenSet } from '@navikt/next-auth-wonderwall';
 import { isLocal } from 'lib/utils/environment';
+import { requestAzureOboToken, validateToken } from '@navikt/oasis';
+import { getAccessTokenOrRedirectToLogin } from 'lib/auth/authentication';
+import { headers } from 'next/headers';
 import { logError } from '@navikt/aap-felles-utils';
 
 const NUMBER_OF_RETRIES = 3;
 
+export const getOnBefalfOfToken = async (audience: string, url: string): Promise<string> => {
+  const token = getAccessTokenOrRedirectToLogin(headers());
+  if (!token) {
+    logError(`Token for ${url} er undefined`);
+    throw new Error('Token for simpleTokenXProxy is undefined');
+  }
+
+  const validation = await validateToken(token);
+  if (!validation.ok) {
+    logError(`Token for ${url} validerte ikke`);
+    throw new Error('Token for simpleTokenXProxy didnt validate');
+  }
+
+  const onBehalfOf = await requestAzureOboToken(token, audience);
+  if (!onBehalfOf.ok) {
+    logError(`Henting av oboToken for ${url} feilet`, onBehalfOf.error);
+    throw new Error('Request oboToken for simpleTokenXProxy failed');
+  }
+
+  return onBehalfOf.token;
+};
+
 export const fetchProxy = async <ResponseBody>(
   url: string,
-  accessToken: string,
   scope: string,
   method: 'GET' | 'POST' = 'GET',
   requestBody?: object
 ): Promise<ResponseBody> => {
-  let oboToken;
-  if (!isLocal()) {
-    oboToken = await grantAzureOboToken(accessToken, scope);
-    if (isInvalidTokenSet(oboToken)) {
-      throw new Error(`Unable to get accessToken: ${oboToken.message}`);
-    }
+  if (isLocal()) {
+    return await fetchWithRetry<ResponseBody>(url, method, '', NUMBER_OF_RETRIES, requestBody);
+  } else {
+    const oboToken = await getOnBefalfOfToken(scope, url);
+    return await fetchWithRetry<ResponseBody>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody);
   }
-
-  return await fetchWithRetry<ResponseBody>(url, method, oboToken ?? '', NUMBER_OF_RETRIES, requestBody);
 };
 
 const fetchWithRetry = async <ResponseBody>(

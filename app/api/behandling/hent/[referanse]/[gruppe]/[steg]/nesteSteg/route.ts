@@ -1,6 +1,4 @@
-import { getToken } from 'lib/auth/authentication';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { headers } from 'next/headers';
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;
@@ -45,7 +43,7 @@ export async function GET(__request, context: { params: { referanse: string; gru
 
         writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
       }
-      const flyt = await hentFlyt(context.params.referanse, getToken(headers()));
+      const flyt = await hentFlyt(context.params.referanse);
       if (gruppeEllerStegErEndret(context.params.gruppe, context.params.steg, flyt.aktivGruppe, flyt.aktivtSteg)) {
         console.log('Gruppe eller steg er endret!');
         const json: ServerSentEventData = {

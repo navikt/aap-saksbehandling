@@ -1,6 +1,4 @@
-import { getToken } from 'lib/auth/authentication';
 import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { headers } from 'next/headers';
 import { HGrid } from 'components/DsClient';
 import styles from './layout.module.css';
 import { ReactNode } from 'react';
@@ -17,8 +15,8 @@ const Layout = async ({
   params: { behandlingsReferanse: string; aktivGruppe: string };
   children: ReactNode;
 }) => {
-  const behandling = await hentBehandling(params.behandlingsReferanse, getToken(headers()));
-  const flytResponse = await hentFlyt(params.behandlingsReferanse, getToken(headers()));
+  const behandling = await hentBehandling(params.behandlingsReferanse);
+  const flytResponse = await hentFlyt(params.behandlingsReferanse);
 
   if (behandling === undefined) {
     notFound();

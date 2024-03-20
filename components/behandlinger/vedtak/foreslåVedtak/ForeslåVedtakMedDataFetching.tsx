@@ -1,6 +1,4 @@
 import { hentFatteVedtakGrunnlang, hentResultat } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getToken } from 'lib/auth/authentication';
-import { headers } from 'next/headers';
 import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslåVedtak/ForeslåVedtak';
 
 interface Props {
@@ -8,8 +6,8 @@ interface Props {
 }
 
 export const ForeslåVedtakMedDataFetching = async ({ behandlingsReferanse }: Props) => {
-  const grunnlag = await hentFatteVedtakGrunnlang(behandlingsReferanse, getToken(headers()));
-  const behandlingsResultat = await hentResultat(behandlingsReferanse, getToken(headers()));
+  const grunnlag = await hentFatteVedtakGrunnlang(behandlingsReferanse);
+  const behandlingsResultat = await hentResultat(behandlingsReferanse);
 
   console.log(behandlingsResultat);
 
