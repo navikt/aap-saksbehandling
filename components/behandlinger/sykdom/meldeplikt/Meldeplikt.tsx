@@ -10,10 +10,10 @@ import { FigureIcon } from '@navikt/aksel-icons';
 import style from './Meldeplikt.module.css';
 import { FritakMeldepliktGrunnlag } from 'lib/types/types';
 import { løsBehov } from 'lib/api';
-import { format } from 'date-fns';
-import { handleSubmitWithCallback, Behovstype } from 'lib/utils/form';
+import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
+import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
   behandlingsReferanse: string;
@@ -76,8 +76,8 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
                 begrunnelse: data.begrunnelse,
                 harFritak: data.unntakFraMeldeplikt.includes('Unntak fra meldeplikten'),
                 periode: {
-                  fom: data.startDato ? format(new Date(data.startDato), 'yyyy-MM-dd') : '',
-                  tom: data.sluttDato ? format(new Date(data.sluttDato), 'yyyy-MM-dd') : '',
+                  fom: data.startDato ? formaterDatoForBackend(data.startDato) : '',
+                  tom: data.sluttDato ? formaterDatoForBackend(data.sluttDato) : '',
                 },
               },
             },

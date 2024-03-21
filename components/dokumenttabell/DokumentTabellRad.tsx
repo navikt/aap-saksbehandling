@@ -2,7 +2,7 @@
 
 import { Checkbox, Link, Table } from '@navikt/ds-react';
 
-import { formaterDato } from 'lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Dokument } from 'components/dokumenttabell/DokumentTabell';
 
 export interface Props {
@@ -22,7 +22,9 @@ export const DokumentTabellRad = ({ dokument }: Props) => {
         </Link>
       </Table.DataCell>
       <Table.DataCell textSize={'small'}>{dokument.journalpostId}</Table.DataCell>
-      <Table.DataCell textSize={'small'}>{dokument.åpnet ? formaterDato(dokument.åpnet) : 'Nei'}</Table.DataCell>
+      <Table.DataCell textSize={'small'}>
+        {dokument.åpnet ? formaterDatoForFrontend(dokument.åpnet) : 'Nei'}
+      </Table.DataCell>
       <Table.DataCell textSize={'small'}>
         <Checkbox size={'small'} hideLabel value={dokument.tittel}>
           Tilknytt dokument til vurdering

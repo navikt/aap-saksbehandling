@@ -1,5 +1,5 @@
 import { FastSettArbeidsevnePeriode } from 'components/fastsettarbeidsevneperiodeform/FastsettArbeidsevnePeriodeForm';
-import { formaterDato } from 'lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { BodyLong, Table } from '@navikt/ds-react';
 export const FastsettArbeidsevnePeriodeTableRow = ({
   id,
@@ -11,7 +11,7 @@ export const FastsettArbeidsevnePeriodeTableRow = ({
 }: FastSettArbeidsevnePeriode) => {
   return (
     <Table.ExpandableRow key={id} content={<BodyLong>{begrunnelse}</BodyLong>}>
-      <Table.DataCell>{formaterDato(fraDato)}</Table.DataCell>
+      <Table.DataCell>{formaterDatoForFrontend(fraDato)}</Table.DataCell>
       <Table.DataCell>{`${arbeidsevne} ${benevning}`}</Table.DataCell>
       <Table.DataCell>{`${dokumenterBruktIVurderingen.join()}`}</Table.DataCell>
     </Table.ExpandableRow>

@@ -7,7 +7,13 @@ import { Form } from 'components/form/Form';
 import { Buldings2Icon } from '@navikt/aksel-icons';
 
 import { løsBehov } from 'lib/api';
-import { getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei, Behovstype } from 'lib/utils/form';
+import {
+  getJaNeiEllerUndefined,
+  handleSubmitWithCallback,
+  JaEllerNei,
+  Behovstype,
+  JaEllerNeiOptions,
+} from 'lib/utils/form';
 import { format } from 'date-fns';
 import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 import { StudentGrunnlag } from 'lib/types/types';
@@ -38,10 +44,7 @@ export const Student = ({ behandlingsReferanse, grunnlag }: Props) => {
       type: 'radio',
       label: 'Har søker oppfyllt vilkårene i § 11-14?',
       defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.oppfyller11_14),
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
+      options: JaEllerNeiOptions,
       rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
     },
     avbruttStudieDato: {

@@ -5,9 +5,9 @@ import { useConfigForm } from 'hooks/FormHook';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/api';
-import { format } from 'date-fns';
 import { SykdomsGrunnlag } from 'lib/types/types';
-import { handleSubmitWithCallback, Behovstype } from 'lib/utils/form';
+import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
+import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
   behandlingsReferanse: string;
@@ -54,11 +54,8 @@ export const FastsettBeregning = ({ behandlingsReferanse, sykdomsgrunnlag }: Pro
               behovstype: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
               beregningVurdering: {
                 begrunnelse: data.begrunnelse,
-                ytterligereNedsattArbeidsevneDato: format(
-                  new Date(data.ytterligereNedsattArbeidsevneDato),
-                  'yyyy-MM-dd'
-                ),
-                nedsattArbeidsevneDato: format(new Date(data.nedsattArbeidsevneDato), 'yyyy-MM-dd'),
+                ytterligereNedsattArbeidsevneDato: formaterDatoForBackend(data.ytterligereNedsattArbeidsevneDato),
+                nedsattArbeidsevneDato: formaterDatoForBackend(data.nedsattArbeidsevneDato),
                 // @ts-ignore TODO feil type fra backend
                 antattÅrligInntekt: data.antattÅrligInntekt ? Number(data.antattÅrligInntekt) : undefined,
               },

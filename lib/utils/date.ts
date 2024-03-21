@@ -1,4 +1,4 @@
-import { format, isValid, parse, parseISO } from 'date-fns';
+import { format, isValid, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
 
 export const DATO_FORMATER = {
@@ -7,13 +7,13 @@ export const DATO_FORMATER = {
   ddMMyyyy_HHmm: 'dd.MM.yyyy HH:mm',
 };
 
-export function formaterDatoFødselsdag(dato: string, datoformat?: string): string {
-  return format(parseISO(dato), datoformat || DATO_FORMATER.ddMMyyyy, { locale: nb });
-}
-
-export function formaterDato(dato: Date): string {
+export function formaterDatoForFrontend(dato: Date): string {
   return format(dato, DATO_FORMATER.ddMMyyyy, { locale: nb });
 }
+
+export const formaterDatoForBackend = (dato: Date) => {
+  return format(dato, 'yyyy-MM-dd');
+};
 
 export const stringToDate = (value?: string | null) => {
   if (!value) {

@@ -7,7 +7,13 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { løsBehov } from 'lib/api';
 import { BistandsGrunnlag } from 'lib/types/types';
-import { Behovstype, getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
+import {
+  Behovstype,
+  getJaNeiEllerUndefined,
+  handleSubmitWithCallback,
+  JaEllerNei,
+  JaEllerNeiOptions,
+} from 'lib/utils/form';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
 
@@ -43,10 +49,7 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
       label: 'Er vilkårene i § 11-6 oppfylt?',
       defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForBistand),
       rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
-      options: [
-        { label: 'Ja', value: JaEllerNei.Ja },
-        { label: 'Nei', value: JaEllerNei.Nei },
-      ],
+      options: JaEllerNeiOptions,
     },
     grunner: {
       type: 'checkbox',

@@ -1,7 +1,13 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { Behovstype, getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
+import {
+  Behovstype,
+  getJaNeiEllerUndefined,
+  handleSubmitWithCallback,
+  JaEllerNei,
+  JaEllerNeiOptions,
+} from 'lib/utils/form';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
@@ -10,8 +16,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
-import { stringToDate } from 'lib/utils/date';
-import { format } from 'date-fns';
+import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
 
@@ -36,10 +41,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
         type: 'radio',
         label: 'Er arbeidsevnen nedsatt?',
         defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erArbeidsevnenNedsatt),
-        options: [
-          { label: 'Ja', value: JaEllerNei.Ja },
-          { label: 'Nei', value: JaEllerNei.Nei },
-        ],
+        options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om arbeidsevnen er nedsatt' },
       },
       begrunnelse: {
@@ -54,10 +56,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
         type: 'radio',
         label: 'Er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne? (§ 11-5)',
         defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
-        options: [
-          { label: 'Ja', value: JaEllerNei.Ja },
-          { label: 'Nei', value: JaEllerNei.Nei },
-        ],
+        options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
       },
       erNedsettelseIArbeidsevneHøyereEnnNedreGrense: {
@@ -66,10 +65,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
           ? 'Er arbeidsevnen nedsatt med minst 30%?'
           : 'Er arbeidsevnen nedsatt med minst 50%?',
         defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
-        options: [
-          { label: 'Ja', value: JaEllerNei.Ja },
-          { label: 'Nei', value: JaEllerNei.Nei },
-        ],
+        options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om arbeidsevnen er nedsatt med minst 50%' },
       },
       dokumenterBruktIVurderingen: {
@@ -106,7 +102,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse }: Props) => {
                 erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
                   data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
                 nedsattArbeidsevneDato: data.nedsattArbeidsevneDato
-                  ? format(new Date(data.nedsattArbeidsevneDato), 'yyyy-MM-dd')
+                  ? formaterDatoForBackend(data.nedsattArbeidsevneDato)
                   : undefined,
               },
             },

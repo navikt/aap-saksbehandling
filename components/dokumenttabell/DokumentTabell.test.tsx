@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Dokument, DokumentTabell } from './DokumentTabell';
-import { formaterDato } from 'lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import { DokumentTabellRad } from 'components/dokumenttabell/DokumentTabellRad';
 
@@ -54,7 +54,7 @@ describe('DokumentTabellRow', () => {
     expect(screen.getByRole('row')).toBeVisible();
     expect(screen.getByRole('link', { name: dokument.tittel })).toBeVisible();
     expect(screen.getByRole('cell', { name: dokument.journalpostId })).toBeVisible();
-    expect(screen.getByRole('cell', { name: formaterDato(dokument.åpnet ?? new Date()) })).toBeVisible();
+    expect(screen.getByRole('cell', { name: formaterDatoForFrontend(dokument.åpnet ?? new Date()) })).toBeVisible();
     expect(screen.getByRole('checkbox')).toBeVisible();
   });
 });

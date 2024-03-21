@@ -1,7 +1,13 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { Behovstype, getJaNeiEllerUndefined, handleSubmitWithCallback, JaEllerNei } from 'lib/utils/form';
+import {
+  Behovstype,
+  getJaNeiEllerUndefined,
+  handleSubmitWithCallback,
+  JaEllerNei,
+  JaEllerNeiOptions,
+} from 'lib/utils/form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
@@ -14,8 +20,7 @@ import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
 import styles from './SykdomsvurderingMedYrkesskade.module.css';
 import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
-import { format } from 'date-fns';
-import { stringToDate } from 'lib/utils/date';
+import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 
 interface Props {
@@ -40,10 +45,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         type: 'radio',
         label: 'Er arbeidsevnen nedsatt?',
         defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erArbeidsevnenNedsatt),
-        options: [
-          { label: 'Ja', value: JaEllerNei.Ja },
-          { label: 'Nei', value: JaEllerNei.Nei },
-        ],
+        options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om arbeidsevnen er nedsatt' },
       },
       begrunnelse: {
@@ -56,10 +58,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
       erSkadeSykdomEllerLyteVesentligdel: {
         type: 'radio',
         label: 'Er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne? (§ 11-5)',
-        options: [
-          { label: 'Ja', value: JaEllerNei.Ja },
-          { label: 'Nei', value: JaEllerNei.Nei },
-        ],
+        options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
         rules: {
           required: 'Du må svare på om det er sykdom, skade eller lyte som er medvirkende til nedsatt arbeidsevne.',
@@ -68,10 +67,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
       erÅrsakssammenheng: {
         type: 'radio',
         label: 'Er yrkesskaden helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen? (§ 11-22 1.ledd).',
-        options: [
-          { label: 'Ja', value: JaEllerNei.Ja },
-          { label: 'Nei', value: JaEllerNei.Nei },
-        ],
+        options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadevurdering?.erÅrsakssammenheng),
         rules: {
           required:
@@ -80,10 +76,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
       },
       erNedsettelseIArbeidsevneHøyereEnnNedreGrense: {
         type: 'radio',
-        options: [
-          { label: 'Ja', value: JaEllerNei.Ja },
-          { label: 'Nei', value: JaEllerNei.Nei },
-        ],
+        options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
         rules: { required: 'Du må svare på om arbeidsevnen er nedsatt.' },
       },
@@ -105,6 +98,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
   );
 
   const dokumenterBruktIVurderingen = form.watch('dokumenterBruktIVurderingen');
+  console.log(form.watch('nedsattArbeidsevneDato'));
 
   return (
     <VilkårsKort
@@ -129,7 +123,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
                 erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
                   data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
                 nedsattArbeidsevneDato: data.nedsattArbeidsevneDato
-                  ? format(new Date(data.nedsattArbeidsevneDato), 'yyyy-MM-dd')
+                  ? formaterDatoForBackend(data.nedsattArbeidsevneDato)
                   : undefined,
                 yrkesskadevurdering: {
                   erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,

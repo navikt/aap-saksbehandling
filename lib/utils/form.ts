@@ -1,5 +1,6 @@
 import { SubmitErrorHandler, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { FieldValues } from 'react-hook-form/dist/types';
+import { ValuePair } from 'components/input/formfield/FormField';
 
 export enum Behovstype {
   MANUELT_SATT_PÅ_VENT_KODE = '9001',
@@ -19,6 +20,11 @@ export enum JaEllerNei {
   Nei = 'nei',
 }
 
+export const JaEllerNeiOptions: ValuePair[] = [
+  { label: 'Ja', value: JaEllerNei.Ja },
+  { label: 'Nei', value: JaEllerNei.Nei },
+];
+
 export const getJaNeiEllerUndefined = (value?: boolean | null) => {
   if (value === undefined || value === null) {
     return undefined;
@@ -32,6 +38,7 @@ export const getStringEllerUndefined = (value?: number | string | null) => {
   }
   return value.toString();
 };
+
 export function handleSubmitWithCallback<FormFields extends FieldValues>(
   form: UseFormReturn<FormFields>,
   onValid: SubmitHandler<FormFields>,
