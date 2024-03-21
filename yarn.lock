@@ -2157,6 +2157,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tiptap/extension-bubble-menu@npm:^2.2.4":
+  version: 2.2.4
+  resolution: "@tiptap/extension-bubble-menu@npm:2.2.4"
+  dependencies:
+    tippy.js: "npm:^6.3.7"
+  peerDependencies:
+    "@tiptap/core": ^2.0.0
+    "@tiptap/pm": ^2.0.0
+  checksum: 10c0/df209f137e652cfa95d59530cab11a806c232b68c0b896a188c404dc2aceb0f0f255109b6e6a655af0e6d4d073b4370e44ce9e015ed96ab90705465353565a75
+  languageName: node
+  linkType: hard
+
 "@tiptap/extension-bullet-list@npm:^2.2.1":
   version: 2.2.1
   resolution: "@tiptap/extension-bullet-list@npm:2.2.1"
@@ -3053,7 +3065,7 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.4.2"
     "@testing-library/react": "npm:^14.2.2"
     "@testing-library/user-event": "npm:14.5.2"
-    "@tiptap/extension-bubble-menu": "npm:^2.2.1"
+    "@tiptap/extension-bubble-menu": "npm:^2.2.4"
     "@tiptap/extension-table": "npm:^2.2.1"
     "@tiptap/extension-table-cell": "npm:^2.2.1"
     "@tiptap/extension-table-header": "npm:^2.2.1"
