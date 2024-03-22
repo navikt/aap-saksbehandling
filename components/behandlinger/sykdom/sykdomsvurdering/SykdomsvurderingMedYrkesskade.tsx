@@ -98,7 +98,6 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
   );
 
   const dokumenterBruktIVurderingen = form.watch('dokumenterBruktIVurderingen');
-  console.log(form.watch('nedsattArbeidsevneDato'));
 
   return (
     <VilkårsKort
