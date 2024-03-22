@@ -15,20 +15,13 @@ interface Props {
 }
 
 interface FormFields {
-  nedsattArbeidsevneDato: Date;
   begrunnelse: string;
   ytterligereNedsattArbeidsevneDato: Date;
   antattÅrligInntekt: string;
 }
 
-export const FastsettBeregning = ({ behandlingsReferanse, sykdomsgrunnlag }: Props) => {
+export const FastsettBeregning = ({ behandlingsReferanse }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
-    nedsattArbeidsevneDato: {
-      type: 'date',
-      label: sykdomsgrunnlag.sykdomsvurdering?.yrkesskadevurdering?.erÅrsakssammenheng
-        ? 'Dato for når arbeidsevnen ble nedsatt med minst 30 prosent'
-        : 'Dato for når arbeidsevnen ble nedsatt med minst 50 prosent',
-    },
     begrunnelse: {
       type: 'text',
       label: 'Begrunnelse',
@@ -55,7 +48,6 @@ export const FastsettBeregning = ({ behandlingsReferanse, sykdomsgrunnlag }: Pro
               beregningVurdering: {
                 begrunnelse: data.begrunnelse,
                 ytterligereNedsattArbeidsevneDato: formaterDatoForBackend(data.ytterligereNedsattArbeidsevneDato),
-                nedsattArbeidsevneDato: formaterDatoForBackend(data.nedsattArbeidsevneDato),
                 // @ts-ignore TODO feil type fra backend
                 antattÅrligInntekt: data.antattÅrligInntekt ? Number(data.antattÅrligInntekt) : undefined,
               },
@@ -65,7 +57,6 @@ export const FastsettBeregning = ({ behandlingsReferanse, sykdomsgrunnlag }: Pro
         })}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
         <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
         <FormField form={form} formField={formFields.antattÅrligInntekt} />
       </Form>
