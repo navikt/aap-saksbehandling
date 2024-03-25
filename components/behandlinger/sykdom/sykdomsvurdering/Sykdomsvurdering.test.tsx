@@ -27,6 +27,16 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     expect(textbox).toBeVisible();
   });
 
+  it('Skal vise korrekt description på begrunnelsesfelt', async () => {
+    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
+
+    const label = screen.getByText(
+      /hvilken sykdom \/ skade \/ lyte\. hva er det mest vesentlige\. hvorfor vurderes nedsatt arbeidsevne med minst 50%\?/i
+    );
+
+    expect(label).toBeVisible();
+  });
+
   it('Skal ha et felt for om arbeidsevnen er nedsatt', () => {
     render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
     const textbox = screen.getByRole('group', { name: /er arbeidsevnen nedsatt\?/i });
@@ -47,6 +57,33 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     await VelgAtArbeidsevneErNedsatt();
     const radioGroup = screen.getByRole('group', { name: /er arbeidsevnen nedsatt med minst 50%\?/i });
     expect(radioGroup).toBeVisible();
+  });
+
+  it('Skal ha et felt for når arbeidsevnen ble nedsatt', async () => {
+    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
+    await VelgAtArbeidsevneErNedsatt();
+    const felt = screen.getByRole('textbox', { name: /hvilket år ble arbeidsevnen nedsatt\? \(§11-5\)/i });
+    expect(felt).toBeVisible();
+  });
+
+  it('Skal ikke vise felt for når arbeidsevnen ble nedsatt dersom arbeidsevnen ikke er nedsatt', () => {
+    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
+    const felt = screen.queryByRole('textbox', { name: /hvilket år ble arbeidsevnen nedsatt\? \(§11-5\)/i });
+    expect(felt).toBeNull();
+  });
+
+  it('Skal ikke vise felt for om sykdom, skade eller lyte er årsaken til nedsatt arbeidsevne dersom arbeidsevnen ikke er nedsatt', () => {
+    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
+    const radioGroup = screen.queryByRole('group', {
+      name: /er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne\? \(§ 11-5\)/i,
+    });
+    expect(radioGroup).toBeNull();
+  });
+
+  it('Skal ikke vise felt for om arbeidsevnen er nedsatt med minst 50 prosent dersom arbeidsevnen ikke er nedsatt', () => {
+    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
+    const radioGroup = screen.queryByRole('group', { name: /er arbeidsevnen nedsatt med minst 50%\?/i });
+    expect(radioGroup).toBeNull();
   });
 
   it('Skal vise feilmelding dersom begrunnelse felt ikke er besvart', async () => {
@@ -75,14 +112,13 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     expect(await screen.findByText('Du må svare på om arbeidsevnen er nedsatt med minst 50%')).toBeVisible();
   });
 
-  it('Skal vise korrekt label på begrunnelsesfelt', async () => {
+  it('Skal vise feilmelding dersom felt for hvilket år arbeisevnen ble nedsatt ikke er besvart', async () => {
     render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
+    await VelgAtArbeidsevneErNedsatt();
+    const button = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(button);
 
-    const label = screen.getByText(
-      /hvilken sykdom \/ skade \/ lyte\. hva er det mest vesentlige\. hvorfor vurderes nedsatt arbeidsevne med minst 50%\?/i
-    );
-
-    expect(label).toBeVisible();
+    expect(await screen.findByText('Du må sette en dato for skadetidspunktet')).toBeVisible();
   });
 
   async function VelgAtArbeidsevneErNedsatt() {
