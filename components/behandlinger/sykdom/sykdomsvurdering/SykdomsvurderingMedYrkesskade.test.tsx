@@ -54,8 +54,15 @@ describe('Sykdomsvurdering med yrkesskade', () => {
     expect(textbox).toBeVisible();
   });
 
+  it('Skal vise feilmelding dersom felt om arbeidsevnen er nedsatt ikke har blitt besvart', async () => {
+    const button = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(button);
+
+    expect(await screen.findByText('Du må svare på om arbeidsevnen er nedsatt')).toBeVisible();
+  });
+
   it('Skal ha felt for om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne', async () => {
-    await VelgAtArbeidsevneErNedsatt();
+    await velgAtArbeidsevneErNedsatt();
     const radiogroup = screen.getByRole('group', {
       name: /er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne\? \(§ 11-5\)/i,
     });
@@ -64,7 +71,7 @@ describe('Sykdomsvurdering med yrkesskade', () => {
   });
 
   it('Skal vise feilmelding dersom felt for om sykdom, skade eller lyte er vesentlig medvirkende ikke har blitt besvart', async () => {
-    await VelgAtArbeidsevneErNedsatt();
+    await velgAtArbeidsevneErNedsatt();
     const button = screen.getByRole('button', { name: /bekreft/i });
     await user.click(button);
 
@@ -76,7 +83,7 @@ describe('Sykdomsvurdering med yrkesskade', () => {
   });
 
   it('Skal ha felt for om yrkesskaden helt eller delvis medvirkende til nedsatt arbeidsevne', async () => {
-    await VelgAtArbeidsevneErNedsatt();
+    await velgAtArbeidsevneErNedsatt();
     const radiogroup = screen.getByRole('group', {
       name: /er yrkesskaden helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen\? \(§ 11-22 1\.ledd\)\./i,
     });
@@ -85,7 +92,7 @@ describe('Sykdomsvurdering med yrkesskade', () => {
   });
 
   it('Skal vise feilmelding dersom felt for om yrkesskaden er medvirkende ikke har blitt besvart', async () => {
-    await VelgAtArbeidsevneErNedsatt();
+    await velgAtArbeidsevneErNedsatt();
     const button = screen.getByRole('button', { name: /bekreft/i });
     await user.click(button);
 
@@ -97,14 +104,14 @@ describe('Sykdomsvurdering med yrkesskade', () => {
   });
 
   it('Skal vise korrekt label i felt for om arbeidsevnen er nedsatt dersom 11-22 ikke er besvart', async () => {
-    await VelgAtArbeidsevneErNedsatt();
+    await velgAtArbeidsevneErNedsatt();
     const radiogroup = screen.getByRole('group', { name: /er arbeidsevnen nedsatt med minst 50%\?/i });
 
     expect(radiogroup).toBeVisible();
   });
 
   it('Skal vise feilmelding dersom spørsmål om arbeidsevnen er nedsatt ikke har blitt besvart', async () => {
-    await VelgAtArbeidsevneErNedsatt();
+    await velgAtArbeidsevneErNedsatt();
     const button = screen.getByRole('button', { name: /bekreft/i });
     await user.click(button);
 
@@ -112,7 +119,7 @@ describe('Sykdomsvurdering med yrkesskade', () => {
   });
 
   it('Skal vise korrekt label i felt for om arbeidsevnen er nedsatt dersom 11-22 er oppfylt', async () => {
-    await VelgAtArbeidsevneErNedsatt();
+    await velgAtArbeidsevneErNedsatt();
     const radiogroup = screen.getByRole('group', {
       name: /er yrkesskaden helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen\? \(§ 11-22 1\.ledd\)\./i,
     });
@@ -125,7 +132,7 @@ describe('Sykdomsvurdering med yrkesskade', () => {
   });
 
   it('Skal vise korrekt label i felt for om arbeidsevnen er nedsatt dersom 11-22 ikke er oppfylt', async () => {
-    await VelgAtArbeidsevneErNedsatt();
+    await velgAtArbeidsevneErNedsatt();
     const radiogroup = screen.getByRole('group', {
       name: /er yrkesskaden helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen\? \(§ 11-22 1\.ledd\)\./i,
     });
@@ -137,23 +144,51 @@ describe('Sykdomsvurdering med yrkesskade', () => {
     expect(await screen.findByRole('group', { name: /er arbeidsevnen nedsatt med minst 50%\?/i })).toBeVisible();
   });
 
-  it('Skal ikke vise dato felt for skadetidspunkt dersom vilkåret i § 11-22 ikke er oppfylt', async () => {
-    await VelgAtArbeidsevneErNedsatt();
-    const group = screen.getByRole('group', {
-      name: /er yrkesskaden helt eller delvis medvirkende årsak til den nedsatte arbeidsevnen\? \(§ 11-22 1\.ledd\)\./i,
-    });
-    const neiValg = within(group).getByRole('radio', { name: /nei/i });
-
-    await user.click(neiValg);
+  it('skal ha et felt for hvilket år arbeidsevnen ble nedsatt', async () => {
+    await velgAtArbeidsevneErNedsatt();
+    await velgAtSykdomSkadeEllerLyteErVesentligMedvirkendeÅrsak();
+    await velgAtArbeidsevnenErNedsattMedMinst50prosent();
 
     expect(
-      await screen.queryByRole('textbox', { name: /dato for skadetidspunkt for yrkesskaden/i })
-    ).not.toBeInTheDocument();
+      await screen.findByRole('textbox', { name: /hvilket år ble arbeidsevnen nedsatt\? \(§11-5\)/i })
+    ).toBeVisible();
   });
 
-  async function VelgAtArbeidsevneErNedsatt() {
+  it('Skal vise feilmelding dersom felt for hvilket år arbeisevnen ble nedsatt ikke er besvart', async () => {
+    await velgAtArbeidsevneErNedsatt();
+    await velgAtSykdomSkadeEllerLyteErVesentligMedvirkendeÅrsak();
+    await velgAtArbeidsevnenErNedsattMedMinst50prosent();
+
+    const button = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(button);
+    expect(await screen.findByText('Du må sette en dato for når arbeidsevnen ble nedsatt')).toBeVisible();
+  });
+
+  async function velgAtArbeidsevneErNedsatt() {
     const group = screen.getByRole('group', { name: /er arbeidsevnen nedsatt\?/i });
     const jaValg = within(group).getByRole('radio', { name: /ja/i });
     await user.click(jaValg);
+  }
+
+  async function velgAtSykdomSkadeEllerLyteErVesentligMedvirkendeÅrsak() {
+    const erSykdomSkadeEllerLyteFelt = screen.getByRole('group', {
+      name: /er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne\? \(§ 11-5\)/i,
+    });
+
+    const erSykdomSkadeEllerLyteFeltJaValg = within(erSykdomSkadeEllerLyteFelt).getByRole('radio', {
+      name: /ja/i,
+    });
+
+    await user.click(erSykdomSkadeEllerLyteFeltJaValg);
+  }
+
+  async function velgAtArbeidsevnenErNedsattMedMinst50prosent() {
+    const erArbeidsevnenNedsattMedMinst50prosentFelt = screen.getByRole('group', {
+      name: /er arbeidsevnen nedsatt med minst 50%\?/i,
+    });
+    const erArbeidsevnenNedsattMedMinst50prosentFeltjaValg = within(
+      erArbeidsevnenNedsattMedMinst50prosentFelt
+    ).getByRole('radio', { name: /ja/i });
+    await user.click(erArbeidsevnenNedsattMedMinst50prosentFeltjaValg);
   }
 });

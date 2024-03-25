@@ -85,7 +85,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag }
         label: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)',
         defaultValue: stringToDate(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
         rules: {
-          required: 'Du må sette en dato for skadetidspunktet',
+          required: 'Du må sette en dato for når arbeidsevnen ble nedsatt',
         },
       },
       dokumenterBruktIVurderingen: {

@@ -15,6 +15,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     const heading = screen.getByText('Nedsatt arbeidsevne - § 11-5');
     expect(heading).toBeVisible();
   });
+
   it('skal ha en liste over tilknyttede dokumenter til vilkåret ', () => {
     render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
     const tilknyttedeDokumenterListe = screen.getByRole('list', { name: /tilknyttede dokumenter/i });
@@ -94,6 +95,14 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     expect(await screen.findByText('Du må begrunne')).toBeVisible();
   });
 
+  it('Skal vise feilmelding dersom felt om arbeidsevnen er nedsatt ikke har blitt besvart', async () => {
+    render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
+    const button = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(button);
+
+    expect(await screen.findByText('Du må svare på om arbeidsevnen er nedsatt')).toBeVisible();
+  });
+
   it('Skal vise feilmelding dersom felt for om sykdom, skade eller lyte er årsaken til nedsatt arbeidsevne ikke er besvart', async () => {
     render(<Sykdomsvurdering behandlingsReferanse={'123'} grunnlag={grunnlag} />);
     await VelgAtArbeidsevneErNedsatt();
@@ -118,7 +127,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     const button = screen.getByRole('button', { name: /bekreft/i });
     await user.click(button);
 
-    expect(await screen.findByText('Du må sette en dato for skadetidspunktet')).toBeVisible();
+    expect(await screen.findByText('Du må sette en dato for når arbeidsevnen ble nedsatt')).toBeVisible();
   });
 
   async function VelgAtArbeidsevneErNedsatt() {
