@@ -2364,9 +2364,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/pm@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "@tiptap/pm@npm:2.2.1"
+"@tiptap/pm@npm:^2.2.4":
+  version: 2.2.4
+  resolution: "@tiptap/pm@npm:2.2.4"
   dependencies:
     prosemirror-changeset: "npm:^2.2.1"
     prosemirror-collab: "npm:^1.3.1"
@@ -2386,7 +2386,7 @@ __metadata:
     prosemirror-trailing-node: "npm:^2.0.7"
     prosemirror-transform: "npm:^1.8.0"
     prosemirror-view: "npm:^1.32.7"
-  checksum: 10c0/4a5078cef2c640523609bf35f9354ab75ad4afbae5cd362bcc6567483b122e4481c51ce962658cdd78624e26cad3ddd7f64fb4f297233781dcefe270b5bfd49e
+  checksum: 10c0/b2f889c62549372acb8bcb72f4b0c306aff303aa6c461f9709535515b9840538db29d4f68d7d176af53e1557226afbdeb05910916fee878d06c05c2b83fc44b5
   languageName: node
   linkType: hard
 
@@ -3066,7 +3066,7 @@ __metadata:
     "@tiptap/extension-table-header": "npm:^2.2.1"
     "@tiptap/extension-table-row": "npm:^2.2.1"
     "@tiptap/extension-underline": "npm:^2.2.1"
-    "@tiptap/pm": "npm:^2.2.1"
+    "@tiptap/pm": "npm:^2.2.4"
     "@tiptap/react": "npm:^2.2.1"
     "@tiptap/starter-kit": "npm:^2.2.1"
     "@types/jest": "npm:^29.5.12"
