@@ -50,7 +50,7 @@ export const OpprettSak = () => {
     <form
       onSubmit={form.handleSubmit(async (data) => {
         await opprettSak({ ...data, yrkesskade: data.yrkesskade === 'true', student: data.student === 'true' });
-        mutate('api/sak/alle');
+        await mutate('api/sak/alle');
       })}
       className={styles.form}
     >
