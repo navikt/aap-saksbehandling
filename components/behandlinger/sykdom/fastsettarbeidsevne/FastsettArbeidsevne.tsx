@@ -1,15 +1,13 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Button, Heading } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { useState } from 'react';
 import {
   FastSettArbeidsevnePeriode,
   FastsettArbeidsevnePeriodeForm,
 } from 'components/fastsettarbeidsevneperiodeform/FastsettArbeidsevnePeriodeForm';
-import { FastsettArbeidsevnePeriodeTableRow } from 'components/fastsettarbeidsevneperiodetable/FastsettArbeidsevnePeriodeTableRow';
 import { FastsettArbeidsevnePeriodeTable } from 'components/fastsettarbeidsevneperiodetable/FastsettArbeidsevnePeriodeTable';
-import { PlusIcon } from '@navikt/aksel-icons';
 import { v4 as uuidv4 } from 'uuid';
 
 import styles from './FastsettArbeidsevne.module.css';
@@ -40,24 +38,7 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
       defaultOpen={false}
     >
       <div className={styles.fastsettArbeidsevne}>
-        <div className={styles.tabell}>
-          <Heading size={'small'} level={'4'}>
-            Regisrerte perioder med arbeidsevne
-          </Heading>
-          <FastsettArbeidsevnePeriodeTable>
-            {perioder.map((periode) => (
-              <FastsettArbeidsevnePeriodeTableRow key={periode.id} {...periode} />
-            ))}
-          </FastsettArbeidsevnePeriodeTable>
-          <Button
-            variant={'tertiary'}
-            size={'small'}
-            icon={<PlusIcon />}
-            onClick={() => setSkalLeggeTilNyPeriode(true)}
-          >
-            Legg til ny preiode
-          </Button>
-        </div>
+        <FastsettArbeidsevnePeriodeTable perioder={perioder} onClick={() => setSkalLeggeTilNyPeriode(true)} />
 
         {skalLeggeTilNyPeriode && (
           <FastsettArbeidsevnePeriodeForm
@@ -68,6 +49,7 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
             onAvbryt={() => setSkalLeggeTilNyPeriode(false)}
           />
         )}
+
         <form onSubmit={() => console.log('bekreft fastsettarbeidsevne', behandlingsReferanse, perioder)}>
           <Button form={'fastsettArbeidsevne'}>Bekreft</Button>
         </form>

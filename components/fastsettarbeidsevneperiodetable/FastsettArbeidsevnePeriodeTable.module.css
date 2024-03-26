@@ -1,5 +1,6 @@
-.fastsettArbeidsevne {
+.tabell {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--a-spacing-4);
 }
