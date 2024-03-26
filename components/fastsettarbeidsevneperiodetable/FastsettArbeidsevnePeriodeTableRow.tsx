@@ -13,7 +13,7 @@ export const FastsettArbeidsevnePeriodeTableRow = ({
     <Table.ExpandableRow key={id} content={<BodyLong>{begrunnelse}</BodyLong>}>
       <Table.DataCell>{formaterDatoForFrontend(fraDato)}</Table.DataCell>
       <Table.DataCell>{`${arbeidsevne} ${benevning}`}</Table.DataCell>
-      <Table.DataCell>{`${dokumenterBruktIVurderingen.join()}`}</Table.DataCell>
+      <Table.DataCell>{`${dokumenterBruktIVurderingen ? dokumenterBruktIVurderingen.join() : ''}`}</Table.DataCell>
     </Table.ExpandableRow>
   );
 };

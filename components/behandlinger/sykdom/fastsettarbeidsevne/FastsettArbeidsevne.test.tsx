@@ -20,19 +20,30 @@ describe('FastsettArbeidsevne', () => {
     expect(textbox).toBeNull();
   });
 
+  it('Skal ha knapp for å legge til ny periode', async () => {
+    await åpneVilkårskort();
+    await åpneLeggTilNyPeriode();
+    const knapp = screen.getByRole('button', { name: /legg til ny preiode/i });
+    expect(knapp).toBeVisible();
+  });
+
   it('Skal ha synlig vilkårsveiledning', async () => {
     await åpneVilkårskort();
+    await åpneLeggTilNyPeriode();
     const vilkårsveiledning = screen.getByText('Slik vurderes vilkåret');
     expect(vilkårsveiledning).toBeVisible();
   });
 
   it('Skal ha feltet begrunnelse', async () => {
     await åpneVilkårskort();
+    await åpneLeggTilNyPeriode();
     const textbox = screen.getByRole('textbox', { name: /Vurder om brukeren har arbeidsevne/i });
     expect(textbox).toBeVisible();
   });
+
   it('Begrunnelse skal ha feilmelding dersom ikke fyllt ut', async () => {
     await åpneVilkårskort();
+    await åpneLeggTilNyPeriode();
     await lagreArbeidsevnePeriode();
 
     const errorText = await screen.findByText('Du må begrunne avgjørelsen din.');
@@ -41,32 +52,47 @@ describe('FastsettArbeidsevne', () => {
     const textbox = screen.getByRole('textbox', { name: /Vurder om brukeren har arbeidsevne/i });
     expect(textbox).toBeInvalid();
   });
+
   it('Skal ha feltet dokumenterBruktIVurderingen', async () => {
     await åpneVilkårskort();
+    await åpneLeggTilNyPeriode();
     const checkboxGroup = await screen.findByRole('group', { name: 'Dokumenter funnet som er relevant for vurdering' });
     expect(checkboxGroup).toBeVisible();
   });
+
+  it('skal ha beskrivelses tekst i feltet for arbeidsevne (timer og prosent)', async () => {
+    await åpneVilkårskort();
+    await åpneLeggTilNyPeriode();
+    const beskrivelse = screen.getByText('sett opp mot en arbeidsuke på 37,5 timer');
+    expect(beskrivelse).toBeVisible();
+  });
+
   it('Skal ha feltet arbeidsevne (timer)', async () => {
     await åpneVilkårskort();
+    await åpneLeggTilNyPeriode();
     const textbox = screen.getByRole('textbox', {
-      name: /Hvor stor er arbeidsevnen sett opp mot en arbeidsuke på 37,5 timer/i,
+      name: /Hvor stor er arbeidsevnen i timer?/i,
     });
     expect(textbox).toBeVisible();
   });
+
   it('Arbeidsevne skal ha feilmelding dersom ikke fyllt ut', async () => {
     await åpneVilkårskort();
+    await åpneLeggTilNyPeriode();
     await lagreArbeidsevnePeriode();
 
     const errorText = await screen.findByText('Du må angi en arbeidsevne.');
     expect(errorText).toBeVisible();
 
     const textbox = screen.getByRole('textbox', {
-      name: /Hvor stor er arbeidsevnen sett opp mot en arbeidsuke på 37,5 timer/i,
+      name: /Hvor stor er arbeidsevnen i timer?/i,
     });
     expect(textbox).toBeInvalid();
   });
+
   it('Skal ha feltet arbeidsevne (prosent)', async () => {
     await åpneVilkårskort();
+    await åpneLeggTilNyPeriode();
     const toggle = screen.getByRole('radio', { name: /Prosent/i });
     await user.click(toggle);
     const textbox = screen.getByRole('textbox', {
@@ -74,13 +100,17 @@ describe('FastsettArbeidsevne', () => {
     });
     expect(textbox).toBeVisible();
   });
+
   it('Skal ha feltet fraDato', async () => {
     await åpneVilkårskort();
+    await åpneLeggTilNyPeriode();
     const textbox = screen.getByRole('textbox', { name: /Arbeidsevnen gjelder fra og med/i });
     expect(textbox).toBeVisible();
   });
+
   it('Fradato skal ha feilmelding dersom ikke fyllt ut', async () => {
     await åpneVilkårskort();
+    await åpneLeggTilNyPeriode();
     await lagreArbeidsevnePeriode();
 
     const errorText = await screen.findByText('Du må angi når perioden med arbeidsevne starter.');
@@ -97,5 +127,10 @@ describe('FastsettArbeidsevne', () => {
     const region = screen.getByRole('region', { name: /Reduksjon ved delvis nedsatt arbeidsevne - § 11-23 2.ledd/i });
     const button = within(region).getByRole('button');
     await user.click(button);
+  }
+
+  async function åpneLeggTilNyPeriode() {
+    const knapp = screen.getByRole('button', { name: /legg til ny preiode/i });
+    await user.click(knapp);
   }
 });

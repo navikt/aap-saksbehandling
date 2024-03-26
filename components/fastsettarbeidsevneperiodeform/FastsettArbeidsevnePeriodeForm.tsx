@@ -5,26 +5,27 @@ import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 import styles from './FastsettArbeidsevnePeriodeForm.module.css';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
-  periode?: FastSettArbeidsevnePeriode;
   onSave: (periode: FastSettArbeidsevnePeriode) => void;
+  onAvbryt: () => void;
 }
 
 export interface FastSettArbeidsevnePeriode extends FormFields {
-  benevning: string;
+  benevning: 'timer' | 'prosent';
   id: string;
 }
 
 interface FormFields {
   arbeidsevne: string;
   fraDato: Date;
-  dokumenterBruktIVurderingen: string[];
+  dokumenterBruktIVurderingen?: string[];
   begrunnelse: string;
 }
 
-export const FastsettArbeidsevnePeriodeForm = ({ periode, onSave }: Props) => {
-  const [activeToggle, setActiveToggle] = useState('timer');
+export const FastsettArbeidsevnePeriodeForm = ({ onSave, onAvbryt }: Props) => {
+  const [activeToggle, setActiveToggle] = useState<'timer' | 'prosent'>('timer');
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
@@ -40,27 +41,23 @@ export const FastsettArbeidsevnePeriodeForm = ({ periode, onSave }: Props) => {
     arbeidsevne: {
       type: 'text',
       label: '',
-      defaultValue: periode?.arbeidsevne,
+      description: 'sett opp mot en arbeidsuke på 37,5 timer',
       rules: { required: 'Du må angi en arbeidsevne.' },
     },
     fraDato: {
       type: 'date',
       label: 'Arbeidsevnen gjelder fra og med',
-      defaultValue: periode?.fraDato,
       rules: { required: 'Du må angi når perioden med arbeidsevne starter.' },
     },
   });
-  const labelTimer = 'Hvor stor er arbeidsevnen sett opp mot en arbeidsuke på 37,5 timer';
+
+  const labelTimer = 'Hvor stor er arbeidsevnen i timer?';
   const labelProsent = 'Hvor stor er arbeidsevnen i prosent?';
 
   return (
     <form
       onSubmit={form.handleSubmit((data) => {
-        if (periode) {
-          onSave({ ...data, id: periode.id, benevning: activeToggle });
-        } else {
-          onSave({ ...data, id: `placeholder-id-${Math.floor(Math.random() * 1000)}`, benevning: activeToggle });
-        }
+        onSave({ ...data, id: uuidv4(), benevning: activeToggle });
       })}
       className={styles.fastsettArbeidsEvneForm}
     >
@@ -74,21 +71,38 @@ export const FastsettArbeidsevnePeriodeForm = ({ periode, onSave }: Props) => {
         <Vilkårsveildening />
 
         <FormField form={form} formField={formFields.begrunnelse} />
-        <div>
-          <ToggleGroup defaultValue="timer" onChange={(value) => setActiveToggle(value)} size={'small'}>
+        <div className={styles.prosenttimer}>
+          <FormField
+            form={form}
+            formField={{ ...formFields.arbeidsevne, label: activeToggle === 'timer' ? labelTimer : labelProsent }}
+          />
+          <ToggleGroup
+            defaultValue="timer"
+            onChange={(value) => {
+              if (value === 'timer' || value === 'prosent') {
+                setActiveToggle(value);
+              }
+            }}
+            size={'small'}
+          >
             <ToggleGroup.Item value="timer">Timer</ToggleGroup.Item>
             <ToggleGroup.Item value="prosent">Prosent</ToggleGroup.Item>
           </ToggleGroup>
-          <span>
-            <FormField
-              form={form}
-              formField={{ ...formFields.arbeidsevne, label: activeToggle === 'timer' ? labelTimer : labelProsent }}
-            />
-            {`${activeToggle === 'timer' ? 'timer' : '%'}`}
-          </span>
         </div>
         <FormField form={form} formField={formFields.fraDato} />
-        <Button>Lagre</Button>
+        <div className={styles.knapper}>
+          <Button size={'medium'}>Lagre</Button>
+          <Button
+            variant={'secondary'}
+            size={'medium'}
+            onClick={(e) => {
+              e.preventDefault();
+              onAvbryt();
+            }}
+          >
+            Avbryt
+          </Button>
+        </div>
       </div>
     </form>
   );
