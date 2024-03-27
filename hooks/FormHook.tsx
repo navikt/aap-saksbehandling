@@ -37,6 +37,7 @@ interface FormFieldTextArea<FormFieldIds extends FieldValues> extends BaseFormFi
 interface FormFieldDate<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
   type: 'date';
   fromDate?: Date;
+  toDate?: Date;
   defaultValue?: Date;
   disableWeekends?: boolean;
 }

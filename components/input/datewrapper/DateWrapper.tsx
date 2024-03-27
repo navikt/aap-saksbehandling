@@ -12,6 +12,7 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   rules?: RegisterOptions<FormFieldValues>;
   control: Control<FormFieldValues>;
   fromDate?: Date;
+  toDate?: Date;
   selected?: Date;
   readOnly?: boolean;
 }
@@ -26,6 +27,7 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
   rules,
   disableWeekend = false,
   fromDate = FRA_DATO,
+  toDate,
   selected,
   readOnly,
 }: DateProps<FormFieldValues>) => {
@@ -46,7 +48,7 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
             disableWeekends={disableWeekend}
             dropdownCaption
             fromDate={fromDate}
-            toDate={new Date()}
+            toDate={toDate}
           >
             <DatePicker.Input
               onChange={onChange}

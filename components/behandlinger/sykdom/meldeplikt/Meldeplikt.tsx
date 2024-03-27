@@ -50,10 +50,12 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
     },
     startDato: {
       type: 'date',
+      toDate: new Date(),
       label: 'Startdato for fritak fra meldeplikt',
     },
     sluttDato: {
       type: 'date',
+      fromDate: new Date(),
       label: 'Sluttdato for fritak fra meldeplikt',
     },
   });
