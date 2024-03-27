@@ -4,7 +4,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
-import { BodyShort } from '@navikt/ds-react';
+import { Alert, BodyShort, List } from '@navikt/ds-react';
 import { FigureIcon } from '@navikt/aksel-icons';
 
 import style from './Meldeplikt.module.css';
@@ -86,11 +86,21 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
         })}
         steg={'BARNETILLEGG'}
       >
-        <div>
-          <BodyShort>Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:</BodyShort>
-          <BodyShort>a) vurderer at det vil være unødig tyngende for søker å overholde meldeplikten</BodyShort>
-          <BodyShort>b) er usikker på om det vil være unødig tyngende for søker å overholde meldeplikten</BodyShort>
-        </div>
+        <Alert variant={'info'} size={'small'}>
+          <BodyShort size={'small'}>Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:</BodyShort>
+          <List as={'ol'} size={'small'}>
+            <List.Item>
+              <BodyShort size={'small'}>
+                Vurderer at det vil være unødig tyngende for søker å overholde meldeplikten
+              </BodyShort>
+            </List.Item>
+            <List.Item>
+              <BodyShort size={'small'}>
+                Er usikker på om det vil være unødig tyngende for søker å overholde meldeplikten
+              </BodyShort>
+            </List.Item>
+          </List>
+        </Alert>
 
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />

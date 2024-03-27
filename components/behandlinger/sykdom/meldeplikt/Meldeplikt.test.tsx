@@ -42,10 +42,10 @@ describe('Meldeplikt', () => {
 
     expect(screen.getByText('Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:')).toBeVisible();
     expect(
-      screen.getByText('a) vurderer at det vil være unødig tyngende for søker å overholde meldeplikten')
+      screen.getByText('Vurderer at det vil være unødig tyngende for søker å overholde meldeplikten')
     ).toBeVisible();
     expect(
-      screen.getByText('b) er usikker på om det vil være unødig tyngende for søker å overholde meldeplikten')
+      screen.getByText('Er usikker på om det vil være unødig tyngende for søker å overholde meldeplikten')
     ).toBeVisible();
   });
 
