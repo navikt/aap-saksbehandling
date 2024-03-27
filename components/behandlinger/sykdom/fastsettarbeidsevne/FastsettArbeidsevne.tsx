@@ -17,18 +17,17 @@ interface Props {
 }
 
 export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
+  const [skalLeggeTilNyPeriode, setSkalLeggeTilNyPeriode] = useState(false);
   const [perioder, setPerioder] = useState<FastSettArbeidsevnePeriode[]>([
     {
       arbeidsevne: '0',
       id: uuidv4(),
       benevning: 'timer',
-      begrunnelse: '',
-      dokumenterBruktIVurderingen: [],
-      fraDato: new Date(),
+      begrunnelse: 'Begrunnelse for hvorfor det finnes arbeidsevne',
+      dokumenterBruktIVurderingen: ['Legeerklæring'],
+      fraDato: new Date('March 25, 2024'),
     },
   ]);
-
-  const [skalLeggeTilNyPeriode, setSkalLeggeTilNyPeriode] = useState(false);
 
   return (
     <VilkårsKort
@@ -50,9 +49,11 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
           />
         )}
 
-        <form onSubmit={() => console.log('bekreft fastsettarbeidsevne', behandlingsReferanse, perioder)}>
-          <Button form={'fastsettArbeidsevne'}>Bekreft</Button>
-        </form>
+        <div>
+          <Button onClick={() => console.log('bekreft fastsettarbeidsevne', behandlingsReferanse, perioder)}>
+            Bekreft
+          </Button>
+        </div>
       </div>
     </VilkårsKort>
   );
