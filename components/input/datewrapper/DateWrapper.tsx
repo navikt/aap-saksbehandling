@@ -1,5 +1,5 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
-import { subYears } from 'date-fns';
+import { subYears, addYears } from 'date-fns';
 import React from 'react';
 import { Control, Controller, FieldValues, RegisterOptions } from 'react-hook-form';
 import { FieldPath } from 'react-hook-form/dist/types';
@@ -18,6 +18,7 @@ export interface DateProps<FormFieldValues extends FieldValues> {
 }
 
 const FRA_DATO = subYears(new Date(), 80);
+const TIL_DATO = addYears(new Date(), 80);
 
 export const DateWrapper = <FormFieldValues extends FieldValues>({
   name,
@@ -27,7 +28,7 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
   rules,
   disableWeekend = false,
   fromDate = FRA_DATO,
-  toDate,
+  toDate = TIL_DATO,
   selected,
   readOnly,
 }: DateProps<FormFieldValues>) => {
