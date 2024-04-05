@@ -1,6 +1,6 @@
 'use client';
 
-import { opprettSak } from 'lib/api';
+import { opprettSak } from 'lib/clientApi';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
 import { Button } from '@navikt/ds-react';

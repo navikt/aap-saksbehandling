@@ -6,7 +6,7 @@ import { useConfigForm } from 'hooks/FormHook';
 import { handleSubmitWithCallback, JaEllerNei, Behovstype, JaEllerNeiOptions } from 'lib/utils/form';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
-import { løsBehov } from 'lib/api';
+import { løsBehov } from 'lib/clientApi';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
 

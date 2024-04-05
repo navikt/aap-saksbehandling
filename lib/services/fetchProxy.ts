@@ -35,7 +35,7 @@ export const fetchProxy = async <ResponseBody>(
   requestBody?: object
 ): Promise<ResponseBody> => {
   if (isLocal()) {
-    return await fetchWithRetry<ResponseBody>(url, method, '', NUMBER_OF_RETRIES, requestBody);
+    return await fetchWithRetry<ResponseBody>(url, method, 'lokaltoken', NUMBER_OF_RETRIES, requestBody);
   } else {
     const oboToken = await getOnBefalfOfToken(scope, url);
     return await fetchWithRetry<ResponseBody>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody);

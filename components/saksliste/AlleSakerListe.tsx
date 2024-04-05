@@ -1,6 +1,6 @@
 'use client';
 
-import { hentAlleSaker } from 'lib/api';
+import { hentAlleSaker } from 'lib/clientApi';
 import { SaksInfo } from 'lib/types/types';
 import Link from 'next/link';
 import useSWR from 'swr';

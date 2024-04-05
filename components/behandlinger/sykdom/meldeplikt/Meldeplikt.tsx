@@ -9,7 +9,7 @@ import { FigureIcon } from '@navikt/aksel-icons';
 
 import style from './Meldeplikt.module.css';
 import { FritakMeldepliktGrunnlag } from 'lib/types/types';
-import { løsBehov } from 'lib/api';
+import { løsBehov } from 'lib/clientApi';
 import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';

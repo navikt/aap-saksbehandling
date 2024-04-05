@@ -1,5 +1,5 @@
 import { Dispatch, useCallback, useEffect, useState } from 'react';
-import { hentBrevmalFraSanity } from 'lib/api';
+import { hentBrevmalFraSanity } from 'lib/clientApi';
 import { Brevmal } from 'lib/utils/sanity';
 
 export function useBrev(): {

@@ -5,7 +5,7 @@ import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
-import { løsBehov } from 'lib/api';
+import { løsBehov } from 'lib/clientApi';
 import { BistandsGrunnlag } from 'lib/types/types';
 import {
   Behovstype,

@@ -14,7 +14,7 @@ import { FormField } from 'components/input/formfield/FormField';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { Alert, Label, Link, List } from '@navikt/ds-react';
 import { SykdomsGrunnlag } from 'lib/types/types';
-import { løsBehov } from 'lib/api';
+import { løsBehov } from 'lib/clientApi';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 

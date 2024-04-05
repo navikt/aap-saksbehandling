@@ -6,7 +6,7 @@ import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
 import { Buldings2Icon } from '@navikt/aksel-icons';
 
-import { løsBehov } from 'lib/api';
+import { løsBehov } from 'lib/clientApi';
 import {
   getJaNeiEllerUndefined,
   handleSubmitWithCallback,

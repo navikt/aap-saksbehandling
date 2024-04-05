@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Detail, Label } from '@navikt/ds-react';
-import { hentSaksinfo } from 'lib/api';
+import { hentSaksinfo } from 'lib/clientApi';
 import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { hentPersonInformasjonForIdent } from 'lib/services/pdlservice/pdlService';
 

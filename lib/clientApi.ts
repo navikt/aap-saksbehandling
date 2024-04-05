@@ -1,7 +1,7 @@
 import { LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo } from './types/types';
 import { Brevmal } from 'lib/utils/sanity';
 
-export async function fetcher<ResponseBody>(
+export async function fetchProxy<ResponseBody>(
   url: string,
   method: 'GET' | 'POST',
   body?: object
@@ -10,6 +10,7 @@ export async function fetcher<ResponseBody>(
     const res = await fetch(url, {
       method,
       body: body && JSON.stringify(body),
+      cache: 'no-store',
     });
 
     const data = await res.json();
@@ -25,26 +26,20 @@ export async function fetcher<ResponseBody>(
   }
 }
 
-export function finnSak(ident: string) {
-  return fetcher<SaksInfo[]>('http://localhost:3000/api/sak/finn', 'POST', {
-    ident: ident,
-  });
-}
-
 export function opprettSak(sak: OpprettTestcase) {
-  return fetcher('/api/test/opprett', 'POST', sak);
+  return fetchProxy('/api/test/opprett', 'POST', sak);
 }
 
 export function hentAlleSaker() {
-  return fetcher<SaksInfo[]>('/api/sak/alle', 'GET');
+  return fetchProxy<SaksInfo[]>('/api/sak/alle', 'GET');
 }
 
 export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
-  return fetcher('/api/behandling/los-behov/', 'POST', avklaringsBehov);
+  return fetchProxy('/api/behandling/los-behov/', 'POST', avklaringsBehov);
 }
 
 export function hentBrevmalFraSanity(brevmalid: string) {
-  return fetcher<Brevmal>(`/api/sanity/brevmal/${brevmalid}`, 'GET');
+  return fetchProxy<Brevmal>(`/api/sanity/brevmal/${brevmalid}`, 'GET');
 }
 
 export async function hentSaksinfo() {
@@ -58,16 +53,5 @@ export async function hentSaksinfo() {
       navn: 'Marte Kirkerud',
       tidspunkt: '12.12.2020 kl 12:12',
     },
-  };
-}
-
-export async function hentAldersvurdering() {
-  return {
-    detaljer: {
-      name: 'Fødselsdato',
-      value: '12.12.2020 (18 år)',
-    },
-    saksopplysninger: [{ kilde: 'Digital søknad', dato: '10.10.2023' }],
-    behandlingsform: 'AUTOMATISK',
   };
 }
