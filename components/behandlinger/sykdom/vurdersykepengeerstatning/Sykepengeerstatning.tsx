@@ -3,15 +3,23 @@
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FigureIcon } from '@navikt/aksel-icons';
 import { useConfigForm } from 'hooks/FormHook';
-import { handleSubmitWithCallback, JaEllerNei, Behovstype, JaEllerNeiOptions } from 'lib/utils/form';
+import {
+  handleSubmitWithCallback,
+  JaEllerNei,
+  Behovstype,
+  JaEllerNeiOptions,
+  getJaNeiEllerUndefined,
+} from 'lib/utils/form';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/clientApi';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
+import { SykepengeerstatningGrunnlag } from 'lib/types/types';
 
 interface Props {
   behandlingsReferanse: string;
+  grunnlag: SykepengeerstatningGrunnlag;
 }
 
 interface FormFields {
@@ -21,7 +29,8 @@ interface FormFields {
   grunn: string[];
 }
 
-export const Sykepengeerstatning = ({ behandlingsReferanse }: Props) => {
+export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag }: Props) => {
+  console.log('sykepengererstatningsgrunnlag', grunnlag);
   const { form, formFields } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
@@ -33,12 +42,14 @@ export const Sykepengeerstatning = ({ behandlingsReferanse }: Props) => {
         type: 'textarea',
         label: 'Vurder om søker har rett til sykepengeerstatning',
         rules: { required: 'Du må begrunne avgjørelsen din.' },
+        defaultValue: grunnlag?.begrunnelse,
       },
       erOppfylt: {
         type: 'radio',
         label: 'Krav på sykepengeerstatning?',
         rules: { required: 'Du må ta stilling til om søkeren har rett på AAP som sykepengeerstatning.' },
         options: JaEllerNeiOptions,
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.harRettPå),
       },
       grunn: {
         type: 'checkbox',

@@ -11,6 +11,7 @@ import {
   SaksInfo,
   StudentGrunnlag,
   SykdomsGrunnlag,
+  SykepengeerstatningGrunnlag,
   UtvidetSaksInfo,
 } from 'lib/types/types';
 import { fetchProxy } from 'lib/services/fetchProxy';
@@ -53,6 +54,12 @@ export const hentSykdomsGrunnlag = async (behandlingsReferanse: string): Promise
   return await fetchProxy<SykdomsGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentSykepengerErstatningGrunnlag = async (
+  behandlingsReferanse: string
+): Promise<SykepengeerstatningGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/sykepengergrunnlag`;
+  return await fetchProxy<SykepengeerstatningGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
 export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string): Promise<FritakMeldepliktGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/fritak-meldeplikt`;
   return await fetchProxy<FritakMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
