@@ -32,3 +32,9 @@ Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på Git
 ---
 
 Interne henvendelser kan sendes via Slack i kanalen #po-aap-team-aap.
+
+# Åpen kildekode
+
+Løsningen er ikke produksjonssatt og vi har derfor vurdert at vi på nåværende tidspunkt ikke gjør kildekoden åpen av følgende grunn:
+
+- kode som implementerer lovendringer og forskrifter som ikke er ferdig behandlet.
