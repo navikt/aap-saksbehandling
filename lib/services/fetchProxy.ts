@@ -61,6 +61,7 @@ const fetchWithRetry = async <ResponseBody>(
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
+    next: { revalidate: 0 },
   });
 
   // Mulige feilmeldinger:

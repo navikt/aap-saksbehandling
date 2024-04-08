@@ -16,7 +16,7 @@ import {
 import { fetchProxy } from 'lib/services/fetchProxy';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
-export const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
+const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
 
 export const hentBehandling = async (behandlingsReferanse: string): Promise<DetaljertBehandling> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}`;
