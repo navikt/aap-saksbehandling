@@ -11,42 +11,52 @@ describe('Toolbar', () => {
   beforeEach(() => {
     render(<ToolbarWrapper />);
   });
-  test('har knapp for å angre', () => {
-    expect(screen.getByRole('button', { name: 'Angre' })).toBeVisible();
+  test('har knapp for å angre', async () => {
+    const button = await screen.findByRole('button', { name: 'Angre' });
+    expect(button).toBeVisible();
   });
-  test('har knapp for H1', () => {
-    expect(screen.getByRole('button', { name: 'H1' })).toBeVisible();
-  });
-
-  test('har knapp for H2', () => {
-    expect(screen.getByRole('button', { name: 'H2' })).toBeVisible();
+  test('har knapp for H1', async () => {
+    const heading = await screen.findByRole('button', { name: 'H1' });
+    expect(heading).toBeVisible();
   });
 
-  test('har knapp for H3', () => {
-    expect(screen.getByRole('button', { name: 'H3' })).toBeVisible();
+  test('har knapp for H2', async () => {
+    const heading = await screen.findByRole('button', { name: 'H2' });
+    expect(heading).toBeVisible();
   });
 
-  test('har knapp for H4', () => {
-    expect(screen.getByRole('button', { name: 'H4' })).toBeVisible();
+  test('har knapp for H3', async () => {
+    const heading = await screen.findByRole('button', { name: 'H3' });
+    expect(heading).toBeVisible();
   });
 
-  test('har knapp for bold', () => {
-    expect(screen.getByRole('button', { name: 'B' })).toBeVisible();
+  test('har knapp for H4', async () => {
+    const heading = await screen.findByRole('button', { name: 'H4' });
+    expect(heading).toBeVisible();
   });
 
-  test('har knapp for kursiv', () => {
-    expect(screen.getByRole('button', { name: 'I' })).toBeVisible();
+  test('har knapp for bold', async () => {
+    const button = await screen.findByRole('button', { name: 'B' });
+    expect(button).toBeVisible();
   });
 
-  test('har knapp for punktliste', () => {
-    expect(screen.getByRole('button', { name: 'Punktliste' })).toBeVisible();
+  test('har knapp for kursiv', async () => {
+    const button = await screen.findByRole('button', { name: 'I' });
+    expect(button).toBeVisible();
   });
 
-  test('har knapp for nummerert liste', () => {
-    expect(screen.getByRole('button', { name: 'Nummerert liste' })).toBeVisible();
+  test('har knapp for punktliste', async () => {
+    const button = await screen.findByRole('button', { name: 'Punktliste' });
+    expect(button).toBeVisible();
   });
 
-  test('har knapp for å sette inn tabell', () => {
-    expect(screen.getByRole('button', { name: 'Sett inn tabell' })).toBeVisible();
+  test('har knapp for nummerert liste', async () => {
+    const button = await screen.findByRole('button', { name: 'Nummerert liste' });
+    expect(button).toBeVisible();
+  });
+
+  test('har knapp for å sette inn tabell', async () => {
+    const button = await screen.findByRole('button', { name: 'Sett inn tabell' });
+    expect(button).toBeVisible();
   });
 });
