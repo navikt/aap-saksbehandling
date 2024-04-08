@@ -23,7 +23,7 @@ export const OpprettSak = () => {
     },
     fødselsdato: {
       type: 'text',
-      defaultValue: '2020-01-01',
+      defaultValue: '2000-01-01',
       label: 'Fødselsdato',
     },
     yrkesskade: {
