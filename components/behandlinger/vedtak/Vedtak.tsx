@@ -2,6 +2,7 @@ import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/fo
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
+import { FatteVedtakMedDataFetching } from 'components/behandlinger/vedtak/fattevedtak/FatteVedtakMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -19,6 +20,14 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
           return (
             <StegSuspense key={steg}>
               <ForeslåVedtakMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+            </StegSuspense>
+          );
+        }
+
+        if (steg === 'FATTE_VEDTAK') {
+          return (
+            <StegSuspense key={steg}>
+              <FatteVedtakMedDataFetching behandlingsReferanse={behandlingsReferanse} />
             </StegSuspense>
           );
         }

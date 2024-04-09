@@ -6,7 +6,8 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { BehandlingResultat, FatteVedtakGrunnlag } from 'lib/types/types';
 import { Vilkårsoppsummering } from 'components/vilkårsoppsummering/Vilkårsoppsummering';
-import { handleSubmitWithCallback } from 'lib/utils/form';
+import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
+import { løsBehov } from 'lib/clientApi';
 
 interface Props {
   behandlingsReferanse: string;
@@ -19,6 +20,7 @@ interface FormFields {
 }
 
 export const ForeslåVedtak = ({ behandlingsReferanse, grunnlag, behandlingResultat }: Props) => {
+  console.log(grunnlag);
   const { formFields, form } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
@@ -31,8 +33,15 @@ export const ForeslåVedtak = ({ behandlingsReferanse, grunnlag, behandlingResul
     <VilkårsKort heading="Foreslå vedtak" steg={'FORESLÅ_VEDTAK'}>
       <Form
         steg="FORESLÅ_VEDTAK"
-        onSubmit={handleSubmitWithCallback(form, () => {
-          console.log(behandlingsReferanse, grunnlag);
+        onSubmit={handleSubmitWithCallback(form, async (data) => {
+          await løsBehov({
+            behandlingVersjon: 0,
+            behov: {
+              behovstype: Behovstype.FORESLÅ_VEDTAK_KODE,
+              foreslåvedtakVurdering: data.begrunnelse,
+            },
+            referanse: behandlingsReferanse,
+          });
         })}
       >
         <Vilkårsoppsummering behandlingResultat={behandlingResultat} />
