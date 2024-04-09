@@ -1899,12 +1899,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sanity/overlays@npm:^2.3.30":
-  version: 2.3.30
-  resolution: "@sanity/overlays@npm:2.3.30"
+"@sanity/overlays@npm:^2.3.33":
+  version: 2.3.33
+  resolution: "@sanity/overlays@npm:2.3.33"
   dependencies:
-    "@sanity/visual-editing": "npm:1.8.4"
-  checksum: 10c0/442255e4442df4fefbba265b696f61c7564a476957ab3c5466adc54b88ff9c0efa90b890530b14a4dc4de5b6300101b70e4fbef7256bac3cf0f6ca702238ff90
+    "@sanity/visual-editing": "npm:1.8.7"
+  checksum: 10c0/d10756f98dd14099d7c253c7848d4c37e0b05cacd746a9a06fc9e229f502883549fa8df0179c7fa9bb197b096b1839e44493bd9fd1a8c61e9eede755e41c26be
   languageName: node
   linkType: hard
 
@@ -1946,6 +1946,17 @@ __metadata:
   peerDependencies:
     "@sanity/client": ^6.15.7
   checksum: 10c0/10ffea506b583a9c52f306df4a5c2f0af9582bdfb60974a62e24b2af2dd58a3817aeaba8d59ed66e1cf37a2847361b3b2390267879aace1fa47bd05a56da754c
+  languageName: node
+  linkType: hard
+
+"@sanity/preview-url-secret@npm:^1.6.7":
+  version: 1.6.7
+  resolution: "@sanity/preview-url-secret@npm:1.6.7"
+  dependencies:
+    "@sanity/uuid": "npm:3.0.2"
+  peerDependencies:
+    "@sanity/client": ^6.15.11
+  checksum: 10c0/155c4a1d6ab5d8d2c3a960809ebe6c42d242ef8aef4792de50094fbf8833cb1a746e46803d268cb940926e21d6acf3cc28b5762771ccce6eed4c65421bfbd67c
   languageName: node
   linkType: hard
 
@@ -2011,6 +2022,38 @@ __metadata:
     svelte:
       optional: true
   checksum: 10c0/1363a8e1dad0ee31a5aed096828d39963dea75399ab7e4e158b45478925d6c0e6c8e711f667daa521e809db32375fe1e59cd8503dcc531c557d3e35af230d221
+  languageName: node
+  linkType: hard
+
+"@sanity/visual-editing@npm:1.8.7":
+  version: 1.8.7
+  resolution: "@sanity/visual-editing@npm:1.8.7"
+  dependencies:
+    "@sanity/preview-url-secret": "npm:^1.6.7"
+    "@vercel/stega": "npm:0.1.0"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+    react-is: "npm:18.2.0"
+    scroll-into-view-if-needed: "npm:^3.1.0"
+    valibot: "npm:0.30.0"
+  peerDependencies:
+    "@remix-run/react": ">= 2"
+    "@sanity/client": ^6.15.11
+    "@sveltejs/kit": ">= 2"
+    next: ">= 13"
+    svelte: ">= 4"
+  peerDependenciesMeta:
+    "@remix-run/react":
+      optional: true
+    "@sanity/client":
+      optional: true
+    "@sveltejs/kit":
+      optional: true
+    next:
+      optional: true
+    svelte:
+      optional: true
+  checksum: 10c0/5b6d5c7ec8bcd023998064bfdd67de09049caed50e8663f9585389715a2002dd63533fd7a8d5163de84b9d9905a3bbc23a5001e38d1e9b13987589de9c87d8fa
   languageName: node
   linkType: hard
 
@@ -3062,7 +3105,7 @@ __metadata:
     "@navikt/oasis": "npm:^3.2.3"
     "@portabletext/react": "npm:^3.0.15"
     "@sanity/client": "npm:^6.15.7"
-    "@sanity/overlays": "npm:^2.3.30"
+    "@sanity/overlays": "npm:^2.3.33"
     "@sanity/react-loader": "npm:^1.9.5"
     "@sanity/types": "npm:^3.36.2"
     "@testing-library/jest-dom": "npm:^6.4.2"
