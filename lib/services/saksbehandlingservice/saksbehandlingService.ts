@@ -12,7 +12,6 @@ import {
   StudentGrunnlag,
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
-  UtvidetSaksInfo,
 } from 'lib/types/types';
 import { fetchProxy } from 'lib/services/fetchProxy';
 
@@ -29,10 +28,10 @@ export const hentBehandling = async (behandlingsReferanse: string): Promise<Deta
   }
 };
 
-export const hentSak = async (saksnummer: string): Promise<UtvidetSaksInfo> => {
+export const hentSak = async (saksnummer: string): Promise<SaksInfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}`;
   try {
-    return await fetchProxy<UtvidetSaksInfo>(url, saksbehandlingApiScope, 'GET');
+    return await fetchProxy<SaksInfo>(url, saksbehandlingApiScope, 'GET');
   } catch (e) {
     console.log(`Fant ikke sak med referanse ${saksnummer}`);
     notFound();

@@ -18,6 +18,7 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Saksnummer</Table.HeaderCell>
+          <Table.HeaderCell>Ident</Table.HeaderCell>
           <Table.HeaderCell>Fra</Table.HeaderCell>
           <Table.HeaderCell>Til</Table.HeaderCell>
         </Table.Row>
@@ -28,6 +29,7 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
             <Table.DataCell>
               <Link href={`/sak/${sak.saksnummer}/`}>{sak.saksnummer}</Link>
             </Table.DataCell>
+            <Table.DataCell>{sak.ident}</Table.DataCell>
             <Table.DataCell>{formaterDatoForFrontend(sak.periode.fom)}</Table.DataCell>
             <Table.DataCell>{formaterDatoForFrontend(sak.periode.tom)}</Table.DataCell>
           </Table.Row>
