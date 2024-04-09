@@ -5,6 +5,7 @@ import { SaksInfo } from 'lib/types/types';
 import Link from 'next/link';
 import useSWR from 'swr';
 import { Table } from '@navikt/ds-react';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   alleSaker: SaksInfo[];
@@ -27,8 +28,8 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
             <Table.DataCell>
               <Link href={`/sak/${sak.saksnummer}/`}>{sak.saksnummer}</Link>
             </Table.DataCell>
-            <Table.DataCell>{sak.periode.fom}</Table.DataCell>
-            <Table.DataCell>{sak.periode.tom}</Table.DataCell>
+            <Table.DataCell>{formaterDatoForFrontend(sak.periode.fom)}</Table.DataCell>
+            <Table.DataCell>{formaterDatoForFrontend(sak.periode.tom)}</Table.DataCell>
           </Table.Row>
         ))}
       </Table.Body>

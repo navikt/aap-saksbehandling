@@ -7,7 +7,7 @@ export const DATO_FORMATER = {
   ddMMyyyy_HHmm: 'dd.MM.yyyy HH:mm',
 };
 
-export function formaterDatoForFrontend(dato: Date): string {
+export function formaterDatoForFrontend(dato: Date | string): string {
   return format(dato, DATO_FORMATER.ddMMyyyy, { locale: nb });
 }
 
