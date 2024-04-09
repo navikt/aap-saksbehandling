@@ -19,7 +19,7 @@ import { SykepengeerstatningGrunnlag } from 'lib/types/types';
 
 interface Props {
   behandlingsReferanse: string;
-  grunnlag: SykepengeerstatningGrunnlag;
+  grunnlag?: SykepengeerstatningGrunnlag;
 }
 
 interface FormFields {
