@@ -4,13 +4,13 @@ import { OpprettSak } from 'components/opprettsak/OpprettSak';
 import { AlleSakerListe } from 'components/saksliste/AlleSakerListe';
 
 import styles from './page.module.css';
+import { isLocal } from 'lib/utils/environment';
 
 const Page = async () => {
   const alleSaker = await hentAlleSaker();
   return (
     <main className={styles.main}>
-      <h1>Saksoversikt page</h1>
-      <OpprettSak />
+      {isLocal() && <OpprettSak />}
       <AlleSakerListe alleSaker={alleSaker} />
     </main>
   );
