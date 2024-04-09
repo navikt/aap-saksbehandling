@@ -19,7 +19,6 @@ export type DetaljertBehandling = components['schemas']['no.nav.aap.behandlingsf
 export type BehandlingFlytOgTilstand =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingFlytOgTilstandDto'];
 export type FlytGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.FlytGruppe'];
-export type FlytSteg = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.FlytSteg'];
 
 export type LøsAvklaringsbehovPåBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.flate.LøsAvklaringsbehovPåBehandling'];

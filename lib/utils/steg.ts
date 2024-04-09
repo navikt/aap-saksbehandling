@@ -12,7 +12,7 @@ export const getStegSomSkalVises = (gruppe: StegGruppe, flyt: BehandlingFlytOgTi
 
 export interface DetaljertSteg {
   navn: string;
-  paragraf: string;
+  paragraf?: string;
 }
 
 export const mapStegTypeTilDetaljertSteg = (stegType: StegType): DetaljertSteg => {
@@ -42,6 +42,24 @@ export const mapStegTypeTilDetaljertSteg = (stegType: StegType): DetaljertSteg =
         navn: 'Sykepengeerstatning',
         paragraf: '11-13',
       };
+    }
+    case 'FASTSETT_ARBEIDSEVNE': {
+      return {
+        navn: 'Fastsett arbeidsevne',
+        paragraf: '11-23',
+      };
+    }
+    case 'FASTSETT_BEREGNINGSTIDSPUNKT': {
+      return {
+        navn: 'Fastsett beregningstidspunkt',
+        paragraf: '11-19',
+      };
+    }
+    case 'FORESLÅ_VEDTAK': {
+      return { navn: 'Foreslå vedtak' };
+    }
+    case 'FATTE_VEDTAK': {
+      return { navn: 'Fatte vedtak' };
     }
     default:
       return {
