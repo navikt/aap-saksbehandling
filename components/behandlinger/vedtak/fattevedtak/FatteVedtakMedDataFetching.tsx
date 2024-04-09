@@ -1,6 +1,7 @@
 import { FatteVedtak } from 'components/behandlinger/vedtak/fattevedtak/FatteVedtak';
 import {
   hentBistandsbehovGrunnlag,
+  hentFatteVedtakGrunnlang,
   hentStudentGrunnlag,
   hentSykdomsGrunnlag,
   hentSykepengerErstatningGrunnlag,
@@ -12,14 +13,21 @@ interface Props {
 }
 
 export const FatteVedtakMedDataFetching = async ({ behandlingsReferanse }: Props) => {
-  const [sykdomsgrunnlag, studentGrunnlag, bistandsbehovGrunnlag, sykepengeerstatningGrunnlag, meldepliktGrunnlag] =
-    await Promise.all([
-      hentSykdomsGrunnlag(behandlingsReferanse),
-      hentStudentGrunnlag(behandlingsReferanse),
-      hentBistandsbehovGrunnlag(behandlingsReferanse),
-      hentSykepengerErstatningGrunnlag(behandlingsReferanse),
-      hentUnntakMeldepliktGrunnlag(behandlingsReferanse),
-    ]);
+  const [
+    sykdomsgrunnlag,
+    studentGrunnlag,
+    bistandsbehovGrunnlag,
+    sykepengeerstatningGrunnlag,
+    meldepliktGrunnlag,
+    fatteVedtakGrunnlag,
+  ] = await Promise.all([
+    hentSykdomsGrunnlag(behandlingsReferanse),
+    hentStudentGrunnlag(behandlingsReferanse),
+    hentBistandsbehovGrunnlag(behandlingsReferanse),
+    hentSykepengerErstatningGrunnlag(behandlingsReferanse),
+    hentUnntakMeldepliktGrunnlag(behandlingsReferanse),
+    hentFatteVedtakGrunnlang(behandlingsReferanse),
+  ]);
 
   return (
     <FatteVedtak
@@ -29,6 +37,7 @@ export const FatteVedtakMedDataFetching = async ({ behandlingsReferanse }: Props
       sykdomsGrunnlag={sykdomsgrunnlag}
       bistandsGrunnlag={bistandsbehovGrunnlag}
       fritakMeldepliktGrunnlag={meldepliktGrunnlag}
+      fatteVedtakGrunnlag={fatteVedtakGrunnlag}
     />
   );
 };

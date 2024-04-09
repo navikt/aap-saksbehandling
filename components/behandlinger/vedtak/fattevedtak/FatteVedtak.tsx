@@ -3,6 +3,7 @@
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import {
   BistandsGrunnlag,
+  FatteVedtakGrunnlag,
   FritakMeldepliktGrunnlag,
   StudentGrunnlag,
   SykdomsGrunnlag,
@@ -16,6 +17,7 @@ interface Props {
   bistandsGrunnlag: BistandsGrunnlag;
   sykepengeerstatningGrunnlag: SykepengeerstatningGrunnlag;
   fritakMeldepliktGrunnlag: FritakMeldepliktGrunnlag;
+  fatteVedtakGrunnlag: FatteVedtakGrunnlag;
 }
 
 export const FatteVedtak = ({
@@ -25,12 +27,15 @@ export const FatteVedtak = ({
   studentGrunnlag,
   sykdomsGrunnlag,
   bistandsGrunnlag,
+  fatteVedtakGrunnlag,
 }: Props) => {
-  console.log(fritakMeldepliktGrunnlag);
-  console.log(sykepengeerstatningGrunnlag);
-  console.log(studentGrunnlag);
-  console.log(sykdomsGrunnlag);
-  console.log(bistandsGrunnlag);
+  console.log('fritakMeldepliktGrunnlag', fritakMeldepliktGrunnlag);
+  console.log('sykepengeerstatningGrunnlag', sykepengeerstatningGrunnlag);
+  console.log('studentGrunnlag', studentGrunnlag);
+  console.log('sykdomsGrunnlag', sykdomsGrunnlag);
+  console.log('bistandsGrunnlag', bistandsGrunnlag);
+  console.log('fatteVedtakGrunnlag', fatteVedtakGrunnlag);
+
   return (
     <VilkårsKort heading={'Fatte vedtak'} steg={'FATTE_VEDTAK'}>
       {behandlingsReferanse}

@@ -4,14 +4,13 @@ import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
-import { BehandlingResultat, FatteVedtakGrunnlag } from 'lib/types/types';
+import { BehandlingResultat } from 'lib/types/types';
 import { Vilkårsoppsummering } from 'components/vilkårsoppsummering/Vilkårsoppsummering';
 import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
 import { løsBehov } from 'lib/clientApi';
 
 interface Props {
   behandlingsReferanse: string;
-  grunnlag: FatteVedtakGrunnlag;
   behandlingResultat: BehandlingResultat;
 }
 
@@ -19,8 +18,7 @@ interface FormFields {
   begrunnelse: string;
 }
 
-export const ForeslåVedtak = ({ behandlingsReferanse, grunnlag, behandlingResultat }: Props) => {
-  console.log(grunnlag);
+export const ForeslåVedtak = ({ behandlingsReferanse, behandlingResultat }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
