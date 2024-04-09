@@ -30,7 +30,6 @@ interface FormFields {
 }
 
 export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag }: Props) => {
-  console.log('sykepengererstatningsgrunnlag', grunnlag);
   const { form, formFields } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
