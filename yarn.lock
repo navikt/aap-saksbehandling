@@ -714,24 +714,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-core@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "@grafana/faro-core@npm:1.5.0"
+"@grafana/faro-core@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "@grafana/faro-core@npm:1.5.1"
   dependencies:
     "@opentelemetry/api": "npm:^1.7.0"
     "@opentelemetry/otlp-transformer": "npm:^0.48.0"
-  checksum: 10c0/36a7211ba405839412c7016d4196e831c8de3d1d0de02555efb28c8d1c96425dbc83de17883b06f2bca23838888cbf92263214427580e517282c70d46ad12048
+  checksum: 10c0/43c1c60c1c9530a14318535ec0287b19d9667463001ffe1fb69e969f87199ed89f097e0e0fa6ad294d13bdb1a662102aac6e416aa775044641912f9149897605
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "@grafana/faro-web-sdk@npm:1.5.0"
+"@grafana/faro-web-sdk@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "@grafana/faro-web-sdk@npm:1.5.1"
   dependencies:
-    "@grafana/faro-core": "npm:^1.5.0"
+    "@grafana/faro-core": "npm:^1.5.1"
     ua-parser-js: "npm:^1.0.32"
     web-vitals: "npm:^3.1.1"
-  checksum: 10c0/c91e63981d52362f9b9b4072a8601608ee347dbe481d458a02284167caf4b15d5381c142e4550a2a6bf1abfcb71317b1ed9143c08af33b5115d04a33b5ddc357
+  checksum: 10c0/1db9ee25d12e93f42d8c7a1c8dab2cbc3672f7074854a316a70faf94f46c93a8bd912d0b338cd5234b02c1e99d8c600145b6a478331664d636a91e759e13399d
   languageName: node
   linkType: hard
 
@@ -2116,9 +2116,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^14.2.2":
-  version: 14.2.2
-  resolution: "@testing-library/react@npm:14.2.2"
+"@testing-library/react@npm:^14.3.0":
+  version: 14.3.0
+  resolution: "@testing-library/react@npm:14.3.0"
   dependencies:
     "@babel/runtime": "npm:^7.12.5"
     "@testing-library/dom": "npm:^9.0.0"
@@ -2126,7 +2126,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 10c0/ab36707f6701a4a56dd217e16e00d6326e0f760bb2e716245422c7500a0b94efcd351d0aa89c4fab2916e6ebc68c983cec6b3ae0804de813cafc913a612668f6
+  checksum: 10c0/2a2529d2bd428074654f75a313c55a33b59e7ab497ff5adcf208b59afd96b19e1e565da48289fdcf898348a0227caef4b43ac888003b6a992331d4c12a488bfc
   languageName: node
   linkType: hard
 
@@ -3061,7 +3061,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "aap-saksbehandling@workspace:."
   dependencies:
-    "@grafana/faro-web-sdk": "npm:^1.5.0"
+    "@grafana/faro-web-sdk": "npm:^1.5.1"
     "@navikt/aap-felles-css": "npm:^0.0.97"
     "@navikt/aap-felles-prettier": "npm:^0.0.97"
     "@navikt/aap-felles-react": "npm:^0.0.97"
@@ -3078,7 +3078,7 @@ __metadata:
     "@sanity/react-loader": "npm:^1.9.9"
     "@sanity/types": "npm:^3.36.4"
     "@testing-library/jest-dom": "npm:^6.4.2"
-    "@testing-library/react": "npm:^14.2.2"
+    "@testing-library/react": "npm:^14.3.0"
     "@testing-library/user-event": "npm:14.5.2"
     "@tiptap/extension-bubble-menu": "npm:^2.2.6"
     "@tiptap/extension-table": "npm:^2.2.6"
