@@ -7,6 +7,7 @@ import { HGrid, Tag } from 'components/DsClient';
 
 import styles from './layout.module.css';
 import { StegGruppeIndikator } from 'components/steggruppeindikator/StegGruppeIndikator';
+import { ToTrinnskontrollMedDataFetching } from 'components/totrinsskontroll/ToTrinnskontrollMedDataFetching';
 
 interface Props {
   children: ReactNode;
@@ -42,7 +43,9 @@ const Layout = async ({ children, params }: Props) => {
 
       <HGrid columns={'3fr 1fr'} className={styles.kolonner}>
         {children}
-        <div className={`${styles.kolonne} ${styles.høyrekolonne}`}>hei pello</div>
+        <div className={`${styles.kolonne} ${styles.høyrekolonne}`}>
+          <ToTrinnskontrollMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
+        </div>
       </HGrid>
     </div>
   );

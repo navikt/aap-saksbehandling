@@ -1,3 +1,5 @@
+'use client';
+
 import { useConfigForm } from 'hooks/FormHook';
 import { JaEllerNeiOptions } from 'lib/utils/form';
 import { FormField } from 'components/input/formfield/FormField';
