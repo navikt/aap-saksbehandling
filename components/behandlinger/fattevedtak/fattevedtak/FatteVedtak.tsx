@@ -9,6 +9,7 @@ import {
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
 } from 'lib/types/types';
+import { ToTrinnsKontroll } from 'components/behandlinger/vedtak/totrinsskontroll/ToTrinnsKontroll';
 
 interface Props {
   behandlingsReferanse: string;
@@ -39,6 +40,12 @@ export const FatteVedtak = ({
   return (
     <VilkårsKort heading={'Fatte vedtak'} steg={'FATTE_VEDTAK'}>
       {behandlingsReferanse}
+
+      <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+        {fatteVedtakGrunnlag.vurderinger.map((vurderinger) => (
+          <ToTrinnsKontroll definisjon={vurderinger.definisjon} key={vurderinger.definisjon} />
+        ))}
+      </div>
     </VilkårsKort>
   );
 };

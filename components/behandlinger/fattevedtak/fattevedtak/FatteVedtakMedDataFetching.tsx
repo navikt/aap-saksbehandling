@@ -1,4 +1,4 @@
-import { FatteVedtak } from 'components/behandlinger/vedtak/fattevedtak/FatteVedtak';
+import { FatteVedtak } from 'components/behandlinger/fattevedtak/fattevedtak/FatteVedtak';
 import {
   hentBistandsbehovGrunnlag,
   hentFatteVedtakGrunnlang,

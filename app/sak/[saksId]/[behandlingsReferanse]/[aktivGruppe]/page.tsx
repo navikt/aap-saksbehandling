@@ -14,6 +14,7 @@ const grupper: StegGruppe[] = [
   'TILKJENT_YTELSE',
   'SIMULERING',
   'BARNETILLEGG',
+  'FATTE_VEDTAK',
 ];
 
 const Page = async ({ params }: { params: { behandlingsReferanse: string; aktivGruppe: StegGruppe } }) => {

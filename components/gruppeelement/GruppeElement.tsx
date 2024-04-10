@@ -61,6 +61,10 @@ export function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Grunnlag';
     case 'LOVVALG':
       return 'Lovvalg';
+    case 'FATTE_VEDTAK':
+      return 'Fatte vedtak';
+    case 'IVERKSETT_VEDTAK':
+      return 'Iverksett vedtak';
     case 'UDEFINERT':
       return 'Udefinert';
   }

@@ -42,6 +42,7 @@ const Layout = async ({
                 'SIMULERING',
                 'BARNETILLEGG',
                 'BREV',
+                'FATTE_VEDTAK',
               ].includes(gruppe.stegGruppe)
             )
             .map((gruppe, index) => {

@@ -3,6 +3,7 @@ import { StegGruppe } from 'lib/types/types';
 import { Vedtak } from 'components/behandlinger/vedtak/Vedtak';
 import styles from './OppgaveKolonne.module.css';
 import { Grunnlag } from 'components/behandlinger/grunnlag/Grunnlag';
+import { FatteVedtak } from 'components/behandlinger/fattevedtak/FatteVedtak';
 interface Props {
   behandlingsReferanse: string;
   aktivGruppe: StegGruppe;
@@ -21,6 +22,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Prop
       {aktivGruppe === 'TILKJENT_YTELSE' && <div>TILKJENT YTELSE</div>}
       {aktivGruppe === 'SIMULERING' && <div>SIMULERING</div>}
       {aktivGruppe === 'VEDTAK' && <Vedtak behandlingsReferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'FATTE_VEDTAK' && <FatteVedtak behandlingsReferanse={behandlingsReferanse} />}
     </div>
   );
 };
