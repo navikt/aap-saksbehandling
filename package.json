@@ -34,7 +34,7 @@
     "@tiptap/extension-table-row": "^2.2.6",
     "@tiptap/extension-underline": "^2.2.6",
     "@tiptap/pm": "^2.2.6",
-    "@tiptap/react": "^2.2.6",
+    "@tiptap/react": "^2.3.0",
     "@tiptap/starter-kit": "^2.2.6",
     "@vercel/otel": "^1.8.1",
     "date-fns": "^3.6.0",
