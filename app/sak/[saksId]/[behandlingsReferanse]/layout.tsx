@@ -3,8 +3,7 @@ import { Detail, Label } from '@navikt/ds-react';
 import { hentSaksinfo } from 'lib/clientApi';
 import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { hentPersonInformasjonForIdent } from 'lib/services/pdlservice/pdlService';
-
-import { Tag } from 'components/DsClient';
+import { HGrid, Tag } from 'components/DsClient';
 
 import styles from './layout.module.css';
 
@@ -38,7 +37,10 @@ const Layout = async ({ children, params }: Props) => {
         </Detail>
       </div>
 
-      {children}
+      <HGrid columns={'3fr 1fr'} className={styles.kolonner}>
+        {children}
+        <div className={`${styles.kolonne} ${styles.høyrekolonne}`}>hei pello</div>
+      </HGrid>
     </div>
   );
 };

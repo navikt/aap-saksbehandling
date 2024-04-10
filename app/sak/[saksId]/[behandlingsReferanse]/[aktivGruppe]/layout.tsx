@@ -25,7 +25,7 @@ const Layout = async ({
   const stegSomSkalVises = getStegSomSkalVises(decodeURI(params.aktivGruppe) as StegGruppe, flytResponse);
 
   return (
-    <>
+    <div>
       <div>
         <ol type="1" className={styles.stegMeny}>
           {flytResponse?.flyt
@@ -59,15 +59,14 @@ const Layout = async ({
             })}
         </ol>
       </div>
-      <HGrid columns={'1fr 3fr 1fr'} className={styles.kolonner}>
+      <HGrid columns={'1fr 3fr'} className={styles.kolonner}>
         <InformasjonsKolonne
           stegSomSkalVises={stegSomSkalVises}
           className={`${styles.kolonne} ${styles.venstrekolonne}`}
         />
         {children}
-        <div className={`${styles.kolonne} ${styles.høyrekolonne}`} />
       </HGrid>
-    </>
+    </div>
   );
 };
 
