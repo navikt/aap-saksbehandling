@@ -2,7 +2,6 @@ import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/sak
 import { HGrid } from 'components/DsClient';
 import styles from './layout.module.css';
 import { ReactNode } from 'react';
-import { GruppeElement } from 'components/gruppeelement/GruppeElement';
 import { notFound } from 'next/navigation';
 import { InformasjonsKolonne } from 'components/informasjonskolonne/InformasjonsKolonne';
 import { getStegSomSkalVises } from 'lib/utils/steg';
@@ -25,48 +24,13 @@ const Layout = async ({
   const stegSomSkalVises = getStegSomSkalVises(decodeURI(params.aktivGruppe) as StegGruppe, flytResponse);
 
   return (
-    <div>
-      <div>
-        <ol type="1" className={styles.stegMeny}>
-          {flytResponse?.flyt
-            .filter((gruppe) =>
-              [
-                'SYKDOM',
-                'VEDTAK',
-                'ALDER',
-                'GRUNNLAG',
-                'MEDLEMSKAP',
-                'LOVVALG',
-                'UTTAK',
-                'TILKJENT_YTELSE',
-                'SIMULERING',
-                'BARNETILLEGG',
-                'BREV',
-                'FATTE_VEDTAK',
-              ].includes(gruppe.stegGruppe)
-            )
-            .map((gruppe, index) => {
-              return (
-                <GruppeElement
-                  key={gruppe.stegGruppe}
-                  navn={gruppe.stegGruppe}
-                  nummer={index + 1}
-                  erFullført={gruppe.erFullført}
-                  aktivtSteg={decodeURI(params.aktivGruppe) === gruppe.stegGruppe}
-                  kanNavigeresTil={gruppe.erFullført || flytResponse.aktivGruppe === gruppe.stegGruppe}
-                />
-              );
-            })}
-        </ol>
-      </div>
-      <HGrid columns={'1fr 3fr'} className={styles.kolonner}>
-        <InformasjonsKolonne
-          stegSomSkalVises={stegSomSkalVises}
-          className={`${styles.kolonne} ${styles.venstrekolonne}`}
-        />
-        {children}
-      </HGrid>
-    </div>
+    <HGrid columns={'1fr 3fr'} className={styles.kolonner}>
+      <InformasjonsKolonne
+        stegSomSkalVises={stegSomSkalVises}
+        className={`${styles.kolonne} ${styles.venstrekolonne}`}
+      />
+      {children}
+    </HGrid>
   );
 };
 

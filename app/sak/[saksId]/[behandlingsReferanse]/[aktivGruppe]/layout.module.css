@@ -7,10 +7,6 @@
   padding: 1rem;
 }
 
-.høyrekolonne {
-  border-left: 1px solid var(--a-border-default);
-}
-
 .stegMeny {
   display: flex;
   flex-direction: row;

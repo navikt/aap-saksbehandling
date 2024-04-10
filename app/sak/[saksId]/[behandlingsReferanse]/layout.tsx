@@ -1,11 +1,12 @@
 import { ReactNode } from 'react';
 import { Detail, Label } from '@navikt/ds-react';
 import { hentSaksinfo } from 'lib/clientApi';
-import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentFlyt, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { hentPersonInformasjonForIdent } from 'lib/services/pdlservice/pdlService';
 import { HGrid, Tag } from 'components/DsClient';
 
 import styles from './layout.module.css';
+import { StegGruppeIndikator } from 'components/steggruppeindikator/StegGruppeIndikator';
 
 interface Props {
   children: ReactNode;
@@ -16,6 +17,7 @@ const Layout = async ({ children, params }: Props) => {
   const saksInfo = await hentSaksinfo(); // TODO: Litt metadata om søker, skal skrives om
   const sak = await hentSak(params.saksId);
   const personInformasjon = await hentPersonInformasjonForIdent(sak.ident);
+  const flytResponse = await hentFlyt(params.behandlingsReferanse);
 
   return (
     <div>
@@ -36,6 +38,7 @@ const Layout = async ({ children, params }: Props) => {
           Sist endret av {saksInfo.sistEndret.navn} den {saksInfo.sistEndret.tidspunkt}
         </Detail>
       </div>
+      <StegGruppeIndikator flytRespons={flytResponse} />
 
       <HGrid columns={'3fr 1fr'} className={styles.kolonner}>
         {children}
