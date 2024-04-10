@@ -3128,7 +3128,7 @@ __metadata:
     json-diff: "npm:^1.0.6"
     lint-staged: "npm:^15.2.2"
     next: "npm:^14.1.4"
-    next-sanity: "npm:^8.5.5"
+    next-sanity: "npm:^9.0.0"
     node-loader: "npm:^2.0.0"
     openapi-typescript: "npm:6.7.5"
     pino-pretty: "npm:^10.3.1"
@@ -6220,10 +6220,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"groq@npm:^3.19":
-  version: 3.19.2
-  resolution: "groq@npm:3.19.2"
-  checksum: 10c0/1141ada24baafa14498b6a80171279835f04f376e9dfc7d62ad34a590e1092c0c2b8d3beead215892ac2a14c254de1e989c99d40600fbb5a47a6acb6bd51cb0d
+"groq@npm:^3.37.1":
+  version: 3.37.2
+  resolution: "groq@npm:3.37.2"
+  checksum: 10c0/3f657751c3a89a15c7f0bf66d9dd3a4b95122952df053efc65c69483f01722b4af327198883cb00a042cbda5a09d315fc98b4acbc8481780b86e3e29381a4965
   languageName: node
   linkType: hard
 
@@ -8377,27 +8377,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-sanity@npm:^8.5.5":
-  version: 8.5.5
-  resolution: "next-sanity@npm:8.5.5"
+"next-sanity@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "next-sanity@npm:9.0.0"
   dependencies:
     "@portabletext/react": "npm:^3.0.17"
     "@sanity/client": "npm:^6.15.11"
     "@sanity/preview-kit": "npm:5.0.41"
     "@sanity/visual-editing": "npm:1.8.7"
     "@sanity/webhook": "npm:4.0.2-bc"
-    groq: "npm:^3.19"
+    groq: "npm:^3.37.1"
     history: "npm:^5.3.0"
   peerDependencies:
     "@sanity/client": ^6.15.11
-    "@sanity/icons": ^2.8
-    "@sanity/types": ^3.25
-    "@sanity/ui": ^1.8 || ^2.0.0-beta || ^2.0
+    "@sanity/icons": ^2.11.3
+    "@sanity/types": ^3.37.1
+    "@sanity/ui": ^2.0.11
     next: ^14.1
     react: ^18.2
-    sanity: ^3.25
-    styled-components: ^5.2 || ^6.0
-  checksum: 10c0/9757a27195df5819d65ca8d9608fd9b45fe70f5b07a5fe707bbc1d0eb0a1f8a0a35783fff81928eef6aee73bf76afdd9465a8bf723a996ed303cf81665e9ced6
+    sanity: ^3.37.1
+    styled-components: ^6.1
+  checksum: 10c0/6cafa12e97ef27fbba4d32b1d3c2ef5ca1640778ff22d51a2d5282b3c5becf118a2c76a554a4b04b5a2654bb2d115fc786b0df50390a05fa9e52194769586ec6
   languageName: node
   linkType: hard
 
