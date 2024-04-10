@@ -15,6 +15,33 @@ export enum Behovstype {
   FATTE_VEDTAK_KODE = '5099',
 }
 
+type BehovsKode = `${Behovstype}`;
+
+export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
+  switch (kode) {
+    case '5001':
+      return 'Avklar student';
+    case '5003':
+      return 'Avklar sykdom';
+    case '5004':
+      return 'Fastsett arbeidsevne';
+    case '5005':
+      return 'Fritak meldeplikt';
+    case '5006':
+      return 'Avklar bistandsbehov';
+    case '5007':
+      return 'Vurder sykepengeerstatning';
+    case '5008':
+      return 'Fastsett beregningstidspunkt';
+    case '5098':
+      return 'Foreslå vedtak';
+    case '5099':
+      return 'Fatte vedtak';
+    case '9001':
+      return 'Manuelt satt på vent';
+  }
+}
+
 export enum JaEllerNei {
   Ja = 'ja',
   Nei = 'nei',

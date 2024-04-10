@@ -1,4 +1,4 @@
-import { hentFatteVedtakGrunnlang } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentFatteVedtakGrunnlang, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ToTrinnsKontroll } from 'components/totrinsskontroll/ToTrinnsKontroll';
 
 interface Props {
@@ -6,11 +6,15 @@ interface Props {
 }
 export const ToTrinnskontrollMedDataFetching = async ({ behandlingsReferanse }: Props) => {
   const fatteVedtakGrunnlag = await hentFatteVedtakGrunnlang(behandlingsReferanse);
+  const flyt = await hentFlyt(behandlingsReferanse);
+
+  const skalViseToTrinnsKontroll = flyt.aktivGruppe === 'FATTE_VEDTAK';
+
   return (
     <>
-      {fatteVedtakGrunnlag.vurderinger.map((vurderinger) => (
-        <ToTrinnsKontroll definisjon={vurderinger.definisjon} key={vurderinger.definisjon} />
-      ))}
+      {skalViseToTrinnsKontroll && (
+        <ToTrinnsKontroll fatteVedtakGrunnlag={fatteVedtakGrunnlag} behandlingsReferanse={behandlingsReferanse} />
+      )}
     </>
   );
 };

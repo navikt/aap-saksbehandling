@@ -1,42 +1,54 @@
 'use client';
 
-import { useConfigForm } from 'hooks/FormHook';
-import { JaEllerNeiOptions } from 'lib/utils/form';
-import { FormField } from 'components/input/formfield/FormField';
+import { FatteVedtakGrunnlag } from 'lib/types/types';
+import { ToTrinnsKontrollForm } from 'components/totrinsskontroll/totrinnskontrollform/ToTrinnsKontrollForm';
+
+import styles from 'components/totrinsskontroll/ToTrinnsKontroll.module.css';
+import { useState } from 'react';
 import { Button } from '@navikt/ds-react';
+import { løsBehov } from 'lib/clientApi';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
-  definisjon: string;
-}
-interface FormFields {
-  oppfylt: string;
-  begrunnelse: string;
+  fatteVedtakGrunnlag: FatteVedtakGrunnlag;
+  behandlingsReferanse: string;
 }
 
-export const ToTrinnsKontroll = ({ definisjon }: Props) => {
-  const { form, formFields } = useConfigForm<FormFields>({
-    oppfylt: {
-      type: 'radio',
-      label: 'Er du enig?',
-      options: JaEllerNeiOptions,
-    },
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Begrunnelse',
-    },
-  });
+export interface ToTrinnskontroll {
+  definisjon: string;
+  godkjent: boolean;
+  begrunnelse?: string;
+}
+
+export const ToTrinnsKontroll = ({ fatteVedtakGrunnlag, behandlingsReferanse }: Props) => {
+  const [toTrinnskontrollVurderinger, setToTrinnskontrollVurderinger] = useState<ToTrinnskontroll[]>([]);
 
   return (
-    <form
-      onSubmit={form.handleSubmit((data) => console.log(data))}
-      style={{ display: 'flex', flexDirection: 'column', gap: '1rem', border: '2px solid black', padding: '1rem' }}
-    >
-      <span>{definisjon}</span>
-      <FormField form={form} formField={formFields.oppfylt} />
-      <FormField form={form} formField={formFields.begrunnelse} />
-      <div>
-        <Button>Bekreft</Button>
-      </div>
-    </form>
+    <div className={styles.toTrinnsKontroll}>
+      {fatteVedtakGrunnlag.vurderinger.map((vurderinger) => (
+        <ToTrinnsKontrollForm
+          definisjon={vurderinger.definisjon}
+          key={vurderinger.definisjon}
+          lagreToTrinnskontroll={(toTrinnskontroll) =>
+            setToTrinnskontrollVurderinger([...toTrinnskontrollVurderinger, toTrinnskontroll])
+          }
+        />
+      ))}
+      <Button
+        size={'medium'}
+        onClick={async () => {
+          await løsBehov({
+            behandlingVersjon: 0,
+            behov: {
+              behovstype: Behovstype.FATTE_VEDTAK_KODE,
+              vurderinger: toTrinnskontrollVurderinger,
+            },
+            referanse: behandlingsReferanse,
+          });
+        }}
+      >
+        Send inn to-trinnskontroll!
+      </Button>
+    </div>
   );
 };
