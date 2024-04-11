@@ -39,3 +39,6 @@ export type BehandlingResultat = components['schemas']['no.nav.aap.behandlingsfl
 export type StegType = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.FlytSteg']['stegType'];
 
 export type StegGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.FlytGruppe']['stegGruppe'];
+
+export type ToTrinnsVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.løser.vedtak.TotrinnsVurdering'];

@@ -7,11 +7,11 @@ import { Alert, Button, Label } from '@navikt/ds-react';
 
 import styles from 'components/totrinsskontroll/totrinnskontrollform/ToTrinnsKontrollForm.module.css';
 import { useState } from 'react';
-import { ToTrinnskontroll } from 'components/totrinsskontroll/ToTrinnsKontroll';
+import { ToTrinnsVurdering } from 'lib/types/types';
 
 interface Props {
   definisjon: string;
-  lagreToTrinnskontroll: (toTrinnskontroll: ToTrinnskontroll) => void;
+  lagreToTrinnskontroll: (toTrinnskontroll: ToTrinnsVurdering) => void;
 }
 
 interface FormFields {
@@ -53,7 +53,7 @@ export const ToTrinnsKontrollForm = ({ definisjon, lagreToTrinnskontroll }: Prop
         lagreToTrinnskontroll({
           definisjon: definisjon,
           godkjent: data.godkjent === JaEllerNei.Ja,
-          begrunnelse: data.begrunnelse,
+          begrunnelse: data?.begrunnelse,
         });
         setErSendtInn(true);
       })}

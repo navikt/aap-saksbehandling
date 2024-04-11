@@ -1,6 +1,6 @@
 'use client';
 
-import { FatteVedtakGrunnlag } from 'lib/types/types';
+import { FatteVedtakGrunnlag, ToTrinnsVurdering } from 'lib/types/types';
 import { ToTrinnsKontrollForm } from 'components/totrinsskontroll/totrinnskontrollform/ToTrinnsKontrollForm';
 
 import styles from 'components/totrinsskontroll/ToTrinnsKontroll.module.css';
@@ -14,14 +14,8 @@ interface Props {
   behandlingsReferanse: string;
 }
 
-export interface ToTrinnskontroll {
-  definisjon: string;
-  godkjent: boolean;
-  begrunnelse?: string;
-}
-
 export const ToTrinnsKontroll = ({ fatteVedtakGrunnlag, behandlingsReferanse }: Props) => {
-  const [toTrinnskontrollVurderinger, setToTrinnskontrollVurderinger] = useState<ToTrinnskontroll[]>([]);
+  const [toTrinnskontrollVurderinger, setToTrinnskontrollVurderinger] = useState<ToTrinnsVurdering[]>([]);
 
   return (
     <div className={styles.toTrinnsKontroll}>
