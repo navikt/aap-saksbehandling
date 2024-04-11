@@ -7,9 +7,10 @@ import styles from './FastsettArbeidsevnePeriodeTable.module.css';
 
 interface Props {
   perioder: FastSettArbeidsevnePeriode[];
+  visLeggTilPeriodeKnapp: boolean;
   onClick: () => void;
 }
-export const FastsettArbeidsevnePeriodeTable = ({ perioder, onClick }: Props) => {
+export const FastsettArbeidsevnePeriodeTable = ({ perioder, onClick, visLeggTilPeriodeKnapp }: Props) => {
   return (
     <div className={styles.tabell}>
       <Heading size={'small'} level={'4'}>
@@ -30,9 +31,11 @@ export const FastsettArbeidsevnePeriodeTable = ({ perioder, onClick }: Props) =>
           ))}
         </Table.Body>
       </Table>
-      <Button variant={'tertiary'} size={'small'} icon={<PlusIcon />} onClick={onClick}>
-        Legg til ny preiode
-      </Button>
+      {visLeggTilPeriodeKnapp && (
+        <Button variant={'tertiary'} size={'small'} icon={<PlusIcon />} onClick={onClick}>
+          Legg til ny preiode
+        </Button>
+      )}
     </div>
   );
 };

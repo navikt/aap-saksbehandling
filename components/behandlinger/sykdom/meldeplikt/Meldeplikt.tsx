@@ -17,6 +17,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
   behandlingsReferanse: string;
+  erBeslutter: boolean;
   grunnlag?: FritakMeldepliktGrunnlag;
 }
 
@@ -28,37 +29,40 @@ interface FormFields {
   sluttDato?: Date;
 }
 
-export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
-  const { formFields, form } = useConfigForm<FormFields>({
-    dokumenterBruktIVurderingen: {
-      type: 'checkbox_nested',
-      label: 'Dokumenter funnet som er relevant for vurdering av §11-10',
-      description: 'Tilknytt minst ett dokument til §11-10',
+export const Meldeplikt = ({ behandlingsReferanse, grunnlag, erBeslutter }: Props) => {
+  const { formFields, form } = useConfigForm<FormFields>(
+    {
+      dokumenterBruktIVurderingen: {
+        type: 'checkbox_nested',
+        label: 'Dokumenter funnet som er relevant for vurdering av §11-10',
+        description: 'Tilknytt minst ett dokument til §11-10',
+      },
+      begrunnelse: {
+        type: 'textarea',
+        description: 'Begrunn vurderingen',
+        label: 'Vurder om det vil være unødig tyngende for søker å overholde meldeplikten',
+        rules: { required: 'Du må begrunne' },
+        defaultValue: grunnlag?.vurderinger?.[0]?.begrunnelse,
+      },
+      unntakFraMeldeplikt: {
+        type: 'checkbox',
+        label: 'Det vurderes at søker kan unntas fra meldeplikten',
+        rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
+        options: ['Unntak fra meldeplikten'],
+      },
+      startDato: {
+        type: 'date',
+        toDate: new Date(),
+        label: 'Startdato for fritak fra meldeplikt',
+      },
+      sluttDato: {
+        type: 'date',
+        fromDate: new Date(),
+        label: 'Sluttdato for fritak fra meldeplikt',
+      },
     },
-    begrunnelse: {
-      type: 'textarea',
-      description: 'Begrunn vurderingen',
-      label: 'Vurder om det vil være unødig tyngende for søker å overholde meldeplikten',
-      rules: { required: 'Du må begrunne' },
-      defaultValue: grunnlag?.vurderinger?.[0]?.begrunnelse,
-    },
-    unntakFraMeldeplikt: {
-      type: 'checkbox',
-      label: 'Det vurderes at søker kan unntas fra meldeplikten',
-      rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
-      options: ['Unntak fra meldeplikten'],
-    },
-    startDato: {
-      type: 'date',
-      toDate: new Date(),
-      label: 'Startdato for fritak fra meldeplikt',
-    },
-    sluttDato: {
-      type: 'date',
-      fromDate: new Date(),
-      label: 'Sluttdato for fritak fra meldeplikt',
-    },
-  });
+    { readOnly: erBeslutter }
+  );
 
   return (
     <VilkårsKort
@@ -87,6 +91,7 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag }: Props) => {
           });
         })}
         steg={'BARNETILLEGG'}
+        visBekreftKnapp={!erBeslutter}
       >
         <Alert variant={'info'} size={'small'}>
           <BodyShort size={'small'}>Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:</BodyShort>

@@ -20,6 +20,7 @@ import { SykepengeerstatningGrunnlag } from 'lib/types/types';
 interface Props {
   behandlingsReferanse: string;
   grunnlag?: SykepengeerstatningGrunnlag;
+  erBeslutter: boolean;
 }
 
 interface FormFields {
@@ -29,7 +30,7 @@ interface FormFields {
   grunn: string[];
 }
 
-export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag }: Props) => {
+export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag, erBeslutter }: Props) => {
   const { form, formFields } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
@@ -63,7 +64,7 @@ export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag }: Props) =
         ],
       },
     },
-    { shouldUnregister: true }
+    { shouldUnregister: true, readOnly: erBeslutter }
   );
 
   return (
@@ -84,6 +85,7 @@ export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag }: Props) =
           });
         })}
         steg={'VURDER_SYKEPENGEERSTATNING'}
+        visBekreftKnapp={!erBeslutter}
       >
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />

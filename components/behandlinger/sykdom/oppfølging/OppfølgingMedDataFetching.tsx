@@ -3,10 +3,11 @@ import { Oppfølging } from 'components/behandlinger/sykdom/oppfølging/Oppfølg
 
 interface Props {
   behandlingsReferanse: string;
+  erBeslutter: boolean;
 }
 
-export const OppfølgingMedDataFetching = async ({ behandlingsReferanse }: Props) => {
+export const OppfølgingMedDataFetching = async ({ behandlingsReferanse, erBeslutter }: Props) => {
   const grunnlag = await hentBistandsbehovGrunnlag(behandlingsReferanse);
 
-  return <Oppfølging behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} />;
+  return <Oppfølging behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} erBeslutter={erBeslutter} />;
 };

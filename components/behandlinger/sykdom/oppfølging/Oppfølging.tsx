@@ -19,6 +19,7 @@ import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiled
 
 interface Props {
   behandlingsReferanse: string;
+  erBeslutter: boolean;
   grunnlag?: BistandsGrunnlag;
 }
 
@@ -29,38 +30,42 @@ interface FormFields {
   grunner: string[];
 }
 
-export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
-  const { formFields, form } = useConfigForm<FormFields>({
-    dokumenterBruktIVurderingen: {
-      type: 'checkbox_nested',
-      label: 'Dokumenter funnet som er relevant for vurdering av §11-6',
-      description: 'Tilknytt minst ett dokument som er relevant for vurderingen av §11-6',
+export const Oppfølging = ({ behandlingsReferanse, grunnlag, erBeslutter }: Props) => {
+  const { formFields, form } = useConfigForm<FormFields>(
+    {
+      dokumenterBruktIVurderingen: {
+        type: 'checkbox_nested',
+        label: 'Dokumenter funnet som er relevant for vurdering av §11-6',
+        description: 'Tilknytt minst ett dokument som er relevant for vurderingen av §11-6',
+      },
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Vurder om søker har behov for oppfølging',
+        description:
+          'Beskriv oppfølgingsbehov, behovet for arbeidsrettet oppfølging og vurdering om det er en mulighet for å komme tilbake i arbeid og eventuell annen oppfølging fra nav',
+        defaultValue: grunnlag?.vurdering?.begrunnelse,
+        rules: { required: 'Du må begrunne' },
+      },
+      vilkårOppfylt: {
+        type: 'radio',
+        label: 'Er vilkårene i § 11-6 oppfylt?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForBistand),
+        rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
+        options: JaEllerNeiOptions,
+      },
+      grunner: {
+        type: 'checkbox',
+        label: 'Velg minst én grunn for at § 11-6 er oppfylt',
+        options: [
+          'Behov for aktiv behandling',
+          'Behov for arbeidsrettet tiltak',
+          'Etter å ha prøvd tiltakene etter bokstav a eller b fortsatt anses for å ha en viss mulighet for å komme i arbeid, og får annen oppfølging fra Arbeids- og velferdsetaten',
+        ],
+      },
     },
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Vurder om søker har behov for oppfølging',
-      description:
-        'Beskriv oppfølgingsbehov, behovet for arbeidsrettet oppfølging og vurdering om det er en mulighet for å komme tilbake i arbeid og eventuell annen oppfølging fra nav',
-      defaultValue: grunnlag?.vurdering?.begrunnelse,
-      rules: { required: 'Du må begrunne' },
-    },
-    vilkårOppfylt: {
-      type: 'radio',
-      label: 'Er vilkårene i § 11-6 oppfylt?',
-      defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForBistand),
-      rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
-      options: JaEllerNeiOptions,
-    },
-    grunner: {
-      type: 'checkbox',
-      label: 'Velg minst én grunn for at § 11-6 er oppfylt',
-      options: [
-        'Behov for aktiv behandling',
-        'Behov for arbeidsrettet tiltak',
-        'Etter å ha prøvd tiltakene etter bokstav a eller b fortsatt anses for å ha en viss mulighet for å komme i arbeid, og får annen oppfølging fra Arbeids- og velferdsetaten',
-      ],
-    },
-  });
+    { readOnly: erBeslutter }
+  );
+
   return (
     <VilkårsKort
       heading="Behov for oppfølging § 11-6"
@@ -83,6 +88,7 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag }: Props) => {
             referanse: behandlingsReferanse,
           });
         })}
+        visBekreftKnapp={!erBeslutter}
       >
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />

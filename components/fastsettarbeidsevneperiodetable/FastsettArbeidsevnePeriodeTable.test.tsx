@@ -18,6 +18,7 @@ describe('fastsettArbeidsevnePeriodeTable', () => {
           },
         ]}
         onClick={jest.fn}
+        visLeggTilPeriodeKnapp={true}
       />
     );
   });

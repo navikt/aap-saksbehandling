@@ -10,7 +10,13 @@ const grunnlagFørBesvarelse: SykdomsGrunnlag = {
 
 describe('Sykdomsvurdering med yrkesskade', () => {
   beforeEach(() => {
-    render(<SykdomsvurderingMedYrkesskade behandlingsReferanse={'123'} grunnlag={grunnlagFørBesvarelse} />);
+    render(
+      <SykdomsvurderingMedYrkesskade
+        behandlingsReferanse={'123'}
+        grunnlag={grunnlagFørBesvarelse}
+        erBeslutter={false}
+      />
+    );
   });
   const user = userEvent.setup();
 

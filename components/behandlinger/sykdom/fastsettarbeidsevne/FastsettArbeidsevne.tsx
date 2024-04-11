@@ -14,9 +14,10 @@ import styles from './FastsettArbeidsevne.module.css';
 
 interface Props {
   behandlingsReferanse: string;
+  erBeslutter: boolean;
 }
 
-export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
+export const FastsettArbeidsevne = ({ behandlingsReferanse, erBeslutter }: Props) => {
   const [skalLeggeTilNyPeriode, setSkalLeggeTilNyPeriode] = useState(false);
   const [perioder, setPerioder] = useState<FastSettArbeidsevnePeriode[]>([
     {
@@ -37,8 +38,11 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
       defaultOpen={false}
     >
       <div className={styles.fastsettArbeidsevne}>
-        <FastsettArbeidsevnePeriodeTable perioder={perioder} onClick={() => setSkalLeggeTilNyPeriode(true)} />
-
+        <FastsettArbeidsevnePeriodeTable
+          perioder={perioder}
+          onClick={() => setSkalLeggeTilNyPeriode(true)}
+          visLeggTilPeriodeKnapp={!erBeslutter}
+        />
         {skalLeggeTilNyPeriode && (
           <FastsettArbeidsevnePeriodeForm
             onSave={(periode) => {
@@ -48,12 +52,13 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse }: Props) => {
             onAvbryt={() => setSkalLeggeTilNyPeriode(false)}
           />
         )}
-
-        <div>
-          <Button onClick={() => console.log('bekreft fastsettarbeidsevne', behandlingsReferanse, perioder)}>
-            Bekreft
-          </Button>
-        </div>
+        {!erBeslutter && (
+          <div>
+            <Button onClick={() => console.log('bekreft fastsettarbeidsevne', behandlingsReferanse, perioder)}>
+              Bekreft
+            </Button>
+          </div>
+        )}
       </div>
     </VilkårsKort>
   );

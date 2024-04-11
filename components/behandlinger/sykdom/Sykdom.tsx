@@ -16,6 +16,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
 
   const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt);
+  const erPåFatteVedtakSteg = flyt.aktivtSteg === 'FATTE_VEDTAK';
 
   return (
     <>
@@ -23,42 +24,57 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
         if (steg === 'AVKLAR_STUDENT') {
           return (
             <StegSuspense key={steg}>
-              <StudentMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+              <StudentMedDataFetching behandlingsReferanse={behandlingsReferanse} erBeslutter={erPåFatteVedtakSteg} />
             </StegSuspense>
           );
         }
         if (steg === 'AVKLAR_SYKDOM') {
           return (
             <StegSuspense key={steg}>
-              <SykdomsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+              <SykdomsvurderingMedDataFetching
+                behandlingsReferanse={behandlingsReferanse}
+                erBeslutter={erPåFatteVedtakSteg}
+              />
             </StegSuspense>
           );
         }
         if (steg === 'FRITAK_MELDEPLIKT') {
           return (
             <StegSuspense key={steg}>
-              <MeldepliktMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+              <MeldepliktMedDataFetching
+                behandlingsReferanse={behandlingsReferanse}
+                erBeslutter={erPåFatteVedtakSteg}
+              />
             </StegSuspense>
           );
         }
         if (steg === 'VURDER_BISTANDSBEHOV') {
           return (
             <StegSuspense key={steg}>
-              <OppfølgingMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+              <OppfølgingMedDataFetching
+                behandlingsReferanse={behandlingsReferanse}
+                erBeslutter={erPåFatteVedtakSteg}
+              />
             </StegSuspense>
           );
         }
         if (steg === 'FASTSETT_ARBEIDSEVNE') {
           return (
             <StegSuspense key={steg}>
-              <FastsettArbeidsevneMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+              <FastsettArbeidsevneMedDataFetching
+                behandlingsReferanse={behandlingsReferanse}
+                erBeslutter={erPåFatteVedtakSteg}
+              />
             </StegSuspense>
           );
         }
         if (steg === 'VURDER_SYKEPENGEERSTATNING') {
           return (
             <StegSuspense key={steg}>
-              <SykepengeerstatningMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+              <SykepengeerstatningMedDataFetching
+                behandlingsReferanse={behandlingsReferanse}
+                erBeslutter={erPåFatteVedtakSteg}
+              />
             </StegSuspense>
           );
         }

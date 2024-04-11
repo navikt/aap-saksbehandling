@@ -17,9 +17,10 @@ interface Props {
     callbackError: () => void
   ) => (e?: BaseSyntheticEvent<object, any, any> | undefined) => Promise<void>;
   children: ReactNode;
+  visBekreftKnapp?: boolean;
 }
 
-export const Form = ({ steg, onSubmit, children }: Props) => {
+export const Form = ({ steg, onSubmit, children, visBekreftKnapp = true }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [status, setStatus] = useState<ServerSentEventStatus | undefined>();
   const router = useRouter();
@@ -79,9 +80,11 @@ export const Form = ({ steg, onSubmit, children }: Props) => {
       {status === 'POLLING' && (
         <Alert variant="info">Maskinen bruker litt lengre tid på å jobbe enn vanlig. Ta deg en kopp kaffe ☕️</Alert>
       )}
-      <Button className={styles.button} loading={isLoading}>
-        Bekreft
-      </Button>
+      {visBekreftKnapp && (
+        <Button className={styles.button} loading={isLoading}>
+          Bekreft
+        </Button>
+      )}
     </form>
   );
 };
