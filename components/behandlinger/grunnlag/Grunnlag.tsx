@@ -10,13 +10,19 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
 
   const stegSomSkalVises = getStegSomSkalVises('GRUNNLAG', flyt);
+
+  const erPåFatteVedtakSteg = flyt.aktivtSteg === 'FATTE_VEDTAK';
+
   return (
     <>
       {stegSomSkalVises.map((steg) => {
         if (steg === 'FASTSETT_BEREGNINGSTIDSPUNKT') {
           return (
             <StegSuspense key={steg}>
-              <FastsettBeregningMedDataFeching behandlingsReferanse={behandlingsReferanse} />
+              <FastsettBeregningMedDataFeching
+                behandlingsReferanse={behandlingsReferanse}
+                erBeslutter={erPåFatteVedtakSteg}
+              />
             </StegSuspense>
           );
         }

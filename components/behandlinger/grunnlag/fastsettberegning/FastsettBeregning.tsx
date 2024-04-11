@@ -10,6 +10,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
   behandlingsReferanse: string;
+  erBeslutter: boolean;
 }
 
 interface FormFields {
@@ -18,21 +19,24 @@ interface FormFields {
   antattÅrligInntekt: string;
 }
 
-export const FastsettBeregning = ({ behandlingsReferanse }: Props) => {
-  const { formFields, form } = useConfigForm<FormFields>({
-    begrunnelse: {
-      type: 'text',
-      label: 'Begrunnelse',
+export const FastsettBeregning = ({ behandlingsReferanse, erBeslutter }: Props) => {
+  const { formFields, form } = useConfigForm<FormFields>(
+    {
+      begrunnelse: {
+        type: 'text',
+        label: 'Begrunnelse',
+      },
+      ytterligereNedsattArbeidsevneDato: {
+        type: 'date',
+        label: 'Ytterligere nedsatt arbeidsevne dato',
+      },
+      antattÅrligInntekt: {
+        type: 'number',
+        label: 'Antatt årlig inntekt',
+      },
     },
-    ytterligereNedsattArbeidsevneDato: {
-      type: 'date',
-      label: 'Ytterligere nedsatt arbeidsevne dato',
-    },
-    antattÅrligInntekt: {
-      type: 'number',
-      label: 'Antatt årlig inntekt',
-    },
-  });
+    { readOnly: erBeslutter }
+  );
 
   return (
     <VilkårsKort heading={'Fastsett beregning'} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}>
@@ -53,6 +57,7 @@ export const FastsettBeregning = ({ behandlingsReferanse }: Props) => {
             referanse: behandlingsReferanse,
           });
         })}
+        visBekreftKnapp={!erBeslutter}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
