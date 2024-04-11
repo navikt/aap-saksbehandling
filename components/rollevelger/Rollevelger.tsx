@@ -4,7 +4,7 @@ import { Rolle } from 'app/api/rolle/route';
 import { fetchProxy } from 'lib/clientApi';
 import { Select, VStack } from '@navikt/ds-react';
 import useSWR from 'swr';
-const roller = ['NAV-KONTOR', 'NAY', 'NAY-BESLUTTER'];
+const roller = ['SAKSBEHANDLER', 'BESLUTTER', 'LESEVISNING'];
 
 export const Rollevelger = () => {
   const getAktivRolle = async () => await fetchProxy<{ rolle: Rolle }>('/api/rolle', 'GET');

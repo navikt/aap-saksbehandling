@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server';
 import { endreRolle, hentRolle } from 'lib/services/rolleservice/rolleservice';
 
-const roller = ['NAV-KONTOR', 'NAY', 'NAY-BESLUTTER'] as const;
+const roller = ['SAKSBEHANDLER', 'BESLUTTER', 'LESEVISNING'];
 export type Rolle = (typeof roller)[number];
 
 export async function GET() {
   const rolleCache = await hentRolle();
-  const rolle: Rolle = (rolleCache as Rolle) || 'NAV-KONTOR';
+  const rolle: Rolle = (rolleCache as Rolle) || 'LESEVISNING';
   return new Response(JSON.stringify({ rolle }), { status: 200 });
 }
 export async function POST(req: NextRequest) {
