@@ -2,7 +2,8 @@ import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/fo
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
-import { FatteVedtakMedDataFetching } from 'components/behandlinger/fattevedtak/fattevedtak/FatteVedtakMedDataFetching';
+import { BrevmalVelger } from 'components/brevmalvelger/BrevmalVelger';
+import { hentAlleBrevmaler } from 'lib/services/sanityservice/sanityservice';
 
 interface Props {
   behandlingsReferanse: string;
@@ -10,6 +11,7 @@ interface Props {
 
 export const Vedtak = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
+  const brevmaler = await hentAlleBrevmaler();
 
   const stegSomSkalVises = getStegSomSkalVises('VEDTAK', flyt);
 
@@ -23,15 +25,9 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
             </StegSuspense>
           );
         }
-
-        if (steg === 'FATTE_VEDTAK') {
-          return (
-            <StegSuspense key={steg}>
-              <FatteVedtakMedDataFetching behandlingsReferanse={behandlingsReferanse} />
-            </StegSuspense>
-          );
-        }
       })}
+
+      <BrevmalVelger brevmaler={brevmaler} />
     </>
   );
 };
