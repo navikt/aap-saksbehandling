@@ -5,13 +5,11 @@ import { useConfigForm } from 'hooks/FormHook';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/clientApi';
-import { SykdomsGrunnlag } from 'lib/types/types';
 import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
 import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
   behandlingsReferanse: string;
-  sykdomsgrunnlag: SykdomsGrunnlag;
 }
 
 interface FormFields {
