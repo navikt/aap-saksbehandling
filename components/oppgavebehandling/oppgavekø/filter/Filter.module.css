@@ -1,0 +1,18 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--a-spacing-4);
+}
+
+.nyttFilter {
+  margin-top: var(--a-spacing-8);
+}
+
+.soek {
+  margin-top: var(--a-spacing-4);
+}

@@ -1,0 +1,13 @@
+import { render, screen } from '@testing-library/react';
+import { Kort } from 'components/oppgavebehandling/kort/Kort';
+
+describe('Kort', () => {
+  test('tegner innhold som blir sendt inn', () => {
+    render(
+      <Kort>
+        <div>Enkelt innhold</div>
+      </Kort>
+    );
+    expect(screen.getByText('Enkelt innhold')).toBeVisible();
+  });
+});

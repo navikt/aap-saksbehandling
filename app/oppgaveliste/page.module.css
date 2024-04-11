@@ -1,0 +1,5 @@
+.content {
+  max-width: var(--a-breakpoint-2xl);
+  margin-inline: auto;
+  margin-top: var(--a-spacing-4);
+}
