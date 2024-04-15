@@ -56,7 +56,7 @@ export const ToTrinnsKontrollForm = ({ definisjon, lagreToTrinnskontroll, sendtT
       onSubmit={form.handleSubmit((data) => {
         lagreToTrinnskontroll({
           definisjon: definisjon,
-          godkjent: data.godkjent === JaEllerNei.Ja,
+          godkjent: data.godkjent === 'true',
           begrunnelse: data?.begrunnelse,
         });
         setErSendtInn(true);
@@ -65,7 +65,7 @@ export const ToTrinnsKontrollForm = ({ definisjon, lagreToTrinnskontroll, sendtT
     >
       <Label size={'medium'}>{mapBehovskodeTilBehovstype(definisjon as Behovstype)}</Label>
       <FormField form={form} formField={formFields.godkjent} />
-      {form.watch('godkjent') === JaEllerNei.Nei && (
+      {form.watch('godkjent') === 'false' && (
         <>
           <FormField form={form} formField={formFields.begrunnelse} />
           <FormField form={form} formField={formFields.grunn} />
