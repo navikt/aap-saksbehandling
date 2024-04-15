@@ -160,8 +160,8 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, 
 
         <Vilkårsveildening />
         <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
         <TilknyttedeDokumenter dokumenter={dokumenterBruktIVurderingen} />
+        <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
 
         {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
           <>

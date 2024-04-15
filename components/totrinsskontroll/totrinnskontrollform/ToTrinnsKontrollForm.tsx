@@ -1,7 +1,7 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { Behovstype, JaEllerNei, JaEllerNeiOptions, mapBehovskodeTilBehovstype } from 'lib/utils/form';
+import { Behovstype, GodkjennEllerUnderkjennOptions, JaEllerNei, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import { FormField } from 'components/input/formfield/FormField';
 import { Alert, Button, Label } from '@navikt/ds-react';
 
@@ -12,6 +12,7 @@ import { ToTrinnsVurdering } from 'lib/types/types';
 interface Props {
   definisjon: string;
   lagreToTrinnskontroll: (toTrinnskontroll: ToTrinnsVurdering) => void;
+  sendtTilbakeFraBeslutter: boolean;
 }
 
 interface FormFields {
@@ -20,32 +21,35 @@ interface FormFields {
   grunn: string;
 }
 
-export const ToTrinnsKontrollForm = ({ definisjon, lagreToTrinnskontroll }: Props) => {
+export const ToTrinnsKontrollForm = ({ definisjon, lagreToTrinnskontroll, sendtTilbakeFraBeslutter }: Props) => {
   const [erSendtInn, setErSendtInn] = useState(false);
-  const { form, formFields } = useConfigForm<FormFields>({
-    godkjent: {
-      type: 'radio',
-      label: 'Er du enig?',
-      options: JaEllerNeiOptions,
-      rules: { required: 'Du må svare om du er enig' },
-    },
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Begrunnelse',
-      rules: {
-        validate: (value, formValues) => {
-          if (!value && formValues.godkjent === JaEllerNei.Nei) {
-            return 'Du må skrive en begrunnelse';
-          }
+  const { form, formFields } = useConfigForm<FormFields>(
+    {
+      godkjent: {
+        type: 'radio',
+        label: 'Er du enig?',
+        options: GodkjennEllerUnderkjennOptions,
+        rules: { required: 'Du må svare om du er enig' },
+      },
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Begrunnelse',
+        rules: {
+          validate: (value, formValues) => {
+            if (!value && formValues.godkjent === JaEllerNei.Nei) {
+              return 'Du må skrive en begrunnelse';
+            }
+          },
         },
       },
+      grunn: {
+        type: 'select',
+        label: 'Velg grunn',
+        options: ['Grunn 1', 'Grunn 2', 'Grunn 3'],
+      },
     },
-    grunn: {
-      type: 'select',
-      label: 'Velg grunn',
-      options: ['Grunn 1', 'Grunn 2', 'Grunn 3'],
-    },
-  });
+    { readOnly: sendtTilbakeFraBeslutter }
+  );
 
   return (
     <form

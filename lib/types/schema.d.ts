@@ -396,7 +396,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestPersonDto': {
       /**
        * Format: date
-       * @example 2024-04-10
+       * @example 2024-04-12
        */
       fødselsdato: string;
       yrkesskade: boolean;
@@ -407,7 +407,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2024-04-10
+       * @example 2024-04-12
        */
       fødselsdato: string;
       ident: string;
@@ -419,7 +419,28 @@ export interface components {
       pliktkort: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.pliktkort.Pliktkort'];
     };
     'no.nav.aap.behandlingsflyt.avklaringsbehov.flate.FatteVedtakGrunnlagDto': {
+      historikk: components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.flate.Historikk'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.løser.vedtak.TotrinnsVurdering'][];
+    };
+    'no.nav.aap.behandlingsflyt.avklaringsbehov.flate.Historikk': {
+      avIdent: string;
+      /** @enum {string} */
+      definisjon:
+        | "MANUELT_SATT_PÅ_VENT(kode='9001')"
+        | "AVKLAR_STUDENT(kode='5001')"
+        | "AVKLAR_SYKDOM(kode='5003')"
+        | "FASTSETT_ARBEIDSEVNE(kode='5004')"
+        | "FASTSETT_BEREGNINGSTIDSPUNKT(kode='5008')"
+        | "FRITAK_MELDEPLIKT(kode='5005')"
+        | "AVKLAR_BISTANDSBEHOV(kode='5006')"
+        | "AVKLAR_SYKEPENGEERSTATNING(kode='5007')"
+        | "FORESLÅ_VEDTAK(kode='5098')"
+        | "FATTE_VEDTAK(kode='5099')";
+      /**
+       * Format: date-time
+       * @example 2024-04-12T10:56:51.690316
+       */
+      tidspunkt: string;
     };
     'no.nav.aap.behandlingsflyt.avklaringsbehov.flate.LøsAvklaringsbehovPåBehandling': {
       /** Format: int64 */
@@ -500,7 +521,7 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2024-04-10
+       * @example 2024-04-12
        */
       ytterligereNedsattArbeidsevneDato?: string | null;
     };
@@ -523,7 +544,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurdering': {
       /**
        * Format: date
-       * @example 2024-04-10
+       * @example 2024-04-12
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
@@ -549,7 +570,7 @@ export interface components {
       ref: string;
       /**
        * Format: date
-       * @example 2024-04-10
+       * @example 2024-04-12
        */
       skadedato: string;
     };
@@ -568,7 +589,7 @@ export interface components {
       nedreGrense?: 'TRETTI' | 'FEMTI' | null;
       /**
        * Format: date
-       * @example 2024-04-10
+       * @example 2024-04-12
        */
       nedsattArbeidsevneDato?: string | null;
       yrkesskadevurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadevurderingDto'];
@@ -665,7 +686,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-04-10T10:17:30.12564
+       * @example 2024-04-12T10:56:51.690316
        */
       opprettet: string;
       /** Format: uuid */
@@ -684,7 +705,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-04-10T10:17:30.12564
+       * @example 2024-04-12T10:56:51.690316
        */
       tidsstempel: string;
     };
@@ -735,12 +756,15 @@ export interface components {
       vilkårDTO?: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårDTO'];
     };
     'no.nav.aap.behandlingsflyt.flyt.flate.SøknadDto': {
-      student: boolean;
+      student: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.SøknadStudentDto'];
     };
     'no.nav.aap.behandlingsflyt.flyt.flate.SøknadSendDto': {
       journalpostId: string;
       saksnummer: string;
       søknad: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.SøknadDto'];
+    };
+    'no.nav.aap.behandlingsflyt.flyt.flate.SøknadStudentDto': {
+      erStudent: string;
     };
     'no.nav.aap.behandlingsflyt.flyt.flate.VilkårDTO': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO'][];
@@ -784,7 +808,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-04-10T10:17:30.12564
+       * @example 2024-04-12T10:56:51.690316
        */
       opprettet: string;
       /** Format: uuid */
@@ -797,7 +821,7 @@ export interface components {
       ident: string;
       /**
        * Format: date
-       * @example 2024-04-10
+       * @example 2024-04-12
        */
       søknadsdato: string;
     };
@@ -829,12 +853,12 @@ export interface components {
     'no.nav.aap.verdityper.Periode': {
       /**
        * Format: date
-       * @example 2024-04-10
+       * @example 2024-04-12
        */
       fom: string;
       /**
        * Format: date
-       * @example 2024-04-10
+       * @example 2024-04-12
        */
       tom: string;
     };

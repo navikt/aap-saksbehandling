@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Layout = async ({ children, params }: Props) => {
-  const saksInfo = await hentSaksinfo(); // TODO: Litt metadata om søker, skal skrives om
+  const saksInfo = await hentSaksinfo();
   const sak = await hentSak(params.saksId);
   const personInformasjon = await hentPersonInformasjonForIdent(sak.ident);
   const flytResponse = await hentFlyt(params.behandlingsReferanse);

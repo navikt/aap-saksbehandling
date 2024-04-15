@@ -52,6 +52,11 @@ export const JaEllerNeiOptions: ValuePair[] = [
   { label: 'Nei', value: JaEllerNei.Nei },
 ];
 
+export const GodkjennEllerUnderkjennOptions: ValuePair[] = [
+  { label: 'Godkjenn', value: 'true' },
+  { label: 'Underkjenn', value: 'false' },
+];
+
 export const getJaNeiEllerUndefined = (value?: boolean | null) => {
   if (value === undefined || value === null) {
     return undefined;

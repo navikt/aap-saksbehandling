@@ -13,7 +13,11 @@ export const ToTrinnskontrollMedDataFetching = async ({ behandlingsReferanse }: 
   return (
     <>
       {skalViseToTrinnsKontroll && (
-        <ToTrinnsKontroll fatteVedtakGrunnlag={fatteVedtakGrunnlag} behandlingsReferanse={behandlingsReferanse} />
+        <ToTrinnsKontroll
+          fatteVedtakGrunnlag={fatteVedtakGrunnlag}
+          behandlingsReferanse={behandlingsReferanse}
+          sendtTilbakeFraBeslutter={false}
+        />
       )}
     </>
   );
