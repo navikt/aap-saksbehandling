@@ -26,7 +26,7 @@ import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/Tilknytt
 interface Props {
   behandlingsReferanse: string;
   grunnlag: SykdomsGrunnlag;
-  erBeslutter: boolean;
+  readOnly: boolean;
 }
 
 interface FormFields {
@@ -39,7 +39,7 @@ interface FormFields {
   dokumenterBruktIVurderingen: string[];
 }
 
-export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, erBeslutter }: Props) => {
+export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
   const { form, formFields } = useConfigForm<FormFields>(
     {
       erArbeidsevnenNedsatt: {
@@ -95,7 +95,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, 
         description: 'Tilknytt minst ett dokument til §11-22 1.ledd og §11-5 vurdering',
       },
     },
-    { shouldUnregister: true, readOnly: erBeslutter }
+    { shouldUnregister: true, readOnly: readOnly }
   );
 
   const dokumenterBruktIVurderingen = form.watch('dokumenterBruktIVurderingen');
@@ -133,7 +133,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, 
             referanse: behandlingsReferanse,
           });
         })}
-        visBekreftKnapp={!erBeslutter}
+        visBekreftKnapp={!readOnly}
       >
         <Alert variant="warning" size={'small'}>
           Vi har funnet en eller flere registrerte yrkesskader

@@ -22,7 +22,7 @@ import { stringToDate } from 'lib/utils/date';
 interface Props {
   behandlingsReferanse: string;
   grunnlag?: StudentGrunnlag;
-  erBeslutter: boolean;
+  readOnly: boolean;
 }
 
 interface FormFields {
@@ -31,7 +31,7 @@ interface FormFields {
   avbruttStudieDato?: Date;
 }
 
-export const Student = ({ behandlingsReferanse, grunnlag, erBeslutter }: Props) => {
+export const Student = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -64,7 +64,7 @@ export const Student = ({ behandlingsReferanse, grunnlag, erBeslutter }: Props) 
         },
       },
     },
-    { readOnly: erBeslutter }
+    { readOnly: readOnly }
   );
 
   return (
@@ -92,7 +92,7 @@ export const Student = ({ behandlingsReferanse, grunnlag, erBeslutter }: Props) 
           });
         })}
         steg={'AVKLAR_STUDENT'}
-        visBekreftKnapp={!erBeslutter}
+        visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
 

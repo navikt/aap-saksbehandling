@@ -16,7 +16,8 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
 
   const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt);
-  const erPåFatteVedtakSteg = flyt.aktivtSteg === 'FATTE_VEDTAK';
+
+  const saksBehandlerReadOnly = flyt.visning.saksbehandlerReadOnly;
 
   return (
     <>
@@ -24,7 +25,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
         if (steg === 'AVKLAR_STUDENT') {
           return (
             <StegSuspense key={steg}>
-              <StudentMedDataFetching behandlingsReferanse={behandlingsReferanse} erBeslutter={erPåFatteVedtakSteg} />
+              <StudentMedDataFetching behandlingsReferanse={behandlingsReferanse} readOnly={saksBehandlerReadOnly} />
             </StegSuspense>
           );
         }
@@ -33,7 +34,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             <StegSuspense key={steg}>
               <SykdomsvurderingMedDataFetching
                 behandlingsReferanse={behandlingsReferanse}
-                erBeslutter={erPåFatteVedtakSteg}
+                readOnly={saksBehandlerReadOnly}
               />
             </StegSuspense>
           );
@@ -41,20 +42,14 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
         if (steg === 'FRITAK_MELDEPLIKT') {
           return (
             <StegSuspense key={steg}>
-              <MeldepliktMedDataFetching
-                behandlingsReferanse={behandlingsReferanse}
-                erBeslutter={erPåFatteVedtakSteg}
-              />
+              <MeldepliktMedDataFetching behandlingsReferanse={behandlingsReferanse} readOnly={saksBehandlerReadOnly} />
             </StegSuspense>
           );
         }
         if (steg === 'VURDER_BISTANDSBEHOV') {
           return (
             <StegSuspense key={steg}>
-              <OppfølgingMedDataFetching
-                behandlingsReferanse={behandlingsReferanse}
-                erBeslutter={erPåFatteVedtakSteg}
-              />
+              <OppfølgingMedDataFetching behandlingsReferanse={behandlingsReferanse} readOnly={saksBehandlerReadOnly} />
             </StegSuspense>
           );
         }
@@ -63,7 +58,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             <StegSuspense key={steg}>
               <FastsettArbeidsevneMedDataFetching
                 behandlingsReferanse={behandlingsReferanse}
-                erBeslutter={erPåFatteVedtakSteg}
+                readOnly={saksBehandlerReadOnly}
               />
             </StegSuspense>
           );
@@ -73,7 +68,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             <StegSuspense key={steg}>
               <SykepengeerstatningMedDataFetching
                 behandlingsReferanse={behandlingsReferanse}
-                erBeslutter={erPåFatteVedtakSteg}
+                readOnly={saksBehandlerReadOnly}
               />
             </StegSuspense>
           );

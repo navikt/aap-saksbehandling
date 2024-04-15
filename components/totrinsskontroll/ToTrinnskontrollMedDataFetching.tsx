@@ -8,17 +8,11 @@ export const ToTrinnskontrollMedDataFetching = async ({ behandlingsReferanse }: 
   const fatteVedtakGrunnlag = await hentFatteVedtakGrunnlang(behandlingsReferanse);
   const flyt = await hentFlyt(behandlingsReferanse);
 
-  const skalViseToTrinnsKontroll = flyt.aktivGruppe === 'FATTE_VEDTAK';
-
   return (
-    <>
-      {skalViseToTrinnsKontroll && (
-        <ToTrinnsKontroll
-          fatteVedtakGrunnlag={fatteVedtakGrunnlag}
-          behandlingsReferanse={behandlingsReferanse}
-          sendtTilbakeFraBeslutter={false}
-        />
-      )}
-    </>
+    <ToTrinnsKontroll
+      fatteVedtakGrunnlag={fatteVedtakGrunnlag}
+      behandlingsReferanse={behandlingsReferanse}
+      sendtTilbakeFraBeslutter={flyt.visning.beslutterReadOnly}
+    />
   );
 };

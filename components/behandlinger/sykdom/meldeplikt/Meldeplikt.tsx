@@ -17,7 +17,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
   behandlingsReferanse: string;
-  erBeslutter: boolean;
+  readOnly: boolean;
   grunnlag?: FritakMeldepliktGrunnlag;
 }
 
@@ -29,7 +29,7 @@ interface FormFields {
   sluttDato?: Date;
 }
 
-export const Meldeplikt = ({ behandlingsReferanse, grunnlag, erBeslutter }: Props) => {
+export const Meldeplikt = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
@@ -61,7 +61,7 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag, erBeslutter }: Prop
         label: 'Sluttdato for fritak fra meldeplikt',
       },
     },
-    { readOnly: erBeslutter }
+    { readOnly: readOnly }
   );
 
   return (
@@ -91,7 +91,7 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag, erBeslutter }: Prop
           });
         })}
         steg={'BARNETILLEGG'}
-        visBekreftKnapp={!erBeslutter}
+        visBekreftKnapp={!readOnly}
       >
         <Alert variant={'info'} size={'small'}>
           <BodyShort size={'small'}>Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:</BodyShort>

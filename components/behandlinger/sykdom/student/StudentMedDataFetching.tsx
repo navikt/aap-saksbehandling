@@ -3,11 +3,11 @@ import { hentStudentGrunnlag } from 'lib/services/saksbehandlingservice/saksbeha
 
 interface Props {
   behandlingsReferanse: string;
-  erBeslutter: boolean;
+  readOnly: boolean;
 }
 
-export const StudentMedDataFetching = async ({ behandlingsReferanse, erBeslutter }: Props) => {
+export const StudentMedDataFetching = async ({ behandlingsReferanse, readOnly }: Props) => {
   const grunnlag = await hentStudentGrunnlag(behandlingsReferanse);
 
-  return <Student behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} erBeslutter={erBeslutter} />;
+  return <Student behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} readOnly={readOnly} />;
 };

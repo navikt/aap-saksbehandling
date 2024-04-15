@@ -10,7 +10,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
   behandlingsReferanse: string;
-  erBeslutter: boolean;
+  readOnly: boolean;
 }
 
 interface FormFields {
@@ -19,7 +19,7 @@ interface FormFields {
   antattÅrligInntekt: string;
 }
 
-export const FastsettBeregning = ({ behandlingsReferanse, erBeslutter }: Props) => {
+export const FastsettBeregning = ({ behandlingsReferanse, readOnly }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -35,7 +35,7 @@ export const FastsettBeregning = ({ behandlingsReferanse, erBeslutter }: Props) 
         label: 'Antatt årlig inntekt',
       },
     },
-    { readOnly: erBeslutter }
+    { readOnly: readOnly }
   );
 
   return (
@@ -57,7 +57,7 @@ export const FastsettBeregning = ({ behandlingsReferanse, erBeslutter }: Props) 
             referanse: behandlingsReferanse,
           });
         })}
-        visBekreftKnapp={!erBeslutter}
+        visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />

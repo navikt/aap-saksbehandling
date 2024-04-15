@@ -4,19 +4,19 @@ import { SykdomsvurderingMedYrkesskade } from 'components/behandlinger/sykdom/sy
 
 interface Props {
   behandlingsReferanse: string;
-  erBeslutter: boolean;
+  readOnly: boolean;
 }
 
-export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, erBeslutter }: Props) => {
+export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, readOnly }: Props) => {
   const grunnlag = await hentSykdomsGrunnlag(behandlingsReferanse);
 
   return grunnlag.skalVurdereYrkesskade ? (
     <SykdomsvurderingMedYrkesskade
       behandlingsReferanse={behandlingsReferanse}
       grunnlag={grunnlag}
-      erBeslutter={erBeslutter}
+      readOnly={readOnly}
     />
   ) : (
-    <Sykdomsvurdering behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} erBeslutter={erBeslutter} />
+    <Sykdomsvurdering behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} readOnly={readOnly} />
   );
 };

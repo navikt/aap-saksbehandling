@@ -50,6 +50,10 @@ const flyt: BehandlingFlytOgTilstand = {
   aktivGruppe: 'SYKDOM',
   aktivtSteg: 'AVKLAR_SYKDOM',
   behandlingVersjon: 0,
+  visning: {
+    saksbehandlerReadOnly: false,
+    beslutterReadOnly: false,
+  },
   flyt: [],
 };
 

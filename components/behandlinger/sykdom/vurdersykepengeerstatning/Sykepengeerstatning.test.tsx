@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 describe('Sykepengeerstatning', () => {
   beforeEach(() => {
-    render(<Sykepengeerstatning behandlingsReferanse={'123'} erBeslutter={false} />);
+    render(<Sykepengeerstatning behandlingsReferanse={'123'} readOnly={false} />);
   });
 
   const user = userEvent.setup();

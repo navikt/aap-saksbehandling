@@ -21,7 +21,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
             <StegSuspense key={steg}>
               <FastsettBeregningMedDataFeching
                 behandlingsReferanse={behandlingsReferanse}
-                erBeslutter={erPåFatteVedtakSteg}
+                readOnly={erPåFatteVedtakSteg}
               />
             </StegSuspense>
           );

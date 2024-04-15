@@ -19,7 +19,7 @@ import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiled
 
 interface Props {
   behandlingsReferanse: string;
-  erBeslutter: boolean;
+  readOnly: boolean;
   grunnlag?: BistandsGrunnlag;
 }
 
@@ -30,7 +30,7 @@ interface FormFields {
   grunner: string[];
 }
 
-export const Oppfølging = ({ behandlingsReferanse, grunnlag, erBeslutter }: Props) => {
+export const Oppfølging = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
@@ -63,7 +63,7 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag, erBeslutter }: Pro
         ],
       },
     },
-    { readOnly: erBeslutter }
+    { readOnly: readOnly }
   );
 
   return (
@@ -88,7 +88,7 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag, erBeslutter }: Pro
             referanse: behandlingsReferanse,
           });
         })}
-        visBekreftKnapp={!erBeslutter}
+        visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />

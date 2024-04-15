@@ -3,7 +3,7 @@ import { FastsettBeregning } from 'components/behandlinger/grunnlag/fastsettbere
 
 describe('Fastsett beregning', () => {
   it('Skal ha heading', () => {
-    render(<FastsettBeregning behandlingsReferanse={'123'} />);
+    render(<FastsettBeregning behandlingsReferanse={'123'} readOnly={false} />);
     const heading = screen.getByText('Fastsett beregning');
     expect(heading).toBeVisible();
   });

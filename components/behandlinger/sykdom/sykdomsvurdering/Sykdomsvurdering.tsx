@@ -23,7 +23,7 @@ import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiled
 interface Props {
   behandlingsReferanse: string;
   grunnlag: SykdomsGrunnlag;
-  erBeslutter: boolean;
+  readOnly: boolean;
 }
 
 interface FormFields {
@@ -35,7 +35,7 @@ interface FormFields {
   nedsattArbeidsevneDato: Date;
 }
 
-export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, erBeslutter }: Props) => {
+export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, readOnly }: Props) => {
   const { formFields, form } = useConfigForm<FormFields>(
     {
       erArbeidsevnenNedsatt: {
@@ -83,7 +83,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, erBeslutter }
         },
       },
     },
-    { shouldUnregister: true, readOnly: erBeslutter }
+    { shouldUnregister: true, readOnly: readOnly }
   );
 
   return (
@@ -111,7 +111,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, erBeslutter }
           });
         })}
         steg={'AVKLAR_SYKDOM'}
-        visBekreftKnapp={!erBeslutter}
+        visBekreftKnapp={!readOnly}
       >
         <RegistrertBehandler />
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>

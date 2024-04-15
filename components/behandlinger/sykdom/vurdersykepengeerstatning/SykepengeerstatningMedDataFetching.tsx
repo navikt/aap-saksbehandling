@@ -3,13 +3,11 @@ import { hentSykepengerErstatningGrunnlag } from 'lib/services/saksbehandlingser
 
 interface Props {
   behandlingsReferanse: string;
-  erBeslutter: boolean;
+  readOnly: boolean;
 }
 
-export const SykepengeerstatningMedDataFetching = async ({ behandlingsReferanse, erBeslutter }: Props) => {
+export const SykepengeerstatningMedDataFetching = async ({ behandlingsReferanse, readOnly }: Props) => {
   const grunnlag = await hentSykepengerErstatningGrunnlag(behandlingsReferanse);
 
-  return (
-    <Sykepengeerstatning behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} erBeslutter={erBeslutter} />
-  );
+  return <Sykepengeerstatning behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} readOnly={readOnly} />;
 };

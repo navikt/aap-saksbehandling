@@ -2,9 +2,9 @@ import { FastsettBeregning } from 'components/behandlinger/grunnlag/fastsettbere
 
 interface Props {
   behandlingsReferanse: string;
-  erBeslutter: boolean;
+  readOnly: boolean;
 }
 
-export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, erBeslutter }: Props) => {
-  return <FastsettBeregning behandlingsReferanse={behandlingsReferanse} erBeslutter={erBeslutter} />;
+export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, readOnly }: Props) => {
+  return <FastsettBeregning behandlingsReferanse={behandlingsReferanse} readOnly={readOnly} />;
 };
