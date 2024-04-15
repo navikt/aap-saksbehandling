@@ -12,7 +12,7 @@ export const ToTrinnskontrollMedDataFetching = async ({ behandlingsReferanse }: 
     <ToTrinnsKontroll
       fatteVedtakGrunnlag={fatteVedtakGrunnlag}
       behandlingsReferanse={behandlingsReferanse}
-      sendtTilbakeFraBeslutter={flyt.visning.beslutterReadOnly}
+      readOnly={flyt.visning.beslutterReadOnly}
     />
   );
 };

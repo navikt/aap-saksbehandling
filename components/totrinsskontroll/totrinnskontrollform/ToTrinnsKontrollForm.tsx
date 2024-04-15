@@ -10,9 +10,9 @@ import { useState } from 'react';
 import { ToTrinnsVurdering } from 'lib/types/types';
 
 interface Props {
-  definisjon: string;
+  toTrinnsVurdering: ToTrinnsVurdering;
   lagreToTrinnskontroll: (toTrinnskontroll: ToTrinnsVurdering) => void;
-  sendtTilbakeFraBeslutter: boolean;
+  readOnly: boolean;
 }
 
 interface FormFields {
@@ -21,7 +21,7 @@ interface FormFields {
   grunn: string;
 }
 
-export const ToTrinnsKontrollForm = ({ definisjon, lagreToTrinnskontroll, sendtTilbakeFraBeslutter }: Props) => {
+export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll, readOnly }: Props) => {
   const [erSendtInn, setErSendtInn] = useState(false);
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -48,14 +48,14 @@ export const ToTrinnsKontrollForm = ({ definisjon, lagreToTrinnskontroll, sendtT
         options: ['Grunn 1', 'Grunn 2', 'Grunn 3'],
       },
     },
-    { readOnly: sendtTilbakeFraBeslutter }
+    { readOnly: readOnly }
   );
 
   return (
     <form
       onSubmit={form.handleSubmit((data) => {
         lagreToTrinnskontroll({
-          definisjon: definisjon,
+          definisjon: toTrinnsVurdering.definisjon,
           godkjent: data.godkjent === 'true',
           begrunnelse: data?.begrunnelse,
         });
@@ -63,7 +63,8 @@ export const ToTrinnsKontrollForm = ({ definisjon, lagreToTrinnskontroll, sendtT
       })}
       className={styles.form}
     >
-      <Label size={'medium'}>{mapBehovskodeTilBehovstype(definisjon as Behovstype)}</Label>
+      {/*TODO Fiks den syke typen her Thomas*/}
+      <Label size={'medium'}>{mapBehovskodeTilBehovstype(toTrinnsVurdering as unknown as Behovstype)}</Label>
       <FormField form={form} formField={formFields.godkjent} />
       {form.watch('godkjent') === 'false' && (
         <>
@@ -71,15 +72,17 @@ export const ToTrinnsKontrollForm = ({ definisjon, lagreToTrinnskontroll, sendtT
           <FormField form={form} formField={formFields.grunn} />
         </>
       )}
-      <div>
-        {erSendtInn ? (
-          <Alert size={'small'} variant={'success'}>
-            Fullført
-          </Alert>
-        ) : (
-          <Button size={'small'}>Bekreft</Button>
-        )}
-      </div>
+      {!readOnly && (
+        <div>
+          {erSendtInn ? (
+            <Alert size={'small'} variant={'success'}>
+              Fullført
+            </Alert>
+          ) : (
+            <Button size={'small'}>Bekreft</Button>
+          )}
+        </div>
+      )}
     </form>
   );
 };

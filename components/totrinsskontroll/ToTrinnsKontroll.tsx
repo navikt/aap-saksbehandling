@@ -4,7 +4,6 @@ import { FatteVedtakGrunnlag, ToTrinnsVurdering } from 'lib/types/types';
 import { ToTrinnsKontrollForm } from 'components/totrinsskontroll/totrinnskontrollform/ToTrinnsKontrollForm';
 
 import styles from 'components/totrinsskontroll/ToTrinnsKontroll.module.css';
-import stylesHello from './totrinnskontrollform/ToTrinnsKontrollForm.module.css';
 import { useState } from 'react';
 import { BodyShort, Button, Label } from '@navikt/ds-react';
 import { løsBehov } from 'lib/clientApi';
@@ -14,15 +13,15 @@ import { formaterDatoTidForVisning } from '@navikt/aap-felles-utils-client';
 interface Props {
   fatteVedtakGrunnlag: FatteVedtakGrunnlag;
   behandlingsReferanse: string;
-  sendtTilbakeFraBeslutter: boolean;
+  readOnly: boolean;
 }
 
-export const ToTrinnsKontroll = ({ fatteVedtakGrunnlag, behandlingsReferanse, sendtTilbakeFraBeslutter }: Props) => {
+export const ToTrinnsKontroll = ({ fatteVedtakGrunnlag, behandlingsReferanse, readOnly }: Props) => {
   const [toTrinnskontrollVurderinger, setToTrinnskontrollVurderinger] = useState<ToTrinnsVurdering[]>([]);
 
   return (
     <div className={styles.toTrinnsKontroll}>
-      <div className={stylesHello.form}>
+      <div>
         <Label size={'medium'}>Historikk</Label>
         {fatteVedtakGrunnlag.historikk.map((historikk, index) => (
           <div key={index}>
@@ -33,32 +32,34 @@ export const ToTrinnsKontroll = ({ fatteVedtakGrunnlag, behandlingsReferanse, se
         ))}
       </div>
 
-      {fatteVedtakGrunnlag.vurderinger.map((vurderinger) => (
+      {fatteVedtakGrunnlag.vurderinger.map((vurdering) => (
         <ToTrinnsKontrollForm
-          definisjon={vurderinger.definisjon}
-          key={vurderinger.definisjon}
+          toTrinnsVurdering={vurdering}
+          key={vurdering.definisjon}
           lagreToTrinnskontroll={(toTrinnskontroll) =>
             setToTrinnskontrollVurderinger([...toTrinnskontrollVurderinger, toTrinnskontroll])
           }
-          sendtTilbakeFraBeslutter={sendtTilbakeFraBeslutter}
+          readOnly={readOnly}
         />
       ))}
 
-      <Button
-        size={'medium'}
-        onClick={async () => {
-          await løsBehov({
-            behandlingVersjon: 0,
-            behov: {
-              behovstype: Behovstype.FATTE_VEDTAK_KODE,
-              vurderinger: toTrinnskontrollVurderinger,
-            },
-            referanse: behandlingsReferanse,
-          });
-        }}
-      >
-        Send inn
-      </Button>
+      {!readOnly && (
+        <Button
+          size={'medium'}
+          onClick={async () => {
+            await løsBehov({
+              behandlingVersjon: 0,
+              behov: {
+                behovstype: Behovstype.FATTE_VEDTAK_KODE,
+                vurderinger: toTrinnskontrollVurderinger,
+              },
+              referanse: behandlingsReferanse,
+            });
+          }}
+        >
+          Send inn
+        </Button>
+      )}
     </div>
   );
 };
