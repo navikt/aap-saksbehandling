@@ -9,10 +9,13 @@ export const ToTrinnskontrollMedDataFetching = async ({ behandlingsReferanse }: 
   const flyt = await hentFlyt(behandlingsReferanse);
 
   return (
+<>{flyt.visning.visBeslutterKort && 
     <ToTrinnsKontroll
       fatteVedtakGrunnlag={fatteVedtakGrunnlag}
       behandlingsReferanse={behandlingsReferanse}
       readOnly={flyt.visning.beslutterReadOnly}
     />
+}
+</>
   );
 };
