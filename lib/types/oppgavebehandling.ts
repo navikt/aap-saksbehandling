@@ -6,3 +6,7 @@ export type Oppgave = {
   reservertTil: string;
   saksbehandler?: string;
 };
+
+export type Oppgaver = {
+  oppgaver: Oppgave[];
+};
