@@ -44,9 +44,15 @@ export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll,
         },
       },
       grunn: {
-        type: 'select',
+        type: 'checkbox',
         label: 'Velg grunn',
-        options: ['Grunn 1', 'Grunn 2', 'Grunn 3'],
+        options: [
+          'Feil fakta',
+          'Mangler dokumentasjon',
+          'Feil/mangelfull lovanvendelse',
+          'Mangelfull begrunnelse',
+          'Skrivefeil/korrektur',
+        ],
       },
     },
     { readOnly: readOnly }
@@ -64,8 +70,7 @@ export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll,
       })}
       className={styles.form}
     >
-      {/*TODO Fiks den syke typen her Thomas*/}
-      <Label size={'medium'}>{mapBehovskodeTilBehovstype(toTrinnsVurdering as unknown as Behovstype)}</Label>
+      <Label size={'medium'}>{mapBehovskodeTilBehovstype(toTrinnsVurdering.definisjon as Behovstype)}</Label>
       <FormField form={form} formField={formFields.godkjent} />
       {form.watch('godkjent') === 'false' && (
         <>
