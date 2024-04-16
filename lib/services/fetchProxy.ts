@@ -57,7 +57,7 @@ const fetchWithRetry = async <ResponseBody>(
     method,
     body: JSON.stringify(requestBody),
     headers: {
-      Authorization: `Bearer ${oboToken}`,
+      ...(isLocal() ? {} : { Authorization: `Bearer ${oboToken}` }),
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
