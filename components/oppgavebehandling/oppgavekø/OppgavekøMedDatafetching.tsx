@@ -10,7 +10,7 @@ const hentOppgaver = async (): Promise<Oppgave[]> => {
   if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'localhost') {
     return mockOppgaver;
   }
-  return await fetchProxy<Oppgave[]>(`${oppgavestyringApiBaseUrl}/api/oppgaver`, oppgavestyringApiScope, 'GET');
+  return await fetchProxy<Oppgave[]>(`${oppgavestyringApiBaseUrl}/oppgaver`, oppgavestyringApiScope, 'GET');
 };
 
 export const OppgavekMedDatafetching = async () => {
