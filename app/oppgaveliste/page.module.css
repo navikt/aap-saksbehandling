@@ -3,3 +3,7 @@
   margin-inline: auto;
   margin-top: var(--a-spacing-4);
 }
+
+.oppgavekø {
+  margin-top: var(--a-spacing-4);
+}

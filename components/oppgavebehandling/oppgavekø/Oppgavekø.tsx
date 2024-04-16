@@ -1,23 +1,18 @@
 'use client';
 
-import { mockOppgaver } from 'mocks/mockOppgaver';
-import { Oppgave } from 'lib/types/oppgavebehandling';
-import { Oppgavetabell } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/Oppgavetabell';
-import { Filter } from 'components/oppgavebehandling/oppgavekø/filter/Filter';
 import { ExpansionCard } from '@navikt/ds-react';
 
+import { Oppgavetabell } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/Oppgavetabell';
+import { Filter } from 'components/oppgavebehandling/oppgavekø/filter/Filter';
+
+import { Oppgave } from 'lib/types/oppgavebehandling';
 import styles from './Oppgavekø.module.css';
 
-const hentOppgaver = async (): Promise<Oppgave[]> => {
-  if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'localhost') {
-    return mockOppgaver;
-  }
-  return [];
-};
+interface Props {
+  oppgaver: Oppgave[];
+}
 
-export const Oppgavekø = async () => {
-  const oppgaver = await hentOppgaver();
-
+export const Oppgavekø = ({ oppgaver }: Props) => {
   return (
     <section className={styles.oppgavekø}>
       <ExpansionCard aria-label={'NAY nasjonal AAP-kø'} defaultOpen>
