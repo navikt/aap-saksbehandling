@@ -8,6 +8,7 @@ import { Alert, Button, Label } from '@navikt/ds-react';
 import styles from 'components/totrinsskontroll/totrinnskontrollform/ToTrinnsKontrollForm.module.css';
 import { useState } from 'react';
 import { ToTrinnsVurdering } from 'lib/types/types';
+import { Veiledning } from 'components/veiledning/Veiledning';
 
 interface Props {
   toTrinnsVurdering: ToTrinnsVurdering;
@@ -69,6 +70,10 @@ export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll,
       {form.watch('godkjent') === 'false' && (
         <>
           <FormField form={form} formField={formFields.begrunnelse} />
+          <Veiledning
+            header={'Overskrift'}
+            tekst={veiledningsTekstPåDefinisjon(toTrinnsVurdering.definisjon as Behovstype)}
+          />
           <FormField form={form} formField={formFields.grunn} />
         </>
       )}
@@ -86,3 +91,13 @@ export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll,
     </form>
   );
 };
+
+function veiledningsTekstPåDefinisjon(definisjon: Behovstype): string {
+  if (definisjon === '5003') {
+    return 'Husk at du som beslutter ikke skal overprøve skjønnet knyttet til nedsatt arbeidsevne';
+  } else if (definisjon === '5006') {
+    return 'Husk at du som beslutter ikke skal overprøve skjønnet knyttet til bistandsbehovet';
+  } else {
+    return 'Her kommer noe veildeningstekst';
+  }
+}

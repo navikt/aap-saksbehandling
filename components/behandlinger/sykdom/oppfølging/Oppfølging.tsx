@@ -15,7 +15,7 @@ import {
   JaEllerNeiOptions,
 } from 'lib/utils/form';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
-import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
+import { Veiledning } from 'components/veiledning/Veiledning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -93,7 +93,7 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag, readOnly }: Props)
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
-        <Vilkårsveildening />
+        <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.vilkårOppfylt} />
         {form.watch('vilkårOppfylt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.grunner} />}

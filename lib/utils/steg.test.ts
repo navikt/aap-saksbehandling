@@ -53,6 +53,7 @@ const flyt: BehandlingFlytOgTilstand = {
   visning: {
     saksbehandlerReadOnly: false,
     beslutterReadOnly: false,
+    visBeslutterKort: false,
   },
   flyt: [],
 };

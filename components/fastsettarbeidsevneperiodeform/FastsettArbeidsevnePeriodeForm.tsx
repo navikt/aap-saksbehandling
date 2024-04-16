@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 import styles from './FastsettArbeidsevnePeriodeForm.module.css';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
-import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
+import { Veiledning } from 'components/veiledning/Veiledning';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
@@ -68,7 +68,7 @@ export const FastsettArbeidsevnePeriodeForm = ({ onSave, onAvbryt }: Props) => {
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
-        <Vilkårsveildening />
+        <Veiledning />
 
         <FormField form={form} formField={formFields.begrunnelse} />
         <div className={styles.prosenttimer}>

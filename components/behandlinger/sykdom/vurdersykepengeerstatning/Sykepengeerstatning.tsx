@@ -14,7 +14,7 @@ import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/clientApi';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
-import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
+import { Veiledning } from 'components/veiledning/Veiledning';
 import { SykepengeerstatningGrunnlag } from 'lib/types/types';
 
 interface Props {
@@ -90,7 +90,7 @@ export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag, readOnly }
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
-        <Vilkårsveildening />
+        <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erOppfylt} />
         {form.watch('erOppfylt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.grunn} />}

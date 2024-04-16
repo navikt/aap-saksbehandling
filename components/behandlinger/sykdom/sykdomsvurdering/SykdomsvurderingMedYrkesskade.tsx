@@ -19,7 +19,7 @@ import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBe
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
 import styles from './SykdomsvurderingMedYrkesskade.module.css';
-import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
+import { Veiledning } from 'components/veiledning/Veiledning';
 import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 
@@ -158,7 +158,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, 
           <DokumentTabell />
         </FormField>
 
-        <Vilkårsveildening />
+        <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} />
         <TilknyttedeDokumenter dokumenter={dokumenterBruktIVurderingen} />
         <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />

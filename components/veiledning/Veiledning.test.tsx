@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react';
-import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
+import { Veiledning } from 'components/veiledning/Veiledning';
 
 describe('Vilkårsveildening', () => {
   it('skal ha en overskrift', () => {
-    render(<Vilkårsveildening />);
+    render(<Veiledning />);
 
     expect(screen.getByText('Slik vurderes vilkåret')).toBeVisible();
   });
 
   it('skal vise korrekt tekst for avklar student', () => {
-    render(<Vilkårsveildening />);
+    render(<Veiledning />);
     expect(screen.getByText('Her kommer det noe tekst som beskriver hvordan vilkåret skal vurderes')).toBeVisible();
   });
 });

@@ -12,7 +12,7 @@ import { FritakMeldepliktGrunnlag } from 'lib/types/types';
 import { løsBehov } from 'lib/clientApi';
 import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
-import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
+import { Veiledning } from 'components/veiledning/Veiledning';
 import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
@@ -113,7 +113,7 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag, readOnly }: Props) 
           <DokumentTabell />
         </FormField>
 
-        <Vilkårsveildening />
+        <Veiledning />
 
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.unntakFraMeldeplikt} />

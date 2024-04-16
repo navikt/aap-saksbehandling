@@ -18,7 +18,7 @@ import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBe
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
-import { Vilkårsveildening } from 'components/vilkårsveiledning/Vilkårsveiledning';
+import { Veiledning } from 'components/veiledning/Veiledning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -117,7 +117,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, readOnly }: P
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
-        <Vilkårsveildening />
+        <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
         <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
