@@ -15,6 +15,7 @@ const hentOppgaver = async (): Promise<Oppgave[]> => {
 
 export const OppgavekMedDatafetching = async () => {
   const oppgaver = await hentOppgaver();
+  console.log('oppgaveresponse: ', JSON.stringify(oppgaver));
 
   return <Oppgavekø oppgaver={oppgaver} />;
 };
