@@ -9,6 +9,7 @@ import styles from './Oppgavetabell.module.css';
 type Props = {
   oppgaver: Oppgave[];
 };
+
 export const Oppgavetabell = ({ oppgaver }: Props) => {
   const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.saksbehandler;
   return (
