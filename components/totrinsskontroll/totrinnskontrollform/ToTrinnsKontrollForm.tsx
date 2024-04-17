@@ -1,7 +1,13 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { Behovstype, GodkjennEllerUnderkjennOptions, JaEllerNei, mapBehovskodeTilBehovstype } from 'lib/utils/form';
+import {
+  Behovstype,
+  getStringEllerUndefined,
+  getValueFromBooleanUndefinedNull,
+  JaEllerNei,
+  mapBehovskodeTilBehovstype,
+} from 'lib/utils/form';
 import { FormField } from 'components/input/formfield/FormField';
 import { Alert, Button, Label } from '@navikt/ds-react';
 
@@ -29,12 +35,17 @@ export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll,
       godkjent: {
         type: 'radio',
         label: 'Er du enig?',
-        options: GodkjennEllerUnderkjennOptions,
+        defaultValue: getValueFromBooleanUndefinedNull(toTrinnsVurdering.godkjent),
+        options: [
+          { label: 'Godkjenn', value: 'true' },
+          { label: 'Vurdér på nytt', value: 'false' },
+        ],
         rules: { required: 'Du må svare om du er enig' },
       },
       begrunnelse: {
         type: 'textarea',
         label: 'Begrunnelse',
+        defaultValue: getStringEllerUndefined(toTrinnsVurdering.begrunnelse),
         rules: {
           validate: (value, formValues) => {
             if (!value && formValues.godkjent === JaEllerNei.Nei) {
@@ -77,6 +88,7 @@ export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll,
           <Veiledning
             header={'Overskrift'}
             tekst={veiledningsTekstPåDefinisjon(toTrinnsVurdering.definisjon as Behovstype)}
+            defaultOpen={!readOnly}
           />
           <FormField form={form} formField={formFields.begrunnelse} />
           <FormField form={form} formField={formFields.grunn} />
