@@ -282,7 +282,7 @@ export interface paths {
         /** @description OK */
         200: {
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.SykepengerVurdering'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerGrunnlagDto'];
           };
         };
       };
@@ -456,7 +456,7 @@ export interface components {
         | "FATTE_VEDTAK(kode='5099')";
       /**
        * Format: date-time
-       * @example 2024-04-17T12:14:23.71441
+       * @example 2024-04-17T14:01:15.483268
        */
       tidspunkt: string;
     };
@@ -615,6 +615,9 @@ export interface components {
       nedsattArbeidsevneDato?: string | null;
       yrkesskadevurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadevurderingDto'];
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerGrunnlagDto': {
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.SykepengerVurdering'];
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadevurderingDto': {
       erÅrsakssammenheng: boolean;
     };
@@ -708,7 +711,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-04-17T12:14:23.71441
+       * @example 2024-04-17T14:01:15.483268
        */
       opprettet: string;
       /** Format: uuid */
@@ -727,7 +730,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-04-17T12:14:23.71441
+       * @example 2024-04-17T14:01:15.483268
        */
       tidsstempel: string;
     };
@@ -835,7 +838,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-04-17T12:14:23.71441
+       * @example 2024-04-17T14:01:15.483268
        */
       opprettet: string;
       /** Format: uuid */
