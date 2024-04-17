@@ -1,6 +1,6 @@
 import { addDays, endOfDay, subDays, subWeeks } from 'date-fns';
 
-import { Oppgaver } from 'lib/types/oppgavebehandling';
+import { Oppgave, Oppgaver } from 'lib/types/oppgavebehandling';
 
 export const mockOppgaver: Oppgaver = {
   oppgaver: [
@@ -11,6 +11,10 @@ export const mockOppgaver: Oppgaver = {
       opprettet: subDays(new Date(), 67).toISOString(),
       saksbehandler: undefined,
       reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
+      oppgaveId: 34580234,
+      foedselsnummer: '12345678910',
+      oppgavetype: 'AAP',
+      versjon: 1,
     },
     {
       navn: '17837900007',
@@ -19,6 +23,10 @@ export const mockOppgaver: Oppgaver = {
       opprettet: subWeeks(new Date(), 4).toISOString(),
       saksbehandler: undefined,
       reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
+      oppgaveId: 34580234,
+      foedselsnummer: '12345678910',
+      oppgavetype: 'AAP',
+      versjon: 1,
     },
     {
       navn: '14839400004',
@@ -27,11 +35,15 @@ export const mockOppgaver: Oppgaver = {
       opprettet: subDays(new Date(), 9).toISOString(),
       saksbehandler: 'Eklektisk Kappe',
       reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
+      oppgaveId: 34580234,
+      foedselsnummer: '12345678910',
+      oppgavetype: 'AAP',
+      versjon: 1,
     },
   ],
 };
 
-export const ufordeltOppgave = [
+export const ufordeltOppgave: Oppgave[] = [
   {
     navn: '09837600004',
     søknadstype: 'Førstegangssøknad',
@@ -39,10 +51,14 @@ export const ufordeltOppgave = [
     opprettet: subWeeks(new Date(), 4).toISOString(),
     saksbehandler: undefined,
     reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
+    oppgaveId: 34580234,
+    foedselsnummer: '12345678910',
+    oppgavetype: 'AAP',
+    versjon: 1,
   },
 ];
 
-export const fordeltOppgave = [
+export const fordeltOppgave: Oppgave[] = [
   {
     navn: '09837600004',
     søknadstype: 'Førstegangssøknad',
@@ -50,5 +66,9 @@ export const fordeltOppgave = [
     opprettet: subWeeks(new Date(), 4).toISOString(),
     saksbehandler: 'Eklektisk Kappe',
     reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
+    oppgaveId: 34580234,
+    foedselsnummer: '12345678910',
+    oppgavetype: 'AAP',
+    versjon: 1,
   },
 ];

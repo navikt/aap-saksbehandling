@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { Button, Table } from '@navikt/ds-react';
 
 import styles from './Oppgavetabell.module.css';
+import { fetchProxy } from 'lib/clientApi';
 
 type Props = {
   oppgaver: Oppgave[];
@@ -12,6 +13,15 @@ type Props = {
 
 export const Oppgavetabell = ({ oppgaver }: Props) => {
   const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.saksbehandler;
+  const fordelOppgave = async (oppgave: Oppgave) => {
+    await fetchProxy(`/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave`, 'PATCH', {
+      versjon: oppgave.versjon,
+      navIdent: 'z994422',
+    });
+  };
+
+  const frigiOppgave = () => window.alert('Ikke implementert enda... :(');
+
   return (
     <Table zebraStripes className={styles.oppgavetabell}>
       <Table.Header>
@@ -39,9 +49,15 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
               <Table.DataCell>{format(oppgave.opprettet, 'dd.MM.yy')}</Table.DataCell>
               <Table.DataCell>{oppgave.saksbehandler ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell>
-                <Button variant={oppgaveErFordelt(oppgave) ? 'secondary' : 'primary'} size={'small'}>
-                  {oppgaveErFordelt(oppgave) ? 'Frigjør' : 'Behandle'}
-                </Button>
+                {oppgaveErFordelt(oppgave) ? (
+                  <Button variant={'secondary'} size={'small'} onClick={() => frigiOppgave()}>
+                    Frigjør
+                  </Button>
+                ) : (
+                  <Button variant={'primary'} size={'small'} onClick={() => fordelOppgave(oppgave)}>
+                    Behandle
+                  </Button>
+                )}
               </Table.DataCell>
             </Table.Row>
           ))}
