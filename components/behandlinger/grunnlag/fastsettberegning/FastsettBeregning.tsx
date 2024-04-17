@@ -8,6 +8,7 @@ import { løsBehov } from 'lib/clientApi';
 import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
 import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { BeregningsGrunnlag } from 'lib/types/types';
+import { numberToString } from 'lib/utils/string';
 
 interface Props {
   grunnlag?: BeregningsGrunnlag;
@@ -28,16 +29,17 @@ export const FastsettBeregning = ({ grunnlag, behandlingsReferanse, readOnly }: 
       begrunnelse: {
         type: 'text',
         label: 'Begrunnelse',
-        defaultValue: grunnlag?.beregnigsVurdering?.begrunnelse,
+        defaultValue: grunnlag?.begrunnelse,
       },
       ytterligereNedsattArbeidsevneDato: {
         type: 'date',
         label: 'Ytterligere nedsatt arbeidsevne dato',
-        defaultValue: stringToDate(grunnlag?.beregnigsVurdering?.ytterligereNedsattArbeidsevneDato),
+        defaultValue: stringToDate(grunnlag?.ytterligereNedsattArbeidsevneDato),
       },
       antattÅrligInntekt: {
         type: 'number',
         label: 'Antatt årlig inntekt',
+        defaultValue: numberToString(grunnlag?.antattÅrligInntekt),
       },
     },
     { readOnly: readOnly }
