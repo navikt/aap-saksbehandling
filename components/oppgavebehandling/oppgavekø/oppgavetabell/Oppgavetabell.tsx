@@ -6,6 +6,7 @@ import { Button, Table } from '@navikt/ds-react';
 
 import styles from './Oppgavetabell.module.css';
 import { fetchProxy } from 'lib/clientApi';
+import Link from 'next/link';
 
 type Props = {
   oppgaver: Oppgave[];
@@ -31,7 +32,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
           <Table.HeaderCell>Gjelder</Table.HeaderCell>
           <Table.HeaderCell>Oppgave opprettet</Table.HeaderCell>
           <Table.HeaderCell>Saksbehandler</Table.HeaderCell>
-          <Table.HeaderCell></Table.HeaderCell>
+          <Table.HeaderCell colSpan={2}></Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -58,6 +59,9 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
                     Behandle
                   </Button>
                 )}
+              </Table.DataCell>
+              <Table.DataCell>
+                <Link href={`/oppgaveliste/${oppgave.oppgaveId}`}>Se oppgave</Link>
               </Table.DataCell>
             </Table.Row>
           ))}
