@@ -74,11 +74,11 @@ export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll,
       <FormField form={form} formField={formFields.godkjent} />
       {form.watch('godkjent') === 'false' && (
         <>
-          <FormField form={form} formField={formFields.begrunnelse} />
           <Veiledning
             header={'Overskrift'}
             tekst={veiledningsTekstPåDefinisjon(toTrinnsVurdering.definisjon as Behovstype)}
           />
+          <FormField form={form} formField={formFields.begrunnelse} />
           <FormField form={form} formField={formFields.grunn} />
         </>
       )}
