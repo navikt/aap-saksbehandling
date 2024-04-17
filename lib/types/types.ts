@@ -6,7 +6,7 @@ export type StudentGrunnlag =
 export type SykdomsGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomGrunnlagDto'];
 export type SykepengeerstatningGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.SykepengerVurdering'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerGrunnlagDto'];
 export type BistandsGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.flate.BistandGrunnlagDto'];
 export type FritakMeldepliktGrunnlag =

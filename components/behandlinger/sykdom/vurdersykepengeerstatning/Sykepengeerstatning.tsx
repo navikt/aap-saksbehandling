@@ -42,14 +42,14 @@ export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag, readOnly }
         type: 'textarea',
         label: 'Vurder om søker har rett til sykepengeerstatning',
         rules: { required: 'Du må begrunne avgjørelsen din.' },
-        defaultValue: grunnlag?.begrunnelse,
+        defaultValue: grunnlag?.vurdering?.begrunnelse,
       },
       erOppfylt: {
         type: 'radio',
         label: 'Krav på sykepengeerstatning?',
         rules: { required: 'Du må ta stilling til om søkeren har rett på AAP som sykepengeerstatning.' },
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.harRettPå),
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harRettPå),
       },
       grunn: {
         type: 'checkbox',
