@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import {
   BehandlingFlytOgTilstand,
   BehandlingResultat,
+  BeregningsGrunnlag,
   BistandsGrunnlag,
   DetaljertBehandling,
   FatteVedtakGrunnlag,
@@ -74,6 +75,14 @@ export const hentFatteVedtakGrunnlang = async (behandlingsReferanse: string): Pr
   return await fetchProxy<FatteVedtakGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentBeregningsGrunnlag = async (behandlingsReferanse: string): Promise<BeregningsGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregningsvurdering`;
+  return await fetchProxy<BeregningsGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+export const hentTilkjentYtelse = async (behandlingsReferanse: string): Promise<unknown> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent/${behandlingsReferanse}`;
+  return await fetchProxy<unknown>(url, saksbehandlingApiScope, 'GET');
+};
 export const hentFlyt = async (behandlingsReferanse: string): Promise<BehandlingFlytOgTilstand> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
   return await fetchProxy<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET');

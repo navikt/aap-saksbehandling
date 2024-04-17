@@ -6,9 +6,11 @@ import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/clientApi';
 import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
+import { BeregningsGrunnlag } from 'lib/types/types';
 
 interface Props {
+  grunnlag?: BeregningsGrunnlag;
   behandlingsReferanse: string;
   readOnly: boolean;
 }
@@ -19,16 +21,19 @@ interface FormFields {
   antattÅrligInntekt: string;
 }
 
-export const FastsettBeregning = ({ behandlingsReferanse, readOnly }: Props) => {
+export const FastsettBeregning = ({ grunnlag, behandlingsReferanse, readOnly }: Props) => {
+  console.log('beregning grunnlag', grunnlag);
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'text',
         label: 'Begrunnelse',
+        defaultValue: grunnlag?.beregnigsVurdering?.begrunnelse,
       },
       ytterligereNedsattArbeidsevneDato: {
         type: 'date',
         label: 'Ytterligere nedsatt arbeidsevne dato',
+        defaultValue: stringToDate(grunnlag?.beregnigsVurdering?.ytterligereNedsattArbeidsevneDato),
       },
       antattÅrligInntekt: {
         type: 'number',

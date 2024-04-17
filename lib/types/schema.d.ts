@@ -322,6 +322,24 @@ export interface paths {
       };
     };
   };
+  '/api/behandling/{referanse}/grunnlag/beregningsvurdering': {
+    get: {
+      parameters: {
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.flate.BeregningsVurderingDTO'];
+          };
+        };
+      };
+    };
+  };
   '/test/opprett': {
     post: {
       requestBody?: {
@@ -396,7 +414,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestPersonDto': {
       /**
        * Format: date
-       * @example 2024-04-16
+       * @example 2024-04-17
        */
       fødselsdato: string;
       yrkesskade: boolean;
@@ -407,7 +425,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2024-04-16
+       * @example 2024-04-17
        */
       fødselsdato: string;
       ident: string;
@@ -438,7 +456,7 @@ export interface components {
         | "FATTE_VEDTAK(kode='5099')";
       /**
        * Format: date-time
-       * @example 2024-04-16T09:06:06.105664
+       * @example 2024-04-17T12:14:23.71441
        */
       tidspunkt: string;
     };
@@ -521,9 +539,12 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2024-04-16
+       * @example 2024-04-17
        */
       ytterligereNedsattArbeidsevneDato?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.flate.BeregningsVurderingDTO': {
+      beregnigsVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.BeregningVurdering'];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.BistandVurdering': {
       begrunnelse: string;
@@ -544,7 +565,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurdering': {
       /**
        * Format: date
-       * @example 2024-04-16
+       * @example 2024-04-17
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
@@ -570,7 +591,7 @@ export interface components {
       ref: string;
       /**
        * Format: date
-       * @example 2024-04-16
+       * @example 2024-04-17
        */
       skadedato: string;
     };
@@ -589,7 +610,7 @@ export interface components {
       nedreGrense?: 'TRETTI' | 'FEMTI' | null;
       /**
        * Format: date
-       * @example 2024-04-16
+       * @example 2024-04-17
        */
       nedsattArbeidsevneDato?: string | null;
       yrkesskadevurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadevurderingDto'];
@@ -687,7 +708,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-04-16T09:06:06.105664
+       * @example 2024-04-17T12:14:23.71441
        */
       opprettet: string;
       /** Format: uuid */
@@ -706,7 +727,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-04-16T09:06:06.105664
+       * @example 2024-04-17T12:14:23.71441
        */
       tidsstempel: string;
     };
@@ -814,7 +835,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-04-16T09:06:06.105664
+       * @example 2024-04-17T12:14:23.71441
        */
       opprettet: string;
       /** Format: uuid */
@@ -827,7 +848,7 @@ export interface components {
       ident: string;
       /**
        * Format: date
-       * @example 2024-04-16
+       * @example 2024-04-17
        */
       søknadsdato: string;
     };
@@ -859,12 +880,12 @@ export interface components {
     'no.nav.aap.verdityper.Periode': {
       /**
        * Format: date
-       * @example 2024-04-16
+       * @example 2024-04-17
        */
       fom: string;
       /**
        * Format: date
-       * @example 2024-04-16
+       * @example 2024-04-17
        */
       tom: string;
     };
