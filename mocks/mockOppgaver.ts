@@ -21,12 +21,12 @@ export const mockOppgaver: Oppgaver = {
       søknadstype: 'Førstegangssøknad',
       type: '11-4 Alder',
       opprettet: subWeeks(new Date(), 4).toISOString(),
-      saksbehandler: undefined,
       reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
       oppgaveId: 34580234,
       foedselsnummer: '12345678910',
       oppgavetype: 'AAP',
       versjon: 1,
+      tilordnetRessurs: 'Eklektisk Kappe',
     },
     {
       navn: '14839400004',
@@ -39,6 +39,7 @@ export const mockOppgaver: Oppgaver = {
       foedselsnummer: '12345678910',
       oppgavetype: 'AAP',
       versjon: 1,
+      tilordnetRessurs: undefined,
     },
   ],
 };
@@ -49,12 +50,12 @@ export const ufordeltOppgave: Oppgave[] = [
     søknadstype: 'Førstegangssøknad',
     type: '11-4 Alder',
     opprettet: subWeeks(new Date(), 4).toISOString(),
-    saksbehandler: undefined,
     reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
     oppgaveId: 34580234,
     foedselsnummer: '12345678910',
     oppgavetype: 'AAP',
     versjon: 1,
+    tilordnetRessurs: undefined,
   },
 ];
 
@@ -64,11 +65,11 @@ export const fordeltOppgave: Oppgave[] = [
     søknadstype: 'Førstegangssøknad',
     type: '11-4 Alder',
     opprettet: subWeeks(new Date(), 4).toISOString(),
-    saksbehandler: 'Eklektisk Kappe',
     reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
     oppgaveId: 34580234,
     foedselsnummer: '12345678910',
     oppgavetype: 'AAP',
     versjon: 1,
+    tilordnetRessurs: 'Eklektisk Kappe',
   },
 ];

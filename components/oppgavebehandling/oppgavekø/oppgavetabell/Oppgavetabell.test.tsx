@@ -25,7 +25,7 @@ describe('Oppgavetabell', () => {
 
   test('viser navn på saksbehandler når en oppgave er fordelt', () => {
     render(<Oppgavetabell oppgaver={fordeltOppgave} />);
-    expect(screen.getByRole('cell', { name: fordeltOppgave[0].saksbehandler })).toBeVisible();
+    expect(screen.getByRole('cell', { name: fordeltOppgave[0].tilordnetRessurs })).toBeVisible();
   });
 
   test('har knapp for å ta en ufordelt oppgave', () => {

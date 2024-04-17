@@ -11,6 +11,7 @@ export type Oppgave = {
   opprettet: string;
   reservertTil: string;
   versjon: number;
+  tilordnetRessurs?: string;
 };
 
 export type Oppgaver = {
