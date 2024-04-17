@@ -13,6 +13,7 @@ import {
   StudentGrunnlag,
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
+  TilkjentYtelseGrunnlag,
 } from 'lib/types/types';
 import { fetchProxy } from 'lib/services/fetchProxy';
 
@@ -79,9 +80,9 @@ export const hentBeregningsGrunnlag = async (behandlingsReferanse: string): Prom
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregningsvurdering`;
   return await fetchProxy<BeregningsGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
-export const hentTilkjentYtelse = async (behandlingsReferanse: string): Promise<unknown> => {
+export const hentTilkjentYtelse = async (behandlingsReferanse: string): Promise<TilkjentYtelseGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent/${behandlingsReferanse}`;
-  return await fetchProxy<unknown>(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 export const hentFlyt = async (behandlingsReferanse: string): Promise<BehandlingFlytOgTilstand> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;

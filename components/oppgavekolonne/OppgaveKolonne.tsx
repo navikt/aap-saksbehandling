@@ -4,6 +4,7 @@ import { Vedtak } from 'components/behandlinger/vedtak/Vedtak';
 import styles from './OppgaveKolonne.module.css';
 import { Grunnlag } from 'components/behandlinger/grunnlag/Grunnlag';
 import { FatteVedtak } from 'components/behandlinger/fattevedtak/FatteVedtak';
+import { TilkjentYtelse } from 'components/behandlinger/tilkjentytelse/TilkjentYtelse';
 interface Props {
   behandlingsReferanse: string;
   aktivGruppe: StegGruppe;
@@ -19,7 +20,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Prop
       {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'UTTAK' && <div>UTTAK</div>}
       {aktivGruppe === 'BARNETILLEGG' && <div>BARNETILLEGG</div>}
-      {aktivGruppe === 'TILKJENT_YTELSE' && <div>TILKJENT YTELSE</div>}
+      {aktivGruppe === 'TILKJENT_YTELSE' && <TilkjentYtelse behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'SIMULERING' && <div>SIMULERING</div>}
       {aktivGruppe === 'VEDTAK' && <Vedtak behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'FATTE_VEDTAK' && <FatteVedtak behandlingsReferanse={behandlingsReferanse} />}
