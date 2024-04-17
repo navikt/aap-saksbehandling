@@ -31,7 +31,7 @@ export const getOnBefalfOfToken = async (audience: string, url: string): Promise
 export const fetchProxy = async <ResponseBody>(
   url: string,
   scope: string,
-  method: 'GET' | 'POST' = 'GET',
+  method: 'GET' | 'POST' | 'PATCH' = 'GET',
   requestBody?: object
 ): Promise<ResponseBody> => {
   if (isLocal()) {
