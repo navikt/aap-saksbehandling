@@ -14,6 +14,7 @@ type Props = {
 
 export const Oppgavetabell = ({ oppgaver }: Props) => {
   const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.tilordnetRessurs;
+
   const fordelOppgave = async (oppgave: Oppgave) => {
     await fetchProxy(`/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave`, 'PATCH', {
       versjon: oppgave.versjon,
@@ -21,7 +22,11 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
     });
   };
 
-  const frigiOppgave = () => window.alert('Ikke implementert enda... :(');
+  const frigiOppgave = async (oppgave: Oppgave) => {
+    await fetchProxy(`/api/oppgavebehandling/${oppgave.oppgaveId}/frigi`, 'PATCH', {
+      versjon: oppgave.versjon,
+    });
+  };
 
   return (
     <Table zebraStripes className={styles.oppgavetabell}>
@@ -51,7 +56,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell>
                 {oppgaveErFordelt(oppgave) ? (
-                  <Button variant={'secondary'} size={'small'} onClick={() => frigiOppgave()}>
+                  <Button variant={'secondary'} size={'small'} onClick={() => frigiOppgave(oppgave)}>
                     Frigjør
                   </Button>
                 ) : (
