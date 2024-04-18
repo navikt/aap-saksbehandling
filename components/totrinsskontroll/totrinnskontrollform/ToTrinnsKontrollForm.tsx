@@ -9,16 +9,18 @@ import {
   mapBehovskodeTilBehovstype,
 } from 'lib/utils/form';
 import { FormField } from 'components/input/formfield/FormField';
-import { Alert, Button, Label } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 
 import styles from 'components/totrinsskontroll/totrinnskontrollform/ToTrinnsKontrollForm.module.css';
 import { useState } from 'react';
 import { ToTrinnsVurdering } from 'lib/types/types';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import Link from 'next/link';
 
 interface Props {
   toTrinnsVurdering: ToTrinnsVurdering;
   lagreToTrinnskontroll: (toTrinnskontroll: ToTrinnsVurdering) => void;
+  link: string;
   readOnly: boolean;
 }
 
@@ -28,7 +30,7 @@ interface FormFields {
   grunn: string;
 }
 
-export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll, readOnly }: Props) => {
+export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll, readOnly, link }: Props) => {
   const [erSendtInn, setErSendtInn] = useState(false);
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -81,7 +83,7 @@ export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll,
       })}
       className={styles.form}
     >
-      <Label size={'medium'}>{mapBehovskodeTilBehovstype(toTrinnsVurdering.definisjon as Behovstype)}</Label>
+      <Link href={link}>{mapBehovskodeTilBehovstype(toTrinnsVurdering.definisjon as Behovstype)}</Link>
       <FormField form={form} formField={formFields.godkjent} />
       {form.watch('godkjent') === 'false' && (
         <>
