@@ -9,6 +9,7 @@ import { BodyShort, Button, Label } from '@navikt/ds-react';
 import { løsBehov } from 'lib/clientApi';
 import { Behovstype } from 'lib/utils/form';
 import { formaterDatoTidForVisning } from '@navikt/aap-felles-utils-client';
+import { useParams } from 'next/navigation';
 
 interface Props {
   fatteVedtakGrunnlag: FatteVedtakGrunnlag;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export const ToTrinnsKontroll = ({ fatteVedtakGrunnlag, behandlingsReferanse, readOnly }: Props) => {
+  const params = useParams();
   const [toTrinnskontrollVurderinger, setToTrinnskontrollVurderinger] = useState<ToTrinnsVurdering[]>([]);
 
   return (
@@ -39,6 +41,7 @@ export const ToTrinnsKontroll = ({ fatteVedtakGrunnlag, behandlingsReferanse, re
           lagreToTrinnskontroll={(toTrinnskontroll) =>
             setToTrinnskontrollVurderinger([...toTrinnskontrollVurderinger, toTrinnskontroll])
           }
+          link={`/sak/${params.saksId}/${behandlingsReferanse}/${behovstypeTilVilkårskortLink(vurdering.definisjon as Behovstype)}`}
           readOnly={readOnly}
         />
       ))}
@@ -63,3 +66,22 @@ export const ToTrinnsKontroll = ({ fatteVedtakGrunnlag, behandlingsReferanse, re
     </div>
   );
 };
+
+function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
+  switch (behovstype) {
+    case Behovstype.AVKLAR_SYKDOM_KODE:
+      return 'SYKDOM/#AVKLAR_SYKDOM';
+    case Behovstype.AVKLAR_BISTANDSBEHOV_KODE:
+      return 'SYKDOM/#VURDER_BISTANDSBEHOV';
+    case Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE:
+      return 'GRUNNLAG/#FASTSETT_BEREGNINGSTIDSPUNKT';
+    case Behovstype.FRITAK_MELDEPLIKT_KODE:
+      return 'SYKDOM/#FRITAK_MELDEPLIKT';
+    case Behovstype.FASTSETT_ARBEIDSEVNE_KODE:
+      return 'SYKDOM/#FASTSETT_ARBEIDSEVNE';
+    case Behovstype.VURDER_SYKEPENGEERSTATNING_KODE:
+      return 'SYKDOM/#VURDER_SYKEPENGEERSTATNING';
+    default:
+      return 'SYKDOM';
+  }
+}

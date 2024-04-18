@@ -7,6 +7,7 @@ export interface ServerSentEventData {
   aktivGruppe?: string;
   aktivtSteg?: string;
   skalBytteGruppe?: boolean;
+  skalBytteSteg?: boolean;
   status: ServerSentEventStatus;
 }
 
@@ -50,6 +51,7 @@ export async function GET(__request, context: { params: { referanse: string; gru
           aktivGruppe: flyt.aktivGruppe,
           aktivtSteg: flyt.aktivtSteg,
           skalBytteGruppe: flyt.aktivGruppe !== context.params.gruppe,
+          skalBytteSteg: flyt.aktivtSteg !== context.params.steg,
           status: 'DONE',
         };
 

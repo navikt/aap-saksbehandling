@@ -38,8 +38,10 @@ export const Form = ({ steg, onSubmit, children, visBekreftKnapp = true }: Props
       const eventData: ServerSentEventData = JSON.parse(event.data);
       if (eventData.status === 'DONE') {
         eventSource.close();
-        if (eventData.skalBytteGruppe) {
-          router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}`);
+        if (eventData.skalBytteGruppe || eventData.skalBytteSteg) {
+          router.push(
+            `/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}/#${eventData.aktivtSteg}`
+          );
         }
         router.refresh();
         setIsLoading(false);
