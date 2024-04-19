@@ -1,6 +1,6 @@
 'use client';
 
-import { FatteVedtakGrunnlag, ToTrinnsVurdering } from 'lib/types/types';
+import { FatteVedtakGrunnlag, HistorikkAksjon, ToTrinnsVurdering } from 'lib/types/types';
 import { ToTrinnsKontrollForm } from 'components/totrinsskontroll/totrinnskontrollform/ToTrinnsKontrollForm';
 
 import styles from 'components/totrinsskontroll/ToTrinnsKontroll.module.css';
@@ -23,12 +23,13 @@ export const ToTrinnsKontroll = ({ fatteVedtakGrunnlag, behandlingsReferanse, re
 
   return (
     <div className={styles.toTrinnsKontroll}>
+      <Label size={'medium'}>Historikk</Label>
       <div>
-        <Label size={'medium'}>Historikk</Label>
         {fatteVedtakGrunnlag.historikk.map((historikk, index) => (
-          <div key={index}>
+          <div key={index} className={index === 0 ? styles.historikkTopp : styles.historikkImidten}>
+            <Label size={'small'}>{mapAksjonTilString(historikk.aksjon)}</Label>
             <BodyShort size={'small'}>
-              {historikk.avIdent} {formaterDatoTidForVisning(historikk.tidspunkt)}
+              {formaterDatoTidForVisning(historikk.tidspunkt)} {historikk.avIdent}
             </BodyShort>
           </div>
         ))}
@@ -83,5 +84,16 @@ function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'SYKDOM/#VURDER_SYKEPENGEERSTATNING';
     default:
       return 'SYKDOM';
+  }
+}
+
+function mapAksjonTilString(aksjon: HistorikkAksjon): string {
+  switch (aksjon) {
+    case 'RETURNERT_FRA_BESLUTTER':
+      return 'Returnert fra beslutter';
+    case 'FATTET_VEDTAK':
+      return 'Fattet vedtak';
+    case 'SENDT_TIL_BESLUTTER':
+      return 'Sendt til beslutter';
   }
 }
