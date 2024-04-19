@@ -20,17 +20,17 @@ type BehovsKode = `${Behovstype}`;
 export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
   switch (kode) {
     case '5001':
-      return 'Avklar student';
+      return '§ 11-14 Avklar student';
     case '5003':
-      return 'Avklar sykdom';
+      return '§ 11-5 Avklar sykdom';
     case '5004':
-      return 'Fastsett arbeidsevne';
+      return '§ 11- 23 2.ledd Fastsett arbeidsevne';
     case '5005':
-      return 'Fritak meldeplikt';
+      return '§ 11-10 Fritak meldeplikt';
     case '5006':
-      return 'Avklar bistandsbehov';
+      return '§ 11-6 Avklar bistandsbehov';
     case '5007':
-      return 'Vurder sykepengeerstatning';
+      return '§ 11 -13 Vurder sykepengeerstatning';
     case '5008':
       return 'Fastsett beregningstidspunkt';
     case '5098':
