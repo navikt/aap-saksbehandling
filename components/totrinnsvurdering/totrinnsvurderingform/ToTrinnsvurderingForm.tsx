@@ -11,7 +11,7 @@ import {
 import { FormField } from 'components/input/formfield/FormField';
 import { Alert, Button } from '@navikt/ds-react';
 
-import styles from 'components/totrinsskontroll/totrinnskontrollform/ToTrinnsKontrollForm.module.css';
+import styles from 'components/totrinnsvurdering/totrinnsvurderingform/ToTrinnsvurderingForm.module.css';
 import { useState } from 'react';
 import { ToTrinnsVurdering } from 'lib/types/types';
 import { Veiledning } from 'components/veiledning/Veiledning';
@@ -30,7 +30,7 @@ interface FormFields {
   grunn: string;
 }
 
-export const ToTrinnsKontrollForm = ({ toTrinnsVurdering, lagreToTrinnskontroll, readOnly, link }: Props) => {
+export const ToTrinnsvurderingForm = ({ toTrinnsVurdering, lagreToTrinnskontroll, readOnly, link }: Props) => {
   const [erSendtInn, setErSendtInn] = useState(false);
   const { form, formFields } = useConfigForm<FormFields>(
     {

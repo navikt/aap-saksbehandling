@@ -1,15 +1,15 @@
 'use client';
 
-import { FatteVedtakGrunnlag, HistorikkAksjon, ToTrinnsVurdering } from 'lib/types/types';
-import { ToTrinnsKontrollForm } from 'components/totrinsskontroll/totrinnskontrollform/ToTrinnsKontrollForm';
+import { FatteVedtakGrunnlag, ToTrinnsVurdering } from 'lib/types/types';
+import { ToTrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/ToTrinnsvurderingForm';
 
-import styles from 'components/totrinsskontroll/ToTrinnsKontroll.module.css';
+import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
 import { useState } from 'react';
-import { BodyShort, Button, Label } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { løsBehov } from 'lib/clientApi';
 import { Behovstype } from 'lib/utils/form';
-import { formaterDatoTidForVisning } from '@navikt/aap-felles-utils-client';
 import { useParams } from 'next/navigation';
+import { ToTrinnsvurderingHistorikk } from 'components/totrinnsvurdering/totrinnsvurderinghistorikk/ToTrinnsvurderingHistorikk';
 
 interface Props {
   fatteVedtakGrunnlag: FatteVedtakGrunnlag;
@@ -17,26 +17,20 @@ interface Props {
   readOnly: boolean;
 }
 
-export const ToTrinnsKontroll = ({ fatteVedtakGrunnlag, behandlingsReferanse, readOnly }: Props) => {
+export const ToTrinnsvurdering = ({ fatteVedtakGrunnlag, behandlingsReferanse, readOnly }: Props) => {
   const params = useParams();
   const [toTrinnskontrollVurderinger, setToTrinnskontrollVurderinger] = useState<ToTrinnsVurdering[]>([]);
 
   return (
     <div className={styles.toTrinnsKontroll}>
-      <Label size={'medium'}>Historikk</Label>
       <div>
         {fatteVedtakGrunnlag.historikk.map((historikk, index) => (
-          <div key={index} className={index === 0 ? styles.historikkTopp : styles.historikkImidten}>
-            <Label size={'small'}>{mapAksjonTilString(historikk.aksjon)}</Label>
-            <BodyShort size={'small'}>
-              {formaterDatoTidForVisning(historikk.tidspunkt)} {historikk.avIdent}
-            </BodyShort>
-          </div>
+          <ToTrinnsvurderingHistorikk key={index} historikk={historikk} erFørsteElementILiten={index === 0} />
         ))}
       </div>
 
       {fatteVedtakGrunnlag.vurderinger.map((vurdering) => (
-        <ToTrinnsKontrollForm
+        <ToTrinnsvurderingForm
           toTrinnsVurdering={vurdering}
           key={vurdering.definisjon}
           lagreToTrinnskontroll={(toTrinnskontroll) =>
@@ -84,16 +78,5 @@ function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'SYKDOM/#VURDER_SYKEPENGEERSTATNING';
     default:
       return 'SYKDOM';
-  }
-}
-
-function mapAksjonTilString(aksjon: HistorikkAksjon): string {
-  switch (aksjon) {
-    case 'RETURNERT_FRA_BESLUTTER':
-      return 'Returnert fra beslutter';
-    case 'FATTET_VEDTAK':
-      return 'Fattet vedtak';
-    case 'SENDT_TIL_BESLUTTER':
-      return 'Sendt til beslutter';
   }
 }
