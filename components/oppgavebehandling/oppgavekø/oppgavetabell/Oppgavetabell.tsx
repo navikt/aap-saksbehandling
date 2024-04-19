@@ -48,17 +48,22 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
         )}
         {oppgaver.length > 0 &&
           oppgaver.map((oppgave) => (
-            <Table.Row key={oppgave.navn}>
-              <Table.DataCell>{oppgave.navn}</Table.DataCell>
+            <Table.Row key={oppgave.oppgaveId}>
+              <Table.DataCell>{oppgave.foedselsnummer}</Table.DataCell>
               <Table.DataCell>{oppgave.søknadstype}</Table.DataCell>
               <Table.DataCell>{oppgave.type}</Table.DataCell>
               <Table.DataCell>{format(oppgave.opprettet, 'dd.MM.yy')}</Table.DataCell>
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell>
                 {oppgaveErFordelt(oppgave) ? (
-                  <Button variant={'secondary'} size={'small'} onClick={() => frigiOppgave(oppgave)}>
-                    Frigjør
-                  </Button>
+                  <>
+                    <Button variant={'secondary'} size={'small'} onClick={() => frigiOppgave(oppgave)}>
+                      Frigjør
+                    </Button>
+                    <Button variant={'danger'} size={'small'} onClick={() => fordelOppgave(oppgave)}>
+                      Overta
+                    </Button>
+                  </>
                 ) : (
                   <Button variant={'primary'} size={'small'} onClick={() => fordelOppgave(oppgave)}>
                     Behandle
