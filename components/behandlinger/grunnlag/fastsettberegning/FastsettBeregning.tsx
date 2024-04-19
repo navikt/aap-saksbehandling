@@ -5,7 +5,7 @@ import { useConfigForm } from 'hooks/FormHook';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { løsBehov } from 'lib/clientApi';
-import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
+import { Behovstype, getStringEllerUndefined, handleSubmitWithCallback } from 'lib/utils/form';
 import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { BeregningsGrunnlag } from 'lib/types/types';
 import { numberToString } from 'lib/utils/string';
@@ -29,7 +29,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingsReferanse, readOnly }: 
       begrunnelse: {
         type: 'text',
         label: 'Begrunnelse',
-        defaultValue: grunnlag?.begrunnelse,
+        defaultValue: getStringEllerUndefined(grunnlag?.begrunnelse),
       },
       ytterligereNedsattArbeidsevneDato: {
         type: 'date',
