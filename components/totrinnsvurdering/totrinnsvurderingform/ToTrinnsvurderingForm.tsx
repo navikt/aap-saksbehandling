@@ -1,113 +1,83 @@
 'use client';
 
-import { useConfigForm } from 'hooks/FormHook';
-import {
-  Behovstype,
-  getStringEllerUndefined,
-  getValueFromBooleanUndefinedNull,
-  JaEllerNei,
-  mapBehovskodeTilBehovstype,
-} from 'lib/utils/form';
-import { FormField } from 'components/input/formfield/FormField';
-import { Alert, Button } from '@navikt/ds-react';
+import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/ToTrinnsvurderingForm.module.css';
-import { useState } from 'react';
-import { ToTrinnsVurdering } from 'lib/types/types';
+import { Something, ToTrinnsvurderingError } from 'components/totrinnsvurdering/ToTrinnsvurdering';
+import { Checkbox, CheckboxGroup, Link, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
-import Link from 'next/link';
 
 interface Props {
-  toTrinnsVurdering: ToTrinnsVurdering;
-  lagreToTrinnskontroll: (toTrinnskontroll: ToTrinnsVurdering) => void;
+  toTrinnsvurdering: Something;
+  oppdaterVurdering: (index: number, name: keyof Something, value: any) => void;
   link: string;
+  index: number;
+  errors: ToTrinnsvurderingError[];
   readOnly: boolean;
 }
 
-interface FormFields {
-  godkjent: string;
-  begrunnelse: string;
-  grunn: string;
-}
-
-export const ToTrinnsvurderingForm = ({ toTrinnsVurdering, lagreToTrinnskontroll, readOnly, link }: Props) => {
-  const [erSendtInn, setErSendtInn] = useState(false);
-  const { form, formFields } = useConfigForm<FormFields>(
-    {
-      godkjent: {
-        type: 'radio',
-        label: 'Er du enig?',
-        defaultValue: getValueFromBooleanUndefinedNull(toTrinnsVurdering.godkjent),
-        options: [
-          { label: 'Godkjenn', value: 'true' },
-          { label: 'Vurdér på nytt', value: 'false' },
-        ],
-        rules: { required: 'Du må svare om du er enig' },
-      },
-      begrunnelse: {
-        type: 'textarea',
-        label: 'Begrunnelse',
-        defaultValue: getStringEllerUndefined(toTrinnsVurdering.begrunnelse),
-        rules: {
-          validate: (value, formValues) => {
-            if (!value && formValues.godkjent === JaEllerNei.Nei) {
-              return 'Du må skrive en begrunnelse';
-            }
-          },
-        },
-      },
-      grunn: {
-        type: 'checkbox',
-        label: 'Velg grunn',
-        options: [
-          'Feil fakta',
-          'Mangler dokumentasjon',
-          'Feil/mangelfull lovanvendelse',
-          'Mangelfull begrunnelse',
-          'Skrivefeil/korrektur',
-        ],
-      },
-    },
-    { readOnly: readOnly }
-  );
+export const ToTrinnsvurderingForm = ({
+  toTrinnsvurdering,
+  oppdaterVurdering,
+  readOnly,
+  link,
+  index,
+  errors,
+}: Props) => {
+  const grunnOptions = [
+    'Feil fakta',
+    'Mangler dokumentasjon',
+    'Feil/mangelfull lovanvendelse',
+    'Mangelfull begrunnelse',
+    'Skrivefeil/korrektur',
+  ];
 
   return (
-    <form
-      onSubmit={form.handleSubmit((data) => {
-        lagreToTrinnskontroll({
-          definisjon: toTrinnsVurdering.definisjon,
-          godkjent: data.godkjent === 'true',
-          begrunnelse: data?.begrunnelse,
-        });
-        setErSendtInn(true);
-      })}
-      className={styles.form}
-    >
-      <Link href={link}>{mapBehovskodeTilBehovstype(toTrinnsVurdering.definisjon as Behovstype)}</Link>
-      <FormField form={form} formField={formFields.godkjent} />
-      {form.watch('godkjent') === 'false' && (
+    <div className={styles.form}>
+      <Link href={link}>{mapBehovskodeTilBehovstype(toTrinnsvurdering.definisjon as Behovstype)}</Link>
+      <RadioGroup
+        legend={'Er det godkjent?'}
+        onChange={(value) => oppdaterVurdering(index, 'godkjent', value)}
+        value={toTrinnsvurdering.godkjent === undefined ? undefined : toTrinnsvurdering.godkjent ? 'true' : 'false'}
+        size={'small'}
+        readOnly={readOnly}
+        error={errors.find((error) => error.felt === 'godkjent')?.message}
+      >
+        <Radio value={'true'}>Ja</Radio>
+        <Radio value={'false'}>Nei</Radio>
+      </RadioGroup>
+      {toTrinnsvurdering.godkjent === 'false' && (
         <>
           <Veiledning
             header={'Overskrift'}
-            tekst={veiledningsTekstPåDefinisjon(toTrinnsVurdering.definisjon as Behovstype)}
+            tekst={veiledningsTekstPåDefinisjon(toTrinnsvurdering.definisjon as Behovstype)}
             defaultOpen={!readOnly}
           />
-          <FormField form={form} formField={formFields.begrunnelse} />
-          <FormField form={form} formField={formFields.grunn} />
+          <Textarea
+            label={'Begrunnelse'}
+            value={toTrinnsvurdering.begrunnelse}
+            size={'small'}
+            readOnly={readOnly}
+            onChange={(e) => oppdaterVurdering(index, 'begrunnelse', e.target.value)}
+            error={errors.find((error) => error.felt === 'begrunnelse')?.message}
+          />
+          <CheckboxGroup
+            legend={'Grunn'}
+            onChange={(value) => oppdaterVurdering(index, 'grunn', value)}
+            size={'small'}
+            readOnly={readOnly}
+            value={toTrinnsvurdering.grunn}
+            error={errors.find((error) => error.felt === 'grunn')?.message}
+          >
+            {grunnOptions.map((value) => (
+              <Checkbox value={value} key={value}>
+                {value}
+              </Checkbox>
+            ))}
+          </CheckboxGroup>
         </>
       )}
-      {!readOnly && (
-        <div>
-          {erSendtInn ? (
-            <Alert size={'small'} variant={'success'}>
-              Fullført
-            </Alert>
-          ) : (
-            <Button size={'small'}>Bekreft</Button>
-          )}
-        </div>
-      )}
-    </form>
+    </div>
   );
 };
 
