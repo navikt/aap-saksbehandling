@@ -23,7 +23,6 @@ interface FormFields {
 }
 
 export const FastsettBeregning = ({ grunnlag, behandlingsReferanse, readOnly }: Props) => {
-  console.log('beregning grunnlag', grunnlag);
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
