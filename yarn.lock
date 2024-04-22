@@ -721,24 +721,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-core@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "@grafana/faro-core@npm:1.5.1"
+"@grafana/faro-core@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "@grafana/faro-core@npm:1.6.0"
   dependencies:
     "@opentelemetry/api": "npm:^1.7.0"
     "@opentelemetry/otlp-transformer": "npm:^0.48.0"
-  checksum: 10c0/43c1c60c1c9530a14318535ec0287b19d9667463001ffe1fb69e969f87199ed89f097e0e0fa6ad294d13bdb1a662102aac6e416aa775044641912f9149897605
+  checksum: 10c0/693607b549fd79ac929b62fad4da5dd032c4ad77b9f03e370bbab15fb300779b5367a200f1afabfdb20a9568a91608b88b784ca4f4571422fed2f494dfac18ba
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "@grafana/faro-web-sdk@npm:1.5.1"
+"@grafana/faro-web-sdk@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "@grafana/faro-web-sdk@npm:1.6.0"
   dependencies:
-    "@grafana/faro-core": "npm:^1.5.1"
+    "@grafana/faro-core": "npm:^1.6.0"
     ua-parser-js: "npm:^1.0.32"
     web-vitals: "npm:^3.1.1"
-  checksum: 10c0/1db9ee25d12e93f42d8c7a1c8dab2cbc3672f7074854a316a70faf94f46c93a8bd912d0b338cd5234b02c1e99d8c600145b6a478331664d636a91e759e13399d
+  checksum: 10c0/97b851b9d0379fc29585af710760050a75fecdb2aaa1aeae7271fba893bc8ec91756fe67cf62b287882e6f43932c704e4d6dbf0f7c38a905018356305ef953d5
   languageName: node
   linkType: hard
 
@@ -1579,18 +1579,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@portabletext/react@npm:^3.0.17":
-  version: 3.0.17
-  resolution: "@portabletext/react@npm:3.0.17"
-  dependencies:
-    "@portabletext/toolkit": "npm:^2.0.14"
-    "@portabletext/types": "npm:^2.0.12"
-  peerDependencies:
-    react: ^17 || ^18
-  checksum: 10c0/f23505be82d2d86b533e44530452f3348614b1cb2c7a32af157f553c5ea75314fbe9c44faeaa185983d4a60972baf66060d223316c0787e7ee908b1b859e883c
-  languageName: node
-  linkType: hard
-
 "@portabletext/react@npm:^3.0.18":
   version: 3.0.18
   resolution: "@portabletext/react@npm:3.0.18"
@@ -1603,28 +1591,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@portabletext/toolkit@npm:^2.0.14":
-  version: 2.0.14
-  resolution: "@portabletext/toolkit@npm:2.0.14"
-  dependencies:
-    "@portabletext/types": "npm:^2.0.12"
-  checksum: 10c0/ddd268076eb83f0a8695765eee13313b812b1d0cb0586748c842581fb51f4f454d4ceb12cffb7ce765950b34fa972bb1b1e95ad7698fa249824c50970451cd5a
-  languageName: node
-  linkType: hard
-
 "@portabletext/toolkit@npm:^2.0.15":
   version: 2.0.15
   resolution: "@portabletext/toolkit@npm:2.0.15"
   dependencies:
     "@portabletext/types": "npm:^2.0.13"
   checksum: 10c0/d54375c56c026754004120d137cdb88de2f6cdeb3c92d5b32d914c6c8a7c378a4c046b1cd0d87fc03027367724ccd0e6c7fab87985647c96065658d2ea7deedb
-  languageName: node
-  linkType: hard
-
-"@portabletext/types@npm:^2.0.12":
-  version: 2.0.12
-  resolution: "@portabletext/types@npm:2.0.12"
-  checksum: 10c0/419326668c46dc963056d343310c6fd17077f69aa55682373bbb90dbbf2a2981c523f2973b049a01fb6f7f29ba4b2a032a2991c80921f27271974ab345ba4409
   languageName: node
   linkType: hard
 
@@ -2161,9 +2133,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^14.3.0":
-  version: 14.3.0
-  resolution: "@testing-library/react@npm:14.3.0"
+"@testing-library/react@npm:^14.3.1":
+  version: 14.3.1
+  resolution: "@testing-library/react@npm:14.3.1"
   dependencies:
     "@babel/runtime": "npm:^7.12.5"
     "@testing-library/dom": "npm:^9.0.0"
@@ -2171,7 +2143,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 10c0/2a2529d2bd428074654f75a313c55a33b59e7ab497ff5adcf208b59afd96b19e1e565da48289fdcf898348a0227caef4b43ac888003b6a992331d4c12a488bfc
+  checksum: 10c0/1ccf4eb1510500cc20a805cb0244c9098dca28a8745173a8f71ea1274d63774f0b7898a35c878b43c797b89c13621548909ff37843b835c1a27ee1efbbdd098c
   languageName: node
   linkType: hard
 
@@ -3113,7 +3085,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "aap-saksbehandling@workspace:."
   dependencies:
-    "@grafana/faro-web-sdk": "npm:^1.5.1"
+    "@grafana/faro-web-sdk": "npm:^1.6.0"
     "@navikt/aap-felles-css": "npm:^0.0.97"
     "@navikt/aap-felles-prettier": "npm:^0.0.97"
     "@navikt/aap-felles-react": "npm:^0.0.97"
@@ -3124,13 +3096,13 @@ __metadata:
     "@navikt/ds-react": "npm:6.6.0"
     "@navikt/eslint-config-aap": "npm:^0.0.97"
     "@navikt/oasis": "npm:^3.2.4"
-    "@portabletext/react": "npm:^3.0.17"
+    "@portabletext/react": "npm:^3.0.18"
     "@sanity/client": "npm:^6.15.19"
     "@sanity/overlays": "npm:^2.3.40"
     "@sanity/react-loader": "npm:^1.9.13"
     "@sanity/types": "npm:^3.38.0"
     "@testing-library/jest-dom": "npm:^6.4.2"
-    "@testing-library/react": "npm:^14.3.0"
+    "@testing-library/react": "npm:^14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
     "@tiptap/extension-bubble-menu": "npm:^2.3.0"
     "@tiptap/extension-table": "npm:^2.3.0"
@@ -3173,7 +3145,7 @@ __metadata:
     prettier: "npm:^3.2.5"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
-    react-hook-form: "npm:7.51.2"
+    react-hook-form: "npm:7.51.3"
     react-pdf: "npm:^7.7.1"
     swr: "npm:^2.2.5"
     typescript: "npm:^5.4.4"
@@ -9655,12 +9627,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.51.2":
-  version: 7.51.2
-  resolution: "react-hook-form@npm:7.51.2"
+"react-hook-form@npm:7.51.3":
+  version: 7.51.3
+  resolution: "react-hook-form@npm:7.51.3"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 10c0/9d5e303b64f77330f244304854522e4f588fd3a5554734d2daebf64230195eb42c44504e074d5acfabd6f33a2272ffca4ebef7a54fad7019ae519471b720327e
+  checksum: 10c0/dd7dfc8514df19a13b7647b3faebdcb1329723afb52454626496eeaa657323d42bab12dc85e6b77d758a166c6427fa87f13c5bd9f5f78666c682e8263117e297
   languageName: node
   linkType: hard
 
