@@ -24,12 +24,9 @@
   height: 30px;
   width: 30px;
 }
-.kolonne {
-  border-top: 1px solid gray;
-  padding: 1rem;
-}
 
 .høyrekolonne {
   border-left: 1px solid var(--a-border-default);
   height: 100vh;
+  padding: 1rem;
 }

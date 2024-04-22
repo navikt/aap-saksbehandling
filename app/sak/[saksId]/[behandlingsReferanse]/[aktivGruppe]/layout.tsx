@@ -1,5 +1,4 @@
 import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { HGrid } from 'components/DsClient';
 import styles from './layout.module.css';
 import { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
@@ -24,13 +23,10 @@ const Layout = async ({
   const stegSomSkalVises = getStegSomSkalVises(decodeURI(params.aktivGruppe) as StegGruppe, flytResponse);
 
   return (
-    <HGrid columns={'1fr 3fr'} className={styles.kolonner}>
-      <InformasjonsKolonne
-        stegSomSkalVises={stegSomSkalVises}
-        className={`${styles.kolonne} ${styles.venstrekolonne}`}
-      />
+    <>
+      <InformasjonsKolonne stegSomSkalVises={stegSomSkalVises} className={styles.venstrekolonne} />
       {children}
-    </HGrid>
+    </>
   );
 };
 
