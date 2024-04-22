@@ -14,9 +14,15 @@ const Layout = async ({
   children: ReactNode;
 }) => {
   const behandling = await hentBehandling(params.behandlingsReferanse);
-  const flytResponse = await hentFlyt(params.behandlingsReferanse);
-
   if (behandling === undefined) {
+    notFound();
+  }
+
+  const flytResponse = await hentFlyt(params.behandlingsReferanse);
+  const ferdigeSteg = flytResponse.flyt.filter((steg) => steg.erFullført).map((steg) => steg.stegGruppe);
+
+  if (!ferdigeSteg.includes(params.aktivGruppe as StegGruppe) && flytResponse.aktivGruppe != params.aktivGruppe) {
+    // TODO: Undersøke hva brukere ønsker dersom de går til en gruppe de ikke kan vurdere enda
     notFound();
   }
 
