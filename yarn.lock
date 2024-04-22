@@ -1225,19 +1225,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/eslint-config-aap@npm:^0.0.97":
-  version: 0.0.97
-  resolution: "@navikt/eslint-config-aap@npm:0.0.97::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Feslint-config-aap%2F0.0.97%2Faf976fac114d1909c41955416de011d0cbf9c7ba"
+"@navikt/eslint-config-aap@npm:^0.0.98":
+  version: 0.0.98
+  resolution: "@navikt/eslint-config-aap@npm:0.0.98::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Feslint-config-aap%2F0.0.98%2F7c116d90ba939b2c4b77cf1534aa068288693151"
   peerDependencies:
-    "@typescript-eslint/eslint-plugin": ^6.7.0
-    "@typescript-eslint/parser": ^6.7.0
-    eslint: ^8.37.0
+    "@typescript-eslint/eslint-plugin": ^7.7.0
+    "@typescript-eslint/parser": ^7.7.0
+    eslint: ^8.56.0
     eslint-config-standard: ^17.0.0
-    eslint-plugin-jest: ^27.2.1
+    eslint-plugin-jest: ^28.2.0
     eslint-plugin-jsx-a11y: ^6.7.1
-    eslint-plugin-react: ^7.32.2
+    eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
-  checksum: 10c0/b1291daee94181b1654238d10d9d42470bb348b9ab7b8900948f613b19e55110622119da281567679ef8a1cc662043d594bf8c732a523305f4b98566a7bd34f6
+  checksum: 10c0/1f54bf3f328161f5c25c476b8ac8982abcf9cb2a61c32f6a838212492eff6059b24b7d4c90f197a141803a4950053d0ae16064ecb4031f15c9ae0d398a2d3697
   languageName: node
   linkType: hard
 
@@ -3098,7 +3098,7 @@ __metadata:
     "@navikt/aksel-icons": "npm:6.6.0"
     "@navikt/ds-css": "npm:6.6.0"
     "@navikt/ds-react": "npm:6.6.0"
-    "@navikt/eslint-config-aap": "npm:^0.0.97"
+    "@navikt/eslint-config-aap": "npm:^0.0.98"
     "@navikt/oasis": "npm:^3.2.4"
     "@portabletext/react": "npm:^3.0.18"
     "@sanity/client": "npm:^6.15.19"
