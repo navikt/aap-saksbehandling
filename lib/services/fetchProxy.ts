@@ -53,6 +53,8 @@ const fetchWithRetry = async <ResponseBody>(
     throw new Error(`Unable to fetch ${url}: ${retries} retries left`);
   }
 
+  logError(`Bearer ${oboToken}`);
+
   const response = await fetch(url, {
     method,
     body: JSON.stringify(requestBody),
