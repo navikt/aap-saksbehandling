@@ -11,7 +11,7 @@ interface Params {
 
 export async function PATCH(req: NextRequest, { params }: Params) {
   if (isLocal()) {
-    return new Response(JSON.stringify({ message: 'Oppgave frigitt' }), { status: 200 });
+    return new Response(JSON.stringify({ message: 'Oppgave frigitt', status: 200 }), { status: 200 });
   }
 
   const body = await req.json();
@@ -22,7 +22,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
       'PATCH',
       body
     );
-    return new Response(JSON.stringify({ message: 'Oppgave frigitt' }), { status: 200 });
+    return new Response(JSON.stringify({ message: 'Oppgave frigitt', status: 200 }), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });
   }

@@ -12,20 +12,40 @@ type Props = {
   oppgaver: Oppgave[];
 };
 
+type ProxyResponse = {
+  message: string;
+  status: number;
+};
+
 export const Oppgavetabell = ({ oppgaver }: Props) => {
   const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.tilordnetRessurs;
 
   const fordelOppgave = async (oppgave: Oppgave) => {
-    await fetchProxy(`/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave`, 'PATCH', {
-      versjon: oppgave.versjon,
-      navIdent: 'z994422',
-    });
+    const res: ProxyResponse | undefined = await fetchProxy(
+      `/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave`,
+      'PATCH',
+      {
+        versjon: oppgave.versjon,
+        navIdent: 'z994422',
+      }
+    );
+    if (res && res.status === 200) {
+      window.location.reload();
+    }
   };
 
   const frigiOppgave = async (oppgave: Oppgave) => {
-    await fetchProxy(`/api/oppgavebehandling/${oppgave.oppgaveId}/frigi`, 'PATCH', {
-      versjon: oppgave.versjon,
-    });
+    const res: ProxyResponse | undefined = await fetchProxy(
+      `/api/oppgavebehandling/${oppgave.oppgaveId}/frigi`,
+      'PATCH',
+      {
+        versjon: oppgave.versjon,
+      }
+    );
+    console.log(res);
+    if (res && res.status === 200) {
+      window.location.reload();
+    }
   };
 
   return (
