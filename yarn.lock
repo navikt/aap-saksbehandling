@@ -1880,6 +1880,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sanity/client@npm:^6.15.20":
+  version: 6.15.20
+  resolution: "@sanity/client@npm:6.15.20"
+  dependencies:
+    "@sanity/eventsource": "npm:^5.0.2"
+    get-it: "npm:^8.4.27"
+    rxjs: "npm:^7.0.0"
+  checksum: 10c0/807486048400b0d0f88da9eaaa206eb144451c1c21e0f1784ba69f9d2d2e7d92bf1d88c4d5a232838c260f1ee4a3308c3313cd06bed35a4c01f9e00f7c6d8f0d
+  languageName: node
+  linkType: hard
+
 "@sanity/core-loader@npm:1.6.8":
   version: 1.6.8
   resolution: "@sanity/core-loader@npm:1.6.8"
@@ -1898,6 +1909,18 @@ __metadata:
     event-source-polyfill: "npm:1.0.31"
     eventsource: "npm:2.0.2"
   checksum: 10c0/7796f19aa5416fff061d30b54c0f72b1456dd5008e84bc56498b260e41434f506859daf85a926700792b91a0c4b7bae4f93d48aaa07b048653d9501a5bd63b68
+  languageName: node
+  linkType: hard
+
+"@sanity/eventsource@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "@sanity/eventsource@npm:5.0.2"
+  dependencies:
+    "@types/event-source-polyfill": "npm:1.0.5"
+    "@types/eventsource": "npm:1.1.15"
+    event-source-polyfill: "npm:1.0.31"
+    eventsource: "npm:2.0.2"
+  checksum: 10c0/7896e5bf1afd1811db22479ea6c529bf2042c2ef1d17fede26b5eafba839235cff35a53fdb68fa53b90975dba993f884d13a262ca9a729e9d97020f958743cee
   languageName: node
   linkType: hard
 
@@ -2569,10 +2592,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/event-source-polyfill@npm:1.0.5":
+  version: 1.0.5
+  resolution: "@types/event-source-polyfill@npm:1.0.5"
+  checksum: 10c0/62f06c58312097c17f8489771057bb9e859269243a815ef27c8b50b48e084412fce4f90cb18252f807ed9016028321ce2713c90b77e77abc9e84a21bce5db724
+  languageName: node
+  linkType: hard
+
 "@types/eventsource@npm:1.1.12":
   version: 1.1.12
   resolution: "@types/eventsource@npm:1.1.12"
   checksum: 10c0/c96c4bd443c8688a3a8e2563ef19be961cef40aeebea11ab41df6285d208347d3363949d8287ad9e7ca6e7bafacedc5a29d29b63e76bf08211c72bad44bfba43
+  languageName: node
+  linkType: hard
+
+"@types/eventsource@npm:1.1.15":
+  version: 1.1.15
+  resolution: "@types/eventsource@npm:1.1.15"
+  checksum: 10c0/afee5c6c1185e365802349878411324569c77ae9878317b6e34bd633bdb5ee0a6eada6d1b358fec57640fe610eb43535344076db199895e1d9ab81511bb6ed0e
   languageName: node
   linkType: hard
 
@@ -3101,7 +3138,7 @@ __metadata:
     "@navikt/eslint-config-aap": "npm:^0.0.98"
     "@navikt/oasis": "npm:^3.2.4"
     "@portabletext/react": "npm:^3.0.18"
-    "@sanity/client": "npm:^6.15.19"
+    "@sanity/client": "npm:^6.15.20"
     "@sanity/overlays": "npm:^2.3.40"
     "@sanity/react-loader": "npm:^1.9.13"
     "@sanity/types": "npm:^3.38.0"
