@@ -1,20 +1,4 @@
-.kolonner {
-  height: 100vh;
-  border-top: 1px solid gray;
-}
-
-.kolonne {
-  padding: 1rem;
-}
-
-.stegMeny {
-  display: flex;
-  flex-direction: row;
-  gap: var(--a-spacing-4);
-  margin: var(--a-spacing-1) 0;
-  align-items: flex-start;
-}
-
 .venstrekolonne {
   border-right: 1px solid var(--a-border-default);
+  padding: 1rem;
 }

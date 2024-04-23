@@ -1,31 +1,52 @@
 'use client';
 
-import { Oppgave } from 'lib/types/oppgavebehandling';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { Button, Table } from '@navikt/ds-react';
 
-import styles from './Oppgavetabell.module.css';
+import { Oppgave } from 'lib/types/oppgavebehandling';
 import { fetchProxy } from 'lib/clientApi';
-import Link from 'next/link';
+
+import styles from './Oppgavetabell.module.css';
 
 type Props = {
   oppgaver: Oppgave[];
+  mutate: Function;
 };
 
-export const Oppgavetabell = ({ oppgaver }: Props) => {
+type ProxyResponse = {
+  message: string;
+  status: number;
+};
+
+export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
   const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.tilordnetRessurs;
 
   const fordelOppgave = async (oppgave: Oppgave) => {
-    await fetchProxy(`/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave`, 'PATCH', {
-      versjon: oppgave.versjon,
-      navIdent: 'z994422',
-    });
+    const res: ProxyResponse | undefined = await fetchProxy(
+      `/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave`,
+      'PATCH',
+      {
+        versjon: oppgave.versjon,
+        navIdent: 'z994422',
+      }
+    );
+    if (res && res.status === 200) {
+      await mutate();
+    }
   };
 
   const frigiOppgave = async (oppgave: Oppgave) => {
-    await fetchProxy(`/api/oppgavebehandling/${oppgave.oppgaveId}/frigi`, 'PATCH', {
-      versjon: oppgave.versjon,
-    });
+    const res: ProxyResponse | undefined = await fetchProxy(
+      `/api/oppgavebehandling/${oppgave.oppgaveId}/frigi`,
+      'PATCH',
+      {
+        versjon: oppgave.versjon,
+      }
+    );
+    if (res && res.status === 200) {
+      await mutate();
+    }
   };
 
   return (
@@ -41,7 +62,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {oppgaver.length === 0 && (
+        {oppgaver && oppgaver.length === 0 && (
           <Table.Row>
             <Table.DataCell colSpan={6}>Fant ingen oppgaver</Table.DataCell>
           </Table.Row>

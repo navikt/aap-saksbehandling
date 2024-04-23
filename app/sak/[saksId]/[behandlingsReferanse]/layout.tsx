@@ -41,9 +41,9 @@ const Layout = async ({ children, params }: Props) => {
       </div>
       <StegGruppeIndikator flytRespons={flytResponse} />
 
-      <HGrid columns={'3fr 1fr'} className={styles.kolonner}>
+      <HGrid columns={'1fr 3fr 1fr'}>
         {children}
-        <div className={`${styles.kolonne}`}>
+        <div className={`${styles.høyrekolonne}`}>
           <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
         </div>
       </HGrid>

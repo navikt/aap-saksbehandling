@@ -1,6 +1,6 @@
 'use client';
 
-import styles from 'app/sak/[saksId]/[behandlingsReferanse]/[aktivGruppe]/layout.module.css';
+import styles from './StegGruppeIndikator.module.css';
 import { GruppeElement } from 'components/gruppeelement/GruppeElement';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
 import { useParams } from 'next/navigation';

@@ -1,12 +1,11 @@
-import { HGrid, Skeleton } from '@navikt/ds-react';
+import { HGrid } from '@navikt/ds-react';
 
 import { Kort } from 'components/oppgavebehandling/kort/Kort';
 import { Køvelger } from 'components/oppgavebehandling/køvelger/Køvelger';
 import { HøyreKolonne } from 'components/oppgavebehandling/høyrekolonne/Høyrekolonne';
-import { OppgavekMedDatafetching } from 'components/oppgavebehandling/oppgavekø/OppgavekøMedDatafetching';
-import { Suspense } from 'react';
 
 import styles from './page.module.css';
+import { Oppgavekø } from 'components/oppgavebehandling/oppgavekø/Oppgavekø';
 
 const Page = () => {
   return (
@@ -15,9 +14,7 @@ const Page = () => {
         <HGrid>
           <Kort>
             <Køvelger />
-            <Suspense fallback={<Skeleton variant={'rectangle'} height={380} className={styles.oppgavekø} />}>
-              <OppgavekMedDatafetching />
-            </Suspense>
+            <Oppgavekø />
           </Kort>
         </HGrid>
         <HøyreKolonne />
