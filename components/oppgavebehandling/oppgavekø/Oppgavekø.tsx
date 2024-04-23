@@ -1,18 +1,12 @@
 'use client';
 
 import { ExpansionCard } from '@navikt/ds-react';
-
-import { Oppgavetabell } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/Oppgavetabell';
 import { Filter } from 'components/oppgavebehandling/oppgavekø/filter/Filter';
 
-import { Oppgave } from 'lib/types/oppgavebehandling';
 import styles from './Oppgavekø.module.css';
+import { OppgaveFetcher } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
 
-interface Props {
-  oppgaver: Oppgave[];
-}
-
-export const Oppgavekø = ({ oppgaver }: Props) => {
+export const Oppgavekø = () => {
   return (
     <section className={styles.oppgavekø}>
       <ExpansionCard aria-label={'NAY nasjonal AAP-kø'} defaultOpen>
@@ -21,7 +15,7 @@ export const Oppgavekø = ({ oppgaver }: Props) => {
         </ExpansionCard.Header>
         <ExpansionCard.Content>
           <Filter />
-          <Oppgavetabell oppgaver={oppgaver} />
+          <OppgaveFetcher />
         </ExpansionCard.Content>
       </ExpansionCard>
     </section>

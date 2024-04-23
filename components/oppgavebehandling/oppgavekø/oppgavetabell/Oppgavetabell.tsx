@@ -1,15 +1,17 @@
 'use client';
 
-import { Oppgave } from 'lib/types/oppgavebehandling';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { Button, Table } from '@navikt/ds-react';
 
-import styles from './Oppgavetabell.module.css';
+import { Oppgave } from 'lib/types/oppgavebehandling';
 import { fetchProxy } from 'lib/clientApi';
-import Link from 'next/link';
+
+import styles from './Oppgavetabell.module.css';
 
 type Props = {
   oppgaver: Oppgave[];
+  mutate: Function;
 };
 
 type ProxyResponse = {
@@ -17,7 +19,7 @@ type ProxyResponse = {
   status: number;
 };
 
-export const Oppgavetabell = ({ oppgaver }: Props) => {
+export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
   const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.tilordnetRessurs;
 
   const fordelOppgave = async (oppgave: Oppgave) => {
@@ -30,7 +32,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
       }
     );
     if (res && res.status === 200) {
-      window.location.reload();
+      await mutate();
     }
   };
 
@@ -42,9 +44,8 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
         versjon: oppgave.versjon,
       }
     );
-    console.log(res);
     if (res && res.status === 200) {
-      window.location.reload();
+      await mutate();
     }
   };
 
@@ -61,7 +62,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {oppgaver.length === 0 && (
+        {oppgaver && oppgaver.length === 0 && (
           <Table.Row>
             <Table.DataCell colSpan={6}>Fant ingen oppgaver</Table.DataCell>
           </Table.Row>
