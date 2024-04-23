@@ -3,13 +3,13 @@
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/ToTrinnsvurderingForm.module.css';
-import { Something, ToTrinnsvurderingError } from 'components/totrinnsvurdering/ToTrinnsvurdering';
+import { ToTrinnsVurderingFormFields, ToTrinnsvurderingError } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { Checkbox, CheckboxGroup, Link, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 
 interface Props {
-  toTrinnsvurdering: Something;
-  oppdaterVurdering: (index: number, name: keyof Something, value: any) => void;
+  toTrinnsvurdering: ToTrinnsVurderingFormFields;
+  oppdaterVurdering: (index: number, name: keyof ToTrinnsVurderingFormFields, value: any) => void;
   link: string;
   index: number;
   errors: ToTrinnsvurderingError[];
@@ -38,7 +38,6 @@ export const ToTrinnsvurderingForm = ({
       <RadioGroup
         legend={'Er det godkjent?'}
         onChange={(value) => oppdaterVurdering(index, 'godkjent', value)}
-        value={toTrinnsvurdering.godkjent === undefined ? undefined : toTrinnsvurdering.godkjent ? 'true' : 'false'}
         size={'small'}
         readOnly={readOnly}
         error={errors.find((error) => error.felt === 'godkjent')?.message}
@@ -55,7 +54,6 @@ export const ToTrinnsvurderingForm = ({
           />
           <Textarea
             label={'Begrunnelse'}
-            value={toTrinnsvurdering.begrunnelse}
             size={'small'}
             readOnly={readOnly}
             onChange={(e) => oppdaterVurdering(index, 'begrunnelse', e.target.value)}
@@ -66,7 +64,6 @@ export const ToTrinnsvurderingForm = ({
             onChange={(value) => oppdaterVurdering(index, 'grunn', value)}
             size={'small'}
             readOnly={readOnly}
-            value={toTrinnsvurdering.grunn}
             error={errors.find((error) => error.felt === 'grunn')?.message}
           >
             {grunnOptions.map((value) => (
