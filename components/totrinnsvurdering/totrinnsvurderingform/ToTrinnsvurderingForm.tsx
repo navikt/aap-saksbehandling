@@ -25,18 +25,17 @@ export const ToTrinnsvurderingForm = ({
   errors,
 }: Props) => {
   const grunnOptions = [
-    'Feil fakta',
-    'Mangler dokumentasjon',
-    'Feil/mangelfull lovanvendelse',
     'Mangelfull begrunnelse',
-    'Skrivefeil/korrektur',
+    'Manglende utredning',
+    'Feil lovanvendelse',
+    'Annet (Skriv i begrunnelsen)',
   ];
 
   return (
     <div className={styles.form}>
       <Link href={link}>{mapBehovskodeTilBehovstype(toTrinnsvurdering.definisjon as Behovstype)}</Link>
       <RadioGroup
-        legend={'Er det godkjent?'}
+        legend={'Er du enig?'}
         onChange={(value) => oppdaterVurdering(index, 'godkjent', value)}
         size={'small'}
         readOnly={readOnly}
@@ -60,7 +59,8 @@ export const ToTrinnsvurderingForm = ({
             error={errors.find((error) => error.felt === 'begrunnelse')?.message}
           />
           <CheckboxGroup
-            legend={'Grunn'}
+            legend={'Velg grunn'}
+            description={'Du må minst velge èn grunn'}
             onChange={(value) => oppdaterVurdering(index, 'grunn', value)}
             size={'small'}
             readOnly={readOnly}
