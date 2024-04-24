@@ -1,6 +1,6 @@
 import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import styles from './layout.module.css';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { InformasjonsKolonne } from 'components/informasjonskolonne/InformasjonsKolonne';
 import { getStegSomSkalVises } from 'lib/utils/steg';
@@ -30,8 +30,17 @@ const Layout = async ({
 
   return (
     <>
-      <InformasjonsKolonne stegSomSkalVises={stegSomSkalVises} className={styles.venstrekolonne} />
-      {children}
+      <Suspense
+        fallback={
+          <>
+            <div></div>
+            <div></div>
+          </>
+        }
+      >
+        <InformasjonsKolonne stegSomSkalVises={stegSomSkalVises} className={styles.venstrekolonne} />
+        {children}
+      </Suspense>
     </>
   );
 };
