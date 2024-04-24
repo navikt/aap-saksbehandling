@@ -5,6 +5,7 @@ import { Køvelger } from 'components/oppgavebehandling/køvelger/Køvelger';
 
 import styles from './page.module.css';
 import { Oppgavekø } from 'components/oppgavebehandling/oppgavekø/Oppgavekø';
+import { AktiveOppgaver } from 'components/oppgavebehandling/oppgavekø/AktiveOppgaver';
 
 const Page = () => {
   return (
@@ -13,6 +14,7 @@ const Page = () => {
         <HGrid>
           <Kort>
             <Køvelger />
+            <AktiveOppgaver />
             <Oppgavekø />
           </Kort>
         </HGrid>
