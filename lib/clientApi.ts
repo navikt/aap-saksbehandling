@@ -42,7 +42,18 @@ export function hentBrevmalFraSanity(brevmalid: string) {
   return fetchProxy<Brevmal>(`/api/sanity/brevmal/${brevmalid}`, 'GET');
 }
 
-export async function hentSaksinfo() {
+export interface SaksInformasjon {
+  søker: {
+    navn: string;
+    fnr: string;
+  };
+  labels: { type: string }[];
+  sistEndret: {
+    navn: string;
+    tidspunkt: string;
+  };
+}
+export async function hentSaksinfo(): Promise<SaksInformasjon> {
   return {
     søker: {
       navn: 'Peder Ås',

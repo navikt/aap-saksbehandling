@@ -1,13 +1,13 @@
 import { ReactNode } from 'react';
-import { Detail, Label } from '@navikt/ds-react';
 import { hentSaksinfo } from 'lib/clientApi';
 import { hentFlyt, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { hentPersonInformasjonForIdent } from 'lib/services/pdlservice/pdlService';
-import { HGrid, Tag } from 'components/DsClient';
+import { HGrid } from '@navikt/ds-react';
 
 import styles from './layout.module.css';
 import { StegGruppeIndikator } from 'components/steggruppeindikator/StegGruppeIndikator';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
+import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 
 interface Props {
   children: ReactNode;
@@ -22,23 +22,7 @@ const Layout = async ({ children, params }: Props) => {
 
   return (
     <div>
-      <div className={styles.saksinfoBanner}>
-        <div className={styles.søkerinfo}>
-          <div className={styles.ikon} />
-          <Label size="small">{personInformasjon.navn}</Label>
-          <span aria-hidden>/</span>
-          <Detail>{sak?.ident}</Detail>
-          {saksInfo.labels.map((label) => (
-            <Tag variant="info" size="xsmall" key={label.type}>
-              {label.type}
-            </Tag>
-          ))}
-        </div>
-
-        <Detail className={styles.endretAv}>
-          Sist endret av {saksInfo.sistEndret.navn} den {saksInfo.sistEndret.tidspunkt}
-        </Detail>
-      </div>
+      <SaksinfoBanner personInformasjon={personInformasjon} saksInfo={saksInfo} sak={sak} />
       <StegGruppeIndikator flytRespons={flytResponse} />
 
       <HGrid columns={'1fr 3fr 1fr'}>

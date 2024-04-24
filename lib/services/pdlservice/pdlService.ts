@@ -1,4 +1,4 @@
-interface PdlInformasjon {
+export interface PdlInformasjon {
   navn: string;
 }
 
