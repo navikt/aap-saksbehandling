@@ -2,8 +2,9 @@ import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/ToTrinnsvurderingForm.module.css';
 import { ToTrinnsVurderingFormFields, ToTrinnsvurderingError } from 'components/totrinnsvurdering/ToTrinnsvurdering';
-import { Checkbox, CheckboxGroup, Link, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
+import { Checkbox, CheckboxGroup, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import Link from 'next/link';
 
 interface Props {
   toTrinnsvurdering: ToTrinnsVurderingFormFields;

@@ -1,16 +1,16 @@
-import { Historikk, HistorikkAksjon } from 'lib/types/types';
+import { HistorikkType, HistorikkAksjon } from 'lib/types/types';
 import { BodyShort, Label } from '@navikt/ds-react';
-import styles from './ToTrinnsvurderingHistorikk.module.css';
+import styles from 'components/totrinnsvurdering/historikk/Historikk.module.css';
 import { formaterDatoTidForVisning } from '@navikt/aap-felles-utils-client';
 
 interface Props {
-  historikk: Historikk;
-  erFørsteElementILiten: boolean;
+  historikk: HistorikkType;
+  erFørsteElementIListen: boolean;
 }
 
-export const ToTrinnsvurderingHistorikk = ({ historikk, erFørsteElementILiten }: Props) => {
+export const Historikk = ({ historikk, erFørsteElementIListen }: Props) => {
   return (
-    <div className={erFørsteElementILiten ? styles.historikkTopp : styles.historikkImidten}>
+    <div className={erFørsteElementIListen ? styles.historikkTopp : styles.historikkImidten}>
       <Label size={'small'}>{mapAksjonTilString(historikk.aksjon)}</Label>
       <BodyShort size={'small'}>
         <span>{formaterDatoTidForVisning(historikk.tidspunkt)}</span> <span>{historikk.avIdent}</span>
