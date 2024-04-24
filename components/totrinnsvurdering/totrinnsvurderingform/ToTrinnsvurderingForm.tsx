@@ -1,5 +1,3 @@
-'use client';
-
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/ToTrinnsvurderingForm.module.css';
@@ -35,14 +33,15 @@ export const ToTrinnsvurderingForm = ({
     <div className={styles.form}>
       <Link href={link}>{mapBehovskodeTilBehovstype(toTrinnsvurdering.definisjon as Behovstype)}</Link>
       <RadioGroup
-        legend={'Er du enig?'}
+        legend={'Er du enig i vurderingen av vilkåret?'}
         onChange={(value) => oppdaterVurdering(index, 'godkjent', value)}
         size={'small'}
+        hideLegend
         readOnly={readOnly}
         error={errors.find((error) => error.felt === 'godkjent')?.message}
       >
-        <Radio value={'true'}>Ja</Radio>
-        <Radio value={'false'}>Nei</Radio>
+        <Radio value={'true'}>Godkjenn</Radio>
+        <Radio value={'false'}>Vurdèr på nytt</Radio>
       </RadioGroup>
       {toTrinnsvurdering.godkjent === 'false' && (
         <>
