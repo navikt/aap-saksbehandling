@@ -1,4 +1,10 @@
 .oppsummering {
+  display: grid;
+  flex-direction: column;
+  gap: var(--a-spacing-4);
+}
+
+.beslutteroppsummering {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

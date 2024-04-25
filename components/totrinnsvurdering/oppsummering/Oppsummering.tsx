@@ -13,10 +13,10 @@ interface Props {
 
 export const Oppsummering = ({ vurderinger, link }: Props) => {
   return (
-    <div>
+    <div className={styles.oppsummering}>
       <Label size={'small'}>Siste vurderinger fra beslutter</Label>
       {vurderinger.map((vurdering) => (
-        <div key={vurdering.definisjon} className={styles.oppsummering}>
+        <div key={vurdering.definisjon} className={styles.beslutteroppsummering}>
           <div>
             <Label size={'small'}>Vilkår</Label>
             <Link href={`${link}/${behovstypeTilVilkårskortLink(vurdering.definisjon as Behovstype)}`}>

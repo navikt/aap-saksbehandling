@@ -39,7 +39,7 @@ export const ToTrinnsvurdering = ({ fatteVedtakGrunnlag, behandlingsReferanse, r
   const link = `/sak/${params.saksId}/${behandlingsReferanse}`;
 
   const vurderteTotrinnsvurderinger = fatteVedtakGrunnlag.vurderinger.filter(
-    (vurdering) => vurdering.godkjent !== undefined && vurdering.begrunnelse !== undefined
+    (vurdering) => vurdering.godkjent !== undefined
   );
 
   return (
