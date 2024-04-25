@@ -77,14 +77,9 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell>
                 {oppgaveErFordelt(oppgave) ? (
-                  <>
-                    <Button variant={'secondary'} size={'small'} onClick={() => frigiOppgave(oppgave)}>
-                      Frigjør
-                    </Button>
-                    <Button variant={'danger'} size={'small'} onClick={() => fordelOppgave(oppgave)}>
-                      Overta
-                    </Button>
-                  </>
+                  <Button variant={'secondary'} size={'small'} onClick={() => frigiOppgave(oppgave)}>
+                    Frigjør
+                  </Button>
                 ) : (
                   <Button variant={'primary'} size={'small'} onClick={() => fordelOppgave(oppgave)}>
                     Behandle
