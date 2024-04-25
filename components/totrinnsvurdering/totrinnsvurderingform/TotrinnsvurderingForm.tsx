@@ -25,6 +25,7 @@ export const TotrinnsvurderingForm = ({ fatteVedtakGrunnlag, link, readOnly, beh
     };
   });
 
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<ToTrinnsvurderingError[]>([]);
   const [vurderinger, setVurderinger] = useState<ToTrinnsVurderingFormFields[]>(initialValue);
 
@@ -86,7 +87,9 @@ export const TotrinnsvurderingForm = ({ fatteVedtakGrunnlag, link, readOnly, beh
 
       <Button
         size={'medium'}
+        loading={isLoading}
         onClick={async () => {
+          setIsLoading(true);
           const validerteToTrinnsvurderinger = validerTotrinnsvurderinger(vurderinger);
           if (errors.length === 0 && validerteToTrinnsvurderinger && validerteToTrinnsvurderinger.length > 0) {
             await løsBehov({
@@ -98,6 +101,7 @@ export const TotrinnsvurderingForm = ({ fatteVedtakGrunnlag, link, readOnly, beh
               referanse: behandlingsReferanse,
             });
           }
+          setIsLoading(false);
         }}
       >
         Send inn
