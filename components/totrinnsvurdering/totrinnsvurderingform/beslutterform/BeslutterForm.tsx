@@ -1,6 +1,6 @@
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
-import styles from 'components/totrinnsvurdering/totrinnsvurderingform/ToTrinnsvurderingForm.module.css';
+import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/BeslutterForm.module.css';
 import { ToTrinnsVurderingFormFields, ToTrinnsvurderingError } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { Checkbox, CheckboxGroup, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
@@ -8,21 +8,14 @@ import Link from 'next/link';
 
 interface Props {
   toTrinnsvurdering: ToTrinnsVurderingFormFields;
-  oppdaterVurdering: (index: number, name: keyof ToTrinnsVurderingFormFields, value: any) => void;
+  oppdaterVurdering: (index: number, name: keyof ToTrinnsVurderingFormFields, value: string | string[]) => void;
   link: string;
   index: number;
   errors: ToTrinnsvurderingError[];
   readOnly: boolean;
 }
 
-export const ToTrinnsvurderingForm = ({
-  toTrinnsvurdering,
-  oppdaterVurdering,
-  readOnly,
-  link,
-  index,
-  errors,
-}: Props) => {
+export const BeslutterForm = ({ toTrinnsvurdering, oppdaterVurdering, readOnly, link, index, errors }: Props) => {
   const grunnOptions = [
     'Mangelfull begrunnelse',
     'Manglende utredning',

@@ -1,4 +1,4 @@
-import { ToTrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/ToTrinnsvurderingForm';
+import { BeslutterForm } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/BeslutterForm';
 import { Behovstype } from 'lib/utils/form';
 import { Button } from '@navikt/ds-react';
 import { løsBehov } from 'lib/clientApi';
@@ -17,7 +17,7 @@ interface Props {
   behandlingsReferanse: string;
 }
 
-export const Totrinnsvurderingforms = ({ fatteVedtakGrunnlag, link, readOnly, behandlingsReferanse }: Props) => {
+export const TotrinnsvurderingForm = ({ fatteVedtakGrunnlag, link, readOnly, behandlingsReferanse }: Props) => {
   const initialValue: ToTrinnsVurderingFormFields[] = fatteVedtakGrunnlag.vurderinger.map((vurdering) => {
     return {
       definisjon: vurdering.definisjon,
@@ -27,46 +27,12 @@ export const Totrinnsvurderingforms = ({ fatteVedtakGrunnlag, link, readOnly, be
 
   const [errors, setErrors] = useState<ToTrinnsvurderingError[]>([]);
   const [vurderinger, setVurderinger] = useState<ToTrinnsVurderingFormFields[]>(initialValue);
-  const handleInputChange = (index: number, name: keyof ToTrinnsVurderingFormFields, value: any) => {
+
+  const handleInputChange = (index: number, name: keyof ToTrinnsVurderingFormFields, value: string | string[]) => {
     setVurderinger((prevState) =>
       prevState.map((field, id) => (id === index ? { ...field, [name]: value, harBlittRedigert: true } : field))
     );
   };
-
-  return (
-    <>
-      {vurderinger.map((vurdering, index) => (
-        <ToTrinnsvurderingForm
-          key={vurdering.definisjon}
-          toTrinnsvurdering={vurdering}
-          oppdaterVurdering={handleInputChange}
-          errors={errors.filter((error) => error.definisjon === vurdering.definisjon)}
-          index={index}
-          link={`${link}/${behovstypeTilVilkårskortLink(vurdering.definisjon as Behovstype)}`}
-          readOnly={readOnly}
-        />
-      ))}
-
-      <Button
-        size={'medium'}
-        onClick={async () => {
-          const validerteToTrinnsvurderinger = validerTotrinnsvurderinger(vurderinger);
-          if (errors.length === 0 && validerteToTrinnsvurderinger && validerteToTrinnsvurderinger.length > 0) {
-            await løsBehov({
-              behandlingVersjon: 0,
-              behov: {
-                behovstype: Behovstype.FATTE_VEDTAK_KODE,
-                vurderinger: validerteToTrinnsvurderinger,
-              },
-              referanse: behandlingsReferanse,
-            });
-          }
-        }}
-      >
-        Send inn
-      </Button>
-    </>
-  );
 
   function validerTotrinnsvurderinger(
     toTrinnsvurdering: ToTrinnsVurderingFormFields[]
@@ -103,4 +69,39 @@ export const Totrinnsvurderingforms = ({ fatteVedtakGrunnlag, link, readOnly, be
 
     return errors.length > 0 ? undefined : validatedVurderinger;
   }
+
+  return (
+    <>
+      {vurderinger.map((vurdering, index) => (
+        <BeslutterForm
+          key={vurdering.definisjon}
+          toTrinnsvurdering={vurdering}
+          oppdaterVurdering={handleInputChange}
+          errors={errors.filter((error) => error.definisjon === vurdering.definisjon)}
+          index={index}
+          link={`${link}/${behovstypeTilVilkårskortLink(vurdering.definisjon as Behovstype)}`}
+          readOnly={readOnly}
+        />
+      ))}
+
+      <Button
+        size={'medium'}
+        onClick={async () => {
+          const validerteToTrinnsvurderinger = validerTotrinnsvurderinger(vurderinger);
+          if (errors.length === 0 && validerteToTrinnsvurderinger && validerteToTrinnsvurderinger.length > 0) {
+            await løsBehov({
+              behandlingVersjon: 0,
+              behov: {
+                behovstype: Behovstype.FATTE_VEDTAK_KODE,
+                vurderinger: validerteToTrinnsvurderinger,
+              },
+              referanse: behandlingsReferanse,
+            });
+          }
+        }}
+      >
+        Send inn
+      </Button>
+    </>
+  );
 };

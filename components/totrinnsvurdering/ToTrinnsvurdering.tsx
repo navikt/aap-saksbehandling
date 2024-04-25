@@ -9,7 +9,7 @@ import { useParams } from 'next/navigation';
 import { Historikk } from 'components/totrinnsvurdering/historikk/Historikk';
 import { ToTrinnsvurderingToggleGroup } from 'components/totrinnsvurdering/totrinnsvurderingtogglegroup/ToTrinnsvurderingToggleGroup';
 import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsummering';
-import { Totrinnsvurderingforms } from 'components/totrinnsvurdering/totrinnsvurderingform/Totrinnsvurderingforms';
+import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 
 interface Props {
   fatteVedtakGrunnlag: FatteVedtakGrunnlag;
@@ -27,7 +27,7 @@ export interface ToTrinnsVurderingFormFields {
 
 export interface ToTrinnsvurderingError {
   definisjon: string;
-  felt: string;
+  felt: keyof ToTrinnsVurderingFormFields;
   message: string;
 }
 
@@ -36,7 +36,7 @@ export const ToTrinnsvurdering = ({ fatteVedtakGrunnlag, behandlingsReferanse, r
 
   const [toggleGroupValue, setToggleGroupValue] = useState<string>(readOnly ? 'historikk' : 'totrinnsvurdering');
 
-  const link = `/sak/${params.saksId}/${behandlingsReferanse}/`;
+  const link = `/sak/${params.saksId}/${behandlingsReferanse}`;
 
   const vurderteTotrinnsvurderinger = fatteVedtakGrunnlag.vurderinger.filter(
     (vurdering) => vurdering.godkjent !== undefined && vurdering.begrunnelse !== undefined
@@ -61,7 +61,7 @@ export const ToTrinnsvurdering = ({ fatteVedtakGrunnlag, behandlingsReferanse, r
         aria-hidden={toggleGroupValue === 'historikk'}
         className={toggleGroupValue === 'totrinnsvurdering' ? styles.toTrinnsKontroll : ''}
       >
-        <Totrinnsvurderingforms
+        <TotrinnsvurderingForm
           fatteVedtakGrunnlag={fatteVedtakGrunnlag}
           link={link}
           readOnly={readOnly}
