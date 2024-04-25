@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { format } from 'date-fns';
-import { Button, Table } from '@navikt/ds-react';
+import { Button, Dropdown, Table } from '@navikt/ds-react';
 
 import { Oppgave } from 'lib/types/oppgavebehandling';
 import { fetchProxy } from 'lib/clientApi';
 
 import styles from './Oppgavetabell.module.css';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 
 type Props = {
   oppgaver: Oppgave[];
@@ -75,7 +76,7 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
               <Table.DataCell>{oppgave.type}</Table.DataCell>
               <Table.DataCell>{format(oppgave.opprettet, 'dd.MM.yy')}</Table.DataCell>
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
-              <Table.DataCell>
+              <Table.DataCell className={styles.knappecelle}>
                 {oppgaveErFordelt(oppgave) ? (
                   <Button variant={'secondary'} size={'small'} onClick={() => frigiOppgave(oppgave)}>
                     Frigjør
@@ -85,9 +86,18 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
                     Behandle
                   </Button>
                 )}
-              </Table.DataCell>
-              <Table.DataCell>
-                <Link href={`/oppgaveliste/${oppgave.oppgaveId}`}>Se oppgave</Link>
+                <Dropdown>
+                  <Button as={Dropdown.Toggle} variant={'tertiary'} size={'small'}>
+                    <MenuElipsisVerticalIcon style={{ color: '#000' }} fontSize={'1.5rem'} />
+                  </Button>
+                  <Dropdown.Menu>
+                    <Dropdown.Menu.List>
+                      <Dropdown.Menu.List.Item as={Link} href={`/oppgaveliste/${oppgave.oppgaveId}`}>
+                        Se oppgave
+                      </Dropdown.Menu.List.Item>
+                    </Dropdown.Menu.List>
+                  </Dropdown.Menu>
+                </Dropdown>
               </Table.DataCell>
             </Table.Row>
           ))}
