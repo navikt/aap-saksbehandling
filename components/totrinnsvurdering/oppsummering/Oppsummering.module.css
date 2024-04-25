@@ -1,0 +1,7 @@
+.oppsummering {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 2px solid black;
+  padding: 1rem;
+}

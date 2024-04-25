@@ -4,6 +4,8 @@ import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import { behovstypeTilVilkårskortLink } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import Link from 'next/link';
 
+import styles from './Oppsummering.module.css';
+
 interface Props {
   vurderinger: ToTrinnsVurdering[];
   link: string;
@@ -14,17 +16,8 @@ export const Oppsummering = ({ vurderinger, link }: Props) => {
     <div>
       <Label size={'small'}>Siste vurderinger fra beslutter</Label>
       {vurderinger.map((vurdering) => (
-        <div
-          key={vurdering.definisjon}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.5rem',
-            border: '2px solid black',
-            padding: '1rem',
-          }}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div key={vurdering.definisjon} className={styles.oppsummering}>
+          <div>
             <Label size={'small'}>Vilkår</Label>
             <Link href={`${link}/${behovstypeTilVilkårskortLink(vurdering.definisjon as Behovstype)}`}>
               <BodyShort size={'small'}>{mapBehovskodeTilBehovstype(vurdering.definisjon as Behovstype)}</BodyShort>
