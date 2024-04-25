@@ -9,7 +9,7 @@ type Props = {
   egneOppgaver?: boolean;
 };
 
-const BRUKERNAVN = 'Eklektisk Kappe'; // må hentes
+const BRUKERNAVN = 'z994422'; // må hentes
 
 export const OppgaveFetcher = ({ egneOppgaver = false }: Props) => {
   const hentAlleBehandlinger = async () => await fetchProxy<Oppgaver>('/api/oppgavebehandling', 'GET');
