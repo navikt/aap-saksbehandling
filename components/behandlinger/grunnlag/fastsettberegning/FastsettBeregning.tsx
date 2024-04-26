@@ -56,8 +56,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingsReferanse, readOnly }: 
           beregningVurdering: {
             begrunnelse: data.begrunnelse,
             ytterligereNedsattArbeidsevneDato: formaterDatoForBackend(data.ytterligereNedsattArbeidsevneDato),
-            // @ts-ignore TODO feil type fra backend
-            antattÅrligInntekt: data.antattÅrligInntekt ? Number(data.antattÅrligInntekt) : undefined,
+            antattÅrligInntekt: data.antattÅrligInntekt ? { verdi: Number(data.antattÅrligInntekt) } : undefined,
           },
         },
         referanse: behandlingsReferanse,
