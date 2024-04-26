@@ -45,7 +45,7 @@ export default function Page() {
   const aktivitetspliktOppfylt = form.watch('aktivitetspliktOppfylt');
   return (
     <div className={styles.aktivitetSkjema}>
-      <VilkårsKort heading={'Vurder aktivitetsplikt'} steg={'AKTIVITET'} icon={<FigureIcon fontSize={'inherit'} />}>
+      <VilkårsKort heading={'Vurder aktivitetsplikt'} steg={'FATTE_VEDTAK'} icon={<FigureIcon fontSize={'inherit'} />}>
         <form>
           <FormField form={form} formField={formFields.begrunnelse} />
           <FormField form={form} formField={formFields.aktivitetspliktOppfylt} />

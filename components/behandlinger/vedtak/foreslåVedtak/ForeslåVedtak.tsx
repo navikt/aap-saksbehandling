@@ -1,50 +1,41 @@
 'use client';
 
-import { Form } from 'components/form/Form';
-import { FormField } from 'components/input/formfield/FormField';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { useConfigForm } from 'hooks/FormHook';
 import { BehandlingResultat } from 'lib/types/types';
 import { Vilkårsoppsummering } from 'components/vilkårsoppsummering/Vilkårsoppsummering';
-import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 import { løsBehov } from 'lib/clientApi';
+import { Button } from '@navikt/ds-react';
+import { useNesteSteg } from 'hooks/NesteStegHook';
 
 interface Props {
   behandlingsReferanse: string;
   behandlingResultat: BehandlingResultat;
 }
 
-interface FormFields {
-  begrunnelse: string;
-}
-
 export const ForeslåVedtak = ({ behandlingsReferanse, behandlingResultat }: Props) => {
-  const { formFields, form } = useConfigForm<FormFields>({
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Begrunnelse',
-      description: 'Skriv en begrunnelse',
-    },
-  });
+  const { status, listenSSE, isLoading } = useNesteSteg('FORESLÅ_VEDTAK');
+
+  console.log(status);
 
   return (
     <VilkårsKort heading="Foreslå vedtak" steg={'FORESLÅ_VEDTAK'}>
-      <Form
-        steg="FORESLÅ_VEDTAK"
-        onSubmit={handleSubmitWithCallback(form, async (data) => {
+      <Vilkårsoppsummering behandlingResultat={behandlingResultat} />
+      <Button
+        loading={isLoading}
+        onClick={async () => {
           await løsBehov({
             behandlingVersjon: 0,
             behov: {
               behovstype: Behovstype.FORESLÅ_VEDTAK_KODE,
-              foreslåvedtakVurdering: data.begrunnelse,
             },
             referanse: behandlingsReferanse,
           });
-        })}
+          await listenSSE();
+        }}
       >
-        <Vilkårsoppsummering behandlingResultat={behandlingResultat} />
-        <FormField form={form} formField={formFields.begrunnelse} />
-      </Form>
+        Neste steg
+      </Button>
     </VilkårsKort>
   );
 };
