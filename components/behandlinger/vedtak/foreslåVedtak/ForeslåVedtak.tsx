@@ -4,9 +4,8 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { BehandlingResultat } from 'lib/types/types';
 import { Vilkårsoppsummering } from 'components/vilkårsoppsummering/Vilkårsoppsummering';
 import { Behovstype } from 'lib/utils/form';
-import { løsBehov } from 'lib/clientApi';
 import { Button } from '@navikt/ds-react';
-import { useNesteSteg } from 'hooks/NesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 
 interface Props {
   behandlingsReferanse: string;
@@ -14,7 +13,7 @@ interface Props {
 }
 
 export const ForeslåVedtak = ({ behandlingsReferanse, behandlingResultat }: Props) => {
-  const { status, listenSSE, isLoading } = useNesteSteg('FORESLÅ_VEDTAK');
+  const { status, løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
 
   console.log(status);
 
@@ -24,14 +23,13 @@ export const ForeslåVedtak = ({ behandlingsReferanse, behandlingResultat }: Pro
       <Button
         loading={isLoading}
         onClick={async () => {
-          await løsBehov({
+          await løsBehovOgGåTilNesteSteg({
             behandlingVersjon: 0,
             behov: {
               behovstype: Behovstype.FORESLÅ_VEDTAK_KODE,
             },
             referanse: behandlingsReferanse,
           });
-          await listenSSE();
         }}
       >
         Neste steg

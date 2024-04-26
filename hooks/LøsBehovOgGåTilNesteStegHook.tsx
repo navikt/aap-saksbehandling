@@ -4,20 +4,25 @@ import {
   ServerSentEventStatus,
 } from 'app/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { useParams, useRouter } from 'next/navigation';
-import { StegType } from 'lib/types/types';
+import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
+import { løsBehov } from 'lib/clientApi';
 
-export const useNesteSteg = (
+export const useLøsBehovOgGåTilNesteSteg = (
   steg: StegType
 ): {
   status: ServerSentEventStatus | undefined;
   isLoading: boolean;
-  listenSSE: () => void;
+  løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling) => void;
 } => {
   const params = useParams();
   const router = useRouter();
   const [status, setStatus] = useState<ServerSentEventStatus | undefined>();
   const [isLoading, setIsLoading] = useState(false);
 
+  const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling) => {
+    await løsBehov(behov);
+    await listenSSE();
+  };
   const listenSSE = () => {
     setIsLoading(true);
     const eventSource = new EventSource(
@@ -53,5 +58,5 @@ export const useNesteSteg = (
     };
   };
 
-  return { isLoading, status, listenSSE };
+  return { isLoading, status, løsBehovOgGåTilNesteSteg };
 };
