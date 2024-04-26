@@ -4,7 +4,8 @@ import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import styles from './page.module.css';
-import { Heading } from '@navikt/ds-react';
+import { FigureIcon } from '@navikt/aksel-icons';
+import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 
 interface FormFields {
   begrunnelse: string;
@@ -25,17 +26,6 @@ export default function Page() {
       rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
       options: JaEllerNeiOptions,
     },
-    paragraf: {
-      type: 'select',
-      label: 'Paragraf',
-      options: [
-        'Ikke møtt til møte med Nav',
-        'Ikke møtt i behandling',
-        'Ikke møtt i tiltak',
-        'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om',
-        'Ikke bidratt til egen avklaring',
-      ],
-    },
     grunn: {
       type: 'radio',
       label: 'Begrunnelse',
@@ -55,17 +45,14 @@ export default function Page() {
   const aktivitetspliktOppfylt = form.watch('aktivitetspliktOppfylt');
   return (
     <div className={styles.aktivitetSkjema}>
-      <Heading size={'large'}>Vurder aktivitetsplikt</Heading>
-      <form>
-        <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.aktivitetspliktOppfylt} />
-        {aktivitetspliktOppfylt === JaEllerNei.Nei && (
-          <>
-            <FormField form={form} formField={formFields.grunn} />
-            <FormField form={form} formField={formFields.dato} />
-          </>
-        )}
-      </form>
+      <VilkårsKort heading={'Vurder aktivitetsplikt'} steg={'AKTIVITET'} icon={<FigureIcon fontSize={'inherit'} />}>
+        <form>
+          <FormField form={form} formField={formFields.begrunnelse} />
+          <FormField form={form} formField={formFields.aktivitetspliktOppfylt} />
+          {aktivitetspliktOppfylt === JaEllerNei.Nei && <FormField form={form} formField={formFields.grunn} />}
+          <FormField form={form} formField={formFields.dato} />
+        </form>
+      </VilkårsKort>
     </div>
   );
 }
