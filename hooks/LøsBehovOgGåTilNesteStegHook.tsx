@@ -21,7 +21,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
 
   const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling) => {
     await løsBehov(behov);
-    await listenSSE();
+    listenSSE();
   };
   const listenSSE = () => {
     setIsLoading(true);

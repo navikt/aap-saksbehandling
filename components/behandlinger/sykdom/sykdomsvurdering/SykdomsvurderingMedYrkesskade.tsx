@@ -1,20 +1,13 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import {
-  Behovstype,
-  getJaNeiEllerUndefined,
-  handleSubmitWithCallback,
-  JaEllerNei,
-  JaEllerNeiOptions,
-} from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { Alert, Label, Link, List } from '@navikt/ds-react';
 import { SykdomsGrunnlag } from 'lib/types/types';
-import { løsBehov } from 'lib/clientApi';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
@@ -22,6 +15,8 @@ import styles from './SykdomsvurderingMedYrkesskade.module.css';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { FormEvent } from 'react';
 
 interface Props {
   behandlingsReferanse: string;
@@ -40,6 +35,8 @@ interface FormFields {
 }
 
 export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
+  const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
+
   const { form, formFields } = useConfigForm<FormFields>(
     {
       erArbeidsevnenNedsatt: {
@@ -100,6 +97,33 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, 
 
   const dokumenterBruktIVurderingen = form.watch('dokumenterBruktIVurderingen');
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: 0,
+        behov: {
+          behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
+          sykdomsvurdering: {
+            erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
+            begrunnelse: data.begrunnelse,
+            dokumenterBruktIVurdering: [],
+            erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
+            nedreGrense: data.erÅrsakssammenheng === JaEllerNei.Ja ? 'TRETTI' : 'FEMTI',
+            erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
+              data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
+            nedsattArbeidsevneDato: data.nedsattArbeidsevneDato
+              ? formaterDatoForBackend(data.nedsattArbeidsevneDato)
+              : undefined,
+            yrkesskadevurdering: {
+              erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
+            },
+          },
+        },
+        referanse: behandlingsReferanse,
+      });
+    })(event);
+  };
+
   return (
     <VilkårsKort
       heading={'Yrkesskade og nedsatt arbeidsevne §§ 11-22 1.ledd, 11-5'}
@@ -109,30 +133,9 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, 
     >
       <Form
         steg={'AVKLAR_SYKDOM'}
-        onSubmit={handleSubmitWithCallback(form, async (data) => {
-          await løsBehov({
-            behandlingVersjon: 0,
-            behov: {
-              behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
-              sykdomsvurdering: {
-                erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
-                begrunnelse: data.begrunnelse,
-                dokumenterBruktIVurdering: [],
-                erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
-                nedreGrense: data.erÅrsakssammenheng === JaEllerNei.Ja ? 'TRETTI' : 'FEMTI',
-                erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
-                  data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
-                nedsattArbeidsevneDato: data.nedsattArbeidsevneDato
-                  ? formaterDatoForBackend(data.nedsattArbeidsevneDato)
-                  : undefined,
-                yrkesskadevurdering: {
-                  erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
-                },
-              },
-            },
-            referanse: behandlingsReferanse,
-          });
-        })}
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        status={status}
         visBekreftKnapp={!readOnly}
       >
         <Alert variant="warning" size={'small'}>

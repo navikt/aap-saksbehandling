@@ -5,17 +5,12 @@ import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
-import { løsBehov } from 'lib/clientApi';
 import { BistandsGrunnlag } from 'lib/types/types';
-import {
-  Behovstype,
-  getJaNeiEllerUndefined,
-  handleSubmitWithCallback,
-  JaEllerNei,
-  JaEllerNeiOptions,
-} from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { FormEvent } from 'react';
 
 interface Props {
   behandlingsReferanse: string;
@@ -31,6 +26,8 @@ interface FormFields {
 }
 
 export const Oppfølging = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
+  const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
@@ -66,6 +63,22 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag, readOnly }: Props)
     { readOnly: readOnly }
   );
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) =>
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: 0,
+        behov: {
+          behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
+          bistandsVurdering: {
+            begrunnelse: data.begrunnelse,
+            erBehovForBistand: data.vilkårOppfylt === JaEllerNei.Ja,
+          },
+        },
+        referanse: behandlingsReferanse,
+      })
+    )(event);
+  };
+
   return (
     <VilkårsKort
       heading="Behov for oppfølging § 11-6"
@@ -75,19 +88,9 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag, readOnly }: Props)
     >
       <Form
         steg="VURDER_BISTANDSBEHOV"
-        onSubmit={handleSubmitWithCallback(form, async (data) => {
-          await løsBehov({
-            behandlingVersjon: 0,
-            behov: {
-              behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-              bistandsVurdering: {
-                begrunnelse: data.begrunnelse,
-                erBehovForBistand: data.vilkårOppfylt === JaEllerNei.Ja,
-              },
-            },
-            referanse: behandlingsReferanse,
-          });
-        })}
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        status={status}
         visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>

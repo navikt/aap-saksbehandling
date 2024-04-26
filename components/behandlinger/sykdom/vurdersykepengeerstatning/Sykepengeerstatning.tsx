@@ -3,19 +3,14 @@
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FigureIcon } from '@navikt/aksel-icons';
 import { useConfigForm } from 'hooks/FormHook';
-import {
-  handleSubmitWithCallback,
-  JaEllerNei,
-  Behovstype,
-  JaEllerNeiOptions,
-  getJaNeiEllerUndefined,
-} from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
-import { løsBehov } from 'lib/clientApi';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { SykepengeerstatningGrunnlag } from 'lib/types/types';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { FormEvent } from 'react';
 
 interface Props {
   behandlingsReferanse: string;
@@ -31,6 +26,8 @@ interface FormFields {
 }
 
 export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
+  const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
+
   const { form, formFields } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
@@ -67,23 +64,29 @@ export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag, readOnly }
     { shouldUnregister: true, readOnly: readOnly }
   );
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) =>
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: 0,
+        behov: {
+          behovstype: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
+          sykepengeerstatningVurdering: {
+            begrunnelse: data.begrunnelse,
+            dokumenterBruktIVurdering: [],
+            harRettPå: data.erOppfylt === JaEllerNei.Ja,
+          },
+        },
+        referanse: behandlingsReferanse,
+      })
+    )(event);
+  };
+
   return (
     <VilkårsKort heading={'Sykepengeerstatning § 11-13'} steg="VURDER_SYKEPENGEERSTATNING" icon={<FigureIcon />}>
       <Form
-        onSubmit={handleSubmitWithCallback(form, async (data) => {
-          await løsBehov({
-            behandlingVersjon: 0,
-            behov: {
-              behovstype: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
-              sykepengeerstatningVurdering: {
-                begrunnelse: data.begrunnelse,
-                dokumenterBruktIVurdering: [],
-                harRettPå: data.erOppfylt === JaEllerNei.Ja,
-              },
-            },
-            referanse: behandlingsReferanse,
-          });
-        })}
+        onSubmit={handleSubmit}
+        status={status}
+        isLoading={isLoading}
         steg={'VURDER_SYKEPENGEERSTATNING'}
         visBekreftKnapp={!readOnly}
       >

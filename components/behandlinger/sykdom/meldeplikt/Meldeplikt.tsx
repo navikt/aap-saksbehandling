@@ -9,11 +9,12 @@ import { FigureIcon } from '@navikt/aksel-icons';
 
 import style from './Meldeplikt.module.css';
 import { FritakMeldepliktGrunnlag } from 'lib/types/types';
-import { løsBehov } from 'lib/clientApi';
-import { Behovstype, handleSubmitWithCallback } from 'lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { formaterDatoForBackend } from 'lib/utils/date';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { FormEvent } from 'react';
 
 interface Props {
   behandlingsReferanse: string;
@@ -30,6 +31,8 @@ interface FormFields {
 }
 
 export const Meldeplikt = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
+  const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
@@ -64,6 +67,26 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag, readOnly }: Props) 
     { readOnly: readOnly }
   );
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: 0,
+        behov: {
+          behovstype: Behovstype.FRITAK_MELDEPLIKT_KODE,
+          vurdering: {
+            begrunnelse: data.begrunnelse,
+            harFritak: data.unntakFraMeldeplikt.includes('Unntak fra meldeplikten'),
+            periode: {
+              fom: data.startDato ? formaterDatoForBackend(data.startDato) : '',
+              tom: data.sluttDato ? formaterDatoForBackend(data.sluttDato) : '',
+            },
+          },
+        },
+        referanse: behandlingsReferanse,
+      });
+    })(event);
+  };
+
   return (
     <VilkårsKort
       heading={'Unntak fra meldeplikt § 11-10'}
@@ -73,23 +96,9 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag, readOnly }: Props) 
       defaultOpen={false}
     >
       <Form
-        onSubmit={handleSubmitWithCallback(form, async (data) => {
-          await løsBehov({
-            behandlingVersjon: 0,
-            behov: {
-              behovstype: Behovstype.FRITAK_MELDEPLIKT_KODE,
-              vurdering: {
-                begrunnelse: data.begrunnelse,
-                harFritak: data.unntakFraMeldeplikt.includes('Unntak fra meldeplikten'),
-                periode: {
-                  fom: data.startDato ? formaterDatoForBackend(data.startDato) : '',
-                  tom: data.sluttDato ? formaterDatoForBackend(data.sluttDato) : '',
-                },
-              },
-            },
-            referanse: behandlingsReferanse,
-          });
-        })}
+        onSubmit={handleSubmit}
+        status={status}
+        isLoading={isLoading}
         steg={'BARNETILLEGG'}
         visBekreftKnapp={!readOnly}
       >

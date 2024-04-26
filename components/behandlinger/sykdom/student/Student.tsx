@@ -5,19 +5,13 @@ import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
 import { Buldings2Icon } from '@navikt/aksel-icons';
-
-import { løsBehov } from 'lib/clientApi';
-import {
-  getJaNeiEllerUndefined,
-  handleSubmitWithCallback,
-  JaEllerNei,
-  Behovstype,
-  JaEllerNeiOptions,
-} from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { format } from 'date-fns';
 import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 import { StudentGrunnlag } from 'lib/types/types';
 import { stringToDate } from 'lib/utils/date';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { FormEvent } from 'react';
 
 interface Props {
   behandlingsReferanse: string;
@@ -32,6 +26,8 @@ interface FormFields {
 }
 
 export const Student = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
+  const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -67,6 +63,26 @@ export const Student = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => 
     { readOnly: readOnly }
   );
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: 0,
+        behov: {
+          behovstype: Behovstype.AVKLAR_STUDENT_KODE,
+          studentvurdering: {
+            begrunnelse: data.begrunnelse,
+            dokumenterBruktIVurdering: [],
+            oppfyller11_14: data.oppfyller11_14 === JaEllerNei.Ja,
+            avbruttStudieDato: data.avbruttStudieDato
+              ? format(new Date(data.avbruttStudieDato), 'yyyy-MM-dd')
+              : undefined,
+          },
+        },
+        referanse: behandlingsReferanse,
+      });
+    })(event);
+  };
+
   return (
     <VilkårsKort
       heading={getHeaderForSteg(mapStegTypeTilDetaljertSteg('AVKLAR_STUDENT'))}
@@ -74,23 +90,9 @@ export const Student = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => 
       icon={<Buldings2Icon fontSize={'inherit'} />}
     >
       <Form
-        onSubmit={handleSubmitWithCallback(form, async (data) => {
-          await løsBehov({
-            behandlingVersjon: 0,
-            behov: {
-              behovstype: Behovstype.AVKLAR_STUDENT_KODE,
-              studentvurdering: {
-                begrunnelse: data.begrunnelse,
-                dokumenterBruktIVurdering: [],
-                oppfyller11_14: data.oppfyller11_14 === JaEllerNei.Ja,
-                avbruttStudieDato: data.avbruttStudieDato
-                  ? format(new Date(data.avbruttStudieDato), 'yyyy-MM-dd')
-                  : undefined,
-              },
-            },
-            referanse: behandlingsReferanse,
-          });
-        })}
+        onSubmit={handleSubmit}
+        status={status}
+        isLoading={isLoading}
         steg={'AVKLAR_STUDENT'}
         visBekreftKnapp={!readOnly}
       >

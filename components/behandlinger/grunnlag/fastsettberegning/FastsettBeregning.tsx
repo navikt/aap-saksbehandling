@@ -4,11 +4,12 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
-import { løsBehov } from 'lib/clientApi';
-import { Behovstype, getStringEllerUndefined, handleSubmitWithCallback } from 'lib/utils/form';
+import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
 import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { BeregningsGrunnlag } from 'lib/types/types';
 import { numberToString } from 'lib/utils/string';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { FormEvent } from 'react';
 
 interface Props {
   grunnlag?: BeregningsGrunnlag;
@@ -23,6 +24,8 @@ interface FormFields {
 }
 
 export const FastsettBeregning = ({ grunnlag, behandlingsReferanse, readOnly }: Props) => {
+  const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -44,25 +47,31 @@ export const FastsettBeregning = ({ grunnlag, behandlingsReferanse, readOnly }: 
     { readOnly: readOnly }
   );
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: 0,
+        behov: {
+          behovstype: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
+          beregningVurdering: {
+            begrunnelse: data.begrunnelse,
+            ytterligereNedsattArbeidsevneDato: formaterDatoForBackend(data.ytterligereNedsattArbeidsevneDato),
+            // @ts-ignore TODO feil type fra backend
+            antattÅrligInntekt: data.antattÅrligInntekt ? Number(data.antattÅrligInntekt) : undefined,
+          },
+        },
+        referanse: behandlingsReferanse,
+      });
+    })(event);
+  };
+
   return (
     <VilkårsKort heading={'Fastsett beregning'} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}>
       <Form
         steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
-        onSubmit={handleSubmitWithCallback(form, async (data) => {
-          await løsBehov({
-            behandlingVersjon: 0,
-            behov: {
-              behovstype: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
-              beregningVurdering: {
-                begrunnelse: data.begrunnelse,
-                ytterligereNedsattArbeidsevneDato: formaterDatoForBackend(data.ytterligereNedsattArbeidsevneDato),
-                // @ts-ignore TODO feil type fra backend
-                antattÅrligInntekt: data.antattÅrligInntekt ? Number(data.antattÅrligInntekt) : undefined,
-              },
-            },
-            referanse: behandlingsReferanse,
-          });
-        })}
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        status={status}
         visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.begrunnelse} />

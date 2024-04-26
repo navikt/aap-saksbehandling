@@ -1,17 +1,10 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import {
-  Behovstype,
-  getJaNeiEllerUndefined,
-  handleSubmitWithCallback,
-  JaEllerNei,
-  JaEllerNeiOptions,
-} from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
-import { løsBehov } from 'lib/clientApi';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
@@ -19,6 +12,8 @@ import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { FormEvent } from 'react';
 
 interface Props {
   behandlingsReferanse: string;
@@ -36,6 +31,8 @@ interface FormFields {
 }
 
 export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, readOnly }: Props) => {
+  const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       erArbeidsevnenNedsatt: {
@@ -86,30 +83,36 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, readOnly }: P
     { shouldUnregister: true, readOnly: readOnly }
   );
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: 0,
+        behov: {
+          behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
+          sykdomsvurdering: {
+            erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
+            begrunnelse: data.begrunnelse,
+            dokumenterBruktIVurdering: [],
+            erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
+            nedreGrense: 'FEMTI',
+            erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
+              data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
+            nedsattArbeidsevneDato: data.nedsattArbeidsevneDato
+              ? formaterDatoForBackend(data.nedsattArbeidsevneDato)
+              : undefined,
+          },
+        },
+        referanse: behandlingsReferanse,
+      });
+    })(event);
+  };
+
   return (
     <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} steg="AVKLAR_SYKDOM" icon={<VitalsIcon />} erNav={true}>
       <Form
-        onSubmit={handleSubmitWithCallback(form, async (data) => {
-          await løsBehov({
-            behandlingVersjon: 0,
-            behov: {
-              behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
-              sykdomsvurdering: {
-                erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
-                begrunnelse: data.begrunnelse,
-                dokumenterBruktIVurdering: [],
-                erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
-                nedreGrense: 'FEMTI',
-                erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
-                  data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
-                nedsattArbeidsevneDato: data.nedsattArbeidsevneDato
-                  ? formaterDatoForBackend(data.nedsattArbeidsevneDato)
-                  : undefined,
-              },
-            },
-            referanse: behandlingsReferanse,
-          });
-        })}
+        onSubmit={handleSubmit}
+        status={status}
+        isLoading={isLoading}
         steg={'AVKLAR_SYKDOM'}
         visBekreftKnapp={!readOnly}
       >
