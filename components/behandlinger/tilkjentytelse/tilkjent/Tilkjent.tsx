@@ -1,4 +1,5 @@
 import { TilkjentYtelseGrunnlag } from 'lib/types/types';
+import { PeriodeViser } from 'components/periodeviser/PeriodeViser';
 
 interface Props {
   grunnlag: TilkjentYtelseGrunnlag;
@@ -6,13 +7,7 @@ interface Props {
 export const Tilkjent = ({ grunnlag }: Props) => {
   return (
     <div>
-      {grunnlag?.perioder?.map((periode, index: number) => (
-        <div key={index}>
-          <div>Periode: {JSON.stringify(periode?.periode)}</div>
-          <div>Tilkjent: {JSON.stringify(periode?.tilkjent)}</div>
-          <div>----</div>
-        </div>
-      ))}
+      <PeriodeViser tilkjentYtelse={grunnlag} />
     </div>
   );
 };

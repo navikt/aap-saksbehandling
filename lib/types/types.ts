@@ -1,4 +1,6 @@
 import { components } from './schema';
+// Verdityper
+export type Periode = components['schemas']['no.nav.aap.verdityper.Periode'];
 
 // Grunnlag
 export type StudentGrunnlag =
@@ -15,6 +17,11 @@ export type BeregningsGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.flate.BeregningsVurderingDTO'];
 export type TilkjentYtelseGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.tilkjentytelse.flate.TilkjentYtelseDto'];
+
+export type TilkjentYtelsePeriode =
+  components['schemas']['no.nav.aap.behandlingsflyt.tilkjentytelse.flate.TilkjentYtelsePeriode'];
+export type Tilkjent = components['schemas']['no.nav.aap.behandlingsflyt.forretningsflyt.steg.Tilkjent'];
+
 export type FatteVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.flate.FatteVedtakGrunnlagDto'];
 
