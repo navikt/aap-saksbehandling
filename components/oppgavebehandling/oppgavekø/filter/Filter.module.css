@@ -13,6 +13,11 @@
   margin-top: var(--a-spacing-8);
 }
 
-.soek {
+.knapperad {
+  display: flex;
+  gap: var(--a-spacing-4);
+}
+
+.knapperad > button {
   margin-top: var(--a-spacing-4);
 }
