@@ -123,4 +123,22 @@ describe('totrinnsvurderingform', () => {
     const errorMessage = await screen.getByText('Du må oppgi en grunn');
     expect(errorMessage).toBeVisible();
   });
+
+  it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
+    render(
+      <TotrinnsvurderingForm fatteVedtakGrunnlag={grunnlag} link={link} readOnly={false} behandlingsReferanse={'456'} />
+    );
+
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
+    await user.click(vurderPåNyttValg);
+
+    const fritekstFelt = await screen.queryByRole('textbox', { name: /beskriv returårsak/i });
+    expect(fritekstFelt).not.toBeInTheDocument();
+
+    const annetValg = screen.getByRole('checkbox', { name: /annet/i });
+    await user.click(annetValg);
+
+    const fritekstFeltEtterAnnetErValgt = await screen.queryByRole('textbox', { name: /beskriv returårsak/i });
+    expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
+  });
 });
