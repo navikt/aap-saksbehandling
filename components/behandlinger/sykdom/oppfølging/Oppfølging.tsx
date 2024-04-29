@@ -84,7 +84,7 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag, readOnly }: Props)
       heading="Behov for oppfølging § 11-6"
       steg="VURDER_BISTANDSBEHOV"
       icon={<PersonGroupIcon />}
-      erNav={true}
+      vilkårTilhørerNavKontor={true}
     >
       <Form
         steg="VURDER_BISTANDSBEHOV"

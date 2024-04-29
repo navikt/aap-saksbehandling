@@ -92,7 +92,7 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag, readOnly }: Props) 
       heading={'Unntak fra meldeplikt § 11-10'}
       steg="FRITAK_MELDEPLIKT"
       icon={<FigureIcon fontSize={'inherit'} />}
-      erNav={true}
+      vilkårTilhørerNavKontor={true}
       defaultOpen={false}
     >
       <Form

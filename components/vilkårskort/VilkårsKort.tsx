@@ -11,11 +11,18 @@ interface Props {
   children: ReactNode;
   defaultOpen?: boolean;
   icon?: ReactNode;
-  erNav?: boolean;
+  vilkårTilhørerNavKontor?: boolean;
 }
 
-export const VilkårsKort = ({ heading, steg, children, icon, defaultOpen = true, erNav = false }: Props) => {
-  const classNameBasertPåEnhet = erNav ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
+export const VilkårsKort = ({
+  heading,
+  steg,
+  children,
+  icon,
+  defaultOpen = true,
+  vilkårTilhørerNavKontor = false,
+}: Props) => {
+  const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
 
   return (
     <ExpansionCard

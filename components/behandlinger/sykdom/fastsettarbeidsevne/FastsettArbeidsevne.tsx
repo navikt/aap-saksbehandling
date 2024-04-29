@@ -34,7 +34,7 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse, readOnly }: Props) =
     <VilkårsKort
       heading={'Reduksjon ved delvis nedsatt arbeidsevne - § 11-23 2.ledd'}
       steg={'FASTSETT_ARBEIDSEVNE'}
-      erNav={true}
+      vilkårTilhørerNavKontor={true}
       defaultOpen={false}
     >
       <div className={styles.fastsettArbeidsevne}>

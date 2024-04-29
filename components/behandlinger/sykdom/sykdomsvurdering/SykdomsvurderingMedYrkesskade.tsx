@@ -129,7 +129,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, 
       heading={'Yrkesskade og nedsatt arbeidsevne §§ 11-22 1.ledd, 11-5'}
       steg={'AVKLAR_SYKDOM'}
       icon={<VitalsIcon />}
-      erNav={true}
+      vilkårTilhørerNavKontor={true}
     >
       <Form
         steg={'AVKLAR_SYKDOM'}

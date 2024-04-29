@@ -108,7 +108,12 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, readOnly }: P
   };
 
   return (
-    <VilkårsKort heading={'Nedsatt arbeidsevne - § 11-5'} steg="AVKLAR_SYKDOM" icon={<VitalsIcon />} erNav={true}>
+    <VilkårsKort
+      heading={'Nedsatt arbeidsevne - § 11-5'}
+      steg="AVKLAR_SYKDOM"
+      icon={<VitalsIcon />}
+      vilkårTilhørerNavKontor={true}
+    >
       <Form
         onSubmit={handleSubmit}
         status={status}
