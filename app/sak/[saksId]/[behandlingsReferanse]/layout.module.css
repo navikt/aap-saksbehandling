@@ -7,7 +7,5 @@
 }
 
 .høyrekolonne {
-  border-left: 1px solid var(--a-border-default);
-  height: 100vh;
   padding: 1rem;
 }
