@@ -2,3 +2,8 @@
 .ProseMirror-focused {
   outline: none;
 }
+
+/* Hjelper mot at knappene fra Aksel bruker full bredde når man bruker grid/flex */
+.fit-content-button {
+  width: fit-content;
+}

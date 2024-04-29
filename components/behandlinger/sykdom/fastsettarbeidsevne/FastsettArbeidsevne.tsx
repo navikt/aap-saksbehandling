@@ -53,11 +53,12 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse, readOnly }: Props) =
           />
         )}
         {!readOnly && (
-          <div>
-            <Button onClick={() => console.log('bekreft fastsettarbeidsevne', behandlingsReferanse, perioder)}>
-              Bekreft
-            </Button>
-          </div>
+          <Button
+            className={'fit-content-button'}
+            onClick={() => console.log('bekreft fastsettarbeidsevne', behandlingsReferanse, perioder)}
+          >
+            Bekreft
+          </Button>
         )}
       </div>
     </VilkårsKort>

@@ -1,5 +1,5 @@
 import { hentResultat } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslåVedtak/ForeslåVedtak';
+import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak';
 
 interface Props {
   behandlingsReferanse: string;

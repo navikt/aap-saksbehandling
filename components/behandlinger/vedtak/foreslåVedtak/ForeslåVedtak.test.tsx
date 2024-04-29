@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslåVedtak/ForeslåVedtak';
+import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak';
 import { BehandlingResultat } from 'lib/types/types';
 
 const behandlingResultat: BehandlingResultat = {

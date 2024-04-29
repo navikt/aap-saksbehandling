@@ -59,17 +59,15 @@ export const DokumentTabell = ({ dokumenter = defaultDokumenter }: Props) => {
           </Table.Body>
         )}
       </Table>
-      <div>
-        <Button
-          className={styles.leggTilDokumentKnapp}
-          size={'small'}
-          icon={<PlusIcon />}
-          variant={'tertiary'}
-          onClick={(e) => e.preventDefault()}
-        >
-          Legg til dokument
-        </Button>
-      </div>
+      <Button
+        className={`fit-content-button ${styles.leggTilDokumentKnapp}`}
+        size={'small'}
+        icon={<PlusIcon />}
+        variant={'tertiary'}
+        onClick={(e) => e.preventDefault()}
+      >
+        Legg til dokument
+      </Button>
       <Checkbox value={'dokumentasjonMangler'}>Dokumentasjon mangler</Checkbox>
     </div>
   );

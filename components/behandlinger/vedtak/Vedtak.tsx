@@ -1,4 +1,4 @@
-import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/foreslåVedtak/ForeslåVedtakMedDataFetching';
+import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtakMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
