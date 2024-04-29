@@ -38,6 +38,10 @@ export const PeriodeViser = ({ tilkjentYtelse }: Props) => {
         <Table zebraStripes>
           <Table.Body>
             <Table.Row>
+              <Table.DataCell scope="row">{'Periode'}</Table.DataCell>
+              <Table.DataCell>{`${activePeriod.periode.fom} - ${activePeriod.periode.tom}`}</Table.DataCell>
+            </Table.Row>
+            <Table.Row>
               <Table.DataCell scope="row">{'Dagsats'}</Table.DataCell>
               <Table.DataCell>
                 {activePeriod.tilkjent.dagsats && JSON.stringify(activePeriod.tilkjent.dagsats)}
