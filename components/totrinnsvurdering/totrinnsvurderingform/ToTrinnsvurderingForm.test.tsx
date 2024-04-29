@@ -73,7 +73,7 @@ describe('totrinnsvurderingform', () => {
     const manglendeUtredning = screen.getByRole('checkbox', { name: /manglende utredning/i });
     const feilLovanvendelse = screen.getByRole('checkbox', { name: /feil lovanvendelse/i });
     const annet = screen.getByRole('checkbox', {
-      name: /annet \(skriv i begrunnelsen\)/i,
+      name: /annet/i,
     });
 
     expect(mangelfullBegrunnelse).toBeVisible();
@@ -120,7 +120,7 @@ describe('totrinnsvurderingform', () => {
     const knapp = screen.getByRole('button', { name: /send inn/i });
     await user.click(knapp);
 
-    const errorMessage = screen.getByText('Du må oppgi en grunn');
+    const errorMessage = await screen.getByText('Du må oppgi en grunn');
     expect(errorMessage).toBeVisible();
   });
 });

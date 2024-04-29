@@ -1,10 +1,11 @@
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/BeslutterForm.module.css';
-import { ToTrinnsVurderingFormFields, ToTrinnsvurderingError } from 'components/totrinnsvurdering/ToTrinnsvurdering';
-import { Checkbox, CheckboxGroup, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
+import { ToTrinnsvurderingError, ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
+import { Checkbox, CheckboxGroup, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import Link from 'next/link';
+import { ValuePair } from 'components/input/formfield/FormField';
 
 interface Props {
   toTrinnsvurdering: ToTrinnsVurderingFormFields;
@@ -16,11 +17,11 @@ interface Props {
 }
 
 export const BeslutterForm = ({ toTrinnsvurdering, oppdaterVurdering, readOnly, link, index, errors }: Props) => {
-  const grunnOptions = [
-    'Mangelfull begrunnelse',
-    'Manglende utredning',
-    'Feil lovanvendelse',
-    'Annet (Skriv i begrunnelsen)',
+  const grunnOptions: ValuePair[] = [
+    { label: 'Mangelfull begrunnelse', value: 'MANGELFULL_BEGRUNNELSE' },
+    { label: 'Manglende utredning', value: 'MANGLENDE_UTREDNING' },
+    { label: 'Feil lovanvendelse', value: 'FEIL_LOVANVENDELSE' },
+    { label: 'Annet', value: 'ANNET' },
   ];
 
   return (
@@ -54,17 +55,26 @@ export const BeslutterForm = ({ toTrinnsvurdering, oppdaterVurdering, readOnly, 
           <CheckboxGroup
             legend={'Velg grunn'}
             description={'Du må minst velge èn grunn'}
-            onChange={(value) => oppdaterVurdering(index, 'grunn', value)}
+            onChange={(value) => oppdaterVurdering(index, 'grunner', value)}
             size={'small'}
             readOnly={readOnly}
-            error={errors.find((error) => error.felt === 'grunn')?.message}
+            error={errors.find((error) => error.felt === 'grunner')?.message}
           >
-            {grunnOptions.map((value) => (
-              <Checkbox value={value} key={value}>
-                {value}
+            {grunnOptions.map((option) => (
+              <Checkbox value={option.value} key={option.value}>
+                {option.label}
               </Checkbox>
             ))}
           </CheckboxGroup>
+          {toTrinnsvurdering.grunner?.find((grunn) => grunn === 'ANNET') && (
+            <TextField
+              label={'Beskriv returårsak'}
+              size={'small'}
+              readOnly={readOnly}
+              onChange={(e) => oppdaterVurdering(index, 'årsakFritekst', e.target.value)}
+              error={errors.find((error) => error.felt === 'årsakFritekst')?.message}
+            />
+          )}
         </>
       )}
     </div>

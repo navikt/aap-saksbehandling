@@ -1,6 +1,6 @@
 'use client';
 
-import { FatteVedtakGrunnlag } from 'lib/types/types';
+import { FatteVedtakGrunnlag, ToTrinnsVurderingGrunn } from 'lib/types/types';
 
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
 import { useState } from 'react';
@@ -20,7 +20,8 @@ interface Props {
 export interface ToTrinnsVurderingFormFields {
   godkjent?: string;
   begrunnelse?: string;
-  grunn?: string[];
+  grunner?: ToTrinnsVurderingGrunn[];
+  årsakFritekst?: string;
   harBlittRedigert: boolean;
   definisjon: string;
 }
@@ -39,7 +40,7 @@ export const ToTrinnsvurdering = ({ fatteVedtakGrunnlag, behandlingsReferanse, r
   const link = `/sak/${params.saksId}/${behandlingsReferanse}`;
 
   const vurderteTotrinnsvurderinger = fatteVedtakGrunnlag.vurderinger.filter(
-    (vurdering) => vurdering.godkjent !== undefined
+    (vurdering) => typeof vurdering.godkjent === 'boolean'
   );
 
   return (

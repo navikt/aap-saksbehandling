@@ -54,6 +54,9 @@ export type StegGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flyt.
 export type ToTrinnsVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.løser.vedtak.TotrinnsVurdering'];
 
+export type ToTrinnsVurderingGrunn =
+  components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.ÅrsakTilRetur']['årsak'];
+
 export type HistorikkType = components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.flate.Historikk'];
 
 export type HistorikkAksjon =

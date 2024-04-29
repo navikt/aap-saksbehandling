@@ -446,7 +446,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-04-26T09:23:54.994409
+       * @example 2024-04-26T14:48:22.267117
        */
       tidspunkt: string;
     };
@@ -462,9 +462,7 @@ export interface components {
       begrunnelse?: string | null;
       definisjon: string;
       godkjent?: boolean | null;
-      /** @enum {string|null} */
-      grunn?: 'MANGELFULL_BEGRUNNELSE' | 'MANGLENDE_UTREDNING' | 'FEIL_LOVANVENDELSE' | 'ANNET' | null;
-      grunnnFritekst?: string | null;
+      grunner?: components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.ÅrsakTilRetur'][] | null;
     };
     'no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.AvklarBistandsbehovLøsning': {
       behovstype: string;
@@ -514,6 +512,11 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.SattPåVentLøsning': {
       behovstype: string;
+    };
+    'no.nav.aap.behandlingsflyt.avklaringsbehov.ÅrsakTilRetur': {
+      /** @enum {string} */
+      årsak: 'MANGELFULL_BEGRUNNELSE' | 'MANGLENDE_UTREDNING' | 'FEIL_LOVANVENDELSE' | 'ANNET';
+      årsakFritekst?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.arbeid.ArbeidIPeriode': {
       periode: components['schemas']['no.nav.aap.verdityper.Periode'];
@@ -709,7 +712,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-04-26T09:23:54.994409
+       * @example 2024-04-26T14:48:22.267117
        */
       opprettet: string;
       /** Format: uuid */
@@ -728,7 +731,7 @@ export interface components {
       status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-04-26T09:23:54.994409
+       * @example 2024-04-26T14:48:22.267117
        */
       tidsstempel: string;
     };
@@ -836,7 +839,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-04-26T09:23:54.994409
+       * @example 2024-04-26T14:48:22.267117
        */
       opprettet: string;
       /** Format: uuid */
@@ -876,8 +879,12 @@ export interface components {
       periode: components['schemas']['no.nav.aap.verdityper.Periode'];
       tilkjent: components['schemas']['no.nav.aap.behandlingsflyt.forretningsflyt.steg.Tilkjent'];
     };
-    'no.nav.aap.verdityper.Beløp': Record<string, never>;
-    'no.nav.aap.verdityper.GUnit': Record<string, never>;
+    'no.nav.aap.verdityper.Beløp': {
+      verdi: number;
+    };
+    'no.nav.aap.verdityper.GUnit': {
+      verdi: number;
+    };
     'no.nav.aap.verdityper.Periode': {
       /**
        * Format: date

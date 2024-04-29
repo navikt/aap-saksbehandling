@@ -29,10 +29,21 @@ export const Oppsummering = ({ vurderinger, link }: Props) => {
             <BodyShort size={'small'}>{vurdering.godkjent ? 'Ja' : 'Nei'}</BodyShort>
           </div>
 
-          {vurdering.begrunnelse && (
+          {vurdering.begrunnelse != '' && (
             <div>
               <Label size={'small'}>Begrunnelse</Label>
               <BodyShort size={'small'}>{vurdering.begrunnelse}</BodyShort>
+            </div>
+          )}
+
+          {vurdering.grunner && vurdering.grunner?.length > 0 && (
+            <div>
+              <Label size={'small'}>Grunner</Label>
+              {vurdering.grunner.map((grunn, index) => (
+                <BodyShort key={index} size={'small'}>
+                  {grunn.årsak !== 'ANNET' ? mapGrunnTilString(grunn.årsak) : grunn.årsakFritekst}
+                </BodyShort>
+              ))}
             </div>
           )}
         </div>
@@ -40,3 +51,16 @@ export const Oppsummering = ({ vurderinger, link }: Props) => {
     </div>
   );
 };
+
+function mapGrunnTilString(grunn: string): string {
+  switch (grunn) {
+    case 'FEIL_LOVANVENDELSE':
+      return 'Feil lovanvendelse';
+    case 'MANGELFULL_BEGRUNNELSE':
+      return 'Mangelfull begrunnelse';
+    case 'MANGLENDE_UTREDNING':
+      return 'Manglende utredning';
+    default:
+      return grunn;
+  }
+}

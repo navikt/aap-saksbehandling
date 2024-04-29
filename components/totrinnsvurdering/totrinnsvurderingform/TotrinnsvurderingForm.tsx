@@ -48,19 +48,29 @@ export const TotrinnsvurderingForm = ({ fatteVedtakGrunnlag, link, readOnly, beh
           validatedVurderinger.push({
             definisjon: vurdering.definisjon,
             godkjent: true,
+            grunner: [],
           });
-        } else if (vurdering.godkjent === 'false' && vurdering.begrunnelse && vurdering.grunn) {
+        } else if (vurdering.godkjent === 'false' && vurdering.begrunnelse && vurdering.grunner) {
           validatedVurderinger.push({
             definisjon: vurdering.definisjon,
             godkjent: false,
             begrunnelse: vurdering.begrunnelse,
+            grunner: vurdering.grunner.map((grunn) => {
+              return {
+                årsak: grunn,
+                årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+              };
+            }),
           });
         } else {
-          if (vurdering.begrunnelse === undefined) {
+          if (!vurdering.begrunnelse) {
             errors.push({ felt: 'begrunnelse', definisjon: vurdering.definisjon, message: 'Du må gi en begrunnelse' });
           }
-          if (vurdering.grunn === undefined) {
-            errors.push({ felt: 'grunn', definisjon: vurdering.definisjon, message: 'Du må oppgi en grunn' });
+          if (!vurdering.grunner) {
+            errors.push({ felt: 'grunner', definisjon: vurdering.definisjon, message: 'Du må oppgi en grunn' });
+          }
+          if (vurdering.grunner?.find((grunn) => grunn === 'ANNET') && !vurdering.årsakFritekst) {
+            errors.push({ felt: 'årsakFritekst', definisjon: vurdering.definisjon, message: 'Du må skrive en grunn' });
           }
         }
       }
@@ -85,27 +95,29 @@ export const TotrinnsvurderingForm = ({ fatteVedtakGrunnlag, link, readOnly, beh
         />
       ))}
 
-      <Button
-        size={'medium'}
-        loading={isLoading}
-        onClick={async () => {
-          setIsLoading(true);
-          const validerteToTrinnsvurderinger = validerTotrinnsvurderinger(vurderinger);
-          if (errors.length === 0 && validerteToTrinnsvurderinger && validerteToTrinnsvurderinger.length > 0) {
-            await løsBehov({
-              behandlingVersjon: 0,
-              behov: {
-                behovstype: Behovstype.FATTE_VEDTAK_KODE,
-                vurderinger: validerteToTrinnsvurderinger,
-              },
-              referanse: behandlingsReferanse,
-            });
-          }
-          setIsLoading(false);
-        }}
-      >
-        Send inn
-      </Button>
+      {!readOnly && (
+        <Button
+          size={'medium'}
+          loading={isLoading}
+          onClick={async () => {
+            setIsLoading(true);
+            const validerteToTrinnsvurderinger = validerTotrinnsvurderinger(vurderinger);
+            if (errors.length === 0 && validerteToTrinnsvurderinger && validerteToTrinnsvurderinger.length > 0) {
+              await løsBehov({
+                behandlingVersjon: 0,
+                behov: {
+                  behovstype: Behovstype.FATTE_VEDTAK_KODE,
+                  vurderinger: validerteToTrinnsvurderinger,
+                },
+                referanse: behandlingsReferanse,
+              });
+            }
+            setIsLoading(false);
+          }}
+        >
+          Send inn
+        </Button>
+      )}
     </>
   );
 };
