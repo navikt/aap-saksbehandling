@@ -1,9 +1,9 @@
-import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtakMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { BrevmalVelger } from 'components/brevmalvelger/BrevmalVelger';
 import { hentAlleBrevmaler } from 'lib/services/sanityservice/sanityservice';
+import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtakMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;

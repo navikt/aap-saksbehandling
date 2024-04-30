@@ -1,10 +1,10 @@
 import { Sykdom } from 'components/behandlinger/sykdom/Sykdom';
 import { StegGruppe } from 'lib/types/types';
-import { Vedtak } from 'components/behandlinger/vedtak/Vedtak';
 import styles from './OppgaveKolonne.module.css';
 import { Grunnlag } from 'components/behandlinger/grunnlag/Grunnlag';
-import { FatteVedtak } from 'components/behandlinger/fattevedtak/FatteVedtak';
 import { TilkjentYtelse } from 'components/behandlinger/tilkjentytelse/TilkjentYtelse';
+import { FatteVedtak } from 'components/behandlinger/fattevedtak/FatteVedtak';
+import { Vedtak } from 'components/behandlinger/vedtak/Vedtak';
 interface Props {
   behandlingsReferanse: string;
   aktivGruppe: StegGruppe;
