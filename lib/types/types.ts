@@ -61,3 +61,6 @@ export type HistorikkType = components['schemas']['no.nav.aap.behandlingsflyt.av
 
 export type HistorikkAksjon =
   components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.flate.Historikk']['aksjon'];
+
+export type FlytProsessering =
+  components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingFlytOgTilstandDto']['prosessering'];

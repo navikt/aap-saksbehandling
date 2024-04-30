@@ -2,6 +2,7 @@ import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingServi
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { FastsettBeregningMedDataFeching } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregningMedDataFeching';
+import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 
 interface Props {
   behandlingsReferanse: string;
@@ -15,6 +16,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
 
   return (
     <>
+      {flyt.prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={flyt.prosessering} />}
       {stegSomSkalVises.map((steg) => {
         if (steg === 'FASTSETT_BEREGNINGSTIDSPUNKT') {
           return (

@@ -8,6 +8,7 @@ import { StudentMedDataFetching } from 'components/behandlinger/sykdom/student/S
 import { SykepengeerstatningMedDataFetching } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningMedDataFetching';
 import { FastsettArbeidsevneMedDataFetching } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevneMedDataFetching';
 import { logInfo } from '@navikt/aap-felles-utils';
+import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 
 interface Props {
   behandlingsReferanse: string;
@@ -25,6 +26,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
 
   return (
     <>
+      {flyt.prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={flyt.prosessering} />}
       {stegSomSkalVises.map((steg) => {
         if (steg === 'AVKLAR_STUDENT') {
           return (
