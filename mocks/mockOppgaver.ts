@@ -15,6 +15,7 @@ export const mockOppgaver: Oppgaver = {
       foedselsnummer: '12345678910',
       oppgavetype: 'AAP',
       versjon: 1,
+      tilordnetRessurs: 'Flagrende Gevant',
     },
     {
       navn: '17837900007',
@@ -39,7 +40,7 @@ export const mockOppgaver: Oppgaver = {
       foedselsnummer: '12345678910',
       oppgavetype: 'AAP',
       versjon: 1,
-      tilordnetRessurs: undefined,
+      tilordnetRessurs: 'Ambulerende Bie',
     },
   ],
 };

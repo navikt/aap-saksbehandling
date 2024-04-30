@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { format } from 'date-fns';
-import { Button, Dropdown, Table } from '@navikt/ds-react';
+import { Button, Dropdown, SortState, Table } from '@navikt/ds-react';
 
 import { Oppgave } from 'lib/types/oppgavebehandling';
 import { fetchProxy } from 'lib/clientApi';
 
 import styles from './Oppgavetabell.module.css';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { useState } from 'react';
 
 type Props = {
   oppgaver: Oppgave[];
@@ -21,7 +22,35 @@ type ProxyResponse = {
 };
 
 export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
+  const [sort, setSort] = useState<SortState | undefined>();
   const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.tilordnetRessurs;
+
+  const sorter = (sortKey: string | undefined) => {
+    if (sortKey) {
+      if (sort?.orderBy === sortKey && sort.direction === 'descending') {
+        setSort(undefined);
+      } else {
+        setSort({ orderBy: sortKey, direction: sort?.direction === 'ascending' ? 'descending' : 'ascending' });
+      }
+    }
+  };
+
+  const comparator = (a: any, b: any, orderBy: string) => {
+    if (b[orderBy] < a[orderBy] || b[orderBy] === undefined) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  };
+
+  const sortedData = oppgaver.slice().sort((a, b) => {
+    if (sort) {
+      return sort.direction === 'ascending' ? comparator(b, a, sort.orderBy) : comparator(a, b, sort.orderBy);
+    }
+    return 1;
+  });
 
   const fordelOppgave = async (oppgave: Oppgave) => {
     const res: ProxyResponse | undefined = await fetchProxy(
@@ -51,14 +80,24 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
   };
 
   return (
-    <Table zebraStripes className={styles.oppgavetabell}>
+    <Table zebraStripes className={styles.oppgavetabell} sort={sort} onSortChange={(sortKey) => sorter(sortKey)}>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell>Innbygger</Table.HeaderCell>
-          <Table.HeaderCell>Oppgavetype</Table.HeaderCell>
-          <Table.HeaderCell>Gjelder</Table.HeaderCell>
-          <Table.HeaderCell>Oppgave opprettet</Table.HeaderCell>
-          <Table.HeaderCell>Saksbehandler</Table.HeaderCell>
+          <Table.ColumnHeader sortable sortKey={'foedselsnummer'}>
+            Innbygger
+          </Table.ColumnHeader>
+          <Table.ColumnHeader sortable sortKey={'søknadstype'}>
+            Oppgavetype
+          </Table.ColumnHeader>
+          <Table.ColumnHeader sortable sortKey={'type'}>
+            Gjelder
+          </Table.ColumnHeader>
+          <Table.ColumnHeader sortable sortKey={'opprettet'}>
+            Oppgave opprettet
+          </Table.ColumnHeader>
+          <Table.ColumnHeader sortable sortKey={'tilordnetRessurs'}>
+            Saksbehandler
+          </Table.ColumnHeader>
           <Table.HeaderCell colSpan={2}></Table.HeaderCell>
         </Table.Row>
       </Table.Header>
@@ -68,8 +107,8 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
             <Table.DataCell colSpan={6}>Fant ingen oppgaver</Table.DataCell>
           </Table.Row>
         )}
-        {oppgaver.length > 0 &&
-          oppgaver.map((oppgave) => (
+        {sortedData.length > 0 &&
+          sortedData.map((oppgave) => (
             <Table.Row key={oppgave.oppgaveId}>
               <Table.DataCell>{oppgave.foedselsnummer}</Table.DataCell>
               <Table.DataCell>{oppgave.søknadstype}</Table.DataCell>
