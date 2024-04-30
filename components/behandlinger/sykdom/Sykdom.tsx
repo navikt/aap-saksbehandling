@@ -7,6 +7,7 @@ import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldep
 import { StudentMedDataFetching } from 'components/behandlinger/sykdom/student/StudentMedDataFetching';
 import { SykepengeerstatningMedDataFetching } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningMedDataFetching';
 import { FastsettArbeidsevneMedDataFetching } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevneMedDataFetching';
+import { logInfo } from '@navikt/aap-felles-utils';
 
 interface Props {
   behandlingsReferanse: string;
@@ -16,6 +17,9 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
 
   const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt);
+
+  logInfo('steg som skal vises i Sykdom: ' + JSON.stringify(stegSomSkalVises));
+  logInfo('Flyt som hentes opp i Sykdom: ' + JSON.stringify(flyt));
 
   const saksBehandlerReadOnly = flyt.visning.saksbehandlerReadOnly;
 
