@@ -13,7 +13,6 @@ interface FormFields {
   aktivitetspliktOppfylt: string;
   grunn?: string;
   dato?: Date;
-  hjemmel: string;
 }
 export default function Page() {
   const { form, formFields } = useConfigForm<FormFields>({
@@ -27,11 +26,6 @@ export default function Page() {
       label: 'Er aktivitetsplikt oppfylt?',
       rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
       options: JaEllerNeiOptions,
-    },
-    hjemmel: {
-      type: 'select',
-      label: 'Hjemmel',
-      options: ['§11-7', '§11-8', '§11-9'],
     },
     grunn: {
       type: 'radio',
@@ -50,8 +44,7 @@ export default function Page() {
     },
   });
   const aktivitetspliktOppfylt = form.watch('aktivitetspliktOppfylt');
-  const hjemmel = form.watch('hjemmel');
-  const buttonText = hjemmel === '§11-7' || hjemmel === '§11-8' ? 'Send forhåndsvarsel' : 'Send';
+  const buttonText = 'Send';
   return (
     <div className={styles.aktivitetSkjema}>
       <VilkårsKort heading={'Vurder aktivitetsplikt'} steg={'FATTE_VEDTAK'} icon={<FigureIcon fontSize={'inherit'} />}>
@@ -60,7 +53,6 @@ export default function Page() {
           <FormField form={form} formField={formFields.aktivitetspliktOppfylt} />
           {aktivitetspliktOppfylt === JaEllerNei.Nei && (
             <>
-              <FormField form={form} formField={formFields.hjemmel} />
               <FormField form={form} formField={formFields.grunn} />
             </>
           )}
