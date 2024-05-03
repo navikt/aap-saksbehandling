@@ -22,3 +22,7 @@ export const stringToDate = (value?: string | null) => {
   const parsed = parse(value, 'yyyy-MM-dd', new Date());
   return isValid(parsed) ? parsed : undefined;
 };
+
+export function sorterEtterNyesteDato(a: string, b: string) {
+  return new Date(b).getTime() - new Date(a).getTime();
+}
