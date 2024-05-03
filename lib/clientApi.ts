@@ -27,7 +27,7 @@ export async function fetchProxy<ResponseBody>(
 }
 
 export function rekjørFeiledeOppgaver() {
-  return fetchProxy('/api/test/rekjørfeilede', 'GET');
+  return fetchProxy('/api/test/rekjorfeilede', 'GET');
 }
 
 export function opprettSak(sak: OpprettTestcase) {
