@@ -1,9 +1,11 @@
 'use client';
-import { useState } from 'react';
+import { useContext } from 'react';
 
 import { Button, Dropdown, Heading, UNSAFE_Combobox } from '@navikt/ds-react';
 
 import { LagreModal } from 'components/oppgavebehandling/oppgavekø/filter/LagreModal';
+import { FilterValg, Kø, KøContext } from 'components/oppgavebehandling/KøContext';
+
 import styles from './Filter.module.css';
 
 interface FilterOptions {
@@ -11,27 +13,15 @@ interface FilterOptions {
   label: string;
 }
 
-interface EgendefinerteFilter {
+interface FilterType {
+  navn: string;
   label: string;
-  key: string;
   options: FilterOptions[];
 }
 
-interface LagretFilter {
-  [key: string]: {
-    valgteOptions: string[];
-  };
-}
-
-interface FilterType {
-  [key: string]: {
-    label: string;
-    options: FilterOptions[];
-  };
-}
-
-const filterValg: FilterType = {
-  aapstatus: {
+const filterValg: FilterType[] = [
+  {
+    navn: 'aapstatus',
     label: 'AAP Status',
     options: [
       { value: 'foerstegangsbehandling', label: 'Førstegangsbehandling' },
@@ -40,14 +30,16 @@ const filterValg: FilterType = {
       { value: 'venter', label: 'På vent' },
     ],
   },
-  oppgavetype: {
+  {
+    navn: 'oppgavetype',
     label: 'Oppgavetype',
     options: [
       { value: 'foerstegangsbehandling', label: 'Førstegangsbehandling' },
       { value: 'revurdering', label: 'Revurdering' },
     ],
   },
-  gjelder: {
+  {
+    navn: 'gjelder',
     label: 'Gjelder',
     options: [
       { value: 'fastsette', label: 'Fastsette ytelse' },
@@ -55,7 +47,8 @@ const filterValg: FilterType = {
       { value: 'aktivitetsplikt', label: 'Aktivitetsplikt' },
     ],
   },
-  alder: {
+  {
+    navn: 'alder',
     label: 'Alder',
     options: [
       { value: 'unge', label: '18-25 år' },
@@ -63,37 +56,37 @@ const filterValg: FilterType = {
       { value: 'eldre', label: '65+ år' },
     ],
   },
-};
+];
+
+const finnFilterOptionLabel = (filter: FilterValg, option: string) =>
+  filterValg
+    .find((filterType) => filterType.navn === filter.navn)
+    ?.options.find((filterOption) => filterOption.value === option)?.label ?? option;
+
+const finnFilterLabel = (noekkel: string) =>
+  filterValg.find((filterValg) => filterValg.navn === noekkel)?.label ?? noekkel;
 
 export const Filter = () => {
-  const lsFilters = localStorage.getItem('oppgavestyring_filter');
+  const køContext = useContext(KøContext);
 
-  const storedFilters: LagretFilter = lsFilters ? JSON.parse(lsFilters) : [];
-  const initialFilters: EgendefinerteFilter[] = Object.keys(storedFilters).map((sf) => {
-    const filter = filterValg[sf];
-    return {
-      label: filter.label,
-      key: sf,
-      options: filter.options,
-    };
-  });
-  const [customFilter, updateCustomFilter] = useState<EgendefinerteFilter[]>(initialFilters);
-  const [valgteFilter, oppdaterValgteFilter] = useState<LagretFilter>(storedFilters ?? []);
+  const addFilter = (noekkel: string) => {
+    const newFilter = filterValg.find((filter) => filter.navn === noekkel);
 
-  const lagreFilter = () => {
-    if (!valgteFilter || Object.keys(valgteFilter).length === 0) {
-      console.error('Har ingen filter å lagre...');
+    if (!newFilter) {
+      console.error(`Fant ikke filter for nøkkel ${noekkel}`);
     } else {
-      localStorage.setItem('oppgavestyring_filter', JSON.stringify(valgteFilter));
+      const filterValg: FilterValg = {
+        navn: newFilter.navn,
+        valgteFilter: [],
+        alleFilter: newFilter.options,
+      };
+      if (køContext.valgtKø.filter) {
+        const oppdaterteFilter: FilterValg[] = [...køContext.valgtKø.filter, filterValg];
+        køContext.oppdaterValgtKø({ ...køContext.valgtKø, filter: oppdaterteFilter });
+      } else {
+        køContext.oppdaterValgtKø({ ...køContext.valgtKø, filter: [filterValg] });
+      }
     }
-  };
-
-  const slettFilter = () => localStorage.removeItem('oppgavestyring_filter');
-
-  const addFilter = (key: string) => {
-    const newFilter = filterValg[key];
-
-    updateCustomFilter([...customFilter, { label: newFilter.label, key, options: newFilter.options }]);
   };
 
   return (
@@ -102,42 +95,70 @@ export const Filter = () => {
         <Heading level={'2'} size={'medium'}>
           Filter
         </Heading>
-        {customFilter.length > 0 && <LagreModal />}
+        {køContext.valgtKø.filter && køContext.valgtKø.filter?.length > 0 && <LagreModal />}
       </div>
       <section className={styles.rad}>
-        {customFilter &&
-          customFilter?.length > 0 &&
-          customFilter?.map((f) => (
+        {køContext.valgtKø.filter &&
+          køContext.valgtKø.filter.length > 0 &&
+          køContext.valgtKø.filter.map((filter) => (
             <UNSAFE_Combobox
-              label={f.label}
-              key={f.key}
-              options={f.options}
+              label={finnFilterLabel(filter.navn)}
+              key={filter.navn}
+              options={filter.alleFilter}
+              selectedOptions={filter.valgteFilter}
               isMultiSelect
               shouldShowSelectedOptions
               size={'small'}
-              selectedOptions={valgteFilter[f.key]?.valgteOptions ?? []}
               onToggleSelected={(option, isSelected) => {
+                const filterLabel = finnFilterOptionLabel(filter, option);
+
                 if (isSelected) {
-                  if (valgteFilter[f.key]) {
-                    oppdaterValgteFilter({
-                      ...valgteFilter,
-                      [f.key]: { valgteOptions: [...valgteFilter[f.key].valgteOptions, option] },
-                    });
-                  } else {
-                    oppdaterValgteFilter({
-                      ...valgteFilter,
-                      [f.key]: { valgteOptions: [option] },
-                    });
+                  if (køContext.valgtKø.filter) {
+                    // det finnes allerede filter her
+                    if (køContext.valgtKø.filter.find((v) => v.navn === filter.navn)) {
+                      // og dette filteret er allerede lagt til
+
+                      // finn index for det filteret vi skal endre på
+                      const valgtFilterIndex = køContext.valgtKø.filter.findIndex((v) => v.navn === filter.navn);
+                      // lag en kopi av eksisterende filter og legg til det nye valget
+                      const nyttFilter = [
+                        ...køContext.valgtKø.filter[valgtFilterIndex].valgteFilter,
+                        { value: option, label: filterLabel },
+                      ];
+
+                      const eksisterendeFilter = køContext.valgtKø.filter;
+                      eksisterendeFilter.forEach((f, index) => {
+                        if (f.navn === filter.navn) {
+                          eksisterendeFilter[index] = { ...f, valgteFilter: nyttFilter };
+                        }
+                      });
+
+                      const oppdatertKø: Kø = {
+                        ...køContext.valgtKø,
+                        filter: eksisterendeFilter,
+                      };
+                      køContext.oppdaterValgtKø(oppdatertKø);
+                    }
                   }
                 } else {
-                  oppdaterValgteFilter({
-                    ...valgteFilter,
-                    [f.key]: {
-                      valgteOptions: [
-                        ...valgteFilter[f.key].valgteOptions.filter((valgtFilter) => valgtFilter !== option),
-                      ],
-                    },
-                  });
+                  if (køContext.valgtKø.filter) {
+                    const valgtFilterIndex = køContext.valgtKø.filter.findIndex((v) => v.navn === filter.navn);
+                    const nyttFilter = [
+                      ...køContext.valgtKø.filter[valgtFilterIndex].valgteFilter.filter((v) => v.value !== option),
+                    ];
+                    const eksisterendeFilter = køContext.valgtKø.filter;
+                    eksisterendeFilter.forEach((f, index) => {
+                      if (f.navn === filter.navn) {
+                        eksisterendeFilter[index] = { ...f, valgteFilter: nyttFilter };
+                      }
+                    });
+
+                    const oppdatertKø: Kø = {
+                      ...køContext.valgtKø,
+                      filter: eksisterendeFilter,
+                    };
+                    køContext.oppdaterValgtKø(oppdatertKø);
+                  }
                 }
               }}
             />
@@ -150,25 +171,25 @@ export const Filter = () => {
             <Dropdown.Menu.List>
               <Dropdown.Menu.List.Item
                 onClick={() => addFilter('aapstatus')}
-                disabled={!!customFilter?.find((v) => v.key === 'aapstatus')}
+                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'aapstatus')}
               >
                 AAP Status
               </Dropdown.Menu.List.Item>
               <Dropdown.Menu.List.Item
                 onClick={() => addFilter('oppgavetype')}
-                disabled={!!customFilter?.find((v) => v.key === 'oppgavetype')}
+                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'oppgavetype')}
               >
                 Oppgavetype
               </Dropdown.Menu.List.Item>
               <Dropdown.Menu.List.Item
                 onClick={() => addFilter('gjelder')}
-                disabled={!!customFilter?.find((v) => v.key === 'gjelder')}
+                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'gjelder')}
               >
                 Gjelder
               </Dropdown.Menu.List.Item>
               <Dropdown.Menu.List.Item
                 onClick={() => addFilter('alder')}
-                disabled={!!customFilter?.find((v) => v.key === 'alder')}
+                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'alder')}
               >
                 Alder
               </Dropdown.Menu.List.Item>
@@ -178,12 +199,6 @@ export const Filter = () => {
       </section>
       <div className={styles.knapperad}>
         <Button variant={'primary'}>Søk</Button>
-        <Button variant={'secondary'} onClick={() => lagreFilter()}>
-          Lagre filter
-        </Button>
-        <Button variant={'danger'} onClick={() => slettFilter()}>
-          Slett filter
-        </Button>
       </div>
     </section>
   );
