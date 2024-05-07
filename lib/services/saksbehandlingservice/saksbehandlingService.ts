@@ -95,7 +95,7 @@ export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovP�
 };
 
 export const opprettTestSak = async (sak: OpprettTestcase) => {
-  const url = `${saksbehandlingApiBaseUrl}/thomas/opprett`;
+  const url = `${saksbehandlingApiBaseUrl}/test/opprett`;
   return await fetchProxy<void>(url, saksbehandlingApiScope, 'POST', sak);
 };
 
@@ -105,6 +105,6 @@ export const hentResultat = async (referanse: string): Promise<BehandlingResulta
 };
 
 export const rekjørFeiledeOppgaver = async () => {
-  const url = `${saksbehandlingApiBaseUrl}/thomas/rekjorFeilede`;
-  return await fetchProxy<BehandlingResultat>(url, saksbehandlingApiScope, 'GET');
+  const url = `${saksbehandlingApiBaseUrl}/test/rekjorFeilede`;
+  return await fetchProxy<void>(url, saksbehandlingApiScope, 'GET');
 };
