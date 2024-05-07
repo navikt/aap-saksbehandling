@@ -3150,7 +3150,7 @@ __metadata:
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
     react-hook-form: "npm:7.51.3"
-    react-pdf: "npm:^7.7.1"
+    react-pdf: "npm:^7.7.3"
     swr: "npm:^2.2.5"
     typescript: "npm:^5.4.5"
     uuid: "npm:^9.0.1"
@@ -9591,9 +9591,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-pdf@npm:^7.7.1":
-  version: 7.7.1
-  resolution: "react-pdf@npm:7.7.1"
+"react-pdf@npm:^7.7.3":
+  version: 7.7.3
+  resolution: "react-pdf@npm:7.7.3"
   dependencies:
     clsx: "npm:^2.0.0"
     dequal: "npm:^2.0.3"
@@ -9611,7 +9611,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/e789719e0da816a35232e7cfddae3e12a147b72b288fb6fb34ca346042562d92220ebf953356a5b4ac414cb98cd16de939b3f3896c31d82944c8c774cf33e9fd
+  checksum: 10c0/ffeed3941ba3222398ccb0505f8fbc5ef2c966bc21bb3ceebaabfc6a3129f1e5aebda903bd2730f2caef1fd661c7c5377865be441f53d28df0ab2a9aa67fe44e
   languageName: node
   linkType: hard
 
