@@ -18,7 +18,6 @@ describe('sorterEtterNyesteDato', () => {
   const datoer = ['2024-04-30', '2024-05-02', '2024-05-03'];
   it('skal sortere korrekt', () => {
     const sorterteDatoer = datoer.sort(sorterEtterNyesteDato);
-    console.log(sorterteDatoer);
     expect(sorterteDatoer).toEqual(['2024-05-03', '2024-05-02', '2024-04-30']);
   });
 });

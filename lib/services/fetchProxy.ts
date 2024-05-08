@@ -67,8 +67,12 @@ const fetchWithRetry = async <ResponseBody>(
   // Mulige feilmeldinger:
   // 500
   // 404
-
   console.log('status', { status: response.status, url });
+
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.includes('text')) {
+    return (await response.text()) as ResponseBody;
+  }
 
   if (!response.ok) {
     if (response.status === 500) {

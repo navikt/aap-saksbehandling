@@ -4,19 +4,43 @@ import { hentAlleSaker, rekjørFeiledeOppgaver } from 'lib/clientApi';
 import { SaksInfo } from 'lib/types/types';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { Button, Table } from '@navikt/ds-react';
+import { Button, Table, TextField } from '@navikt/ds-react';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 interface Props {
   alleSaker: SaksInfo[];
 }
 
 export const AlleSakerListe = ({ alleSaker }: Props) => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
   const { data } = useSWR('api/sak/alle', hentAlleSaker, { fallbackData: alleSaker });
 
+  const searchValue = searchParams.get('ident');
+
   return (
-    <>
-      <Button onClick={async () => await rekjørFeiledeOppgaver()}>Rekjør feilede oppgaver</Button>
+    <div style={{ marginTop: '1rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <Button size={'small'} onClick={async () => await rekjørFeiledeOppgaver()}>
+          Rekjør feilede oppgaver
+        </Button>
+        <TextField
+          label={'Ident'}
+          size={'small'}
+          onChange={(event) => {
+            const params = new URLSearchParams(searchParams);
+            if (event.target.value) {
+              params.set('ident', event.target.value);
+            } else {
+              params.delete('ident');
+            }
+            replace(`${pathname}?${params.toString()}`);
+          }}
+        />
+      </div>
       <Table>
         <Table.Header>
           <Table.Row>
@@ -28,6 +52,7 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
         </Table.Header>
         <Table.Body>
           {data
+            ?.filter((sak) => !searchValue || sak.ident.includes(searchValue))
             ?.sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom))
             .map((sak) => (
               <Table.Row key={sak.saksnummer}>
@@ -41,6 +66,6 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
             ))}
         </Table.Body>
       </Table>
-    </>
+    </div>
   );
 };
