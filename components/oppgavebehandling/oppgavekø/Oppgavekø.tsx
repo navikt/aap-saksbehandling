@@ -5,13 +5,16 @@ import { Filter } from 'components/oppgavebehandling/oppgavekø/filter/Filter';
 
 import styles from './Oppgavekø.module.css';
 import { OppgaveFetcher } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
+import { KøContext } from 'components/oppgavebehandling/KøContext';
+import { useContext } from 'react';
 
 export const Oppgavekø = () => {
+  const køContext = useContext(KøContext);
   return (
     <section className={styles.oppgavekø}>
-      <ExpansionCard aria-label={'NAY nasjonal AAP-kø'} defaultOpen>
+      <ExpansionCard aria-label={køContext.valgtKø.navn} defaultOpen>
         <ExpansionCard.Header>
-          <ExpansionCard.Title>NAY nasjonal AAP-kø</ExpansionCard.Title>
+          <ExpansionCard.Title>{køContext.valgtKø.navn}</ExpansionCard.Title>
         </ExpansionCard.Header>
         <ExpansionCard.Content>
           <Filter />

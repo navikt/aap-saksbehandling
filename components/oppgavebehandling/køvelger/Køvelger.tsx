@@ -1,8 +1,17 @@
 'use client';
 
 import { BodyShort, Button, Heading, HGrid, Label, Select } from '@navikt/ds-react';
+import { useContext } from 'react';
+import { defaultKø, KøContext } from 'components/oppgavebehandling/KøContext';
 
 export const Køvelger = () => {
+  const køContext = useContext(KøContext);
+
+  const settKø = (køId: string) => {
+    const kø = køContext.køliste.find((kø) => kø.id === køId);
+    køContext.oppdaterValgtKø(kø ?? defaultKø);
+  };
+
   return (
     <section>
       <Heading level={'2'} size={'medium'} spacing>
@@ -10,14 +19,17 @@ export const Køvelger = () => {
       </Heading>
       <HGrid columns="1fr 2fr" gap={'8'}>
         <div>
-          <Select label={'Valgt oppgavekø'}>
-            <option>NAY Nasjonal AAP-kø (1 429 saker)</option>
-            <option>Studentsaker (218 saker)</option>
+          <Select label={'Valgt oppgavekø'} onChange={(event) => settKø(event.target.value)}>
+            {køContext.køliste.map((kø) => (
+              <option key={kø.id} value={kø.id}>
+                {kø.navn}
+              </option>
+            ))}
           </Select>
         </div>
         <div>
           <Label>Beskrivelse av køen</Label>
-          <BodyShort>En kort beskrivelse av hva køen dekker. Oppdaterer seg når man bytter kø.</BodyShort>
+          <BodyShort>{køContext.valgtKø.beskrivelse}</BodyShort>
         </div>
       </HGrid>
       <Button style={{ marginTop: '1rem' }}>Behandle neste sak</Button>

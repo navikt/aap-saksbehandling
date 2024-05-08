@@ -6,6 +6,7 @@ import { Køvelger } from 'components/oppgavebehandling/køvelger/Køvelger';
 import styles from './page.module.css';
 import { Oppgavekø } from 'components/oppgavebehandling/oppgavekø/Oppgavekø';
 import { AktiveOppgaver } from 'components/oppgavebehandling/oppgavekø/AktiveOppgaver';
+import { KøProvider } from 'components/oppgavebehandling/KøContext';
 
 const Page = () => {
   return (
@@ -13,9 +14,11 @@ const Page = () => {
       <HGrid gap={'8'} columns={'1fr'}>
         <HGrid>
           <Kort>
-            <Køvelger />
-            <AktiveOppgaver />
-            <Oppgavekø />
+            <KøProvider>
+              <Køvelger />
+              <AktiveOppgaver />
+              <Oppgavekø />
+            </KøProvider>
           </Kort>
         </HGrid>
       </HGrid>
