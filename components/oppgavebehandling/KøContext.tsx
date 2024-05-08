@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, ReactNode, useState } from 'react';
-import { ComboboxOption } from '@navikt/ds-react/src/form/combobox/types';
+import { ComboboxOption } from '@navikt/ds-react/esm/form/combobox/types';
 
 export type FilterValg = {
   navn: string;
