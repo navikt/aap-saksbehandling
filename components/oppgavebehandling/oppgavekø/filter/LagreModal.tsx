@@ -1,8 +1,43 @@
-import { BodyShort, Button, Modal, Textarea, TextField } from '@navikt/ds-react';
-import { useRef } from 'react';
+import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { FormEvent, useContext, useRef } from 'react';
+import { Kø, KøContext } from 'components/oppgavebehandling/KøContext';
+import { useConfigForm } from 'hooks/FormHook';
+import { FormField } from 'components/input/formfield/FormField';
 
 export const LagreModal = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
+  const køContext = useContext(KøContext);
+
+  const { formFields, form } = useConfigForm({
+    navn: {
+      type: 'text',
+      label: 'Kønavn',
+      rules: {
+        required: 'Køen må ha et navn',
+      },
+    },
+    beskrivelse: {
+      type: 'textarea',
+      label: 'Beskrivelse',
+      rules: {
+        required: 'Du må beskrive hva køen dekker',
+      },
+    },
+  });
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      const nyKø: Kø = {
+        id: Date.now().toString(),
+        navn: data.navn,
+        beskrivelse: data.beskrivelse,
+        filter: køContext.valgtKø.filter,
+      };
+      køContext.oppdaterKøliste([...køContext.køliste, nyKø]);
+      køContext.oppdaterValgtKø(nyKø);
+      modalRef.current?.close();
+    })(event);
+  };
 
   return (
     <>
@@ -10,21 +45,20 @@ export const LagreModal = () => {
         Lagre som kø
       </Button>
       <Modal ref={modalRef} header={{ heading: 'Overskrift' }}>
-        <Modal.Body>
-          <BodyShort spacing>Søket kan lagres som en standard kø som vises for alle i din avdeling</BodyShort>
-          <TextField label={'Kønavn'} />
-          <Textarea label={'Beskrivelse'} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button type="button" onClick={() => modalRef.current?.close()}>
-            Lagre kø
-          </Button>
-          <Button type="button" variant={'tertiary'} onClick={() => modalRef.current?.close()}>
-            Avbryt
-          </Button>
-        </Modal.Footer>
+        <form onSubmit={handleSubmit}>
+          <Modal.Body>
+            <BodyShort spacing>Søket kan lagres som en standard kø som vises for alle i din avdeling</BodyShort>
+            <FormField form={form} formField={formFields.navn} />
+            <FormField form={form} formField={formFields.beskrivelse} />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button>Lagre kø</Button>
+            <Button type="button" variant={'tertiary'} onClick={() => modalRef.current?.close()}>
+              Avbryt
+            </Button>
+          </Modal.Footer>
+        </form>
       </Modal>
     </>
   );
 };
-1;

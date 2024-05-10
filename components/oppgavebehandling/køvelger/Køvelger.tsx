@@ -19,7 +19,11 @@ export const Køvelger = () => {
       </Heading>
       <HGrid columns="1fr 2fr" gap={'8'}>
         <div>
-          <Select label={'Valgt oppgavekø'} onChange={(event) => settKø(event.target.value)}>
+          <Select
+            label={'Valgt oppgavekø'}
+            onChange={(event) => settKø(event.target.value)}
+            value={køContext.valgtKø.id}
+          >
             {køContext.køliste.map((kø) => (
               <option key={kø.id} value={kø.id}>
                 {kø.navn}
