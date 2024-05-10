@@ -3,6 +3,7 @@ import {
   BehandlingFlytOgTilstand,
   BehandlingResultat,
   BeregningsGrunnlag,
+  BeregningsVurdering,
   BistandsGrunnlag,
   DetaljertBehandling,
   FatteVedtakGrunnlag,
@@ -76,9 +77,9 @@ export const hentFatteVedtakGrunnlang = async (behandlingsReferanse: string): Pr
   return await fetchProxy<FatteVedtakGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentBeregningsGrunnlag = async (behandlingsReferanse: string): Promise<BeregningsGrunnlag> => {
+export const hentBeregningsVurdering = async (behandlingsReferanse: string): Promise<BeregningsVurdering> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregningsvurdering`;
-  return await fetchProxy<BeregningsGrunnlag>(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy<BeregningsVurdering>(url, saksbehandlingApiScope, 'GET');
 };
 export const hentTilkjentYtelse = async (behandlingsReferanse: string): Promise<TilkjentYtelseGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent/${behandlingsReferanse}`;
@@ -107,4 +108,9 @@ export const hentResultat = async (referanse: string): Promise<BehandlingResulta
 export const rekjørFeiledeOppgaver = async () => {
   const url = `${saksbehandlingApiBaseUrl}/test/rekjorFeilede`;
   return await fetchProxy<void>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentBeregningsGrunnlag = async (referanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/beregning/grunnlag/${referanse}`;
+  return await fetchProxy<BeregningsGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };

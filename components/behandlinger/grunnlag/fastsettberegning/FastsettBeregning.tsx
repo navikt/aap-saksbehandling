@@ -6,12 +6,13 @@ import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
 import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
-import { BeregningsGrunnlag } from 'lib/types/types';
+import { BeregningsGrunnlag, BeregningsVurdering } from 'lib/types/types';
 import { numberToString } from 'lib/utils/string';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 
 interface Props {
+  vurdering?: BeregningsVurdering;
   grunnlag?: BeregningsGrunnlag;
   behandlingsReferanse: string;
   readOnly: boolean;
@@ -23,25 +24,27 @@ interface FormFields {
   antattÅrligInntekt: string;
 }
 
-export const FastsettBeregning = ({ grunnlag, behandlingsReferanse, readOnly }: Props) => {
+export const FastsettBeregning = ({ vurdering, grunnlag, behandlingsReferanse, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
+
+  console.log('grunnlag', grunnlag);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'text',
         label: 'Begrunnelse',
-        defaultValue: getStringEllerUndefined(grunnlag?.begrunnelse),
+        defaultValue: getStringEllerUndefined(vurdering?.begrunnelse),
       },
       ytterligereNedsattArbeidsevneDato: {
         type: 'date',
         label: 'Ytterligere nedsatt arbeidsevne dato',
-        defaultValue: stringToDate(grunnlag?.ytterligereNedsattArbeidsevneDato),
+        defaultValue: stringToDate(vurdering?.ytterligereNedsattArbeidsevneDato),
       },
       antattÅrligInntekt: {
         type: 'number',
         label: 'Antatt årlig inntekt',
-        defaultValue: numberToString(grunnlag?.antattÅrligInntekt),
+        defaultValue: numberToString(vurdering?.antattÅrligInntekt),
       },
     },
     { readOnly: readOnly }
