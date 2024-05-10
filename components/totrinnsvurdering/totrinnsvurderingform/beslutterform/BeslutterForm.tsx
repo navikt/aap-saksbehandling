@@ -3,7 +3,6 @@ import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/BeslutterForm.module.css';
 import { ToTrinnsvurderingError, ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { Checkbox, CheckboxGroup, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react';
-import { Veiledning } from 'components/veiledning/Veiledning';
 import Link from 'next/link';
 import { ValuePair } from 'components/input/formfield/FormField';
 
@@ -40,11 +39,6 @@ export const BeslutterForm = ({ toTrinnsvurdering, oppdaterVurdering, readOnly, 
       </RadioGroup>
       {toTrinnsvurdering.godkjent === 'false' && (
         <>
-          <Veiledning
-            header={'Overskrift'}
-            tekst={veiledningsTekstPåDefinisjon(toTrinnsvurdering.definisjon as Behovstype)}
-            defaultOpen={!readOnly}
-          />
           <Textarea
             label={'Begrunnelse'}
             size={'small'}
@@ -80,13 +74,3 @@ export const BeslutterForm = ({ toTrinnsvurdering, oppdaterVurdering, readOnly, 
     </div>
   );
 };
-
-function veiledningsTekstPåDefinisjon(definisjon: Behovstype): string {
-  if (definisjon === '5003') {
-    return 'Husk at du som beslutter ikke skal overprøve skjønnet knyttet til nedsatt arbeidsevne';
-  } else if (definisjon === '5006') {
-    return 'Husk at du som beslutter ikke skal overprøve skjønnet knyttet til bistandsbehovet';
-  } else {
-    return 'Her kommer noe veildeningstekst';
-  }
-}
