@@ -36,7 +36,7 @@ describe('Oppsummering', () => {
   it('skal vise korrekt verdi på om vilkåret er vurdert ikke godkjent', () => {
     render(<Oppsummering vurderinger={[vurderingIkkeGodkjent]} link={''} />);
 
-    const label = screen.getByText('godkjent?');
+    const label = screen.getByText('Godkjent?');
     expect(label).toBeVisible();
 
     const verdi = screen.getByText('Nei');
@@ -46,7 +46,7 @@ describe('Oppsummering', () => {
   it('skal vise korrekt verdi på om vilkåret er vurdert godkjent', () => {
     render(<Oppsummering vurderinger={[vurderingGodkjent]} link={''} />);
 
-    const label = screen.getByText('godkjent?');
+    const label = screen.getByText('Godkjent?');
     expect(label).toBeVisible();
 
     const verdi = screen.getByText('Ja');

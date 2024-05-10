@@ -48,6 +48,7 @@ const flytSykdomOgAvklaringsbehovAvbrutt: FlytGruppe = {
 
 const flyt: BehandlingFlytOgTilstand = {
   aktivGruppe: 'SYKDOM',
+  prosessering: { status: 'FERDIG', ventendeOppgaver: [] },
   aktivtSteg: 'AVKLAR_SYKDOM',
   behandlingVersjon: 0,
   visning: {

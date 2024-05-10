@@ -25,7 +25,7 @@ export const Oppsummering = ({ vurderinger, link }: Props) => {
           </div>
 
           <div>
-            <Label size={'small'}>godkjent?</Label>
+            <Label size={'small'}>Godkjent?</Label>
             <BodyShort size={'small'}>{vurdering.godkjent ? 'Ja' : 'Nei'}</BodyShort>
           </div>
 
