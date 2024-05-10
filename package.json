@@ -23,7 +23,7 @@
     "@navikt/ds-react": "6.7.0",
     "@navikt/oasis": "^3.2.4",
     "@portabletext/react": "^3.0.18",
-    "@sanity/client": "^6.15.19",
+    "@sanity/client": "^6.18.0",
     "@sanity/overlays": "^2.3.40",
     "@sanity/react-loader": "^1.9.13",
     "@testing-library/user-event": "14.5.2",
