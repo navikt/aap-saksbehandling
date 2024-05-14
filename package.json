@@ -33,7 +33,7 @@
     "@tiptap/extension-table-header": "^2.3.2",
     "@tiptap/extension-table-row": "^2.3.2",
     "@tiptap/extension-underline": "^2.3.2",
-    "@tiptap/pm": "^2.3.2",
+    "@tiptap/pm": "^2.4.0",
     "@tiptap/react": "^2.3.2",
     "@tiptap/starter-kit": "^2.3.2",
     "@vercel/otel": "^1.8.2",
