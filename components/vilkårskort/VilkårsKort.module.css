@@ -10,9 +10,9 @@
 
 .vilkårsKortNAV {
   --ac-expansioncard-bg: var(--a-green-50);
-  --ac-expansioncard-header-bg: var(--a-green-200);
-  --ac-expansioncard-header-open-bg: var(--a-green-200);
-  --ac-expansioncard-header-bg-hover: var(--a-green-300);
+  --ac-expansioncard-header-bg: var(--a-green-100);
+  --ac-expansioncard-header-open-bg: var(--a-green-100);
+  --ac-expansioncard-header-bg-hover: var(--a-green-200);
   --ac-expansioncard-border-radius: var(--a-border-radius-small);
   --ac-expansioncard-border-hover-color: none;
   box-shadow: var(--a-shadow-xsmall);
