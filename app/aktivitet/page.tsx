@@ -17,8 +17,9 @@ interface FormFields {
 export default function Page() {
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
-      type: 'text',
+      type: 'textarea',
       label: 'Begrunnelse',
+      description: 'Skriv begrunnelse og henvis til kilde/dokumentasjon',
       rules: { required: 'Du må begrunne' },
     },
     aktivitetspliktOppfylt: {
@@ -28,7 +29,7 @@ export default function Page() {
       options: JaEllerNeiOptions,
     },
     grunn: {
-      type: 'radio',
+      type: 'checkbox',
       label: 'Årsak',
       options: [
         'Ikke møtt til møte med Nav',
@@ -44,20 +45,25 @@ export default function Page() {
     },
   });
   const aktivitetspliktOppfylt = form.watch('aktivitetspliktOppfylt');
-  const buttonText = 'Send';
+  const buttonText = 'Send inn';
   return (
     <div className={styles.aktivitetSkjema}>
-      <VilkårsKort heading={'Vurder aktivitetsplikt'} steg={'FATTE_VEDTAK'} icon={<FigureIcon fontSize={'inherit'} />}>
+      <VilkårsKort
+        heading={'Vurder aktivitetsplikt'}
+        steg={'FATTE_VEDTAK'}
+        vilkårTilhørerNavKontor={true}
+        icon={<FigureIcon fontSize={'inherit'} />}
+      >
         <form className={styles.form}>
-          <FormField form={form} formField={formFields.begrunnelse} />
           <FormField form={form} formField={formFields.aktivitetspliktOppfylt} />
           {aktivitetspliktOppfylt === JaEllerNei.Nei && (
             <>
               <FormField form={form} formField={formFields.grunn} />
+              <FormField form={form} formField={formFields.begrunnelse} />
             </>
           )}
           <FormField form={form} formField={formFields.dato} />
-          <Button>{buttonText}</Button>
+          <Button className={'fit-content-button'}>{buttonText}</Button>
         </form>
       </VilkårsKort>
     </div>
