@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, ReactNode, useState } from 'react';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 import { ComboboxOption } from '@navikt/ds-react/esm/form/combobox/types';
 
 export type FilterValg = {
@@ -40,9 +40,28 @@ interface Props {
   children: ReactNode;
 }
 
+const storeData = (køer: Kø[]): void => {
+  if (køer.length > 0) {
+    localStorage.setItem('køer', JSON.stringify(køer.filter((kø) => kø.id !== 'default')));
+  } else {
+    console.warn('Ingen elementer i køen. Lagrer ikke');
+  }
+};
+
+const getInitialState = (): Kø[] => {
+  const data = localStorage.getItem('køer');
+  const result: Kø[] = data ? JSON.parse(data) : [];
+  return [defaultKø, ...result];
+};
+
 export const KøProvider = ({ children }: Props) => {
   const [valgtKø, oppdaterValgtKø] = useState<Kø>(defaultKø);
-  const [køliste, oppdaterKøliste] = useState<Kø[]>([defaultKø]);
+  const [køliste, oppdaterKøliste] = useState<Kø[]>(getInitialState());
+
+  useEffect(() => {
+    storeData(køliste);
+  }, [køliste]);
+
   return (
     <KøContext.Provider value={{ valgtKø, oppdaterValgtKø, køliste, oppdaterKøliste }}>{children}</KøContext.Provider>
   );
