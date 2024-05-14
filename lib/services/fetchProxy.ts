@@ -69,6 +69,11 @@ const fetchWithRetry = async <ResponseBody>(
   // 404
   console.log('status', { status: response.status, url });
 
+  // TODO Vi må håndtere 204 på en bedre måte
+  if (response.status === 204) {
+    return 'Request gikk fint' as ResponseBody;
+  }
+
   const contentType = response.headers.get('content-type');
   if (contentType && contentType.includes('text')) {
     return (await response.text()) as ResponseBody;

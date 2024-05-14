@@ -1,4 +1,4 @@
-import { LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo } from './types/types';
+import { LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo, SettPåVent } from './types/types';
 import { Brevmal } from 'lib/utils/sanity';
 
 export async function fetchProxy<ResponseBody>(
@@ -26,6 +26,9 @@ export async function fetchProxy<ResponseBody>(
   }
 }
 
+export function settBehandlingPåVent(referanse: string, settPåVent: SettPåVent) {
+  return fetchProxy(`/api/behandling/${referanse}/sett-paa-vent`, 'POST', settPåVent);
+}
 export function rekjørFeiledeOppgaver() {
   return fetchProxy('/api/test/rekjorfeilede', 'GET');
 }

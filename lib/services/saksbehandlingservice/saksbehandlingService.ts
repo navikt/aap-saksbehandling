@@ -11,6 +11,7 @@ import {
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
   SaksInfo,
+  SettPåVent,
   StudentGrunnlag,
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
@@ -113,4 +114,9 @@ export const rekjørFeiledeOppgaver = async () => {
 export const hentBeregningsGrunnlag = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/beregning/grunnlag/${referanse}`;
   return await fetchProxy<BeregningsGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const settBehandlingPåVent = async (referanse: string, requestBody: SettPåVent) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/sett-på-vent`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
 };

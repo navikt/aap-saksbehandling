@@ -66,3 +66,5 @@ export type FlytProsessering =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingFlytOgTilstandDto']['prosessering'];
 
 export type BeregningsGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.beregning.flate.BeregningDTO'];
+
+export type SettPåVent = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.SettPåVentRequest'];
