@@ -1,17 +1,26 @@
+export enum Avklaringsbehovtype {
+  MANUELT_SATT_PÅ_VENT = '9001',
+  AVKLAR_STUDENT = '5001',
+  AVKLAR_SYKDOM = '5003',
+  FASTSETT_ARBEIDSEVNE = '5004',
+  FRITAK_MELDEPLIKT = '5005',
+  AVKLAR_BISTANDSBEHOV = '5006',
+  VURDER_SYKEPENGEERSTATNING = '5007',
+  FASTSETT_BEREGNINGSTIDSPUNKT = '5008',
+  FORESLÅ_VEDTAK = '5098',
+  FATTE_VEDTAK = '5099',
+}
+
 export type Oppgave = {
-  // felt som ikke finnes i backend pt
-  navn: string;
-  søknadstype: string;
-  type: string;
-  saksbehandler?: string;
-  // faktiske felt
+  versjon: number; // TODO ikke i backend pt
   oppgaveId: number;
-  oppgavetype: string;
-  foedselsnummer: string;
-  opprettet: string;
-  reservertTil: string;
-  versjon: number;
+  avklaringsbehov: Avklaringsbehovtype;
+  status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
+  foedselsnummer: String; //innbygger
+  avklaringsbehovOpprettetTid: string;
+  behandlingOpprettetTid: string;
   tilordnetRessurs?: string;
+  reservertTil?: string;
 };
 
 export type Oppgaver = {
