@@ -7,6 +7,7 @@ export const mockOppgaver: Oppgaver = {
     {
       oppgaveId: 1234,
       saksnummer: '3457345',
+      behandlingstype: 'Førstegangsbehandling',
       behandlingsreferanse: '346345727',
       avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
       status: 'OPPRETTET',
@@ -20,6 +21,7 @@ export const mockOppgaver: Oppgaver = {
     {
       oppgaveId: 8935,
       saksnummer: '34563',
+      behandlingstype: 'Førstegangsbehandling',
       behandlingsreferanse: '7345234',
       avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
       status: 'OPPRETTET',
@@ -33,6 +35,7 @@ export const mockOppgaver: Oppgaver = {
     {
       oppgaveId: 3840,
       saksnummer: '1284534',
+      behandlingstype: 'Førstegangsbehandling',
       behandlingsreferanse: '6345723567',
       avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
       status: 'OPPRETTET',
@@ -50,6 +53,7 @@ export const ufordeltOppgave: Oppgave[] = [
   {
     oppgaveId: 3045,
     saksnummer: '3456',
+    behandlingstype: 'Førstegangsbehandling',
     behandlingsreferanse: '234264356',
     avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
     status: 'OPPRETTET',
@@ -66,6 +70,7 @@ export const fordeltOppgave: Oppgave[] = [
   {
     oppgaveId: 2856,
     saksnummer: '3456',
+    behandlingstype: 'Førstegangsbehandling',
     behandlingsreferanse: '34456345',
     avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
     status: 'OPPRETTET',

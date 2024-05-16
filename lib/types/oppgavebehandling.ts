@@ -15,6 +15,7 @@ export type Oppgave = {
   versjon: number; // TODO ikke i backend pt
   oppgaveId: number;
   saksnummer: string;
+  behandlingstype: string;
   behandlingsreferanse: string;
   avklaringsbehov: Avklaringsbehovtype;
   status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';

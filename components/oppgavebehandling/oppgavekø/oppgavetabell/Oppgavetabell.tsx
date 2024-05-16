@@ -111,7 +111,7 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
           sortedData.map((oppgave) => (
             <Table.Row key={oppgave.oppgaveId}>
               <Table.DataCell>{oppgave.foedselsnummer}</Table.DataCell>
-              <Table.DataCell>{oppgave.avklaringsbehov}</Table.DataCell>
+              <Table.DataCell>{oppgave.behandlingstype}</Table.DataCell>
               <Table.DataCell>{oppgave.status}</Table.DataCell>
               <Table.DataCell>{format(oppgave.avklaringsbehovOpprettetTid, 'dd.MM.yy')}</Table.DataCell>
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
