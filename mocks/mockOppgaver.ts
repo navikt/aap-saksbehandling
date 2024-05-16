@@ -6,6 +6,8 @@ export const mockOppgaver: Oppgaver = {
   oppgaver: [
     {
       oppgaveId: 1234,
+      saksnummer: '3457345',
+      behandlingsreferanse: '346345727',
       avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
       status: 'OPPRETTET',
       foedselsnummer: '09837600004',
@@ -17,6 +19,8 @@ export const mockOppgaver: Oppgaver = {
     },
     {
       oppgaveId: 8935,
+      saksnummer: '34563',
+      behandlingsreferanse: '7345234',
       avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
       status: 'OPPRETTET',
       foedselsnummer: '17837900007',
@@ -28,6 +32,8 @@ export const mockOppgaver: Oppgaver = {
     },
     {
       oppgaveId: 3840,
+      saksnummer: '1284534',
+      behandlingsreferanse: '6345723567',
       avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
       status: 'OPPRETTET',
       foedselsnummer: '14839400004',
@@ -43,6 +49,8 @@ export const mockOppgaver: Oppgaver = {
 export const ufordeltOppgave: Oppgave[] = [
   {
     oppgaveId: 3045,
+    saksnummer: '3456',
+    behandlingsreferanse: '234264356',
     avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
     status: 'OPPRETTET',
     foedselsnummer: '09837600004',
@@ -57,6 +65,8 @@ export const ufordeltOppgave: Oppgave[] = [
 export const fordeltOppgave: Oppgave[] = [
   {
     oppgaveId: 2856,
+    saksnummer: '3456',
+    behandlingsreferanse: '34456345',
     avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
     status: 'OPPRETTET',
     foedselsnummer: '09837600004',
