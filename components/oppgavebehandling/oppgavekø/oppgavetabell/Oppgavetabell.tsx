@@ -133,7 +133,7 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
                     <Dropdown.Menu.List>
                       <Dropdown.Menu.List.Item
                         as={Link}
-                        href={`/oppgaveliste/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`}
+                        href={`/sak/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`}
                       >
                         Se oppgave
                       </Dropdown.Menu.List.Item>
