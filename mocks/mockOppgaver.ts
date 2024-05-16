@@ -17,7 +17,6 @@ export const mockOppgaver: Oppgaver = {
       oppgaveOpprettet: subDays(new Date(), 67).toISOString(),
       reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
       versjon: 1,
-      tilordnetRessurs: 'Flagrende Gevant',
     },
     {
       oppgaveId: 8935,
@@ -32,7 +31,6 @@ export const mockOppgaver: Oppgaver = {
       oppgaveOpprettet: subWeeks(new Date(), 4).toISOString(),
       reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
       versjon: 1,
-      tilordnetRessurs: 'Eklektisk Kappe',
     },
     {
       oppgaveId: 3840,
@@ -47,7 +45,6 @@ export const mockOppgaver: Oppgaver = {
       oppgaveOpprettet: subDays(new Date(), 9).toISOString(),
       reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
       versjon: 1,
-      tilordnetRessurs: 'Ambulerende Bie',
     },
   ],
 };

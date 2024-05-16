@@ -10,6 +10,7 @@ import { fetchProxy } from 'lib/clientApi';
 import styles from './Oppgavetabell.module.css';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   oppgaver: Oppgave[];
@@ -48,6 +49,7 @@ const mapAvklaringsbehov = (behandlingstype: string) => {
 
 export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
   const [sort, setSort] = useState<SortState | undefined>();
+  const router = useRouter();
   const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.tilordnetRessurs;
 
   const sorter = (sortKey: string | undefined) => {
@@ -77,21 +79,22 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
     return 1;
   });
 
-  const fordelOppgave = async (oppgave: Oppgave) => {
-    const res: ProxyResponse | undefined = await fetchProxy(
-      `/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave`,
-      'PATCH',
-      {
-        versjon: oppgave.versjon,
-        navIdent: 'z994422',
-      }
-    );
-    if (res && res.status === 200) {
-      await mutate();
-    }
+  const behandle = async (oppgave: Oppgave) => {
+    // const res: ProxyResponse | undefined = await fetchProxy(
+    //   `/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave`,
+    //   'PATCH',
+    //   {
+    //     versjon: oppgave.versjon,
+    //     navIdent: 'z994422',
+    //   }
+    // );
+    // if (res && res.status === 200) {
+    //   await mutate();
+    // }
+    router.push(`/sak/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`);
   };
 
-  const frigiOppgave = async (oppgave: Oppgave) => {
+  const frigi = async (oppgave: Oppgave) => {
     const res: ProxyResponse | undefined = await fetchProxy(
       `/api/oppgavebehandling/${oppgave.oppgaveId}/frigi`,
       'PATCH',
@@ -146,11 +149,11 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell className={styles.knappecelle}>
                 {oppgaveErFordelt(oppgave) ? (
-                  <Button variant={'secondary'} size={'small'} onClick={() => frigiOppgave(oppgave)}>
+                  <Button variant={'secondary'} size={'small'} onClick={() => frigi(oppgave)}>
                     Frigjør
                   </Button>
                 ) : (
-                  <Button variant={'primary'} size={'small'} onClick={() => fordelOppgave(oppgave)}>
+                  <Button variant={'primary'} size={'small'} onClick={() => behandle(oppgave)}>
                     Behandle
                   </Button>
                 )}
