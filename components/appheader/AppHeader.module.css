@@ -1,5 +1,11 @@
-.app__header {
+.header {
   justify-content: space-between;
+}
+
+.leftSide {
+  display: flex;
+  flex-direction: row;
+  gap: var(--a-spacing-4);
 }
 
 .link {
