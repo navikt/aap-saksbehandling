@@ -17,7 +17,7 @@ export type Oppgave = {
   saksnummer: string;
   behandlingstype: string;
   behandlingsreferanse: string;
-  avklaringsbehov: Avklaringsbehovtype;
+  avklaringsbehov: string;
   status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
   foedselsnummer: String; //innbygger
   avklaringsbehovOpprettetTid: string;

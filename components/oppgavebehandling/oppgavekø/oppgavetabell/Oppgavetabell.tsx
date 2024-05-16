@@ -21,6 +21,31 @@ type ProxyResponse = {
   status: number;
 };
 
+const mapAvklaringsbehov = (behandlingstype: string) => {
+  switch (behandlingstype) {
+    case 'AVKLAR_STUDENT':
+      return 'Student';
+    case 'AVKLAR_SYKDOM':
+      return 'Nedsatt arbeidsevne';
+    case 'VURDER_BISTANDSBEHOV':
+      return 'Behov for oppfølging';
+    case 'FRITAK_MELDEPLIKT':
+      return 'Unntak fra meldeplikt';
+    case 'VURDER_SYKEPENGEERSTATNING':
+      return 'Sykepengeerstatning';
+    case 'FASTSETT_ARBEIDSEVNE':
+      return 'Fastsett arbeidsevne';
+    case 'FASTSETT_BEREGNINGSTIDSPUNKT':
+      return 'Fastsett beregningstidspunkt';
+    case 'FORESLÅ_VEDTAK':
+      return 'Foreslå vedtak';
+    case 'FATTE_VEDTAK':
+      return 'Fatte vedtak';
+    default:
+      return behandlingstype;
+  }
+};
+
 export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
   const [sort, setSort] = useState<SortState | undefined>();
   const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.tilordnetRessurs;
@@ -115,7 +140,7 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
             <Table.Row key={oppgave.oppgaveId}>
               <Table.DataCell>{oppgave.foedselsnummer}</Table.DataCell>
               <Table.DataCell>{oppgave.behandlingstype}</Table.DataCell>
-              <Table.DataCell>{oppgave.avklaringsbehov}</Table.DataCell>
+              <Table.DataCell>{mapAvklaringsbehov(oppgave.avklaringsbehov)}</Table.DataCell>
               <Table.DataCell>{format(oppgave.behandlingOpprettetTid, 'dd.MM.yy')}</Table.DataCell>
               <Table.DataCell>{format(oppgave.oppgaveOpprettet, 'dd.MM.yy')}</Table.DataCell>
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>

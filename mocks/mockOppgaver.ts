@@ -1,6 +1,6 @@
 import { addDays, endOfDay, subDays, subWeeks } from 'date-fns';
 
-import { Avklaringsbehovtype, Oppgave, Oppgaver } from 'lib/types/oppgavebehandling';
+import { Oppgave, Oppgaver } from 'lib/types/oppgavebehandling';
 
 export const mockOppgaver: Oppgaver = {
   oppgaver: [
@@ -9,7 +9,7 @@ export const mockOppgaver: Oppgaver = {
       saksnummer: '3457345',
       behandlingstype: 'Førstegangsbehandling',
       behandlingsreferanse: '346345727',
-      avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
+      avklaringsbehov: 'AVKLAR_SYKDOM',
       status: 'OPPRETTET',
       foedselsnummer: '09837600004',
       avklaringsbehovOpprettetTid: subDays(new Date(), 67).toISOString(),
@@ -24,7 +24,7 @@ export const mockOppgaver: Oppgaver = {
       saksnummer: '34563',
       behandlingstype: 'Førstegangsbehandling',
       behandlingsreferanse: '7345234',
-      avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
+      avklaringsbehov: 'AVKLAR_SYKDOM',
       status: 'OPPRETTET',
       foedselsnummer: '17837900007',
       avklaringsbehovOpprettetTid: subWeeks(new Date(), 4).toISOString(),
@@ -39,7 +39,7 @@ export const mockOppgaver: Oppgaver = {
       saksnummer: '1284534',
       behandlingstype: 'Førstegangsbehandling',
       behandlingsreferanse: '6345723567',
-      avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
+      avklaringsbehov: 'AVKLAR_SYKDOM',
       status: 'OPPRETTET',
       foedselsnummer: '14839400004',
       avklaringsbehovOpprettetTid: subDays(new Date(), 9).toISOString(),
@@ -58,7 +58,7 @@ export const ufordeltOppgave: Oppgave[] = [
     saksnummer: '3456',
     behandlingstype: 'Førstegangsbehandling',
     behandlingsreferanse: '234264356',
-    avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
+    avklaringsbehov: 'AVKLAR_SYKDOM',
     status: 'OPPRETTET',
     foedselsnummer: '09837600004',
     avklaringsbehovOpprettetTid: subWeeks(new Date(), 4).toISOString(),
@@ -76,7 +76,7 @@ export const fordeltOppgave: Oppgave[] = [
     saksnummer: '3456',
     behandlingstype: 'Førstegangsbehandling',
     behandlingsreferanse: '34456345',
-    avklaringsbehov: Avklaringsbehovtype.AVKLAR_SYKDOM,
+    avklaringsbehov: 'AVKLAR_SYKDOM',
     status: 'OPPRETTET',
     foedselsnummer: '09837600004',
     avklaringsbehovOpprettetTid: subWeeks(new Date(), 4).toISOString(),
