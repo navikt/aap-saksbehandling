@@ -22,6 +22,7 @@ export type Oppgave = {
   foedselsnummer: String; //innbygger
   avklaringsbehovOpprettetTid: string;
   behandlingOpprettetTid: string;
+  oppgaveOpprettet: string;
   tilordnetRessurs?: string;
   reservertTil?: string;
 };

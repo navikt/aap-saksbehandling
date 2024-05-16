@@ -113,7 +113,7 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
               <Table.DataCell>{oppgave.foedselsnummer}</Table.DataCell>
               <Table.DataCell>{oppgave.behandlingstype}</Table.DataCell>
               <Table.DataCell>{oppgave.status}</Table.DataCell>
-              <Table.DataCell>{format(oppgave.avklaringsbehovOpprettetTid, 'dd.MM.yy')}</Table.DataCell>
+              <Table.DataCell>{format(oppgave.oppgaveOpprettet, 'dd.MM.yy')}</Table.DataCell>
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell className={styles.knappecelle}>
                 {oppgaveErFordelt(oppgave) ? (
