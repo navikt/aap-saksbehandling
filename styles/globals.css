@@ -7,3 +7,15 @@
 .fit-content-button {
   width: fit-content;
 }
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--a-spacing-4);
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-4);
+}

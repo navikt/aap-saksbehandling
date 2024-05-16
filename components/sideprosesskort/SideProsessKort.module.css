@@ -1,0 +1,23 @@
+.sideProsessKort {
+  --ac-expansioncard-bg: var(--a-orange-50);
+  --ac-expansioncard-header-bg: var(--a-orange-100);
+  --ac-expansioncard-header-open-bg: var(--a-orange-100);
+  --ac-expansioncard-header-bg-hover: var(--a-orange-200);
+  --ac-expansioncard-border-radius: var(--a-border-radius-small);
+  --ac-expansioncard-border-hover-color: none;
+  box-shadow: var(--a-shadow-xsmall);
+}
+
+.header,
+.content,
+.header:hover,
+.content:hover {
+  border: none;
+  box-shadow: none;
+}
+
+.title {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--a-spacing-2);
+}

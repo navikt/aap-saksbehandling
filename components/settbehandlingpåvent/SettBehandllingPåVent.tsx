@@ -1,17 +1,16 @@
 'use client';
 
 import React from 'react';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useConfigForm } from 'hooks/FormHook';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { FormField } from 'components/input/formfield/FormField';
 import { settBehandlingPåVent } from 'lib/clientApi';
+import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 
 interface Props {
   referanse: string;
-  erPåVent: boolean;
 }
 
 interface FormFields {
@@ -19,7 +18,7 @@ interface FormFields {
   frist: Date;
 }
 
-export const SettBehandllingPåVent = ({ referanse, erPåVent }: Props) => {
+export const SettBehandllingPåVent = ({ referanse }: Props) => {
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'text',
@@ -32,10 +31,8 @@ export const SettBehandllingPåVent = ({ referanse, erPåVent }: Props) => {
     },
   });
 
-  console.log('erPåVent', erPåVent);
-
   return (
-    <VilkårsKort steg={'VURDER_BISTANDSBEHOV'} heading={'Sett behandling på vent'} icon={<HourglassBottomFilledIcon />}>
+    <SideProsessKort heading={'Sett behandling på vent'} icon={<HourglassBottomFilledIcon />}>
       <form
         onSubmit={form.handleSubmit(async (data) => {
           await settBehandlingPåVent(referanse, {
@@ -43,12 +40,12 @@ export const SettBehandllingPåVent = ({ referanse, erPåVent }: Props) => {
             frist: formaterDatoForBackend(data.frist),
           });
         })}
-        style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+        className={'flex-column'}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.frist} />
         <Button className={'fit-content-button'}>Sett på vent</Button>
       </form>
-    </VilkårsKort>
+    </SideProsessKort>
   );
 };
