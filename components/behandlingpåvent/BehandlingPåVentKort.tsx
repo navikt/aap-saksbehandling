@@ -9,9 +9,10 @@ import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 
 interface Props {
   behandlingsreferanse: string;
+  behandlingVersjon: number;
 }
 
-export const BehandlingPåVentKort = ({ behandlingsreferanse }: Props) => {
+export const BehandlingPåVentKort = ({ behandlingsreferanse, behandlingVersjon }: Props) => {
   return (
     <SideProsessKort heading={'Behandling på vent'} icon={<HourglassBottomFilledIcon />}>
       <div className={'flex-column'}>
@@ -20,7 +21,7 @@ export const BehandlingPåVentKort = ({ behandlingsreferanse }: Props) => {
           size={'medium'}
           onClick={() => {
             løsBehov({
-              behandlingVersjon: 0,
+              behandlingVersjon: behandlingVersjon,
               behov: {
                 behovstype: Behovstype.MANUELT_SATT_PÅ_VENT_KODE,
               },
