@@ -14,6 +14,7 @@ import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurd
 interface Props {
   fatteVedtakGrunnlag: FatteVedtakGrunnlag;
   behandlingsReferanse: string;
+  behandlingVersjon: number;
   readOnly: boolean;
 }
 
@@ -32,7 +33,12 @@ export interface ToTrinnsvurderingError {
   message: string;
 }
 
-export const ToTrinnsvurdering = ({ fatteVedtakGrunnlag, behandlingsReferanse, readOnly }: Props) => {
+export const ToTrinnsvurdering = ({
+  fatteVedtakGrunnlag,
+  behandlingsReferanse,
+  readOnly,
+  behandlingVersjon,
+}: Props) => {
   const params = useParams();
 
   const [toggleGroupValue, setToggleGroupValue] = useState<string>(readOnly ? 'historikk' : 'totrinnsvurdering');
@@ -67,6 +73,7 @@ export const ToTrinnsvurdering = ({ fatteVedtakGrunnlag, behandlingsReferanse, r
           link={link}
           readOnly={readOnly}
           behandlingsReferanse={behandlingsReferanse}
+          behandlingVersjon={behandlingVersjon}
         />
       </div>
     </div>

@@ -15,9 +15,16 @@ interface Props {
   link: string;
   readOnly: boolean;
   behandlingsReferanse: string;
+  behandlingVersjon: number;
 }
 
-export const TotrinnsvurderingForm = ({ fatteVedtakGrunnlag, link, readOnly, behandlingsReferanse }: Props) => {
+export const TotrinnsvurderingForm = ({
+  fatteVedtakGrunnlag,
+  link,
+  readOnly,
+  behandlingsReferanse,
+  behandlingVersjon,
+}: Props) => {
   const initialValue: ToTrinnsVurderingFormFields[] = fatteVedtakGrunnlag.vurderinger.map((vurdering) => {
     return {
       definisjon: vurdering.definisjon,
@@ -104,7 +111,7 @@ export const TotrinnsvurderingForm = ({ fatteVedtakGrunnlag, link, readOnly, beh
             const validerteToTrinnsvurderinger = validerTotrinnsvurderinger(vurderinger);
             if (errors.length === 0 && validerteToTrinnsvurderinger && validerteToTrinnsvurderinger.length > 0) {
               await løsBehov({
-                behandlingVersjon: 0,
+                behandlingVersjon: behandlingVersjon,
                 behov: {
                   behovstype: Behovstype.FATTE_VEDTAK_KODE,
                   vurderinger: validerteToTrinnsvurderinger,

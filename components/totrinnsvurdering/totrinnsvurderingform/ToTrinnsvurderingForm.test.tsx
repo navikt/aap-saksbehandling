@@ -20,7 +20,13 @@ describe('totrinnsvurderingform', () => {
 
   it('skal ha en overskrift som er en lenke til vilkårsvurderingen', () => {
     render(
-      <TotrinnsvurderingForm fatteVedtakGrunnlag={grunnlag} link={link} readOnly={false} behandlingsReferanse={'456'} />
+      <TotrinnsvurderingForm
+        fatteVedtakGrunnlag={grunnlag}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
     );
 
     const overskriftLenke = screen.getByRole('link', { name: /§ 11-5 avklar sykdom/i });
@@ -30,7 +36,13 @@ describe('totrinnsvurderingform', () => {
 
   it('skal ha en radio group hvor beslutter kan godkjenne eller avslå vurderingen til saksbehandler/veileder', () => {
     render(
-      <TotrinnsvurderingForm fatteVedtakGrunnlag={grunnlag} link={link} readOnly={false} behandlingsReferanse={'456'} />
+      <TotrinnsvurderingForm
+        fatteVedtakGrunnlag={grunnlag}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
     );
 
     const godkjennValg = screen.getByRole('radio', { name: /godkjenn/i });
@@ -42,7 +54,13 @@ describe('totrinnsvurderingform', () => {
 
   it('skal ha en knapp for å sende inn totrinnsvurderingene', () => {
     render(
-      <TotrinnsvurderingForm fatteVedtakGrunnlag={grunnlag} link={link} readOnly={false} behandlingsReferanse={'456'} />
+      <TotrinnsvurderingForm
+        fatteVedtakGrunnlag={grunnlag}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
     );
 
     const knapp = screen.getByRole('button', { name: /send inn/i });
@@ -51,7 +69,13 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp felt for begrunnelse dersom vurderingen har blitt avslått', async () => {
     render(
-      <TotrinnsvurderingForm fatteVedtakGrunnlag={grunnlag} link={link} readOnly={false} behandlingsReferanse={'456'} />
+      <TotrinnsvurderingForm
+        fatteVedtakGrunnlag={grunnlag}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
@@ -63,7 +87,13 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp felt for å velge grunner for avslag dersom vurderingen har blitt avslått', async () => {
     render(
-      <TotrinnsvurderingForm fatteVedtakGrunnlag={grunnlag} link={link} readOnly={false} behandlingsReferanse={'456'} />
+      <TotrinnsvurderingForm
+        fatteVedtakGrunnlag={grunnlag}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
@@ -84,7 +114,13 @@ describe('totrinnsvurderingform', () => {
 
   it('skal ha riktige vlag i feltet for å velge grunner', async () => {
     render(
-      <TotrinnsvurderingForm fatteVedtakGrunnlag={grunnlag} link={link} readOnly={false} behandlingsReferanse={'456'} />
+      <TotrinnsvurderingForm
+        fatteVedtakGrunnlag={grunnlag}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
@@ -96,7 +132,13 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp feilmelding hvis begrunnelse ikke har blitt besvart ved innsending', async () => {
     render(
-      <TotrinnsvurderingForm fatteVedtakGrunnlag={grunnlag} link={link} readOnly={false} behandlingsReferanse={'456'} />
+      <TotrinnsvurderingForm
+        fatteVedtakGrunnlag={grunnlag}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
@@ -111,7 +153,13 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp feilmelding hvis ingen grunn har blitt valgt ved innsending', async () => {
     render(
-      <TotrinnsvurderingForm fatteVedtakGrunnlag={grunnlag} link={link} readOnly={false} behandlingsReferanse={'456'} />
+      <TotrinnsvurderingForm
+        fatteVedtakGrunnlag={grunnlag}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
@@ -126,7 +174,13 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
     render(
-      <TotrinnsvurderingForm fatteVedtakGrunnlag={grunnlag} link={link} readOnly={false} behandlingsReferanse={'456'} />
+      <TotrinnsvurderingForm
+        fatteVedtakGrunnlag={grunnlag}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
@@ -144,7 +198,13 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp error på fritekst felt for å skrive inn en grunn dersom ANNET er valgt og det ikke er besvart', async () => {
     render(
-      <TotrinnsvurderingForm fatteVedtakGrunnlag={grunnlag} link={link} readOnly={false} behandlingsReferanse={'456'} />
+      <TotrinnsvurderingForm
+        fatteVedtakGrunnlag={grunnlag}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
