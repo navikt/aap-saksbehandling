@@ -14,6 +14,8 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
 
   const erPåFatteVedtakSteg = flyt.aktivtSteg === 'FATTE_VEDTAK';
 
+  const behandlingVersjon = flyt.behandlingVersjon;
+
   return (
     <>
       {flyt.prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={flyt.prosessering} />}
@@ -24,6 +26,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
               <FastsettBeregningMedDataFeching
                 behandlingsReferanse={behandlingsReferanse}
                 readOnly={erPåFatteVedtakSteg}
+                behandlingVersjon={behandlingVersjon}
               />
             </StegSuspense>
           );

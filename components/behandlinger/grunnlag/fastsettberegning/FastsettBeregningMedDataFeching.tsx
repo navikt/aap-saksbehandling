@@ -4,9 +4,10 @@ import { hentBeregningsVurdering } from 'lib/services/saksbehandlingservice/saks
 interface Props {
   behandlingsReferanse: string;
   readOnly: boolean;
+  behandlingVersjon: number;
 }
 
-export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, readOnly }: Props) => {
+export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
   const vurdering = await hentBeregningsVurdering(behandlingsReferanse);
   // const grunnlag = await hentBeregningsGrunnlag(behandlingsReferanse);
 
@@ -15,6 +16,7 @@ export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, re
       behandlingsReferanse={behandlingsReferanse}
       readOnly={readOnly}
       vurdering={vurdering}
+      behandlingVersjon={behandlingVersjon}
       // grunnlag={grunnlag}
     />
   );

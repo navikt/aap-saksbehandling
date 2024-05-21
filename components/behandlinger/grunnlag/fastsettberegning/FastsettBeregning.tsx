@@ -15,6 +15,7 @@ interface Props {
   vurdering?: BeregningsVurdering;
   grunnlag?: BeregningsGrunnlag;
   behandlingsReferanse: string;
+  behandlingVersjon: number;
   readOnly: boolean;
 }
 
@@ -24,7 +25,13 @@ interface FormFields {
   antattÅrligInntekt: string;
 }
 
-export const FastsettBeregning = ({ vurdering, grunnlag, behandlingsReferanse, readOnly }: Props) => {
+export const FastsettBeregning = ({
+  vurdering,
+  grunnlag,
+  behandlingsReferanse,
+  behandlingVersjon,
+  readOnly,
+}: Props) => {
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
   console.log('grunnlag', grunnlag);
@@ -53,7 +60,7 @@ export const FastsettBeregning = ({ vurdering, grunnlag, behandlingsReferanse, r
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: 0,
+        behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
           beregningVurdering: {
