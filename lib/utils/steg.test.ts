@@ -55,6 +55,7 @@ const flyt: BehandlingFlytOgTilstand = {
     saksbehandlerReadOnly: false,
     beslutterReadOnly: false,
     visBeslutterKort: false,
+    visVentekort: false,
   },
   flyt: [],
 };

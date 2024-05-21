@@ -7,7 +7,6 @@ import { Form } from 'components/form/Form';
 import { FormField } from 'components/input/formfield/FormField';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { Alert, Label, Link, List } from '@navikt/ds-react';
-import { SykdomsGrunnlag } from 'lib/types/types';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
@@ -17,12 +16,7 @@ import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
-
-interface Props {
-  behandlingsReferanse: string;
-  grunnlag: SykdomsGrunnlag;
-  readOnly: boolean;
-}
+import { SykdomProps } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 
 interface FormFields {
   erArbeidsevnenNedsatt: string;
@@ -34,7 +28,12 @@ interface FormFields {
   dokumenterBruktIVurderingen: string[];
 }
 
-export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
+export const SykdomsvurderingMedYrkesskade = ({
+  behandlingsReferanse,
+  behandlingVersjon,
+  grunnlag,
+  readOnly,
+}: SykdomProps) => {
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const { form, formFields } = useConfigForm<FormFields>(
@@ -100,7 +99,7 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingsReferanse, grunnlag, 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: 0,
+        behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
           sykdomsvurdering: {

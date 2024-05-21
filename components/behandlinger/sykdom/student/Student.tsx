@@ -14,7 +14,8 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { FormEvent } from 'react';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
+  behandlingVersjon: number;
   grunnlag?: StudentGrunnlag;
   readOnly: boolean;
 }
@@ -25,7 +26,7 @@ interface FormFields {
   avbruttStudieDato?: Date;
 }
 
-export const Student = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
+export const Student = ({ behandlingsreferanse, behandlingVersjon, grunnlag, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -66,7 +67,7 @@ export const Student = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: 0,
+        behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_STUDENT_KODE,
           studentvurdering: {
@@ -78,7 +79,7 @@ export const Student = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => 
               : undefined,
           },
         },
-        referanse: behandlingsReferanse,
+        referanse: behandlingsreferanse,
       });
     })(event);
   };

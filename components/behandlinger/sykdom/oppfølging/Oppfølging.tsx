@@ -14,6 +14,7 @@ import { FormEvent } from 'react';
 
 interface Props {
   behandlingsReferanse: string;
+  behandlingVersjon: number;
   readOnly: boolean;
   grunnlag?: BistandsGrunnlag;
 }
@@ -25,7 +26,7 @@ interface FormFields {
   grunner: string[];
 }
 
-export const Oppfølging = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
+export const Oppfølging = ({ behandlingsReferanse, behandlingVersjon, grunnlag, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -66,7 +67,7 @@ export const Oppfølging = ({ behandlingsReferanse, grunnlag, readOnly }: Props)
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) =>
       løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: 0,
+        behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
           bistandsVurdering: {

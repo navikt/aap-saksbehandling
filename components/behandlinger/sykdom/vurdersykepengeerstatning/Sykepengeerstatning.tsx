@@ -14,6 +14,7 @@ import { FormEvent } from 'react';
 
 interface Props {
   behandlingsReferanse: string;
+  behandlingVersjon: number;
   grunnlag?: SykepengeerstatningGrunnlag;
   readOnly: boolean;
 }
@@ -25,7 +26,7 @@ interface FormFields {
   grunn: string[];
 }
 
-export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
+export const Sykepengeerstatning = ({ behandlingsReferanse, behandlingVersjon, grunnlag, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
 
   const { form, formFields } = useConfigForm<FormFields>(
@@ -67,7 +68,7 @@ export const Sykepengeerstatning = ({ behandlingsReferanse, grunnlag, readOnly }
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) =>
       løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: 0,
+        behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
           sykepengeerstatningVurdering: {

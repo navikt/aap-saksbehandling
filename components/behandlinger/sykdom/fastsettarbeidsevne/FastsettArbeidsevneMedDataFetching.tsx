@@ -2,9 +2,20 @@ import { FastsettArbeidsevne } from 'components/behandlinger/sykdom/fastsettarbe
 
 interface Props {
   behandlingsReferanse: string;
+  behandlingVersjon: number;
   readOnly: boolean;
 }
 
-export const FastsettArbeidsevneMedDataFetching = async ({ behandlingsReferanse, readOnly }: Props) => {
-  return <FastsettArbeidsevne behandlingsReferanse={behandlingsReferanse} readOnly={readOnly} />;
+export const FastsettArbeidsevneMedDataFetching = async ({
+  behandlingsReferanse,
+  behandlingVersjon,
+  readOnly,
+}: Props) => {
+  return (
+    <FastsettArbeidsevne
+      behandlingsReferanse={behandlingsReferanse}
+      readOnly={readOnly}
+      behandlingVersjon={behandlingVersjon}
+    />
+  );
 };

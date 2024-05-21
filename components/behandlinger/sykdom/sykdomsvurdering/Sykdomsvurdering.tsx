@@ -2,7 +2,6 @@
 
 import { useConfigForm } from 'hooks/FormHook';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { SykdomsGrunnlag } from 'lib/types/types';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
@@ -14,12 +13,7 @@ import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/Tilknytt
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
-
-interface Props {
-  behandlingsReferanse: string;
-  grunnlag: SykdomsGrunnlag;
-  readOnly: boolean;
-}
+import { SykdomProps } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 
 interface FormFields {
   erArbeidsevnenNedsatt: string;
@@ -30,7 +24,7 @@ interface FormFields {
   nedsattArbeidsevneDato: Date;
 }
 
-export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, readOnly }: Props) => {
+export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, behandlingVersjon, readOnly }: SykdomProps) => {
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -86,7 +80,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, readOnly }: P
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: 0,
+        behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
           sykdomsvurdering: {

@@ -18,6 +18,7 @@ import { FormEvent } from 'react';
 
 interface Props {
   behandlingsReferanse: string;
+  behandlingVersjon: number;
   readOnly: boolean;
   grunnlag?: FritakMeldepliktGrunnlag;
 }
@@ -30,7 +31,7 @@ interface FormFields {
   sluttDato?: Date;
 }
 
-export const Meldeplikt = ({ behandlingsReferanse, grunnlag, readOnly }: Props) => {
+export const Meldeplikt = ({ behandlingsReferanse, behandlingVersjon, grunnlag, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -70,7 +71,7 @@ export const Meldeplikt = ({ behandlingsReferanse, grunnlag, readOnly }: Props) 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: 0,
+        behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.FRITAK_MELDEPLIKT_KODE,
           vurdering: {

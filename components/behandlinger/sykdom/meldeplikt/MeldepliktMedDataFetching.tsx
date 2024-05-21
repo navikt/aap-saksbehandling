@@ -3,11 +3,19 @@ import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt
 
 interface Props {
   behandlingsReferanse: string;
+  behandlingVersjon: number;
   readOnly: boolean;
 }
 
-export const MeldepliktMedDataFetching = async ({ behandlingsReferanse, readOnly }: Props) => {
+export const MeldepliktMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentUnntakMeldepliktGrunnlag(behandlingsReferanse);
 
-  return <Meldeplikt behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} readOnly={readOnly} />;
+  return (
+    <Meldeplikt
+      behandlingsReferanse={behandlingsReferanse}
+      grunnlag={grunnlag}
+      readOnly={readOnly}
+      behandlingVersjon={behandlingVersjon}
+    />
+  );
 };

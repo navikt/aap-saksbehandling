@@ -2,12 +2,20 @@ import { Student } from 'components/behandlinger/sykdom/student/Student';
 import { hentStudentGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   readOnly: boolean;
+  behandlingVersjon: number;
 }
 
-export const StudentMedDataFetching = async ({ behandlingsReferanse, readOnly }: Props) => {
-  const grunnlag = await hentStudentGrunnlag(behandlingsReferanse);
+export const StudentMedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
+  const grunnlag = await hentStudentGrunnlag(behandlingsreferanse);
 
-  return <Student behandlingsReferanse={behandlingsReferanse} grunnlag={grunnlag} readOnly={readOnly} />;
+  return (
+    <Student
+      behandlingsreferanse={behandlingsreferanse}
+      grunnlag={grunnlag}
+      readOnly={readOnly}
+      behandlingVersjon={behandlingVersjon}
+    />
+  );
 };

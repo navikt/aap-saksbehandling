@@ -14,10 +14,11 @@ import styles from './FastsettArbeidsevne.module.css';
 
 interface Props {
   behandlingsReferanse: string;
+  behandlingVersjon: number;
   readOnly: boolean;
 }
 
-export const FastsettArbeidsevne = ({ behandlingsReferanse, readOnly }: Props) => {
+export const FastsettArbeidsevne = ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
   const [skalLeggeTilNyPeriode, setSkalLeggeTilNyPeriode] = useState(false);
   const [perioder, setPerioder] = useState<FastSettArbeidsevnePeriode[]>([
     {
@@ -55,7 +56,9 @@ export const FastsettArbeidsevne = ({ behandlingsReferanse, readOnly }: Props) =
         {!readOnly && (
           <Button
             className={'fit-content-button'}
-            onClick={() => console.log('bekreft fastsettarbeidsevne', behandlingsReferanse, perioder)}
+            onClick={() =>
+              console.log('bekreft fastsettarbeidsevne', behandlingsReferanse, behandlingVersjon, perioder)
+            }
           >
             Bekreft
           </Button>
