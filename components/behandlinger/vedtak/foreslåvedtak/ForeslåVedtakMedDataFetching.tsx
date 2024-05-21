@@ -3,10 +3,17 @@ import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslåvedtak/Fo
 
 interface Props {
   behandlingsReferanse: string;
+  behandlingVersjon: number;
 }
 
-export const ForeslåVedtakMedDataFetching = async ({ behandlingsReferanse }: Props) => {
+export const ForeslåVedtakMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon }: Props) => {
   const behandlingsResultat = await hentResultat(behandlingsReferanse);
 
-  return <ForeslåVedtak behandlingResultat={behandlingsResultat} behandlingsReferanse={behandlingsReferanse} />;
+  return (
+    <ForeslåVedtak
+      behandlingResultat={behandlingsResultat}
+      behandlingsReferanse={behandlingsReferanse}
+      behandlingVersjon={behandlingVersjon}
+    />
+  );
 };

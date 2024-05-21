@@ -13,9 +13,10 @@ import styles from './ForeslåVedtak.module.css';
 interface Props {
   behandlingsReferanse: string;
   behandlingResultat: BehandlingResultat;
+  behandlingVersjon: number;
 }
 
-export const ForeslåVedtak = ({ behandlingsReferanse, behandlingResultat }: Props) => {
+export const ForeslåVedtak = ({ behandlingsReferanse, behandlingResultat, behandlingVersjon }: Props) => {
   const { status, løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
 
   return (
@@ -27,8 +28,8 @@ export const ForeslåVedtak = ({ behandlingsReferanse, behandlingResultat }: Pro
           className={'fit-content-button'}
           loading={isLoading}
           onClick={async () => {
-            await løsBehovOgGåTilNesteSteg({
-              behandlingVersjon: 0,
+            løsBehovOgGåTilNesteSteg({
+              behandlingVersjon: behandlingVersjon,
               behov: {
                 behovstype: Behovstype.FORESLÅ_VEDTAK_KODE,
               },

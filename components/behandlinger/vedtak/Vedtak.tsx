@@ -16,6 +16,8 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
 
   const stegSomSkalVises = getStegSomSkalVises('VEDTAK', flyt);
 
+  const behandlingVersjon = flyt.behandlingVersjon;
+
   return (
     <>
       {flyt.prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={flyt.prosessering} />}
@@ -23,7 +25,10 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
         if (steg === 'FORESLÅ_VEDTAK') {
           return (
             <StegSuspense key={steg}>
-              <ForeslåVedtakMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+              <ForeslåVedtakMedDataFetching
+                behandlingsReferanse={behandlingsReferanse}
+                behandlingVersjon={behandlingVersjon}
+              />
             </StegSuspense>
           );
         }
