@@ -7,6 +7,7 @@ import { LagreModal } from 'components/oppgavebehandling/oppgavekø/filter/Lagre
 import { FilterValg, Kø, KøContext } from 'components/oppgavebehandling/KøContext';
 
 import styles from './Filter.module.css';
+import { skjulPrototype } from 'lib/utils/skjulPrototype';
 
 interface FilterOptions {
   value: string;
@@ -68,6 +69,10 @@ const finnFilterLabel = (noekkel: string) =>
 
 export const Filter = () => {
   const køContext = useContext(KøContext);
+
+  if (skjulPrototype()) {
+    return null;
+  }
 
   const addFilter = (noekkel: string) => {
     const newFilter = filterValg.find((filter) => filter.navn === noekkel);

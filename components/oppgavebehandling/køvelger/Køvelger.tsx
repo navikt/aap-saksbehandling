@@ -3,9 +3,14 @@
 import { BodyShort, Button, Heading, HGrid, Label, Select } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { defaultKø, KøContext } from 'components/oppgavebehandling/KøContext';
+import { skjulPrototype } from 'lib/utils/skjulPrototype';
 
 export const Køvelger = () => {
   const køContext = useContext(KøContext);
+
+  if (skjulPrototype()) {
+    return null;
+  }
 
   const settKø = (køId: string) => {
     const kø = køContext.køliste.find((kø) => kø.id === køId);
