@@ -1,10 +1,10 @@
 'use client';
 
-import { hentAlleSaker, rekjørFeiledeOppgaver } from 'lib/clientApi';
+import { hentAlleSaker } from 'lib/clientApi';
 import { SaksInfo } from 'lib/types/types';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { Button, Table, TextField } from '@navikt/ds-react';
+import { Table, TextField } from '@navikt/ds-react';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
@@ -24,9 +24,6 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
   return (
     <div style={{ marginTop: '1rem' }}>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-        <Button size={'small'} onClick={async () => await rekjørFeiledeOppgaver()}>
-          Rekjør feilede oppgaver
-        </Button>
         <TextField
           label={'Ident'}
           size={'small'}

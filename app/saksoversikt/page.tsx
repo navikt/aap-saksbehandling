@@ -1,10 +1,10 @@
 import { hentAlleSaker } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
-import { OpprettSak } from 'components/opprettsak/OpprettSak';
 import { AlleSakerListe } from 'components/saksliste/AlleSakerListe';
 
 import styles from './page.module.css';
 import { isLocal } from 'lib/utils/environment';
+import { OpprettSak } from 'components/opprettsak/OpprettSak';
 
 const Page = async () => {
   const alleSaker = await hentAlleSaker();
