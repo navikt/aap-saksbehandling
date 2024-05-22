@@ -6,6 +6,7 @@ import { løsBehov } from 'lib/clientApi';
 import { Behovstype } from 'lib/utils/form';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
+import { revalidateFlyt } from 'lib/actions/actions';
 
 interface Props {
   behandlingsreferanse: string;
@@ -19,14 +20,16 @@ export const BehandlingPåVentKort = ({ behandlingsreferanse, behandlingVersjon 
         <BodyShort as={'p'}>Behandlingen er på vent. Vil du åpne den igjen?</BodyShort>
         <Button
           size={'medium'}
-          onClick={() => {
-            løsBehov({
+          onClick={async () => {
+            await løsBehov({
               behandlingVersjon: behandlingVersjon,
               behov: {
                 behovstype: Behovstype.MANUELT_SATT_PÅ_VENT_KODE,
               },
               referanse: behandlingsreferanse,
             });
+
+            await revalidateFlyt(behandlingsreferanse);
           }}
           className={'fit-content-button'}
         >
