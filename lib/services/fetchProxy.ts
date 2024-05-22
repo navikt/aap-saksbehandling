@@ -67,9 +67,9 @@ const fetchWithRetry = async <ResponseBody>(
   // Mulige feilmeldinger:
   // 500
   // 404
+  // 204
   console.log('status', { status: response.status, url });
 
-  // TODO Vi må håndtere 204 på en bedre måte
   if (response.status === 204) {
     return 'Request gikk fint' as ResponseBody;
   }
