@@ -8,9 +8,11 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { FormField } from 'components/input/formfield/FormField';
 import { settBehandlingPåVent } from 'lib/clientApi';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
+import { revalidateFlyt } from 'lib/actions/actions';
 
 interface Props {
   referanse: string;
+  behandlingVersjon: number;
 }
 
 interface FormFields {
@@ -18,7 +20,7 @@ interface FormFields {
   frist: Date;
 }
 
-export const SettBehandllingPåVent = ({ referanse }: Props) => {
+export const SettBehandllingPåVent = ({ referanse, behandlingVersjon }: Props) => {
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'text',
@@ -37,8 +39,10 @@ export const SettBehandllingPåVent = ({ referanse }: Props) => {
         onSubmit={form.handleSubmit(async (data) => {
           await settBehandlingPåVent(referanse, {
             begrunnelse: data.begrunnelse,
+            behandlingVersjon: behandlingVersjon,
             frist: formaterDatoForBackend(data.frist),
           });
+          await revalidateFlyt(referanse);
         })}
         className={'flex-column'}
       >

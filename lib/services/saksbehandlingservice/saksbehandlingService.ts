@@ -16,6 +16,7 @@ import {
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
+  VenteInformasjon,
 } from 'lib/types/types';
 import { fetchProxy } from 'lib/services/fetchProxy';
 
@@ -119,4 +120,9 @@ export const hentBeregningsGrunnlag = async (referanse: string) => {
 export const settBehandlingPåVent = async (referanse: string, requestBody: SettPåVent) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/sett-på-vent`;
   return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
+};
+
+export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/vente-informasjon`;
+  return await fetchProxy<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
 };

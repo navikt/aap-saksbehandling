@@ -5,6 +5,7 @@ import { BrevmalVelger } from 'components/brevmalvelger/BrevmalVelger';
 import { hentAlleBrevmaler } from 'lib/services/sanityservice/sanityservice';
 import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtakMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
+import { SideProsesser } from 'components/sideprosesser/SideProsesser';
 
 interface Props {
   behandlingsReferanse: string;
@@ -21,6 +22,11 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
   return (
     <>
       {flyt.prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={flyt.prosessering} />}
+      <SideProsesser
+        visVenteKort={flyt.visning.visVentekort}
+        behandlingReferanse={behandlingsReferanse}
+        behandlingVersjon={behandlingVersjon}
+      />
       {stegSomSkalVises.map((steg) => {
         if (steg === 'FORESLÅ_VEDTAK') {
           return (
