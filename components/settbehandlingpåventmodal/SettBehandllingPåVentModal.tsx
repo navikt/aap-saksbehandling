@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Dispatch, useEffect } from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
 import { Button, Modal } from '@navikt/ds-react';
 import { useConfigForm } from 'hooks/FormHook';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -24,6 +24,8 @@ interface FormFields {
 }
 
 export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOpen, setIsOpen }: Props) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
@@ -53,12 +55,14 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
         <form
           id={'settBehandlingPåVent'}
           onSubmit={form.handleSubmit(async (data) => {
+            setIsLoading(true);
             await settBehandlingPåVent(referanse, {
               begrunnelse: data.begrunnelse,
               behandlingVersjon: behandlingVersjon,
               frist: formaterDatoForBackend(data.frist),
             });
             await revalidateFlyt(referanse);
+            setIsLoading(false);
             setIsOpen(false);
           })}
           className={'flex-column'}
@@ -68,7 +72,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
         </form>
       </Modal.Body>
       <Modal.Footer>
-        <Button form={'settBehandlingPåVent'} className={'fit-content-button'}>
+        <Button form={'settBehandlingPåVent'} className={'fit-content-button'} loading={isLoading}>
           Sett på vent
         </Button>
         <Button variant={'secondary'} onClick={() => setIsOpen(false)}>
