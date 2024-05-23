@@ -22,7 +22,13 @@ const Layout = async ({ children, params }: Props) => {
 
   return (
     <div>
-      <SaksinfoBanner personInformasjon={personInformasjon} saksInfo={saksInfo} sak={sak} />
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        saksInfo={saksInfo}
+        sak={sak}
+        behandlingVersjon={flytResponse.behandlingVersjon}
+        referanse={params.behandlingsReferanse}
+      />
       <StegGruppeIndikator flytRespons={flytResponse} />
 
       <HGrid columns={'1fr 3fr 1fr'}>

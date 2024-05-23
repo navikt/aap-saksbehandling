@@ -24,11 +24,27 @@ const sak: SaksInfo = {
 };
 describe('SaksinfoBanner', () => {
   it('komponenten rendrer med navn på søker', () => {
-    render(<SaksinfoBanner personInformasjon={personInformasjon} saksInfo={saksinfo} sak={sak} />);
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        saksInfo={saksinfo}
+        sak={sak}
+        referanse={'123'}
+        behandlingVersjon={1}
+      />
+    );
     expect(screen.getByText('Peder Ås')).toBeVisible();
   });
   it('ident fra sak vises', () => {
-    render(<SaksinfoBanner personInformasjon={personInformasjon} saksInfo={saksinfo} sak={sak} />);
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        saksInfo={saksinfo}
+        sak={sak}
+        referanse={'123'}
+        behandlingVersjon={1}
+      />
+    );
     expect(screen.getByText(ident)).toBeVisible();
   });
 });

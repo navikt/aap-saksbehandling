@@ -1,16 +1,25 @@
-import { Detail, Label } from '@navikt/ds-react';
+'use client';
+
+import { Button, Detail, Label } from '@navikt/ds-react';
 import styles from './SaksinfoBanner.module.css';
 import { Tag } from 'components/DsClient';
 import { PdlInformasjon } from 'lib/services/pdlservice/pdlService';
 import { SaksInformasjon } from 'lib/clientApi';
 import { SaksInfo } from 'lib/types/types';
+import { useState } from 'react';
+import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
 
 interface Props {
   personInformasjon: PdlInformasjon;
   saksInfo: SaksInformasjon;
   sak: SaksInfo;
+  referanse: string;
+  behandlingVersjon: number;
 }
-export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak }: Props) => {
+
+export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVersjon, referanse }: Props) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
   return (
     <div className={styles.saksinfoBanner}>
       <div className={styles.søkerinfo}>
@@ -24,6 +33,16 @@ export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak }: Props) => {
           </Tag>
         ))}
       </div>
+      <Button variant={'secondary'} size={'small'} onClick={() => setModalIsOpen(true)}>
+        Sett behandling på vent
+      </Button>
+
+      <SettBehandllingPåVentModal
+        referanse={referanse}
+        behandlingVersjon={behandlingVersjon}
+        isOpen={modalIsOpen}
+        setIsOpen={setModalIsOpen}
+      />
     </div>
   );
 };
