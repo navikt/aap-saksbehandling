@@ -10,12 +10,5 @@ interface Props {
 export const MeldepliktMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentUnntakMeldepliktGrunnlag(behandlingsReferanse);
 
-  return (
-    <Meldeplikt
-      behandlingsReferanse={behandlingsReferanse}
-      grunnlag={grunnlag}
-      readOnly={readOnly}
-      behandlingVersjon={behandlingVersjon}
-    />
-  );
+  return <Meldeplikt grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
 };

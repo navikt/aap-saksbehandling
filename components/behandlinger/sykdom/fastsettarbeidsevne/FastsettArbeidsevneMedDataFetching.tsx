@@ -6,16 +6,6 @@ interface Props {
   readOnly: boolean;
 }
 
-export const FastsettArbeidsevneMedDataFetching = async ({
-  behandlingsReferanse,
-  behandlingVersjon,
-  readOnly,
-}: Props) => {
-  return (
-    <FastsettArbeidsevne
-      behandlingsReferanse={behandlingsReferanse}
-      readOnly={readOnly}
-      behandlingVersjon={behandlingVersjon}
-    />
-  );
+export const FastsettArbeidsevneMedDataFetching = async ({ behandlingVersjon, readOnly }: Props) => {
+  return <FastsettArbeidsevne readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
 };

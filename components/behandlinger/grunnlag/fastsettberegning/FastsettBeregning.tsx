@@ -10,11 +10,11 @@ import { BeregningsGrunnlag, BeregningsVurdering } from 'lib/types/types';
 import { numberToString } from 'lib/utils/string';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
   vurdering?: BeregningsVurdering;
   grunnlag?: BeregningsGrunnlag;
-  behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
 }
@@ -25,13 +25,8 @@ interface FormFields {
   antattÅrligInntekt: string;
 }
 
-export const FastsettBeregning = ({
-  vurdering,
-  grunnlag,
-  behandlingsReferanse,
-  behandlingVersjon,
-  readOnly,
-}: Props) => {
+export const FastsettBeregning = ({ vurdering, grunnlag, behandlingVersjon, readOnly }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
   console.log('grunnlag', grunnlag);

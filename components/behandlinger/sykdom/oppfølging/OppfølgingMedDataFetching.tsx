@@ -10,12 +10,5 @@ interface Props {
 export const OppfølgingMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentBistandsbehovGrunnlag(behandlingsReferanse);
 
-  return (
-    <Oppfølging
-      behandlingsReferanse={behandlingsReferanse}
-      grunnlag={grunnlag}
-      readOnly={readOnly}
-      behandlingVersjon={behandlingVersjon}
-    />
-  );
+  return <Oppfølging grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
 };

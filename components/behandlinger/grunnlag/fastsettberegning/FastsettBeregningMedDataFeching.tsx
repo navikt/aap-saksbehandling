@@ -13,7 +13,6 @@ export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, be
 
   return (
     <FastsettBeregning
-      behandlingsReferanse={behandlingsReferanse}
       readOnly={readOnly}
       vurdering={vurdering}
       behandlingVersjon={behandlingVersjon}

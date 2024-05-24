@@ -31,7 +31,6 @@ export const FatteVedtakMedDataFetching = async ({ behandlingsReferanse }: Props
 
   return (
     <FatteVedtak
-      behandlingsReferanse={behandlingsReferanse}
       sykepengeerstatningGrunnlag={sykepengeerstatningGrunnlag}
       studentGrunnlag={studentGrunnlag}
       sykdomsGrunnlag={sykdomsgrunnlag}

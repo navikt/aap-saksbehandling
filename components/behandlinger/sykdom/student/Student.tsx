@@ -12,9 +12,9 @@ import { StudentGrunnlag } from 'lib/types/types';
 import { stringToDate } from 'lib/utils/date';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
-  behandlingsreferanse: string;
   behandlingVersjon: number;
   grunnlag?: StudentGrunnlag;
   readOnly: boolean;
@@ -26,7 +26,8 @@ interface FormFields {
   avbruttStudieDato?: Date;
 }
 
-export const Student = ({ behandlingsreferanse, behandlingVersjon, grunnlag, readOnly }: Props) => {
+export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -79,7 +80,7 @@ export const Student = ({ behandlingsreferanse, behandlingVersjon, grunnlag, rea
               : undefined,
           },
         },
-        referanse: behandlingsreferanse,
+        referanse: behandlingsReferanse,
       });
     })(event);
   };

@@ -10,7 +10,6 @@ interface Props {
 }
 
 export interface SykdomProps {
-  behandlingsReferanse: string;
   behandlingVersjon: number;
   grunnlag: SykdomsGrunnlag;
   readOnly: boolean;
@@ -20,18 +19,8 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, be
   const grunnlag = await hentSykdomsGrunnlag(behandlingsReferanse);
 
   return grunnlag.skalVurdereYrkesskade ? (
-    <SykdomsvurderingMedYrkesskade
-      behandlingsReferanse={behandlingsReferanse}
-      grunnlag={grunnlag}
-      readOnly={readOnly}
-      behandlingVersjon={behandlingVersjon}
-    />
+    <SykdomsvurderingMedYrkesskade grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />
   ) : (
-    <Sykdomsvurdering
-      behandlingsReferanse={behandlingsReferanse}
-      grunnlag={grunnlag}
-      readOnly={readOnly}
-      behandlingVersjon={behandlingVersjon}
-    />
+    <Sykdomsvurdering grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />
   );
 };

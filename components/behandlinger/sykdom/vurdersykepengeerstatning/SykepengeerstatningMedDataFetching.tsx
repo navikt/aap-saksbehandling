@@ -14,12 +14,5 @@ export const SykepengeerstatningMedDataFetching = async ({
 }: Props) => {
   const grunnlag = await hentSykepengerErstatningGrunnlag(behandlingsReferanse);
 
-  return (
-    <Sykepengeerstatning
-      behandlingsReferanse={behandlingsReferanse}
-      grunnlag={grunnlag}
-      readOnly={readOnly}
-      behandlingVersjon={behandlingVersjon}
-    />
-  );
+  return <Sykepengeerstatning grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
 };

@@ -11,14 +11,15 @@ import { FastsettArbeidsevnePeriodeTable } from 'components/fastsettarbeidsevnep
 import { v4 as uuidv4 } from 'uuid';
 
 import styles from './FastsettArbeidsevne.module.css';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
-  behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
 }
 
-export const FastsettArbeidsevne = ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
+export const FastsettArbeidsevne = ({ behandlingVersjon, readOnly }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
   const [skalLeggeTilNyPeriode, setSkalLeggeTilNyPeriode] = useState(false);
   const [perioder, setPerioder] = useState<FastSettArbeidsevnePeriode[]>([
     {

@@ -9,14 +9,15 @@ import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { VenteInformasjon } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
-  behandlingsreferanse: string;
   behandlingVersjon: number;
   informasjon?: VenteInformasjon;
 }
 
-export const BehandlingPåVentKort = ({ behandlingsreferanse, behandlingVersjon, informasjon }: Props) => {
+export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
   return (
     <SideProsessKort heading={'Behandling på vent'} icon={<HourglassBottomFilledIcon />}>
       <div className={'flex-column'}>
@@ -42,10 +43,10 @@ export const BehandlingPåVentKort = ({ behandlingsreferanse, behandlingVersjon,
               behov: {
                 behovstype: Behovstype.MANUELT_SATT_PÅ_VENT_KODE,
               },
-              referanse: behandlingsreferanse,
+              referanse: behandlingsReferanse,
             });
 
-            await revalidateFlyt(behandlingsreferanse);
+            await revalidateFlyt(behandlingsReferanse);
           }}
           className={'fit-content-button'}
         >

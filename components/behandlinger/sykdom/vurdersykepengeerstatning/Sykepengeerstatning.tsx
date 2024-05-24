@@ -11,9 +11,9 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { SykepengeerstatningGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
-  behandlingsReferanse: string;
   behandlingVersjon: number;
   grunnlag?: SykepengeerstatningGrunnlag;
   readOnly: boolean;
@@ -26,7 +26,8 @@ interface FormFields {
   grunn: string[];
 }
 
-export const Sykepengeerstatning = ({ behandlingsReferanse, behandlingVersjon, grunnlag, readOnly }: Props) => {
+export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
 
   const { form, formFields } = useConfigForm<FormFields>(

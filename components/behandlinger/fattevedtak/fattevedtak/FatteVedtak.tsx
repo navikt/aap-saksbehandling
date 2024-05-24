@@ -9,9 +9,9 @@ import {
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
 } from 'lib/types/types';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
-  behandlingsReferanse: string;
   sykdomsGrunnlag: SykdomsGrunnlag;
   studentGrunnlag: StudentGrunnlag;
   bistandsGrunnlag: BistandsGrunnlag;
@@ -21,7 +21,6 @@ interface Props {
 }
 
 export const FatteVedtak = ({
-  behandlingsReferanse,
   fritakMeldepliktGrunnlag,
   sykepengeerstatningGrunnlag,
   studentGrunnlag,
@@ -29,6 +28,8 @@ export const FatteVedtak = ({
   bistandsGrunnlag,
   fatteVedtakGrunnlag,
 }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
+
   console.log('fritakMeldepliktGrunnlag', fritakMeldepliktGrunnlag);
   console.log('sykepengeerstatningGrunnlag', sykepengeerstatningGrunnlag);
   console.log('studentGrunnlag', studentGrunnlag);

@@ -11,9 +11,9 @@ import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
-  behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
   grunnlag?: BistandsGrunnlag;
@@ -26,7 +26,8 @@ interface FormFields {
   grunner: string[];
 }
 
-export const Oppfølging = ({ behandlingsReferanse, behandlingVersjon, grunnlag, readOnly }: Props) => {
+export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
   const { formFields, form } = useConfigForm<FormFields>(

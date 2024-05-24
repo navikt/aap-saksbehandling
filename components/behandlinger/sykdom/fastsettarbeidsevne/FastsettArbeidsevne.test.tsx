@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 describe('FastsettArbeidsevne', () => {
   beforeEach(() => {
-    render(<FastsettArbeidsevne behandlingsReferanse={'1234'} readOnly={false} behandlingVersjon={0} />);
+    render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} />);
   });
   const user = userEvent.setup();
 

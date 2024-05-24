@@ -14,6 +14,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { SykdomProps } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface FormFields {
   erArbeidsevnenNedsatt: string;
@@ -24,7 +25,8 @@ interface FormFields {
   nedsattArbeidsevneDato: Date;
 }
 
-export const Sykdomsvurdering = ({ grunnlag, behandlingsReferanse, behandlingVersjon, readOnly }: SykdomProps) => {
+export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: SykdomProps) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const { formFields, form } = useConfigForm<FormFields>(

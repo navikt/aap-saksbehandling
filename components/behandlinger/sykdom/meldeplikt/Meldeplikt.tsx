@@ -15,9 +15,9 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
-  behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
   grunnlag?: FritakMeldepliktGrunnlag;
@@ -31,7 +31,8 @@ interface FormFields {
   sluttDato?: Date;
 }
 
-export const Meldeplikt = ({ behandlingsReferanse, behandlingVersjon, grunnlag, readOnly }: Props) => {
+export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
 
   const { formFields, form } = useConfigForm<FormFields>(

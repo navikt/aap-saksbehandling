@@ -9,14 +9,15 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
 
 import styles from './ForeslåVedtak.module.css';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
-  behandlingsReferanse: string;
   behandlingResultat: BehandlingResultat;
   behandlingVersjon: number;
 }
 
-export const ForeslåVedtak = ({ behandlingsReferanse, behandlingResultat, behandlingVersjon }: Props) => {
+export const ForeslåVedtak = ({ behandlingResultat, behandlingVersjon }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
   const { status, løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
 
   return (
