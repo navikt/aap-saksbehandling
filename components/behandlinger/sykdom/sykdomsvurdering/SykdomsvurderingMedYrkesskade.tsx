@@ -33,8 +33,6 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingVersjon, grunnlag, rea
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
-  const refref = useBehandlingsReferanse();
-  console.log('behandlingsref hook', refref);
   const { form, formFields } = useConfigForm<FormFields>(
     {
       erArbeidsevnenNedsatt: {
