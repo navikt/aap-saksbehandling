@@ -1,4 +1,10 @@
-import { LøsAvklaringsbehovPåBehandling, OpprettTestcase, SaksInfo, SettPåVent } from './types/types';
+import {
+  BehandlingFlytOgTilstand,
+  LøsAvklaringsbehovPåBehandling,
+  OpprettTestcase,
+  SaksInfo,
+  SettPåVent,
+} from './types/types';
 import { Brevmal } from 'lib/utils/sanity';
 
 export async function fetchProxy<ResponseBody>(
@@ -47,6 +53,10 @@ export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
 
 export function hentBrevmalFraSanity(brevmalid: string) {
   return fetchProxy<Brevmal>(`/api/sanity/brevmal/${brevmalid}`, 'GET');
+}
+
+export function hentFlytIClient(behandlingsReferanse: string) {
+  return fetchProxy<BehandlingFlytOgTilstand>(`/api/behandling/${behandlingsReferanse}/flyt`, 'GET');
 }
 
 export interface SaksInformasjon {
