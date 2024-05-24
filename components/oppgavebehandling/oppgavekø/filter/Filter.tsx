@@ -1,5 +1,6 @@
 'use client';
 import { useContext } from 'react';
+import { useSWRConfig } from 'swr';
 
 import { Button, Dropdown, Heading, UNSAFE_Combobox } from '@navikt/ds-react';
 
@@ -8,6 +9,7 @@ import { FilterValg, Kø, KøContext } from 'components/oppgavebehandling/KøCon
 
 import styles from './Filter.module.css';
 import { skjulPrototype } from 'lib/utils/skjulPrototype';
+import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
 
 interface FilterOptions {
   value: string;
@@ -69,6 +71,18 @@ const finnFilterLabel = (noekkel: string) =>
 
 export const Filter = () => {
   const køContext = useContext(KøContext);
+
+  const { mutate } = useSWRConfig();
+  const valgtKøFilter = køContext.valgtKø.filter;
+  const querystring = valgtKøFilter
+    ?.map((filterValg) => {
+      const filternavn = filterValg.navn;
+      const verdier = filterValg.valgteFilter.map((vf) => vf.value).map((u) => `${filternavn}=${u}`);
+      return verdier;
+    })
+    .flat()
+    .join('&');
+  const refresh = () => mutate('oppgaveliste', () => hentAlleBehandlinger(querystring));
 
   if (skjulPrototype()) {
     return null;
@@ -203,7 +217,9 @@ export const Filter = () => {
         </Dropdown>
       </section>
       <div className={styles.knapperad}>
-        <Button variant={'primary'}>Søk</Button>
+        <Button variant={'primary'} onClick={refresh}>
+          Søk
+        </Button>
       </div>
     </section>
   );
