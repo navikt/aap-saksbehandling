@@ -12,9 +12,10 @@ export async function GET(req: NextRequest) {
     return new Response(JSON.stringify(mockOppgaver), { status: 200 });
   }
 
-  const url = req.nextUrl.searchParams
-    ? `${oppgavestyringApiBaseUrl}/oppgaver/?${req.nextUrl.searchParams}`
-    : `${oppgavestyringApiBaseUrl}/oppgaver`;
+  const url =
+    req.nextUrl.searchParams.size > 0
+      ? `${oppgavestyringApiBaseUrl}/oppgaver/?${req.nextUrl.searchParams}`
+      : `${oppgavestyringApiBaseUrl}/oppgaver`;
 
   try {
     const res = await fetchProxy<Oppgaver>(url, oppgavestyringApiScope, 'GET');
