@@ -12,12 +12,12 @@ export async function GET(req: NextRequest) {
     return new Response(JSON.stringify(mockOppgaver), { status: 200 });
   }
 
+  const url = req.nextUrl.searchParams
+    ? `${oppgavestyringApiBaseUrl}/oppgaver/?${req.nextUrl.searchParams}`
+    : `${oppgavestyringApiBaseUrl}/oppgaver`;
+
   try {
-    const res = await fetchProxy<Oppgaver>(
-      `${oppgavestyringApiBaseUrl}/oppgaver/?${req.nextUrl.searchParams}`,
-      oppgavestyringApiScope,
-      'GET'
-    );
+    const res = await fetchProxy<Oppgaver>(url, oppgavestyringApiScope, 'GET');
     return new Response(JSON.stringify(res), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ message: JSON.stringify(error), status: 500 }), { status: 500 });
