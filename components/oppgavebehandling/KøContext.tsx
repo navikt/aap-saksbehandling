@@ -18,8 +18,8 @@ export type Kø = {
 
 export const defaultKø: Kø = {
   id: 'default',
-  navn: 'NAY Nasjonal AAP-kø',
-  beskrivelse: 'Standard kø. Alle AAP oppgaver for NAY i Norge, med unntak av skjermede personer og internt ansatte.',
+  navn: 'Standard AAP-oppgavekø',
+  beskrivelse: 'Standard kø. Alle AAP oppgaver, med unntak av skjermede personer og internt ansatte.',
 };
 
 type ContextUpdate = {
