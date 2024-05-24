@@ -8,12 +8,13 @@ import { SideProsesser } from 'components/sideprosesser/SideProsesser';
 interface Props {
   behandlingsReferanse: string;
 }
+
 export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
 
   const stegSomSkalVises = getStegSomSkalVises('GRUNNLAG', flyt);
 
-  const erPåFatteVedtakSteg = flyt.aktivtSteg === 'FATTE_VEDTAK';
+  const readOnly = flyt.visning.saksbehandlerReadOnly;
 
   const behandlingVersjon = flyt.behandlingVersjon;
 
@@ -31,7 +32,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
             <StegSuspense key={steg}>
               <FastsettBeregningMedDataFeching
                 behandlingsReferanse={behandlingsReferanse}
-                readOnly={erPåFatteVedtakSteg}
+                readOnly={readOnly}
                 behandlingVersjon={behandlingVersjon}
               />
             </StegSuspense>
