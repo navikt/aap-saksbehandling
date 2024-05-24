@@ -1,28 +1,45 @@
 import { fetchProxy } from 'lib/clientApi';
-import { Oppgave, Oppgaver } from 'lib/types/oppgavebehandling';
+import { Oppgaver } from 'lib/types/oppgavebehandling';
 import useSWR from 'swr';
 import { Oppgavetabell } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/Oppgavetabell';
 import styles from 'components/oppgavebehandling/oppgavekø/oppgavetabell/Oppgavetabell.module.css';
 import { Skeleton } from '@navikt/ds-react';
+import { useContext } from 'react';
+import { KøContext } from 'components/oppgavebehandling/KøContext';
 
-type Props = {
-  egneOppgaver?: boolean;
+const getUrl = (querystring?: string): string => {
+  if (!querystring) {
+    return '/api/oppgavebehandling';
+  } else {
+    return `/api/oppgavebehandling/?${querystring}`;
+  }
 };
 
-const BRUKERNAVN = 'z994422'; // må hentes
+export const hentAlleBehandlinger = async (querystring?: string): Promise<Oppgaver | undefined> => {
+  const url = getUrl(querystring);
+  console.log(`Req til: ${url}`);
+  return await fetchProxy<Oppgaver>(getUrl(querystring), 'GET');
+};
 
-export const OppgaveFetcher = ({ egneOppgaver = false }: Props) => {
-  const hentAlleBehandlinger = async () => await fetchProxy<Oppgaver>('/api/oppgavebehandling', 'GET');
-  const { data, error, isLoading, isValidating, mutate } = useSWR('oppgaveliste', hentAlleBehandlinger, {
-    revalidateOnFocus: false,
-  });
+export const OppgaveFetcher = () => {
+  const køContext = useContext(KøContext);
+  const valgtKøFilter = køContext.valgtKø.filter;
+  const querystring = valgtKøFilter
+    ?.map((filterValg) => {
+      const filternavn = filterValg.navn;
+      const verdier = filterValg.valgteFilter.map((vf) => vf.value).map((u) => `${filternavn}=${u}`);
+      return verdier;
+    })
+    .flat()
+    .join('&');
 
-  const finnOppgaver = (): Oppgave[] => {
-    if (egneOppgaver) {
-      return data?.oppgaver.filter((oppgave) => oppgave.tilordnetRessurs === BRUKERNAVN) ?? [];
+  const { data, error, isLoading, isValidating, mutate } = useSWR(
+    'oppgaveliste',
+    () => hentAlleBehandlinger(querystring),
+    {
+      revalidateOnFocus: false,
     }
-    return data?.oppgaver.filter((oppgave) => oppgave.tilordnetRessurs !== BRUKERNAVN) ?? [];
-  };
+  );
 
   if (isLoading || isValidating) {
     return (
@@ -37,5 +54,5 @@ export const OppgaveFetcher = ({ egneOppgaver = false }: Props) => {
     return <div>Feil under henting av oppgaver...</div>;
   }
 
-  return <Oppgavetabell oppgaver={finnOppgaver()} mutate={mutate} />;
+  return <Oppgavetabell oppgaver={data?.oppgaver ?? []} mutate={mutate} />;
 };

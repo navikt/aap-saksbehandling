@@ -16,7 +16,7 @@ export const AktiveOppgaver = () => {
         <ExpansionCard.Title>Dine aktive oppgaver</ExpansionCard.Title>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
-        <OppgaveFetcher egneOppgaver={true} />
+        <OppgaveFetcher />
       </ExpansionCard.Content>
     </ExpansionCard>
   );
