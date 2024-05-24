@@ -16,26 +16,29 @@ const getUrl = (querystring?: string): string => {
 };
 
 export const hentAlleBehandlinger = async (querystring?: string): Promise<Oppgaver | undefined> => {
-  const url = getUrl(querystring);
-  console.log(`Req til: ${url}`);
   return await fetchProxy<Oppgaver>(getUrl(querystring), 'GET');
 };
 
 export const OppgaveFetcher = () => {
   const køContext = useContext(KøContext);
   const valgtKøFilter = køContext.valgtKø.filter;
+
   const querystring = valgtKøFilter
     ?.map((filterValg) => {
       const filternavn = filterValg.navn;
-      const verdier = filterValg.valgteFilter.map((vf) => vf.value).map((u) => `${filternavn}=${u}`);
-      return verdier;
+      return filterValg.valgteFilter.map((vf) => vf.value).map((u) => `${filternavn}=${u}`);
     })
     .flat()
     .join('&');
 
+  const search = new URLSearchParams();
+  if (querystring && querystring?.length > 0) {
+    search.append('filtrering', querystring);
+  }
+
   const { data, error, isLoading, isValidating, mutate } = useSWR(
     'oppgaveliste',
-    () => hentAlleBehandlinger(querystring),
+    () => hentAlleBehandlinger(search.toString()),
     {
       revalidateOnFocus: false,
     }
