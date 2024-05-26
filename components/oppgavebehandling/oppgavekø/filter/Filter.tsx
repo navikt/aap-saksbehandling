@@ -24,21 +24,29 @@ interface FilterType {
 
 const filterValg: FilterType[] = [
   {
-    navn: 'aapstatus',
+    navn: 'behandlingstype',
     label: 'AAP Status',
     options: [
-      { value: 'foerstegangsbehandling', label: 'Førstegangsbehandling' },
-      { value: 'innvilget', label: 'Innvilget' },
-      { value: 'avslaatt', label: 'Avslått' },
-      { value: 'venter', label: 'På vent' },
+      { value: 'Førstegangsbehandling', label: 'Førstegangsbehandling' },
+      { value: 'Revurdering', label: 'Revurdering' },
+      { value: 'Tilbakekreving', label: 'Tilbakekreving' },
+      { value: 'Klage', label: 'Klage' },
     ],
   },
   {
-    navn: 'oppgavetype',
+    navn: 'avklaringsbehov',
     label: 'Oppgavetype',
     options: [
-      { value: 'foerstegangsbehandling', label: 'Førstegangsbehandling' },
-      { value: 'revurdering', label: 'Revurdering' },
+      { value: 'MANUELT_SATT_PÅ_VENT', label: 'Manuelt satt på vent' },
+      { value: 'AVKLAR_STUDENT', label: 'Student' },
+      { value: 'AVKLAR_SYKDOM', label: 'Nedsatt arbeidsevne' },
+      { value: 'FASTSETT_ARBEIDSEVNE', label: 'Fastsett arbeidsevne' },
+      { value: 'FRITAK_MELDEPLIKT', label: 'Unntak fra meldeplikt' },
+      { value: 'AVKLAR_BISTANDSBEHOV', label: 'Behov for bistand' },
+      { value: 'VURDER_SYKEPENGEERSTATNING', label: 'Sykepengeerstatning' },
+      { value: 'FASTSETT_BEREGNINGSTIDSPUNKT', label: 'Fastsett beregningstidspunkt' },
+      { value: 'FORESLÅ_VEDTAK', label: 'Foreslå vedtak' },
+      { value: 'FATTE_VEDTAK', label: 'Fatte vedtak' },
     ],
   },
   {
