@@ -8,6 +8,7 @@ import styles from './layout.module.css';
 import { StegGruppeIndikator } from 'components/steggruppeindikator/StegGruppeIndikator';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
+import { SWRProvider } from 'lib/swr-provider';
 
 interface Props {
   children: ReactNode;
@@ -21,23 +22,25 @@ const Layout = async ({ children, params }: Props) => {
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
 
   return (
-    <div>
-      <SaksinfoBanner
-        personInformasjon={personInformasjon}
-        saksInfo={saksInfo}
-        sak={sak}
-        behandlingVersjon={flytResponse.behandlingVersjon}
-        referanse={params.behandlingsReferanse}
-      />
-      <StegGruppeIndikator flytRespons={flytResponse} />
+    <SWRProvider>
+      <div>
+        <SaksinfoBanner
+          personInformasjon={personInformasjon}
+          saksInfo={saksInfo}
+          sak={sak}
+          behandlingVersjon={flytResponse.behandlingVersjon}
+          referanse={params.behandlingsReferanse}
+        />
+        <StegGruppeIndikator flytRespons={flytResponse} />
 
-      <HGrid columns={'1fr 3fr 1fr'}>
-        {children}
-        <div className={`${styles.høyrekolonne}`}>
-          <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
-        </div>
-      </HGrid>
-    </div>
+        <HGrid columns={'1fr 3fr 1fr'}>
+          {children}
+          <div className={`${styles.høyrekolonne}`}>
+            <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
+          </div>
+        </HGrid>
+      </div>
+    </SWRProvider>
   );
 };
 
