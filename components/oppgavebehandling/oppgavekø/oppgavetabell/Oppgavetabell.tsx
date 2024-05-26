@@ -28,8 +28,8 @@ const mapAvklaringsbehov = (behandlingstype: string) => {
       return 'Student';
     case 'AVKLAR_SYKDOM':
       return 'Nedsatt arbeidsevne';
-    case 'VURDER_BISTANDSBEHOV':
-      return 'Behov for oppfølging';
+    case 'AVKLAR_BISTANDSBEHOV':
+      return 'Behov for bistand';
     case 'FRITAK_MELDEPLIKT':
       return 'Unntak fra meldeplikt';
     case 'VURDER_SYKEPENGEERSTATNING':
