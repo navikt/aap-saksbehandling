@@ -118,7 +118,7 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
             Behandlingstype
           </Table.ColumnHeader>
           <Table.ColumnHeader sortable sortKey={'type'}>
-            Oppgavetype
+            Gjelder
           </Table.ColumnHeader>
           <Table.ColumnHeader sortable sortKey={'opprettet'}>
             Behandling opprettet

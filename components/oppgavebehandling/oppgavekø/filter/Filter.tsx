@@ -25,7 +25,7 @@ interface FilterType {
 const filterValg: FilterType[] = [
   {
     navn: 'behandlingstype',
-    label: 'AAP Status',
+    label: 'Behandlingstype',
     options: [
       { value: 'Førstegangsbehandling', label: 'Førstegangsbehandling' },
       { value: 'Revurdering', label: 'Revurdering' },
@@ -35,7 +35,7 @@ const filterValg: FilterType[] = [
   },
   {
     navn: 'avklaringsbehov',
-    label: 'Oppgavetype',
+    label: 'Gjelder',
     options: [
       { value: 'MANUELT_SATT_PÅ_VENT', label: 'Manuelt satt på vent' },
       { value: 'AVKLAR_STUDENT', label: 'Student' },
@@ -47,15 +47,6 @@ const filterValg: FilterType[] = [
       { value: 'FASTSETT_BEREGNINGSTIDSPUNKT', label: 'Fastsett beregningstidspunkt' },
       { value: 'FORESLÅ_VEDTAK', label: 'Foreslå vedtak' },
       { value: 'FATTE_VEDTAK', label: 'Fatte vedtak' },
-    ],
-  },
-  {
-    navn: 'gjelder',
-    label: 'Gjelder',
-    options: [
-      { value: 'fastsette', label: 'Fastsette ytelse' },
-      { value: 'beslutning', label: 'Beslutning' },
-      { value: 'aktivitetsplikt', label: 'Aktivitetsplikt' },
     ],
   },
   {
@@ -197,20 +188,14 @@ export const Filter = () => {
           <Dropdown.Menu>
             <Dropdown.Menu.List>
               <Dropdown.Menu.List.Item
-                onClick={() => addFilter('aapstatus')}
-                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'aapstatus')}
+                onClick={() => addFilter('behandlingstype')}
+                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'behandlingstype')}
               >
-                AAP Status
+                Behandlingstype
               </Dropdown.Menu.List.Item>
               <Dropdown.Menu.List.Item
-                onClick={() => addFilter('oppgavetype')}
-                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'oppgavetype')}
-              >
-                Oppgavetype
-              </Dropdown.Menu.List.Item>
-              <Dropdown.Menu.List.Item
-                onClick={() => addFilter('gjelder')}
-                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'gjelder')}
+                onClick={() => addFilter('avklaringsbehov')}
+                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'avklaringsbehov')}
               >
                 Gjelder
               </Dropdown.Menu.List.Item>
