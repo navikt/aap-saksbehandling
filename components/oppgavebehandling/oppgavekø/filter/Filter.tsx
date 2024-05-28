@@ -52,15 +52,6 @@ const filterValg: FilterType[] = [
       { value: 'FATTE_VEDTAK', label: 'Fatte vedtak' },
     ],
   },
-  {
-    navn: 'alder',
-    label: 'Alder',
-    options: [
-      { value: 'unge', label: '18-25 år' },
-      { value: 'vanlige', label: '25-65 år' },
-      { value: 'eldre', label: '65+ år' },
-    ],
-  },
 ];
 
 const finnFilterOptionLabel = (filter: FilterValg, option: string) =>
