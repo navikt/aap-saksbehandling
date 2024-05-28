@@ -44,28 +44,67 @@ const køMedToFilterValg: Kø = {
   ],
 };
 
+const køMedSynkendeSortering: Kø = {
+  id: '1',
+  navn: 'en kø',
+  beskrivelse: 'Dette er en testkø',
+  sortering: {
+    orderBy: 'parameter1',
+    direction: 'descending',
+  },
+};
+
+const køMedStigendeSortering: Kø = {
+  id: '1',
+  navn: 'en kø',
+  beskrivelse: 'Dette er en testkø',
+  sortering: {
+    orderBy: 'parameter1',
+    direction: 'ascending',
+  },
+};
+
 describe('query utils', () => {
   test('gir tom streng når det ikke er valgt noen filter eller sortering', () => {
-    const res = byggQueryString(køUtenFilter.filter);
+    const res = byggQueryString(køUtenFilter);
     expect(res).toEqual('');
   });
 
   test('prefixer filter med "filtrering="', () => {
-    const res = byggQueryString(køMedEttFiltervalg.filter);
+    const res = byggQueryString(køMedEttFiltervalg);
     expect(res).toMatch(/^filtrering=.*/);
   });
 
   test('bygger på format parameternavn%3Dparameternavnverdi', () => {
-    const res = byggQueryString(køMedEttFiltervalg.filter);
+    const res = byggQueryString(køMedEttFiltervalg);
     const searchparams = new URLSearchParams();
     searchparams.append('filtrering', 'parameter1=verdi2');
     expect(res).toEqual(searchparams.toString());
   });
 
   test('gjentar mønsteret parameternavn%3Dparameternavnverdi for hver verdi på et parameter', () => {
-    const res = byggQueryString(køMedToFilterValg.filter);
+    const res = byggQueryString(køMedToFilterValg);
     const searchparams = new URLSearchParams();
     searchparams.append('filtrering', 'parameter1=verdi1&parameter1=verdi2');
     expect(res).toEqual(searchparams.toString());
+  });
+
+  test('prefixer sortering med "sortering="', () => {
+    const res = byggQueryString(køMedSynkendeSortering);
+    expect(res).toMatch(/^sortering=/);
+  });
+
+  test('lager sorteringsstreng for parameter1 i synkende rekkefølge', () => {
+    const res = byggQueryString(køMedSynkendeSortering);
+    const sort = new URLSearchParams();
+    sort.append('sortering', 'parameter1=desc');
+    expect(res).toEqual(sort.toString());
+  });
+
+  test('lager sorteringsstreng for parameter1 i stigende rekkefølge', () => {
+    const res = byggQueryString(køMedStigendeSortering);
+    const sort = new URLSearchParams();
+    sort.append('sortering', 'parameter1=asc');
+    expect(res).toEqual(sort.toString());
   });
 });

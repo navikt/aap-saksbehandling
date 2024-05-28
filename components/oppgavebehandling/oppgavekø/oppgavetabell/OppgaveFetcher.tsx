@@ -22,9 +22,8 @@ export const hentAlleBehandlinger = async (querystring?: string): Promise<Oppgav
 
 export const OppgaveFetcher = () => {
   const køContext = useContext(KøContext);
-  const valgtKøFilter = køContext.valgtKø.filter;
 
-  const search = byggQueryString(valgtKøFilter);
+  const search = byggQueryString(køContext.valgtKø);
 
   const { data, error, isLoading, isValidating, mutate } = useSWR('oppgaveliste', () => hentAlleBehandlinger(search), {
     revalidateOnFocus: false,

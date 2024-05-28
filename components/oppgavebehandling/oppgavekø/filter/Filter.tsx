@@ -64,9 +64,8 @@ export const Filter = () => {
   const køContext = useContext(KøContext);
 
   const { mutate } = useSWRConfig();
-  const valgtKøFilter = køContext.valgtKø.filter;
 
-  const search = byggQueryString(valgtKøFilter);
+  const search = byggQueryString(køContext.valgtKø);
   const refresh = () => mutate('oppgaveliste', () => hentAlleBehandlinger(search));
 
   if (skjulPrototype()) {

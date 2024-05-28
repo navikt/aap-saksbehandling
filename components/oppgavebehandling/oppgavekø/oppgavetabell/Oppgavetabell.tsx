@@ -48,7 +48,6 @@ const mapAvklaringsbehov = (behandlingstype: string) => {
 export const Oppgavetabell = ({ oppgaver }: Props) => {
   const køContext = useContext(KøContext);
   const { mutate } = useSWRConfig();
-  const valgtKøFilter = køContext.valgtKø.filter;
 
   const valgtKø = køContext.valgtKø;
   const router = useRouter();
@@ -67,7 +66,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
           },
         });
       }
-      const search = byggQueryString(valgtKøFilter);
+      const search = byggQueryString(valgtKø);
       mutate('oppgaveliste', () => hentAlleBehandlinger(search));
     }
   };
