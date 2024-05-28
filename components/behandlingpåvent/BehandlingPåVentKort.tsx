@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { BodyShort, Button, Label } from '@navikt/ds-react';
-import { løsBehov } from 'lib/clientApi';
 import { Behovstype } from 'lib/utils/form';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
@@ -10,6 +9,7 @@ import { revalidateFlyt } from 'lib/actions/actions';
 import { VenteInformasjon } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useLøsBehovOgVentPåProsessering } from 'hooks/LøsBehovOgVentPåProsessering';
 
 interface Props {
   behandlingVersjon: number;
@@ -18,6 +18,8 @@ interface Props {
 
 export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
+  const { løsBehovOgVentPåProsessering, isLoading } = useLøsBehovOgVentPåProsessering();
+
   return (
     <SideProsessKort heading={'Behandling på vent'} icon={<HourglassBottomFilledIcon />}>
       <div className={'flex-column'}>
@@ -37,8 +39,9 @@ export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props)
         <BodyShort as={'p'}>Behandlingen er på vent. Vil du åpne den igjen?</BodyShort>
         <Button
           size={'medium'}
+          loading={isLoading}
           onClick={async () => {
-            await løsBehov({
+            løsBehovOgVentPåProsessering({
               behandlingVersjon: behandlingVersjon,
               behov: {
                 behovstype: Behovstype.MANUELT_SATT_PÅ_VENT_KODE,

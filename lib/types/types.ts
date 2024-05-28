@@ -65,6 +65,9 @@ export type HistorikkAksjon =
 export type FlytProsessering =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingFlytOgTilstandDto']['prosessering'];
 
+export type FlytProsesseringStatus =
+  components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingFlytOgTilstandDto']['prosessering']['status'];
+
 export type BeregningsGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.beregning.flate.BeregningDTO'];
 
 export type SettPåVent = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.SettPåVentRequest'];
