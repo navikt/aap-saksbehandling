@@ -9,7 +9,10 @@ import { FilterValg, Kø, KøContext } from 'components/oppgavebehandling/KøCon
 
 import styles from './Filter.module.css';
 import { skjulPrototype } from 'lib/utils/skjulPrototype';
-import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
+import {
+  byggQueryString,
+  hentAlleBehandlinger,
+} from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
 
 interface FilterOptions {
   value: string;
@@ -73,15 +76,9 @@ export const Filter = () => {
 
   const { mutate } = useSWRConfig();
   const valgtKøFilter = køContext.valgtKø.filter;
-  const querystring = valgtKøFilter
-    ?.map((filterValg) => {
-      const filternavn = filterValg.navn;
-      const verdier = filterValg.valgteFilter.map((vf) => vf.value).map((u) => `${filternavn}=${u}`);
-      return verdier;
-    })
-    .flat()
-    .join('&');
-  const refresh = () => mutate('oppgaveliste', () => hentAlleBehandlinger(querystring));
+
+  const search = byggQueryString(valgtKøFilter);
+  const refresh = () => mutate('oppgaveliste', () => hentAlleBehandlinger(search));
 
   if (skjulPrototype()) {
     return null;
