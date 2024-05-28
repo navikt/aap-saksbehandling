@@ -24,7 +24,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
 
   return (
     <>
-      {flyt.prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={flyt.prosessering} />}
+      <FlytProsesseringAlert flytProsessering={flyt.prosessering} />
       <SideProsesser
         visVenteKort={flyt.visning.visVentekort}
         behandlingReferanse={behandlingsReferanse}

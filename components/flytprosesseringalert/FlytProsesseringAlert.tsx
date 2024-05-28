@@ -9,6 +9,7 @@ export const FlytProsesseringAlert = ({ flytProsessering }: Props) => {
   return (
     <Alert variant={'error'}>
       <BodyShort spacing>Noe gikk galt i backend</BodyShort>
+      <BodyShort spacing>{flytProsessering.status}</BodyShort>
       <List>
         {flytProsessering.ventendeOppgaver.map((oppgaver, index) => (
           <div key={index}>

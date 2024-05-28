@@ -17,7 +17,7 @@ interface Props {
   behandlingVersjon: number;
 }
 
-export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVersjon, referanse }: Props) => {
+export const SaksinfoBanner = ({ behandlingVersjon, personInformasjon, saksInfo, sak }: Props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
@@ -34,14 +34,13 @@ export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVer
         ))}
       </div>
       <Button variant={'secondary'} size={'small'} onClick={() => setModalIsOpen(true)}>
-        Sett behandling på vent
+        Sett behandling på vent {behandlingVersjon}
       </Button>
 
       <SettBehandllingPåVentModal
-        referanse={referanse}
-        behandlingVersjon={behandlingVersjon}
         isOpen={modalIsOpen}
         setIsOpen={setModalIsOpen}
+        behandlingVersjon={behandlingVersjon}
       />
     </div>
   );

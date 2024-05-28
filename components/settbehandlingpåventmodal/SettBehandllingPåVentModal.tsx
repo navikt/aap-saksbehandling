@@ -10,12 +10,12 @@ import { revalidateFlyt } from 'lib/actions/actions';
 
 import styles from './SettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
-  referanse: string;
-  behandlingVersjon: number;
   isOpen: boolean;
   setIsOpen: Dispatch<boolean>;
+  behandlingVersjon: number;
 }
 
 interface FormFields {
@@ -23,8 +23,9 @@ interface FormFields {
   frist: Date;
 }
 
-export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOpen, setIsOpen }: Props) => {
+export const SettBehandllingPåVentModal = ({ isOpen, setIsOpen, behandlingVersjon }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
+  const behandlingsReferanse = useBehandlingsReferanse();
 
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
@@ -44,6 +45,8 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
     form.reset();
   }, [isOpen, form]);
 
+  console.log('behandlingVersjon', behandlingVersjon);
+
   return (
     <Modal
       open={isOpen}
@@ -54,14 +57,14 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
       <Modal.Body>
         <form
           id={'settBehandlingPåVent'}
-          onSubmit={form.handleSubmit(async (data) => {
+          onSubmit={form.handleSubmit(async (formFields) => {
             setIsLoading(true);
-            await settBehandlingPåVent(referanse, {
-              begrunnelse: data.begrunnelse,
+            await settBehandlingPåVent(behandlingsReferanse, {
+              begrunnelse: formFields.begrunnelse,
               behandlingVersjon: behandlingVersjon,
-              frist: formaterDatoForBackend(data.frist),
+              frist: formaterDatoForBackend(formFields.frist),
             });
-            await revalidateFlyt(referanse);
+            await revalidateFlyt(behandlingsReferanse);
             setIsLoading(false);
             setIsOpen(false);
           })}

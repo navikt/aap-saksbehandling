@@ -1,4 +1,5 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;
@@ -8,6 +9,7 @@ export interface ServerSentEventData {
   aktivtSteg?: string;
   skalBytteGruppe?: boolean;
   skalBytteSteg?: boolean;
+  flytProsseseringStatus?: BehandlingFlytOgTilstand['prosessering']['status'];
   status: ServerSentEventStatus;
 }
 

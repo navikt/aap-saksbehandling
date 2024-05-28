@@ -18,6 +18,7 @@ interface Props {
 
 export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
+
   return (
     <SideProsessKort heading={'Behandling på vent'} icon={<HourglassBottomFilledIcon />}>
       <div className={'flex-column'}>
