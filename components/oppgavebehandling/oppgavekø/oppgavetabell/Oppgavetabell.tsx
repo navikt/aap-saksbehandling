@@ -11,9 +11,6 @@ import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { KøContext } from 'components/oppgavebehandling/KøContext';
-import { useSWRConfig } from 'swr';
-import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
-import { byggQueryString } from 'components/oppgavebehandling/lib/query';
 
 type Props = {
   oppgaver: Oppgave[];
@@ -47,7 +44,6 @@ const mapAvklaringsbehov = (behandlingstype: string) => {
 
 export const Oppgavetabell = ({ oppgaver }: Props) => {
   const køContext = useContext(KøContext);
-  const { mutate } = useSWRConfig();
 
   const valgtKø = køContext.valgtKø;
   const router = useRouter();
@@ -66,8 +62,6 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
           },
         });
       }
-      const search = byggQueryString(valgtKø);
-      mutate('oppgaveliste', () => hentAlleBehandlinger(search));
     }
   };
 
