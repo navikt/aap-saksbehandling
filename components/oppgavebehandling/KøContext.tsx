@@ -2,6 +2,7 @@
 
 import { createContext, ReactNode, useEffect, useState } from 'react';
 import { ComboboxOption } from '@navikt/ds-react/esm/form/combobox/types';
+import { SortState } from '@navikt/ds-react';
 
 export type FilterValg = {
   navn: string;
@@ -14,6 +15,7 @@ export type Kø = {
   navn: string;
   beskrivelse: string;
   filter?: FilterValg[];
+  sortering?: SortState; // hmmm
 };
 
 export const defaultKø: Kø = {

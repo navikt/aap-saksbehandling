@@ -2,24 +2,22 @@
 
 import Link from 'next/link';
 import { format } from 'date-fns';
-import { Button, Dropdown, SortState, Table } from '@navikt/ds-react';
+import { Button, Dropdown, Table } from '@navikt/ds-react';
 
 import { Oppgave } from 'lib/types/oppgavebehandling';
-import { fetchProxy } from 'lib/clientApi';
 
 import styles from './Oppgavetabell.module.css';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
+import { KøContext } from 'components/oppgavebehandling/KøContext';
+import { useSWRConfig } from 'swr';
+import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
+import { byggQueryString } from 'components/oppgavebehandling/lib/query';
 
 type Props = {
   oppgaver: Oppgave[];
   mutate: Function;
-};
-
-type ProxyResponse = {
-  message: string;
-  status: number;
 };
 
 const mapAvklaringsbehov = (behandlingstype: string) => {
@@ -47,37 +45,32 @@ const mapAvklaringsbehov = (behandlingstype: string) => {
   }
 };
 
-export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
-  const [sort, setSort] = useState<SortState | undefined>();
+export const Oppgavetabell = ({ oppgaver }: Props) => {
+  const køContext = useContext(KøContext);
+  const { mutate } = useSWRConfig();
+  const valgtKøFilter = køContext.valgtKø.filter;
+
+  const valgtKø = køContext.valgtKø;
   const router = useRouter();
   const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.tilordnetRessurs;
 
   const sorter = (sortKey: string | undefined) => {
     if (sortKey) {
-      if (sort?.orderBy === sortKey && sort.direction === 'descending') {
-        setSort(undefined);
+      if (valgtKø.sortering?.orderBy === sortKey && valgtKø.sortering.direction === 'descending') {
+        køContext.oppdaterValgtKø({ ...valgtKø, sortering: undefined });
       } else {
-        setSort({ orderBy: sortKey, direction: sort?.direction === 'ascending' ? 'descending' : 'ascending' });
+        køContext.oppdaterValgtKø({
+          ...valgtKø,
+          sortering: {
+            orderBy: sortKey,
+            direction: valgtKø.sortering?.direction === 'ascending' ? 'descending' : 'ascending',
+          },
+        });
       }
+      const search = byggQueryString(valgtKøFilter);
+      mutate('oppgaveliste', () => hentAlleBehandlinger(search));
     }
   };
-
-  const comparator = (a: any, b: any, orderBy: string) => {
-    if (b[orderBy] < a[orderBy] || b[orderBy] === undefined) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  };
-
-  const sortedData = oppgaver.slice().sort((a, b) => {
-    if (sort) {
-      return sort.direction === 'ascending' ? comparator(b, a, sort.orderBy) : comparator(a, b, sort.orderBy);
-    }
-    return 1;
-  });
 
   const behandle = async (oppgave: Oppgave) => {
     // const res: ProxyResponse | undefined = await fetchProxy(
@@ -94,41 +87,29 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
     router.push(`/sak/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`);
   };
 
-  const frigi = async (oppgave: Oppgave) => {
-    const res: ProxyResponse | undefined = await fetchProxy(
-      `/api/oppgavebehandling/${oppgave.oppgaveId}/frigi`,
-      'PATCH',
-      {
-        versjon: oppgave.versjon,
-      }
-    );
-    if (res && res.status === 200) {
-      await mutate();
-    }
-  };
-
   return (
-    <Table zebraStripes className={styles.oppgavetabell} sort={sort} onSortChange={(sortKey) => sorter(sortKey)}>
+    <Table
+      zebraStripes
+      className={styles.oppgavetabell}
+      sort={valgtKø.sortering}
+      onSortChange={(sortKey) => sorter(sortKey)}
+    >
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeader sortable sortKey={'foedselsnummer'}>
-            Innbygger
-          </Table.ColumnHeader>
-          <Table.ColumnHeader sortable sortKey={'søknadstype'}>
+          <Table.ColumnHeader>Innbygger</Table.ColumnHeader>
+          <Table.ColumnHeader sortable sortKey={'behandlingstype'}>
             Behandlingstype
           </Table.ColumnHeader>
-          <Table.ColumnHeader sortable sortKey={'type'}>
+          <Table.ColumnHeader sortable sortKey={'avklaringsbehov'}>
             Gjelder
           </Table.ColumnHeader>
-          <Table.ColumnHeader sortable sortKey={'opprettet'}>
+          <Table.ColumnHeader sortable sortKey={'behandlingOpprettetTid'}>
             Behandling opprettet
           </Table.ColumnHeader>
-          <Table.ColumnHeader sortable sortKey={'opprettet'}>
+          <Table.ColumnHeader sortable sortKey={'avklaringsbehovOpprettetTid'}>
             Oppgave opprettet
           </Table.ColumnHeader>
-          <Table.ColumnHeader sortable sortKey={'tilordnetRessurs'}>
-            Saksbehandler
-          </Table.ColumnHeader>
+          <Table.ColumnHeader>Saksbehandler</Table.ColumnHeader>
           <Table.HeaderCell colSpan={2}></Table.HeaderCell>
         </Table.Row>
       </Table.Header>
@@ -138,8 +119,8 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
             <Table.DataCell colSpan={6}>Fant ingen oppgaver</Table.DataCell>
           </Table.Row>
         )}
-        {sortedData.length > 0 &&
-          sortedData.map((oppgave) => (
+        {oppgaver.length > 0 &&
+          oppgaver.map((oppgave) => (
             <Table.Row key={oppgave.oppgaveId}>
               <Table.DataCell>{oppgave.foedselsnummer}</Table.DataCell>
               <Table.DataCell>{oppgave.behandlingstype}</Table.DataCell>
@@ -149,7 +130,7 @@ export const Oppgavetabell = ({ oppgaver, mutate }: Props) => {
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell className={styles.knappecelle}>
                 {oppgaveErFordelt(oppgave) ? (
-                  <Button variant={'secondary'} size={'small'} onClick={() => frigi(oppgave)}>
+                  <Button variant={'secondary'} size={'small'} onClick={() => {}}>
                     Frigjør
                   </Button>
                 ) : (

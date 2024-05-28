@@ -9,10 +9,8 @@ import { FilterValg, Kø, KøContext } from 'components/oppgavebehandling/KøCon
 
 import styles from './Filter.module.css';
 import { skjulPrototype } from 'lib/utils/skjulPrototype';
-import {
-  byggQueryString,
-  hentAlleBehandlinger,
-} from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
+import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
+import { byggQueryString } from 'components/oppgavebehandling/lib/query';
 
 interface FilterOptions {
   value: string;
