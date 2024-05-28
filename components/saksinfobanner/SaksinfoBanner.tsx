@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Detail, Label } from '@navikt/ds-react';
+import { Button, Detail, HStack, Label } from '@navikt/ds-react';
 import styles from './SaksinfoBanner.module.css';
 import { Tag } from 'components/DsClient';
 import { PdlInformasjon } from 'lib/services/pdlservice/pdlService';
@@ -8,6 +8,7 @@ import { SaksInformasjon } from 'lib/clientApi';
 import { SaksInfo } from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
+import { AktivitetsbruddModal } from 'components/aktivitetsbruddmodal/AktivitetsbruddModal';
 
 interface Props {
   personInformasjon: PdlInformasjon;
@@ -19,6 +20,7 @@ interface Props {
 
 export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVersjon, referanse }: Props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [aktivitetsbruddModalIsOpen, setAktivitetsbruddModalIsOpen] = useState(false);
 
   return (
     <div className={styles.saksinfoBanner}>
@@ -33,9 +35,14 @@ export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVer
           </Tag>
         ))}
       </div>
-      <Button variant={'secondary'} size={'small'} onClick={() => setModalIsOpen(true)}>
-        Sett behandling på vent
-      </Button>
+      <HStack gap={'4'} justify={'end'}>
+        <Button variant={'secondary'} size={'small'} onClick={() => setModalIsOpen(true)}>
+          Sett behandling på vent
+        </Button>
+        <Button variant={'secondary'} size={'small'} onClick={() => setAktivitetsbruddModalIsOpen(true)}>
+          Aktivitetsplikt
+        </Button>
+      </HStack>
 
       <SettBehandllingPåVentModal
         referanse={referanse}
@@ -43,6 +50,7 @@ export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVer
         isOpen={modalIsOpen}
         setIsOpen={setModalIsOpen}
       />
+      <AktivitetsbruddModal isOpen={aktivitetsbruddModalIsOpen} setIsOpen={setAktivitetsbruddModalIsOpen} />
     </div>
   );
 };
