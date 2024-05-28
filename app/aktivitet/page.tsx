@@ -12,6 +12,8 @@ interface FormFields {
   begrunnelse: string;
   aktivitetspliktOppfylt: string;
   grunn?: string;
+  paragraf?: string;
+  forhåndsVarsel?: string;
   dato?: Date;
 }
 export default function Page() {
@@ -32,12 +34,22 @@ export default function Page() {
       type: 'checkbox',
       label: 'Årsak',
       options: [
-        'Ikke møtt til møte med Nav',
-        'Ikke møtt i behandling',
-        'Ikke møtt i tiltak',
-        'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om',
-        'Ikke bidratt til egen avklaring',
+        'Ikke møtt til møte med Nav (§§ 11-8, 11-9)',
+        'Ikke møtt i behandling (§§ 11-8, 11-9)',
+        'Ikke møtt i tiltak (§§ 11-8, 11-9)',
+        'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om (§§ 11-8, 11-9)',
+        'Ikke bidratt til egen avklaring (§ 11-7)',
       ],
+    },
+    forhåndsVarsel: {
+      type: 'radio',
+      label: 'Skal det sendes forhåndsvarsel til AAP-mottager',
+      options: JaEllerNeiOptions,
+    },
+    paragraf: {
+      type: 'radio',
+      label: 'Hvilken paragraf?',
+      options: ['§ 11-7', '§ 11-8', '§ 11-9'],
     },
     dato: {
       type: 'date',
@@ -56,13 +68,15 @@ export default function Page() {
       >
         <form className={styles.form}>
           <FormField form={form} formField={formFields.aktivitetspliktOppfylt} />
+          <FormField form={form} formField={formFields.dato} />
           {aktivitetspliktOppfylt === JaEllerNei.Nei && (
             <>
               <FormField form={form} formField={formFields.grunn} />
               <FormField form={form} formField={formFields.begrunnelse} />
+              <FormField form={form} formField={formFields.paragraf} />
+              <FormField form={form} formField={formFields.forhåndsVarsel} />
             </>
           )}
-          <FormField form={form} formField={formFields.dato} />
           <Button className={'fit-content-button'}>{buttonText}</Button>
         </form>
       </VilkårsKort>
