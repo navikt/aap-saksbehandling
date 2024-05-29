@@ -1,5 +1,4 @@
 export type Oppgave = {
-  versjon: number; // TODO ikke i backend pt
   oppgaveId: number;
   saksnummer: string;
   behandlingstype: string;

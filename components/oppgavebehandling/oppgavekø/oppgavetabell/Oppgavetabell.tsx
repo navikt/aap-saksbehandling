@@ -11,6 +11,7 @@ import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { KøContext } from 'components/oppgavebehandling/KøContext';
+import { fetchProxy } from 'lib/clientApi';
 
 type Props = {
   oppgaver: Oppgave[];
@@ -66,18 +67,26 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
   };
 
   const behandle = async (oppgave: Oppgave) => {
-    // const res: ProxyResponse | undefined = await fetchProxy(
-    //   `/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave`,
-    //   'PATCH',
-    //   {
-    //     versjon: oppgave.versjon,
-    //     navIdent: 'z994422',
-    //   }
-    // );
-    // if (res && res.status === 200) {
-    //   await mutate();
-    // }
-    router.push(`/sak/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`);
+    const res = await fetchProxy<Response>(`/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave`, 'PATCH', {
+      versjon: 1,
+      navIdent: 'z994422',
+    });
+    if (res && res.status === 200) {
+      router.push(`/sak/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`);
+    } else {
+      console.error('Klarte ikke å tildele oppgave');
+    }
+  };
+
+  const frigi = async (oppgave: Oppgave) => {
+    const res = await fetchProxy<Response>(`/api/oppgavebehandling/${oppgave.oppgaveId}/frigi`, 'PATCH', {
+      versjon: 1,
+    });
+    if (res && res.status === 200) {
+      window.location.reload();
+    } else {
+      console.error('Klarte ikke å frigi oppgave');
+    }
   };
 
   return (
@@ -123,7 +132,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell className={styles.knappecelle}>
                 {oppgaveErFordelt(oppgave) ? (
-                  <Button variant={'secondary'} size={'small'} onClick={() => {}}>
+                  <Button variant={'secondary'} size={'small'} onClick={() => frigi(oppgave)}>
                     Frigjør
                   </Button>
                 ) : (

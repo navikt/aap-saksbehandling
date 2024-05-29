@@ -16,7 +16,6 @@ export const mockOppgaver: Oppgaver = {
       behandlingOpprettetTid: subDays(new Date(), 67).toISOString(),
       oppgaveOpprettet: subDays(new Date(), 67).toISOString(),
       reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
-      versjon: 1,
     },
     {
       oppgaveId: 8935,
@@ -30,7 +29,6 @@ export const mockOppgaver: Oppgaver = {
       behandlingOpprettetTid: subWeeks(new Date(), 4).toISOString(),
       oppgaveOpprettet: subWeeks(new Date(), 4).toISOString(),
       reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
-      versjon: 1,
     },
     {
       oppgaveId: 3840,
@@ -44,7 +42,6 @@ export const mockOppgaver: Oppgaver = {
       behandlingOpprettetTid: subDays(new Date(), 9).toISOString(),
       oppgaveOpprettet: subDays(new Date(), 9).toISOString(),
       reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
-      versjon: 1,
     },
   ],
 };
@@ -62,7 +59,6 @@ export const ufordeltOppgave: Oppgave[] = [
     behandlingOpprettetTid: subWeeks(new Date(), 4).toISOString(),
     oppgaveOpprettet: subWeeks(new Date(), 4).toISOString(),
     reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
-    versjon: 1,
     tilordnetRessurs: undefined,
   },
 ];
@@ -80,7 +76,6 @@ export const fordeltOppgave: Oppgave[] = [
     behandlingOpprettetTid: subWeeks(new Date(), 4).toISOString(),
     oppgaveOpprettet: subWeeks(new Date(), 4).toISOString(),
     reservertTil: endOfDay(addDays(new Date(), 3)).toISOString(),
-    versjon: 1,
     tilordnetRessurs: 'Eklektisk Kappe',
   },
 ];
