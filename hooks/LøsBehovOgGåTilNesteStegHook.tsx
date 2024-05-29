@@ -6,6 +6,7 @@ import {
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { løsBehov } from 'lib/clientApi';
+import { revalidateFlyt } from 'lib/actions/actions';
 
 export const useLøsBehovOgGåTilNesteSteg = (
   steg: StegType
@@ -14,7 +15,8 @@ export const useLøsBehovOgGåTilNesteSteg = (
   isLoading: boolean;
   løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling) => void;
 } => {
-  const params = useParams();
+  const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
+  console.log(params);
   const router = useRouter();
   const [status, setStatus] = useState<ServerSentEventStatus | undefined>();
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +33,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
         withCredentials: true,
       }
     );
-    eventSource.onmessage = (event: any) => {
+    eventSource.onmessage = async (event: any) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
       if (eventData.status === 'DONE') {
         eventSource.close();
@@ -40,7 +42,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
             `/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}/#${eventData.aktivtSteg}`
           );
         }
-        router.refresh();
+        await revalidateFlyt(params.behandlingsReferanse);
         setIsLoading(false);
       }
       if (eventData.status === 'ERROR') {
