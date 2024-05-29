@@ -16,7 +16,6 @@ export const useLøsBehovOgGåTilNesteSteg = (
   løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling) => void;
 } => {
   const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
-  console.log(params);
   const router = useRouter();
   const [status, setStatus] = useState<ServerSentEventStatus | undefined>();
   const [isLoading, setIsLoading] = useState(false);
