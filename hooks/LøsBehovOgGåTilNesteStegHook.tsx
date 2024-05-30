@@ -6,7 +6,6 @@ import {
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { løsBehov } from 'lib/clientApi';
-import { revalidateFlyt } from 'lib/actions/actions';
 
 export const useLøsBehovOgGåTilNesteSteg = (
   steg: StegType
@@ -41,7 +40,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
             `/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}/#${eventData.aktivtSteg}`
           );
         }
-        await revalidateFlyt(params.behandlingsReferanse);
+        router.refresh();
         setIsLoading(false);
       }
       if (eventData.status === 'ERROR') {
