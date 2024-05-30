@@ -71,7 +71,7 @@ const fetchWithRetry = async <ResponseBody>(
   console.log('status', { status: response.status, url });
 
   if (response.status === 204) {
-    return 'Request gikk fint' as ResponseBody;
+    return undefined as ResponseBody;
   }
 
   const contentType = response.headers.get('content-type');

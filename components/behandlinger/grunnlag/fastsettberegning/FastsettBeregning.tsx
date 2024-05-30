@@ -29,8 +29,6 @@ export const FastsettBeregning = ({ vurdering, grunnlag, behandlingVersjon, read
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
-  console.log('grunnlag', grunnlag);
-
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -71,6 +69,7 @@ export const FastsettBeregning = ({ vurdering, grunnlag, behandlingVersjon, read
 
   return (
     <VilkårsKort heading={'Fastsett beregning'} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}>
+      {grunnlag && <div>{JSON.stringify(grunnlag)}</div>}
       <Form
         steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
         onSubmit={handleSubmit}
