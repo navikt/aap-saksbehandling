@@ -184,12 +184,6 @@ export const Filter = () => {
               >
                 Gjelder
               </Dropdown.Menu.List.Item>
-              <Dropdown.Menu.List.Item
-                onClick={() => addFilter('alder')}
-                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'alder')}
-              >
-                Alder
-              </Dropdown.Menu.List.Item>
             </Dropdown.Menu.List>
           </Dropdown.Menu>
         </Dropdown>
