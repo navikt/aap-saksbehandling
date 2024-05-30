@@ -9,9 +9,9 @@ describe('Oppgavetabell', () => {
     render(<Oppgavetabell oppgaver={mockOppgaver.oppgaver} mutate={mutateMock} />);
     expect(screen.getByRole('columnheader', { name: 'Innbygger' })).toBeVisible();
     expect(screen.getByRole('columnheader', { name: 'Behandlingstype' })).toBeVisible();
-    expect(screen.getByRole('columnheader', { name: 'Gjelder' })).toBeVisible();
+    expect(screen.getByRole('columnheader', { name: 'Oppgavetype' })).toBeVisible();
     expect(screen.getByRole('columnheader', { name: 'Behandling opprettet' })).toBeVisible();
-    expect(screen.getByRole('columnheader', { name: 'Oppgave opprettet' })).toBeVisible();
+    expect(screen.getByRole('columnheader', { name: 'Avklaringsbehov opprettet' })).toBeVisible();
     expect(screen.getByRole('columnheader', { name: 'Saksbehandler' })).toBeVisible();
     expect(screen.getByRole('columnheader', { name: '' })).toBeVisible();
   });

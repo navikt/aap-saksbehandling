@@ -103,13 +103,13 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
             Behandlingstype
           </Table.ColumnHeader>
           <Table.ColumnHeader sortable sortKey={'avklaringsbehov'}>
-            Gjelder
+            Oppgavetype
           </Table.ColumnHeader>
           <Table.ColumnHeader sortable sortKey={'behandlingOpprettetTid'}>
             Behandling opprettet
           </Table.ColumnHeader>
           <Table.ColumnHeader sortable sortKey={'avklaringsbehovOpprettetTid'}>
-            Oppgave opprettet
+            Avklaringsbehov opprettet
           </Table.ColumnHeader>
           <Table.ColumnHeader>Saksbehandler</Table.ColumnHeader>
           <Table.HeaderCell colSpan={2}></Table.HeaderCell>
@@ -128,7 +128,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
               <Table.DataCell>{oppgave.behandlingstype}</Table.DataCell>
               <Table.DataCell>{mapAvklaringsbehov(oppgave.avklaringsbehov)}</Table.DataCell>
               <Table.DataCell>{format(oppgave.behandlingOpprettetTid, 'dd.MM.yy')}</Table.DataCell>
-              <Table.DataCell>{format(oppgave.oppgaveOpprettet, 'dd.MM.yy')}</Table.DataCell>
+              <Table.DataCell>{format(oppgave.avklaringsbehovOpprettetTid, 'dd.MM.yy')}</Table.DataCell>
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell className={styles.knappecelle}>
                 {oppgaveErFordelt(oppgave) ? (
