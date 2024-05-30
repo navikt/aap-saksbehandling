@@ -9,10 +9,3 @@
   align-items: center;
   border-bottom: 2px solid var(--a-border-strong);
 }
-
-.søkerinfo {
-  display: flex;
-  flex-direction: row;
-  gap: var(--a-spacing-2);
-  align-items: center;
-}

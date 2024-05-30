@@ -20,6 +20,7 @@ const Layout = async ({ children, params }: Props) => {
   const personInformasjon = await hentPersonInformasjonForIdent(sak.ident);
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
 
+  console.log('saksinfo', saksInfo);
   return (
     <div>
       <SaksinfoBanner

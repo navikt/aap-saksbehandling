@@ -10,6 +10,7 @@ import {
   FritakMeldepliktGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
+  SakPersoninfo,
   SaksInfo,
   SettPåVent,
   StudentGrunnlag,
@@ -19,6 +20,7 @@ import {
   VenteInformasjon,
 } from 'lib/types/types';
 import { fetchProxy } from 'lib/services/fetchProxy';
+import { logWarning } from '@navikt/aap-felles-utils';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -28,7 +30,7 @@ export const hentBehandling = async (behandlingsReferanse: string): Promise<Deta
   try {
     return await fetchProxy<DetaljertBehandling>(url, saksbehandlingApiScope, 'GET');
   } catch (e) {
-    console.log(`Fant ikke behandling med referanse ${behandlingsReferanse}`);
+    logWarning(`Fant ikke behandling med referanse ${behandlingsReferanse}`);
     notFound();
   }
 };
@@ -38,7 +40,16 @@ export const hentSak = async (saksnummer: string): Promise<SaksInfo> => {
   try {
     return await fetchProxy<SaksInfo>(url, saksbehandlingApiScope, 'GET');
   } catch (e) {
-    console.log(`Fant ikke sak med referanse ${saksnummer}`);
+    logWarning(`Fant ikke sak med referanse ${saksnummer}`);
+    notFound();
+  }
+};
+export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
+  try {
+    return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
+  } catch (e) {
+    logWarning(`Fant ikke sak med referanse ${saksnummer}`);
     notFound();
   }
 };

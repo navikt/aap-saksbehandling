@@ -1,18 +1,18 @@
 'use client';
 
-import { Button, Detail, Label } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import styles from './SaksinfoBanner.module.css';
-import { Tag } from 'components/DsClient';
 import { PdlInformasjon } from 'lib/services/pdlservice/pdlService';
 import { SaksInformasjon } from 'lib/clientApi';
-import { SaksInfo } from 'lib/types/types';
+import { SaksInfo as SaksInfoType } from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
+import { SaksInfo } from 'components/saksinfo/SaksInfo';
 
 interface Props {
   personInformasjon: PdlInformasjon;
   saksInfo: SaksInformasjon;
-  sak: SaksInfo;
+  sak: SaksInfoType;
   referanse: string;
   behandlingVersjon: number;
 }
@@ -22,17 +22,7 @@ export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVer
 
   return (
     <div className={styles.saksinfoBanner}>
-      <div className={styles.søkerinfo}>
-        <div className={styles.ikon} />
-        <Label size="small">{personInformasjon.navn}</Label>
-        <span aria-hidden>/</span>
-        <Detail>{sak?.ident}</Detail>
-        {saksInfo.labels.map((label) => (
-          <Tag variant="info" size="xsmall" key={label.type}>
-            {label.type}
-          </Tag>
-        ))}
-      </div>
+      <SaksInfo saksInfo={saksInfo} sak={sak} personInformasjon={personInformasjon} />
       <Button variant={'secondary'} size={'small'} onClick={() => setModalIsOpen(true)}>
         Sett behandling på vent
       </Button>

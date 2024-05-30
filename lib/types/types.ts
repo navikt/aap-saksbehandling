@@ -36,6 +36,8 @@ export type LøsAvklaringsbehovPåBehandling =
 
 // Sak
 export type SaksInfo = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.UtvidetSaksinfoDTO'];
+export type SakPersoninfo =
+  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SakPersoninfoDTO'];
 
 export type OpprettTestcase = components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
 export type FinnSakForIdent =
