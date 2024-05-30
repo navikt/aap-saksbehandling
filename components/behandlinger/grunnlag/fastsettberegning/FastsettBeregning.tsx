@@ -11,10 +11,12 @@ import { numberToString } from 'lib/utils/string';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { MockBeregeningsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
   vurdering?: BeregningsVurdering;
   grunnlag?: BeregningsGrunnlag;
+  mockGrunnlag: MockBeregeningsGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
 }
@@ -25,10 +27,12 @@ interface FormFields {
   antattÅrligInntekt: string;
 }
 
-export const FastsettBeregning = ({ vurdering, grunnlag, behandlingVersjon, readOnly }: Props) => {
+export const FastsettBeregning = ({ vurdering, grunnlag, behandlingVersjon, readOnly, mockGrunnlag }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
+  console.log('grunnlag', grunnlag);
+  console.log('mockGrunnlag', mockGrunnlag);
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -69,7 +73,6 @@ export const FastsettBeregning = ({ vurdering, grunnlag, behandlingVersjon, read
 
   return (
     <VilkårsKort heading={'Fastsett beregning'} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}>
-      {grunnlag && <div>{JSON.stringify(grunnlag)}</div>}
       <Form
         steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
         onSubmit={handleSubmit}
