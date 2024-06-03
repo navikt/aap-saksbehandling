@@ -36,7 +36,7 @@ const filterValg: FilterType[] = [
   },
   {
     navn: 'avklaringsbehov',
-    label: 'Gjelder',
+    label: 'Oppgavetype',
     options: [
       { value: 'MANUELT_SATT_PÅ_VENT', label: 'Manuelt satt på vent' },
       { value: 'AVKLAR_STUDENT', label: 'Student' },
@@ -182,7 +182,7 @@ export const Filter = () => {
                 onClick={() => addFilter('avklaringsbehov')}
                 disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'avklaringsbehov')}
               >
-                Gjelder
+                Oppgavetype
               </Dropdown.Menu.List.Item>
             </Dropdown.Menu.List>
           </Dropdown.Menu>
