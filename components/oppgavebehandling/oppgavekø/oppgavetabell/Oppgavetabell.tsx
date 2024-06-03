@@ -69,7 +69,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
   const behandle = async (oppgave: Oppgave) => {
     const res = await fetchProxy<Response>(`/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave/`, 'PATCH', {
       versjon: 1,
-      navIdent: 'z994422',
+      navIdent: 'z994028',
     });
     if (res && res.status === 200) {
       router.push(`/sak/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`);
