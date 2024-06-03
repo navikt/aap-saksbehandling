@@ -52,24 +52,26 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
       className={styles.settBehandlingPåVentModal}
     >
       <Modal.Body>
-        <form
-          id={'settBehandlingPåVent'}
-          onSubmit={form.handleSubmit(async (data) => {
-            setIsLoading(true);
-            await settBehandlingPåVent(referanse, {
-              begrunnelse: data.begrunnelse,
-              behandlingVersjon: behandlingVersjon,
-              frist: formaterDatoForBackend(data.frist),
-            });
-            await revalidateFlyt(referanse);
-            setIsLoading(false);
-            setIsOpen(false);
-          })}
-          className={'flex-column'}
-        >
-          <FormField form={form} formField={formFields.begrunnelse} />
-          <FormField form={form} formField={formFields.frist} />
-        </form>
+        {isOpen && (
+          <form
+            id={'settBehandlingPåVent'}
+            onSubmit={form.handleSubmit(async (data) => {
+              setIsLoading(true);
+              await settBehandlingPåVent(referanse, {
+                begrunnelse: data.begrunnelse,
+                behandlingVersjon: behandlingVersjon,
+                frist: formaterDatoForBackend(data.frist),
+              });
+              await revalidateFlyt(referanse);
+              setIsLoading(false);
+              setIsOpen(false);
+            })}
+            className={'flex-column'}
+          >
+            <FormField form={form} formField={formFields.begrunnelse} />
+            <FormField form={form} formField={formFields.frist} />
+          </form>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button form={'settBehandlingPåVent'} className={'fit-content-button'} loading={isLoading}>
