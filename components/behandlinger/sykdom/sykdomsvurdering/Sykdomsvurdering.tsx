@@ -123,8 +123,8 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
         </FormField>
         <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
         <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
+        <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
         {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
           <>
             <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
