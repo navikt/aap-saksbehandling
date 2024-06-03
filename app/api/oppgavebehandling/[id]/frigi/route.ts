@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { fetchProxy } from 'lib/services/fetchProxy';
 import { isLocal } from 'lib/utils/environment';
+import { logError } from '@navikt/aap-felles-utils';
 
 const oppgavestyringApiBaseUrl = process.env.OPPGAVESTYRING_API_BASE_URL;
 const oppgavestyringApiScope = process.env.OPPGAVESTYRING_API_SCOPE ?? '';
@@ -16,14 +17,10 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
   const body = await req.json();
   try {
-    await fetchProxy<void>(
-      `${oppgavestyringApiBaseUrl}/oppgaver/${params.id}/frigi`,
-      oppgavestyringApiScope,
-      'PATCH',
-      body
-    );
+    await fetchProxy(`${oppgavestyringApiBaseUrl}/oppgaver/${params.id}/frigi`, oppgavestyringApiScope, 'PATCH', body);
     return new Response(JSON.stringify({ message: 'Oppgave frigitt', status: 200 }), { status: 200 });
   } catch (error) {
+    logError('Feil ved frigjøring av oppgave', error);
     return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });
   }
 }
