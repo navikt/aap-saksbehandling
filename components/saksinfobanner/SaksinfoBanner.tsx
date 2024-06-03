@@ -31,7 +31,7 @@ export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVer
         referanse={referanse}
         behandlingVersjon={behandlingVersjon}
         isOpen={modalIsOpen}
-        setIsOpen={setModalIsOpen}
+        onClose={() => setModalIsOpen(false)}
       />
     </div>
   );

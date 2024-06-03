@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Dispatch, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal } from '@navikt/ds-react';
 import { useConfigForm } from 'hooks/FormHook';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -15,7 +15,7 @@ interface Props {
   referanse: string;
   behandlingVersjon: number;
   isOpen: boolean;
-  setIsOpen: Dispatch<boolean>;
+  onClose: () => void;
 }
 
 interface FormFields {
@@ -23,7 +23,7 @@ interface FormFields {
   frist: Date;
 }
 
-export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOpen, setIsOpen }: Props) => {
+export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { form, formFields } = useConfigForm<FormFields>({
@@ -47,7 +47,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
   return (
     <Modal
       open={isOpen}
-      onClose={() => setIsOpen(false)}
+      onClose={onClose}
       header={{ heading: 'Sett behandling på vent', icon: <HourglassBottomFilledIcon /> }}
       className={styles.settBehandlingPåVentModal}
     >
@@ -64,7 +64,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
               });
               await revalidateFlyt(referanse);
               setIsLoading(false);
-              setIsOpen(false);
+              onClose();
             })}
             className={'flex-column'}
           >
@@ -77,7 +77,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
         <Button form={'settBehandlingPåVent'} className={'fit-content-button'} loading={isLoading}>
           Sett på vent
         </Button>
-        <Button variant={'secondary'} onClick={() => setIsOpen(false)}>
+        <Button variant={'secondary'} onClick={onClose}>
           Avbryt
         </Button>
       </Modal.Footer>
