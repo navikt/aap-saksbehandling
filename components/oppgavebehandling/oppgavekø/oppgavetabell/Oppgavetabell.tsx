@@ -67,7 +67,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
   };
 
   const behandle = async (oppgave: Oppgave) => {
-    const res = await fetchProxy<Response>(`/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave`, 'PATCH', {
+    const res = await fetchProxy<Response>(`/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave/`, 'PATCH', {
       versjon: 1,
       navIdent: 'z994422',
     });
@@ -79,7 +79,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
   };
 
   const frigi = async (oppgave: Oppgave) => {
-    const res = await fetchProxy<Response>(`/api/oppgavebehandling/${oppgave.oppgaveId}/frigi`, 'PATCH', {
+    const res = await fetchProxy<Response>(`/api/oppgavebehandling/${oppgave.oppgaveId}/frigi/`, 'PATCH', {
       versjon: 1,
     });
     if (res && res.status === 200) {
