@@ -1,20 +1,26 @@
 'use client';
 
 import { useConfigForm } from 'hooks/FormHook';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import {
+  Behovstype,
+  getJaNeiEllerUndefined,
+  getStringEllerUndefined,
+  JaEllerNei,
+  JaEllerNeiOptions,
+} from 'lib/utils/form';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
-import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { SykdomProps } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { validerÅrstall } from 'lib/utils/validation';
 
 interface FormFields {
   erArbeidsevnenNedsatt: string;
@@ -22,7 +28,7 @@ interface FormFields {
   erSkadeSykdomEllerLyteVesentligdel: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   begrunnelse: string;
-  nedsattArbeidsevneDato: Date;
+  nedsattArbeidsevneDato: string;
 }
 
 export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: SykdomProps) => {
@@ -68,11 +74,12 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
         description: 'Tilknytt minst ett dokument §11-5 vurdering',
       },
       nedsattArbeidsevneDato: {
-        type: 'date',
+        type: 'text',
         label: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)',
-        defaultValue: stringToDate(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
+        defaultValue: getStringEllerUndefined(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato),
         rules: {
           required: 'Du må sette en dato for når arbeidsevnen ble nedsatt',
+          validate: (value) => validerÅrstall(value as string),
         },
       },
     },
@@ -93,9 +100,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
             nedreGrense: 'FEMTI',
             erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
               data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
-            nedsattArbeidsevneDato: data.nedsattArbeidsevneDato
-              ? formaterDatoForBackend(data.nedsattArbeidsevneDato)
-              : undefined,
+            nedsattArbeidsevneDato: Number(data.nedsattArbeidsevneDato),
           },
         },
         referanse: behandlingsReferanse,
