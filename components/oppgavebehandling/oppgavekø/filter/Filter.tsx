@@ -2,30 +2,31 @@
 import { useContext } from 'react';
 import { useSWRConfig } from 'swr';
 
-import { Button, Dropdown, Heading, UNSAFE_Combobox } from '@navikt/ds-react';
+import { Button, Dropdown, Heading } from '@navikt/ds-react';
 
 import { LagreModal } from 'components/oppgavebehandling/oppgavekø/filter/LagreModal';
-import { FilterValg, Kø, KøContext } from 'components/oppgavebehandling/KøContext';
+import { FilterValg, KøContext } from 'components/oppgavebehandling/KøContext';
 
 import styles from './Filter.module.css';
 import { skjulPrototype } from 'lib/utils/skjulPrototype';
 import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
 import { byggQueryString } from 'components/oppgavebehandling/lib/query';
+import { Flervalgsfilter } from './Flervalgsfilter';
 
-interface FilterOptions {
+export interface FilterOptions {
   value: string;
   label: string;
 }
 
 type Filternavn = 'behandlingstype' | 'avklaringsbehov';
 
-interface Flervalgsfilter {
+export interface FlervalgsfilterType {
   navn: Filternavn;
   label: string;
   options: FilterOptions[];
 }
 
-const flervalgsfilter: Flervalgsfilter[] = [
+const flervalgsfilter: FlervalgsfilterType[] = [
   {
     navn: 'behandlingstype',
     label: 'Behandlingstype',
@@ -106,70 +107,11 @@ export const Filter = () => {
         {køContext.valgtKø.flervalgsfilter &&
           køContext.valgtKø.flervalgsfilter.length > 0 &&
           køContext.valgtKø.flervalgsfilter.map((filter) => (
-            <UNSAFE_Combobox
-              label={finnFilterLabel(filter.navn)}
+            <Flervalgsfilter
               key={filter.navn}
-              options={filter.alleFilter}
-              selectedOptions={filter.valgteFilter}
-              isMultiSelect
-              shouldShowSelectedOptions
-              size={'small'}
-              onToggleSelected={(option, isSelected) => {
-                const filterLabel = finnFilterOptionLabel(filter, option);
-
-                if (isSelected) {
-                  if (køContext.valgtKø.flervalgsfilter) {
-                    // det finnes allerede filter her
-                    if (køContext.valgtKø.flervalgsfilter.find((v) => v.navn === filter.navn)) {
-                      // og dette filteret er allerede lagt til
-
-                      // finn index for det filteret vi skal endre på
-                      const valgtFilterIndex = køContext.valgtKø.flervalgsfilter.findIndex(
-                        (v) => v.navn === filter.navn
-                      );
-                      // lag en kopi av eksisterende filter og legg til det nye valget
-                      const nyttFilter = [
-                        ...køContext.valgtKø.flervalgsfilter[valgtFilterIndex].valgteFilter,
-                        { value: option, label: filterLabel },
-                      ];
-
-                      const eksisterendeFilter = køContext.valgtKø.flervalgsfilter;
-                      eksisterendeFilter.forEach((f, index) => {
-                        if (f.navn === filter.navn) {
-                          eksisterendeFilter[index] = { ...f, valgteFilter: nyttFilter };
-                        }
-                      });
-
-                      const oppdatertKø: Kø = {
-                        ...køContext.valgtKø,
-                        flervalgsfilter: eksisterendeFilter,
-                      };
-                      køContext.oppdaterValgtKø(oppdatertKø);
-                    }
-                  }
-                } else {
-                  if (køContext.valgtKø.flervalgsfilter) {
-                    const valgtFilterIndex = køContext.valgtKø.flervalgsfilter.findIndex((v) => v.navn === filter.navn);
-                    const nyttFilter = [
-                      ...køContext.valgtKø.flervalgsfilter[valgtFilterIndex].valgteFilter.filter(
-                        (v) => v.value !== option
-                      ),
-                    ];
-                    const eksisterendeFilter = køContext.valgtKø.flervalgsfilter;
-                    eksisterendeFilter.forEach((f, index) => {
-                      if (f.navn === filter.navn) {
-                        eksisterendeFilter[index] = { ...f, valgteFilter: nyttFilter };
-                      }
-                    });
-
-                    const oppdatertKø: Kø = {
-                      ...køContext.valgtKø,
-                      flervalgsfilter: eksisterendeFilter,
-                    };
-                    køContext.oppdaterValgtKø(oppdatertKø);
-                  }
-                }
-              }}
+              label={finnFilterLabel(filter.navn)}
+              filter={filter}
+              finnFilterOptionLabel={finnFilterOptionLabel}
             />
           ))}
         <Dropdown>
