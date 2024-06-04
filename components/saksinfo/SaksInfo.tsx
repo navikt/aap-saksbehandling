@@ -1,12 +1,11 @@
 import { Detail, Label } from '@navikt/ds-react';
 import { Tag } from 'components/DsClient';
-import { PdlInformasjon } from 'lib/services/pdlservice/pdlService';
 import { SaksInformasjon } from 'lib/clientApi';
-import { SaksInfo as SaksInfoType } from 'lib/types/types';
+import { SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
 import styles from './SaksInfo.module.css';
 
 interface Props {
-  personInformasjon: PdlInformasjon;
+  personInformasjon: SakPersoninfo;
   saksInfo: SaksInformasjon;
   sak: SaksInfoType;
 }

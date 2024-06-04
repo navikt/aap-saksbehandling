@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { hentSaksinfo } from 'lib/clientApi';
-import { hentFlyt, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { hentPersonInformasjonForIdent } from 'lib/services/pdlservice/pdlService';
+import { hentFlyt, hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { HGrid } from '@navikt/ds-react';
 
 import styles from './layout.module.css';
@@ -16,15 +15,15 @@ interface Props {
 
 const Layout = async ({ children, params }: Props) => {
   const saksInfo = await hentSaksinfo();
+  const personInfo = await hentSakPersoninfo(params.saksId);
   const sak = await hentSak(params.saksId);
-  const personInformasjon = await hentPersonInformasjonForIdent(sak.ident);
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
 
-  console.log('saksinfo', saksInfo);
+  console.log('sakPersonInfo', personInfo);
   return (
     <div>
       <SaksinfoBanner
-        personInformasjon={personInformasjon}
+        personInformasjon={personInfo}
         saksInfo={saksInfo}
         sak={sak}
         behandlingVersjon={flytResponse.behandlingVersjon}
