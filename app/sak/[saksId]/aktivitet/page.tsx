@@ -29,6 +29,7 @@ export default function Page() {
         'Ikke møtt i behandling eller utredning',
         'Ikke møtt i tiltak',
         'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om',
+        'Annen fastsatt aktivitet',
       ],
     },
     dato: {
