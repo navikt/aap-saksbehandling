@@ -1,7 +1,7 @@
 import { Kø } from 'components/oppgavebehandling/KøContext';
 
 export const byggQueryString = (valgtKø: Kø | undefined) => {
-  const querystring = valgtKø?.filter
+  const querystring = valgtKø?.flervalgsfilter
     ?.map((filterValg) => {
       const filternavn = filterValg.navn;
       return filterValg.valgteFilter.map((vf) => vf.value).map((u) => `${filternavn}=${u}`);

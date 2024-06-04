@@ -9,7 +9,7 @@ const køUtenFilter: Kø = {
   id: '1',
   navn: 'en kø',
   beskrivelse: 'Dette er en testkø',
-  filter: [
+  flervalgsfilter: [
     {
       navn: 'parameter1',
       alleFilter: [filter1, filter2],
@@ -22,7 +22,7 @@ const køMedEttFiltervalg: Kø = {
   id: '1',
   navn: 'en kø',
   beskrivelse: 'Dette er en testkø',
-  filter: [
+  flervalgsfilter: [
     {
       navn: 'parameter1',
       alleFilter: [filter1, filter2],
@@ -35,7 +35,7 @@ const køMedToFilterValg: Kø = {
   id: '1',
   navn: 'en kø',
   beskrivelse: 'Dette er en testkø',
-  filter: [
+  flervalgsfilter: [
     {
       navn: 'parameter1',
       alleFilter: [filter1, filter2],

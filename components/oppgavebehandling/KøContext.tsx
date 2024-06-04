@@ -14,7 +14,7 @@ export type Kø = {
   id: string;
   navn: string;
   beskrivelse: string;
-  filter?: FilterValg[];
+  flervalgsfilter?: FilterValg[];
   sortering?: SortState; // hmmm
 };
 

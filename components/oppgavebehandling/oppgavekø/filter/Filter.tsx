@@ -17,13 +17,15 @@ interface FilterOptions {
   label: string;
 }
 
-interface FilterType {
-  navn: string;
+type Filternavn = 'behandlingstype' | 'avklaringsbehov';
+
+interface Flervalgsfilter {
+  navn: Filternavn;
   label: string;
   options: FilterOptions[];
 }
 
-const filterValg: FilterType[] = [
+const flervalgsfilter: Flervalgsfilter[] = [
   {
     navn: 'behandlingstype',
     label: 'Behandlingstype',
@@ -53,12 +55,12 @@ const filterValg: FilterType[] = [
 ];
 
 const finnFilterOptionLabel = (filter: FilterValg, option: string) =>
-  filterValg
+  flervalgsfilter
     .find((filterType) => filterType.navn === filter.navn)
     ?.options.find((filterOption) => filterOption.value === option)?.label ?? option;
 
 const finnFilterLabel = (noekkel: string) =>
-  filterValg.find((filterValg) => filterValg.navn === noekkel)?.label ?? noekkel;
+  flervalgsfilter.find((filterValg) => filterValg.navn === noekkel)?.label ?? noekkel;
 
 export const Filter = () => {
   const køContext = useContext(KøContext);
@@ -72,8 +74,8 @@ export const Filter = () => {
     return null;
   }
 
-  const addFilter = (noekkel: string) => {
-    const newFilter = filterValg.find((filter) => filter.navn === noekkel);
+  const addFilter = (noekkel: Filternavn) => {
+    const newFilter = flervalgsfilter.find((filter) => filter.navn === noekkel);
 
     if (!newFilter) {
       console.error(`Fant ikke filter for nøkkel ${noekkel}`);
@@ -83,11 +85,11 @@ export const Filter = () => {
         valgteFilter: [],
         alleFilter: newFilter.options,
       };
-      if (køContext.valgtKø.filter) {
-        const oppdaterteFilter: FilterValg[] = [...køContext.valgtKø.filter, filterValg];
-        køContext.oppdaterValgtKø({ ...køContext.valgtKø, filter: oppdaterteFilter });
+      if (køContext.valgtKø.flervalgsfilter) {
+        const oppdaterteFilter: FilterValg[] = [...køContext.valgtKø.flervalgsfilter, filterValg];
+        køContext.oppdaterValgtKø({ ...køContext.valgtKø, flervalgsfilter: oppdaterteFilter });
       } else {
-        køContext.oppdaterValgtKø({ ...køContext.valgtKø, filter: [filterValg] });
+        køContext.oppdaterValgtKø({ ...køContext.valgtKø, flervalgsfilter: [filterValg] });
       }
     }
   };
@@ -98,12 +100,12 @@ export const Filter = () => {
         <Heading level={'2'} size={'medium'}>
           Filter
         </Heading>
-        {køContext.valgtKø.filter && køContext.valgtKø.filter?.length > 0 && <LagreModal />}
+        {køContext.valgtKø.flervalgsfilter && køContext.valgtKø.flervalgsfilter?.length > 0 && <LagreModal />}
       </div>
       <section className={styles.rad}>
-        {køContext.valgtKø.filter &&
-          køContext.valgtKø.filter.length > 0 &&
-          køContext.valgtKø.filter.map((filter) => (
+        {køContext.valgtKø.flervalgsfilter &&
+          køContext.valgtKø.flervalgsfilter.length > 0 &&
+          køContext.valgtKø.flervalgsfilter.map((filter) => (
             <UNSAFE_Combobox
               label={finnFilterLabel(filter.navn)}
               key={filter.navn}
@@ -116,20 +118,22 @@ export const Filter = () => {
                 const filterLabel = finnFilterOptionLabel(filter, option);
 
                 if (isSelected) {
-                  if (køContext.valgtKø.filter) {
+                  if (køContext.valgtKø.flervalgsfilter) {
                     // det finnes allerede filter her
-                    if (køContext.valgtKø.filter.find((v) => v.navn === filter.navn)) {
+                    if (køContext.valgtKø.flervalgsfilter.find((v) => v.navn === filter.navn)) {
                       // og dette filteret er allerede lagt til
 
                       // finn index for det filteret vi skal endre på
-                      const valgtFilterIndex = køContext.valgtKø.filter.findIndex((v) => v.navn === filter.navn);
+                      const valgtFilterIndex = køContext.valgtKø.flervalgsfilter.findIndex(
+                        (v) => v.navn === filter.navn
+                      );
                       // lag en kopi av eksisterende filter og legg til det nye valget
                       const nyttFilter = [
-                        ...køContext.valgtKø.filter[valgtFilterIndex].valgteFilter,
+                        ...køContext.valgtKø.flervalgsfilter[valgtFilterIndex].valgteFilter,
                         { value: option, label: filterLabel },
                       ];
 
-                      const eksisterendeFilter = køContext.valgtKø.filter;
+                      const eksisterendeFilter = køContext.valgtKø.flervalgsfilter;
                       eksisterendeFilter.forEach((f, index) => {
                         if (f.navn === filter.navn) {
                           eksisterendeFilter[index] = { ...f, valgteFilter: nyttFilter };
@@ -138,18 +142,20 @@ export const Filter = () => {
 
                       const oppdatertKø: Kø = {
                         ...køContext.valgtKø,
-                        filter: eksisterendeFilter,
+                        flervalgsfilter: eksisterendeFilter,
                       };
                       køContext.oppdaterValgtKø(oppdatertKø);
                     }
                   }
                 } else {
-                  if (køContext.valgtKø.filter) {
-                    const valgtFilterIndex = køContext.valgtKø.filter.findIndex((v) => v.navn === filter.navn);
+                  if (køContext.valgtKø.flervalgsfilter) {
+                    const valgtFilterIndex = køContext.valgtKø.flervalgsfilter.findIndex((v) => v.navn === filter.navn);
                     const nyttFilter = [
-                      ...køContext.valgtKø.filter[valgtFilterIndex].valgteFilter.filter((v) => v.value !== option),
+                      ...køContext.valgtKø.flervalgsfilter[valgtFilterIndex].valgteFilter.filter(
+                        (v) => v.value !== option
+                      ),
                     ];
-                    const eksisterendeFilter = køContext.valgtKø.filter;
+                    const eksisterendeFilter = køContext.valgtKø.flervalgsfilter;
                     eksisterendeFilter.forEach((f, index) => {
                       if (f.navn === filter.navn) {
                         eksisterendeFilter[index] = { ...f, valgteFilter: nyttFilter };
@@ -158,7 +164,7 @@ export const Filter = () => {
 
                     const oppdatertKø: Kø = {
                       ...køContext.valgtKø,
-                      filter: eksisterendeFilter,
+                      flervalgsfilter: eksisterendeFilter,
                     };
                     køContext.oppdaterValgtKø(oppdatertKø);
                   }
@@ -174,13 +180,13 @@ export const Filter = () => {
             <Dropdown.Menu.List>
               <Dropdown.Menu.List.Item
                 onClick={() => addFilter('behandlingstype')}
-                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'behandlingstype')}
+                disabled={!!køContext.valgtKø.flervalgsfilter?.find((v) => v.navn === 'behandlingstype')}
               >
                 Behandlingstype
               </Dropdown.Menu.List.Item>
               <Dropdown.Menu.List.Item
                 onClick={() => addFilter('avklaringsbehov')}
-                disabled={!!køContext.valgtKø.filter?.find((v) => v.navn === 'avklaringsbehov')}
+                disabled={!!køContext.valgtKø.flervalgsfilter?.find((v) => v.navn === 'avklaringsbehov')}
               >
                 Oppgavetype
               </Dropdown.Menu.List.Item>

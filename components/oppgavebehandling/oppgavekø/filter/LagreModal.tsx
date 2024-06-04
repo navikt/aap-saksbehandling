@@ -31,7 +31,7 @@ export const LagreModal = () => {
         id: Date.now().toString(),
         navn: data.navn,
         beskrivelse: data.beskrivelse,
-        filter: køContext.valgtKø.filter,
+        flervalgsfilter: køContext.valgtKø.flervalgsfilter,
       };
       køContext.oppdaterKøliste([...køContext.køliste, nyKø]);
       køContext.oppdaterValgtKø(nyKø);
