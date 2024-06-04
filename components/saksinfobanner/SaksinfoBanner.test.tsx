@@ -1,8 +1,8 @@
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { SaksInformasjon } from 'lib/clientApi';
-import { SaksInfo } from 'lib/types/types';
+import { SakPersoninfo, SaksInfo } from 'lib/types/types';
 import { render, screen } from '@testing-library/react';
-const personInformasjon = { navn: 'Peder Ås' };
+const personInformasjon: SakPersoninfo = { navn: 'Peder Ås', fnr: '12345678910' };
 const saksinfo: SaksInformasjon = {
   søker: {
     navn: 'Peder Ås',
@@ -14,7 +14,7 @@ const saksinfo: SaksInformasjon = {
     tidspunkt: '12.12.2020 kl 12:12',
   },
 };
-const ident = 'klsjgaskljg3r5g';
+const ident = '12345678910';
 const sak: SaksInfo = {
   ident,
   behandlinger: [],
