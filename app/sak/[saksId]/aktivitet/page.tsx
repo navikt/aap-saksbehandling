@@ -28,8 +28,9 @@ export default function Page() {
         'Ikke møtt til møte med Nav',
         'Ikke møtt i behandling eller utredning',
         'Ikke møtt i tiltak',
+        'Ikke møtt til annen fastsatt aktivitet',
         'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om',
-        'Annen fastsatt aktivitet',
+        'Bidrar ikke aktivt i prosessen med å komme seg i arbeid',
       ],
     },
     dato: {
