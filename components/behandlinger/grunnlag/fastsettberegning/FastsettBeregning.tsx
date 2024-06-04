@@ -16,7 +16,7 @@ import { MockBeregeningsGrunnlag } from 'lib/services/saksbehandlingservice/saks
 interface Props {
   vurdering?: BeregningsVurdering;
   grunnlag?: BeregningsGrunnlag;
-  mockGrunnlag: MockBeregeningsGrunnlag;
+  mockGrunnlag?: MockBeregeningsGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
 }
