@@ -12,6 +12,9 @@ import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { KøContext } from 'components/oppgavebehandling/KøContext';
 import { fetchProxy } from 'lib/clientApi';
+import { useSWRConfig } from 'swr';
+import { byggQueryString } from 'components/oppgavebehandling/lib/query';
+import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
 
 type Props = {
   oppgaver: Oppgave[];
@@ -49,6 +52,10 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
   const valgtKø = køContext.valgtKø;
   const router = useRouter();
   const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.tilordnetRessurs;
+  const { mutate } = useSWRConfig();
+
+  const search = byggQueryString(køContext.valgtKø);
+  const refresh = () => mutate('oppgaveliste', () => hentAlleBehandlinger(search));
 
   const sorter = (sortKey: string | undefined) => {
     if (sortKey) {
@@ -83,7 +90,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
       versjon: 1,
     });
     if (res && res.status === 200) {
-      window.location.reload();
+      await refresh();
     } else {
       console.error('Klarte ikke å frigi oppgave');
     }
