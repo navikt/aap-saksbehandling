@@ -167,7 +167,7 @@ export const Filter = () => {
           ))}
         <Dropdown>
           <Button as={Dropdown.Toggle} size={'small'} variant={'secondary'} className={styles.nyttFilter}>
-            + Legg til filter
+            Legg til filter
           </Button>
           <Dropdown.Menu>
             <Dropdown.Menu.List>

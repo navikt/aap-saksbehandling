@@ -13,6 +13,10 @@
   margin-top: var(--a-spacing-8);
 }
 
+.nyttFilter::before {
+  content: ' +';
+}
+
 .knapperad {
   display: flex;
   gap: var(--a-spacing-4);
