@@ -120,7 +120,9 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
           <Table.ColumnHeader sortable sortKey={'avklaringsbehovOpprettetTid'}>
             Avklaringsbehov opprettet
           </Table.ColumnHeader>
-          <Table.ColumnHeader>Saksbehandler</Table.ColumnHeader>
+          <Table.ColumnHeader sortable sortKey={'tilordnetRessurs'}>
+            Saksbehandler
+          </Table.ColumnHeader>
           <Table.HeaderCell colSpan={2}></Table.HeaderCell>
         </Table.Row>
       </Table.Header>
