@@ -1,8 +1,11 @@
 'use client';
 
-import { createContext, ReactNode, useEffect, useState } from 'react';
+import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
 import { ComboboxOption } from '@navikt/ds-react/esm/form/combobox/types';
 import { SortState } from '@navikt/ds-react';
+import { useSWRConfig } from 'swr';
+import { byggQueryString } from 'components/oppgavebehandling/lib/query';
+import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
 
 export type FilterValg = {
   navn: string;
@@ -65,10 +68,21 @@ const getInitialState = (): Kø[] => {
 export const KøProvider = ({ children }: Props) => {
   const [valgtKø, oppdaterValgtKø] = useState<Kø>(defaultKø);
   const [køliste, oppdaterKøliste] = useState<Kø[]>(getInitialState());
+  const { mutate } = useSWRConfig();
+
+  const search = byggQueryString(valgtKø);
+  const nyttSoek = useCallback(() => mutate('oppgaveliste', () => hentAlleBehandlinger(search)), [mutate, search]);
 
   useEffect(() => {
     storeData(køliste);
   }, [køliste]);
+
+  useEffect(() => {
+    // gjør nytt søk automatisk når sortering endrer seg
+    if (valgtKø.sortering) {
+      nyttSoek();
+    }
+  }, [valgtKø.sortering, nyttSoek]);
 
   return (
     <KøContext.Provider value={{ valgtKø, oppdaterValgtKø, køliste, oppdaterKøliste }}>{children}</KøContext.Provider>
