@@ -2,10 +2,10 @@
 import { useContext } from 'react';
 import { useSWRConfig } from 'swr';
 
-import { Button, Dropdown, Heading } from '@navikt/ds-react';
+import { Button, Dropdown, Heading, TextField } from '@navikt/ds-react';
 
 import { LagreModal } from 'components/oppgavebehandling/oppgavekø/filter/LagreModal';
-import { FilterValg, KøContext } from 'components/oppgavebehandling/KøContext';
+import { FilterValg, Fritekstfilter, KøContext } from 'components/oppgavebehandling/KøContext';
 
 import styles from './Filter.module.css';
 import { skjulPrototype } from 'lib/utils/skjulPrototype';
@@ -18,13 +18,27 @@ export interface FilterOptions {
   label: string;
 }
 
-type Filternavn = 'behandlingstype' | 'avklaringsbehov';
+type Filternavn = 'behandlingstype' | 'avklaringsbehov' | 'foedselsnummer';
 
-export interface FlervalgsfilterType {
+interface FilterType {
   navn: Filternavn;
   label: string;
+}
+
+export interface FlervalgsfilterType extends FilterType {
   options: FilterOptions[];
 }
+
+interface FritekstfilterType extends FilterType {
+  verdi?: string;
+}
+
+const fritekstFilter: FritekstfilterType[] = [
+  {
+    navn: 'foedselsnummer',
+    label: 'Innbygger',
+  },
+];
 
 const flervalgsfilter: FlervalgsfilterType[] = [
   {
@@ -60,8 +74,8 @@ const finnFilterOptionLabel = (filter: FilterValg, option: string) =>
     .find((filterType) => filterType.navn === filter.navn)
     ?.options.find((filterOption) => filterOption.value === option)?.label ?? option;
 
-const finnFilterLabel = (noekkel: string) =>
-  flervalgsfilter.find((filterValg) => filterValg.navn === noekkel)?.label ?? noekkel;
+const finnFilterLabel = (noekkel: string, filterliste: FilterType[]) =>
+  filterliste.find((filterValg) => filterValg.navn === noekkel)?.label ?? noekkel;
 
 export const Filter = () => {
   const køContext = useContext(KøContext);
@@ -74,6 +88,24 @@ export const Filter = () => {
   if (skjulPrototype()) {
     return null;
   }
+
+  const leggInnFritekstfilter = (noekkel: Filternavn) => {
+    const newFilter = fritekstFilter.find((filter) => filter.navn === noekkel);
+    if (!newFilter) {
+      console.error(`Fant ikke filter for nøkkel ${noekkel}`);
+    } else {
+      const fritekstfilter: Fritekstfilter = {
+        navn: newFilter.navn,
+        verdi: undefined,
+      };
+      if (køContext.valgtKø.fritekstfilter) {
+        const oppdatertFritekstFilter = [...køContext.valgtKø.fritekstfilter, fritekstfilter];
+        køContext.oppdaterValgtKø({ ...køContext.valgtKø, fritekstfilter: oppdatertFritekstFilter });
+      } else {
+        køContext.oppdaterValgtKø({ ...køContext.valgtKø, fritekstfilter: [fritekstfilter] });
+      }
+    }
+  };
 
   const addFilter = (noekkel: Filternavn) => {
     const newFilter = flervalgsfilter.find((filter) => filter.navn === noekkel);
@@ -104,12 +136,31 @@ export const Filter = () => {
         {køContext.valgtKø.flervalgsfilter && køContext.valgtKø.flervalgsfilter?.length > 0 && <LagreModal />}
       </div>
       <section className={styles.rad}>
+        {køContext.valgtKø.fritekstfilter &&
+          køContext.valgtKø.fritekstfilter.length > 0 &&
+          køContext.valgtKø.fritekstfilter.map((filter) => (
+            <TextField
+              label={finnFilterLabel(filter.navn, fritekstFilter)}
+              key={filter.navn}
+              value={filter.verdi}
+              onChange={(event) => {
+                if (køContext.valgtKø.fritekstfilter) {
+                  if (køContext.valgtKø.fritekstfilter.find((v) => v.navn === filter.navn)) {
+                    const filterArray = køContext.valgtKø.fritekstfilter;
+                    const filterIndex = køContext.valgtKø.fritekstfilter.findIndex((v) => v.navn === filter.navn);
+                    filterArray[filterIndex].verdi = event.target.value;
+                    køContext.oppdaterValgtKø({ ...køContext.valgtKø, fritekstfilter: filterArray });
+                  }
+                }
+              }}
+            />
+          ))}
         {køContext.valgtKø.flervalgsfilter &&
           køContext.valgtKø.flervalgsfilter.length > 0 &&
           køContext.valgtKø.flervalgsfilter.map((filter) => (
             <Flervalgsfilter
               key={filter.navn}
-              label={finnFilterLabel(filter.navn)}
+              label={finnFilterLabel(filter.navn, flervalgsfilter)}
               filter={filter}
               finnFilterOptionLabel={finnFilterOptionLabel}
             />
@@ -120,6 +171,12 @@ export const Filter = () => {
           </Button>
           <Dropdown.Menu>
             <Dropdown.Menu.List>
+              <Dropdown.Menu.List.Item
+                onClick={() => leggInnFritekstfilter('foedselsnummer')}
+                disabled={!!køContext.valgtKø.fritekstfilter?.find((v) => v.navn === 'foedselsnummer')}
+              >
+                Innbygger
+              </Dropdown.Menu.List.Item>
               <Dropdown.Menu.List.Item
                 onClick={() => addFilter('behandlingstype')}
                 disabled={!!køContext.valgtKø.flervalgsfilter?.find((v) => v.navn === 'behandlingstype')}

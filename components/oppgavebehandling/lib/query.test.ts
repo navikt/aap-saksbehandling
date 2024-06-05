@@ -64,6 +64,13 @@ const køMedStigendeSortering: Kø = {
   },
 };
 
+const køMedFritekstfilter: Kø = {
+  id: '1',
+  navn: 'en kø',
+  beskrivelse: 'Dette er en testkø',
+  fritekstfilter: [{ navn: 'fritekst1', verdi: 'fritekstverdi1' }],
+};
+
 describe('query utils', () => {
   test('gir tom streng når det ikke er valgt noen filter eller sortering', () => {
     const res = byggQueryString(køUtenFilter);
@@ -106,5 +113,37 @@ describe('query utils', () => {
     const sort = new URLSearchParams();
     sort.append('sortering', 'parameter1=asc');
     expect(res).toEqual(sort.toString());
+  });
+
+  test('bygger søkestreng for fritekstparameter', () => {
+    const res = byggQueryString(køMedFritekstfilter);
+    const searchParams = new URLSearchParams();
+    searchParams.append('filtrering', 'fritekst1=fritekstverdi1');
+    expect(res).toEqual(searchParams.toString());
+  });
+
+  test('bygger søkestreng for både fritekst og flervalgsparameter', () => {
+    const køMedAlt: Kø = {
+      navn: 'en kø',
+      beskrivelse: 'En testkø',
+      id: '1',
+      fritekstfilter: [
+        {
+          navn: 'fritekst1',
+          verdi: 'verdi1',
+        },
+      ],
+      flervalgsfilter: [
+        {
+          navn: 'flervalg1',
+          alleFilter: [filter1],
+          valgteFilter: [filter1],
+        },
+      ],
+    };
+    const res = byggQueryString(køMedAlt);
+    const searchParams = new URLSearchParams();
+    searchParams.append('filtrering', `flervalg1=${filter1.value}&fritekst1=verdi1`);
+    expect(res).toEqual(searchParams.toString());
   });
 });

@@ -10,11 +10,17 @@ export type FilterValg = {
   alleFilter: ComboboxOption[];
 };
 
+export type Fritekstfilter = {
+  navn: string;
+  verdi?: string;
+};
+
 export type Kø = {
   id: string;
   navn: string;
   beskrivelse: string;
   flervalgsfilter?: FilterValg[];
+  fritekstfilter?: Fritekstfilter[];
   sortering?: SortState; // hmmm
 };
 
