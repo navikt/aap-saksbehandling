@@ -18,7 +18,7 @@ export interface FilterOptions {
   label: string;
 }
 
-type Filternavn = 'behandlingstype' | 'avklaringsbehov' | 'foedselsnummer';
+type Filternavn = 'behandlingstype' | 'avklaringsbehov' | 'foedselsnummer' | 'tilordnetRessurs';
 
 interface FilterType {
   navn: Filternavn;
@@ -37,6 +37,10 @@ const fritekstFilter: FritekstfilterType[] = [
   {
     navn: 'foedselsnummer',
     label: 'Innbygger',
+  },
+  {
+    navn: 'tilordnetRessurs',
+    label: 'Saksbehandler',
   },
 ];
 
@@ -176,6 +180,12 @@ export const Filter = () => {
                 disabled={!!køContext.valgtKø.fritekstfilter?.find((v) => v.navn === 'foedselsnummer')}
               >
                 Innbygger
+              </Dropdown.Menu.List.Item>
+              <Dropdown.Menu.List.Item
+                onClick={() => leggInnFritekstfilter('tilordnetRessurs')}
+                disabled={!!køContext.valgtKø.fritekstfilter?.find((v) => v.navn === 'tilordnetRessurs')}
+              >
+                Saksbehandler
               </Dropdown.Menu.List.Item>
               <Dropdown.Menu.List.Item
                 onClick={() => addFilter('behandlingstype')}
