@@ -105,7 +105,9 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
     >
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeader>Innbygger</Table.ColumnHeader>
+          <Table.ColumnHeader sortable sortKey={'foedselsnummer'}>
+            Innbygger
+          </Table.ColumnHeader>
           <Table.ColumnHeader sortable sortKey={'behandlingstype'}>
             Behandlingstype
           </Table.ColumnHeader>
