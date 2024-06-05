@@ -8,7 +8,9 @@ export const byggQueryString = (valgtKø: Kø | undefined) => {
     })
     .flat();
 
-  const fritekstfilter = valgtKø?.fritekstfilter?.map((filtervalg) => `${filtervalg.navn}=${filtervalg.verdi}`);
+  const fritekstfilter = valgtKø?.fritekstfilter
+    ?.filter((filtervalg) => !!filtervalg.verdi)
+    .map((filtervalg) => `${filtervalg.navn}=${filtervalg.verdi}`);
 
   const soekeparams: string[] = [];
 

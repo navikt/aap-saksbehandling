@@ -146,4 +146,20 @@ describe('query utils', () => {
     searchParams.append('filtrering', `flervalg1=${filter1.value}&fritekst1=verdi1`);
     expect(res).toEqual(searchParams.toString());
   });
+
+  test('tomt fritekstfelt skal ikke gi filtrering i querystring', () => {
+    const køMedTomFritekst: Kø = {
+      navn: 'en kø',
+      beskrivelse: 'Kø',
+      id: '1',
+      fritekstfilter: [
+        {
+          navn: 'fritekst1',
+          verdi: undefined,
+        },
+      ],
+    };
+    const res = byggQueryString(køMedTomFritekst);
+    expect(res).toEqual('');
+  });
 });
