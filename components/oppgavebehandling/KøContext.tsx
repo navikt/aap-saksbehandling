@@ -6,6 +6,7 @@ import { SortState } from '@navikt/ds-react';
 import { useSWRConfig } from 'swr';
 import { byggQueryString } from 'components/oppgavebehandling/lib/query';
 import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
+import { usePreviousValue } from 'hooks/PreviousValueHook';
 
 export type FilterValg = {
   navn: string;
@@ -73,16 +74,19 @@ export const KøProvider = ({ children }: Props) => {
   const search = byggQueryString(valgtKø);
   const nyttSoek = useCallback(() => mutate('oppgaveliste', () => hentAlleBehandlinger(search)), [mutate, search]);
 
+  const forrigeSortering = usePreviousValue<SortState | undefined>(valgtKø.sortering);
+
   useEffect(() => {
     storeData(køliste);
   }, [køliste]);
 
   useEffect(() => {
     // gjør nytt søk automatisk når sortering endrer seg
-    if (valgtKø.sortering) {
+    const gjoerNyttSoek = valgtKø.sortering || (!valgtKø.sortering && forrigeSortering);
+    if (gjoerNyttSoek) {
       nyttSoek();
     }
-  }, [valgtKø.sortering, nyttSoek]);
+  }, [valgtKø.sortering, nyttSoek, forrigeSortering]);
 
   return (
     <KøContext.Provider value={{ valgtKø, oppdaterValgtKø, køliste, oppdaterKøliste }}>{children}</KøContext.Provider>
