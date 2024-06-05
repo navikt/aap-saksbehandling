@@ -7,7 +7,6 @@ import { Skeleton } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { KøContext } from 'components/oppgavebehandling/KøContext';
 import { byggQueryString } from 'components/oppgavebehandling/lib/query';
-import { sorterEtterNyesteDato } from 'lib/utils/date';
 
 const getUrl = (querystring?: string): string => {
   if (!querystring) {
@@ -43,10 +42,5 @@ export const OppgaveFetcher = () => {
     return <div>Feil under henting av oppgaver...</div>;
   }
 
-  return (
-    <Oppgavetabell
-      oppgaver={data?.oppgaver.sort((a, b) => sorterEtterNyesteDato(a.oppgaveOpprettet, b.oppgaveOpprettet)) ?? []}
-      mutate={mutate}
-    />
-  );
+  return <Oppgavetabell oppgaver={data?.oppgaver ?? []} mutate={mutate} />;
 };
