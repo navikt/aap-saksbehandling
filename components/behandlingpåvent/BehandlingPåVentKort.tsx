@@ -34,7 +34,7 @@ export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props)
               <BodyShort>{formaterDatoForFrontend(informasjon?.frist)}</BodyShort>
             </div>
             <div>
-              <Label>Frem til</Label>
+              <Label>Årsak</Label>
               <BodyShort>{informasjon.grunn}</BodyShort>
             </div>
           </>
