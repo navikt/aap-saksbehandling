@@ -5,6 +5,7 @@ import { ToTrinnsvurderingError, ToTrinnsVurderingFormFields } from 'components/
 import { Checkbox, CheckboxGroup, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react';
 import Link from 'next/link';
 import { ValuePair } from 'components/input/formfield/FormField';
+import { ToTrinnsVurderingGrunn } from 'lib/types/types';
 
 interface Props {
   toTrinnsvurdering: ToTrinnsVurderingFormFields;
@@ -16,7 +17,7 @@ interface Props {
 }
 
 export const BeslutterForm = ({ toTrinnsvurdering, oppdaterVurdering, readOnly, link, index, errors }: Props) => {
-  const grunnOptions: ValuePair[] = [
+  const grunnOptions: ValuePair<ToTrinnsVurderingGrunn>[] = [
     { label: 'Mangelfull begrunnelse', value: 'MANGELFULL_BEGRUNNELSE' },
     { label: 'Manglende utredning', value: 'MANGLENDE_UTREDNING' },
     { label: 'Feil lovanvendelse', value: 'FEIL_LOVANVENDELSE' },

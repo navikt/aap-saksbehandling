@@ -11,8 +11,8 @@ import { SelectWrapper } from 'components/input/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/input/textareawrapper/TextAreaWrapper';
 import { TextFieldWrapper } from 'components/input/textfieldwrapper/TextFieldWrapper';
 
-export interface ValuePair {
-  value: string;
+export interface ValuePair<Enum = string> {
+  value: Enum;
   label: string;
 }
 

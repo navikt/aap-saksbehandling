@@ -20,4 +20,9 @@ describe('settBehandlingPåVentModal', () => {
     const tidspunktFelt = screen.getByRole('textbox', { name: /tidspunkt/i });
     expect(tidspunktFelt).toBeVisible();
   });
+
+  it('skal ha et felt for årsak', () => {
+    const årsakFelt = screen.getByRole('combobox', { name: /Velg en årsak/i });
+    expect(årsakFelt).toBeVisible();
+  });
 });

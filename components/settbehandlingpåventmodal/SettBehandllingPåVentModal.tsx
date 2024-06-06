@@ -4,12 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { Button, Modal } from '@navikt/ds-react';
 import { useConfigForm } from 'hooks/FormHook';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { FormField } from 'components/input/formfield/FormField';
+import { FormField, ValuePair } from 'components/input/formfield/FormField';
 import { settBehandlingPåVent } from 'lib/clientApi';
 import { revalidateFlyt } from 'lib/actions/actions';
 
 import styles from './SettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
+import { SettPåVentÅrsaker } from 'lib/types/types';
 
 interface Props {
   referanse: string;
@@ -21,10 +22,13 @@ interface Props {
 interface FormFields {
   begrunnelse: string;
   frist: Date;
+  grunn: SettPåVentÅrsaker;
 }
 
 export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const grunnOptions: ValuePair<SettPåVentÅrsaker>[] = [{ label: 'Et eller annet', value: 'ET_ELLER_ANNET' }];
 
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
@@ -37,6 +41,12 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
       fromDate: new Date(),
       label: 'Tidspunkt',
       rules: { required: 'Du må sette en frist' },
+    },
+    grunn: {
+      type: 'select',
+      label: 'Velg en årsak',
+      options: ['', ...grunnOptions],
+      rules: { required: 'Du må velge en årsak' },
     },
   });
 
@@ -61,6 +71,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
                 begrunnelse: data.begrunnelse,
                 behandlingVersjon: behandlingVersjon,
                 frist: formaterDatoForBackend(data.frist),
+                grunn: data.grunn,
               });
               await revalidateFlyt(referanse);
               setIsLoading(false);
@@ -70,6 +81,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
           >
             <FormField form={form} formField={formFields.begrunnelse} />
             <FormField form={form} formField={formFields.frist} />
+            <FormField form={form} formField={formFields.grunn} />
           </form>
         )}
       </Modal.Body>
