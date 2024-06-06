@@ -263,6 +263,24 @@ export interface paths {
       };
     };
   };
+  '/api/behandling/{referanse}/grunnlag/kvalitetssikring': {
+    get: {
+      parameters: {
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.flate.KvalitetssikringGrunnlagDto'];
+          };
+        };
+      };
+    };
+  };
   '/api/behandling/{referanse}/grunnlag/bistand': {
     get: {
       parameters: {
@@ -614,9 +632,13 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-06-06T09:40:33.430514
+       * @example 2024-06-06T19:39:12.248394
        */
       tidspunkt: string;
+    };
+    'no.nav.aap.behandlingsflyt.avklaringsbehov.flate.KvalitetssikringGrunnlagDto': {
+      historikk: components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.flate.Historikk'][];
+      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.løser.vedtak.TotrinnsVurdering'][];
     };
     'no.nav.aap.behandlingsflyt.avklaringsbehov.flate.LøsAvklaringsbehovPåBehandling': {
       /** Format: int64 */
@@ -658,6 +680,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.FatteVedtakLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.ForeslåVedtakLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.FritakMeldepliktLøsning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.KvalitetssikringLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.SattPåVentLøsning'];
     'no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.FastsettArbeidsevneLøsning': {
       arbeidsevne: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.Arbeidsevne'];
@@ -677,6 +700,10 @@ export interface components {
     'no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.FritakMeldepliktLøsning': {
       behovstype: string;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.Fritaksvurdering'];
+    };
+    'no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.KvalitetssikringLøsning': {
+      behovstype: string;
+      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.løser.vedtak.TotrinnsVurdering'][];
     };
     'no.nav.aap.behandlingsflyt.avklaringsbehov.løsning.SattPåVentLøsning': {
       behovstype: string;
@@ -798,6 +825,7 @@ export interface components {
         | "MANUELT_SATT_PÅ_VENT(kode='9001')"
         | "AVKLAR_STUDENT(kode='5001')"
         | "AVKLAR_SYKDOM(kode='5003')"
+        | "KVALITETSSIKRING(kode='5097')"
         | "FASTSETT_ARBEIDSEVNE(kode='5004')"
         | "FASTSETT_BEREGNINGSTIDSPUNKT(kode='5008')"
         | "FRITAK_MELDEPLIKT(kode='5005')"
@@ -807,7 +835,14 @@ export interface components {
         | "FATTE_VEDTAK(kode='5099')";
       endringer: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.EndringDTO'][];
       /** @enum {string} */
-      status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
+      status:
+        | 'OPPRETTET'
+        | 'AVSLUTTET'
+        | 'TOTRINNS_VURDERT'
+        | 'SENDT_TILBAKE_FRA_BESLUTTER'
+        | 'KVALITETSSIKRET'
+        | 'SENDT_TILBAKE_FRA_KVALITETSSIKRER'
+        | 'AVBRUTT';
     };
     'no.nav.aap.behandlingsflyt.flyt.flate.BehandlingFlytOgTilstandDto': {
       /** @enum {string} */
@@ -824,6 +859,7 @@ export interface components {
         | 'SIMULERING'
         | 'VEDTAK'
         | 'FATTE_VEDTAK'
+        | 'KVALITETSSIKRING'
         | 'IVERKSETT_VEDTAK'
         | 'UDEFINERT';
       /** @enum {string} */
@@ -836,6 +872,7 @@ export interface components {
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
+        | 'KVALITETSSIKRING'
         | 'BARNETILLEGG'
         | 'AVKLAR_SYKDOM'
         | 'FASTSETT_ARBEIDSEVNE'
@@ -870,6 +907,7 @@ export interface components {
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
+        | 'KVALITETSSIKRING'
         | 'BARNETILLEGG'
         | 'AVKLAR_SYKDOM'
         | 'FASTSETT_ARBEIDSEVNE'
@@ -896,6 +934,7 @@ export interface components {
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
+        | 'KVALITETSSIKRING'
         | 'BARNETILLEGG'
         | 'AVKLAR_SYKDOM'
         | 'FASTSETT_ARBEIDSEVNE'
@@ -911,7 +950,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-06-06T09:40:33.430514
+       * @example 2024-06-06T19:39:12.248394
        */
       opprettet: string;
       /** Format: uuid */
@@ -927,10 +966,17 @@ export interface components {
       begrunnelse?: string | null;
       endretAv: string;
       /** @enum {string} */
-      status: 'OPPRETTET' | 'AVSLUTTET' | 'TOTRINNS_VURDERT' | 'SENDT_TILBAKE_FRA_BESLUTTER' | 'AVBRUTT';
+      status:
+        | 'OPPRETTET'
+        | 'AVSLUTTET'
+        | 'TOTRINNS_VURDERT'
+        | 'SENDT_TILBAKE_FRA_BESLUTTER'
+        | 'KVALITETSSIKRET'
+        | 'SENDT_TILBAKE_FRA_KVALITETSSIKRER'
+        | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-06-06T09:40:33.430514
+       * @example 2024-06-06T19:39:12.248394
        */
       tidsstempel: string;
     };
@@ -951,6 +997,7 @@ export interface components {
         | 'SIMULERING'
         | 'VEDTAK'
         | 'FATTE_VEDTAK'
+        | 'KVALITETSSIKRING'
         | 'IVERKSETT_VEDTAK'
         | 'UDEFINERT';
     };
@@ -966,6 +1013,7 @@ export interface components {
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FRITAK_MELDEPLIKT'
+        | 'KVALITETSSIKRING'
         | 'BARNETILLEGG'
         | 'AVKLAR_SYKDOM'
         | 'FASTSETT_ARBEIDSEVNE'
@@ -1084,7 +1132,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-06-06T09:40:33.430514
+       * @example 2024-06-06T19:39:12.248394
        */
       opprettet: string;
       /** Format: uuid */

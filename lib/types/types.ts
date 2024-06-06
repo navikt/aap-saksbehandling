@@ -17,6 +17,8 @@ export type BeregningsVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.flate.BeregningsVurderingDTO'];
 export type TilkjentYtelseGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.tilkjentytelse.flate.TilkjentYtelseDto'];
+export type KvalitetssikringGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.flate.KvalitetssikringGrunnlagDto'];
 
 export type TilkjentYtelsePeriode =
   components['schemas']['no.nav.aap.behandlingsflyt.tilkjentytelse.flate.TilkjentYtelsePeriode'];

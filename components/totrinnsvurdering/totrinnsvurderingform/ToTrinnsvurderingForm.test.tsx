@@ -21,7 +21,8 @@ describe('totrinnsvurderingform', () => {
   it('skal ha en overskrift som er en lenke til vilkårsvurderingen', () => {
     render(
       <TotrinnsvurderingForm
-        fatteVedtakGrunnlag={grunnlag}
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
@@ -37,7 +38,8 @@ describe('totrinnsvurderingform', () => {
   it('skal ha en radio group hvor beslutter kan godkjenne eller avslå vurderingen til saksbehandler/veileder', () => {
     render(
       <TotrinnsvurderingForm
-        fatteVedtakGrunnlag={grunnlag}
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
@@ -55,7 +57,8 @@ describe('totrinnsvurderingform', () => {
   it('skal ha en knapp for å sende inn totrinnsvurderingene', () => {
     render(
       <TotrinnsvurderingForm
-        fatteVedtakGrunnlag={grunnlag}
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
@@ -70,7 +73,8 @@ describe('totrinnsvurderingform', () => {
   it('skal dukke opp felt for begrunnelse dersom vurderingen har blitt avslått', async () => {
     render(
       <TotrinnsvurderingForm
-        fatteVedtakGrunnlag={grunnlag}
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
@@ -88,7 +92,8 @@ describe('totrinnsvurderingform', () => {
   it('skal dukke opp felt for å velge grunner for avslag dersom vurderingen har blitt avslått', async () => {
     render(
       <TotrinnsvurderingForm
-        fatteVedtakGrunnlag={grunnlag}
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
@@ -115,7 +120,8 @@ describe('totrinnsvurderingform', () => {
   it('skal ha riktige vlag i feltet for å velge grunner', async () => {
     render(
       <TotrinnsvurderingForm
-        fatteVedtakGrunnlag={grunnlag}
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
@@ -133,7 +139,8 @@ describe('totrinnsvurderingform', () => {
   it('skal dukke opp feilmelding hvis begrunnelse ikke har blitt besvart ved innsending', async () => {
     render(
       <TotrinnsvurderingForm
-        fatteVedtakGrunnlag={grunnlag}
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
@@ -154,7 +161,8 @@ describe('totrinnsvurderingform', () => {
   it('skal dukke opp feilmelding hvis ingen grunn har blitt valgt ved innsending', async () => {
     render(
       <TotrinnsvurderingForm
-        fatteVedtakGrunnlag={grunnlag}
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
@@ -175,7 +183,8 @@ describe('totrinnsvurderingform', () => {
   it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
     render(
       <TotrinnsvurderingForm
-        fatteVedtakGrunnlag={grunnlag}
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
@@ -199,7 +208,8 @@ describe('totrinnsvurderingform', () => {
   it('skal dukke opp error på fritekst felt for å skrive inn en grunn dersom ANNET er valgt og det ikke er besvart', async () => {
     render(
       <TotrinnsvurderingForm
-        fatteVedtakGrunnlag={grunnlag}
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}

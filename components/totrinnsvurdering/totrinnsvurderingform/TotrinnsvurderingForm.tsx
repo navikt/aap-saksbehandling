@@ -2,7 +2,7 @@ import { BeslutterForm } from 'components/totrinnsvurdering/totrinnsvurderingfor
 import { Behovstype } from 'lib/utils/form';
 import { Button } from '@navikt/ds-react';
 import { løsBehov } from 'lib/clientApi';
-import { FatteVedtakGrunnlag, ToTrinnsVurdering } from 'lib/types/types';
+import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, ToTrinnsVurdering } from 'lib/types/types';
 import {
   behovstypeTilVilkårskortLink,
   ToTrinnsvurderingError,
@@ -11,21 +11,23 @@ import {
 import { useState } from 'react';
 
 interface Props {
-  fatteVedtakGrunnlag: FatteVedtakGrunnlag;
+  grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
   link: string;
+  erKvalitetssikring: boolean;
   readOnly: boolean;
   behandlingsReferanse: string;
   behandlingVersjon: number;
 }
 
 export const TotrinnsvurderingForm = ({
-  fatteVedtakGrunnlag,
+  grunnlag,
   link,
   readOnly,
   behandlingsReferanse,
   behandlingVersjon,
+  erKvalitetssikring,
 }: Props) => {
-  const initialValue: ToTrinnsVurderingFormFields[] = fatteVedtakGrunnlag.vurderinger.map((vurdering) => {
+  const initialValue: ToTrinnsVurderingFormFields[] = grunnlag.vurderinger.map((vurdering) => {
     return {
       definisjon: vurdering.definisjon,
       harBlittRedigert: false,
@@ -113,7 +115,7 @@ export const TotrinnsvurderingForm = ({
               await løsBehov({
                 behandlingVersjon: behandlingVersjon,
                 behov: {
-                  behovstype: Behovstype.FATTE_VEDTAK_KODE,
+                  behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
                   vurderinger: validerteToTrinnsvurderinger,
                 },
                 referanse: behandlingsReferanse,

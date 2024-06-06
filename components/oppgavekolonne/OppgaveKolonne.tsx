@@ -16,6 +16,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Prop
       {aktivGruppe === 'ALDER' && <div>ALDER</div>}
       {aktivGruppe === 'LOVVALG' && <div>LOVVALG</div>}
       {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'KVALITETSSIKRING' && <div>Kvalitetssikring - hva skal vi vise her dah hehe? =)</div>}
       {aktivGruppe === 'MEDLEMSKAP' && <div>MEDLEMSKAP</div>}
       {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'UTTAK' && <div>UTTAK</div>}

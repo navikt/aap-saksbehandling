@@ -65,6 +65,8 @@ export function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Fatte vedtak';
     case 'IVERKSETT_VEDTAK':
       return 'Iverksett vedtak';
+    case 'KVALITETSSIKRING':
+      return 'Kvalitetssikring';
     case 'UDEFINERT':
       return 'Udefinert';
   }

@@ -1,6 +1,6 @@
 'use client';
 
-import { FatteVedtakGrunnlag, ToTrinnsVurderingGrunn } from 'lib/types/types';
+import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, ToTrinnsVurderingGrunn } from 'lib/types/types';
 
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
 import { useState } from 'react';
@@ -12,7 +12,8 @@ import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsumme
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 
 interface Props {
-  fatteVedtakGrunnlag: FatteVedtakGrunnlag;
+  grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
+  erKvalitetssikring: boolean;
   behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
@@ -34,10 +35,11 @@ export interface ToTrinnsvurderingError {
 }
 
 export const ToTrinnsvurdering = ({
-  fatteVedtakGrunnlag,
+  grunnlag,
   behandlingsReferanse,
   readOnly,
   behandlingVersjon,
+  erKvalitetssikring,
 }: Props) => {
   const params = useParams();
 
@@ -45,7 +47,7 @@ export const ToTrinnsvurdering = ({
 
   const link = `/sak/${params.saksId}/${behandlingsReferanse}`;
 
-  const vurderteTotrinnsvurderinger = fatteVedtakGrunnlag.vurderinger.filter(
+  const vurderteTotrinnsvurderinger = grunnlag.vurderinger.filter(
     (vurdering) => typeof vurdering.godkjent === 'boolean'
   );
 
@@ -57,7 +59,7 @@ export const ToTrinnsvurdering = ({
 
       {toggleGroupValue === 'historikk' && (
         <div>
-          {fatteVedtakGrunnlag.historikk.map((historikk, index) => (
+          {grunnlag.historikk.map((historikk, index) => (
             <Historikk key={index} historikk={historikk} erFørsteElementIListen={index === 0} />
           ))}
         </div>
@@ -69,8 +71,9 @@ export const ToTrinnsvurdering = ({
         className={toggleGroupValue === 'totrinnsvurdering' ? styles.toTrinnsKontroll : ''}
       >
         <TotrinnsvurderingForm
-          fatteVedtakGrunnlag={fatteVedtakGrunnlag}
+          grunnlag={grunnlag}
           link={link}
+          erKvalitetssikring={erKvalitetssikring}
           readOnly={readOnly}
           behandlingsReferanse={behandlingsReferanse}
           behandlingVersjon={behandlingVersjon}

@@ -11,6 +11,7 @@ export enum Behovstype {
   FASTSETT_BEREGNINGSTIDSPUNKT_KODE = '5008',
   FORESLÅ_VEDTAK_KODE = '5098',
   FATTE_VEDTAK_KODE = '5099',
+  KVALITETSSIKRING_KODE = '5097',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -35,6 +36,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Foreslå vedtak';
     case '5099':
       return 'Fatte vedtak';
+    case '5097':
+      return 'Kvalitetssikring';
     case '9001':
       return 'Manuelt satt på vent';
   }

@@ -16,6 +16,7 @@ export const StegGruppeIndikator = ({ flytRespons }: Props) => {
         .filter((gruppe) =>
           [
             'SYKDOM',
+            'KVALITETSSIKRING',
             'VEDTAK',
             'ALDER',
             'GRUNNLAG',

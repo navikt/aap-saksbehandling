@@ -11,6 +11,7 @@ const grupper: StegGruppe[] = [
   'LOVVALG',
   'GRUNNLAG',
   'UTTAK',
+  'KVALITETSSIKRING',
   'TILKJENT_YTELSE',
   'SIMULERING',
   'BARNETILLEGG',

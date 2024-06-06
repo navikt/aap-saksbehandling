@@ -8,6 +8,7 @@ import {
   DetaljertBehandling,
   FatteVedtakGrunnlag,
   FritakMeldepliktGrunnlag,
+  KvalitetssikringGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
   SakPersoninfo,
@@ -75,6 +76,11 @@ export const hentStudentGrunnlag = async (behandlingsReferanse: string): Promise
 export const hentSykdomsGrunnlag = async (behandlingsReferanse: string): Promise<SykdomsGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/sykdom`;
   return await fetchProxy<SykdomsGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentKvalitetssikringGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/kvalitetssikring`;
+  return await fetchProxy<KvalitetssikringGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSykepengerErstatningGrunnlag = async (
