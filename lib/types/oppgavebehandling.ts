@@ -16,3 +16,9 @@ export type Oppgave = {
 export type Oppgaver = {
   oppgaver: Oppgave[];
 };
+
+export type FilterDTO = {
+  tittel: string;
+  beskrivelse: string;
+  filter: string; //JSON som må parses
+};
