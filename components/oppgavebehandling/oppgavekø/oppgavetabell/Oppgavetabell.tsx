@@ -1,13 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { format } from 'date-fns';
-import { Button, Dropdown, Table } from '@navikt/ds-react';
+import { Button, Dropdown, Link, Table } from '@navikt/ds-react';
 
 import { Oppgave } from 'lib/types/oppgavebehandling';
 
 import styles from './Oppgavetabell.module.css';
-import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { KøContext } from 'components/oppgavebehandling/KøContext';
@@ -51,7 +50,6 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
 
   const valgtKø = køContext.valgtKø;
   const router = useRouter();
-  const oppgaveErFordelt = (oppgave: Oppgave) => !!oppgave.tilordnetRessurs;
   const { mutate } = useSWRConfig();
 
   const search = byggQueryString(køContext.valgtKø);
@@ -142,30 +140,33 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
               <Table.DataCell>{format(oppgave.avklaringsbehovOpprettetTid, 'dd.MM.yy')}</Table.DataCell>
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell className={styles.knappecelle}>
-                {oppgaveErFordelt(oppgave) ? (
-                  <Button variant={'secondary'} size={'small'} onClick={() => frigi(oppgave)}>
-                    Frigjør
-                  </Button>
-                ) : (
-                  <Button variant={'primary'} size={'small'} onClick={() => behandle(oppgave)}>
+                <div className={styles.onebutton}>
+                  <Button size={'small'} type={'button'} variant={'primary'} onClick={() => behandle(oppgave)}>
                     Behandle
                   </Button>
-                )}
-                <Dropdown>
-                  <Button as={Dropdown.Toggle} variant={'tertiary'} size={'small'}>
-                    <MenuElipsisVerticalIcon style={{ color: '#000' }} fontSize={'1.5rem'} />
-                  </Button>
-                  <Dropdown.Menu>
-                    <Dropdown.Menu.List>
-                      <Dropdown.Menu.List.Item
-                        as={Link}
-                        href={`/sak/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`}
-                      >
-                        Se oppgave
-                      </Dropdown.Menu.List.Item>
-                    </Dropdown.Menu.List>
-                  </Dropdown.Menu>
-                </Dropdown>
+                  <Dropdown>
+                    <Button as={Dropdown.Toggle} variant={'primary'} size={'small'} title={'Handlinger'}>
+                      <ChevronDownIcon fontSize={'1.5rem'} />
+                    </Button>
+                    <Dropdown.Menu>
+                      <Dropdown.Menu.List>
+                        <Dropdown.Menu.List.Item
+                          as={Link}
+                          href={`/sak/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`}
+                        >
+                          Se sak
+                        </Dropdown.Menu.List.Item>
+                        <Dropdown.Menu.List.Item onClick={() => alert('Ikke implementert')}>
+                          Tildelt annen behandler
+                        </Dropdown.Menu.List.Item>
+                        <Dropdown.Menu.Divider />
+                        <Dropdown.Menu.List.Item onClick={() => frigi(oppgave)}>
+                          Frigjør oppgave
+                        </Dropdown.Menu.List.Item>
+                      </Dropdown.Menu.List>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
               </Table.DataCell>
             </Table.Row>
           ))}

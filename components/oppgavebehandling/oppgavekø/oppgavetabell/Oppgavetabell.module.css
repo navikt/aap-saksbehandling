@@ -7,3 +7,19 @@
   justify-content: flex-end;
   gap: var(--a-spacing-8);
 }
+
+.onebutton {
+  display: flex;
+  align-content: flex-start;
+}
+
+.onebutton > button:first-of-type {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 2px solid var(--a-bg-subtle);
+}
+
+.onebutton > button:nth-of-type(2) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
