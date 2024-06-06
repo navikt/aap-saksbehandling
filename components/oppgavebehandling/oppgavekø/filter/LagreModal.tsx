@@ -28,12 +28,10 @@ export const LagreModal = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       const nyKø: Kø = {
-        id: Date.now().toString(),
         navn: data.navn,
         beskrivelse: data.beskrivelse,
         flervalgsfilter: køContext.valgtKø.flervalgsfilter,
       };
-      køContext.oppdaterKøliste([...køContext.køliste, nyKø]);
       køContext.oppdaterValgtKø(nyKø);
       modalRef.current?.close();
     })(event);

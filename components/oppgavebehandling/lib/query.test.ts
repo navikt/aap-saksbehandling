@@ -6,7 +6,6 @@ const filter1: ComboboxOption = { label: 'Første valg', value: 'verdi1' };
 const filter2: ComboboxOption = { label: 'Andre valg', value: 'verdi2' };
 
 const køUtenFilter: Kø = {
-  id: '1',
   navn: 'en kø',
   beskrivelse: 'Dette er en testkø',
   flervalgsfilter: [
@@ -19,7 +18,6 @@ const køUtenFilter: Kø = {
 };
 
 const køMedEttFiltervalg: Kø = {
-  id: '1',
   navn: 'en kø',
   beskrivelse: 'Dette er en testkø',
   flervalgsfilter: [
@@ -32,7 +30,6 @@ const køMedEttFiltervalg: Kø = {
 };
 
 const køMedToFilterValg: Kø = {
-  id: '1',
   navn: 'en kø',
   beskrivelse: 'Dette er en testkø',
   flervalgsfilter: [
@@ -45,7 +42,6 @@ const køMedToFilterValg: Kø = {
 };
 
 const køMedSynkendeSortering: Kø = {
-  id: '1',
   navn: 'en kø',
   beskrivelse: 'Dette er en testkø',
   sortering: {
@@ -55,7 +51,6 @@ const køMedSynkendeSortering: Kø = {
 };
 
 const køMedStigendeSortering: Kø = {
-  id: '1',
   navn: 'en kø',
   beskrivelse: 'Dette er en testkø',
   sortering: {
@@ -65,7 +60,6 @@ const køMedStigendeSortering: Kø = {
 };
 
 const køMedFritekstfilter: Kø = {
-  id: '1',
   navn: 'en kø',
   beskrivelse: 'Dette er en testkø',
   fritekstfilter: [{ navn: 'fritekst1', verdi: 'fritekstverdi1' }],
@@ -126,7 +120,6 @@ describe('query utils', () => {
     const køMedAlt: Kø = {
       navn: 'en kø',
       beskrivelse: 'En testkø',
-      id: '1',
       fritekstfilter: [
         {
           navn: 'fritekst1',
@@ -151,7 +144,6 @@ describe('query utils', () => {
     const køMedTomFritekst: Kø = {
       navn: 'en kø',
       beskrivelse: 'Kø',
-      id: '1',
       fritekstfilter: [
         {
           navn: 'fritekst1',

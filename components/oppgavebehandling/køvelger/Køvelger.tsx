@@ -1,19 +1,54 @@
 'use client';
 
-import { BodyShort, Button, Heading, HGrid, Label, Select } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HGrid, Label, Select, SortState } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { defaultKø, KøContext } from 'components/oppgavebehandling/KøContext';
+import useSWR from 'swr';
+
+import { defaultKø, FilterValg, Fritekstfilter, Kø, KøContext } from 'components/oppgavebehandling/KøContext';
 import { skjulPrototype } from 'lib/utils/skjulPrototype';
+import { FilterDTO } from 'lib/types/oppgavebehandling';
+import { fetchProxy } from 'lib/clientApi';
+import { logError } from '@navikt/aap-felles-utils';
+
+const hentLagredeKøer = async (): Promise<FilterDTO[] | undefined> => {
+  return await fetchProxy('/api/oppgavebehandling/filter', 'GET');
+};
+
+type Params = {
+  sortering?: SortState;
+  fritekstfilter?: Fritekstfilter[];
+  flervalgsfilter?: FilterValg[];
+};
 
 export const Køvelger = () => {
   const køContext = useContext(KøContext);
+  const { data, error } = useSWR('lagrede_filter', () => hentLagredeKøer());
+
+  const køliste: Kø[] = [defaultKø];
+
+  if (error) {
+    logError('Feil ved lasting av filter', error);
+  }
+  if (data && data.length > 0) {
+    const nyeFilter: Kø[] = data.map((filter) => {
+      const params: Params = filter.filter && JSON.parse(filter.filter);
+      return {
+        navn: filter.tittel,
+        beskrivelse: filter.beskrivelse,
+        sortering: params.sortering,
+        fritekstfilter: params.fritekstfilter,
+        flervalgsfilter: params.flervalgsfilter,
+      };
+    });
+    køliste.push(...nyeFilter);
+  }
 
   if (skjulPrototype()) {
     return null;
   }
 
-  const settKø = (køId: string) => {
-    const kø = køContext.køliste.find((kø) => kø.id === køId);
+  const settKø = (filterTittel: string) => {
+    const kø = køliste.find((kø) => kø.navn === filterTittel);
     køContext.oppdaterValgtKø(kø ?? defaultKø);
   };
 
@@ -27,10 +62,10 @@ export const Køvelger = () => {
           <Select
             label={'Valgt oppgavekø'}
             onChange={(event) => settKø(event.target.value)}
-            value={køContext.valgtKø.id}
+            value={køContext.valgtKø.navn}
           >
-            {køContext.køliste.map((kø) => (
-              <option key={kø.id} value={kø.id}>
+            {køliste.map((kø) => (
+              <option key={kø.navn} value={kø.navn}>
                 {kø.navn}
               </option>
             ))}
