@@ -632,7 +632,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-06-06T19:39:12.248394
+       * @example 2024-06-06T22:13:24.312159
        */
       tidspunkt: string;
     };
@@ -950,7 +950,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-06-06T19:39:12.248394
+       * @example 2024-06-06T22:13:24.312159
        */
       opprettet: string;
       /** Format: uuid */
@@ -976,7 +976,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-06-06T19:39:12.248394
+       * @example 2024-06-06T22:13:24.312159
        */
       tidsstempel: string;
     };
@@ -1114,8 +1114,10 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.flyt.flate.Visning': {
       beslutterReadOnly: boolean;
+      kvalitetssikringReadOnly: boolean;
       saksbehandlerReadOnly: boolean;
       visBeslutterKort: boolean;
+      visKvalitetssikringKort: boolean;
       visVentekort: boolean;
     };
     'no.nav.aap.behandlingsflyt.forretningsflyt.steg.Tilkjent': {
@@ -1132,7 +1134,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-06-06T19:39:12.248394
+       * @example 2024-06-06T22:13:24.312159
        */
       opprettet: string;
       /** Format: uuid */

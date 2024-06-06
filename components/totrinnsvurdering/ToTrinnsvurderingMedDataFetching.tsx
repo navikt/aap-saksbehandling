@@ -15,7 +15,6 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
   const flyt = await hentFlyt(behandlingsReferanse);
 
   const behandlingVersjon = flyt.behandlingVersjon;
-  const visKvalitetssikringKort = flyt.aktivtSteg === 'KVALITETSSIKRING'; //TODO Hente state fra backend for når det skal vises
 
   return (
     <>
@@ -28,13 +27,13 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
           readOnly={flyt.visning.beslutterReadOnly}
         />
       )}
-      {visKvalitetssikringKort && (
+      {flyt.visning.visKvalitetssikringKort && (
         <ToTrinnsvurdering
           grunnlag={kvalitetssikringGrunnlag}
           behandlingsReferanse={behandlingsReferanse}
           erKvalitetssikring={true}
           behandlingVersjon={behandlingVersjon}
-          readOnly={false} //TODO Hente verdi fra backend
+          readOnly={flyt.visning.kvalitetssikringReadOnly}
         />
       )}
     </>

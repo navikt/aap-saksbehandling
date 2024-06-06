@@ -56,6 +56,8 @@ const flyt: BehandlingFlytOgTilstand = {
     beslutterReadOnly: false,
     visBeslutterKort: false,
     visVentekort: false,
+    visKvalitetssikringKort: false,
+    kvalitetssikringReadOnly: false,
   },
   flyt: [],
 };
