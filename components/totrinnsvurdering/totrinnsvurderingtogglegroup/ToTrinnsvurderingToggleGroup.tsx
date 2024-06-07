@@ -2,6 +2,8 @@ import { Tabs, Tooltip } from '@navikt/ds-react';
 import { ClockDashedIcon, PersonGavelFillIcon } from '@navikt/aksel-icons';
 import { Dispatch } from 'react';
 
+import styles from './ToTrinnsvurderingToggleGroup.module.css';
+
 interface Props {
   activeToggle: string;
   setToggleValue: Dispatch<string>;
@@ -10,7 +12,13 @@ interface Props {
 
 export const ToTrinnsvurderingToggleGroup = ({ activeToggle, setToggleValue, erKvalitetssikring }: Props) => {
   return (
-    <Tabs size={'small'} defaultValue={activeToggle} onChange={(value) => setToggleValue(value)} value={activeToggle}>
+    <Tabs
+      size={'small'}
+      defaultValue={activeToggle}
+      onChange={(value) => setToggleValue(value)}
+      value={activeToggle}
+      className={erKvalitetssikring ? styles.tabs : ''}
+    >
       <Tooltip content={'Totrinnsvurdering'}>
         <Tabs.Tab
           value="totrinnsvurdering"

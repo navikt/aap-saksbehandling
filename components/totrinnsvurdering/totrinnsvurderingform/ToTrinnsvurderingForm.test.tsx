@@ -30,7 +30,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const overskriftLenke = screen.getByRole('link', { name: /§ 11-5 avklar sykdom/i });
+    const overskriftLenke = screen.getByRole('link', { name: 'Avklar sykdom (§ 11-5)' });
     expect(overskriftLenke).toBeVisible();
     expect(overskriftLenke).toHaveAttribute('href', `${link}/SYKDOM#AVKLAR_SYKDOM`);
   });
@@ -50,7 +50,7 @@ describe('totrinnsvurderingform', () => {
     const godkjennValg = screen.getByRole('radio', { name: /godkjenn/i });
     expect(godkjennValg).toBeVisible();
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
     expect(vurderPåNyttValg).toBeVisible();
   });
 
@@ -82,7 +82,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
     await user.click(vurderPåNyttValg);
 
     const begrunnelseFelt = await screen.getByRole('textbox', { name: /begrunnelse/i });
@@ -101,7 +101,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
     await user.click(vurderPåNyttValg);
 
     const mangelfullBegrunnelse = screen.getByRole('checkbox', { name: /mangelfull begrunnelse/i });
@@ -129,7 +129,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
     await user.click(vurderPåNyttValg);
 
     const grunnerFelt = screen.getByRole('group', { name: /velg grunn/i });
@@ -148,7 +148,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
     await user.click(vurderPåNyttValg);
 
     const knapp = screen.getByRole('button', { name: /send inn/i });
@@ -170,7 +170,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
     await user.click(vurderPåNyttValg);
 
     const knapp = screen.getByRole('button', { name: /send inn/i });
@@ -192,7 +192,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
     await user.click(vurderPåNyttValg);
 
     const fritekstFelt = await screen.queryByRole('textbox', { name: /beskriv returårsak/i });
@@ -217,7 +217,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /vurdèr på nytt/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
     await user.click(vurderPåNyttValg);
 
     const fritekstFelt = await screen.queryByRole('textbox', { name: /beskriv returårsak/i });

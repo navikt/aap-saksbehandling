@@ -1,0 +1,6 @@
+.tabs {
+  --ac-tabs-border: var(--a-green-400);
+  --ac-tabs-hover-border: var(--a-green-400);
+  --ac-tabs-selected-border: var(--a-green-400);
+  --ac-tabs-selected-text: var(--a-green-500);
+}

@@ -5,7 +5,7 @@
   flex-direction: column;
   gap: var(--a-spacing-4);
 }
-.form {
+.beslutterform {
   display: flex;
   flex-direction: column;
   gap: var(--a-spacing-5);

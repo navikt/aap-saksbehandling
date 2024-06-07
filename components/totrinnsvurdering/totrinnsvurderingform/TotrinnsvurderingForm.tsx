@@ -96,6 +96,7 @@ export const TotrinnsvurderingForm = ({
         <BeslutterForm
           key={vurdering.definisjon}
           toTrinnsvurdering={vurdering}
+          erKvalitetssikring={erKvalitetssikring}
           oppdaterVurdering={handleInputChange}
           errors={errors.filter((error) => error.definisjon === vurdering.definisjon)}
           index={index}
@@ -107,6 +108,7 @@ export const TotrinnsvurderingForm = ({
       {!readOnly && (
         <Button
           size={'medium'}
+          className={'fit-content-button'}
           loading={isLoading}
           onClick={async () => {
             setIsLoading(true);

@@ -14,9 +14,18 @@ interface Props {
   index: number;
   errors: ToTrinnsvurderingError[];
   readOnly: boolean;
+  erKvalitetssikring: boolean;
 }
 
-export const BeslutterForm = ({ toTrinnsvurdering, oppdaterVurdering, readOnly, link, index, errors }: Props) => {
+export const BeslutterForm = ({
+  toTrinnsvurdering,
+  oppdaterVurdering,
+  readOnly,
+  link,
+  index,
+  errors,
+  erKvalitetssikring,
+}: Props) => {
   const grunnOptions: ValuePair<ToTrinnsVurderingGrunn>[] = [
     { label: 'Mangelfull begrunnelse', value: 'MANGELFULL_BEGRUNNELSE' },
     { label: 'Manglende utredning', value: 'MANGLENDE_UTREDNING' },
@@ -25,53 +34,59 @@ export const BeslutterForm = ({ toTrinnsvurdering, oppdaterVurdering, readOnly, 
   ];
 
   return (
-    <div className={styles.form}>
-      <Link href={link}>{mapBehovskodeTilBehovstype(toTrinnsvurdering.definisjon as Behovstype)}</Link>
-      <RadioGroup
-        legend={'Er du enig i vurderingen av vilkåret?'}
-        onChange={(value) => oppdaterVurdering(index, 'godkjent', value)}
-        size={'small'}
-        hideLegend
-        readOnly={readOnly}
-        error={errors.find((error) => error.felt === 'godkjent')?.message}
+    <div className={styles.beslutterform}>
+      <div
+        className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
       >
-        <Radio value={'true'}>Godkjenn</Radio>
-        <Radio value={'false'}>Vurdèr på nytt</Radio>
-      </RadioGroup>
-      {toTrinnsvurdering.godkjent === 'false' && (
-        <>
-          <Textarea
-            label={'Begrunnelse'}
-            size={'small'}
-            readOnly={readOnly}
-            onChange={(e) => oppdaterVurdering(index, 'begrunnelse', e.target.value)}
-            error={errors.find((error) => error.felt === 'begrunnelse')?.message}
-          />
-          <CheckboxGroup
-            legend={'Velg grunn'}
-            description={'Du må minst velge èn grunn'}
-            onChange={(value) => oppdaterVurdering(index, 'grunner', value)}
-            size={'small'}
-            readOnly={readOnly}
-            error={errors.find((error) => error.felt === 'grunner')?.message}
-          >
-            {grunnOptions.map((option) => (
-              <Checkbox value={option.value} key={option.value}>
-                {option.label}
-              </Checkbox>
-            ))}
-          </CheckboxGroup>
-          {toTrinnsvurdering.grunner?.find((grunn) => grunn === 'ANNET') && (
-            <TextField
-              label={'Beskriv returårsak'}
+        <Link href={link}>{mapBehovskodeTilBehovstype(toTrinnsvurdering.definisjon as Behovstype)}</Link>
+      </div>
+      <div className={styles.felter}>
+        <RadioGroup
+          legend={'Er du enig i vurderingen av vilkåret?'}
+          onChange={(value) => oppdaterVurdering(index, 'godkjent', value)}
+          size={'small'}
+          hideLegend
+          readOnly={readOnly}
+          error={errors.find((error) => error.felt === 'godkjent')?.message}
+        >
+          <Radio value={'true'}>Godkjenn</Radio>
+          <Radio value={'false'}>Send tilbake</Radio>
+        </RadioGroup>
+        {toTrinnsvurdering.godkjent === 'false' && (
+          <>
+            <Textarea
+              label={'Begrunnelse'}
               size={'small'}
               readOnly={readOnly}
-              onChange={(e) => oppdaterVurdering(index, 'årsakFritekst', e.target.value)}
-              error={errors.find((error) => error.felt === 'årsakFritekst')?.message}
+              onChange={(e) => oppdaterVurdering(index, 'begrunnelse', e.target.value)}
+              error={errors.find((error) => error.felt === 'begrunnelse')?.message}
             />
-          )}
-        </>
-      )}
+            <CheckboxGroup
+              legend={'Velg grunn'}
+              description={'Du må minst velge èn grunn'}
+              onChange={(value) => oppdaterVurdering(index, 'grunner', value)}
+              size={'small'}
+              readOnly={readOnly}
+              error={errors.find((error) => error.felt === 'grunner')?.message}
+            >
+              {grunnOptions.map((option) => (
+                <Checkbox value={option.value} key={option.value}>
+                  {option.label}
+                </Checkbox>
+              ))}
+            </CheckboxGroup>
+            {toTrinnsvurdering.grunner?.find((grunn) => grunn === 'ANNET') && (
+              <TextField
+                label={'Beskriv returårsak'}
+                size={'small'}
+                readOnly={readOnly}
+                onChange={(e) => oppdaterVurdering(index, 'årsakFritekst', e.target.value)}
+                error={errors.find((error) => error.felt === 'årsakFritekst')?.message}
+              />
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
