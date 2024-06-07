@@ -22,7 +22,7 @@ import {
   VenteInformasjon,
 } from 'lib/types/types';
 import { fetchProxy } from 'lib/services/fetchProxy';
-import { logWarning } from '@navikt/aap-felles-utils';
+import { logError, logWarning } from '@navikt/aap-felles-utils';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -160,6 +160,18 @@ export const settBehandlingPåVent = async (referanse: string, requestBody: Sett
 export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/vente-informasjon`;
   return await fetchProxy<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentLocalToken = async () => {
+  const url = 'http://localhost:8081/token';
+  try {
+    return fetch(url, { method: 'POST' })
+      .then((res) => res.json())
+      .then((data) => data?.access_token);
+  } catch (err) {
+    logError('hentLocalToken feilet', err);
+    return Promise.resolve('dummy-token');
+  }
 };
 
 export interface MockBeregeningsGrunnlag {

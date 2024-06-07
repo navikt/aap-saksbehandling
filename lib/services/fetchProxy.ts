@@ -3,6 +3,7 @@ import { requestAzureOboToken, validateToken } from '@navikt/oasis';
 import { getAccessTokenOrRedirectToLogin } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
 import { logError } from '@navikt/aap-felles-utils';
+import { hentLocalToken } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 const NUMBER_OF_RETRIES = 3;
 
@@ -34,12 +35,8 @@ export const fetchProxy = async <ResponseBody>(
   method: 'GET' | 'POST' | 'PATCH' = 'GET',
   requestBody?: object
 ): Promise<ResponseBody> => {
-  if (isLocal()) {
-    return await fetchWithRetry<ResponseBody>(url, method, 'lokaltoken', NUMBER_OF_RETRIES, requestBody);
-  } else {
-    const oboToken = await getOnBefalfOfToken(scope, url);
-    return await fetchWithRetry<ResponseBody>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody);
-  }
+  const oboToken = isLocal() ? await hentLocalToken() : await getOnBefalfOfToken(scope, url);
+  return await fetchWithRetry<ResponseBody>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody);
 };
 
 const fetchWithRetry = async <ResponseBody>(
@@ -57,7 +54,7 @@ const fetchWithRetry = async <ResponseBody>(
     method,
     body: JSON.stringify(requestBody),
     headers: {
-      ...(isLocal() ? {} : { Authorization: `Bearer ${oboToken}` }),
+      Authorization: `Bearer ${oboToken}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
