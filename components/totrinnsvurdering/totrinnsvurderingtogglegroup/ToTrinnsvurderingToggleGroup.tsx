@@ -1,30 +1,26 @@
-import { ToggleGroup, Tooltip } from '@navikt/ds-react';
+import { Tabs, Tooltip } from '@navikt/ds-react';
 import { ClockDashedIcon, PersonGavelFillIcon } from '@navikt/aksel-icons';
 import { Dispatch } from 'react';
 
 interface Props {
   activeToggle: string;
   setToggleValue: Dispatch<string>;
+  erKvalitetssikring: boolean;
 }
 
-export const ToTrinnsvurderingToggleGroup = ({ activeToggle, setToggleValue }: Props) => {
+export const ToTrinnsvurderingToggleGroup = ({ activeToggle, setToggleValue, erKvalitetssikring }: Props) => {
   return (
-    <ToggleGroup
-      size={'small'}
-      defaultValue={activeToggle}
-      onChange={(value) => setToggleValue(value)}
-      value={activeToggle}
-    >
+    <Tabs size={'small'} defaultValue={activeToggle} onChange={(value) => setToggleValue(value)} value={activeToggle}>
       <Tooltip content={'Totrinnsvurdering'}>
-        <ToggleGroup.Item value="totrinnsvurdering">
-          <PersonGavelFillIcon aria-hidden />
-        </ToggleGroup.Item>
+        <Tabs.Tab
+          value="totrinnsvurdering"
+          label={erKvalitetssikring ? 'Kvalitetssikrer' : 'Beslutter'}
+          icon={<PersonGavelFillIcon aria-hidden />}
+        />
       </Tooltip>
       <Tooltip content={'Historikk'}>
-        <ToggleGroup.Item value="historikk">
-          <ClockDashedIcon aria-hidden />
-        </ToggleGroup.Item>
+        <Tabs.Tab value="historikk" label={'Historikk'} icon={<ClockDashedIcon aria-hidden />} />
       </Tooltip>
-    </ToggleGroup>
+    </Tabs>
   );
 };
