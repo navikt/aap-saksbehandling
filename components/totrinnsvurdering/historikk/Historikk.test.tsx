@@ -22,6 +22,24 @@ const fatteVedtakInnslag: HistorikkType = {
   avIdent: 'Per Fekt',
 };
 
+const kvalitetssikretInnslag: HistorikkType = {
+  aksjon: 'KVALITETSSIKRET',
+  tidspunkt: date,
+  avIdent: 'Per Fekt',
+};
+
+const sendtTilKvalitetssikretInnslag: HistorikkType = {
+  aksjon: 'SENDT_TIL_KVALITETSSIKRER',
+  tidspunkt: date,
+  avIdent: 'Per Fekt',
+};
+
+const returnertFraKvalitetssikretInnslag: HistorikkType = {
+  aksjon: 'RETURNERT_FRA_KVALITETSSIKRER',
+  tidspunkt: date,
+  avIdent: 'Per Fekt',
+};
+
 describe('toTrinnsvurderingHistorikk', () => {
   it('Skal vise korrekt label dersom aksjon er SENDT_TIL_BESLUTTER', () => {
     render(<Historikk historikk={sendtTilBeslutterInnslag} erFørsteElementIListen={true} />);
@@ -36,6 +54,21 @@ describe('toTrinnsvurderingHistorikk', () => {
   it('Skal vise korrekt label dersom aksjon er FATTET_VEDTAK', () => {
     render(<Historikk historikk={fatteVedtakInnslag} erFørsteElementIListen={true} />);
     expect(screen.getByText('Fattet vedtak')).toBeVisible();
+  });
+
+  it('Skal vise korrekt label dersom aksjon er KVALITETSSIKRET', () => {
+    render(<Historikk historikk={kvalitetssikretInnslag} erFørsteElementIListen={true} />);
+    expect(screen.getByText('Kvalitetssikret')).toBeVisible();
+  });
+
+  it('Skal vise korrekt label dersom aksjon er RETURNERT_FRA_KVALITETSSIKRET', () => {
+    render(<Historikk historikk={returnertFraKvalitetssikretInnslag} erFørsteElementIListen={true} />);
+    expect(screen.getByText('Returnert fra kvalitetssikrer')).toBeVisible();
+  });
+
+  it('Skal vise korrekt label dersom aksjon er SENDT_TIL_KVALITETSSIKRET', () => {
+    render(<Historikk historikk={sendtTilKvalitetssikretInnslag} erFørsteElementIListen={true} />);
+    expect(screen.getByText('Sendt til kvalitetssikrer')).toBeVisible();
   });
 
   it('Skal vise tidspunkt for når hendelsen skjedde', () => {

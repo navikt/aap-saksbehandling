@@ -27,5 +27,11 @@ function mapAksjonTilString(aksjon: HistorikkAksjon): string {
       return 'Fattet vedtak';
     case 'SENDT_TIL_BESLUTTER':
       return 'Sendt til beslutter';
+    case 'SENDT_TIL_KVALITETSSIKRER':
+      return 'Sendt til kvalitetssikrer';
+    case 'RETURNERT_FRA_KVALITETSSIKRER':
+      return 'Returnert fra kvalitetssikrer';
+    case 'KVALITETSSIKRET':
+      return 'Kvalitetssikret';
   }
 }
