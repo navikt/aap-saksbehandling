@@ -1,11 +1,12 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { StegGruppe, StegType } from 'lib/types/types';
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;
 
 export interface ServerSentEventData {
-  aktivGruppe?: string;
-  aktivtSteg?: string;
+  aktivGruppe?: StegGruppe;
+  aktivtSteg?: StegType;
   skalBytteGruppe?: boolean;
   skalBytteSteg?: boolean;
   status: ServerSentEventStatus;
