@@ -19,7 +19,8 @@ const Layout = async ({ children, params }: Props) => {
   const sak = await hentSak(params.saksId);
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
 
-  console.log('sakPersonInfo', personInfo);
+  const visToTrinnsvurdering = flytResponse.visning.visKvalitetssikringKort || flytResponse.visning.visBeslutterKort;
+
   return (
     <div>
       <SaksinfoBanner
@@ -31,7 +32,7 @@ const Layout = async ({ children, params }: Props) => {
       />
       <StegGruppeIndikator flytRespons={flytResponse} />
 
-      <HGrid columns={'1fr 3fr 1fr'}>
+      <HGrid columns={visToTrinnsvurdering ? '1fr 3fr 2fr' : '1fr 3fr 1fr'}>
         {children}
         <div className={`${styles.høyrekolonne}`}>
           <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
