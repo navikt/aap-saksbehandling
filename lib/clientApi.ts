@@ -2,11 +2,11 @@ import {
   BehandlingFlytOgTilstand,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
+  OpprettYrkesskadeTestCase,
   SaksInfo,
   SettPåVent,
 } from './types/types';
 import { Brevmal } from 'lib/utils/sanity';
-
 export async function fetchProxy<ResponseBody>(
   url: string,
   method: 'GET' | 'POST' | 'PATCH',
@@ -41,6 +41,10 @@ export function rekjørFeiledeOppgaver() {
 
 export function opprettSak(sak: OpprettTestcase) {
   return fetchProxy('/api/test/opprett', 'POST', sak);
+}
+
+export function leggTilIYrkesskadeMock(data: OpprettYrkesskadeTestCase) {
+  return fetchProxy('/api/test/yrkesskademock', 'POST', data);
 }
 
 export function hentAlleSaker() {

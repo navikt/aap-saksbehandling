@@ -79,3 +79,5 @@ export type SettPåVentÅrsaker =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.SettPåVentRequest']['grunn'];
 
 export type VenteInformasjon = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.Venteinformasjon'];
+
+export type OpprettYrkesskadeTestCase = components['schemas']['no.nav.aap.behandlingsflyt.OpprettYrkesskadeTestCase'];
