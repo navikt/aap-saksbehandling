@@ -5,6 +5,7 @@ import styles from './GruppeElement.module.css';
 import { StegGruppe } from 'lib/types/types';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { BodyShort } from '@navikt/ds-react';
 
 interface Props {
   navn: StegGruppe;
@@ -29,9 +30,11 @@ export const GruppeElement = ({ navn, nummer, erFullført, aktivtSteg, kanNavige
       <div className={nummerStyle}>{erFullført ? <CheckmarkIcon title="Fullført" /> : nummer}</div>
 
       {aktivtSteg || erFullført || kanNavigeresTil ? (
-        <Link href={`/sak/${params.saksId}/${params.behandlingsReferanse}/${navn}`}>{label}</Link>
+        <Link href={`/sak/${params.saksId}/${params.behandlingsReferanse}/${navn}`}>
+          <BodyShort size={'small'}>{label}</BodyShort>
+        </Link>
       ) : (
-        <span>{label}</span>
+        <BodyShort size={'small'}>{label}</BodyShort>
       )}
     </li>
   );

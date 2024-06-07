@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--a-spacing-1);
-  padding: var(--a-spacing-2);
+  padding: var(--a-spacing-1);
 }
 
 .aktivtSteg,
