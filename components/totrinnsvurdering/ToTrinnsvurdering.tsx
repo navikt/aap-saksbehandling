@@ -72,7 +72,7 @@ export const ToTrinnsvurdering = ({
       <div
         hidden={toggleGroupValue === 'historikk'}
         aria-hidden={toggleGroupValue === 'historikk'}
-        className={toggleGroupValue === 'totrinnsvurdering' ? styles.toTrinnsKontroll : ''}
+        className={toggleGroupValue === 'totrinnsvurdering' ? 'flex-column' : ''}
       >
         <TotrinnsvurderingForm
           grunnlag={grunnlag}
