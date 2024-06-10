@@ -33,6 +33,7 @@ export const Køvelger = () => {
     const nyeFilter: Kø[] = data.map((filter) => {
       const params: Params = filter.filter && JSON.parse(filter.filter);
       return {
+        id: filter.id,
         navn: filter.tittel,
         beskrivelse: filter.beskrivelse,
         sortering: params.sortering,

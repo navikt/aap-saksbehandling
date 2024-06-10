@@ -1,7 +1,7 @@
 import { Kø } from 'components/oppgavebehandling/KøContext';
 import { FilterDTO } from 'lib/types/oppgavebehandling';
 
-export const byggFilterFraKø = (navn: string, beskrivelse: string, kø: Kø): FilterDTO => {
+export const byggFilterFraKø = (navn: string, beskrivelse: string, kø: Kø): Omit<FilterDTO, 'id'> => {
   return {
     tittel: navn,
     beskrivelse: beskrivelse,

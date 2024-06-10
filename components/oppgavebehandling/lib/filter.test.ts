@@ -3,6 +3,7 @@ import { byggFilterFraKø } from 'components/oppgavebehandling/lib/filter';
 
 describe('filter utils', () => {
   const enKø: Kø = {
+    id: 1,
     navn: 'min kø',
     beskrivelse: 'Beskrivelse av min kø',
     flervalgsfilter: [

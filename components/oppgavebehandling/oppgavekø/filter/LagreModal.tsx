@@ -3,7 +3,6 @@ import { FormEvent, useContext, useRef, useState } from 'react';
 import { KøContext } from 'components/oppgavebehandling/KøContext';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
-import { FilterDTO } from 'lib/types/oppgavebehandling';
 import { fetchProxy } from 'lib/clientApi';
 import { byggFilterFraKø } from 'components/oppgavebehandling/lib/filter';
 
@@ -31,7 +30,7 @@ export const LagreModal = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) => {
-      const nyttFilter: FilterDTO = byggFilterFraKø(data.navn, data.beskrivelse, køContext.valgtKø);
+      const nyttFilter = byggFilterFraKø(data.navn, data.beskrivelse, køContext.valgtKø);
       const res = await fetchProxy('/api/oppgavebehandling/filter/', 'POST', nyttFilter);
       if (!res) {
         settFeilVedLagring(true);

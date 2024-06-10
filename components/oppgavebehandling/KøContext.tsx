@@ -20,6 +20,7 @@ export type Fritekstfilter = {
 };
 
 export type Kø = {
+  id: number | string;
   navn: string;
   beskrivelse: string;
   flervalgsfilter?: FilterValg[];
@@ -28,6 +29,7 @@ export type Kø = {
 };
 
 export const defaultKø: Kø = {
+  id: 'default',
   navn: 'Standard AAP-oppgavekø',
   beskrivelse: 'Standard kø. Alle AAP oppgaver, med unntak av skjermede personer og internt ansatte.',
 };

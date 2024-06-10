@@ -18,6 +18,7 @@ export type Oppgaver = {
 };
 
 export type FilterDTO = {
+  id: number;
   tittel: string;
   beskrivelse: string;
   filter: string; //JSON som må parses
