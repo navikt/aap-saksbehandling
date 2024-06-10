@@ -56,14 +56,17 @@ export const KøProvider = ({ children }: Props) => {
   const nyttSoek = useCallback(() => mutate('oppgaveliste', () => hentAlleBehandlinger(search)), [mutate, search]);
 
   const forrigeSortering = usePreviousValue<SortState | undefined>(valgtKø.sortering);
+  const forrigeKøId = usePreviousValue<number | string | undefined>(valgtKø.id);
 
   useEffect(() => {
     // gjør nytt søk automatisk når sortering endrer seg
     const valgtSorteringErEndret = valgtKø.sortering !== forrigeSortering;
-    if (valgtSorteringErEndret) {
+    const valgtKøErEndret = valgtKø.id !== forrigeKøId && forrigeKøId;
+    if (valgtSorteringErEndret || valgtKøErEndret) {
+      console.log('Gjør nytt søk');
       nyttSoek();
     }
-  }, [valgtKø.sortering, nyttSoek, forrigeSortering]);
+  }, [valgtKø.sortering, nyttSoek, forrigeSortering, valgtKø.id, forrigeKøId]);
 
   return <KøContext.Provider value={{ valgtKø, oppdaterValgtKø }}>{children}</KøContext.Provider>;
 };
