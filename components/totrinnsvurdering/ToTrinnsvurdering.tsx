@@ -53,7 +53,9 @@ export const ToTrinnsvurdering = ({
 
   return (
     <div className={styles.toTrinnsKontroll}>
-      {readOnly && <Oppsummering vurderinger={vurderteTotrinnsvurderinger} link={link} />}
+      {readOnly && (
+        <Oppsummering vurderinger={vurderteTotrinnsvurderinger} link={link} erKvalitetssikrer={erKvalitetssikring} />
+      )}
 
       <ToTrinnsvurderingToggleGroup
         activeToggle={toggleGroupValue}

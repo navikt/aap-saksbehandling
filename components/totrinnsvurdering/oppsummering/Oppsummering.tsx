@@ -8,13 +8,14 @@ import styles from './Oppsummering.module.css';
 
 interface Props {
   vurderinger: ToTrinnsVurdering[];
+  erKvalitetssikrer: boolean;
   link: string;
 }
 
-export const Oppsummering = ({ vurderinger, link }: Props) => {
+export const Oppsummering = ({ vurderinger, link, erKvalitetssikrer }: Props) => {
   return (
     <div className={styles.oppsummering}>
-      <Label size={'small'}>Siste vurderinger fra beslutter</Label>
+      <Label size={'small'}>{`Siste vurderinger fra ${erKvalitetssikrer ? 'kvalitetssikrer' : 'beslutter'}`}</Label>
       {vurderinger.map((vurdering) => (
         <div key={vurdering.definisjon} className={styles.beslutteroppsummering}>
           <div>

@@ -1,7 +1,6 @@
 import { BeslutterForm } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/BeslutterForm';
 import { Behovstype } from 'lib/utils/form';
 import { Button } from '@navikt/ds-react';
-import { løsBehov } from 'lib/clientApi';
 import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, ToTrinnsVurdering } from 'lib/types/types';
 import {
   behovstypeTilVilkårskortLink,
@@ -9,6 +8,7 @@ import {
   ToTrinnsVurderingFormFields,
 } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { useState } from 'react';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -27,6 +27,9 @@ export const TotrinnsvurderingForm = ({
   behandlingVersjon,
   erKvalitetssikring,
 }: Props) => {
+  const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg(
+    erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
+  );
   const initialValue: ToTrinnsVurderingFormFields[] = grunnlag.vurderinger.map((vurdering) => {
     return {
       definisjon: vurdering.definisjon,
@@ -34,7 +37,6 @@ export const TotrinnsvurderingForm = ({
     };
   });
 
-  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<ToTrinnsvurderingError[]>([]);
   const [vurderinger, setVurderinger] = useState<ToTrinnsVurderingFormFields[]>(initialValue);
 
@@ -111,10 +113,9 @@ export const TotrinnsvurderingForm = ({
           className={'fit-content-button'}
           loading={isLoading}
           onClick={async () => {
-            setIsLoading(true);
             const validerteToTrinnsvurderinger = validerTotrinnsvurderinger(vurderinger);
             if (errors.length === 0 && validerteToTrinnsvurderinger && validerteToTrinnsvurderinger.length > 0) {
-              await løsBehov({
+              løsBehovOgGåTilNesteSteg({
                 behandlingVersjon: behandlingVersjon,
                 behov: {
                   behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
@@ -123,7 +124,6 @@ export const TotrinnsvurderingForm = ({
                 referanse: behandlingsReferanse,
               });
             }
-            setIsLoading(false);
           }}
         >
           Send inn

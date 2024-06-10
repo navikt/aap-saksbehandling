@@ -15,14 +15,20 @@ const vurderingGodkjent: ToTrinnsVurdering = {
 };
 
 describe('Oppsummering', () => {
-  it('skal ha en overskrift', () => {
-    render(<Oppsummering vurderinger={[vurderingIkkeGodkjent]} link={''} />);
+  it('skal ha korrekt overskrift dersom det er sendt tilbake fra beslutter', () => {
+    render(<Oppsummering vurderinger={[vurderingIkkeGodkjent]} link={''} erKvalitetssikrer={false} />);
     const overskrift = screen.getByText('Siste vurderinger fra beslutter');
     expect(overskrift).toBeVisible();
   });
 
+  it('skal ha korrekt overskrift dersom det er sendt tilbake fra kvalitetssikrer', () => {
+    render(<Oppsummering vurderinger={[vurderingIkkeGodkjent]} link={''} erKvalitetssikrer={true} />);
+    const overskrift = screen.getByText('Siste vurderinger fra kvalitetssikrer');
+    expect(overskrift).toBeVisible();
+  });
+
   it('skal vise korrekt vilkår basert på definisjonskode', () => {
-    render(<Oppsummering vurderinger={[vurderingIkkeGodkjent]} link={''} />);
+    render(<Oppsummering vurderinger={[vurderingIkkeGodkjent]} link={''} erKvalitetssikrer={false} />);
 
     const label = screen.getByText('Vilkår');
     expect(label).toBeVisible();
@@ -34,7 +40,7 @@ describe('Oppsummering', () => {
   });
 
   it('skal vise korrekt verdi på om vilkåret er vurdert ikke godkjent', () => {
-    render(<Oppsummering vurderinger={[vurderingIkkeGodkjent]} link={''} />);
+    render(<Oppsummering vurderinger={[vurderingIkkeGodkjent]} link={''} erKvalitetssikrer={false} />);
 
     const label = screen.getByText('Godkjent?');
     expect(label).toBeVisible();
@@ -44,7 +50,7 @@ describe('Oppsummering', () => {
   });
 
   it('skal vise korrekt verdi på om vilkåret er vurdert godkjent', () => {
-    render(<Oppsummering vurderinger={[vurderingGodkjent]} link={''} />);
+    render(<Oppsummering vurderinger={[vurderingGodkjent]} link={''} erKvalitetssikrer={false} />);
 
     const label = screen.getByText('Godkjent?');
     expect(label).toBeVisible();
@@ -54,7 +60,7 @@ describe('Oppsummering', () => {
   });
 
   it('skal vise begrunnelse', () => {
-    render(<Oppsummering vurderinger={[vurderingIkkeGodkjent]} link={''} />);
+    render(<Oppsummering vurderinger={[vurderingIkkeGodkjent]} link={''} erKvalitetssikrer={false} />);
 
     const label = screen.getByText('Begrunnelse');
     expect(label).toBeVisible();
