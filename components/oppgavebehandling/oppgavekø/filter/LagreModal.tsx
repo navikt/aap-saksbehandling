@@ -5,11 +5,13 @@ import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
 import { fetchProxy } from 'lib/clientApi';
 import { byggFilterFraKø } from 'components/oppgavebehandling/lib/filter';
+import { useSWRConfig } from 'swr';
 
 export const LagreModal = () => {
   const [feilVedLagring, settFeilVedLagring] = useState<boolean>(false);
   const modalRef = useRef<HTMLDialogElement>(null);
   const køContext = useContext(KøContext);
+  const { mutate } = useSWRConfig();
 
   const { formFields, form } = useConfigForm({
     navn: {
@@ -35,6 +37,7 @@ export const LagreModal = () => {
       if (!res) {
         settFeilVedLagring(true);
       } else {
+        mutate('lagrede_filter');
         settFeilVedLagring(false);
         modalRef.current?.close();
       }
