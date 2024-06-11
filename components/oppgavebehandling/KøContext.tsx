@@ -20,7 +20,7 @@ export type Fritekstfilter = {
 };
 
 export type Kø = {
-  id: number;
+  id?: number;
   navn: string;
   beskrivelse: string;
   flervalgsfilter?: FilterValg[];
@@ -28,10 +28,7 @@ export type Kø = {
   sortering?: SortState; // hmmm
 };
 
-export const DEFAULT_KØ_ID = -1;
-
 export const DEFAULT_KØ: Kø = {
-  id: DEFAULT_KØ_ID,
   navn: 'Standard AAP-oppgavekø',
   beskrivelse: 'Standard kø. Alle AAP oppgaver, med unntak av skjermede personer og internt ansatte.',
 };
@@ -58,7 +55,7 @@ export const KøProvider = ({ children }: Props) => {
   const nyttSoek = useCallback(() => mutate('oppgaveliste', () => hentAlleBehandlinger(search)), [mutate, search]);
 
   const forrigeSortering = usePreviousValue<SortState | undefined>(valgtKø.sortering);
-  const forrigeKøId = usePreviousValue<number | string | undefined>(valgtKø.id);
+  const forrigeKøId = usePreviousValue(valgtKø.id);
 
   useEffect(() => {
     // gjør nytt søk automatisk når sortering endrer seg

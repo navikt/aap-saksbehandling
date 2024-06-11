@@ -5,7 +5,7 @@ import { useSWRConfig } from 'swr';
 import { Button, Dropdown, Heading, TextField } from '@navikt/ds-react';
 
 import { LagreModal } from 'components/oppgavebehandling/oppgavekø/filter/LagreModal';
-import { DEFAULT_KØ_ID, FilterValg, Fritekstfilter, KøContext } from 'components/oppgavebehandling/KøContext';
+import { FilterValg, Fritekstfilter, KøContext } from 'components/oppgavebehandling/KøContext';
 
 import styles from './Filter.module.css';
 import { skjulPrototype } from 'lib/utils/skjulPrototype';
@@ -139,9 +139,7 @@ export const Filter = () => {
           Filter
         </Heading>
         <div className={styles.køknapper}>
-          {køContext.valgtKø.id && køContext.valgtKø.id !== DEFAULT_KØ_ID && (
-            <SlettFilter kønavn={køContext.valgtKø.navn} køId={køContext.valgtKø.id} />
-          )}
+          {køContext.valgtKø.id && <SlettFilter kønavn={køContext.valgtKø.navn} køId={køContext.valgtKø.id} />}
           {køContext.valgtKø.flervalgsfilter && køContext.valgtKø.flervalgsfilter?.length > 0 && <LagreModal />}
         </div>
       </div>
