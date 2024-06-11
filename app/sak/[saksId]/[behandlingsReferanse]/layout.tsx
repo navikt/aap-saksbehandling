@@ -7,6 +7,7 @@ import styles from './layout.module.css';
 import { StegGruppeIndikator } from 'components/steggruppeindikator/StegGruppeIndikator';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
+import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 
 interface Props {
   children: ReactNode;
@@ -35,6 +36,7 @@ const Layout = async ({ children, params }: Props) => {
       <HGrid columns={visToTrinnsvurdering ? '1fr 3fr 2fr' : '1fr 3fr 1fr'}>
         {children}
         <div className={`${styles.høyrekolonne}`}>
+          <Behandlingsinfo behandlingstype="Førstegangsbehandling" />
           <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
         </div>
       </HGrid>
