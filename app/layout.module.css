@@ -1,5 +1,5 @@
 .underArbeid {
-  position: absolute;
+  position: fixed;
   z-index: 1000;
   right: -70px;
   top: 30px;
@@ -8,4 +8,5 @@
   padding: 0.75rem;
   transform: rotate(45deg);
   background-color: var(--a-surface-warning-subtle);
+  overflow: hidden;
 }
