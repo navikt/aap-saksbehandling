@@ -25,7 +25,7 @@ export const OppgaveFetcher = () => {
 
   const search = byggQueryString(køContext.valgtKø);
 
-  const { data, error, isLoading, isValidating, mutate } = useSWR('oppgaveliste', () => hentAlleBehandlinger(search), {
+  const { data, error, isLoading, isValidating } = useSWR('oppgaveliste', () => hentAlleBehandlinger(search), {
     revalidateOnFocus: false,
   });
 
@@ -42,5 +42,5 @@ export const OppgaveFetcher = () => {
     return <div>Feil under henting av oppgaver...</div>;
   }
 
-  return <Oppgavetabell oppgaver={data?.oppgaver ?? []} mutate={mutate} />;
+  return <Oppgavetabell oppgaver={data?.oppgaver ?? []} />;
 };

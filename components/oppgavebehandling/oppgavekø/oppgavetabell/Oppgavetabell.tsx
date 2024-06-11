@@ -17,7 +17,6 @@ import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/op
 
 type Props = {
   oppgaver: Oppgave[];
-  mutate: Function;
 };
 
 const mapAvklaringsbehov = (behandlingstype: string) => {
