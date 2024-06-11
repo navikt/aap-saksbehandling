@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import {
+  AlderGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingResultat,
   BeregningsGrunnlag,
@@ -89,6 +90,11 @@ export const hentSykepengerErstatningGrunnlag = async (
 ): Promise<SykepengeerstatningGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/sykepengergrunnlag`;
   return await fetchProxy<SykepengeerstatningGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentAlderGrunnlag = async (behandlingsReferanse: string): Promise<AlderGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/alder`;
+  return await fetchProxy<AlderGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string): Promise<FritakMeldepliktGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/fritak-meldeplikt`;

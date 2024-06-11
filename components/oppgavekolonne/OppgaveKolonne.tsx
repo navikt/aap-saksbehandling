@@ -5,6 +5,7 @@ import { Grunnlag } from 'components/behandlinger/grunnlag/Grunnlag';
 import { TilkjentYtelse } from 'components/behandlinger/tilkjentytelse/TilkjentYtelse';
 import { FatteVedtak } from 'components/behandlinger/fattevedtak/FatteVedtak';
 import { Vedtak } from 'components/behandlinger/vedtak/Vedtak';
+import { Alder } from 'components/behandlinger/alder/Alder';
 interface Props {
   behandlingsReferanse: string;
   aktivGruppe: StegGruppe;
@@ -13,7 +14,7 @@ interface Props {
 export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Props) => {
   return (
     <div className={styles.kolonne}>
-      {aktivGruppe === 'ALDER' && <div>ALDER</div>}
+      {aktivGruppe === 'ALDER' && <Alder behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'LOVVALG' && <div>LOVVALG</div>}
       {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'KVALITETSSIKRING' && <div>Kvalitetssikring - hva skal vi vise her dah hehe? =)</div>}

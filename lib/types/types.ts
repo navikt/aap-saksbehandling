@@ -27,6 +27,8 @@ export type Tilkjent = components['schemas']['no.nav.aap.behandlingsflyt.forretn
 export type FatteVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.avklaringsbehov.flate.FatteVedtakGrunnlagDto'];
 
+export type AlderGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.vilkår.alder.flate.AlderDTO'];
+
 // Behandling
 export type DetaljertBehandling = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.DetaljertBehandlingDTO'];
 export type BehandlingFlytOgTilstand =
