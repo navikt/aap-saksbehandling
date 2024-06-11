@@ -20,7 +20,7 @@ export type Fritekstfilter = {
 };
 
 export type Kø = {
-  id: number | string;
+  id: number;
   navn: string;
   beskrivelse: string;
   flervalgsfilter?: FilterValg[];
@@ -28,8 +28,10 @@ export type Kø = {
   sortering?: SortState; // hmmm
 };
 
-export const defaultKø: Kø = {
-  id: 'default',
+export const DEFAULT_KØ_ID = -1;
+
+export const DEFAULT_KØ: Kø = {
+  id: DEFAULT_KØ_ID,
   navn: 'Standard AAP-oppgavekø',
   beskrivelse: 'Standard kø. Alle AAP oppgaver, med unntak av skjermede personer og internt ansatte.',
 };
@@ -40,7 +42,7 @@ type ContextUpdate = {
 };
 
 export const KøContext = createContext<ContextUpdate>({
-  valgtKø: defaultKø,
+  valgtKø: DEFAULT_KØ,
   oppdaterValgtKø: () => {},
 });
 
@@ -49,7 +51,7 @@ interface Props {
 }
 
 export const KøProvider = ({ children }: Props) => {
-  const [valgtKø, oppdaterValgtKø] = useState<Kø>(defaultKø);
+  const [valgtKø, oppdaterValgtKø] = useState<Kø>(DEFAULT_KØ);
   const { mutate } = useSWRConfig();
 
   const search = byggQueryString(valgtKø);

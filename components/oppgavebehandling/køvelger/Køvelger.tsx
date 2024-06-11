@@ -4,7 +4,7 @@ import { BodyShort, Button, Heading, HGrid, Label, Select, SortState } from '@na
 import { useContext } from 'react';
 import useSWR from 'swr';
 
-import { defaultKø, FilterValg, Fritekstfilter, Kø, KøContext } from 'components/oppgavebehandling/KøContext';
+import { DEFAULT_KØ, FilterValg, Fritekstfilter, Kø, KøContext } from 'components/oppgavebehandling/KøContext';
 import { skjulPrototype } from 'lib/utils/skjulPrototype';
 import { FilterDTO } from 'lib/types/oppgavebehandling';
 import { fetchProxy } from 'lib/clientApi';
@@ -24,7 +24,7 @@ export const Køvelger = () => {
   const køContext = useContext(KøContext);
   const { data, error } = useSWR('lagrede_filter', () => hentLagredeKøer());
 
-  const køliste: Kø[] = [defaultKø];
+  const køliste: Kø[] = [DEFAULT_KØ];
 
   if (error) {
     logError('Feil ved lasting av filter', error);
@@ -50,7 +50,7 @@ export const Køvelger = () => {
 
   const settKø = (filterTittel: string) => {
     const kø = køliste.find((kø) => kø.navn === filterTittel);
-    køContext.oppdaterValgtKø(kø ?? defaultKø);
+    køContext.oppdaterValgtKø(kø ?? DEFAULT_KØ);
   };
 
   return (

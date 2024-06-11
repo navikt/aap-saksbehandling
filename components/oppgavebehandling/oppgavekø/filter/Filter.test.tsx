@@ -1,6 +1,9 @@
+import { ReactElement } from 'react';
 import { render, screen } from '@testing-library/react';
-import { Filter } from 'components/oppgavebehandling/oppgavekø/filter/Filter';
 import userEvent from '@testing-library/user-event';
+
+import { Filter } from 'components/oppgavebehandling/oppgavekø/filter/Filter';
+import { DEFAULT_KØ, Kø, KøContext } from 'components/oppgavebehandling/KøContext';
 
 const user = userEvent.setup();
 
@@ -37,4 +40,24 @@ describe('Filter', () => {
     expect(screen.getByRole('button', { name: 'Oppgavetype' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Saksbehandler' })).toBeVisible();
   });
+
+  test('har ikke knapp for å slette kø når man står på DEFAULT_KØ', () => {
+    køContextRender(<Filter />, { valgtKø: DEFAULT_KØ });
+    expect(screen.queryByRole('button', { name: /Slett kø/ })).not.toBeInTheDocument();
+  });
+
+  test('viser knapp for å slette kø når man har valgt en kø annen enn DEFAULT_KØ', () => {
+    const nyKø: Kø = {
+      id: 1,
+      navn: 'En annen kø',
+      beskrivelse: 'En helt annen kø',
+    };
+    køContextRender(<Filter />, { valgtKø: nyKø });
+    expect(screen.getByRole('button', { name: /Slett kø/ })).toBeInTheDocument();
+  });
 });
+
+const køContextRender = (ui: ReactElement, { valgtKø, ...renderOptions }: { valgtKø: Kø }) => {
+  const oppdaterValgtKø = jest.fn();
+  return render(<KøContext.Provider value={{ valgtKø, oppdaterValgtKø }}>{ui}</KøContext.Provider>, renderOptions);
+};

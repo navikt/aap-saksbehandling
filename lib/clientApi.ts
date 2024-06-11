@@ -9,7 +9,7 @@ import {
 import { Brevmal } from 'lib/utils/sanity';
 export async function fetchProxy<ResponseBody>(
   url: string,
-  method: 'GET' | 'POST' | 'PATCH',
+  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
   body?: object
 ): Promise<ResponseBody | undefined> {
   try {

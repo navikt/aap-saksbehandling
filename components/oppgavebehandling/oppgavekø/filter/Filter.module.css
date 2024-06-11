@@ -25,3 +25,9 @@
 .knapperad > button {
   margin-top: var(--a-spacing-4);
 }
+
+.køknapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--a-spacing-4);
+}

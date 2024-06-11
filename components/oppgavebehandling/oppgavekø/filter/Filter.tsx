@@ -5,13 +5,14 @@ import { useSWRConfig } from 'swr';
 import { Button, Dropdown, Heading, TextField } from '@navikt/ds-react';
 
 import { LagreModal } from 'components/oppgavebehandling/oppgavekø/filter/LagreModal';
-import { FilterValg, Fritekstfilter, KøContext } from 'components/oppgavebehandling/KøContext';
+import { DEFAULT_KØ_ID, FilterValg, Fritekstfilter, KøContext } from 'components/oppgavebehandling/KøContext';
 
 import styles from './Filter.module.css';
 import { skjulPrototype } from 'lib/utils/skjulPrototype';
 import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
 import { byggQueryString } from 'components/oppgavebehandling/lib/query';
 import { Flervalgsfilter } from './Flervalgsfilter';
+import { SlettFilter } from 'components/oppgavebehandling/oppgavekø/filter/SlettFilter';
 
 export interface FilterOptions {
   value: string;
@@ -137,7 +138,12 @@ export const Filter = () => {
         <Heading level={'2'} size={'medium'}>
           Filter
         </Heading>
-        {køContext.valgtKø.flervalgsfilter && køContext.valgtKø.flervalgsfilter?.length > 0 && <LagreModal />}
+        <div className={styles.køknapper}>
+          {køContext.valgtKø.id && køContext.valgtKø.id !== DEFAULT_KØ_ID && (
+            <SlettFilter kønavn={køContext.valgtKø.navn} køId={køContext.valgtKø.id} />
+          )}
+          {køContext.valgtKø.flervalgsfilter && køContext.valgtKø.flervalgsfilter?.length > 0 && <LagreModal />}
+        </div>
       </div>
       <section className={styles.rad}>
         {køContext.valgtKø.fritekstfilter &&
