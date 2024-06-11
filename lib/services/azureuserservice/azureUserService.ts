@@ -5,6 +5,7 @@ import { validerToken } from 'lib/services/azureuserservice/azuread';
 
 export interface BrukerInformasjon {
   navn: string;
+  NAVident?: string;
 }
 
 export const hentBrukerInformasjon = async (): Promise<BrukerInformasjon> => {
