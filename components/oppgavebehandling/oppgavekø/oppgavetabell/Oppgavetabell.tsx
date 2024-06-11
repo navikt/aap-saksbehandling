@@ -127,7 +127,7 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
       <Table.Body>
         {oppgaver && oppgaver.length === 0 && (
           <Table.Row>
-            <Table.DataCell colSpan={6}>Fant ingen oppgaver</Table.DataCell>
+            <Table.DataCell colSpan={7}>Fant ingen oppgaver</Table.DataCell>
           </Table.Row>
         )}
         {oppgaver.length > 0 &&
