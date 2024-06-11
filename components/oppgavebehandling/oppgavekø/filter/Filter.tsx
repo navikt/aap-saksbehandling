@@ -1,8 +1,8 @@
 'use client';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useSWRConfig } from 'swr';
 
-import { Button, Dropdown, Heading, TextField } from '@navikt/ds-react';
+import { Button, Dropdown, Heading, Switch, TextField } from '@navikt/ds-react';
 
 import { LagreModal } from 'components/oppgavebehandling/oppgavekø/filter/LagreModal';
 import { FilterValg, Fritekstfilter, KøContext } from 'components/oppgavebehandling/KøContext';
@@ -84,6 +84,7 @@ const finnFilterLabel = (noekkel: string, filterliste: FilterType[]) =>
 
 export const Filter = () => {
   const køContext = useContext(KøContext);
+  const [erAvdelingsleder, toggleAvdelingsleder] = useState<boolean>(false);
 
   const { mutate } = useSWRConfig();
 
@@ -138,10 +139,12 @@ export const Filter = () => {
         <Heading level={'2'} size={'medium'}>
           Filter
         </Heading>
-        <div className={styles.køknapper}>
-          {køContext.valgtKø.id && <SlettFilter kønavn={køContext.valgtKø.navn} køId={køContext.valgtKø.id} />}
-          {køContext.valgtKø.flervalgsfilter && køContext.valgtKø.flervalgsfilter?.length > 0 && <LagreModal />}
-        </div>
+        {erAvdelingsleder && (
+          <div className={styles.køknapper}>
+            {køContext.valgtKø.id && <SlettFilter kønavn={køContext.valgtKø.navn} køId={køContext.valgtKø.id} />}
+            {køContext.valgtKø.flervalgsfilter && køContext.valgtKø.flervalgsfilter?.length > 0 && <LagreModal />}
+          </div>
+        )}
       </div>
       <section className={styles.rad}>
         {køContext.valgtKø.fritekstfilter &&
@@ -211,6 +214,11 @@ export const Filter = () => {
         <Button variant={'primary'} onClick={refresh}>
           Søk
         </Button>
+      </div>
+      <div className={styles.avdelingsleder_mock}>
+        <Switch checked={erAvdelingsleder} onChange={() => toggleAvdelingsleder(!erAvdelingsleder)}>
+          Avdelingsleder (kun for test)
+        </Switch>
       </div>
     </section>
   );

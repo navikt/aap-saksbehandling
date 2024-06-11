@@ -46,13 +46,15 @@ describe('Filter', () => {
     expect(screen.queryByRole('button', { name: /Slett kø/ })).not.toBeInTheDocument();
   });
 
-  test('viser knapp for å slette kø når man har valgt en kø annen enn DEFAULT_KØ', () => {
+  test('viser knapp for å slette kø når man har valgt en kø annen enn DEFAULT_KØ', async () => {
     const nyKø: Kø = {
       id: 1,
       navn: 'En annen kø',
       beskrivelse: 'En helt annen kø',
     };
     køContextRender(<Filter />, { valgtKø: nyKø });
+    // kan slettes når mock for avdelingsleder fjernes
+    await user.click(screen.getByRole('checkbox', { name: 'Avdelingsleder (kun for test)' }));
     expect(screen.getByRole('button', { name: /Slett kø/ })).toBeInTheDocument();
   });
 });
