@@ -36,7 +36,7 @@ const Layout = async ({ children, params }: Props) => {
       <HGrid columns={visToTrinnsvurdering ? '1fr 3fr 2fr' : '1fr 3fr 1fr'}>
         {children}
         <div className={`${styles.høyrekolonne}`}>
-          <Behandlingsinfo behandlingstype="Førstegangsbehandling" />
+          <Behandlingsinfo behandlingstype="Førstegangsbehandling" status={'Utredes'} opprettet={new Date()} />
           <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
         </div>
       </HGrid>
