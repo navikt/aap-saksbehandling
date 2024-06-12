@@ -11,9 +11,6 @@ export const SideProsesser = async ({ visVenteKort, behandlingVersjon, behandlin
   const venteInformasjon = await hentBehandlingPåVentInformasjon(behandlingReferanse);
 
   return (
-    <div className={'flex-column'}>
-      {visVenteKort && <BehandlingPåVentKort behandlingVersjon={behandlingVersjon} informasjon={venteInformasjon} />}
-      {/*{!visVenteKort && <SettBehandllingPåVent referanse={behandlingReferanse} behandlingVersjon={behandlingVersjon} />}*/}
-    </div>
+    <>{visVenteKort && <BehandlingPåVentKort behandlingVersjon={behandlingVersjon} informasjon={venteInformasjon} />}</>
   );
 };
