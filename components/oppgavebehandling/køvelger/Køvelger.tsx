@@ -59,7 +59,7 @@ export const Køvelger = () => {
       : '/api/oppgavebehandling/nesteoppgave';
 
     const oppgave = await fetchProxy<Oppgave>(url, 'GET');
-    if (oppgave) {
+    if (oppgave && oppgave.saksnummer && oppgave.behandlingsreferanse) {
       router.push(`/sak/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`);
     } else {
       console.error('Klarte ikke å hente neste oppgave');
