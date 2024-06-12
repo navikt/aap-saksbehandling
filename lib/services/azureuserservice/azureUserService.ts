@@ -16,5 +16,5 @@ export const hentBrukerInformasjon = async (): Promise<BrukerInformasjon> => {
   const token = getAccessTokenOrRedirectToLogin(requestHeaders);
 
   const JWTVerifyResult = await validerToken(token);
-  return { navn: JWTVerifyResult.payload.name as string };
+  return { navn: JWTVerifyResult.payload.name as string, NAVident: JWTVerifyResult.payload.NAVident as string };
 };
