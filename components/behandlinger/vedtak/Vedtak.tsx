@@ -4,8 +4,7 @@ import { getStegSomSkalVises } from 'lib/utils/steg';
 import { BrevmalVelger } from 'components/brevmalvelger/BrevmalVelger';
 import { hentAlleBrevmaler } from 'lib/services/sanityservice/sanityservice';
 import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtakMedDataFetching';
-import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
-import { SideProsesser } from 'components/sideprosesser/SideProsesser';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 
 interface Props {
   behandlingsReferanse: string;
@@ -20,13 +19,12 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
   const behandlingVersjon = flyt.behandlingVersjon;
 
   return (
-    <>
-      {flyt.prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={flyt.prosessering} />}
-      <SideProsesser
-        visVenteKort={flyt.visning.visVentekort}
-        behandlingReferanse={behandlingsReferanse}
-        behandlingVersjon={behandlingVersjon}
-      />
+    <GruppeSteg
+      behandlingVersjon={behandlingVersjon}
+      behandlingReferanse={behandlingsReferanse}
+      prosessering={flyt.prosessering}
+      visVenteKort={flyt.visning.visVentekort}
+    >
       {stegSomSkalVises.map((steg) => {
         if (steg === 'FORESLÅ_VEDTAK') {
           return (
@@ -41,6 +39,6 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
       })}
 
       <BrevmalVelger brevmaler={brevmaler} />
-    </>
+    </GruppeSteg>
   );
 };

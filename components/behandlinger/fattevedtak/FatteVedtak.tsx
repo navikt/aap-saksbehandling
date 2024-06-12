@@ -2,7 +2,7 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { FatteVedtakMedDataFetching } from 'components/behandlinger/fattevedtak/fattevedtak/FatteVedtakMedDataFetching';
-import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 
 interface Props {
   behandlingsReferanse: string;
@@ -14,8 +14,12 @@ export const FatteVedtak = async ({ behandlingsReferanse }: Props) => {
   const stegSomSkalVises = getStegSomSkalVises('FATTE_VEDTAK', flyt);
 
   return (
-    <>
-      {flyt.prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={flyt.prosessering} />}
+    <GruppeSteg
+      behandlingVersjon={flyt.behandlingVersjon}
+      behandlingReferanse={behandlingsReferanse}
+      prosessering={flyt.prosessering}
+      visVenteKort={flyt.visning.visVentekort}
+    >
       {stegSomSkalVises.map((steg) => {
         if (steg === 'FATTE_VEDTAK') {
           return (
@@ -25,6 +29,6 @@ export const FatteVedtak = async ({ behandlingsReferanse }: Props) => {
           );
         }
       })}
-    </>
+    </GruppeSteg>
   );
 };

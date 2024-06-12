@@ -7,8 +7,7 @@ import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldep
 import { StudentMedDataFetching } from 'components/behandlinger/sykdom/student/StudentMedDataFetching';
 import { SykepengeerstatningMedDataFetching } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningMedDataFetching';
 import { FastsettArbeidsevneMedDataFetching } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevneMedDataFetching';
-import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
-import { SideProsesser } from 'components/sideprosesser/SideProsesser';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 
 interface Props {
   behandlingsReferanse: string;
@@ -23,13 +22,12 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const behandlingVersjon = flyt.behandlingVersjon;
 
   return (
-    <>
-      {flyt.prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={flyt.prosessering} />}
-      <SideProsesser
-        visVenteKort={flyt.visning.visVentekort}
-        behandlingReferanse={behandlingsReferanse}
-        behandlingVersjon={behandlingVersjon}
-      />
+    <GruppeSteg
+      behandlingVersjon={behandlingVersjon}
+      behandlingReferanse={behandlingsReferanse}
+      prosessering={flyt.prosessering}
+      visVenteKort={flyt.visning.visVentekort}
+    >
       {stegSomSkalVises.map((steg) => {
         if (steg === 'AVKLAR_STUDENT') {
           return (
@@ -98,6 +96,6 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           );
         }
       })}
-    </>
+    </GruppeSteg>
   );
 };
