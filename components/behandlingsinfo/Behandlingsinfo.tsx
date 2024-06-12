@@ -1,6 +1,7 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import styles from './Behandlingsinfo.module.css';
 import { DetaljertBehandling } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   behandling: DetaljertBehandling;
@@ -26,7 +27,7 @@ export const Behandlingsinfo = ({ behandling }: Props) => {
             Opprettet:
           </Label>
           <BodyShort size="medium" spacing>
-            {behandling.opprettet}
+            {formaterDatoForFrontend(behandling.opprettet)}
           </BodyShort>
         </div>
       </div>
