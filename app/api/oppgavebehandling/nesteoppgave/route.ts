@@ -14,8 +14,8 @@ export async function GET(req: NextRequest) {
 
   const url =
     req.nextUrl.searchParams.size > 0
-      ? `${oppgavestyringApiBaseUrl}/oppgaver?${req.nextUrl.searchParams}`
-      : `${oppgavestyringApiBaseUrl}/oppgaver`;
+      ? `${oppgavestyringApiBaseUrl}/nesteOppgave?${req.nextUrl.searchParams}`
+      : `${oppgavestyringApiBaseUrl}/nesteOppgave`;
 
   try {
     const res = await fetchProxy<Oppgave>(url, oppgavestyringApiScope, 'GET');
