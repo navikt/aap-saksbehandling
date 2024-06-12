@@ -1,4 +1,4 @@
-import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import styles from './layout.module.css';
 import { ReactNode, Suspense } from 'react';
 import { notFound } from 'next/navigation';
@@ -13,11 +13,6 @@ const Layout = async ({
   params: { behandlingsReferanse: string; aktivGruppe: string };
   children: ReactNode;
 }) => {
-  const behandling = await hentBehandling(params.behandlingsReferanse);
-  if (behandling === undefined) {
-    notFound();
-  }
-
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
   const ferdigeSteg = flytResponse.flyt.filter((steg) => steg.erFullført).map((steg) => steg.stegGruppe);
 

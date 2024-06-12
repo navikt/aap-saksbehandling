@@ -1,26 +1,24 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import styles from './Behandlingsinfo.module.css';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { DetaljertBehandling } from 'lib/types/types';
 
 interface Props {
-  behandlingstype: string;
-  status: string;
-  opprettet: Date;
+  behandling: DetaljertBehandling;
 }
 
-export const Behandlingsinfo = ({ behandlingstype, status, opprettet }: Props) => {
+export const Behandlingsinfo = ({ behandling }: Props) => {
   return (
     <div className={styles.container}>
       <div className={styles.behandlingstype}>
         <Label as="p" size="medium" spacing>
-          {behandlingstype}
+          {behandling.type}
         </Label>
         <div>
           <Label as="p" size="medium" spacing>
             Behandlingsstatus:
           </Label>
           <BodyShort size="medium" spacing>
-            {status}
+            {behandling.status}
           </BodyShort>
         </div>
         <div>
@@ -28,11 +26,10 @@ export const Behandlingsinfo = ({ behandlingstype, status, opprettet }: Props) =
             Opprettet:
           </Label>
           <BodyShort size="medium" spacing>
-            {opprettet && formaterDatoForFrontend(opprettet)}
+            {behandling.opprettet}
           </BodyShort>
         </div>
       </div>
-      HELLO PELLO
     </div>
   );
 };
