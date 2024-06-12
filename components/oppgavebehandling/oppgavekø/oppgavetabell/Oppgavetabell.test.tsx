@@ -55,4 +55,20 @@ describe('Oppgavetabell', () => {
     expect(screen.getByRole('button', { name: 'Tildelt annen behandler' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Frigjør oppgave' })).toBeVisible();
   });
+
+  test('kan sorterte på tabellheadere', () => {
+    render(<Oppgavetabell oppgaver={mockOppgaver.oppgaver} />);
+    expect(screen.getByRole('button', { name: 'Innbygger' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Behandlingstype' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Oppgavetype' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Behandling opprettet' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Avklaringsbehov opprettet' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Saksbehandler' })).toBeVisible();
+  });
+
+  test('sortering kan deaktiveres', () => {
+    render(<Oppgavetabell oppgaver={mockOppgaver.oppgaver} sorterbar={false} />);
+    expect(screen.queryByRole('button', { name: 'Behandlingstype' })).not.toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: 'Behandlingstype' })).toBeVisible();
+  });
 });

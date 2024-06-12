@@ -17,6 +17,7 @@ import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/op
 
 type Props = {
   oppgaver: Oppgave[];
+  sorterbar?: boolean;
 };
 
 const mapAvklaringsbehov = (behandlingstype: string) => {
@@ -44,7 +45,7 @@ const mapAvklaringsbehov = (behandlingstype: string) => {
   }
 };
 
-export const Oppgavetabell = ({ oppgaver }: Props) => {
+export const Oppgavetabell = ({ oppgaver, sorterbar = true }: Props) => {
   const køContext = useContext(KøContext);
 
   const valgtKø = køContext.valgtKø;
@@ -102,22 +103,22 @@ export const Oppgavetabell = ({ oppgaver }: Props) => {
     >
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeader sortable sortKey={'foedselsnummer'}>
+          <Table.ColumnHeader sortable={sorterbar} sortKey={'foedselsnummer'}>
             Innbygger
           </Table.ColumnHeader>
-          <Table.ColumnHeader sortable sortKey={'behandlingstype'}>
+          <Table.ColumnHeader sortable={sorterbar} sortKey={'behandlingstype'}>
             Behandlingstype
           </Table.ColumnHeader>
-          <Table.ColumnHeader sortable sortKey={'avklaringsbehov'}>
+          <Table.ColumnHeader sortable={sorterbar} sortKey={'avklaringsbehov'}>
             Oppgavetype
           </Table.ColumnHeader>
-          <Table.ColumnHeader sortable sortKey={'behandlingOpprettetTid'}>
+          <Table.ColumnHeader sortable={sorterbar} sortKey={'behandlingOpprettetTid'}>
             Behandling opprettet
           </Table.ColumnHeader>
-          <Table.ColumnHeader sortable sortKey={'avklaringsbehovOpprettetTid'}>
+          <Table.ColumnHeader sortable={sorterbar} sortKey={'avklaringsbehovOpprettetTid'}>
             Avklaringsbehov opprettet
           </Table.ColumnHeader>
-          <Table.ColumnHeader sortable sortKey={'tilordnetRessurs'}>
+          <Table.ColumnHeader sortable={sorterbar} sortKey={'tilordnetRessurs'}>
             Saksbehandler
           </Table.ColumnHeader>
           <Table.HeaderCell colSpan={2}></Table.HeaderCell>
