@@ -10,7 +10,7 @@ export interface BrukerInformasjon {
 
 export const hentBrukerInformasjon = async (): Promise<BrukerInformasjon> => {
   if (isLocal()) {
-    return { navn: 'Iren Panikk' };
+    return { navn: 'Iren Panikk', NAVident: 'z123456' };
   }
   const requestHeaders = headers();
   const token = getAccessTokenOrRedirectToLogin(requestHeaders);

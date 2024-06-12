@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { fetchProxy } from 'lib/services/fetchProxy';
 import { isLocal } from 'lib/utils/environment';
 import { logError } from '@navikt/aap-felles-utils';
+import { hentBrukerInformasjon } from 'lib/services/azureuserservice/azureUserService';
 
 const oppgavestyringApiBaseUrl = process.env.OPPGAVESTYRING_API_BASE_URL;
 const oppgavestyringApiScope = process.env.OPPGAVESTYRING_API_SCOPE ?? '';
@@ -15,7 +16,15 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     return new Response(JSON.stringify({ message: 'Oppgave fordelt', status: 200 }), { status: 200 });
   }
 
-  const body = await req.json();
+  const { NAVident } = await hentBrukerInformasjon();
+  if (NAVident) {
+    return new Response(JSON.stringify({ message: JSON.stringify('Fant ikke NAVIdent'), status: 500 }), {
+      status: 500,
+    });
+  }
+  const reqBody = await req.json();
+  const body = { navIdent: NAVident, versjon: reqBody.versjon };
+
   try {
     await fetchProxy(
       `${oppgavestyringApiBaseUrl}/oppgaver/${params.id}/tildelRessurs`,
