@@ -17,7 +17,7 @@ const grunnlagOppfylt: AlderGrunnlag = {
 };
 
 const grunnlagIkkeOppfylt: AlderGrunnlag = {
-  fødselsdato: '2000-01-02',
+  fødselsdato: '1958-01-02',
   vilkårsperioder: [
     {
       periode: {
@@ -26,6 +26,7 @@ const grunnlagIkkeOppfylt: AlderGrunnlag = {
       },
       utfall: 'IKKE_OPPFYLT',
       manuellVurdering: false,
+      avslagsårsak: 'BRUKER_OVER_67',
     },
   ],
 };
@@ -71,5 +72,21 @@ describe('alder', () => {
     expect(utfallValue).toBeVisible();
     expect(fraOgMedValue).toBeVisible();
     expect(tilOgMedValue).toBeVisible();
+  });
+
+  it('skal vise avslagsårsak dersom vilkårsperioden ikke er oppfylt', () => {
+    render(<Alder grunnlag={grunnlagIkkeOppfylt} />);
+    const avslagsårsakLabel = screen.getByRole('columnheader', { name: /avslagsårsak/i });
+    const avslagsårsaValue = screen.getByRole('cell', { name: 'Brukeren er over 67 år.' });
+
+    expect(avslagsårsakLabel).toBeVisible();
+    expect(avslagsårsaValue).toBeVisible();
+  });
+
+  it('skal ikke vise avslagsårsak dersom alle vilkårsperioden er oppfylt', async () => {
+    render(<Alder grunnlag={grunnlagOppfylt} />);
+    const avslagsårsakLabel = await screen.queryByRole('columnheader', { name: /avslagsårsak/i });
+
+    expect(avslagsårsakLabel).not.toBeInTheDocument();
   });
 });
