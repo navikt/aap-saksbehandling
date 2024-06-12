@@ -1,8 +1,8 @@
 'use client';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { useSWRConfig } from 'swr';
 
-import { Button, Dropdown, Heading, Switch, TextField } from '@navikt/ds-react';
+import { Button, Dropdown, Heading, TextField } from '@navikt/ds-react';
 
 import { LagreModal } from 'components/oppgavebehandling/oppgavekø/filter/LagreModal';
 import { FilterValg, Fritekstfilter, KøContext } from 'components/oppgavebehandling/KøContext';
@@ -12,6 +12,7 @@ import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/op
 import { byggQueryString } from 'components/oppgavebehandling/lib/query';
 import { Flervalgsfilter } from './Flervalgsfilter';
 import { SlettFilter } from 'components/oppgavebehandling/oppgavekø/filter/SlettFilter';
+import { useSearchParams } from 'next/navigation';
 
 export interface FilterOptions {
   value: string;
@@ -83,7 +84,8 @@ const finnFilterLabel = (noekkel: string, filterliste: FilterType[]) =>
 
 export const Filter = () => {
   const køContext = useContext(KøContext);
-  const [erAvdelingsleder, toggleAvdelingsleder] = useState<boolean>(false);
+  const searchParams = useSearchParams();
+  const erAvdelingsleder = !!searchParams.get('erAvdelingsleder');
 
   const { mutate } = useSWRConfig();
 
@@ -209,11 +211,6 @@ export const Filter = () => {
         <Button variant={'primary'} onClick={refresh}>
           Søk
         </Button>
-      </div>
-      <div className={styles.avdelingsleder_mock}>
-        <Switch checked={erAvdelingsleder} onChange={() => toggleAvdelingsleder(!erAvdelingsleder)}>
-          Avdelingsleder (kun for test)
-        </Switch>
       </div>
     </section>
   );
