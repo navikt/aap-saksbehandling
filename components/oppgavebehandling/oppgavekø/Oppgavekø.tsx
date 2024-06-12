@@ -15,7 +15,7 @@ export const Oppgavekø = () => {
   const antallOppgaver = () => (data?.oppgaver.length ? `(${data.oppgaver.length})` : '');
   return (
     <section className={styles.oppgavekø}>
-      <ExpansionCard aria-label={køContext.valgtKø.navn} defaultOpen>
+      <ExpansionCard aria-label={køContext.valgtKø.navn}>
         <ExpansionCard.Header>
           <ExpansionCard.Title>
             {køContext.valgtKø.navn} {antallOppgaver()}
