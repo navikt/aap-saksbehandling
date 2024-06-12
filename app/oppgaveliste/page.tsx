@@ -6,6 +6,7 @@ import { Køvelger } from 'components/oppgavebehandling/køvelger/Køvelger';
 import styles from './page.module.css';
 import { Oppgavekø } from 'components/oppgavebehandling/oppgavekø/Oppgavekø';
 import { KøProvider } from 'components/oppgavebehandling/KøContext';
+import { DineOppgaver } from 'components/oppgavebehandling/oppgavekø/DineOppgaver';
 
 const Page = () => {
   return (
@@ -15,6 +16,7 @@ const Page = () => {
           <Kort>
             <KøProvider>
               <Køvelger />
+              <DineOppgaver />
               <Oppgavekø />
             </KøProvider>
           </Kort>
