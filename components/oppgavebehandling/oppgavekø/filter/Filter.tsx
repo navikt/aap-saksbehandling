@@ -8,7 +8,6 @@ import { LagreModal } from 'components/oppgavebehandling/oppgavekø/filter/Lagre
 import { FilterValg, Fritekstfilter, KøContext } from 'components/oppgavebehandling/KøContext';
 
 import styles from './Filter.module.css';
-import { skjulPrototype } from 'lib/utils/skjulPrototype';
 import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
 import { byggQueryString } from 'components/oppgavebehandling/lib/query';
 import { Flervalgsfilter } from './Flervalgsfilter';
@@ -90,10 +89,6 @@ export const Filter = () => {
 
   const search = byggQueryString(køContext.valgtKø);
   const refresh = () => mutate('oppgaveliste', () => hentAlleBehandlinger(search));
-
-  if (skjulPrototype()) {
-    return null;
-  }
 
   const leggInnFritekstfilter = (noekkel: Filternavn) => {
     const newFilter = fritekstFilter.find((filter) => filter.navn === noekkel);

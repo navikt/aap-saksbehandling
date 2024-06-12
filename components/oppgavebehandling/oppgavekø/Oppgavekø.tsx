@@ -7,7 +7,6 @@ import styles from './Oppgavekø.module.css';
 import { OppgaveFetcher } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
 import { KøContext } from 'components/oppgavebehandling/KøContext';
 import { useContext } from 'react';
-import { skjulPrototype } from 'lib/utils/skjulPrototype';
 import useSWR from 'swr';
 
 export const Oppgavekø = () => {
@@ -19,7 +18,7 @@ export const Oppgavekø = () => {
       <ExpansionCard aria-label={køContext.valgtKø.navn} defaultOpen>
         <ExpansionCard.Header>
           <ExpansionCard.Title>
-            {skjulPrototype() ? 'Felles AAP Kø' : køContext.valgtKø.navn} {antallOppgaver()}
+            {køContext.valgtKø.navn} {antallOppgaver()}
           </ExpansionCard.Title>
         </ExpansionCard.Header>
         <ExpansionCard.Content>

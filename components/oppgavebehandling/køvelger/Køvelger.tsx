@@ -5,7 +5,6 @@ import { useContext } from 'react';
 import useSWR from 'swr';
 
 import { DEFAULT_KØ, FilterValg, Fritekstfilter, Kø, KøContext } from 'components/oppgavebehandling/KøContext';
-import { skjulPrototype } from 'lib/utils/skjulPrototype';
 import { FilterDTO } from 'lib/types/oppgavebehandling';
 import { fetchProxy } from 'lib/clientApi';
 import { logError } from '@navikt/aap-felles-utils';
@@ -42,10 +41,6 @@ export const Køvelger = () => {
       };
     });
     køliste.push(...nyeFilter);
-  }
-
-  if (skjulPrototype()) {
-    return null;
   }
 
   const settKø = (filterTittel: string) => {
