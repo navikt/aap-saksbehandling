@@ -26,11 +26,13 @@ export const DineOppgaver = () => {
     return <div>Feil under henting av dine oppgaver...</div>;
   }
 
+  const antallOppgaver = data?.oppgaver?.length ?? 0;
+
   return (
     <section className={styles.oppgavekø}>
       <ExpansionCard aria-label={'Dine aktive oppgaver'} defaultOpen>
         <ExpansionCard.Header>
-          <ExpansionCard.Title>Dine aktive oppgaver</ExpansionCard.Title>
+          <ExpansionCard.Title>Dine aktive oppgaver ({antallOppgaver})</ExpansionCard.Title>
         </ExpansionCard.Header>
         <ExpansionCard.Content>
           <Oppgavetabell oppgaver={data?.oppgaver ?? []} sorterbar={false} />
