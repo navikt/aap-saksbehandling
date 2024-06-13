@@ -7,8 +7,7 @@ import { DEFAULT_KØ, Kø, KøContext } from 'components/oppgavebehandling/KøCo
 
 const user = userEvent.setup();
 
-// TODO Øivind må fikse denne
-describe.skip('Filter', () => {
+describe('Filter', () => {
   test('har overskrift på nivå 2', () => {
     render(<Filter />);
     expect(screen.getByRole('heading', { level: 2, name: 'Filter' })).toBeVisible();
@@ -47,15 +46,42 @@ describe.skip('Filter', () => {
     expect(screen.queryByRole('button', { name: /Slett kø/ })).not.toBeInTheDocument();
   });
 
-  test('viser knapp for å slette kø når man har valgt en kø annen enn DEFAULT_KØ', async () => {
+  test('viser knapp for å slette kø når man har valgt en kø annen enn DEFAULT_KØ og man er avdelingsleder', async () => {
     const nyKø: Kø = {
       id: 1,
       navn: 'En annen kø',
       beskrivelse: 'En helt annen kø',
     };
-    køContextRender(<Filter />, { valgtKø: nyKø });
+    køContextRender(<Filter erAvdelingsleder={true} />, { valgtKø: nyKø });
     expect(screen.getByRole('button', { name: /Slett kø/ })).toBeInTheDocument();
   });
+});
+
+test('viser knapp for å lagre kø når man har lagt til et filter og er avdelingsleder', () => {
+  const nyKø: Kø = {
+    id: 1,
+    navn: 'En annen kø',
+    beskrivelse: 'En helt annen kø',
+    flervalgsfilter: [
+      {
+        navn: 'param',
+        valgteFilter: [
+          {
+            value: '1',
+            label: 'Label',
+          },
+        ],
+        alleFilter: [
+          {
+            value: '1',
+            label: 'Label',
+          },
+        ],
+      },
+    ],
+  };
+  køContextRender(<Filter erAvdelingsleder={true} />, { valgtKø: nyKø });
+  expect(screen.getByRole('button', { name: /Lagre som kø/ })).toBeInTheDocument();
 });
 
 const køContextRender = (ui: ReactElement, { valgtKø, ...renderOptions }: { valgtKø: Kø }) => {

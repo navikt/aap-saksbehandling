@@ -12,7 +12,10 @@ import { hentAlleBehandlinger } from 'components/oppgavebehandling/oppgavekø/op
 import { byggQueryString } from 'components/oppgavebehandling/lib/query';
 import { Flervalgsfilter } from './Flervalgsfilter';
 import { SlettFilter } from 'components/oppgavebehandling/oppgavekø/filter/SlettFilter';
-import { useSearchParams } from 'next/navigation';
+
+interface Props {
+  erAvdelingsleder?: boolean;
+}
 
 export interface FilterOptions {
   value: string;
@@ -82,10 +85,8 @@ const finnFilterOptionLabel = (filter: FilterValg, option: string) =>
 const finnFilterLabel = (noekkel: string, filterliste: FilterType[]) =>
   filterliste.find((filterValg) => filterValg.navn === noekkel)?.label ?? noekkel;
 
-export const Filter = () => {
+export const Filter = ({ erAvdelingsleder = false }: Props) => {
   const køContext = useContext(KøContext);
-  const searchParams = useSearchParams();
-  const erAvdelingsleder = !!searchParams.get('erAvdelingsleder');
 
   const { mutate } = useSWRConfig();
 

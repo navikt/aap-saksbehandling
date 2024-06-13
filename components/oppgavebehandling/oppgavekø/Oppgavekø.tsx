@@ -1,13 +1,14 @@
 'use client';
-
-import { ExpansionCard } from '@navikt/ds-react';
-import { Filter } from 'components/oppgavebehandling/oppgavekø/filter/Filter';
-
-import styles from './Oppgavekø.module.css';
-import { OppgaveFetcher } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
-import { KøContext } from 'components/oppgavebehandling/KøContext';
 import { useContext } from 'react';
 import useSWR from 'swr';
+
+import { ExpansionCard } from '@navikt/ds-react';
+
+import { OppgaveFetcher } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/OppgaveFetcher';
+import { KøContext } from 'components/oppgavebehandling/KøContext';
+import { FilterWrapper } from 'components/oppgavebehandling/oppgavekø/filter/FilterWrapper';
+
+import styles from './Oppgavekø.module.css';
 
 export const Oppgavekø = () => {
   const køContext = useContext(KøContext);
@@ -22,7 +23,7 @@ export const Oppgavekø = () => {
           </ExpansionCard.Title>
         </ExpansionCard.Header>
         <ExpansionCard.Content>
-          <Filter />
+          <FilterWrapper />
           <OppgaveFetcher />
         </ExpansionCard.Content>
       </ExpansionCard>
