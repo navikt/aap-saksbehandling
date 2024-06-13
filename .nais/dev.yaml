@@ -1,2 +1,3 @@
 ingresses:
   - 'https://aap-saksbehandling.intern.dev.nav.no'
+  - 'https://aap-saksbehandling.ansatt.dev.nav.no'
