@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { Alder } from 'components/behandlinger/alder/Alder';
+import { Alder, kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { AlderGrunnlag } from 'lib/types/types';
 
 const grunnlagOppfylt: AlderGrunnlag = {
@@ -39,6 +39,14 @@ describe('alder', () => {
 
     expect(fødselsdatoLabel).toBeVisible();
     expect(fødselsdatoValue).toBeVisible();
+  });
+
+  it('Skal vise alder', () => {
+    render(<Alder grunnlag={grunnlagOppfylt} />);
+    const alderString = kalkulerAlder(new Date(grunnlagOppfylt.fødselsdato));
+    const alder = screen.getByText(`(${alderString})`);
+
+    expect(alder).toBeVisible();
   });
 
   it('skal vise tabell med utfall, fra og med, til og med i header', () => {

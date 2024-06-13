@@ -21,7 +21,10 @@ export const Alder = ({ grunnlag }: Props) => {
     <VilkårsKort heading={'Alder'} steg={'VURDER_ALDER'} icon={<PersonTallShortFillIcon fontSize={'1.5rem'} />}>
       <div>
         <Label>Fødselsdato</Label>
-        <BodyShort>{formaterDatoForFrontend(grunnlag.fødselsdato)}</BodyShort>
+        <BodyShort>
+          <span>{formaterDatoForFrontend(grunnlag.fødselsdato)}</span>
+          <b> {`(${kalkulerAlder(new Date(grunnlag.fødselsdato))})`}</b>
+        </BodyShort>
       </div>
 
       <Table>
@@ -92,4 +95,18 @@ function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak): string {
     default:
       throw new Error('Kunne ikke finne påkrevd årsak.');
   }
+}
+
+export function kalkulerAlder(fødselsdato: Date): string {
+  const dagensDato = new Date();
+
+  let år = dagensDato.getFullYear() - fødselsdato.getFullYear();
+  let måneder = dagensDato.getMonth() - fødselsdato.getMonth();
+
+  if (måneder < 0 || måneder === 0) {
+    år--;
+    måneder += 12;
+  }
+
+  return `${år} år og ${måneder} måneder`;
 }
