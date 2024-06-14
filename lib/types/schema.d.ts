@@ -656,7 +656,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-06-14T12:39:24.655125
+       * @example 2024-06-14T17:14:10.653744
        */
       tidspunkt: string;
     };
@@ -738,9 +738,11 @@ export interface components {
       årsakFritekst?: string | null;
     };
     'no.nav.aap.behandlingsflyt.beregning.flate.BeregningDTO': {
-      beregningsGrunnlag: components['schemas']['no.nav.aap.verdityper.GUnit'];
+      beregningsgrunnlag: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.beregning.Beregningsgrunnlag'];
       faktagrunnlag: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilkårsresultat.Faktagrunnlag'];
+      grunnlag: components['schemas']['no.nav.aap.verdityper.GUnit'];
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.beregning.Beregningsgrunnlag': Record<string, never>;
     'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilkårsresultat.Faktagrunnlag': Record<string, never>;
     'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilkårsresultat.Vilkårsperiode': {
       /** @enum {string|null} */
@@ -770,7 +772,13 @@ export interface components {
        */
       dato: string;
       /** @enum {string} */
-      type: 'IKKE_MØTT_TIL_MØTE' | 'IKKE_MØTT_TIL_BEHANDLING' | 'IKKE_MØTT_TIL_KLAGE' | 'IKKE_SENDT_INN_DOKUMENTASJON';
+      type:
+        | 'IKKE_MØTT_TIL_MØTE'
+        | 'IKKE_MØTT_TIL_BEHANDLING'
+        | 'IKKE_MØTT_TIL_TILTAK'
+        | 'IKKE_MØTT_TIL_ANNEN_AKTIVITET'
+        | 'IKKE_SENDT_INN_DOKUMENTASJON'
+        | 'IKKE_AKTIVT_BIDRAG';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.aktivitet.TorsHammerDto': {
       hammer: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.aktivitet.HammerDto'];
@@ -824,6 +832,16 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritakMeldepliktGrunnlagDto': {
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.Fritaksvurdering'][];
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent': {
+      /**
+       * Format: date
+       * @example 2024-06-14
+       */
+      avbruttDato?: string | null;
+      harAvbruttStudie: boolean;
+      /** Format: int64 */
+      id?: number | null;
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurdering': {
       /**
        * Format: date
@@ -837,6 +855,7 @@ export interface components {
       oppfyller11_14?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.flate.StudentGrunnlagDto': {
+      oppgittStudent?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent'];
       studentvurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurdering'];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.SykepengerVurdering': {
@@ -1012,7 +1031,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-06-14T12:39:24.655125
+       * @example 2024-06-14T17:14:10.653744
        */
       opprettet: string;
       /** Format: uuid */
@@ -1038,7 +1057,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-06-14T12:39:24.655125
+       * @example 2024-06-14T17:14:10.653744
        */
       tidsstempel: string;
     };
@@ -1188,7 +1207,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-06-14T12:39:24.655125
+       * @example 2024-06-14T17:14:10.653744
        */
       opprettet: string;
       /** Format: uuid */
