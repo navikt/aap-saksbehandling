@@ -12,14 +12,14 @@ export async function GET() {
     return new Response(JSON.stringify(mockOppgaver), { status: 200 });
   }
 
-  const brukerinfo = await hentBrukerInformasjon();
-  if (!brukerinfo.NAVident) {
+  const { NAVident } = await hentBrukerInformasjon();
+  if (!NAVident) {
     return new Response(JSON.stringify({ message: JSON.stringify('Fant ikke NAVIdent'), status: 500 }), {
       status: 500,
     });
   }
   const searchparams = new URLSearchParams();
-  searchparams.append('filtrering[tilordnetRessurs]', `${brukerinfo.NAVident}`);
+  searchparams.append('filtrering[tilordnetRessurs]', `${NAVident}`);
   const url = `${oppgavestyringApiBaseUrl}/oppgaver?${searchparams.toString()}`;
 
   try {

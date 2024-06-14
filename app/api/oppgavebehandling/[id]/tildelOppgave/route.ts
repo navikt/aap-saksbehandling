@@ -17,7 +17,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   }
 
   const { NAVident } = await hentBrukerInformasjon();
-  if (NAVident) {
+  if (!NAVident) {
     return new Response(JSON.stringify({ message: JSON.stringify('Fant ikke NAVIdent'), status: 500 }), {
       status: 500,
     });
