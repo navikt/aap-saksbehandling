@@ -77,9 +77,9 @@ describe('query utils', () => {
     expect(res).toEqual('');
   });
 
-  test('prefixer filter med "filtrering="', () => {
+  test('prefixer filter med "filtrering"', () => {
     const res = byggQueryString(køMedEttFiltervalg);
-    expect(res).toMatch(/^filtrering=.*/);
+    expect(res).toMatch(/^filtrering.*/);
   });
 
   test('bygger på format parameternavn%3Dparameternavnverdi', () => {
@@ -97,9 +97,9 @@ describe('query utils', () => {
     expect(res).toEqual(searchparams.toString());
   });
 
-  test('prefixer sortering med "sortering="', () => {
+  test('prefixer sortering med "sortering"', () => {
     const res = byggQueryString(køMedSynkendeSortering);
-    expect(res).toMatch(/^sortering=/);
+    expect(res).toMatch(/^sortering/);
   });
 
   test('lager sorteringsstreng for parameter1 i synkende rekkefølge', () => {

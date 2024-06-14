@@ -4,7 +4,7 @@ export const byggQueryString = (valgtKø: Kø | undefined) => {
   const flervalgsfilter = valgtKø?.flervalgsfilter
     ?.map((filterValg) => {
       const filternavn = filterValg.navn;
-      return filterValg.valgteFilter.map((vf) => vf.value).map((u) => `${filternavn}=${u}`);
+      return filterValg.valgteFilter.map((vf) => vf.value).map((u) => `filtrering[${filternavn}]=${u}`);
     })
     .flat();
 
@@ -27,7 +27,7 @@ export const byggQueryString = (valgtKø: Kø | undefined) => {
 
   if (valgtKø?.sortering) {
     search.append(
-        `sortering[${valgtKø.sortering.orderBy}]`,
+      `sortering[${valgtKø.sortering.orderBy}]`,
       `${valgtKø.sortering.direction === 'ascending' ? 'asc' : 'desc'}`
     );
   }
