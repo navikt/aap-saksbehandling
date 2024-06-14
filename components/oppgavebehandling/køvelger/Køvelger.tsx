@@ -91,7 +91,7 @@ export const Køvelger = () => {
         </div>
       </HGrid>
       <Button style={{ marginTop: '1rem' }} onClick={() => hentNesteOppgave()}>
-        Behandle neste sak
+        Behandle neste oppgave
       </Button>
     </section>
   );
