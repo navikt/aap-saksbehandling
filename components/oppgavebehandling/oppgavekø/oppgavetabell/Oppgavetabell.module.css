@@ -2,12 +2,6 @@
   margin-top: var(--a-spacing-8);
 }
 
-.knappecelle {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--a-spacing-8);
-}
-
 .onebutton {
   display: flex;
   align-content: flex-start;

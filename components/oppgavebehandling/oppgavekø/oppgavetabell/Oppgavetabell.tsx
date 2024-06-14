@@ -138,7 +138,7 @@ export const Oppgavetabell = ({ oppgaver, sorterbar = true }: Props) => {
               <Table.DataCell>{format(oppgave.behandlingOpprettetTid, 'dd.MM.yy')}</Table.DataCell>
               <Table.DataCell>{format(oppgave.avklaringsbehovOpprettetTid, 'dd.MM.yy')}</Table.DataCell>
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
-              <Table.DataCell className={styles.knappecelle}>
+              <Table.DataCell>
                 <div className={styles.onebutton}>
                   <Button size={'small'} type={'button'} variant={'primary'} onClick={() => behandle(oppgave)}>
                     Behandle
