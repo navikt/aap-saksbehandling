@@ -14,6 +14,7 @@ import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/T
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { notFound } from 'next/navigation';
+import { StegGruppe } from 'lib/types/types';
 
 interface Props {
   children: ReactNode;
@@ -32,6 +33,32 @@ const Layout = async ({ children, params }: Props) => {
 
   const visToTrinnsvurdering = flytResponse.visning.visKvalitetssikringKort || flytResponse.visning.visBeslutterKort;
 
+  // TODO Hacky løsning for å få dynamisk stegmeny for Student steg frem til vi har fikset det i backend
+  const grupper: StegGruppe[] = [
+    'ALDER',
+    'SYKDOM',
+    'VEDTAK',
+    'MEDLEMSKAP',
+    'LOVVALG',
+    'GRUNNLAG',
+    'UTTAK',
+    'TILKJENT_YTELSE',
+    'SIMULERING',
+    'BARNETILLEGG',
+    'FATTE_VEDTAK',
+  ];
+
+  const studentStegHarAvklaringsbehov =
+    (
+      flytResponse.flyt
+        .find((flyt2) => flyt2.stegGruppe === 'STUDENT')
+        ?.steg.filter((steg) => steg.avklaringsbehov && steg.avklaringsbehov.length > 0)
+        .filter((steg) => steg.avklaringsbehov.every((avklaringsbehov) => avklaringsbehov.status !== 'AVBRUTT'))
+        .map((steg) => steg.stegType) ?? []
+    ).length > 0;
+
+  const grupperMedEllerUtenStudent = studentStegHarAvklaringsbehov ? [...grupper, 'STUDENT'] : grupper;
+
   return (
     <div>
       <SaksinfoBanner
@@ -41,7 +68,7 @@ const Layout = async ({ children, params }: Props) => {
         behandlingVersjon={flytResponse.behandlingVersjon}
         referanse={params.behandlingsReferanse}
       />
-      <StegGruppeIndikator flytRespons={flytResponse} />
+      <StegGruppeIndikator flytRespons={flytResponse} grupperMedEllerUtenStudent={grupperMedEllerUtenStudent} />
 
       <HGrid columns={visToTrinnsvurdering ? '1fr 3fr 2fr' : '1fr 3fr 1fr'}>
         {children}

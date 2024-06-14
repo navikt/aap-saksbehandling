@@ -656,7 +656,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-06-14T10:59:03.577615
+       * @example 2024-06-14T12:39:24.655125
        */
       tidspunkt: string;
     };
@@ -913,6 +913,7 @@ export interface components {
         | 'LOVVALG'
         | 'MEDLEMSKAP'
         | 'BARNETILLEGG'
+        | 'STUDENT'
         | 'SYKDOM'
         | 'GRUNNLAG'
         | 'UTTAK'
@@ -1011,7 +1012,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-06-14T10:59:03.577615
+       * @example 2024-06-14T12:39:24.655125
        */
       opprettet: string;
       /** Format: uuid */
@@ -1037,7 +1038,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-06-14T10:59:03.577615
+       * @example 2024-06-14T12:39:24.655125
        */
       tidsstempel: string;
     };
@@ -1051,6 +1052,7 @@ export interface components {
         | 'LOVVALG'
         | 'MEDLEMSKAP'
         | 'BARNETILLEGG'
+        | 'STUDENT'
         | 'SYKDOM'
         | 'GRUNNLAG'
         | 'UTTAK'
@@ -1186,7 +1188,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-06-14T10:59:03.577615
+       * @example 2024-06-14T12:39:24.655125
        */
       opprettet: string;
       /** Format: uuid */

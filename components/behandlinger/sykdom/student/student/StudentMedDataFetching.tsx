@@ -1,4 +1,4 @@
-import { Student } from 'components/behandlinger/sykdom/student/Student';
+import { Student } from 'components/behandlinger/sykdom/student/student/Student';
 import { hentStudentGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {

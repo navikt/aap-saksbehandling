@@ -70,6 +70,8 @@ export function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Iverksett vedtak';
     case 'KVALITETSSIKRING':
       return 'Kvalitetssikring';
+    case 'STUDENT':
+      return 'Student';
     case 'UDEFINERT':
       return 'Udefinert';
   }

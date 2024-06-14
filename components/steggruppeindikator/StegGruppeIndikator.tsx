@@ -7,28 +7,14 @@ import { useParams } from 'next/navigation';
 
 interface Props {
   flytRespons: BehandlingFlytOgTilstand;
+  grupperMedEllerUtenStudent: string[];
 }
-export const StegGruppeIndikator = ({ flytRespons }: Props) => {
+export const StegGruppeIndikator = ({ flytRespons, grupperMedEllerUtenStudent }: Props) => {
   const params = useParams<{ aktivGruppe: string }>();
   return (
     <ol type="1" className={styles.stegMeny}>
       {flytRespons.flyt
-        .filter((gruppe) =>
-          [
-            'SYKDOM',
-            'VEDTAK',
-            'ALDER',
-            'GRUNNLAG',
-            'MEDLEMSKAP',
-            'LOVVALG',
-            'UTTAK',
-            'TILKJENT_YTELSE',
-            'SIMULERING',
-            'BARNETILLEGG',
-            'BREV',
-            'FATTE_VEDTAK',
-          ].includes(gruppe.stegGruppe)
-        )
+        .filter((gruppe) => grupperMedEllerUtenStudent.includes(gruppe.stegGruppe))
         .map((gruppe, index) => {
           return (
             <GruppeElement

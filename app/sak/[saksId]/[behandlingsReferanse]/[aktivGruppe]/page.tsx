@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 const grupper: StegGruppe[] = [
   'ALDER',
   'SYKDOM',
+  'STUDENT',
   'VEDTAK',
   'MEDLEMSKAP',
   'LOVVALG',
