@@ -3,7 +3,7 @@ import { BehandlingPåVentKort } from 'components/behandlingpåvent/BehandlingP�
 import { VenteInformasjon } from 'lib/types/types';
 
 const informasjon: VenteInformasjon = {
-  grunn: 'ET_ELLER_ANNET',
+  grunn: 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER',
   frist: new Date('2020-10-02').toDateString(),
   begrunnelse: 'Venter på legeerklæring',
 };
@@ -22,7 +22,7 @@ describe('behandlingPåVentKort', () => {
   it('skal vise grunn', () => {
     const årsakLabel = screen.getByText('Årsak');
     expect(årsakLabel).toBeVisible();
-    const årsakValue = screen.getByText(/et_eller_annet/i);
+    const årsakValue = screen.getByText(/venter på medisinske opplysninger/i);
     expect(årsakValue).toBeVisible();
   });
 

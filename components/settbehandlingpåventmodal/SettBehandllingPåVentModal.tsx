@@ -28,7 +28,16 @@ interface FormFields {
 export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const grunnOptions: ValuePair<SettPåVentÅrsaker>[] = [{ label: 'Et eller annet', value: 'ET_ELLER_ANNET' }];
+  const grunnOptions: ValuePair<SettPåVentÅrsaker>[] = [
+    { label: 'Venter på medisinske opplysninger', value: 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER' },
+    { label: 'Venter på opplysninger', value: 'VENTER_PÅ_OPPLYSNINGER' },
+    { label: 'Venter på vurdering fra rådgivende overlege', value: 'VENTER_PÅ_VURDERING_AV_ROL' },
+    {
+      label: 'Venter på opplysninger fra utenlandske myndigheter',
+      value: 'VENTER_PÅ_OPPLYSNINGER_FRA_UTENLANDSKE_MYNDIGHETER',
+    },
+    { label: 'Venter på svar fra bruker', value: 'VENTER_PÅ_SVAR_FRA_BRUKER' },
+  ];
 
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
