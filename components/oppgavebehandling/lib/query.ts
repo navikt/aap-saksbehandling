@@ -10,7 +10,7 @@ export const byggQueryString = (valgtKø: Kø | undefined) => {
 
   const fritekstfilter = valgtKø?.fritekstfilter
     ?.filter((filtervalg) => !!filtervalg.verdi)
-    .map((filtervalg) => `${filtervalg.navn}=${filtervalg.verdi}`);
+    .map((filtervalg) => `filtrering[${filtervalg.navn}]=${filtervalg.verdi}`);
 
   const soekeparams: string[] = [];
 
@@ -23,15 +23,12 @@ export const byggQueryString = (valgtKø: Kø | undefined) => {
 
   const querystring = soekeparams.join('&');
 
-  const search = new URLSearchParams();
-  if (querystring && querystring?.length > 0) {
-    search.append('filtrering', querystring);
-  }
+  const search = new URLSearchParams(querystring);
 
   if (valgtKø?.sortering) {
     search.append(
-      'sortering',
-      `${valgtKø.sortering.orderBy}=${valgtKø.sortering.direction === 'ascending' ? 'asc' : 'desc'}`
+        `sortering[${valgtKø.sortering.orderBy}]`,
+      `${valgtKø.sortering.direction === 'ascending' ? 'asc' : 'desc'}`
     );
   }
 

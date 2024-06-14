@@ -19,7 +19,7 @@ export async function GET() {
     });
   }
   const searchparams = new URLSearchParams();
-  searchparams.append('filtrering', `tilordnetRessurs=${brukerinfo.NAVident}`);
+  searchparams.append('filtrering[tilordnetRessurs]', `${brukerinfo.NAVident}`);
   const url = `${oppgavestyringApiBaseUrl}/oppgaver?${searchparams.toString()}`;
 
   try {

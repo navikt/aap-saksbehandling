@@ -85,14 +85,15 @@ describe('query utils', () => {
   test('bygger på format parameternavn%3Dparameternavnverdi', () => {
     const res = byggQueryString(køMedEttFiltervalg);
     const searchparams = new URLSearchParams();
-    searchparams.append('filtrering', 'parameter1=verdi2');
+    searchparams.append('filtrering[parameter1]', 'verdi2');
     expect(res).toEqual(searchparams.toString());
   });
 
   test('gjentar mønsteret parameternavn%3Dparameternavnverdi for hver verdi på et parameter', () => {
     const res = byggQueryString(køMedToFilterValg);
     const searchparams = new URLSearchParams();
-    searchparams.append('filtrering', 'parameter1=verdi1&parameter1=verdi2');
+    searchparams.append('filtrering[parameter1]', 'verdi1');
+    searchparams.append('filtrering[parameter1]', 'verdi2');
     expect(res).toEqual(searchparams.toString());
   });
 
@@ -104,21 +105,21 @@ describe('query utils', () => {
   test('lager sorteringsstreng for parameter1 i synkende rekkefølge', () => {
     const res = byggQueryString(køMedSynkendeSortering);
     const sort = new URLSearchParams();
-    sort.append('sortering', 'parameter1=desc');
+    sort.append('sortering[parameter1]', 'desc');
     expect(res).toEqual(sort.toString());
   });
 
   test('lager sorteringsstreng for parameter1 i stigende rekkefølge', () => {
     const res = byggQueryString(køMedStigendeSortering);
     const sort = new URLSearchParams();
-    sort.append('sortering', 'parameter1=asc');
+    sort.append('sortering[parameter1]', 'asc');
     expect(res).toEqual(sort.toString());
   });
 
   test('bygger søkestreng for fritekstparameter', () => {
     const res = byggQueryString(køMedFritekstfilter);
     const searchParams = new URLSearchParams();
-    searchParams.append('filtrering', 'fritekst1=fritekstverdi1');
+    searchParams.append('filtrering[fritekst1]', 'fritekstverdi1');
     expect(res).toEqual(searchParams.toString());
   });
 
@@ -143,7 +144,8 @@ describe('query utils', () => {
     };
     const res = byggQueryString(køMedAlt);
     const searchParams = new URLSearchParams();
-    searchParams.append('filtrering', `flervalg1=${filter1.value}&fritekst1=verdi1`);
+    searchParams.append('filtrering[flervalg1]', `${filter1.value}`);
+    searchParams.append('filtrering[fritekst1]', `verdi1`);
     expect(res).toEqual(searchParams.toString());
   });
 
