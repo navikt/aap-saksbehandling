@@ -10,7 +10,12 @@ const Page = async ({ params }: { params: { saksId: string; behandlingsReferanse
     return <div>Behandling ikke funnet</div>;
   }
 
-  redirect(`/sak/${params.saksId}/${behandling.referanse}/${flyt.aktivGruppe}`);
+  // TODO Må håndtere tilfelle hvor man går inn på saken når aktiv gruppe er Kvalitetssikring så skal visningen være Sykdom
+  if (flyt.aktivGruppe === 'KVALITETSSIKRING') {
+    redirect(`/sak/${params.saksId}/${behandling.referanse}/SYKDOM`);
+  } else {
+    redirect(`/sak/${params.saksId}/${behandling.referanse}/${flyt.aktivGruppe}`);
+  }
 };
 
 export default Page;
