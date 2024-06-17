@@ -5,6 +5,7 @@ import {
   hentFlyt,
   hentSak,
   hentSakPersoninfo,
+  hentStudentGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { HGrid } from '@navikt/ds-react';
 
@@ -48,16 +49,10 @@ const Layout = async ({ children, params }: Props) => {
     'FATTE_VEDTAK',
   ];
 
-  const studentStegHarAvklaringsbehov =
-    (
-      flytResponse.flyt
-        .find((flyt2) => flyt2.stegGruppe === 'STUDENT')
-        ?.steg.filter((steg) => steg.avklaringsbehov && steg.avklaringsbehov.length > 0)
-        .filter((steg) => steg.avklaringsbehov.every((avklaringsbehov) => avklaringsbehov.status !== 'AVBRUTT'))
-        .map((steg) => steg.stegType) ?? []
-    ).length > 0;
-
-  const grupperMedEllerUtenStudent = studentStegHarAvklaringsbehov ? [...grupper, 'STUDENT'] : grupper;
+  const studentGrunnlag = await hentStudentGrunnlag(params.behandlingsReferanse);
+  const grupperMedEllerUtenStudent = studentGrunnlag.oppgittStudent?.harAvbruttStudie
+    ? [...grupper, 'STUDENT']
+    : grupper;
 
   return (
     <div>
