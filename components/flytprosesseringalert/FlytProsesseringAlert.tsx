@@ -12,10 +12,10 @@ export const FlytProsesseringAlert = ({ flytProsessering }: Props) => {
       <List>
         {flytProsessering.ventendeOppgaver.map((oppgaver, index) => (
           <div key={index}>
-            <Label>{oppgaver.oppgaveType}</Label>
+            <Label>{oppgaver.type}</Label>
+            <BodyShort>Antall feilende forsøk: {oppgaver.antallFeilendeForsøk}</BodyShort>
             <BodyShort>Status: {oppgaver.status}</BodyShort>
             <BodyShort>Feilmelding: {oppgaver.feilmelding}</BodyShort>
-            <BodyShort>Antall feilende forsøk: {oppgaver.antallFeilendeForsøk}</BodyShort>
           </div>
         ))}
       </List>

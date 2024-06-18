@@ -656,7 +656,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-06-18T22:20:25.283264
+       * @example 2024-06-18T22:32:19.267136
        */
       tidspunkt: string;
     };
@@ -1031,7 +1031,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-06-18T22:20:25.283264
+       * @example 2024-06-18T22:32:19.267136
        */
       opprettet: string;
       /** Format: uuid */
@@ -1057,7 +1057,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-06-18T22:20:25.283264
+       * @example 2024-06-18T22:32:19.267136
        */
       tidsstempel: string;
     };
@@ -1114,9 +1114,9 @@ export interface components {
       /** Format: int32 */
       antallFeilendeForsøk: number;
       feilmelding?: string | null;
-      oppgaveType: string;
       /** @enum {string} */
       status: 'KLAR' | 'PLUKKET' | 'FERDIG' | 'FEILET';
+      type: string;
     };
     'no.nav.aap.behandlingsflyt.flyt.flate.Prosessering': {
       /** @enum {string} */
@@ -1210,7 +1210,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-06-18T22:20:25.283264
+       * @example 2024-06-18T22:32:19.267136
        */
       opprettet: string;
       /** Format: uuid */
