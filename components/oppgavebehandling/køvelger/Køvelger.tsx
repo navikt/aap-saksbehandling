@@ -1,15 +1,13 @@
 'use client';
 
-import { BodyShort, Button, Heading, HGrid, Label, Select, SortState } from '@navikt/ds-react';
+import { BodyShort, Heading, HGrid, Label, Select, SortState } from '@navikt/ds-react';
 import { useContext } from 'react';
 import useSWR from 'swr';
 
 import { DEFAULT_KØ, FilterValg, Fritekstfilter, Kø, KøContext } from 'components/oppgavebehandling/KøContext';
-import { FilterDTO, Oppgave } from 'lib/types/oppgavebehandling';
+import { FilterDTO } from 'lib/types/oppgavebehandling';
 import { fetchProxy } from 'lib/clientApi';
 import { logError } from '@navikt/aap-felles-utils';
-import { useRouter } from 'next/navigation';
-import { byggQueryString } from 'components/oppgavebehandling/lib/query';
 
 const hentLagredeKøer = async (): Promise<FilterDTO[] | undefined> => {
   return await fetchProxy('/api/oppgavebehandling/filter', 'GET');
@@ -23,7 +21,6 @@ type Params = {
 
 export const Køvelger = () => {
   const køContext = useContext(KøContext);
-  const router = useRouter();
   const { data, error } = useSWR('lagrede_filter', () => hentLagredeKøer());
 
   const køliste: Kø[] = [DEFAULT_KØ];
@@ -51,21 +48,6 @@ export const Køvelger = () => {
     køContext.oppdaterValgtKø(kø ?? DEFAULT_KØ);
   };
 
-  const hentNesteOppgave = async () => {
-    const umodifisertKø = køliste.find((k) => k.id === køContext.valgtKø.id);
-    const querystring = byggQueryString(umodifisertKø);
-    const url = querystring
-      ? `/api/oppgavebehandling/nesteoppgave/?${querystring}`
-      : '/api/oppgavebehandling/nesteoppgave';
-
-    const oppgave = await fetchProxy<Oppgave>(url, 'GET');
-    if (oppgave && oppgave.saksnummer && oppgave.behandlingsreferanse) {
-      router.push(`/sak/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`);
-    } else {
-      console.error('Klarte ikke å hente neste oppgave');
-    }
-  };
-
   return (
     <section>
       <Heading level={'2'} size={'medium'} spacing>
@@ -90,9 +72,6 @@ export const Køvelger = () => {
           <BodyShort>{køContext.valgtKø.beskrivelse}</BodyShort>
         </div>
       </HGrid>
-      <Button style={{ marginTop: '1rem' }} onClick={() => hentNesteOppgave()}>
-        Behandle neste oppgave
-      </Button>
     </section>
   );
 };

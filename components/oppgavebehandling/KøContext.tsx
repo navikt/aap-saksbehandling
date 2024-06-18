@@ -36,11 +36,19 @@ export const DEFAULT_KØ: Kø = {
 type ContextUpdate = {
   valgtKø: Kø;
   oppdaterValgtKø: (k: Kø) => void;
+  køliste: Kø[];
+  oppdaterKøliste: (køer: Kø[]) => void;
+  valgtKøId?: number;
+  oppdaterValgtKøId: (valgtKøId: number | undefined) => void;
 };
 
 export const KøContext = createContext<ContextUpdate>({
   valgtKø: DEFAULT_KØ,
   oppdaterValgtKø: () => {},
+  køliste: [DEFAULT_KØ],
+  oppdaterKøliste: () => {},
+  valgtKøId: DEFAULT_KØ.id,
+  oppdaterValgtKøId: () => {},
 });
 
 interface Props {
@@ -49,6 +57,8 @@ interface Props {
 
 export const KøProvider = ({ children }: Props) => {
   const [valgtKø, oppdaterValgtKø] = useState<Kø>(DEFAULT_KØ);
+  const [køListe, oppdaterKøListe] = useState<Kø[]>([DEFAULT_KØ]);
+  const [valgtKøId, oppdaterValgtKøId] = useState<number | undefined>();
   const { mutate } = useSWRConfig();
 
   const search = byggQueryString(valgtKø);
@@ -67,5 +77,18 @@ export const KøProvider = ({ children }: Props) => {
     }
   }, [valgtKø.sortering, nyttSoek, forrigeSortering, valgtKø.id, forrigeKøId]);
 
-  return <KøContext.Provider value={{ valgtKø, oppdaterValgtKø }}>{children}</KøContext.Provider>;
+  return (
+    <KøContext.Provider
+      value={{
+        valgtKø,
+        oppdaterValgtKø,
+        køliste: køListe,
+        oppdaterKøliste: oppdaterKøListe,
+        valgtKøId,
+        oppdaterValgtKøId,
+      }}
+    >
+      {children}
+    </KøContext.Provider>
+  );
 };

@@ -86,5 +86,14 @@ test('viser knapp for å lagre kø når man har lagt til et filter og er avdelin
 
 const køContextRender = (ui: ReactElement, { valgtKø, ...renderOptions }: { valgtKø: Kø }) => {
   const oppdaterValgtKø = jest.fn();
-  return render(<KøContext.Provider value={{ valgtKø, oppdaterValgtKø }}>{ui}</KøContext.Provider>, renderOptions);
+  const oppdaterValgtKøId = jest.fn();
+  const oppdaterKøliste = jest.fn();
+  const valgtKøId = 1;
+  const køliste = [valgtKø];
+  return render(
+    <KøContext.Provider value={{ valgtKø, oppdaterValgtKø, valgtKøId, oppdaterValgtKøId, køliste, oppdaterKøliste }}>
+      {ui}
+    </KøContext.Provider>,
+    renderOptions
+  );
 };
