@@ -7,7 +7,7 @@ import { Oppgave } from 'lib/types/oppgavebehandling';
 
 import styles from './Oppgavetabell.module.css';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { KøContext } from 'components/oppgavebehandling/KøContext';
 import { fetchProxy } from 'lib/clientApi';
@@ -46,6 +46,7 @@ const mapAvklaringsbehov = (behandlingstype: string) => {
 };
 
 export const Oppgavetabell = ({ oppgaver, sorterbar = true }: Props) => {
+  const [behandlerDokument, oppdaterBehandlerDokument] = useState<number | undefined>();
   const køContext = useContext(KøContext);
 
   const valgtKø = køContext.valgtKø;
@@ -72,23 +73,28 @@ export const Oppgavetabell = ({ oppgaver, sorterbar = true }: Props) => {
   };
 
   const behandle = async (oppgave: Oppgave) => {
+    oppdaterBehandlerDokument(oppgave.oppgaveId);
     const res = await fetchProxy<Response>(`/api/oppgavebehandling/${oppgave.oppgaveId}/tildelOppgave/`, 'PATCH', {
       versjon: 1,
     });
     if (res && res.status === 200) {
       router.push(`/sak/${oppgave.saksnummer}/${oppgave.behandlingsreferanse}`);
     } else {
+      oppdaterBehandlerDokument(undefined);
       console.error('Klarte ikke å tildele oppgave');
     }
   };
 
   const frigi = async (oppgave: Oppgave) => {
+    oppdaterBehandlerDokument(oppgave.oppgaveId);
     const res = await fetchProxy<Response>(`/api/oppgavebehandling/${oppgave.oppgaveId}/frigi/`, 'PATCH', {
       versjon: 1,
     });
     if (res && res.status === 200) {
+      oppdaterBehandlerDokument(undefined);
       await refresh();
     } else {
+      oppdaterBehandlerDokument(undefined);
       console.error('Klarte ikke å frigi oppgave');
     }
   };
@@ -140,7 +146,13 @@ export const Oppgavetabell = ({ oppgaver, sorterbar = true }: Props) => {
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell>
                 <div className={styles.onebutton}>
-                  <Button size={'small'} type={'button'} variant={'primary'} onClick={() => behandle(oppgave)}>
+                  <Button
+                    size={'small'}
+                    type={'button'}
+                    variant={'primary'}
+                    onClick={() => behandle(oppgave)}
+                    loading={behandlerDokument === oppgave.oppgaveId}
+                  >
                     Behandle
                   </Button>
                   <Dropdown>
