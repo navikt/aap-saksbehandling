@@ -87,3 +87,9 @@ export type OpprettYrkesskadeTestCase = components['schemas']['no.nav.aap.behand
 export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['utfall'];
 export type AvslagÅrsak =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['avslagsårsak'];
+
+export type AktivitetInnsendingDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.aktivitet.TorsHammerDto'];
+export type AktivitetDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.aktivitet.HammerDto'];
+export type AktivitetDtoType = AktivitetDto['type'];

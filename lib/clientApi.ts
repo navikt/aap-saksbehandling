@@ -1,4 +1,5 @@
 import {
+  AktivitetInnsendingDto,
   BehandlingFlytOgTilstand,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
@@ -59,6 +60,9 @@ export function hentBrevmalFraSanity(brevmalid: string) {
   return fetchProxy<Brevmal>(`/api/sanity/brevmal/${brevmalid}`, 'GET');
 }
 
+export function sendAktivitetClient(aktivitet: AktivitetInnsendingDto) {
+  return fetchProxy('/api/hammer/send/', 'POST', aktivitet);
+}
 export function hentFlytIClient(behandlingsReferanse: string) {
   return fetchProxy<BehandlingFlytOgTilstand>(`/api/behandling/${behandlingsReferanse}/flyt`, 'GET');
 }

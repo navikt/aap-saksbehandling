@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import {
+  AktivitetInnsendingDto,
   AlderGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingResultat,
@@ -63,6 +64,11 @@ export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersonin
   //   logWarning(`Fant ikke sak med referanse ${saksnummer}`);
   //   notFound();
   // }
+};
+
+export const sendAktivitet = async (aktivitet: AktivitetInnsendingDto) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/hammer/send`;
+  return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 
 export const hentAlleSaker = async (): Promise<SaksInfo[]> => {
