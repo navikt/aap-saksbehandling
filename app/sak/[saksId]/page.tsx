@@ -1,7 +1,6 @@
 import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import Link from 'next/link';
 import { Heading } from '@navikt/ds-react';
-import { AktivitetHistorikk } from 'components/aktivitethistorikk/AktivitetHistorikk';
 import styles from './page.module.css';
 import { isLocal } from 'lib/utils/environment';
 
@@ -22,9 +21,6 @@ const Page = async ({ params }: { params: { saksId: string } }) => {
         <>
           <Heading size={'medium'}>Aktivitet</Heading>
           <Link href={`/sak/${params.saksId}/aktivitet`}>Registrer brudd på aktivitetsplikten</Link>
-          <AktivitetHistorikk heading={'§ 11-9'} />
-          <AktivitetHistorikk heading={'§ 11-8'} />
-          <AktivitetHistorikk heading={'§ 11-7'} />
         </>
       )}
     </div>
