@@ -141,8 +141,8 @@ export const Oppgavetabell = ({ oppgaver, sorterbar = true }: Props) => {
               <Table.DataCell>{oppgave.foedselsnummer}</Table.DataCell>
               <Table.DataCell>{oppgave.behandlingstype}</Table.DataCell>
               <Table.DataCell>{mapAvklaringsbehov(oppgave.avklaringsbehov)}</Table.DataCell>
-              <Table.DataCell>{format(oppgave.behandlingOpprettetTid, 'dd.MM.yy')}</Table.DataCell>
-              <Table.DataCell>{format(oppgave.avklaringsbehovOpprettetTid, 'dd.MM.yy')}</Table.DataCell>
+              <Table.DataCell>{format(oppgave.behandlingOpprettetTid, 'dd.MM.yy HH:mm')}</Table.DataCell>
+              <Table.DataCell>{format(oppgave.avklaringsbehovOpprettetTid, 'dd.MM.yy HH:mm')}</Table.DataCell>
               <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ufordelt'}</Table.DataCell>
               <Table.DataCell>
                 <div className={styles.onebutton}>
