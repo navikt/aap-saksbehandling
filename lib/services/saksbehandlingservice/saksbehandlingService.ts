@@ -78,7 +78,7 @@ export const hentAlleSaker = async (): Promise<SaksInfo[]> => {
 
 export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/dokumenter`;
-  return await fetchProxy<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentStudentGrunnlag = async (behandlingsReferanse: string): Promise<StudentGrunnlag> => {
