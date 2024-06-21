@@ -13,7 +13,11 @@ I .bashrc eller .zshrc:
 
 `export NPM_AUTH_TOKEN=github_pat`
 
-Hvor github_pat er din personal access token laget på github(settings -> developer settings). Husk read:packages rettighet og enable sso når du oppdaterer/lager PAT.
+Hvor github_pat er din personal access token laget på github (settings -> developer settings). Husk `read:packages`-rettighet og enable SSO når du oppdaterer/lager PAT.
+
+### .env.local-fil
+
+I tillegg må du kopiere `.env-template` til `.env.local` for å kunne kjøre lokalt.
 
 ---
 
