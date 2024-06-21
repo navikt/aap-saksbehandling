@@ -495,43 +495,32 @@ export interface paths {
       };
     };
   };
-  '/drift/api/rekjor/{referanse}': {
-    get: {
-      parameters: {
-        path: {
-          /** @description referanse */
-          referanse: string;
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          content: {
-            'application/json': string;
-          };
-        };
-      };
-    };
-  };
-  '/drift/api/rekjorAlleFeilede': {
+  '/drift/api/jobb/feilende': {
     get: {
       responses: {
         /** @description OK */
         200: {
           content: {
-            'application/json': string;
+            'application/json': components['schemas']['no.nav.aap.motor.api.JobbInfoDto'][];
           };
         };
       };
     };
   };
-  '/test/yrkesskadeMock': {
-    post: {
-      requestBody?: {
-        content: {
-          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.OpprettYrkesskadeTestCase'];
+  '/drift/api/jobb/planlagte-jobber': {
+    get: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            'application/json': components['schemas']['no.nav.aap.motor.api.JobbInfoDto'][];
+          };
         };
       };
+    };
+  };
+  '/drift/api/jobb/rekjor/{jobbId}': {
+    get: {
       responses: {
         /** @description OK */
         200: {
@@ -542,7 +531,7 @@ export interface paths {
       };
     };
   };
-  '/test/rekjorFeilede': {
+  '/drift/api/jobb/rekjorAlleFeilede': {
     get: {
       responses: {
         /** @description OK */
@@ -628,7 +617,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestPersonDto': {
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       fødselsdato: string;
       yrkesskade: boolean;
@@ -639,20 +628,12 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       fødselsdato: string;
       ident: string;
       student: boolean;
       yrkesskade: boolean;
-    };
-    'no.nav.aap.behandlingsflyt.OpprettYrkesskadeTestCase': {
-      ident: string;
-      /**
-       * Format: date
-       * @example 2024-06-20
-       */
-      yrkesskadeDato: string;
     };
     'no.nav.aap.behandlingsflyt.PliktkortTestDTO': {
       ident: string;
@@ -674,7 +655,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-06-20T13:43:02.152866
+       * @example 2024-06-21T09:43:31.2616
        */
       tidspunkt: string;
     };
@@ -786,7 +767,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.aktivitet.HammerDto': {
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       dato: string;
       /** @enum {string} */
@@ -821,7 +802,7 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       ytterligereNedsattArbeidsevneDato?: string | null;
     };
@@ -830,7 +811,7 @@ export interface components {
       begrunnelse?: string | null;
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       ytterligereNedsattArbeidsevneDato?: string | null;
     };
@@ -853,7 +834,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent': {
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       avbruttDato?: string | null;
       harAvbruttStudie: boolean;
@@ -863,7 +844,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurdering': {
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
@@ -890,7 +871,7 @@ export interface components {
       ref: string;
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       skadedato: string;
     };
@@ -1049,7 +1030,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-06-20T13:43:02.152866
+       * @example 2024-06-21T09:43:31.2616
        */
       opprettet: string;
       /** Format: uuid */
@@ -1075,7 +1056,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-06-20T13:43:02.152866
+       * @example 2024-06-21T09:43:31.2616
        */
       tidsstempel: string;
     };
@@ -1147,7 +1128,7 @@ export interface components {
       behandlingVersjon: number;
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       frist?: string | null;
       /** @enum {string} */
@@ -1167,7 +1148,7 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       frist: string;
       /** @enum {string} */
@@ -1228,7 +1209,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-06-20T13:43:02.152866
+       * @example 2024-06-21T09:43:31.2616
        */
       opprettet: string;
       /** Format: uuid */
@@ -1241,7 +1222,7 @@ export interface components {
       ident: string;
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       søknadsdato: string;
     };
@@ -1275,10 +1256,20 @@ export interface components {
     'no.nav.aap.behandlingsflyt.vilkår.alder.flate.AlderDTO': {
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       fødselsdato: string;
       vilkårsperioder: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilkårsresultat.Vilkårsperiode'][];
+    };
+    'no.nav.aap.motor.api.JobbInfoDto': {
+      /** Format: int32 */
+      antallFeilendeForsøk: number;
+      feilmelding?: string | null;
+      /** Format: int64 */
+      id: number;
+      /** @enum {string} */
+      status: 'KLAR' | 'PLUKKET' | 'FERDIG' | 'FEILET';
+      type: string;
     };
     'no.nav.aap.verdityper.Beløp': {
       verdi: number;
@@ -1289,12 +1280,12 @@ export interface components {
     'no.nav.aap.verdityper.Periode': {
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       fom: string;
       /**
        * Format: date
-       * @example 2024-06-20
+       * @example 2024-06-21
        */
       tom: string;
     };

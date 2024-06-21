@@ -82,8 +82,6 @@ export type SettPåVentÅrsaker =
 
 export type VenteInformasjon = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.Venteinformasjon'];
 
-export type OpprettYrkesskadeTestCase = components['schemas']['no.nav.aap.behandlingsflyt.OpprettYrkesskadeTestCase'];
-
 export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['utfall'];
 export type AvslagÅrsak =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['avslagsårsak'];

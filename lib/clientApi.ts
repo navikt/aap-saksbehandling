@@ -1,13 +1,12 @@
 import {
   AktivitetInnsendingDto,
-  BehandlingFlytOgTilstand,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
-  OpprettYrkesskadeTestCase,
   SaksInfo,
   SettPåVent,
 } from './types/types';
 import { Brevmal } from 'lib/utils/sanity';
+
 export async function fetchProxy<ResponseBody>(
   url: string,
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
@@ -44,10 +43,6 @@ export function opprettSak(sak: OpprettTestcase) {
   return fetchProxy('/api/test/opprett', 'POST', sak);
 }
 
-export function leggTilIYrkesskadeMock(data: OpprettYrkesskadeTestCase) {
-  return fetchProxy('/api/test/yrkesskademock', 'POST', data);
-}
-
 export function hentAlleSaker() {
   return fetchProxy<SaksInfo[]>('/api/sak/alle', 'GET');
 }
@@ -62,9 +57,6 @@ export function hentBrevmalFraSanity(brevmalid: string) {
 
 export function sendAktivitetClient(aktivitet: AktivitetInnsendingDto) {
   return fetchProxy('/api/hammer/send/', 'POST', aktivitet);
-}
-export function hentFlytIClient(behandlingsReferanse: string) {
-  return fetchProxy<BehandlingFlytOgTilstand>(`/api/behandling/${behandlingsReferanse}/flyt`, 'GET');
 }
 
 export interface SaksInformasjon {

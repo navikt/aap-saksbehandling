@@ -14,7 +14,6 @@ import {
   KvalitetssikringGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
-  OpprettYrkesskadeTestCase,
   SakPersoninfo,
   SaksInfo,
   SettPåVent,
@@ -154,11 +153,6 @@ export const hentResultat = async (referanse: string): Promise<BehandlingResulta
 export const rekjørFeiledeOppgaver = async () => {
   const url = `${saksbehandlingApiBaseUrl}/test/rekjorFeilede`;
   return await fetchProxy<void>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const leggTilIBehandlingsflytYrkesskadeMock = async (yrkesskade: OpprettYrkesskadeTestCase) => {
-  const url = `${saksbehandlingApiBaseUrl}/test/yrkesskadeMock`;
-  return await fetchProxy<void>(url, saksbehandlingApiScope, 'POST', yrkesskade);
 };
 
 export const hentBeregningsGrunnlag = async (referanse: string) => {
