@@ -7,6 +7,7 @@ import { BodyShort, Label, Table } from '@navikt/ds-react';
 import { AlderGrunnlag, AvslagÅrsak, VilkårUtfall } from 'lib/types/types';
 
 import styles from './Alder.module.css';
+import { addYears } from 'date-fns';
 
 interface Props {
   grunnlag: AlderGrunnlag;
@@ -19,12 +20,21 @@ export const Alder = ({ grunnlag }: Props) => {
 
   return (
     <VilkårsKort heading={'Alder'} steg={'VURDER_ALDER'} icon={<PersonTallShortFillIcon fontSize={'1.5rem'} />}>
-      <div>
-        <Label>Fødselsdato</Label>
-        <BodyShort>
-          <span>{formaterDatoForFrontend(grunnlag.fødselsdato)}</span>
-          <b> {`(${kalkulerAlder(new Date(grunnlag.fødselsdato))})`}</b>
-        </BodyShort>
+      <div className={'flex-column'}>
+        <div>
+          <Label>Fødselsdato</Label>
+          <BodyShort>
+            <span>{formaterDatoForFrontend(grunnlag.fødselsdato)}</span>
+            <b>{`(Bruker er ${kalkulerAlder(new Date(grunnlag.fødselsdato))} i dag)`}</b>
+          </BodyShort>
+        </div>
+
+        <div>
+          <Label>Dato bruker blir 67 år</Label>
+          <BodyShort>
+            <span>{formaterDatoForFrontend(addYears(new Date(grunnlag.fødselsdato), 67))}</span>
+          </BodyShort>
+        </div>
       </div>
 
       <Table>

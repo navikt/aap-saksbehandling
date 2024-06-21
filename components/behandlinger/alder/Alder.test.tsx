@@ -44,7 +44,7 @@ describe('alder', () => {
   it('Skal vise alder', () => {
     render(<Alder grunnlag={grunnlagOppfylt} />);
     const alderString = kalkulerAlder(new Date(grunnlagOppfylt.fødselsdato));
-    const alder = screen.getByText(`(${alderString})`);
+    const alder = screen.getByText(`(Bruker er ${alderString} i dag)`);
 
     expect(alder).toBeVisible();
   });
@@ -96,5 +96,14 @@ describe('alder', () => {
     const avslagsårsakLabel = await screen.queryByRole('columnheader', { name: /avslagsårsak/i });
 
     expect(avslagsårsakLabel).not.toBeInTheDocument();
+  });
+
+  it('skal vise alderen brukeren blir 67 år', () => {
+    render(<Alder grunnlag={grunnlagOppfylt} />);
+    const label = screen.getByText('Dato bruker blir 67 år');
+    expect(label).toBeInTheDocument();
+
+    const verdi = screen.getByText('02.01.2067');
+    expect(verdi).toBeInTheDocument();
   });
 });
