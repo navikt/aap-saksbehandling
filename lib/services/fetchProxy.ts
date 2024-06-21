@@ -50,7 +50,7 @@ const fetchWithRetry = async <ResponseBody>(
     throw new Error(`Unable to fetch ${url}: ${retries} retries left`);
   }
 
-  logInfo('obotoken til Fredrik og Ine', oboToken);
+  logInfo(`obotoken til Fredrik og Ine: ${oboToken}`);
 
   const response = await fetch(url, {
     method,
