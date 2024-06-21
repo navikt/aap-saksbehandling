@@ -2,7 +2,7 @@ import { isLocal } from 'lib/utils/environment';
 import { requestAzureOboToken, validateToken } from '@navikt/oasis';
 import { getAccessTokenOrRedirectToLogin } from 'lib/auth/authentication';
 import { headers } from 'next/headers';
-import { logError } from '@navikt/aap-felles-utils';
+import { logError, logInfo } from '@navikt/aap-felles-utils';
 import { hentLocalToken } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 const NUMBER_OF_RETRIES = 3;
@@ -49,6 +49,8 @@ const fetchWithRetry = async <ResponseBody>(
   if (retries === 0) {
     throw new Error(`Unable to fetch ${url}: ${retries} retries left`);
   }
+
+  logInfo('obotoken til Fredrik og Ine', oboToken);
 
   const response = await fetch(url, {
     method,
