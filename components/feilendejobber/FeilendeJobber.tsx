@@ -1,15 +1,17 @@
 import React from 'react';
-import { JobbDto } from 'lib/types/types';
+import { JobbInfo } from 'lib/types/types';
 import { Alert, BodyShort, Label } from '@navikt/ds-react';
 
 import styles from './FeilendeJobber.module.css';
 
 interface Props {
-  jobber: JobbDto[];
+  jobber: JobbInfo[];
 }
 
 export const FeilendeJobber = ({ jobber }: Props) => {
   const harFeilendeJobber = jobber.length > 0;
+
+  console.log(jobber);
 
   return (
     <div className={'flex-column'}>
@@ -18,10 +20,8 @@ export const FeilendeJobber = ({ jobber }: Props) => {
       ) : (
         <Alert variant={'success'}>Alt kjører OK</Alert>
       )}
-      {jobber.length === 0 ? (
-        <BodyShort>Ingen feilende jobber</BodyShort>
-      ) : (
-        <div>
+      {harFeilendeJobber && (
+        <div className={'flex-column'}>
           {jobber.map((jobb, index) => (
             <div key={index} className={`${styles.feilendeJobb} flex-column`}>
               <div className={'flex-row'}>
@@ -39,11 +39,16 @@ export const FeilendeJobber = ({ jobber }: Props) => {
                   <Label>Antall feilende forsøk</Label>
                   <BodyShort>{jobb.antallFeilendeForsøk}</BodyShort>
                 </div>
+
+                <div>
+                  <Label>ID</Label>
+                  <BodyShort>{jobb.id}</BodyShort>
+                </div>
               </div>
 
               <div>
                 <Label>Feilmelding</Label>
-                <BodyShort>{jobb.feilmelding}</BodyShort>
+                <BodyShort size={'small'}>{jobb.feilmelding}</BodyShort>
               </div>
             </div>
           ))}

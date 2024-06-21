@@ -92,4 +92,4 @@ export type AktivitetDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.aktivitet.HammerDto'];
 export type AktivitetDtoType = AktivitetDto['type'];
 
-export type JobbDto = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.JobbDto'];
+export type JobbInfo = components['schemas']['no.nav.aap.motor.api.JobbInfoDto'];

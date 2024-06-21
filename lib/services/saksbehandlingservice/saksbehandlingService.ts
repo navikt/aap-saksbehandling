@@ -10,7 +10,7 @@ import {
   DetaljertBehandling,
   FatteVedtakGrunnlag,
   FritakMeldepliktGrunnlag,
-  JobbDto,
+  JobbInfo,
   KvalitetssikringGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
@@ -188,7 +188,7 @@ export const hentLocalToken = async () => {
 
 export const hentFeilendeJObber = async () => {
   const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/feilende`;
-  return await fetchProxy<JobbDto[]>(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy<JobbInfo[]>(url, saksbehandlingApiScope, 'GET');
 };
 
 export interface MockBeregeningsGrunnlag {
