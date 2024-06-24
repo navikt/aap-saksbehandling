@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { JobbInfo } from 'lib/types/types';
-import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HStack, Label, VStack } from '@navikt/ds-react';
 
 import styles from 'components/drift/feilendejobber/FeilendeJobber.module.css';
 import { rekjørJobb } from 'lib/clientApi';
@@ -12,42 +12,70 @@ interface Props {
 }
 
 export const FeilendeJobber = ({ jobber }: Props) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
   const harFeilendeJobber = jobber.length > 0;
 
   console.log(jobber);
+  async function onRekjørJobbClick(id: number) {
+    setIsLoading(true);
+    try {
+      const rekjørRes = await rekjørJobb(id);
+      if (rekjørRes.ok) {
+        const message = await rekjørRes.text();
+        setMessage(message);
+      } else {
+        const message = await rekjørRes.text();
+        setMessage(message);
+      }
+    } catch (err) {
+      setMessage('Noe gikk galt');
+      setIsLoading(false);
+    }
+    setIsLoading(false);
+  }
 
   return (
-    <div className={'flex-column'}>
+    <VStack>
       {harFeilendeJobber ? (
         <Alert variant={'error'}>Det finnes {jobber.length} feilede jobb(er)</Alert>
       ) : (
         <Alert variant={'success'}>Alt kjører OK</Alert>
       )}
       {harFeilendeJobber && (
-        <div className={'flex-column'}>
+        <VStack>
           {jobber.map((jobb, index) => (
             <div key={index} className={`${styles.feilendeJobb} flex-column`}>
-              <div className={'flex-row'}>
-                <div>
-                  <Label>Type</Label>
-                  <BodyShort>{jobb.type}</BodyShort>
-                </div>
+              <div className={styles.topWrapper}>
+                <div className={styles.metaData}>
+                  <div>
+                    <Label>Type</Label>
+                    <BodyShort>{jobb.type}</BodyShort>
+                  </div>
 
-                <div>
-                  <Label>Status</Label>
-                  <BodyShort>{jobb.status}</BodyShort>
-                </div>
+                  <div>
+                    <Label>Status</Label>
+                    <BodyShort>{jobb.status}</BodyShort>
+                  </div>
 
-                <div>
-                  <Label>Antall feilende forsøk</Label>
-                  <BodyShort>{jobb.antallFeilendeForsøk}</BodyShort>
-                </div>
+                  <div>
+                    <Label>Antall feilende forsøk</Label>
+                    <BodyShort>{jobb.antallFeilendeForsøk}</BodyShort>
+                  </div>
 
-                <div>
-                  <Label>ID</Label>
-                  <BodyShort>{jobb.id}</BodyShort>
+                  <div>
+                    <Label>ID</Label>
+                    <BodyShort>{jobb.id}</BodyShort>
+                  </div>
                 </div>
-                <Button onClick={() => rekjørJobb(jobb.id)}>Rekjør</Button>
+                <div>
+                  <HStack justify={'end'}>
+                    <Button loading={isLoading} onClick={() => onRekjørJobbClick(jobb.id)}>
+                      Rekjør
+                    </Button>
+                  </HStack>
+                  {message && <BodyShort>{message}</BodyShort>}
+                </div>
               </div>
 
               <div>
@@ -56,8 +84,8 @@ export const FeilendeJobber = ({ jobber }: Props) => {
               </div>
             </div>
           ))}
-        </div>
+        </VStack>
       )}
-    </div>
+    </VStack>
   );
 };

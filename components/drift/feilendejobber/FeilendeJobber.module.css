@@ -3,3 +3,15 @@
   border: 1px solid var(--a-gray-400);
   box-shadow: var(--a-shadow-xsmall);
 }
+.metaData {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--a-spacing-4);
+}
+.topWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.buttonWrapper {
+}

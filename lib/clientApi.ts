@@ -16,7 +16,6 @@ export async function fetchProxy<ResponseBody>(
     const res = await fetch(url, {
       method,
       body: body && JSON.stringify(body),
-      cache: 'no-store',
     });
 
     const data = await res.json();
@@ -58,8 +57,8 @@ export function hentBrevmalFraSanity(brevmalid: string) {
 export function sendAktivitetClient(aktivitet: AktivitetInnsendingDto) {
   return fetchProxy('/api/hammer/send/', 'POST', aktivitet);
 }
-export function rekjørJobb(jobbId: number): Promise<string | undefined> {
-  return fetchProxy(`/api/drift/jobb/rekjor/${jobbId}`, 'GET');
+export function rekjørJobb(jobbId: number) {
+  return fetch(`/api/drift/jobb/rekjor/${jobbId}`, { method: 'GET' });
 }
 
 export interface SaksInformasjon {
