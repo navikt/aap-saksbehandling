@@ -1,8 +1,11 @@
+'use client';
+
 import React from 'react';
 import { JobbInfo } from 'lib/types/types';
-import { Alert, BodyShort, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
 
 import styles from 'components/drift/feilendejobber/FeilendeJobber.module.css';
+import { rekjørJobb } from 'lib/clientApi';
 
 interface Props {
   jobber: JobbInfo[];
@@ -44,6 +47,7 @@ export const FeilendeJobber = ({ jobber }: Props) => {
                   <Label>ID</Label>
                   <BodyShort>{jobb.id}</BodyShort>
                 </div>
+                <Button onClick={() => rekjørJobb(jobb.id)}>Rekjør</Button>
               </div>
 
               <div>

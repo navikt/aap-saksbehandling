@@ -58,6 +58,9 @@ export function hentBrevmalFraSanity(brevmalid: string) {
 export function sendAktivitetClient(aktivitet: AktivitetInnsendingDto) {
   return fetchProxy('/api/hammer/send/', 'POST', aktivitet);
 }
+export function rekjørJobb(jobbId: number): Promise<string | undefined> {
+  return fetchProxy(`/api/drift/jobb/rekjor/${jobbId}`, 'GET');
+}
 
 export interface SaksInformasjon {
   søker: {
