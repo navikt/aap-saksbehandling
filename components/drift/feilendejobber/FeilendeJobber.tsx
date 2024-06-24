@@ -2,7 +2,7 @@ import React from 'react';
 import { JobbInfo } from 'lib/types/types';
 import { Alert, BodyShort, Label } from '@navikt/ds-react';
 
-import styles from './FeilendeJobber.module.css';
+import styles from 'components/drift/feilendejobber/FeilendeJobber.module.css';
 
 interface Props {
   jobber: JobbInfo[];
