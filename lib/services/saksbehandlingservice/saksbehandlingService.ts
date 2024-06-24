@@ -81,6 +81,12 @@ export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
+// TODO returtype? - fetchProxy godtar application/json - /dokument returner application/pdf
+export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/dokument/${journalPostId}/${dokumentInfoId}`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentStudentGrunnlag = async (behandlingsReferanse: string): Promise<StudentGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/student`;
   return await fetchProxy<StudentGrunnlag>(url, saksbehandlingApiScope, 'GET');
