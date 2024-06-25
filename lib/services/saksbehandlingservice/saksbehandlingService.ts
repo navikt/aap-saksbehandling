@@ -82,7 +82,7 @@ export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
 };
 
 export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/dokument/${journalPostId}/${dokumentInfoId}`;
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/dokument/${journalPostId}/${dokumentInfoId}`;
   return await fetchPdf(url, saksbehandlingApiScope);
 };
 
