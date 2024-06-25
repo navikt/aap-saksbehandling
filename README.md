@@ -2,7 +2,7 @@
 
 Frontendapplikasjon for ny saksbehandlingsløsning på AAP
 
-## Bygge app lokalt
+## Bygge og kjøre app lokalt
 
 ### Github package registry
 
@@ -18,6 +18,16 @@ Hvor github_pat er din personal access token laget på github (settings -> devel
 ### .env.local-fil
 
 I tillegg må du kopiere `.env-template` til `.env.local` for å kunne kjøre lokalt.
+
+### Kjøre lokalt
+
+Start `behandlingsflyt` backend lokalt ved å kjøre `TestApp`-klassen fra IntelliJ (TODO: hvordan kjøre fra kommandolinjen?)
+
+```
+yarn dev
+```
+
+For å opprette en lokal test-sak, åpne `http://localhost:3000/saksoversikt/` i nettleseren.
 
 ---
 
