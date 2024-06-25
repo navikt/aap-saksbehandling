@@ -23,9 +23,11 @@ interface Props {
 interface FormFields {
   begrunnelse: string;
   harAvbruttStudie: string;
+  godkjentStudie: string;
   avbruttPgaSykdomSkade: string;
   harBehovForBehandling: string;
   avbruttDato: Date;
+  forventetGjenopptatt: string;
   avbruddMerEnn6Mnd: string;
   dokumenterBruktIVurderingen: string[];
 }
@@ -45,28 +47,40 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       },
       harAvbruttStudie: {
         type: 'radio',
-        label: 'Har søker avbrutt et studie som er godkjent av Lånekassen?',
+        label: 'Har søker avbrutt et studie?',
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om søker har avbrutt studie.' },
       },
+      godkjentStudie: {
+        type: 'radio',
+        label: 'Er studiet godkjent av Lånekassen?',
+        options: JaEllerNeiOptions,
+        rules: { required: 'Du må svare på om studiet er godkjent av Lånekassen.' },
+      },
       avbruttPgaSykdomSkade: {
         type: 'radio',
-        label: 'Er studie avbrutt pga sykdom eller skade som krever behandling?',
+        label: 'Er studie avbrutt pga sykdom eller skade?',
         options: JaEllerNeiOptions,
         rules: {
-          required: 'Du må svare på om søker har avbrutt studie på grunn av sykdom eller skade som krever behandling.',
+          required: 'Du må svare på om søker har avbrutt studie på grunn av sykdom eller skade.',
         },
       },
       harBehovForBehandling: {
         type: 'radio',
-        label: 'Har bruker behov for behandling?',
+        label: 'Har bruker behov for behandling for å gjenoppta studiet?',
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om søker har behov for behandling.' },
+        rules: { required: 'Du må svare på om søker har behov for behandling for å gjenoppta studiet.' },
       },
       avbruttDato: {
         type: 'date',
         label: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?',
         rules: { required: 'Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.' },
+      },
+      forventetGjenopptatt: {
+        type: 'radio',
+        label: 'Er det forventet at søker skal gjenoppta studiet?',
+        options: JaEllerNeiOptions,
+        rules: { required: 'Du må svare på om det er forventet at søker skal gjenoppta studiet.' },
       },
       avbruddMerEnn6Mnd: {
         type: 'radio',
@@ -122,8 +136,10 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         </FormField>
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.harAvbruttStudie} />
+        <FormField form={form} formField={formFields.godkjentStudie} />
         <FormField form={form} formField={formFields.avbruttPgaSykdomSkade} />
         <FormField form={form} formField={formFields.harBehovForBehandling} />
+        <FormField form={form} formField={formFields.forventetGjenopptatt} />
         <FormField form={form} formField={formFields.avbruttDato} />
         <FormField form={form} formField={formFields.avbruddMerEnn6Mnd} />
       </Form>

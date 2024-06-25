@@ -36,21 +36,24 @@ describe('Student', () => {
 
   it('har et valg for om søker har avbrutt et studie', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
-    expect(
-      screen.getByRole('group', { name: 'Har søker avbrutt et studie som er godkjent av Lånekassen?' })
-    ).toBeVisible();
+    expect(screen.getByRole('group', { name: 'Har søker avbrutt et studie?' })).toBeVisible();
   });
 
-  it('har et valg for om studie er avbrutt pga sykdom eller skade som krever behandling', () => {
+  it('har et valg for om studiet er godkjent av Lånekassen', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
-    expect(
-      screen.getByRole('group', { name: 'Er studie avbrutt pga sykdom eller skade som krever behandling?' })
-    ).toBeVisible();
+    expect(screen.getByRole('group', { name: 'Er studiet godkjent av Lånekassen?' })).toBeVisible();
+  });
+
+  it('har et valg for om studie er avbrutt pga sykdom eller skade', () => {
+    render(<Student readOnly={false} behandlingVersjon={0} />);
+    expect(screen.getByRole('group', { name: 'Er studie avbrutt pga sykdom eller skade?' })).toBeVisible();
   });
 
   it('har et valg for om bruker har behov for behandling', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
-    expect(screen.getByRole('group', { name: 'Har bruker behov for behandling?' })).toBeVisible();
+    expect(
+      screen.getByRole('group', { name: 'Har bruker behov for behandling for å gjenoppta studiet?' })
+    ).toBeVisible();
   });
 
   it('har et felt for å sette når studieevnen ble nedsatt fra', () => {
@@ -58,6 +61,11 @@ describe('Student', () => {
     expect(
       screen.getByRole('textbox', { name: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?' })
     ).toBeVisible();
+  });
+
+  it('spør om det er forventet at studiet skal gjenopptas', () => {
+    render(<Student readOnly={false} behandlingVersjon={0} />);
+    expect(screen.getByRole('group', { name: 'Er det forventet at søker skal gjenoppta studiet?' })).toBeVisible();
   });
 
   it('spør om avbruddet er forventet å vare mer enn 6 mnd', () => {
@@ -81,24 +89,32 @@ describe('Student', () => {
     expect(await screen.findByText('Du må svare på om søker har avbrutt studie.')).toBeVisible();
   });
 
+  it('viser feilmelding hvis det ikke er svart på om studiet er godkjent av Lånekassen', async () => {
+    render(<Student readOnly={false} behandlingVersjon={0} />);
+    const button = screen.getByRole('button', { name: /Bekreft/ });
+    await user.click(button);
+
+    expect(await screen.findByText('Du må svare på om studiet er godkjent av Lånekassen.')).toBeVisible();
+  });
+
   it('viser feilemdling hvis det ikke er svart på om studiet er avbrutt pga sykdom eller skade', async () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
     expect(
-      await screen.findByText(
-        'Du må svare på om søker har avbrutt studie på grunn av sykdom eller skade som krever behandling.'
-      )
+      await screen.findByText('Du må svare på om søker har avbrutt studie på grunn av sykdom eller skade.')
     ).toBeVisible();
   });
 
-  it('viser feilmelding hvis det ikke er svart på om bruker trenger behandling', async () => {
+  it('viser feilmelding hvis det ikke er svart på om bruker trenger behandling for å gjenoppta studiet', async () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
-    expect(await screen.findByText('Du må svare på om søker har behov for behandling.')).toBeVisible();
+    expect(
+      await screen.findByText('Du må svare på om søker har behov for behandling for å gjenoppta studiet.')
+    ).toBeVisible();
   });
 
   it('viser feilmelding hvis det ikke er svart på når studieevnen ble nedsatt', async () => {
@@ -108,6 +124,16 @@ describe('Student', () => {
 
     expect(
       await screen.findByText('Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.')
+    ).toBeVisible();
+  });
+
+  it('viser feilmelding hvis det ikke er svart på om det er forventet at studiet skal gjenopptas', async () => {
+    render(<Student readOnly={false} behandlingVersjon={0} />);
+    const button = screen.getByRole('button', { name: /Bekreft/ });
+    await user.click(button);
+
+    expect(
+      await screen.findByText('Du må svare på om det er forventet at søker skal gjenoppta studiet.')
     ).toBeVisible();
   });
 
