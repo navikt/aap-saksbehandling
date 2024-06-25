@@ -4,15 +4,15 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
-import { Buldings2Icon } from '@navikt/aksel-icons';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { format } from 'date-fns';
+import { BooksIcon } from '@navikt/aksel-icons';
+import { Behovstype, JaEllerNeiOptions } from 'lib/utils/form';
 import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 import { StudentGrunnlag } from 'lib/types/types';
-import { stringToDate } from 'lib/utils/date';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { BodyShort, Label } from '@navikt/ds-react';
+import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 
 interface Props {
   behandlingVersjon: number;
@@ -22,8 +22,12 @@ interface Props {
 
 interface FormFields {
   begrunnelse: string;
-  oppfyller11_14: string;
-  avbruttStudieDato?: Date;
+  harAvbruttStudie: string;
+  avbruttPgaSykdomSkade: string;
+  harBehovForBehandling: string;
+  avbruttDato: Date;
+  avbruddMerEnn6Mnd: string;
+  dokumenterBruktIVurderingen: string[];
 }
 
 export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
@@ -35,31 +39,45 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       begrunnelse: {
         type: 'textarea',
         description: 'Begrunn vurderingen',
-        label: 'Vurder... ............',
-        rules: { required: 'Du må begrunne' },
-
+        label: 'Vurder §11-14 og vilkårene i §7 i forskriften',
         defaultValue: grunnlag?.studentvurdering?.begrunnelse,
+        rules: { required: 'Du må begrunne vurderingen din' },
       },
-      oppfyller11_14: {
+      harAvbruttStudie: {
         type: 'radio',
-        label: 'Har søker oppfyllt vilkårene i § 11-14?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.oppfyller11_14),
+        label: 'Har søker avbrutt et studie som er godkjent av Lånekassen?',
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
+        rules: { required: 'Du må svare på om søker har avbrutt studie' },
       },
-      avbruttStudieDato: {
-        type: 'date',
-        label: 'Første dag med avbrutt studie',
-        defaultValue: stringToDate(grunnlag?.studentvurdering?.avbruttStudieDato),
+      avbruttPgaSykdomSkade: {
+        type: 'radio',
+        label: 'Er studie avbrutt pga sykdom eller skade som krever behandling?',
+        options: JaEllerNeiOptions,
         rules: {
-          validate: {
-            required: (value, formValues) => {
-              if (!value && formValues.oppfyller11_14 === JaEllerNei.Ja) {
-                return 'Du må svare på når studiet ble avbrutt';
-              }
-            },
-          },
+          required: 'Du må svare på om søker har avbrutt studie på grunn av sykdom eller skade som krever behandling',
         },
+      },
+      harBehovForBehandling: {
+        type: 'radio',
+        label: 'Har bruker behov for behandling?',
+        options: JaEllerNeiOptions,
+        rules: { required: 'Du må svare på om søker har behov for behandling' },
+      },
+      avbruttDato: {
+        type: 'date',
+        label: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?',
+        rules: { required: 'Du må angi når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.' },
+      },
+      avbruddMerEnn6Mnd: {
+        type: 'radio',
+        label: 'Er avbruddet forventet å vare mer enn 6 mnd?',
+        options: JaEllerNeiOptions,
+        rules: { required: 'Du må svare på om avbruddet er forventet å vare i mer enn 6 mnd.' },
+      },
+      dokumenterBruktIVurderingen: {
+        type: 'checkbox_nested',
+        label: 'Dokumenter funnet som er relevante for vurdering av student §11-14',
+        description: 'Les dokumentene og tilknytt minst ett dokument til 11-14 vurderingen.',
       },
     },
     { readOnly: readOnly }
@@ -74,10 +92,6 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           studentvurdering: {
             begrunnelse: data.begrunnelse,
             dokumenterBruktIVurdering: [],
-            oppfyller11_14: data.oppfyller11_14 === JaEllerNei.Ja,
-            avbruttStudieDato: data.avbruttStudieDato
-              ? format(new Date(data.avbruttStudieDato), 'yyyy-MM-dd')
-              : undefined,
           },
         },
         referanse: behandlingsReferanse,
@@ -89,7 +103,7 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
     <VilkårsKort
       heading={getHeaderForSteg(mapStegTypeTilDetaljertSteg('AVKLAR_STUDENT'))}
       steg={'AVKLAR_STUDENT'}
-      icon={<Buldings2Icon fontSize={'inherit'} />}
+      icon={<BooksIcon fontSize={'inherit'} />}
     >
       <Form
         onSubmit={handleSubmit}
@@ -98,13 +112,20 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         steg={'AVKLAR_STUDENT'}
         visBekreftKnapp={!readOnly}
       >
+        <div>
+          <Label>Har søker oppgitt at hen har avbrutt studiet helt pga sykdom?</Label>
+          <BodyShort>Ja</BodyShort>
+        </div>
+
+        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
+          <DokumentTabell />
+        </FormField>
         <FormField form={form} formField={formFields.begrunnelse} />
-
-        <FormField form={form} formField={formFields.oppfyller11_14} />
-
-        {form.watch('oppfyller11_14') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.avbruttStudieDato} />
-        )}
+        <FormField form={form} formField={formFields.harAvbruttStudie} />
+        <FormField form={form} formField={formFields.avbruttPgaSykdomSkade} />
+        <FormField form={form} formField={formFields.harBehovForBehandling} />
+        <FormField form={form} formField={formFields.avbruttDato} />
+        <FormField form={form} formField={formFields.avbruddMerEnn6Mnd} />
       </Form>
     </VilkårsKort>
   );

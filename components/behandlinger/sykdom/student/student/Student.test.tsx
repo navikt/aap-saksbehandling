@@ -1,101 +1,64 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { Student } from 'components/behandlinger/sykdom/student/student/Student';
 
 describe('Student', () => {
-  const user = userEvent.setup();
-
   it('skal ha en overskrift', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
     const heading = screen.getByText('Student - § 11-14');
     expect(heading).toBeVisible();
   });
 
-  it('Skal ha et begrunnelse felt', () => {
+  it('viser informasjon om at bruker har svart at de studerer i søknaden', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
-    const textbox = screen.getByRole('textbox', {
-      name: /vurder/i,
+    expect(screen.getByText('Har søker oppgitt at hen har avbrutt studiet helt pga sykdom?')).toBeVisible();
+  });
+
+  it('har en liste over dokumenter som kan tilknyttes vurderingen', () => {
+    render(<Student readOnly={false} behandlingVersjon={0} />);
+    const tilknyttedeDokumenterListe = screen.getByRole('group', {
+      name: 'Dokumenter funnet som er relevante for vurdering av student §11-14',
     });
-    expect(textbox).toBeVisible();
+    expect(tilknyttedeDokumenterListe).toBeVisible();
   });
 
-  it('Skal ha et felt for om søker oppfyller hovedvilkåret', () => {
+  it('listen over dokumenter som kan knyttes til saken har korrekt beskrivelse', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
-    const radioGroup = screen.getByRole('group', { name: /Har søker oppfyllt vilkårene i § 11-14?/i });
-    expect(radioGroup).toBeVisible();
+    expect(screen.getByText('Les dokumentene og tilknytt minst ett dokument til 11-14 vurderingen.')).toBeVisible();
   });
 
-  it("Radiogruppe for hovedvilkår skal ha to valg, 'Ja' og 'Nei'", () => {
+  it('har et fritekstfelt for vurdering av vilkåret', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
-    const oppfyltJa = screen.getByRole('radio', { name: /Ja/i });
-    const oppfyltNei = screen.getByRole('radio', { name: /Nei/i });
-    expect(oppfyltJa).not.toBeChecked();
-    expect(oppfyltNei).not.toBeChecked();
+    expect(screen.getByRole('textbox', { name: 'Vurder §11-14 og vilkårene i §7 i forskriften' })).toBeVisible();
   });
 
-  it('Skal ikke vise datofelt dersom hovedvilkåret ikke er oppfylt', async () => {
+  it('har et valg for om søker har avbrutt et studie', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
-    const oppfyltNei = screen.getByRole('radio', { name: /Nei/i });
-
-    await user.click(oppfyltNei);
-
-    expect(oppfyltNei).toBeChecked();
-
-    const datofelt = screen.queryByRole('textbox', { name: 'Første dag med avbrutt studie' });
-    expect(datofelt).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('group', { name: 'Har søker avbrutt et studie som er godkjent av Lånekassen?' })
+    ).toBeVisible();
   });
 
-  it('Skal vise datofelt dersom hovedvilkåret er oppfylt', async () => {
+  it('har et valg for om studie er avbrutt pga sykdom eller skade som krever behandling', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
-    const oppfyltJa = screen.getByRole('radio', { name: /Ja/i });
-
-    await user.click(oppfyltJa);
-
-    expect(oppfyltJa).toBeChecked();
-
-    const datofelt = screen.queryByRole('textbox', { name: 'Første dag med avbrutt studie' });
-    expect(datofelt).toBeInTheDocument();
+    expect(
+      screen.getByRole('group', { name: 'Er studie avbrutt pga sykdom eller skade som krever behandling?' })
+    ).toBeVisible();
   });
 
-  it('Begrunnelse skal ha feilmelding dersom ikke fyllt ut', async () => {
+  it('har et valg for om bruker har behov for behandling', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
-    const button = screen.getByRole('button', { name: /bekreft/i });
-
-    await user.click(button);
-
-    const errorText = await screen.findByText('Du må begrunne');
-
-    expect(errorText).toBeVisible();
-
-    const textField = screen.getByRole('textbox', { name: /vurder/i });
-    expect(textField).toBeInvalid();
+    expect(screen.getByRole('group', { name: 'Har bruker behov for behandling?' })).toBeVisible();
   });
 
-  it('Hovedvilkåret skal ha feilmelding dersom ikke fyllt ut', async () => {
+  it('har et felt for å sette når studieevnen ble nedsatt fra', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
-    const button = screen.getByRole('button', { name: /bekreft/i });
-
-    await user.click(button);
-
-    const errorText = await screen.findByText('Du må svare på om vilkåret er oppfyllt');
-
-    expect(errorText).toBeVisible();
+    expect(
+      screen.getByRole('textbox', { name: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?' })
+    ).toBeVisible();
   });
 
-  it('Datofelt skal ha feilmelding dersom hovedvilkår er "Ja", og datofeilt ikke fyllt ut', async () => {
+  it('spør om avbruddet er forventet å vare mer enn 6 mnd', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
-    const button = screen.getByRole('button', { name: /bekreft/i });
-
-    const oppfyltJa = screen.getByRole('radio', { name: /Ja/i });
-    await user.click(oppfyltJa);
-
-    await user.click(button);
-
-    const errorText = await screen.findByText('Du må svare på når studiet ble avbrutt');
-
-    expect(errorText).toBeVisible();
-
-    const datofelt = screen.queryByRole('textbox', { name: 'Første dag med avbrutt studie' });
-    expect(datofelt).toBeInvalid();
+    expect(screen.getByRole('group', { name: 'Er avbruddet forventet å vare mer enn 6 mnd?' })).toBeVisible();
   });
 });
