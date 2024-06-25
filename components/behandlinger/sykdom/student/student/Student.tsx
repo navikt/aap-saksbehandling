@@ -105,6 +105,7 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           behovstype: Behovstype.AVKLAR_STUDENT_KODE,
           studentvurdering: {
             begrunnelse: data.begrunnelse,
+            oppfyller11_14: false, // Legger inn at den ikke er oppfylt slik at det ikke tryner foreløpig
             dokumenterBruktIVurdering: [],
           },
         },
