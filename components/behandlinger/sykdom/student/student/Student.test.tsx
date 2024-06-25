@@ -1,5 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { Student } from 'components/behandlinger/sykdom/student/student/Student';
+import userEvent from '@testing-library/user-event';
+
+const user = userEvent.setup();
 
 describe('Student', () => {
   it('skal ha en overskrift', () => {
@@ -60,5 +63,61 @@ describe('Student', () => {
   it('spør om avbruddet er forventet å vare mer enn 6 mnd', () => {
     render(<Student readOnly={false} behandlingVersjon={0} />);
     expect(screen.getByRole('group', { name: 'Er avbruddet forventet å vare mer enn 6 mnd?' })).toBeVisible();
+  });
+
+  it('viser en feilmelding dersom det ikke er lagt inn en begrunnelse', async () => {
+    render(<Student readOnly={false} behandlingVersjon={0} />);
+    const button = screen.getByRole('button', { name: /Bekreft/ });
+    await user.click(button);
+
+    expect(await screen.findByText('Du må begrunne vurderingen.')).toBeVisible();
+  });
+
+  it('viser feilemdling hvis det ikke er svart på om studiet er avbrutt', async () => {
+    render(<Student readOnly={false} behandlingVersjon={0} />);
+    const button = screen.getByRole('button', { name: /Bekreft/ });
+    await user.click(button);
+
+    expect(await screen.findByText('Du må svare på om søker har avbrutt studie.')).toBeVisible();
+  });
+
+  it('viser feilemdling hvis det ikke er svart på om studiet er avbrutt pga sykdom eller skade', async () => {
+    render(<Student readOnly={false} behandlingVersjon={0} />);
+    const button = screen.getByRole('button', { name: /Bekreft/ });
+    await user.click(button);
+
+    expect(
+      await screen.findByText(
+        'Du må svare på om søker har avbrutt studie på grunn av sykdom eller skade som krever behandling.'
+      )
+    ).toBeVisible();
+  });
+
+  it('viser feilmelding hvis det ikke er svart på om bruker trenger behandling', async () => {
+    render(<Student readOnly={false} behandlingVersjon={0} />);
+    const button = screen.getByRole('button', { name: /Bekreft/ });
+    await user.click(button);
+
+    expect(await screen.findByText('Du må svare på om søker har behov for behandling.')).toBeVisible();
+  });
+
+  it('viser feilmelding hvis det ikke er svart på når studieevnen ble nedsatt', async () => {
+    render(<Student readOnly={false} behandlingVersjon={0} />);
+    const button = screen.getByRole('button', { name: /Bekreft/ });
+    await user.click(button);
+
+    expect(
+      await screen.findByText('Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.')
+    ).toBeVisible();
+  });
+
+  it('viser feilmelding hvis det ikke er svart på om det er forventet at fraværet blir over 6 mnd', async () => {
+    render(<Student readOnly={false} behandlingVersjon={0} />);
+    const button = screen.getByRole('button', { name: /Bekreft/ });
+    await user.click(button);
+
+    expect(
+      await screen.findByText('Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.')
+    ).toBeVisible();
   });
 });
