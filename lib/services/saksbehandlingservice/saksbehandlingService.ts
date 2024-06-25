@@ -23,7 +23,7 @@ import {
   TilkjentYtelseGrunnlag,
   VenteInformasjon,
 } from 'lib/types/types';
-import { fetchProxy } from 'lib/services/fetchProxy';
+import { fetchProxy, fetchPdf } from 'lib/services/fetchProxy';
 import { logError, logWarning } from '@navikt/aap-felles-utils';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
@@ -81,10 +81,9 @@ export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
-// TODO returtype? - fetchProxy godtar application/json - /dokument returner application/pdf
 export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
   const url = `${saksbehandlingApiBaseUrl}/dokument/${journalPostId}/${dokumentInfoId}`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+  return await fetchPdf(url, saksbehandlingApiScope);
 };
 
 export const hentStudentGrunnlag = async (behandlingsReferanse: string): Promise<StudentGrunnlag> => {

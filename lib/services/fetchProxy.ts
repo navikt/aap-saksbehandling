@@ -39,6 +39,24 @@ export const fetchProxy = async <ResponseBody>(
   return await fetchWithRetry<ResponseBody>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody);
 };
 
+export const fetchPdf = async (url: string, scope: string): Promise<Blob | undefined> => {
+  const oboToken = isLocal() ? await hentLocalToken() : await getOnBefalfOfToken(scope, url);
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${oboToken}`,
+      Accept: 'application/pdf',
+    },
+    next: { revalidate: 0 },
+  });
+
+  if (response.ok) {
+    return response.blob();
+  } else {
+    logError(`kunne ikke lese pdf på url ${url}.`);
+  }
+};
+
 const fetchWithRetry = async <ResponseBody>(
   url: string,
   method: string,
