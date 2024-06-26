@@ -10,7 +10,7 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
@@ -26,10 +26,19 @@ interface FormFields {
   grunner: string[];
 }
 
+const bokstavA = 'Behov for aktiv behandling';
+const bokstavB = 'Behov for arbeidsrettet tiltak';
+const bokstavC =
+  'Etter å ha prøvd tiltakene etter bokstav a eller b fortsatt anses for å ha en viss mulighet for å komme i arbeid, og får annen oppfølging fra Arbeids- og velferdsetaten';
+const grunnerErrorMessage = 'Bokstav C kan ikke velges i kombinasjon med bokstav A eller B';
 export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
-
+  function validateGrunner(grunner: string[]) {
+    // skal inneholde enten bokstavA og/eller bokstavB, eller kun bokstavC
+    if (grunner?.includes(bokstavC)) return grunner?.length === 1;
+    return true;
+  }
   const { formFields, form } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
@@ -55,15 +64,20 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
       grunner: {
         type: 'checkbox',
         label: 'Velg minst én grunn for at § 11-6 er oppfylt',
-        options: [
-          'Behov for aktiv behandling',
-          'Behov for arbeidsrettet tiltak',
-          'Etter å ha prøvd tiltakene etter bokstav a eller b fortsatt anses for å ha en viss mulighet for å komme i arbeid, og får annen oppfølging fra Arbeids- og velferdsetaten',
-        ],
+        options: [bokstavA, bokstavB, bokstavC],
+        rules: { validate: (val) => (validateGrunner(val as string[]) ? true : grunnerErrorMessage) },
       },
     },
     { readOnly: readOnly }
   );
+  const oppfølgingsGrunner = form.watch('grunner');
+  useEffect(() => {
+    if (oppfølgingsGrunner?.length && !validateGrunner(oppfølgingsGrunner)) {
+      form.setError('grunner', { message: grunnerErrorMessage });
+    } else {
+      form.clearErrors();
+    }
+  }, [oppfølgingsGrunner]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) =>
