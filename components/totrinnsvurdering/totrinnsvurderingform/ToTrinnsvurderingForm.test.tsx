@@ -235,4 +235,33 @@ describe('totrinnsvurderingform', () => {
     const errorMessage = await screen.getByText('Du må skrive en grunn');
     expect(errorMessage).toBeVisible();
   });
+
+  it('gir feilmelding hvis man velger en grunn for så å fjerne den igjen', async () => {
+    render(
+      <TotrinnsvurderingForm
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
+    );
+
+    const vurderPåNyttValg = screen.getByRole('radio', { name: 'Send tilbake' });
+    await user.click(vurderPåNyttValg);
+
+    const begrunnelse = screen.getByRole('textbox', { name: 'Begrunnelse' });
+    await user.type(begrunnelse, 'En grunn');
+    const mangelfullBegrunnelse = screen.getByRole('checkbox', { name: 'Mangelfull begrunnelse' });
+
+    // Feilen kommer dersom man velger en grunn, for så å fjerne avkryssningen igjen
+    await user.click(mangelfullBegrunnelse);
+    expect(mangelfullBegrunnelse).toBeChecked();
+    await user.click(mangelfullBegrunnelse);
+    expect(mangelfullBegrunnelse).not.toBeChecked();
+
+    await user.click(screen.getByRole('button', { name: 'Send inn' }));
+    expect(screen.getByText('Du må oppgi en grunn')).toBeVisible();
+  });
 });

@@ -61,7 +61,12 @@ export const TotrinnsvurderingForm = ({
             godkjent: true,
             grunner: [],
           });
-        } else if (vurdering.godkjent === 'false' && vurdering.begrunnelse && vurdering.grunner) {
+        } else if (
+          vurdering.godkjent === 'false' &&
+          vurdering.begrunnelse &&
+          vurdering.grunner &&
+          vurdering.grunner.length > 0
+        ) {
           validatedVurderinger.push({
             definisjon: vurdering.definisjon,
             godkjent: false,
@@ -77,7 +82,7 @@ export const TotrinnsvurderingForm = ({
           if (!vurdering.begrunnelse) {
             errors.push({ felt: 'begrunnelse', definisjon: vurdering.definisjon, message: 'Du må gi en begrunnelse' });
           }
-          if (!vurdering.grunner) {
+          if (!vurdering.grunner || vurdering.grunner.length === 0) {
             errors.push({ felt: 'grunner', definisjon: vurdering.definisjon, message: 'Du må oppgi en grunn' });
           }
           if (vurdering.grunner?.find((grunn) => grunn === 'ANNET') && !vurdering.årsakFritekst) {
