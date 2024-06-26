@@ -5,7 +5,7 @@ import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
 import { BooksIcon } from '@navikt/aksel-icons';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNeiOptions } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 import { StudentGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -14,6 +14,7 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
+import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
   behandlingVersjon: number;
@@ -24,12 +25,12 @@ interface Props {
 interface FormFields {
   begrunnelse: string;
   harAvbruttStudie: string;
-  godkjentStudie: string;
-  avbruttPgaSykdomSkade: string;
+  godkjentStudieAvLånekassen: string;
+  avbruttPgaSykdomEllerSkade: string;
   harBehovForBehandling: string;
-  avbruttDato: string;
-  forventetGjenopptatt: string;
-  avbruddMerEnn6Mnd: string;
+  avbruttDato: Date;
+  skalGjenopptaStudie: string;
+  avbruddMerEnn6Måneder: string;
   dokumenterBruktIVurderingen: string[];
 }
 
@@ -37,6 +38,7 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
 
+  console.log(grunnlag);
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -50,18 +52,21 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         type: 'radio',
         label: 'Har søker avbrutt et studie?',
         options: JaEllerNeiOptions,
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.harAvbruttStudie),
         rules: { required: 'Du må svare på om søker har avbrutt studie.' },
       },
-      godkjentStudie: {
+      godkjentStudieAvLånekassen: {
         type: 'radio',
         label: 'Er studiet godkjent av Lånekassen?',
         options: JaEllerNeiOptions,
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.godkjentStudieAvLånekassen),
         rules: { required: 'Du må svare på om studiet er godkjent av Lånekassen.' },
       },
-      avbruttPgaSykdomSkade: {
+      avbruttPgaSykdomEllerSkade: {
         type: 'radio',
         label: 'Er studie avbrutt pga sykdom eller skade?',
         options: JaEllerNeiOptions,
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.avbruttPgaSykdomEllerSkade),
         rules: {
           required: 'Du må svare på om søker har avbrutt studie på grunn av sykdom eller skade.',
         },
@@ -70,23 +75,29 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         type: 'radio',
         label: 'Har bruker behov for behandling for å gjenoppta studiet?',
         options: JaEllerNeiOptions,
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.harBehovForBehandling),
         rules: { required: 'Du må svare på om søker har behov for behandling for å gjenoppta studiet.' },
       },
       avbruttDato: {
         type: 'date',
         label: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?',
+        defaultValue: grunnlag?.studentvurdering?.avbruttStudieDato
+          ? new Date(grunnlag?.studentvurdering?.avbruttStudieDato)
+          : undefined,
         rules: { required: 'Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.' },
       },
-      forventetGjenopptatt: {
+      skalGjenopptaStudie: {
         type: 'radio',
         label: 'Er det forventet at søker skal gjenoppta studiet?',
         options: JaEllerNeiOptions,
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.skalGjenopptaStudie),
         rules: { required: 'Du må svare på om det er forventet at søker skal gjenoppta studiet.' },
       },
-      avbruddMerEnn6Mnd: {
+      avbruddMerEnn6Måneder: {
         type: 'radio',
         label: 'Er avbruddet forventet å vare mer enn 6 mnd?',
         options: JaEllerNeiOptions,
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.avbruddMerEnn6Måneder),
         rules: { required: 'Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.' },
       },
       dokumenterBruktIVurderingen: {
@@ -106,7 +117,13 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           behovstype: Behovstype.AVKLAR_STUDENT_KODE,
           studentvurdering: {
             begrunnelse: data.begrunnelse,
-            oppfyller11_14: false, // Legger inn at den ikke er oppfylt slik at det ikke tryner foreløpig
+            avbruttStudieDato: formaterDatoForBackend(data.avbruttDato),
+            harAvbruttStudie: data.harAvbruttStudie === JaEllerNei.Ja,
+            harBehovForBehandling: data.harBehovForBehandling === JaEllerNei.Ja,
+            avbruddMerEnn6Måneder: data.avbruddMerEnn6Måneder === JaEllerNei.Ja,
+            avbruttPgaSykdomEllerSkade: data.avbruttPgaSykdomEllerSkade === JaEllerNei.Ja,
+            godkjentStudieAvLånekassen: data.godkjentStudieAvLånekassen === JaEllerNei.Ja,
+            skalGjenopptaStudie: data.skalGjenopptaStudie === JaEllerNei.Ja,
             dokumenterBruktIVurdering: [],
           },
         },
@@ -139,12 +156,12 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         <FormField form={form} formField={formFields.begrunnelse} />
         <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
         <FormField form={form} formField={formFields.harAvbruttStudie} />
-        <FormField form={form} formField={formFields.godkjentStudie} />
-        <FormField form={form} formField={formFields.avbruttPgaSykdomSkade} />
+        <FormField form={form} formField={formFields.godkjentStudieAvLånekassen} />
+        <FormField form={form} formField={formFields.avbruttPgaSykdomEllerSkade} />
         <FormField form={form} formField={formFields.harBehovForBehandling} />
-        <FormField form={form} formField={formFields.forventetGjenopptatt} />
+        <FormField form={form} formField={formFields.skalGjenopptaStudie} />
         <FormField form={form} formField={formFields.avbruttDato} />
-        <FormField form={form} formField={formFields.avbruddMerEnn6Mnd} />
+        <FormField form={form} formField={formFields.avbruddMerEnn6Måneder} />
       </Form>
     </VilkårsKort>
   );
