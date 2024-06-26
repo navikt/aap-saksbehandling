@@ -5,7 +5,7 @@ import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
 import { Form } from 'components/form/Form';
 import { BooksIcon } from '@navikt/aksel-icons';
-import { Behovstype, JaEllerNeiOptions } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNeiOptions } from 'lib/utils/form';
 import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 import { StudentGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -26,7 +26,7 @@ interface FormFields {
   godkjentStudie: string;
   avbruttPgaSykdomSkade: string;
   harBehovForBehandling: string;
-  avbruttDato: Date;
+  avbruttDato: string;
   forventetGjenopptatt: string;
   avbruddMerEnn6Mnd: string;
   dokumenterBruktIVurderingen: string[];
@@ -129,7 +129,7 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       >
         <div>
           <Label>Har søker oppgitt at hen har avbrutt studiet helt pga sykdom?</Label>
-          <BodyShort>Ja</BodyShort>
+          <BodyShort>{getJaNeiEllerUndefined(grunnlag?.oppgittStudent?.harAvbruttStudie)}</BodyShort>
         </div>
 
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
