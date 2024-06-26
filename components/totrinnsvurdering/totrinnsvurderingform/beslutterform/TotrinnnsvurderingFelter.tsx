@@ -1,6 +1,6 @@
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
-import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/BeslutterForm.module.css';
+import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
 import { ToTrinnsvurderingError, ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { Checkbox, CheckboxGroup, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react';
 import Link from 'next/link';
@@ -17,7 +17,7 @@ interface Props {
   erKvalitetssikring: boolean;
 }
 
-export const BeslutterForm = ({
+export const TotrinnnsvurderingFelter = ({
   toTrinnsvurdering,
   oppdaterVurdering,
   readOnly,

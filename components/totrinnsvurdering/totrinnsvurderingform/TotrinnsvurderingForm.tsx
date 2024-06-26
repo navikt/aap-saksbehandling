@@ -1,4 +1,4 @@
-import { BeslutterForm } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/BeslutterForm';
+import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
 import { Behovstype } from 'lib/utils/form';
 import { Button } from '@navikt/ds-react';
 import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, ToTrinnsVurdering } from 'lib/types/types';
@@ -100,7 +100,7 @@ export const TotrinnsvurderingForm = ({
   return (
     <>
       {vurderinger.map((vurdering, index) => (
-        <BeslutterForm
+        <TotrinnnsvurderingFelter
           key={vurdering.definisjon}
           toTrinnsvurdering={vurdering}
           erKvalitetssikring={erKvalitetssikring}
