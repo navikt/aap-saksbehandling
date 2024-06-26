@@ -13,6 +13,7 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
+import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 
 interface Props {
   behandlingVersjon: number;
@@ -136,6 +137,7 @@ export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           <DokumentTabell />
         </FormField>
         <FormField form={form} formField={formFields.begrunnelse} />
+        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
         <FormField form={form} formField={formFields.harAvbruttStudie} />
         <FormField form={form} formField={formFields.godkjentStudie} />
         <FormField form={form} formField={formFields.avbruttPgaSykdomSkade} />

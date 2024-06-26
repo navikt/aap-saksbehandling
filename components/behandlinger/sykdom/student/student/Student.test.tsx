@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { Student } from 'components/behandlinger/sykdom/student/student/Student';
 import userEvent from '@testing-library/user-event';
 
@@ -145,5 +145,25 @@ describe('Student', () => {
     expect(
       await screen.findByText('Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.')
     ).toBeVisible();
+  });
+
+  it('skal vise en liste med tilknyttede dokumenter som har blitt valgt', async () => {
+    render(<Student behandlingVersjon={0} readOnly={false} />);
+    const rad = screen.getByRole('row', {
+      name: /sykemelding/i,
+    });
+
+    await user.click(
+      within(rad).getByRole('checkbox', {
+        name: /tilknytt dokument til vurdering/i,
+      })
+    );
+
+    const list = screen.getByRole('list', {
+      name: /tilknyttede dokumenter/i,
+    });
+
+    const dokument = within(list).getByText(/sykemelding/i);
+    expect(dokument).toBeVisible();
   });
 });
