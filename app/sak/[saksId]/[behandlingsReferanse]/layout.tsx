@@ -50,9 +50,11 @@ const Layout = async ({ children, params }: Props) => {
   ];
 
   const studentGrunnlag = await hentStudentGrunnlag(params.behandlingsReferanse);
-  const grupperMedEllerUtenStudent = studentGrunnlag.oppgittStudent?.harAvbruttStudie
-    ? [...grupper, 'STUDENT']
-    : grupper;
+  const grupperMedEllerUtenStudent =
+    studentGrunnlag.oppgittStudent?.erStudentStatus === 'JA' ||
+    studentGrunnlag.oppgittStudent?.erStudentStatus === 'AVBRUTT'
+      ? [...grupper, 'STUDENT']
+      : grupper;
 
   return (
     <div>

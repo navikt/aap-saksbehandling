@@ -93,3 +93,8 @@ export type AktivitetDto =
 export type AktivitetDtoType = AktivitetDto['type'];
 
 export type JobbInfo = components['schemas']['no.nav.aap.motor.api.JobbInfoDto'];
+
+export type ErStudentStatus =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['erStudentStatus'];
+export type SkalGjenopptaStudieStatus =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['skalGjenopptaStudieStatus'];

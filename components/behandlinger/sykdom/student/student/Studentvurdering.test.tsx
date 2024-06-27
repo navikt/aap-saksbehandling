@@ -11,11 +11,6 @@ describe('Student', () => {
     expect(heading).toBeVisible();
   });
 
-  it('viser informasjon om at bruker har svart at de studerer i søknaden', () => {
-    render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
-    expect(screen.getByText('Har søker oppgitt at hen har avbrutt studiet helt pga sykdom?')).toBeVisible();
-  });
-
   it('har en liste over dokumenter som kan tilknyttes vurderingen', () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
     const tilknyttedeDokumenterListe = screen.getByRole('group', {
@@ -165,5 +160,41 @@ describe('Student', () => {
 
     const dokument = within(list).getByText(/sykemelding/i);
     expect(dokument).toBeVisible();
+  });
+
+  it('skal vise korrekt informasjon fra søknaden dersom det har blitt besvart ja i søknaden', async () => {
+    render(
+      <Studentvurdering
+        behandlingVersjon={0}
+        readOnly={false}
+        grunnlag={{ oppgittStudent: { erStudentStatus: 'JA' } }}
+      />
+    );
+    const tekst = screen.getByText('Ja, helt eller delvis');
+    expect(tekst).toBeVisible();
+  });
+
+  it('skal vise korrekt informasjon fra søknaden dersom det har blitt besvart avbrutt i søknaden', async () => {
+    render(
+      <Studentvurdering
+        behandlingVersjon={0}
+        readOnly={false}
+        grunnlag={{ oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+      />
+    );
+    const tekst = screen.getByText('Ja, men har avbrutt studiet helt på grunn av sykdom');
+    expect(tekst).toBeVisible();
+  });
+
+  it('skal vise korrekt informasjon fra søknaden dersom det har blitt besvart nei i søknaden', async () => {
+    render(
+      <Studentvurdering
+        behandlingVersjon={0}
+        readOnly={false}
+        grunnlag={{ oppgittStudent: { erStudentStatus: 'NEI' } }}
+      />
+    );
+    const tekst = screen.getAllByText('Nei')[0]; //TODO Finnes det en smartere måte å gjøre dette på?
+    expect(tekst).toBeVisible();
   });
 });

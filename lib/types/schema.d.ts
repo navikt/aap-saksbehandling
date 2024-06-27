@@ -699,7 +699,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-06-27T15:01:28.975485
+       * @example 2024-06-27T20:36:53.047247
        */
       tidspunkt: string;
     };
@@ -928,11 +928,12 @@ export interface components {
        * @example 2024-06-27
        */
       avbruttDato?: string | null;
-      erStudent: string;
-      harAvbruttStudie: boolean;
+      /** @enum {string} */
+      erStudentStatus: 'JA' | 'NEI' | 'AVBRUTT';
       /** Format: int64 */
       id?: number | null;
-      skalGjenopptaStudie?: string | null;
+      /** @enum {string|null} */
+      skalGjenopptaStudieStatus?: 'JA' | 'NEI' | 'VET_IKKE' | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.flate.StudentGrunnlagDto': {
       oppgittStudent?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent'];
@@ -1131,7 +1132,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-06-27T15:01:28.975485
+       * @example 2024-06-27T20:36:53.047247
        */
       opprettet: string;
       /** Format: uuid */
@@ -1157,7 +1158,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-06-27T15:01:28.975485
+       * @example 2024-06-27T20:36:53.047247
        */
       tidsstempel: string;
     };
@@ -1310,7 +1311,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-06-27T15:01:28.975485
+       * @example 2024-06-27T20:36:53.047247
        */
       opprettet: string;
       /** Format: uuid */

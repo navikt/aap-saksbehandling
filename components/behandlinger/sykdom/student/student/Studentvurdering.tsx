@@ -7,14 +7,14 @@ import { Form } from 'components/form/Form';
 import { BooksIcon } from '@navikt/aksel-icons';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
-import { StudentGrunnlag } from 'lib/types/types';
+import { ErStudentStatus, SkalGjenopptaStudieStatus, StudentGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { BodyShort, Label } from '@navikt/ds-react';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { formaterDatoForBackend } from 'lib/utils/date';
+import { BodyShort, Label } from '@navikt/ds-react';
 
 interface Props {
   behandlingVersjon: number;
@@ -145,9 +145,26 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
         steg={'AVKLAR_STUDENT'}
         visBekreftKnapp={!readOnly}
       >
-        <div>
-          <Label>Har søker oppgitt at hen har avbrutt studiet helt pga sykdom?</Label>
-          <BodyShort>{getJaNeiEllerUndefined(grunnlag?.oppgittStudent?.harAvbruttStudie)}</BodyShort>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <Label size={'small'}>Relevant informasjon fra søknaden</Label>
+          {grunnlag?.oppgittStudent?.erStudentStatus && (
+            <div>
+              <Label size={'small'} as={'p'} color={'gray'}>
+                Er søker student:
+              </Label>
+              <BodyShort size={'small'}>
+                {mapErStudentStatusTilString(grunnlag.oppgittStudent.erStudentStatus)}
+              </BodyShort>
+            </div>
+          )}
+          {grunnlag?.oppgittStudent?.skalGjenopptaStudieStatus && (
+            <div>
+              <Label size={'small'} as={'p'}>
+                Planlegger å gjenoppta studie?
+              </Label>
+              <BodyShort>{mapSkalGjenopptaStudieStatus(grunnlag.oppgittStudent.skalGjenopptaStudieStatus)}</BodyShort>
+            </div>
+          )}
         </div>
 
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
@@ -166,3 +183,25 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
     </VilkårsKort>
   );
 };
+
+function mapErStudentStatusTilString(status: ErStudentStatus): string {
+  switch (status) {
+    case 'JA':
+      return 'Ja, helt eller delvis';
+    case 'AVBRUTT':
+      return 'Ja, men har avbrutt studiet helt på grunn av sykdom';
+    case 'NEI':
+      return 'Nei';
+  }
+}
+
+function mapSkalGjenopptaStudieStatus(status: SkalGjenopptaStudieStatus): string | undefined {
+  switch (status) {
+    case 'JA':
+      return 'Ja';
+    case 'VET_IKKE':
+      return 'Brukeren vet ikke';
+    case 'NEI':
+      return 'Nei';
+  }
+}
