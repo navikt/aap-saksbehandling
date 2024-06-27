@@ -2,7 +2,7 @@
 
 import { Checkbox, Table } from '@navikt/ds-react';
 import { AktivitetDto } from 'lib/types/types';
-import { grunnOptions } from 'app/sak/[saksId]/aktivitet/page';
+import { grunnOptions } from 'components/aktivitetsmelding/AktivitetsMelding';
 
 export interface Props {
   aktivitet: AktivitetDto;
@@ -11,7 +11,9 @@ export interface Props {
 export const AktivitetsTabellRad = ({ aktivitet }: Props) => {
   return (
     <Table.Row>
-      <Table.DataCell textSize={'small'}>{grunnOptions.find((e) => e.value === aktivitet?.type)?.label}</Table.DataCell>
+      <Table.DataCell textSize={'small'}>
+        {grunnOptions?.find((e) => e.value === aktivitet?.type)?.label}
+      </Table.DataCell>
       <Table.DataCell textSize={'small'}>{aktivitet?.dato}</Table.DataCell>
       <Table.DataCell textSize={'small'}>
         <Checkbox size={'small'} hideLabel value={'forhåndsvarsel'}>

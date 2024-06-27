@@ -66,9 +66,14 @@ export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersonin
   // }
 };
 
-export const sendAktivitet = async (aktivitet: AktivitetInnsendingDto) => {
+export const sendAktivitetsMelding = async (aktivitet: AktivitetInnsendingDto) => {
   const url = `${saksbehandlingApiBaseUrl}/api/hammer/send`;
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
+};
+
+export const hentAktivitetsMeldinger = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/hammer/${saksnummer}`;
+  return await fetchProxy<Array<AktivitetInnsendingDto>>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentAlleSaker = async (): Promise<SaksInfo[]> => {
