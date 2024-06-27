@@ -42,7 +42,7 @@ const Layout = async ({ children, params }: Props) => {
     'MEDLEMSKAP',
     'LOVVALG',
     'GRUNNLAG',
-    'UTTAK',
+    'UNDERVEIS',
     'TILKJENT_YTELSE',
     'SIMULERING',
     'BARNETILLEGG',

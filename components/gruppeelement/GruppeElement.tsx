@@ -46,8 +46,8 @@ export function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Medlemskap';
     case 'SYKDOM':
       return 'Sykdom';
-    case 'UTTAK':
-      return 'Uttak';
+    case 'UNDERVEIS':
+      return 'Underveis';
     case 'TILKJENT_YTELSE':
       return 'Tilkjent ytelse';
     case 'VEDTAK':

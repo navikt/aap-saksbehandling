@@ -12,18 +12,22 @@ export const defaultAktiviteter: AktivitetDto[] = [
   {
     type: 'IKKE_MØTT_TIL_MØTE',
     dato: '02.04.2024',
+    begrunnelse: 'En begrunnelse',
   },
   {
     type: 'IKKE_MØTT_TIL_ANNEN_AKTIVITET',
     dato: '10.04.2024',
+    begrunnelse: 'En begrunnelse',
   },
   {
     type: 'IKKE_MØTT_TIL_MØTE',
     dato: '15.04.2024',
+    begrunnelse: 'En begrunnelse',
   },
   {
     type: 'IKKE_AKTIVT_BIDRAG',
     dato: '22.04.2024',
+    begrunnelse: 'En begrunnelse',
   },
 ];
 export const AktivitetsTabell = ({ aktiviteter = defaultAktiviteter }: Props) => {

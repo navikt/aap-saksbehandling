@@ -17,6 +17,8 @@ interface FormFields {
   grunn?: string;
   dato?: Date;
 }
+
+//TODO Fix this
 export const grunnOptions: ValuePair<AktivitetDtoType>[] = [
   { label: 'Ikke møtt til møte med Nav', value: 'IKKE_MØTT_TIL_MØTE' },
   { label: 'Ikke møtt i behandling eller utredning', value: 'IKKE_MØTT_TIL_BEHANDLING' },
@@ -88,6 +90,7 @@ export default function Page({ params }: { params: { saksId: string } }) {
               hammer: {
                 dato,
                 type,
+                begrunnelse: 'En begrunnelse',
               },
               saksnummer: params.saksId,
             });

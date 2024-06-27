@@ -38,7 +38,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
 
-  console.log(grunnlag);
+  console.log('grunnlag for student', grunnlag);
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
