@@ -8,13 +8,13 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { sendAktivitetClient } from 'lib/clientApi';
 import { FormField, ValuePair } from 'components/input/formfield/FormField';
 import { Button } from '@navikt/ds-react';
-import { AktivitetDto, AktivitetDtoType } from 'lib/types/types';
+import { AktivitetDtoType, Aktivitetsmeldinger } from 'lib/types/types';
 import { useEffect, useState } from 'react';
 import { useConfigForm } from 'hooks/FormHook';
 
 interface Props {
   saksnummer: string;
-  aktivitetsMeldinger: AktivitetDto[];
+  aktivitetsMeldinger: Aktivitetsmeldinger;
 }
 interface FormFields {
   begrunnelse: string;
@@ -32,9 +32,10 @@ export const grunnOptions: ValuePair<AktivitetDtoType>[] = [
   },
   { label: 'Bidrar ikke aktivt i prosessen med å komme seg i arbeid', value: 'IKKE_AKTIVT_BIDRAG' },
 ] as const;
+
 type Årsaker = (typeof grunnOptions)[number]['label'];
+
 export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) => {
-  console.log(aktivitetsMeldinger);
   const [datoLabel, setDatoLabel] = useState<string>('');
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
@@ -80,7 +81,7 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
       vilkårTilhørerNavKontor={true}
       icon={<FigureIcon fontSize={'inherit'} />}
     >
-      <AktivitetsTabell />
+      <AktivitetsTabell aktivitetsmeldinger={aktivitetsMeldinger} />
       <form
         className={styles.form}
         onSubmit={form.handleSubmit(async (data) => {

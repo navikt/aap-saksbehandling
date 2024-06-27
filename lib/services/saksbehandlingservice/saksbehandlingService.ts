@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import {
   AktivitetInnsendingDto,
+  Aktivitetsmeldinger,
   AlderGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingResultat,
@@ -73,7 +74,7 @@ export const sendAktivitetsMelding = async (aktivitet: AktivitetInnsendingDto) =
 
 export const hentAktivitetsMeldinger = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/hammer/${saksnummer}`;
-  return await fetchProxy<Array<AktivitetInnsendingDto>>(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy<Aktivitetsmeldinger>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentAlleSaker = async (): Promise<SaksInfo[]> => {

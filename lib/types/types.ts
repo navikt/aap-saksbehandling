@@ -85,7 +85,7 @@ export type VenteInformasjon = components['schemas']['no.nav.aap.behandlingsflyt
 export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['utfall'];
 export type AvslagÅrsak =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['avslagsårsak'];
-
+export type Aktivitetsmeldinger = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AlleHammereDto'];
 export type AktivitetInnsendingDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.aktivitet.TorsHammerDto'];
 export type AktivitetDto =

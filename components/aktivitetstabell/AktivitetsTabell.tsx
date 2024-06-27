@@ -2,35 +2,13 @@ import styles from 'components/dokumenttabell/DokumentTabell.module.css';
 import { Button, Checkbox, Table } from '@navikt/ds-react';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { AktivitetsTabellRad } from 'components/aktivitetstabell/AktivitetsTabellRad';
-import { AktivitetDto } from 'lib/types/types';
+import { Aktivitetsmeldinger } from 'lib/types/types';
 
 interface Props {
-  aktiviteter?: AktivitetDto[];
+  aktivitetsmeldinger?: Aktivitetsmeldinger;
 }
 
-export const defaultAktiviteter: AktivitetDto[] = [
-  {
-    type: 'IKKE_MØTT_TIL_MØTE',
-    dato: '02.04.2024',
-    begrunnelse: 'En begrunnelse',
-  },
-  {
-    type: 'IKKE_MØTT_TIL_ANNEN_AKTIVITET',
-    dato: '10.04.2024',
-    begrunnelse: 'En begrunnelse',
-  },
-  {
-    type: 'IKKE_MØTT_TIL_MØTE',
-    dato: '15.04.2024',
-    begrunnelse: 'En begrunnelse',
-  },
-  {
-    type: 'IKKE_AKTIVT_BIDRAG',
-    dato: '22.04.2024',
-    begrunnelse: 'En begrunnelse',
-  },
-];
-export const AktivitetsTabell = ({ aktiviteter = defaultAktiviteter }: Props) => {
+export const AktivitetsTabell = ({ aktivitetsmeldinger = { hammere: [] } }: Props) => {
   return (
     <div className={styles.dokumentTabell}>
       <Table>
@@ -42,9 +20,9 @@ export const AktivitetsTabell = ({ aktiviteter = defaultAktiviteter }: Props) =>
             <Table.HeaderCell textSize={'small'}>Sendt vedtak</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        {aktiviteter.length > 0 && (
+        {aktivitetsmeldinger?.hammere?.length > 0 && (
           <Table.Body>
-            {aktiviteter.map((aktivitet, index) => (
+            {aktivitetsmeldinger.hammere.map((aktivitet, index) => (
               <AktivitetsTabellRad key={`aktivitet-${index}`} aktivitet={aktivitet} />
             ))}
           </Table.Body>

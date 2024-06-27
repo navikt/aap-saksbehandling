@@ -6,10 +6,9 @@ import { AktivitetsMelding } from 'components/aktivitetsmelding/AktivitetsMeldin
 
 export const AktivitetsMeldingMedDatafetching = async ({ saksnummer }: { saksnummer: string }) => {
   const aktivitetsMeldinger = await hentAktivitetsMeldinger(saksnummer);
-  console.log('aktivitetsmeldinger', aktivitetsMeldinger);
   return (
     <div className={styles.aktivitetSkjema}>
-      <AktivitetsMelding saksnummer={saksnummer} aktivitetsMeldinger={[]} />
+      <AktivitetsMelding saksnummer={saksnummer} aktivitetsMeldinger={aktivitetsMeldinger} />
     </div>
   );
 };
