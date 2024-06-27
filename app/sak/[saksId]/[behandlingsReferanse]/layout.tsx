@@ -16,6 +16,7 @@ import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { notFound } from 'next/navigation';
 import { StegGruppe } from 'lib/types/types';
+import { logInfo } from '@navikt/aap-felles-utils';
 
 interface Props {
   children: ReactNode;
@@ -50,6 +51,7 @@ const Layout = async ({ children, params }: Props) => {
   ];
 
   const studentGrunnlag = await hentStudentGrunnlag(params.behandlingsReferanse);
+  logInfo(`Studentgrunnlag + ${JSON.stringify(studentGrunnlag)}`);
   const grupperMedEllerUtenStudent =
     studentGrunnlag.oppgittStudent?.erStudentStatus === 'JA' ||
     studentGrunnlag.oppgittStudent?.erStudentStatus === 'AVBRUTT'
