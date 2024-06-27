@@ -1,7 +1,7 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { StudentMedDataFetching } from 'components/behandlinger/sykdom/student/student/StudentMedDataFetching';
+import { StudentvurderingMedDataFetching } from 'components/behandlinger/sykdom/student/student/StudentvurderingMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
 interface Props {
@@ -24,7 +24,7 @@ export const Student = async ({ behandlingsreferanse }: Props) => {
         if (steg === 'AVKLAR_STUDENT') {
           return (
             <StegSuspense key={steg}>
-              <StudentMedDataFetching
+              <StudentvurderingMedDataFetching
                 behandlingsreferanse={behandlingsreferanse}
                 readOnly={flyt.visning.saksbehandlerReadOnly}
                 behandlingVersjon={flyt.behandlingVersjon}

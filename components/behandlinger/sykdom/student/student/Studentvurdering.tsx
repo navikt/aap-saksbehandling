@@ -34,7 +34,7 @@ interface FormFields {
   dokumenterBruktIVurderingen: string[];
 }
 
-export const Student = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
 
