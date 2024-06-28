@@ -172,7 +172,7 @@ describe('Student', () => {
         grunnlag={{ oppgittStudent: { erStudentStatus: 'JA' } }}
       />
     );
-    const tekst = screen.getByText('Ja, helt eller delvis');
+    const tekst = screen.getByText('Er søker student: Ja, helt eller delvis');
     expect(tekst).toBeVisible();
   });
 
@@ -184,7 +184,7 @@ describe('Student', () => {
         grunnlag={{ oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
       />
     );
-    const tekst = screen.getByText('Ja, men har avbrutt studiet helt på grunn av sykdom');
+    const tekst = screen.getByText('Er søker student: Ja, men har avbrutt studiet helt på grunn av sykdom');
     expect(tekst).toBeVisible();
   });
 
@@ -196,6 +196,7 @@ describe('Student', () => {
         grunnlag={{ oppgittStudent: { erStudentStatus: 'NEI' } }}
       />
     );
+
     const tekst = screen.getAllByText('Nei')[0]; //TODO Finnes det en smartere måte å gjøre dette på?
     expect(tekst).toBeVisible();
   });

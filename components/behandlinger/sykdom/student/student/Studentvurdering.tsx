@@ -38,7 +38,6 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
 
-  console.log('grunnlag for student', grunnlag);
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -148,22 +147,15 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <Label size={'small'}>Relevant informasjon fra søknaden</Label>
           {grunnlag?.oppgittStudent?.erStudentStatus && (
-            <div>
-              <Label size={'small'} as={'p'} color={'gray'}>
-                Er søker student:
-              </Label>
-              <BodyShort size={'small'}>
-                {mapErStudentStatusTilString(grunnlag.oppgittStudent.erStudentStatus)}
-              </BodyShort>
-            </div>
+            <BodyShort size={'small'}>
+              Er søker student: {mapErStudentStatusTilString(grunnlag.oppgittStudent.erStudentStatus)}
+            </BodyShort>
           )}
           {grunnlag?.oppgittStudent?.skalGjenopptaStudieStatus && (
-            <div>
-              <Label size={'small'} as={'p'}>
-                Planlegger å gjenoppta studie?
-              </Label>
-              <BodyShort>{mapSkalGjenopptaStudieStatus(grunnlag.oppgittStudent.skalGjenopptaStudieStatus)}</BodyShort>
-            </div>
+            <BodyShort>
+              Planlegger å gjenoppta studie:{' '}
+              {mapSkalGjenopptaStudieStatus(grunnlag.oppgittStudent.skalGjenopptaStudieStatus)}
+            </BodyShort>
           )}
         </div>
 
