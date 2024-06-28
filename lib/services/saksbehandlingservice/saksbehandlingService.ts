@@ -87,6 +87,11 @@ export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentLesetilgang = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/lesetilgang`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+}
+
 export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/dokument/${journalPostId}/${dokumentInfoId}`;
   return await fetchPdf(url, saksbehandlingApiScope);
