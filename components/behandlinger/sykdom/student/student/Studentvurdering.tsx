@@ -95,7 +95,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
       },
       avbruddMerEnn6Måneder: {
         type: 'radio',
-        label: 'Er avbruddet forventet å vare mer enn 6 mnd?',
+        label: 'Er det forventet at søker kan gjenoppta studiet innen 6 måneder?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.avbruddMerEnn6Måneder),
         rules: { required: 'Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.' },

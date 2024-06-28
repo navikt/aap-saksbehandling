@@ -65,7 +65,9 @@ describe('Student', () => {
 
   it('spør om avbruddet er forventet å vare mer enn 6 mnd', () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
-    expect(screen.getByRole('group', { name: 'Er avbruddet forventet å vare mer enn 6 mnd?' })).toBeVisible();
+    expect(
+      screen.getByRole('group', { name: 'Er det forventet at søker kan gjenoppta studiet innen 6 måneder?' })
+    ).toBeVisible();
   });
 
   it('viser en feilmelding dersom det ikke er lagt inn en begrunnelse', async () => {
