@@ -16,7 +16,6 @@ export const FeilendeJobber = ({ jobber }: Props) => {
   const [message, setMessage] = useState<string>('');
   const harFeilendeJobber = jobber.length > 0;
 
-  console.log(jobber);
   async function onRekjørJobbClick(id: number) {
     setIsLoading(true);
     try {

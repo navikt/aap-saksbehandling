@@ -166,11 +166,6 @@ export const hentResultat = async (referanse: string): Promise<BehandlingResulta
   return await fetchProxy<BehandlingResultat>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const rekjørFeiledeOppgaver = async () => {
-  const url = `${saksbehandlingApiBaseUrl}/test/rekjorFeilede`;
-  return await fetchProxy<void>(url, saksbehandlingApiScope, 'GET');
-};
-
 export const hentBeregningsGrunnlag = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/beregning/grunnlag/${referanse}`;
   return await fetchProxy<BeregningsGrunnlag>(url, saksbehandlingApiScope, 'GET');
@@ -202,6 +197,11 @@ export const hentLocalToken = async () => {
   }
 };
 
+// Experimental
+// export const hentJobbHistorikk = async () => {
+//   const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/historikk`;
+//   return await fetchProxy<JobbInfo[]>(url, saksbehandlingApiScope, 'GET');
+// };
 export const hentFeilendeJObber = async () => {
   const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/feilende`;
   return await fetchProxy<JobbInfo[]>(url, saksbehandlingApiScope, 'GET');
@@ -214,6 +214,10 @@ export const hentPlanlagteJobber = async () => {
 
 export const rekjørJobb = async (jobbId: string) => {
   const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/rekjor/${jobbId}`;
+  return await fetchProxy<string>(url, saksbehandlingApiScope, 'GET');
+};
+export const rekjørFeiledeJobber = async () => {
+  const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/rekjorAlleFeilede`;
   return await fetchProxy<string>(url, saksbehandlingApiScope, 'GET');
 };
 

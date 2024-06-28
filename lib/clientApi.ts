@@ -34,9 +34,6 @@ export async function fetchProxy<ResponseBody>(
 export function settBehandlingPåVent(referanse: string, settPåVent: SettPåVent) {
   return fetchProxy(`/api/behandling/${referanse}/sett-paa-vent`, 'POST', settPåVent);
 }
-export function rekjørFeiledeOppgaver() {
-  return fetchProxy('/api/test/rekjorfeilede', 'GET');
-}
 
 export function opprettSak(sak: OpprettTestcase) {
   return fetchProxy('/api/test/opprett', 'POST', sak);
@@ -59,6 +56,9 @@ export function sendAktivitetClient(aktivitet: AktivitetInnsendingDto) {
 }
 export function rekjørJobb(jobbId: number) {
   return fetch(`/api/drift/jobb/rekjor/${jobbId}`, { method: 'GET' });
+}
+export function rekjørFeiledeJobber() {
+  return fetch('/api/drift/jobb/rekjorfeilede', { method: 'GET' });
 }
 
 export interface SaksInformasjon {

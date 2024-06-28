@@ -3,7 +3,7 @@ import { rekjørJobb } from 'lib/services/saksbehandlingservice/saksbehandlingSe
 
 export async function GET(req: NextRequest, { params }: { params: { jobbid: string } }) {
   try {
-    return await rekjørJobb(params.jobbid);
+    return new Response(await rekjørJobb(params.jobbid), { status: 200 });
   } catch (err: any) {
     return new Response(err?.message, { status: 500 });
   }
