@@ -38,7 +38,7 @@
     "@tiptap/starter-kit": "^2.3.2",
     "@vercel/otel": "^1.8.2",
     "date-fns": "^3.6.0",
-    "next": "^14.2.3",
+    "next": "^14.2.4",
     "next-sanity": "^9.4.2",
     "node-loader": "^2.0.0",
     "react": "18.3.1",
