@@ -110,6 +110,19 @@ describe('manuelleBarn', () => {
     expect(leggTilSluttDatoKnapp).toBeVisible();
   });
 
+  it('skal vise felt for sluttdato for forsørgeransvare dersom man trykker på knappen legg til sluttdato', async () => {
+    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    await svarJaPåOmDetSkalBeregnesBarnetillegg();
+
+    expect(screen.queryByRole('textbox', { name: /Sluttdato for forsørgeransvaret/i })).not.toBeInTheDocument();
+
+    const leggTilSluttDatoKnapp = screen.getByRole('button', { name: 'Legg til sluttdato' });
+    await user.click(leggTilSluttDatoKnapp);
+
+    const sluttDatoFelt = screen.getByRole('textbox', { name: /Sluttdato for forsørgeransvaret/i });
+    expect(sluttDatoFelt).toBeVisible();
+  });
+
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
     const skalBeregnesBarnetilleggFelt = screen.getByRole('group', {
       name: 'Skal det beregnes barnetillegg for dette barnet?',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BodyShort, Button, ExpansionCard, Heading } from '@navikt/ds-react';
 import { PlusIcon, QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 
@@ -17,7 +17,8 @@ export interface ManueltBarnType {
 interface FormFields {
   begrunnelse: string;
   skalDetBeregnesBarneTillegg: string;
-  forsørgerAnsvarDato: Date;
+  forsørgerAnsvarStartDato: Date;
+  forsørgerAnsvarSluttDato?: Date;
 }
 
 interface Props {
@@ -25,6 +26,7 @@ interface Props {
 }
 
 export const ManueltBarn = ({ manueltBarn }: Props) => {
+  const [leggTilSluttDato, setLeggTilSluttDato] = useState(false);
   const { formFields, form } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
@@ -37,9 +39,14 @@ export const ManueltBarn = ({ manueltBarn }: Props) => {
       options: JaEllerNeiOptions,
       rules: { required: 'Du må besvare om det skal beregnes barnetillegg for barnet' },
     },
-    forsørgerAnsvarDato: {
+    forsørgerAnsvarStartDato: {
       type: 'date',
       label: 'Søker har forsørgeransvar for barnet fra',
+      rules: { required: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra' },
+    },
+    forsørgerAnsvarSluttDato: {
+      type: 'date',
+      label: 'Sluttdato for forsørgeransvaret',
       rules: { required: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra' },
     },
   });
@@ -73,10 +80,23 @@ export const ManueltBarn = ({ manueltBarn }: Props) => {
             <FormField form={form} formField={formFields.skalDetBeregnesBarneTillegg} />
             {form.watch('skalDetBeregnesBarneTillegg') === JaEllerNei.Ja && (
               <div className={'flex-row'}>
-                <FormField form={form} formField={formFields.forsørgerAnsvarDato} />
-                <Button icon={<PlusIcon />} className={'fit-content-button'} variant={'tertiary'} size={'medium'}>
-                  Legg til sluttdato
-                </Button>
+                <FormField form={form} formField={formFields.forsørgerAnsvarStartDato} />
+                {leggTilSluttDato ? (
+                  <FormField form={form} formField={formFields.forsørgerAnsvarSluttDato} />
+                ) : (
+                  <Button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setLeggTilSluttDato(true);
+                    }}
+                    icon={<PlusIcon />}
+                    className={'fit-content-button'}
+                    variant={'tertiary'}
+                    size={'medium'}
+                  >
+                    Legg til sluttdato
+                  </Button>
+                )}
               </div>
             )}
             <Button className={'fit-content-button'} variant={'secondary'} size={'medium'}>
