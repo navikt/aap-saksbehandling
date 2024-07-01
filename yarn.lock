@@ -1005,10 +1005,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:6.7.1":
-  version: 6.7.1
-  resolution: "@navikt/aksel-icons@npm:6.7.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.7.1%2F6c93069e7c03eba1ffe25634ad0188ddef34853b"
-  checksum: 10c0/8be658d568b5f211a53b0ec51656fc7a6fc53aa6a92fd77981dd2ba4d7ab622e30c7d5870cf9b592c314ad4a829ac035c478023c72ba72aa0279badddd7a157e
+"@navikt/aksel-icons@npm:6.13.0":
+  version: 6.13.0
+  resolution: "@navikt/aksel-icons@npm:6.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.13.0%2F7378bad8c8230187b30a9e0b15675f7740dc96cf"
+  checksum: 10c0/3a54483dcbaf119e6a1a49edb6a93f55cec4aca3facd90a45e78d8cac8d43a8c1eaaab30ea90dcbf21cd80560706f42c2b679a8528135e23ac6eea4efc29430d
   languageName: node
   linkType: hard
 
@@ -2665,7 +2665,7 @@ __metadata:
     "@navikt/aap-felles-react": "npm:^1.0.1"
     "@navikt/aap-felles-utils": "npm:^1.0.1"
     "@navikt/aap-felles-utils-client": "npm:^1.0.1"
-    "@navikt/aksel-icons": "npm:6.7.1"
+    "@navikt/aksel-icons": "npm:6.13.0"
     "@navikt/ds-css": "npm:6.7.1"
     "@navikt/ds-react": "npm:6.7.1"
     "@navikt/eslint-config-aap": "npm:^1.0.1"
