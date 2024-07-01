@@ -1,0 +1,15 @@
+.manueltbarn {
+  --ac-expansioncard-bg: var(--a-white);
+  --ac-expansioncard-header-bg: var(--a-white);
+  --ac-expansioncard-header-open-bg: var(--a-white);
+  --ac-expansioncard-header-bg-hover: var(--a-white);
+  --ac-expansioncard-border-radius: var(--a-border-radius-small);
+  --ac-expansioncard-border-hover-color: none;
+  box-shadow: var(--a-shadow-xsmall);
+}
+
+.manueltbarnheading {
+  display: flex;
+  flex-direction: row;
+  gap: var(--a-spacing-4);
+}

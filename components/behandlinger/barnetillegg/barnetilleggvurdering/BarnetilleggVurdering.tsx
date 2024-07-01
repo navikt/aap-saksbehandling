@@ -3,20 +3,19 @@
 import { ChildHairEyesIcon } from '@navikt/aksel-icons';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Form } from 'components/form/Form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
-import { BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, Button, Label } from '@navikt/ds-react';
+import { ManueltBarn } from 'components/manueltbarn/ManueltBarn';
 
 interface FormFields {
   dokumenterBruktIVurderingen: string[];
 }
 
-export const Barn = () => {
-  const { isLoading, status } = useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
+export const BarnetilleggVurdering = () => {
+  // const { isLoading, status } = useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
   const { form, formFields } = useConfigForm<FormFields>({
     dokumenterBruktIVurderingen: {
       type: 'checkbox_nested',
@@ -31,10 +30,12 @@ export const Barn = () => {
       icon={<ChildHairEyesIcon title="barnetilleg-ikon" fontSize="1.5rem" />}
       steg={'BARNETILLEGG'}
     >
-      <Form steg={'BARNETILLEGG'} onSubmit={() => console.log('hello')} isLoading={isLoading} status={status}>
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
-          <DokumentTabell />
-        </FormField>
+      <div className={'flex-column'}>
+        <form id={'dokument-form'} onSubmit={form.handleSubmit(() => console.log('Her skal det skje noe!'))}>
+          <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
+            <DokumentTabell />
+          </FormField>
+        </form>
         <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
 
         <div>
@@ -43,7 +44,11 @@ export const Barn = () => {
             Les dokumentene og tilknytt relevante dokumenter til vurdering om det skal beregnes barnetillegg
           </BodyShort>
         </div>
-      </Form>
+        <ManueltBarn manueltBarn={{ navn: 'Kjell T Ringen', ident: '12345678910', rolle: 'FOSTERBARN' }} />
+        <Button className={'fit-content-button'} form="dokument-form">
+          Bekreft
+        </Button>
+      </div>
     </VilkårsKort>
   );
 };
