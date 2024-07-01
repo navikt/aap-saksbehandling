@@ -4,7 +4,6 @@ import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingServi
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { OppfølgingMedDataFetching } from 'components/behandlinger/sykdom/oppfølging/OppfølgingMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
-import { StudentvurderingMedDataFetching } from 'components/behandlinger/sykdom/student/student/StudentvurderingMedDataFetching';
 import { SykepengeerstatningMedDataFetching } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningMedDataFetching';
 import { FastsettArbeidsevneMedDataFetching } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevneMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
@@ -29,17 +28,6 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
       visVenteKort={flyt.visning.visVentekort}
     >
       {stegSomSkalVises.map((steg) => {
-        if (steg === 'AVKLAR_STUDENT') {
-          return (
-            <StegSuspense key={steg}>
-              <StudentvurderingMedDataFetching
-                behandlingsreferanse={behandlingsReferanse}
-                readOnly={saksBehandlerReadOnly}
-                behandlingVersjon={behandlingVersjon}
-              />
-            </StegSuspense>
-          );
-        }
         if (steg === 'AVKLAR_SYKDOM') {
           return (
             <StegSuspense key={steg}>
