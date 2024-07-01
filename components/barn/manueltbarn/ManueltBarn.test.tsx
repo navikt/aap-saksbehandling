@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import { ManueltBarn, ManueltBarnType } from 'components/manueltbarn/ManueltBarn';
+import { ManueltBarn, ManueltBarnType } from 'components/barn/manueltbarn/ManueltBarn';
 import userEvent from '@testing-library/user-event';
 
 const manueltBarn: ManueltBarnType = {

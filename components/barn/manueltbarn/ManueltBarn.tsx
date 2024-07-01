@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BodyShort, Button, ExpansionCard, Heading } from '@navikt/ds-react';
 import { PlusIcon, QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 
-import styles from './ManueltBarn.module.css';
+import styles from 'components/barn/Barn.module.css';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
@@ -52,7 +52,7 @@ export const ManueltBarn = ({ manueltBarn }: Props) => {
   });
 
   return (
-    <ExpansionCard aria-label={'manuelt-barn'} size={'small'} defaultOpen={true} className={styles.manueltbarn}>
+    <ExpansionCard aria-label={'manuelt-barn'} size={'small'} defaultOpen={true} className={styles.barn}>
       <ExpansionCard.Header>
         <ExpansionCard.Title>
           <div className={styles.manueltbarnheading}>

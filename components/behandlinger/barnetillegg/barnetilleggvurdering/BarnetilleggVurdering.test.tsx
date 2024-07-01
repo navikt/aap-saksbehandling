@@ -62,4 +62,10 @@ describe('barnetillegg', () => {
     );
     expect(description).toBeVisible();
   });
+
+  it('skal ha en heading for registrerte barn fra folkeregisteret', () => {
+    render(<BarnetilleggVurdering />);
+    const heading = screen.getByText('Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg');
+    expect(heading).toBeVisible();
+  });
 });
