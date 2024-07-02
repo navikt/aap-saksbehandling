@@ -10,12 +10,18 @@ import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/Tilknytt
 import { BodyShort, Button, Label } from '@navikt/ds-react';
 import { ManueltBarn } from 'components/barn/manueltbarn/ManueltBarn';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
+import { BarnetilleggGrunnlag } from 'lib/types/types';
+
+type Props = {
+  grunnlag: BarnetilleggGrunnlag;
+};
 
 interface FormFields {
   dokumenterBruktIVurderingen: string[];
 }
 
-export const BarnetilleggVurdering = () => {
+export const BarnetilleggVurdering = ({ grunnlag }: Props) => {
+  console.log(grunnlag);
   const { form, formFields } = useConfigForm<FormFields>({
     dokumenterBruktIVurderingen: {
       type: 'checkbox_nested',
@@ -46,11 +52,14 @@ export const BarnetilleggVurdering = () => {
         </div>
         <ManueltBarn manueltBarn={{ navn: 'Kjell T Ringen', ident: '12345678910', rolle: 'FOSTERBARN' }} />
 
-        <Label size={'small'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
-        <RegistrertBarn
-          registrertBarn={{ navn: 'Anna Nass', ident: '98765432121', forsørgerPeriode: { fom: '2020-03-04' } }}
-        />
-
+        {grunnlag.folkeregisterbarn.length > 0 && (
+          <>
+            <Label size={'small'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
+            {grunnlag.folkeregisterbarn.map((barn, index) => (
+              <RegistrertBarn key={index} registrertBarn={barn} />
+            ))}
+          </>
+        )}
         <Button className={'fit-content-button'} form="dokument-form">
           Bekreft
         </Button>

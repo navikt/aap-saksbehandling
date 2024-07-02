@@ -3,6 +3,7 @@ import {
   AktivitetInnsendingDto,
   Aktivitetsmeldinger,
   AlderGrunnlag,
+  BarnetilleggGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingResultat,
   BeregningsGrunnlag,
@@ -97,6 +98,11 @@ export const hentStudentGrunnlag = async (behandlingsReferanse: string): Promise
 export const hentSykdomsGrunnlag = async (behandlingsReferanse: string): Promise<SykdomsGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/sykdom`;
   return await fetchProxy<SykdomsGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentBarnetilleggGrunnlag = async (behandlingsreferanse: string): Promise<BarnetilleggGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/barnetillegg/grunnlag/${behandlingsreferanse}`;
+  return await fetchProxy<BarnetilleggGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentKvalitetssikringGrunnlag = async (behandlingsReferanse: string) => {

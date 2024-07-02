@@ -2,15 +2,10 @@ import React from 'react';
 import styles from 'components/barn/Barn.module.css';
 import { BodyShort, ExpansionCard, Heading, Label } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-
-export interface RegistrertBarnType {
-  navn: string;
-  ident: string;
-  forsørgerPeriode: { fom: string; tom?: string };
-}
+import { IdentifisertBarn } from 'lib/types/types';
 
 interface Props {
-  registrertBarn: RegistrertBarnType;
+  registrertBarn: IdentifisertBarn;
 }
 
 export const RegistrertBarn = ({ registrertBarn }: Props) => {
@@ -20,7 +15,7 @@ export const RegistrertBarn = ({ registrertBarn }: Props) => {
         <ExpansionCard.Title>
           <div>
             <Heading size={'small'}>
-              {registrertBarn.navn} - {registrertBarn.ident}
+              {registrertBarn.navn} - {registrertBarn.ident.identifikator}
             </Heading>
             <BodyShort size={'small'}>Eget barn</BodyShort>
           </div>
@@ -30,8 +25,8 @@ export const RegistrertBarn = ({ registrertBarn }: Props) => {
         <div>
           <Label>Forsørgerperiode</Label>
           <BodyShort>
-            {formaterDatoForFrontend(registrertBarn.forsørgerPeriode.fom)}{' '}
-            {` - ${registrertBarn.forsørgerPeriode.tom ? `${formaterDatoForFrontend(registrertBarn.forsørgerPeriode.tom)}` : ''}`}
+            {formaterDatoForFrontend(registrertBarn.forsorgerPeriode.fom)}{' '}
+            {` - ${registrertBarn.forsorgerPeriode.tom ? `${formaterDatoForFrontend(registrertBarn.forsorgerPeriode.tom)}` : ''}`}
           </BodyShort>
         </div>
       </ExpansionCard.Content>

@@ -569,6 +569,24 @@ export interface paths {
       };
     };
   };
+  '/api/barnetillegg/grunnlag/{referanse}': {
+    get: {
+      parameters: {
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.BarnetilleggDto'];
+          };
+        };
+      };
+    };
+  };
   '/drift/api/jobb/feilende': {
     get: {
       responses: {
@@ -618,6 +636,18 @@ export interface paths {
         200: {
           content: {
             'application/json': string;
+          };
+        };
+      };
+    };
+  };
+  '/drift/api/jobb/sisteKjørte': {
+    get: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            'application/json': components['schemas']['no.nav.aap.motor.api.JobbInfoDto'][];
           };
         };
       };
@@ -735,7 +765,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-07-02T13:44:38.664618
+       * @example 2024-07-02T14:47:48.591206
        */
       tidspunkt: string;
     };
@@ -815,6 +845,14 @@ export interface components {
       /** @enum {string} */
       årsak: 'MANGELFULL_BEGRUNNELSE' | 'MANGLENDE_UTREDNING' | 'FEIL_LOVANVENDELSE' | 'ANNET';
       årsakFritekst?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.BarnetilleggDto': {
+      folkeregisterbarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.IdentifiserteBarnDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.IdentifiserteBarnDto': {
+      forsorgerPeriode: components['schemas']['no.nav.aap.verdityper.Periode'];
+      ident: components['schemas']['no.nav.aap.verdityper.sakogbehandling.Ident'];
+      navn: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.flate.BeregningDTO': {
       faktagrunnlag: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilkårsresultat.Faktagrunnlag'];
@@ -1183,7 +1221,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-07-02T13:44:38.664618
+       * @example 2024-07-02T14:47:48.591206
        */
       opprettet: string;
       /** Format: uuid */
@@ -1209,7 +1247,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-07-02T13:44:38.664618
+       * @example 2024-07-02T14:47:48.591206
        */
       tidsstempel: string;
     };
@@ -1362,7 +1400,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-07-02T13:44:38.664618
+       * @example 2024-07-02T14:47:48.591206
        */
       opprettet: string;
       /** Format: uuid */
@@ -1396,7 +1434,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-07-02T13:44:38.664618
+       * @example 2024-07-02T14:47:48.591206
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.verdityper.Periode'];
@@ -1407,7 +1445,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-07-02T13:44:38.664618
+       * @example 2024-07-02T14:47:48.591206
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.verdityper.Periode'];
@@ -1418,15 +1456,17 @@ export interface components {
     'no.nav.aap.motor.api.JobbInfoDto': {
       /** Format: int32 */
       antallFeilendeForsøk: number;
+      beskrivelse: string;
       feilmelding?: string | null;
       /** Format: int64 */
       id: number;
       metadata: {
         [key: string]: string;
       };
+      navn: string;
       /**
        * Format: date-time
-       * @example 2024-07-02T13:44:38.664618
+       * @example 2024-07-02T14:47:48.591206
        */
       planlagtKjøretidspunkt: string;
       /** @enum {string} */
@@ -1456,6 +1496,10 @@ export interface components {
       antallTimer: number;
     };
     'no.nav.aap.verdityper.dokument.JournalpostId': {
+      identifikator: string;
+    };
+    'no.nav.aap.verdityper.sakogbehandling.Ident': {
+      aktivIdent: boolean;
       identifikator: string;
     };
   };

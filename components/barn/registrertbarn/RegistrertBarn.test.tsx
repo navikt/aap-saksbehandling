@@ -1,10 +1,14 @@
 import { render, screen } from '@testing-library/react';
-import { RegistrertBarn, RegistrertBarnType } from 'components/barn/registrertbarn/RegistrertBarn';
+import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
+import { IdentifisertBarn } from 'lib/types/types';
 
-const registrertBarn: RegistrertBarnType = {
+const registrertBarn: IdentifisertBarn = {
   navn: 'Anna Nass',
-  ident: '98765432121',
-  forsørgerPeriode: { fom: '2020-03-03', tom: '2038-03-03' },
+  ident: {
+    identifikator: '98765432121',
+    aktivIdent: true,
+  },
+  forsorgerPeriode: { fom: '2020-03-03', tom: '2038-03-03' },
 };
 
 describe('registrert barn', () => {

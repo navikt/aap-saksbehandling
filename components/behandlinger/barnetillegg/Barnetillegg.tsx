@@ -2,6 +2,7 @@ import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingServi
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { BarnMedDataFetching } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnMedDataFetching';
 import { getStegSomSkalVises } from 'lib/utils/steg';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
 interface Props {
   behandlingsreferanse: string;
@@ -14,13 +15,15 @@ export const Barnetillegg = async ({ behandlingsreferanse }: Props) => {
   console.log('stegSomSkalVises', stegSomSkalVises);
 
   return (
-    <GruppeSteg
-      prosessering={flyt.prosessering}
-      visVenteKort={flyt.visning.visVentekort}
-      behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flyt.behandlingVersjon}
-    >
-      <BarnMedDataFetching />
-    </GruppeSteg>
+    <StegSuspense>
+      <GruppeSteg
+        prosessering={flyt.prosessering}
+        visVenteKort={flyt.visning.visVentekort}
+        behandlingReferanse={behandlingsreferanse}
+        behandlingVersjon={flyt.behandlingVersjon}
+      >
+        <BarnMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+      </GruppeSteg>
+    </StegSuspense>
   );
 };
