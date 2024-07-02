@@ -77,7 +77,7 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
     } else {
       form.clearErrors();
     }
-  }, [oppfølgingsGrunner]);
+  }, [oppfølgingsGrunner, form]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) =>
