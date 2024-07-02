@@ -50,21 +50,13 @@ export const hentSak = async (saksnummer: string): Promise<SaksInfo> => {
   }
 };
 export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
-  // TODO: bruk backend når vi får ordnet opp i lokal auth
-  console.log(saksnummer);
-  const mockResponse: SakPersoninfo = {
-    fnr: '123456 78999',
-    navn: 'Peter Ås',
-  };
-  return Promise.resolve(mockResponse);
-
-  // const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
-  // try {
-  //   return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
-  // } catch (e) {
-  //   logWarning(`Fant ikke sak med referanse ${saksnummer}`);
-  //   notFound();
-  // }
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
+  try {
+    return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
+  } catch (e) {
+    logWarning(`Fant ikke sak med referanse ${saksnummer}`);
+    notFound();
+  }
 };
 
 export const sendAktivitetsMelding = async (aktivitet: AktivitetInnsendingDto) => {
@@ -90,7 +82,7 @@ export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
 export const hentLesetilgang = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/lesetilgang`;
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
-}
+};
 
 export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/dokument/${journalPostId}/${dokumentInfoId}`;
