@@ -25,6 +25,8 @@ const AppHeader = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon
     <div className={styles.leftSide}>
       <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
       <Link href={'/sanity'}>Sanity</Link>
+      <Link href={'/saksoversikt'}>Saksoversikt</Link>
+      <Link href={'/oppgaveliste'}>Oppgaveliste</Link>
     </div>
 
     <Brukermeny brukerInformasjon={brukerInformasjon} />
