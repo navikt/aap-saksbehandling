@@ -594,7 +594,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:^1.7.2":
+"@grafana/faro-web-sdk@npm:^1.8.0":
   version: 1.8.0
   resolution: "@grafana/faro-web-sdk@npm:1.8.0"
   dependencies:
@@ -1064,7 +1064,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/oasis@npm:^3.2.4":
+"@navikt/oasis@npm:^3.3.0":
   version: 3.3.0
   resolution: "@navikt/oasis@npm:3.3.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F3.3.0%2F0d6116b68e84598184f94a86087eee68d8f929a1"
   dependencies:
@@ -2507,7 +2507,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/otel@npm:^1.8.2":
+"@vercel/otel@npm:^1.9.1":
   version: 1.9.1
   resolution: "@vercel/otel@npm:1.9.1"
   peerDependencies:
@@ -2533,7 +2533,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "aap-saksbehandling@workspace:."
   dependencies:
-    "@grafana/faro-web-sdk": "npm:^1.7.2"
+    "@grafana/faro-web-sdk": "npm:^1.8.0"
     "@navikt/aap-felles-css": "npm:^1.0.2"
     "@navikt/aap-felles-prettier": "npm:^1.0.2"
     "@navikt/aap-felles-react": "npm:^1.0.2"
@@ -2543,7 +2543,7 @@ __metadata:
     "@navikt/ds-css": "npm:6.13.0"
     "@navikt/ds-react": "npm:6.13.0"
     "@navikt/eslint-config-aap": "npm:^1.0.2"
-    "@navikt/oasis": "npm:^3.2.4"
+    "@navikt/oasis": "npm:^3.3.0"
     "@portabletext/react": "npm:^3.1.0"
     "@sanity/client": "npm:^6.20.1"
     "@sanity/overlays": "npm:^2.3.55"
@@ -2570,7 +2570,7 @@ __metadata:
     "@types/uuid": "npm:^10.0.0"
     "@typescript-eslint/eslint-plugin": "npm:^7.15.0"
     "@typescript-eslint/parser": "npm:^7.15.0"
-    "@vercel/otel": "npm:^1.8.2"
+    "@vercel/otel": "npm:^1.9.1"
     date-fns: "npm:^3.6.0"
     eslint: "npm:^8.57.0"
     eslint-config-next: "npm:^14.2.4"
@@ -2589,12 +2589,12 @@ __metadata:
     next: "npm:^14.2.4"
     next-sanity: "npm:^9.4.2"
     node-loader: "npm:^2.0.0"
-    openapi-typescript: "npm:6.7.5"
+    openapi-typescript: "npm:6.7.6"
     pino-pretty: "npm:^11.2.1"
     prettier: "npm:^3.3.2"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
-    react-hook-form: "npm:7.52.0"
+    react-hook-form: "npm:7.52.1"
     react-pdf: "npm:^8.0.2"
     swr: "npm:^2.2.5"
     typescript: "npm:^5.5.3"
@@ -7459,19 +7459,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-typescript@npm:6.7.5":
-  version: 6.7.5
-  resolution: "openapi-typescript@npm:6.7.5"
+"openapi-typescript@npm:6.7.6":
+  version: 6.7.6
+  resolution: "openapi-typescript@npm:6.7.6"
   dependencies:
     ansi-colors: "npm:^4.1.3"
     fast-glob: "npm:^3.3.2"
     js-yaml: "npm:^4.1.0"
     supports-color: "npm:^9.4.0"
-    undici: "npm:^5.28.2"
+    undici: "npm:^5.28.4"
     yargs-parser: "npm:^21.1.1"
   bin:
     openapi-typescript: bin/cli.js
-  checksum: 10c0/d4486a1a08d40a4292389af26093fd1b5c26ea4ee8c91f2d4d3f3fb910484cf3720eacafb38699a4de11759c2f67f866466ed75ab463b04f4f9d28e6ceb3cff2
+  checksum: 10c0/43b5a64cca2a53a0adc7f8763152db67c56369f06bdb5063d0c7aa3d4d53e76f54131cdbaee7e5e30404da15784b92ae3f814389f1f71428bcaa4ffcfa1c5197
   languageName: node
   linkType: hard
 
@@ -8215,12 +8215,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.52.0":
-  version: 7.52.0
-  resolution: "react-hook-form@npm:7.52.0"
+"react-hook-form@npm:7.52.1":
+  version: 7.52.1
+  resolution: "react-hook-form@npm:7.52.1"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 10c0/058bf5596f314c071863bb133979deb56d0a7817d5bf1908a569c003fe03a15736402b040d3e18aeb259723c6e15c243fe75d2d887ea47ff4be87fc472f31ad5
+  checksum: 10c0/68f21daa66f3c2b87c83f2f9b1dbd160a856b24e9315263af24fee8737b62336dc7cc43e09c581ff957ed032a3ac2355f69b1c1d32d89893a6e1f601112eacfd
   languageName: node
   linkType: hard
 
@@ -9480,7 +9480,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^5.28.2":
+"undici@npm:^5.28.4":
   version: 5.28.4
   resolution: "undici@npm:5.28.4"
   dependencies:
