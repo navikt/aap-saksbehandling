@@ -29,7 +29,6 @@ interface FormFields {
   avbruttPgaSykdomEllerSkade: string;
   harBehovForBehandling: string;
   avbruttDato: Date;
-  skalGjenopptaStudie: string;
   avbruddMerEnn6Måneder: string;
   dokumenterBruktIVurderingen: string[];
 }
@@ -85,13 +84,6 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
           : undefined,
         rules: { required: 'Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.' },
       },
-      skalGjenopptaStudie: {
-        type: 'radio',
-        label: 'Er det forventet at søker skal gjenoppta studiet?',
-        options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.skalGjenopptaStudie),
-        rules: { required: 'Du må svare på om det er forventet at søker skal gjenoppta studiet.' },
-      },
       avbruddMerEnn6Måneder: {
         type: 'radio',
         label: 'Er det forventet at søker kan gjenoppta studiet innen 6 måneder?',
@@ -122,7 +114,6 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
             avbruddMerEnn6Måneder: data.avbruddMerEnn6Måneder === JaEllerNei.Ja,
             avbruttPgaSykdomEllerSkade: data.avbruttPgaSykdomEllerSkade === JaEllerNei.Ja,
             godkjentStudieAvLånekassen: data.godkjentStudieAvLånekassen === JaEllerNei.Ja,
-            skalGjenopptaStudie: data.skalGjenopptaStudie === JaEllerNei.Ja,
             dokumenterBruktIVurdering: [],
           },
         },
@@ -168,9 +159,8 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
         <FormField form={form} formField={formFields.godkjentStudieAvLånekassen} />
         <FormField form={form} formField={formFields.avbruttPgaSykdomEllerSkade} />
         <FormField form={form} formField={formFields.harBehovForBehandling} />
-        <FormField form={form} formField={formFields.skalGjenopptaStudie} />
-        <FormField form={form} formField={formFields.avbruttDato} />
         <FormField form={form} formField={formFields.avbruddMerEnn6Måneder} />
+        <FormField form={form} formField={formFields.avbruttDato} />
       </Form>
     </VilkårsKort>
   );

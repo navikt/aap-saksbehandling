@@ -58,11 +58,6 @@ describe('Student', () => {
     ).toBeVisible();
   });
 
-  it('spør om det er forventet at studiet skal gjenopptas', () => {
-    render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
-    expect(screen.getByRole('group', { name: 'Er det forventet at søker skal gjenoppta studiet?' })).toBeVisible();
-  });
-
   it('spør om avbruddet er forventet å vare mer enn 6 mnd', () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
     expect(
@@ -121,16 +116,6 @@ describe('Student', () => {
 
     expect(
       await screen.findByText('Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.')
-    ).toBeVisible();
-  });
-
-  it('viser feilmelding hvis det ikke er svart på om det er forventet at studiet skal gjenopptas', async () => {
-    render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
-    const button = screen.getByRole('button', { name: /Bekreft/ });
-    await user.click(button);
-
-    expect(
-      await screen.findByText('Du må svare på om det er forventet at søker skal gjenoppta studiet.')
     ).toBeVisible();
   });
 
