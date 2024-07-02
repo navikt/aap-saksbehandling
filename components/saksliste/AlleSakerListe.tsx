@@ -21,8 +21,6 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
 
   const searchValue = searchParams.get('ident');
 
-  console.log('alleSaker', alleSaker);
-
   return (
     <div style={{ marginTop: '1rem' }}>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>

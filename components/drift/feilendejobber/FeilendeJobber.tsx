@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { JobbInfo } from 'lib/types/types';
-import { Alert, BodyShort, Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading, HStack, Label, VStack } from '@navikt/ds-react';
 
 import styles from 'components/drift/feilendejobber/FeilendeJobber.module.css';
 import { rekjørJobb } from 'lib/clientApi';
@@ -36,10 +36,13 @@ export const FeilendeJobber = ({ jobber }: Props) => {
 
   return (
     <VStack>
+      <Heading size={'small'} level={'3'} spacing>
+        Feilende jobber
+      </Heading>
       {harFeilendeJobber ? (
         <Alert variant={'error'}>Det finnes {jobber.length} feilede jobb(er)</Alert>
       ) : (
-        <Alert variant={'success'}>Alt kjører OK</Alert>
+        <Alert variant={'success'}>Det finnes ingen feilende jobber</Alert>
       )}
       {harFeilendeJobber && (
         <VStack>

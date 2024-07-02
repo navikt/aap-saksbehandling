@@ -735,7 +735,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-07-02T12:37:53.283763
+       * @example 2024-07-02T13:44:38.664618
        */
       tidspunkt: string;
     };
@@ -1183,7 +1183,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-07-02T12:37:53.283763
+       * @example 2024-07-02T13:44:38.664618
        */
       opprettet: string;
       /** Format: uuid */
@@ -1209,7 +1209,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-07-02T12:37:53.283763
+       * @example 2024-07-02T13:44:38.664618
        */
       tidsstempel: string;
     };
@@ -1362,7 +1362,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-07-02T12:37:53.283763
+       * @example 2024-07-02T13:44:38.664618
        */
       opprettet: string;
       /** Format: uuid */
@@ -1396,7 +1396,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-07-02T12:37:53.283763
+       * @example 2024-07-02T13:44:38.664618
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.verdityper.Periode'];
@@ -1407,7 +1407,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-07-02T12:37:53.283763
+       * @example 2024-07-02T13:44:38.664618
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.verdityper.Periode'];
@@ -1424,6 +1424,11 @@ export interface components {
       metadata: {
         [key: string]: string;
       };
+      /**
+       * Format: date-time
+       * @example 2024-07-02T13:44:38.664618
+       */
+      planlagtKjøretidspunkt: string;
       /** @enum {string} */
       status: 'KLAR' | 'PLUKKET' | 'FERDIG' | 'FEILET';
       type: string;
