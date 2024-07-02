@@ -735,7 +735,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-07-02T10:41:19.01686
+       * @example 2024-07-02T12:37:53.283763
        */
       tidspunkt: string;
     };
@@ -1183,7 +1183,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-07-02T10:41:19.01686
+       * @example 2024-07-02T12:37:53.283763
        */
       opprettet: string;
       /** Format: uuid */
@@ -1209,7 +1209,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-07-02T10:41:19.01686
+       * @example 2024-07-02T12:37:53.283763
        */
       tidsstempel: string;
     };
@@ -1362,7 +1362,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-07-02T10:41:19.01686
+       * @example 2024-07-02T12:37:53.283763
        */
       opprettet: string;
       /** Format: uuid */
@@ -1394,12 +1394,22 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksinfoDTO': {
       ident: string;
+      /**
+       * Format: date-time
+       * @example 2024-07-02T12:37:53.283763
+       */
+      opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.verdityper.Periode'];
       saksnummer: string;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.UtvidetSaksinfoDTO': {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO'][];
       ident: string;
+      /**
+       * Format: date-time
+       * @example 2024-07-02T12:37:53.283763
+       */
+      opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.verdityper.Periode'];
       saksnummer: string;
       /** @enum {string} */

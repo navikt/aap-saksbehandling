@@ -5,7 +5,7 @@ import { SaksInfo } from 'lib/types/types';
 import Link from 'next/link';
 import useSWR from 'swr';
 import { Table, TextField } from '@navikt/ds-react';
-import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
+import { formaterDatoMedTidspunktForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 interface Props {
@@ -43,22 +43,20 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
           <Table.Row>
             <Table.HeaderCell>Saksnummer</Table.HeaderCell>
             <Table.HeaderCell>Ident</Table.HeaderCell>
-            <Table.HeaderCell>Fra</Table.HeaderCell>
-            <Table.HeaderCell>Til</Table.HeaderCell>
+            <Table.HeaderCell>Opprettelsestidspunkt</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {data
             ?.filter((sak) => !searchValue || sak.ident.includes(searchValue))
-            ?.sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom))
+            ?.sort((a, b) => sorterEtterNyesteDato(a.opprettetTidspunkt, b.opprettetTidspunkt))
             .map((sak) => (
               <Table.Row key={sak.saksnummer}>
                 <Table.DataCell>
                   <Link href={`/sak/${sak.saksnummer}/`}>{sak.saksnummer}</Link>
                 </Table.DataCell>
                 <Table.DataCell>{sak.ident}</Table.DataCell>
-                <Table.DataCell>{formaterDatoForFrontend(sak.periode.fom)}</Table.DataCell>
-                <Table.DataCell>{formaterDatoForFrontend(sak.periode.tom)}</Table.DataCell>
+                <Table.DataCell>{formaterDatoMedTidspunktForFrontend(sak.opprettetTidspunkt)}</Table.DataCell>
               </Table.Row>
             ))}
         </Table.Body>

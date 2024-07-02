@@ -14,13 +14,13 @@ const saksinfo: SaksInformasjon = {
     tidspunkt: '12.12.2020 kl 12:12',
   },
 };
-const ident = '12345678910';
 const sak: SaksInfo = {
-  ident,
+  ident: '12345678910',
   behandlinger: [],
+  opprettetTidspunkt: '12. mai',
   saksnummer: 'kjfsdf',
   status: 'OPPRETTET',
-  periode: { fom: '12 main', tom: '27 mai' },
+  periode: { fom: '12 mai', tom: '27 mai' },
 };
 describe('SaksinfoBanner', () => {
   it('komponenten rendrer med navn på søker', () => {
@@ -35,6 +35,7 @@ describe('SaksinfoBanner', () => {
     );
     expect(screen.getByText('Peder Ås')).toBeVisible();
   });
+
   it('ident fra sak vises', () => {
     render(
       <SaksinfoBanner
@@ -45,6 +46,6 @@ describe('SaksinfoBanner', () => {
         behandlingVersjon={1}
       />
     );
-    expect(screen.getByText(ident)).toBeVisible();
+    expect(screen.getByText('12345678910')).toBeVisible();
   });
 });
