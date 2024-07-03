@@ -32,13 +32,13 @@ export const OpprettSak = () => {
     yrkesskade: {
       type: 'radio',
       label: 'Yrkesskade?',
-      defaultValue: 'true',
+      defaultValue: JaEllerNei.Ja,
       options: JaEllerNeiOptions,
     },
     student: {
       type: 'radio',
       label: 'Student?',
-      defaultValue: 'false',
+      defaultValue: JaEllerNei.Nei,
       options: JaEllerNeiOptions,
     },
     barn: {
