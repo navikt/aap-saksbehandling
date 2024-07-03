@@ -9,6 +9,7 @@ import styles from './OpprettSak.module.css';
 import { mutate } from 'swr';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { OpprettSakBarn } from 'components/opprettsak/OpprettSakBarn';
+import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 
 interface Barn {
   fodselsdato: string;
@@ -32,19 +33,13 @@ export const OpprettSak = () => {
       type: 'radio',
       label: 'Yrkesskade?',
       defaultValue: 'true',
-      options: [
-        { label: 'Ja', value: 'true' },
-        { label: 'Nei', value: 'false' },
-      ],
+      options: JaEllerNeiOptions,
     },
     student: {
       type: 'radio',
       label: 'Student?',
       defaultValue: 'false',
-      options: [
-        { label: 'Ja', value: 'true' },
-        { label: 'Nei', value: 'false' },
-      ],
+      options: JaEllerNeiOptions,
     },
     barn: {
       type: 'text', // Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
@@ -60,8 +55,8 @@ export const OpprettSak = () => {
         await opprettSak({
           ...data,
           fødselsdato: formaterDatoForBackend(data.fødselsdato),
-          yrkesskade: data.yrkesskade === 'true',
-          student: data.student === 'true',
+          yrkesskade: data.yrkesskade === JaEllerNei.Ja,
+          student: data.student === JaEllerNei.Ja,
           barn:
             data.barn?.map((barn) => {
               return { fodselsdato: formaterDatoForBackend(new Date(barn.fodselsdato)) };
