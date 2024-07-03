@@ -21,7 +21,6 @@ interface FormFields {
 }
 
 export const BarnetilleggVurdering = ({ grunnlag }: Props) => {
-  console.log(grunnlag);
   const { form, formFields } = useConfigForm<FormFields>({
     dokumenterBruktIVurderingen: {
       type: 'checkbox_nested',
