@@ -12,18 +12,22 @@ export const Barnetillegg = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
   const stegSomSkalVises = getStegSomSkalVises('BARNETILLEGG', flyt);
 
-  console.log('stegSomSkalVises', stegSomSkalVises);
-
   return (
-    <StegSuspense>
-      <GruppeSteg
-        prosessering={flyt.prosessering}
-        visVenteKort={flyt.visning.visVentekort}
-        behandlingReferanse={behandlingsreferanse}
-        behandlingVersjon={flyt.behandlingVersjon}
-      >
-        <BarnMedDataFetching behandlingsreferanse={behandlingsreferanse} />
-      </GruppeSteg>
-    </StegSuspense>
+    <GruppeSteg
+      prosessering={flyt.prosessering}
+      visVenteKort={flyt.visning.visVentekort}
+      behandlingReferanse={behandlingsreferanse}
+      behandlingVersjon={flyt.behandlingVersjon}
+    >
+      {stegSomSkalVises.map((steg) => {
+        if (steg === 'BARNETILLEGG') {
+          return (
+            <StegSuspense key={steg}>
+              <BarnMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+            </StegSuspense>
+          );
+        }
+      })}
+    </GruppeSteg>
   );
 };
