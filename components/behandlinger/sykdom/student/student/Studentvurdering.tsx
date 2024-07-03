@@ -143,7 +143,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
             </BodyShort>
           )}
           {grunnlag?.oppgittStudent?.skalGjenopptaStudieStatus && (
-            <BodyShort>
+            <BodyShort size={'small'}>
               Planlegger å gjenoppta studie:{' '}
               {mapSkalGjenopptaStudieStatus(grunnlag.oppgittStudent.skalGjenopptaStudieStatus)}
             </BodyShort>
