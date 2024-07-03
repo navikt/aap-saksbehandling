@@ -1,6 +1,7 @@
 import React from 'react';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import Image from 'next/image';
+import Medlemskapkatt from '../../../public/medlemskapkatt.jpg';
 
 interface Props {
   behandlingsreferanse: string;
@@ -11,7 +12,7 @@ export const Medlemskap = async ({ behandlingsreferanse }: Props) => {
 
   return (
     <VilkårsKort heading={'Medlemskap'} steg={'VURDER_MEDLEMSKAP'}>
-      <Image src="/medlemskapkatt.jpg" alt="404" width={500} height={500} />
+      <Image src={Medlemskapkatt} alt="404" width={500} height={500} />
     </VilkårsKort>
   );
 };
