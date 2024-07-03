@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { Heading } from '@navikt/ds-react';
+import ErrorBilde from '../public/error.jpg';
 
 //500 Page
 const Error = () => {
@@ -18,7 +19,7 @@ const Error = () => {
       <Heading level="2" size="medium" spacing>
         Det har oppstått en feil 🙃.
       </Heading>
-      <Image src="/error.jpg" alt="404" width={500} height={500} />
+      <Image src={ErrorBilde} alt="404" width={500} height={500} />
     </div>
   );
 };

@@ -12,7 +12,7 @@ export const Medlemskap = async ({ behandlingsreferanse }: Props) => {
 
   return (
     <VilkårsKort heading={'Medlemskap'} steg={'VURDER_MEDLEMSKAP'}>
-      <Image src={Medlemskapkatt} alt="404" width={500} height={500} />
+      <Image src={Medlemskapkatt} alt="medlemskap-katt" width={500} height={500} />
     </VilkårsKort>
   );
 };
