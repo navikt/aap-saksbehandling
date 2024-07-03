@@ -219,6 +219,11 @@ export const rekjørFeiledeJobber = async () => {
   return await fetchProxy<string>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentSisteKjørteJobber = async () => {
+  const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/sisteKjørte`;
+  return await fetchProxy<JobbInfo[]>(url, saksbehandlingApiScope, 'GET');
+};
+
 export interface MockBeregeningsGrunnlag {
   beregningsGrunnlag: string;
   faktagrunnlag: string;

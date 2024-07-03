@@ -6,7 +6,7 @@ import { Alert, BodyShort, Button, Heading, HStack, Label, VStack } from '@navik
 
 import styles from 'components/drift/feilendejobber/FeilendeJobber.module.css';
 import { rekjørJobb } from 'lib/clientApi';
-import { objectToMap } from 'components/drift/planlagtejobber/PlanlagteJobber';
+import { objectToMap } from 'components/drift/jobbtabell/JobbTabell';
 
 interface Props {
   jobber: JobbInfo[];
