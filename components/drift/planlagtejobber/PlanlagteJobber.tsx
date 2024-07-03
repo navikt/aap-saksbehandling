@@ -71,6 +71,6 @@ export const PlanlagteJobber = ({ planlagteJobber }: Props) => {
   );
 };
 
-function objectToMap(value: Object): Map<string, string> {
+export function objectToMap(value: Object): Map<string, string> {
   return new Map(Object.entries(value));
 }

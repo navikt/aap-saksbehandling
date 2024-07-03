@@ -6,6 +6,7 @@ import { Alert, BodyShort, Button, Heading, HStack, Label, VStack } from '@navik
 
 import styles from 'components/drift/feilendejobber/FeilendeJobber.module.css';
 import { rekjørJobb } from 'lib/clientApi';
+import { objectToMap } from 'components/drift/planlagtejobber/PlanlagteJobber';
 
 interface Props {
   jobber: JobbInfo[];
@@ -84,6 +85,15 @@ export const FeilendeJobber = ({ jobber }: Props) => {
                 <Label>Feilmelding</Label>
                 <BodyShort size={'small'}>{jobb.feilmelding}</BodyShort>
               </div>
+
+              {[...objectToMap(jobb.metadata)].map(([key, value]) => {
+                return (
+                  <div key={key}>
+                    <Label>{key}</Label>
+                    <BodyShort>{value}</BodyShort>
+                  </div>
+                );
+              })}
             </div>
           ))}
         </VStack>
