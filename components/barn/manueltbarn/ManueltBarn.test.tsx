@@ -1,6 +1,8 @@
 import { render, screen, within } from '@testing-library/react';
 import { ManueltBarn, ManueltBarnType } from 'components/barn/manueltbarn/ManueltBarn';
 import userEvent from '@testing-library/user-event';
+import { addDays } from 'date-fns';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 const manueltBarn: ManueltBarnType = {
   navn: 'Kjell T Ringen',
@@ -121,6 +123,33 @@ describe('manuelleBarn', () => {
 
     const sluttDatoFelt = screen.getByRole('textbox', { name: /Sluttdato for forsørgeransvaret/i });
     expect(sluttDatoFelt).toBeVisible();
+  });
+
+  it('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
+    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    await svarJaPåOmDetSkalBeregnesBarnetillegg();
+    const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+    const imorgen = addDays(new Date(), 1);
+
+    await user.type(datofelt, formaterDatoForFrontend(imorgen));
+    const lagreKnapp = screen.getByRole('button', { name: 'Lagre vurdering' });
+
+    await user.click(lagreKnapp);
+    const feilmelding = screen.getByText('Dato for når søker har forsørgeransvar fra kan ikke være frem i tid');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
+    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    await svarJaPåOmDetSkalBeregnesBarnetillegg();
+    const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+
+    await user.type(datofelt, '12.2003');
+    const lagreKnapp = screen.getByRole('button', { name: 'Lagre vurdering' });
+
+    await user.click(lagreKnapp);
+    const feilmelding = screen.getByText('Dato for når søker har forsørgeransvar fra er ikke gyldig');
+    expect(feilmelding).toBeVisible();
   });
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {

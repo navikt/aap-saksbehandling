@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { isAfter } from 'date-fns';
+
 import { BodyShort, Button, ExpansionCard, Heading } from '@navikt/ds-react';
 import { PlusIcon, QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 
@@ -7,6 +9,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 export interface ManueltBarnType {
   navn: string;
@@ -42,7 +45,19 @@ export const ManueltBarn = ({ manueltBarn }: Props) => {
     forsørgerAnsvarStartDato: {
       type: 'date',
       label: 'Søker har forsørgeransvar for barnet fra',
-      rules: { required: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra' },
+      toDate: new Date(),
+      rules: {
+        required: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra',
+        validate: (value) => {
+          const inputDato = parseDatoFraDatePicker(value);
+          if (inputDato) {
+            return isAfter(inputDato, new Date())
+              ? 'Dato for når søker har forsørgeransvar fra kan ikke være frem i tid'
+              : true;
+          }
+          return 'Dato for når søker har forsørgeransvar fra er ikke gyldig';
+        },
+      },
     },
     forsørgerAnsvarSluttDato: {
       type: 'date',

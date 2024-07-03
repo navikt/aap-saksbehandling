@@ -19,14 +19,21 @@ export const formaterDatoForBackend = (dato: Date) => {
   return format(dato, 'yyyy-MM-dd');
 };
 
-export const stringToDate = (value?: string | null) => {
+export const stringToDate = (value?: string | null, format: string = 'yyyy-MM-dd') => {
   if (!value) {
     return undefined;
   }
-  const parsed = parse(value, 'yyyy-MM-dd', new Date());
-  return isValid(parsed) ? parsed : undefined;
+  const parsedDate = parse(value, format, new Date());
+  return isValid(parsedDate) ? parsedDate : undefined;
 };
 
 export function sorterEtterNyesteDato(a: string, b: string) {
   return new Date(b).getTime() - new Date(a).getTime();
 }
+
+export const parseDatoFraDatePicker = (value?: string | Date): Date | undefined => {
+  if (value instanceof Date) {
+    return value;
+  }
+  return stringToDate(value, 'dd.MM.yyyy');
+};
