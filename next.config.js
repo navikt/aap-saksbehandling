@@ -17,6 +17,10 @@ const nextConfig = {
 
     return config;
   },
+
+  images: {
+    formats: ['image/webp'],
+  },
 };
 
 module.exports = nextConfig;
