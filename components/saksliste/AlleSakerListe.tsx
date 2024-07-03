@@ -4,9 +4,10 @@ import { hentAlleSaker } from 'lib/clientApi';
 import { SaksInfo } from 'lib/types/types';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { Table, TextField } from '@navikt/ds-react';
+import { Button, Table, TextField } from '@navikt/ds-react';
 import { formaterDatoMedTidspunktForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 
 interface Props {
   alleSaker: SaksInfo[];
@@ -17,7 +18,7 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const { data } = useSWR('api/sak/alle', hentAlleSaker, { fallbackData: alleSaker });
+  const { data, mutate, isLoading } = useSWR('api/sak/alle', hentAlleSaker, { fallbackData: alleSaker });
 
   const searchValue = searchParams.get('ident');
 
@@ -37,6 +38,15 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
             replace(`${pathname}?${params.toString()}`);
           }}
         />
+        <Button
+          icon={<ArrowCirclepathIcon />}
+          onClick={() => mutate()}
+          size={'medium'}
+          variant={'tertiary'}
+          loading={isLoading}
+        >
+          Refresh listen
+        </Button>
       </div>
       <Table>
         <Table.Header>
