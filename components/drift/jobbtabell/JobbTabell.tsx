@@ -1,6 +1,6 @@
 import React from 'react';
 import { BodyShort, HStack, Label, Table, VStack } from '@navikt/ds-react';
-import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
+import { formaterDatoMedTidspunktSekunderForFrontend } from 'lib/utils/date';
 import { JobbInfo } from 'lib/types/types';
 
 interface Props {
@@ -55,7 +55,9 @@ export const JobbTabell = ({ jobber }: Props) => {
               <Table.DataCell>{jobb.id}</Table.DataCell>
               <Table.DataCell>{jobb.navn}</Table.DataCell>
               <Table.DataCell>{jobb.status}</Table.DataCell>
-              <Table.DataCell>{formaterDatoMedTidspunktForFrontend(jobb.planlagtKjøretidspunkt)}</Table.DataCell>
+              <Table.DataCell>
+                {formaterDatoMedTidspunktSekunderForFrontend(jobb.planlagtKjøretidspunkt)}
+              </Table.DataCell>
               <Table.DataCell>{jobb.antallFeilendeForsøk}</Table.DataCell>
             </Table.ExpandableRow>
           );
