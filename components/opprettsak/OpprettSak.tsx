@@ -3,27 +3,26 @@
 import { opprettSak } from 'lib/clientApi';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
-import { Button, Label, TextField } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 
 import styles from './OpprettSak.module.css';
 import { mutate } from 'swr';
-import { useFieldArray } from 'react-hook-form';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
+import { OpprettSakBarn } from 'components/opprettsak/OpprettSakBarn';
 
 interface Barn {
   fodselsdato: string;
 }
 
-interface FormFields {
+export interface OpprettSakFormFields {
   fødselsdato: Date;
   yrkesskade: string;
   student: string;
-  barn: Barn[];
+  barn?: Barn[];
 }
 
 export const OpprettSak = () => {
-  const { formFields, form } = useConfigForm<FormFields>({
+  const { formFields, form } = useConfigForm<OpprettSakFormFields>({
     fødselsdato: {
       type: 'date',
       defaultValue: new Date('2000-01-01'),
@@ -48,14 +47,11 @@ export const OpprettSak = () => {
       ],
     },
     barn: {
-      type: 'date',
-      label: 'Ikke relevant',
+      type: 'text', // Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
+      label: 'Ikke relevant', // Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
+      // @ts-ignore Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
+      defaultValue: [{ fodselsdato: '2015' }],
     },
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: 'barn',
   });
 
   return (
@@ -66,52 +62,21 @@ export const OpprettSak = () => {
           fødselsdato: formaterDatoForBackend(data.fødselsdato),
           yrkesskade: data.yrkesskade === 'true',
           student: data.student === 'true',
-          barn: data.barn.map((barn) => {
-            return { fodselsdato: formaterDatoForBackend(new Date(barn.fodselsdato)) };
-          }),
+          barn:
+            data.barn?.map((barn) => {
+              return { fodselsdato: formaterDatoForBackend(new Date(barn.fodselsdato)) };
+            }) || [],
         });
         await mutate('api/sak/alle');
       })}
       className={styles.form}
     >
-      <FormField form={form} formField={formFields.fødselsdato} />
-      <FormField form={form} formField={formFields.yrkesskade} />
-      <FormField form={form} formField={formFields.student} />
-      {fields.map((field, index) => {
-        return (
-          <div key={field.id} className={'flex-column'}>
-            <div>
-              <Label>Barn {index + 1}</Label>
-              <TextField size={'small'} label={'Årstall'} {...form.register(`barn.${index}.fodselsdato`)} />
-            </div>
-            <div className={'flex-row'}>
-              <Button
-                variant={'danger'}
-                size={'small'}
-                icon={<MinusIcon />}
-                onClick={() => remove(index)}
-                className={'fit-content-button'}
-              >
-                Fjern barn
-              </Button>
-              {fields.length === index + 1 && (
-                <Button
-                  type="button"
-                  className={'fit-content-button'}
-                  onClick={() => {
-                    append({ fodselsdato: '' });
-                  }}
-                  variant={'tertiary'}
-                  icon={<PlusIcon />}
-                >
-                  Legg til barn
-                </Button>
-              )}
-            </div>
-          </div>
-        );
-      })}
-
+      <div className={'flex-column'}>
+        <FormField form={form} formField={formFields.fødselsdato} />
+        <FormField form={form} formField={formFields.yrkesskade} />
+        <FormField form={form} formField={formFields.student} />
+      </div>
+      <OpprettSakBarn form={form} />
       <Button className={'fit-content-button'}>Opprett test sak</Button>
     </form>
   );
