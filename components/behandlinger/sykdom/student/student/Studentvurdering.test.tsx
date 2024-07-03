@@ -1,6 +1,8 @@
 import { render, screen, within } from '@testing-library/react';
 import { Studentvurdering } from 'components/behandlinger/sykdom/student/student/Studentvurdering';
 import userEvent from '@testing-library/user-event';
+import { addDays } from 'date-fns';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 const user = userEvent.setup();
 
@@ -184,5 +186,46 @@ describe('Student', () => {
 
     const tekst = screen.getAllByText('Nei')[0]; //TODO Finnes det en smartere måte å gjøre dette på?
     expect(tekst).toBeVisible();
+  });
+
+  it('viser feilmelding dersom dato for avbrutt studie settes frem i tid', async () => {
+    render(
+      <Studentvurdering
+        behandlingVersjon={0}
+        readOnly={false}
+        grunnlag={{ oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+      />
+    );
+    const datoinput = screen.getByRole('textbox', {
+      name: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?',
+    });
+    const imorgen = addDays(new Date(), 1);
+    await user.type(datoinput, formaterDatoForFrontend(imorgen));
+
+    const button = screen.getByRole('button', { name: /Bekreft/ });
+    await user.click(button);
+
+    expect(
+      screen.getByText('Dato for når stuideevnen ble 100% nedsatt / avbrutt kan ikke være frem i tid.')
+    ).toBeVisible();
+  });
+
+  it('viser feilmelding dersom dato for avbrutt studie er ugyldig', async () => {
+    render(
+      <Studentvurdering
+        behandlingVersjon={0}
+        readOnly={false}
+        grunnlag={{ oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+      />
+    );
+    const datoinput = screen.getByRole('textbox', {
+      name: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?',
+    });
+    await user.type(datoinput, '19.2022');
+
+    const button = screen.getByRole('button', { name: /Bekreft/ });
+    await user.click(button);
+
+    expect(screen.getByText('Dato for når studieevnen ble 100% nedsatt / avbrutt er ugyldig.')).toBeVisible();
   });
 });

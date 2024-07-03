@@ -1,5 +1,6 @@
 'use client';
 
+import { isAfter } from 'date-fns';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from 'components/input/formfield/FormField';
@@ -13,7 +14,7 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { BodyShort, Label } from '@navikt/ds-react';
 
 interface Props {
@@ -82,7 +83,24 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
         defaultValue: grunnlag?.studentvurdering?.avbruttStudieDato
           ? new Date(grunnlag?.studentvurdering?.avbruttStudieDato)
           : undefined,
-        rules: { required: 'Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.' },
+        rules: {
+          required: 'Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.',
+          validate: (value) => {
+            if (value instanceof Date || !value || typeof value === 'string') {
+              const inputDato = parseDatoFraDatePicker(value);
+              if (inputDato) {
+                return isAfter(inputDato, new Date())
+                  ? 'Dato for når stuideevnen ble 100% nedsatt / avbrutt kan ikke være frem i tid.'
+                  : true;
+              }
+              return 'Dato for når studieevnen ble 100% nedsatt / avbrutt er ugyldig.';
+            } else {
+              // rhf bruker en union av alle typer som mulige input-typer til validate
+              // må derfor ha med en typesjekk og en catch-all for sikkerhetsskyld
+              return 'Dato for når studieevnen ble 100% nedsatt / avbrutt inneholder en ugyldig verdi.';
+            }
+          },
+        },
       },
       avbruddMerEnn6Måneder: {
         type: 'radio',
