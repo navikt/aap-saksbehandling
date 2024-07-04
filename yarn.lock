@@ -1515,12 +1515,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sanity/core-loader@npm:1.6.19":
-  version: 1.6.19
-  resolution: "@sanity/core-loader@npm:1.6.19"
+"@sanity/core-loader@npm:1.6.20":
+  version: 1.6.20
+  resolution: "@sanity/core-loader@npm:1.6.20"
   peerDependencies:
-    "@sanity/client": ^6.19.1
-  checksum: 10c0/ea460c4923d40b19503cba82f66dc19f3798c8d435707a3c452b49e556191c0c550cb0f0fb5a60e79b9a8ea504caefa71358de908cd47e0bad04b71deba339de
+    "@sanity/client": ^6.20.1
+  checksum: 10c0/1c63cc00a443e63f752a843d14dda0ba8e615f8eaba64fb5e6a3088d4d175a9284c7aaa860fda8909e72e4b578487d3e5c65a9bfe720cf59b1d39fbbb14ab718
   languageName: node
   linkType: hard
 
@@ -1582,15 +1582,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sanity/react-loader@npm:^1.10.3":
-  version: 1.10.3
-  resolution: "@sanity/react-loader@npm:1.10.3"
+"@sanity/react-loader@npm:^1.10.4":
+  version: 1.10.4
+  resolution: "@sanity/react-loader@npm:1.10.4"
   dependencies:
-    "@sanity/core-loader": "npm:1.6.19"
+    "@sanity/core-loader": "npm:1.6.20"
   peerDependencies:
-    "@sanity/client": ^6.19.1
+    "@sanity/client": ^6.20.1
     react: ^18.3 || >=19.0.0-rc
-  checksum: 10c0/1b0adf38091772190727f714d78f9e00744ae3f951e3b908d0490f362d80c21f6ce6d49b7e5a467a820e49678db59e85d8225f11f136b1c433d8c499fb7bdce0
+  checksum: 10c0/339899a0028e128f321d7dc36c3d2d8a03f7f56d0e4af2583bc6c2cafc9d959014cad4244ffa1e951dd4e852ea2e204e3f6f6b17d1bee175c8970d89568f38a0
   languageName: node
   linkType: hard
 
@@ -2547,7 +2547,7 @@ __metadata:
     "@portabletext/react": "npm:^3.1.0"
     "@sanity/client": "npm:^6.20.1"
     "@sanity/overlays": "npm:^2.3.55"
-    "@sanity/react-loader": "npm:^1.10.3"
+    "@sanity/react-loader": "npm:^1.10.4"
     "@sanity/types": "npm:^3.48.1"
     "@testing-library/dom": "npm:^10.2.0"
     "@testing-library/jest-dom": "npm:^6.4.6"
