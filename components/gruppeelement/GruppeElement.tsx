@@ -73,7 +73,7 @@ export function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
     case 'STUDENT':
       return 'Student';
     case 'ET_ANNET_STED':
-      return 'Et annet sted';
+      return 'Institusjonsopphold';
     case 'UDEFINERT':
       return 'Udefinert';
   }
