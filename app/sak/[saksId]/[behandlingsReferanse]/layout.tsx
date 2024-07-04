@@ -5,7 +5,6 @@ import {
   hentFlyt,
   hentSak,
   hentSakPersoninfo,
-  hentStudentGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { HGrid } from '@navikt/ds-react';
 
@@ -16,7 +15,6 @@ import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { notFound } from 'next/navigation';
 import { StegGruppe } from 'lib/types/types';
-import { logInfo } from '@navikt/aap-felles-utils';
 
 interface Props {
   children: ReactNode;
@@ -35,28 +33,9 @@ const Layout = async ({ children, params }: Props) => {
 
   const visToTrinnsvurdering = flytResponse.visning.visKvalitetssikringKort || flytResponse.visning.visBeslutterKort;
 
-  // TODO Hacky løsning for å få dynamisk stegmeny for Student steg frem til vi har fikset det i backend
-  const grupper: StegGruppe[] = [
-    'ALDER',
-    'SYKDOM',
-    'VEDTAK',
-    'MEDLEMSKAP',
-    'LOVVALG',
-    'GRUNNLAG',
-    'UNDERVEIS',
-    'TILKJENT_YTELSE',
-    'SIMULERING',
-    'BARNETILLEGG',
-    'FATTE_VEDTAK',
-  ];
-
-  const studentGrunnlag = await hentStudentGrunnlag(params.behandlingsReferanse);
-  logInfo(`Studentgrunnlag + ${JSON.stringify(studentGrunnlag)}`);
-  const grupperMedEllerUtenStudent =
-    studentGrunnlag.oppgittStudent?.erStudentStatus === 'JA' ||
-    studentGrunnlag.oppgittStudent?.erStudentStatus === 'AVBRUTT'
-      ? [...grupper, 'STUDENT']
-      : grupper;
+  const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.flyt
+    .filter((steg) => steg.skalVises)
+    .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
 
   return (
     <div>
@@ -67,7 +46,7 @@ const Layout = async ({ children, params }: Props) => {
         behandlingVersjon={flytResponse.behandlingVersjon}
         referanse={params.behandlingsReferanse}
       />
-      <StegGruppeIndikator flytRespons={flytResponse} grupperMedEllerUtenStudent={grupperMedEllerUtenStudent} />
+      <StegGruppeIndikator flytRespons={flytResponse} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
 
       <HGrid columns={visToTrinnsvurdering ? '1fr 3fr 2fr' : '1fr 3fr 1fr'}>
         {children}

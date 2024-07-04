@@ -72,6 +72,8 @@ export function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Kvalitetssikring';
     case 'STUDENT':
       return 'Student';
+    case 'ET_ANNET_STED':
+      return 'Et annet sted';
     case 'UDEFINERT':
       return 'Udefinert';
   }

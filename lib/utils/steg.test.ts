@@ -2,6 +2,7 @@ import { BehandlingFlytOgTilstand, FlytGruppe } from 'lib/types/types';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 
 const flytAlder: FlytGruppe = {
+  skalVises: true,
   erFullført: false,
   stegGruppe: 'ALDER',
   steg: [
@@ -13,6 +14,7 @@ const flytAlder: FlytGruppe = {
 };
 
 const flytSykdom: FlytGruppe = {
+  skalVises: true,
   erFullført: false,
   stegGruppe: 'SYKDOM',
   steg: [
@@ -30,6 +32,7 @@ const flytSykdom: FlytGruppe = {
 };
 
 const flytSykdomOgAvklaringsbehovAvbrutt: FlytGruppe = {
+  skalVises: true,
   erFullført: false,
   stegGruppe: 'SYKDOM',
   steg: [

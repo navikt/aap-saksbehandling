@@ -2,19 +2,21 @@
 
 import styles from './StegGruppeIndikator.module.css';
 import { GruppeElement } from 'components/gruppeelement/GruppeElement';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
+import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 import { useParams } from 'next/navigation';
 
 interface Props {
   flytRespons: BehandlingFlytOgTilstand;
-  grupperMedEllerUtenStudent: string[];
+  stegGrupperSomSkalVises: StegGruppe[];
 }
-export const StegGruppeIndikator = ({ flytRespons, grupperMedEllerUtenStudent }: Props) => {
+
+export const StegGruppeIndikator = ({ flytRespons, stegGrupperSomSkalVises }: Props) => {
   const params = useParams<{ aktivGruppe: string }>();
+
   return (
     <ol type="1" className={styles.stegMeny}>
       {flytRespons.flyt
-        .filter((gruppe) => grupperMedEllerUtenStudent.includes(gruppe.stegGruppe))
+        .filter((gruppe) => stegGrupperSomSkalVises.includes(gruppe.stegGruppe))
         .map((gruppe, index) => {
           return (
             <GruppeElement
