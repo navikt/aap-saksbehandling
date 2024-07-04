@@ -43,6 +43,12 @@ export const mapStegTypeTilDetaljertSteg = (stegType: StegType): DetaljertSteg =
         paragraf: '11-13',
       };
     }
+    case 'BARNETILLEGG': {
+      return {
+        navn: 'Barnetillegg',
+        paragraf: '11-20',
+      };
+    }
     case 'FASTSETT_ARBEIDSEVNE': {
       return {
         navn: 'Fastsett arbeidsevne',
