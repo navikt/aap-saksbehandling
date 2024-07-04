@@ -9,6 +9,7 @@ import { AlderMedDataFetching } from 'components/behandlinger/alder/AlderMedData
 import { Student } from 'components/behandlinger/sykdom/student/Student';
 import { Barnetillegg } from 'components/behandlinger/barnetillegg/Barnetillegg';
 import { Medlemskap } from 'components/behandlinger/medlemskap/Medlemskap';
+import { EtAnnetSted } from 'components/behandlinger/etannetsted/EtAnnetSted';
 
 interface Props {
   behandlingsReferanse: string;
@@ -25,6 +26,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Prop
       {aktivGruppe === 'MEDLEMSKAP' && <Medlemskap behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'UNDERVEIS' && <div>UNDERVEIS</div>}
+      {aktivGruppe === 'ET_ANNET_STED' && <EtAnnetSted behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'BARNETILLEGG' && <Barnetillegg behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'TILKJENT_YTELSE' && <TilkjentYtelse behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'SIMULERING' && <div>SIMULERING</div>}
