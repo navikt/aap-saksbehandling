@@ -169,10 +169,6 @@ export const hentBeregningsGrunnlag = async (referanse: string) => {
   return await fetchProxy<BeregningsGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentBeregningsGrunnlagMock = async () => {
-  return mockBeregningsGrunnlag;
-};
-
 export const settBehandlingPåVent = async (referanse: string, requestBody: SettPåVent) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/sett-på-vent`;
   return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
@@ -195,11 +191,6 @@ export const hentLocalToken = async () => {
   }
 };
 
-// Experimental
-// export const hentJobbHistorikk = async () => {
-//   const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/historikk`;
-//   return await fetchProxy<JobbInfo[]>(url, saksbehandlingApiScope, 'GET');
-// };
 export const hentFeilendeJObber = async () => {
   const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/feilende`;
   return await fetchProxy<JobbInfo[]>(url, saksbehandlingApiScope, 'GET');
@@ -222,66 +213,4 @@ export const rekjørFeiledeJobber = async () => {
 export const hentSisteKjørteJobber = async () => {
   const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/sisteKjørte`;
   return await fetchProxy<JobbInfo[]>(url, saksbehandlingApiScope, 'GET');
-};
-
-export interface MockBeregeningsGrunnlag {
-  beregningsGrunnlag: string;
-  faktagrunnlag: string;
-  nedsattArbeidsevneÅr: string;
-  inntekterFraForegåendeÅr: string;
-  inntektIKroner: string;
-  inntektIG: string;
-  er6GBegrenset: string;
-  erDetBruktGjennomsnitt: string;
-
-  antattÅrligInntektYrkesskadetidspunkt: string;
-  yrkesskadetidspunkt: string;
-  TerskelverdiForYrkesskadefordel: string;
-  AndelYrkesskade: string;
-  BenyttetAndelYrkesskade: string;
-  InntektPåYrkesskadetidspunkt: string;
-  YrkesskadeinntektIG: string;
-  grunnlagForBeregningAvYrkesskadeandel: string;
-  andelSomSkyldesYrkesskade: string;
-  andelSomIkkeSkyldesYrkesskade: string;
-  grunnlagEtterYrkesskadefordel: string;
-
-  uføreYtterligereNedsattArbeidsevneÅr: string;
-  uføreInntekterFraForegåendeÅr: string;
-  uføregrad: string; //Liste? Avhengig av om vi skal se på grad over tid
-  uføreOppjusterteInntekter: string;
-  uføreInntektIKroner: string;
-  uføreInntektIG: string;
-  uføreEr6GBegrenset: string;
-  uføreErDetBruktGjennomsnitt: string;
-}
-
-const mockBeregningsGrunnlag: MockBeregeningsGrunnlag = {
-  AndelYrkesskade: '',
-  BenyttetAndelYrkesskade: '',
-  InntektPåYrkesskadetidspunkt: '',
-  TerskelverdiForYrkesskadefordel: '',
-  YrkesskadeinntektIG: '',
-  andelSomIkkeSkyldesYrkesskade: '',
-  andelSomSkyldesYrkesskade: '',
-  antattÅrligInntektYrkesskadetidspunkt: '',
-  beregningsGrunnlag: '',
-  er6GBegrenset: '',
-  erDetBruktGjennomsnitt: '',
-  faktagrunnlag: '',
-  grunnlagEtterYrkesskadefordel: '',
-  grunnlagForBeregningAvYrkesskadeandel: '',
-  inntektIG: '',
-  inntektIKroner: '',
-  inntekterFraForegåendeÅr: '',
-  nedsattArbeidsevneÅr: '',
-  uføreEr6GBegrenset: '',
-  uføreErDetBruktGjennomsnitt: '',
-  uføreInntektIG: '',
-  uføreInntektIKroner: '',
-  uføreInntekterFraForegåendeÅr: '',
-  uføreOppjusterteInntekter: '',
-  uføreYtterligereNedsattArbeidsevneÅr: '',
-  uføregrad: '',
-  yrkesskadetidspunkt: '',
 };

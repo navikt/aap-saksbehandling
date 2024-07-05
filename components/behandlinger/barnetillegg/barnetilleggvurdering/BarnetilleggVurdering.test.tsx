@@ -23,13 +23,13 @@ describe('barnetillegg', () => {
   };
 
   it('skal ha en overskrift', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} />);
+    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} />);
     const overskrift = screen.getByText('Barnetillegg § 11-20 tredje og fjerde ledd');
     expect(overskrift).toBeVisible();
   });
 
   it('skal ha en dokumenttabell med korrekt heading', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} />);
+    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} />);
     const heading = screen.getByRole('group', {
       name: 'Dokumenter funnet som er relevante for vurdering av barnetillegg §11-20',
     });
@@ -37,7 +37,7 @@ describe('barnetillegg', () => {
   });
 
   it('skal ha en dokumenttabell med korrekt description', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} />);
+    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} />);
 
     const description = screen.getByText(
       'Les dokumentene og tilknytt eventuelle dokumenter benyttet til 11-20 vurderingen'
@@ -47,7 +47,7 @@ describe('barnetillegg', () => {
   });
 
   it('skal ha en liste som viser hvilke dokumenter som er tilknyttet vurderingen', async () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} />);
+    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} />);
     const rad = screen.getByRole('row', {
       name: /sykemelding/i,
     });
@@ -67,13 +67,13 @@ describe('barnetillegg', () => {
   });
 
   it('skal ha en heading for manuelle barn som er lagt inn av søker', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} />);
+    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} />);
     const heading = screen.getByText('Følgende barn er oppgitt av søker og må vurderes for barnetillegg');
     expect(heading).toBeVisible();
   });
 
   it('skal ha en description for manuelle barn som er lagt inn av søker', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} />);
+    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} />);
     const description = screen.getByText(
       'Les dokumentene og tilknytt relevante dokumenter til vurdering om det skal beregnes barnetillegg'
     );
@@ -81,7 +81,7 @@ describe('barnetillegg', () => {
   });
 
   it('skal ha en heading for registrerte barn fra folkeregisteret', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} />);
+    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} />);
     const heading = screen.getByText('Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg');
     expect(heading).toBeVisible();
   });

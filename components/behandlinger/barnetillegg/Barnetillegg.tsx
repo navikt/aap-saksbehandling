@@ -23,7 +23,10 @@ export const Barnetillegg = async ({ behandlingsreferanse }: Props) => {
         if (steg === 'BARNETILLEGG') {
           return (
             <StegSuspense key={steg}>
-              <BarnMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+              <BarnMedDataFetching
+                behandlingsreferanse={behandlingsreferanse}
+                behandlingsversjon={flyt.behandlingVersjon}
+              />
             </StegSuspense>
           );
         }
