@@ -36,14 +36,9 @@ export const useLøsBehovOgGåTilNesteSteg = (
       if (eventData.status === 'DONE') {
         eventSource.close();
         if (eventData.skalBytteGruppe || eventData.skalBytteSteg) {
-          if (eventData.aktivGruppe === 'KVALITETSSIKRING') {
-            // Dersom behandlingen kvalitetssikres så skal vi holde oss på SYKDOM siden
-            router.push(`/sak/${params.saksId}/${params.behandlingsReferanse}/SYKDOM`);
-          } else {
-            router.push(
-              `/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}/#${eventData.aktivtSteg}`
-            );
-          }
+          router.push(
+            `/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}/#${eventData.aktivtSteg}`
+          );
         }
         router.refresh();
         setIsLoading(false);

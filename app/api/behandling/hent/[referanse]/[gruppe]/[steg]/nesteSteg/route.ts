@@ -48,11 +48,15 @@ export async function GET(__request, context: { params: { referanse: string; gru
       const flyt = await hentFlyt(context.params.referanse);
       if (gruppeEllerStegErEndret(context.params.gruppe, context.params.steg, flyt.aktivGruppe, flyt.aktivtSteg)) {
         console.log('Gruppe eller steg er endret!');
+
+        const aktivGruppe = flyt.vurdertGruppe != null ? flyt.vurdertGruppe : flyt.aktivGruppe;
+        const aktivtSteg = flyt.vurdertSteg != null ? flyt.vurdertSteg : flyt.aktivtSteg;
+
         const json: ServerSentEventData = {
-          aktivGruppe: flyt.aktivGruppe,
-          aktivtSteg: flyt.aktivtSteg,
-          skalBytteGruppe: flyt.aktivGruppe !== context.params.gruppe,
-          skalBytteSteg: flyt.aktivtSteg !== context.params.steg,
+          aktivGruppe: flyt.vurdertGruppe != null ? flyt.vurdertGruppe : flyt.aktivGruppe,
+          aktivtSteg: flyt.vurdertSteg != null ? flyt.vurdertSteg : flyt.aktivtSteg,
+          skalBytteGruppe: aktivGruppe !== context.params.gruppe,
+          skalBytteSteg: aktivtSteg !== context.params.steg,
           status: 'DONE',
         };
 

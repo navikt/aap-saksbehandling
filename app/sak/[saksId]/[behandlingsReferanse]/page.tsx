@@ -10,9 +10,12 @@ const Page = async ({ params }: { params: { saksId: string; behandlingsReferanse
     return <div>Behandling ikke funnet</div>;
   }
 
-  // TODO Må håndtere tilfelle hvor man går inn på saken når aktiv gruppe er Kvalitetssikring så skal visningen være Sykdom
-  if (flyt.aktivGruppe === 'KVALITETSSIKRING') {
-    redirect(`/sak/${params.saksId}/${behandling.referanse}/SYKDOM`);
+  /**
+   * vurdertGruppe er første manuelle vurdering som har blitt gjort som skal totrinnsvurderes.
+   * F.eks hvis Student steget er første vurdering som er gjort i behandlingen så vil vurdertGruppe være satt til Student når man kommer til besluttersteget
+   */
+  if (flyt.vurdertGruppe && flyt.vurdertSteg) {
+    redirect(`/sak/${params.saksId}/${behandling.referanse}/${flyt.vurdertGruppe}/#${flyt.vurdertSteg}`);
   } else {
     redirect(`/sak/${params.saksId}/${behandling.referanse}/${flyt.aktivGruppe}`);
   }
