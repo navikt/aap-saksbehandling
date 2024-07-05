@@ -9,6 +9,7 @@ export enum Behovstype {
   AVKLAR_BISTANDSBEHOV_KODE = '5006',
   VURDER_SYKEPENGEERSTATNING_KODE = '5007',
   FASTSETT_BEREGNINGSTIDSPUNKT_KODE = '5008',
+  AVKLAR_BARNETILLEGG_KODE = '5009',
   FORESLÅ_VEDTAK_KODE = '5098',
   FATTE_VEDTAK_KODE = '5099',
   KVALITETSSIKRING_KODE = '5097',
@@ -32,6 +33,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Vurder sykepengeerstatning (§ 11 -13)';
     case '5008':
       return 'Fastsett beregningstidspunkt';
+    case '5009':
+      return 'Avklar barnetillegg';
     case '5098':
       return 'Foreslå vedtak';
     case '5099':

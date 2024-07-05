@@ -11,8 +11,12 @@ import { BodyShort, Button, Label } from '@navikt/ds-react';
 import { ManueltBarn } from 'components/barn/manueltbarn/ManueltBarn';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
 import { BarnetilleggGrunnlag } from 'lib/types/types';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { Behovstype } from 'lib/utils/form';
+import {useBehandlingsReferanse} from "hooks/BehandlingHook";
 
 type Props = {
+  behandlingsversjon: number;
   grunnlag: BarnetilleggGrunnlag;
 };
 
@@ -20,7 +24,9 @@ interface FormFields {
   dokumenterBruktIVurderingen: string[];
 }
 
-export const BarnetilleggVurdering = ({ grunnlag }: Props) => {
+export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
+  const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
   const { form, formFields } = useConfigForm<FormFields>({
     dokumenterBruktIVurderingen: {
       type: 'checkbox_nested',
@@ -59,7 +65,20 @@ export const BarnetilleggVurdering = ({ grunnlag }: Props) => {
             ))}
           </>
         )}
-        <Button className={'fit-content-button'} form="dokument-form">
+        <Button
+          className={'fit-content-button'}
+          form="dokument-form"
+          onClick={() =>
+            løsBehovOgGåTilNesteSteg({
+              behandlingVersjon: behandlingsversjon,
+              behov: {
+                behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
+              },
+              referanse: behandlingsReferanse
+            })
+          }
+          loading={isLoading}
+        >
           Bekreft
         </Button>
       </div>
