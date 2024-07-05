@@ -1,0 +1,11 @@
+.grunnlagvisning {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--a-spacing-4);
+}
+
+.inntekter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-2);
+}
