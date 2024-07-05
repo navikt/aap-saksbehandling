@@ -1,5 +1,5 @@
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjonsvurdering';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 const user = userEvent.setup();
@@ -30,6 +30,25 @@ describe('Helseinstitusjonsvurdering', () => {
     expect(
       screen.getByText('Les dokumentene og tilknytt relevante dokumenter til vurdering om ytelsen skal reduseres')
     ).toBeVisible();
+  });
+
+  it('skal vise en liste med tilknyttede dokumenter som har blitt valgt', async () => {
+    const rad = screen.getByRole('row', {
+      name: /^Sykemelding/,
+    });
+
+    await user.click(
+      within(rad).getByRole('checkbox', {
+        name: 'Tilknytt dokument til vurdering',
+      })
+    );
+
+    const list = screen.getByRole('list', {
+      name: 'Tilknyttede dokumenter',
+    });
+
+    const dokument = within(list).getByText('Sykemelding');
+    expect(dokument).toBeVisible();
   });
 
   test('har et fritekstfelt for vurdering av vilkåret', () => {

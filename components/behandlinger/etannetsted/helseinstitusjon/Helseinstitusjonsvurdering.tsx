@@ -11,6 +11,7 @@ import { FormEvent } from 'react';
 import { FormField } from 'components/input/formfield/FormField';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 
 type Props = {
   behandlingVersjon: number;
@@ -83,6 +84,7 @@ export const Helseinstitusjonsvurdering = ({ behandlingVersjon, readOnly }: Prop
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
+        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.faarFriKostOgLosji} />
         {form.watch('faarFriKostOgLosji') === JaEllerNei.Ja && (
