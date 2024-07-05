@@ -51,6 +51,12 @@ describe('Helseinstitusjonsvurdering', () => {
     expect(dokument).toBeVisible();
   });
 
+  test('viser en liste over institusjonsopphold som er oppdaget', () => {
+    expect(
+      screen.getByRole('table', { name: 'Søker har følgende institusjonsopphold på helseinstitusjon' })
+    ).toBeVisible();
+  });
+
   test('har et fritekstfelt for vurdering av vilkåret', () => {
     expect(
       screen.getByRole('textbox', { name: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen' })
