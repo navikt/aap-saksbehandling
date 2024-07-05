@@ -1,5 +1,8 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+import { HelseinstitusjonsvurderingMedDataFetching } from 'components/behandlinger/etannetsted/helseinstitusjon/HelseinstitusjonsvurderingMedDataFetching';
 
 type Props = {
   behandlingsreferanse: string;
@@ -7,6 +10,7 @@ type Props = {
 
 export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
+
   return (
     <GruppeSteg
       prosessering={flyt.prosessering}
@@ -14,7 +18,13 @@ export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={flyt.behandlingVersjon}
     >
-      <div>Institusjonsopphold</div>
+      <StegSuspense>
+        <HelseinstitusjonsvurderingMedDataFetching
+          readOnly={flyt.visning.saksbehandlerReadOnly}
+          behandlingVersjon={flyt.behandlingVersjon}
+        />
+      </StegSuspense>
+      <Soningsvurdering />
     </GruppeSteg>
   );
 };
