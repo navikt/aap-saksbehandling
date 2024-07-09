@@ -1,0 +1,4 @@
+.selectContainer {
+  display: flex;
+  gap: var(--a-spacing-4);
+}
