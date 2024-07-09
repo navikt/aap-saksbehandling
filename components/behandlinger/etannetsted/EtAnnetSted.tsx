@@ -1,14 +1,16 @@
-import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
-import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { HelseinstitusjonsvurderingMedDataFetching } from 'components/behandlinger/etannetsted/helseinstitusjon/HelseinstitusjonsvurderingMedDataFetching';
+import {GruppeSteg} from 'components/gruppesteg/GruppeSteg';
+import {hentFlyt} from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {Soningsvurdering} from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
+import {StegSuspense} from 'components/stegsuspense/StegSuspense';
+import {
+  HelseinstitusjonsvurderingMedDataFetching
+} from 'components/behandlinger/etannetsted/helseinstitusjon/HelseinstitusjonsvurderingMedDataFetching';
 
 type Props = {
   behandlingsreferanse: string;
 };
 
-export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
+export const EtAnnetSted = async ({behandlingsreferanse}: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
 
   return (
@@ -24,7 +26,9 @@ export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
           behandlingVersjon={flyt.behandlingVersjon}
         />
       </StegSuspense>
-      <Soningsvurdering />
+      <Soningsvurdering
+        readOnly={flyt.visning.saksbehandlerReadOnly}
+        behandlingVersjon={flyt.behandlingVersjon}/>
     </GruppeSteg>
   );
 };

@@ -2,7 +2,7 @@ import { BodyShort, Label, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 // mock-type
-type InstitusjonsoppholdTypeMock = {
+export type InstitusjonsoppholdTypeMock = {
   institusjonstype: string;
   oppholdstype: string;
   status: string;
@@ -11,22 +11,18 @@ type InstitusjonsoppholdTypeMock = {
   kildeinstitusjon: string;
 };
 
-const mockData: InstitusjonsoppholdTypeMock[] = [
-  {
-    institusjonstype: 'Helseinstitusjon',
-    oppholdstype: 'Heldøgnspasient',
-    status: 'Aktivt',
-    oppholdFra: new Date().toUTCString(),
-    kildeinstitusjon: 'Godthaab',
-  },
-];
+type Props = {
+  label: string;
+  beskrivelse: string;
+  instutisjonsopphold: InstitusjonsoppholdTypeMock[];
+}
 
-export const Institusjonsopphold = () => {
+export const InstitusjonsoppholdTabell = ({label, beskrivelse, instutisjonsopphold}: Props) => {
   return (
     <section>
-      <Label as={'p'}>Søker har følgende institusjonsopphold på helseinstitusjon</Label>
-      <BodyShort>Opphold over tre måneder på helseinstitusjon kan gi redusert AAP ytelse</BodyShort>
-      <Table title={'Søker har følgende institusjonsopphold på helseinstitusjon'}>
+      <Label as={'p'}>{label}</Label>
+      <BodyShort>{beskrivelse}</BodyShort>
+      <Table title={label}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell scope={'col'}>Institusjonstype</Table.HeaderCell>
@@ -38,7 +34,7 @@ export const Institusjonsopphold = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {mockData.map((opphold, index) => (
+          {instutisjonsopphold.map((opphold, index) => (
             <Table.Row key={index}>
               <Table.DataCell>{opphold.institusjonstype}</Table.DataCell>
               <Table.DataCell>{opphold.oppholdstype}</Table.DataCell>
