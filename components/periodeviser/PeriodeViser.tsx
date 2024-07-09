@@ -1,11 +1,10 @@
 'use client';
-import { Detail, Label, Select, Table, Timeline } from '@navikt/ds-react';
-import { PersonIcon } from '@navikt/aksel-icons';
+import { Detail, Label, Select, Table } from '@navikt/ds-react';
 import { TilkjentYtelseGrunnlag, TilkjentYtelsePeriode } from 'lib/types/types';
 import { useMemo, useState } from 'react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import styles from './PeriodeViser.module.css';
-import { addDays, isAfter, isBefore, subDays } from 'date-fns';
+import { addDays, format, isAfter, isBefore, parse, subDays } from 'date-fns';
 import { ResponsiveContainer, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, Area } from 'recharts';
 
 interface Props {
@@ -22,6 +21,7 @@ export const PeriodeViser = ({ tilkjentYtelse }: Props) => {
   const [ytelsePer, setYtelsePer] = useState<PeriodePerOptions>('dag');
 
   const filteredTilkjentYtelser = useMemo(() => {
+    console.log('ytelsePer', ytelsePer);
     return tilkjentYtelse.perioder
       ?.filter((ytelse) => isAfter(new Date(ytelse.periode.fom), subDays(new Date(), parseInt(ytelseFra))))
       .filter((ytelse) => isBefore(new Date(ytelse.periode.tom), addDays(new Date(), parseInt(ytelseTil))))
@@ -33,7 +33,10 @@ export const PeriodeViser = ({ tilkjentYtelse }: Props) => {
       });
   }, [ytelseFra, ytelseTil, ytelsePer, tilkjentYtelse]);
 
-  console.log('filteredTilkjentYtelser:', filteredTilkjentYtelser);
+  const setActivePeriodFromStartDate = (startDate: Date) => {
+    const ytelse = tilkjentYtelse?.perioder.find((ytelse) => ytelse.periode.fom === format(startDate, 'yyyy-MM-dd'));
+    setActivePeriod(ytelse);
+  };
 
   return (
     <div>
@@ -63,7 +66,12 @@ export const PeriodeViser = ({ tilkjentYtelse }: Props) => {
         </Select>
       </div>
       <ResponsiveContainer width="100%" height={400}>
-        <AreaChart data={filteredTilkjentYtelser} width={500} height={400}>
+        <AreaChart
+          data={filteredTilkjentYtelser}
+          width={500}
+          height={400}
+          onClick={(val) => setActivePeriodFromStartDate(parse(val.activeLabel!!, 'dd.MM.yyyy', new Date()))}
+        >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
@@ -72,7 +80,7 @@ export const PeriodeViser = ({ tilkjentYtelse }: Props) => {
         </AreaChart>
       </ResponsiveContainer>
 
-      <Timeline>
+      {/*<Timeline>
         <Timeline.Row label="AAP" icon={<PersonIcon aria-hidden />}>
           {tilkjentYtelse?.perioder?.map((periode: TilkjentYtelsePeriode, i) => (
             <Timeline.Period
@@ -94,7 +102,7 @@ export const PeriodeViser = ({ tilkjentYtelse }: Props) => {
           <Timeline.Zoom.Button label="1.5 år" interval="year" count={1.5} />
           <Timeline.Zoom.Button label="3 år" interval="year" count={3} />
         </Timeline.Zoom>
-      </Timeline>
+      </Timeline>*/}
       {activePeriod && (
         <div>
           <Label as="p">
@@ -122,32 +130,30 @@ export const PeriodeViser = ({ tilkjentYtelse }: Props) => {
               </Table.Row>
               <Table.Row>
                 <Table.DataCell scope="row">{'Antall barn'}</Table.DataCell>
-                <Table.DataCell>
-                  {activePeriod.tilkjent.antallBarn && JSON.stringify(activePeriod.tilkjent.antallBarn)}
-                </Table.DataCell>
+                <Table.DataCell>{activePeriod.tilkjent.antallBarn && activePeriod.tilkjent.antallBarn}</Table.DataCell>
               </Table.Row>
               <Table.Row>
                 <Table.DataCell scope="row">{'Barnetillegg'}</Table.DataCell>
                 <Table.DataCell>
-                  {activePeriod.tilkjent.barnetillegg && JSON.stringify(activePeriod.tilkjent.barnetillegg)}
+                  {activePeriod.tilkjent.barnetillegg && activePeriod.tilkjent.barnetillegg.verdi}
                 </Table.DataCell>
               </Table.Row>
               <Table.Row>
                 <Table.DataCell scope="row">{'Barnetilleggsats'}</Table.DataCell>
                 <Table.DataCell>
-                  {activePeriod.tilkjent.barnetilleggsats && JSON.stringify(activePeriod.tilkjent.barnetilleggsats)}
+                  {activePeriod.tilkjent.barnetilleggsats && activePeriod.tilkjent.barnetilleggsats.verdi}kr
                 </Table.DataCell>
               </Table.Row>
               <Table.Row>
                 <Table.DataCell scope="row">{'Grunnbeløp'}</Table.DataCell>
                 <Table.DataCell>
-                  {activePeriod.tilkjent.grunnbeløp && JSON.stringify(activePeriod.tilkjent.grunnbeløp)}
+                  {activePeriod.tilkjent.grunnbeløp && activePeriod.tilkjent.grunnbeløp.verdi}kr
                 </Table.DataCell>
               </Table.Row>
               <Table.Row>
                 <Table.DataCell scope="row">{'Grunnlagsfaktor'}</Table.DataCell>
                 <Table.DataCell>
-                  {activePeriod.tilkjent.grunnlagsfaktor && JSON.stringify(activePeriod.tilkjent.grunnlagsfaktor)}
+                  {activePeriod.tilkjent.grunnlagsfaktor && activePeriod.tilkjent.grunnlagsfaktor.verdi}
                 </Table.DataCell>
               </Table.Row>
             </Table.Body>
