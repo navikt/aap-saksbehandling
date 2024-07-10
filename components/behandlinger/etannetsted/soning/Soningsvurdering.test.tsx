@@ -1,12 +1,17 @@
 import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
 import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {SoningsgrunnlagResponse} from "../../../../lib/types/types";
 
 const user = userEvent.setup();
 
 describe('Soningsvurdering', () => {
   beforeEach(() => {
-    render(<Soningsvurdering  behandlingVersjon={0} readOnly={false} />);
+    render(<Soningsvurdering
+      behandlingsreferanse={"smooth-reference"}
+      behandlingVersjon={0}
+      grunnlag={{} as SoningsgrunnlagResponse}
+      readOnly={false} />);
   })
 
   test('har overskrift Soningsvurdering § 11-26', () => {

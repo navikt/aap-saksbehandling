@@ -19,6 +19,7 @@ import {
   SakPersoninfo,
   SaksInfo,
   SettPåVent,
+  SoningsgrunnlagResponse,
   StudentGrunnlag,
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
@@ -140,6 +141,12 @@ export const hentBeregningsVurdering = async (behandlingsReferanse: string): Pro
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregningsvurdering`;
   return await fetchProxy<BeregningsVurdering>(url, saksbehandlingApiScope, 'GET');
 };
+
+export const hentSoningsvurdering = async (behandlingsreferanse: string): Promise<SoningsgrunnlagResponse> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/institusjon/soning`;
+  return fetchProxy<SoningsgrunnlagResponse>(url, saksbehandlingApiScope, 'GET')
+}
+
 export const hentTilkjentYtelse = async (behandlingsReferanse: string): Promise<TilkjentYtelseGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent/${behandlingsReferanse}`;
   return await fetchProxy<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');

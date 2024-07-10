@@ -7,12 +7,18 @@ import {Form} from "../../../form/Form";
 import {FormEvent} from "react";
 import {useConfigForm} from "../../../../hooks/FormHook";
 import {useLøsBehovOgGåTilNesteSteg} from "../../../../hooks/LøsBehovOgGåTilNesteStegHook";
-import {Behovstype, JaEllerNei, JaEllerNeiOptions} from "../../../../lib/utils/form";
+import {
+  Behovstype,
+  getJaNeiEllerUndefined,
+  JaEllerNei,
+  JaEllerNeiOptions,
+  jaNeiEllerUndefinedToNullableBoolean
+} from "../../../../lib/utils/form";
 import {FormField} from "../../../input/formfield/FormField";
-import {useBehandlingsReferanse} from "../../../../hooks/BehandlingHook";
 import {DokumentTabell} from "../../../dokumenttabell/DokumentTabell";
 import {TilknyttedeDokumenter} from "../../../tilknyttededokumenter/TilknyttedeDokumenter";
 import {InstitusjonsoppholdTabell, InstitusjonsoppholdTypeMock} from "../helseinstitusjon/InstitusjonsoppholdTabell";
+import {SoningsgrunnlagResponse} from "../../../../lib/types/types";
 
 const mockData: InstitusjonsoppholdTypeMock[] = [
   {
@@ -25,23 +31,24 @@ const mockData: InstitusjonsoppholdTypeMock[] = [
 ];
 
 
-type Props = {
+interface Props {
+  behandlingsreferanse: string;
   behandlingVersjon: number;
+  grunnlag: SoningsgrunnlagResponse;
   readOnly: boolean;
 }
 
 interface FormFields {
   dokumenterBruktIVurderingen: string[]
-  soningUtenforFengsel: string;
+  soningUtenforFengsel: JaEllerNei;
   begrunnelseForSoningUtenforAnstalt: string;
-  arbeidUtenforAnstalt: string;
+  arbeidUtenforAnstalt: JaEllerNei;
   begrunnelseForArbeidUtenforAnstalt: string;
 }
 
-export const Soningsvurdering = ({behandlingVersjon, readOnly}: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+export const Soningsvurdering = ({behandlingsreferanse, grunnlag, behandlingVersjon, readOnly}: Props) => {
+  const soningsvurdering = grunnlag.soningsvurdering
   const {løsBehovOgGåTilNesteSteg, isLoading, status} = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
-
   const {formFields, form} = useConfigForm<FormFields>({
     dokumenterBruktIVurderingen: {
       type: 'checkbox_nested',
@@ -49,8 +56,10 @@ export const Soningsvurdering = ({behandlingVersjon, readOnly}: Props) => {
       description: 'Les dokumentene og tilknytt eventuelt dokumenter til 11-26 vurderingen',
     },
 
+
     soningUtenforFengsel: {
       type: "radio",
+      defaultValue: getJaNeiEllerUndefined(soningsvurdering?.soningUtenforFengsel),
       label: "Gjennomfører søker straff utenfor fengsel?",
       options: JaEllerNeiOptions,
       rules: {required: "Du må oppgi om søker soner straff i eller utenfor fengsel"}
@@ -58,12 +67,14 @@ export const Soningsvurdering = ({behandlingVersjon, readOnly}: Props) => {
 
     begrunnelseForSoningUtenforAnstalt: {
       type: "textarea",
-      "label": "Skriv en beskrivelse av hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel",
+      defaultValue: soningsvurdering?.begrunnelseForSoningUtenforAnstalt ?? undefined,
+      label: "Skriv en beskrivelse av hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel",
       rules: {required: "En begrunnelse for soning utenfor fengsel må oppgis"}
     },
 
     arbeidUtenforAnstalt: {
       type: "radio",
+      defaultValue: getJaNeiEllerUndefined(soningsvurdering?.arbeidUtenforAnstalt),
       label: "Har søkerarbeid utenfor anstalten?",
       options: JaEllerNeiOptions,
       rules: {required: "Spørsmål må besvares"}
@@ -71,6 +82,7 @@ export const Soningsvurdering = ({behandlingVersjon, readOnly}: Props) => {
 
     begrunnelseForArbeidUtenforAnstalt: {
       type: "textarea",
+      defaultValue: soningsvurdering?.begrunnelseForArbeidUtenforAnstalt ?? undefined,
       label: "Skriv en beskrivelse av hvorfor det er vurdert at søker har arbeid utenforanstalt?",
       rules: { required: "Beskrivelse må fylles ut" }
     }
@@ -87,11 +99,11 @@ export const Soningsvurdering = ({behandlingVersjon, readOnly}: Props) => {
             dokumenterBruktIVurdering: [],
             soningUtenforFengsel: data.soningUtenforFengsel === JaEllerNei.Ja,
             begrunnelseForSoningUtenforAnstalt: data.begrunnelseForSoningUtenforAnstalt,
-            arbeidUtenforAnstalt: data.arbeidUtenforAnstalt === JaEllerNei.Ja,
+            arbeidUtenforAnstalt: jaNeiEllerUndefinedToNullableBoolean(data.arbeidUtenforAnstalt) ,
             begrunnelseForArbeidUtenforAnstalt: data.begrunnelseForArbeidUtenforAnstalt
           }
         },
-        referanse: behandlingsReferanse
+        referanse: behandlingsreferanse
       })
     })(event);
   };

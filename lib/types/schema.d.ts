@@ -1034,6 +1034,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/behandling/{referanse}/grunnlag/institusjon/soning": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    /** @description referanse */
+                    referanse: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsgrunnlagResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/behandling/l\u00F8s-behov": {
         parameters: {
             query?: never;
@@ -1551,7 +1589,7 @@ export interface components {
             avIdent: string;
             /**
              * Format: date-time
-             * @example 2024-07-10T12:09:55.063306638
+             * @example 2024-07-10T22:12:59.338518438
              */
             tidspunkt: string;
         };
@@ -1583,7 +1621,7 @@ export interface components {
         };
         "no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSoningsforholdL\u00F8sning": {
             behovstype: string;
-            soningsvurdering: components["schemas"]["no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.SoningsvurderingDto"];
+            soningsvurdering: components["schemas"]["no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsvurderingDto"];
         };
         "no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sning": {
             behovstype: string;
@@ -1774,10 +1812,13 @@ export interface components {
         "no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.flate.BistandGrunnlagDto": {
             vurdering?: components["schemas"]["no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.BistandVurdering"];
         };
-        "no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.SoningsvurderingDto": {
+        "no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsgrunnlagResponse": {
+            soningsvurdering?: components["schemas"]["no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsvurderingDto"];
+        };
+        "no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsvurderingDto": {
             arbeidUtenforAnstalt?: boolean | null;
             begrunnelseForArbeidUtenforAnstalt?: string | null;
-            begrunnelseForSoningUtenforAnstalt: string;
+            begrunnelseForSoningUtenforAnstalt?: string | null;
             dokumenterBruktIVurdering: components["schemas"]["no.nav.aap.verdityper.dokument.JournalpostId"][];
             soningUtenforFengsel: boolean;
         };
@@ -1906,7 +1947,7 @@ export interface components {
             avklaringsbehov: components["schemas"]["no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO"][];
             /**
              * Format: date-time
-             * @example 2024-07-10T12:09:55.063306638
+             * @example 2024-07-10T22:12:59.338518438
              */
             opprettet: string;
             /** Format: uuid */
@@ -1925,7 +1966,7 @@ export interface components {
             status: "OPPRETTET" | "AVSLUTTET" | "TOTRINNS_VURDERT" | "SENDT_TILBAKE_FRA_BESLUTTER" | "KVALITETSSIKRET" | "SENDT_TILBAKE_FRA_KVALITETSSIKRER" | "AVBRUTT";
             /**
              * Format: date-time
-             * @example 2024-07-10T12:09:55.063306638
+             * @example 2024-07-10T22:12:59.338518438
              */
             tidsstempel: string;
         };
@@ -2020,7 +2061,7 @@ export interface components {
         "no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO": {
             /**
              * Format: date-time
-             * @example 2024-07-10T12:09:55.063306638
+             * @example 2024-07-10T22:12:59.338518438
              */
             opprettet: string;
             /** Format: uuid */
@@ -2055,7 +2096,7 @@ export interface components {
             ident: string;
             /**
              * Format: date-time
-             * @example 2024-07-10T12:09:55.063306638
+             * @example 2024-07-10T22:12:59.338518438
              */
             opprettetTidspunkt: string;
             periode: components["schemas"]["no.nav.aap.verdityper.Periode"];
@@ -2066,7 +2107,7 @@ export interface components {
             ident: string;
             /**
              * Format: date-time
-             * @example 2024-07-10T12:09:55.063306638
+             * @example 2024-07-10T22:12:59.338518438
              */
             opprettetTidspunkt: string;
             periode: components["schemas"]["no.nav.aap.verdityper.Periode"];
@@ -2087,7 +2128,7 @@ export interface components {
             navn: string;
             /**
              * Format: date-time
-             * @example 2024-07-10T12:09:55.063306638
+             * @example 2024-07-10T22:12:59.338518438
              */
             "planlagtKj\u00F8retidspunkt": string;
             /** @enum {string} */

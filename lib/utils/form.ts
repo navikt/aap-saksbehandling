@@ -74,6 +74,11 @@ export const getJaNeiEllerUndefined = (value?: boolean | null) => {
   return value ? JaEllerNei.Ja : JaEllerNei.Nei;
 };
 
+export const jaNeiEllerUndefinedToNullableBoolean = (jaNeiEllerUndefined: JaEllerNei | undefined) => {
+  if (jaNeiEllerUndefined === undefined) return null;
+  return jaNeiEllerUndefined === JaEllerNei.Ja
+}
+
 export const getStringEllerUndefined = (value?: number | string | null) => {
   if (value === undefined || value === null) {
     return undefined;
