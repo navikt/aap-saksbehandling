@@ -7,7 +7,7 @@ import {Form} from "../../../form/Form";
 import {FormEvent} from "react";
 import {useConfigForm} from "../../../../hooks/FormHook";
 import {useLøsBehovOgGåTilNesteSteg} from "../../../../hooks/LøsBehovOgGåTilNesteStegHook";
-import {JaEllerNei, JaEllerNeiOptions} from "../../../../lib/utils/form";
+import {Behovstype, JaEllerNei, JaEllerNeiOptions} from "../../../../lib/utils/form";
 import {FormField} from "../../../input/formfield/FormField";
 import {useBehandlingsReferanse} from "../../../../hooks/BehandlingHook";
 import {DokumentTabell} from "../../../dokumenttabell/DokumentTabell";
@@ -40,7 +40,8 @@ interface FormFields {
 
 export const Soningsvurdering = ({behandlingVersjon, readOnly}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const {isLoading, status} = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
+  const {løsBehovOgGåTilNesteSteg, isLoading, status} = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
+
   const {formFields, form} = useConfigForm<FormFields>({
     dokumenterBruktIVurderingen: {
       type: 'checkbox_nested',
@@ -77,8 +78,21 @@ export const Soningsvurdering = ({behandlingVersjon, readOnly}: Props) => {
   })
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(() => {
-      console.log('TODO ' + behandlingVersjon + ':' + behandlingsReferanse);
+    form.handleSubmit(data => {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: Behovstype.AVKLAR_SONINGSFORRHOLD,
+          soningsvurdering: {
+            dokumenterBruktIVurdering: [],
+            soningUtenforFengsel: data.soningUtenforFengsel === JaEllerNei.Ja,
+            begrunnelseForSoningUtenforAnstalt: data.begrunnelseForSoningUtenforAnstalt,
+            arbeidUtenforAnstalt: data.arbeidUtenforAnstalt === JaEllerNei.Ja,
+            begrunnelseForArbeidUtenforAnstalt: data.begrunnelseForArbeidUtenforAnstalt
+          }
+        },
+        referanse: behandlingsReferanse
+      })
     })(event);
   };
 
