@@ -4,14 +4,17 @@ import { PdfVisning } from 'components/pdfvisning/PdfVisning';
 import { useEffect, useState } from 'react';
 import { deserialize, Nivå } from 'lib/utils/sanity';
 import { JSONContent } from '@tiptap/core';
-import { Button, ReadMore, Heading } from '@navikt/ds-react';
+import { Button, Heading, Detail } from '@navikt/ds-react';
 import { Breveditor } from 'components/breveditor/Breveditor';
+import Image from 'next/image';
 
 import styles from './Brevbygger.module.css';
 
-import { PortableText } from '@portabletext/react';
 import { EyeIcon } from '@navikt/aksel-icons';
 import { DelAvBrev, PortableTextMedRef } from 'components/brevmalvelger/BrevmalVelger';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+
+import NavLogo from 'public/nav_logo.png';
 
 interface Props {
   tittel: string;
@@ -61,16 +64,19 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
       <div style={isOpen ? { display: 'flex', flexDirection: 'row' } : undefined}>
         <div className={styles.brevbygger}>
           <div className={styles.brev}>
+            <div className={styles.brevPersonalia}>
+              <Image src={NavLogo} width={110} height={70} alt={'NAV logo'} />
+              <Detail>Navn: Ola Nordmann</Detail>
+              <Detail>Fødselsnummer: 12345678910</Detail>
+              <Detail>Dato: {formaterDatoForFrontend(new Date())}</Detail>
+              <Detail>Saksnnummer: AABBCC</Detail>
+            </div>
             <Heading size={'medium'} className={styles.brevtittel}>
               {tittel}
             </Heading>
             {brevMedInnhold.map((innhold) => {
               return (
-                <div
-                  key={innhold.id}
-                  style={{ padding: '1rem' }}
-                  className={innhold.brukEditor ? styles.editableContent : ''}
-                >
+                <div key={innhold.id} className={innhold.brukEditor ? styles.editableContent : ''}>
                   <div className={styles.headerRow}>
                     {innhold.overskrift && innhold.nivå && (
                       <Heading
@@ -80,11 +86,6 @@ export const Brevbygger = ({ tittel, brevMedInnhold, portableTextMedRef }: Props
                       >
                         {innhold.overskrift}
                       </Heading>
-                    )}
-                    {innhold.hjelpetekst && (
-                      <ReadMore header={'Få tips til skrivingen her'}>
-                        <PortableText value={innhold.hjelpetekst} />
-                      </ReadMore>
                     )}
                   </div>
                   <Breveditor

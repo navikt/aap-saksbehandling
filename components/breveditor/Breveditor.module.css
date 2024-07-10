@@ -7,10 +7,19 @@
   justify-content: center;
 }
 
+.editorContainer {
+  display: flex;
+  gap: var(--a-spacing-4);
+}
+
 .editorContent {
+  padding-block: 0.5rem;
+  width: 100%;
+}
+
+.editorContent:focus {
   border: 2px solid;
   border-color: var(--a-blue-800);
-  padding-block: 0.5rem;
 }
 
 /* Bytter margin med padding i tiptap paragrafer for å gjøre hele elementet klikkbart */

@@ -11,6 +11,10 @@
   gap: 1rem;
 }
 
+.brevPersonalia {
+  padding-inline-start: calc(2rem + 5px);
+}
+
 .heading,
 .brevtittel {
   padding-left: calc(2rem + 5px);

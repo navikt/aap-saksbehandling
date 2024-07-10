@@ -73,12 +73,4 @@ describe('Brevbygger', () => {
     const text = screen.getByText('Hva det gjelder: Om du har rett til arbeidsavklaringspenger (AAP).');
     expect(text).toBeVisible();
   });
-
-  it('Skal vise skrivetips', () => {
-    render(
-      <Brevbygger brevMedInnhold={brevMedInnhold} portableTextMedRef={portableTextMedRef} tittel={'Brevbygger'} />
-    );
-    const button = screen.getByRole('button', { name: 'Få tips til skrivingen her' });
-    expect(button).toBeVisible();
-  });
 });

@@ -11,6 +11,7 @@ import { TableRow } from '@tiptap/extension-table-row';
 import { Table } from '@tiptap/extension-table';
 import { Loader } from '@navikt/ds-react';
 import { Underline } from '@tiptap/extension-underline';
+import { PencilIcon } from '@navikt/aksel-icons';
 
 interface Props {
   initialValue?: JSONContent;
@@ -55,11 +56,14 @@ export const Breveditor = ({ initialValue, setContent, brukEditor }: Props) => {
           <Boblemeny editor={editor} />
         </BubbleMenu>
       )}
-      <EditorContent
-        editor={editor}
-        className={brukEditor ? styles.editorContent : styles.disabledEditor}
-        data-testid={'breveditor'}
-      />
+      <div className={styles.editorContainer}>
+        <EditorContent
+          editor={editor}
+          className={brukEditor ? styles.editorContent : styles.disabledEditor}
+          data-testid={'breveditor'}
+        />
+        {brukEditor && !editor.isFocused && <PencilIcon />}
+      </div>
     </div>
   );
 };
