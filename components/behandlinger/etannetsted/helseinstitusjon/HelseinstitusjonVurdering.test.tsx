@@ -1,12 +1,14 @@
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjonsvurdering';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { HelseinstitusjonGrunnlagResponse } from 'lib/types/types';
 
 const user = userEvent.setup();
 
 describe('Helseinstitusjonsvurdering', () => {
+  const helseinstitusjonGrunnlag: HelseinstitusjonGrunnlagResponse = {};
   beforeEach(() => {
-    render(<Helseinstitusjonsvurdering behandlingVersjon={0} readOnly={false} />);
+    render(<Helseinstitusjonsvurdering grunnlag={helseinstitusjonGrunnlag} behandlingVersjon={0} readOnly={false} />);
   });
 
   test('har overskrift Helseinstitusjon § 11-25', () => {

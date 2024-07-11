@@ -12,6 +12,7 @@ import {
   DetaljertBehandling,
   FatteVedtakGrunnlag,
   FritakMeldepliktGrunnlag,
+  HelseinstitusjonGrunnlagResponse,
   JobbInfo,
   KvalitetssikringGrunnlag,
   LøsAvklaringsbehovPåBehandling,
@@ -142,10 +143,17 @@ export const hentBeregningsVurdering = async (behandlingsReferanse: string): Pro
   return await fetchProxy<BeregningsVurdering>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentHelseInstitusjonsVurdering = async (
+  behandlingsReferanse: string
+): Promise<HelseinstitusjonGrunnlagResponse> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/institusjon/helse`;
+  return fetchProxy<HelseinstitusjonGrunnlagResponse>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentSoningsvurdering = async (behandlingsreferanse: string): Promise<SoningsgrunnlagResponse> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/institusjon/soning`;
-  return fetchProxy<SoningsgrunnlagResponse>(url, saksbehandlingApiScope, 'GET')
-}
+  return fetchProxy<SoningsgrunnlagResponse>(url, saksbehandlingApiScope, 'GET');
+};
 
 export const hentTilkjentYtelse = async (behandlingsReferanse: string): Promise<TilkjentYtelseGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent/${behandlingsReferanse}`;

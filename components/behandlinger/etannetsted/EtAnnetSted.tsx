@@ -1,16 +1,14 @@
-import {GruppeSteg} from 'components/gruppesteg/GruppeSteg';
-import {hentFlyt} from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import {StegSuspense} from 'components/stegsuspense/StegSuspense';
-import {
-  HelseinstitusjonsvurderingMedDataFetching
-} from 'components/behandlinger/etannetsted/helseinstitusjon/HelseinstitusjonsvurderingMedDataFetching';
-import {SoningsvurderingMedDataFetching} from "./soning/SoningsvurderingMedDataFetching";
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+import { HelseinstitusjonsvurderingMedDataFetching } from 'components/behandlinger/etannetsted/helseinstitusjon/HelseinstitusjonsvurderingMedDataFetching';
+import { SoningsvurderingMedDataFetching } from './soning/SoningsvurderingMedDataFetching';
 
 type Props = {
   behandlingsreferanse: string;
 };
 
-export const EtAnnetSted = async ({behandlingsreferanse}: Props) => {
+export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
 
   return (
@@ -22,6 +20,7 @@ export const EtAnnetSted = async ({behandlingsreferanse}: Props) => {
     >
       <StegSuspense>
         <HelseinstitusjonsvurderingMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
           readOnly={flyt.visning.saksbehandlerReadOnly}
           behandlingVersjon={flyt.behandlingVersjon}
         />
@@ -30,7 +29,8 @@ export const EtAnnetSted = async ({behandlingsreferanse}: Props) => {
         <SoningsvurderingMedDataFetching
           behandlingsreferanse={behandlingsreferanse}
           behandlingsversjon={flyt.behandlingVersjon}
-          readOnly={flyt.visning.saksbehandlerReadOnly}/>
+          readOnly={flyt.visning.saksbehandlerReadOnly}
+        />
       </StegSuspense>
     </GruppeSteg>
   );

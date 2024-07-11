@@ -10,10 +10,11 @@ export enum Behovstype {
   VURDER_SYKEPENGEERSTATNING_KODE = '5007',
   FASTSETT_BEREGNINGSTIDSPUNKT_KODE = '5008',
   AVKLAR_BARNETILLEGG_KODE = '5009',
+  AVKLAR_SONINGSFORRHOLD = '5010',
+  AVKLAR_HELSEINSTITUSJON = '5011',
   FORESLÅ_VEDTAK_KODE = '5098',
   FATTE_VEDTAK_KODE = '5099',
   KVALITETSSIKRING_KODE = '5097',
-  AVKLAR_SONINGSFORRHOLD = '5010'
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -46,6 +47,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Manuelt satt på vent';
     case '5010':
       return 'Avklar soningsvurdering';
+    case '5011':
+      return 'Avklar helseinstitusjon';
   }
 }
 
@@ -76,8 +79,8 @@ export const getJaNeiEllerUndefined = (value?: boolean | null) => {
 
 export const jaNeiEllerUndefinedToNullableBoolean = (jaNeiEllerUndefined: JaEllerNei | undefined) => {
   if (jaNeiEllerUndefined === undefined) return null;
-  return jaNeiEllerUndefined === JaEllerNei.Ja
-}
+  return jaNeiEllerUndefined === JaEllerNei.Ja;
+};
 
 export const getStringEllerUndefined = (value?: number | string | null) => {
   if (value === undefined || value === null) {
