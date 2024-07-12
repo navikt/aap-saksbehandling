@@ -1465,7 +1465,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sanity/client@npm:^6.20.0, @sanity/client@npm:^6.20.1":
+"@sanity/client@npm:^6.20.1":
   version: 6.20.1
   resolution: "@sanity/client@npm:6.20.1"
   dependencies:
@@ -1484,6 +1484,17 @@ __metadata:
     get-it: "npm:^8.6.3"
     rxjs: "npm:^7.0.0"
   checksum: 10c0/b2b5e1bce1fcd2f8365e55e07a007fcd7439235ce092dc72a95132643da4c5077da050d97b9e11a0aedb864e3e592c527791f792969c22873908140ca7316ce7
+  languageName: node
+  linkType: hard
+
+"@sanity/client@npm:^6.21.0":
+  version: 6.21.0
+  resolution: "@sanity/client@npm:6.21.0"
+  dependencies:
+    "@sanity/eventsource": "npm:^5.0.2"
+    get-it: "npm:^8.6.3"
+    rxjs: "npm:^7.0.0"
+  checksum: 10c0/fa7ad22d782d0f8c37d46f4e9942b08fe8d37ebd5d4875c73a5070e420a92a3e4fe2a7044a82ce7bba6109bcbc1a64693eccf0b07cc21c15f5182d640a826826
   languageName: node
   linkType: hard
 
@@ -1577,13 +1588,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sanity/types@npm:^3.49.0":
-  version: 3.49.0
-  resolution: "@sanity/types@npm:3.49.0"
+"@sanity/types@npm:^3.50.0":
+  version: 3.50.0
+  resolution: "@sanity/types@npm:3.50.0"
   dependencies:
-    "@sanity/client": "npm:^6.20.0"
+    "@sanity/client": "npm:^6.21.0"
     "@types/react": "npm:^18.0.25"
-  checksum: 10c0/729574b18377d364a3c4ffa810f1fe1b4fbf7d81486a0e6ba0f61152b6105944289864c85f2d46ccbe6021df145f5def04d3bd05bff3a7937fff86024a7e178e
+  checksum: 10c0/5b374f8560e7d0a84d05f4841e9237f5c1d10d1f86205421b74ced131d08fa16d9dc261278b9a6ebdc688b3d09b1895bebce7e745d11d3a8d02f807e4dcc7faa
   languageName: node
   linkType: hard
 
@@ -2700,7 +2711,7 @@ __metadata:
     "@sanity/client": "npm:^6.20.2"
     "@sanity/overlays": "npm:^2.3.56"
     "@sanity/react-loader": "npm:^1.10.4"
-    "@sanity/types": "npm:^3.49.0"
+    "@sanity/types": "npm:^3.50.0"
     "@testing-library/dom": "npm:^10.3.1"
     "@testing-library/jest-dom": "npm:^6.4.6"
     "@testing-library/react": "npm:^16.0.0"
