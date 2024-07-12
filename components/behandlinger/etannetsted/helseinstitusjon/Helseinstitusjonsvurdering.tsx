@@ -18,7 +18,7 @@ import {
   jaNeiEllerUndefinedToNullableBoolean,
 } from 'lib/utils/form';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
-import { InstitusjonsoppholdTabell, InstitusjonsoppholdTypeMock } from './InstitusjonsoppholdTabell';
+import { InstitusjonsoppholdTabell, InstitusjonsoppholdTypeMock } from '../InstitusjonsoppholdTabell';
 import { HelseinstitusjonGrunnlagResponse } from 'lib/types/types';
 
 const mockData: InstitusjonsoppholdTypeMock[] = [

@@ -1,5 +1,5 @@
 import { BodyShort, Label, Table } from '@navikt/ds-react';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend } from '../../../lib/utils/date';
 
 // mock-type
 export type InstitusjonsoppholdTypeMock = {
@@ -7,7 +7,7 @@ export type InstitusjonsoppholdTypeMock = {
   oppholdstype: string;
   status: string;
   oppholdFra: string;
-  avsluttetDato?: string;
+  avsluttetDato?: string | null;
   kildeinstitusjon: string;
 };
 
@@ -15,9 +15,9 @@ type Props = {
   label: string;
   beskrivelse: string;
   instutisjonsopphold: InstitusjonsoppholdTypeMock[];
-}
+};
 
-export const InstitusjonsoppholdTabell = ({label, beskrivelse, instutisjonsopphold}: Props) => {
+export const InstitusjonsoppholdTabell = ({ label, beskrivelse, instutisjonsopphold }: Props) => {
   return (
     <section>
       <Label as={'p'}>{label}</Label>

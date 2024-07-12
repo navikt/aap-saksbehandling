@@ -17,18 +17,8 @@ import {
 import { FormField } from '../../../input/formfield/FormField';
 import { DokumentTabell } from '../../../dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from '../../../tilknyttededokumenter/TilknyttedeDokumenter';
-import { InstitusjonsoppholdTabell, InstitusjonsoppholdTypeMock } from '../helseinstitusjon/InstitusjonsoppholdTabell';
+import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
 import { SoningsgrunnlagResponse } from '../../../../lib/types/types';
-
-const mockData: InstitusjonsoppholdTypeMock[] = [
-  {
-    institusjonstype: 'Åpent fengsel',
-    oppholdstype: 'Casual',
-    status: 'Aktivt',
-    oppholdFra: new Date().toUTCString(),
-    kildeinstitusjon: 'Blackgate Penitentiary',
-  },
-];
 
 interface Props {
   behandlingsreferanse: string;
@@ -127,7 +117,7 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
           beskrivelse={
             'Under opphold i fengsel har ikke søker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP'
           }
-          instutisjonsopphold={mockData}
+          instutisjonsopphold={grunnlag.soningsopphold}
         />
 
         <FormField form={form} formField={formFields.soningUtenforFengsel} />
