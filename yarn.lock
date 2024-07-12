@@ -1476,14 +1476,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sanity/client@npm:^6.20.2":
-  version: 6.20.2
-  resolution: "@sanity/client@npm:6.20.2"
+"@sanity/client@npm:^6.21.0":
+  version: 6.21.0
+  resolution: "@sanity/client@npm:6.21.0"
   dependencies:
     "@sanity/eventsource": "npm:^5.0.2"
     get-it: "npm:^8.6.3"
     rxjs: "npm:^7.0.0"
-  checksum: 10c0/b2b5e1bce1fcd2f8365e55e07a007fcd7439235ce092dc72a95132643da4c5077da050d97b9e11a0aedb864e3e592c527791f792969c22873908140ca7316ce7
+  checksum: 10c0/fa7ad22d782d0f8c37d46f4e9942b08fe8d37ebd5d4875c73a5070e420a92a3e4fe2a7044a82ce7bba6109bcbc1a64693eccf0b07cc21c15f5182d640a826826
   languageName: node
   linkType: hard
 
@@ -2697,7 +2697,7 @@ __metadata:
     "@navikt/eslint-config-aap": "npm:^1.1.0"
     "@navikt/oasis": "npm:^3.3.0"
     "@portabletext/react": "npm:^3.1.0"
-    "@sanity/client": "npm:^6.20.2"
+    "@sanity/client": "npm:^6.21.0"
     "@sanity/overlays": "npm:^2.3.56"
     "@sanity/react-loader": "npm:^1.10.4"
     "@sanity/types": "npm:^3.49.0"
