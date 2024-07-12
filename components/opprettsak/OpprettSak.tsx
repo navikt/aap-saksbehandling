@@ -20,6 +20,7 @@ export interface OpprettSakFormFields {
   yrkesskade: string;
   student: string;
   barn?: Barn[];
+  institusjon: ['fengsel', 'sykehus'];
 }
 
 export const OpprettSak = () => {
@@ -47,6 +48,14 @@ export const OpprettSak = () => {
       // @ts-ignore Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
       defaultValue: [{ fodselsdato: '2015' }],
     },
+    institusjon: {
+      type: 'checkbox',
+      label: 'Institujon',
+      options: [
+        { label: 'Er innlagt på sykehus', value: 'sykehus' },
+        { label: 'Er i fengsel', value: 'fengsel' },
+      ],
+    },
   });
 
   return (
@@ -61,6 +70,10 @@ export const OpprettSak = () => {
             data.barn?.map((barn) => {
               return { fodselsdato: formaterDatoForBackend(new Date(barn.fodselsdato)) };
             }) || [],
+          institusjoner: {
+            sykehus: data.institusjon.includes('sykehus'),
+            fengsel: data.institusjon.includes('fengsel'),
+          },
         });
         await mutate('api/sak/alle');
       })}
@@ -70,6 +83,7 @@ export const OpprettSak = () => {
         <FormField form={form} formField={formFields.fødselsdato} />
         <FormField form={form} formField={formFields.yrkesskade} />
         <FormField form={form} formField={formFields.student} />
+        <FormField form={form} formField={formFields.institusjon} />
       </div>
       <OpprettSakBarn form={form} />
       <Button className={'fit-content-button'}>Opprett test sak</Button>
