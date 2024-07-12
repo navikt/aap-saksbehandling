@@ -1,5 +1,5 @@
-import {Soningsvurdering} from "./Soningsvurdering";
-import {hentSoningsvurdering} from "../../../../lib/services/saksbehandlingservice/saksbehandlingService";
+import { Soningsvurdering } from './Soningsvurdering';
+import { hentSoningsvurdering } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -7,12 +7,21 @@ interface Props {
   readOnly: boolean;
 }
 
-export const SoningsvurderingMedDataFetching = async ({behandlingsreferanse, behandlingsversjon, readOnly}: Props) => {
-  const soningsgrunnlag = await hentSoningsvurdering(behandlingsreferanse)
+export const SoningsvurderingMedDataFetching = async ({
+  behandlingsreferanse,
+  behandlingsversjon,
+  readOnly,
+}: Props) => {
+  const soningsgrunnlag = await hentSoningsvurdering(behandlingsreferanse);
 
-  return <Soningsvurdering
-    behandlingsreferanse={behandlingsreferanse}
-    behandlingVersjon={behandlingsversjon}
-    grunnlag={soningsgrunnlag}
-    readOnly={readOnly}/>
-}
+  return (
+    soningsgrunnlag.soningsopphold.length > 0 && (
+      <Soningsvurdering
+        behandlingsreferanse={behandlingsreferanse}
+        behandlingVersjon={behandlingsversjon}
+        grunnlag={soningsgrunnlag}
+        readOnly={readOnly}
+      />
+    )
+  );
+};
