@@ -3,6 +3,7 @@ import { getStegSomSkalVises } from 'lib/utils/steg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { FastsettBeregningMedDataFeching } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregningMedDataFeching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { VisBeregningMedDataFetching } from 'components/behandlinger/grunnlag/visberegning/VisBeregningMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -16,6 +17,8 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
   const readOnly = flyt.visning.saksbehandlerReadOnly;
 
   const behandlingVersjon = flyt.behandlingVersjon;
+
+  console.log('GRUNNLAG STEG SOM SKAL VISES', stegSomSkalVises);
 
   return (
     <GruppeSteg
@@ -37,6 +40,9 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           );
         }
       })}
+      <StegSuspense>
+        <VisBeregningMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+      </StegSuspense>
     </GruppeSteg>
   );
 };
