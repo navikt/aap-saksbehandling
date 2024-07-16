@@ -13,7 +13,7 @@
   },
   "prettier": "@navikt/aap-felles-prettier",
   "dependencies": {
-    "@grafana/faro-web-sdk": "^1.8.1",
+    "@grafana/faro-web-sdk": "^1.8.2",
     "@navikt/aap-felles-css": "^1.1.0",
     "@navikt/aap-felles-react": "^1.1.0",
     "@navikt/aap-felles-utils": "^1.1.0",
@@ -23,7 +23,7 @@
     "@navikt/ds-react": "6.13.0",
     "@navikt/oasis": "^3.3.0",
     "@portabletext/react": "^3.1.0",
-    "@sanity/client": "^6.20.2",
+    "@sanity/client": "^6.21.0",
     "@sanity/overlays": "^2.3.56",
     "@sanity/react-loader": "^1.10.4",
     "@testing-library/user-event": "14.5.2",
@@ -52,7 +52,7 @@
   "devDependencies": {
     "@navikt/aap-felles-prettier": "^1.1.0",
     "@navikt/eslint-config-aap": "^1.1.0",
-    "@sanity/types": "^3.49.0",
+    "@sanity/types": "^3.50.0",
     "@testing-library/dom": "^10.3.1",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
