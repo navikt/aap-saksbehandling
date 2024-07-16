@@ -1818,6 +1818,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tiptap/extension-bubble-menu@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "@tiptap/extension-bubble-menu@npm:2.5.1"
+  dependencies:
+    tippy.js: "npm:^6.3.7"
+  peerDependencies:
+    "@tiptap/core": ^2.5.1
+    "@tiptap/pm": ^2.5.1
+  checksum: 10c0/0cbfbc039f430df2eee1dedc9c12ccae4a8180cf282e5761760fadcb50b903adfd19c8fb730b02c1fe6547b5fdf828002b8542d340f9750914dae3c8593b7508
+  languageName: node
+  linkType: hard
+
 "@tiptap/extension-bullet-list@npm:^2.4.0":
   version: 2.4.0
   resolution: "@tiptap/extension-bullet-list@npm:2.4.0"
@@ -1865,15 +1877,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-floating-menu@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "@tiptap/extension-floating-menu@npm:2.4.0"
+"@tiptap/extension-floating-menu@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "@tiptap/extension-floating-menu@npm:2.5.1"
   dependencies:
     tippy.js: "npm:^6.3.7"
   peerDependencies:
-    "@tiptap/core": ^2.0.0
-    "@tiptap/pm": ^2.0.0
-  checksum: 10c0/60f31277ecc116a0fc1015834ecf08204995c182dc8ad0dd2854b4b6ec57208a665d2270e459df082d070f82bfbc1968bad0f6fcb386ca9048920a5aa7ccd83a
+    "@tiptap/core": ^2.5.1
+    "@tiptap/pm": ^2.5.1
+  checksum: 10c0/4bdd79a2ca916fa0e63526b4f5ecb7c1b487ca86de5e681acb942d0bc467d3f0e86396f3800c4609f7bdb03a2ebb3fee08d8007b89021450be29b4a446154600
   languageName: node
   linkType: hard
 
@@ -2051,18 +2063,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/react@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "@tiptap/react@npm:2.4.0"
+"@tiptap/react@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "@tiptap/react@npm:2.5.1"
   dependencies:
-    "@tiptap/extension-bubble-menu": "npm:^2.4.0"
-    "@tiptap/extension-floating-menu": "npm:^2.4.0"
+    "@tiptap/extension-bubble-menu": "npm:^2.5.1"
+    "@tiptap/extension-floating-menu": "npm:^2.5.1"
+    "@types/use-sync-external-store": "npm:^0.0.6"
+    use-sync-external-store: "npm:^1.2.2"
   peerDependencies:
-    "@tiptap/core": ^2.0.0
-    "@tiptap/pm": ^2.0.0
+    "@tiptap/core": ^2.5.1
+    "@tiptap/pm": ^2.5.1
     react: ^17.0.0 || ^18.0.0
     react-dom: ^17.0.0 || ^18.0.0
-  checksum: 10c0/ca476b1ef88fa4cf929b1138fbd55995a3be3fd23bf469a8a1d8d9c299de51e4c9533e5742e4d0a29cab3f23b90c5a2be0b4711f2d88d24db5ee7833481d8ee3
+  checksum: 10c0/2543f0dd9caa789661fb919646a4a2ed7a0cfaf588f6a4aa820002cc0c57f78c1ff93d39bcda7c635638a0220a1eebb68f0b33c10aac99933910c27c8b28b5b1
   languageName: node
   linkType: hard
 
@@ -2377,6 +2391,13 @@ __metadata:
   version: 4.0.5
   resolution: "@types/tough-cookie@npm:4.0.5"
   checksum: 10c0/68c6921721a3dcb40451543db2174a145ef915bc8bcbe7ad4e59194a0238e776e782b896c7a59f4b93ac6acefca9161fccb31d1ce3b3445cb6faa467297fb473
+  languageName: node
+  linkType: hard
+
+"@types/use-sync-external-store@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "@types/use-sync-external-store@npm:0.0.6"
+  checksum: 10c0/77c045a98f57488201f678b181cccd042279aff3da34540ad242f893acc52b358bd0a8207a321b8ac09adbcef36e3236944390e2df4fcedb556ce7bb2a88f2a8
   languageName: node
   linkType: hard
 
@@ -2712,7 +2733,7 @@ __metadata:
     "@tiptap/extension-table-row": "npm:^2.4.0"
     "@tiptap/extension-underline": "npm:^2.4.0"
     "@tiptap/pm": "npm:^2.4.0"
-    "@tiptap/react": "npm:^2.4.0"
+    "@tiptap/react": "npm:^2.5.1"
     "@tiptap/starter-kit": "npm:^2.4.0"
     "@types/jest": "npm:^29.5.12"
     "@types/node": "npm:20.14.10"
@@ -9918,7 +9939,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:^1.2.0":
+"use-sync-external-store@npm:^1.2.0, use-sync-external-store@npm:^1.2.2":
   version: 1.2.2
   resolution: "use-sync-external-store@npm:1.2.2"
   peerDependencies:
