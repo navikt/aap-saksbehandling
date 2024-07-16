@@ -18,18 +18,8 @@ import {
   jaNeiEllerUndefinedToNullableBoolean,
 } from 'lib/utils/form';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
-import { InstitusjonsoppholdTabell, InstitusjonsoppholdTypeMock } from '../InstitusjonsoppholdTabell';
+import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
 import { HelseinstitusjonGrunnlagResponse } from 'lib/types/types';
-
-const mockData: InstitusjonsoppholdTypeMock[] = [
-  {
-    institusjonstype: 'Helseinstitusjon',
-    oppholdstype: 'Heldøgnspasient',
-    status: 'Aktivt',
-    oppholdFra: new Date().toUTCString(),
-    kildeinstitusjon: 'Godthaab',
-  },
-];
 
 type Props = {
   grunnlag: HelseinstitusjonGrunnlagResponse;
@@ -114,9 +104,11 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
         steg={'AVKLAR_STUDENT'}
         visBekreftKnapp={!readOnly}
       >
-        <Alert variant={'warning'}>
-          Vi har funnet en eller flere registrerte opphold på helseinstitusjon som kan påvirke ytelsen
-        </Alert>
+        {grunnlag.helseinstitusjonOpphold.length > 0 && (
+          <Alert variant={'warning'}>
+            Vi har funnet en eller flere registrerte opphold på helseinstitusjon som kan påvirke ytelsen
+          </Alert>
+        )}
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
           <DokumentTabell />
         </FormField>
@@ -124,7 +116,7 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
         <InstitusjonsoppholdTabell
           label={'Søker har følgende institusjonsopphold på helseinstitusjon'}
           beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP ytelse'}
-          instutisjonsopphold={mockData}
+          instutisjonsopphold={grunnlag.helseinstitusjonOpphold}
         />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.faarFriKostOgLosji} />

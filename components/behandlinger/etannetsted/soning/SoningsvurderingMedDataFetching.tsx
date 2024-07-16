@@ -12,14 +12,14 @@ export const SoningsvurderingMedDataFetching = async ({
   behandlingsversjon,
   readOnly,
 }: Props) => {
-  const soningsgrunnlag = await hentSoningsvurdering(behandlingsreferanse);
-
+  const grunnlag = await hentSoningsvurdering(behandlingsreferanse);
+  console.log('SONINGSGRUNNLAG', grunnlag);
   return (
-    soningsgrunnlag.soningsopphold.length > 0 && (
+    grunnlag.soningsopphold.length > 0 && (
       <Soningsvurdering
         behandlingsreferanse={behandlingsreferanse}
         behandlingVersjon={behandlingsversjon}
-        grunnlag={soningsgrunnlag}
+        grunnlag={grunnlag}
         readOnly={readOnly}
       />
     )

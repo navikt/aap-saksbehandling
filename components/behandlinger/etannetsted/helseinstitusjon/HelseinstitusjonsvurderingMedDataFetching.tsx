@@ -13,6 +13,6 @@ export const HelseinstitusjonsvurderingMedDataFetching = async ({
   readOnly,
 }: Props) => {
   const grunnlag = await hentHelseInstitusjonsVurdering(behandlingsreferanse);
-  console.log('grunnlag', grunnlag);
+  console.log('HELSEGRUNNLAG', grunnlag);
   return <Helseinstitusjonsvurdering grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
 };

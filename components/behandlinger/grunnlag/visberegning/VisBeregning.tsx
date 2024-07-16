@@ -9,7 +9,6 @@ interface Props {
 }
 
 export const VisBeregning = ({ grunnlag }: Props) => {
-  console.log('grunnlag', grunnlag);
   return (
     <>
       {/* @ts-ignore-line TODO: Legge inn riktig type i backend-typer */}
@@ -24,7 +23,7 @@ export const VisBeregning = ({ grunnlag }: Props) => {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {Object.keys(grunnlag.grunnlag11_19.inntekter).map((key: string) => (
+            {Object.keys(grunnlag?.grunnlag11_19.inntekter ?? {})?.map((key: string) => (
               <Table.Row key={key}>
                 <Table.DataCell>{key}</Table.DataCell>
                 <Table.DataCell>{grunnlag.grunnlag11_19.inntekter[key]}</Table.DataCell>

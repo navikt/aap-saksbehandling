@@ -6,7 +6,18 @@ import { HelseinstitusjonGrunnlagResponse } from 'lib/types/types';
 const user = userEvent.setup();
 
 describe('Helseinstitusjonsvurdering', () => {
-  const helseinstitusjonGrunnlag: HelseinstitusjonGrunnlagResponse = {};
+  const helseinstitusjonGrunnlag: HelseinstitusjonGrunnlagResponse = {
+    helseinstitusjonGrunnlag: undefined,
+    helseinstitusjonOpphold: [
+      {
+        oppholdFra: '2021-01-01',
+        institusjonstype: 'Sykehus',
+        oppholdstype: 'Heldøgnspasient',
+        status: 'Aktivt',
+        kildeinstitusjon: 'Godthaab',
+      },
+    ],
+  };
   beforeEach(() => {
     render(<Helseinstitusjonsvurdering grunnlag={helseinstitusjonGrunnlag} behandlingVersjon={0} readOnly={false} />);
   });
