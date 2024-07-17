@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import userEvent from '@testing-library/user-event';

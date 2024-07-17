@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Alder, kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { AlderGrunnlag } from 'lib/types/types';

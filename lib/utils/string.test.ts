@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { storForbokstav } from 'lib/utils/string';
 
 describe('storForbokstav', () => {

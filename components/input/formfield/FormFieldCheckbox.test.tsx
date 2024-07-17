@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from './FormField';
@@ -68,7 +69,7 @@ interface Props {
   defaultValue?: string[];
 }
 function FormMedCheckbox(props: Props) {
-  const onSubmitMock = jest.fn();
+  const onSubmitMock = vi.fn();
   const { formFields, form } = useConfigForm<FormFields>({
     erDuSikker: {
       type: 'checkbox',

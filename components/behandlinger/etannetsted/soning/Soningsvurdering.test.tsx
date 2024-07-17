@@ -1,3 +1,4 @@
+import { describe, test, expect, beforeEach } from 'vitest';
 import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -37,7 +38,7 @@ describe('Soningsvurdering', () => {
       expect(screen.getByText('Les dokumentene og tilknytt eventuelt dokumenter til 11-26 vurderingen')).toBeVisible();
     });
 
-    it('skal vise en liste med tilknyttede dokumenter som har blitt valgt', async () => {
+    test('skal vise en liste med tilknyttede dokumenter som har blitt valgt', async () => {
       const rad = screen.getByRole('row', {
         name: /^Sykemelding/,
       });

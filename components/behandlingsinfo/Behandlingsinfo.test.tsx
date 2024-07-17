@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { render, screen } from '@testing-library/react';
 import { DetaljertBehandling } from 'lib/types/types';

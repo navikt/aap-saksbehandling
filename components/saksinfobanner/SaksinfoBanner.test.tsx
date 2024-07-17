@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { SaksInformasjon } from 'lib/clientApi';
 import { SakPersoninfo, SaksInfo } from 'lib/types/types';

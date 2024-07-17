@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { validerÅrstall } from 'lib/utils/validation';
 
 describe('validerÅr', () => {

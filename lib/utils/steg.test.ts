@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { BehandlingFlytOgTilstand, FlytGruppe } from 'lib/types/types';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { Vilkårsoppsummering } from 'components/vilkårsoppsummering/Vilkårsoppsummering';
 import { render, screen } from '@testing-library/react';
 import { BehandlingResultat } from 'lib/types/types';

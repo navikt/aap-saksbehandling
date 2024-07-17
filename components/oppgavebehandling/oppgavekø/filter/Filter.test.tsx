@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import React, { ReactElement } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -85,9 +86,9 @@ test('viser knapp for å lagre kø når man har lagt til et filter og er avdelin
 });
 
 const køContextRender = (ui: ReactElement, { valgtKø, ...renderOptions }: { valgtKø: Kø }) => {
-  const oppdaterValgtKø = jest.fn();
-  const oppdaterValgtKøId = jest.fn();
-  const oppdaterKøliste = jest.fn();
+  const oppdaterValgtKø = vi.fn();
+  const oppdaterValgtKøId = vi.fn();
+  const oppdaterKøliste = vi.fn();
   const valgtKøId = 1;
   const køliste = [valgtKø];
   return render(

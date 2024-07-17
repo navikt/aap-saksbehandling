@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Brevbygger } from 'components/brevbygger/Brevbygger';
 import { DelAvBrev, PortableTextMedRef } from 'components/brevmalvelger/BrevmalVelger';

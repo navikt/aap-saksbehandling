@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Dokument, DokumentTabell } from './DokumentTabell';
 import { formaterDatoForFrontend } from 'lib/utils/date';

@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { Button } from '@navikt/ds-react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -75,7 +76,7 @@ function SelectForm(props: Props) {
     },
   });
   return (
-    <form onSubmit={form.handleSubmit(() => jest.fn())}>
+    <form onSubmit={form.handleSubmit(() => vi.fn())}>
       <FormField form={form} formField={formFields.type} />
       <Button variant={'primary'}>Send inn</Button>
     </form>

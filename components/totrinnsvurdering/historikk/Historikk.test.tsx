@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Historikk } from 'components/totrinnsvurdering/historikk/Historikk';
 import { HistorikkType } from 'lib/types/types';
