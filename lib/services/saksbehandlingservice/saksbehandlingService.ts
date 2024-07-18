@@ -92,6 +92,11 @@ export const hentDokument = async (journalPostId: string, dokumentInfoId: string
   return await fetchPdf(url, saksbehandlingApiScope);
 };
 
+export const hentMedlemskapGrunnlag = async (behandlingsReferanse: string): Promise<any> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/medlemskap`;
+  return await fetchProxy<any>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentStudentGrunnlag = async (behandlingsReferanse: string): Promise<StudentGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/student`;
   return await fetchProxy<StudentGrunnlag>(url, saksbehandlingApiScope, 'GET');
