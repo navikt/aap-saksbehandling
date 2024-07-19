@@ -8,5 +8,5 @@ interface Props {
 export const MedlemskapMedDataFetching = async ({ behandlingsReferanse }: Props) => {
   const grunnlag = await hentMedlemskapGrunnlag(behandlingsReferanse);
 
-  return <Medlemskap grunnlag={grunnlag} behandlingsReferanse={behandlingsReferanse} />;
+  return <Medlemskap grunnlag={grunnlag} />;
 };
