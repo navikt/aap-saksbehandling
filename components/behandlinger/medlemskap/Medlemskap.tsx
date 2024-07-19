@@ -2,10 +2,11 @@ import React from 'react';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import Image from 'next/image';
 import Medlemskapkatt from '../../../public/medlemskapkatt.jpg';
+import { MedlemskapGrunnlag } from 'lib/types/types';
 
 interface Props {
   behandlingsReferanse: string;
-  grunnlag: any;
+  grunnlag: MedlemskapGrunnlag;
 }
 
 export const Medlemskap = async ({ behandlingsReferanse, grunnlag }: Props) => {
