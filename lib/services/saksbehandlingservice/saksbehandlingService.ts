@@ -16,6 +16,7 @@ import {
   JobbInfo,
   KvalitetssikringGrunnlag,
   LøsAvklaringsbehovPåBehandling,
+  MedlemskapGrunnlag,
   OpprettTestcase,
   SakPersoninfo,
   SaksInfo,
@@ -90,6 +91,11 @@ export const hentLesetilgang = async (saksnummer: string) => {
 export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/dokument/${journalPostId}/${dokumentInfoId}`;
   return await fetchPdf(url, saksbehandlingApiScope);
+};
+
+export const hentMedlemskapGrunnlag = async (behandlingsReferanse: string): Promise<MedlemskapGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/medlemskap`;
+  return await fetchProxy<MedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentStudentGrunnlag = async (behandlingsReferanse: string): Promise<StudentGrunnlag> => {

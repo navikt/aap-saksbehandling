@@ -3,6 +3,8 @@ import { components } from './schema';
 export type Periode = components['schemas']['no.nav.aap.verdityper.Periode'];
 
 // Grunnlag
+export type MedlemskapGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.medlemskap.flate.MedlemskapGrunnlagDto'];
 export type StudentGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.flate.StudentGrunnlagDto'];
 export type SykdomsGrunnlag =
@@ -27,7 +29,7 @@ export type HelseinstitusjonGrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonGrunnlagResponse'];
 export type TilkjentYtelsePeriode =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.flate.TilkjentYtelsePeriode'];
-export type Tilkjent = components['schemas']['no.nav.aap.behandlingsflyt.forretningsflyt.steg.Tilkjent'];
+export type Tilkjent = components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.Tilkjent'];
 
 export type FatteVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.FatteVedtakGrunnlagDto'];
