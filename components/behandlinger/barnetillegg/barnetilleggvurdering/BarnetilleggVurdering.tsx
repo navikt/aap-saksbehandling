@@ -13,7 +13,7 @@ import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
 import { BarnetilleggGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
-import {useBehandlingsReferanse} from "hooks/BehandlingHook";
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 type Props = {
   behandlingsversjon: number;
@@ -73,8 +73,9 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon }: Props) =
               behandlingVersjon: behandlingsversjon,
               behov: {
                 behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
+                vurdering: {},
               },
-              referanse: behandlingsReferanse
+              referanse: behandlingsReferanse,
             })
           }
           loading={isLoading}
