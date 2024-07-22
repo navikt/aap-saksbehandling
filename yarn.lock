@@ -1647,13 +1647,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sanity/types@npm:^3.50.0":
-  version: 3.50.0
-  resolution: "@sanity/types@npm:3.50.0"
+"@sanity/types@npm:^3.52.0":
+  version: 3.52.0
+  resolution: "@sanity/types@npm:3.52.0"
   dependencies:
     "@sanity/client": "npm:^6.21.0"
     "@types/react": "npm:^18.0.25"
-  checksum: 10c0/5b374f8560e7d0a84d05f4841e9237f5c1d10d1f86205421b74ced131d08fa16d9dc261278b9a6ebdc688b3d09b1895bebce7e745d11d3a8d02f807e4dcc7faa
+  checksum: 10c0/02f6a9d6a0652f52ef66c20e5fb0642460f8baca842a179bd28aeb1ee62c1f5d1e910599a4996c0b5c238f570aabf4ae9633aca2206c48e9f4b94c805590b3cc
   languageName: node
   linkType: hard
 
@@ -2779,7 +2779,7 @@ __metadata:
     "@sanity/client": "npm:^6.21.0"
     "@sanity/overlays": "npm:^2.3.56"
     "@sanity/react-loader": "npm:^1.10.4"
-    "@sanity/types": "npm:^3.50.0"
+    "@sanity/types": "npm:^3.52.0"
     "@testing-library/dom": "npm:^10.3.1"
     "@testing-library/jest-dom": "npm:^6.4.6"
     "@testing-library/react": "npm:^16.0.0"
