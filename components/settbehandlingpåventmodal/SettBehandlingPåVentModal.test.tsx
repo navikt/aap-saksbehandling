@@ -1,11 +1,11 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
 
-beforeEach(() =>
-  render(<SettBehandllingPåVentModal referanse={'123'} behandlingVersjon={1} isOpen={true} onClose={jest.fn} />)
-);
-
 describe('settBehandlingPåVentModal', () => {
+  beforeEach(() => {
+    render(<SettBehandllingPåVentModal referanse={'123'} behandlingVersjon={1} isOpen={true} onClose={vi.fn} />);
+  });
   it('skal ha en heading', () => {
     const heading = screen.getByText('Sett behandling på vent');
     expect(heading).toBeVisible();

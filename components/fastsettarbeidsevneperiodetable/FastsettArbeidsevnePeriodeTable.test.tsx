@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { FastsettArbeidsevnePeriodeTable } from 'components/fastsettarbeidsevneperiodetable/FastsettArbeidsevnePeriodeTable';
 import { v4 as uuidv4 } from 'uuid';
@@ -17,7 +18,7 @@ describe('fastsettArbeidsevnePeriodeTable', () => {
             fraDato: new Date('March 25, 2024'),
           },
         ]}
-        onClick={jest.fn}
+        onClick={vi.fn}
         visLeggTilPeriodeKnapp={true}
       />
     );

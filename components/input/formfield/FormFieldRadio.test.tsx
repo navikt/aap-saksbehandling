@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from './FormField';
 import { Button } from '@navikt/ds-react';
@@ -87,7 +88,7 @@ interface Props {
   defaultValue?: string;
 }
 function FormMedRadios(props: Props) {
-  const onSubmitMock = jest.fn();
+  const onSubmitMock = vi.fn();
   const { formFields, form } = useConfigForm<FormFields>({
     størrelse: {
       type: 'radio',

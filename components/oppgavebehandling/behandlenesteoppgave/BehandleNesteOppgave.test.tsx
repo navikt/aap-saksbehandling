@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BehandleNesteOppgave } from 'components/oppgavebehandling/behandlenesteoppgave/BehandleNesteOppgave';
 

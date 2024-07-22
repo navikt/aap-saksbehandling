@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { useConfigForm } from 'hooks/FormHook';
 import { FormField } from './FormField';
 import { Button } from '@navikt/ds-react';
@@ -38,7 +39,7 @@ function FormMedDatePicker(props: Props) {
   });
 
   return (
-    <form onSubmit={form.handleSubmit(() => jest.fn())}>
+    <form onSubmit={form.handleSubmit(() => vi.fn())}>
       <FormField form={form} formField={formFields.virkningstidspunkt} />
       <Button>Send</Button>
     </form>

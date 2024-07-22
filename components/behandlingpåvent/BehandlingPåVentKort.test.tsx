@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BehandlingPåVentKort } from 'components/behandlingpåvent/BehandlingPåVentKort';
 import { VenteInformasjon } from 'lib/types/types';
@@ -9,7 +10,9 @@ const informasjon: VenteInformasjon = {
 };
 
 describe('behandlingPåVentKort', () => {
-  beforeEach(() => render(<BehandlingPåVentKort behandlingVersjon={1} informasjon={informasjon} />));
+  beforeEach(() => {
+    render(<BehandlingPåVentKort behandlingVersjon={1} informasjon={informasjon} />);
+  });
 
   it('skal vise begrunnelse', () => {
     const begrunnelseLabel = screen.getByText('Begrunnelse');

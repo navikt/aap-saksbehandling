@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Kort } from 'components/oppgavebehandling/kort/Kort';
 

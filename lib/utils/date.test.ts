@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { formaterDatoForBackend, parseDatoFraDatePicker, sorterEtterNyesteDato, stringToDate } from 'lib/utils/date';
 
 describe('formaterDatoForBackend', () => {

@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { Oppgavetabell } from 'components/oppgavebehandling/oppgavekø/oppgavetabell/Oppgavetabell';
 import { fordeltOppgave, mockOppgaver, ufordeltOppgave } from 'mocks/mockOppgaver';
 import { render, screen } from '@testing-library/react';
