@@ -1,6 +1,6 @@
 import { isLocal } from 'lib/utils/environment';
 import { requestAzureOboToken, validateToken } from '@navikt/oasis';
-import { getAccessTokenOrRedirectToLogin } from 'lib/auth/authentication';
+import { getAccessTokenOrRedirectToLogin } from '@navikt/aap-felles-utils';
 import { headers } from 'next/headers';
 import { logError } from '@navikt/aap-felles-utils';
 import { hentLocalToken } from 'lib/services/saksbehandlingservice/saksbehandlingService';

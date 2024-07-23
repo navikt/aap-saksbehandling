@@ -1,8 +1,7 @@
 import { NextRequest } from 'next/server';
 import { fetchProxy } from 'lib/services/fetchProxy';
 import { isLocal } from 'lib/utils/environment';
-import { logError } from '@navikt/aap-felles-utils';
-import { hentBrukerInformasjon } from 'lib/services/azureuserservice/azureUserService';
+import { hentBrukerInformasjon, logError } from '@navikt/aap-felles-utils';
 
 const oppgavestyringApiBaseUrl = process.env.OPPGAVESTYRING_API_BASE_URL;
 const oppgavestyringApiScope = process.env.OPPGAVESTYRING_API_SCOPE ?? '';

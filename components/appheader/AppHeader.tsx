@@ -1,9 +1,9 @@
 'use client';
 
+import { BrukerInformasjon } from '@navikt/aap-felles-utils';
 import { Dropdown, InternalHeader, Link } from 'components/DsClient';
 
 import styles from 'components/appheader/AppHeader.module.css';
-import { BrukerInformasjon } from 'lib/services/azureuserservice/azureUserService';
 
 const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => (
   <Dropdown>

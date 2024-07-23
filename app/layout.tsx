@@ -1,9 +1,8 @@
 import '@navikt/ds-css';
-import { verifyUserLoggedIn } from 'lib/auth/authentication';
 import 'styles/globals.css';
 
 import { AppHeader } from 'components/appheader/AppHeader';
-import { hentBrukerInformasjon } from 'lib/services/azureuserservice/azureUserService';
+import { hentBrukerInformasjon, verifyUserLoggedIn } from '@navikt/aap-felles-utils';
 
 export const metadata = {
   title: 'Kelvin',

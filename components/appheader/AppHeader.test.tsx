@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { AppHeader } from 'components/appheader/AppHeader';
 
 import userEvent from '@testing-library/user-event';
-import { BrukerInformasjon } from 'lib/services/azureuserservice/azureUserService';
+import { BrukerInformasjon } from '@navikt/aap-felles-utils';
 
 const brukerInformasjon: BrukerInformasjon = {
   navn: 'Kjell T Ringen',
