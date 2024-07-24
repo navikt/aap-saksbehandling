@@ -7,7 +7,6 @@ import useSWR from 'swr';
 import { DEFAULT_KØ, FilterValg, Fritekstfilter, Kø, KøContext } from 'components/oppgavebehandling/KøContext';
 import { FilterDTO } from 'lib/types/oppgavebehandling';
 import { fetchProxy } from 'lib/clientApi';
-import { logError } from '@navikt/aap-felles-utils';
 
 const hentLagredeKøer = async (): Promise<FilterDTO[] | undefined> => {
   return await fetchProxy('/api/oppgavebehandling/filter', 'GET');
@@ -26,7 +25,7 @@ export const Køvelger = () => {
   const køliste: Kø[] = [DEFAULT_KØ];
 
   if (error) {
-    logError('Feil ved lasting av filter', error);
+    console.error('Feil ved lasting av filter', error);
   }
   if (data && data.length > 0) {
     const nyeFilter: Kø[] = data.map((filter) => {
