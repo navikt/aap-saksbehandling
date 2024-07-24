@@ -26,7 +26,7 @@ const AppHeader = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon
       <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
       <Link href={'/sanity'}>Sanity</Link>
       <Link href={'/saksoversikt'}>Saksoversikt</Link>
-      <Link href={'/oppgaveliste'}>Oppgaveliste</Link>
+      <Link href={`${process.env.NEXT_PUBLIC_OPPGAVESTYRING_URL}/oppgaveliste`}>Oppgaveliste</Link>
     </div>
 
     <Brukermeny brukerInformasjon={brukerInformasjon} />
