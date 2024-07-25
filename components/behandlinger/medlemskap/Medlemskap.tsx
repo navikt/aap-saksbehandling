@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Medlemskapkatt from '../../../public/medlemskapkatt.jpg';
 import { MedlemskapGrunnlag } from 'lib/types/types';
 import { Table } from '@navikt/ds-react';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   grunnlag: MedlemskapGrunnlag;
@@ -31,9 +32,9 @@ export const Medlemskap = async ({ grunnlag }: Props) => {
           <Table.Body>
             {unntakListe.map((unntak, index) => (
               <Table.Row key={index}>
-                <Table.DataCell>{unntak.periode.fom}</Table.DataCell>
-                <Table.DataCell>{unntak.periode.tom}</Table.DataCell>
-                <Table.DataCell>{unntak.verdi.status}</Table.DataCell>
+                <Table.DataCell>{formaterDatoForFrontend(unntak.periode.fom)}</Table.DataCell>
+                <Table.DataCell>{formaterDatoForFrontend(unntak.periode.tom)}</Table.DataCell>
+                <Table.DataCell>{getTekstligVerdiForStatus(unntak.verdi.status)}</Table.DataCell>
                 <Table.DataCell>{unntak.verdi.statusaarsak}</Table.DataCell>
                 <Table.DataCell>{unntak.verdi.medlem ? 'Ja' : 'Nei'}</Table.DataCell>
                 <Table.DataCell>{unntak.verdi.grunnlag}</Table.DataCell>
@@ -47,4 +48,18 @@ export const Medlemskap = async ({ grunnlag }: Props) => {
       <Image src={Medlemskapkatt} alt="medlemskap-katt" width={500} height={500} />
     </VilkårsKort>
   );
+};
+
+// Tar utgangspunkt i verdiene her https://confluence.adeo.no/pages/viewpage.action?spaceKey=FEL&title=Gyldige+verdier+for+kodeverk+i+MEDL
+const getTekstligVerdiForStatus = (status: string) => {
+  switch (status) {
+    case 'GYLD':
+      return 'Gyldig';
+    case 'AVST':
+      return 'Avvist';
+    case 'UAVK':
+      return 'Uavklart';
+    default:
+      return '';
+  }
 };
