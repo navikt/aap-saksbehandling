@@ -28,7 +28,7 @@
     "@sanity/overlays": "^2.3.56",
     "@sanity/react-loader": "^1.10.4",
     "@testing-library/user-event": "14.5.2",
-    "@tiptap/extension-bubble-menu": "^2.5.5",
+    "@tiptap/extension-bubble-menu": "^2.5.6",
     "@tiptap/extension-table": "^2.5.5",
     "@tiptap/extension-table-cell": "^2.5.5",
     "@tiptap/extension-table-header": "^2.5.5",
