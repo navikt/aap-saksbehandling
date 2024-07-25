@@ -2,8 +2,7 @@
 
 import { isAfter } from 'date-fns';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { useConfigForm } from 'hooks/FormHook';
-import { FormField } from 'components/input/formfield/FormField';
+import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { BooksIcon } from '@navikt/aksel-icons';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';

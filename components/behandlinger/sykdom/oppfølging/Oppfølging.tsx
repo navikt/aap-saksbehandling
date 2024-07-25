@@ -2,9 +2,8 @@
 
 import { PersonGroupIcon } from '@navikt/aksel-icons';
 import { Form } from 'components/form/Form';
-import { FormField } from 'components/input/formfield/FormField';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { useConfigForm } from 'hooks/FormHook';
+import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import { BistandsGrunnlag } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useConfigForm } from 'hooks/FormHook';
+import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import {
   Behovstype,
   getJaNeiEllerUndefined,
@@ -10,7 +10,6 @@ import {
 } from 'lib/utils/form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
-import { FormField } from 'components/input/formfield/FormField';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { Alert, Label, Link, List } from '@navikt/ds-react';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';

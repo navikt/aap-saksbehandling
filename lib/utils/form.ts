@@ -1,4 +1,4 @@
-import { ValuePair } from 'components/input/formfield/FormField';
+import { ValuePair } from '@navikt/aap-felles-react';
 
 export enum Behovstype {
   MANUELT_SATT_PÅ_VENT_KODE = '9001',

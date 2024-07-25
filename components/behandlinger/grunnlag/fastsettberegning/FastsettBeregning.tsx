@@ -1,9 +1,8 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { useConfigForm } from 'hooks/FormHook';
+import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
-import { FormField } from 'components/input/formfield/FormField';
 import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined } from 'lib/utils/form';
 import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 import { BeregningsGrunnlag, BeregningsVurdering } from 'lib/types/types';

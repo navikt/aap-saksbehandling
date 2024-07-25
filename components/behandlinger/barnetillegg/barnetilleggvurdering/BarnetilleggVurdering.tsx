@@ -3,8 +3,7 @@
 import { ChildHairEyesIcon } from '@navikt/aksel-icons';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { useConfigForm } from 'hooks/FormHook';
-import { FormField } from 'components/input/formfield/FormField';
+import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { BodyShort, Button, Label } from '@navikt/ds-react';

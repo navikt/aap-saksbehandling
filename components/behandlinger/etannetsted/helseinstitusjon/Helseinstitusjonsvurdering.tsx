@@ -6,9 +6,8 @@ import { Alert } from '@navikt/ds-react';
 import { Form } from 'components/form/Form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { useConfigForm } from 'hooks/FormHook';
+import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import { FormEvent } from 'react';
-import { FormField } from 'components/input/formfield/FormField';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import {
   Behovstype,

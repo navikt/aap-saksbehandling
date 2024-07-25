@@ -4,7 +4,7 @@ import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutter
 import { ToTrinnsvurderingError, ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { Checkbox, CheckboxGroup, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react';
 import Link from 'next/link';
-import { ValuePair } from 'components/input/formfield/FormField';
+import { ValuePair } from '@navikt/aap-felles-react';
 import { ToTrinnsVurderingGrunn } from 'lib/types/types';
 
 interface Props {

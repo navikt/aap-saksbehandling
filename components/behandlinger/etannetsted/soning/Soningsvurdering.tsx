@@ -5,7 +5,7 @@ import { PadlockLockedIcon } from '@navikt/aksel-icons';
 import { Alert } from '@navikt/ds-react';
 import { Form } from '../../../form/Form';
 import { FormEvent } from 'react';
-import { useConfigForm } from '../../../../hooks/FormHook';
+import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import { useLøsBehovOgGåTilNesteSteg } from '../../../../hooks/LøsBehovOgGåTilNesteStegHook';
 import {
   Behovstype,
@@ -14,7 +14,6 @@ import {
   JaEllerNeiOptions,
   jaNeiEllerUndefinedToNullableBoolean,
 } from '../../../../lib/utils/form';
-import { FormField } from '../../../input/formfield/FormField';
 import { DokumentTabell } from '../../../dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from '../../../tilknyttededokumenter/TilknyttedeDokumenter';
 import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';

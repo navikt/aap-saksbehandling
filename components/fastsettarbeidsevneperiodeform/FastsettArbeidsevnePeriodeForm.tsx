@@ -1,5 +1,4 @@
-import { useConfigForm } from 'hooks/FormHook';
-import { FormField } from 'components/input/formfield/FormField';
+import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import { useState } from 'react';
 import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 import styles from './FastsettArbeidsevnePeriodeForm.module.css';

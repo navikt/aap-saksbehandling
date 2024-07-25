@@ -6,11 +6,10 @@ import { AktivitetsTabell } from 'components/aktivitetstabell/AktivitetsTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { sendAktivitetClient } from 'lib/clientApi';
-import { FormField, ValuePair } from 'components/input/formfield/FormField';
+import { useConfigForm, FormField, ValuePair } from '@navikt/aap-felles-react';
 import { Button } from '@navikt/ds-react';
 import { AktivitetDtoType, Aktivitetsmeldinger } from 'lib/types/types';
 import { useEffect, useState } from 'react';
-import { useConfigForm } from 'hooks/FormHook';
 
 interface Props {
   saksnummer: string;

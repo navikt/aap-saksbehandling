@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from '@navikt/ds-react';
-import { useConfigForm } from 'hooks/FormHook';
+import { useConfigForm, FormField, ValuePair } from '@navikt/aap-felles-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { FormField, ValuePair } from 'components/input/formfield/FormField';
 import { settBehandlingPåVent } from 'lib/clientApi';
 import { revalidateFlyt } from 'lib/actions/actions';
 

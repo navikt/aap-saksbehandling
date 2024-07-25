@@ -6,8 +6,7 @@ import { PlusIcon, QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 
 import styles from 'components/barn/Barn.module.css';
 import { Veiledning } from 'components/veiledning/Veiledning';
-import { useConfigForm } from 'hooks/FormHook';
-import { FormField } from 'components/input/formfield/FormField';
+import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 
