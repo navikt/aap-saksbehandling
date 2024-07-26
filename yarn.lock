@@ -2240,12 +2240,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:20.14.10":
-  version: 20.14.10
-  resolution: "@types/node@npm:20.14.10"
+"@types/node@npm:20.14.12":
+  version: 20.14.12
+  resolution: "@types/node@npm:20.14.12"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10c0/0b06cff14365c2d0085dc16cc8cbea5c40ec09cfc1fea966be9eeecf35562760bfde8f88e86de6edfaf394501236e229d9c1084fad04fb4dec472ae245d8ae69
+  checksum: 10c0/59bc5fa11fdd23fd517f859063118f54a1ab53d3399ef63c926f8902429d7453abc0db22ef4b0a6110026b6ab81b6472fee894e1d235c24b01a0b3e10cfae0bb
   languageName: node
   linkType: hard
 
@@ -2696,7 +2696,7 @@ __metadata:
     "@tiptap/pm": "npm:^2.5.6"
     "@tiptap/react": "npm:^2.5.6"
     "@tiptap/starter-kit": "npm:^2.5.6"
-    "@types/node": "npm:20.14.10"
+    "@types/node": "npm:20.14.12"
     "@types/react": "npm:^18.3.3"
     "@types/react-collapse": "npm:^5.0.4"
     "@types/react-dom": "npm:^18.3.0"
@@ -2715,15 +2715,15 @@ __metadata:
     eslint-plugin-promise: "npm:6.6.0"
     eslint-plugin-react: "npm:^7.35.0"
     eslint-plugin-react-hooks: "npm:^4.6.2"
-    husky: "npm:^9.1.1"
+    husky: "npm:^9.1.2"
     jsdom: "npm:^24.1.1"
     json-diff: "npm:^1.0.6"
     lint-staged: "npm:^15.2.7"
     next: "npm:^14.2.5"
     next-sanity: "npm:^9.4.2"
     node-loader: "npm:^2.0.0"
-    openapi-typescript: "npm:7.0.2"
-    pino-pretty: "npm:^11.2.1"
+    openapi-typescript: "npm:7.1.0"
+    pino-pretty: "npm:^11.2.2"
     prettier: "npm:^3.3.3"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
@@ -5312,12 +5312,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:^9.1.1":
-  version: 9.1.1
-  resolution: "husky@npm:9.1.1"
+"husky@npm:^9.1.2":
+  version: 9.1.2
+  resolution: "husky@npm:9.1.2"
   bin:
     husky: bin.js
-  checksum: 10c0/56394f5a08201badece23a8599bd76fe8c41e4510a956022fe54897645900c5c5a96a740ffb0604e99e808dffc3714bae982f1cbda4a069082cc713414f17ad3
+  checksum: 10c0/7e25c31ef98ac35d357147005d6e5d87db2abca7297e7c5aac931de3699acd32a3f1a9f8e53f101daeab818f0cfe9d18fa7e34f7cf5c9c4437c3665123456dea
   languageName: node
   linkType: hard
 
@@ -6901,9 +6901,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-typescript@npm:7.0.2":
-  version: 7.0.2
-  resolution: "openapi-typescript@npm:7.0.2"
+"openapi-typescript@npm:7.1.0":
+  version: 7.1.0
+  resolution: "openapi-typescript@npm:7.1.0"
   dependencies:
     "@redocly/openapi-core": "npm:^1.16.0"
     ansi-colors: "npm:^4.1.3"
@@ -6914,7 +6914,7 @@ __metadata:
     typescript: ^5.x
   bin:
     openapi-typescript: bin/cli.js
-  checksum: 10c0/76cb4a2ac8ca8b7fb4a53f995b675a50122403ee4c0fce4a956f9f689f499bdb99b10e48106c3793f6df06bd8b4751536f86698558055703cdad147fb43a32f4
+  checksum: 10c0/0a926519d810bf30b541ab3ca7851e43b1ebb5cf1e81f9f859a5184697bbd70610be4d7ef1e709b4f9422b7cfbb45ba11be26d1579c7e71d27557aa4f7603aab
   languageName: node
   linkType: hard
 
@@ -7135,9 +7135,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino-pretty@npm:^11.2.1":
-  version: 11.2.1
-  resolution: "pino-pretty@npm:11.2.1"
+"pino-pretty@npm:^11.2.2":
+  version: 11.2.2
+  resolution: "pino-pretty@npm:11.2.2"
   dependencies:
     colorette: "npm:^2.0.7"
     dateformat: "npm:^4.6.3"
@@ -7155,7 +7155,7 @@ __metadata:
     strip-json-comments: "npm:^3.1.1"
   bin:
     pino-pretty: bin.js
-  checksum: 10c0/6c7f15b5bf8a007c8b7157eae445675b13cd95097ffa512d5ebd661f9e7abd328fa27592b25708756a09f098f87cb03ca81837518cd725c16e3f801129b941d4
+  checksum: 10c0/3ce1769907886a5584f6c8123d9bc987712ad10a375797733a0fe95a238df587dac8e2b709bab291c4e30d41b0cf65808c708c96f8eb98b2778b6df60afa7e66
   languageName: node
   linkType: hard
 
