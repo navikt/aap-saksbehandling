@@ -54,6 +54,7 @@ export const OpprettSak = () => {
         { label: 'Er innlagt på sykehus', value: 'sykehus' },
         { label: 'Er i fengsel', value: 'fengsel' },
       ],
+      defaultValue: [],
     },
   });
 
