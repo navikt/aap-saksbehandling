@@ -1,6 +1,6 @@
 import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
 import { Behovstype } from 'lib/utils/form';
-import { Button } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, ToTrinnsVurdering } from 'lib/types/types';
 import {
   behovstypeTilVilkårskortLink,
@@ -37,7 +37,8 @@ export const TotrinnsvurderingForm = ({
     };
   });
 
-  const [errors, setErrors] = useState<ToTrinnsvurderingError[]>([]);
+  const [toTrinnsvurderingErrors, setToTrinnsvurderingErrors] = useState<ToTrinnsvurderingError[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>();
   const [vurderinger, setVurderinger] = useState<ToTrinnsVurderingFormFields[]>(initialValue);
 
   const handleInputChange = (index: number, name: keyof ToTrinnsVurderingFormFields, value: string | string[]) => {
@@ -49,9 +50,16 @@ export const TotrinnsvurderingForm = ({
   function validerTotrinnsvurderinger(
     toTrinnsvurdering: ToTrinnsVurderingFormFields[]
   ): ToTrinnsVurdering[] | undefined {
-    setErrors([]);
+    setToTrinnsvurderingErrors([]);
+    setErrorMessage(undefined);
     const errors: ToTrinnsvurderingError[] = [];
     const validatedVurderinger: ToTrinnsVurdering[] = [];
+
+    const harIkkeBlittVurdert = toTrinnsvurdering.every((vurdering) => !vurdering.harBlittRedigert);
+
+    if (harIkkeBlittVurdert) {
+      setErrorMessage('Du må gjøre minst én vurdering.');
+    }
 
     toTrinnsvurdering.forEach((vurdering) => {
       if (vurdering.harBlittRedigert) {
@@ -92,7 +100,7 @@ export const TotrinnsvurderingForm = ({
       }
     });
 
-    setErrors(errors);
+    setToTrinnsvurderingErrors(errors);
 
     return errors.length > 0 ? undefined : validatedVurderinger;
   }
@@ -105,7 +113,7 @@ export const TotrinnsvurderingForm = ({
           toTrinnsvurdering={vurdering}
           erKvalitetssikring={erKvalitetssikring}
           oppdaterVurdering={handleInputChange}
-          errors={errors.filter((error) => error.definisjon === vurdering.definisjon)}
+          errors={toTrinnsvurderingErrors.filter((error) => error.definisjon === vurdering.definisjon)}
           index={index}
           link={`${link}/${behovstypeTilVilkårskortLink(vurdering.definisjon as Behovstype)}`}
           readOnly={readOnly}
@@ -119,7 +127,11 @@ export const TotrinnsvurderingForm = ({
           loading={isLoading}
           onClick={async () => {
             const validerteToTrinnsvurderinger = validerTotrinnsvurderinger(vurderinger);
-            if (errors.length === 0 && validerteToTrinnsvurderinger && validerteToTrinnsvurderinger.length > 0) {
+            if (
+              toTrinnsvurderingErrors.length === 0 &&
+              validerteToTrinnsvurderinger &&
+              validerteToTrinnsvurderinger.length > 0
+            ) {
               løsBehovOgGåTilNesteSteg({
                 behandlingVersjon: behandlingVersjon,
                 behov: {
@@ -134,6 +146,7 @@ export const TotrinnsvurderingForm = ({
           Send inn
         </Button>
       )}
+      {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
     </>
   );
 };

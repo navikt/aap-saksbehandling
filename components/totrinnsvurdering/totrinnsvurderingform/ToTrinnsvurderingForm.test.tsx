@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Behovstype } from 'lib/utils/form';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
@@ -264,5 +264,25 @@ describe('totrinnsvurderingform', () => {
 
     await user.click(screen.getByRole('button', { name: 'Send inn' }));
     expect(screen.getByText('Du må oppgi en grunn')).toBeVisible();
+  });
+
+  it('skal vise en feilmelding dersom det ikke har blitt gjort noen totrinnsvurdering og man prøver å send inn vurderingene', async () => {
+    render(
+      <TotrinnsvurderingForm
+        grunnlag={grunnlag}
+        erKvalitetssikring={false}
+        link={link}
+        readOnly={false}
+        behandlingsReferanse={'456'}
+        behandlingVersjon={0}
+      />
+    );
+
+    const sendInnButton = screen.getByRole('button', { name: /send inn/i });
+    expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
+
+    await user.click(sendInnButton);
+
+    expect(screen.getByText('Du må gjøre minst én vurdering.')).toBeInTheDocument();
   });
 });
