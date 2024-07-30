@@ -10,6 +10,7 @@ import {
   BeregningsVurdering,
   BistandsGrunnlag,
   DetaljertBehandling,
+  DokumentInfo,
   FatteVedtakGrunnlag,
   FritakMeldepliktGrunnlag,
   HelseinstitusjonGrunnlagResponse,
@@ -78,7 +79,7 @@ export const hentAlleSaker = async (): Promise<SaksInfo[]> => {
   return await fetchProxy<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
+export const hentAlleDokumenterPåSak = async (saksnummer: string): Promise<DokumentInfo[]> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/dokumenter`;
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };

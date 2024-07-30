@@ -12,17 +12,18 @@ import { EtAnnetSted } from 'components/behandlinger/etannetsted/EtAnnetSted';
 import { MedlemskapMedDataFetching } from 'components/behandlinger/medlemskap/MedlemskapMedDataFetching';
 
 interface Props {
+  saksId: string;
   behandlingsReferanse: string;
   aktivGruppe: StegGruppe;
 }
 
-export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Props) => {
+export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, saksId }: Props) => {
   return (
     <div className={styles.kolonne}>
       {aktivGruppe === 'LOVVALG' && <div>LOVVALG</div>}
       {aktivGruppe === 'ALDER' && <AlderMedDataFetching behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'STUDENT' && <Student behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} sakId={saksId} />}
       {aktivGruppe === 'MEDLEMSKAP' && <MedlemskapMedDataFetching behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'UNDERVEIS' && <div>UNDERVEIS</div>}

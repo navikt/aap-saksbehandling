@@ -34,7 +34,12 @@ interface FormFields {
   dokumenterBruktIVurderingen: string[];
 }
 
-export const SykdomsvurderingMedYrkesskade = ({ behandlingVersjon, grunnlag, readOnly }: SykdomProps) => {
+export const SykdomsvurderingMedYrkesskade = ({
+  behandlingVersjon,
+  grunnlag,
+  readOnly,
+  tilknyttedeDokumenter,
+}: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
@@ -158,7 +163,14 @@ export const SykdomsvurderingMedYrkesskade = ({ behandlingVersjon, grunnlag, rea
         <RegistrertBehandler />
 
         <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
-          <DokumentTabell />
+          <DokumentTabell
+            dokumenter={tilknyttedeDokumenter.map((d) => ({
+              journalpostId: d.journalpostId,
+              dokumentId: d.dokumentInfoId,
+              tittel: d.tittel,
+              erTilknyttet: false,
+            }))}
+          />
         </FormField>
 
         <Veiledning />
