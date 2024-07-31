@@ -1,3 +1,7 @@
 {
-  "extends": ["@navikt/eslint-config-aap", "next/core-web-vitals"]
+  "extends": ["@navikt/eslint-config-aap", "next/core-web-vitals", "plugin:import/recommended", "plugin:import/typescript"],
+  "rules": {
+    "import/no-unused-modules": [1, {"unusedExports": true, "ignoreExports": ["**/*/route.ts", "**/*/page.tsx"]}]
+
+  }
 }
