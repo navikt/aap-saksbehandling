@@ -21,7 +21,7 @@ I tillegg må du kopiere `.env-template` til `.env.local` for å kunne kjøre lo
 
 ### Kjøre lokalt
 
-Start `behandlingsflyt` backend lokalt ved å kjøre `TestApp`-klassen fra IntelliJ (TODO: hvordan kjøre fra kommandolinjen?)
+Start `behandlingsflyt` backend lokalt ved å kjøre `TestApp`-klassen fra IntelliJ eller følge guiden her https://aap-sysdoc.ansatt.nav.no/funksjonalitet/Behandlingsflyt/teknisk/#kj%C3%B8re-lokalt
 
 ```
 yarn dev
