@@ -33,7 +33,6 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
           return (
             <StegSuspense key={steg}>
               <SykdomsvurderingMedDataFetching
-                saksId={sakId}
                 behandlingsReferanse={behandlingsReferanse}
                 readOnly={saksBehandlerReadOnly}
                 behandlingVersjon={behandlingVersjon}

@@ -7,7 +7,6 @@ const Page = async ({
 }: {
   params: { behandlingsReferanse: string; aktivGruppe: StegGruppe; saksId: string };
 }) => {
-  console.log(params);
   return (
     <OppgaveKolonne
       saksId={params.saksId}
