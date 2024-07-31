@@ -16,7 +16,7 @@ export const Behandlingsinfo = ({ behandling }: Props) => {
           {behandling.type}
         </Label>
       </div>
-      <HGrid columns={'1fr 1fr'}>
+      <HGrid columns={'1fr 1fr'} gap={'1'}>
         <Label as="p" size="medium" spacing>
           Behandlingsstatus:
         </Label>

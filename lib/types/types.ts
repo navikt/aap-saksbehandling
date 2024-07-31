@@ -3,6 +3,7 @@ import { components } from './schema';
 export type Periode = components['schemas']['no.nav.aap.verdityper.Periode'];
 
 // Grunnlag
+export type DokumentInfo = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.adapters.Dokument'];
 export type MedlemskapGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.medlemskap.flate.MedlemskapGrunnlagDto'];
 export type StudentGrunnlag =

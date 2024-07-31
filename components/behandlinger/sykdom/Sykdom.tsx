@@ -10,9 +10,10 @@ import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 
 interface Props {
   behandlingsReferanse: string;
+  sakId: string;
 }
 
-export const Sykdom = async ({ behandlingsReferanse }: Props) => {
+export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
 
   const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt);
@@ -32,6 +33,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           return (
             <StegSuspense key={steg}>
               <SykdomsvurderingMedDataFetching
+                saksId={sakId}
                 behandlingsReferanse={behandlingsReferanse}
                 readOnly={saksBehandlerReadOnly}
                 behandlingVersjon={behandlingVersjon}
