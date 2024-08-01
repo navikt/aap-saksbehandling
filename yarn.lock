@@ -248,6 +248,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/parser@npm:^7.24.4":
+  version: 7.25.3
+  resolution: "@babel/parser@npm:7.25.3"
+  dependencies:
+    "@babel/types": "npm:^7.25.2"
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: 10c0/874b01349aedb805d6694f867a752fdc7469778fad76aca4548d2cc6ce96087c3ba5fb917a6f8d05d2d1a74aae309b5f50f1a4dba035f5a2c9fcfe6e106d2c4e
+  languageName: node
+  linkType: hard
+
 "@babel/parser@npm:^7.24.8":
   version: 7.24.8
   resolution: "@babel/parser@npm:7.24.8"
@@ -374,6 +385,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/types@npm:^7.24.0, @babel/types@npm:^7.25.2":
+  version: 7.25.2
+  resolution: "@babel/types@npm:7.25.2"
+  dependencies:
+    "@babel/helper-string-parser": "npm:^7.24.8"
+    "@babel/helper-validator-identifier": "npm:^7.24.7"
+    to-fast-properties: "npm:^2.0.0"
+  checksum: 10c0/e489435856be239f8cc1120c90a197e4c2865385121908e5edb7223cfdff3768cba18f489adfe0c26955d9e7bbb1fb10625bc2517505908ceb0af848989bd864
+  languageName: node
+  linkType: hard
+
 "@babel/types@npm:^7.24.8, @babel/types@npm:^7.24.9":
   version: 7.24.9
   resolution: "@babel/types@npm:7.24.9"
@@ -382,6 +404,13 @@ __metadata:
     "@babel/helper-validator-identifier": "npm:^7.24.7"
     to-fast-properties: "npm:^2.0.0"
   checksum: 10c0/4970b3481cab39c5c3fdb7c28c834df5c7049f3c7f43baeafe121bb05270ebf0da7c65b097abf314877f213baa591109c82204f30d66cdd46c22ece4a2f32415
+  languageName: node
+  linkType: hard
+
+"@bcoe/v8-coverage@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@bcoe/v8-coverage@npm:0.2.3"
+  checksum: 10c0/6b80ae4cb3db53f486da2dc63b6e190a74c8c3cca16bb2733f234a0b6a9382b09b146488ae08e2b22cf00f6c83e20f3e040a2f7894f05c045c946d6a090b1d52
   languageName: node
   linkType: hard
 
@@ -716,6 +745,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@istanbuljs/schema@npm:^0.1.2":
+  version: 0.1.3
+  resolution: "@istanbuljs/schema@npm:0.1.3"
+  checksum: 10c0/61c5286771676c9ca3eb2bd8a7310a9c063fb6e0e9712225c8471c582d157392c88f5353581c8c9adbe0dff98892317d2fdfc56c3499aa42e0194405206a963a
+  languageName: node
+  linkType: hard
+
 "@jridgewell/gen-mapping@npm:^0.3.5":
   version: 0.3.5
   resolution: "@jridgewell/gen-mapping@npm:0.3.5"
@@ -755,7 +791,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/trace-mapping@npm:^0.3.24, @jridgewell/trace-mapping@npm:^0.3.25":
+"@jridgewell/trace-mapping@npm:^0.3.23, @jridgewell/trace-mapping@npm:^0.3.24, @jridgewell/trace-mapping@npm:^0.3.25":
   version: 0.3.25
   resolution: "@jridgewell/trace-mapping@npm:0.3.25"
   dependencies:
@@ -784,26 +820,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-css@npm:^1.5.2":
-  version: 1.5.2
-  resolution: "@navikt/aap-felles-css@npm:1.5.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F1.5.2%2Fd3f997f6fc11161fad2f3d23c29dd07a08d97a6e"
-  checksum: 10c0/70b9fec9625d9f5687c993b4d8ef83e25a347d6f414d412abcb4449b3a63e1a1c41afb0d69388b01b494d00b0e9c3c7d9f553411eb9f08d464a2c9ae95d30b98
+"@navikt/aap-felles-css@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "@navikt/aap-felles-css@npm:1.5.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F1.5.3%2F45f886ea82f3a5a2e25497114f94ebff2a36a420"
+  checksum: 10c0/bfe5393eed5986cac75af4371bf0dcf5426af195fb8d3276030dbd0cb5e128052a9d55ae1c2b9622350c03f4d67400011e35980a355dd0bedb61219890dfba13
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-prettier@npm:^1.5.2":
-  version: 1.5.2
-  resolution: "@navikt/aap-felles-prettier@npm:1.5.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F1.5.2%2F9c6032ec0ef8a191a3ddfef0920a04a26fb7f710"
+"@navikt/aap-felles-prettier@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "@navikt/aap-felles-prettier@npm:1.5.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F1.5.3%2F7c9a6f4311d473527b8319316d3862c24017d36d"
   dependencies:
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
     prettier: "npm:^3.3.2"
-  checksum: 10c0/83114d9c8e8384d461b42a624d037d9527bc906dc99235e9496ea00bdbc122ca373323be1473f89e92b75dd0716a63c1898cd75b7ed1c2eb58391051642887ee
+  checksum: 10c0/23c743c6a9505603bf62873ee07eb636a9a604ddb1f671f79218e7344124e1c879b554b29c0a1f9c61bbe901fdf9f43bd17e7ac6ba5cd6d4e0063533ed3d516b
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-react@npm:^1.5.2":
-  version: 1.5.2
-  resolution: "@navikt/aap-felles-react@npm:1.5.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-react%2F1.5.2%2Facc53323a39f27d17d1cc2bacd41e7cf75abb40e"
+"@navikt/aap-felles-react@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "@navikt/aap-felles-react@npm:1.5.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-react%2F1.5.3%2F6bd74d132b6d19c96bd85e845d4243081476fa97"
   dependencies:
     "@navikt/aksel-icons": "npm:^6.13.0"
     "@navikt/ds-css": "npm:^6.13.0"
@@ -813,22 +849,22 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-hook-form: "npm:^7.52.1"
     uuid: "npm:^10.0.0"
-  checksum: 10c0/e42c825635f58367768fe7eeea53822d1ef56c29eacd61552a5bfb97243b07552425667de340c7caafdfaaf140fca026a61b78dc480f979b41faa2d1e8116d7a
+  checksum: 10c0/9057ed55b3a6a44994d1044784feb5745bd562ba7fa14dbc1482bf086e3ed3da453e375dc7a5fc27cbef0b50b9a264cb0631a8bfc58892f7d2e00c680fa2f59c
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils-client@npm:^1.5.2":
-  version: 1.5.2
-  resolution: "@navikt/aap-felles-utils-client@npm:1.5.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils-client%2F1.5.2%2F9416b5d14164af6a8b896ac62f9d00e3a9acb8aa"
+"@navikt/aap-felles-utils-client@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "@navikt/aap-felles-utils-client@npm:1.5.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils-client%2F1.5.3%2F19fdbfd54de82cecf561847d13f91f1a43faa104"
   dependencies:
     date-fns: "npm:^3.6.0"
-  checksum: 10c0/9bf1ace42b6c016b51d9b649ed9755a8f4c1ea930b7e22878f48794faaf6b59def0111ce601f15d8e5b7c281e6b53b931a3029785d27f069da4dd9e1e312b75d
+  checksum: 10c0/bffe55a754978958614d3ef738b4be8dfc4701342d8837eb85817536c8a1845179a296e132ea10b48879ac24b04ee67dd9b1d55c2d2140439c3796f14a387fdb
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils@npm:^1.5.2":
-  version: 1.5.2
-  resolution: "@navikt/aap-felles-utils@npm:1.5.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F1.5.2%2Fc61ea692a8ef782f6a0b8232d6ce2c1e0f8e5b5b"
+"@navikt/aap-felles-utils@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "@navikt/aap-felles-utils@npm:1.5.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F1.5.3%2Fbe73a35cd12ad7ec6c66bcf3b803d954c128fd2b"
   dependencies:
     "@navikt/oasis": "npm:^3.3.0"
     axios: "npm:^1.7.2"
@@ -838,7 +874,7 @@ __metadata:
     pino: "npm:^9.2.0"
     prom-client: "npm:^15.1.3"
     server-only: "npm:^0.0.1"
-  checksum: 10c0/a4fdc20554fe936fd4eac7d1626d289e530de6c775f6aab429872365241c2e762f0b5feb54e369522dd43235ad97d3652ae68f67cee7fe4fb3cdb4e29032801c
+  checksum: 10c0/5a3cd2326f087027c5e210bd2b0aa7f4302b10ff24a0473a3d67da7be52ec7e162cb24d5b48fa6d2bb242c87c6c9efe84c4e1c9d0d6db04f3f4bc0095c5f0a25
   languageName: node
   linkType: hard
 
@@ -881,9 +917,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/eslint-config-aap@npm:^1.5.2":
-  version: 1.5.2
-  resolution: "@navikt/eslint-config-aap@npm:1.5.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Feslint-config-aap%2F1.5.2%2F0c431f0d8f599871e837f76871542b293c9c66bf"
+"@navikt/eslint-config-aap@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "@navikt/eslint-config-aap@npm:1.5.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Feslint-config-aap%2F1.5.3%2Fdf75e57fdf481431c8b38506668c32935a3e6b6f"
   peerDependencies:
     "@typescript-eslint/eslint-plugin": ^7.7.0
     "@typescript-eslint/parser": ^7.7.0
@@ -894,7 +930,7 @@ __metadata:
     eslint-plugin-jsx-a11y: ^6.7.1
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
-  checksum: 10c0/809aa2293760a12e12b37c6a6e82a1696d120d8ba193f0b3abd28d6abcc18f37bcbc8babf1a688ecddf4af61bab6241f70e2ad7dd8949e9788dfc825da45ccd1
+  checksum: 10c0/afeb0aece0b13eca9e2f1cd023372cea9e03713b2560051b16ec4d1183f423af01c323af2e4aca1e7a69aaf0f1314794564bb6d8a1b7c5009b675a823ac93c93
   languageName: node
   linkType: hard
 
@@ -2601,6 +2637,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vitest/coverage-v8@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "@vitest/coverage-v8@npm:2.0.5"
+  dependencies:
+    "@ampproject/remapping": "npm:^2.3.0"
+    "@bcoe/v8-coverage": "npm:^0.2.3"
+    debug: "npm:^4.3.5"
+    istanbul-lib-coverage: "npm:^3.2.2"
+    istanbul-lib-report: "npm:^3.0.1"
+    istanbul-lib-source-maps: "npm:^5.0.6"
+    istanbul-reports: "npm:^3.1.7"
+    magic-string: "npm:^0.30.10"
+    magicast: "npm:^0.3.4"
+    std-env: "npm:^3.7.0"
+    test-exclude: "npm:^7.0.1"
+    tinyrainbow: "npm:^1.2.0"
+  peerDependencies:
+    vitest: 2.0.5
+  checksum: 10c0/a95eef744d2a541f5d9d0287243cbcb596802c04e0250404947e36a669c477abe86607afb8d8ddb3d31bf12633b3ffa3d9a313e489e4ab7998b3c1620ad60e00
+  languageName: node
+  linkType: hard
+
 "@vitest/expect@npm:2.0.4":
   version: 2.0.4
   resolution: "@vitest/expect@npm:2.0.4"
@@ -2669,15 +2727,15 @@ __metadata:
   resolution: "aap-saksbehandling@workspace:."
   dependencies:
     "@grafana/faro-web-sdk": "npm:^1.8.2"
-    "@navikt/aap-felles-css": "npm:^1.5.2"
-    "@navikt/aap-felles-prettier": "npm:^1.5.2"
-    "@navikt/aap-felles-react": "npm:^1.5.2"
-    "@navikt/aap-felles-utils": "npm:^1.5.2"
-    "@navikt/aap-felles-utils-client": "npm:^1.5.2"
+    "@navikt/aap-felles-css": "npm:^1.5.3"
+    "@navikt/aap-felles-prettier": "npm:^1.5.3"
+    "@navikt/aap-felles-react": "npm:^1.5.3"
+    "@navikt/aap-felles-utils": "npm:^1.5.3"
+    "@navikt/aap-felles-utils-client": "npm:^1.5.3"
     "@navikt/aksel-icons": "npm:6.13.0"
     "@navikt/ds-css": "npm:6.13.0"
     "@navikt/ds-react": "npm:6.13.0"
-    "@navikt/eslint-config-aap": "npm:^1.5.2"
+    "@navikt/eslint-config-aap": "npm:^1.5.3"
     "@navikt/oasis": "npm:^3.3.0"
     "@portabletext/react": "npm:^3.1.0"
     "@sanity/client": "npm:^6.21.1"
@@ -2706,6 +2764,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^7.17.0"
     "@vercel/otel": "npm:^1.9.1"
     "@vitejs/plugin-react": "npm:^4.3.1"
+    "@vitest/coverage-v8": "npm:^2.0.5"
     date-fns: "npm:^3.6.0"
     eslint: "npm:^8.57.0"
     eslint-config-next: "npm:^14.2.5"
@@ -2737,6 +2796,7 @@ __metadata:
     uuid: "npm:^10.0.0"
     vite-tsconfig-paths: "npm:^4.3.2"
     vitest: "npm:^2.0.4"
+    vitest-fetch-mock: "npm:^0.3.0"
   languageName: unknown
   linkType: soft
 
@@ -3511,6 +3571,15 @@ __metadata:
   version: 1.0.6
   resolution: "crelt@npm:1.0.6"
   checksum: 10c0/e0fb76dff50c5eb47f2ea9b786c17f9425c66276025adee80876bdbf4a84ab72e899e56d3928431ab0cb057a105ef704df80fe5726ef0f7b1658f815521bdf09
+  languageName: node
+  linkType: hard
+
+"cross-fetch@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "cross-fetch@npm:4.0.0"
+  dependencies:
+    node-fetch: "npm:^2.6.12"
+  checksum: 10c0/386727dc4c6b044746086aced959ff21101abb85c43df5e1d151547ccb6f338f86dec3f28b9dbddfa8ff5b9ec8662ed2263ad4607a93b2dc354fb7fe3bbb898a
   languageName: node
   linkType: hard
 
@@ -5078,6 +5147,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob@npm:^10.4.1":
+  version: 10.4.5
+  resolution: "glob@npm:10.4.5"
+  dependencies:
+    foreground-child: "npm:^3.1.0"
+    jackspeak: "npm:^3.1.2"
+    minimatch: "npm:^9.0.4"
+    minipass: "npm:^7.1.2"
+    package-json-from-dist: "npm:^1.0.0"
+    path-scurry: "npm:^1.11.1"
+  bin:
+    glob: dist/esm/bin.mjs
+  checksum: 10c0/19a9759ea77b8e3ca0a43c2f07ecddc2ad46216b786bb8f993c445aee80d345925a21e5280c7b7c6c59e860a0154b84e4b2b60321fea92cd3c56b4a7489f160e
+  languageName: node
+  linkType: hard
+
 "glob@npm:^7.1.3":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
@@ -5267,6 +5352,13 @@ __metadata:
   dependencies:
     whatwg-encoding: "npm:^3.1.1"
   checksum: 10c0/523398055dc61ac9b34718a719cb4aa691e4166f29187e211e1607de63dc25ac7af52ca7c9aead0c4b3c0415ffecb17326396e1202e2e86ff4bca4c0ee4c6140
+  languageName: node
+  linkType: hard
+
+"html-escaper@npm:^2.0.0":
+  version: 2.0.2
+  resolution: "html-escaper@npm:2.0.2"
+  checksum: 10c0/208e8a12de1a6569edbb14544f4567e6ce8ecc30b9394fcaa4e7bb1e60c12a7c9a1ed27e31290817157e8626f3a4f29e76c8747030822eb84a6abb15c255f0a0
   languageName: node
   linkType: hard
 
@@ -5742,6 +5834,45 @@ __metadata:
   languageName: node
   linkType: hard
 
+"istanbul-lib-coverage@npm:^3.0.0, istanbul-lib-coverage@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "istanbul-lib-coverage@npm:3.2.2"
+  checksum: 10c0/6c7ff2106769e5f592ded1fb418f9f73b4411fd5a084387a5410538332b6567cd1763ff6b6cadca9b9eb2c443cce2f7ea7d7f1b8d315f9ce58539793b1e0922b
+  languageName: node
+  linkType: hard
+
+"istanbul-lib-report@npm:^3.0.0, istanbul-lib-report@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "istanbul-lib-report@npm:3.0.1"
+  dependencies:
+    istanbul-lib-coverage: "npm:^3.0.0"
+    make-dir: "npm:^4.0.0"
+    supports-color: "npm:^7.1.0"
+  checksum: 10c0/84323afb14392de8b6a5714bd7e9af845cfbd56cfe71ed276cda2f5f1201aea673c7111901227ee33e68e4364e288d73861eb2ed48f6679d1e69a43b6d9b3ba7
+  languageName: node
+  linkType: hard
+
+"istanbul-lib-source-maps@npm:^5.0.6":
+  version: 5.0.6
+  resolution: "istanbul-lib-source-maps@npm:5.0.6"
+  dependencies:
+    "@jridgewell/trace-mapping": "npm:^0.3.23"
+    debug: "npm:^4.1.1"
+    istanbul-lib-coverage: "npm:^3.0.0"
+  checksum: 10c0/ffe75d70b303a3621ee4671554f306e0831b16f39ab7f4ab52e54d356a5d33e534d97563e318f1333a6aae1d42f91ec49c76b6cd3f3fb378addcb5c81da0255f
+  languageName: node
+  linkType: hard
+
+"istanbul-reports@npm:^3.1.7":
+  version: 3.1.7
+  resolution: "istanbul-reports@npm:3.1.7"
+  dependencies:
+    html-escaper: "npm:^2.0.0"
+    istanbul-lib-report: "npm:^3.0.0"
+  checksum: 10c0/a379fadf9cf8dc5dfe25568115721d4a7eb82fbd50b005a6672aff9c6989b20cc9312d7865814e0859cd8df58cbf664482e1d3604be0afde1f7fc3ccc1394a51
+  languageName: node
+  linkType: hard
+
 "iterator.prototype@npm:^1.1.2":
   version: 1.1.2
   resolution: "iterator.prototype@npm:1.1.2"
@@ -6173,6 +6304,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"magicast@npm:^0.3.4":
+  version: 0.3.4
+  resolution: "magicast@npm:0.3.4"
+  dependencies:
+    "@babel/parser": "npm:^7.24.4"
+    "@babel/types": "npm:^7.24.0"
+    source-map-js: "npm:^1.2.0"
+  checksum: 10c0/7ebaaac397b13c31ca05e6d9649296751d76749b945d10a0800107872119fbdf267acdb604571d25e38ec6fd7ab3568a951b6e76eaef1caba9eaa11778fd9783
+  languageName: node
+  linkType: hard
+
 "make-cancellable-promise@npm:^1.3.1":
   version: 1.3.2
   resolution: "make-cancellable-promise@npm:1.3.2"
@@ -6186,6 +6328,15 @@ __metadata:
   dependencies:
     semver: "npm:^6.0.0"
   checksum: 10c0/56aaafefc49c2dfef02c5c95f9b196c4eb6988040cf2c712185c7fe5c99b4091591a7fc4d4eafaaefa70ff763a26f6ab8c3ff60b9e75ea19876f49b18667ecaa
+  languageName: node
+  linkType: hard
+
+"make-dir@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "make-dir@npm:4.0.0"
+  dependencies:
+    semver: "npm:^7.5.3"
+  checksum: 10c0/69b98a6c0b8e5c4fe9acb61608a9fbcfca1756d910f51e5dbe7a9e5cfb74fca9b8a0c8a0ffdf1294a740826c1ab4871d5bf3f62f72a3049e5eac6541ddffed68
   languageName: node
   linkType: hard
 
@@ -6654,7 +6805,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.7":
+"node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.12, node-fetch@npm:^2.6.7":
   version: 2.7.0
   resolution: "node-fetch@npm:2.7.0"
   dependencies:
@@ -8719,6 +8870,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"test-exclude@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "test-exclude@npm:7.0.1"
+  dependencies:
+    "@istanbuljs/schema": "npm:^0.1.2"
+    glob: "npm:^10.4.1"
+    minimatch: "npm:^9.0.4"
+  checksum: 10c0/6d67b9af4336a2e12b26a68c83308c7863534c65f27ed4ff7068a56f5a58f7ac703e8fc80f698a19bb154fd8f705cdf7ec347d9512b2c522c737269507e7b263
+  languageName: node
+  linkType: hard
+
 "text-table@npm:^0.2.0":
   version: 0.2.0
   resolution: "text-table@npm:0.2.0"
@@ -9201,6 +9363,17 @@ __metadata:
   bin:
     vite: bin/vite.js
   checksum: 10c0/604a1c8698bcf09d6889533c552f20137c80cb5027e9e7ddf6215d51e3df763414f8712168c22b3c8c16383aff9447094c05f21d7cca3c115874ff9d12e1538e
+  languageName: node
+  linkType: hard
+
+"vitest-fetch-mock@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "vitest-fetch-mock@npm:0.3.0"
+  dependencies:
+    cross-fetch: "npm:^4.0.0"
+  peerDependencies:
+    vitest: ">=2.0.0"
+  checksum: 10c0/794a3ba957d419ff862139872c9ef55f0add1937003157ce734f11f294c5733bee1874c57fd00b7d49b8a1ef68ea4abe7e2d22573be3dd72bd90829046729aef
   languageName: node
   linkType: hard
 

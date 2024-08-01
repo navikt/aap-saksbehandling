@@ -1,3 +1,5 @@
+'use server';
+
 import { isLocal } from 'lib/utils/environment';
 import { requestAzureOboToken, validateToken } from '@navikt/oasis';
 import { getAccessTokenOrRedirectToLogin, logError } from '@navikt/aap-felles-utils';
@@ -56,7 +58,7 @@ export const fetchPdf = async (url: string, scope: string): Promise<Blob | undef
   }
 };
 
-const fetchWithRetry = async <ResponseBody>(
+export const fetchWithRetry = async <ResponseBody>(
   url: string,
   method: string,
   oboToken: string,
@@ -78,19 +80,14 @@ const fetchWithRetry = async <ResponseBody>(
     next: { revalidate: 0 },
   });
 
-  // Mulige feilmeldinger:
-  // 500
-  // 404
+  // Mulige statuskoder:
+  // 200
   // 204
-  console.log('status', { status: response.status, url });
+  // 404
+  // 500
 
   if (response.status === 204) {
     return undefined as ResponseBody;
-  }
-
-  const contentType = response.headers.get('content-type');
-  if (contentType && contentType.includes('text')) {
-    return (await response.text()) as ResponseBody;
   }
 
   if (!response.ok) {
@@ -107,6 +104,11 @@ const fetchWithRetry = async <ResponseBody>(
       `Kall mot ${url} feilet med statuskode ${response.status}, prøver på nytt. Antall forsøk igjen: ${retries}`
     );
     return await fetchWithRetry(url, method, oboToken, retries - 1, requestBody);
+  }
+
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.includes('text')) {
+    return (await response.text()) as ResponseBody;
   }
 
   return await response.json();

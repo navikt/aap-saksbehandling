@@ -15,10 +15,10 @@
   "prettier": "@navikt/aap-felles-prettier",
   "dependencies": {
     "@grafana/faro-web-sdk": "^1.8.2",
-    "@navikt/aap-felles-css": "^1.5.2",
-    "@navikt/aap-felles-react": "^1.5.2",
-    "@navikt/aap-felles-utils": "^1.5.2",
-    "@navikt/aap-felles-utils-client": "^1.5.2",
+    "@navikt/aap-felles-css": "^1.5.3",
+    "@navikt/aap-felles-react": "^1.5.3",
+    "@navikt/aap-felles-utils": "^1.5.3",
+    "@navikt/aap-felles-utils-client": "^1.5.3",
     "@navikt/aksel-icons": "6.13.0",
     "@navikt/ds-css": "6.13.0",
     "@navikt/ds-react": "6.13.0",
@@ -51,8 +51,8 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@navikt/aap-felles-prettier": "^1.5.2",
-    "@navikt/eslint-config-aap": "^1.5.2",
+    "@navikt/aap-felles-prettier": "^1.5.3",
+    "@navikt/eslint-config-aap": "^1.5.3",
     "@sanity/types": "^3.52.4",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.4.8",
@@ -65,6 +65,7 @@
     "@typescript-eslint/eslint-plugin": "^7.17.0",
     "@typescript-eslint/parser": "^7.17.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "@vitest/coverage-v8": "^2.0.5",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.5",
     "eslint-config-standard": "^17.1.0",
@@ -84,7 +85,8 @@
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
     "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^2.0.4"
+    "vitest": "^2.0.4",
+    "vitest-fetch-mock": "^0.3.0"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --cache --fix",
