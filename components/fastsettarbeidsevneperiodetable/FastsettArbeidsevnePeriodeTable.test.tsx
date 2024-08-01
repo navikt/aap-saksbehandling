@@ -27,7 +27,7 @@ describe('fastsettArbeidsevnePeriodeTable', () => {
   const user = userEvent.setup();
 
   it('Skal ha knapp for å legge til ny periode', async () => {
-    const knapp = screen.getByRole('button', { name: /legg til ny preiode/i });
+    const knapp = screen.getByRole('button', { name: /legg til ny periode/i });
     expect(knapp).toBeVisible();
   });
 

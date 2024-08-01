@@ -23,13 +23,13 @@ describe('FastsettArbeidsevne', () => {
 
   it('Skal ha en tabell som viser perioder', async () => {
     await åpneVilkårskort();
-    const tabell = screen.getByRole('heading', { name: /regisrerte perioder med arbeidsevne/i });
+    const tabell = screen.getByRole('heading', { name: /registrerte perioder med arbeidsevne/i });
     expect(tabell).toBeVisible();
   });
 
   it('Skal ha et form som åpner seg når man trykker på knappen "legg til periode"', async () => {
     await åpneVilkårskort();
-    const knapp = screen.getByRole('button', { name: /legg til ny preiode/i });
+    const knapp = screen.getByRole('button', { name: /legg til ny periode/i });
     await user.click(knapp);
 
     const formHeading = screen.getByRole('heading', {

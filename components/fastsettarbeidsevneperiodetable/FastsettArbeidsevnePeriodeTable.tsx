@@ -14,7 +14,7 @@ export const FastsettArbeidsevnePeriodeTable = ({ perioder, onClick, visLeggTilP
   return (
     <div className={styles.tabell}>
       <Heading size={'small'} level={'4'}>
-        Regisrerte perioder med arbeidsevne
+        Registrerte perioder med arbeidsevne
       </Heading>
       <Table>
         <Table.Header>
@@ -33,7 +33,7 @@ export const FastsettArbeidsevnePeriodeTable = ({ perioder, onClick, visLeggTilP
       </Table>
       {visLeggTilPeriodeKnapp && (
         <Button variant={'tertiary'} size={'small'} icon={<PlusIcon />} onClick={onClick}>
-          Legg til ny preiode
+          Legg til ny periode
         </Button>
       )}
     </div>
