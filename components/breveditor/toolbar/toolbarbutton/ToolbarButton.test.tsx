@@ -1,7 +1,7 @@
 import { describe, test, expect, vi } from 'vitest';
 import { ToolbarButton } from 'components/breveditor/toolbar/toolbarbutton/ToolbarButton';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 
 describe('ToolbarButton', () => {
   const user = userEvent.setup();

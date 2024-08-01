@@ -5,7 +5,7 @@ declare global {
   var _metrics: AppMetrics;
 }
 
-export class AppMetrics {
+class AppMetrics {
   constructor() {
     logInfo('Initializing metrics client');
     collectDefaultMetrics();
@@ -32,4 +32,5 @@ export class AppMetrics {
 
 global._metrics = global._metrics || new AppMetrics();
 
+// eslint-disable-next-line import/no-unused-modules
 export default global._metrics;

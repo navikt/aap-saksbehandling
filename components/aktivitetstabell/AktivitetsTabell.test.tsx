@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { AktivitetsTabell } from 'components/aktivitetstabell/AktivitetsTabell';
 import { Aktivitetsmeldinger } from 'lib/types/types';
 
-export const defaultAktiviteter: Aktivitetsmeldinger = {
+const defaultAktiviteter: Aktivitetsmeldinger = {
   hammere: [
     {
       type: 'IKKE_MØTT_TIL_MØTE',

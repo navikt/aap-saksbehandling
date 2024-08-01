@@ -15,10 +15,10 @@
   "prettier": "@navikt/aap-felles-prettier",
   "dependencies": {
     "@grafana/faro-web-sdk": "^1.8.2",
-    "@navikt/aap-felles-css": "^1.5.1",
-    "@navikt/aap-felles-react": "^1.5.1",
-    "@navikt/aap-felles-utils": "^1.5.1",
-    "@navikt/aap-felles-utils-client": "^1.5.1",
+    "@navikt/aap-felles-css": "^1.5.2",
+    "@navikt/aap-felles-react": "^1.5.2",
+    "@navikt/aap-felles-utils": "^1.5.2",
+    "@navikt/aap-felles-utils-client": "^1.5.2",
     "@navikt/aksel-icons": "6.13.0",
     "@navikt/ds-css": "6.13.0",
     "@navikt/ds-react": "6.13.0",
@@ -51,8 +51,8 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@navikt/aap-felles-prettier": "^1.5.1",
-    "@navikt/eslint-config-aap": "^1.5.1",
+    "@navikt/aap-felles-prettier": "^1.5.2",
+    "@navikt/eslint-config-aap": "^1.5.2",
     "@sanity/types": "^3.52.4",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.4.8",
@@ -68,6 +68,7 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.5",
     "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jest": "^28.6.0",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-n": "^16.6.2",

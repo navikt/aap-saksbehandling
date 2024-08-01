@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { SoningsgrunnlagResponse } from '../../../../lib/types/types';
 
 const user = userEvent.setup();

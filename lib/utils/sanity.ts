@@ -11,7 +11,7 @@ export interface PortableText {
   level?: number;
 }
 
-export interface PortableTextChild {
+interface PortableTextChild {
   _type: PortableTextLeaf;
   _key: string;
   text: string;
@@ -26,14 +26,14 @@ interface Innhold {
   niva?: Nivå;
 }
 
-export interface StandardTekst extends Innhold {
+interface StandardTekst extends Innhold {
   innhold: PortableText[];
   kanRedigeres: boolean;
   hjelpetekst?: PortableText[];
   _type: 'standardtekst';
 }
 
-export interface Systeminnhold extends Innhold {
+interface Systeminnhold extends Innhold {
   _type: 'systeminnhold';
   systemNokkel: string;
 }

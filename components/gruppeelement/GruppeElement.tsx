@@ -40,7 +40,7 @@ export const GruppeElement = ({ navn, nummer, erFullført, aktivtSteg, kanNavige
   );
 };
 
-export function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
+function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
   switch (steg) {
     case 'MEDLEMSKAP':
       return 'Medlemskap';

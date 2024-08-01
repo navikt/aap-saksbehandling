@@ -4,7 +4,7 @@ import { Checkbox, Table } from '@navikt/ds-react';
 import { AktivitetDto } from 'lib/types/types';
 import { grunnOptions } from 'components/aktivitetsmelding/AktivitetsMelding';
 
-export interface Props {
+interface Props {
   aktivitet: AktivitetDto;
 }
 

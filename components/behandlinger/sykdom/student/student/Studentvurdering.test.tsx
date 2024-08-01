@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { Studentvurdering } from 'components/behandlinger/sykdom/student/student/Studentvurdering';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { addDays } from 'date-fns';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 

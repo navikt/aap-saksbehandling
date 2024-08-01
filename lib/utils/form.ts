@@ -62,14 +62,6 @@ export const JaEllerNeiOptions: ValuePair[] = [
   { label: 'Nei', value: JaEllerNei.Nei },
 ];
 
-export const getValueFromBooleanUndefinedNull = (value?: boolean | null) => {
-  if (value === undefined || value === null) {
-    return undefined;
-  }
-
-  return value ? 'true' : 'false';
-};
-
 export const getJaNeiEllerUndefined = (value?: boolean | null) => {
   if (value === undefined || value === null) {
     return undefined;

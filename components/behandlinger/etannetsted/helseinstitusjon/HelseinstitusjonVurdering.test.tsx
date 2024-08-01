@@ -1,7 +1,7 @@
 import { describe, it, test, beforeEach, expect } from 'vitest';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjonsvurdering';
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { HelseinstitusjonGrunnlagResponse } from 'lib/types/types';
 
 const user = userEvent.setup();

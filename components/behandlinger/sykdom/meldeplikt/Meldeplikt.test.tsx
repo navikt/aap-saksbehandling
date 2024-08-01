@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 
 describe('Meldeplikt', () => {
   const user = userEvent.setup();

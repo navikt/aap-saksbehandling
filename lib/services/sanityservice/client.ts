@@ -1,7 +1,7 @@
 import { createClient } from '@sanity/client/stega';
 
-export const STUDIO_ORIGIN = 'http://localhost:3333';
-export const STEGA_ENABLED = true;
+const STUDIO_ORIGIN = 'http://localhost:3333';
+const STEGA_ENABLED = true;
 
 export const client = createClient({
   projectId: '948n95rd',

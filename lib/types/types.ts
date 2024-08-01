@@ -1,6 +1,4 @@
 import { components } from './schema';
-// Verdityper
-export type Periode = components['schemas']['no.nav.aap.verdityper.Periode'];
 
 // Grunnlag
 export type DokumentInfo = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.adapters.Dokument'];
@@ -30,7 +28,6 @@ export type HelseinstitusjonGrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonGrunnlagResponse'];
 export type TilkjentYtelsePeriode =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.flate.TilkjentYtelsePeriode'];
-export type Tilkjent = components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.Tilkjent'];
 
 export type FatteVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.FatteVedtakGrunnlagDto'];

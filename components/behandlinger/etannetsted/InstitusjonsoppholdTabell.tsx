@@ -2,7 +2,7 @@ import { BodyShort, Label, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from '../../../lib/utils/date';
 
 // mock-type
-export type InstitusjonsoppholdTypeMock = {
+type InstitusjonsoppholdTypeMock = {
   institusjonstype: string;
   oppholdstype: string;
   status: string;

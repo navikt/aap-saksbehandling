@@ -1,3 +1,20 @@
 {
-  "extends": ["@navikt/eslint-config-aap", "next/core-web-vitals"]
+  "extends": ["@navikt/eslint-config-aap", "next/core-web-vitals"],
+  "rules": {
+    "import/no-unused-modules": [
+      1,
+      {
+        "unusedExports": true,
+        "ignoreExports": [
+          "**/*/route.ts",
+          "**/*/page.tsx",
+          "**/*/not-found.tsx",
+          "**/*/layout.tsx",
+          "**/*/error.tsx",
+          "instrumentation.ts",
+          "lib/types/schema.d.ts"
+        ]
+      }
+    ]
+  }
 }

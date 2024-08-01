@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { Behovstype } from 'lib/utils/form';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import { FatteVedtakGrunnlag } from 'lib/types/types';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 
 const grunnlag: FatteVedtakGrunnlag = {
   vurderinger: [

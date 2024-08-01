@@ -1,13 +1,12 @@
 import { isLocal } from 'lib/utils/environment';
 import { requestAzureOboToken, validateToken } from '@navikt/oasis';
-import { getAccessTokenOrRedirectToLogin } from '@navikt/aap-felles-utils';
+import { getAccessTokenOrRedirectToLogin, logError } from '@navikt/aap-felles-utils';
 import { headers } from 'next/headers';
-import { logError } from '@navikt/aap-felles-utils';
 import { hentLocalToken } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 const NUMBER_OF_RETRIES = 3;
 
-export const getOnBefalfOfToken = async (audience: string, url: string): Promise<string> => {
+const getOnBefalfOfToken = async (audience: string, url: string): Promise<string> => {
   const token = getAccessTokenOrRedirectToLogin(headers());
   if (!token) {
     logError(`Token for ${url} er undefined`);

@@ -23,7 +23,7 @@ export const Vilkårsoppsummering = ({ behandlingResultat }: Props) => {
   );
 };
 
-export function periodeErOppfylt(periode: Vilkårsperiode): boolean {
+function periodeErOppfylt(periode: Vilkårsperiode): boolean {
   return periode.utfall === 'OPPFYLT';
 }
 
