@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@navikt/ds-react';
+import { Button, Dropdown } from '@navikt/ds-react';
 import styles from './SaksinfoBanner.module.css';
 import { SaksInformasjon } from 'lib/clientApi';
 import { SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
@@ -17,20 +17,31 @@ interface Props {
 }
 
 export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVersjon, referanse }: Props) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
 
   return (
     <div className={styles.saksinfoBanner}>
       <SaksInfo saksInfo={saksInfo} sak={sak} personInformasjon={personInformasjon} />
-      <Button variant={'secondary'} size={'small'} onClick={() => setModalIsOpen(true)}>
-        Sett behandling på vent
-      </Button>
+
+      <Dropdown>
+        <Button size={'small'} as={Dropdown.Toggle} variant={'secondary'}>
+          Saksmeny
+        </Button>
+        <Dropdown.Menu>
+          <Dropdown.Menu.GroupedList>
+            <Dropdown.Menu.GroupedList.Heading>Saksmeny</Dropdown.Menu.GroupedList.Heading>
+            <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
+              Sett behandling på vent
+            </Dropdown.Menu.GroupedList.Item>
+          </Dropdown.Menu.GroupedList>
+        </Dropdown.Menu>
+      </Dropdown>
 
       <SettBehandllingPåVentModal
         referanse={referanse}
         behandlingVersjon={behandlingVersjon}
-        isOpen={modalIsOpen}
-        onClose={() => setModalIsOpen(false)}
+        isOpen={settBehandlingPåVentmodalIsOpen}
+        onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}
       />
     </div>
   );
