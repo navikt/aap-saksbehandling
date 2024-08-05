@@ -1,8 +1,9 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { SaksInformasjon } from 'lib/clientApi';
 import { SakPersoninfo, SaksInfo } from 'lib/types/types';
 import { render, screen } from '@testing-library/react';
+
 const personInformasjon: SakPersoninfo = { navn: 'Peder Ås', fnr: '12345678910' };
 const saksinfo: SaksInformasjon = {
   søker: {
@@ -48,5 +49,21 @@ describe('SaksinfoBanner', () => {
       />
     );
     expect(screen.getByText('12345678910')).toBeVisible();
+  });
+
+  it('skal ha en knapp for å åpne saksmeny', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        saksInfo={saksinfo}
+        sak={sak}
+        referanse={'123'}
+        behandlingVersjon={1}
+      />
+    );
+
+    const knapp = screen.getByRole('button', { name: /saksmeny chevron-saksmeny/i });
+
+    expect(knapp).toBeVisible();
   });
 });

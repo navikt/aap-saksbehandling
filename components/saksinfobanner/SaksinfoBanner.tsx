@@ -7,6 +7,7 @@ import { SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
 import { SaksInfo } from 'components/saksinfo/SaksInfo';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -24,7 +25,13 @@ export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVer
       <SaksInfo saksInfo={saksInfo} sak={sak} personInformasjon={personInformasjon} />
 
       <Dropdown>
-        <Button size={'small'} as={Dropdown.Toggle} variant={'secondary'}>
+        <Button
+          size={'small'}
+          as={Dropdown.Toggle}
+          variant={'secondary'}
+          icon={<ChevronDownIcon title="chevron-saksmeny" fontSize="1.5rem" />}
+          iconPosition={'right'}
+        >
           Saksmeny
         </Button>
         <Dropdown.Menu>
