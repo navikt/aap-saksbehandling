@@ -14,9 +14,9 @@ interface Props {
 export const Jobboversikt = ({ planlagteJobber, feilendeJobber, sisteKjørteJobber }: Props) => {
   return (
     <div className={'flex-column'}>
-      <RekjørFeiledeJobber />
       <PlanlagteJobber planlagteJobber={planlagteJobber} />
       <FeilendeJobber jobber={feilendeJobber} />
+      <RekjørFeiledeJobber />
       <SisteKjørteJobber sisteKjørteJobber={sisteKjørteJobber} />
     </div>
   );
