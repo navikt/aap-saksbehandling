@@ -6,7 +6,7 @@ type Props = {
   behandlingsversjon: number;
 };
 
-export const BarnMedDataFetching = async ({ behandlingsreferanse, behandlingsversjon }: Props) => {
+export const BarnetilleggVurderingMedDataFetching = async ({ behandlingsreferanse, behandlingsversjon }: Props) => {
   const grunnlag = await hentBarnetilleggGrunnlag(behandlingsreferanse);
 
   return <BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={behandlingsversjon} />;

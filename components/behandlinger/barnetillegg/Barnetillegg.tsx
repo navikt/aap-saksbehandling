@@ -1,6 +1,6 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { BarnMedDataFetching } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnMedDataFetching';
+import { BarnetilleggVurderingMedDataFetching } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurderingMedDataFetching';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
@@ -23,7 +23,7 @@ export const Barnetillegg = async ({ behandlingsreferanse }: Props) => {
         if (steg === 'BARNETILLEGG') {
           return (
             <StegSuspense key={steg}>
-              <BarnMedDataFetching
+              <BarnetilleggVurderingMedDataFetching
                 behandlingsreferanse={behandlingsreferanse}
                 behandlingsversjon={flyt.behandlingVersjon}
               />
