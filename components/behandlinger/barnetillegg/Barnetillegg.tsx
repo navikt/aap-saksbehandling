@@ -26,6 +26,7 @@ export const Barnetillegg = async ({ behandlingsreferanse }: Props) => {
               <BarnetilleggVurderingMedDataFetching
                 behandlingsreferanse={behandlingsreferanse}
                 behandlingsversjon={flyt.behandlingVersjon}
+                readOnly={flyt.visning.saksbehandlerReadOnly}
               />
             </StegSuspense>
           );

@@ -4,10 +4,15 @@ import { hentBarnetilleggGrunnlag } from 'lib/services/saksbehandlingservice/sak
 type Props = {
   behandlingsreferanse: string;
   behandlingsversjon: number;
+  readOnly: boolean;
 };
 
-export const BarnetilleggVurderingMedDataFetching = async ({ behandlingsreferanse, behandlingsversjon }: Props) => {
+export const BarnetilleggVurderingMedDataFetching = async ({
+  behandlingsreferanse,
+  behandlingsversjon,
+  readOnly,
+}: Props) => {
   const grunnlag = await hentBarnetilleggGrunnlag(behandlingsreferanse);
 
-  return <BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={behandlingsversjon} />;
+  return <BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={behandlingsversjon} readOnly={readOnly} />;
 };

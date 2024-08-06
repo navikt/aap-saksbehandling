@@ -14,25 +14,29 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
-type Props = {
+interface Props {
   behandlingsversjon: number;
   grunnlag: BarnetilleggGrunnlag;
-};
+  readOnly: boolean;
+}
 
 interface FormFields {
   dokumenterBruktIVurderingen: string[];
 }
 
-export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon }: Props) => {
+export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
-  const { form, formFields } = useConfigForm<FormFields>({
-    dokumenterBruktIVurderingen: {
-      type: 'checkbox_nested',
-      label: 'Dokumenter funnet som er relevante for vurdering av barnetillegg §11-20',
-      description: 'Les dokumentene og tilknytt eventuelle dokumenter benyttet til 11-20 vurderingen',
+  const { form, formFields } = useConfigForm<FormFields>(
+    {
+      dokumenterBruktIVurderingen: {
+        type: 'checkbox_nested',
+        label: 'Dokumenter funnet som er relevante for vurdering av barnetillegg §11-20',
+        description: 'Les dokumentene og tilknytt eventuelle dokumenter benyttet til 11-20 vurderingen',
+      },
     },
-  });
+    { readOnly: readOnly }
+  );
 
   return (
     <VilkårsKort
@@ -54,7 +58,10 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon }: Props) =
             Les dokumentene og tilknytt relevante dokumenter til vurdering om det skal beregnes barnetillegg
           </BodyShort>
         </div>
-        <ManueltBarn manueltBarn={{ navn: 'Kjell T Ringen', ident: '12345678910', rolle: 'FOSTERBARN' }} />
+        <ManueltBarn
+          manueltBarn={{ navn: 'Kjell T Ringen', ident: '12345678910', rolle: 'FOSTERBARN' }}
+          readOnly={readOnly}
+        />
 
         {grunnlag.folkeregisterbarn.length > 0 && (
           <>
@@ -64,23 +71,25 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon }: Props) =
             ))}
           </>
         )}
-        <Button
-          className={'fit-content-button'}
-          form="dokument-form"
-          onClick={() =>
-            løsBehovOgGåTilNesteSteg({
-              behandlingVersjon: behandlingsversjon,
-              behov: {
-                behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
-                vurdering: {},
-              },
-              referanse: behandlingsReferanse,
-            })
-          }
-          loading={isLoading}
-        >
-          Bekreft
-        </Button>
+        {!readOnly && (
+          <Button
+            className={'fit-content-button'}
+            form="dokument-form"
+            onClick={() =>
+              løsBehovOgGåTilNesteSteg({
+                behandlingVersjon: behandlingsversjon,
+                behov: {
+                  behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
+                  vurdering: {},
+                },
+                referanse: behandlingsReferanse,
+              })
+            }
+            loading={isLoading}
+          >
+            Bekreft
+          </Button>
+        )}
       </div>
     </VilkårsKort>
   );

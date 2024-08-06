@@ -25,45 +25,49 @@ interface FormFields {
 
 interface Props {
   manueltBarn: ManueltBarnType;
+  readOnly: boolean;
 }
 
-export const ManueltBarn = ({ manueltBarn }: Props) => {
+export const ManueltBarn = ({ manueltBarn, readOnly }: Props) => {
   const [leggTilSluttDato, setLeggTilSluttDato] = useState(false);
-  const { formFields, form } = useConfigForm<FormFields>({
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet',
-      rules: { required: 'Du må gi en begrunnelse' },
-    },
-    skalDetBeregnesBarneTillegg: {
-      type: 'radio',
-      label: 'Skal det beregnes barnetillegg for dette barnet?',
-      options: JaEllerNeiOptions,
-      rules: { required: 'Du må besvare om det skal beregnes barnetillegg for barnet' },
-    },
-    forsørgerAnsvarStartDato: {
-      type: 'date',
-      label: 'Søker har forsørgeransvar for barnet fra',
-      toDate: new Date(),
-      rules: {
-        required: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra',
-        validate: (value) => {
-          const inputDato = parseDatoFraDatePicker(value);
-          if (inputDato) {
-            return isAfter(inputDato, new Date())
-              ? 'Dato for når søker har forsørgeransvar fra kan ikke være frem i tid'
-              : true;
-          }
-          return 'Dato for når søker har forsørgeransvar fra er ikke gyldig';
+  const { formFields, form } = useConfigForm<FormFields>(
+    {
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet',
+        rules: { required: 'Du må gi en begrunnelse' },
+      },
+      skalDetBeregnesBarneTillegg: {
+        type: 'radio',
+        label: 'Skal det beregnes barnetillegg for dette barnet?',
+        options: JaEllerNeiOptions,
+        rules: { required: 'Du må besvare om det skal beregnes barnetillegg for barnet' },
+      },
+      forsørgerAnsvarStartDato: {
+        type: 'date',
+        label: 'Søker har forsørgeransvar for barnet fra',
+        toDate: new Date(),
+        rules: {
+          required: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra',
+          validate: (value) => {
+            const inputDato = parseDatoFraDatePicker(value);
+            if (inputDato) {
+              return isAfter(inputDato, new Date())
+                ? 'Dato for når søker har forsørgeransvar fra kan ikke være frem i tid'
+                : true;
+            }
+            return 'Dato for når søker har forsørgeransvar fra er ikke gyldig';
+          },
         },
       },
+      forsørgerAnsvarSluttDato: {
+        type: 'date',
+        label: 'Sluttdato for forsørgeransvaret',
+        rules: { required: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra' },
+      },
     },
-    forsørgerAnsvarSluttDato: {
-      type: 'date',
-      label: 'Sluttdato for forsørgeransvaret',
-      rules: { required: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra' },
-    },
-  });
+    { readOnly: readOnly }
+  );
 
   return (
     <ExpansionCard aria-label={'manuelt-barn'} size={'small'} defaultOpen={true} className={styles.barn}>
@@ -113,9 +117,11 @@ export const ManueltBarn = ({ manueltBarn }: Props) => {
                 )}
               </div>
             )}
-            <Button className={'fit-content-button'} variant={'secondary'} size={'medium'}>
-              Lagre vurdering
-            </Button>
+            {!readOnly && (
+              <Button className={'fit-content-button'} variant={'secondary'} size={'medium'}>
+                Lagre vurdering
+              </Button>
+            )}
           </form>
         </div>
       </ExpansionCard.Content>

@@ -15,38 +15,38 @@ describe('manuelleBarn', () => {
   const user = userEvent.setup();
 
   it('skal ha en heading med navn og ident', () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     const heading = screen.getByRole('heading', { name: 'Kjell T Ringen - 12345678910' });
     expect(heading).toBeVisible();
   });
 
   it('skal ha en tekst under heading som forteller hvilken rolle barnet har', () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     const rolle = screen.getByText('Fosterbarn');
     expect(rolle).toBeVisible();
   });
 
   it('skal ha en vilkårsveiledning med korrekt heading', () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     const heading = screen.getByText('Slik vurderes vilkåret');
     expect(heading).toBeVisible();
   });
 
   it('skal ha innhold i vilkårsveiledningen', () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     const tekst = screen.getByText('Her kommer det en tekst om hvordan vilkåret skal vurderes');
     expect(tekst).toBeVisible();
   });
 
   it('skal ha en lagre vurdering knapp', () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
 
     const lagreKnapp = screen.getByRole('button', { name: 'Lagre vurdering' });
     expect(lagreKnapp).toBeVisible();
   });
 
   it('skal ha et begrunnelsesfelt', () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     const felt = screen.getByRole('textbox', {
       name: 'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet',
     });
@@ -54,7 +54,7 @@ describe('manuelleBarn', () => {
   });
 
   it('skal gi en feilmelding dersom begrunnelsesfelt ikke er besvart', async () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
 
     const lagreKnapp = screen.getByRole('button', { name: 'Lagre vurdering' });
 
@@ -64,13 +64,13 @@ describe('manuelleBarn', () => {
   });
 
   it('skal ha et felt hvor det besvares om det skal beregnes barnetillegg for barnet', () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     const felt = screen.getByRole('group', { name: 'Skal det beregnes barnetillegg for dette barnet?' });
     expect(felt).toBeVisible();
   });
 
   it('skal gi en feilmelding dersom feltet om det skal beregnes barnetillegg ikke er besvart', async () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
 
     const lagreKnapp = screen.getByRole('button', { name: 'Lagre vurdering' });
 
@@ -80,7 +80,7 @@ describe('manuelleBarn', () => {
   });
 
   it('skal ha et felt for å sette datoen søkeren har forsørgeransvar for barnet fra dersom det har blitt besvart ja på spørsmålet om det skal beregnes barnetillegg', async () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
 
     const forsørgerAnsvarFelt = screen.queryByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
     expect(forsørgerAnsvarFelt).not.toBeInTheDocument();
@@ -92,7 +92,7 @@ describe('manuelleBarn', () => {
   });
 
   it('skal ha vise feilmelding dersom feltet for datoen søkeren har forsørgeransvar for barnet fra ikke er besvart', async () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
 
     const forsørgeransvarFelt = screen.queryByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
     expect(forsørgeransvarFelt).not.toBeInTheDocument();
@@ -106,7 +106,7 @@ describe('manuelleBarn', () => {
   });
 
   it('skal ha en knapp for å kunne sette en sluttdato for forsørgeransvaret', async () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
 
     const leggTilSluttDatoKnapp = screen.getByRole('button', { name: 'Legg til sluttdato' });
@@ -114,7 +114,7 @@ describe('manuelleBarn', () => {
   });
 
   it('skal vise felt for sluttdato for forsørgeransvare dersom man trykker på knappen legg til sluttdato', async () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
 
     expect(screen.queryByRole('textbox', { name: /Sluttdato for forsørgeransvaret/i })).not.toBeInTheDocument();
@@ -127,7 +127,7 @@ describe('manuelleBarn', () => {
   });
 
   it('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
     const imorgen = addDays(new Date(), 1);
@@ -141,7 +141,7 @@ describe('manuelleBarn', () => {
   });
 
   it('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
-    render(<ManueltBarn manueltBarn={manueltBarn} />);
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
 
@@ -151,6 +151,18 @@ describe('manuelleBarn', () => {
     await user.click(lagreKnapp);
     const feilmelding = screen.getByText('Dato for når søker har forsørgeransvar fra er ikke gyldig');
     expect(feilmelding).toBeVisible();
+  });
+
+  it('skal vise knapp for å fullføre steget dersom readonly er satt til false', () => {
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
+    const knapp = screen.getByRole('button', { name: 'Lagre vurdering' });
+    expect(knapp).toBeVisible();
+  });
+
+  it('skal ikke vise knapp for å fullføre steget dersom readonly er satt til true', () => {
+    render(<ManueltBarn manueltBarn={manueltBarn} readOnly={true} />);
+    const knapp = screen.queryByRole('button', { name: 'Lagre vurdering' });
+    expect(knapp).not.toBeInTheDocument();
   });
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
