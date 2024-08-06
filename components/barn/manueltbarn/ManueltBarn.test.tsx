@@ -153,13 +153,13 @@ describe('manuelleBarn', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it('skal vise knapp for å fullføre steget dersom readonly er satt til false', () => {
+  it('skal vise knapp for å fullføre vurdering dersom readonly er satt til false', () => {
     render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     const knapp = screen.getByRole('button', { name: 'Lagre vurdering' });
     expect(knapp).toBeVisible();
   });
 
-  it('skal ikke vise knapp for å fullføre steget dersom readonly er satt til true', () => {
+  it('skal ikke vise knapp for å fullføre vurdering dersom readonly er satt til true', () => {
     render(<ManueltBarn manueltBarn={manueltBarn} readOnly={true} />);
     const knapp = screen.queryByRole('button', { name: 'Lagre vurdering' });
     expect(knapp).not.toBeInTheDocument();
