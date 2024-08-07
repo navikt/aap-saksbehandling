@@ -1,9 +1,9 @@
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBeregningsGrunnlag, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { FastsettBeregningMedDataFeching } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregningMedDataFeching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { VisBeregningMedDataFetching } from 'components/behandlinger/grunnlag/visberegning/VisBeregningMedDataFetching';
+import { VisBeregning } from 'components/behandlinger/grunnlag/visberegning/VisBeregning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -11,6 +11,7 @@ interface Props {
 
 export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
+  const grunnlag = await hentBeregningsGrunnlag(behandlingsReferanse);
 
   const stegSomSkalVises = getStegSomSkalVises('GRUNNLAG', flyt);
 
@@ -40,9 +41,8 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           );
         }
       })}
-      <StegSuspense>
-        <VisBeregningMedDataFetching behandlingsReferanse={behandlingsReferanse} />
-      </StegSuspense>
+
+      {grunnlag && <VisBeregning grunnlag={grunnlag} />}
     </GruppeSteg>
   );
 };
