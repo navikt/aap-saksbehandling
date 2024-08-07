@@ -32,6 +32,7 @@ export const OpprettSakBarn = ({ form }: Props) => {
                   }
                 />
                 <Button
+                  type="button"
                   variant={'tertiary'}
                   size={'small'}
                   icon={<TrashIcon />}
