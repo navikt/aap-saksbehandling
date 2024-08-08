@@ -83,6 +83,18 @@ export type FlytProsesseringStatus =
 export type BeregningsGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.BeregningDTO'];
 
+export type Grunnlag1119 =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.Grunnlag11_19DTO'];
+
+export type UføreGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.GrunnlagUføreDTO'];
+
+export type YrkesskadeGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.GrunnlagYrkesskadeDTO'];
+
+export type YrkesskadeUføreGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.GrunnlagYrkesskadeUføreDTO'];
+
 export type SettPåVent = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.SettPåVentRequest'];
 export type SettPåVentÅrsaker =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.SettPåVentRequest']['grunn'];
