@@ -148,7 +148,6 @@ describe('Soningsvurdering', () => {
     const arbeidUtenforFengselSpærsmål = screen.getByRole('group', { name: 'Har søkerarbeid utenfor anstalten?' });
     await user.click(within(arbeidUtenforFengselSpærsmål).getByText('Ja'));
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-    screen.logTestingPlaygroundURL();
     expect(screen.getByText('Dato for første arbeidsdag må registreres')).toBeVisible();
   });
 
