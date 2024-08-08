@@ -17,7 +17,7 @@ import {
   jaNeiEllerUndefinedToNullableBoolean,
 } from 'lib/utils/form';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
-import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
+import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
 import { HelseinstitusjonGrunnlagResponse } from 'lib/types/types';
 
 type Props = {

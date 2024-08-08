@@ -3,21 +3,21 @@
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { PadlockLockedIcon } from '@navikt/aksel-icons';
 import { Alert } from '@navikt/ds-react';
-import { Form } from '../../../form/Form';
+import { Form } from 'components/form/Form';
 import { FormEvent } from 'react';
 import { useConfigForm, FormField } from '@navikt/aap-felles-react';
-import { useLøsBehovOgGåTilNesteSteg } from '../../../../hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import {
   Behovstype,
   getJaNeiEllerUndefined,
   JaEllerNei,
   JaEllerNeiOptions,
   jaNeiEllerUndefinedToNullableBoolean,
-} from '../../../../lib/utils/form';
-import { DokumentTabell } from '../../../dokumenttabell/DokumentTabell';
-import { TilknyttedeDokumenter } from '../../../tilknyttededokumenter/TilknyttedeDokumenter';
-import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
-import { SoningsgrunnlagResponse } from '../../../../lib/types/types';
+} from 'lib/utils/form';
+import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
+import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
+import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
+import { SoningsgrunnlagResponse } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
@@ -58,15 +58,15 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
         type: 'textarea',
         defaultValue: soningsvurdering?.begrunnelse ?? undefined,
         label: 'Skriv en beskrivelse av hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel',
-        rules: { required: 'En begrunnelse for soning utenfor fengsel må oppgis' },
+        rules: { required: 'Du må begrunne hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel' },
       },
 
       arbeidUtenforAnstalt: {
         type: 'radio',
         defaultValue: getJaNeiEllerUndefined(soningsvurdering?.arbeidUtenforAnstalt),
-        label: 'Har søkerarbeid utenfor anstalten?',
+        label: 'Har søker arbeid utenfor institusjonen?',
         options: JaEllerNeiOptions,
-        rules: { required: 'Spørsmål må besvares' },
+        rules: { required: 'Du må svare på om søker har arbeid utenfor institusjonen' },
       },
       foersteArbeidsdag: {
         type: 'date',
@@ -77,8 +77,8 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
       begrunnelseForArbeidUtenforAnstalt: {
         type: 'textarea',
         defaultValue: soningsvurdering?.begrunnelse ?? undefined,
-        label: 'Skriv en beskrivelse av hvorfor det er vurdert at søker har arbeid utenforanstalt?',
-        rules: { required: 'Beskrivelse må fylles ut' },
+        label: 'Skriv en beskrivelse av hvorfor det er vurdert at søker har arbeid utenfor institusjonen',
+        rules: { required: 'Du må begrunne hvorfor det er vurdert at søker har arbeid utenfor institusjonen' },
       },
     },
     { shouldUnregister: true, readOnly: readOnly }

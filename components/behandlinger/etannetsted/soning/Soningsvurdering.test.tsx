@@ -2,7 +2,7 @@ import { describe, test, expect, beforeEach } from 'vitest';
 import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { SoningsgrunnlagResponse } from '../../../../lib/types/types';
+import { SoningsgrunnlagResponse } from 'lib/types/types';
 
 const user = userEvent.setup();
 
@@ -68,74 +68,76 @@ describe('Soningsvurdering', () => {
     expect(screen.queryByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' })).not.toBeInTheDocument();
   });
 
-  test('Spørsmål om soning i eller utenfor anstalt må være besvart', async () => {
+  test('viser feilmelding dersom man ikke har svart på om søker soner straff i fengsel', async () => {
     await user.click(screen.getByText('Bekreft'));
 
     expect(screen.getByText('Du må oppgi om søker soner straff i eller utenfor fengsel')).toBeVisible();
   });
 
-  test('Dersom straff sones utenfor fengsel skal begrunnelsestekstfelt vises', async () => {
+  test('viser begrunnelsesfelt når straff sones utenfor fengsel', async () => {
     const straffUtenforFengselSpærsmål = screen.getByRole('group', {
       name: 'Gjennomfører søker straff utenfor fengsel?',
     });
-    await user.click(within(straffUtenforFengselSpærsmål).getByText('Ja'));
+    await user.click(within(straffUtenforFengselSpærsmål).getByRole('radio', { name: 'Ja' }));
 
     expect(
       screen.getByText('Skriv en beskrivelse av hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel')
     ).toBeVisible();
   });
 
-  test('Dersom straff sones utenfor fengsel må begrunnelsestekstfelt fylles ut', async () => {
+  test('viser feilmelding dersom begrunnelse for vurderingen av soning utenfor fengsel ikke er besvart', async () => {
     const straffUtenforFengselSpærsmål = screen.getByRole('group', {
       name: 'Gjennomfører søker straff utenfor fengsel?',
     });
     await user.click(within(straffUtenforFengselSpærsmål).getByText('Ja'));
     await user.click(screen.getByText('Bekreft'));
 
-    expect(screen.getByText('En begrunnelse for soning utenfor fengsel må oppgis')).toBeVisible();
-  });
-
-  test('Dersom straff sones i fengsel skal valg for arbeid utenfor anstalt vises', async () => {
-    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
-      name: 'Gjennomfører søker straff utenfor fengsel?',
-    });
-    await user.click(within(straffUtenforFengselSpærsmål).getByText('Nei'));
-
-    expect(screen.getByText('Har søkerarbeid utenfor anstalten?')).toBeVisible();
-  });
-
-  test('Spørsmål om arbeid utenfor anstalt må besvares', async () => {
-    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
-      name: 'Gjennomfører søker straff utenfor fengsel?',
-    });
-    await user.click(within(straffUtenforFengselSpærsmål).getByText('Nei'));
-    await user.click(screen.getByText('Bekreft'));
-
-    expect(screen.getByText('Spørsmål må besvares')).toBeVisible();
-  });
-
-  test('Dersom søker jobber utenfor anstalt skals begrunnelse-tekstfelt vises', async () => {
-    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
-      name: 'Gjennomfører søker straff utenfor fengsel?',
-    });
-    await user.click(within(straffUtenforFengselSpærsmål).getByText('Nei'));
-
-    const arbeidUtenforFengselSpærsmål = screen.getByRole('group', { name: 'Har søkerarbeid utenfor anstalten?' });
-    await user.click(within(arbeidUtenforFengselSpærsmål).getByText('Ja'));
-
     expect(
-      screen.getByText('Skriv en beskrivelse av hvorfor det er vurdert at søker har arbeid utenforanstalt?')
+      screen.getByText('Du må begrunne hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel')
     ).toBeVisible();
   });
 
-  test('dersom søker jobber utenfor anstalt må dato for første arbeidsdag registreres', async () => {
+  test('viser valg for om søker har arbeid utenfor institusjonen når straff gjennomføres i fengsel', async () => {
     const straffUtenforFengselSpærsmål = screen.getByRole('group', {
       name: 'Gjennomfører søker straff utenfor fengsel?',
     });
-    await user.click(within(straffUtenforFengselSpærsmål).getByText('Nei'));
+    await user.click(within(straffUtenforFengselSpærsmål).getByRole('radio', { name: 'Nei' }));
 
-    const arbeidUtenforFengselSpærsmål = screen.getByRole('group', { name: 'Har søkerarbeid utenfor anstalten?' });
-    await user.click(within(arbeidUtenforFengselSpærsmål).getByText('Ja'));
+    expect(screen.getByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' })).toBeVisible();
+  });
+
+  test('Spørsmål om arbeid utenfor institusjon må besvares', async () => {
+    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
+      name: 'Gjennomfører søker straff utenfor fengsel?',
+    });
+    await user.click(within(straffUtenforFengselSpærsmål).getByRole('radio', { name: 'Nei' }));
+    await user.click(screen.getByText('Bekreft'));
+
+    expect(screen.getByText('Du må svare på om søker har arbeid utenfor institusjonen')).toBeVisible();
+  });
+
+  test('viser begrunnelsesfelt når søker arbeider utenfor institusjonen', async () => {
+    const straffUtenforFengselSpørsmål = screen.getByRole('group', {
+      name: 'Gjennomfører søker straff utenfor fengsel?',
+    });
+    await user.click(within(straffUtenforFengselSpørsmål).getByRole('radio', { name: 'Nei' }));
+
+    const arbeidUtenforFengselSpærsmål = screen.getByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' });
+    await user.click(within(arbeidUtenforFengselSpærsmål).getByRole('radio', { name: 'Ja' }));
+
+    expect(
+      screen.getByText('Skriv en beskrivelse av hvorfor det er vurdert at søker har arbeid utenfor institusjonen')
+    ).toBeVisible();
+  });
+
+  test('dersom søker jobber utenfor institusjon må dato for første arbeidsdag registreres', async () => {
+    const straffUtenforFengselSpørsmål = screen.getByRole('group', {
+      name: 'Gjennomfører søker straff utenfor fengsel?',
+    });
+    await user.click(within(straffUtenforFengselSpørsmål).getByRole('radio', { name: 'Nei' }));
+
+    const arbeidUtenforFengselSpærsmål = screen.getByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' });
+    await user.click(within(arbeidUtenforFengselSpærsmål).getByRole('radio', { name: 'Ja' }));
     expect(screen.getByRole('textbox', { name: 'Dato for første arbeidsdag' })).toBeVisible();
   });
 
@@ -143,25 +145,27 @@ describe('Soningsvurdering', () => {
     const straffUtenforFengselSpærsmål = screen.getByRole('group', {
       name: 'Gjennomfører søker straff utenfor fengsel?',
     });
-    await user.click(within(straffUtenforFengselSpærsmål).getByText('Nei'));
+    await user.click(within(straffUtenforFengselSpærsmål).getByRole('radio', { name: 'Nei' }));
 
-    const arbeidUtenforFengselSpærsmål = screen.getByRole('group', { name: 'Har søkerarbeid utenfor anstalten?' });
-    await user.click(within(arbeidUtenforFengselSpærsmål).getByText('Ja'));
+    const arbeidUtenforFengselSpørsmål = screen.getByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' });
+    await user.click(within(arbeidUtenforFengselSpørsmål).getByRole('radio', { name: 'Ja' }));
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
     expect(screen.getByText('Dato for første arbeidsdag må registreres')).toBeVisible();
   });
 
-  test('Beskrivesle av arbeid utenfor anstalt må oppgis', async () => {
-    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
+  test('gir feilmelding dersom man ikke begrunner hvorfor det er vurdert at søker har arbeid utenfor institusjonen', async () => {
+    const straffUtenforFengselSpørsmål = screen.getByRole('group', {
       name: 'Gjennomfører søker straff utenfor fengsel?',
     });
-    await user.click(within(straffUtenforFengselSpærsmål).getByText('Nei'));
+    await user.click(within(straffUtenforFengselSpørsmål).getByRole('radio', { name: 'Nei' }));
 
-    const arbeidUtenforFengselSpærsmål = screen.getByRole('group', { name: 'Har søkerarbeid utenfor anstalten?' });
-    await user.click(within(arbeidUtenforFengselSpærsmål).getByText('Ja'));
+    const arbeidUtenforFengselSpørsmål = screen.getByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' });
+    await user.click(within(arbeidUtenforFengselSpørsmål).getByRole('radio', { name: 'Ja' }));
 
-    await user.click(screen.getByText('Bekreft'));
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
-    expect(screen.getByText('Beskrivelse må fylles ut')).toBeVisible();
+    expect(
+      screen.getByText('Du må begrunne hvorfor det er vurdert at søker har arbeid utenfor institusjonen')
+    ).toBeVisible();
   });
 });

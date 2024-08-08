@@ -1,5 +1,5 @@
 import { BodyShort, Label, Table } from '@navikt/ds-react';
-import { formaterDatoForFrontend } from '../../../lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { utledOppholdsstatus } from 'components/behandlinger/etannetsted/etAnnetStedUtil';
 
 // mock-type

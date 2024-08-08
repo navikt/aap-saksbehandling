@@ -1,5 +1,5 @@
 import { Soningsvurdering } from './Soningsvurdering';
-import { hentSoningsvurdering } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentSoningsvurdering } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
   behandlingsreferanse: string;
