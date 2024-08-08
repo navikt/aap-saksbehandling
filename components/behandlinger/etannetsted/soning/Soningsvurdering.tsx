@@ -31,6 +31,7 @@ interface FormFields {
   soningUtenforFengsel: JaEllerNei;
   begrunnelseForSoningUtenforAnstalt: string;
   arbeidUtenforAnstalt: JaEllerNei;
+  foersteArbeidsdag: Date;
   begrunnelseForArbeidUtenforAnstalt: string;
 }
 
@@ -67,7 +68,12 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
         options: JaEllerNeiOptions,
         rules: { required: 'Spørsmål må besvares' },
       },
-
+      foersteArbeidsdag: {
+        type: 'date',
+        defaultValue: undefined, // TODO må inn i DTO
+        label: 'Dato for første arbeidsdag',
+        rules: { required: 'Dato for første arbeidsdag må registreres' },
+      },
       begrunnelseForArbeidUtenforAnstalt: {
         type: 'textarea',
         defaultValue: soningsvurdering?.begrunnelseForArbeidUtenforAnstalt ?? undefined,
@@ -127,7 +133,10 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
           <FormField form={form} formField={formFields.arbeidUtenforAnstalt} />
         )}
         {form.watch(formFields.arbeidUtenforAnstalt.name) === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.begrunnelseForArbeidUtenforAnstalt} />
+          <>
+            <FormField form={form} formField={formFields.foersteArbeidsdag} />
+            <FormField form={form} formField={formFields.begrunnelseForArbeidUtenforAnstalt} />
+          </>
         )}
       </Form>
     </VilkårsKort>

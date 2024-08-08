@@ -60,6 +60,14 @@ describe('Soningsvurdering', () => {
     });
   });
 
+  test('viser kun spørsmål om søker gjennomfører straff utenfor fengsel initielt', () => {
+    expect(screen.getByRole('group', { name: 'Gjennomfører søker straff utenfor fengsel?' })).toBeVisible();
+    expect(
+      screen.queryByText('Skriv en beskrivelse av hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel')
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' })).not.toBeInTheDocument();
+  });
+
   test('Spørsmål om soning i eller utenfor anstalt må være besvart', async () => {
     await user.click(screen.getByText('Bekreft'));
 
@@ -118,6 +126,30 @@ describe('Soningsvurdering', () => {
     expect(
       screen.getByText('Skriv en beskrivelse av hvorfor det er vurdert at søker har arbeid utenforanstalt?')
     ).toBeVisible();
+  });
+
+  test('dersom søker jobber utenfor anstalt må dato for første arbeidsdag registreres', async () => {
+    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
+      name: 'Gjennomfører søker straff utenfor fengsel?',
+    });
+    await user.click(within(straffUtenforFengselSpærsmål).getByText('Nei'));
+
+    const arbeidUtenforFengselSpærsmål = screen.getByRole('group', { name: 'Har søkerarbeid utenfor anstalten?' });
+    await user.click(within(arbeidUtenforFengselSpærsmål).getByText('Ja'));
+    expect(screen.getByRole('textbox', { name: 'Dato for første arbeidsdag' })).toBeVisible();
+  });
+
+  test('gir feilmelding dersom dato for første arbeidsdag ikke er besvart', async () => {
+    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
+      name: 'Gjennomfører søker straff utenfor fengsel?',
+    });
+    await user.click(within(straffUtenforFengselSpærsmål).getByText('Nei'));
+
+    const arbeidUtenforFengselSpærsmål = screen.getByRole('group', { name: 'Har søkerarbeid utenfor anstalten?' });
+    await user.click(within(arbeidUtenforFengselSpærsmål).getByText('Ja'));
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+    screen.logTestingPlaygroundURL();
+    expect(screen.getByText('Dato for første arbeidsdag må registreres')).toBeVisible();
   });
 
   test('Beskrivesle av arbeid utenfor anstalt må oppgis', async () => {
