@@ -45,26 +45,28 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
         defaultValue: grunnlag?.helseinstitusjonGrunnlag?.begrunnelse,
         rules: { required: 'Du må begrunne vurderingen din' },
       },
+      forsoergerEktefelle: {
+        type: 'radio',
+        label: 'Forsørger søker ektefelle eller tilsvarende?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.helseinstitusjonGrunnlag?.forsoergerEktefelle),
+        options: JaEllerNeiOptions,
+        rules: { required: 'Du må svare på om søker forsørger ektefelle eller tilsvarende' },
+      },
+      harFasteUtgifter: {
+        type: 'radio',
+        label: 'Har søker faste utgifter nødvendig for å beholde bolig og andre eiendeler?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.helseinstitusjonGrunnlag?.harFasteUtgifter),
+        options: JaEllerNeiOptions,
+        rules: {
+          required: 'Du må svare på om søker har faste utgifter nødvendig for å beholde bolig og andre eiendeler',
+        },
+      },
       faarFriKostOgLosji: {
         type: 'radio',
         label: 'Får søker fri kost og losji?',
         defaultValue: getJaNeiEllerUndefined(grunnlag?.helseinstitusjonGrunnlag?.faarFriKostOgLosji),
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om søker får fri kost og losji' },
-      },
-      forsoergerEktefelle: {
-        type: 'radio',
-        label: 'Forsørger søker ektefelle?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.helseinstitusjonGrunnlag?.forsoergerEktefelle),
-        options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om søker forsørger ektefelle' },
-      },
-      harFasteUtgifter: {
-        type: 'radio',
-        label: 'Har søker faste utgifter nødvendig for å beholde bolig og annet?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.helseinstitusjonGrunnlag?.harFasteUtgifter),
-        options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om søker har faste utgifter nødvendig for å beholde bolig og annet' },
       },
       dokumenterBruktIVurderingen: {
         type: 'checkbox_nested',
@@ -94,6 +96,9 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
     })(event);
   };
 
+  const visFaarFriKostOgLosji =
+    form.watch('harFasteUtgifter') === JaEllerNei.Nei && form.watch('forsoergerEktefelle') === JaEllerNei.Nei;
+
   return (
     <VilkårsKort heading={'Helseinstitusjon § 11-25'} steg={'DU_ER_ET_ANNET_STED'} icon={<HospitalIcon />}>
       <Form
@@ -118,13 +123,9 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
           instutisjonsopphold={grunnlag.helseinstitusjonOpphold}
         />
         <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.faarFriKostOgLosji} />
-        {form.watch('faarFriKostOgLosji') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.forsoergerEktefelle} />
-        )}
-        {form.watch('faarFriKostOgLosji') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.harFasteUtgifter} />
-        )}
+        <FormField form={form} formField={formFields.forsoergerEktefelle} />
+        <FormField form={form} formField={formFields.harFasteUtgifter} />
+        {visFaarFriKostOgLosji && <FormField form={form} formField={formFields.faarFriKostOgLosji} />}
       </Form>
     </VilkårsKort>
   );

@@ -79,43 +79,74 @@ describe('Helseinstitusjonsvurdering', () => {
     ).toBeVisible();
   });
 
-  test('spør om søker får fri kost og losji', () => {
+  test('spør om søker forsørger ektefelle', () => {
+    expect(screen.getByRole('group', { name: 'Forsørger søker ektefelle eller tilsvarende?' })).toBeVisible();
+  });
+
+  test('spør om søker har faste utgifter for å beholde bolig eller andre eiendeler', () => {
+    expect(
+      screen.getByRole('group', { name: 'Har søker faste utgifter nødvendig for å beholde bolig og andre eiendeler?' })
+    ).toBeVisible();
+  });
+
+  test('viser ikke spørsmål om søker får fri kost og losji initielt', () => {
+    expect(screen.queryByRole('group', { name: 'Får søker fri kost og losji?' })).not.toBeInTheDocument();
+  });
+
+  test('viser spørsmål om søker får fri kost og losji når man svarer nei på om søker forsørger ektefelle og har faste utgifter', async () => {
+    const forsoergerEktefelleGruppe = screen.getByRole('group', {
+      name: 'Forsørger søker ektefelle eller tilsvarende?',
+    });
+    const harFasteUtgifterGruppe = screen.getByRole('group', {
+      name: 'Har søker faste utgifter nødvendig for å beholde bolig og andre eiendeler?',
+    });
+
+    await user.click(within(forsoergerEktefelleGruppe).getByRole('radio', { name: 'Nei' }));
+    await user.click(within(harFasteUtgifterGruppe).getByRole('radio', { name: 'Nei' }));
+
     expect(screen.getByRole('group', { name: 'Får søker fri kost og losji?' })).toBeVisible();
   });
 
-  test('spørsmål om søker forsørger ektefelle vises ikke initielt', () => {
-    expect(screen.queryByRole('group', { name: 'Forsørger søker ektefelle?' })).not.toBeInTheDocument();
+  test('viser ikke spørsmål om søker får fri kost og losji hvis man svarer ja på at søker forsørger ektefelle', async () => {
+    const forsoergerEktefelleGruppe = screen.getByRole('group', {
+      name: 'Forsørger søker ektefelle eller tilsvarende?',
+    });
+    const harFasteUtgifterGruppe = screen.getByRole('group', {
+      name: 'Har søker faste utgifter nødvendig for å beholde bolig og andre eiendeler?',
+    });
+
+    await user.click(within(forsoergerEktefelleGruppe).getByRole('radio', { name: 'Ja' }));
+    await user.click(within(harFasteUtgifterGruppe).getByRole('radio', { name: 'Nei' }));
+
+    expect(screen.queryByRole('group', { name: 'Får søker fri kost og losji?' })).not.toBeInTheDocument();
   });
 
-  test('viser ikke spørsmål om søker forsørger ektefelle når man svarer nei på at søker får fri kost og losji', async () => {
-    await user.click(screen.getByRole('radio', { name: 'Nei' }));
-    expect(screen.queryByRole('group', { name: 'Forsørger søker ektefelle?' })).not.toBeInTheDocument();
+  test('viser ikke spørsmål om søker får fri kost og losji hvis man svarer ja på at har faste utgifter', async () => {
+    const forsoergerEktefelleGruppe = screen.getByRole('group', {
+      name: 'Forsørger søker ektefelle eller tilsvarende?',
+    });
+    const harFasteUtgifterGruppe = screen.getByRole('group', {
+      name: 'Har søker faste utgifter nødvendig for å beholde bolig og andre eiendeler?',
+    });
+
+    await user.click(within(forsoergerEktefelleGruppe).getByRole('radio', { name: 'Nei' }));
+    await user.click(within(harFasteUtgifterGruppe).getByRole('radio', { name: 'Ja' }));
+
+    expect(screen.queryByRole('group', { name: 'Får søker fri kost og losji?' })).not.toBeInTheDocument();
   });
 
-  test('viser spørsmål om søker forsørger ektefelle når man svarer ja på at søker får fri kost og losji', async () => {
-    await user.click(screen.getByRole('radio', { name: 'Ja' }));
+  test('viser ikke spørsmål om søker får fri kost og losji hvis man svarer ja på at har faste utgifter og at de forsørger ektefelle', async () => {
+    const forsoergerEktefelleGruppe = screen.getByRole('group', {
+      name: 'Forsørger søker ektefelle eller tilsvarende?',
+    });
+    const harFasteUtgifterGruppe = screen.getByRole('group', {
+      name: 'Har søker faste utgifter nødvendig for å beholde bolig og andre eiendeler?',
+    });
 
-    expect(screen.getByRole('group', { name: 'Forsørger søker ektefelle?' })).toBeVisible();
-  });
+    await user.click(within(forsoergerEktefelleGruppe).getByRole('radio', { name: 'Ja' }));
+    await user.click(within(harFasteUtgifterGruppe).getByRole('radio', { name: 'Ja' }));
 
-  test('spørsmål om søker har faste utgifter vises ikke initielt', () => {
-    expect(
-      screen.queryByRole('group', { name: 'Har søker faste utgifter nødvendig for å beholde bolig og annet?' })
-    ).not.toBeInTheDocument();
-  });
-
-  test('viser ikke spørsmål om søker har faste utgifter når man svarer nei på at søker får fri kost og losji', async () => {
-    await user.click(screen.getByRole('radio', { name: 'Nei' }));
-    expect(
-      screen.queryByRole('group', { name: 'Har søker faste utgifter nødvendig for å beholde bolig og annet?' })
-    ).not.toBeInTheDocument();
-  });
-
-  test('viser spørsmål om søker har faste utgifer når man svarer ja på at søker får fri kost og losji', async () => {
-    await user.click(screen.getByRole('radio', { name: 'Ja' }));
-    expect(
-      screen.queryByRole('group', { name: 'Har søker faste utgifter nødvendig for å beholde bolig og annet?' })
-    ).toBeVisible();
+    expect(screen.queryByRole('group', { name: 'Får søker fri kost og losji?' })).not.toBeInTheDocument();
   });
 
   describe('valiering', () => {
@@ -124,22 +155,30 @@ describe('Helseinstitusjonsvurdering', () => {
       expect(screen.getByText('Du må begrunne vurderingen din')).toBeVisible();
     });
 
-    test('viser feilmelding hvis man ikke har svart på om søker får fri kost og losji', async () => {
+    test('viser feilmelding hvis man ikke har svart på om søker forsørger ektefelle', async () => {
       await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-      expect(screen.getByText('Du må svare på om søker får fri kost og losji')).toBeVisible();
-    });
-    test('når søker får fri kost og losji vises det en feilmelding hvis man ikke har svart på om søker forsørger ektefelle', async () => {
-      await user.click(screen.getByRole('radio', { name: 'Ja' }));
-      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-      expect(screen.getByText('Du må svare på om søker forsørger ektefelle')).toBeVisible();
+      expect(screen.getByText('Du må svare på om søker forsørger ektefelle eller tilsvarende')).toBeVisible();
     });
 
-    test('når søker får fri kost og losji vises det en feilmelding hvis man ikke har svart på om søker har faste utgifter', async () => {
-      await user.click(screen.getByRole('radio', { name: 'Ja' }));
+    test('viser feilmelding hvis man ikke har svart på om søker har faste utgifter', async () => {
       await user.click(screen.getByRole('button', { name: 'Bekreft' }));
       expect(
-        screen.getByText('Du må svare på om søker har faste utgifter nødvendig for å beholde bolig og annet')
+        screen.getByText('Du må svare på om søker har faste utgifter nødvendig for å beholde bolig og andre eiendeler')
       ).toBeVisible();
+    });
+
+    test('viser feilmelding dersom spørsmålet om fri kost og losji vises men ikke er besvart', async () => {
+      const forsoergerEktefelleGruppe = screen.getByRole('group', {
+        name: 'Forsørger søker ektefelle eller tilsvarende?',
+      });
+      const harFasteUtgifterGruppe = screen.getByRole('group', {
+        name: 'Har søker faste utgifter nødvendig for å beholde bolig og andre eiendeler?',
+      });
+
+      await user.click(within(forsoergerEktefelleGruppe).getByRole('radio', { name: 'Nei' }));
+      await user.click(within(harFasteUtgifterGruppe).getByRole('radio', { name: 'Nei' }));
+      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+      expect(screen.getByText('Du må svare på om søker får fri kost og losji')).toBeVisible();
     });
   });
 });
