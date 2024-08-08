@@ -1,9 +1,4 @@
-.stegMeny {
-  display: flex;
-  flex-direction: row;
-  gap: var(--a-spacing-4);
-  margin: 0;
-  padding-block: var(--a-spacing-1);
-  align-items: flex-start;
+.stegMenyWrapper {
+  padding-top: var(--a-spacing-2);
   border-bottom: 1px solid var(--a-border-default);
 }
