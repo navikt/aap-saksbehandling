@@ -56,7 +56,7 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
 
       begrunnelseForSoningUtenforAnstalt: {
         type: 'textarea',
-        defaultValue: soningsvurdering?.begrunnelseForSoningUtenforAnstalt ?? undefined,
+        defaultValue: soningsvurdering?.begrunnelse ?? undefined,
         label: 'Skriv en beskrivelse av hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel',
         rules: { required: 'En begrunnelse for soning utenfor fengsel må oppgis' },
       },
@@ -76,7 +76,7 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
       },
       begrunnelseForArbeidUtenforAnstalt: {
         type: 'textarea',
-        defaultValue: soningsvurdering?.begrunnelseForArbeidUtenforAnstalt ?? undefined,
+        defaultValue: soningsvurdering?.begrunnelse ?? undefined,
         label: 'Skriv en beskrivelse av hvorfor det er vurdert at søker har arbeid utenforanstalt?',
         rules: { required: 'Beskrivelse må fylles ut' },
       },
@@ -93,9 +93,8 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
           soningsvurdering: {
             dokumenterBruktIVurdering: [],
             soningUtenforFengsel: data.soningUtenforFengsel === JaEllerNei.Ja,
-            begrunnelseForSoningUtenforAnstalt: data.begrunnelseForSoningUtenforAnstalt,
+            begrunnelse: data.begrunnelseForSoningUtenforAnstalt || data.begrunnelseForArbeidUtenforAnstalt,
             arbeidUtenforAnstalt: jaNeiEllerUndefinedToNullableBoolean(data.arbeidUtenforAnstalt),
-            begrunnelseForArbeidUtenforAnstalt: data.begrunnelseForArbeidUtenforAnstalt,
           },
         },
         referanse: behandlingsreferanse,

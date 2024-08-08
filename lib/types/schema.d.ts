@@ -1645,7 +1645,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-08-08T10:11:15.764042
+       * @example 2024-08-08T16:32:10.600588353
        */
       tidspunkt: string;
     };
@@ -1970,8 +1970,6 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsvurderingDto': {
       arbeidUtenforAnstalt?: boolean | null;
       begrunnelse?: string | null;
-      begrunnelseForArbeidUtenforAnstalt?: string | null;
-      begrunnelseForSoningUtenforAnstalt?: string | null;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
       soningUtenforFengsel: boolean;
     };
@@ -2251,7 +2249,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-08-08T10:11:15.764042
+       * @example 2024-08-08T16:32:10.600588353
        */
       opprettet: string;
       /** Format: uuid */
@@ -2277,7 +2275,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-08-08T10:11:15.764042
+       * @example 2024-08-08T16:32:10.600588353
        */
       tidsstempel: string;
     };
@@ -2423,7 +2421,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-08-08T10:11:15.764042
+       * @example 2024-08-08T16:32:10.600588353
        */
       opprettet: string;
       /** Format: uuid */
@@ -2458,7 +2456,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-08-08T10:11:15.764042
+       * @example 2024-08-08T16:32:10.600588353
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.verdityper.Periode'];
@@ -2469,7 +2467,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-08-08T10:11:15.764042
+       * @example 2024-08-08T16:32:10.600588353
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.verdityper.Periode'];
@@ -2490,7 +2488,7 @@ export interface components {
       navn: string;
       /**
        * Format: date-time
-       * @example 2024-08-08T10:11:15.764042
+       * @example 2024-08-08T16:32:10.600588353
        */
       'planlagtKj\u00F8retidspunkt': string;
       /** @enum {string} */
