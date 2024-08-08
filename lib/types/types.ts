@@ -26,6 +26,8 @@ export type SoningsgrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsgrunnlagResponse'];
 export type HelseinstitusjonGrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonGrunnlagResponse'];
+export type InstitusjonsoppholdResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.InstitusjonsoppholdDto'];
 export type TilkjentYtelsePeriode =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.flate.TilkjentYtelsePeriode'];
 
