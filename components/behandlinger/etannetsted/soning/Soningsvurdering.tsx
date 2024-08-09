@@ -95,7 +95,7 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
             dokumenterBruktIVurdering: [],
             soningUtenforFengsel: data.soningUtenforFengsel === JaEllerNei.Ja,
             begrunnelse: data.begrunnelseForSoningUtenforAnstalt || data.begrunnelseForArbeidUtenforAnstalt,
-            førsteArbeidsdag: formaterDatoForBackend(data.førsteArbeidsdag),
+            førsteArbeidsdag: data.førsteArbeidsdag && formaterDatoForBackend(data.førsteArbeidsdag),
             arbeidUtenforAnstalt: jaNeiEllerUndefinedToNullableBoolean(data.arbeidUtenforAnstalt),
           },
         },
