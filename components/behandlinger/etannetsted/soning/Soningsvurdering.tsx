@@ -18,6 +18,7 @@ import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
 import { SoningsgrunnlagResponse } from 'lib/types/types';
+import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
   behandlingsreferanse: string;
@@ -31,7 +32,7 @@ interface FormFields {
   soningUtenforFengsel: JaEllerNei;
   begrunnelseForSoningUtenforAnstalt: string;
   arbeidUtenforAnstalt: JaEllerNei;
-  foersteArbeidsdag: Date;
+  førsteArbeidsdag: Date;
   begrunnelseForArbeidUtenforAnstalt: string;
 }
 
@@ -68,7 +69,7 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om søker har arbeid utenfor institusjonen' },
       },
-      foersteArbeidsdag: {
+      førsteArbeidsdag: {
         type: 'date',
         defaultValue: undefined, // TODO må inn i DTO
         label: 'Dato for første arbeidsdag',
@@ -94,6 +95,7 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
             dokumenterBruktIVurdering: [],
             soningUtenforFengsel: data.soningUtenforFengsel === JaEllerNei.Ja,
             begrunnelse: data.begrunnelseForSoningUtenforAnstalt || data.begrunnelseForArbeidUtenforAnstalt,
+            førsteArbeidsdag: formaterDatoForBackend(data.førsteArbeidsdag),
             arbeidUtenforAnstalt: jaNeiEllerUndefinedToNullableBoolean(data.arbeidUtenforAnstalt),
           },
         },
@@ -133,7 +135,7 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
         )}
         {form.watch(formFields.arbeidUtenforAnstalt.name) === JaEllerNei.Ja && (
           <>
-            <FormField form={form} formField={formFields.foersteArbeidsdag} />
+            <FormField form={form} formField={formFields.førsteArbeidsdag} />
             <FormField form={form} formField={formFields.begrunnelseForArbeidUtenforAnstalt} />
           </>
         )}
