@@ -1,20 +1,11 @@
 import { BodyShort, Label, Table } from '@navikt/ds-react';
+import { InstitusjonsoppholdResponse } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-
-// mock-type
-type InstitusjonsoppholdTypeMock = {
-  institusjonstype: string;
-  oppholdstype: string;
-  status: string;
-  oppholdFra: string;
-  avsluttetDato?: string | null;
-  kildeinstitusjon: string;
-};
 
 type Props = {
   label: string;
   beskrivelse: string;
-  instutisjonsopphold: InstitusjonsoppholdTypeMock[];
+  instutisjonsopphold: InstitusjonsoppholdResponse[];
 };
 
 export const InstitusjonsoppholdTabell = ({ label, beskrivelse, instutisjonsopphold }: Props) => {
