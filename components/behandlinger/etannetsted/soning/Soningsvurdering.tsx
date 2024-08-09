@@ -18,7 +18,7 @@ import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
 import { SoningsgrunnlagResponse } from 'lib/types/types';
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
 
 interface Props {
   behandlingsreferanse: string;
@@ -71,7 +71,7 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
       },
       førsteArbeidsdag: {
         type: 'date',
-        defaultValue: undefined, // TODO må inn i DTO
+        defaultValue: stringToDate(soningsvurdering?.førsteArbeidsdag),
         label: 'Dato for første arbeidsdag',
         rules: { required: 'Dato for første arbeidsdag må registreres' },
       },
