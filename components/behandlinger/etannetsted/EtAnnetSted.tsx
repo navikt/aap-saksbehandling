@@ -4,6 +4,7 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { HelseinstitusjonsvurderingMedDataFetching } from 'components/behandlinger/etannetsted/helseinstitusjon/HelseinstitusjonsvurderingMedDataFetching';
 import { SoningsvurderingMedDataFetching } from './soning/SoningsvurderingMedDataFetching';
 import { getStegSomSkalVises } from 'lib/utils/steg';
+import { Behovstype } from 'lib/utils/form';
 
 type Props = {
   behandlingsreferanse: string;
@@ -12,6 +13,19 @@ type Props = {
 export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
   const stegSomSkalVises = getStegSomSkalVises('ET_ANNET_STED', flyt);
+  const etAnnetStedGruppe = flyt.flyt.find((gruppe) => gruppe.stegGruppe === 'ET_ANNET_STED');
+  const avklaringsBehov = etAnnetStedGruppe?.steg.find((steg) => steg.avklaringsbehov);
+
+  /*
+   TODO 09.08.2024 - hacky løsning for å midlertidig kunne vise soning og opphold på helseinstitusjon
+   Må tweake på navn for å få det på en linje, for å få satt ts-ignore
+   */
+  const hinst = Behovstype.AVKLAR_HELSEINSTITUSJON;
+  const soning = Behovstype.AVKLAR_SONINGSFORRHOLD;
+  // @ts-ignore
+  const vurderHelseinstitusjon = avklaringsBehov?.avklaringsbehov.find((b) => b.definisjon.kode === hinst) != null;
+  // @ts-ignore
+  const vurderSoning = avklaringsBehov?.avklaringsbehov.find((behov) => behov.definisjon.kode === soning) != null;
 
   return (
     <GruppeSteg
@@ -21,7 +35,7 @@ export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
       behandlingVersjon={flyt.behandlingVersjon}
     >
       {stegSomSkalVises.map((steg) => {
-        if (steg === 'VURDER_HELSEINSTITUSJON') {
+        if (vurderHelseinstitusjon) {
           return (
             <StegSuspense key={steg}>
               <HelseinstitusjonsvurderingMedDataFetching
@@ -32,7 +46,7 @@ export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
             </StegSuspense>
           );
         }
-        if (steg === 'VURDER_SONING') {
+        if (vurderSoning) {
           return (
             <StegSuspense key={steg}>
               <SoningsvurderingMedDataFetching
