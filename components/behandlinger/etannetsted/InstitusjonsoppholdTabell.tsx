@@ -1,6 +1,5 @@
 import { BodyShort, Label, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { utledOppholdsstatus } from 'components/behandlinger/etannetsted/etAnnetStedUtil';
 
 // mock-type
 type InstitusjonsoppholdTypeMock = {
@@ -39,7 +38,7 @@ export const InstitusjonsoppholdTabell = ({ label, beskrivelse, instutisjonsopph
             <Table.Row key={index}>
               <Table.DataCell>{opphold.institusjonstype}</Table.DataCell>
               <Table.DataCell>{opphold.oppholdstype}</Table.DataCell>
-              <Table.DataCell>{utledOppholdsstatus(opphold)}</Table.DataCell>
+              <Table.DataCell>{opphold.status}</Table.DataCell>
               <Table.DataCell>{formaterDatoForFrontend(opphold.oppholdFra)}</Table.DataCell>
               <Table.DataCell>{opphold.avsluttetDato && formaterDatoForFrontend(opphold.avsluttetDato)}</Table.DataCell>
               <Table.DataCell>{opphold.kildeinstitusjon}</Table.DataCell>
