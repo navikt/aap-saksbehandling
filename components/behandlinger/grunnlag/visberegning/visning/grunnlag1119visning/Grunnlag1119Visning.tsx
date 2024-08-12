@@ -1,4 +1,4 @@
-import { BodyShort, Heading, Label, Table } from '@navikt/ds-react';
+import { Heading, Label, Table } from '@navikt/ds-react';
 import { Grunnlag1119 } from 'lib/types/types';
 
 import styles from 'components/behandlinger/grunnlag/visberegning/visning/grunnlag1119visning/Grunnlag1119.module.css';
@@ -33,36 +33,26 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
           tooltip={'Hvilket grunnlag som beregningen skal basere seg utfra §11-19'}
         />
 
-        <Label>Inntekt siste 3 år</Label>
-        <Table size={'small'}>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Periode</Table.HeaderCell>
-              <Table.HeaderCell>Inntekt i kr</Table.HeaderCell>
-              <Table.HeaderCell>Inntekt i G</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {Object.keys(grunnlag?.inntekter ?? {})?.map((key: string) => (
-              <Table.Row key={key}>
-                <Table.DataCell>{key}</Table.DataCell>
-                <Table.DataCell>{grunnlag.inntekter[key]}</Table.DataCell>
-                <Table.DataCell></Table.DataCell>
+        <div className={styles.grunnlagvisningfullrad}>
+          <Label>Inntekt siste 3 år</Label>
+          <Table size={'small'}>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Periode</Table.HeaderCell>
+                <Table.HeaderCell>Inntekt i kr</Table.HeaderCell>
+                <Table.HeaderCell>Inntekt i G</Table.HeaderCell>
               </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-        <div>
-          <Label size={'small'}>Inntekter?</Label>
-          <div className={styles.inntekter}>
-            {Object.keys(grunnlag.inntekter).map((key) => (
-              <div key={key}>
-                <BodyShort size={'small'}>
-                  {key} : {grunnlag.inntekter[key]}
-                </BodyShort>
-              </div>
-            ))}
-          </div>
+            </Table.Header>
+            <Table.Body>
+              {Object.keys(grunnlag?.inntekter ?? {})?.map((key: string) => (
+                <Table.Row key={key}>
+                  <Table.DataCell>{key}</Table.DataCell>
+                  <Table.DataCell>{grunnlag.inntekter[key]}</Table.DataCell>
+                  <Table.DataCell></Table.DataCell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
         </div>
       </div>
     </>
