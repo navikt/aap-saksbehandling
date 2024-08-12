@@ -18,25 +18,66 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
     <>
       <Heading size={'small'}>Grunnlag Yrkesskade</Heading>
       <div className={styles.grunnlagvisning}>
-        <LabelValuePair label={'Andel som ikke skyldes yrkesskade'} value={grunnlag.andelSomIkkeSkyldesYrkesskade} />
-        <LabelValuePair label={'Andel som skyldes yrkesskade'} value={grunnlag.andelSomSkyldesYrkesskade} />
-        <LabelValuePair label={'Andel yrkesskade?'} value={grunnlag.andelYrkesskade} />
+        <LabelValuePair
+          label={'Andel som ikke skyldes yrkesskade'}
+          value={grunnlag.andelSomIkkeSkyldesYrkesskade}
+          tooltip={'Hvor stor del av [grunnlaget] som ikke kommer fra yrkesskade'}
+        />
+        <LabelValuePair
+          label={'Andel som skyldes yrkesskade'}
+          value={grunnlag.andelSomSkyldesYrkesskade}
+          tooltip={'Hvor stor del av [grunnlaget] som kommer fra yrkesskade'}
+        />
+        <LabelValuePair label={'Andel yrkesskade?'} value={grunnlag.andelYrkesskade} tooltip={'Yrkesskadeprosent'} />
         <LabelValuePair
           label={'Antatt årlig inntekt yrkesskade tidspunktet?'}
           value={grunnlag.antattÅrligInntektYrkesskadeTidspunktet}
         />
-        <LabelValuePair label={'benyttet andel for yrkesskaden?'} value={grunnlag.benyttetAndelForYrkesskade} />
-        <LabelValuePair label={'er 6G begrenset?'} value={getJaNeiEllerUndefined(grunnlag.er6GBegrenset)} />
-        <LabelValuePair label={'er gjennomsnitt?'} value={getJaNeiEllerUndefined(grunnlag.er6GBegrenset)} />
-        <LabelValuePair label={'Grunnlag etter yrkesskade fordel'} value={grunnlag.grunnlagEtterYrkesskadeFordel} />
+        <LabelValuePair
+          label={'benyttet andel for yrkesskaden?'}
+          value={grunnlag.benyttetAndelForYrkesskade}
+          tooltip={'Yrkesskadeprosent, muligens oppjustert etter [terskelverdiForYrkesskade]'}
+        />
+        <LabelValuePair
+          label={'er 6G begrenset?'}
+          value={getJaNeiEllerUndefined(grunnlag.er6GBegrenset)}
+          tooltip={'Om inntekten i [beregningsgrunnlag] er 6G-begrenset'}
+        />
+        <LabelValuePair
+          label={'er gjennomsnitt?'}
+          value={getJaNeiEllerUndefined(grunnlag.erGjennomsnitt)}
+          tooltip={'Om inntekten i [beregningsgrunnlag] er et gjennomsnitt'}
+        />
+        <LabelValuePair
+          label={'Grunnlag etter yrkesskade fordel'}
+          value={grunnlag.grunnlagEtterYrkesskadeFordel}
+          tooltip={'Samme som [grunnlaget]. // TODO kan fjernes?'}
+        />
         <LabelValuePair
           label={'grunnlag for beregning av yrkesskade andel'}
           value={grunnlag.grunnlagForBeregningAvYrkesskadeandel}
+          tooltip={'Delen av [grunnlaget] som skyldes yrkesskade'}
         />
-        <LabelValuePair label={'grunnlaget'} value={grunnlag.grunnlaget} />
-        <LabelValuePair label={'terskelverdi for yrkesskade'} value={grunnlag.terskelverdiForYrkesskade} />
-        <LabelValuePair label={'yrkesskadetidspunkt'} value={grunnlag.yrkesskadeTidspunkt} />
-        <LabelValuePair label={'yrkesskade inntekt i G'} value={grunnlag.yrkesskadeinntektIG} />
+        <LabelValuePair
+          label={'grunnlaget'}
+          value={grunnlag.grunnlaget}
+          tooltip={'Det beregnede grunnlaget gitt yrkesskade'}
+        />
+        <LabelValuePair
+          label={'terskelverdi for yrkesskade'}
+          value={grunnlag.terskelverdiForYrkesskade}
+          tooltip={'Gjeldende terskelverdi for yrkesskade (definert i §11-22)'}
+        />
+        <LabelValuePair
+          label={'yrkesskadetidspunkt'}
+          value={grunnlag.yrkesskadeTidspunkt}
+          tooltip={'Hvilket år yrkesskaden skjedde'}
+        />
+        <LabelValuePair
+          label={'yrkesskade inntekt i G'}
+          value={grunnlag.yrkesskadeinntektIG}
+          tooltip={'Inntekt på yrkesskadetidspunktet i G'}
+        />
       </div>
       <Heading size={'small'}>grunnlag Yrkesskade (11-19) </Heading>
       <Grunnlag1119Visning grunnlag={grunnlag.beregningsgrunnlag} />

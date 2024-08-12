@@ -17,9 +17,21 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
     <>
       <Heading size={'small'}>Grunnlag 11-19</Heading>
       <div className={styles.grunnlagvisning}>
-        <LabelValuePair label={'Er 6G begrenset?'} value={getJaNeiEllerUndefined(grunnlag.er6GBegrenset)} />
-        <LabelValuePair label={'Er gjennomsnitt?'} value={getJaNeiEllerUndefined(grunnlag.erGjennomsnitt)} />
-        <LabelValuePair label={'Grunnlaget'} value={grunnlag.grunnlaget} />
+        <LabelValuePair
+          label={'Er 6G begrenset?'}
+          value={getJaNeiEllerUndefined(grunnlag.er6GBegrenset)}
+          tooltip={'Om minst ett av årene fra [inntekter] overstiger 6G'}
+        />
+        <LabelValuePair
+          label={'Er gjennomsnitt?'}
+          value={getJaNeiEllerUndefined(grunnlag.erGjennomsnitt)}
+          tooltip={'Om [grunnlaget] er et gjennomsnitt'}
+        />
+        <LabelValuePair
+          label={'Grunnlaget'}
+          value={grunnlag.grunnlaget}
+          tooltip={'Hvilket grunnlag som beregningen skal basere seg utfra §11-19'}
+        />
 
         <Label>Inntekt siste 3 år</Label>
         <Table size={'small'}>
