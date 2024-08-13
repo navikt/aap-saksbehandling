@@ -13,6 +13,10 @@
   color: var(--a-surface-danger);
 }
 
+.delvisOppfylt {
+  color: var(--a-surface-warning);
+}
+
 .vilkårsitem {
   display: flex;
   align-items: center;

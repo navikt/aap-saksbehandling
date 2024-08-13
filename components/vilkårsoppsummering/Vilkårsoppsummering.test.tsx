@@ -41,6 +41,33 @@ const behandlingResultatIkkeOppfylt: BehandlingResultat = {
   ],
 };
 
+const behandlingsresultatIkkeAllePerioderOppfylt: BehandlingResultat = {
+  vilkårene: [
+    {
+      vilkårtype: 'ALDERSVILKÅRET',
+      perioder: [
+        {
+          periode: {
+            fom: '2023-01-01',
+            tom: '2023-12-31',
+          },
+          utfall: 'OPPFYLT',
+          manuellVurdering: false,
+        },
+        {
+          periode: {
+            fom: '2024-01-01',
+            tom: '2024-12-31',
+          },
+          utfall: 'IKKE_OPPFYLT',
+          manuellVurdering: false,
+          avslagsårsak: 'BRUKER_OVER_67',
+        },
+      ],
+    },
+  ],
+};
+
 describe('Vilkårsoppsummering', () => {
   it('Skal vise korrekt navn på vilkåret', () => {
     render(<Vilkårsoppsummering behandlingResultat={behandlingResultatOppfylt} />);
@@ -55,6 +82,11 @@ describe('Vilkårsoppsummering', () => {
   it('Skal ha ikon for avslått dersom et av vilkårene ikke er oppfylt', () => {
     render(<Vilkårsoppsummering behandlingResultat={behandlingResultatIkkeOppfylt} />);
     expect(screen.getByRole('img', { name: 'vilkår-avslått' })).toBeVisible();
+  });
+
+  it('Skal ha et eget ikon dersom kun deler av perioden er oppfylt', () => {
+    render(<Vilkårsoppsummering behandlingResultat={behandlingsresultatIkkeAllePerioderOppfylt} />);
+    expect(screen.getByRole('img', { name: 'vilkår-delvis-oppfylt' })).toBeVisible();
   });
 
   it('Skal vise antall vilkår som er oppfylt', () => {

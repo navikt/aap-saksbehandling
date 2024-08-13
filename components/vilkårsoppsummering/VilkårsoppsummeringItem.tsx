@@ -1,20 +1,28 @@
 import styles from 'components/vilkårsoppsummering/Vilkårsoppsummering.module.css';
 import { Vilkår, VilkårType } from 'lib/types/types';
-import { CheckmarkCircleFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { vilkårErOppfylt } from 'components/vilkårsoppsummering/Vilkårsoppsummering';
 import { BodyShort } from '@navikt/ds-react';
 
 interface Props {
   vilkår: Vilkår;
 }
+
+const vilkarsstatus = (vilkar: Vilkår) => {
+  switch (vilkårErOppfylt(vilkar)) {
+    case 'JA':
+      return <CheckmarkCircleFillIcon title="vilkår-oppfylt" className={styles.oppfyltIcon} />;
+    case 'DELVIS':
+      return <ExclamationmarkTriangleFillIcon title="vilkår-delvis-oppfylt" className={styles.delvisOppfylt} />;
+    default:
+      return <XMarkOctagonFillIcon title={'vilkår-avslått'} className={styles.avslåttIcon} />;
+  }
+};
+
 export const VilkårsoppsummeringItem = ({ vilkår }: Props) => {
   return (
     <BodyShort className={styles.vilkårsitem}>
-      {vilkårErOppfylt(vilkår) ? (
-        <CheckmarkCircleFillIcon title="vilkår-oppfylt" className={styles.oppfyltIcon} />
-      ) : (
-        <XMarkOctagonFillIcon title={'vilkår-avslått'} className={styles.avslåttIcon} />
-      )}
+      {vilkarsstatus(vilkår)}
       {mapVilkårTypeTilVilkårNavn(vilkår.vilkårtype)}
     </BodyShort>
   );

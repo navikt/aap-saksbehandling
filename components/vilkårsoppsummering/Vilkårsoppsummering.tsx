@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const Vilkårsoppsummering = ({ behandlingResultat }: Props) => {
-  const antallStegSomErFullført = behandlingResultat.vilkårene.filter(vilkårErOppfylt);
+  const antallStegSomErFullført = behandlingResultat.vilkårene.filter((v) => vilkårErOppfylt(v) !== 'NEI');
 
   return (
     <>
@@ -27,6 +27,12 @@ function periodeErOppfylt(periode: Vilkårsperiode): boolean {
   return periode.utfall === 'OPPFYLT';
 }
 
-export function vilkårErOppfylt(vilkår: Vilkår): boolean {
-  return vilkår.perioder.every(periodeErOppfylt);
+export function vilkårErOppfylt(vilkår: Vilkår): 'JA' | 'NEI' | 'DELVIS' {
+  if (vilkår.perioder.every(periodeErOppfylt)) {
+    return 'JA';
+  }
+  if (vilkår.perioder.some(periodeErOppfylt)) {
+    return 'DELVIS';
+  }
+  return 'NEI';
 }
