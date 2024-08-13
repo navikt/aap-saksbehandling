@@ -1,7 +1,8 @@
 import { InntektTabell } from 'components/inntekttabell/InntektTabell';
 import { Label, Table } from '@navikt/ds-react';
-import { YrkesskadeGrunnlag } from 'components/behandlinger/grunnlag/visberegning/VisBeregning';
+
 import { formaterTilG, formaterTilNok, formaterTilProsent } from 'lib/utils/string';
+import { YrkesskadeGrunnlag } from 'lib/types/types';
 
 interface Props {
   grunnlag?: YrkesskadeGrunnlag;
@@ -34,7 +35,9 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
           <Table.Body>
             <Table.Row>
               <Table.DataCell>Anslått inntekt yrkesskade</Table.DataCell>
-              <Table.DataCell align={'right'}>{formaterTilProsent(grunnlag.yrkesskadeInntekt.prosentVekting)}</Table.DataCell>
+              <Table.DataCell align={'right'}>
+                {formaterTilProsent(grunnlag.yrkesskadeInntekt.prosentVekting)}
+              </Table.DataCell>
               <Table.DataCell align={'right'}>
                 {formaterTilNok(grunnlag.yrkesskadeInntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)}
               </Table.DataCell>
@@ -49,7 +52,9 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
             </Table.Row>
             <Table.Row>
               <Table.DataCell>Høyeste grunnlag standard beregning</Table.DataCell>
-              <Table.DataCell align={'right'}>{formaterTilProsent(grunnlag.standardBeregning.prosentVekting)}</Table.DataCell>
+              <Table.DataCell align={'right'}>
+                {formaterTilProsent(grunnlag.standardBeregning.prosentVekting)}
+              </Table.DataCell>
               <Table.DataCell></Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.inntektIG)}</Table.DataCell>
               <Table.DataCell align={'right'}>

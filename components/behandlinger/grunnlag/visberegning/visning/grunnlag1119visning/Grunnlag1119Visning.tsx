@@ -2,7 +2,7 @@ import { InntektTabell } from 'components/inntekttabell/InntektTabell';
 import { Label, Table } from '@navikt/ds-react';
 
 import styles from './Grunnlag1119.module.css';
-import { Grunnlag1119 } from 'components/behandlinger/grunnlag/visberegning/VisBeregning';
+import { Grunnlag1119 } from 'lib/types/types';
 
 interface Props {
   grunnlag?: Grunnlag1119;

@@ -1,5 +1,6 @@
 import { Label, Table } from '@navikt/ds-react';
-import { Inntekt } from 'components/behandlinger/grunnlag/visberegning/VisBeregning';
+import { Inntekt } from 'lib/types/types';
+
 import { formaterTilG, formaterTilNok } from 'lib/utils/string';
 
 interface Props {
