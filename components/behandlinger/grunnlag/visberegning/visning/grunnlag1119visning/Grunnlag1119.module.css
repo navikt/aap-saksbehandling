@@ -1,9 +1,5 @@
 .grunnlagvisning {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--a-spacing-4);
-}
-
-.grunnlagvisningfullrad {
-  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-8);
 }

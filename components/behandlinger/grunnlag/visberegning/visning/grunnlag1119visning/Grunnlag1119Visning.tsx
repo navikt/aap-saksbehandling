@@ -1,9 +1,8 @@
-import { Heading, Label, Table } from '@navikt/ds-react';
-import { Grunnlag1119 } from 'lib/types/types';
+import { InntektTabell } from 'components/inntekttabell/InntektTabell';
+import { Label, Table } from '@navikt/ds-react';
 
-import styles from 'components/behandlinger/grunnlag/visberegning/visning/grunnlag1119visning/Grunnlag1119.module.css';
-import { getJaNeiEllerUndefined } from 'lib/utils/form';
-import { LabelValuePair } from 'components/labelvaluepair/LabelValuePair';
+import styles from './Grunnlag1119.module.css';
+import { Grunnlag1119 } from 'components/behandlinger/grunnlag/visberegning/VisBeregning';
 
 interface Props {
   grunnlag?: Grunnlag1119;
@@ -11,50 +10,41 @@ interface Props {
 
 export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
   if (!grunnlag) {
-    return <div>Kunne ikke finne påkrevd grunnlag for standard</div>;
+    throw new Error('Kunne ikke finne påkrevd grunnlag for 11-19');
   }
-  return (
-    <>
-      <Heading size={'small'}>Grunnlag 11-19</Heading>
-      <div className={styles.grunnlagvisning}>
-        <LabelValuePair
-          label={'Er 6G begrenset?'}
-          value={getJaNeiEllerUndefined(grunnlag.er6GBegrenset)}
-          tooltip={'Om minst ett av årene fra [inntekter] overstiger 6G'}
-        />
-        <LabelValuePair
-          label={'Er gjennomsnitt?'}
-          value={getJaNeiEllerUndefined(grunnlag.erGjennomsnitt)}
-          tooltip={'Om [grunnlaget] er et gjennomsnitt'}
-        />
-        <LabelValuePair
-          label={'Grunnlaget'}
-          value={grunnlag.grunnlaget}
-          tooltip={'Hvilket grunnlag som beregningen skal basere seg utfra §11-19'}
-        />
 
-        <div className={styles.grunnlagvisningfullrad}>
-          <Label>Inntekt siste 3 år</Label>
-          <Table size={'small'}>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Periode</Table.HeaderCell>
-                <Table.HeaderCell>Inntekt i kr</Table.HeaderCell>
-                <Table.HeaderCell>Inntekt i G</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {Object.keys(grunnlag?.inntekter ?? {})?.map((key: string) => (
-                <Table.Row key={key}>
-                  <Table.DataCell>{key}</Table.DataCell>
-                  <Table.DataCell>{grunnlag.inntekter[key]}</Table.DataCell>
-                  <Table.DataCell></Table.DataCell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
-        </div>
+  return (
+    <div className={styles.grunnlagvisning}>
+      <InntektTabell label={'Pensjonsgivende inntekt siste 3 år'} inntekter={grunnlag.inntekter} gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år} />
+      <div className={'flex-column'}>
+        <Label size={'medium'}>Faktisk grunnlag er satt til høyeste verdi av følgende</Label>
+        <Table size={'medium'}>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
+              <Table.HeaderCell>Grunnlag</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            <Table.Row>
+              <Table.DataCell>Gjennomsnitt siste 3 år</Table.DataCell>
+              <Table.DataCell>{grunnlag.gjennomsnittligInntektSiste3år}</Table.DataCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.DataCell>Inntekt siste år</Table.DataCell>
+              <Table.DataCell>{grunnlag.inntektSisteÅr}</Table.DataCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.DataCell>
+                <b>Faktisk grunnlag</b>
+              </Table.DataCell>
+              <Table.DataCell>
+                <b>{grunnlag.grunnlag}G</b>
+              </Table.DataCell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
       </div>
-    </>
+    </div>
   );
 };

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formaterTilG, formaterTilNok, formaterTilProsent, storForbokstav } from 'lib/utils/string';
+import { formaterTilG, formaterTilProsent, storForbokstav } from 'lib/utils/string';
 
 describe('storForbokstav', () => {
   it('skal returnere en string med stor forbokstav dersom value er bare uppercase', () => {

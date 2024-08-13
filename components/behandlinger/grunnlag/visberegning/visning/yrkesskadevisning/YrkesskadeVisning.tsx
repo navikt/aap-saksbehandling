@@ -1,10 +1,7 @@
-import React from 'react';
-import { YrkesskadeGrunnlag } from 'lib/types/types';
-import { Heading } from '@navikt/ds-react';
-import styles from 'components/behandlinger/grunnlag/visberegning/visning/grunnlag1119visning/Grunnlag1119.module.css';
-import { LabelValuePair } from 'components/labelvaluepair/LabelValuePair';
-import { getJaNeiEllerUndefined } from 'lib/utils/form';
-import { Grunnlag1119Visning } from 'components/behandlinger/grunnlag/visberegning/visning/grunnlag1119visning/Grunnlag1119Visning';
+import { InntektTabell } from 'components/inntekttabell/InntektTabell';
+import { Label, Table } from '@navikt/ds-react';
+import { YrkesskadeGrunnlag } from 'components/behandlinger/grunnlag/visberegning/VisBeregning';
+import { formaterTilG, formaterTilNok, formaterTilProsent } from 'lib/utils/string';
 
 interface Props {
   grunnlag?: YrkesskadeGrunnlag;
@@ -14,73 +11,100 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
   if (!grunnlag) {
     return <div>Kunne ikke finne påkrevd grunnlag for yrkesskade</div>;
   }
+
   return (
-    <>
-      <Heading size={'small'}>Grunnlag Yrkesskade</Heading>
-      <div className={styles.grunnlagvisning}>
-        <LabelValuePair
-          label={'Andel som ikke skyldes yrkesskade'}
-          value={grunnlag.andelSomIkkeSkyldesYrkesskade}
-          tooltip={'Hvor stor del av [grunnlaget] som ikke kommer fra yrkesskade'}
-        />
-        <LabelValuePair
-          label={'Andel som skyldes yrkesskade'}
-          value={grunnlag.andelSomSkyldesYrkesskade}
-          tooltip={'Hvor stor del av [grunnlaget] som kommer fra yrkesskade'}
-        />
-        <LabelValuePair label={'Andel yrkesskade?'} value={grunnlag.andelYrkesskade} tooltip={'Yrkesskadeprosent'} />
-        <LabelValuePair
-          label={'Antatt årlig inntekt yrkesskade tidspunktet?'}
-          value={grunnlag.antattÅrligInntektYrkesskadeTidspunktet}
-        />
-        <LabelValuePair
-          label={'benyttet andel for yrkesskaden?'}
-          value={grunnlag.benyttetAndelForYrkesskade}
-          tooltip={'Yrkesskadeprosent, muligens oppjustert etter [terskelverdiForYrkesskade]'}
-        />
-        <LabelValuePair
-          label={'er 6G begrenset?'}
-          value={getJaNeiEllerUndefined(grunnlag.er6GBegrenset)}
-          tooltip={'Om inntekten i [beregningsgrunnlag] er 6G-begrenset'}
-        />
-        <LabelValuePair
-          label={'er gjennomsnitt?'}
-          value={getJaNeiEllerUndefined(grunnlag.erGjennomsnitt)}
-          tooltip={'Om inntekten i [beregningsgrunnlag] er et gjennomsnitt'}
-        />
-        <LabelValuePair
-          label={'Grunnlag etter yrkesskade fordel'}
-          value={grunnlag.grunnlagEtterYrkesskadeFordel}
-          tooltip={'Samme som [grunnlaget]. // TODO kan fjernes?'}
-        />
-        <LabelValuePair
-          label={'grunnlag for beregning av yrkesskade andel'}
-          value={grunnlag.grunnlagForBeregningAvYrkesskadeandel}
-          tooltip={'Delen av [grunnlaget] som skyldes yrkesskade'}
-        />
-        <LabelValuePair
-          label={'grunnlaget'}
-          value={grunnlag.grunnlaget}
-          tooltip={'Det beregnede grunnlaget gitt yrkesskade'}
-        />
-        <LabelValuePair
-          label={'terskelverdi for yrkesskade'}
-          value={grunnlag.terskelverdiForYrkesskade}
-          tooltip={'Gjeldende terskelverdi for yrkesskade (definert i §11-22)'}
-        />
-        <LabelValuePair
-          label={'yrkesskadetidspunkt'}
-          value={grunnlag.yrkesskadeTidspunkt}
-          tooltip={'Hvilket år yrkesskaden skjedde'}
-        />
-        <LabelValuePair
-          label={'yrkesskade inntekt i G'}
-          value={grunnlag.yrkesskadeinntektIG}
-          tooltip={'Inntekt på yrkesskadetidspunktet i G'}
-        />
+    <div className={'flex-column'}>
+      <InntektTabell
+        inntekter={grunnlag.inntekter}
+        gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
+        label={'Pensjonsgivende inntekt siste 3 år før redusert arbeidsevne'}
+      />
+      <div className={'flex-column'}>
+        <Label size={'medium'}>Faktisk grunnlag er satt til høyeste verdi av følgende</Label>
+        <Table size={'medium'}>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
+              <Table.HeaderCell align={'right'}>Prosent vekting</Table.HeaderCell>
+              <Table.HeaderCell align={'right'}>Inntekt i kr</Table.HeaderCell>
+              <Table.HeaderCell align={'right'}>Inntekt i G</Table.HeaderCell>
+              <Table.HeaderCell align={'right'}>Justert til maks 6G</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            <Table.Row>
+              <Table.DataCell>Anslått inntekt yrkesskade</Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilProsent(grunnlag.yrkesskadeInntekt.prosentVekting)}</Table.DataCell>
+              <Table.DataCell align={'right'}>
+                {formaterTilNok(grunnlag.yrkesskadeInntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)}
+              </Table.DataCell>
+              <Table.DataCell align={'right'}>
+                {formaterTilG(grunnlag.yrkesskadeInntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
+              </Table.DataCell>
+              <Table.DataCell align={'right'}>
+                {grunnlag.yrkesskadeInntekt.justertTilMaks6G
+                  ? '6 G'
+                  : formaterTilG(grunnlag.yrkesskadeInntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
+              </Table.DataCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.DataCell>Høyeste grunnlag standard beregning</Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilProsent(grunnlag.standardBeregning.prosentVekting)}</Table.DataCell>
+              <Table.DataCell></Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.inntektIG)}</Table.DataCell>
+              <Table.DataCell align={'right'}>
+                {grunnlag.standardBeregning.JustertTilMaks6G
+                  ? '6 G'
+                  : formaterTilG(grunnlag.standardBeregning.inntektIG)}
+              </Table.DataCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.DataCell>
+                <b>Yrkesskade grunnlag</b>
+              </Table.DataCell>
+              <Table.DataCell></Table.DataCell>
+              <Table.DataCell></Table.DataCell>
+              <Table.DataCell></Table.DataCell>
+              <Table.DataCell align={'right'}>
+                <b>{formaterTilG(grunnlag.yrkesskadeGrunnlag)}</b>
+              </Table.DataCell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
       </div>
-      <Heading size={'small'}>grunnlag Yrkesskade (11-19) </Heading>
-      <Grunnlag1119Visning grunnlag={grunnlag.beregningsgrunnlag} />
-    </>
+      <div className={'flex-column'}>
+        <Label size={'medium'}>Faktisk grunnlag er satt til høyeste verdi av følgende</Label>
+        <Table size={'medium'}>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
+              <Table.HeaderCell align={'right'}>Grunnlag</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            <Table.Row>
+              <Table.DataCell>Gjennomsnittlig inntekt siste 3 år</Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.gjennomsnittligInntektSiste3år)}</Table.DataCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.DataCell>Inntekt siste år</Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr)}</Table.DataCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.DataCell>Yrkesskade grunnlag</Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.yrkesskadeGrunnlag)}</Table.DataCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.DataCell>
+                <b>Faktisk grunnlag</b>
+              </Table.DataCell>
+              <Table.DataCell align={'right'}>
+                <b>{formaterTilG(grunnlag.grunnlag)}</b>
+              </Table.DataCell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      </div>
+    </div>
   );
 };
