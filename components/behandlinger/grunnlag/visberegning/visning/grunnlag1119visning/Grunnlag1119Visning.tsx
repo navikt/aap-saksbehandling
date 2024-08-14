@@ -3,7 +3,7 @@ import { Label, Table } from '@navikt/ds-react';
 
 import styles from './Grunnlag1119.module.css';
 import { Grunnlag1119 } from 'lib/types/types';
-import {formaterTilG} from "lib/utils/string";
+import { formaterTilG } from 'lib/utils/string';
 
 interface Props {
   grunnlag?: Grunnlag1119;
@@ -16,7 +16,11 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
 
   return (
     <div className={styles.grunnlagvisning}>
-      <InntektTabell label={'Pensjonsgivende inntekt siste 3 år'} inntekter={grunnlag.inntekter} gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år} />
+      <InntektTabell
+        label={'Pensjonsgivende inntekt siste 3 år'}
+        inntekter={grunnlag.inntekter}
+        gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
+      />
       <div className={'flex-column'}>
         <Label size={'medium'}>Faktisk grunnlag er satt til høyeste verdi av følgende</Label>
         <Table size={'medium'}>
@@ -28,8 +32,8 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
           </Table.Header>
           <Table.Body>
             <Table.Row>
-              <Table.DataCell>Gjennomsnitt siste 3 år</Table.DataCell>
-              <Table.DataCell align={'right'}>{grunnlag.gjennomsnittligInntektSiste3år}</Table.DataCell>
+              <Table.DataCell>Gjennomsnittlig inntekt siste 3 år</Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.gjennomsnittligInntektSiste3år)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
               <Table.DataCell>Inntekt siste år</Table.DataCell>
