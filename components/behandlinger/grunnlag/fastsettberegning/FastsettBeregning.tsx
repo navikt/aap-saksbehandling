@@ -30,7 +30,7 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
-        type: 'text',
+        type: 'textarea',
         label: 'Begrunnelse',
         defaultValue: getStringEllerUndefined(vurdering?.begrunnelse),
       },
@@ -74,9 +74,9 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
         status={status}
         visBekreftKnapp={!readOnly}
       >
-        <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
         <FormField form={form} formField={formFields.antattÅrligInntekt} />
+        <FormField form={form} formField={formFields.begrunnelse} />
       </Form>
     </VilkårsKort>
   );
