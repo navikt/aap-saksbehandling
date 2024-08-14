@@ -3,6 +3,7 @@ import { Label, Table } from '@navikt/ds-react';
 
 import styles from './Grunnlag1119.module.css';
 import { Grunnlag1119 } from 'lib/types/types';
+import {formaterTilG} from "lib/utils/string";
 
 interface Props {
   grunnlag?: Grunnlag1119;
@@ -22,23 +23,23 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
-              <Table.HeaderCell>Grunnlag</Table.HeaderCell>
+              <Table.HeaderCell align={'right'}>Grunnlag</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             <Table.Row>
               <Table.DataCell>Gjennomsnitt siste 3 år</Table.DataCell>
-              <Table.DataCell>{grunnlag.gjennomsnittligInntektSiste3år}</Table.DataCell>
+              <Table.DataCell align={'right'}>{grunnlag.gjennomsnittligInntektSiste3år}</Table.DataCell>
             </Table.Row>
             <Table.Row>
               <Table.DataCell>Inntekt siste år</Table.DataCell>
-              <Table.DataCell>{grunnlag.inntektSisteÅr}</Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr.inntektIG)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
               <Table.DataCell>
                 <b>Faktisk grunnlag</b>
               </Table.DataCell>
-              <Table.DataCell>
+              <Table.DataCell align={'right'}>
                 <b>{grunnlag.grunnlag}G</b>
               </Table.DataCell>
             </Table.Row>

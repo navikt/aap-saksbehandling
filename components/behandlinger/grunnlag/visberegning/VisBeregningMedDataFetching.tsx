@@ -1,12 +1,10 @@
-import { VisBeregning } from 'components/behandlinger/grunnlag/visberegning/VisBeregning';
-import { hentBeregningsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-
 interface Props {
   behandlingsReferanse: string;
 }
 
 export const VisBeregningMedDataFetching = async ({ behandlingsReferanse }: Props) => {
-  const grunnlag = await hentBeregningsGrunnlag(behandlingsReferanse);
+  // const grunnlag = await hentBeregningsGrunnlag(behandlingsReferanse);
+  console.log(behandlingsReferanse);
 
-  return <VisBeregning grunnlag={grunnlag} />;
+  // return <VisBeregning grunnlag={grunnlag} />;
 };

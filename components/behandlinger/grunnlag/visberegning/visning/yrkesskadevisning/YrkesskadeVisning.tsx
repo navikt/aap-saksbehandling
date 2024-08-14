@@ -93,7 +93,7 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
             </Table.Row>
             <Table.Row>
               <Table.DataCell>Inntekt siste år</Table.DataCell>
-              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr)}</Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr.inntektIG)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
               <Table.DataCell>Yrkesskade grunnlag</Table.DataCell>

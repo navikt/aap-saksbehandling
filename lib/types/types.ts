@@ -82,20 +82,20 @@ export type FlytProsessering =
 export type FlytProsesseringStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingFlytOgTilstandDto']['prosessering']['status'];
 
-export type BeregningsGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.BeregningDTO'];
+// export type BeregningsGrunnlag =
+//   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.BeregningDTO'];
 
 // export type Grunnlag1119 =
 //   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.Grunnlag11_19DTO'];
 
-export type UføreGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.GrunnlagUføreDTO'];
+// export type UføreGrunnlag =
+//   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.GrunnlagUføreDTO'];
 
 // export type YrkesskadeGrunnlag =
 //   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.GrunnlagYrkesskadeDTO'];
 
-export type YrkesskadeUføreGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.GrunnlagYrkesskadeUføreDTO'];
+// export type YrkesskadeUføreGrunnlag =
+//   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.flate.GrunnlagYrkesskadeUføreDTO'];
 
 export type SettPåVent = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.SettPåVentRequest'];
 export type SettPåVentÅrsaker =
@@ -123,42 +123,69 @@ export type SkalGjenopptaStudieStatus =
 export type IdentifisertBarn =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.IdentifiserteBarnDto'];
 
-
 export interface Inntekt {
-    år: string;
-    inntektIKroner: number;
-    inntektIG: number;
-    justertTilMaks6G: boolean;
+  år: string;
+  inntektIKroner: number; // Kroner
+  inntektIG: number; // G
+  justertTilMaks6G: number; // G
+}
+
+interface UføreInntekt extends Inntekt {
+  justertForUføreGrad: number; // Kroner
+  uføreGrad: number; // Prosent
 }
 
 interface YrkesskadeInntekt {
-    prosentVekting: number; // Tidligere andelYrkesskade, kommer i %
-    antattÅrligInntektIKronerYrkesskadeTidspunktet: number; // Kroner
-    antattÅrligInntektIGYrkesskadeTidspunktet: number; // G
-    justertTilMaks6G: boolean;
+  prosentVekting: number; // Tidligere andelYrkesskade, kommer i %
+  antattÅrligInntektIKronerYrkesskadeTidspunktet: number; // Kroner
+  antattÅrligInntektIGYrkesskadeTidspunktet: number; // G
+  justertTilMaks6G: number; // G TODO Kan hende denne ikke skal være med.
 }
 
 interface StandardBeregning {
-    prosentVekting: number; // %
-    inntektIG: number; // G
-    JustertTilMaks6G: boolean;
+  prosentVekting: number; // %
+  inntektIG: number; // G
+  JustertTilMaks6G: boolean;
 }
 
 // Grunnlag 11-19 uten yrkesskade eller uføre
 export interface Grunnlag1119 {
-    inntekter: Array<Inntekt>; // Siste 3 år med inntekter
-    gjennomsnittligInntektSiste3år: number; // Denne må komme i G
-    inntektSisteÅr: number; // inntekt siste år i G
-    grunnlag: number; // Det faktiske grunnlaget i G
+  inntekter: Array<Inntekt>; // Siste 3 år med inntekter
+  gjennomsnittligInntektSiste3år: number; // Denne må komme i G
+  inntektSisteÅr: Inntekt; // inntekt siste år i G
+  grunnlag: number; // Det faktiske grunnlaget i G
 }
 
 // Yrkesskade grunnlag
 export interface YrkesskadeGrunnlag {
-    inntekter: Array<Inntekt>;
-    yrkesskadeInntekt: YrkesskadeInntekt;
-    standardBeregning: StandardBeregning;
-    gjennomsnittligInntektSiste3år: number; // G
-    inntektSisteÅr: number; // G
-    yrkesskadeGrunnlag: number; // G
-    grunnlag: number; // G, faktisk grunnlag
+  inntekter: Array<Inntekt>;
+  yrkesskadeInntekt: YrkesskadeInntekt;
+  standardBeregning: StandardBeregning;
+  gjennomsnittligInntektSiste3år: number; // G
+  inntektSisteÅr: Inntekt; // G
+  yrkesskadeGrunnlag: number; // G
+  grunnlag: number; // G, faktisk grunnlag
+}
+
+export interface UføreGrunnlag {
+  inntekter: Array<Inntekt>;
+  gjennomsnittligInntektSiste3år: number; // G
+  inntektSisteÅr: Inntekt; // G
+  uføreInntekter: Array<UføreInntekt>;
+  gjennomsnittligInntektSiste3årUfør: number; // G
+  inntektSisteÅrUfør: UføreInntekt; // G
+  grunnlag: number; // G
+}
+
+export interface YrkesskadeUføreGrunnlag {
+  uføreGrunnlag: UføreGrunnlag;
+  yrkesskadeGrunnlag: YrkesskadeGrunnlag;
+}
+
+export interface Beregningsgrunnlag {
+  beregningstype: 'STANDARD' | 'UFØRE' | 'YRKESSKADE' | 'YRKESSKADE_UFØR';
+  yrkesskadeGrunnlag?: YrkesskadeGrunnlag;
+  uføreGrunnlag?: UføreGrunnlag;
+  yrkesskadeUføreGrunnlag?: YrkesskadeUføreGrunnlag;
+  grunnlag1119?: Grunnlag1119;
 }
