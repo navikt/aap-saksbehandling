@@ -11,7 +11,7 @@ interface Props {
 }
 
 const grunnlag: Beregningsgrunnlag = {
-  beregningstype: 'STANDARD',
+  beregningstype: 'YRKESSKADE',
   grunnlag1119: {
     inntekter: [
       { år: '2021', inntektIG: 6, inntektIKroner: 1000000, justertTilMaks6G: 6 },
