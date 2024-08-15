@@ -1,20 +1,15 @@
 import React, { useState } from 'react';
 import { isAfter } from 'date-fns';
 
-import { BodyShort, Button, ExpansionCard, Heading } from '@navikt/ds-react';
+import { Button, Heading } from '@navikt/ds-react';
 import { PlusIcon, QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 
 import styles from 'components/barn/Barn.module.css';
 import { Veiledning } from 'components/veiledning/Veiledning';
-import { useConfigForm, FormField } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
-
-export interface ManueltBarnType {
-  navn: string;
-  ident: string;
-  rolle: 'FOSTERBARN' | 'ADOPTIVBARN';
-}
+import { ManueltRegistrerteBarn } from 'lib/types/types';
 
 interface FormFields {
   begrunnelse: string;
@@ -24,7 +19,7 @@ interface FormFields {
 }
 
 interface Props {
-  manueltBarn: ManueltBarnType;
+  manueltBarn: ManueltRegistrerteBarn;
   readOnly: boolean;
 }
 
@@ -70,61 +65,47 @@ export const ManueltBarn = ({ manueltBarn, readOnly }: Props) => {
   );
 
   return (
-    <ExpansionCard aria-label={'manuelt-barn'} size={'small'} defaultOpen={true} className={styles.barn}>
-      <ExpansionCard.Header>
-        <ExpansionCard.Title>
-          <div className={styles.manueltbarnheading}>
-            <div>
-              <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'3rem'} />
-            </div>
-            <div>
-              <Heading size={'small'}>
-                {manueltBarn.navn} - {manueltBarn.ident}
-              </Heading>
-              <BodyShort size={'small'}>Fosterbarn</BodyShort>
-            </div>
-          </div>
-        </ExpansionCard.Title>
-      </ExpansionCard.Header>
-      <ExpansionCard.Content>
-        <div className={'flex-column'}>
-          <Veiledning
-            header={'Slik vurderes vilkåret'}
-            defaultOpen={true}
-            tekst={'Her kommer det en tekst om hvordan vilkåret skal vurderes'}
-          />
-          <form className={'flex-column'} onSubmit={form.handleSubmit(() => console.log('Her skal det skje noe!'))}>
-            <FormField form={form} formField={formFields.begrunnelse} />
-            <FormField form={form} formField={formFields.skalDetBeregnesBarneTillegg} />
-            {form.watch('skalDetBeregnesBarneTillegg') === JaEllerNei.Ja && (
-              <div className={'flex-row'}>
-                <FormField form={form} formField={formFields.forsørgerAnsvarStartDato} />
-                {leggTilSluttDato ? (
-                  <FormField form={form} formField={formFields.forsørgerAnsvarSluttDato} />
-                ) : (
-                  <Button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setLeggTilSluttDato(true);
-                    }}
-                    icon={<PlusIcon />}
-                    className={'fit-content-button'}
-                    variant={'tertiary'}
-                    size={'medium'}
-                  >
-                    Legg til sluttdato
-                  </Button>
-                )}
-              </div>
-            )}
-            {!readOnly && (
-              <Button className={'fit-content-button'} variant={'secondary'} size={'medium'}>
-                Lagre vurdering
+    <section className={styles.barnekort}>
+      <div className={styles.manueltbarnheading}>
+        <div>
+          <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'3rem'} />
+        </div>
+        <div>
+          <Heading size={'small'}>
+            {manueltBarn.navn} - {manueltBarn.ident.identifikator}
+          </Heading>
+        </div>
+      </div>
+      <div className={'flex-column'}>
+        <Veiledning
+          header={'Slik vurderes vilkåret'}
+          defaultOpen={true}
+          tekst={'Her kommer det en tekst om hvordan vilkåret skal vurderes'}
+        />
+        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.skalDetBeregnesBarneTillegg} />
+        {form.watch('skalDetBeregnesBarneTillegg') === JaEllerNei.Ja && (
+          <div className={'flex-row'}>
+            <FormField form={form} formField={formFields.forsørgerAnsvarStartDato} />
+            {leggTilSluttDato ? (
+              <FormField form={form} formField={formFields.forsørgerAnsvarSluttDato} />
+            ) : (
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setLeggTilSluttDato(true);
+                }}
+                icon={<PlusIcon />}
+                className={'fit-content-button'}
+                variant={'tertiary'}
+                size={'medium'}
+              >
+                Legg til sluttdato
               </Button>
             )}
-          </form>
-        </div>
-      </ExpansionCard.Content>
-    </ExpansionCard>
+          </div>
+        )}
+      </div>
+    </section>
   );
 };

@@ -9,7 +9,7 @@ import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/Tilknytt
 import { BodyShort, Button, Label } from '@navikt/ds-react';
 import { ManueltBarn } from 'components/barn/manueltbarn/ManueltBarn';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
-import { BarnetilleggGrunnlag } from 'lib/types/types';
+import { BarnetilleggGrunnlag, ManueltRegistrerteBarn } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -23,6 +23,23 @@ interface Props {
 interface FormFields {
   dokumenterBruktIVurderingen: string[];
 }
+
+const mockManueltRegistrerteBarn: ManueltRegistrerteBarn[] = [
+  {
+    navn: 'Kjell T Ringen',
+    ident: {
+      identifikator: '12345678910',
+      aktivIdent: true,
+    },
+  },
+  {
+    navn: 'Gro Tesk',
+    ident: {
+      identifikator: '17082100001',
+      aktivIdent: true,
+    },
+  },
+];
 
 export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
@@ -58,10 +75,14 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
             Les dokumentene og tilknytt relevante dokumenter til vurdering om det skal beregnes barnetillegg
           </BodyShort>
         </div>
-        <ManueltBarn
-          manueltBarn={{ navn: 'Kjell T Ringen', ident: '12345678910', rolle: 'FOSTERBARN' }}
-          readOnly={readOnly}
-        />
+        {/* TODO hent fra grunnlag */}
+        {mockManueltRegistrerteBarn.length > 0 && (
+          <>
+            {mockManueltRegistrerteBarn.map((barn, index) => (
+              <ManueltBarn manueltBarn={barn} readOnly={readOnly} key={index} />
+            ))}
+          </>
+        )}
 
         {grunnlag.folkeregistrerteBarn && grunnlag.folkeregistrerteBarn.length > 0 && (
           <>
