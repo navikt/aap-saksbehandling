@@ -3,6 +3,7 @@ import { UføreGrunnlag } from 'lib/types/types';
 import { InntektTabell } from 'components/inntekttabell/InntektTabell';
 import { Label, Table } from '@navikt/ds-react';
 import { formaterTilG } from 'lib/utils/string';
+import { UføreInntektTabell } from 'components/uføreinntekttabell/UføreInntektTabell';
 
 interface Props {
   grunnlag?: UføreGrunnlag;
@@ -21,7 +22,7 @@ export const UføreVisning = ({ grunnlag }: Props) => {
         gjennomsnittSiste3år={6}
       />
 
-      <InntektTabell
+      <UføreInntektTabell
         label={
           'Ufør. Pensjonsgivende inntekt siste 3 år  før arbeidsevne ble ytterligere nedsatt, justert for uføregrad '
         }
@@ -40,9 +41,7 @@ export const UføreVisning = ({ grunnlag }: Props) => {
           <Table.Body>
             <Table.Row>
               <Table.DataCell>Snitt inntekt siste 3 år</Table.DataCell>
-              <Table.DataCell align={'right'}>
-                {formaterTilG(grunnlag.gjennomsnittligInntektSiste3år)}
-              </Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.gjennomsnittligInntektSiste3år)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
               <Table.DataCell>Inntekt siste år</Table.DataCell>
