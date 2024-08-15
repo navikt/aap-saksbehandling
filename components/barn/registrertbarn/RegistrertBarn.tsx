@@ -2,7 +2,7 @@ import React from 'react';
 import styles from 'components/barn/Barn.module.css';
 import { BodyShort, ExpansionCard, Heading, Label } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { IdentifisertBarn } from 'lib/types/types';
+import {IdentifisertBarn} from "lib/types/types";
 
 interface Props {
   registrertBarn: IdentifisertBarn;

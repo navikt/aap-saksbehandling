@@ -6,7 +6,7 @@ import {
   BarnetilleggGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingResultat,
-  Beregningsgrunnlag,
+  BeregningsGrunnlag,
   BeregningsVurdering,
   BistandsGrunnlag,
   DetaljertBehandling,
@@ -188,7 +188,7 @@ export const hentResultat = async (referanse: string): Promise<BehandlingResulta
 
 export const hentBeregningsGrunnlag = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/beregning/grunnlag/${referanse}`;
-  return await fetchProxy<Beregningsgrunnlag>(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy<BeregningsGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const settBehandlingPåVent = async (referanse: string, requestBody: SettPåVent) => {

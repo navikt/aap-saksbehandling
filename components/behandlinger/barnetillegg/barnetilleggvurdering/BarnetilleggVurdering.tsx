@@ -63,10 +63,10 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
           readOnly={readOnly}
         />
 
-        {grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0 && (
+        {grunnlag.folkeregistrerteBarn && grunnlag.folkeregistrerteBarn.length > 0 && (
           <>
             <Label size={'small'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
-            {grunnlag.folkeregisterbarn.map((barn, index) => (
+            {grunnlag.folkeregistrerteBarn.map((barn, index) => (
               <RegistrertBarn key={index} registrertBarn={barn} />
             ))}
           </>
@@ -80,7 +80,9 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
                 behandlingVersjon: behandlingsversjon,
                 behov: {
                   behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
-                  vurdering: {},
+                  vurdering: {
+                    barn: [],
+                  },
                 },
                 referanse: behandlingsReferanse,
               })

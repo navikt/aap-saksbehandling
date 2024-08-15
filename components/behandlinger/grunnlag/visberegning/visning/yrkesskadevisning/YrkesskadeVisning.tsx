@@ -15,6 +15,7 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
     return <div>Kunne ikke finne påkrevd grunnlag for yrkesskade</div>;
   }
 
+  console.log('yrkesskade', grunnlag);
   return (
     <div className={styles.visning}>
       <InntektTabell
@@ -38,18 +39,18 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
             <Table.Row>
               <Table.DataCell>Anslått inntekt yrkesskade</Table.DataCell>
               <Table.DataCell align={'right'}>
-                {formaterTilProsent(grunnlag.yrkesskadeInntekt.prosentVekting)}
+                {formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)}
               </Table.DataCell>
               <Table.DataCell align={'right'}>
-                {formaterTilNok(grunnlag.yrkesskadeInntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)}
+                {formaterTilNok(grunnlag.yrkesskadeinntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)}
               </Table.DataCell>
               <Table.DataCell align={'right'}>
-                {formaterTilG(grunnlag.yrkesskadeInntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
+                {formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
               </Table.DataCell>
               <Table.DataCell align={'right'}>
-                {grunnlag.yrkesskadeInntekt.justertTilMaks6G
+                {grunnlag.yrkesskadeinntekt.justertTilMaks6G
                   ? '6 G'
-                  : formaterTilG(grunnlag.yrkesskadeInntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
+                  : formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
               </Table.DataCell>
             </Table.Row>
             <Table.Row>
@@ -60,7 +61,7 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
               <Table.DataCell align={'center'}>-</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.inntektIG)}</Table.DataCell>
               <Table.DataCell align={'right'}>
-                {grunnlag.standardBeregning.JustertTilMaks6G
+                {grunnlag.standardBeregning.justertTilMaks6G
                   ? '6 G'
                   : formaterTilG(grunnlag.standardBeregning.inntektIG)}
               </Table.DataCell>

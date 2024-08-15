@@ -8,7 +8,7 @@ describe('barnetillegg', () => {
   const user = userEvent.setup();
 
   const grunnlag: BarnetilleggGrunnlag = {
-    folkeregisterbarn: [
+    folkeregistrerteBarn: [
       {
         ident: {
           identifikator: '12345678910',
@@ -21,16 +21,18 @@ describe('barnetillegg', () => {
         },
       },
     ],
+    manueltOppgitteBarn: [],
+    vurdering: { barn: [] },
   };
 
   it('skal ha en overskrift', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false}/>);
+    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
     const overskrift = screen.getByText('Barnetillegg § 11-20 tredje og fjerde ledd');
     expect(overskrift).toBeVisible();
   });
 
   it('skal ha en dokumenttabell med korrekt heading', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false}/>);
+    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
     const heading = screen.getByRole('group', {
       name: 'Dokumenter funnet som er relevante for vurdering av barnetillegg §11-20',
     });
@@ -38,7 +40,7 @@ describe('barnetillegg', () => {
   });
 
   it('skal ha en dokumenttabell med korrekt description', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false}/>);
+    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
 
     const description = screen.getByText(
       'Les dokumentene og tilknytt eventuelle dokumenter benyttet til 11-20 vurderingen'
@@ -50,7 +52,7 @@ describe('barnetillegg', () => {
   // TODO: Test feiler fordi dokumenterBruktIVurdering ikke blir oppdatert når testen kjører, fungerer i nettleser.
   // Fiks test når vi faktisk skal bruke dokumentlisten
   it.skip('skal ha en liste som viser hvilke dokumenter som er tilknyttet vurderingen', async () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false}/>);
+    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
     const rad = screen.getByRole('row', {
       name: /sykemelding/i,
     });
