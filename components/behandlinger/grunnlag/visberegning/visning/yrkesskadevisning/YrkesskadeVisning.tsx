@@ -48,9 +48,7 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
                 {formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
               </Table.DataCell>
               <Table.DataCell align={'right'}>
-                {grunnlag.yrkesskadeinntekt.justertTilMaks6G
-                  ? '6 G'
-                  : formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
+                {formaterTilG(grunnlag.yrkesskadeinntekt.justertTilMaks6G)}
               </Table.DataCell>
             </Table.Row>
             <Table.Row>
@@ -61,9 +59,7 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
               <Table.DataCell align={'center'}>-</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.inntektIG)}</Table.DataCell>
               <Table.DataCell align={'right'}>
-                {grunnlag.standardBeregning.justertTilMaks6G
-                  ? '6 G'
-                  : formaterTilG(grunnlag.standardBeregning.inntektIG)}
+                {formaterTilG(grunnlag.standardBeregning.justertTilMaks6G)}
               </Table.DataCell>
             </Table.Row>
             <Table.Row>
@@ -96,7 +92,7 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
             </Table.Row>
             <Table.Row>
               <Table.DataCell>Inntekt siste år</Table.DataCell>
-              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr.inntektIG)}</Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr.justertTilMaks6G)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
               <Table.DataCell>Yrkesskade grunnlag</Table.DataCell>

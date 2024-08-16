@@ -37,7 +37,7 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
             </Table.Row>
             <Table.Row>
               <Table.DataCell>Inntekt siste år</Table.DataCell>
-              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr.inntektIG)}</Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr.justertTilMaks6G)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
               <Table.DataCell>

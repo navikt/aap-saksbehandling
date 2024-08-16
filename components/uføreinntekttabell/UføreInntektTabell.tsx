@@ -41,6 +41,8 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, label }:
             </Table.DataCell>
             <Table.DataCell></Table.DataCell>
             <Table.DataCell></Table.DataCell>
+            <Table.DataCell></Table.DataCell>
+            <Table.DataCell></Table.DataCell>
             <Table.DataCell align={'right'}>
               <b>{formaterTilG(gjennomsnittSiste3år)}</b>
             </Table.DataCell>

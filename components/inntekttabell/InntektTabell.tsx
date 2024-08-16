@@ -28,9 +28,7 @@ export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, label }: Props
               <Table.DataCell>{inntekt.år}</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilNok(inntekt.inntektIKroner)}</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(inntekt.inntektIG)}</Table.DataCell>
-              <Table.DataCell align={'right'}>
-                {inntekt.justertTilMaks6G ? '6 G' : formaterTilG(inntekt.inntektIG)}
-              </Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(inntekt.justertTilMaks6G)}</Table.DataCell>
             </Table.Row>
           ))}
           <Table.Row>
