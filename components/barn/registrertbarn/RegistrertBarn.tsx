@@ -2,7 +2,7 @@ import React from 'react';
 import styles from 'components/barn/Barn.module.css';
 import { BodyShort, ExpansionCard, Heading, Label } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import {IdentifisertBarn} from "lib/types/types";
+import { IdentifisertBarn } from 'lib/types/types';
 
 interface Props {
   registrertBarn: IdentifisertBarn;
@@ -14,9 +14,7 @@ export const RegistrertBarn = ({ registrertBarn }: Props) => {
       <ExpansionCard.Header>
         <ExpansionCard.Title>
           <div>
-            <Heading size={'small'}>
-              {registrertBarn.navn} - {registrertBarn.ident.identifikator}
-            </Heading>
+            <Heading size={'small'}>{registrertBarn.ident.identifikator}</Heading>
             <BodyShort size={'small'}>Eget barn</BodyShort>
           </div>
         </ExpansionCard.Title>

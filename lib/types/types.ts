@@ -21,7 +21,7 @@ export type TilkjentYtelseGrunnlag =
 export type KvalitetssikringGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.KvalitetssikringGrunnlagDto'];
 export type BarnetilleggGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barnetillegg.flate.BarnetilleggGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.BarnetilleggDto'];
 export type SoningsgrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsgrunnlagResponse'];
 export type HelseinstitusjonGrunnlagResponse =
@@ -124,8 +124,6 @@ export type ErStudentStatus =
 export type SkalGjenopptaStudieStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['skalGjenopptaStudieStatus'];
 
+export type OppgitteBarn = components['schemas']['no.nav.aap.verdityper.sakogbehandling.Ident'];
 export type IdentifisertBarn =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barnetillegg.flate.FolkeregistrertBarnDto'];
-
-export type ManueltRegistrerteBarn =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barnetillegg.flate.ManueltBarnDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.IdentifiserteBarnDto'];

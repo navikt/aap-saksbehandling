@@ -8,21 +8,20 @@ describe('barnetillegg', () => {
   const user = userEvent.setup();
 
   const grunnlag: BarnetilleggGrunnlag = {
-    folkeregistrerteBarn: [
+    folkeregisterbarn: [
       {
         ident: {
           identifikator: '12345678910',
           aktivIdent: true,
         },
-        navn: 'Trude Lutt',
         forsorgerPeriode: {
           fom: '2020-02-02',
           tom: '2038-02-02',
         },
       },
     ],
-    manueltOppgitteBarn: [],
-    vurdering: { barn: [] },
+    oppgitteBarn: [],
+    barnSomTrengerVurdering: [],
   };
 
   it('skal ha en overskrift', () => {

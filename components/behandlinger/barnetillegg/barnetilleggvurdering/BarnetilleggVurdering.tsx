@@ -9,7 +9,7 @@ import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/Tilknytt
 import { BodyShort, Button, Label } from '@navikt/ds-react';
 import { ManueltBarn } from 'components/barn/manueltbarn/ManueltBarn';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
-import { BarnetilleggGrunnlag, ManueltRegistrerteBarn } from 'lib/types/types';
+import { BarnetilleggGrunnlag, OppgitteBarn } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -24,20 +24,14 @@ interface FormFields {
   dokumenterBruktIVurderingen: string[];
 }
 
-const mockManueltRegistrerteBarn: ManueltRegistrerteBarn[] = [
+const mockManueltRegistrerteBarn: OppgitteBarn[] = [
   {
-    navn: 'Kjell T Ringen',
-    ident: {
-      identifikator: '12345678910',
-      aktivIdent: true,
-    },
+    identifikator: '12345678910',
+    aktivIdent: true,
   },
   {
-    navn: 'Gro Tesk',
-    ident: {
-      identifikator: '17082100001',
-      aktivIdent: true,
-    },
+    identifikator: '17082100001',
+    aktivIdent: true,
   },
 ];
 
@@ -84,10 +78,10 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
           </>
         )}
 
-        {grunnlag.folkeregistrerteBarn && grunnlag.folkeregistrerteBarn.length > 0 && (
+        {grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0 && (
           <>
             <Label size={'small'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
-            {grunnlag.folkeregistrerteBarn.map((barn, index) => (
+            {grunnlag.folkeregisterbarn.map((barn, index) => (
               <RegistrertBarn key={index} registrertBarn={barn} />
             ))}
           </>
@@ -101,9 +95,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
                 behandlingVersjon: behandlingsversjon,
                 behov: {
                   behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
-                  vurdering: {
-                    barn: [],
-                  },
+                  vurdering: {},
                 },
                 referanse: behandlingsReferanse,
               })

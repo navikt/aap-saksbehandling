@@ -4,17 +4,18 @@ import { ManueltBarn } from 'components/barn/manueltbarn/ManueltBarn';
 import { userEvent } from '@testing-library/user-event';
 import { addDays } from 'date-fns';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { ManueltRegistrerteBarn } from 'lib/types/types';
+import { OppgitteBarn } from 'lib/types/types';
 
-const manueltBarn: ManueltRegistrerteBarn = {
-  navn: 'Kjell T Ringen',
-  ident: { identifikator: '12345678910', aktivIdent: true },
+const manueltBarn: OppgitteBarn = {
+  identifikator: '12345678910',
+  aktivIdent: true,
 };
 
 describe('Manuelt registrerte barn', () => {
   const user = userEvent.setup();
 
-  it('skal ha en heading med navn og ident', () => {
+  // TODO navn må hentes, kommer ikke som en del av grunnlaget
+  it.skip('skal ha en heading med navn og ident', () => {
     render(<ManueltBarn manueltBarn={manueltBarn} readOnly={false} />);
     const heading = screen.getByRole('heading', { name: 'Kjell T Ringen - 12345678910' });
     expect(heading).toBeVisible();

@@ -9,7 +9,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
-import { ManueltRegistrerteBarn } from 'lib/types/types';
+import { OppgitteBarn } from 'lib/types/types';
 
 interface FormFields {
   begrunnelse: string;
@@ -19,7 +19,7 @@ interface FormFields {
 }
 
 interface Props {
-  manueltBarn: ManueltRegistrerteBarn;
+  manueltBarn: OppgitteBarn;
   readOnly: boolean;
 }
 
@@ -71,9 +71,7 @@ export const ManueltBarn = ({ manueltBarn, readOnly }: Props) => {
           <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'3rem'} />
         </div>
         <div>
-          <Heading size={'small'}>
-            {manueltBarn.navn} - {manueltBarn.ident.identifikator}
-          </Heading>
+          <Heading size={'small'}>{manueltBarn.identifikator}</Heading>
         </div>
       </div>
       <div className={'flex-column'}>
