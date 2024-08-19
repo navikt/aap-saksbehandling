@@ -1,5 +1,0 @@
-.grunnlagvisning {
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-8);
-}

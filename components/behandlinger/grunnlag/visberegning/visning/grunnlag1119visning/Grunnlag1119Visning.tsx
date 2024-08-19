@@ -1,7 +1,7 @@
 import { InntektTabell } from 'components/inntekttabell/InntektTabell';
 import { Label, Table } from '@navikt/ds-react';
 
-import styles from './Grunnlag1119.module.css';
+import styles from '../Visning.module.css';
 import { Grunnlag1119 } from 'lib/types/types';
 import { formaterTilG } from 'lib/utils/string';
 
@@ -15,7 +15,7 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
   }
 
   return (
-    <div className={styles.grunnlagvisning}>
+    <div className={styles.visning}>
       <InntektTabell
         label={'Pensjonsgivende inntekt siste 3 år'}
         inntekter={grunnlag.inntekter}
