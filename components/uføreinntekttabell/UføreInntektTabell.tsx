@@ -19,7 +19,7 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, label }:
             <Table.HeaderCell>Periode</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Uføregrad</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Inntekt</Table.HeaderCell>
-            <Table.HeaderCell align={'right'}>Juster for uføregrad</Table.HeaderCell>
+            <Table.HeaderCell align={'right'}>Justert for uføregrad</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Inntekt i G</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Justert til maks 6G</Table.HeaderCell>
           </Table.Row>
