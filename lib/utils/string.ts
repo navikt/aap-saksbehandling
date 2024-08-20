@@ -9,7 +9,8 @@ export function formaterTilNok(sum: number): string {
 }
 
 export function formaterTilG(sum: number): string {
-  return `${sum} G`;
+  const formatedSum = sum.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  return `${formatedSum} G`;
 }
 
 export function formaterTilProsent(sum: number): string {
