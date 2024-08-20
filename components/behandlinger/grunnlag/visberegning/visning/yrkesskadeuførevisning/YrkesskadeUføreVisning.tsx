@@ -81,7 +81,7 @@ export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
                 <b>Faktisk grunnlag</b>
               </Table.DataCell>
               <Table.DataCell align={'right'}>
-                <b>Her kommer det noe</b>
+                <b>{grunnlag.grunnlag}</b>
               </Table.DataCell>
             </Table.Row>
           </Table.Body>
