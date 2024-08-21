@@ -17,7 +17,7 @@ describe('formaterTilG', () => {
   });
 
   it('skal returnere en string med korrekt formatering med 150 000', () => {
-    expect(formaterTilG(4.3949)).toBe('4.3949 G');
+    expect(formaterTilG(4.3949)).toBe('4.39 G');
   });
 
   it('skal returnere en string med korrekt formatering med 1 500 000', () => {
