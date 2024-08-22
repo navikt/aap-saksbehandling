@@ -11,7 +11,7 @@ interface Props {
 
 export const UføreVisning = ({ grunnlag }: Props) => {
   if (!grunnlag) {
-    return <div>Kunne ikke finne påkrevd grunnlag for uføre</div>;
+    throw new Error('Kunne ikke finne påkrevd grunnlag for uføre');
   }
 
   return (

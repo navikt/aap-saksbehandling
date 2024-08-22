@@ -14,7 +14,7 @@ interface Props {
 
 export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
   if (!grunnlag) {
-    return <div>Kunne ikke finne påkrevd grunnlag for uføre og yrkesskade</div>;
+    throw new Error('Kunne ikke finne påkrevd grunnlag for uføre og yrkesskade');
   }
 
   return (
