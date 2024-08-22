@@ -44,7 +44,7 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
                 <b>Faktisk grunnlag</b>
               </Table.DataCell>
               <Table.DataCell align={'right'}>
-                <b>{grunnlag.grunnlag}G</b>
+                <b>{formaterTilG(grunnlag.grunnlag)}</b>
               </Table.DataCell>
             </Table.Row>
           </Table.Body>
