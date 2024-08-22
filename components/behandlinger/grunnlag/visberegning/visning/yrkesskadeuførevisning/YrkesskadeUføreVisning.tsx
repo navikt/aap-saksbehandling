@@ -92,8 +92,9 @@ export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
 };
 
 function formaterLabelForInntekter(inntekt: Array<Inntekt>): string {
-  const lastYear = inntekt[0].år;
-  const firstYear = inntekt[inntekt.length - 1].år;
+  const sortedInntekt = inntekt.sort((a, b) => Number(a.år) - Number(b.år));
+  const firstYear = sortedInntekt[0].år;
+  const lastYear = sortedInntekt[sortedInntekt.length - 1].år;
 
   return `Gjennomsnittlig inntekt siste 3 år (${firstYear} - ${lastYear})`;
 }
