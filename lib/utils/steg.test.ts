@@ -23,7 +23,14 @@ const flytSykdom: FlytGruppe = {
       stegType: 'AVKLAR_SYKDOM',
       avklaringsbehov: [
         {
-          definisjon: "AVKLAR_SYKDOM(kode='5003')",
+          definisjon: {
+            name: 'AVKLAR_SYKDOM',
+            kode: '5003',
+            type: 'MANUELT_PÅKREVD',
+            løsesISteg: 'AVKLAR_SYKDOM',
+            kreverToTrinn: true,
+            kvalitetssikres: true,
+          },
           status: 'OPPRETTET',
           endringer: [],
         },
@@ -41,7 +48,14 @@ const flytSykdomOgAvklaringsbehovAvbrutt: FlytGruppe = {
       stegType: 'AVKLAR_SYKDOM',
       avklaringsbehov: [
         {
-          definisjon: "AVKLAR_SYKDOM(kode='5003')",
+          definisjon: {
+            name: 'AVKLAR_SYKDOM',
+            kode: '5003',
+            type: 'MANUELT_PÅKREVD',
+            løsesISteg: 'AVKLAR_SYKDOM',
+            kreverToTrinn: true,
+            kvalitetssikres: true,
+          },
           status: 'AVBRUTT',
           endringer: [],
         },
