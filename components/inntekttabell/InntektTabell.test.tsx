@@ -12,6 +12,12 @@ describe('tabell for å vise inntekter', () => {
     expect(overskrift).toBeVisible();
   });
 
+  it('viser en detaljert beskrivelse om standard grunnlagsberegning', () => {
+    render(<InntektTabell label={'Inntekter'} inntekter={innteker} gjennomsnittSiste3år={6} />);
+    expect(screen.getByRole('button', { name: 'Se detaljer om standard grunnlagsberegning' })).toBeVisible();
+    expect(screen.getByText(/^Inntekter er hentet fra skatteetaten/)).toBeInTheDocument();
+  });
+
   it('skal ha en tabell som heter Periode', () => {
     render(<InntektTabell label={'Dette er en overskrift'} inntekter={innteker} gjennomsnittSiste3år={6} />);
     const periodeHeader = screen.getByRole('columnheader', { name: /periode/i });

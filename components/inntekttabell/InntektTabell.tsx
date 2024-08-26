@@ -1,4 +1,4 @@
-import { Label, Table } from '@navikt/ds-react';
+import { Label, ReadMore, Table } from '@navikt/ds-react';
 import { Inntekt } from 'lib/types/types';
 
 import { formaterTilG, formaterTilNok } from 'lib/utils/string';
@@ -13,6 +13,11 @@ export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, label }: Props
   return (
     <div className={'flex-column'}>
       <Label size={'medium'}>{label}</Label>
+      <ReadMore header={'Se detaljer om standard grunnlagsberegning'}>
+        Inntekter er hentet fra skatteetaten og a-inntekt. Inntekt i G er justert for G-verdi for relevant år.
+        Grunnlaget for AAP beregnes basert på innbyggers inntekt de siste tre årene før arbeidsevne ble redusert.
+        Beregningen benytter den gunstigste av siste år og gjennomsnitt siste tre år. Maks grunnlag er 6 G.
+      </ReadMore>
       <Table size={'medium'}>
         <Table.Header>
           <Table.Row>
