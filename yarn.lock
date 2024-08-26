@@ -878,10 +878,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:6.16.0, @navikt/aksel-icons@npm:^6.16.0":
-  version: 6.16.0
-  resolution: "@navikt/aksel-icons@npm:6.16.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.16.0%2Fab339b42056db9cadf36315a5eeddf8658000b36"
-  checksum: 10c0/6cbe40fcbf060336b0dc2b30ec91527e3355bd5e1aeca3d5d1c5379a29bd5492ad1113191f793a09793a193fb637d660857ef082805c55771f90c3fa724927a3
+"@navikt/aksel-icons@npm:6.16.1, @navikt/aksel-icons@npm:^6.16.1":
+  version: 6.16.1
+  resolution: "@navikt/aksel-icons@npm:6.16.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.16.1%2F26ab024bb75061bcde97373c7a76b2af0570603c"
+  checksum: 10c0/37118e3f314c230cce31edf2326832a8e461b53f6840689745ab5e3f6ff06fa6fa863058482b9b7663b06262e56261c707ed1bdd7117dc95210779021cd1a914
   languageName: node
   linkType: hard
 
@@ -892,10 +892,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:6.16.0":
-  version: 6.16.0
-  resolution: "@navikt/ds-css@npm:6.16.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F6.16.0%2F12339eae9f3f1e1a83906450c988005910bb5b46"
-  checksum: 10c0/1a89b5a39418e5934015fad323d223dfd635f14235bcb940da8d135da86dbabd1f7e484346cf582c1dfc6f6380c975ddcaa62b0d4a9069460b5c4d4299d449ee
+"@navikt/ds-css@npm:6.16.1":
+  version: 6.16.1
+  resolution: "@navikt/ds-css@npm:6.16.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F6.16.1%2F7dc44ff8ca9ae5a9a2ff7523435579d58e9adcb3"
+  checksum: 10c0/413ef5c2c727d270f0c1a2204307d04493a45647da23acd1bd42508f2b635409c48fe7e22f1db3836eaba42b9b6a69781c8566220c4cf525a0888e9a25bf595c
   languageName: node
   linkType: hard
 
@@ -906,21 +906,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:6.16.0":
-  version: 6.16.0
-  resolution: "@navikt/ds-react@npm:6.16.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F6.16.0%2F0989459528fc4698be5ae1fecefcf0e16c1b3fbf"
+"@navikt/ds-react@npm:6.16.1":
+  version: 6.16.1
+  resolution: "@navikt/ds-react@npm:6.16.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F6.16.1%2F4a3ec99b67365ffba4af76fb2b41d6570d4a2d20"
   dependencies:
     "@floating-ui/react": "npm:0.25.4"
     "@floating-ui/react-dom": "npm:^2.0.9"
-    "@navikt/aksel-icons": "npm:^6.16.0"
-    "@navikt/ds-tokens": "npm:^6.16.0"
+    "@navikt/aksel-icons": "npm:^6.16.1"
+    "@navikt/ds-tokens": "npm:^6.16.1"
     clsx: "npm:^2.1.0"
     date-fns: "npm:^3.0.0"
     react-day-picker: "npm:8.10.0"
   peerDependencies:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
-  checksum: 10c0/fc3e1accd2fc857d6ac96de46187a4fce011910c58da1afb5478feb6e33155d16a55a0d2ec696bc787b140ff38212610f8991d42d29b9c0457fab83b7d05180b
+  checksum: 10c0/58051d700ca3d70d2120645e986364fb05062333d6b25962a068c6b381d9759e8e5da40bd83dd8dea13bf6e1152a7ca9cc9c1639d41d2fe8dfcd6c75d004f90f
   languageName: node
   linkType: hard
 
@@ -949,10 +949,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^6.16.0":
-  version: 6.16.0
-  resolution: "@navikt/ds-tokens@npm:6.16.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.16.0%2F225411f2d34ca90ddf12f57716b2493614032a49"
-  checksum: 10c0/b13dd921156873d895f40f214f8214cd010ad90d1ae7c8047bebe021fa6ea84ca2af4d5334e1df29980b17c445a964a1df2c7b776e4afad03ef5ad352ecc2033
+"@navikt/ds-tokens@npm:^6.16.1":
+  version: 6.16.1
+  resolution: "@navikt/ds-tokens@npm:6.16.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.16.1%2F44f558da7cd89785ea6e496b5a378e2695a36fd9"
+  checksum: 10c0/9d3bcd293309662c5328f1ebc0ca0688bbef0237dfa8c23dbe8a61dea21a8a16acb33374248c62e7147cc9bb71e3279972715c4ccd504f2ce9052c4ca574fd1d
   languageName: node
   linkType: hard
 
@@ -2783,9 +2783,9 @@ __metadata:
     "@navikt/aap-felles-react": "npm:^1.6.3"
     "@navikt/aap-felles-utils": "npm:^1.6.3"
     "@navikt/aap-felles-utils-client": "npm:^1.6.3"
-    "@navikt/aksel-icons": "npm:6.16.0"
-    "@navikt/ds-css": "npm:6.16.0"
-    "@navikt/ds-react": "npm:6.16.0"
+    "@navikt/aksel-icons": "npm:6.16.1"
+    "@navikt/ds-css": "npm:6.16.1"
+    "@navikt/ds-react": "npm:6.16.1"
     "@navikt/eslint-config-aap": "npm:^1.5.3"
     "@navikt/oasis": "npm:^3.4.0"
     "@portabletext/react": "npm:^3.1.0"
