@@ -13,7 +13,9 @@ const grunnlag: Grunnlag1119 = {
 describe('grunnlag 11-19 visning', () => {
   it('skal ha en tabell med pensjonsgivende inntekt for de siste 3 årene', () => {
     render(<Grunnlag1119Visning grunnlag={grunnlag} />);
-    const tabellOverskrift = screen.getByText(/pensjonsgivende inntekt siste 3 år/i);
+    const tabellOverskrift = screen.getByText(
+      'Standard grunnlagsberegning basert på pensjonsgivende inntekt siste 3 år før redusert arbeidsevne'
+    );
     expect(tabellOverskrift).toBeVisible();
 
     const headers = ['Periode', 'Pensjonsgivende inntekt', 'Inntekt i G', 'Justert til maks 6G'];

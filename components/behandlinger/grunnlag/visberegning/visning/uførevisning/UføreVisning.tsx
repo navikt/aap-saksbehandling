@@ -17,7 +17,7 @@ export const UføreVisning = ({ grunnlag }: Props) => {
   return (
     <div className={'flex-column'}>
       <InntektTabell
-        label={'Pensjonsgivende inntekt siste 3 år før arbeidsevne ble nedsatt'}
+        label={'Standard grunnlagsberegning basert på pensjonsgivende inntekt siste 3 år før redusert arbeidsevne'}
         inntekter={grunnlag.inntekter}
         gjennomsnittSiste3år={6}
       />
