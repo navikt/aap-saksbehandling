@@ -80,7 +80,7 @@
     "jsdom": "^24.1.1",
     "json-diff": "^1.0.6",
     "lint-staged": "^15.2.9",
-    "openapi-typescript": "7.1.0",
+    "openapi-typescript": "7.3.0",
     "pino-pretty": "^11.2.2",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
