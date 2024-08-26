@@ -14,7 +14,7 @@
   },
   "prettier": "@navikt/aap-felles-prettier",
   "dependencies": {
-    "@grafana/faro-web-sdk": "^1.8.2",
+    "@grafana/faro-web-sdk": "^1.9.0",
     "@navikt/aap-felles-css": "^1.6.3",
     "@navikt/aap-felles-react": "^1.6.3",
     "@navikt/aap-felles-utils": "^1.6.3",
@@ -37,7 +37,7 @@
     "@tiptap/pm": "^2.6.6",
     "@tiptap/react": "^2.6.6",
     "@tiptap/starter-kit": "^2.6.6",
-    "@vercel/otel": "^1.9.1",
+    "@vercel/otel": "^1.10.0",
     "date-fns": "^3.6.0",
     "next": "^14.2.5",
     "next-sanity": "^9.4.7",
