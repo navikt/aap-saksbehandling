@@ -37,13 +37,9 @@ export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, label }: Props
             </Table.Row>
           ))}
           <Table.Row>
-            <Table.DataCell>
-              <b>Gjennomsnitt siste 3 år</b>
-            </Table.DataCell>
-            <Table.DataCell></Table.DataCell>
-            <Table.DataCell></Table.DataCell>
-            <Table.DataCell align={'right'}>
-              <b>{formaterTilG(gjennomsnittSiste3år)}</b>
+            <Table.DataCell>Gjennomsnitt siste 3 år</Table.DataCell>
+            <Table.DataCell align={'right'} colSpan={3}>
+              {formaterTilG(gjennomsnittSiste3år)}
             </Table.DataCell>
           </Table.Row>
         </Table.Body>
