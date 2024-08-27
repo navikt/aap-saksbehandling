@@ -24,7 +24,7 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
           <Table.Row>
             <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Inntekt i G</Table.HeaderCell>
-            <Table.HeaderCell align={'right'}>Andel vekting</Table.HeaderCell>
+            <Table.HeaderCell align={'right'}>Andel av grunnlag</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Inntekt i kr</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Justert til maks 6G</Table.HeaderCell>
           </Table.Row>
