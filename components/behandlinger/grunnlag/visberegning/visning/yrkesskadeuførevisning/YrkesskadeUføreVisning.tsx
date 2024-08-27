@@ -30,7 +30,7 @@ export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
           'Ufør. Pensjonsgivende inntekt siste 3 år  før arbeidsevne ble ytterligere nedsatt, justert for uføregrad '
         }
         inntekter={grunnlag.uføreGrunnlag.uføreInntekter}
-        gjennomsnittSiste3år={grunnlag.uføreGrunnlag.gjennomsnittligInntektSiste3år}
+        gjennomsnittSiste3år={grunnlag.uføreGrunnlag.gjennomsnittligInntektSiste3årUfør}
       />
 
       <YrkesskadeBeregningTabell grunnlag={grunnlag.yrkesskadeGrunnlag} />
