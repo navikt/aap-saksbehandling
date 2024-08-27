@@ -34,7 +34,6 @@ describe('tabell for å vise uføre inntekter', () => {
     expect(uføregradKolonne).toBeVisible();
   });
 
-
   // Fiks denne
   it.skip('skal ha en kolonne som heter inntekt', () => {
     render(<UføreInntektTabell label={'Dette er en overskrift'} inntekter={innteker} gjennomsnittSiste3år={6} />);
@@ -69,6 +68,6 @@ describe('tabell for å vise uføre inntekter', () => {
   it('skal rendre en rad', () => {
     render(<UføreInntektTabell label={'Dette er en overskrift'} inntekter={innteker} gjennomsnittSiste3år={6} />);
     const rows = screen.getAllByRole('row');
-    expect(rows).toHaveLength(3); // Inneholder headers og gjennomsnitt siste 3 år
+    expect(rows).toHaveLength(4); // Inneholder headers og gjennomsnitt siste 3 år
   });
 });

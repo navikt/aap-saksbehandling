@@ -47,6 +47,12 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, label }:
               <b>{formaterTilG(gjennomsnittSiste3år)}</b>
             </Table.DataCell>
           </Table.Row>
+          <Table.Row>
+            <Table.HeaderCell scope={'row'}>Grunnlag ved uføretidspunkt</Table.HeaderCell>
+            <Table.DataCell align={'right'} colSpan={5}>
+              <b>{formaterTilG(gjennomsnittSiste3år)}</b>
+            </Table.DataCell>
+          </Table.Row>
         </Table.Body>
       </Table>
     </div>
