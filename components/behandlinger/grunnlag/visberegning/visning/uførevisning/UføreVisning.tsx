@@ -19,7 +19,7 @@ export const UføreVisning = ({ grunnlag }: Props) => {
       <InntektTabell
         label={'Standard grunnlagsberegning basert på pensjonsgivende inntekt siste 3 år før redusert arbeidsevne'}
         inntekter={grunnlag.inntekter}
-        gjennomsnittSiste3år={6}
+        gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
         grunnlagBeregnet={grunnlag.grunnlag}
       />
 
