@@ -31,7 +31,7 @@ export const UføreVisning = ({ grunnlag }: Props) => {
         gjennomsnittSiste3år={6}
       />
       <div className={'flex-column'}>
-        <Label size={'medium'}>Faktisk grunnlag er satt til høyeste verdi av følgende</Label>
+        <Label size={'medium'}>Innbyggers grunnlag er satt til gunstigste av følgende</Label>
         <Table size={'medium'}>
           <Table.Header>
             <Table.Row>

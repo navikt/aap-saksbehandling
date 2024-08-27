@@ -35,7 +35,7 @@ describe('yrkesskade visning', () => {
 
   it('skal ha en tabell som viser en oppsummering og det faktiske grunnlaget', () => {
     render(<YrkesskadeVisning grunnlag={grunnlag} />);
-    const tabellOverskrift = screen.getByText(/faktisk grunnlag er satt til høyeste verdi av følgende/i);
+    const tabellOverskrift = screen.getByText('Innbyggers grunnlag er satt til gunstigste av følgende');
     expect(tabellOverskrift).toBeVisible();
   });
 
