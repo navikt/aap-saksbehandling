@@ -6,7 +6,7 @@ import { Grunnlag1119 } from 'lib/types/types';
 const grunnlag: Grunnlag1119 = {
   gjennomsnittligInntektSiste3år: 6,
   grunnlag: 6,
-  inntektSisteÅr: { inntektIG: 0, inntektIKroner: 0, justertTilMaks6G: 0, år: '' },
+  inntektSisteÅr: { inntektIG: 0, inntektIKroner: 0, justertTilMaks6G: 0, år: '2023' },
   inntekter: [{ inntektIG: 0, inntektIKroner: 0, justertTilMaks6G: 0, år: '2010' }],
 };
 
@@ -35,5 +35,10 @@ describe('grunnlag 11-19 visning', () => {
     });
 
     expect(screen.getByRole('rowheader', { name: 'Grunnlag satt til' })).toBeVisible();
+  });
+
+  it('rad med inntekt siste år viser årstall', () => {
+    render(<Grunnlag1119Visning grunnlag={grunnlag} />);
+    expect(screen.getByRole('cell', { name: `Inntekt siste år (${grunnlag.inntektSisteÅr.år})` })).toBeVisible();
   });
 });

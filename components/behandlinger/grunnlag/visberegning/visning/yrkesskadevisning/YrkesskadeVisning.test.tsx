@@ -6,7 +6,7 @@ import { YrkesskadeGrunnlag } from 'lib/types/types';
 const grunnlag: YrkesskadeGrunnlag = {
   gjennomsnittligInntektSiste3år: 0,
   grunnlag: 0,
-  inntektSisteÅr: { inntektIG: 0, inntektIKroner: 0, justertTilMaks6G: 0, år: '' },
+  inntektSisteÅr: { inntektIG: 0, inntektIKroner: 0, justertTilMaks6G: 0, år: '2023' },
   inntekter: [],
   standardBeregning: { inntektIG: 0, justertTilMaks6G: 0, prosentVekting: 0 },
   yrkesskadeGrunnlag: 0,
@@ -45,5 +45,10 @@ describe('yrkesskade visning', () => {
       screen.getByRole('button', { name: 'Se detaljer om beregningen for innbygger med yrkesskade' })
     ).toBeVisible();
     expect(screen.getByText(/^Der yrkesskade er medvirkende årsak til redusert/));
+  });
+
+  it('rad med inntekt siste år viser årstall', () => {
+    render(<YrkesskadeVisning grunnlag={grunnlag} />);
+    expect(screen.getByRole('cell', { name: `Inntekt siste år (${grunnlag.inntektSisteÅr.år})` })).toBeVisible();
   });
 });

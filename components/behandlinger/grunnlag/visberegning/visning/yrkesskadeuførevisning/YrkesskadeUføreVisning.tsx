@@ -52,7 +52,7 @@ export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
               </Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>Inntekt siste år</Table.DataCell>
+              <Table.DataCell>Inntekt siste år ({grunnlag.yrkesskadeGrunnlag.inntektSisteÅr.år})</Table.DataCell>
               <Table.DataCell align={'right'}>
                 {formaterTilG(grunnlag.yrkesskadeGrunnlag.inntektSisteÅr.justertTilMaks6G)}
               </Table.DataCell>

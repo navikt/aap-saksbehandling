@@ -44,7 +44,7 @@ export const UføreVisning = ({ grunnlag }: Props) => {
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.gjennomsnittligInntektSiste3år)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>Inntekt siste år</Table.DataCell>
+              <Table.DataCell>Inntekt siste år ({grunnlag.inntektSisteÅr.år})</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr.inntektIG)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
