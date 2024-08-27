@@ -53,4 +53,14 @@ describe('tabell for å vise inntekter', () => {
     const rows = screen.getAllByRole('row');
     expect(rows).toHaveLength(3); // Inneholder headers og gjennomsnitt siste 3 år
   });
+
+  it('viser rad for beregnet grunnlag når det er sendt inn', () => {
+    render(<InntektTabell label={'Inntekter'} inntekter={inntekter} gjennomsnittSiste3år={6} grunnlagBeregnet={5.4} />);
+    expect(screen.getByRole('cell', { name: 'Grunnlag standard beregnet' })).toBeVisible();
+  });
+
+  it('viser ikke rad beregnet grunnlag når det ikke sendes inn', () => {
+    render(<InntektTabell label={'Inntekter'} inntekter={inntekter} gjennomsnittSiste3år={6} />);
+    expect(screen.queryByRole('cell', { name: 'Grunnlag standard beregnet' })).not.toBeInTheDocument();
+  });
 });

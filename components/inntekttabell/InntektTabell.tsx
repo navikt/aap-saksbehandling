@@ -7,9 +7,10 @@ interface Props {
   label: string;
   inntekter: Array<Inntekt>;
   gjennomsnittSiste3år: number;
+  grunnlagBeregnet?: number;
 }
 
-export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, label }: Props) => {
+export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, label, grunnlagBeregnet }: Props) => {
   return (
     <div className={'flex-column'}>
       <Label size={'medium'}>{label}</Label>
@@ -42,6 +43,16 @@ export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, label }: Props
               {formaterTilG(gjennomsnittSiste3år)}
             </Table.DataCell>
           </Table.Row>
+          {grunnlagBeregnet !== undefined && (
+            <Table.Row>
+              <>
+                <Table.DataCell>Grunnlag standard beregnet</Table.DataCell>
+                <Table.DataCell align={'right'} colSpan={3}>
+                  {grunnlagBeregnet && formaterTilG(grunnlagBeregnet)}
+                </Table.DataCell>
+              </>
+            </Table.Row>
+          )}
         </Table.Body>
       </Table>
     </div>
