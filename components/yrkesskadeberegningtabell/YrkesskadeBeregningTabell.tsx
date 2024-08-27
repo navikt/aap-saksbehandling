@@ -1,4 +1,4 @@
-import { Label, Table } from '@navikt/ds-react';
+import { Label, ReadMore, Table } from '@navikt/ds-react';
 import { formaterTilG, formaterTilNok, formaterTilProsent } from 'lib/utils/string';
 import React from 'react';
 import { YrkesskadeGrunnlag } from 'lib/types/types';
@@ -11,6 +11,14 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
   return (
     <div className={'flex-column'}>
       <Label size={'medium'}>Beregning av grunnlag som følge av yrkesskade</Label>
+      <ReadMore header={'Se detaljer om beregningen for innbygger med yrkesskade'}>
+        Der yrkesskade er medvirkende årsak til redusert arbeidsevne skal det beregnes et grunnlag basert på anslått
+        inntekt for det året yrkesskaden inntraff. Innbygger skal få det gunstigste grunnlaget av: 1) standard
+        grunnlagsberegning, og 2) beregning av den antatte inntekten ved yrkesskadetidspunkt. Anslått inntekt ved
+        yrkesskadetidspunk benyttes kun for den andelen av redusert arbeidsevne som skyldes yrkesskaden. Resterende
+        andel regnes ut etter standard beregning. Hvis yrkesskaden er mer enn 70% årsak til redusert arbeidsevne skal
+        hele beregningen gjøres etter gunstigste inntektsgrunnlag. Maks grunnlag er 6 G.{' '}
+      </ReadMore>
       <Table size={'medium'}>
         <Table.Header>
           <Table.Row>

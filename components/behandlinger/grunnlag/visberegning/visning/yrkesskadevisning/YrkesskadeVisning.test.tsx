@@ -38,4 +38,12 @@ describe('yrkesskade visning', () => {
     const tabellOverskrift = screen.getByText(/faktisk grunnlag er satt til høyeste verdi av følgende/i);
     expect(tabellOverskrift).toBeVisible();
   });
+
+  it('viser detaljer for beregningen', () => {
+    render(<YrkesskadeVisning grunnlag={grunnlag} />);
+    expect(
+      screen.getByRole('button', { name: 'Se detaljer om beregningen for innbygger med yrkesskade' })
+    ).toBeVisible();
+    expect(screen.getByText(/^Der yrkesskade er medvirkende årsak til redusert/));
+  });
 });
