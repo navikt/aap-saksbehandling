@@ -53,13 +53,8 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
             <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.justertTilMaks6G)}</Table.DataCell>
           </Table.Row>
           <Table.Row>
-            <Table.DataCell>
-              <b>Yrkesskade grunnlag</b>
-            </Table.DataCell>
-            <Table.DataCell></Table.DataCell>
-            <Table.DataCell></Table.DataCell>
-            <Table.DataCell></Table.DataCell>
-            <Table.DataCell align={'right'}>
+            <Table.HeaderCell scope={'row'}>Yrkesskade grunnlag</Table.HeaderCell>
+            <Table.DataCell align={'right'} colSpan={4}>
               <b>{formaterTilG(grunnlag.yrkesskadeGrunnlag)}</b>
             </Table.DataCell>
           </Table.Row>
