@@ -29,7 +29,7 @@ describe('yrkesskade visning', () => {
 
   it('skal ha en tabell med pensjonsgivende inntekt for de siste 3 årene', () => {
     render(<YrkesskadeVisning grunnlag={grunnlag} />);
-    const tabellOverskrift = screen.getByText(/yrkesskade grunnlagsberegning § 11-22/i);
+    const tabellOverskrift = screen.getByText('Beregning av grunnlag som følge av yrkesskade');
     expect(tabellOverskrift).toBeVisible();
   });
 

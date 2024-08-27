@@ -10,7 +10,7 @@ interface Props {
 export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
   return (
     <div className={'flex-column'}>
-      <Label size={'medium'}>Yrkesskade grunnlagsberegning § 11-22</Label>
+      <Label size={'medium'}>Beregning av grunnlag som følge av yrkesskade</Label>
       <Table size={'medium'}>
         <Table.Header>
           <Table.Row>
