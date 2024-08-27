@@ -18,26 +18,55 @@ interface Props {
   grunnlag?: BistandsGrunnlag;
 }
 
+enum GrunnerTilBehovForOppfølging {
+  ARBEIDSRETTET_TILTAK = 'Behov for aktiv behandling',
+  AKTIV_BEHANDLING = 'Behov for arbeidsrettet tiltak',
+  ANNEN_OPPFØLGING = 'Etter å ha prøvd tiltakene etter bokstav a eller b fortsatt anses for å ha en viss mulighet for å komme i arbeid, og får annen oppfølging fra Arbeids- og velferdsetaten',
+}
+
+type GrunnerTilBehovForOppfølgingApi = 'ARBEIDSRETTET_TILTAK' | 'AKTIV_BEHANDLING' | 'ANNEN_OPPFØLGING';
 interface FormFields {
   dokumenterBruktIVurderingen: string[];
   begrunnelse: string;
   vilkårOppfylt: string;
-  grunner: string[];
+  grunner: GrunnerTilBehovForOppfølging[];
+  // grunner: (
+  //   | GrunnerTilBehovForOppfølging.AKTIV_BEHANDLING
+  //   | GrunnerTilBehovForOppfølging.ARBEIDSRETTET_TILTAK
+  //   | GrunnerTilBehovForOppfølging.ANNEN_OPPFØLGING
+  // )[];
 }
 
-const bokstavA = 'Behov for aktiv behandling';
-const bokstavB = 'Behov for arbeidsrettet tiltak';
-const bokstavC =
-  'Etter å ha prøvd tiltakene etter bokstav a eller b fortsatt anses for å ha en viss mulighet for å komme i arbeid, og får annen oppfølging fra Arbeids- og velferdsetaten';
 const grunnerErrorMessage = 'Bokstav C kan ikke velges i kombinasjon med bokstav A eller B';
+
+function mapValueToKeyGrunnerTilBehovForOppfølging(
+  val:
+    | GrunnerTilBehovForOppfølging.AKTIV_BEHANDLING
+    | GrunnerTilBehovForOppfølging.ARBEIDSRETTET_TILTAK
+    | GrunnerTilBehovForOppfølging.ANNEN_OPPFØLGING
+): GrunnerTilBehovForOppfølgingApi {
+  if (val === GrunnerTilBehovForOppfølging.ARBEIDSRETTET_TILTAK) return 'ARBEIDSRETTET_TILTAK';
+  if (val === GrunnerTilBehovForOppfølging.AKTIV_BEHANDLING) return 'AKTIV_BEHANDLING';
+  // GrunnerTilBehovForOppfølging.ANNEN_OPPFØLGING:
+  return 'ANNEN_OPPFØLGING';
+}
+function mapKeyToValueGrunnerTilBehovForOppfølging(key: GrunnerTilBehovForOppfølgingApi) {
+  if (key === 'ARBEIDSRETTET_TILTAK') return GrunnerTilBehovForOppfølging.ARBEIDSRETTET_TILTAK;
+  if (key === 'AKTIV_BEHANDLING') return GrunnerTilBehovForOppfølging.AKTIV_BEHANDLING;
+  //'ANNEN_OPPFØLGING':
+  return GrunnerTilBehovForOppfølging.ANNEN_OPPFØLGING;
+}
 export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
   function validateGrunner(grunner: string[]) {
     // skal inneholde enten bokstavA og/eller bokstavB, eller kun bokstavC
-    if (grunner?.includes(bokstavC)) return grunner?.length === 1;
+    if (grunner?.includes(GrunnerTilBehovForOppfølging.ANNEN_OPPFØLGING)) return grunner?.length === 1;
     return true;
   }
+  const defaultGrunner: GrunnerTilBehovForOppfølging[] = (grunnlag?.vurdering?.grunnerTilBehovForBistand || []).map(
+    (key) => mapKeyToValueGrunnerTilBehovForOppfølging(key)
+  );
   const { formFields, form } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
@@ -63,7 +92,12 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
       grunner: {
         type: 'checkbox',
         label: 'Velg minst én grunn for at § 11-6 er oppfylt',
-        options: [bokstavA, bokstavB, bokstavC],
+        options: [
+          GrunnerTilBehovForOppfølging.AKTIV_BEHANDLING,
+          GrunnerTilBehovForOppfølging.ARBEIDSRETTET_TILTAK,
+          GrunnerTilBehovForOppfølging.ANNEN_OPPFØLGING,
+        ],
+        defaultValue: defaultGrunner,
         rules: { validate: (val) => (validateGrunner(val as string[]) ? true : grunnerErrorMessage) },
       },
     },
@@ -79,7 +113,10 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
   }, [oppfølgingsGrunner, form]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit((data) =>
+    form.handleSubmit((data) => {
+      const grunnerTilBehovForBistand: GrunnerTilBehovForOppfølgingApi[] = data.grunner.map(
+        mapValueToKeyGrunnerTilBehovForOppfølging
+      );
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
@@ -87,11 +124,12 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
           bistandsVurdering: {
             begrunnelse: data.begrunnelse,
             erBehovForBistand: data.vilkårOppfylt === JaEllerNei.Ja,
+            grunnerTilBehovForBistand,
           },
         },
         referanse: behandlingsReferanse,
-      })
-    )(event);
+      });
+    })(event);
   };
 
   return (
