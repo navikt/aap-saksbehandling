@@ -23,9 +23,9 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
+            <Table.HeaderCell align={'right'}>Inntekt i G</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Andel vekting</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Inntekt i kr</Table.HeaderCell>
-            <Table.HeaderCell align={'right'}>Inntekt i G</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Justert til maks 6G</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -33,23 +33,23 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
           <Table.Row>
             <Table.DataCell>Anslått inntekt yrkesskade</Table.DataCell>
             <Table.DataCell align={'right'}>
+              {formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
+            </Table.DataCell>
+            <Table.DataCell align={'right'}>
               {formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)}
             </Table.DataCell>
             <Table.DataCell align={'right'}>
               {formaterTilNok(grunnlag.yrkesskadeinntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)}
             </Table.DataCell>
-            <Table.DataCell align={'right'}>
-              {formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
-            </Table.DataCell>
             <Table.DataCell align={'right'}>{formaterTilG(grunnlag.yrkesskadeinntekt.justertTilMaks6G)}</Table.DataCell>
           </Table.Row>
           <Table.Row>
             <Table.DataCell>Høyeste grunnlag standard beregning</Table.DataCell>
+            <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.inntektIG)}</Table.DataCell>
             <Table.DataCell align={'right'}>
               {formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)}
             </Table.DataCell>
             <Table.DataCell align={'center'}>-</Table.DataCell>
-            <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.inntektIG)}</Table.DataCell>
             <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.justertTilMaks6G)}</Table.DataCell>
           </Table.Row>
           <Table.Row>
