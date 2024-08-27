@@ -26,12 +26,14 @@ describe('grunnlag 11-19 visning', () => {
 
   it('skal ha en tabell som viser en oppsummering og det faktiske grunnlaget', () => {
     render(<Grunnlag1119Visning grunnlag={grunnlag} />);
-    const tabellOverskrift = screen.getByText(/faktisk grunnlag er satt til høyeste verdi av følgende/i);
+    const tabellOverskrift = screen.getByText('Innbyggers grunnlag er satt til gunstigste av følgende');
     expect(tabellOverskrift).toBeVisible();
 
     const headers = ['Beskrivelse', 'Grunnlag'];
     headers.forEach((header) => {
       expect(screen.getByRole('columnheader', { name: new RegExp(`^${header}$`) })).toBeVisible();
     });
+
+    expect(screen.getByRole('rowheader', { name: 'Grunnlag satt til' })).toBeVisible();
   });
 });

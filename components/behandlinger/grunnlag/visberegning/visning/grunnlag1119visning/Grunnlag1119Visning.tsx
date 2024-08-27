@@ -22,7 +22,7 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
         gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
       />
       <div className={'flex-column'}>
-        <Label size={'medium'}>Faktisk grunnlag er satt til høyeste verdi av følgende</Label>
+        <Label size={'medium'}>Innbyggers grunnlag er satt til gunstigste av følgende</Label>
         <Table size={'medium'}>
           <Table.Header>
             <Table.Row>
@@ -40,9 +40,7 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr.justertTilMaks6G)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>
-                <b>Faktisk grunnlag</b>
-              </Table.DataCell>
+              <Table.HeaderCell scope={'row'}>Grunnlag satt til</Table.HeaderCell>
               <Table.DataCell align={'right'}>
                 <b>{formaterTilG(grunnlag.grunnlag)}</b>
               </Table.DataCell>

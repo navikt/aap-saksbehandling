@@ -47,9 +47,7 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.yrkesskadeGrunnlag)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>
-                <b>Faktisk grunnlag</b>
-              </Table.DataCell>
+              <Table.HeaderCell scope={'row'}>Grunnlag satt til</Table.HeaderCell>
               <Table.DataCell align={'right'}>
                 <b>{formaterTilG(grunnlag.grunnlag)}</b>
               </Table.DataCell>
