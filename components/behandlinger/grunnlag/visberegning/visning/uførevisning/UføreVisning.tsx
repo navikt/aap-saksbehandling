@@ -22,13 +22,7 @@ export const UføreVisning = ({ grunnlag }: Props) => {
         grunnlagBeregnet={grunnlag.grunnlag}
       />
 
-      <UføreInntektTabell
-        label={
-          'Ufør. Pensjonsgivende inntekt siste 3 år  før arbeidsevne ble ytterligere nedsatt, justert for uføregrad '
-        }
-        inntekter={grunnlag.uføreInntekter}
-        gjennomsnittSiste3år={6}
-      />
+      <UføreInntektTabell inntekter={grunnlag.uføreInntekter} gjennomsnittSiste3år={6} />
       <div className={'flex-column'}>
         <Label size={'medium'}>Innbyggers grunnlag er satt til gunstigste av følgende</Label>
         <Table size={'medium'}>

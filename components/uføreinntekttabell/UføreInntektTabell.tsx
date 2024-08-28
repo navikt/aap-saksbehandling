@@ -4,15 +4,14 @@ import { UføreInntekt } from 'lib/types/types';
 import { formaterTilG, formaterTilNok, formaterTilProsent } from 'lib/utils/string';
 
 interface Props {
-  label: string;
   inntekter: Array<UføreInntekt>;
   gjennomsnittSiste3år: number;
 }
 
-export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, label }: Props) => {
+export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år }: Props) => {
   return (
     <div className={'flex-column'}>
-      <Label size={'medium'}>{label}</Label>
+      <Label size={'medium'}>Grunnlagsberegning ytterligere nedsatt arbeidsevne ved ufør</Label>
       <Table size={'medium'}>
         <Table.Header>
           <Table.Row>

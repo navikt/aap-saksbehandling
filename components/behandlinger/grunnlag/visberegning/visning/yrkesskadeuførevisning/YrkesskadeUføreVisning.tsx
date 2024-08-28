@@ -25,9 +25,6 @@ export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
       />
 
       <UføreInntektTabell
-        label={
-          'Ufør. Pensjonsgivende inntekt siste 3 år  før arbeidsevne ble ytterligere nedsatt, justert for uføregrad '
-        }
         inntekter={grunnlag.uføreGrunnlag.uføreInntekter}
         gjennomsnittSiste3år={grunnlag.uføreGrunnlag.gjennomsnittligInntektSiste3årUfør}
       />
