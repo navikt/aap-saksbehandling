@@ -44,7 +44,7 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
             <Table.DataCell align={'right'}>{formaterTilG(grunnlag.yrkesskadeinntekt.justertTilMaks6G)}</Table.DataCell>
           </Table.Row>
           <Table.Row>
-            <Table.DataCell>Høyeste grunnlag standard beregning</Table.DataCell>
+            <Table.DataCell>Grunnlag standard beregnet</Table.DataCell>
             <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.inntektIG)}</Table.DataCell>
             <Table.DataCell align={'right'}>
               {formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)}
