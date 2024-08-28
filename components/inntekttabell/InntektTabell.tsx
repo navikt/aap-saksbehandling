@@ -6,7 +6,7 @@ import { formaterTilG, formaterTilNok } from 'lib/utils/string';
 interface Props {
   inntekter: Array<Inntekt>;
   gjennomsnittSiste3år: number;
-  grunnlagBeregnet?: number;
+  grunnlagBeregnet: number;
 }
 
 export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, grunnlagBeregnet }: Props) => {
@@ -44,16 +44,14 @@ export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, grunnlagBeregn
               {formaterTilG(gjennomsnittSiste3år)}
             </Table.DataCell>
           </Table.Row>
-          {grunnlagBeregnet !== undefined && (
-            <Table.Row>
-              <>
-                <Table.DataCell>Grunnlag standard beregnet</Table.DataCell>
-                <Table.DataCell align={'right'} colSpan={3}>
-                  {grunnlagBeregnet && formaterTilG(grunnlagBeregnet)}
-                </Table.DataCell>
-              </>
-            </Table.Row>
-          )}
+          <Table.Row>
+            <>
+              <Table.DataCell>Grunnlag standard beregnet</Table.DataCell>
+              <Table.DataCell align={'right'} colSpan={3}>
+                {grunnlagBeregnet && formaterTilG(grunnlagBeregnet)}
+              </Table.DataCell>
+            </>
+          </Table.Row>
         </Table.Body>
       </Table>
     </div>
