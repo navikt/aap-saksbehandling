@@ -45,12 +45,10 @@ export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, grunnlagBeregn
             </Table.DataCell>
           </Table.Row>
           <Table.Row>
-            <>
-              <Table.DataCell>Grunnlag standard beregnet</Table.DataCell>
-              <Table.DataCell align={'right'} colSpan={3}>
-                {grunnlagBeregnet && formaterTilG(grunnlagBeregnet)}
-              </Table.DataCell>
-            </>
+            <Table.DataCell>Grunnlag standard beregnet</Table.DataCell>
+            <Table.DataCell align={'right'} colSpan={3}>
+              {formaterTilG(grunnlagBeregnet)}
+            </Table.DataCell>
           </Table.Row>
         </Table.Body>
       </Table>
