@@ -4,16 +4,17 @@ import { Inntekt } from 'lib/types/types';
 import { formaterTilG, formaterTilNok } from 'lib/utils/string';
 
 interface Props {
-  label: string;
   inntekter: Array<Inntekt>;
   gjennomsnittSiste3år: number;
   grunnlagBeregnet?: number;
 }
 
-export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, label, grunnlagBeregnet }: Props) => {
+export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, grunnlagBeregnet }: Props) => {
   return (
     <div className={'flex-column'}>
-      <Label size={'medium'}>{label}</Label>
+      <Label size={'medium'}>
+        Standard grunnlagsberegning basert på pensjonsgivende inntekt siste 3 år før redusert arbeidsevne
+      </Label>
       <ReadMore header={'Se detaljer om standard grunnlagsberegning'}>
         Inntekter er hentet fra skatteetaten og a-inntekt. Inntekt i G er justert for G-verdi for relevant år.
         Grunnlaget for AAP beregnes basert på innbyggers inntekt de siste tre årene før arbeidsevne ble redusert.

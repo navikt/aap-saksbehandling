@@ -20,7 +20,6 @@ export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
   return (
     <div className={styles.visning}>
       <InntektTabell
-        label={'Pensjonsgivende inntekt siste 3 år  før arbeidsevne ble nedsatt'}
         inntekter={grunnlag?.yrkesskadeGrunnlag.inntekter}
         gjennomsnittSiste3år={grunnlag?.yrkesskadeGrunnlag.gjennomsnittligInntektSiste3år}
       />

@@ -21,7 +21,6 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
       <InntektTabell
         inntekter={grunnlag.inntekter}
         gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
-        label={'Standard grunnlagsberegning basert på pensjonsgivende inntekt siste 3 år før redusert arbeidsevne'}
         grunnlagBeregnet={grunnlag.grunnlag}
       />
       <YrkesskadeBeregningTabell grunnlag={grunnlag} />

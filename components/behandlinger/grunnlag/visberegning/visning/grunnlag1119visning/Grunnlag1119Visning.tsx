@@ -17,7 +17,6 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
   return (
     <div className={styles.visning}>
       <InntektTabell
-        label={'Standard grunnlagsberegning basert på pensjonsgivende inntekt siste 3 år før redusert arbeidsevne'}
         inntekter={grunnlag.inntekter}
         gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
         grunnlagBeregnet={grunnlag.grunnlag}
