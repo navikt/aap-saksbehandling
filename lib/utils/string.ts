@@ -9,7 +9,10 @@ export function formaterTilNok(sum: number): string {
 }
 
 export function formaterTilG(sum: number): string {
-  const formatedSum = sum.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  const formatedSum = sum.toFixed(2);
+  if (formatedSum.endsWith('.00')) {
+    return `${formatedSum.slice(0, -3)} G`;
+  }
   return `${formatedSum} G`;
 }
 

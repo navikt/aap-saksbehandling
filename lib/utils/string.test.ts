@@ -23,6 +23,10 @@ describe('formaterTilG', () => {
   it('skal returnere en string med korrekt formatering med 6', () => {
     expect(formaterTilG(6)).toBe('6 G');
   });
+
+  it('skal returnere en string med korrekt formatering med 4.10', () => {
+    expect(formaterTilG(4.1)).toBe('4.10 G');
+  });
 });
 
 describe('formaterTilProsent', () => {
