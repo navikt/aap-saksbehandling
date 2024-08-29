@@ -1,4 +1,4 @@
-import { Label, Table } from '@navikt/ds-react';
+import { Label, ReadMore, Table } from '@navikt/ds-react';
 import { UføreInntekt } from 'lib/types/types';
 
 import { formaterTilG, formaterTilNok, formaterTilProsent } from 'lib/utils/string';
@@ -12,6 +12,13 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år }: Props)
   return (
     <div className={'flex-column'}>
       <Label size={'medium'}>Grunnlagsberegning ytterligere nedsatt arbeidsevne ved ufør</Label>
+      <ReadMore header={'Se detaljer for beregning ved uføre'}>
+        Der innbygger har gradert uføre skal det beregningen benytte gunstigste av: 1) Tidspunktet da innbyggers
+        arbeidsevne ble redusert med minst 50%. Typisk uføretidspunktet for gradert uføretrygd. 2) Tidspunktet da
+        arbeidsevne ble ytterligere nedsatt. Typisk når innbygger får ytterligere redusert arbeidsevne. I det siste
+        tilfellet skal inntekt fra deltidsstilling oppjusteres til 100 % stilling basert på uføregraden. Uføretrygd er
+        ikke pensjonsgivende inntekt. Maks grunnlag er 6 G.
+      </ReadMore>
       <Table size={'medium'}>
         <Table.Header>
           <Table.Row>
@@ -35,15 +42,15 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år }: Props)
             </Table.Row>
           ))}
           <Table.Row>
-            <Table.HeaderCell scope={'row'}>Gjennomsnitt siste 3 år</Table.HeaderCell>
+            <Table.DataCell>Gjennomsnitt siste 3 år før ytterligere nedsatt</Table.DataCell>
             <Table.DataCell align={'right'} colSpan={5}>
-              <b>{formaterTilG(gjennomsnittSiste3år)}</b>
+              {formaterTilG(gjennomsnittSiste3år)}
             </Table.DataCell>
           </Table.Row>
           <Table.Row>
-            <Table.HeaderCell scope={'row'}>Grunnlag ved uføretidspunkt</Table.HeaderCell>
+            <Table.DataCell>Grunnlag ytterligere nedsatt</Table.DataCell>
             <Table.DataCell align={'right'} colSpan={5}>
-              <b>{formaterTilG(gjennomsnittSiste3år)}</b>
+              {formaterTilG(gjennomsnittSiste3år)}
             </Table.DataCell>
           </Table.Row>
         </Table.Body>

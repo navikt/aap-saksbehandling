@@ -61,7 +61,7 @@ describe('tabell for å vise uføre inntekter', () => {
 
   it('skal ha et felt med gjennomsnittlig inntekt siste 3 år', () => {
     render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} />);
-    const felt = screen.getByText('Gjennomsnitt siste 3 år');
+    const felt = screen.getByText('Gjennomsnitt siste 3 år før ytterligere nedsatt');
     expect(felt).toBeVisible();
   });
 
