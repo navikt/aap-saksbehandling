@@ -31,7 +31,7 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
         </Table.Header>
         <Table.Body>
           <Table.Row>
-            <Table.DataCell>Anslått inntekt yrkesskade</Table.DataCell>
+            <Table.DataCell>Anslått inntekt yrkesskade ({grunnlag.inntektSisteÅr.år})</Table.DataCell>
             <Table.DataCell align={'right'}>
               {formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
             </Table.DataCell>
