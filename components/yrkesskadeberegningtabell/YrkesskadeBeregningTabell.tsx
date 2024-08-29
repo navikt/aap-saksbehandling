@@ -1,5 +1,5 @@
 import { Label, ReadMore, Table } from '@navikt/ds-react';
-import { formaterTilG, formaterTilNok, formaterTilProsent } from 'lib/utils/string';
+import { formaterTilG, formaterTilProsent } from 'lib/utils/string';
 import React from 'react';
 import { YrkesskadeGrunnlag } from 'lib/types/types';
 
@@ -17,7 +17,7 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
         grunnlagsberegning, og 2) beregning av den antatte inntekten ved yrkesskadetidspunkt. Anslått inntekt ved
         yrkesskadetidspunk benyttes kun for den andelen av redusert arbeidsevne som skyldes yrkesskaden. Resterende
         andel regnes ut etter standard beregning. Hvis yrkesskaden er mer enn 70% årsak til redusert arbeidsevne skal
-        hele beregningen gjøres etter gunstigste inntektsgrunnlag. Maks grunnlag er 6 G.{' '}
+        hele beregningen gjøres etter gunstigste inntektsgrunnlag. Maks grunnlag er 6 G.
       </ReadMore>
       <Table size={'medium'}>
         <Table.Header>
@@ -25,8 +25,8 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
             <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Inntekt i G</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Andel av grunnlag</Table.HeaderCell>
-            <Table.HeaderCell align={'right'}>Inntekt i kr</Table.HeaderCell>
-            <Table.HeaderCell align={'right'}>Justert til maks 6G</Table.HeaderCell>
+            <Table.HeaderCell align={'right'}>Andel*inntekt</Table.HeaderCell>
+            <Table.HeaderCell align={'right'}>Benyttet i YS grunnlag</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -38,10 +38,8 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
             <Table.DataCell align={'right'}>
               {formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)}
             </Table.DataCell>
-            <Table.DataCell align={'right'}>
-              {formaterTilNok(grunnlag.yrkesskadeinntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)}
-            </Table.DataCell>
-            <Table.DataCell align={'right'}>{formaterTilG(grunnlag.yrkesskadeinntekt.justertTilMaks6G)}</Table.DataCell>
+            <Table.DataCell align={'right'}>{formaterTilG(5.42)}</Table.DataCell>
+            <Table.DataCell align={'right'}>{formaterTilG(5.24)}</Table.DataCell>
           </Table.Row>
           <Table.Row>
             <Table.DataCell>Grunnlag standard beregnet</Table.DataCell>
@@ -49,13 +47,20 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
             <Table.DataCell align={'right'}>
               {formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)}
             </Table.DataCell>
-            <Table.DataCell align={'center'}>-</Table.DataCell>
+            <Table.DataCell align={'right'}>4.2 G</Table.DataCell>
             <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.justertTilMaks6G)}</Table.DataCell>
           </Table.Row>
           <Table.Row>
-            <Table.HeaderCell scope={'row'}>Yrkesskade grunnlag</Table.HeaderCell>
+            <Table.DataCell>Resterende andel, standard beregnet</Table.DataCell>
+            <Table.DataCell align={'right'}>4 G</Table.DataCell>
+            <Table.DataCell align={'right'}>40%</Table.DataCell>
+            <Table.DataCell align={'right'}>4 G</Table.DataCell>
+            <Table.DataCell align={'right'}>4 G</Table.DataCell>
+          </Table.Row>
+          <Table.Row>
+            <Table.DataCell>Totalt yrkesskade grunnlag</Table.DataCell>
             <Table.DataCell align={'right'} colSpan={4}>
-              <b>{formaterTilG(grunnlag.yrkesskadeGrunnlag)}</b>
+              {formaterTilG(grunnlag.yrkesskadeGrunnlag)}
             </Table.DataCell>
           </Table.Row>
         </Table.Body>
