@@ -2,7 +2,7 @@ import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingServi
 import { StegGruppe, StegType } from 'lib/types/types';
 import { NextRequest } from 'next/server';
 
-const DEFAULT_TIMEOUT_IN_MS = 1000;
+const DEFAULT_TIMEOUT_IN_MS = 500;
 const RETRIES = 0;
 
 export interface ServerSentEventData {
@@ -15,13 +15,6 @@ export interface ServerSentEventData {
 }
 
 export type ServerSentEventStatus = 'POLLING' | 'ERROR' | 'DONE';
-
-const gruppeEllerStegErEndret = (
-  aktivGruppe: string,
-  aktivtSteg: string,
-  aktivGruppeFraBackend: string,
-  aktivtStegFraBackend: string
-) => aktivGruppe !== aktivGruppeFraBackend || aktivtSteg !== aktivtStegFraBackend;
 
 export async function GET(
   __request: NextRequest,
@@ -51,8 +44,6 @@ export async function GET(
       }
 
       const flyt = await hentFlyt(context.params.referanse);
-      const aktivGruppe = flyt.vurdertGruppe != null ? flyt.vurdertGruppe : flyt.aktivGruppe;
-      const aktivtSteg = flyt.vurdertSteg != null ? flyt.vurdertSteg : flyt.aktivtSteg;
 
       if (flyt.prosessering.status === 'FEILET') {
         const json: ServerSentEventData = {
@@ -65,8 +56,10 @@ export async function GET(
         return;
       }
 
-      if (gruppeEllerStegErEndret(context.params.gruppe, context.params.steg, aktivGruppe, aktivtSteg)) {
-        console.log('Gruppe eller steg er endret!');
+      if (flyt.prosessering.status === 'FERDIG') {
+        console.log('Prosessering ferdig');
+        const aktivGruppe = flyt.vurdertGruppe != null ? flyt.vurdertGruppe : flyt.aktivGruppe;
+        const aktivtSteg = flyt.vurdertSteg != null ? flyt.vurdertSteg : flyt.aktivtSteg;
 
         const json: ServerSentEventData = {
           aktivGruppe: flyt.vurdertGruppe != null ? flyt.vurdertGruppe : flyt.aktivGruppe,
@@ -80,7 +73,8 @@ export async function GET(
         writer.close();
         return;
       } else {
-        await pollFlytMedTimeoutOgRetry(timeout * 1.3, retries + 1);
+        console.log('Prosessering jobber');
+        await pollFlytMedTimeoutOgRetry(DEFAULT_TIMEOUT_IN_MS, retries + 1);
       }
     }, timeout);
   };
