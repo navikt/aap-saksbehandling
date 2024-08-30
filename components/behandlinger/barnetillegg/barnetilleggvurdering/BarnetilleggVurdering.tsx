@@ -3,7 +3,7 @@
 import { ChildHairEyesIcon } from '@navikt/aksel-icons';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { useConfigForm, FormField } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { BodyShort, Button, Label } from '@navikt/ds-react';
@@ -95,8 +95,9 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
                 behandlingVersjon: behandlingsversjon,
                 behov: {
                   behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
-                  //@ts-ignore TODO Legg inn vurdering her
-                  vurdering: {},
+                  vurdering: {
+                    vurderteBarn: [],
+                  },
                 },
                 referanse: behandlingsReferanse,
               })
