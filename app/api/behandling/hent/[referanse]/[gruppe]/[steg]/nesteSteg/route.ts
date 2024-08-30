@@ -26,7 +26,7 @@ export async function GET(
   const pollFlytMedTimeoutOgRetry = async (timeout: number, retries: number) => {
     setTimeout(async () => {
       console.log({ timeout, retries });
-      if (retries > 8) {
+      if (retries > 19) {
         const json: ServerSentEventData = {
           status: 'ERROR',
           errormessage: 'Antall retries er brukt opp',
@@ -35,7 +35,7 @@ export async function GET(
         writer.close();
         return;
       }
-      if (retries === 3) {
+      if (retries === 10) {
         const json: ServerSentEventData = {
           status: 'POLLING',
         };
