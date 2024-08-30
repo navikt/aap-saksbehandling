@@ -95,6 +95,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
                 behandlingVersjon: behandlingsversjon,
                 behov: {
                   behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
+                  //@ts-ignore TODO Legg inn vurdering her
                   vurdering: {},
                 },
                 referanse: behandlingsReferanse,
