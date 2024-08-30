@@ -74,7 +74,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.FRITAK_MELDEPLIKT_KODE,
-          vurdering: {
+          fritaksvurdering: {
             begrunnelse: data.begrunnelse,
             harFritak: data.unntakFraMeldeplikt.includes('Unntak fra meldeplikten'),
             periode: {
