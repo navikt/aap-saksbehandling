@@ -20,11 +20,12 @@ export const useLøsBehovOgGåTilNesteSteg = (
   const [isLoading, setIsLoading] = useState(false);
 
   const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling) => {
+    setIsLoading(true);
     await løsBehov(behov);
     listenSSE();
   };
+
   const listenSSE = () => {
-    setIsLoading(true);
     const eventSource = new EventSource(
       `/api/behandling/hent/${params.behandlingsReferanse}/${params.aktivGruppe}/${steg}/nesteSteg/`,
       {
@@ -47,6 +48,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
         console.log('ERROR', eventData);
         setStatus(eventData.status);
         eventSource.close();
+        setIsLoading(false);
       }
       if (eventData.status === 'POLLING') {
         setStatus(eventData.status);
