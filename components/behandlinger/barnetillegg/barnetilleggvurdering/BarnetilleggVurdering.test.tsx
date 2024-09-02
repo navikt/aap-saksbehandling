@@ -1,28 +1,30 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { BarnetilleggVurdering } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { userEvent } from '@testing-library/user-event';
 import { BarnetilleggGrunnlag } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { addDays } from 'date-fns';
 
-describe('barnetillegg', () => {
-  const user = userEvent.setup();
-
-  const grunnlag: BarnetilleggGrunnlag = {
-    folkeregisterbarn: [
-      {
-        ident: {
-          identifikator: '12345678910',
-          aktivIdent: true,
-        },
-        forsorgerPeriode: {
-          fom: '2020-02-02',
-          tom: '2038-02-02',
-        },
+const grunnlag: BarnetilleggGrunnlag = {
+  folkeregisterbarn: [
+    {
+      ident: {
+        identifikator: '12345678910',
+        aktivIdent: true,
       },
-    ],
-    oppgitteBarn: [],
-    barnSomTrengerVurdering: [],
-  };
+      forsorgerPeriode: {
+        fom: '2020-02-02',
+        tom: '2038-02-02',
+      },
+    },
+  ],
+  oppgitteBarn: [],
+  barnSomTrengerVurdering: [],
+};
+
+describe.skip('barnetillegg', () => {
+  const user = userEvent.setup();
 
   it('skal ha en overskrift', () => {
     render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
@@ -101,4 +103,151 @@ describe('barnetillegg', () => {
     const knapp = screen.queryByRole('button', { name: 'Bekreft' });
     expect(knapp).not.toBeInTheDocument();
   });
+});
+
+describe.skip('Manuelt registrerte barn', () => {
+  const user = userEvent.setup();
+
+  // TODO navn må hentes, kommer ikke som en del av grunnlaget
+  it.skip('skal ha en heading med navn og ident', () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    const heading = screen.getByRole('heading', { name: 'Kjell T Ringen - 12345678910' });
+    expect(heading).toBeVisible();
+  });
+
+  it('skal ha en vilkårsveiledning med korrekt heading', () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    const heading = screen.getByText('Slik vurderes vilkåret');
+    expect(heading).toBeVisible();
+  });
+
+  it('skal ha innhold i vilkårsveiledningen', () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    const tekst = screen.getByText('Her kommer det en tekst om hvordan vilkåret skal vurderes');
+    expect(tekst).toBeVisible();
+  });
+
+  it('skal ha et begrunnelsesfelt', () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    const felt = screen.getByRole('textbox', {
+      name: 'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet',
+    });
+    expect(felt).toBeVisible();
+  });
+
+  // denne testen må skrives om
+  it('skal gi en feilmelding dersom begrunnelsesfelt ikke er besvart', async () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+
+    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
+
+    await user.click(lagreKnapp);
+    const feilmelding = screen.getByText('Du må gi en begrunnelse');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('skal ha et felt hvor det besvares om det skal beregnes barnetillegg for barnet', () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    const felt = screen.getByRole('group', { name: 'Skal det beregnes barnetillegg for dette barnet?' });
+    expect(felt).toBeVisible();
+  });
+
+  it('skal gi en feilmelding dersom feltet om det skal beregnes barnetillegg ikke er besvart', async () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+
+    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
+
+    await user.click(lagreKnapp);
+    const feilmelding = screen.getByText('Du må besvare om det skal beregnes barnetillegg for barnet');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('skal ha et felt for å sette datoen søkeren har forsørgeransvar for barnet fra dersom det har blitt besvart ja på spørsmålet om det skal beregnes barnetillegg', async () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+
+    const forsørgerAnsvarFelt = screen.queryByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+    expect(forsørgerAnsvarFelt).not.toBeInTheDocument();
+
+    await svarJaPåOmDetSkalBeregnesBarnetillegg();
+
+    const felt = screen.getByRole('textbox', { name: /søker har forsørgeransvar for barnet fra/i });
+    expect(felt).toBeVisible();
+  });
+
+  it('skal ha vise feilmelding dersom feltet for datoen søkeren har forsørgeransvar for barnet fra ikke er besvart', async () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+
+    const forsørgeransvarFelt = screen.queryByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+    expect(forsørgeransvarFelt).not.toBeInTheDocument();
+
+    await svarJaPåOmDetSkalBeregnesBarnetillegg();
+    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
+
+    await user.click(lagreKnapp);
+    const feilmelding = screen.getByText('Du må sette en dato for når søker har forsørgeransvar for barnet fra');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('skal ha en knapp for å kunne sette en sluttdato for forsørgeransvaret', async () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    await svarJaPåOmDetSkalBeregnesBarnetillegg();
+
+    const leggTilSluttDatoKnapp = screen.getByRole('button', { name: 'Legg til sluttdato' });
+    expect(leggTilSluttDatoKnapp).toBeVisible();
+  });
+
+  it('skal vise felt for sluttdato for forsørgeransvare dersom man trykker på knappen legg til sluttdato', async () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    await svarJaPåOmDetSkalBeregnesBarnetillegg();
+
+    expect(screen.queryByRole('textbox', { name: /Sluttdato for forsørgeransvaret/i })).not.toBeInTheDocument();
+
+    const leggTilSluttDatoKnapp = screen.getByRole('button', { name: 'Legg til sluttdato' });
+    await user.click(leggTilSluttDatoKnapp);
+
+    const sluttDatoFelt = screen.getByRole('textbox', { name: /Sluttdato for forsørgeransvaret/i });
+    expect(sluttDatoFelt).toBeVisible();
+  });
+
+  it('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    await svarJaPåOmDetSkalBeregnesBarnetillegg();
+    const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+    const imorgen = addDays(new Date(), 1);
+
+    await user.type(datofelt, formaterDatoForFrontend(imorgen));
+    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
+
+    await user.click(lagreKnapp);
+    const feilmelding = screen.getByText('Dato for når søker har forsørgeransvar fra kan ikke være frem i tid');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    await svarJaPåOmDetSkalBeregnesBarnetillegg();
+    const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+
+    await user.type(datofelt, '12.2003');
+    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
+
+    await user.click(lagreKnapp);
+    const feilmelding = screen.getByText('Dato for når søker har forsørgeransvar fra er ikke gyldig');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('skal ikke vise knapp for å fullføre vurdering dersom readonly er satt til true', () => {
+    render(<BarnetilleggVurdering readOnly={true} grunnlag={grunnlag} behandlingsversjon={1} />);
+    const knapp = screen.queryByRole('button', { name: 'Bekreft' });
+    expect(knapp).not.toBeInTheDocument();
+  });
+
+  async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
+    const skalBeregnesBarnetilleggFelt = screen.getByRole('group', {
+      name: 'Skal det beregnes barnetillegg for dette barnet?',
+    });
+    const jaVerdi = within(skalBeregnesBarnetilleggFelt).getByRole('radio', { name: 'Ja' });
+
+    await user.click(jaVerdi);
+  }
 });

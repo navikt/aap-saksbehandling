@@ -1,18 +1,22 @@
 'use client';
 
-import { ChildHairEyesIcon } from '@navikt/aksel-icons';
+import { ChildHairEyesIcon, QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
+import { BodyShort, Button, CheckboxGroup, Heading, Label } from '@navikt/ds-react';
+import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
+import { BarnetilleggGrunnlag, VurdertBarn } from 'lib/types/types';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useState } from 'react';
+import styles from 'components/barn/Barn.module.css';
+import { ManueltBarn } from 'components/barn/manueltbarn/ManueltBarn';
+
+import { v4 as uuidv4 } from 'uuid';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
-import { BodyShort, Button, Label } from '@navikt/ds-react';
-import { ManueltBarn } from 'components/barn/manueltbarn/ManueltBarn';
-import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
-import { BarnetilleggGrunnlag, OppgitteBarn } from 'lib/types/types';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype } from 'lib/utils/form';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
   behandlingsversjon: number;
@@ -20,34 +24,63 @@ interface Props {
   readOnly: boolean;
 }
 
-interface FormFields {
-  dokumenterBruktIVurderingen: string[];
+interface Vurdering {
+  [ident: string]: ManueltBarnVurdering[];
 }
 
-const mockManueltRegistrerteBarn: OppgitteBarn[] = [
-  {
-    identifikator: '12345678910',
-    aktivIdent: true,
-  },
-  {
-    identifikator: '17082100001',
-    aktivIdent: true,
-  },
-];
+export interface ManueltBarnVurdering {
+  begrunnelse?: string;
+  harForelderAnsvar?: string;
+  fom?: Date;
+  tom?: Date;
+  feltId: string;
+}
 
 export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
-  const { form, formFields } = useConfigForm<FormFields>(
-    {
-      dokumenterBruktIVurderingen: {
-        type: 'checkbox_nested',
-        label: 'Dokumenter funnet som er relevante for vurdering av barnetillegg §11-20',
-        description: 'Les dokumentene og tilknytt eventuelle dokumenter benyttet til 11-20 vurderingen',
-      },
-    },
-    { readOnly: readOnly }
-  );
+
+  const initialValue = grunnlag.barnSomTrengerVurdering.reduce((acc, barn) => {
+    acc[barn.ident.identifikator] = [{ feltId: uuidv4() }];
+    return acc;
+  }, {} as Vurdering);
+
+  const [vurderinger, setVurderinger] = useState<Vurdering>(initialValue);
+  const [dokumenter, setDokumenter] = useState<string[]>([]);
+
+  const handleInputChange = (
+    ident: string,
+    feltId: string,
+    field: keyof ManueltBarnVurdering,
+    value: string | Date
+  ) => {
+    const updatedVurderinger = { ...vurderinger };
+    const vurderingList = updatedVurderinger[ident];
+    const manualVurd = vurderingList.find((v) => v.feltId === feltId);
+
+    if (manualVurd) {
+      // @ts-ignore TODO Finn ut hva som skjer her
+      manualVurd[field] = value;
+      setVurderinger(updatedVurderinger);
+    }
+  };
+
+  const addManueltBarnVurdering = (ident: string) => {
+    const newVurdering = {
+      feltId: uuidv4(),
+    };
+
+    setVurderinger((prevVurderinger) => ({
+      ...prevVurderinger,
+      [ident]: [...(prevVurderinger[ident] || []), newVurdering],
+    }));
+  };
+
+  const removeManueltBarnVurdering = (ident: string, feltId: string) => {
+    const updatedVurderinger = { ...vurderinger };
+    updatedVurderinger[ident] = updatedVurderinger[ident].filter((v) => v.feltId !== feltId);
+    setVurderinger(updatedVurderinger);
+  };
 
   return (
     <VilkårsKort
@@ -56,12 +89,15 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
       steg={'BARNETILLEGG'}
     >
       <div className={'flex-column'}>
-        <form id={'dokument-form'} onSubmit={form.handleSubmit(() => console.log('Her skal det skje noe!'))}>
-          <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
-            <DokumentTabell />
-          </FormField>
-        </form>
-        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
+        <CheckboxGroup
+          legend={'Dokumenter funnet som er relevante for vurdering av barnetillegg §11-20'}
+          description={'Les dokumentene og tilknytt eventuelle dokumenter benyttet til 11-20 vurderingen'}
+          onChange={(value) => setDokumenter(value)}
+        >
+          <DokumentTabell />
+        </CheckboxGroup>
+
+        <TilknyttedeDokumenter dokumenter={dokumenter} />
 
         <div>
           <Label size={'small'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
@@ -69,14 +105,35 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
             Les dokumentene og tilknytt relevante dokumenter til vurdering om det skal beregnes barnetillegg
           </BodyShort>
         </div>
-        {/* TODO hent fra grunnlag */}
-        {mockManueltRegistrerteBarn.length > 0 && (
-          <>
-            {mockManueltRegistrerteBarn.map((barn, index) => (
-              <ManueltBarn manueltBarn={barn} readOnly={readOnly} key={index} />
-            ))}
-          </>
-        )}
+        <>
+          {Object.keys(vurderinger).map((ident) => (
+            <section key={ident} className={styles.barnekort}>
+              <div className={styles.manueltbarnheading}>
+                <div>
+                  <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'3rem'} />
+                </div>
+                <div>
+                  <Heading size={'small'}>{ident}</Heading>
+                </div>
+              </div>
+              <div>
+                {vurderinger[ident].map((vurdering, manueltBarnVurderingIndex) => (
+                  <div key={vurdering.feltId}>
+                    <ManueltBarn
+                      key={manueltBarnVurderingIndex}
+                      manueltBarn={vurdering}
+                      readOnly={readOnly}
+                      oppdaterVurdering={handleInputChange}
+                      ident={ident}
+                    />
+                    <Button onClick={() => removeManueltBarnVurdering(ident, vurdering.feltId)}>Fjern periode</Button>
+                  </div>
+                ))}
+              </div>
+              <Button onClick={() => addManueltBarnVurdering(ident)}>Legg til flere perioder</Button>
+            </section>
+          ))}
+        </>
 
         {grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0 && (
           <>
@@ -86,22 +143,42 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
             ))}
           </>
         )}
+
         {!readOnly && (
           <Button
             className={'fit-content-button'}
             form="dokument-form"
-            onClick={() =>
+            onClick={() => {
+              // TODO Skriv noe valideringsregler her
+              // const validerteVurderinger = validerVurderinger();
+
+              const vurderteBarn: VurdertBarn[] = Object.keys(vurderinger).map((ident) => {
+                return {
+                  ident: { identifikator: ident, aktivIdent: true },
+                  vurderinger: vurderinger[ident].map((vurdering) => {
+                    return {
+                      begrunnelse: vurdering.begrunnelse || '',
+                      harForeldreAnsvar: vurdering.harForelderAnsvar === JaEllerNei.Ja,
+                      periode: {
+                        fom: vurdering.fom ? formaterDatoForBackend(vurdering.fom) : formaterDatoForBackend(new Date()),
+                        tom: vurdering.tom ? formaterDatoForBackend(vurdering.tom) : formaterDatoForBackend(new Date()),
+                      },
+                    };
+                  }),
+                };
+              });
+
               løsBehovOgGåTilNesteSteg({
                 behandlingVersjon: behandlingsversjon,
                 behov: {
                   behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
                   vurderingerForBarnetillegg: {
-                    vurderteBarn: [],
+                    vurderteBarn: vurderteBarn,
                   },
                 },
                 referanse: behandlingsReferanse,
-              })
-            }
+              });
+            }}
             loading={isLoading}
           >
             Bekreft

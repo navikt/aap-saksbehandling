@@ -1,109 +1,86 @@
-import React, { useState } from 'react';
-import { isAfter } from 'date-fns';
+import { useState } from 'react';
 
-import { Button, Heading } from '@navikt/ds-react';
-import { PlusIcon, QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
+import { Button, DatePicker, Radio, RadioGroup, Textarea, useDatepicker } from '@navikt/ds-react';
+import { PlusIcon } from '@navikt/aksel-icons';
+import { JaEllerNei } from 'lib/utils/form';
 
-import styles from 'components/barn/Barn.module.css';
-import { Veiledning } from 'components/veiledning/Veiledning';
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
-import { OppgitteBarn } from 'lib/types/types';
-
-interface FormFields {
-  begrunnelse: string;
-  skalDetBeregnesBarneTillegg: string;
-  forsørgerAnsvarStartDato: Date;
-  forsørgerAnsvarSluttDato?: Date;
-}
+import { ManueltBarnVurdering } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 
 interface Props {
-  manueltBarn: OppgitteBarn;
+  manueltBarn: ManueltBarnVurdering;
+  oppdaterVurdering: (ident: string, feltId: string, field: keyof ManueltBarnVurdering, value: string | Date) => void;
+  ident: string;
   readOnly: boolean;
 }
 
-export const ManueltBarn = ({ manueltBarn, readOnly }: Props) => {
+export const ManueltBarn = ({ manueltBarn, oppdaterVurdering, readOnly, ident }: Props) => {
   const [leggTilSluttDato, setLeggTilSluttDato] = useState(false);
-  const { formFields, form } = useConfigForm<FormFields>(
-    {
-      begrunnelse: {
-        type: 'textarea',
-        label: 'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet',
-        rules: { required: 'Du må gi en begrunnelse' },
+
+  const feltId = manueltBarn.feltId;
+
+  const { datepickerProps: forsørgerAnsvarStartDatoDatepickerProps, inputProps: forsørgerAnsvarStartDatoInputProps } =
+    useDatepicker({
+      toDate: new Date(),
+      onDateChange: (date) => {
+        if (date) oppdaterVurdering(ident, feltId, 'tom', date);
       },
-      skalDetBeregnesBarneTillegg: {
-        type: 'radio',
-        label: 'Skal det beregnes barnetillegg for dette barnet?',
-        options: JaEllerNeiOptions,
-        rules: { required: 'Du må besvare om det skal beregnes barnetillegg for barnet' },
+    });
+  const { datepickerProps: forsørgerAnsvarSluttDatoDatepickerProps, inputProps: forsørgerAnsvarSluttDatoInputProps } =
+    useDatepicker({
+      fromDate: new Date(),
+      onDateChange: (date) => {
+        if (date) oppdaterVurdering(ident, feltId, 'fom', date);
       },
-      forsørgerAnsvarStartDato: {
-        type: 'date',
-        label: 'Søker har forsørgeransvar for barnet fra',
-        toDate: new Date(),
-        rules: {
-          required: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra',
-          validate: (value) => {
-            const inputDato = parseDatoFraDatePicker(value);
-            if (inputDato) {
-              return isAfter(inputDato, new Date())
-                ? 'Dato for når søker har forsørgeransvar fra kan ikke være frem i tid'
-                : true;
-            }
-            return 'Dato for når søker har forsørgeransvar fra er ikke gyldig';
-          },
-        },
-      },
-      forsørgerAnsvarSluttDato: {
-        type: 'date',
-        label: 'Sluttdato for forsørgeransvaret',
-        rules: { required: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra' },
-      },
-    },
-    { readOnly: readOnly }
-  );
+    });
 
   return (
-    <section className={styles.barnekort}>
-      <div className={styles.manueltbarnheading}>
-        <div>
-          <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'3rem'} />
+    <div className={'flex-column'}>
+      <Textarea
+        label={'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet'}
+        onChange={(event) => oppdaterVurdering(ident, feltId, 'begrunnelse', event.target.value)}
+        size={'small'}
+        readOnly={readOnly}
+      />
+      <RadioGroup
+        legend={'Skal det beregnes barnetillegg for dette barnet?'}
+        onChange={(value) => oppdaterVurdering(ident, feltId, 'harForelderAnsvar', value)}
+        size={'small'}
+        readOnly={readOnly}
+      >
+        <Radio value={JaEllerNei.Ja}>Ja</Radio>
+        <Radio value={JaEllerNei.Nei}>Nei</Radio>
+      </RadioGroup>
+
+      {manueltBarn.harForelderAnsvar === JaEllerNei.Ja && (
+        <div className={'flex-row'}>
+          <DatePicker {...forsørgerAnsvarStartDatoDatepickerProps}>
+            <DatePicker.Input
+              label={'Søker har forsørgeransvar for barnet fra'}
+              size={'small'}
+              {...forsørgerAnsvarStartDatoInputProps}
+            />
+          </DatePicker>
+          {leggTilSluttDato ? (
+            <DatePicker {...forsørgerAnsvarSluttDatoDatepickerProps}>
+              <DatePicker.Input
+                label={'Sluttdato for forsørgeransvaret'}
+                size={'small'}
+                {...forsørgerAnsvarSluttDatoInputProps}
+              />
+            </DatePicker>
+          ) : (
+            <Button
+              onClick={() => setLeggTilSluttDato(true)}
+              icon={<PlusIcon />}
+              className={'fit-content-button'}
+              variant={'tertiary'}
+              size={'small'}
+            >
+              Legg til sluttdato
+            </Button>
+          )}
         </div>
-        <div>
-          <Heading size={'small'}>{manueltBarn.identifikator}</Heading>
-        </div>
-      </div>
-      <div className={'flex-column'}>
-        <Veiledning
-          header={'Slik vurderes vilkåret'}
-          defaultOpen={true}
-          tekst={'Her kommer det en tekst om hvordan vilkåret skal vurderes'}
-        />
-        <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.skalDetBeregnesBarneTillegg} />
-        {form.watch('skalDetBeregnesBarneTillegg') === JaEllerNei.Ja && (
-          <div className={'flex-row'}>
-            <FormField form={form} formField={formFields.forsørgerAnsvarStartDato} />
-            {leggTilSluttDato ? (
-              <FormField form={form} formField={formFields.forsørgerAnsvarSluttDato} />
-            ) : (
-              <Button
-                onClick={(e) => {
-                  e.preventDefault();
-                  setLeggTilSluttDato(true);
-                }}
-                icon={<PlusIcon />}
-                className={'fit-content-button'}
-                variant={'tertiary'}
-                size={'medium'}
-              >
-                Legg til sluttdato
-              </Button>
-            )}
-          </div>
-        )}
-      </div>
-    </section>
+      )}
+    </div>
   );
 };
