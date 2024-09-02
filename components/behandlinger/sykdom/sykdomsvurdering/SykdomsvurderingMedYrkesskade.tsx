@@ -25,6 +25,7 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { validerÅrstall } from 'lib/utils/validation';
 
 interface FormFields {
+  harSkadeSykdomEllerLyte: string;
   erArbeidsevnenNedsatt: string;
   begrunnelse: string;
   erSkadeSykdomEllerLyteVesentligdel: string;
@@ -45,6 +46,13 @@ export const SykdomsvurderingMedYrkesskade = ({
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
+      harSkadeSykdomEllerLyte: {
+        type: 'radio',
+        label: 'Har innbygger sykdom, skade eller lyte?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.harSkadeSykdomEllerLyte),
+        options: JaEllerNeiOptions,
+        rules: { required: 'Du må svare på om innbygger har sykdom, skade eller lyte' },
+      },
       erArbeidsevnenNedsatt: {
         type: 'radio',
         label: 'Er arbeidsevnen nedsatt?',
@@ -61,11 +69,11 @@ export const SykdomsvurderingMedYrkesskade = ({
       },
       erSkadeSykdomEllerLyteVesentligdel: {
         type: 'radio',
-        label: 'Er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne? (§ 11-5)',
+        label: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
         rules: {
-          required: 'Du må svare på om det er sykdom, skade eller lyte som er medvirkende til nedsatt arbeidsevne.',
+          required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
         },
       },
       erÅrsakssammenheng: {
@@ -111,6 +119,7 @@ export const SykdomsvurderingMedYrkesskade = ({
         behov: {
           behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
           sykdomsvurdering: {
+            harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
             erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
             begrunnelse: data.begrunnelse,
             dokumenterBruktIVurdering: [],
@@ -176,10 +185,10 @@ export const SykdomsvurderingMedYrkesskade = ({
         <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} />
         <TilknyttedeDokumenter dokumenter={dokumenterBruktIVurderingen} />
-        <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
-
-        {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
+        <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} />
+        {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
           <>
+            <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
             <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
             <FormField form={form} formField={formFields.erÅrsakssammenheng} />
             <FormField

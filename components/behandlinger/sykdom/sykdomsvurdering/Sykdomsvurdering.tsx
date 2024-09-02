@@ -22,6 +22,7 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { validerÅrstall } from 'lib/utils/validation';
 
 interface FormFields {
+  harSkadeSykdomEllerLyte: string;
   erArbeidsevnenNedsatt: string;
   dokumenterBruktIVurderingen: string[];
   erSkadeSykdomEllerLyteVesentligdel: string;
@@ -36,27 +37,27 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
-      erArbeidsevnenNedsatt: {
-        type: 'radio',
-        label: 'Er arbeidsevnen nedsatt?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erArbeidsevnenNedsatt),
-        options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om arbeidsevnen er nedsatt' },
-      },
       begrunnelse: {
         type: 'textarea',
         label: 'Vurder den nedsatte arbeidsevnen',
         description:
-          'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige. Hvorfor vurderes nedsatt arbeidsevne med minst 50%?',
+          'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige? Hvis yrkesskade er funnet: vurder mot YS',
         defaultValue: grunnlag?.sykdomsvurdering?.begrunnelse,
         rules: { required: 'Du må begrunne' },
       },
-      erSkadeSykdomEllerLyteVesentligdel: {
+      harSkadeSykdomEllerLyte: {
         type: 'radio',
-        label: 'Er det sykdom, skade eller lyte som er vesentlig medvirkende til nedsatt arbeidsevne? (§ 11-5)',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
+        label: 'Har innbygger sykdom, skade eller lyte?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.harSkadeSykdomEllerLyte),
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om vilkåret er oppfyllt' },
+        rules: { required: 'Du må svare på om innbygger har sykdom, skade eller lyte' },
+      },
+      erArbeidsevnenNedsatt: {
+        type: 'radio',
+        label: 'Har innbygger nedsatt arbeidsevne?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erArbeidsevnenNedsatt),
+        options: JaEllerNeiOptions,
+        rules: { required: 'Du må svare på om innbygger har nedsatt arbeidsevne' },
       },
       erNedsettelseIArbeidsevneHøyereEnnNedreGrense: {
         type: 'radio',
@@ -66,6 +67,15 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om arbeidsevnen er nedsatt med minst 50%' },
+      },
+      erSkadeSykdomEllerLyteVesentligdel: {
+        type: 'radio',
+        label: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
+        options: JaEllerNeiOptions,
+        rules: {
+          required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
+        },
       },
       dokumenterBruktIVurderingen: {
         type: 'checkbox_nested',
@@ -95,6 +105,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
             erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
             begrunnelse: data.begrunnelse,
             dokumenterBruktIVurdering: [],
+            harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
             erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
             nedreGrense: 'FEMTI',
             erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
@@ -106,6 +117,12 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
       });
     })(event);
   };
+
+  const visFeltForNårArbeidsevnenBleNedsatt =
+    form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja &&
+    form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja &&
+    form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') === JaEllerNei.Ja &&
+    form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja;
 
   return (
     <VilkårsKort
@@ -135,14 +152,21 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} />
         <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
-        <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
-        {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
+        <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} />
+        {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
           <>
-            <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
+            <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
+            <Veiledning
+              header={'Slik vurderes dette'}
+              tekst={
+                'Sykdom, skate eller lyte er (som hovedregel) en medisinsk tilstand med en vitenskalpelig anerkjent diagnose. Sykdomslignende symptomer kan også oppfylle lovens krav til sykdom, så det er ikke alltid et krav at det er stilt en diagnose for at vilkåret skal være oppfylt'
+              }
+            />
             <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
-            <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
+            <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
           </>
         )}
+        {visFeltForNårArbeidsevnenBleNedsatt && <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />}
       </Form>
     </VilkårsKort>
   );
