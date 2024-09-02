@@ -63,7 +63,8 @@ export const SykdomsvurderingMedYrkesskade = ({
       begrunnelse: {
         type: 'textarea',
         label: 'Vurder den nedsatte arbeidsevnen',
-        description: 'Hvilken sykdom/skade/lyte? Hva er det mest vesentlige? Hvis yrkesskade er funnet: vurder mot YS',
+        description:
+          'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige? Hvis yrkesskade er funnet: vurder mot YS',
         defaultValue: grunnlag.sykdomsvurdering?.begrunnelse,
         rules: { required: 'Du må begrunne' },
       },
@@ -202,7 +203,9 @@ export const SykdomsvurderingMedYrkesskade = ({
               }}
             />
 
-            {form.watch('erSkadeSykdomEllerLyteVesentligdel') == JaEllerNei.Ja &&
+            {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja &&
+              form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja &&
+              form.watch('erSkadeSykdomEllerLyteVesentligdel') == JaEllerNei.Ja &&
               form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') == JaEllerNei.Ja && (
                 <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
               )}

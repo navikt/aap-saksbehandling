@@ -168,20 +168,20 @@ describe('Sykdomsvurdering med yrkesskade', () => {
 
   it('skal ha et felt for hvilket år arbeidsevnen ble nedsatt', async () => {
     await velgAtInnbyggerHarSykdomSkadeEllerLyte();
+    await velgAtArbeidsevnenErNedsatt();
     await velgAtSykdomSkadeEllerLyteErVesentligMedvirkendeÅrsak();
     await velgAtArbeidsevnenErNedsattMedMinst50prosent();
 
-    expect(
-      await screen.findByRole('textbox', { name: /hvilket år ble arbeidsevnen nedsatt\? \(§11-5\)/i })
-    ).toBeVisible();
+    expect(await screen.findByRole('textbox', { name: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)' })).toBeVisible();
   });
 
   it('Skal vise feilmelding dersom felt for hvilket år arbeisevnen ble nedsatt ikke er besvart', async () => {
     await velgAtInnbyggerHarSykdomSkadeEllerLyte();
+    await velgAtArbeidsevnenErNedsatt();
     await velgAtSykdomSkadeEllerLyteErVesentligMedvirkendeÅrsak();
     await velgAtArbeidsevnenErNedsattMedMinst50prosent();
 
-    const button = screen.getByRole('button', { name: /bekreft/i });
+    const button = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(button);
     expect(await screen.findByText('Du må sette en dato for når arbeidsevnen ble nedsatt')).toBeVisible();
   });
@@ -213,6 +213,13 @@ describe('Sykdomsvurdering med yrkesskade', () => {
       'radio',
       { name: 'Ja' }
     );
+    await user.click(jaValg);
+  };
+
+  const velgAtArbeidsevnenErNedsatt = async () => {
+    const jaValg = within(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt?' })).getByRole('radio', {
+      name: 'Ja',
+    });
     await user.click(jaValg);
   };
 });
