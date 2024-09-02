@@ -46,7 +46,7 @@ export const OpprettSak = () => {
       type: 'text', // Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
       label: 'Ikke relevant', // Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
       // @ts-ignore Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
-      defaultValue: [{ fodselsdato: '2015', harRelasjon: JaEllerNei.Ja }],
+      defaultValue: [{ fodselsdato: '2015', harRelasjon: 'folkeregistrertBarn' }],
     },
     institusjon: {
       type: 'checkbox',
@@ -71,7 +71,7 @@ export const OpprettSak = () => {
             data.barn?.map((barn) => {
               return {
                 fodselsdato: formaterDatoForBackend(new Date(barn.fodselsdato)),
-                harRelasjon: barn.harRelasjon === JaEllerNei.Nei,
+                harRelasjon: barn.harRelasjon === 'folkeregistrertBarn',
               };
             }) || [],
           institusjoner: {

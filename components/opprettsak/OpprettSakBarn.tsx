@@ -2,7 +2,7 @@ import React from 'react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { OpprettSakFormFields } from 'components/opprettsak/OpprettSak';
 import styles from 'components/opprettsak/OpprettSak.module.css';
-import { Button, RadioGroup, TextField, Radio } from '@navikt/ds-react';
+import { Button, Select, TextField } from '@navikt/ds-react';
 import { validerÅrstall } from 'lib/utils/validation';
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
 import { JaEllerNei } from 'lib/utils/form';
@@ -32,10 +32,15 @@ export const OpprettSakBarn = ({ form }: Props) => {
                     form?.formState?.errors?.barn ? form.formState.errors.barn[index]?.fodselsdato?.message : undefined
                   }
                 />
-                <RadioGroup legend={'Er det manuelt barn?'} size={'small'} {...form.register(`barn.${index}.harRelasjon`)}>
-                  <Radio value={JaEllerNei.Ja}>Ja</Radio>
-                  <Radio value={JaEllerNei.Nei}>Nei</Radio>
-                </RadioGroup>
+                <Select
+                  label={'Hvilket barn er det?'}
+                  size={'small'}
+                  {...form.register(`barn.${index}.harRelasjon`)}
+                  name={`barn.${index}.harRelasjon`}
+                >
+                  <option value={'manueltBarn'}>Manuelt barn</option>
+                  <option value={'folkeregistrertBarn'}>Folkeregistrert barn</option>
+                </Select>
                 <Button
                   type="button"
                   variant={'tertiary'}
