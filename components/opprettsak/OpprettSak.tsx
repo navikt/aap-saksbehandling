@@ -12,6 +12,7 @@ import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 
 interface Barn {
   fodselsdato: string;
+  harRelasjon: string;
 }
 
 export interface OpprettSakFormFields {
@@ -45,7 +46,7 @@ export const OpprettSak = () => {
       type: 'text', // Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
       label: 'Ikke relevant', // Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
       // @ts-ignore Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
-      defaultValue: [{ fodselsdato: '2015' }],
+      defaultValue: [{ fodselsdato: '2015', harRelasjon: JaEllerNei.Ja }],
     },
     institusjon: {
       type: 'checkbox',
@@ -68,7 +69,10 @@ export const OpprettSak = () => {
           student: data.student === JaEllerNei.Ja,
           barn:
             data.barn?.map((barn) => {
-              return { fodselsdato: formaterDatoForBackend(new Date(barn.fodselsdato)) };
+              return {
+                fodselsdato: formaterDatoForBackend(new Date(barn.fodselsdato)),
+                harRelasjon: barn.harRelasjon === JaEllerNei.Nei,
+              };
             }) || [],
           institusjoner: {
             sykehus: data.institusjon.includes('sykehus'),
