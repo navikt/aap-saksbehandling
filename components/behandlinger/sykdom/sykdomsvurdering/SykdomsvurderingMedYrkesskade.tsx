@@ -191,7 +191,7 @@ export const SykdomsvurderingMedYrkesskade = ({
           <Veiledning
             header={'Slik vurderes dette'}
             tekst={
-              'Sykdom, skade eller lyte er (som hovedregel) en medisinsk tilstand med en vitenskalpelig anerkjent diagnose. Sykdomslignende symptomer kan også oppfylle lovens krav til sykdom, så det er ikke alltid et krav at det er stilt en diagnose for at vilkåret skal være oppfylt.'
+              'Sykdom, skade eller lyte er (som hovedregel) en medisinsk tilstand med en vitenskapelig anerkjent diagnose. Sykdomslignende symptomer kan også oppfylle lovens krav til sykdom, så det er ikke alltid et krav at det er stilt en diagnose for at vilkåret skal være oppfylt.'
             }
           />
         </section>
@@ -202,7 +202,7 @@ export const SykdomsvurderingMedYrkesskade = ({
               <Veiledning
                 header={'Slik vurderes dette'}
                 tekst={
-                  'Med arbeidsevne menes den enkeltes evne til å møte de krav som stilles i utførelsen av et normalt inntektsgivende arbeid. Arbeidsevnen anses som nedsatt når medlemmet helt eller delvis er ute av stand til å utføre arbeidsoppgavene i ulike jobber som han eller hun er kvalifisert til.'
+                  'Med arbeidsevne menes den enkeltes evne til å møte de krav som stilles i utførelsen av et normal inntektsgivende arbeid. Arbeidsevnen anses som nedsatt når medlemmet helt eller delvis er ute av stand til å utføre arbeidsoppgavene i ulike jobber som han eller hun er kvalifisert til.'
                 }
               />
             </section>
@@ -220,7 +220,7 @@ export const SykdomsvurderingMedYrkesskade = ({
               <Veiledning
                 header={'Slik vurderes dette'}
                 tekst={
-                  'Det må være årsakssammenheng mellom sykdom, skade eller lyte og den nedsatte arbeidsevnen. At sykdom, skade eller lyte skal utgjøre en vesentlig medvirkende årsak, betyr at den alene må utgjøre en større del enn andre årsaker. Andre årsaker kan samlet utgjøre en større del, men sykdom, skade eller lyte må likevel være vesentlig medvirkende årsak. Det er ikke tilstrekkelig å ha sykdom, skade eller lyte. Det er først når den reduserte arbeidsevnen forklares med funksjonstap som skyldes sykdom, skade og lyte at årsakssammenhengen anses som oppfylt.'
+                  'Det må være årsakssammenheng mellom sykdom, skade eller lyte og den nedsatte arbeidsevnen. At sykdom, skade eller lyte skal utgjøre en vesentlig medvirkende årsak, betyr at den alene må utgjøre en større del enn andre årsaker. Andre årsaker kan samlet utgjøre en større del, men sykdom, skade eller lyte må likevel være vesentlig medvirkende årsak. Det er ikke tilstrekkelig å ha sykdom, skade eller lyte. Det er først når den reduserte arbeidsevnen forklares med funksjonstap som skyldes sykdom, skade og lyte at årsakssammenhengen anses oppfylt.'
                 }
               />
             </section>
