@@ -75,8 +75,8 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
             begrunnelse: data.begrunnelse,
             erBehovForAktivBehandling: data.erBehovForAktivBehandling === JaEllerNei.Ja,
             erBehovForArbeidsrettetTiltak: data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja,
-            erBehovForAnnenOppfølging: data.erBehovForArbeidsrettetTiltak
-              ? data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja
+            erBehovForAnnenOppfølging: data.erBehovForAnnenOppfølging
+              ? data.erBehovForAnnenOppfølging === JaEllerNei.Ja
               : undefined,
           },
         },
