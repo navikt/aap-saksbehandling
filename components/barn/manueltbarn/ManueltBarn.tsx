@@ -26,7 +26,7 @@ export const ManueltBarn = ({ manueltBarn, oppdaterVurdering, readOnly, ident, e
     useDatepicker({
       toDate: new Date(),
       onDateChange: (date) => {
-        if (date) oppdaterVurdering(ident, feltId, 'tom', date);
+        if (date) oppdaterVurdering(ident, feltId, 'fom', date);
       },
     });
 
@@ -34,7 +34,7 @@ export const ManueltBarn = ({ manueltBarn, oppdaterVurdering, readOnly, ident, e
     useDatepicker({
       fromDate: new Date(),
       onDateChange: (date) => {
-        if (date) oppdaterVurdering(ident, feltId, 'fom', date);
+        if (date) oppdaterVurdering(ident, feltId, 'tom', date);
       },
     });
 
