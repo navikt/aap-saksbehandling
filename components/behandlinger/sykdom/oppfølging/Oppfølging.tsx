@@ -101,10 +101,11 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
       >
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.erBehovForAktivBehandling} />
-        <Veiledning />
+        <Veiledning defaultOpen={false} />
         <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} />
         <Veiledning
           header={'Slik vurderes dette'}
+          defaultOpen={false}
           tekst={
             <div>
               <BodyLong size={'small'} spacing>
