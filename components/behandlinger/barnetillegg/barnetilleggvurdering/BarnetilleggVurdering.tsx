@@ -12,11 +12,11 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useState } from 'react';
 import styles from 'components/barn/Barn.module.css';
 import { ManueltBarn } from 'components/barn/manueltbarn/ManueltBarn';
-
-import { v4 as uuidv4 } from 'uuid';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { formaterDatoForBackend } from 'lib/utils/date';
+
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
   behandlingsversjon: number;
@@ -107,7 +107,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
         </div>
         <>
           {Object.keys(vurderinger).map((ident) => (
-            <section key={ident} className={styles.barnekort}>
+            <section key={ident} className={`${styles.barnekort} flex-column`}>
               <div className={styles.manueltbarnheading}>
                 <div>
                   <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'3rem'} />
@@ -118,7 +118,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
               </div>
               <div>
                 {vurderinger[ident].map((vurdering, manueltBarnVurderingIndex) => (
-                  <div key={vurdering.feltId}>
+                  <div key={vurdering.feltId} className={styles.vurdering}>
                     <ManueltBarn
                       key={manueltBarnVurderingIndex}
                       manueltBarn={vurdering}
@@ -126,11 +126,26 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
                       oppdaterVurdering={handleInputChange}
                       ident={ident}
                     />
-                    <Button onClick={() => removeManueltBarnVurdering(ident, vurdering.feltId)}>Fjern periode</Button>
+                    <Button
+                      onClick={() => removeManueltBarnVurdering(ident, vurdering.feltId)}
+                      className={'fit-content-button'}
+                      variant={'danger'}
+                      size={'small'}
+                    >
+                      Fjern periode
+                    </Button>
                   </div>
                 ))}
               </div>
-              <Button onClick={() => addManueltBarnVurdering(ident)}>Legg til flere perioder</Button>
+
+              <Button
+                onClick={() => addManueltBarnVurdering(ident)}
+                className={'fit-content-button'}
+                variant={'secondary'}
+                size={'small'}
+              >
+                Legg til flere perioder
+              </Button>
             </section>
           ))}
         </>

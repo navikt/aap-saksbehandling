@@ -25,6 +25,7 @@ export const ManueltBarn = ({ manueltBarn, oppdaterVurdering, readOnly, ident }:
         if (date) oppdaterVurdering(ident, feltId, 'tom', date);
       },
     });
+
   const { datepickerProps: forsørgerAnsvarSluttDatoDatepickerProps, inputProps: forsørgerAnsvarSluttDatoInputProps } =
     useDatepicker({
       fromDate: new Date(),
