@@ -115,6 +115,14 @@ describe('Oppfølging', () => {
     expect(vilkårsveiledningTekst).toBeVisible();
   });
 
+  it('Skal ha synlig vilkårsveiledning for feltet har innbygger behov for aktiv behandling', () => {
+    render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
+    const vilkårsveiledningTekst = screen.getByText(
+      /med aktiv behandling menes behandling som behandlende lege anbefaler medlemmet å gjennomføre med mål om å bedre arbeidsevnen\. behandling kan gis av for eksempel lege, psykolog, fysioterapeut, kiropraktorer, manuell terapeut mv\. det er en forutsetning at behandlingen er et ledd i en medisinsk behandlingsplan for å bedre arbeidsevnen\./i
+    );
+    expect(vilkårsveiledningTekst).toBeVisible();
+  });
+
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
 

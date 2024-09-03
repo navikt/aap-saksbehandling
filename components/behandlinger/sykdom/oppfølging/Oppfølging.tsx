@@ -102,7 +102,28 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
         <FormField form={form} formField={formFields.begrunnelse} />
         <section>
           <FormField form={form} formField={formFields.erBehovForAktivBehandling} />
-          <Veiledning defaultOpen={false} />
+          <Veiledning
+            defaultOpen={false}
+            header={'Slik vurderes dette'}
+            tekst={
+              <div>
+                <BodyLong spacing size={'small'}>
+                  Med aktiv behandling menes behandling som behandlende lege anbefaler medlemmet å gjennomføre med mål
+                  om å bedre arbeidsevnen. Behandling kan gis av for eksempel lege, psykolog, fysioterapeut,
+                  kiropraktorer, manuell terapeut mv. Det er en forutsetning at behandlingen er et ledd i en medisinsk
+                  behandlingsplan for å bedre arbeidsevnen.
+                </BodyLong>
+                <BodyLong spacing size={'small'}>
+                  Det er ikke et vilkår at det foregår uavbrutte behandlingstiltak. Behandlingen kan variere fra
+                  operative inngrep med innleggelse i helseinstitusjon til kortere, mer passive perioder med rekreasjon.
+                </BodyLong>
+                <BodyLong spacing size={'small'}>
+                  Det må også alltid vurderes om det er andre og mer aktive tiltak som er mer hensiktsmessige for å
+                  bedre arbeidsevnen
+                </BodyLong>
+              </div>
+            }
+          />
         </section>
         <section>
           <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} />
