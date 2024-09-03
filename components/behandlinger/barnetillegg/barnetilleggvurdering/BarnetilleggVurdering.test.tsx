@@ -32,6 +32,7 @@ const grunnlag: BarnetilleggGrunnlag = {
       },
     },
   ],
+  vurderteBarn: []
 };
 
 describe('barnetillegg', () => {
