@@ -20,9 +20,9 @@ interface Props {
 
 interface FormFields {
   begrunnelse: string;
-  behovForAktivBehandling: string;
-  behovForArbeidsrettetTiltak: string;
-  harMulighetTilÅKommeIArbeid?: string;
+  erBehovForAktivBehandling: string;
+  erBehovForArbeidsrettetTiltak: string;
+  erBehovForAnnenOppfølging?: string;
 }
 
 export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
@@ -39,21 +39,21 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
         defaultValue: grunnlag?.vurdering?.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse om innbygger har behov for oppfølging' },
       },
-      behovForAktivBehandling: {
+      erBehovForAktivBehandling: {
         type: 'radio',
         label: 'Har innbygger behov for aktiv behandling?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForBistand),
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAktivBehandling),
         rules: { required: 'Du må svare på om innbygger har behov for aktiv behandling' },
         options: JaEllerNeiOptions,
       },
-      behovForArbeidsrettetTiltak: {
+      erBehovForArbeidsrettetTiltak: {
         type: 'radio',
         label: 'Har innbygger behov for arbeidsrettet tiltak?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(undefined),
         rules: { required: 'Du må svare på om innbygger har behov for arbeidsrettet tiltak' },
       },
-      harMulighetTilÅKommeIArbeid: {
+      erBehovForAnnenOppfølging: {
         type: 'radio',
         label: 'Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
         options: JaEllerNeiOptions,
@@ -71,8 +71,14 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-          // @ts-ignore TODO Legg til korrekt vurdering når backend er ferdig
-          bistandsVurdering: {},
+          bistandsVurdering: {
+            begrunnelse: data.begrunnelse,
+            erBehovForAktivBehandling: data.erBehovForAktivBehandling === JaEllerNei.Ja,
+            erBehovForArbeidsrettetTiltak: data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja,
+            erBehovForAnnenOppfølging: data.erBehovForArbeidsrettetTiltak
+              ? data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja
+              : undefined,
+          },
         },
         referanse: behandlingsReferanse,
       });
@@ -94,9 +100,9 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
         visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.behovForAktivBehandling} />
+        <FormField form={form} formField={formFields.erBehovForAktivBehandling} />
         <Veiledning />
-        <FormField form={form} formField={formFields.behovForArbeidsrettetTiltak} />
+        <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} />
         <Veiledning
           header={'Slik vurderes dette'}
           tekst={
@@ -119,9 +125,9 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
           }
         />
 
-        {form.watch('behovForAktivBehandling') === JaEllerNei.Nei &&
-          form.watch('behovForArbeidsrettetTiltak') === JaEllerNei.Nei && (
-            <FormField form={form} formField={formFields.harMulighetTilÅKommeIArbeid} />
+        {form.watch('erBehovForAktivBehandling') === JaEllerNei.Nei &&
+          form.watch('erBehovForArbeidsrettetTiltak') === JaEllerNei.Nei && (
+            <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} />
           )}
       </Form>
     </VilkårsKort>
