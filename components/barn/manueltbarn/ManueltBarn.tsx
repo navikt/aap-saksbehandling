@@ -24,7 +24,7 @@ export const ManueltBarn = ({ manueltBarn, oppdaterVurdering, readOnly, ident, e
 
   const { datepickerProps: forsørgerAnsvarStartDatoDatepickerProps, inputProps: forsørgerAnsvarStartDatoInputProps } =
     useDatepicker({
-      toDate: new Date(),
+      // toDate: new Date(), TODO Dato her skal filtreres på forrige periode
       onDateChange: (date) => {
         if (date) oppdaterVurdering(ident, feltId, 'fom', date);
       },
@@ -32,7 +32,7 @@ export const ManueltBarn = ({ manueltBarn, oppdaterVurdering, readOnly, ident, e
 
   const { datepickerProps: forsørgerAnsvarSluttDatoDatepickerProps, inputProps: forsørgerAnsvarSluttDatoInputProps } =
     useDatepicker({
-      fromDate: new Date(),
+      // fromDate: new Date(), TODO Dato her skal filtreres på forrige periode
       onDateChange: (date) => {
         if (date) oppdaterVurdering(ident, feltId, 'tom', date);
       },
