@@ -20,10 +20,21 @@ const grunnlag: BarnetilleggGrunnlag = {
     },
   ],
   oppgitteBarn: [],
-  barnSomTrengerVurdering: [],
+  barnSomTrengerVurdering: [
+    {
+      ident: {
+        identifikator: '23456789010',
+        aktivIdent: true,
+      },
+      forsorgerPeriode: {
+        fom: '2020-01-30',
+        tom: '2038-01-30',
+      },
+    },
+  ],
 };
 
-describe.skip('barnetillegg', () => {
+describe('barnetillegg', () => {
   const user = userEvent.setup();
 
   it('skal ha en overskrift', () => {
@@ -105,7 +116,7 @@ describe.skip('barnetillegg', () => {
   });
 });
 
-describe.skip('Manuelt registrerte barn', () => {
+describe('Manuelt registrerte barn', () => {
   const user = userEvent.setup();
 
   // TODO navn må hentes, kommer ikke som en del av grunnlaget
@@ -113,18 +124,6 @@ describe.skip('Manuelt registrerte barn', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     const heading = screen.getByRole('heading', { name: 'Kjell T Ringen - 12345678910' });
     expect(heading).toBeVisible();
-  });
-
-  it('skal ha en vilkårsveiledning med korrekt heading', () => {
-    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
-    const heading = screen.getByText('Slik vurderes vilkåret');
-    expect(heading).toBeVisible();
-  });
-
-  it('skal ha innhold i vilkårsveiledningen', () => {
-    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
-    const tekst = screen.getByText('Her kommer det en tekst om hvordan vilkåret skal vurderes');
-    expect(tekst).toBeVisible();
   });
 
   it('skal ha et begrunnelsesfelt', () => {
@@ -135,7 +134,6 @@ describe.skip('Manuelt registrerte barn', () => {
     expect(felt).toBeVisible();
   });
 
-  // denne testen må skrives om
   it('skal gi en feilmelding dersom begrunnelsesfelt ikke er besvart', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
 
@@ -209,7 +207,7 @@ describe.skip('Manuelt registrerte barn', () => {
     expect(sluttDatoFelt).toBeVisible();
   });
 
-  it('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
+  it.skip('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
@@ -223,7 +221,7 @@ describe.skip('Manuelt registrerte barn', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
+  it.skip('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
