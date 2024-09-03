@@ -100,31 +100,35 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
         visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.erBehovForAktivBehandling} />
-        <Veiledning defaultOpen={false} />
-        <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} />
-        <Veiledning
-          header={'Slik vurderes dette'}
-          defaultOpen={false}
-          tekst={
-            <div>
-              <BodyLong size={'small'} spacing>
-                Med et arbeidsrettet tiltak etter folketrygdloven § 11-6 menes
-              </BodyLong>
-              <BodyLong size={'small'} spacing>
-                a.tiltak etter forskrift 11. desember 2015 nr. 1598 om arbeidsmarkedstiltak (tiltaksforskriften), med
-                unntak av varig tilrettelagt arbeid i forskriften kapittel 14,b.etablering av egen virksomhet, se
-                folketrygdloven § 11-15, ogc.andre aktiviteter i regi av offentlige eller private virksomheter, herunder
-                frivillige aktører, som er egnet til å styrke medlemmets mulighet for overgang til arbeid.
-              </BodyLong>
-              <BodyLong size={'small'} spacing>
-                Forsøk med hjemmel i § 12 i lov om arbeidsmarkedstjenester (arbeidsmarkedsloven) kan anses som et
-                arbeidsrettet tiltak, dersom det framgår av forskriften at deltakeren har rett på
-                arbeidsavklaringspenger
-              </BodyLong>
-            </div>
-          }
-        />
+        <section>
+          <FormField form={form} formField={formFields.erBehovForAktivBehandling} />
+          <Veiledning defaultOpen={false} />
+        </section>
+        <section>
+          <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} />
+          <Veiledning
+            header={'Slik vurderes dette'}
+            defaultOpen={false}
+            tekst={
+              <div>
+                <BodyLong size={'small'} spacing>
+                  Med et arbeidsrettet tiltak etter folketrygdloven § 11-6 menes
+                </BodyLong>
+                <BodyLong size={'small'} spacing>
+                  a.tiltak etter forskrift 11. desember 2015 nr. 1598 om arbeidsmarkedstiltak (tiltaksforskriften), med
+                  unntak av varig tilrettelagt arbeid i forskriften kapittel 14,b.etablering av egen virksomhet, se
+                  folketrygdloven § 11-15, ogc.andre aktiviteter i regi av offentlige eller private virksomheter,
+                  herunder frivillige aktører, som er egnet til å styrke medlemmets mulighet for overgang til arbeid.
+                </BodyLong>
+                <BodyLong size={'small'} spacing>
+                  Forsøk med hjemmel i § 12 i lov om arbeidsmarkedstjenester (arbeidsmarkedsloven) kan anses som et
+                  arbeidsrettet tiltak, dersom det framgår av forskriften at deltakeren har rett på
+                  arbeidsavklaringspenger
+                </BodyLong>
+              </div>
+            }
+          />
+        </section>
 
         {form.watch('erBehovForAktivBehandling') === JaEllerNei.Nei &&
           form.watch('erBehovForArbeidsrettetTiltak') === JaEllerNei.Nei && (
