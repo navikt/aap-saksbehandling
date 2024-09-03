@@ -1,7 +1,8 @@
 import { ReadMore } from '@navikt/ds-react';
+import { ReactNode } from 'react';
 
 interface Props {
-  tekst?: string;
+  tekst?: ReactNode;
   header?: string;
   defaultOpen?: boolean;
 }
