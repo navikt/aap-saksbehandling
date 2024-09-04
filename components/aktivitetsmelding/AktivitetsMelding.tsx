@@ -6,10 +6,9 @@ import { AktivitetsTabell } from 'components/aktivitetstabell/AktivitetsTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { sendAktivitetClient } from 'lib/clientApi';
-import { useConfigForm, FormField, ValuePair } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Button } from '@navikt/ds-react';
 import { AktivitetDtoType, Aktivitetsmeldinger } from 'lib/types/types';
-import { useEffect, useState } from 'react';
 
 interface Props {
   saksnummer: string;
@@ -32,10 +31,7 @@ export const grunnOptions: ValuePair<AktivitetDtoType>[] = [
   { label: 'Bidrar ikke aktivt i prosessen med å komme seg i arbeid', value: 'IKKE_AKTIVT_BIDRAG' },
 ] as const;
 
-type Årsaker = (typeof grunnOptions)[number]['label'];
-
 export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) => {
-  const [datoLabel, setDatoLabel] = useState<string>('');
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
@@ -54,25 +50,23 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
       label: 'Dato for fravær',
     },
   });
+
   const valgtÅrsak = form.watch('grunn');
-  useEffect(() => {
-    if (valgtÅrsak) {
-      switch (valgtÅrsak as Årsaker) {
-        case 'Bidrar ikke aktivt i prosessen med å komme seg i arbeid': {
-          setDatoLabel('Dato for opphør');
-          return;
-        }
-        case 'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om': {
-          setDatoLabel('Frist for innsending av dokumentasjon');
-          return;
-        }
-        default: {
-          setDatoLabel('Dato for fravær');
-        }
+
+  function hentDatoLabel(valgtÅrsak: string): string {
+    switch (valgtÅrsak) {
+      case 'Bidrar ikke aktivt i prosessen med å komme seg i arbeid': {
+        return 'Dato for opphør';
+      }
+      case 'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om': {
+        return 'Frist for innsending av dokumentasjon';
+      }
+      default: {
+        return 'Dato for fravær';
       }
     }
-  }, [valgtÅrsak]);
-  const buttonText = 'Send inn';
+  }
+
   return (
     <VilkårsKort
       heading={'Registrer fravær'}
@@ -99,8 +93,8 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
       >
         <FormField form={form} formField={formFields.grunn} />
         {valgtÅrsak && <FormField form={form} formField={formFields.begrunnelse} />}
-        {valgtÅrsak && <FormField form={form} formField={{ ...formFields.dato, label: datoLabel }} />}
-        <Button className={'fit-content-button'}>{buttonText}</Button>
+        {valgtÅrsak && <FormField form={form} formField={{ ...formFields.dato, label: hentDatoLabel(valgtÅrsak) }} />}
+        <Button className={'fit-content-button'}>Send inn</Button>
       </form>
     </VilkårsKort>
   );
