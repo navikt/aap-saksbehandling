@@ -1,12 +1,17 @@
 'use client';
 
-import { FigureIcon } from '@navikt/aksel-icons';
+import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { AktivitetsTabell } from 'components/aktivitetstabell/AktivitetsTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Button } from '@navikt/ds-react';
 import { AktivitetDtoType, Aktivitetsmeldinger } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
+import { useState } from 'react';
+
+import { v4 as uuidv4 } from 'uuid';
+import { PeriodeDato } from 'components/aktivitetsmeldingdato/PeriodeDato';
+import { EnkeltDagDato } from 'components/aktivitetsmeldingdato/EnkeltDagDato';
 
 interface Props {
   saksnummer: string;
@@ -14,6 +19,25 @@ interface Props {
 }
 
 type Paragraf = '11-8' | '11-9'; // TODO Denne må komme fra backend
+
+interface Periode {
+  // TODO Finn en mer egnet plass
+  fom?: string;
+  tom?: string;
+  id: string;
+}
+
+interface EnkeltDag {
+  // TODO Finn en mer egnet plass
+  dato?: string;
+  id: string;
+}
+
+interface DatoBruddPåAktivitetsplikt {
+  // TODO Finn en mer egnet plass
+  perioder: Periode[];
+  enkeltDager: EnkeltDag[];
+}
 
 interface FormFields {
   brudd: AktivitetDtoType;
@@ -74,6 +98,25 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
     { shouldUnregister: true }
   );
 
+  const [bruddPåAktivitetsDatoer, setBruddPåAktivitetsDatoer] = useState<DatoBruddPåAktivitetsplikt>({
+    enkeltDager: [],
+    perioder: [],
+  });
+
+  function leggTilNyEnkeltDato() {
+    setBruddPåAktivitetsDatoer((prevState) => ({
+      ...prevState,
+      enkeltDager: [...prevState.enkeltDager, { id: uuidv4() }],
+    }));
+  }
+
+  function leggTilNyPeriode() {
+    setBruddPåAktivitetsDatoer((prevState) => ({
+      ...prevState,
+      perioder: [...prevState.perioder, { id: uuidv4() }],
+    }));
+  }
+
   function hentDatoLabel(valgtBrudd: AktivitetDtoType): string {
     switch (valgtBrudd) {
       case 'IKKE_MØTT_TIL_MØTE':
@@ -102,6 +145,8 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
 
   const paragrafErValgt = form.watch('paragraf') != undefined;
 
+  console.log(bruddPåAktivitetsDatoer);
+
   return (
     <SideProsessKort
       heading={'Registrering av gyldig og ugyldig fravær - (aktivitetsplikten §§ 11-7, 11-8, 11-9)'}
@@ -122,7 +167,38 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
           )}
           {paragrafErValgt && (
             <>
-              <FormField form={form} formField={{ ...formFields.datoForBrudd, label: hentDatoLabel(valgtBrudd) }} />
+              <b>{hentDatoLabel(valgtBrudd)}</b>
+              <div className={'flex-row'}>
+                <Button
+                  icon={<PlusCircleIcon />}
+                  type={'button'}
+                  variant={'tertiary'}
+                  size={'small'}
+                  onClick={() => leggTilNyEnkeltDato()}
+                >
+                  Legg til enkeltdato
+                </Button>
+                <Button
+                  icon={<PlusCircleIcon />}
+                  type={'button'}
+                  variant={'tertiary'}
+                  size={'small'}
+                  onClick={() => leggTilNyPeriode()}
+                >
+                  Legg til periode
+                </Button>
+              </div>
+              <div className={'flex-column'}>
+                {bruddPåAktivitetsDatoer.perioder.map((periode) => (
+                  <PeriodeDato key={periode.id} />
+                ))}
+
+                {bruddPåAktivitetsDatoer.enkeltDager.map((dag) => (
+                  <EnkeltDagDato key={dag.id} />
+                ))}
+              </div>
+
+              {/*<FormField form={form} formField={{ ...formFields.datoForBrudd, label: hentDatoLabel(valgtBrudd) }} />*/}
               <FormField form={form} formField={formFields.begrunnelse} />
               <FormField form={form} formField={formFields.skalSendeForhåndsvarsel} />
             </>
