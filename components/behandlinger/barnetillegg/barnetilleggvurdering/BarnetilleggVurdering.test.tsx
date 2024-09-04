@@ -32,7 +32,7 @@ const grunnlag: BarnetilleggGrunnlag = {
       },
     },
   ],
-  vurderteBarn: []
+  vurderteBarn: [],
 };
 
 describe('barnetillegg', () => {
@@ -208,7 +208,7 @@ describe('Manuelt registrerte barn', () => {
     expect(sluttDatoFelt).toBeVisible();
   });
 
-  it.skip('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
+  it('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });

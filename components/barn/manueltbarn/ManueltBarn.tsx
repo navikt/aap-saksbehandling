@@ -28,6 +28,7 @@ export const ManueltBarn = ({ manueltBarn, oppdaterVurdering, readOnly, ident, e
       onDateChange: (date) => {
         if (date) oppdaterVurdering(ident, feltId, 'fom', date);
       },
+      allowTwoDigitYear: false,
     });
 
   const { datepickerProps: forsørgerAnsvarSluttDatoDatepickerProps, inputProps: forsørgerAnsvarSluttDatoInputProps } =
@@ -36,6 +37,7 @@ export const ManueltBarn = ({ manueltBarn, oppdaterVurdering, readOnly, ident, e
       onDateChange: (date) => {
         if (date) oppdaterVurdering(ident, feltId, 'tom', date);
       },
+      allowTwoDigitYear: false,
     });
 
   return (

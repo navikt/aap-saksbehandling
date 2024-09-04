@@ -17,6 +17,7 @@ import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/Tilknytt
 import { formaterDatoForBackend } from 'lib/utils/date';
 
 import { v4 as uuidv4 } from 'uuid';
+import { isAfter } from 'date-fns';
 
 interface Props {
   behandlingsversjon: number;
@@ -97,30 +98,36 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
       const manuelleVurderinger: VurderingAvForeldreAnsvar[] = [];
       const manueltBarnVurderinger = vurderinger[ident];
       manueltBarnVurderinger.forEach((vurdering) => {
-        if (!vurdering.begrunnelse || !vurdering.harForeldreAnsvar || !vurdering.fom) {
-          if (!vurdering.begrunnelse) {
-            errors.push({ formId: vurdering.formId, felt: 'begrunnelse', message: 'Du må gi en begrunnelse' });
-          }
-          if (!vurdering.harForeldreAnsvar) {
-            errors.push({
-              formId: vurdering.formId,
-              felt: 'harForeldreAnsvar',
-              message: 'Du må besvare om det skal beregnes barnetillegg for barnet',
-            });
-          }
-          if (!vurdering.fom) {
-            errors.push({
-              formId: vurdering.formId,
-              felt: 'fom',
-              message: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra',
-            });
-          }
-        } else {
+        if (!vurdering.begrunnelse) {
+          errors.push({ formId: vurdering.formId, felt: 'begrunnelse', message: 'Du må gi en begrunnelse' });
+        }
+        if (!vurdering.harForeldreAnsvar) {
+          errors.push({
+            formId: vurdering.formId,
+            felt: 'harForeldreAnsvar',
+            message: 'Du må besvare om det skal beregnes barnetillegg for barnet',
+          });
+        }
+        if (!vurdering.fom) {
+          errors.push({
+            formId: vurdering.formId,
+            felt: 'fom',
+            message: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra',
+          });
+        }
+        if (vurdering.fom && isAfter(vurdering.fom, new Date())) {
+          errors.push({
+            formId: vurdering.formId,
+            felt: 'fom',
+            message: 'Dato for når søker har forsørgeransvar fra kan ikke være frem i tid',
+          });
+        }
+        if (errors.length === 0) {
           manuelleVurderinger.push({
-            begrunnelse: vurdering.begrunnelse,
+            begrunnelse: vurdering.begrunnelse!,
             harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
             periode: {
-              fom: formaterDatoForBackend(vurdering.fom),
+              fom: formaterDatoForBackend(vurdering.fom!),
               tom: formaterDatoForBackend(vurdering.tom || new Date()),
             },
           });
