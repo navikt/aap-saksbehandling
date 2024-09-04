@@ -90,8 +90,7 @@ describe('aktivitetsmelding', () => {
     render(<AktivitetsMelding saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
     await velgIkkeMøttITiltakSomBrudd();
 
-    const paragraf_11_8Felt = screen.getByRole('radio', { name: /11-8 fravær fra fastsatt aktivitet/i });
-    await user.click(paragraf_11_8Felt);
+    await velgParagraf_11_8();
 
     const felt = screen.getByRole('textbox', { name: /dato for ikke møtt til tiltak/i });
     expect(felt).toBeVisible();
@@ -101,8 +100,7 @@ describe('aktivitetsmelding', () => {
     render(<AktivitetsMelding saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
     await velgIkkeMøttITiltakSomBrudd();
 
-    const paragraf_11_8Felt = screen.getByRole('radio', { name: /11-8 fravær fra fastsatt aktivitet/i });
-    await user.click(paragraf_11_8Felt);
+    await velgParagraf_11_8();
 
     const felt = screen.getByRole('textbox', { name: /begrunnelse/i });
     expect(felt).toBeVisible();
@@ -112,15 +110,62 @@ describe('aktivitetsmelding', () => {
     render(<AktivitetsMelding saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
     await velgIkkeMøttITiltakSomBrudd();
 
-    const paragraf_11_8Felt = screen.getByRole('radio', { name: /11-8 fravær fra fastsatt aktivitet/i });
-    await user.click(paragraf_11_8Felt);
+    await velgParagraf_11_8();
 
     const felt = screen.getByRole('checkbox', { name: /send forhåndsvarsel/i });
     expect(felt).toBeVisible();
   });
 
+  it('skal vise en feilmelding dersom brudd på aktivitetsplikten ikke er besvart', async () => {
+    render(<AktivitetsMelding saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
+
+    const bekreftKnapp = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(bekreftKnapp);
+    const feilmelding = screen.getByText('Du må registrere et brudd på aktivitetsplikten');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('skal vise en feilmelding dersom hvilken paragraf det gjelder ikke er besvart', async () => {
+    render(<AktivitetsMelding saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
+
+    await velgIkkeMøttITiltakSomBrudd();
+    const bekreftKnapp = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(bekreftKnapp);
+    const feilmelding = screen.getByText('Du må velge en paragraf');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('skal vise en feilmelding dersom dato for brudd på aktivitetsplikten ikke er besvart', async () => {
+    render(<AktivitetsMelding saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
+
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_8();
+
+    const bekreftKnapp = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(bekreftKnapp);
+    const feilmelding = screen.getByText('Du må sette en dato for brudd på aktivitetsplikten');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('skal vise en feilmelding dersom begrunnelse ikke er besvart', async () => {
+    render(<AktivitetsMelding saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
+
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_8();
+
+    const bekreftKnapp = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(bekreftKnapp);
+    const feilmelding = screen.getByText('Du må skrive en begrunnelse for brudd på aktivitetsplikten');
+    expect(feilmelding).toBeVisible();
+  });
+
   async function velgIkkeMøttITiltakSomBrudd() {
     const ikkeMøttilTiltakValg = screen.getByRole('radio', { name: /ikke møtt i tiltak/i });
     await user.click(ikkeMøttilTiltakValg);
+  }
+
+  async function velgParagraf_11_8() {
+    const paragraf_11_8Felt = screen.getByRole('radio', { name: /11-8 fravær fra fastsatt aktivitet/i });
+    await user.click(paragraf_11_8Felt);
   }
 });

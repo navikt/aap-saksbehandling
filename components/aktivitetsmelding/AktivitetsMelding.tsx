@@ -32,7 +32,6 @@ const bruddOptions: ValuePair<AktivitetDtoType>[] = [
   { label: 'Ikke møtt i tiltak', value: 'IKKE_MØTT_TIL_TILTAK' },
   { label: 'Ikke møtt i behandling/ utredning', value: 'IKKE_MØTT_TIL_BEHANDLING' },
   { label: 'Ikke møtt til møte med Nav', value: 'IKKE_MØTT_TIL_MØTE' },
-  // { label: 'Ikke møtt til annen fastsatt aktivitet', value: 'IKKE_MØTT_TIL_ANNEN_AKTIVITET' }, // TODO Fjern fra backend
   {
     label: 'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om på aktivitet',
     value: 'IKKE_SENDT_INN_DOKUMENTASJON',
@@ -48,20 +47,24 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
         type: 'radio',
         label: 'Registrer brudd på aktivitetsplikt',
         options: bruddOptions,
+        rules: { required: 'Du må registrere et brudd på aktivitetsplikten' },
       },
       paragraf: {
         type: 'radio',
         label: 'Velg paragraf',
         options: paragrafOptions,
+        rules: { required: 'Du må velge en paragraf' },
       },
       datoForBrudd: {
         type: 'date',
         label: 'Her kommer det en dynamisk label',
+        rules: { required: 'Du må sette en dato for brudd på aktivitetsplikten' },
       },
       begrunnelse: {
         type: 'textarea',
         label: 'Begrunnelse',
         description: 'Skriv begrunnelse og henvis eventuelt til rett kilde/dokumentasjon',
+        rules: { required: 'Du må skrive en begrunnelse for brudd på aktivitetsplikten' },
       },
       skalSendeForhåndsvarsel: {
         type: 'checkbox',
@@ -109,6 +112,7 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
         <form
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
+            // TODO Send inn til backend når endepunkt er på plass
             console.log(data);
           })}
         >
