@@ -1,6 +1,5 @@
 .aktivitetSkjema {
   padding: 25px;
-  max-width: 800px;
   display: flex;
   flex-direction: column;
   gap: var(--a-spacing-4);
