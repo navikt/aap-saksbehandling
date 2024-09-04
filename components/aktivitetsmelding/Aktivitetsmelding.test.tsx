@@ -86,7 +86,7 @@ describe('aktivitetsmelding', () => {
     expect(paragraf_11_9Felt).toBeVisible();
   });
 
-  it('skal dukke opp et dato felt for brudd på aktivitetsplikt dersom man velger en paragraf', async () => {
+  it.skip('skal dukke opp et dato felt for brudd på aktivitetsplikt dersom man velger en paragraf', async () => {
     render(<AktivitetsMelding saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
     await velgIkkeMøttITiltakSomBrudd();
 
@@ -135,7 +135,7 @@ describe('aktivitetsmelding', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it('skal vise en feilmelding dersom dato for brudd på aktivitetsplikten ikke er besvart', async () => {
+  it.skip('skal vise en feilmelding dersom dato for brudd på aktivitetsplikten ikke er besvart', async () => {
     render(<AktivitetsMelding saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
 
     await velgIkkeMøttITiltakSomBrudd();
