@@ -41,7 +41,7 @@ const bruddOptions: ValuePair<AktivitetDtoType>[] = [
 ] as const;
 
 export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) => {
-  console.log(saksnummer)
+  console.log(saksnummer);
   const { form, formFields } = useConfigForm<FormFields>(
     {
       brudd: {
@@ -92,13 +92,12 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
   }
 
   const valgtBrudd = form.watch('brudd');
-  const bruddErValgt =
+  const harIkkeMøttTilTiltakBehandlingEllerSendtInnDokumentasjon =
     valgtBrudd === 'IKKE_MØTT_TIL_TILTAK' ||
     valgtBrudd === 'IKKE_MØTT_TIL_BEHANDLING' ||
     valgtBrudd === 'IKKE_SENDT_INN_DOKUMENTASJON';
 
-  const valgtParagraf = form.watch('paragraf');
-  const paragrafErValgt = valgtParagraf != undefined;
+  const paragrafErValgt = form.watch('paragraf') != undefined;
 
   return (
     <SideProsessKort
@@ -114,7 +113,9 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
           })}
         >
           <FormField form={form} formField={formFields.brudd} />
-          {bruddErValgt && <FormField form={form} formField={formFields.paragraf} />}
+          {harIkkeMøttTilTiltakBehandlingEllerSendtInnDokumentasjon && (
+            <FormField form={form} formField={formFields.paragraf} />
+          )}
           {paragrafErValgt && (
             <>
               <FormField form={form} formField={{ ...formFields.datoForBrudd, label: hentDatoLabel(valgtBrudd) }} />
