@@ -8,10 +8,9 @@ import { Button } from '@navikt/ds-react';
 import { AktivitetDtoType, Aktivitetsmeldinger } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { useState } from 'react';
+import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
 
 import { v4 as uuidv4 } from 'uuid';
-import { PeriodeDato } from 'components/aktivitetsmeldingdato/PeriodeDato';
-import { EnkeltDagDato } from 'components/aktivitetsmeldingdato/EnkeltDagDato';
 
 interface Props {
   saksnummer: string;
@@ -20,24 +19,23 @@ interface Props {
 
 type Paragraf = '11-8' | '11-9'; // TODO Denne må komme fra backend
 
-interface Periode {
-  // TODO Finn en mer egnet plass
-  fom?: Date;
-  tom?: Date;
+export interface BruddDatoPeriode {
+  type: 'enkeltdag' | 'periode';
   id: string;
 }
 
-interface EnkeltDag {
+export interface Periode extends BruddDatoPeriode {
   // TODO Finn en mer egnet plass
-  dato?: Date;
-  id: string;
+  fom?: string;
+  tom?: string;
 }
 
-interface DatoBruddPåAktivitetsplikt {
+export interface EnkeltDag extends BruddDatoPeriode {
   // TODO Finn en mer egnet plass
-  perioder: Periode[];
-  enkeltDager: EnkeltDag[];
+  dato?: string;
 }
+
+export type DatoBruddPåAktivitetsplikt = EnkeltDag & Periode;
 
 interface FormFields {
   brudd: AktivitetDtoType;
@@ -92,23 +90,14 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
     { shouldUnregister: true }
   );
 
-  const [bruddPåAktivitetsDatoer, setBruddPåAktivitetsDatoer] = useState<DatoBruddPåAktivitetsplikt>({
-    enkeltDager: [],
-    perioder: [],
-  });
+  const [bruddPåAktivitetsDatoer, setBruddPåAktivitetsDatoer] = useState<DatoBruddPåAktivitetsplikt[]>([]);
 
   function leggTilNyEnkeltDato() {
-    setBruddPåAktivitetsDatoer((prevState) => ({
-      ...prevState,
-      enkeltDager: [...prevState.enkeltDager, { id: uuidv4() }],
-    }));
+    setBruddPåAktivitetsDatoer((prevState) => [...prevState, { type: 'enkeltdag', id: uuidv4(), dato: '' }]);
   }
 
   function leggTilNyPeriode() {
-    setBruddPåAktivitetsDatoer((prevState) => ({
-      ...prevState,
-      perioder: [...prevState.perioder, { id: uuidv4() }],
-    }));
+    setBruddPåAktivitetsDatoer((prevState) => [...prevState, { type: 'periode', id: uuidv4(), tom: '', fom: '' }]);
   }
 
   function hentDatoLabel(valgtBrudd: AktivitetDtoType): string {
@@ -139,8 +128,6 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
 
   const paragrafErValgt = form.watch('paragraf') != undefined;
 
-  console.log(bruddPåAktivitetsDatoer);
-
   return (
     <SideProsessKort
       heading={'Registrering av gyldig og ugyldig fravær - (aktivitetsplikten §§ 11-7, 11-8, 11-9)'}
@@ -162,47 +149,10 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
           {paragrafErValgt && (
             <div className={'flex-column'}>
               <b>{hentDatoLabel(valgtBrudd)}</b>
-              <div className={'flex-column'}>
-                {bruddPåAktivitetsDatoer.perioder.map((periode) => (
-                  <PeriodeDato
-                    key={periode.id}
-                    onChange={(felt, date) => {
-                      setBruddPåAktivitetsDatoer((prevState) => ({
-                        ...prevState,
-                        perioder: prevState.perioder.map((field) =>
-                          field.id === periode.id ? { ...field, [felt]: date } : field
-                        ),
-                      }));
-                    }}
-                    onDelete={() => {
-                      setBruddPåAktivitetsDatoer((prevState) => ({
-                        ...prevState,
-                        perioder: prevState.perioder.filter((prevstatePeriode) => prevstatePeriode.id !== periode.id),
-                      }));
-                    }}
-                  />
-                ))}
-
-                {bruddPåAktivitetsDatoer.enkeltDager.map((dag) => (
-                  <EnkeltDagDato
-                    key={dag.id}
-                    onChange={(date) => {
-                      setBruddPåAktivitetsDatoer((prevState) => ({
-                        ...prevState,
-                        enkeltDager: prevState.enkeltDager.map((field) =>
-                          field.id === dag.id ? { ...field, dato: date } : field
-                        ),
-                      }));
-                    }}
-                    onDelete={() =>
-                      setBruddPåAktivitetsDatoer((prevState) => ({
-                        ...prevState,
-                        enkeltDager: prevState.perioder.filter((prevstateDag) => prevstateDag.id !== dag.id),
-                      }))
-                    }
-                  />
-                ))}
-              </div>
+              <AktivitetsmeldingDatoTabell
+                bruddDatoPerioder={bruddPåAktivitetsDatoer}
+                setBruddDatoPerioder={setBruddPåAktivitetsDatoer}
+              />
               <div className={'flex-row'}>
                 <Button
                   icon={<PlusCircleIcon />}
