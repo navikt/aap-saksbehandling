@@ -22,14 +22,14 @@ type Paragraf = '11-8' | '11-9'; // TODO Denne må komme fra backend
 
 interface Periode {
   // TODO Finn en mer egnet plass
-  fom?: string;
-  tom?: string;
+  fom?: Date;
+  tom?: Date;
   id: string;
 }
 
 interface EnkeltDag {
   // TODO Finn en mer egnet plass
-  dato?: string;
+  dato?: Date;
   id: string;
 }
 
@@ -42,7 +42,6 @@ interface DatoBruddPåAktivitetsplikt {
 interface FormFields {
   brudd: AktivitetDtoType;
   paragraf?: Paragraf;
-  datoForBrudd?: Date;
   begrunnelse?: string;
   skalSendeForhåndsvarsel: string;
 }
@@ -78,11 +77,6 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
         label: 'Velg paragraf',
         options: paragrafOptions,
         rules: { required: 'Du må velge en paragraf' },
-      },
-      datoForBrudd: {
-        type: 'date',
-        label: 'Her kommer det en dynamisk label',
-        rules: { required: 'Du må sette en dato for brudd på aktivitetsplikten' },
       },
       begrunnelse: {
         type: 'textarea',
@@ -166,8 +160,49 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
             <FormField form={form} formField={formFields.paragraf} />
           )}
           {paragrafErValgt && (
-            <>
+            <div className={'flex-column'}>
               <b>{hentDatoLabel(valgtBrudd)}</b>
+              <div className={'flex-column'}>
+                {bruddPåAktivitetsDatoer.perioder.map((periode) => (
+                  <PeriodeDato
+                    key={periode.id}
+                    onChange={(felt, date) => {
+                      setBruddPåAktivitetsDatoer((prevState) => ({
+                        ...prevState,
+                        perioder: prevState.perioder.map((field) =>
+                          field.id === periode.id ? { ...field, [felt]: date } : field
+                        ),
+                      }));
+                    }}
+                    onDelete={() => {
+                      setBruddPåAktivitetsDatoer((prevState) => ({
+                        ...prevState,
+                        perioder: prevState.perioder.filter((prevstatePeriode) => prevstatePeriode.id !== periode.id),
+                      }));
+                    }}
+                  />
+                ))}
+
+                {bruddPåAktivitetsDatoer.enkeltDager.map((dag) => (
+                  <EnkeltDagDato
+                    key={dag.id}
+                    onChange={(date) => {
+                      setBruddPåAktivitetsDatoer((prevState) => ({
+                        ...prevState,
+                        enkeltDager: prevState.enkeltDager.map((field) =>
+                          field.id === dag.id ? { ...field, dato: date } : field
+                        ),
+                      }));
+                    }}
+                    onDelete={() =>
+                      setBruddPåAktivitetsDatoer((prevState) => ({
+                        ...prevState,
+                        enkeltDager: prevState.perioder.filter((prevstateDag) => prevstateDag.id !== dag.id),
+                      }))
+                    }
+                  />
+                ))}
+              </div>
               <div className={'flex-row'}>
                 <Button
                   icon={<PlusCircleIcon />}
@@ -188,20 +223,10 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
                   Legg til periode
                 </Button>
               </div>
-              <div className={'flex-column'}>
-                {bruddPåAktivitetsDatoer.perioder.map((periode) => (
-                  <PeriodeDato key={periode.id} />
-                ))}
 
-                {bruddPåAktivitetsDatoer.enkeltDager.map((dag) => (
-                  <EnkeltDagDato key={dag.id} />
-                ))}
-              </div>
-
-              {/*<FormField form={form} formField={{ ...formFields.datoForBrudd, label: hentDatoLabel(valgtBrudd) }} />*/}
               <FormField form={form} formField={formFields.begrunnelse} />
               <FormField form={form} formField={formFields.skalSendeForhåndsvarsel} />
-            </>
+            </div>
           )}
           <Button className={'fit-content-button'}>Bekreft</Button>
         </form>

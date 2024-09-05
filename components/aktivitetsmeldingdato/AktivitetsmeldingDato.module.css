@@ -1,0 +1,8 @@
+.periodedatoer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--a-spacing-4);
+  align-items: flex-end;
+  padding: var(--a-spacing-4) 0;
+  border-bottom: 1px solid var(--a-border-subtle);
+}
