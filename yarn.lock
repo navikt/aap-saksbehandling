@@ -685,24 +685,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-core@npm:^1.9.0":
-  version: 1.9.0
-  resolution: "@grafana/faro-core@npm:1.9.0"
+"@grafana/faro-core@npm:^1.9.1":
+  version: 1.9.1
+  resolution: "@grafana/faro-core@npm:1.9.1"
   dependencies:
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/otlp-transformer": "npm:^0.52.0"
-  checksum: 10c0/6de31d808ecb609a3d49fadd76502f500e4c0375771075a2865ae04e9eab98b8d30689f3acc78c7b5e9b2ea323f79924c8b66f6810eba83fe62a2ea12dd61402
+  checksum: 10c0/7979c6c7cad190c3b6a2b5af60850948a336cb469432fe4b34e3364553624fe4d12ab1e46218e229b449e7141004acdcd4434ada3cfb5008af6912775310788d
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:^1.9.0":
-  version: 1.9.0
-  resolution: "@grafana/faro-web-sdk@npm:1.9.0"
+"@grafana/faro-web-sdk@npm:^1.9.1":
+  version: 1.9.1
+  resolution: "@grafana/faro-web-sdk@npm:1.9.1"
   dependencies:
-    "@grafana/faro-core": "npm:^1.9.0"
+    "@grafana/faro-core": "npm:^1.9.1"
     ua-parser-js: "npm:^1.0.32"
     web-vitals: "npm:^4.0.1"
-  checksum: 10c0/4e023415b506b2e8a8eafe7dcb298309949755f1336faaf489ced1db56e8d7e64e58e951bbf519a60ef811c04da74f0ffa2bed9bbc783fee18926cafe6044bc6
+  checksum: 10c0/4ff0d2b9c6d105e13c63c95f32575e8ede18240d69d43a87001afc9b4a171817fe95dacc00aa53b2a264f4ef3548f000545a030558cb41776bf2bf8723e677dd
   languageName: node
   linkType: hard
 
@@ -1647,13 +1647,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sanity/types@npm:^3.55.0":
-  version: 3.55.0
-  resolution: "@sanity/types@npm:3.55.0"
+"@sanity/types@npm:^3.57.0":
+  version: 3.57.0
+  resolution: "@sanity/types@npm:3.57.0"
   dependencies:
     "@sanity/client": "npm:^6.21.2"
     "@types/react": "npm:^18.3.3"
-  checksum: 10c0/9f5987f20a918c9a14fa3e5e33b2a74731da78844af51b1ce95dad70132e311f0f989b182cd1742213d341f58f6eca1f44e10bc4d4502e9ff643e83813540bb3
+  checksum: 10c0/e53d71bbf92305dade6a29a3599ac0b18b8812a1a7538cc7a6225d5605147387433919c3754634d49f70babc42acf0c75198dd1f0b3589bbe60e79febe96c130
   languageName: node
   linkType: hard
 
@@ -1777,9 +1777,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^16.0.0":
-  version: 16.0.0
-  resolution: "@testing-library/react@npm:16.0.0"
+"@testing-library/react@npm:^16.0.1":
+  version: 16.0.1
+  resolution: "@testing-library/react@npm:16.0.1"
   dependencies:
     "@babel/runtime": "npm:^7.12.5"
   peerDependencies:
@@ -1793,7 +1793,7 @@ __metadata:
       optional: true
     "@types/react-dom":
       optional: true
-  checksum: 10c0/297f97bf4722dad05f11d9cafd47d387dbdb096fea4b79b876c7466460f0f2e345b55b81b3e37fc81ed8185c528cb53dd8455ca1b6b019b229edf6c796f11c9f
+  checksum: 10c0/67d05dec5ad5a2e6f92b6a3234af785435c7bb62bdbf12f3bfc89c9bca0c871a189e88c4ba023ed4cea504704c87c6ac7e86e24a3962df6c521ae89b62f48ff7
   languageName: node
   linkType: hard
 
@@ -2341,6 +2341,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react@npm:^18.3.5":
+  version: 18.3.5
+  resolution: "@types/react@npm:18.3.5"
+  dependencies:
+    "@types/prop-types": "npm:*"
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/548b1d3d7c2f0242fbfdbbd658731b4ce69a134be072fa83e6ab516f2840402a3f20e3e7f72e95133b23d4880ef24a6d864050dc8e1f7c68f39fa87ca8445917
+  languageName: node
+  linkType: hard
+
 "@types/use-sync-external-store@npm:^0.0.6":
   version: 0.0.6
   resolution: "@types/use-sync-external-store@npm:0.0.6"
@@ -2737,7 +2747,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "aap-saksbehandling@workspace:."
   dependencies:
-    "@grafana/faro-web-sdk": "npm:^1.9.0"
+    "@grafana/faro-web-sdk": "npm:^1.9.1"
     "@navikt/aap-felles-css": "npm:^1.7.2"
     "@navikt/aap-felles-prettier": "npm:^1.7.2"
     "@navikt/aap-felles-react": "npm:^1.7.2"
@@ -2752,10 +2762,10 @@ __metadata:
     "@sanity/client": "npm:^6.21.3"
     "@sanity/overlays": "npm:^2.3.59"
     "@sanity/react-loader": "npm:^1.10.6"
-    "@sanity/types": "npm:^3.55.0"
+    "@sanity/types": "npm:^3.57.0"
     "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/jest-dom": "npm:^6.5.0"
-    "@testing-library/react": "npm:^16.0.0"
+    "@testing-library/react": "npm:^16.0.1"
     "@testing-library/user-event": "npm:14.5.2"
     "@tiptap/extension-bubble-menu": "npm:^2.6.6"
     "@tiptap/extension-table": "npm:^2.6.6"
@@ -2767,7 +2777,7 @@ __metadata:
     "@tiptap/react": "npm:^2.6.6"
     "@tiptap/starter-kit": "npm:^2.6.6"
     "@types/node": "npm:20.14.12"
-    "@types/react": "npm:^18.3.3"
+    "@types/react": "npm:^18.3.5"
     "@types/react-collapse": "npm:^5.0.4"
     "@types/react-dom": "npm:^18.3.0"
     "@types/uuid": "npm:^10.0.0"
@@ -2790,11 +2800,11 @@ __metadata:
     husky: "npm:^9.1.5"
     jsdom: "npm:^25.0.0"
     json-diff: "npm:^1.0.6"
-    lint-staged: "npm:^15.2.9"
+    lint-staged: "npm:^15.2.10"
     next: "npm:^14.2.8"
     next-sanity: "npm:^9.4.7"
     node-loader: "npm:^2.0.0"
-    openapi-typescript: "npm:7.3.0"
+    openapi-typescript: "npm:7.4.0"
     pino-pretty: "npm:^11.2.2"
     prettier: "npm:^3.3.3"
     react: "npm:18.3.1"
@@ -3410,6 +3420,13 @@ __metadata:
   version: 5.3.0
   resolution: "chalk@npm:5.3.0"
   checksum: 10c0/8297d436b2c0f95801103ff2ef67268d362021b8210daf8ddbe349695333eb3610a71122172ff3b0272f1ef2cf7cc2c41fdaa4715f52e49ffe04c56340feed09
+  languageName: node
+  linkType: hard
+
+"change-case@npm:^5.4.4":
+  version: 5.4.4
+  resolution: "change-case@npm:5.4.4"
+  checksum: 10c0/2a9c2b9c9ad6ab2491105aaf506db1a9acaf543a18967798dcce20926c6a173aa63266cb6189f3086e3c14bf7ae1f8ea4f96ecc466fcd582310efa00372f3734
   languageName: node
   linkType: hard
 
@@ -6165,9 +6182,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^15.2.9":
-  version: 15.2.9
-  resolution: "lint-staged@npm:15.2.9"
+"lint-staged@npm:^15.2.10":
+  version: 15.2.10
+  resolution: "lint-staged@npm:15.2.10"
   dependencies:
     chalk: "npm:~5.3.0"
     commander: "npm:~12.1.0"
@@ -6175,13 +6192,13 @@ __metadata:
     execa: "npm:~8.0.1"
     lilconfig: "npm:~3.1.2"
     listr2: "npm:~8.2.4"
-    micromatch: "npm:~4.0.7"
+    micromatch: "npm:~4.0.8"
     pidtree: "npm:~0.6.0"
     string-argv: "npm:~0.3.2"
     yaml: "npm:~2.5.0"
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 10c0/820c622378b62b826974af17f1747e2a4b0556e4fb99d101af89ad298d392ff079f580fdc576f16a27e975d726b95d73495fd524139402ff654c4649ef2f1a6a
+  checksum: 10c0/6ad7b41f5e87a84fa2eb1990080ea3c68a2f2031b4e81edcdc2a458cc878538eedb310e6f98ffd878a1287e1a52ac968e540ee8a0e96c247e04b0cbc36421cdd
   languageName: node
   linkType: hard
 
@@ -6442,13 +6459,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.4, micromatch@npm:~4.0.7":
+"micromatch@npm:^4.0.4":
   version: 4.0.7
   resolution: "micromatch@npm:4.0.7"
   dependencies:
     braces: "npm:^3.0.3"
     picomatch: "npm:^2.3.1"
   checksum: 10c0/58fa99bc5265edec206e9163a1d2cec5fabc46a5b473c45f4a700adce88c2520456ae35f2b301e4410fb3afb27e9521fb2813f6fc96be0a48a89430e0916a772
+  languageName: node
+  linkType: hard
+
+"micromatch@npm:~4.0.8":
+  version: 4.0.8
+  resolution: "micromatch@npm:4.0.8"
+  dependencies:
+    braces: "npm:^3.0.3"
+    picomatch: "npm:^2.3.1"
+  checksum: 10c0/166fa6eb926b9553f32ef81f5f531d27b4ce7da60e5baf8c021d043b27a388fb95e46a8038d5045877881e673f8134122b59624d5cecbd16eb50a42e7a6b5ca8
   languageName: node
   linkType: hard
 
@@ -7073,12 +7100,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-typescript@npm:7.3.0":
-  version: 7.3.0
-  resolution: "openapi-typescript@npm:7.3.0"
+"openapi-typescript@npm:7.4.0":
+  version: 7.4.0
+  resolution: "openapi-typescript@npm:7.4.0"
   dependencies:
     "@redocly/openapi-core": "npm:^1.16.0"
     ansi-colors: "npm:^4.1.3"
+    change-case: "npm:^5.4.4"
     parse-json: "npm:^8.1.0"
     supports-color: "npm:^9.4.0"
     yargs-parser: "npm:^21.1.1"
@@ -7086,7 +7114,7 @@ __metadata:
     typescript: ^5.x
   bin:
     openapi-typescript: bin/cli.js
-  checksum: 10c0/432d7a549aa4a224ae51e6236e01bd2ac50934d2ed3a283c1c7a3342b86d64f29cf5d5576881704f095be1d2d6cb718ec918747f4e941ef7bfb101520f85f4fb
+  checksum: 10c0/924a839591dc8d05e85f3a8a4d3413c3c57ff9edb2d56d76ef4c0b95c0b6da8fedf749ae7e90fba5829299b87cc9d81e9b2286a88fc86ed9448aef45d6bc8eaf
   languageName: node
   linkType: hard
 
