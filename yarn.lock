@@ -2302,12 +2302,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:20.16.5":
-  version: 20.16.5
-  resolution: "@types/node@npm:20.16.5"
+"@types/node@npm:22.5.4":
+  version: 22.5.4
+  resolution: "@types/node@npm:22.5.4"
   dependencies:
     undici-types: "npm:~6.19.2"
-  checksum: 10c0/6af7994129815010bcbc4cf8221865559c8116ff43e74a6549525c2108267596fc2d18aff5d5ecfe089fb60a119f975631343e2c65c52bfa0955ed9dc56733d6
+  checksum: 10c0/b445daa7eecd761ad4d778b882d6ff7bcc3b4baad2086ea9804db7c5d4a4ab0298b00d7f5315fc640a73b5a1d52bbf9628e09c9fec0cf44dbf9b4df674a8717d
   languageName: node
   linkType: hard
 
@@ -2856,7 +2856,7 @@ __metadata:
     "@tiptap/pm": "npm:^2.6.6"
     "@tiptap/react": "npm:^2.6.6"
     "@tiptap/starter-kit": "npm:^2.6.6"
-    "@types/node": "npm:20.16.5"
+    "@types/node": "npm:22.5.4"
     "@types/react": "npm:^18.3.5"
     "@types/react-collapse": "npm:^5.0.4"
     "@types/react-dom": "npm:^18.3.0"
@@ -2895,7 +2895,7 @@ __metadata:
     swr: "npm:^2.2.5"
     typescript: "npm:^5.5.4"
     uuid: "npm:^10.0.0"
-    vite-tsconfig-paths: "npm:^4.3.2"
+    vite-tsconfig-paths: "npm:^5.0.1"
     vitest: "npm:^2.0.5"
     vitest-fetch-mock: "npm:^0.3.0"
   languageName: unknown
@@ -9534,9 +9534,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-tsconfig-paths@npm:^4.3.2":
-  version: 4.3.2
-  resolution: "vite-tsconfig-paths@npm:4.3.2"
+"vite-tsconfig-paths@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "vite-tsconfig-paths@npm:5.0.1"
   dependencies:
     debug: "npm:^4.1.1"
     globrex: "npm:^0.1.2"
@@ -9546,7 +9546,7 @@ __metadata:
   peerDependenciesMeta:
     vite:
       optional: true
-  checksum: 10c0/f390ac1d1c3992fc5ac50f9274c1090f8b55ab34a89ea88893db9a6924a3b26c9f64bc1163615150ad100749db73b6b2cf1d57f6cd60df6e762ceb5b8ad30024
+  checksum: 10c0/3c68a4d5df21ed4ef81749c20e91c5978989ed06bffc01688b3f1a0fe65951b461a68f0c017ad930a088cfe7a8cc04d0c8d955dfb8719d5edc7fb0ba9bf38a73
   languageName: node
   linkType: hard
 
