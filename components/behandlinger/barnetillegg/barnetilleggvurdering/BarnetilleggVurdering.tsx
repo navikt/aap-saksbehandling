@@ -5,19 +5,18 @@ import { ChildHairEyesIcon, QuestionmarkDiamondIcon } from '@navikt/aksel-icons'
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { BodyShort, Button, CheckboxGroup, Heading, Label } from '@navikt/ds-react';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
-import { BarnetilleggGrunnlag, VurderingAvForeldreAnsvar, VurdertBarn } from 'lib/types/types';
+import { BarnetilleggGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useState } from 'react';
 import styles from 'components/barn/Barn.module.css';
 import { ManueltBarn } from 'components/barn/manueltbarn/ManueltBarn';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
-import { formaterDatoForBackend } from 'lib/utils/date';
 
 import { v4 as uuidv4 } from 'uuid';
-import { isFuture } from 'date-fns';
+import { prosseserSkjema } from './Skjemavalidering.js';
 
 interface Props {
   behandlingsversjon: number;
@@ -25,7 +24,7 @@ interface Props {
   readOnly: boolean;
 }
 
-interface Vurderinger {
+export interface Vurderinger {
   [ident: string]: ManueltBarnVurdering[];
 }
 
@@ -88,61 +87,6 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
     const updatedVurderinger = { ...vurderinger };
     updatedVurderinger[ident] = updatedVurderinger[ident].filter((v) => v.formId !== feltId);
     setVurderinger(updatedVurderinger);
-  };
-
-  const validerVurderinger = (): VurdertBarn[] | undefined => {
-    updateErrors([]);
-    const resultat: VurdertBarn[] = [];
-    const errors: ManueltBarnVurderingError[] = [];
-    Object.keys(vurderinger).forEach((ident) => {
-      const manuelleVurderinger: VurderingAvForeldreAnsvar[] = [];
-      const manueltBarnVurderinger = vurderinger[ident];
-      manueltBarnVurderinger.forEach((vurdering) => {
-        if (!vurdering.begrunnelse) {
-          errors.push({ formId: vurdering.formId, felt: 'begrunnelse', message: 'Du må gi en begrunnelse' });
-        }
-        if (!vurdering.harForeldreAnsvar) {
-          errors.push({
-            formId: vurdering.formId,
-            felt: 'harForeldreAnsvar',
-            message: 'Du må besvare om det skal beregnes barnetillegg for barnet',
-          });
-        }
-        if (!vurdering.fom) {
-          errors.push({
-            formId: vurdering.formId,
-            felt: 'fom',
-            message: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra',
-          });
-        }
-        if (vurdering.fom && isFuture(vurdering.fom)) {
-          errors.push({
-            formId: vurdering.formId,
-            felt: 'fom',
-            message: 'Dato for når søker har forsørgeransvar fra kan ikke være frem i tid',
-          });
-        }
-        if (errors.length === 0) {
-          manuelleVurderinger.push({
-            begrunnelse: vurdering.begrunnelse!,
-            harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
-            periode: {
-              fom: formaterDatoForBackend(vurdering.fom!),
-              tom: formaterDatoForBackend(vurdering.tom || new Date()),
-            },
-          });
-        }
-      });
-      updateErrors(errors);
-      resultat.push({
-        ident: {
-          identifikator: ident,
-          aktivIdent: true,
-        },
-        vurderinger: manuelleVurderinger,
-      });
-    });
-    return errors.length > 0 ? undefined : resultat;
   };
 
   return (
@@ -228,14 +172,17 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
             className={'fit-content-button'}
             form="dokument-form"
             onClick={() => {
-              const validerteVurderinger = validerVurderinger();
-              if (validerteVurderinger) {
+              updateErrors([]);
+              const valideringsresultat = prosseserSkjema(vurderinger);
+              if ('errors' in valideringsresultat) {
+                updateErrors(valideringsresultat.errors);
+              } else {
                 løsBehovOgGåTilNesteSteg({
                   behandlingVersjon: behandlingsversjon,
                   behov: {
                     behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
                     vurderingerForBarnetillegg: {
-                      vurderteBarn: validerteVurderinger,
+                      vurderteBarn: valideringsresultat.mappetSkjema,
                     },
                   },
                   referanse: behandlingsReferanse,
