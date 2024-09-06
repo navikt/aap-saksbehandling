@@ -16,7 +16,7 @@ import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 
 import { v4 as uuidv4 } from 'uuid';
-import { prosseserSkjema } from './Skjemavalidering.js';
+import { prosseserSkjema } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/Skjemavalidering.js';
 
 interface Props {
   behandlingsversjon: number;
