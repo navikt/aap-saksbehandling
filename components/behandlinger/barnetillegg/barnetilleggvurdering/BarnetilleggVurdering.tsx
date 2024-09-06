@@ -17,7 +17,7 @@ import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/Tilknytt
 import { formaterDatoForBackend } from 'lib/utils/date';
 
 import { v4 as uuidv4 } from 'uuid';
-import { isAfter } from 'date-fns';
+import { isFuture } from 'date-fns';
 
 interface Props {
   behandlingsversjon: number;
@@ -115,7 +115,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
             message: 'Du må sette en dato for når søker har forsørgeransvar for barnet fra',
           });
         }
-        if (vurdering.fom && isAfter(vurdering.fom, new Date())) {
+        if (vurdering.fom && isFuture(vurdering.fom)) {
           errors.push({
             formId: vurdering.formId,
             felt: 'fom',
