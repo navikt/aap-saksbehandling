@@ -53,7 +53,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
     grunn: {
       type: 'select',
       label: 'Velg en årsak',
-      options: ['', ...grunnOptions],
+      options: [{ label: '', value: '' }, ...grunnOptions],
       rules: { required: 'Du må velge en årsak' },
     },
   });
