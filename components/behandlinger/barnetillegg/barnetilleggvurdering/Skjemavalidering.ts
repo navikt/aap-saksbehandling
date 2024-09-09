@@ -3,7 +3,7 @@ import { ManueltBarnVurderingError, Vurderinger } from './BarnetilleggVurdering'
 
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
-import { isFuture } from 'date-fns';
+import { isBefore, isFuture } from 'date-fns';
 
 interface Valideringsfeil {
   errors: ManueltBarnVurderingError[];
@@ -40,6 +40,15 @@ const validerSkjema = (vurderinger: Vurderinger): ManueltBarnVurderingError[] | 
             formId: vurdering.formId,
             felt: 'fom',
             message: 'Dato for når søker har forsørgeransvar fra kan ikke være frem i tid',
+          });
+        }
+      }
+      if (vurdering.tom) {
+        if (vurdering.fom && isBefore(vurdering.tom, vurdering.fom)) {
+          errors.push({
+            formId: vurdering.formId,
+            felt: 'fom',
+            message: 'Slutt-dato kan ikke være før start-dato',
           });
         }
       }

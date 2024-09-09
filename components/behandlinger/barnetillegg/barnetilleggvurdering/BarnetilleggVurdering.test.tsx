@@ -222,6 +222,8 @@ describe('Manuelt registrerte barn', () => {
     expect(feilmelding).toBeVisible();
   });
 
+  // skippet fordi datepicker gir undefined dersom det er en ugyldig dato, så vi klarer ikke å skille på en ugydlig dato vs ingen dato
+  // Vi vurderer om vi skal bytte ut date-picker med textfield
   it.skip('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
@@ -233,6 +235,24 @@ describe('Manuelt registrerte barn', () => {
     await user.click(lagreKnapp);
     const feilmelding = screen.getByText('Dato for når søker har forsørgeransvar fra er ikke gyldig');
     expect(feilmelding).toBeVisible();
+  });
+
+  it('viser en feilmelding dersom til-dato er satt før fra-dato', async () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    await svarJaPåOmDetSkalBeregnesBarnetillegg();
+    const startDato = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+
+    const leggTilSluttDatoKnapp = screen.getByRole('button', { name: 'Legg til sluttdato' });
+    await user.click(leggTilSluttDatoKnapp);
+    const sluttDato = screen.getByRole('textbox', { name: /Sluttdato for forsørgeransvaret/i });
+
+    await user.type(startDato, '10.08.2023');
+    await user.type(sluttDato, '09.08.2023');
+
+    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
+
+    await user.click(lagreKnapp);
+    expect(screen.getByText('Slutt-dato kan ikke være før start-dato')).toBeVisible();
   });
 
   it('skal ikke vise knapp for å fullføre vurdering dersom readonly er satt til true', () => {
