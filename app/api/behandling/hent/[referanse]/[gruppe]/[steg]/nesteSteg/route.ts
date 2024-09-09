@@ -62,8 +62,8 @@ export async function GET(
         const aktivtSteg = flyt.vurdertSteg != null ? flyt.vurdertSteg : flyt.aktivtSteg;
 
         const json: ServerSentEventData = {
-          aktivGruppe: flyt.vurdertGruppe != null ? flyt.vurdertGruppe : flyt.aktivGruppe,
-          aktivtSteg: flyt.vurdertSteg != null ? flyt.vurdertSteg : flyt.aktivtSteg,
+          aktivGruppe,
+          aktivtSteg,
           skalBytteGruppe: aktivGruppe !== context.params.gruppe,
           skalBytteSteg: aktivtSteg !== context.params.steg,
           status: 'DONE',
