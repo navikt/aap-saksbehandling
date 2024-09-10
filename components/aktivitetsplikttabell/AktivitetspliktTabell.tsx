@@ -7,9 +7,7 @@ interface Props {
   aktivitetsmeldinger?: Aktivitetsmeldinger;
 }
 
-export const AktivitetspliktTabell = ({
-  aktivitetsmeldinger = { hammere: [{ type: 'IKKE_MØTT_TIL_BEHANDLING', dato: 'hello pello', begrunnelse: 'hei' }] },
-}: Props) => {
+export const AktivitetspliktTabell = ({ aktivitetsmeldinger = { hammere: [] } }: Props) => {
   const harAktivitetsmeldingeraktivitetsmeldinger =
     aktivitetsmeldinger.hammere && aktivitetsmeldinger.hammere.length > 0;
 
