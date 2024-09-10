@@ -1,7 +1,7 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { useConfigForm, FormField } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { Alert, BodyShort, List } from '@navikt/ds-react';
 import { FigureIcon } from '@navikt/aksel-icons';
@@ -9,7 +9,6 @@ import { FigureIcon } from '@navikt/aksel-icons';
 import style from './Meldeplikt.module.css';
 import { FritakMeldepliktGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
-import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -23,7 +22,6 @@ interface Props {
 }
 
 interface FormFields {
-  dokumenterBruktIVurderingen: string[];
   begrunnelse: string;
   unntakFraMeldeplikt: string[];
   startDato?: Date;
@@ -36,11 +34,6 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
-      dokumenterBruktIVurderingen: {
-        type: 'checkbox_nested',
-        label: 'Dokumenter funnet som er relevant for vurdering av §11-10',
-        description: 'Tilknytt minst ett dokument til §11-10',
-      },
       begrunnelse: {
         type: 'textarea',
         description: 'Begrunn vurderingen',
@@ -118,10 +111,6 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
             </List.Item>
           </List>
         </Alert>
-
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
-          <DokumentTabell />
-        </FormField>
 
         <Veiledning />
 

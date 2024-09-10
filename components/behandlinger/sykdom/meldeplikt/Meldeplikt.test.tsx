@@ -16,7 +16,7 @@ describe('Meldeplikt', () => {
 
   it('Skal ha en overskrift', () => {
     render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
-    const heading = screen.getByText('Unntak fra meldeplikt § 11-10');
+    const heading = screen.getByRole('heading', { name: 'Unntak fra meldeplikt § 11-10' });
     expect(heading).toBeVisible();
   });
 
@@ -79,16 +79,6 @@ describe('Meldeplikt', () => {
 
     expect(sluttDatoFelt).not.toBeInTheDocument();
     expect(startDatoFelt).not.toBeInTheDocument();
-  });
-
-  it('skal ha felt med tabell for relevant dokumentasjon', async () => {
-    render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
-    await openAccordionCard();
-
-    const felt = await screen.findByRole('group', {
-      name: /dokumenter funnet som er relevant for vurdering av §11-10/i,
-    });
-    expect(felt).toBeVisible();
   });
 
   it('Skal ha synlig vilkårsveiledning', () => {
