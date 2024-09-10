@@ -41,9 +41,11 @@ interface FormFields {
   brudd: AktivitetDtoType;
   paragraf?: Paragraf;
   begrunnelse?: string;
+  datoFor117?: Date;
 }
 
 const paragrafOptions: ValuePair<Paragraf>[] = [
+  { label: '11-7 noe tekst her som forklarer hva 11-7 er for noe', value: '11-7' },
   { label: '11-8 fravær fra fastsatt aktivitet', value: '11-8' },
   { label: '11-9 reduksjon av AAP ved brudd på nærmere bestemte aktivitetsplikter', value: '11-9' },
 ];
@@ -66,13 +68,14 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
       brudd: {
         type: 'radio',
         label: 'Registrer brudd på aktivitetsplikt',
-        options: bruddOptions,
+        options: bruddOptions, // Denne blir satt dynamisk
         rules: { required: 'Du må registrere et brudd på aktivitetsplikten' },
       },
       paragraf: {
         type: 'radio',
         label: 'Velg paragraf',
         options: paragrafOptions,
+        defaultValue: '11-7',
         rules: { required: 'Du må velge en paragraf' },
       },
       begrunnelse: {
@@ -80,6 +83,10 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
         label: 'Begrunnelse',
         description: 'Skriv begrunnelse og henvis eventuelt til rett kilde/dokumentasjon',
         rules: { required: 'Du må skrive en begrunnelse for brudd på aktivitetsplikten' },
+      },
+      datoFor117: {
+        type: 'date',
+        label: 'Dato',
       },
     },
     { shouldUnregister: true }
@@ -116,12 +123,22 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
   }
 
   const valgtBrudd = form.watch('brudd');
-  const harIkkeMøttTilTiltakBehandlingEllerSendtInnDokumentasjon =
+  const skalVelgeParagraf =
     valgtBrudd === 'IKKE_MØTT_TIL_TILTAK' ||
     valgtBrudd === 'IKKE_MØTT_TIL_BEHANDLING' ||
-    valgtBrudd === 'IKKE_SENDT_INN_DOKUMENTASJON';
+    valgtBrudd === 'IKKE_SENDT_INN_DOKUMENTASJON' ||
+    valgtBrudd === 'IKKE_MØTT_TIL_MØTE';
 
   const paragrafErValgt = form.watch('paragraf') != undefined;
+
+  const paragrafOptionsForBrudd: ValuePair[] =
+    valgtBrudd === 'IKKE_MØTT_TIL_MØTE'
+      ? paragrafOptions.filter((paragraf) => paragraf.value !== '11-8')
+      : paragrafOptions.filter((paragraf) => paragraf.value !== '11-7');
+
+  const skalBareViseEnkeltDato = form.watch('brudd') == 'IKKE_AKTIVT_BIDRAG' || form.watch('paragraf') === '11-7';
+
+  console.log('denne betyr noe', skalBareViseEnkeltDato);
 
   return (
     <SideProsessKort
@@ -138,36 +155,53 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
           })}
         >
           <FormField form={form} formField={formFields.brudd} />
-          {harIkkeMøttTilTiltakBehandlingEllerSendtInnDokumentasjon && (
-            <FormField form={form} formField={formFields.paragraf} />
+          {skalVelgeParagraf && (
+            // @ts-ignore TODO Finn ut hvorfor ts ikke godtar at vi setter options dynamisk
+            <FormField form={form} formField={{ ...formFields.paragraf, options: paragrafOptionsForBrudd }} />
           )}
+
+          {skalBareViseEnkeltDato && (
+            <div className={'flex-column'}>
+              <FormField form={form} formField={formFields.datoFor117} />
+              <FormField form={form} formField={formFields.begrunnelse} />
+            </div>
+          )}
+
           {paragrafErValgt && (
             <div className={'flex-column'}>
-              <b>{hentDatoLabel(valgtBrudd)}</b>
-              <AktivitetsmeldingDatoTabell
-                bruddDatoPerioder={bruddPåAktivitetsDatoer}
-                setBruddDatoPerioder={setBruddPåAktivitetsDatoer}
-              />
-              <div className={'flex-row'}>
-                <Button
-                  icon={<PlusCircleIcon />}
-                  type={'button'}
-                  variant={'tertiary'}
-                  size={'small'}
-                  onClick={() => leggTilNyEnkeltDato()}
-                >
-                  Legg til enkeltdato
-                </Button>
-                <Button
-                  icon={<PlusCircleIcon />}
-                  type={'button'}
-                  variant={'tertiary'}
-                  size={'small'}
-                  onClick={() => leggTilNyPeriode()}
-                >
-                  Legg til periode
-                </Button>
-              </div>
+              <>
+                {skalBareViseEnkeltDato ? (
+                  <FormField form={form} formField={formFields.datoFor117} />
+                ) : (
+                  <>
+                    <b>{hentDatoLabel(valgtBrudd)}</b>
+                    <AktivitetsmeldingDatoTabell
+                      bruddDatoPerioder={bruddPåAktivitetsDatoer}
+                      setBruddDatoPerioder={setBruddPåAktivitetsDatoer}
+                    />
+                    <div className={'flex-row'}>
+                      <Button
+                        icon={<PlusCircleIcon />}
+                        type={'button'}
+                        variant={'tertiary'}
+                        size={'small'}
+                        onClick={() => leggTilNyEnkeltDato()}
+                      >
+                        Legg til enkeltdato
+                      </Button>
+                      <Button
+                        icon={<PlusCircleIcon />}
+                        type={'button'}
+                        variant={'tertiary'}
+                        size={'small'}
+                        onClick={() => leggTilNyPeriode()}
+                      >
+                        Legg til periode
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </>
 
               <FormField form={form} formField={formFields.begrunnelse} />
             </div>
