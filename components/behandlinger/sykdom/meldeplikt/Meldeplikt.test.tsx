@@ -88,9 +88,10 @@ describe('Meldeplikt', () => {
     expect(startDatoFelt).not.toBeInTheDocument();
   });
 
-  it('Skal ha synlig vilkårsveiledning', () => {
+  it('Skal ha synlig vilkårsveiledning', async () => {
     render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
-    const vilkårsveiledning = screen.getByText('Slik vurderes vilkåret');
+    await openAccordionCard();
+    const vilkårsveiledning = screen.getByRole('button', { name: 'Slik vurderes dette' });
     expect(vilkårsveiledning).toBeVisible();
   });
 
