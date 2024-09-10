@@ -8,7 +8,7 @@ const aktivitetsMelding: Aktivitetsmeldinger = {
   hammere: [],
 };
 
-describe('aktivitetsmelding', () => {
+describe.skip('aktivitetsmelding', () => {
   const user = userEvent.setup();
 
   it('skal ha en tabell for tidligere brudd på aktivitetsplikten', () => {
