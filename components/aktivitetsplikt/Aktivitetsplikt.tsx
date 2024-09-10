@@ -75,7 +75,6 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
         type: 'radio',
         label: 'Velg paragraf',
         options: paragrafOptions,
-        defaultValue: '11-7',
         rules: { required: 'Du må velge en paragraf' },
       },
       begrunnelse: {
