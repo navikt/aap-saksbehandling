@@ -1,60 +1,44 @@
 import { DatoBruddPåAktivitetsplikt } from 'components/aktivitetsplikt/Aktivitetsplikt';
 import { Button, Table, TextField } from '@navikt/ds-react';
-import { PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 interface Props {
+  type: DatoBruddPåAktivitetsplikt['type'];
   bruddDatoPeriode: DatoBruddPåAktivitetsplikt;
   onChange: (id: string, felt: 'dato' | 'fom' | 'tom', value: string) => void;
+  onDelete: () => void;
 }
 
-export const AktivitetsmeldingDatoTabellRad = ({ bruddDatoPeriode, onChange }: Props) => {
-  const [isEditing, setIsEditing] = useState(false);
-
+export const AktivitetsmeldingDatoTabellRad = ({ bruddDatoPeriode, onChange, onDelete, type }: Props) => {
   const datoFelt = bruddDatoPeriode.type === 'enkeltdag' ? 'dato' : 'fom';
 
   return (
     <Table.Row>
       <Table.DataCell scope={'row'} className={'navds-table__data-cell--align-top'}>
-        {isEditing ? (
-          <TextField
-            size={'small'}
-            label={'dato'}
-            hideLabel
-            onChange={(e) => onChange(bruddDatoPeriode.id, datoFelt, e.target.value)}
-          />
-        ) : (
-          <span>{bruddDatoPeriode.type === 'enkeltdag' ? bruddDatoPeriode.dato : bruddDatoPeriode.fom}</span>
-        )}
+        <TextField
+          size={'small'}
+          label={type === 'enkeltdag' ? 'dato' : 'fra og med dato'}
+          value={bruddDatoPeriode.fom || bruddDatoPeriode.dato}
+          hideLabel
+          onChange={(e) => onChange(bruddDatoPeriode.id, datoFelt, e.target.value)}
+        />
       </Table.DataCell>
       {bruddDatoPeriode?.type === 'periode' ? (
         <Table.DataCell scope={'row'}>
-          {isEditing ? (
-            <TextField
-              size={'small'}
-              label={'dato'}
-              hideLabel
-              onChange={(e) => onChange(bruddDatoPeriode.id, 'tom', e.target.value)}
-            />
-          ) : (
-            <span>{bruddDatoPeriode.tom}</span>
-          )}
+          <TextField
+            size={'small'}
+            label={'til og med dato'}
+            value={bruddDatoPeriode.tom}
+            hideLabel
+            onChange={(e) => onChange(bruddDatoPeriode.id, 'tom', e.target.value)}
+          />
         </Table.DataCell>
       ) : (
         <Table.DataCell scope={'row'} />
       )}
       <Table.DataCell scope={'row'}>{bruddDatoPeriode.type === 'periode' ? 'Periode' : 'Enkeltdato'}</Table.DataCell>
       <Table.DataCell scope={'row'}>
-        <Button
-          type={'button'}
-          size={'small'}
-          variant={'tertiary'}
-          icon={<PencilIcon title="a11y-title"  />}
-          onClick={() => setIsEditing(!isEditing)}
-        >
-          Endre
-        </Button>
-        <Button type={'button'} size={'small'} variant={'tertiary'} icon={<TrashIcon />}>
+        <Button type={'button'} size={'small'} variant={'tertiary'} icon={<TrashIcon />} onClick={onDelete}>
           Slett
         </Button>
       </Table.DataCell>

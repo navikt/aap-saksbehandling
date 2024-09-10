@@ -17,7 +17,7 @@ interface Props {
   aktivitetsMeldinger: Aktivitetsmeldinger;
 }
 
-type Paragraf = '11-8' | '11-9'; // TODO Denne må komme fra backend
+type Paragraf = '11-7' | '11-8' | '11-9'; // TODO Denne må komme fra backend
 
 export interface BruddDatoPeriode {
   type: 'enkeltdag' | 'periode';
@@ -41,7 +41,6 @@ interface FormFields {
   brudd: AktivitetDtoType;
   paragraf?: Paragraf;
   begrunnelse?: string;
-  skalSendeForhåndsvarsel: string;
 }
 
 const paragrafOptions: ValuePair<Paragraf>[] = [
@@ -58,10 +57,10 @@ const bruddOptions: ValuePair<AktivitetDtoType>[] = [
     value: 'IKKE_SENDT_INN_DOKUMENTASJON',
   },
   { label: 'Ikke bidratt til egen avklaring', value: 'IKKE_AKTIVT_BIDRAG' },
-] as const;
+];
 
 export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
-  console.log(saksnummer);
+  console.log(saksnummer, aktivitetsMeldinger);
   const { form, formFields } = useConfigForm<FormFields>(
     {
       brudd: {
@@ -81,10 +80,6 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
         label: 'Begrunnelse',
         description: 'Skriv begrunnelse og henvis eventuelt til rett kilde/dokumentasjon',
         rules: { required: 'Du må skrive en begrunnelse for brudd på aktivitetsplikten' },
-      },
-      skalSendeForhåndsvarsel: {
-        type: 'checkbox',
-        options: ['Send forhåndsvarsel'],
       },
     },
     { shouldUnregister: true }
@@ -134,7 +129,7 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
       icon={<FigureIcon fontSize={'inherit'} />}
     >
       <div className={'flex-column'}>
-        <AktivitetspliktTabell aktivitetsmeldinger={aktivitetsMeldinger} />
+        <AktivitetspliktTabell />
         <form
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
@@ -175,7 +170,6 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
               </div>
 
               <FormField form={form} formField={formFields.begrunnelse} />
-              <FormField form={form} formField={formFields.skalSendeForhåndsvarsel} />
             </div>
           )}
           <Button className={'fit-content-button'}>Bekreft</Button>

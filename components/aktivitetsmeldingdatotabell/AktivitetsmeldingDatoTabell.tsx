@@ -14,10 +14,10 @@ export const AktivitetsmeldingDatoTabell = ({ bruddDatoPerioder, setBruddDatoPer
       <Table size={'small'}>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell scope={'col'}>Dato</Table.HeaderCell>
-            <Table.HeaderCell scope={'col'}>Dato</Table.HeaderCell>
-            <Table.HeaderCell scope={'col'}>Type</Table.HeaderCell>
-            <Table.HeaderCell scope={'col'}>Handling</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'} scope={'col'}>Dato</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'} scope={'col'}>Til og med dato</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'} scope={'col'}>Type</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'} scope={'col'}>Handling</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -36,6 +36,9 @@ export const AktivitetsmeldingDatoTabell = ({ bruddDatoPerioder, setBruddDatoPer
                   );
                 }
               }}
+              onDelete={() =>
+                setBruddDatoPerioder((prevState) => prevState.filter((something) => something.id !== element.id))
+              }
             />
           ))}
         </Table.Body>

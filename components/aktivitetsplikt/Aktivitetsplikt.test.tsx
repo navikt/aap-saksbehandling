@@ -106,16 +106,6 @@ describe('aktivitetsmelding', () => {
     expect(felt).toBeVisible();
   });
 
-  it('skal dukke opp et felt for å sende forhåndsvarsel for brudd på aktivitetsplikt dersom man velger en paragraf', async () => {
-    render(<Aktivitetsplikt saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
-    await velgIkkeMøttITiltakSomBrudd();
-
-    await velgParagraf_11_8();
-
-    const felt = screen.getByRole('checkbox', { name: /send forhåndsvarsel/i });
-    expect(felt).toBeVisible();
-  });
-
   it('skal vise en feilmelding dersom brudd på aktivitetsplikten ikke er besvart', async () => {
     render(<Aktivitetsplikt saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
 
@@ -157,6 +147,70 @@ describe('aktivitetsmelding', () => {
     await user.click(bekreftKnapp);
     const feilmelding = screen.getByText('Du må skrive en begrunnelse for brudd på aktivitetsplikten');
     expect(feilmelding).toBeVisible();
+  });
+
+  it('skal være mulig å legge til flere rader med enkeltdato', async () => {
+    render(<Aktivitetsplikt saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
+
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_8();
+
+    const leggTilEnkeltdatoKnapp = screen.getByRole('button', { name: /legg til enkeltdato/i });
+    await user.click(leggTilEnkeltdatoKnapp);
+    await user.click(leggTilEnkeltdatoKnapp);
+    const datoFelt = screen.getAllByRole('textbox', { name: /dato/i });
+    expect(datoFelt.length).toEqual(2);
+  });
+
+  it('skal være mulig å slette en rad med enkeltdato', async () => {
+    render(<Aktivitetsplikt saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
+
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_8();
+
+    const leggTilEnkeltdatoKnapp = screen.getByRole('button', { name: /legg til enkeltdato/i });
+    await user.click(leggTilEnkeltdatoKnapp);
+    await user.click(leggTilEnkeltdatoKnapp);
+    expect(screen.getAllByRole('textbox', { name: /dato/i }).length).toEqual(2);
+
+    const slettKnapp = screen.getAllByRole('button', { name: /slett/i });
+    await user.click(slettKnapp[0]);
+    expect(screen.getAllByRole('textbox', { name: /dato/i }).length).toEqual(1);
+  });
+
+  it('skal være mulig å legge til flere rader med perioder', async () => {
+    render(<Aktivitetsplikt saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
+
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_8();
+
+    const leggTilPeriodeKnapp = screen.getByRole('button', { name: /legg til periode/i });
+    await user.click(leggTilPeriodeKnapp);
+    await user.click(leggTilPeriodeKnapp);
+    const fraOgMedDatoFelt = screen.getAllByRole('textbox', { name: /fra og med dato/i });
+    const tilOgMedDatoFelt = screen.getAllByRole('textbox', { name: /til og med dato/i });
+    expect(fraOgMedDatoFelt.length).toEqual(2);
+    expect(tilOgMedDatoFelt.length).toEqual(2);
+  });
+
+  it('skal være mulig å slette en rad med perioder', async () => {
+    render(<Aktivitetsplikt saksnummer={'1233'} aktivitetsMeldinger={aktivitetsMelding} />);
+
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_8();
+
+    const leggTilPeriodeKnapp = screen.getByRole('button', { name: /legg til periode/i });
+    await user.click(leggTilPeriodeKnapp);
+    await user.click(leggTilPeriodeKnapp);
+
+    expect(screen.getAllByRole('textbox', { name: /fra og med dato/i }).length).toEqual(2);
+    expect(screen.getAllByRole('textbox', { name: /til og med dato/i }).length).toEqual(2);
+
+    const slettKnapp = screen.getAllByRole('button', { name: /slett/i });
+    await user.click(slettKnapp[0]);
+
+    expect(screen.getAllByRole('textbox', { name: /fra og med dato/i }).length).toEqual(1);
+    expect(screen.getAllByRole('textbox', { name: /til og med dato/i }).length).toEqual(1);
   });
 
   async function velgIkkeMøttITiltakSomBrudd() {
