@@ -6,10 +6,10 @@ import { userEvent } from '@testing-library/user-event';
 describe('Meldeplikt', () => {
   const user = userEvent.setup();
 
-  it('skal være default lukket', async () => {
+  it('skal være default lukket', () => {
     render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
-    const textbox = await screen.queryByRole('textbox', {
-      name: /vurder om det vil være unødig tyngende for søker å overholde meldeplikten/i,
+    const textbox = screen.queryByRole('textbox', {
+      name: 'Vurder om det vil være unødig tyngende for søker å overholde meldeplikten',
     });
     expect(textbox).toBeNull();
   });
@@ -38,8 +38,15 @@ describe('Meldeplikt', () => {
     expect(checkBoxGroup).toBeVisible();
   });
 
-  it('Skal ha informasjonstekst om unntak fra meldeplikten', () => {
+  it('Skal ha informasjonstekst om unntak fra meldeplikten', async () => {
     render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
+    await openAccordionCard();
+
+    expect(
+      screen.getByRole('button', {
+        name: 'Vilkåret skal kun vurderes ved behov. Se mer om vurdering av fritak fra meldeplikt',
+      })
+    ).toBeVisible();
 
     expect(screen.getByText('Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:')).toBeVisible();
     expect(

@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
-import { Alert, BodyShort, List } from '@navikt/ds-react';
+import { BodyShort, List, ReadMore } from '@navikt/ds-react';
 import { FigureIcon } from '@navikt/aksel-icons';
 
 import style from './Meldeplikt.module.css';
@@ -96,7 +96,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
         steg={'BARNETILLEGG'}
         visBekreftKnapp={!readOnly}
       >
-        <Alert variant={'info'} size={'small'}>
+        <ReadMore header={'Vilkåret skal kun vurderes ved behov. Se mer om vurdering av fritak fra meldeplikt'}>
           <BodyShort size={'small'}>Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:</BodyShort>
           <List as={'ol'} size={'small'}>
             <List.Item>
@@ -110,11 +110,28 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
               </BodyShort>
             </List.Item>
           </List>
-        </Alert>
-
-        <Veiledning />
+        </ReadMore>
 
         <FormField form={form} formField={formFields.begrunnelse} />
+        <Veiledning
+          header={'Slik vurderes dette'}
+          defaultOpen={false}
+          tekst={
+            <>
+              <BodyShort>
+                Unødig tyngende betyr at plikten til å sende meldekort være vanskeligere å oppfylle enn for andre
+                mottakere av AAP – det er ikke tilstrekkelig at meldeplikten er tung eller belastende for personen.
+              </BodyShort>
+              <BodyShort>
+                Fritak kan for eksempel gis hvis det er hindre som gjør det vanskelig for personen å fylle ut
+                meldekortet riktig, for eksempel synshemming, lese- og skrivevansker eller psykisk utviklingshemming.
+                Det kan også gis fritak om en person er lagt inn på institusjon og/eller er i en slik helsetilstand at
+                det ikke er mulig å sende inn meldekort
+              </BodyShort>
+            </>
+          }
+        />
+
         <FormField form={form} formField={formFields.unntakFraMeldeplikt} />
 
         {form.watch('unntakFraMeldeplikt') && form.watch('unntakFraMeldeplikt').includes('Unntak fra meldeplikten') && (
