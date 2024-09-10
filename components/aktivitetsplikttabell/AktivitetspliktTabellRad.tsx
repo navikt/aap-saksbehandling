@@ -6,7 +6,7 @@ interface Props {
   aktivitet: AktivitetDto;
 }
 
-export const AktivitetsTabellRad = ({ aktivitet }: Props) => {
+export const AktivitetspliktTabellRad = ({ aktivitet }: Props) => {
   console.log(aktivitet);
   return <div>Yay en rad</div>;
 };

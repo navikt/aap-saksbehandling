@@ -1,12 +1,12 @@
 import { Aktivitetsmeldinger } from 'lib/types/types';
 
-import styles from './Aktivitetstabell.module.css';
+import styles from 'components/aktivitetsplikttabell/Aktivitetsplikttabell.module.css';
 
 interface Props {
   aktivitetsmeldinger?: Aktivitetsmeldinger;
 }
 
-export const AktivitetsTabell = ({ aktivitetsmeldinger = { hammere: [] } }: Props) => {
+export const AktivitetspliktTabell = ({ aktivitetsmeldinger = { hammere: [] } }: Props) => {
   const harAktivitetsmeldingeraktivitetsmeldinger =
     aktivitetsmeldinger.hammere && aktivitetsmeldinger.hammere.length < 0;
 

@@ -1,4 +1,4 @@
-import { DatoBruddPåAktivitetsplikt } from 'components/aktivitetsmelding/AktivitetsMelding';
+import { DatoBruddPåAktivitetsplikt } from 'components/aktivitetsplikt/Aktivitetsplikt';
 import { Button, Table, TextField } from '@navikt/ds-react';
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';

@@ -1,6 +1,6 @@
 import { Table } from '@navikt/ds-react';
 import { AktivitetsmeldingDatoTabellRad } from './AktivitetsmeldingDatoTabellRad';
-import { DatoBruddPåAktivitetsplikt } from 'components/aktivitetsmelding/AktivitetsMelding';
+import { DatoBruddPåAktivitetsplikt } from 'components/aktivitetsplikt/Aktivitetsplikt';
 import { Dispatch, SetStateAction } from 'react';
 
 interface Props {

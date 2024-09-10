@@ -1,7 +1,7 @@
 'use client';
 
 import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { AktivitetsTabell } from 'components/aktivitetstabell/AktivitetsTabell';
+import { AktivitetspliktTabell } from 'components/aktivitetsplikttabell/AktivitetspliktTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Button } from '@navikt/ds-react';
@@ -60,7 +60,7 @@ const bruddOptions: ValuePair<AktivitetDtoType>[] = [
   { label: 'Ikke bidratt til egen avklaring', value: 'IKKE_AKTIVT_BIDRAG' },
 ] as const;
 
-export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) => {
+export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
   console.log(saksnummer);
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -134,7 +134,7 @@ export const AktivitetsMelding = ({ saksnummer, aktivitetsMeldinger }: Props) =>
       icon={<FigureIcon fontSize={'inherit'} />}
     >
       <div className={'flex-column'}>
-        <AktivitetsTabell aktivitetsmeldinger={aktivitetsMeldinger} />
+        <AktivitetspliktTabell aktivitetsmeldinger={aktivitetsMeldinger} />
         <form
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
