@@ -180,6 +180,7 @@ describe('Manuelt registrerte barn', () => {
     expect(forsørgeransvarFelt).not.toBeInTheDocument();
 
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
+    await fyllUtEnBegrunnelse();
     const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
 
     await user.click(lagreKnapp);
@@ -211,6 +212,7 @@ describe('Manuelt registrerte barn', () => {
   it('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
+    await fyllUtEnBegrunnelse();
     const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
     const imorgen = addDays(new Date(), 1);
 
@@ -240,6 +242,7 @@ describe('Manuelt registrerte barn', () => {
   it('viser en feilmelding dersom til-dato er satt før fra-dato', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
+    await fyllUtEnBegrunnelse();
     const startDato = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
 
     const leggTilSluttDatoKnapp = screen.getByRole('button', { name: 'Legg til sluttdato' });
@@ -269,4 +272,11 @@ describe('Manuelt registrerte barn', () => {
 
     await user.click(jaVerdi);
   }
+
+  const fyllUtEnBegrunnelse = async () => {
+    const begrunnelsesfelt = screen.getByRole('textbox', {
+      name: 'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet',
+    });
+    await user.type(begrunnelsesfelt, 'Dette er en begrunnelse');
+  };
 });

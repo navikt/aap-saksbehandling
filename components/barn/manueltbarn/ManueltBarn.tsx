@@ -75,6 +75,7 @@ export const ManueltBarn = ({ manueltBarn, oppdaterVurdering, readOnly, ident, e
               <DatePicker.Input
                 label={'Sluttdato for forsørgeransvaret'}
                 size={'small'}
+                error={errors.find((error) => error.felt === 'tom')?.message}
                 {...forsørgerAnsvarSluttDatoInputProps}
               />
             </DatePicker>

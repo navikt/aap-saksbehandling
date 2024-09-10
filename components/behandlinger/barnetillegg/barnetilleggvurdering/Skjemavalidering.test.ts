@@ -14,6 +14,9 @@ describe('Skjemavalidering', () => {
     };
     const res = prosseserSkjema(vurderinger);
     expect(res).toHaveProperty('errors');
+    if ('errors' in res) {
+      expect(res.errors.length).toBeGreaterThan(0);
+    }
     expect(res).not.toHaveProperty('mappetSkjema');
   });
 
@@ -33,5 +36,9 @@ describe('Skjemavalidering', () => {
     const res = prosseserSkjema(vurderinger);
     expect(res).toHaveProperty('mappetSkjema');
     expect(res).not.toHaveProperty('errors');
+
+    if ('mappetSkjema' in res) {
+      expect(res.mappetSkjema.length).toBeGreaterThan(0);
+    }
   });
 });
