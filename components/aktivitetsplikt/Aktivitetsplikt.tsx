@@ -4,10 +4,10 @@ import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { AktivitetspliktTabell } from 'components/aktivitetsplikttabell/AktivitetspliktTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
-import { Button } from '@navikt/ds-react';
+import { Button, Radio } from '@navikt/ds-react';
 import { AktivitetDtoType, Aktivitetsmeldinger } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -68,13 +68,12 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
       brudd: {
         type: 'radio',
         label: 'Registrer brudd på aktivitetsplikt',
-        options: bruddOptions, // Denne blir satt dynamisk
+        options: bruddOptions,
         rules: { required: 'Du må registrere et brudd på aktivitetsplikten' },
       },
       paragraf: {
-        type: 'radio',
+        type: 'radio_nested',
         label: 'Velg paragraf',
-        options: paragrafOptions,
         rules: { required: 'Du må velge en paragraf' },
       },
       begrunnelse: {
@@ -128,16 +127,19 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
     valgtBrudd === 'IKKE_SENDT_INN_DOKUMENTASJON' ||
     valgtBrudd === 'IKKE_MØTT_TIL_MØTE';
 
-  const paragrafErValgt = form.watch('paragraf') != undefined;
-
-  const paragrafOptionsForBrudd: ValuePair[] =
-    valgtBrudd === 'IKKE_MØTT_TIL_MØTE'
-      ? paragrafOptions.filter((paragraf) => paragraf.value !== '11-8')
-      : paragrafOptions.filter((paragraf) => paragraf.value !== '11-7');
-
   const skalBareViseEnkeltDato = form.watch('brudd') == 'IKKE_AKTIVT_BIDRAG' || form.watch('paragraf') === '11-7';
 
-  console.log('denne betyr noe', skalBareViseEnkeltDato);
+  const skalViseDatoFeltOgBegrunnelsesfelt =
+    Boolean(form.watch('paragraf')) || form.watch('brudd') == 'IKKE_AKTIVT_BIDRAG';
+
+  console.log('paragraf', form.watch('paragraf'));
+
+  /**
+   * TODO Finn ut hvordan vi kan resette et felt når et annet felt endrer seg
+   */
+  useEffect(() => {
+    form.resetField('paragraf');
+  }, [form.watch('brudd')]);
 
   return (
     <SideProsessKort
@@ -156,17 +158,26 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
           <FormField form={form} formField={formFields.brudd} />
           {skalVelgeParagraf && (
             // @ts-ignore TODO Finn ut hvorfor ts ikke godtar at vi setter options dynamisk
-            <FormField form={form} formField={{ ...formFields.paragraf, options: paragrafOptionsForBrudd }} />
+            <FormField form={form} formField={formFields.paragraf}>
+              {paragrafOptions
+                .filter((paragraf) => {
+                  const validParagraferForIkkeMøttTilMøte = ['11-7', '11-9'];
+                  const validParagraferForAndre = ['11-8', '11-9'];
+
+                  const validParagrafs =
+                    valgtBrudd === 'IKKE_MØTT_TIL_MØTE' ? validParagraferForIkkeMøttTilMøte : validParagraferForAndre;
+
+                  return validParagrafs.includes(paragraf.value);
+                })
+                .map((paragraf) => (
+                  <Radio key={paragraf.value} value={paragraf.value}>
+                    {paragraf.label}
+                  </Radio>
+                ))}
+            </FormField>
           )}
 
-          {skalBareViseEnkeltDato && (
-            <div className={'flex-column'}>
-              <FormField form={form} formField={formFields.datoFor117} />
-              <FormField form={form} formField={formFields.begrunnelse} />
-            </div>
-          )}
-
-          {paragrafErValgt && (
+          {skalViseDatoFeltOgBegrunnelsesfelt && (
             <div className={'flex-column'}>
               <>
                 {skalBareViseEnkeltDato ? (

@@ -11,8 +11,6 @@ export const AktivitetspliktTabell = ({ aktivitetsmeldinger = { hammere: [] } }:
   const harAktivitetsmeldingeraktivitetsmeldinger =
     aktivitetsmeldinger.hammere && aktivitetsmeldinger.hammere.length > 0;
 
-  console.log(harAktivitetsmeldingeraktivitetsmeldinger);
-
   return (
     <div>
       <section className={styles.heading}>
