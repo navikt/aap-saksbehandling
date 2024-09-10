@@ -138,9 +138,8 @@ describe('Manuelt registrerte barn', () => {
   it('skal gi en feilmelding dersom begrunnelsesfelt ikke er besvart', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
 
-    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    await klikkPåBekreft();
 
-    await user.click(lagreKnapp);
     const feilmelding = screen.getByText('Du må gi en begrunnelse');
     expect(feilmelding).toBeVisible();
   });
@@ -154,9 +153,8 @@ describe('Manuelt registrerte barn', () => {
   it('skal gi en feilmelding dersom feltet om det skal beregnes barnetillegg ikke er besvart', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
 
-    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    await klikkPåBekreft();
 
-    await user.click(lagreKnapp);
     const feilmelding = screen.getByText('Du må besvare om det skal beregnes barnetillegg for barnet');
     expect(feilmelding).toBeVisible();
   });
@@ -181,9 +179,8 @@ describe('Manuelt registrerte barn', () => {
 
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     await fyllUtEnBegrunnelse();
-    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    await klikkPåBekreft();
 
-    await user.click(lagreKnapp);
     const feilmelding = screen.getByText('Du må sette en dato for når søker har forsørgeransvar for barnet fra');
     expect(feilmelding).toBeVisible();
   });
@@ -217,9 +214,9 @@ describe('Manuelt registrerte barn', () => {
     const imorgen = addDays(new Date(), 1);
 
     await user.type(datofelt, formaterDatoForFrontend(imorgen));
-    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
 
-    await user.click(lagreKnapp);
+    await klikkPåBekreft();
+
     const feilmelding = screen.getByText('Dato for når søker har forsørgeransvar fra kan ikke være frem i tid');
     expect(feilmelding).toBeVisible();
   });
@@ -230,11 +227,10 @@ describe('Manuelt registrerte barn', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
-
     await user.type(datofelt, '12.2003');
-    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
 
-    await user.click(lagreKnapp);
+    await klikkPåBekreft();
+
     const feilmelding = screen.getByText('Dato for når søker har forsørgeransvar fra er ikke gyldig');
     expect(feilmelding).toBeVisible();
   });
@@ -252,9 +248,8 @@ describe('Manuelt registrerte barn', () => {
     await user.type(startDato, '10.08.2023');
     await user.type(sluttDato, '09.08.2023');
 
-    const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    await klikkPåBekreft();
 
-    await user.click(lagreKnapp);
     expect(screen.getByText('Slutt-dato kan ikke være før start-dato')).toBeVisible();
   });
 
@@ -278,5 +273,9 @@ describe('Manuelt registrerte barn', () => {
       name: 'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet',
     });
     await user.type(begrunnelsesfelt, 'Dette er en begrunnelse');
+  };
+
+  const klikkPåBekreft = async () => {
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
   };
 });
