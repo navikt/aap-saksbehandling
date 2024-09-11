@@ -2,7 +2,6 @@ import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingServic
 import Link from 'next/link';
 import { Heading } from '@navikt/ds-react';
 import styles from './page.module.css';
-import { isLocal } from 'lib/utils/environment';
 
 const Page = async ({ params }: { params: { saksId: string } }) => {
   const sak = await hentSak(params.saksId);
@@ -17,12 +16,8 @@ const Page = async ({ params }: { params: { saksId: string } }) => {
           </li>
         ))}
       </ul>
-      {isLocal() && (
-        <>
-          <Heading size={'medium'}>Aktivitet</Heading>
-          <Link href={`/sak/${params.saksId}/aktivitet`}>Registrer brudd på aktivitetsplikten</Link>
-        </>
-      )}
+      <Heading size={'medium'}>Aktivitet</Heading>
+      <Link href={`/sak/${params.saksId}/aktivitet`}>Registrer brudd på aktivitetsplikten</Link>
     </div>
   );
 };
