@@ -5,17 +5,12 @@ import { AktivitetspliktTabell } from 'components/aktivitetsplikttabell/Aktivite
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Button, Radio } from '@navikt/ds-react';
-import { AktivitetType, Aktivitetsmeldinger } from 'lib/types/types';
+import { AktivitetType } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { useEffect, useState } from 'react';
 import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
 
 import { v4 as uuidv4 } from 'uuid';
-
-interface Props {
-  saksnummer: string;
-  aktivitetsMeldinger: Aktivitetsmeldinger;
-}
 
 type Paragraf = '11-7' | '11-8' | '11-9'; // TODO Denne må komme fra backend
 
@@ -61,8 +56,7 @@ const bruddOptions: ValuePair<AktivitetType>[] = [
   { label: 'Ikke bidratt til egen avklaring', value: 'IKKE_AKTIVT_BIDRAG' },
 ];
 
-export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
-  console.log(saksnummer, aktivitetsMeldinger);
+export const Aktivitetsplikt = () => {
   const { form, formFields } = useConfigForm<FormFields>(
     {
       brudd: {
@@ -121,16 +115,18 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
   }
 
   const valgtBrudd = form.watch('brudd');
-  const skalVelgeParagraf =
-    valgtBrudd === 'IKKE_MØTT_TIL_TILTAK' ||
-    valgtBrudd === 'IKKE_MØTT_TIL_BEHANDLING' ||
-    valgtBrudd === 'IKKE_SENDT_INN_DOKUMENTASJON' ||
-    valgtBrudd === 'IKKE_MØTT_TIL_MØTE';
+  const valgtParagraf = form.watch('paragraf');
 
-  const skalBareViseEnkeltDato = form.watch('brudd') == 'IKKE_AKTIVT_BIDRAG' || form.watch('paragraf') === '11-7';
+  const skalVelgeParagraf = [
+    'IKKE_MØTT_TIL_TILTAK',
+    'IKKE_MØTT_TIL_BEHANDLING',
+    'IKKE_SENDT_INN_DOKUMENTASJON',
+    'IKKE_MØTT_TIL_MØTE',
+  ].includes(valgtBrudd);
 
-  const skalViseDatoFeltOgBegrunnelsesfelt =
-    Boolean(form.watch('paragraf')) || form.watch('brudd') == 'IKKE_AKTIVT_BIDRAG';
+  const skalBareViseEnkeltDato = form.watch('brudd') == 'IKKE_AKTIVT_BIDRAG' || valgtParagraf === '11-7';
+
+  const skalViseDatoFeltOgBegrunnelsesfelt = Boolean(valgtParagraf) || valgtBrudd == 'IKKE_AKTIVT_BIDRAG';
 
   console.log('paragraf', form.watch('paragraf'));
 
@@ -140,6 +136,9 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
   useEffect(() => {
     form.resetField('paragraf');
   }, [form.watch('brudd')]);
+
+  console.log('formfields', formFields);
+  console.log('verdier', form.watch());
 
   return (
     <SideProsessKort
@@ -157,8 +156,8 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
         >
           <FormField form={form} formField={formFields.brudd} />
           {skalVelgeParagraf && (
-            // @ts-ignore TODO Finn ut hvorfor ts ikke godtar at vi setter options dynamisk
             <FormField form={form} formField={formFields.paragraf}>
+              <Radio value={'hei'}>Hei</Radio>
               {paragrafOptions
                 .filter((paragraf) => {
                   const validParagraferForIkkeMøttTilMøte = ['11-7', '11-9'];
