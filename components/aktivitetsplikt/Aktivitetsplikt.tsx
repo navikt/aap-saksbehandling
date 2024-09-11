@@ -5,7 +5,7 @@ import { AktivitetspliktTabell } from 'components/aktivitetsplikttabell/Aktivite
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Button, Radio } from '@navikt/ds-react';
-import { AktivitetDtoType, Aktivitetsmeldinger } from 'lib/types/types';
+import { AktivitetType, Aktivitetsmeldinger } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { useEffect, useState } from 'react';
 import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
@@ -38,7 +38,7 @@ export interface EnkeltDag extends BruddDatoPeriode {
 export type DatoBruddPåAktivitetsplikt = EnkeltDag & Periode;
 
 interface FormFields {
-  brudd: AktivitetDtoType;
+  brudd: AktivitetType;
   paragraf?: Paragraf;
   begrunnelse?: string;
   datoFor117?: Date;
@@ -50,7 +50,7 @@ const paragrafOptions: ValuePair<Paragraf>[] = [
   { label: '11-9 reduksjon av AAP ved brudd på nærmere bestemte aktivitetsplikter', value: '11-9' },
 ];
 
-const bruddOptions: ValuePair<AktivitetDtoType>[] = [
+const bruddOptions: ValuePair<AktivitetType>[] = [
   { label: 'Ikke møtt i tiltak', value: 'IKKE_MØTT_TIL_TILTAK' },
   { label: 'Ikke møtt i behandling/ utredning', value: 'IKKE_MØTT_TIL_BEHANDLING' },
   { label: 'Ikke møtt til møte med Nav', value: 'IKKE_MØTT_TIL_MØTE' },
@@ -100,7 +100,7 @@ export const Aktivitetsplikt = ({ saksnummer, aktivitetsMeldinger }: Props) => {
     setBruddPåAktivitetsDatoer((prevState) => [...prevState, { type: 'periode', id: uuidv4(), tom: '', fom: '' }]);
   }
 
-  function hentDatoLabel(valgtBrudd: AktivitetDtoType): string {
+  function hentDatoLabel(valgtBrudd: AktivitetType): string {
     switch (valgtBrudd) {
       case 'IKKE_MØTT_TIL_MØTE':
         return 'Dato for ikke møtt i tiltak';

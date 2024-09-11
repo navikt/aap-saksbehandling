@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import {
-  AktivitetInnsendingDto,
+  AktivitetInnsending,
   Aktivitetsmeldinger,
   AlderGrunnlag,
   BarnetilleggGrunnlag,
@@ -64,7 +64,7 @@ export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersonin
   }
 };
 
-export const sendAktivitetsMelding = async (aktivitet: AktivitetInnsendingDto) => {
+export const sendAktivitetsMelding = async (aktivitet: AktivitetInnsending) => {
   const url = `${saksbehandlingApiBaseUrl}/api/hammer/send`;
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };

@@ -111,11 +111,11 @@ export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.fl
 export type AvslagÅrsak =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['avslagsårsak'];
 export type Aktivitetsmeldinger = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AlleHammereDto'];
-export type AktivitetInnsendingDto =
+export type AktivitetInnsending =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.aktivitet.TorsHammerDto'];
-export type AktivitetDto =
+export type Aktivitet =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.aktivitet.HammerDto'];
-export type AktivitetDtoType = AktivitetDto['type'];
+export type AktivitetType = Aktivitet['type'];
 
 export type JobbInfo = components['schemas']['no.nav.aap.motor.api.JobbInfoDto'];
 
