@@ -39,6 +39,8 @@ export const StegGruppeIndikatorAksel = ({ flytRespons, stegGrupperSomSkalVises 
 };
 function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
   switch (steg) {
+    case 'BREV':
+      return 'Brev';
     case 'MEDLEMSKAP':
       return 'Medlemskap';
     case 'SYKDOM':
