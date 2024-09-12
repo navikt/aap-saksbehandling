@@ -4,10 +4,10 @@ import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { AktivitetspliktTabell } from 'components/aktivitetsplikttabell/AktivitetspliktTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
-import { Button, Radio } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { AktivitetType } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -36,7 +36,6 @@ interface FormFields {
   brudd: AktivitetType;
   paragraf?: Paragraf;
   begrunnelse?: string;
-  datoFor117?: Date;
 }
 
 const paragrafOptions: ValuePair<Paragraf>[] = [
@@ -66,19 +65,16 @@ export const Aktivitetsplikt = () => {
         rules: { required: 'Du må registrere et brudd på aktivitetsplikten' },
       },
       paragraf: {
-        type: 'radio_nested',
+        type: 'radio',
         label: 'Velg paragraf',
         rules: { required: 'Du må velge en paragraf' },
+        options: paragrafOptions.filter((paragraf) => paragraf.value !== '11-7'),
       },
       begrunnelse: {
         type: 'textarea',
         label: 'Begrunnelse',
         description: 'Skriv begrunnelse og henvis eventuelt til rett kilde/dokumentasjon',
         rules: { required: 'Du må skrive en begrunnelse for brudd på aktivitetsplikten' },
-      },
-      datoFor117: {
-        type: 'date',
-        label: 'Dato',
       },
     },
     { shouldUnregister: true }
@@ -117,28 +113,15 @@ export const Aktivitetsplikt = () => {
   const valgtBrudd = form.watch('brudd');
   const valgtParagraf = form.watch('paragraf');
 
-  const skalVelgeParagraf = [
-    'IKKE_MØTT_TIL_TILTAK',
-    'IKKE_MØTT_TIL_BEHANDLING',
-    'IKKE_SENDT_INN_DOKUMENTASJON',
-    'IKKE_MØTT_TIL_MØTE',
-  ].includes(valgtBrudd);
+  const skalVelgeParagraf = ['IKKE_MØTT_TIL_TILTAK', 'IKKE_MØTT_TIL_BEHANDLING'].includes(valgtBrudd);
 
-  const skalBareViseEnkeltDato = form.watch('brudd') == 'IKKE_AKTIVT_BIDRAG' || valgtParagraf === '11-7';
-
-  const skalViseDatoFeltOgBegrunnelsesfelt = Boolean(valgtParagraf) || valgtBrudd == 'IKKE_AKTIVT_BIDRAG';
+  const skalViseDatoFeltOgBegrunnelsesfelt =
+    Boolean(valgtParagraf) ||
+    valgtBrudd == 'IKKE_AKTIVT_BIDRAG' ||
+    valgtBrudd == 'IKKE_SENDT_INN_DOKUMENTASJON' ||
+    valgtBrudd == 'IKKE_MØTT_TIL_MØTE';
 
   console.log('paragraf', form.watch('paragraf'));
-
-  /**
-   * TODO Finn ut hvordan vi kan resette et felt når et annet felt endrer seg
-   */
-  useEffect(() => {
-    form.resetField('paragraf');
-  }, [form.watch('brudd')]);
-
-  console.log('formfields', formFields);
-  console.log('verdier', form.watch());
 
   return (
     <SideProsessKort
@@ -155,62 +138,35 @@ export const Aktivitetsplikt = () => {
           })}
         >
           <FormField form={form} formField={formFields.brudd} />
-          {skalVelgeParagraf && (
-            <FormField form={form} formField={formFields.paragraf}>
-              <Radio value={'hei'}>Hei</Radio>
-              {paragrafOptions
-                .filter((paragraf) => {
-                  const validParagraferForIkkeMøttTilMøte = ['11-7', '11-9'];
-                  const validParagraferForAndre = ['11-8', '11-9'];
-
-                  const validParagrafs =
-                    valgtBrudd === 'IKKE_MØTT_TIL_MØTE' ? validParagraferForIkkeMøttTilMøte : validParagraferForAndre;
-
-                  return validParagrafs.includes(paragraf.value);
-                })
-                .map((paragraf) => (
-                  <Radio key={paragraf.value} value={paragraf.value}>
-                    {paragraf.label}
-                  </Radio>
-                ))}
-            </FormField>
-          )}
+          {skalVelgeParagraf && <FormField form={form} formField={formFields.paragraf} />}
 
           {skalViseDatoFeltOgBegrunnelsesfelt && (
             <div className={'flex-column'}>
-              <>
-                {skalBareViseEnkeltDato ? (
-                  <FormField form={form} formField={formFields.datoFor117} />
-                ) : (
-                  <>
-                    <b>{hentDatoLabel(valgtBrudd)}</b>
-                    <AktivitetsmeldingDatoTabell
-                      bruddDatoPerioder={bruddPåAktivitetsDatoer}
-                      setBruddDatoPerioder={setBruddPåAktivitetsDatoer}
-                    />
-                    <div className={'flex-row'}>
-                      <Button
-                        icon={<PlusCircleIcon />}
-                        type={'button'}
-                        variant={'tertiary'}
-                        size={'small'}
-                        onClick={() => leggTilNyEnkeltDato()}
-                      >
-                        Legg til enkeltdato
-                      </Button>
-                      <Button
-                        icon={<PlusCircleIcon />}
-                        type={'button'}
-                        variant={'tertiary'}
-                        size={'small'}
-                        onClick={() => leggTilNyPeriode()}
-                      >
-                        Legg til periode
-                      </Button>
-                    </div>
-                  </>
-                )}
-              </>
+              <b>{hentDatoLabel(valgtBrudd)}</b>
+              <AktivitetsmeldingDatoTabell
+                bruddDatoPerioder={bruddPåAktivitetsDatoer}
+                setBruddDatoPerioder={setBruddPåAktivitetsDatoer}
+              />
+              <div className={'flex-row'}>
+                <Button
+                  icon={<PlusCircleIcon />}
+                  type={'button'}
+                  variant={'tertiary'}
+                  size={'small'}
+                  onClick={() => leggTilNyEnkeltDato()}
+                >
+                  Legg til enkeltdato
+                </Button>
+                <Button
+                  icon={<PlusCircleIcon />}
+                  type={'button'}
+                  variant={'tertiary'}
+                  size={'small'}
+                  onClick={() => leggTilNyPeriode()}
+                >
+                  Legg til periode
+                </Button>
+              </div>
 
               <FormField form={form} formField={formFields.begrunnelse} />
             </div>

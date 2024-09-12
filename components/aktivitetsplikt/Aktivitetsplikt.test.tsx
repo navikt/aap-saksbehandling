@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { Aktivitetsplikt } from 'components/aktivitetsplikt/Aktivitetsplikt';
 import { userEvent } from '@testing-library/user-event';
 
-describe.skip('aktivitetsmelding', () => {
+describe('aktivitetsmelding', () => {
   const user = userEvent.setup();
 
   it('skal ha en tabell for tidligere brudd på aktivitetsplikten', () => {
@@ -52,17 +52,6 @@ describe.skip('aktivitetsmelding', () => {
     render(<Aktivitetsplikt />);
     const ikkeMøttIBehandlingValg = screen.getByRole('radio', { name: /ikke møtt i behandling\/ utredning/i });
     await user.click(ikkeMøttIBehandlingValg);
-
-    const paragrafFelt = screen.getByRole('group', { name: /velg paragraf/i });
-    expect(paragrafFelt).toBeVisible();
-  });
-
-  it('skal dukke opp et felt for å velge en paragraf dersom man velger at bruker ikke har sendt inn dokumentasjon', async () => {
-    render(<Aktivitetsplikt />);
-    const ikkeSendtInnDokumentasjonFelt = screen.getByRole('radio', {
-      name: /bruker har ikke sendt inn dokumentasjon som nav har bedt om på aktivitet/i,
-    });
-    await user.click(ikkeSendtInnDokumentasjonFelt);
 
     const paragrafFelt = screen.getByRole('group', { name: /velg paragraf/i });
     expect(paragrafFelt).toBeVisible();
