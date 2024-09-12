@@ -142,10 +142,12 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
               brudd: data.brudd,
               begrunnelse: data.begrunnelse,
               paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
-              periode: {
-                tom: formaterDatoForBackend(new Date('02.19.2020')),
-                fom: formaterDatoForBackend(new Date('02.19.2020')),
-              },
+              perioder: [
+                {
+                  tom: formaterDatoForBackend(new Date('02.19.2020')),
+                  fom: formaterDatoForBackend(new Date('02.19.2020')),
+                },
+              ],
               saksnummer: saksnummer,
             });
 
