@@ -14,7 +14,7 @@ export const AktivitetsmeldingDatoTabellRad = ({ bruddDatoPeriode, onChange, onD
 
   return (
     <Table.Row>
-      <Table.DataCell scope={'row'} className={'navds-table__data-cell--align-top'}>
+      <Table.DataCell className={'navds-table__data-cell--align-top'}>
         <TextField
           size={'small'}
           label={type === 'enkeltdag' ? 'dato' : 'fra og med dato'}
@@ -24,7 +24,7 @@ export const AktivitetsmeldingDatoTabellRad = ({ bruddDatoPeriode, onChange, onD
         />
       </Table.DataCell>
       {bruddDatoPeriode?.type === 'periode' ? (
-        <Table.DataCell scope={'row'}>
+        <Table.DataCell>
           <TextField
             size={'small'}
             label={'til og med dato'}
@@ -34,10 +34,10 @@ export const AktivitetsmeldingDatoTabellRad = ({ bruddDatoPeriode, onChange, onD
           />
         </Table.DataCell>
       ) : (
-        <Table.DataCell scope={'row'} />
+        <Table.DataCell />
       )}
-      <Table.DataCell scope={'row'}>{bruddDatoPeriode.type === 'periode' ? 'Periode' : 'Enkeltdato'}</Table.DataCell>
-      <Table.DataCell scope={'row'}>
+      <Table.DataCell>{bruddDatoPeriode.type === 'periode' ? 'Periode' : 'Enkeltdato'}</Table.DataCell>
+      <Table.DataCell>
         <Button type={'button'} size={'small'} variant={'tertiary'} icon={<TrashIcon />} onClick={onDelete}>
           Slett
         </Button>

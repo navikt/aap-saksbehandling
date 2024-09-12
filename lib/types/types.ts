@@ -133,7 +133,7 @@ export type VurdertBarn =
 export type Ident = components['schemas']['no.nav.aap.verdityper.sakogbehandling.Ident'];
 
 export type AktivitetspliktHendelse =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktHendelse'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktHendelseDto'];
 
 export type BruddAktivitetsplikt =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktRequest'];
