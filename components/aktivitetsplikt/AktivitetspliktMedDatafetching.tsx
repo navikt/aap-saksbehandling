@@ -2,11 +2,18 @@
 
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { Aktivitetsplikt } from 'components/aktivitetsplikt/Aktivitetsplikt';
+import { hentAktivitetspliktHendelser } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
-export const AktivitetspliktMedDatafetching = async () => {
+interface Props {
+  saksnummer: string;
+}
+
+export const AktivitetspliktMedDatafetching = async ({ saksnummer }: Props) => {
+  const aktivitetspliktHendelser = await hentAktivitetspliktHendelser(saksnummer);
+
   return (
     <div className={styles.aktivitetSkjema}>
-      <Aktivitetsplikt />
+      <Aktivitetsplikt aktivitetspliktHendelser={aktivitetspliktHendelser.hendelser} />
     </div>
   );
 };

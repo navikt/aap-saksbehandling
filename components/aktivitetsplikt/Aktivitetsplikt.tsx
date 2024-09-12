@@ -1,18 +1,20 @@
 'use client';
 
 import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { AktivitetspliktTabell } from 'components/aktivitetsplikttabell/AktivitetspliktTabell';
+import { AktivitetspliktHendelserTabell } from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Button } from '@navikt/ds-react';
-import { AktivitetType } from 'lib/types/types';
+import { AktivitetspliktParagraf, AktivitetspliktBrudd, AktivitetspliktHendelse } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { useState } from 'react';
 import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
 
 import { v4 as uuidv4 } from 'uuid';
-
-type Paragraf = '11-7' | '11-8' | '11-9'; // TODO Denne må komme fra backend
+import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
+import { useSaksnummer } from 'hooks/BehandlingHook';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 
 export interface BruddDatoPeriode {
   type: 'enkeltdag' | 'periode';
@@ -32,19 +34,23 @@ export interface EnkeltDag extends BruddDatoPeriode {
 
 export type DatoBruddPåAktivitetsplikt = EnkeltDag & Periode;
 
-interface FormFields {
-  brudd: AktivitetType;
-  paragraf?: Paragraf;
-  begrunnelse?: string;
+interface Props {
+  aktivitetspliktHendelser: AktivitetspliktHendelse[];
 }
 
-const paragrafOptions: ValuePair<Paragraf>[] = [
-  { label: '11-7 noe tekst her som forklarer hva 11-7 er for noe', value: '11-7' },
-  { label: '11-8 fravær fra fastsatt aktivitet', value: '11-8' },
-  { label: '11-9 reduksjon av AAP ved brudd på nærmere bestemte aktivitetsplikter', value: '11-9' },
+interface FormFields {
+  brudd: AktivitetspliktBrudd;
+  paragraf?: AktivitetspliktParagraf;
+  begrunnelse: string;
+}
+
+const paragrafOptions: ValuePair<AktivitetspliktParagraf>[] = [
+  { label: '11-7 noe tekst her som forklarer hva 11-7 er for noe', value: 'PARAGRAF_11_7' },
+  { label: '11-8 fravær fra fastsatt aktivitet', value: 'PARAGRAF_11_8' },
+  { label: '11-9 reduksjon av AAP ved brudd på nærmere bestemte aktivitetsplikter', value: 'PARAGRAF_11_9' },
 ];
 
-const bruddOptions: ValuePair<AktivitetType>[] = [
+const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
   { label: 'Ikke møtt i tiltak', value: 'IKKE_MØTT_TIL_TILTAK' },
   { label: 'Ikke møtt i behandling/ utredning', value: 'IKKE_MØTT_TIL_BEHANDLING' },
   { label: 'Ikke møtt til møte med Nav', value: 'IKKE_MØTT_TIL_MØTE' },
@@ -55,7 +61,8 @@ const bruddOptions: ValuePair<AktivitetType>[] = [
   { label: 'Ikke bidratt til egen avklaring', value: 'IKKE_AKTIVT_BIDRAG' },
 ];
 
-export const Aktivitetsplikt = () => {
+export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
+  const saksnummer = useSaksnummer();
   const { form, formFields } = useConfigForm<FormFields>(
     {
       brudd: {
@@ -68,7 +75,7 @@ export const Aktivitetsplikt = () => {
         type: 'radio',
         label: 'Velg paragraf',
         rules: { required: 'Du må velge en paragraf' },
-        options: paragrafOptions.filter((paragraf) => paragraf.value !== '11-7'),
+        options: paragrafOptions.filter((paragraf) => paragraf.value !== 'PARAGRAF_11_7'),
       },
       begrunnelse: {
         type: 'textarea',
@@ -90,7 +97,7 @@ export const Aktivitetsplikt = () => {
     setBruddPåAktivitetsDatoer((prevState) => [...prevState, { type: 'periode', id: uuidv4(), tom: '', fom: '' }]);
   }
 
-  function hentDatoLabel(valgtBrudd: AktivitetType): string {
+  function hentDatoLabel(valgtBrudd: AktivitetspliktBrudd): string {
     switch (valgtBrudd) {
       case 'IKKE_MØTT_TIL_MØTE':
         return 'Dato for ikke møtt i tiltak';
@@ -121,20 +128,28 @@ export const Aktivitetsplikt = () => {
     valgtBrudd == 'IKKE_SENDT_INN_DOKUMENTASJON' ||
     valgtBrudd == 'IKKE_MØTT_TIL_MØTE';
 
-  console.log('paragraf', form.watch('paragraf'));
-
   return (
     <SideProsessKort
       heading={'Registrering av gyldig og ugyldig fravær - (aktivitetsplikten §§ 11-7, 11-8, 11-9)'}
       icon={<FigureIcon fontSize={'inherit'} />}
     >
       <div className={'flex-column'}>
-        <AktivitetspliktTabell />
+        <AktivitetspliktHendelserTabell aktivitetspliktHendelser={aktivitetspliktHendelser} />
         <form
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
-            // TODO Send inn til backend når endepunkt er på plass
-            console.log(data);
+            await opprettAktivitetspliktBrudd({
+              brudd: data.brudd,
+              begrunnelse: data.begrunnelse,
+              paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
+              periode: {
+                tom: formaterDatoForBackend(new Date('02.19.2020')),
+                fom: formaterDatoForBackend(new Date('02.19.2020')),
+              },
+              saksnummer: saksnummer,
+            });
+
+            await revalidateAktivitetspliktHendelser(saksnummer);
           })}
         >
           <FormField form={form} formField={formFields.brudd} />

@@ -1,15 +1,15 @@
-import { Aktivitetsmeldinger } from 'lib/types/types';
+import { AktivitetspliktHendelse } from 'lib/types/types';
 
-import styles from 'components/aktivitetsplikttabell/Aktivitetsplikttabell.module.css';
+import styles from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell.module.css';
 import { Table } from '@navikt/ds-react';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
-  aktivitetsmeldinger?: Aktivitetsmeldinger;
+  aktivitetspliktHendelser?: AktivitetspliktHendelse[];
 }
 
-export const AktivitetspliktTabell = ({ aktivitetsmeldinger = { hammere: [] } }: Props) => {
-  const harAktivitetsmeldingeraktivitetsmeldinger =
-    aktivitetsmeldinger.hammere && aktivitetsmeldinger.hammere.length > 0;
+export const AktivitetspliktHendelserTabell = ({ aktivitetspliktHendelser }: Props) => {
+  const harAktivitetsmeldingeraktivitetsmeldinger = aktivitetspliktHendelser && aktivitetspliktHendelser.length > 0;
 
   return (
     <div>
@@ -27,12 +27,12 @@ export const AktivitetspliktTabell = ({ aktivitetsmeldinger = { hammere: [] } }:
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {aktivitetsmeldinger?.hammere.map((hammere, index) => {
+              {aktivitetspliktHendelser?.map((aktivitetspliktHendelse, index) => {
                 return (
                   <Table.Row key={index}>
-                    <Table.DataCell>{hammere.begrunnelse}</Table.DataCell>
-                    <Table.DataCell>{hammere.type}</Table.DataCell>
-                    <Table.DataCell>{hammere.dato}</Table.DataCell>
+                    <Table.DataCell>{aktivitetspliktHendelse.paragraf}</Table.DataCell>
+                    <Table.DataCell>{aktivitetspliktHendelse.brudd}</Table.DataCell>
+                    <Table.DataCell>{formaterDatoForFrontend(aktivitetspliktHendelse.periode.fom)}</Table.DataCell>
                   </Table.Row>
                 );
               })}

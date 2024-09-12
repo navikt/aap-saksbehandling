@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import {
-  AktivitetInnsending,
-  Aktivitetsmeldinger,
+  AktivitetspliktHendelser,
   AlderGrunnlag,
   BarnetilleggGrunnlag,
   BehandlingFlytOgTilstand,
@@ -9,6 +8,7 @@ import {
   BeregningsGrunnlag,
   BeregningsVurdering,
   BistandsGrunnlag,
+  BruddAktivitetsplikt,
   DetaljertBehandling,
   DokumentInfo,
   FatteVedtakGrunnlag,
@@ -64,14 +64,14 @@ export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersonin
   }
 };
 
-export const sendAktivitetsMelding = async (aktivitet: AktivitetInnsending) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/hammer/send`;
+export const lagreBruddPåAktivitetsplikten = async (aktivitet: BruddAktivitetsplikt) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/lagre`;
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 
-export const hentAktivitetsMeldinger = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/hammer/${saksnummer}`;
-  return await fetchProxy<Aktivitetsmeldinger>(url, saksbehandlingApiScope, 'GET');
+export const hentAktivitetspliktHendelser = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}`;
+  return await fetchProxy<AktivitetspliktHendelser>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentAlleSaker = async (): Promise<SaksInfo[]> => {

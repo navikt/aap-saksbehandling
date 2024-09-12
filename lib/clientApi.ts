@@ -1,5 +1,5 @@
 import {
-  AktivitetInnsending,
+  BruddAktivitetsplikt,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
   SaksInfo,
@@ -51,8 +51,8 @@ export function hentBrevmalFraSanity(brevmalid: string) {
   return fetchProxy<Brevmal>(`/api/sanity/brevmal/${brevmalid}`, 'GET');
 }
 
-export function sendAktivitetClient(aktivitet: AktivitetInnsending) {
-  return fetchProxy('/api/hammer/send/', 'POST', aktivitet);
+export function opprettAktivitetspliktBrudd(aktivitet: BruddAktivitetsplikt) {
+  return fetchProxy('/api/aktivitetsplikt/lagre', 'POST', aktivitet);
 }
 export function rekjørJobb(jobbId: number) {
   return fetch(`/api/drift/jobb/rekjor/${jobbId}`, { method: 'GET' });

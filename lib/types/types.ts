@@ -110,12 +110,6 @@ export type VenteInformasjon = components['schemas']['no.nav.aap.behandlingsflyt
 export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['utfall'];
 export type AvslagÅrsak =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['avslagsårsak'];
-export type Aktivitetsmeldinger = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AlleHammereDto'];
-export type AktivitetInnsending =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.aktivitet.TorsHammerDto'];
-export type Aktivitet =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.kontrakt.aktivitet.HammerDto'];
-export type AktivitetType = Aktivitet['type'];
 
 export type JobbInfo = components['schemas']['no.nav.aap.motor.api.JobbInfoDto'];
 
@@ -137,3 +131,18 @@ export type VurdertBarn =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarn'];
 
 export type Ident = components['schemas']['no.nav.aap.verdityper.sakogbehandling.Ident'];
+
+export type AktivitetspliktHendelse =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktHendelse'];
+
+export type BruddAktivitetsplikt =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktRequest'];
+
+export type AktivitetspliktHendelser =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktResponse'];
+
+export type AktivitetspliktParagraf =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['paragraf'];
+
+export type AktivitetspliktBrudd =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['brudd'];
