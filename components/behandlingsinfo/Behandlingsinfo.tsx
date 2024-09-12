@@ -6,10 +6,10 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   behandling: DetaljertBehandling;
-  saksId: string;
+  saksnummer: string;
 }
 
-export const Behandlingsinfo = ({ behandling, saksId }: Props) => {
+export const Behandlingsinfo = ({ behandling, saksnummer }: Props) => {
   return (
     <div className={styles.container}>
       <div className={styles.behandlingstype}>
@@ -34,7 +34,7 @@ export const Behandlingsinfo = ({ behandling, saksId }: Props) => {
           Saksnummer:
         </Label>
         <BodyShort size="medium" spacing>
-          {saksId}
+          {saksnummer}
         </BodyShort>
       </HGrid>
     </div>

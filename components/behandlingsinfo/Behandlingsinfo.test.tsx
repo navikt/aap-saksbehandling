@@ -16,39 +16,50 @@ const behandling: DetaljertBehandling = {
 
 describe('Behandlingsinfo', () => {
   it('Skal ha overskrift for riktig behandlingstype', () => {
-    render(<Behandlingsinfo behandling={behandling} />);
+    render(<Behandlingsinfo behandling={behandling} saksnummer={'ERT2E'} />);
     expect(screen.getByText('Førstegangsbehandling')).toBeVisible();
   });
 
   it('Skal vise korrekt behandlingsstatus dersom status er utredes ', () => {
-    render(<Behandlingsinfo behandling={behandling} />);
+    render(<Behandlingsinfo behandling={behandling} saksnummer={'ERT2E'} />);
     expect(screen.getByText('Utredes')).toBeVisible();
   });
 
   it('skal ha en label for behandlingsstatus', () => {
-    render(<Behandlingsinfo behandling={behandling} />);
+    render(<Behandlingsinfo behandling={behandling} saksnummer={'ERT2E'} />);
     const label = screen.getByText('Behandlingsstatus:');
     expect(label).toBeVisible();
   });
 
   it('Skal vise korrekt behandlingsstatus dersom status er avsluttet ', () => {
-    render(<Behandlingsinfo behandling={{ ...behandling, status: 'AVSLUTTET' }} />);
+    render(<Behandlingsinfo behandling={{ ...behandling, status: 'AVSLUTTET' }} saksnummer={'ERT2E'} />);
     expect(screen.getByText('Avsluttet')).toBeVisible();
   });
 
   it('Skal vise korrekt behandlingsstatus dersom status er opprettet ', () => {
-    render(<Behandlingsinfo behandling={{ ...behandling, status: 'OPPRETTET' }} />);
+    render(<Behandlingsinfo behandling={{ ...behandling, status: 'OPPRETTET' }} saksnummer={'ERT2E'} />);
     expect(screen.getByText('Opprettet')).toBeVisible();
   });
 
   it('skal ha en label for opprettelsesdato', () => {
-    render(<Behandlingsinfo behandling={behandling} />);
+    render(<Behandlingsinfo behandling={behandling} saksnummer={'ERT2E'} />);
     const label = screen.getByText('Opprettet:');
     expect(label).toBeVisible();
   });
 
   it('Skal vise dato for opprettet dato', () => {
-    render(<Behandlingsinfo behandling={behandling} />);
+    render(<Behandlingsinfo behandling={behandling} saksnummer={'ERT2E'} />);
     expect(screen.getByText('12.12.2024')).toBeVisible();
+  });
+
+  it('skal ha en label for saksnummer', () => {
+    render(<Behandlingsinfo behandling={behandling} saksnummer={'ERT2E'} />);
+    const label = screen.getByText('Saksnummer:');
+    expect(label).toBeVisible();
+  });
+
+  it('Skal vise saksnummer', () => {
+    render(<Behandlingsinfo behandling={behandling} saksnummer={'ERT2E'} />);
+    expect(screen.getByText('ERT2E')).toBeVisible();
   });
 });
