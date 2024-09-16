@@ -149,3 +149,6 @@ export type AktivitetspliktParagraf =
 
 export type AktivitetspliktBrudd =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['brudd'];
+
+export type FritakMeldepliktVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritakMeldepliktVurderingDto'];

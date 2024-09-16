@@ -30,14 +30,6 @@ describe('Meldeplikt', () => {
     expect(textbox).toBeVisible();
   });
 
-  it('Skal ha et felt for om søker kan unntas fra meldeplikten', async () => {
-    render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
-    await openAccordionCard();
-
-    const checkBoxGroup = screen.getByRole('group', { name: /det vurderes at søker kan unntas fra meldeplikten/i });
-    expect(checkBoxGroup).toBeVisible();
-  });
-
   it('Skal ha informasjonstekst om unntak fra meldeplikten', async () => {
     render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
     await openAccordionCard();
@@ -57,37 +49,6 @@ describe('Meldeplikt', () => {
     ).toBeVisible();
   });
 
-  it('Skal vise felt for startdato og sluttdato dersom unntak fra meldeplikten er valgt', async () => {
-    render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
-    await openAccordionCard();
-
-    const unntakFraMeldeepliktenValg = screen.getByRole('checkbox', { name: /unntak fra meldeplikten/i });
-
-    await user.click(unntakFraMeldeepliktenValg);
-
-    expect(unntakFraMeldeepliktenValg).toBeChecked();
-
-    const sluttDatoFelt = await screen.findByRole('textbox', { name: /sluttdato for fritak fra meldeplikt/i });
-    const startDatoFelt = await screen.findByRole('textbox', { name: /startdato for fritak fra meldeplikt/i });
-
-    expect(sluttDatoFelt).toBeVisible();
-    expect(startDatoFelt).toBeVisible();
-  });
-
-  it('Skal ikke vise felt for startdato og sluttdato dersom unntak fra meldeplikten ikke er valgt', async () => {
-    render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
-    await openAccordionCard();
-
-    const unntakFraMeldeepliktenValg = screen.getByRole('checkbox', { name: /unntak fra meldeplikten/i });
-    expect(unntakFraMeldeepliktenValg).not.toBeChecked();
-
-    const sluttDatoFelt = await screen.queryByRole('textbox', { name: /sluttdato for fritak fra meldeplikt/i });
-    const startDatoFelt = await screen.queryByRole('textbox', { name: /startdato for fritak fra meldeplikt/i });
-
-    expect(sluttDatoFelt).not.toBeInTheDocument();
-    expect(startDatoFelt).not.toBeInTheDocument();
-  });
-
   it('Skal ha synlig vilkårsveiledning', async () => {
     render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
     await openAccordionCard();
@@ -95,9 +56,117 @@ describe('Meldeplikt', () => {
     expect(vilkårsveiledning).toBeVisible();
   });
 
+  it('tabellen med oversikt over perioder har en rad initielt', async () => {
+    render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
+    await openAccordionCard();
+
+    expect(screen.getAllByRole('row')).toHaveLength(2);
+  });
+
+  it('har en knapp for å legge til en ny periode', async () => {
+    render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
+    await openAccordionCard();
+
+    expect(screen.getByRole('button', { name: 'Legg til periode med fritak' })).toBeVisible();
+  });
+
+  describe('oppførsel', () => {
+    it('når man klikker på knappen for å legge til en rad blir det lagt til en rad', async () => {
+      render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
+      await openAccordionCard();
+
+      expect(screen.getAllByRole('row')).toHaveLength(2);
+
+      await leggTilRad();
+      expect(screen.getAllByRole('row')).toHaveLength(3);
+    });
+
+    it('når man klikker på knappen for å slette en rad blir en rad slettet', async () => {
+      render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
+      await openAccordionCard();
+      await leggTilRad();
+      const sisteSlettKnapp = screen.getAllByRole('button', { name: 'Slett' }).pop();
+      expect(sisteSlettKnapp).not.toBeUndefined();
+      if (sisteSlettKnapp) {
+        await user.click(sisteSlettKnapp);
+        expect(screen.getAllByRole('row')).toHaveLength(2);
+      }
+    });
+  });
+  describe('validering', () => {
+    it('viser feilmelding dersom man ikke har begrunnet vurderingen', async () => {
+      render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
+      await openAccordionCard();
+      await klikkPåBekreft();
+      expect(screen.getByText('Du må begrunne vurderingen din')).toBeVisible();
+    });
+
+    it('viser feilmelding derom man ikke har tatt stilling til om bruker skal ha fritak', async () => {
+      render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
+      await openAccordionCard();
+      await klikkPåBekreft();
+      expect(
+        screen.getByText('Du må ta stilling til om bruker skal ha fritak fra meldeplikten eller ikke')
+      ).toBeVisible();
+    });
+
+    it('viser feilmelding hvis man har valgt at bruker skal ha fritak og ikke satt slutt-dato', async () => {
+      render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
+      await openAccordionCard();
+      await velgAtBrukerSkalHaFritak();
+
+      await klikkPåBekreft();
+      expect(screen.getByText('Du må legge inn en dato for når perioden slutter')).toBeVisible();
+    });
+
+    it('viser feilmelding når det legges inn en ugyldig dato', async () => {
+      render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
+      await openAccordionCard();
+      const fraDato = screen.getByRole('textbox', { name: 'Gjelder fra' });
+      await user.type(fraDato, '31.02.2024');
+      await klikkPåBekreft();
+      expect(screen.getByText('Ugyldig dato')).toBeVisible();
+    });
+
+    it('viser feilmelding dersom slutt-tidspunkt er før start-tidspunkt', async () => {
+      render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
+      await openAccordionCard();
+      await velgAtBrukerSkalHaFritak();
+      const fraDato = screen.getByRole('textbox', { name: 'Gjelder fra' });
+      const tilDato = screen.getByRole('textbox', { name: 'Til og med' });
+      await user.type(fraDato, '21.02.2024');
+      await user.type(tilDato, '20.02.2024');
+      await klikkPåBekreft();
+      expect(screen.getByText('Slutt-dato kan ikke være før start-dato')).toBeVisible();
+    });
+
+    it.skip('viser feilmelding dersom bruker har lagt inn overlappende perioder', async () => {
+      render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
+      await openAccordionCard();
+      await leggTilRad();
+      const fritaksfelt = screen.getAllByRole('combobox', { name: 'Fritak meldeplikt' });
+      await user.selectOptions(fritaksfelt[0], 'Ja');
+      await user.selectOptions(fritaksfelt[1], 'Ja');
+
+      const fraDatoFelt = screen.getAllByRole('textbox', { name: 'Gjelder fra' });
+      const tilDatoFelt = screen.getAllByRole('textbox', { name: 'Til og med' });
+      await user.type(fraDatoFelt[0], '01.01.2024');
+      await user.type(tilDatoFelt[0], '15.01.2024');
+      await user.type(fraDatoFelt[1], '14.01.2024');
+      await user.type(tilDatoFelt[1], '30.01.2024');
+
+      expect(screen.getByText('Perioder for fritak kan ikke overlappe.'));
+    });
+  });
+
   async function openAccordionCard() {
     const region = screen.getByRole('region', { name: /Unntak fra meldeplikt § 11-10/i });
     const button = within(region).getByRole('button');
     await user.click(button);
   }
+
+  const leggTilRad = async () => await user.click(screen.getByRole('button', { name: 'Legg til periode med fritak' }));
+  const klikkPåBekreft = async () => await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+  const velgAtBrukerSkalHaFritak = async () =>
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Fritak meldeplikt' }), 'Ja');
 });
