@@ -1,4 +1,4 @@
-import { DatoBruddPåAktivitetsplikt } from 'components/aktivitetsplikt/Aktivitetsplikt';
+import { DatoBruddPåAktivitetsplikt, PeriodeError } from 'components/aktivitetsplikt/Aktivitetsplikt';
 import { Button, Table, TextField } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 
@@ -7,9 +7,10 @@ interface Props {
   bruddDatoPeriode: DatoBruddPåAktivitetsplikt;
   onChange: (id: string, felt: 'dato' | 'fom' | 'tom', value: string) => void;
   onDelete: () => void;
+  errors: PeriodeError[];
 }
 
-export const AktivitetsmeldingDatoTabellRad = ({ bruddDatoPeriode, onChange, onDelete, type }: Props) => {
+export const AktivitetsmeldingDatoTabellRad = ({ bruddDatoPeriode, onChange, onDelete, type, errors }: Props) => {
   const datoFelt = bruddDatoPeriode.type === 'enkeltdag' ? 'dato' : 'fom';
 
   return (
@@ -21,6 +22,9 @@ export const AktivitetsmeldingDatoTabellRad = ({ bruddDatoPeriode, onChange, onD
           value={bruddDatoPeriode.fom || bruddDatoPeriode.dato}
           hideLabel
           onChange={(e) => onChange(bruddDatoPeriode.id, datoFelt, e.target.value)}
+          error={
+            errors.find((error) => (type === 'enkeltdag' ? error.felt === 'dato' : error.felt === 'fom'))?.errorMessage
+          }
         />
       </Table.DataCell>
       {bruddDatoPeriode?.type === 'periode' ? (
@@ -31,6 +35,7 @@ export const AktivitetsmeldingDatoTabellRad = ({ bruddDatoPeriode, onChange, onD
             value={bruddDatoPeriode.tom}
             hideLabel
             onChange={(e) => onChange(bruddDatoPeriode.id, 'tom', e.target.value)}
+            error={errors.find((error) => error.felt === 'tom')?.errorMessage}
           />
         </Table.DataCell>
       ) : (

@@ -1,14 +1,15 @@
 import { Table } from '@navikt/ds-react';
 import { AktivitetsmeldingDatoTabellRad } from './AktivitetsmeldingDatoTabellRad';
-import { DatoBruddPåAktivitetsplikt } from 'components/aktivitetsplikt/Aktivitetsplikt';
+import { DatoBruddPåAktivitetsplikt, PeriodeError } from 'components/aktivitetsplikt/Aktivitetsplikt';
 import { Dispatch, SetStateAction } from 'react';
 
 interface Props {
   bruddDatoPerioder: DatoBruddPåAktivitetsplikt[];
   setBruddDatoPerioder: Dispatch<SetStateAction<DatoBruddPåAktivitetsplikt[]>>;
+  errors: PeriodeError[];
 }
 
-export const AktivitetsmeldingDatoTabell = ({ bruddDatoPerioder, setBruddDatoPerioder }: Props) => {
+export const AktivitetsmeldingDatoTabell = ({ bruddDatoPerioder, setBruddDatoPerioder, errors }: Props) => {
   return (
     <>
       <Table size={'small'}>
@@ -48,6 +49,7 @@ export const AktivitetsmeldingDatoTabell = ({ bruddDatoPerioder, setBruddDatoPer
               onDelete={() =>
                 setBruddDatoPerioder((prevState) => prevState.filter((something) => something.id !== element.id))
               }
+              errors={errors.filter((error) => error.id === element.id)}
             />
           ))}
         </Table.Body>

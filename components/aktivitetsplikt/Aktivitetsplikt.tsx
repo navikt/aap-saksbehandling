@@ -5,7 +5,12 @@ import { AktivitetspliktHendelserTabell } from 'components/aktivitetsplikthendel
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Button } from '@navikt/ds-react';
-import { AktivitetspliktParagraf, AktivitetspliktBrudd, AktivitetspliktHendelse } from 'lib/types/types';
+import {
+  AktivitetspliktBrudd,
+  AktivitetspliktHendelse,
+  AktivitetspliktParagraf,
+  PeriodeAktivitet,
+} from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { useState } from 'react';
 import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
@@ -13,7 +18,7 @@ import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotab
 import { v4 as uuidv4 } from 'uuid';
 import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
 import { useSaksnummer } from 'hooks/BehandlingHook';
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 
 export interface BruddDatoPeriode {
@@ -61,6 +66,12 @@ const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
   { label: 'Ikke bidratt til egen avklaring', value: 'IKKE_AKTIVT_BIDRAG' },
 ];
 
+export interface PeriodeError {
+  id: string;
+  felt: 'fom' | 'tom' | 'dato';
+  errorMessage: string;
+}
+
 export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
   const saksnummer = useSaksnummer();
   const { form, formFields } = useConfigForm<FormFields>(
@@ -87,14 +98,15 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
     { shouldUnregister: true }
   );
 
-  const [bruddPåAktivitetsDatoer, setBruddPåAktivitetsDatoer] = useState<DatoBruddPåAktivitetsplikt[]>([]);
+  const [bruddPåAktivitetDatoer, setBruddPåAktivitetDatoer] = useState<DatoBruddPåAktivitetsplikt[]>([]);
+  const [errors, setErrors] = useState<PeriodeError[]>([]);
 
   function leggTilNyEnkeltDato() {
-    setBruddPåAktivitetsDatoer((prevState) => [...prevState, { type: 'enkeltdag', id: uuidv4(), dato: '' }]);
+    setBruddPåAktivitetDatoer((prevState) => [...prevState, { type: 'enkeltdag', id: uuidv4(), dato: '' }]);
   }
 
   function leggTilNyPeriode() {
-    setBruddPåAktivitetsDatoer((prevState) => [...prevState, { type: 'periode', id: uuidv4(), tom: '', fom: '' }]);
+    setBruddPåAktivitetDatoer((prevState) => [...prevState, { type: 'periode', id: uuidv4(), tom: '', fom: '' }]);
   }
 
   function hentDatoLabel(valgtBrudd: AktivitetspliktBrudd): string {
@@ -128,6 +140,79 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
     valgtBrudd == 'IKKE_SENDT_INN_DOKUMENTASJON' ||
     valgtBrudd == 'IKKE_MØTT_TIL_MØTE';
 
+  /**
+   * På mandag så renskriver vi denne og tester at den fungerer. Det må legges til state på inputfeltene.
+   */
+  function validerDatoer(): PeriodeAktivitet | undefined {
+    setErrors([]);
+    const validertePerioder: PeriodeAktivitet = [];
+    const periodeErrors: PeriodeError[] = [];
+
+    bruddPåAktivitetDatoer.forEach((brudd) => {
+      if (brudd.type === 'enkeltdag') {
+        if (brudd.dato) {
+          const errorMessage = validerDato(brudd.dato);
+          if (errorMessage) {
+            periodeErrors.push({
+              errorMessage,
+              id: brudd.id,
+              felt: 'dato',
+            });
+          } else {
+            validertePerioder.push({
+              tom: formaterDatoForBackend(new Date(brudd.dato)),
+              fom: formaterDatoForBackend(new Date(brudd.dato)),
+            });
+          }
+        }
+      } else {
+        const errorMessageTom = validerDato(brudd.tom);
+        const errorMessageFom = validerDato(brudd.fom);
+
+        if (errorMessageFom) {
+          periodeErrors.push({
+            errorMessage: errorMessageFom,
+            id: brudd.id,
+            felt: 'fom',
+          });
+        }
+
+        if (errorMessageTom) {
+          periodeErrors.push({
+            errorMessage: errorMessageTom,
+            id: brudd.id,
+            felt: 'tom',
+          });
+        }
+
+        if (!errorMessageTom && !errorMessageFom && brudd.tom && brudd.fom) {
+          validertePerioder.push({
+            tom: formaterDatoForBackend(new Date(brudd.tom)),
+            fom: formaterDatoForBackend(new Date(brudd.fom)),
+          });
+        }
+      }
+    });
+
+    if (periodeErrors.length > 0) {
+      setErrors(periodeErrors);
+      return undefined;
+    } else {
+      return validertePerioder;
+    }
+  }
+
+  function validerDato(value?: string) {
+    if (!value) {
+      return 'Du må skrive inn en dato';
+    }
+
+    const inputDato = parseDatoFraDatePicker(value);
+    if (!inputDato) {
+      return 'Dato for når søker har forsørgeransvar fra er ikke gyldig';
+    }
+  }
+
   return (
     <SideProsessKort
       heading={'Registrering av gyldig og ugyldig fravær - (aktivitetsplikten §§ 11-7, 11-8, 11-9)'}
@@ -138,20 +223,19 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         <form
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
-            await opprettAktivitetspliktBrudd({
-              brudd: data.brudd,
-              begrunnelse: data.begrunnelse,
-              paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
-              perioder: [
-                {
-                  tom: formaterDatoForBackend(new Date('02.19.2020')),
-                  fom: formaterDatoForBackend(new Date('02.19.2020')),
-                },
-              ],
-              saksnummer: saksnummer,
-            });
+            const validertePerioder = validerDatoer();
 
-            await revalidateAktivitetspliktHendelser(saksnummer);
+            if (validertePerioder) {
+              await opprettAktivitetspliktBrudd({
+                brudd: data.brudd,
+                begrunnelse: data.begrunnelse,
+                paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
+                perioder: validertePerioder,
+                saksnummer: saksnummer,
+              });
+
+              await revalidateAktivitetspliktHendelser(saksnummer);
+            }
           })}
         >
           <FormField form={form} formField={formFields.brudd} />
@@ -161,8 +245,9 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
             <div className={'flex-column'}>
               <b>{hentDatoLabel(valgtBrudd)}</b>
               <AktivitetsmeldingDatoTabell
-                bruddDatoPerioder={bruddPåAktivitetsDatoer}
-                setBruddDatoPerioder={setBruddPåAktivitetsDatoer}
+                bruddDatoPerioder={bruddPåAktivitetDatoer}
+                setBruddDatoPerioder={setBruddPåAktivitetDatoer}
+                errors={errors}
               />
               <div className={'flex-row'}>
                 <Button
