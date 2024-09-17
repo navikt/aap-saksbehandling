@@ -152,3 +152,5 @@ export type AktivitetspliktBrudd =
 
 export type FritakMeldepliktVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritakMeldepliktVurderingDto'];
+
+export type Periode = components['schemas']['no.nav.aap.komponenter.type.Periode'];

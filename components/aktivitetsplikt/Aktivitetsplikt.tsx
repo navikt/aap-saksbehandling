@@ -4,11 +4,12 @@ import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { AktivitetspliktHendelserTabell } from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
-import { Button } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import {
   AktivitetspliktBrudd,
   AktivitetspliktHendelse,
   AktivitetspliktParagraf,
+  Periode,
   PeriodeAktivitet,
 } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
@@ -20,13 +21,14 @@ import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
+import { harPerioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 
 export interface BruddDatoPeriode {
   type: 'enkeltdag' | 'periode';
   id: string;
 }
 
-export interface Periode extends BruddDatoPeriode {
+export interface AktvitetsPeriode extends BruddDatoPeriode {
   // TODO Finn en mer egnet plass
   fom?: string;
   tom?: string;
@@ -37,7 +39,7 @@ export interface EnkeltDag extends BruddDatoPeriode {
   dato?: string;
 }
 
-export type DatoBruddPåAktivitetsplikt = EnkeltDag & Periode;
+export type DatoBruddPåAktivitetsplikt = EnkeltDag & AktvitetsPeriode;
 
 interface Props {
   aktivitetspliktHendelser: AktivitetspliktHendelse[];
@@ -99,7 +101,8 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
   );
 
   const [bruddPåAktivitetDatoer, setBruddPåAktivitetDatoer] = useState<DatoBruddPåAktivitetsplikt[]>([]);
-  const [errors, setErrors] = useState<PeriodeError[]>([]);
+  const [error, setError] = useState<string>();
+  const [feltErrors, setFeltErrors] = useState<PeriodeError[]>([]);
 
   function leggTilNyEnkeltDato() {
     setBruddPåAktivitetDatoer((prevState) => [...prevState, { type: 'enkeltdag', id: uuidv4(), dato: '' }]);
@@ -143,27 +146,26 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
   /**
    * På mandag så renskriver vi denne og tester at den fungerer. Det må legges til state på inputfeltene.
    */
-  function validerDatoer(): PeriodeAktivitet | undefined {
-    setErrors([]);
-    const validertePerioder: PeriodeAktivitet = [];
+  function valdierPerioder(): PeriodeAktivitet | undefined {
+    setFeltErrors([]);
+    setError(undefined);
+    const validertePerioder: Periode[] = [];
     const periodeErrors: PeriodeError[] = [];
 
     bruddPåAktivitetDatoer.forEach((brudd) => {
       if (brudd.type === 'enkeltdag') {
-        if (brudd.dato) {
-          const errorMessage = validerDato(brudd.dato);
-          if (errorMessage) {
-            periodeErrors.push({
-              errorMessage,
-              id: brudd.id,
-              felt: 'dato',
-            });
-          } else {
-            validertePerioder.push({
-              tom: formaterDatoForBackend(new Date(brudd.dato)),
-              fom: formaterDatoForBackend(new Date(brudd.dato)),
-            });
-          }
+        const errorMessage = validerDato(brudd.dato);
+        if (errorMessage) {
+          periodeErrors.push({
+            errorMessage,
+            id: brudd.id,
+            felt: 'dato',
+          });
+        } else if (brudd.dato) {
+          validertePerioder.push({
+            tom: formaterDatoForBackend(new Date(brudd.dato)),
+            fom: formaterDatoForBackend(new Date(brudd.dato)),
+          });
         }
       } else {
         const errorMessageTom = validerDato(brudd.tom);
@@ -194,8 +196,14 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
       }
     });
 
+    const harOverlappendePerioder = harPerioderSomOverlapper(validertePerioder);
+
+    if (harOverlappendePerioder) {
+      setError('Det finnes overlappende perioder');
+    }
+
     if (periodeErrors.length > 0) {
-      setErrors(periodeErrors);
+      setFeltErrors(periodeErrors);
       return undefined;
     } else {
       return validertePerioder;
@@ -223,7 +231,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         <form
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
-            const validertePerioder = validerDatoer();
+            const validertePerioder = valdierPerioder();
 
             if (validertePerioder) {
               await opprettAktivitetspliktBrudd({
@@ -247,8 +255,9 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
               <AktivitetsmeldingDatoTabell
                 bruddDatoPerioder={bruddPåAktivitetDatoer}
                 setBruddDatoPerioder={setBruddPåAktivitetDatoer}
-                errors={errors}
+                errors={feltErrors}
               />
+              {error && <Alert variant={'error'}>{error}</Alert>}
               <div className={'flex-row'}>
                 <Button
                   icon={<PlusCircleIcon />}
