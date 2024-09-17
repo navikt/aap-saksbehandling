@@ -32,8 +32,8 @@ export const Periodetabell = ({ perioder, oppdaterPerioder, vurderingstidspunkt,
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Fritak meldeplikt</Table.HeaderCell>
-          <Table.HeaderCell>Gjelder fra</Table.HeaderCell>
-          <Table.HeaderCell>Til og med</Table.HeaderCell>
+          <Table.HeaderCell>Gjelder fra (dd.mm.åååå)</Table.HeaderCell>
+          <Table.HeaderCell>Til og med (dd.mm.åååå)</Table.HeaderCell>
           <Table.HeaderCell>Dato vurdert</Table.HeaderCell>
           <Table.HeaderCell>Handling</Table.HeaderCell>
         </Table.Row>

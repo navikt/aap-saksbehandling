@@ -23,9 +23,11 @@ describe('Periodetabell', () => {
   it('har en tabell med oversikt over perioder med fritak', () => {
     render(<Periodetabell perioder={initiellTilstand} oppdaterPerioder={oppdaterMock} valideringsfeil={[]} />);
 
-    ['Fritak meldeplikt', 'Gjelder fra', 'Til og med', 'Dato vurdert', 'Handling'].forEach((kolonneTittel) => {
-      expect(screen.getByRole('columnheader', { name: kolonneTittel })).toBeVisible();
-    });
+    ['Fritak meldeplikt', 'Gjelder fra (dd.mm.åååå)', 'Til og med (dd.mm.åååå)', 'Dato vurdert', 'Handling'].forEach(
+      (kolonneTittel) => {
+        expect(screen.getByRole('columnheader', { name: kolonneTittel })).toBeVisible();
+      }
+    );
   });
 
   it('har en knapp pr rad for å slette når det er mer enn en periode', () => {
