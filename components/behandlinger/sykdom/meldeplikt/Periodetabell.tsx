@@ -4,6 +4,8 @@ import { Dispatch, SetStateAction } from 'react';
 import { JaEllerNei } from 'lib/utils/form';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
+import styles from './Periodetabell.module.css';
+
 interface Props {
   perioder: MeldepliktPeriode[];
   oppdaterPerioder: Dispatch<SetStateAction<MeldepliktPeriode[]>>;
@@ -26,7 +28,7 @@ export const Periodetabell = ({ perioder, oppdaterPerioder, vurderingstidspunkt,
   };
 
   return (
-    <Table>
+    <Table className={styles.periodetabell}>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Fritak meldeplikt</Table.HeaderCell>
