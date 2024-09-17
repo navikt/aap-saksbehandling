@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Periodetabell } from './Periodetabell';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isBefore, parse } from 'date-fns';
 
 interface Props {
@@ -36,8 +36,8 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     grunnlag?.vurderinger && grunnlag.vurderinger.length > 0
       ? grunnlag.vurderinger.map((vurdering) => ({
           fritakFraMeldeplikt: getJaNeiEllerUndefined(vurdering.harFritak),
-          fom: formaterDatoForBackend(stringToDate(vurdering.periode.fom) ?? new Date()),
-          tom: formaterDatoForBackend(stringToDate(vurdering.periode.tom) ?? new Date()),
+          fom: formaterDatoForFrontend(vurdering.periode.fom),
+          tom: vurdering.periode.tom ? formaterDatoForFrontend(vurdering.periode.tom) : '',
         }))
       : [{ fritakFraMeldeplikt: '', fom: '', tom: '' }];
 
