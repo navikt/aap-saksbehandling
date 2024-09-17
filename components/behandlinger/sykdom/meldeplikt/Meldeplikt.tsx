@@ -40,7 +40,8 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
           tom: formaterDatoForBackend(stringToDate(vurdering.periode.tom) ?? new Date()),
         }))
       : [{ fritakFraMeldeplikt: '', fom: '', tom: '' }];
-  const [begrunnelse, oppdaterBegrunnelse] = useState<string>();
+
+  const [begrunnelse, oppdaterBegrunnelse] = useState<string | undefined>(grunnlag?.begrunnelse);
   const [perioder, oppdaterPerioder] = useState<MeldepliktPeriode[]>(initialState);
   const [skjemafeil, oppdaterSkjemafeil] = useState<Valideringsfeil[]>([]);
   const behandlingsReferanse = useBehandlingsReferanse();
