@@ -148,13 +148,22 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       }
 
       if (periode.fom && periode.fritakFraMeldeplikt) {
-        mappetSkjema.push({
-          harFritak: periode.fritakFraMeldeplikt === JaEllerNei.Ja,
-          periode: {
-            fom: periode.fom,
-            tom: periode.tom,
-          },
-        });
+        if (!periode.tom) {
+          mappetSkjema.push({
+            harFritak: periode.fritakFraMeldeplikt === JaEllerNei.Ja,
+            periode: {
+              fom: formaterDatoForBackend(parse(periode.fom, 'dd.MM.yyyy', new Date())),
+            },
+          });
+        } else {
+          mappetSkjema.push({
+            harFritak: periode.fritakFraMeldeplikt === JaEllerNei.Ja,
+            periode: {
+              fom: formaterDatoForBackend(parse(periode.fom, 'dd.MM.yyyy', new Date())),
+              tom: formaterDatoForBackend(parse(periode.tom, 'dd.MM.yyyy', new Date())),
+            },
+          });
+        }
       }
     });
 
