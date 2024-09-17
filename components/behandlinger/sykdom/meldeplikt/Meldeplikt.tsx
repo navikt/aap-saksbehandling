@@ -12,6 +12,9 @@ import { Periodetabell } from './Periodetabell';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isBefore, parse } from 'date-fns';
+import { perioderOverlapper } from './Periodevalidering';
+
+import styles from './Meldeplikt.module.css';
 
 interface Props {
   behandlingVersjon: number;
@@ -26,7 +29,7 @@ export interface MeldepliktPeriode {
 }
 
 export type Valideringsfeil = {
-  felt: keyof MeldepliktPeriode | 'begrunnelse';
+  felt: keyof MeldepliktPeriode | 'begrunnelse' | 'periodeoverlapp';
   index: number;
   message: string;
 };
@@ -49,41 +52,6 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
 
   const leggTilRad = () =>
     oppdaterPerioder((prevState) => [...prevState, { fritakFraMeldeplikt: undefined, fom: undefined, tom: undefined }]);
-
-  // const sjekkOverlappendePerioder = (): Valideringsfeil[] | undefined => {
-  //   let errors = [];
-  //   if (perioder.length > 1) {
-  //     const sorterteIntervaller = perioder
-  //       .map((periode) => {
-  //         const fraDato = stringToDate(periode.fom, 'dd.MM.yyyy');
-  //         if (fraDato) {
-  //           if (periode.fritakFraMeldeplikt === JaEllerNei.Ja) {
-  //             const tilDato = stringToDate(periode.tom, 'dd.MM.yyyy');
-  //             if (tilDato) {
-  //               return interval(fraDato, tilDato);
-  //             }
-  //           } else {
-  //             return interval(fraDato, new Date('2099-12-31'));
-  //           }
-  //         }
-  //       })
-  //       .filter((v) => !!v)
-  //       .sort((a, b) => a.start.getTime() - b.start.getTime());
-  //
-  //     for (let i = 1; i < sorterteIntervaller.length; i++) {
-  //       const prevInterval = sorterteIntervaller[i - 1];
-  //       const currentInterval = sorterteIntervaller[i];
-  //       if (areIntervalsOverlapping(prevInterval, currentInterval)) {
-  //         errors.push({
-  //           index: 0,
-  //           felt: 'fom',
-  //           message: 'Perioder for fritak kan ikke overlappe.',
-  //         });
-  //       }
-  //     }
-  //   }
-  //   return undefined;
-  // };
 
   const validerOgMapSkjema = () => {
     const errors: Valideringsfeil[] = [];
@@ -168,13 +136,23 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       }
     });
 
-    // const overlappsfeil = sjekkOverlappendePerioder();
+    if (errors.length === 0) {
+      const perioderesultat = perioderOverlapper(mappetSkjema);
+      if (perioderesultat) {
+        errors.push({
+          index: -1,
+          felt: 'periodeoverlapp',
+          message: 'Det finnes overlappende perioder.',
+        });
+      }
+    }
 
     return { errors, mappetSkjema };
   };
 
   const handleSubmit = () => {
     const { errors, mappetSkjema } = validerOgMapSkjema();
+    console.log(errors);
     oppdaterSkjemafeil([]);
     if (errors.length > 0) {
       oppdaterSkjemafeil(errors);
@@ -249,6 +227,9 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
         vurderingstidspunkt={grunnlag?.vurderingsTidspunkt}
         valideringsfeil={skjemafeil}
       />
+      <p className={`navds-error-message navds-label ${styles.periodeoverlapp_feilmelding}`}>
+        {skjemafeil.find((feil) => feil.felt === 'periodeoverlapp')?.message}
+      </p>
 
       <Button variant={'tertiary'} icon={<PlusCircleIcon />} type={'button'} onClick={() => leggTilRad()}>
         Legg til periode med fritak

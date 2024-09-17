@@ -3,3 +3,7 @@
   flex-direction: row;
   gap: var(--a-spacing-4);
 }
+
+.periodeoverlapp_feilmelding {
+  margin-top: var(--a-spacing-4);
+}
