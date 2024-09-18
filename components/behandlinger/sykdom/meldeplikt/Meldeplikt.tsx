@@ -154,7 +154,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     const { errors, mappetSkjema } = validerOgMapSkjema();
     console.log(errors);
     oppdaterSkjemafeil([]);
-    if (errors.length > 0) {
+    if (errors.length > 0 || !begrunnelse) {
       oppdaterSkjemafeil(errors);
     } else {
       løsBehovOgGåTilNesteSteg({
@@ -162,7 +162,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
         referanse: behandlingsReferanse,
         behov: {
           behovstype: Behovstype.FRITAK_MELDEPLIKT_KODE,
-          fritaksvurdering: {
+          fritaksvurderingDto: {
             begrunnelse: begrunnelse,
             fritaksPerioder: mappetSkjema,
           },
