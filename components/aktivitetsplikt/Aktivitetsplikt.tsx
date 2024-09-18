@@ -8,7 +8,6 @@ import { Button } from '@navikt/ds-react';
 import { AktivitetspliktBrudd, AktivitetspliktHendelse, AktivitetspliktParagraf } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
-import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useFieldArray } from 'react-hook-form';
@@ -108,19 +107,21 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
             console.log(data);
-            await opprettAktivitetspliktBrudd({
-              brudd: data.brudd,
-              begrunnelse: data.begrunnelse,
-              paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
-              perioder: data.perioder.map((periode) => {
-                if (periode.type === 'enkeltdag') {
-                  return { fom: periode.dato, tom: periode.dato };
-                } else {
-                  return { fom: periode.fom, tom: periode.tom };
-                }
-              }),
-              saksnummer: saksnummer,
-            });
+
+            // Ikke åpne denne før backend er klar.
+            // await opprettAktivitetspliktBrudd({
+            //   brudd: data.brudd,
+            //   begrunnelse: data.begrunnelse,
+            //   paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
+            //   perioder: data.perioder.map((periode) => {
+            //     if (periode.type === 'enkeltdag') {
+            //       return { fom: periode.dato, tom: periode.dato };
+            //     } else {
+            //       return { fom: periode.fom, tom: periode.tom };
+            //     }
+            //   }),
+            //   saksnummer: saksnummer,
+            // });
 
             await revalidateAktivitetspliktHendelser(saksnummer);
           })}

@@ -1556,6 +1556,122 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/aktivitetsplikt/lagre': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': string;
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/aktivitetsplikt/{saksnummer}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/aktivitetsplikt/slett': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': string;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': string;
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/test/opprett': {
     parameters: {
       query?: never;
@@ -1723,7 +1839,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-09-18T12:12:50.576432
+       * @example 2024-09-18T13:41:56.82825
        */
       tidspunkt: string;
     };
@@ -1922,40 +2038,6 @@ export interface components {
       'f\u00F8dselsdato': string;
       'vilk\u00E5rsperioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilk\u00E5rsresultat.Vilk\u00E5rsperiode'][];
     };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktHendelseDto': {
-      begrunnelse: string;
-      /** @enum {string} */
-      brudd:
-        | 'IKKE_MØTT_TIL_MØTE'
-        | 'IKKE_MØTT_TIL_BEHANDLING'
-        | 'IKKE_MØTT_TIL_TILTAK'
-        | 'IKKE_MØTT_TIL_ANNEN_AKTIVITET'
-        | 'IKKE_SENDT_INN_DOKUMENTASJON'
-        | 'IKKE_AKTIVT_BIDRAG';
-      /** Format: uuid */
-      hendelseId: string;
-      /** @enum {string} */
-      paragraf: 'PARAGRAF_11_7' | 'PARAGRAF_11_8' | 'PARAGRAF_11_9';
-      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktRequest': {
-      begrunnelse: string;
-      /** @enum {string} */
-      brudd:
-        | 'IKKE_MØTT_TIL_MØTE'
-        | 'IKKE_MØTT_TIL_BEHANDLING'
-        | 'IKKE_MØTT_TIL_TILTAK'
-        | 'IKKE_MØTT_TIL_ANNEN_AKTIVITET'
-        | 'IKKE_SENDT_INN_DOKUMENTASJON'
-        | 'IKKE_AKTIVT_BIDRAG';
-      /** @enum {string} */
-      paragraf: 'PARAGRAF_11_7' | 'PARAGRAF_11_8' | 'PARAGRAF_11_9';
-      perioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      saksnummer: string;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktResponse': {
-      hendelser: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktHendelseDto'][];
-    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilk\u00E5rsresultat.Vilk\u00E5rsperiode': {
       /** @enum {string|null} */
       'avslags\u00E5rsak'?:
@@ -2123,7 +2205,7 @@ export interface components {
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritakMeldepliktVurderingDto'][];
       /**
        * Format: date-time
-       * @example 2024-09-18T12:12:50.576432
+       * @example 2024-09-18T13:41:56.82825
        */
       vurderingsTidspunkt: string;
     };
@@ -2367,7 +2449,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-09-18T12:12:50.576432
+       * @example 2024-09-18T13:41:56.82825
        */
       opprettet: string;
       /** Format: uuid */
@@ -2393,7 +2475,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-09-18T12:12:50.576432
+       * @example 2024-09-18T13:41:56.82825
        */
       tidsstempel: string;
     };
@@ -2531,6 +2613,40 @@ export interface components {
       visKvalitetssikringKort: boolean;
       visVentekort: boolean;
     };
+    'no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktHendelseDto': {
+      begrunnelse: string;
+      /** @enum {string} */
+      brudd:
+        | 'IKKE_MØTT_TIL_MØTE'
+        | 'IKKE_MØTT_TIL_BEHANDLING'
+        | 'IKKE_MØTT_TIL_TILTAK'
+        | 'IKKE_MØTT_TIL_ANNEN_AKTIVITET'
+        | 'IKKE_SENDT_INN_DOKUMENTASJON'
+        | 'IKKE_AKTIVT_BIDRAG';
+      /** Format: uuid */
+      hendelseId: string;
+      /** @enum {string} */
+      paragraf: 'PARAGRAF_11_7' | 'PARAGRAF_11_8' | 'PARAGRAF_11_9';
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+    };
+    'no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktRequest': {
+      begrunnelse: string;
+      /** @enum {string} */
+      brudd:
+        | 'IKKE_MØTT_TIL_MØTE'
+        | 'IKKE_MØTT_TIL_BEHANDLING'
+        | 'IKKE_MØTT_TIL_TILTAK'
+        | 'IKKE_MØTT_TIL_ANNEN_AKTIVITET'
+        | 'IKKE_SENDT_INN_DOKUMENTASJON'
+        | 'IKKE_AKTIVT_BIDRAG';
+      /** @enum {string} */
+      paragraf: 'PARAGRAF_11_7' | 'PARAGRAF_11_8' | 'PARAGRAF_11_9';
+      perioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      saksnummer: string;
+    };
+    'no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktResponse': {
+      hendelser: components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktHendelseDto'][];
+    };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.adapters.Dokument': {
       brevkode?: string | null;
       dokumentInfoId: string;
@@ -2542,7 +2658,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-09-18T12:12:50.576432
+       * @example 2024-09-18T13:41:56.82825
        */
       opprettet: string;
       /** Format: uuid */
@@ -2573,7 +2689,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-09-18T12:12:50.576432
+       * @example 2024-09-18T13:41:56.82825
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -2584,7 +2700,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-09-18T12:12:50.576432
+       * @example 2024-09-18T13:41:56.82825
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -2618,7 +2734,7 @@ export interface components {
       navn: string;
       /**
        * Format: date-time
-       * @example 2024-09-18T12:12:50.576432
+       * @example 2024-09-18T13:41:56.82825
        */
       'planlagtKj\u00F8retidspunkt': string;
       /** @enum {string} */

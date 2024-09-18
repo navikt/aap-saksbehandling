@@ -133,22 +133,22 @@ export type VurdertBarn =
 export type Ident = components['schemas']['no.nav.aap.verdityper.sakogbehandling.Ident'];
 
 export type AktivitetspliktHendelse =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktHendelseDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktHendelseDto'];
 
 export type BruddAktivitetsplikt =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktRequest'];
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktRequest'];
 
 export type PeriodeAktivitet =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['perioder'];
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['perioder'];
 
 export type AktivitetspliktHendelser =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktResponse'];
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktResponse'];
 
 export type AktivitetspliktParagraf =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['paragraf'];
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['paragraf'];
 
 export type AktivitetspliktBrudd =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['brudd'];
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['brudd'];
 
 export type FritakMeldepliktVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritakMeldepliktVurderingDto'];
