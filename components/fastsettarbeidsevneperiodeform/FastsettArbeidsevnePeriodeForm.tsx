@@ -39,7 +39,6 @@ export const FastsettArbeidsevnePeriodeForm = ({ onSave, onAvbryt }: Props) => {
     },
     arbeidsevne: {
       type: 'text',
-      label: '',
       description: 'sett opp mot en arbeidsuke på 37,5 timer',
       rules: { required: 'Du må angi en arbeidsevne.' },
     },
