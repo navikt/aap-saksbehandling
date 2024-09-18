@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { BodyShort, Button, List, ReadMore, Textarea } from '@navikt/ds-react';
 import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { FritakMeldepliktGrunnlag, FritakMeldepliktVurdering } from 'lib/types/types';
+import { FritakMeldepliktGrunnlag, FritakMeldepliktVurdering, Periode } from 'lib/types/types';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useState } from 'react';
@@ -12,7 +12,7 @@ import { Periodetabell } from './Periodetabell';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isBefore, parse } from 'date-fns';
-import { perioderOverlapper } from './Periodevalidering';
+import { harPerioderSomOverlapper } from './Periodevalidering';
 
 import styles from './Meldeplikt.module.css';
 
@@ -137,8 +137,19 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     });
 
     if (errors.length === 0) {
-      const perioderesultat = perioderOverlapper(mappetSkjema);
-      if (perioderesultat) {
+      const perioder: Periode[] = [];
+      mappetSkjema
+        .filter((periode) => periode.harFritak)
+        .forEach((periode) => {
+          if (periode.periode.tom) {
+            perioder.push({
+              fom: periode.periode.fom,
+              tom: periode.periode.tom,
+            });
+          }
+        });
+
+      if (harPerioderSomOverlapper(perioder)) {
         errors.push({
           index: -1,
           felt: 'periodeoverlapp',
