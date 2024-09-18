@@ -70,16 +70,6 @@ describe('aktivitetsmelding', () => {
     expect(paragraf_11_9Felt).toBeVisible();
   });
 
-  it.skip('skal dukke opp et dato felt for brudd på aktivitetsplikt dersom man velger en paragraf', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
-    await velgIkkeMøttITiltakSomBrudd();
-
-    await velgParagraf_11_8();
-
-    const felt = screen.getByRole('textbox', { name: /dato for ikke møtt til tiltak/i });
-    expect(felt).toBeVisible();
-  });
-
   it('skal dukke opp et begrunnelsesfelt for brudd på aktivitetsplikt dersom man velger en paragraf', async () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
     await velgIkkeMøttITiltakSomBrudd();
@@ -108,15 +98,18 @@ describe('aktivitetsmelding', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it.skip('skal vise en feilmelding dersom dato for brudd på aktivitetsplikten ikke er besvart', async () => {
+  it('skal vise en feilmelding dersom dato for brudd på aktivitetsplikten ikke er besvart', async () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
 
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
+    const enkeltDatoKnapp = screen.getByRole('button', { name: /legg til enkeltdato/i });
+    await user.click(enkeltDatoKnapp);
+
     const bekreftKnapp = screen.getByRole('button', { name: /bekreft/i });
     await user.click(bekreftKnapp);
-    const feilmelding = screen.getByText('Du må sette en dato for brudd på aktivitetsplikten');
+    const feilmelding = screen.getByText('Du må sette en dato');
     expect(feilmelding).toBeVisible();
   });
 
@@ -128,7 +121,6 @@ describe('aktivitetsmelding', () => {
 
     const bekreftKnapp = screen.getByRole('button', { name: /bekreft/i });
     await user.click(bekreftKnapp);
-    screen.logTestingPlaygroundURL();
     const feilmelding = screen.getByText('Du må skrive en begrunnelse for brudd på aktivitetsplikten');
     expect(feilmelding).toBeVisible();
   });
