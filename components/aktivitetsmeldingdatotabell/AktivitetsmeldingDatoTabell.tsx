@@ -1,15 +1,18 @@
-import { Table } from '@navikt/ds-react';
-import { AktivitetsmeldingDatoTabellRad } from './AktivitetsmeldingDatoTabellRad';
-import { DatoBruddPåAktivitetsplikt, PeriodeError } from 'components/aktivitetsplikt/Aktivitetsplikt';
-import { Dispatch, SetStateAction } from 'react';
+import { Button, Table } from '@navikt/ds-react';
+
+import { FieldArray, UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { TextFieldWrapper } from '@navikt/aap-felles-react';
+import { AktivitetspliktFormFields } from 'components/aktivitetsplikt/Aktivitetsplikt';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 interface Props {
-  bruddDatoPerioder: DatoBruddPåAktivitetsplikt[];
-  setBruddDatoPerioder: Dispatch<SetStateAction<DatoBruddPåAktivitetsplikt[]>>;
-  errors: PeriodeError[];
+  form: UseFormReturn<AktivitetspliktFormFields>;
+  fields: FieldArray<AktivitetspliktFormFields>[];
+  remove: UseFieldArrayRemove;
 }
 
-export const AktivitetsmeldingDatoTabell = ({ bruddDatoPerioder, setBruddDatoPerioder, errors }: Props) => {
+export const AktivitetsmeldingDatoTabell = ({ form, fields, remove }: Props) => {
   return (
     <>
       <Table size={'small'}>
@@ -30,30 +33,53 @@ export const AktivitetsmeldingDatoTabell = ({ bruddDatoPerioder, setBruddDatoPer
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {bruddDatoPerioder.map((element) => (
-            <AktivitetsmeldingDatoTabellRad
-              key={element.id}
-              type={element.type}
-              bruddDatoPeriode={element}
-              onChange={(id, felt, value) => {
-                if (element.type === 'enkeltdag') {
-                  setBruddDatoPerioder((prevState) =>
-                    prevState.map((dato) => (dato.id === id ? { ...dato, dato: value } : dato))
-                  );
-                } else {
-                  setBruddDatoPerioder((prevState) =>
-                    prevState.map((dato) => (dato.id === id ? { ...dato, [felt]: value } : dato))
-                  );
-                }
-              }}
-              onDelete={() =>
-                setBruddDatoPerioder((prevState) => prevState.filter((something) => something.id !== element.id))
-              }
-              errors={errors.filter((error) => error.id === element.id)}
-            />
+          {fields.map((field, index) => (
+            <Table.Row key={field.id}>
+              <Table.DataCell className={'navds-table__data-cell--align-top'}>
+                <TextFieldWrapper
+                  label={field.type === 'enkeltdag' ? 'dato' : 'fra og med dato'}
+                  control={form.control}
+                  type={'text'}
+                  name={field.type === 'enkeltdag' ? `periode.${index}.dato` : `periode.${index}.fom`}
+                  rules={{ required: 'Du må sette en dato', validate: (value) => validerDato(value) }}
+                />
+              </Table.DataCell>
+              {field.type === 'periode' ? (
+                <Table.DataCell>
+                  <TextFieldWrapper
+                    label={'til og med dato'}
+                    control={form.control}
+                    type={'text'}
+                    name={`periode.${index}.tom`}
+                    rules={{ required: 'Du må sette en dato', validate: (value) => validerDato(value) }}
+                  />
+                </Table.DataCell>
+              ) : (
+                <Table.DataCell />
+              )}
+              <Table.DataCell>{field.type === 'periode' ? 'Periode' : 'Enkeltdato'}</Table.DataCell>
+              <Table.DataCell>
+                <Button
+                  type={'button'}
+                  size={'small'}
+                  variant={'tertiary'}
+                  icon={<TrashIcon />}
+                  onClick={() => remove(index)}
+                >
+                  Slett
+                </Button>
+              </Table.DataCell>
+            </Table.Row>
           ))}
         </Table.Body>
       </Table>
     </>
   );
 };
+
+function validerDato(value: string) {
+  const inputDato = parseDatoFraDatePicker(value);
+  if (!inputDato) {
+    return 'Dato format er ikke gyldig';
+  }
+}

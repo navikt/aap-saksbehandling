@@ -4,51 +4,37 @@ import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { AktivitetspliktHendelserTabell } from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
-import { Alert, Button } from '@navikt/ds-react';
-import {
-  AktivitetspliktBrudd,
-  AktivitetspliktHendelse,
-  AktivitetspliktParagraf,
-  Periode,
-  PeriodeAktivitet,
-} from 'lib/types/types';
+import { Button } from '@navikt/ds-react';
+import { AktivitetspliktBrudd, AktivitetspliktHendelse, AktivitetspliktParagraf } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
-import { useState } from 'react';
 import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
-
-import { v4 as uuidv4 } from 'uuid';
 import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
 import { useSaksnummer } from 'hooks/BehandlingHook';
-import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
-import { harPerioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
+import { useFieldArray } from 'react-hook-form';
 
-export interface BruddDatoPeriode {
-  type: 'enkeltdag' | 'periode';
-  id: string;
-}
-
-export interface AktvitetsPeriode extends BruddDatoPeriode {
-  // TODO Finn en mer egnet plass
+interface AktvitetsPeriode {
+  type: 'periode';
   fom?: string;
   tom?: string;
 }
 
-export interface EnkeltDag extends BruddDatoPeriode {
-  // TODO Finn en mer egnet plass
+interface EnkeltDag {
+  type: 'enkeltdag';
   dato?: string;
 }
 
-export type DatoBruddPåAktivitetsplikt = EnkeltDag & AktvitetsPeriode;
+export type DatoBruddPåAktivitetsplikt = EnkeltDag | AktvitetsPeriode;
 
 interface Props {
   aktivitetspliktHendelser: AktivitetspliktHendelse[];
 }
 
-interface FormFields {
+export interface AktivitetspliktFormFields {
   brudd: AktivitetspliktBrudd;
   paragraf?: AktivitetspliktParagraf;
   begrunnelse: string;
+  perioder: DatoBruddPåAktivitetsplikt[];
 }
 
 const paragrafOptions: ValuePair<AktivitetspliktParagraf>[] = [
@@ -68,15 +54,9 @@ const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
   { label: 'Ikke bidratt til egen avklaring', value: 'IKKE_AKTIVT_BIDRAG' },
 ];
 
-export interface PeriodeError {
-  id: string;
-  felt: 'fom' | 'tom' | 'dato';
-  errorMessage: string;
-}
-
 export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
   const saksnummer = useSaksnummer();
-  const { form, formFields } = useConfigForm<FormFields>(
+  const { form, formFields } = useConfigForm<AktivitetspliktFormFields>(
     {
       brudd: {
         type: 'radio',
@@ -96,130 +76,26 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         description: 'Skriv begrunnelse og henvis eventuelt til rett kilde/dokumentasjon',
         rules: { required: 'Du må skrive en begrunnelse for brudd på aktivitetsplikten' },
       },
+      perioder: {
+        type: 'fieldArray',
+        defaultValue: undefined,
+      },
     },
     { shouldUnregister: true }
   );
 
-  const [bruddPåAktivitetDatoer, setBruddPåAktivitetDatoer] = useState<DatoBruddPåAktivitetsplikt[]>([]);
-  const [error, setError] = useState<string>();
-  const [feltErrors, setFeltErrors] = useState<PeriodeError[]>([]);
-
-  function leggTilNyEnkeltDato() {
-    setBruddPåAktivitetDatoer((prevState) => [...prevState, { type: 'enkeltdag', id: uuidv4(), dato: '' }]);
-  }
-
-  function leggTilNyPeriode() {
-    setBruddPåAktivitetDatoer((prevState) => [...prevState, { type: 'periode', id: uuidv4(), tom: '', fom: '' }]);
-  }
-
-  function hentDatoLabel(valgtBrudd: AktivitetspliktBrudd): string {
-    switch (valgtBrudd) {
-      case 'IKKE_MØTT_TIL_MØTE':
-        return 'Dato for ikke møtt i tiltak';
-      case 'IKKE_MØTT_TIL_BEHANDLING':
-        return 'Dato for ikke møtt til behandling';
-      case 'IKKE_MØTT_TIL_TILTAK':
-        return 'Dato for ikke møtt til tiltak';
-      case 'IKKE_MØTT_TIL_ANNEN_AKTIVITET':
-        return 'Dato for møtt til annen aktivitet';
-      case 'IKKE_SENDT_INN_DOKUMENTASJON':
-        return 'Dato for ikke sendt inn dokumentasjon';
-      case 'IKKE_AKTIVT_BIDRAG':
-        return 'Dato for ikke bidratt til egen avklaring';
-      default: {
-        return 'Dato for fravær';
-      }
-    }
-  }
+  const { fields, remove, append } = useFieldArray({
+    control: form.control,
+    name: 'perioder',
+  });
 
   const valgtBrudd = form.watch('brudd');
   const valgtParagraf = form.watch('paragraf');
 
   const skalVelgeParagraf = ['IKKE_MØTT_TIL_TILTAK', 'IKKE_MØTT_TIL_BEHANDLING'].includes(valgtBrudd);
-
   const skalViseDatoFeltOgBegrunnelsesfelt =
     Boolean(valgtParagraf) ||
-    valgtBrudd == 'IKKE_AKTIVT_BIDRAG' ||
-    valgtBrudd == 'IKKE_SENDT_INN_DOKUMENTASJON' ||
-    valgtBrudd == 'IKKE_MØTT_TIL_MØTE';
-
-  /**
-   * På mandag så renskriver vi denne og tester at den fungerer. Det må legges til state på inputfeltene.
-   */
-  function valdierPerioder(): PeriodeAktivitet | undefined {
-    setFeltErrors([]);
-    setError(undefined);
-    const validertePerioder: Periode[] = [];
-    const periodeErrors: PeriodeError[] = [];
-
-    bruddPåAktivitetDatoer.forEach((brudd) => {
-      if (brudd.type === 'enkeltdag') {
-        const errorMessage = validerDato(brudd.dato);
-        if (errorMessage) {
-          periodeErrors.push({
-            errorMessage,
-            id: brudd.id,
-            felt: 'dato',
-          });
-        } else if (brudd.dato) {
-          validertePerioder.push({
-            tom: formaterDatoForBackend(new Date(brudd.dato)),
-            fom: formaterDatoForBackend(new Date(brudd.dato)),
-          });
-        }
-      } else {
-        const errorMessageTom = validerDato(brudd.tom);
-        const errorMessageFom = validerDato(brudd.fom);
-
-        if (errorMessageFom) {
-          periodeErrors.push({
-            errorMessage: errorMessageFom,
-            id: brudd.id,
-            felt: 'fom',
-          });
-        }
-
-        if (errorMessageTom) {
-          periodeErrors.push({
-            errorMessage: errorMessageTom,
-            id: brudd.id,
-            felt: 'tom',
-          });
-        }
-
-        if (!errorMessageTom && !errorMessageFom && brudd.tom && brudd.fom) {
-          validertePerioder.push({
-            tom: formaterDatoForBackend(new Date(brudd.tom)),
-            fom: formaterDatoForBackend(new Date(brudd.fom)),
-          });
-        }
-      }
-    });
-
-    const harOverlappendePerioder = harPerioderSomOverlapper(validertePerioder);
-
-    if (harOverlappendePerioder) {
-      setError('Det finnes overlappende perioder');
-    }
-
-    if (periodeErrors.length > 0) {
-      setFeltErrors(periodeErrors);
-      return undefined;
-    } else {
-      return validertePerioder;
-    }
-  }
-
-  function validerDato(value?: string) {
-    if (!value) {
-      return 'Du må skrive inn en dato';
-    }
-
-    const inputDato = parseDatoFraDatePicker(value);
-    if (!inputDato) {
-      return 'Dato for når søker har forsørgeransvar fra er ikke gyldig';
-    }
-  }
+    ['IKKE_AKTIVT_BIDRAG', 'IKKE_SENDT_INN_DOKUMENTASJON', 'IKKE_MØTT_TIL_MØTE'].includes(valgtBrudd);
 
   return (
     <SideProsessKort
@@ -231,19 +107,21 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         <form
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
-            const validertePerioder = valdierPerioder();
+            await opprettAktivitetspliktBrudd({
+              brudd: data.brudd,
+              begrunnelse: data.begrunnelse,
+              paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
+              perioder: data.perioder.map((periode) => {
+                if (periode.type === 'enkeltdag') {
+                  return { tom: periode.dato, fom: periode.dato };
+                } else {
+                  return { tom: periode.tom, fom: periode.fom };
+                }
+              }),
+              saksnummer: saksnummer,
+            });
 
-            if (validertePerioder) {
-              await opprettAktivitetspliktBrudd({
-                brudd: data.brudd,
-                begrunnelse: data.begrunnelse,
-                paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
-                perioder: validertePerioder,
-                saksnummer: saksnummer,
-              });
-
-              await revalidateAktivitetspliktHendelser(saksnummer);
-            }
+            await revalidateAktivitetspliktHendelser(saksnummer);
           })}
         >
           <FormField form={form} formField={formFields.brudd} />
@@ -252,19 +130,14 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
           {skalViseDatoFeltOgBegrunnelsesfelt && (
             <div className={'flex-column'}>
               <b>{hentDatoLabel(valgtBrudd)}</b>
-              <AktivitetsmeldingDatoTabell
-                bruddDatoPerioder={bruddPåAktivitetDatoer}
-                setBruddDatoPerioder={setBruddPåAktivitetDatoer}
-                errors={feltErrors}
-              />
-              {error && <Alert variant={'error'}>{error}</Alert>}
+              <AktivitetsmeldingDatoTabell form={form} fields={fields} remove={remove} />
               <div className={'flex-row'}>
                 <Button
                   icon={<PlusCircleIcon />}
                   type={'button'}
                   variant={'tertiary'}
                   size={'small'}
-                  onClick={() => leggTilNyEnkeltDato()}
+                  onClick={() => append({ type: 'enkeltdag', dato: '' })}
                 >
                   Legg til enkeltdato
                 </Button>
@@ -273,7 +146,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
                   type={'button'}
                   variant={'tertiary'}
                   size={'small'}
-                  onClick={() => leggTilNyPeriode()}
+                  onClick={() => append({ type: 'periode', fom: '', tom: '' })}
                 >
                   Legg til periode
                 </Button>
@@ -288,3 +161,23 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
     </SideProsessKort>
   );
 };
+
+function hentDatoLabel(valgtBrudd: AktivitetspliktBrudd): string {
+  switch (valgtBrudd) {
+    case 'IKKE_MØTT_TIL_MØTE':
+      return 'Dato for ikke møtt i tiltak';
+    case 'IKKE_MØTT_TIL_BEHANDLING':
+      return 'Dato for ikke møtt til behandling';
+    case 'IKKE_MØTT_TIL_TILTAK':
+      return 'Dato for ikke møtt til tiltak';
+    case 'IKKE_MØTT_TIL_ANNEN_AKTIVITET':
+      return 'Dato for møtt til annen aktivitet';
+    case 'IKKE_SENDT_INN_DOKUMENTASJON':
+      return 'Dato for ikke sendt inn dokumentasjon';
+    case 'IKKE_AKTIVT_BIDRAG':
+      return 'Dato for ikke bidratt til egen avklaring';
+    default: {
+      return 'Dato for fravær';
+    }
+  }
+}
