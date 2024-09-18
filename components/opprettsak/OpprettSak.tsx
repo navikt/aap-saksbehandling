@@ -15,12 +15,14 @@ interface Barn {
   harRelasjon: string;
 }
 
+type Institusjon = 'fengsel' | 'sykehus';
+
 export interface OpprettSakFormFields {
   fødselsdato: Date;
   yrkesskade: string;
   student: string;
   barn?: Barn[];
-  institusjon: ['fengsel', 'sykehus'];
+  institusjon: Institusjon[];
 }
 
 export const OpprettSak = () => {
@@ -43,9 +45,7 @@ export const OpprettSak = () => {
       options: JaEllerNeiOptions,
     },
     barn: {
-      type: 'text', // Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
-      label: 'Ikke relevant', // Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
-      // @ts-ignore Vi har ikke støtte for dynamiske skjemaer i useConfigForm. Konfigurasjonen brukes ikke til noe, men den må settes for å kunne angi en standardverdi.
+      type: 'fieldArray',
       defaultValue: [{ fodselsdato: '2015', harRelasjon: 'folkeregistrertBarn' }],
     },
     institusjon: {
@@ -55,7 +55,6 @@ export const OpprettSak = () => {
         { label: 'Er innlagt på sykehus', value: 'sykehus' },
         { label: 'Er i fengsel', value: 'fengsel' },
       ],
-      defaultValue: [],
     },
   });
 

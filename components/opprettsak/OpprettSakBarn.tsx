@@ -2,10 +2,10 @@ import React from 'react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { OpprettSakFormFields } from 'components/opprettsak/OpprettSak';
 import styles from 'components/opprettsak/OpprettSak.module.css';
-import { Button, Select, TextField } from '@navikt/ds-react';
-import { validerÅrstall } from 'lib/utils/validation';
+import { Button } from '@navikt/ds-react';
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
 import { JaEllerNei } from 'lib/utils/form';
+import { SelectWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;
@@ -24,23 +24,16 @@ export const OpprettSakBarn = ({ form }: Props) => {
           <div key={field.id} className={'flex-column'}>
             <div>
               <div className={styles.barn}>
-                <TextField
-                  size={'small'}
+                <TextFieldWrapper
                   label={`Barn ${index + 1} Årstall`}
-                  {...form.register(`barn.${index}.fodselsdato`, { validate: (value) => validerÅrstall(value) })}
-                  error={
-                    form?.formState?.errors?.barn ? form.formState.errors.barn[index]?.fodselsdato?.message : undefined
-                  }
+                  control={form.control}
+                  name={`barn.${index}.fodselsdato`}
+                  type={'text'}
                 />
-                <Select
-                  label={'Hvilket barn er det?'}
-                  size={'small'}
-                  {...form.register(`barn.${index}.harRelasjon`)}
-                  name={`barn.${index}.harRelasjon`}
-                >
+                <SelectWrapper label={'Hvilket barn er det?'} name={`barn.${index}.harRelasjon`} control={form.control}>
                   <option value={'manueltBarn'}>Manuelt barn</option>
                   <option value={'folkeregistrertBarn'}>Folkeregistrert barn</option>
-                </Select>
+                </SelectWrapper>
                 <Button
                   type="button"
                   variant={'tertiary'}
