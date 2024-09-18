@@ -11,9 +11,16 @@ interface Props {
   oppdaterPerioder: Dispatch<SetStateAction<MeldepliktPeriode[]>>;
   vurderingstidspunkt?: string;
   valideringsfeil: Valideringsfeil[];
+  readOnly: boolean;
 }
 
-export const Periodetabell = ({ perioder, oppdaterPerioder, vurderingstidspunkt, valideringsfeil }: Props) => {
+export const Periodetabell = ({
+  perioder,
+  oppdaterPerioder,
+  vurderingstidspunkt,
+  valideringsfeil,
+  readOnly,
+}: Props) => {
   const slettRad = (index: number) => {
     oppdaterPerioder((prevState) => [...prevState.toSpliced(index, 1)]);
   };
@@ -50,6 +57,7 @@ export const Periodetabell = ({ perioder, oppdaterPerioder, vurderingstidspunkt,
                 error={
                   valideringsfeil.find((feil) => feil.felt === 'fritakFraMeldeplikt' && feil.index === index)?.message
                 }
+                readOnly={readOnly}
               >
                 <option>-</option>
                 <option value={JaEllerNei.Ja}>Ja</option>
@@ -63,6 +71,7 @@ export const Periodetabell = ({ perioder, oppdaterPerioder, vurderingstidspunkt,
                 onChange={(event) => oppdater(event.currentTarget.value, index, 'fom')}
                 value={periode.fom ?? ''}
                 error={valideringsfeil.find((feil) => feil.felt === 'fom' && feil.index === index)?.message}
+                readOnly={readOnly}
               />
             </Table.DataCell>
             <Table.DataCell>
@@ -73,12 +82,13 @@ export const Periodetabell = ({ perioder, oppdaterPerioder, vurderingstidspunkt,
                   onChange={(event) => oppdater(event.currentTarget.value, index, 'tom')}
                   value={periode.tom ?? ''}
                   error={valideringsfeil.find((feil) => feil.felt === 'tom' && feil.index === index)?.message}
+                  readOnly={readOnly}
                 />
               )}
             </Table.DataCell>
             <Table.DataCell>{vurderingstidspunkt && formaterDatoForVisning(vurderingstidspunkt)}</Table.DataCell>
             <Table.DataCell>
-              {perioder.length > 1 && (
+              {perioder.length > 1 && !readOnly && (
                 <Button type={'button'} onClick={() => slettRad(index)}>
                   Slett
                 </Button>

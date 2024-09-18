@@ -152,7 +152,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
 
   const handleSubmit = () => {
     const { errors, mappetSkjema } = validerOgMapSkjema();
-    console.log(errors);
+
     oppdaterSkjemafeil([]);
     if (errors.length > 0 || !begrunnelse) {
       oppdaterSkjemafeil(errors);
@@ -201,6 +201,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
         description={'Begrunn vurderingen'}
         value={begrunnelse}
         error={skjemafeil.find((feil) => feil.felt === 'begrunnelse')?.message}
+        readOnly={readOnly}
       />
       <Veiledning
         header={'Slik vurderes dette'}
@@ -226,14 +227,17 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
         oppdaterPerioder={oppdaterPerioder}
         vurderingstidspunkt={grunnlag?.vurderingsTidspunkt}
         valideringsfeil={skjemafeil}
+        readOnly={readOnly}
       />
       <p className={`navds-error-message navds-label ${styles.periodeoverlapp_feilmelding}`}>
         {skjemafeil.find((feil) => feil.felt === 'periodeoverlapp')?.message}
       </p>
 
-      <Button variant={'tertiary'} icon={<PlusCircleIcon />} type={'button'} onClick={() => leggTilRad()}>
-        Legg til periode med fritak
-      </Button>
+      {!readOnly && (
+        <Button variant={'tertiary'} icon={<PlusCircleIcon />} type={'button'} onClick={() => leggTilRad()}>
+          Legg til periode med fritak
+        </Button>
+      )}
       <div>
         {!readOnly && (
           <Button className={'fit-content-button'} form="dokument-form" onClick={handleSubmit} loading={isLoading}>
