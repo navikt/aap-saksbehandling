@@ -820,26 +820,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-css@npm:^1.8.8":
-  version: 1.8.8
-  resolution: "@navikt/aap-felles-css@npm:1.8.8::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F1.8.8%2Fe372fc8d6e87f9038711c8cba218006a000ac536"
-  checksum: 10c0/2c2802ea52fa51a292bb745fc5b4d376fd47c0de56ee10f85c597cb405875e4e04ae1f581e9329c6f0372ffecaceb9e7816d0a87bb8aef058fb1ef1c47bf54eb
+"@navikt/aap-felles-css@npm:^1.8.10":
+  version: 1.8.10
+  resolution: "@navikt/aap-felles-css@npm:1.8.10::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F1.8.10%2F16deba21d313e3ccabd84fb15c5c9a09995aa093"
+  checksum: 10c0/5ee1a9ef26d98c470a7f1758d65ed316ce81db2e7c072bd6b222006f27f1b16dcfb101be6172e2450e90ca288daf99fe3ab913869020e51ff1b6a810ec932197
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-prettier@npm:^1.8.8":
-  version: 1.8.8
-  resolution: "@navikt/aap-felles-prettier@npm:1.8.8::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F1.8.8%2F596802329cceab85d281667a2d9b45a09cfaac59"
+"@navikt/aap-felles-prettier@npm:^1.8.10":
+  version: 1.8.10
+  resolution: "@navikt/aap-felles-prettier@npm:1.8.10::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F1.8.10%2F9795ed8e6c561a2cc7d7f39718f008d192e324fc"
   dependencies:
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
     prettier: "npm:^3.3.2"
-  checksum: 10c0/628c5511d8f6031bf5c3fc21f4ec607d477825a54584c15a0ebb7e39e5a644d824370e761021e8adb72806593315d1ae3db2303e33a601312224bb7497ebe451
+  checksum: 10c0/38b3e57f5995f6d16d1cd096c0d0a043107a89829734cdba9c3c27f40ba9634a32c0209e13b953f3a214437b33657b1c1d4b22a7b06ada92b14a29f9970db332
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-react@npm:^1.8.8":
-  version: 1.8.8
-  resolution: "@navikt/aap-felles-react@npm:1.8.8::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-react%2F1.8.8%2F0e3e85833e545de301a57ec5be3f5b23284338c7"
+"@navikt/aap-felles-react@npm:^1.8.10":
+  version: 1.8.10
+  resolution: "@navikt/aap-felles-react@npm:1.8.10::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-react%2F1.8.10%2F30163c0afb34478cf82ce6e50f6320f9f5613e67"
   dependencies:
     "@navikt/aksel-icons": "npm:^6.16.3"
     "@navikt/ds-css": "npm:^6.16.3"
@@ -849,22 +849,22 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-hook-form: "npm:^7.53.0"
     uuid: "npm:^10.0.0"
-  checksum: 10c0/eb5b3b13a06d04867e88f12c791f79beb84e8bcf7b40969d846069a0d97d6c5e7a918d58186c50b3f4ddbbf1d3bcade8f1754a992c6df1d7d6833631726aa05e
+  checksum: 10c0/9451eaf576ca2cabdc907231785959b0fdf4042cbfc26d4564c07e6abec0ca726203e6d75dc6d3dcf2ab4705d920daf49e17381093adab21d1450304bfe584e8
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils-client@npm:^1.8.8":
-  version: 1.8.8
-  resolution: "@navikt/aap-felles-utils-client@npm:1.8.8::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils-client%2F1.8.8%2F2649703ebd32912206f3dcbf93b36ffd251fccc3"
+"@navikt/aap-felles-utils-client@npm:^1.8.10":
+  version: 1.8.10
+  resolution: "@navikt/aap-felles-utils-client@npm:1.8.10::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils-client%2F1.8.10%2F743eb7f40f8ff386fb4947c70a8668736e587287"
   dependencies:
     date-fns: "npm:^3.6.0"
-  checksum: 10c0/0b9442017ba1868f2b20e7597501f36ff4b1a5a69ab202c55f7a29855b60254216cead9cbfb9a5c6eeef4eed3006c31e46fccbced9df96503e0c52b2ba3cf519
+  checksum: 10c0/e718cf53b6dc29da9929af62658374d4711cf77bd96ee3f4a8e2c1882e9da2d478689539068cc827676d34a91756247c2497d73cb544360f3cccc5000a97303c
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils@npm:^1.8.8":
-  version: 1.8.8
-  resolution: "@navikt/aap-felles-utils@npm:1.8.8::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F1.8.8%2Fbac6d055ae9297a8064216bad21953642f3e6b15"
+"@navikt/aap-felles-utils@npm:^1.8.10":
+  version: 1.8.10
+  resolution: "@navikt/aap-felles-utils@npm:1.8.10::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F1.8.10%2Fe031d6fea9eb0b1c4b129a54bea79fae48247754"
   dependencies:
     "@navikt/oasis": "npm:^3.3.0"
     axios: "npm:^1.7.2"
@@ -874,7 +874,7 @@ __metadata:
     pino: "npm:^9.2.0"
     prom-client: "npm:^15.1.3"
     server-only: "npm:^0.0.1"
-  checksum: 10c0/aca7f39cd3adb87b30cf93229420ab8a129f6d38699e2d996c19645d4a43c55264528df932acca8660036908e2954f7075b4f49b5b0a7e2db99f6cade2dfbc16
+  checksum: 10c0/7203ce3203b4952289a569eca7f49e5be051c709b6b32ed8a23d1b0377dad44321ab30506ce25a64f0bdbc34c9ce6d35aebc4da825ad73f0fe92d333dcf63cb2
   languageName: node
   linkType: hard
 
@@ -917,20 +917,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/eslint-config-aap@npm:^1.8.8":
-  version: 1.8.8
-  resolution: "@navikt/eslint-config-aap@npm:1.8.8::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Feslint-config-aap%2F1.8.8%2Ffc8441e4ebce036a4f338b73368f47d5e4f0f10b"
+"@navikt/eslint-config-aap@npm:^1.8.10":
+  version: 1.8.10
+  resolution: "@navikt/eslint-config-aap@npm:1.8.10::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Feslint-config-aap%2F1.8.10%2Fe71cfc56bb02a251ad248bdf1fadb7a9f4254da8"
   peerDependencies:
     "@typescript-eslint/eslint-plugin": ^7.7.0
     "@typescript-eslint/parser": ^7.7.0
     eslint: ^8.56.0
     eslint-config-standard: ^17.0.0
-    eslint-plugin-import: ^2.29.1
     eslint-plugin-jest: ^28.2.0
     eslint-plugin-jsx-a11y: ^6.7.1
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
-  checksum: 10c0/5083b37b32cb73cf2d444612f5c98b44a0098c7f55051ecdfa8779237bb116f5306204746d8e2bca05eb8a7fe809f134edfbdb3d3fb36a4c94f9373f9b25a82e
+  checksum: 10c0/ee06543ba16c896a47bb456872336420e18bac20f19c7f83450013b4243250a6ee7fb069a496c0580d575498e9496110218f89304b770945ccf639bacb496fa7
   languageName: node
   linkType: hard
 
@@ -1525,13 +1524,6 @@ __metadata:
   version: 4.18.1
   resolution: "@rollup/rollup-win32-x64-msvc@npm:4.18.1"
   conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@rtsao/scc@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@rtsao/scc@npm:1.1.0"
-  checksum: 10c0/b5bcfb0d87f7d1c1c7c0f7693f53b07866ed9fec4c34a97a8c948fb9a7c0082e416ce4d3b60beb4f5e167cbe04cdeefbf6771320f3ede059b9ce91188c409a5b
   languageName: node
   linkType: hard
 
@@ -2828,15 +2820,15 @@ __metadata:
   resolution: "aap-saksbehandling@workspace:."
   dependencies:
     "@grafana/faro-web-sdk": "npm:^1.9.1"
-    "@navikt/aap-felles-css": "npm:^1.8.8"
-    "@navikt/aap-felles-prettier": "npm:^1.8.8"
-    "@navikt/aap-felles-react": "npm:^1.8.8"
-    "@navikt/aap-felles-utils": "npm:^1.8.8"
-    "@navikt/aap-felles-utils-client": "npm:^1.8.8"
+    "@navikt/aap-felles-css": "npm:^1.8.10"
+    "@navikt/aap-felles-prettier": "npm:^1.8.10"
+    "@navikt/aap-felles-react": "npm:^1.8.10"
+    "@navikt/aap-felles-utils": "npm:^1.8.10"
+    "@navikt/aap-felles-utils-client": "npm:^1.8.10"
     "@navikt/aksel-icons": "npm:6.16.3"
     "@navikt/ds-css": "npm:6.16.3"
     "@navikt/ds-react": "npm:6.16.3"
-    "@navikt/eslint-config-aap": "npm:^1.8.8"
+    "@navikt/eslint-config-aap": "npm:^1.8.10"
     "@navikt/oasis": "npm:^3.4.0"
     "@portabletext/react": "npm:^3.1.0"
     "@sanity/client": "npm:^6.21.3"
@@ -2870,7 +2862,6 @@ __metadata:
     eslint: "npm:^8.57.0"
     eslint-config-next: "npm:^14.2.8"
     eslint-config-standard: "npm:^17.1.0"
-    eslint-plugin-import: "npm:^2.30.0"
     eslint-plugin-jest: "npm:^28.8.3"
     eslint-plugin-jsx-a11y: "npm:^6.10.0"
     eslint-plugin-n: "npm:^16.6.2"
@@ -3131,7 +3122,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"array.prototype.findlastindex@npm:^1.2.3, array.prototype.findlastindex@npm:^1.2.5":
+"array.prototype.findlastindex@npm:^1.2.3":
   version: 1.2.5
   resolution: "array.prototype.findlastindex@npm:1.2.5"
   dependencies:
@@ -4549,18 +4540,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-module-utils@npm:^2.9.0":
-  version: 2.11.0
-  resolution: "eslint-module-utils@npm:2.11.0"
-  dependencies:
-    debug: "npm:^3.2.7"
-  peerDependenciesMeta:
-    eslint:
-      optional: true
-  checksum: 10c0/c1b02e83429878ab22596f17a5ac138e51a520e96a5ef89a5a6698769a2d174ab28302d45eb563c0fc418d21a5842e328c37a6e8f294bf2e64e675ba55203dd7
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-es-x@npm:^7.5.0":
   version: 7.8.0
   resolution: "eslint-plugin-es-x@npm:7.8.0"
@@ -4598,34 +4577,6 @@ __metadata:
   peerDependencies:
     eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
   checksum: 10c0/5f35dfbf4e8e67f741f396987de9504ad125c49f4144508a93282b4ea0127e052bde65ab6def1f31b6ace6d5d430be698333f75bdd7dca3bc14226c92a083196
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-import@npm:^2.30.0":
-  version: 2.30.0
-  resolution: "eslint-plugin-import@npm:2.30.0"
-  dependencies:
-    "@rtsao/scc": "npm:^1.1.0"
-    array-includes: "npm:^3.1.8"
-    array.prototype.findlastindex: "npm:^1.2.5"
-    array.prototype.flat: "npm:^1.3.2"
-    array.prototype.flatmap: "npm:^1.3.2"
-    debug: "npm:^3.2.7"
-    doctrine: "npm:^2.1.0"
-    eslint-import-resolver-node: "npm:^0.3.9"
-    eslint-module-utils: "npm:^2.9.0"
-    hasown: "npm:^2.0.2"
-    is-core-module: "npm:^2.15.1"
-    is-glob: "npm:^4.0.3"
-    minimatch: "npm:^3.1.2"
-    object.fromentries: "npm:^2.0.8"
-    object.groupby: "npm:^1.0.3"
-    object.values: "npm:^1.2.0"
-    semver: "npm:^6.3.1"
-    tsconfig-paths: "npm:^3.15.0"
-  peerDependencies:
-    eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
-  checksum: 10c0/4c9dcb1f27505c4d5dd891d2b551f56c70786d136aa3992a77e785bdc67c9f60200a2c7fb0ce55b7647fe550b12bc433d5dfa59e2c00ab44227791c5ab86badf
   languageName: node
   linkType: hard
 
@@ -5781,15 +5732,6 @@ __metadata:
   dependencies:
     hasown: "npm:^2.0.2"
   checksum: 10c0/ae8dbc82bd20426558bc8d20ce290ce301c1cfd6ae4446266d10cacff4c63c67ab16440ade1d72ced9ec41c569fbacbcee01e293782ce568527c4cdf35936e4c
-  languageName: node
-  linkType: hard
-
-"is-core-module@npm:^2.15.1":
-  version: 2.15.1
-  resolution: "is-core-module@npm:2.15.1"
-  dependencies:
-    hasown: "npm:^2.0.2"
-  checksum: 10c0/53432f10c69c40bfd2fa8914133a68709ff9498c86c3bf5fca3cdf3145a56fd2168cbf4a43b29843a6202a120a5f9c5ffba0a4322e1e3441739bc0b641682612
   languageName: node
   linkType: hard
 
@@ -7196,7 +7138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object.groupby@npm:^1.0.1, object.groupby@npm:^1.0.3":
+"object.groupby@npm:^1.0.1":
   version: 1.0.3
   resolution: "object.groupby@npm:1.0.3"
   dependencies:
