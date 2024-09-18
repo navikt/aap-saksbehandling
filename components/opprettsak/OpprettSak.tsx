@@ -22,7 +22,7 @@ export interface OpprettSakFormFields {
   yrkesskade: string;
   student: string;
   barn?: Barn[];
-  institusjon: Institusjon[];
+  institusjon?: Institusjon[];
 }
 
 export const OpprettSak = () => {
@@ -74,8 +74,8 @@ export const OpprettSak = () => {
               };
             }) || [],
           institusjoner: {
-            sykehus: data.institusjon.includes('sykehus'),
-            fengsel: data.institusjon.includes('fengsel'),
+            sykehus: data?.institusjon?.includes('sykehus'),
+            fengsel: data?.institusjon?.includes('fengsel'),
           },
         });
         await mutate('api/sak/alle');
