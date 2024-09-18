@@ -15,6 +15,8 @@ import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { notFound } from 'next/navigation';
 import { StegGruppe } from 'lib/types/types';
+import { DokumentProvider } from 'components/dokumentprovider/DokumentProvider';
+import { POCDokumentTabell } from 'components/dokumentprovider/POCDokumentTabell';
 
 interface Props {
   children: ReactNode;
@@ -49,13 +51,16 @@ const Layout = async ({ children, params }: Props) => {
 
       <StegGruppeIndikatorAksel flytRespons={flytResponse} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
 
-      <HGrid columns={visToTrinnsvurdering ? '1fr 3fr 2fr' : '1fr 3fr 1fr'}>
-        {children}
-        <div className={`${styles.høyrekolonne} flex-column`}>
-          <Behandlingsinfo behandling={behandling} />
-          <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
-        </div>
-      </HGrid>
+      <DokumentProvider>
+        <HGrid columns={visToTrinnsvurdering ? '1fr 3fr 2fr' : '1fr 3fr 1fr'}>
+          {children}
+          <div className={`${styles.høyrekolonne} flex-column`}>
+            <Behandlingsinfo behandling={behandling} />
+            <POCDokumentTabell />
+            <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
+          </div>
+        </HGrid>
+      </DokumentProvider>
     </div>
   );
 };
