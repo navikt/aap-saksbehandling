@@ -15,13 +15,13 @@ import { useFieldArray } from 'react-hook-form';
 
 interface AktvitetsPeriode {
   type: 'periode';
-  fom?: string;
-  tom?: string;
+  fom: string;
+  tom: string;
 }
 
 interface EnkeltDag {
   type: 'enkeltdag';
-  dato?: string;
+  dato: string;
 }
 
 export type DatoBruddPåAktivitetsplikt = EnkeltDag | AktvitetsPeriode;
@@ -107,15 +107,16 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         <form
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
+            console.log(data);
             await opprettAktivitetspliktBrudd({
               brudd: data.brudd,
               begrunnelse: data.begrunnelse,
               paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
               perioder: data.perioder.map((periode) => {
                 if (periode.type === 'enkeltdag') {
-                  return { tom: periode.dato, fom: periode.dato };
+                  return { fom: periode.dato, tom: periode.dato };
                 } else {
-                  return { tom: periode.tom, fom: periode.fom };
+                  return { fom: periode.fom, tom: periode.tom };
                 }
               }),
               saksnummer: saksnummer,

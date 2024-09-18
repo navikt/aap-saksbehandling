@@ -1,6 +1,6 @@
 import { Button, Table } from '@navikt/ds-react';
 
-import { FieldArray, UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
+import { FieldArrayWithId, UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { TextFieldWrapper } from '@navikt/aap-felles-react';
 import { AktivitetspliktFormFields } from 'components/aktivitetsplikt/Aktivitetsplikt';
@@ -8,7 +8,7 @@ import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 interface Props {
   form: UseFormReturn<AktivitetspliktFormFields>;
-  fields: FieldArray<AktivitetspliktFormFields>[];
+  fields: FieldArrayWithId<AktivitetspliktFormFields, 'perioder'>[];
   remove: UseFieldArrayRemove;
 }
 
@@ -40,8 +40,10 @@ export const AktivitetsmeldingDatoTabell = ({ form, fields, remove }: Props) => 
                   label={field.type === 'enkeltdag' ? 'dato' : 'fra og med dato'}
                   control={form.control}
                   type={'text'}
-                  name={field.type === 'enkeltdag' ? `periode.${index}.dato` : `periode.${index}.fom`}
-                  rules={{ required: 'Du må sette en dato', validate: (value) => validerDato(value) }}
+                  name={field.type === 'enkeltdag' ? `perioder.${index}.dato` : `perioder.${index}.fom`}
+                  rules={{
+                    validate: (value) => validerDato(value as string),
+                  }}
                 />
               </Table.DataCell>
               {field.type === 'periode' ? (
@@ -50,8 +52,8 @@ export const AktivitetsmeldingDatoTabell = ({ form, fields, remove }: Props) => 
                     label={'til og med dato'}
                     control={form.control}
                     type={'text'}
-                    name={`periode.${index}.tom`}
-                    rules={{ required: 'Du må sette en dato', validate: (value) => validerDato(value) }}
+                    name={`perioder.${index}.tom`}
+                    rules={{ validate: (value) => validerDato(value as string) }}
                   />
                 </Table.DataCell>
               ) : (
@@ -77,7 +79,10 @@ export const AktivitetsmeldingDatoTabell = ({ form, fields, remove }: Props) => 
   );
 };
 
-function validerDato(value: string) {
+function validerDato(value?: string) {
+  if (!value) {
+    return 'Du må sette en dato';
+  }
   const inputDato = parseDatoFraDatePicker(value);
   if (!inputDato) {
     return 'Dato format er ikke gyldig';
