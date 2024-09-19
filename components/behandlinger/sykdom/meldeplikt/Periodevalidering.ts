@@ -18,3 +18,14 @@ export function harPerioderSomOverlapper(perioder: Periode[]): boolean {
 
   return erOverlappendePerioder;
 }
+
+export const sjekkOmPerioderInkludererDatoer = (datoer: string[], perioder: Periode[]) => {
+  for (let i = 0; i < datoer.length; i++) {
+    const dato = new Date(datoer[i]);
+    const res = perioder.find((periode) => dato >= new Date(periode.fom) && dato <= new Date(periode.tom));
+    if (res) {
+      return true;
+    }
+  }
+  return false;
+};

@@ -12,7 +12,7 @@ import { Periodetabell } from './Periodetabell';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isBefore, parse } from 'date-fns';
-import { harPerioderSomOverlapper } from './Periodevalidering';
+import { harPerioderSomOverlapper, sjekkOmPerioderInkludererDatoer } from './Periodevalidering';
 
 import styles from './Meldeplikt.module.css';
 
@@ -155,6 +155,32 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
           felt: 'periodeoverlapp',
           message: 'Det finnes overlappende perioder.',
         });
+      }
+      // sjekk om det finnes datoer uten fritak som ligger i en periode
+      if (errors.length === 0) {
+        const perioderUtenFritak: string[] = mappetSkjema
+          .filter((periode) => !periode.harFritak)
+          .map((periode) => periode.periode.fom);
+        const perioderMedFritak: Periode[] = [];
+        mappetSkjema
+          .filter((periode) => periode.harFritak)
+          .forEach((periode) => {
+            if (periode.periode.tom) {
+              perioderMedFritak.push({
+                fom: periode.periode.fom,
+                tom: periode.periode.tom,
+              });
+            }
+          });
+        if (perioderUtenFritak.length > 0 && perioderMedFritak.length > 0) {
+          if (sjekkOmPerioderInkludererDatoer(perioderUtenFritak, perioderMedFritak)) {
+            errors.push({
+              index: -1,
+              felt: 'periodeoverlapp',
+              message: 'Det finnes overlappende perioder.',
+            });
+          }
+        }
       }
     }
 
