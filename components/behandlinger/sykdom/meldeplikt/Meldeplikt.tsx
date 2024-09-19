@@ -199,7 +199,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
         referanse: behandlingsReferanse,
         behov: {
           behovstype: Behovstype.FRITAK_MELDEPLIKT_KODE,
-          fritaksvurderingDto: {
+          fritaksvurdering: {
             begrunnelse: begrunnelse,
             fritaksPerioder: mappetSkjema,
           },
