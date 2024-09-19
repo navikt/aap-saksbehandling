@@ -6,6 +6,8 @@ import { TextFieldWrapper } from '@navikt/aap-felles-react';
 import { AktivitetspliktFormFields } from 'components/aktivitetsplikt/Aktivitetsplikt';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 
+import styles from './AktivitetsmeldingDatoTabell.module.css';
+
 interface Props {
   form: UseFormReturn<AktivitetspliktFormFields>;
   fields: FieldArrayWithId<AktivitetspliktFormFields, 'perioder'>[];
@@ -18,43 +20,41 @@ export const AktivitetsmeldingDatoTabell = ({ form, fields, remove }: Props) => 
       <Table size={'small'}>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell textSize={'small'} scope={'col'}>
-              Dato
-            </Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'} scope={'col'}>
-              Til og med dato
-            </Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'} scope={'col'}>
-              Type
-            </Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'} scope={'col'}>
-              Handling
-            </Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Dato</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Til og med dato</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Type</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Handling</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {fields.map((field, index) => (
             <Table.Row key={field.id}>
               <Table.DataCell className={'navds-table__data-cell--align-top'}>
-                <TextFieldWrapper
-                  label={field.type === 'enkeltdag' ? 'dato' : 'fra og med dato'}
-                  control={form.control}
-                  type={'text'}
-                  name={field.type === 'enkeltdag' ? `perioder.${index}.dato` : `perioder.${index}.fom`}
-                  rules={{
-                    validate: (value) => validerDato(value as string),
-                  }}
-                />
+                <div className={styles.tekstfelt}>
+                  <TextFieldWrapper
+                    label={field.type === 'enkeltdag' ? 'dato' : 'fra og med dato'}
+                    control={form.control}
+                    type={'text'}
+                    hideLabel={true}
+                    name={field.type === 'enkeltdag' ? `perioder.${index}.dato` : `perioder.${index}.fom`}
+                    rules={{
+                      validate: (value) => validerDato(value as string),
+                    }}
+                  />
+                </div>
               </Table.DataCell>
               {field.type === 'periode' ? (
                 <Table.DataCell>
-                  <TextFieldWrapper
-                    label={'til og med dato'}
-                    control={form.control}
-                    type={'text'}
-                    name={`perioder.${index}.tom`}
-                    rules={{ validate: (value) => validerDato(value as string) }}
-                  />
+                  <div className={styles.tekstfelt}>
+                    <TextFieldWrapper
+                      label={'til og med dato'}
+                      control={form.control}
+                      type={'text'}
+                      name={`perioder.${index}.tom`}
+                      hideLabel={true}
+                      rules={{ validate: (value) => validerDato(value as string) }}
+                    />
+                  </div>
                 </Table.DataCell>
               ) : (
                 <Table.DataCell />
@@ -85,6 +85,6 @@ function validerDato(value?: string) {
   }
   const inputDato = parseDatoFraDatePicker(value);
   if (!inputDato) {
-    return 'Dato format er ikke gyldig';
+    return 'Dato format er ikke gyldig. Dato må være på formatet dd.mm.yyyy';
   }
 }
