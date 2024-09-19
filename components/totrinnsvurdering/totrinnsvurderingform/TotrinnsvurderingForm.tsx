@@ -1,14 +1,14 @@
 import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
 import { Behovstype } from 'lib/utils/form';
-import { Alert, Button } from '@navikt/ds-react';
-import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, ToTrinnsVurdering } from 'lib/types/types';
+import { Button } from '@navikt/ds-react';
+import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag } from 'lib/types/types';
 import {
   behovstypeTilVilkårskortLink,
-  ToTrinnsvurderingError,
   ToTrinnsVurderingFormFields,
 } from 'components/totrinnsvurdering/ToTrinnsvurdering';
-import { useState } from 'react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useConfigForm } from '@navikt/aap-felles-react';
+import { FieldPath, useFieldArray } from 'react-hook-form';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -17,6 +17,10 @@ interface Props {
   readOnly: boolean;
   behandlingsReferanse: string;
   behandlingVersjon: number;
+}
+
+export interface FormFieldsToTrinnsVurdering {
+  totrinnsvurderinger: ToTrinnsVurderingFormFields[];
 }
 
 export const TotrinnsvurderingForm = ({
@@ -37,116 +41,80 @@ export const TotrinnsvurderingForm = ({
     };
   });
 
-  const [toTrinnsvurderingErrors, setToTrinnsvurderingErrors] = useState<ToTrinnsvurderingError[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>();
-  const [vurderinger, setVurderinger] = useState<ToTrinnsVurderingFormFields[]>(initialValue);
+  const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
+    totrinnsvurderinger: {
+      type: 'fieldArray',
+      defaultValue: initialValue,
+    },
+  });
 
-  const handleInputChange = (index: number, name: keyof ToTrinnsVurderingFormFields, value: string | string[]) => {
-    setVurderinger((prevState) =>
-      prevState.map((field, id) => (id === index ? { ...field, [name]: value, harBlittRedigert: true } : field))
-    );
-  };
+  const { fields } = useFieldArray({
+    control: form.control,
+    name: 'totrinnsvurderinger',
+  });
 
-  function validerTotrinnsvurderinger(
-    toTrinnsvurdering: ToTrinnsVurderingFormFields[]
-  ): ToTrinnsVurdering[] | undefined {
-    setToTrinnsvurderingErrors([]);
-    setErrorMessage(undefined);
-    const errors: ToTrinnsvurderingError[] = [];
-    const validatedVurderinger: ToTrinnsVurdering[] = [];
-
-    const harIkkeBlittVurdert = toTrinnsvurdering.every((vurdering) => !vurdering.harBlittRedigert);
-
-    if (harIkkeBlittVurdert) {
-      setErrorMessage('Du må gjøre minst én vurdering.');
-    }
-
-    toTrinnsvurdering.forEach((vurdering) => {
-      if (vurdering.harBlittRedigert) {
-        if (vurdering.godkjent === 'true') {
-          validatedVurderinger.push({
-            definisjon: vurdering.definisjon,
-            godkjent: true,
-            grunner: [],
-          });
-        } else if (
-          vurdering.godkjent === 'false' &&
-          vurdering.begrunnelse &&
-          vurdering.grunner &&
-          vurdering.grunner.length > 0
-        ) {
-          validatedVurderinger.push({
-            definisjon: vurdering.definisjon,
-            godkjent: false,
-            begrunnelse: vurdering.begrunnelse,
-            grunner: vurdering.grunner.map((grunn) => {
-              return {
-                årsak: grunn,
-                årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
-              };
-            }),
-          });
-        } else {
-          if (!vurdering.begrunnelse) {
-            errors.push({ felt: 'begrunnelse', definisjon: vurdering.definisjon, message: 'Du må gi en begrunnelse' });
-          }
-          if (!vurdering.grunner || vurdering.grunner.length === 0) {
-            errors.push({ felt: 'grunner', definisjon: vurdering.definisjon, message: 'Du må oppgi en grunn' });
-          }
-          if (vurdering.grunner?.find((grunn) => grunn === 'ANNET') && !vurdering.årsakFritekst) {
-            errors.push({ felt: 'årsakFritekst', definisjon: vurdering.definisjon, message: 'Du må skrive en grunn' });
-          }
-        }
-      }
-    });
-
-    setToTrinnsvurderingErrors(errors);
-
-    return errors.length > 0 ? undefined : validatedVurderinger;
-  }
+  console.log('isdirtyyyy', form.formState.isDirty);
+  console.log('dirtyyyyy fields', form.formState.dirtyFields);
 
   return (
-    <>
-      {vurderinger.map((vurdering, index) => (
+    <form
+      onSubmit={form.handleSubmit(async (data) => {
+        // Validate all the dirty fields in each form row
+        const dirtyFieldNames = fields
+          .map((_, index) =>
+            Object.keys(form.formState.dirtyFields?.totrinnsvurderinger?.[index] || {}).map(
+              (field) => `totrinnsvurderinger.${index}.${field}` as FieldPath<FormFieldsToTrinnsVurdering>
+            )
+          )
+          .flat();
+
+        const isValid = await form.trigger(dirtyFieldNames);
+
+        if (isValid) {
+          const validatedData = data.totrinnsvurderinger.filter((_, index) => {
+            return Object.keys(form.formState.dirtyFields?.totrinnsvurderinger?.[index] || {}).length > 0;
+          });
+
+          løsBehovOgGåTilNesteSteg({
+            behandlingVersjon: behandlingVersjon,
+            behov: {
+              behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+              vurderinger: validatedData.map((vurdering) => {
+                return {
+                  definisjon: vurdering.definisjon,
+                  godkjent: vurdering.godkjent === 'true',
+                  grunner: vurdering.grunner?.map((grunn) => {
+                    return {
+                      årsak: grunn,
+                      årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+                    };
+                  }),
+                  begrunnelse: vurdering.begrunnelse,
+                };
+              }),
+            },
+            referanse: behandlingsReferanse,
+          });
+        }
+      })}
+      className={'flex-column'}
+    >
+      {fields.map((field, index) => (
         <TotrinnnsvurderingFelter
-          key={vurdering.definisjon}
-          toTrinnsvurdering={vurdering}
-          erKvalitetssikring={erKvalitetssikring}
-          oppdaterVurdering={handleInputChange}
-          errors={toTrinnsvurderingErrors.filter((error) => error.definisjon === vurdering.definisjon)}
+          key={field.id}
+          form={form}
           index={index}
-          link={`${link}/${behovstypeTilVilkårskortLink(vurdering.definisjon as Behovstype)}`}
+          field={field}
+          erKvalitetssikring={erKvalitetssikring}
+          link={`${link}/${behovstypeTilVilkårskortLink(field.definisjon as Behovstype)}`}
           readOnly={readOnly}
         />
       ))}
-
       {!readOnly && (
-        <Button
-          size={'medium'}
-          className={'fit-content-button'}
-          loading={isLoading}
-          onClick={async () => {
-            const validerteToTrinnsvurderinger = validerTotrinnsvurderinger(vurderinger);
-            if (
-              toTrinnsvurderingErrors.length === 0 &&
-              validerteToTrinnsvurderinger &&
-              validerteToTrinnsvurderinger.length > 0
-            ) {
-              løsBehovOgGåTilNesteSteg({
-                behandlingVersjon: behandlingVersjon,
-                behov: {
-                  behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-                  vurderinger: validerteToTrinnsvurderinger,
-                },
-                referanse: behandlingsReferanse,
-              });
-            }
-          }}
-        >
+        <Button size={'medium'} className={'fit-content-button'} loading={isLoading}>
           Send inn
         </Button>
       )}
-      {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
-    </>
+    </form>
   );
 };

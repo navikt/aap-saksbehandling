@@ -86,6 +86,8 @@ describe('totrinnsvurderingform', () => {
     const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
     await user.click(vurderPåNyttValg);
 
+    screen.logTestingPlaygroundURL();
+
     const begrunnelseFelt = await screen.getByRole('textbox', { name: /begrunnelse/i });
     expect(begrunnelseFelt).toBeVisible();
   });

@@ -16,12 +16,12 @@
   "dependencies": {
     "@grafana/faro-web-sdk": "^1.9.1",
     "@navikt/aap-felles-css": "^1.8.12",
-    "@navikt/aap-felles-react": "^1.8.12",
-    "@navikt/aap-felles-utils": "^1.8.12",
-    "@navikt/aap-felles-utils-client": "^1.8.12",
-    "@navikt/aksel-icons": "6.16.3",
-    "@navikt/ds-css": "6.16.3",
-    "@navikt/ds-react": "6.16.3",
+    "@navikt/aap-felles-react": "^1.8.13",
+    "@navikt/aap-felles-utils": "^1.8.13",
+    "@navikt/aap-felles-utils-client": "^1.8.13",
+    "@navikt/aksel-icons": "6.17.0",
+    "@navikt/ds-css": "6.17.0",
+    "@navikt/ds-react": "6.17.0",
     "@navikt/oasis": "^3.4.0",
     "@portabletext/react": "^3.1.0",
     "@sanity/client": "^6.21.3",
@@ -51,8 +51,8 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@navikt/aap-felles-prettier": "^1.8.12",
-    "@navikt/eslint-config-aap": "^1.8.12",
+    "@navikt/aap-felles-prettier": "^1.8.13",
+    "@navikt/eslint-config-aap": "^1.8.13",
     "@sanity/types": "^3.57.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.5.0",
@@ -84,7 +84,7 @@
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
     "vite-tsconfig-paths": "^5.0.1",
-    "vitest": "^2.0.5",
+    "vitest": "^2.1.1",
     "vitest-fetch-mock": "^0.3.0"
   },
   "lint-staged": {

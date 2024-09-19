@@ -1,31 +1,29 @@
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
-import { ToTrinnsvurderingError, ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
-import { Checkbox, CheckboxGroup, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react';
+import { Checkbox, Radio, RadioGroup } from '@navikt/ds-react';
 import Link from 'next/link';
-import { ValuePair } from '@navikt/aap-felles-react';
+import {
+  CheckboxWrapper,
+  RadioGroupWrapper,
+  TextAreaWrapper,
+  TextFieldWrapper,
+  ValuePair,
+} from '@navikt/aap-felles-react';
 import { ToTrinnsVurderingGrunn } from 'lib/types/types';
+import { FieldArrayWithId, UseFormReturn } from 'react-hook-form';
+import { FormFieldsToTrinnsVurdering } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 
 interface Props {
-  toTrinnsvurdering: ToTrinnsVurderingFormFields;
-  oppdaterVurdering: (index: number, name: keyof ToTrinnsVurderingFormFields, value: string | string[]) => void;
   link: string;
-  index: number;
-  errors: ToTrinnsvurderingError[];
   readOnly: boolean;
   erKvalitetssikring: boolean;
+  index: number;
+  form: UseFormReturn<FormFieldsToTrinnsVurdering>;
+  field: FieldArrayWithId<FormFieldsToTrinnsVurdering, 'totrinnsvurderinger'>;
 }
 
-export const TotrinnnsvurderingFelter = ({
-  toTrinnsvurdering,
-  oppdaterVurdering,
-  readOnly,
-  link,
-  index,
-  errors,
-  erKvalitetssikring,
-}: Props) => {
+export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, form, index, field }: Props) => {
   const grunnOptions: ValuePair<ToTrinnsVurderingGrunn>[] = [
     { label: 'Mangelfull begrunnelse', value: 'MANGELFULL_BEGRUNNELSE' },
     { label: 'Manglende utredning', value: 'MANGLENDE_UTREDNING' },
@@ -33,55 +31,61 @@ export const TotrinnnsvurderingFelter = ({
     { label: 'Annet', value: 'ANNET' },
   ];
 
+  const vurderingErIkkeGodkjent = form.watch(`totrinnsvurderinger.${index}.godkjent`) === 'false';
+  const annetGrunnErValgt =
+    form.watch(`totrinnsvurderinger.${index}.grunner`) &&
+    form.watch(`totrinnsvurderinger.${index}.grunner`)?.includes('ANNET');
+
   return (
     <div className={styles.beslutterform}>
       <div
         className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
       >
-        <Link href={link}>{mapBehovskodeTilBehovstype(toTrinnsvurdering.definisjon as Behovstype)}</Link>
+        <Link href={link}>{mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}</Link>
       </div>
       <div className={styles.felter}>
-        <RadioGroup
-          legend={'Er du enig i vurderingen av vilkåret?'}
-          onChange={(value) => oppdaterVurdering(index, 'godkjent', value)}
-          size={'small'}
-          hideLegend
+        <RadioGroupWrapper
+          label={'Er du enig i vurderingen av vilkåret?'}
+          control={form.control}
+          name={`totrinnsvurderinger.${index}.godkjent`}
           readOnly={readOnly}
-          error={errors.find((error) => error.felt === 'godkjent')?.message}
         >
           <Radio value={'true'}>Godkjenn</Radio>
           <Radio value={'false'}>Send tilbake</Radio>
-        </RadioGroup>
-        {toTrinnsvurdering.godkjent === 'false' && (
+        </RadioGroupWrapper>
+
+        {vurderingErIkkeGodkjent && (
           <>
-            <Textarea
+            <TextAreaWrapper
               label={'Begrunnelse'}
-              size={'small'}
               readOnly={readOnly}
-              onChange={(e) => oppdaterVurdering(index, 'begrunnelse', e.target.value)}
-              error={errors.find((error) => error.felt === 'begrunnelse')?.message}
+              control={form.control}
+              name={`totrinnsvurderinger.${index}.begrunnelse`}
+              rules={{ required: 'Du må gi en begrunnelse' }}
             />
-            <CheckboxGroup
-              legend={'Velg grunn'}
+            <CheckboxWrapper
+              label={'Velg grunn'}
               description={'Du må minst velge èn grunn'}
-              onChange={(value) => oppdaterVurdering(index, 'grunner', value)}
-              size={'small'}
               readOnly={readOnly}
-              error={errors.find((error) => error.felt === 'grunner')?.message}
+              control={form.control}
+              name={`totrinnsvurderinger.${index}.grunner`}
+              rules={{ required: 'Du må oppgi en grunn' }}
             >
               {grunnOptions.map((option) => (
                 <Checkbox value={option.value} key={option.value}>
                   {option.label}
                 </Checkbox>
               ))}
-            </CheckboxGroup>
-            {toTrinnsvurdering.grunner?.find((grunn) => grunn === 'ANNET') && (
-              <TextField
+            </CheckboxWrapper>
+
+            {annetGrunnErValgt && (
+              <TextFieldWrapper
                 label={'Beskriv returårsak'}
-                size={'small'}
                 readOnly={readOnly}
-                onChange={(e) => oppdaterVurdering(index, 'årsakFritekst', e.target.value)}
-                error={errors.find((error) => error.felt === 'årsakFritekst')?.message}
+                control={form.control}
+                name={`totrinnsvurderinger.${index}.årsakFritekst`}
+                type={'text'}
+                rules={{ required: 'Du må skrive en grunn' }}
               />
             )}
           </>

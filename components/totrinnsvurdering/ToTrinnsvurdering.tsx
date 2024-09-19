@@ -1,15 +1,15 @@
 'use client';
 
-import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, ToTrinnsVurderingGrunn } from 'lib/types/types';
-
-import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
 import { useState } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useParams } from 'next/navigation';
 import { Historikk } from 'components/totrinnsvurdering/historikk/Historikk';
-import { ToTrinnsvurderingToggleGroup } from 'components/totrinnsvurdering/totrinnsvurderingtogglegroup/ToTrinnsvurderingToggleGroup';
 import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsummering';
+import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, ToTrinnsVurderingGrunn } from 'lib/types/types';
+import { ToTrinnsvurderingToggleGroup } from 'components/totrinnsvurdering/totrinnsvurderingtogglegroup/ToTrinnsvurderingToggleGroup';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
+
+import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -24,14 +24,7 @@ export interface ToTrinnsVurderingFormFields {
   begrunnelse?: string;
   grunner?: ToTrinnsVurderingGrunn[];
   årsakFritekst?: string;
-  harBlittRedigert: boolean;
   definisjon: string;
-}
-
-export interface ToTrinnsvurderingError {
-  definisjon: string;
-  felt: keyof ToTrinnsVurderingFormFields;
-  message: string;
 }
 
 export const ToTrinnsvurdering = ({
