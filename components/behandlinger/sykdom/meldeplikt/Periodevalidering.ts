@@ -35,3 +35,14 @@ export function harPerioderSomOverlapper(perioder: Periode[]): boolean {
 function parseTilddmmyyyy(value: string) {
   return parse(value, 'dd.MM.yyyy', new Date());
 }
+
+export const sjekkOmPerioderInkludererDatoer = (datoer: string[], perioder: Periode[]) => {
+  for (let i = 0; i < datoer.length; i++) {
+    const dato = new Date(datoer[i]);
+    const res = perioder.find((periode) => dato >= new Date(periode.fom) && dato <= new Date(periode.tom));
+    if (res) {
+      return true;
+    }
+  }
+  return false;
+};
