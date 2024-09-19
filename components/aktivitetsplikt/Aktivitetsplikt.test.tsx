@@ -189,6 +189,36 @@ describe('aktivitetsmelding', () => {
     expect(screen.getAllByRole('textbox', { name: /til og med dato/i }).length).toEqual(1);
   });
 
+  it('skal vise en feilmelding dersom det finnes overlappende perioder', async () => {
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_8();
+
+    const leggTilPeriodeKnapp = screen.getByRole('button', { name: /legg til periode/i });
+    await user.click(leggTilPeriodeKnapp);
+    await user.click(leggTilPeriodeKnapp);
+
+    const fraOgMedFelt = screen.getAllByRole('textbox', { name: /fra og med dato/i });
+    const tilOgMedFelt = screen.getAllByRole('textbox', { name: /til og med dato/i });
+
+    await user.type(fraOgMedFelt[0], '01.01.2020');
+    await user.type(tilOgMedFelt[0], '01.02.2020');
+
+    await user.type(fraOgMedFelt[1], '15.01.2020');
+    await user.type(tilOgMedFelt[1], '24.02.2020');
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: /begrunnelse/i,
+    });
+
+    await user.type(begrunnelseFelt, 'Dette er en begrunnelse');
+    const bekreftKnapp = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(bekreftKnapp);
+
+    const feilmelding = screen.getByText('Det finnes overlappende perioder');
+    expect(feilmelding).toBeVisible();
+  });
+
   async function velgIkkeMøttITiltakSomBrudd() {
     const ikkeMøttilTiltakValg = screen.getByRole('radio', { name: /ikke møtt i tiltak/i });
     await user.click(ikkeMøttilTiltakValg);

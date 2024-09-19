@@ -1,14 +1,27 @@
 import { Periode } from 'lib/types/types';
+import { parse } from 'date-fns';
+
+interface ParsedPeriode {
+  fom: Date;
+  tom: Date;
+}
 
 export function harPerioderSomOverlapper(perioder: Periode[]): boolean {
-  const sortertePerioder = perioder.sort((a, b) => new Date(a.fom).getTime() - new Date(b.fom).getTime());
+  const parsedPerioder: ParsedPeriode[] = perioder.map((periode) => {
+    return {
+      tom: parseTilddmmyyyy(periode.tom),
+      fom: parseTilddmmyyyy(periode.fom),
+    };
+  });
+
+  const sortertePerioder = parsedPerioder.sort((a, b) => a.fom.getTime() - b.fom.getTime());
 
   let erOverlappendePerioder = false;
-  let forrigePeriode: Periode | null = null;
+  let forrigePeriode: ParsedPeriode | null = null;
 
   sortertePerioder.forEach((periode) => {
     if (forrigePeriode) {
-      if (new Date(periode.fom) < new Date(forrigePeriode.tom)) {
+      if (periode.fom < forrigePeriode.tom) {
         erOverlappendePerioder = true;
       }
     }
@@ -19,13 +32,6 @@ export function harPerioderSomOverlapper(perioder: Periode[]): boolean {
   return erOverlappendePerioder;
 }
 
-export const sjekkOmPerioderInkludererDatoer = (datoer: string[], perioder: Periode[]) => {
-  for (let i = 0; i < datoer.length; i++) {
-    const dato = new Date(datoer[i]);
-    const res = perioder.find((periode) => dato >= new Date(periode.fom) && dato <= new Date(periode.tom));
-    if (res) {
-      return true;
-    }
-  }
-  return false;
-};
+function parseTilddmmyyyy(value: string) {
+  return parse(value, 'dd.MM.yyyy', new Date());
+}

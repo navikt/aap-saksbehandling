@@ -4,13 +4,15 @@ import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { AktivitetspliktHendelserTabell } from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
-import { Button } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import { AktivitetspliktBrudd, AktivitetspliktHendelse, AktivitetspliktParagraf } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useFieldArray } from 'react-hook-form';
+import { harPerioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
+import { useState } from 'react';
 
 interface AktvitetsPeriode {
   type: 'periode';
@@ -55,6 +57,7 @@ const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
 
 export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
   const saksnummer = useSaksnummer();
+  const [errorMessage, setErrorMessage] = useState('');
   const { form, formFields } = useConfigForm<AktivitetspliktFormFields>(
     {
       brudd: {
@@ -77,7 +80,6 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
       },
       perioder: {
         type: 'fieldArray',
-        defaultValue: undefined,
       },
     },
     { shouldUnregister: true }
@@ -106,24 +108,29 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         <form
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
-            console.log(data);
+            const perioder = data.perioder.map((periode) => {
+              if (periode.type === 'enkeltdag') {
+                return { fom: periode.dato, tom: periode.dato };
+              } else {
+                return { fom: periode.fom, tom: periode.tom };
+              }
+            });
 
-            // Ikke åpne denne før backend er klar.
-            // await opprettAktivitetspliktBrudd({
-            //   brudd: data.brudd,
-            //   begrunnelse: data.begrunnelse,
-            //   paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
-            //   perioder: data.perioder.map((periode) => {
-            //     if (periode.type === 'enkeltdag') {
-            //       return { fom: periode.dato, tom: periode.dato };
-            //     } else {
-            //       return { fom: periode.fom, tom: periode.tom };
-            //     }
-            //   }),
-            //   saksnummer: saksnummer,
-            // });
+            const harOverlappendePerioder = harPerioderSomOverlapper(perioder);
 
-            await revalidateAktivitetspliktHendelser(saksnummer);
+            if (harOverlappendePerioder) {
+              setErrorMessage('Det finnes overlappende perioder');
+            } else {
+              // Ikke åpne denne før backend er klar.
+              // await opprettAktivitetspliktBrudd({
+              //   brudd: data.brudd,
+              //   begrunnelse: data.begrunnelse,
+              //   paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
+              //   perioder: perioder,
+              //   saksnummer: saksnummer,
+              // });
+              await revalidateAktivitetspliktHendelser(saksnummer);
+            }
           })}
         >
           <FormField form={form} formField={formFields.brudd} />
@@ -153,7 +160,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
                   Legg til periode
                 </Button>
               </div>
-
+              {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
               <FormField form={form} formField={formFields.begrunnelse} />
             </div>
           )}
