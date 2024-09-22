@@ -8,7 +8,7 @@ import {
 } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from '@navikt/aap-felles-react';
-import { FieldPath, useFieldArray } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import { useState } from 'react';
 
 interface Props {
