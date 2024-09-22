@@ -1,18 +1,14 @@
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
-import { Checkbox, Radio, RadioGroup } from '@navikt/ds-react';
+import { Checkbox, Radio } from '@navikt/ds-react';
 import Link from 'next/link';
-import {
-  CheckboxWrapper,
-  RadioGroupWrapper,
-  TextAreaWrapper,
-  TextFieldWrapper,
-  ValuePair,
-} from '@navikt/aap-felles-react';
+import { TextAreaWrapper, TextFieldWrapper, ValuePair } from '@navikt/aap-felles-react';
 import { ToTrinnsVurderingGrunn } from 'lib/types/types';
 import { FieldArrayWithId, UseFormReturn } from 'react-hook-form';
 import { FormFieldsToTrinnsVurdering } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
+import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
+import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 
 interface Props {
   link: string;

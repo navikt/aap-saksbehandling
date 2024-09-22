@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { Behovstype } from 'lib/utils/form';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import { FatteVedtakGrunnlag } from 'lib/types/types';
@@ -85,8 +85,6 @@ describe('totrinnsvurderingform', () => {
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
     await user.click(vurderPåNyttValg);
-
-    screen.logTestingPlaygroundURL();
 
     const begrunnelseFelt = await screen.getByRole('textbox', { name: /begrunnelse/i });
     expect(begrunnelseFelt).toBeVisible();
@@ -204,7 +202,9 @@ describe('totrinnsvurderingform', () => {
     const annetValg = screen.getByRole('checkbox', { name: /annet/i });
     await user.click(annetValg);
 
-    const fritekstFeltEtterAnnetErValgt = await screen.queryByRole('textbox', { name: /beskriv returårsak/i });
+    screen.logTestingPlaygroundURL();
+
+    const fritekstFeltEtterAnnetErValgt = screen.getByRole('textbox', { name: /beskriv returårsak/i });
     expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
   });
 
