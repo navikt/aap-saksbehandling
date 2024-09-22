@@ -202,7 +202,9 @@ describe('totrinnsvurderingform', () => {
     const annetValg = screen.getByRole('checkbox', { name: /annet/i });
     await user.click(annetValg);
 
-    const fritekstFeltEtterAnnetErValgt = await screen.queryByRole('textbox', { name: /beskriv returårsak/i });
+    screen.logTestingPlaygroundURL();
+
+    const fritekstFeltEtterAnnetErValgt = screen.getByRole('textbox', { name: /beskriv returårsak/i });
     expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
   });
 
