@@ -40,23 +40,26 @@ export type FritakMeldepliktFormFields = {
 };
 
 export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
-  const { form, formFields } = useConfigForm<FritakMeldepliktFormFields>({
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Vurder om det vil være unødig tyngende for søker å overholde meldeplikten',
-      description: 'Begrunn vurderingen',
-      rules: { required: 'Du må begrunne vurderingen din' },
-      defaultValue: grunnlag?.begrunnelse,
+  const { form, formFields } = useConfigForm<FritakMeldepliktFormFields>(
+    {
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Vurder om det vil være unødig tyngende for søker å overholde meldeplikten',
+        description: 'Begrunn vurderingen',
+        rules: { required: 'Du må begrunne vurderingen din' },
+        defaultValue: grunnlag?.begrunnelse,
+      },
+      fritaksvurdering: {
+        type: 'fieldArray',
+        defaultValue: grunnlag?.vurderinger.map((v) => ({
+          fritakFraMeldeplikt: v.harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
+          fom: formaterDatoForFrontend(v.periode.fom),
+          tom: v.periode.tom ? formaterDatoForFrontend(v.periode.tom) : '',
+        })) || [{ fritakFraMeldeplikt: '', fom: '', tom: '' }],
+      },
     },
-    fritaksvurdering: {
-      type: 'fieldArray',
-      defaultValue: grunnlag?.vurderinger.map((v) => ({
-        fritakFraMeldeplikt: v.harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
-        fom: formaterDatoForFrontend(v.periode.fom),
-        tom: v.periode.tom ? formaterDatoForFrontend(v.periode.tom) : '',
-      })) || [{ fritakFraMeldeplikt: '', fom: '', tom: '' }],
-    },
-  });
+    { shouldUnregister: true, readOnly: readOnly }
+  );
 
   const { fields, append, remove } = useFieldArray({ control: form.control, name: 'fritaksvurdering' });
 

@@ -39,6 +39,7 @@ export const Periodetabell = ({ perioder, vurderingstidspunkt, readOnly, form, r
                 control={form.control}
                 name={`fritaksvurdering.${index}.fritakFraMeldeplikt`}
                 rules={{ required: 'Du må ta stilling til om bruker skal ha fritak fra meldeplikten eller ikke' }}
+                readOnly={readOnly}
               >
                 <option>-</option>
                 <option value={JaEllerNei.Ja}>Ja</option>
@@ -52,6 +53,7 @@ export const Periodetabell = ({ perioder, vurderingstidspunkt, readOnly, form, r
                 hideLabel
                 control={form.control}
                 name={`fritaksvurdering.${index}.fom`}
+                readOnly={readOnly}
                 rules={{
                   required: 'Du må legge inn en dato for når perioden starter',
                   validate: (value) => validerDato(value as string),
@@ -66,6 +68,7 @@ export const Periodetabell = ({ perioder, vurderingstidspunkt, readOnly, form, r
                   hideLabel
                   control={form.control}
                   name={`fritaksvurdering.${index}.tom`}
+                  readOnly={readOnly}
                   rules={{
                     required: 'Du må legge inn en dato for når perioden slutter',
                     validate: {
