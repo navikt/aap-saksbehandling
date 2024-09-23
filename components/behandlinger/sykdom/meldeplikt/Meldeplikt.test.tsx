@@ -128,8 +128,7 @@ describe('Meldeplikt', () => {
       expect(screen.getByText('Dato format er ikke gyldig. Dato må være på formatet dd.mm.yyyy')).toBeVisible();
     });
 
-    // må skrives om litt
-    it.skip('viser feilmelding dersom slutt-tidspunkt er før start-tidspunkt', async () => {
+    it('viser feilmelding dersom slutt-tidspunkt er før start-tidspunkt', async () => {
       render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
       await openAccordionCard();
       await velgAtBrukerSkalHaFritak();

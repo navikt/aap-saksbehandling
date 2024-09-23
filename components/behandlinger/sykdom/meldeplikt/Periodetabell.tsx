@@ -7,6 +7,7 @@ import styles from './Periodetabell.module.css';
 import { SelectWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { UseFormReturn } from 'react-hook-form';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { parse } from 'date-fns';
 
 interface Props {
   perioder: MeldepliktPeriode[];
@@ -67,7 +68,16 @@ export const Periodetabell = ({ perioder, vurderingstidspunkt, readOnly, form, r
                   name={`fritaksvurdering.${index}.tom`}
                   rules={{
                     required: 'Du må legge inn en dato for når perioden slutter',
-                    validate: (value) => validerDato(value as string),
+                    validate: {
+                      gyldigDato: (value) => validerDato(value as string),
+                      ikkeFoerStart: (value) => {
+                        if (form.watch(`fritaksvurdering.${index}.fritakFraMeldeplikt`) === JaEllerNei.Ja) {
+                          if (erDatoFoerDato(value as string, form.getValues(`fritaksvurdering.${index}.fom`))) {
+                            return 'Slutt-dato kan ikke være før start-dato';
+                          }
+                        }
+                      },
+                    },
                   }}
                 />
               )}
@@ -95,4 +105,11 @@ function validerDato(value?: string) {
   if (!inputDato) {
     return 'Dato format er ikke gyldig. Dato må være på formatet dd.mm.yyyy';
   }
+}
+
+function erDatoFoerDato(inputDato: string, referanseDato: string): boolean {
+  return (
+    new Date(parse(inputDato as string, 'dd.MM.yyyy', new Date())) <
+    new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()))
+  );
 }
