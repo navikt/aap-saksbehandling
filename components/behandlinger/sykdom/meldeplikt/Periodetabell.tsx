@@ -1,39 +1,22 @@
-import { Button, Select, Table, TextField } from '@navikt/ds-react';
-import { MeldepliktPeriode, Valideringsfeil } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
-import { Dispatch, SetStateAction } from 'react';
+import { Button, Table } from '@navikt/ds-react';
+import { FritakMeldepliktFormFields, MeldepliktPeriode } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
 import { JaEllerNei } from 'lib/utils/form';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
 import styles from './Periodetabell.module.css';
+import { SelectWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
+import { UseFormReturn } from 'react-hook-form';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 interface Props {
   perioder: MeldepliktPeriode[];
-  oppdaterPerioder: Dispatch<SetStateAction<MeldepliktPeriode[]>>;
   vurderingstidspunkt?: string;
-  valideringsfeil: Valideringsfeil[];
   readOnly: boolean;
+  form: UseFormReturn<FritakMeldepliktFormFields>;
+  remove: (index: number) => void;
 }
 
-export const Periodetabell = ({
-  perioder,
-  oppdaterPerioder,
-  vurderingstidspunkt,
-  valideringsfeil,
-  readOnly,
-}: Props) => {
-  const slettRad = (index: number) => {
-    oppdaterPerioder((prevState) => [...prevState.toSpliced(index, 1)]);
-  };
-
-  const oppdater = (value: string, index: number, felt: keyof MeldepliktPeriode) => {
-    oppdaterPerioder((prevState) => {
-      const periodeSomSkalOppdateres = prevState[index];
-      periodeSomSkalOppdateres[felt] = value;
-      prevState[index] = periodeSomSkalOppdateres;
-      return [...prevState];
-    });
-  };
-
+export const Periodetabell = ({ perioder, vurderingstidspunkt, readOnly, form, remove }: Props) => {
   return (
     <Table className={styles.periodetabell}>
       <Table.Header>
@@ -49,47 +32,50 @@ export const Periodetabell = ({
         {perioder.map((periode, index) => (
           <Table.Row key={index}>
             <Table.DataCell>
-              <Select
+              <SelectWrapper
                 label={'Fritak meldeplikt'}
                 hideLabel
-                onChange={(event) => oppdater(event.currentTarget.value, index, 'fritakFraMeldeplikt')}
-                value={periode.fritakFraMeldeplikt ?? ''}
-                error={
-                  valideringsfeil.find((feil) => feil.felt === 'fritakFraMeldeplikt' && feil.index === index)?.message
-                }
-                readOnly={readOnly}
+                control={form.control}
+                name={`fritaksvurdering.${index}.fritakFraMeldeplikt`}
+                rules={{ required: 'Du må ta stilling til om bruker skal ha fritak fra meldeplikten eller ikke' }}
               >
                 <option>-</option>
                 <option value={JaEllerNei.Ja}>Ja</option>
                 <option value={JaEllerNei.Nei}>Nei</option>
-              </Select>
+              </SelectWrapper>
             </Table.DataCell>
             <Table.DataCell>
-              <TextField
+              <TextFieldWrapper
+                type={'text'}
                 label={'Gjelder fra'}
                 hideLabel
-                onChange={(event) => oppdater(event.currentTarget.value, index, 'fom')}
-                value={periode.fom ?? ''}
-                error={valideringsfeil.find((feil) => feil.felt === 'fom' && feil.index === index)?.message}
-                readOnly={readOnly}
+                control={form.control}
+                name={`fritaksvurdering.${index}.fom`}
+                rules={{
+                  required: 'Du må legge inn en dato for når perioden starter',
+                  validate: (value) => validerDato(value as string),
+                }}
               />
             </Table.DataCell>
             <Table.DataCell>
-              {periode.fritakFraMeldeplikt === JaEllerNei.Ja && (
-                <TextField
+              {form.watch(`fritaksvurdering.${index}.fritakFraMeldeplikt`) === JaEllerNei.Ja && (
+                <TextFieldWrapper
+                  type={'text'}
                   label={'Til og med'}
                   hideLabel
-                  onChange={(event) => oppdater(event.currentTarget.value, index, 'tom')}
-                  value={periode.tom ?? ''}
-                  error={valideringsfeil.find((feil) => feil.felt === 'tom' && feil.index === index)?.message}
-                  readOnly={readOnly}
+                  control={form.control}
+                  name={`fritaksvurdering.${index}.tom`}
+                  rules={{
+                    required: 'Du må legge inn en dato for når perioden slutter',
+                    validate: (value) => validerDato(value as string),
+                  }}
                 />
               )}
             </Table.DataCell>
             <Table.DataCell>{vurderingstidspunkt && formaterDatoForVisning(vurderingstidspunkt)}</Table.DataCell>
             <Table.DataCell>
               {perioder.length > 1 && !readOnly && (
-                <Button type={'button'} onClick={() => slettRad(index)}>
+                <Button type={'button'} onClick={() => remove(index)}>
                   Slett
                 </Button>
               )}
@@ -100,3 +86,13 @@ export const Periodetabell = ({
     </Table>
   );
 };
+
+function validerDato(value?: string) {
+  if (!value) {
+    return 'Du må sette en dato';
+  }
+  const inputDato = parseDatoFraDatePicker(value);
+  if (!inputDato) {
+    return 'Dato format er ikke gyldig. Dato må være på formatet dd.mm.yyyy';
+  }
+}
