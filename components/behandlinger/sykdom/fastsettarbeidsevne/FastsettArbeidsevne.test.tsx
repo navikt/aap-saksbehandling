@@ -10,7 +10,10 @@ describe('FastsettArbeidsevne', () => {
   const user = userEvent.setup();
 
   it('Skal ha riktig heading', () => {
-    const heading = screen.getByText('Reduksjon ved delvis nedsatt arbeidsevne - § 11-23 2.ledd');
+    const heading = screen.getByRole('heading', {
+      name: 'Reduksjon av maks utbetalt ytelse ved delvis nedsatt arbeidsevne § 11-23 2.ledd (valgfritt)',
+      level: 3,
+    });
     expect(heading).toBeVisible();
   });
 
@@ -40,7 +43,9 @@ describe('FastsettArbeidsevne', () => {
   });
 
   async function åpneVilkårskort() {
-    const region = screen.getByRole('region', { name: /Reduksjon ved delvis nedsatt arbeidsevne - § 11-23 2.ledd/i });
+    const region = screen.getByRole('region', {
+      name: 'Reduksjon av maks utbetalt ytelse ved delvis nedsatt arbeidsevne § 11-23 2.ledd (valgfritt)',
+    });
     const button = within(region).getByRole('button');
     await user.click(button);
   }

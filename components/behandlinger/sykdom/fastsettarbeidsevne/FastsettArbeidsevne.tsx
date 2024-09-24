@@ -33,7 +33,7 @@ export const FastsettArbeidsevne = ({ behandlingVersjon, readOnly }: Props) => {
 
   return (
     <VilkårsKort
-      heading={'Reduksjon ved delvis nedsatt arbeidsevne - § 11-23 2.ledd'}
+      heading={'Reduksjon av maks utbetalt ytelse ved delvis nedsatt arbeidsevne § 11-23 2.ledd (valgfritt)'}
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
       defaultOpen={false}
