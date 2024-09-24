@@ -1,8 +1,7 @@
-import { useConfigForm, FormField } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { useState } from 'react';
 import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 import styles from './FastsettArbeidsevnePeriodeForm.module.css';
-import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -19,7 +18,6 @@ export interface FastSettArbeidsevnePeriode extends FormFields {
 interface FormFields {
   arbeidsevne: string;
   fraDato: Date;
-  dokumenterBruktIVurderingen?: string[];
   begrunnelse: string;
 }
 
@@ -31,11 +29,6 @@ export const FastsettArbeidsevnePeriodeForm = ({ onSave, onAvbryt }: Props) => {
       label: 'Vurder om brukeren har arbeidsevne',
       description: 'En beksrivelse av hva som skal gjøres her',
       rules: { required: 'Du må begrunne avgjørelsen din.' },
-    },
-    dokumenterBruktIVurderingen: {
-      type: 'checkbox_nested',
-      label: 'Dokumenter funnet som er relevant for vurdering',
-      description: 'Tilknytt minst ett dokument til vurdering',
     },
     arbeidsevne: {
       type: 'text',
@@ -63,9 +56,6 @@ export const FastsettArbeidsevnePeriodeForm = ({ onSave, onAvbryt }: Props) => {
         Legg til en ny periode med arbeidsevne
       </Heading>
       <div className={styles.fastsettArbeidsEvneFormFelter}>
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
-          <DokumentTabell />
-        </FormField>
         <Veiledning />
 
         <FormField form={form} formField={formFields.begrunnelse} />

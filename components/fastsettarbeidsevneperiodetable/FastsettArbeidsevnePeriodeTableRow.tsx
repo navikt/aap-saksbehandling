@@ -6,14 +6,12 @@ export const FastsettArbeidsevnePeriodeTableRow = ({
   fraDato,
   arbeidsevne,
   benevning,
-  dokumenterBruktIVurderingen,
   begrunnelse,
 }: FastSettArbeidsevnePeriode) => {
   return (
     <Table.ExpandableRow key={id} content={<BodyLong>{begrunnelse}</BodyLong>}>
       <Table.DataCell>{formaterDatoForFrontend(fraDato)}</Table.DataCell>
       <Table.DataCell>{`${arbeidsevne} ${benevning}`}</Table.DataCell>
-      <Table.DataCell>{`${dokumenterBruktIVurderingen ? dokumenterBruktIVurderingen.join() : ''}`}</Table.DataCell>
     </Table.ExpandableRow>
   );
 };

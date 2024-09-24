@@ -14,7 +14,6 @@ describe('fastsettArbeidsevnePeriodeTable', () => {
             id: uuidv4(),
             benevning: 'timer',
             begrunnelse: 'Begrunnelse for hvorfor det finnes arbeidsevne',
-            dokumenterBruktIVurderingen: ['Legeerklæring'],
             fraDato: new Date('March 25, 2024'),
           },
         ]}
@@ -45,20 +44,11 @@ describe('fastsettArbeidsevnePeriodeTable', () => {
     expect(kolonne).toBeVisible();
   });
 
-  it('Skal ha kolonnen Tilknyttede dokumenter', async () => {
-    const kolonne = screen.getByRole('columnheader', {
-      name: /tilknyttede dokumenter/i,
-    });
-    expect(kolonne).toBeVisible();
-  });
-
   it('Skal ha en rad med data dersom det er en periode', async () => {
     const fraOgMedVerdi = screen.getByRole('cell', { name: /25\.03\.2024/i });
     expect(fraOgMedVerdi).toBeVisible();
     const arbeidsEvneVerdi = screen.getByRole('cell', { name: /0 timer/i });
     expect(arbeidsEvneVerdi).toBeVisible();
-    const tilknyttedeDokumenterVerdi = screen.getByRole('cell', { name: /legeerklæring/i });
-    expect(tilknyttedeDokumenterVerdi).toBeVisible();
   });
 
   it('Skal vise begrunnelse når man åpner tabellraden', async () => {

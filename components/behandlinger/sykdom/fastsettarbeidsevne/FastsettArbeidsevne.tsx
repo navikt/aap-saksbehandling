@@ -27,7 +27,6 @@ export const FastsettArbeidsevne = ({ behandlingVersjon, readOnly }: Props) => {
       id: uuidv4(),
       benevning: 'timer',
       begrunnelse: 'Begrunnelse for hvorfor det finnes arbeidsevne',
-      dokumenterBruktIVurderingen: ['Legeerklæring'],
       fraDato: new Date('March 25, 2024'),
     },
   ]);

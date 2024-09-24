@@ -29,11 +29,6 @@ describe('fastsettArbeidsevnePeriodeForm', () => {
     expect(textbox).toBeInvalid();
   });
 
-  it('Skal ha feltet dokumenterBruktIVurderingen', async () => {
-    const checkboxGroup = await screen.findByRole('group', { name: 'Dokumenter funnet som er relevant for vurdering' });
-    expect(checkboxGroup).toBeVisible();
-  });
-
   it('skal ha beskrivelses tekst i feltet for arbeidsevne (timer og prosent)', async () => {
     const beskrivelse = screen.getByText('sett opp mot en arbeidsuke på 37,5 timer');
     expect(beskrivelse).toBeVisible();
