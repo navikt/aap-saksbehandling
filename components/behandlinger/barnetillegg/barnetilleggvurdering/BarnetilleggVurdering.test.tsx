@@ -62,9 +62,7 @@ describe('barnetillegg', () => {
     expect(description).toBeVisible();
   });
 
-  // TODO: Test feiler fordi dokumenterBruktIVurdering ikke blir oppdatert når testen kjører, fungerer i nettleser.
-  // Fiks test når vi faktisk skal bruke dokumentlisten
-  it.skip('skal ha en liste som viser hvilke dokumenter som er tilknyttet vurderingen', async () => {
+  it('skal ha en liste som viser hvilke dokumenter som er tilknyttet vurderingen', async () => {
     render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
     const rad = screen.getByRole('row', {
       name: /sykemelding/i,
@@ -120,10 +118,9 @@ describe('barnetillegg', () => {
 describe('Manuelt registrerte barn', () => {
   const user = userEvent.setup();
 
-  // TODO navn må hentes, kommer ikke som en del av grunnlaget
-  it.skip('skal ha en heading med navn og ident', () => {
+  it('skal ha en heading med ident', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
-    const heading = screen.getByRole('heading', { name: 'Kjell T Ringen - 12345678910' });
+    const heading = screen.getByRole('heading', { name: '12345678910' });
     expect(heading).toBeVisible();
   });
 
@@ -221,9 +218,7 @@ describe('Manuelt registrerte barn', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  // skippet fordi datepicker gir undefined dersom det er en ugyldig dato, så vi klarer ikke å skille på en ugydlig dato vs ingen dato
-  // Vi vurderer om vi skal bytte ut date-picker med textfield
-  it.skip('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
+  it('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });

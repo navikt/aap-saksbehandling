@@ -1,7 +1,7 @@
 import { format, isValid, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
 
-const DATO_FORMATER = {
+export const DATO_FORMATER = {
   ddMMyyyy: 'dd.MM.yyyy',
   ddMMMyyyy: 'dd. MMM yyyy',
   ddMMyyyy_HHmm: 'dd.MM.yyyy HH:mm',

@@ -1,84 +1,108 @@
 import { useState } from 'react';
 
-import { Button, DatePicker, Radio, RadioGroup, Textarea, useDatepicker } from '@navikt/ds-react';
+import { Button, Radio } from '@navikt/ds-react';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { JaEllerNei } from 'lib/utils/form';
 
 import {
+  BarnetilleggFormFields,
   ManueltBarnVurdering,
-  ManueltBarnVurderingError,
 } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
+import { UseFormReturn } from 'react-hook-form';
+import { TextAreaWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
+import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
+import { isBefore, isFuture } from 'date-fns';
+import { DATO_FORMATER, stringToDate } from 'lib/utils/date';
+
+import styles from '../Barn.module.css';
 
 interface Props {
-  manueltBarn: ManueltBarnVurdering;
-  oppdaterVurdering: (ident: string, feltId: string, field: keyof ManueltBarnVurdering, value: string | Date) => void;
   ident: string;
+  barneTilleggIndex: number;
+  vurderingIndex: number;
   readOnly: boolean;
-  errors: ManueltBarnVurderingError[];
+  manueltBarn: ManueltBarnVurdering;
+  form: UseFormReturn<BarnetilleggFormFields>;
 }
 
-export const ManueltBarn = ({ manueltBarn, oppdaterVurdering, readOnly, ident, errors }: Props) => {
+export const ManueltBarn = ({ readOnly, barneTilleggIndex, vurderingIndex, form }: Props) => {
   const [leggTilSluttDato, setLeggTilSluttDato] = useState(false);
 
-  const feltId = manueltBarn.formId;
-
-  const { datepickerProps: forsørgerAnsvarStartDatoDatepickerProps, inputProps: forsørgerAnsvarStartDatoInputProps } =
-    useDatepicker({
-      // toDate: new Date(), TODO Dato her skal filtreres på forrige periode
-      onDateChange: (date) => {
-        if (date) oppdaterVurdering(ident, feltId, 'fom', date);
-      },
-      allowTwoDigitYear: false,
-    });
-
-  const { datepickerProps: forsørgerAnsvarSluttDatoDatepickerProps, inputProps: forsørgerAnsvarSluttDatoInputProps } =
-    useDatepicker({
-      // fromDate: new Date(), TODO Dato her skal filtreres på forrige periode
-      onDateChange: (date) => {
-        if (date) oppdaterVurdering(ident, feltId, 'tom', date);
-      },
-      allowTwoDigitYear: false,
-    });
+  const harForeldreAnsvar =
+    form.watch(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`) ===
+    JaEllerNei.Ja;
 
   return (
     <div className={'flex-column'}>
-      <Textarea
+      <TextAreaWrapper
         label={'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet'}
-        onChange={(event) => oppdaterVurdering(ident, feltId, 'begrunnelse', event.target.value)}
-        size={'small'}
+        control={form.control}
+        name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
         readOnly={readOnly}
-        error={errors.find((error) => error.felt === 'begrunnelse')?.message}
+        rules={{ required: 'Du må gi en begrunnelse' }}
       />
-      <RadioGroup
-        legend={'Skal det beregnes barnetillegg for dette barnet?'}
-        onChange={(value) => oppdaterVurdering(ident, feltId, 'harForeldreAnsvar', value)}
-        size={'small'}
+      <RadioGroupWrapper
+        label={'Skal det beregnes barnetillegg for dette barnet?'}
+        control={form.control}
+        name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`}
         readOnly={readOnly}
-        error={errors.find((error) => error.felt === 'harForeldreAnsvar')?.message}
+        rules={{ required: 'Du må besvare om det skal beregnes barnetillegg for barnet' }}
       >
         <Radio value={JaEllerNei.Ja}>Ja</Radio>
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
-      </RadioGroup>
+      </RadioGroupWrapper>
 
-      {manueltBarn.harForeldreAnsvar === JaEllerNei.Ja && (
-        <div className={'flex-row'}>
-          <DatePicker {...forsørgerAnsvarStartDatoDatepickerProps}>
-            <DatePicker.Input
+      {harForeldreAnsvar && (
+        <div className={styles.periode}>
+          <div className={styles.datofelt}>
+            <TextFieldWrapper
               label={'Søker har forsørgeransvar for barnet fra'}
-              size={'small'}
-              error={errors.find((error) => error.felt === 'fom')?.message}
-              {...forsørgerAnsvarStartDatoInputProps}
+              control={form.control}
+              name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fom`}
+              type={'text'}
+              rules={{
+                validate: (value) => {
+                  if (!value) {
+                    return 'Du må sette en dato for når søker har forsørgeransvar for barnet fra';
+                  } else {
+                    const parsedValue = stringToDate(value as string, DATO_FORMATER.ddMMyyyy);
+                    if (!parsedValue) {
+                      return 'Dato for når søker har forsørgeransvar fra er ikke gyldig';
+                    } else {
+                      return isFuture(parsedValue)
+                        ? 'Dato for når søker har forsørgeransvar fra kan ikke være frem i tid'
+                        : false;
+                    }
+                  }
+                },
+              }}
             />
-          </DatePicker>
+          </div>
           {leggTilSluttDato ? (
-            <DatePicker {...forsørgerAnsvarSluttDatoDatepickerProps}>
-              <DatePicker.Input
+            <div className={styles.datofelt}>
+              <TextFieldWrapper
                 label={'Sluttdato for forsørgeransvaret'}
-                size={'small'}
-                error={errors.find((error) => error.felt === 'tom')?.message}
-                {...forsørgerAnsvarSluttDatoInputProps}
+                control={form.control}
+                name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.tom`}
+                type={'text'}
+                rules={{
+                  validate: (value, formValues) => {
+                    const parsedValueTom = stringToDate(value as string, DATO_FORMATER.ddMMyyyy);
+                    const parsedValueFom = stringToDate(
+                      formValues.barnetilleggVurderinger[barneTilleggIndex].vurderinger[vurderingIndex]
+                        .fom as unknown as string,
+                      DATO_FORMATER.ddMMyyyy
+                    );
+
+                    if (parsedValueTom && parsedValueFom) {
+                      return isBefore(parsedValueTom, parsedValueFom)
+                        ? 'Slutt-dato kan ikke være før start-dato'
+                        : false;
+                    }
+                  },
+                }}
               />
-            </DatePicker>
+            </div>
           ) : (
             <Button
               onClick={() => setLeggTilSluttDato(true)}
@@ -86,6 +110,7 @@ export const ManueltBarn = ({ manueltBarn, oppdaterVurdering, readOnly, ident, e
               className={'fit-content-button'}
               variant={'tertiary'}
               size={'small'}
+              type={'button'}
             >
               Legg til sluttdato
             </Button>
