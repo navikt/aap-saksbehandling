@@ -4,28 +4,24 @@ import { Button, Radio } from '@navikt/ds-react';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { JaEllerNei } from 'lib/utils/form';
 
-import {
-  BarnetilleggFormFields,
-  ManueltBarnVurdering,
-} from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
+import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { UseFormReturn } from 'react-hook-form';
 import { TextAreaWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 import { isBefore, isFuture } from 'date-fns';
 import { DATO_FORMATER, stringToDate } from 'lib/utils/date';
 
-import styles from '../Barn.module.css';
+import styles from './ManueltBarnVurderingFelter.module.css';
 
 interface Props {
   ident: string;
   barneTilleggIndex: number;
   vurderingIndex: number;
   readOnly: boolean;
-  manueltBarn: ManueltBarnVurdering;
   form: UseFormReturn<BarnetilleggFormFields>;
 }
 
-export const ManueltBarn = ({ readOnly, barneTilleggIndex, vurderingIndex, form }: Props) => {
+export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurderingIndex, form }: Props) => {
   const [leggTilSluttDato, setLeggTilSluttDato] = useState(false);
 
   const harForeldreAnsvar =

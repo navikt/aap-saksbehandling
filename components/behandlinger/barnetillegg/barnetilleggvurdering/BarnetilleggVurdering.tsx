@@ -16,7 +16,7 @@ import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/Tilknytt
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { ManueltBarnVurdering } from 'components/barn/something/ManueltBarnVurdering';
+import { ManueltBarnVurdering } from 'components/barn/manueltbarnvurdering/ManueltBarnVurdering';
 
 interface Props {
   behandlingsversjon: number;
@@ -31,10 +31,10 @@ export interface BarnetilleggFormFields {
 
 interface BarneTilleggVurdering {
   ident: string;
-  vurderinger: ManueltBarnVurdering[];
+  vurderinger: Vurdering[];
 }
 
-export interface ManueltBarnVurdering {
+interface Vurdering {
   begrunnelse: string;
   harForeldreAnsvar: string;
   fom: string;

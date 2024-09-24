@@ -1,0 +1,20 @@
+.barnekort {
+    background-color: var(--a-bg-default);
+    border: 1px solid var(--a-border-subtle);
+    padding: var(--a-spacing-4);
+    border-radius: var(--a-border-radius-large);
+}
+
+.manueltbarnheading {
+    display: flex;
+    flex-direction: row;
+    gap: var(--a-spacing-4);
+}
+
+.vurdering {
+    display: flex;
+    flex-direction: column;
+    gap: var(--a-spacing-4);
+    border-bottom: 1px solid var(--a-border-subtle);
+    padding: var(--a-spacing-4);
+}

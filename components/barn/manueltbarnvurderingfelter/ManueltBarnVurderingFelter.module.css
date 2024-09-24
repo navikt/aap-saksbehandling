@@ -1,0 +1,10 @@
+.datofelt {
+    max-width: 13ch;
+}
+
+.periode {
+    display: flex;
+    flex-direction: row;
+    gap: var(--a-spacing-4);
+    align-items: flex-end;
+}

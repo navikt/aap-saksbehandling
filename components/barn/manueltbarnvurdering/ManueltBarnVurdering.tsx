@@ -2,9 +2,9 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
-import { ManueltBarn } from 'components/barn/manueltbarn/ManueltBarn';
+import { ManueltBarnVurderingFelter } from 'components/barn/manueltbarnvurderingfelter/ManueltBarnVurderingFelter';
 
-import styles from 'components/barn/Barn.module.css';
+import styles from './ManueltBarnVurdering.module.css';
 
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
@@ -35,10 +35,9 @@ export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, readOnly 
       </div>
       <div>
         {vurderinger.map((vurdering, vurderingIndex) => (
-          <div key={vurderingIndex} className={styles.vurdering}>
-            <ManueltBarn
+          <div key={vurdering.id} className={styles.vurdering}>
+            <ManueltBarnVurderingFelter
               form={form}
-              manueltBarn={vurdering}
               readOnly={readOnly}
               ident={ident}
               barneTilleggIndex={barnetilleggIndex}
