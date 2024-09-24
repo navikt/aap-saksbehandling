@@ -207,7 +207,9 @@ describe('Manuelt registrerte barn', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     await fyllUtEnBegrunnelse();
-    const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+    const datofelt = screen.getByRole('textbox', {
+      name: /søker har forsørgeransvar for barnet fra \(dd\.mm\.åååå\)/i,
+    });
     const imorgen = addDays(new Date(), 1);
 
     await user.type(datofelt, formaterDatoForFrontend(imorgen));
@@ -221,7 +223,9 @@ describe('Manuelt registrerte barn', () => {
   it('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
-    const datofelt = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+    const datofelt = screen.getByRole('textbox', {
+      name: /søker har forsørgeransvar for barnet fra \(dd\.mm\.åååå\)/i,
+    });
     await user.type(datofelt, '12.2003');
 
     await klikkPåBekreft();
@@ -234,11 +238,13 @@ describe('Manuelt registrerte barn', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     await fyllUtEnBegrunnelse();
-    const startDato = screen.getByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+    const startDato = screen.getByRole('textbox', {
+      name: /søker har forsørgeransvar for barnet fra \(dd\.mm\.åååå\)/i,
+    });
 
     const leggTilSluttDatoKnapp = screen.getByRole('button', { name: 'Legg til sluttdato' });
     await user.click(leggTilSluttDatoKnapp);
-    const sluttDato = screen.getByRole('textbox', { name: /Sluttdato for forsørgeransvaret/i });
+    const sluttDato = screen.getByRole('textbox', { name: /sluttdato for forsørgeransvaret \(dd\.mm\.åååå\)/i });
 
     await user.type(startDato, '10.08.2023');
     await user.type(sluttDato, '09.08.2023');

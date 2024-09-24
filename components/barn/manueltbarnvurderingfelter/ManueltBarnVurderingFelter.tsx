@@ -51,7 +51,7 @@ export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurder
       {harForeldreAnsvar && (
         <div className={'barnetilleggperiode'}>
           <TextFieldWrapper
-            label={'Søker har forsørgeransvar for barnet fra'}
+            label={'Søker har forsørgeransvar for barnet fra (dd.mm.åååå)'}
             control={form.control}
             name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fom`}
             type={'text'}
@@ -74,7 +74,7 @@ export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurder
           />
           {leggTilSluttDato ? (
             <TextFieldWrapper
-              label={'Sluttdato for forsørgeransvaret'}
+              label={'Sluttdato for forsørgeransvaret (dd.mm.åååå)'}
               control={form.control}
               name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.tom`}
               type={'text'}
