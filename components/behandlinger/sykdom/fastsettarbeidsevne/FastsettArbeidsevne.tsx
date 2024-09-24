@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import styles from './FastsettArbeidsevne.module.css';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { PercentIcon } from '@navikt/aksel-icons';
 
 interface Props {
   behandlingVersjon: number;
@@ -37,6 +38,7 @@ export const FastsettArbeidsevne = ({ behandlingVersjon, readOnly }: Props) => {
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
       defaultOpen={false}
+      icon={<PercentIcon />}
     >
       <div className={styles.fastsettArbeidsevne}>
         <FastsettArbeidsevnePeriodeTable
