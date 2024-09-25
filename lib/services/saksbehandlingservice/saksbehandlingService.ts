@@ -227,6 +227,13 @@ export const rekjørJobb = async (jobbId: string) => {
   const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/rekjor/${jobbId}`;
   return await fetchProxy<string>(url, saksbehandlingApiScope, 'GET');
 };
+
+export const avbrytJobb = async (jobbId: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/avbryt/${jobbId}`;
+  return await fetchProxy<string>(url, saksbehandlingApiScope, 'GET');
+};
+
+
 export const rekjørFeiledeJobber = async () => {
   const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/rekjorAlleFeilede`;
   return await fetchProxy<string>(url, saksbehandlingApiScope, 'GET');

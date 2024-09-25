@@ -5,7 +5,7 @@ import { JobbInfo } from 'lib/types/types';
 import { Alert, BodyShort, Button, Heading, HStack, Label, VStack } from '@navikt/ds-react';
 
 import styles from 'components/drift/feilendejobber/FeilendeJobber.module.css';
-import { rekjørJobb } from 'lib/clientApi';
+import { avbrytKjørendeJobb, rekjørJobb } from 'lib/clientApi';
 import { objectToMap } from 'components/drift/jobbtabell/JobbTabell';
 
 interface Props {
@@ -13,12 +13,13 @@ interface Props {
 }
 
 export const FeilendeJobber = ({ jobber }: Props) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingRekjørJobb, setIsLoadingRekjørJobb] = useState<boolean>(false);
+  const [isLoadingAvbrytJobb, setIsLoadingAvbrytJobb] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const harFeilendeJobber = jobber.length > 0;
 
   async function onRekjørJobbClick(id: number) {
-    setIsLoading(true);
+    setIsLoadingRekjørJobb(true);
     try {
       const rekjørRes = await rekjørJobb(id);
       if (rekjørRes.ok) {
@@ -30,9 +31,27 @@ export const FeilendeJobber = ({ jobber }: Props) => {
       }
     } catch (err) {
       setMessage('Noe gikk galt');
-      setIsLoading(false);
+      setIsLoadingRekjørJobb(false);
     }
-    setIsLoading(false);
+    setIsLoadingRekjørJobb(false);
+  }
+
+  async function onAvbrytJobbClick(id: number) {
+    setIsLoadingAvbrytJobb(true);
+    try {
+      const res = await avbrytKjørendeJobb(id);
+      if (res.ok) {
+        const message = await res.text();
+        setMessage(message);
+      } else {
+        const message = await res.text();
+        setMessage(message);
+      }
+    } catch (err) {
+      setMessage('Noe gikk galt');
+      setIsLoadingAvbrytJobb(false);
+    }
+    setIsLoadingAvbrytJobb(false);
   }
 
   return (
@@ -72,9 +91,12 @@ export const FeilendeJobber = ({ jobber }: Props) => {
                   </div>
                 </div>
                 <div>
-                  <HStack justify={'end'}>
-                    <Button loading={isLoading} onClick={() => onRekjørJobbClick(jobb.id)}>
+                  <HStack justify={'end'} gap={'4'}>
+                    <Button loading={isLoadingRekjørJobb} onClick={() => onRekjørJobbClick(jobb.id)}>
                       Rekjør
+                    </Button>
+                    <Button loading={isLoadingAvbrytJobb} onClick={() => onAvbrytJobbClick(jobb.id)}>
+                      Avbryt
                     </Button>
                   </HStack>
                   {message && <BodyShort>{message}</BodyShort>}

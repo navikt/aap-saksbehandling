@@ -54,11 +54,17 @@ export function hentBrevmalFraSanity(brevmalid: string) {
 export function opprettAktivitetspliktBrudd(aktivitet: BruddAktivitetsplikt) {
   return fetchProxy('/api/aktivitetsplikt/lagre', 'POST', aktivitet);
 }
+
 export function rekjørJobb(jobbId: number) {
   return fetch(`/api/drift/jobb/rekjor/${jobbId}`, { method: 'GET' });
 }
+
 export function rekjørFeiledeJobber() {
   return fetch('/api/drift/jobb/rekjorfeilede', { method: 'GET' });
+}
+
+export function avbrytKjørendeJobb(jobbId: number) {
+  return fetch(`/api/drift/jobb/avbryt/${jobbId}`, { method: 'GET' });
 }
 
 export interface SaksInformasjon {
