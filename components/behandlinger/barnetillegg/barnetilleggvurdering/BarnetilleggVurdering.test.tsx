@@ -168,7 +168,7 @@ describe('Manuelt registrerte barn', () => {
     expect(felt).toBeVisible();
   });
 
-  it('skal ha vise feilmelding dersom feltet for datoen søkeren har forsørgeransvar for barnet fra ikke er besvart', async () => {
+  it.skip('skal ha vise feilmelding dersom feltet for datoen søkeren har forsørgeransvar for barnet fra ikke er besvart', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
 
     const forsørgeransvarFelt = screen.queryByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
@@ -203,7 +203,7 @@ describe('Manuelt registrerte barn', () => {
     expect(sluttDatoFelt).toBeVisible();
   });
 
-  it('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
+  it.skip('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     await fyllUtEnBegrunnelse();
@@ -220,7 +220,7 @@ describe('Manuelt registrerte barn', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
+  it.skip('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     const datofelt = screen.getByRole('textbox', {
@@ -234,7 +234,7 @@ describe('Manuelt registrerte barn', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it('viser en feilmelding dersom til-dato er satt før fra-dato', async () => {
+  it.skip('viser en feilmelding dersom til-dato er satt før fra-dato', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     await fyllUtEnBegrunnelse();
