@@ -47,14 +47,14 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
         label: 'Vurder om det vil være unødig tyngende for søker å overholde meldeplikten',
         description: 'Begrunn vurderingen',
         rules: { required: 'Du må begrunne vurderingen din' },
-        defaultValue: grunnlag?.begrunnelse,
+        defaultValue: grunnlag?.vurderinger[0].begrunnelse,
       },
       fritaksvurdering: {
         type: 'fieldArray',
         defaultValue: grunnlag?.vurderinger.map((v) => ({
-          fritakFraMeldeplikt: v.harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
-          fom: formaterDatoForFrontend(v.periode.fom),
-          tom: v.periode.tom ? formaterDatoForFrontend(v.periode.tom) : '',
+          fritakFraMeldeplikt: v.fritaksperioder[0].harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
+          fom: formaterDatoForFrontend(v.fritaksperioder[0].periode.fom),
+          tom: v.fritaksperioder[0].periode.tom ? formaterDatoForFrontend(v.fritaksperioder[0].periode.tom) : '',
         })) || [{ fritakFraMeldeplikt: '', fom: '', tom: '' }],
       },
     },
@@ -170,7 +170,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
         />
         <Periodetabell
           perioder={fields}
-          vurderingstidspunkt={grunnlag?.vurderingsTidspunkt}
+          vurderingstidspunkt={grunnlag?.vurderinger[0].vurderingsTidspunkt}
           readOnly={readOnly}
           form={form}
           remove={remove}
