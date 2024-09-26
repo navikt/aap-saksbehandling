@@ -8,8 +8,6 @@ import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/bar
 import { UseFormReturn } from 'react-hook-form';
 import { TextAreaWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
-import { isBefore, isFuture } from 'date-fns';
-import { DATO_FORMATER, stringToDate } from 'lib/utils/date';
 
 import 'components/barn/manueltbarnvurderingfelter/ManueltBarnVurderingFelter.css';
 
