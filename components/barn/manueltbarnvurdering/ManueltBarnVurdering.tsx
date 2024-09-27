@@ -1,6 +1,6 @@
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
-import { QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
+import { QuestionmarkDiamondIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import { ManueltBarnVurderingFelter } from 'components/barn/manueltbarnvurderingfelter/ManueltBarnVurderingFelter';
 
@@ -43,12 +43,14 @@ export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, readOnly 
               barneTilleggIndex={barnetilleggIndex}
               vurderingIndex={vurderingIndex}
             />
+
             <Button
               onClick={() => remove(vurderingIndex)}
               className={'fit-content-button'}
-              variant={'danger'}
               type={'button'}
               size={'small'}
+              variant={'tertiary'}
+              icon={<TrashIcon />}
             >
               Fjern periode
             </Button>
