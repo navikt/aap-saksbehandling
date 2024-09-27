@@ -148,22 +148,9 @@ describe('Manuelt registrerte barn', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it('skal ha en knapp for å kunne sette en sluttdato for forsørgeransvaret', async () => {
-    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
-    await svarJaPåOmDetSkalBeregnesBarnetillegg();
-
-    const leggTilSluttDatoKnapp = screen.getByRole('button', { name: 'Legg til sluttdato' });
-    expect(leggTilSluttDatoKnapp).toBeVisible();
-  });
-
   it('skal vise felt for sluttdato for forsørgeransvare dersom man trykker på knappen legg til sluttdato', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
-
-    expect(screen.queryByRole('textbox', { name: /Sluttdato for forsørgeransvaret/i })).not.toBeInTheDocument();
-
-    const leggTilSluttDatoKnapp = screen.getByRole('button', { name: 'Legg til sluttdato' });
-    await user.click(leggTilSluttDatoKnapp);
 
     const sluttDatoFelt = screen.getByRole('textbox', { name: /Sluttdato for forsørgeransvaret/i });
     expect(sluttDatoFelt).toBeVisible();

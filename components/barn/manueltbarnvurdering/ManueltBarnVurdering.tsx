@@ -32,7 +32,9 @@ export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, navn, rea
         </div>
         <div>
           <Heading size={'small'}>{ident}</Heading>
-          <BodyShort size={'small'}>{navn} {}</BodyShort>
+          <BodyShort size={'small'}>
+            {navn} {}
+          </BodyShort>
         </div>
       </div>
       <div>
