@@ -36,8 +36,6 @@ const grunnlag: BarnetilleggGrunnlag = {
 };
 
 describe('barnetillegg', () => {
-  const user = userEvent.setup();
-
   it('skal ha en overskrift', () => {
     render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
     const overskrift = screen.getByText('Barnetillegg § 11-20 tredje og fjerde ledd');
