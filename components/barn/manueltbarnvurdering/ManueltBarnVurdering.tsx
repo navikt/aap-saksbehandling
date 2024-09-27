@@ -1,7 +1,7 @@
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { QuestionmarkDiamondIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { ManueltBarnVurderingFelter } from 'components/barn/manueltbarnvurderingfelter/ManueltBarnVurderingFelter';
 
 import styles from './ManueltBarnVurdering.module.css';
@@ -10,10 +10,11 @@ interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
   barnetilleggIndex: number;
   ident: string;
+  navn: string;
   readOnly: boolean;
 }
 
-export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, readOnly }: Props) => {
+export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, navn, readOnly }: Props) => {
   const {
     fields: vurderinger,
     remove,
@@ -31,6 +32,7 @@ export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, readOnly 
         </div>
         <div>
           <Heading size={'small'}>{ident}</Heading>
+          <BodyShort size={'small'}>{navn}</BodyShort>
         </div>
       </div>
       <div>

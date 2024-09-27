@@ -44,44 +44,6 @@ describe('barnetillegg', () => {
     expect(overskrift).toBeVisible();
   });
 
-  it('skal ha en dokumenttabell med korrekt heading', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
-    const heading = screen.getByRole('group', {
-      name: 'Dokumenter funnet som er relevante for vurdering av barnetillegg §11-20',
-    });
-    expect(heading).toBeVisible();
-  });
-
-  it('skal ha en dokumenttabell med korrekt description', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
-
-    const description = screen.getByText(
-      'Les dokumentene og tilknytt eventuelle dokumenter benyttet til 11-20 vurderingen'
-    );
-
-    expect(description).toBeVisible();
-  });
-
-  it('skal ha en liste som viser hvilke dokumenter som er tilknyttet vurderingen', async () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
-    const rad = screen.getByRole('row', {
-      name: /sykemelding/i,
-    });
-
-    await user.click(
-      within(rad).getByRole('checkbox', {
-        name: /tilknytt dokument til vurdering/i,
-      })
-    );
-
-    const list = screen.getByRole('list', {
-      name: /tilknyttede dokumenter/i,
-    });
-
-    const dokument = within(list).getByText(/sykemelding/i);
-    expect(dokument).toBeVisible();
-  });
-
   it('skal ha en heading for manuelle barn som er lagt inn av søker', () => {
     render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
     const heading = screen.getByText('Følgende barn er oppgitt av søker og må vurderes for barnetillegg');
@@ -121,6 +83,12 @@ describe('Manuelt registrerte barn', () => {
   it('skal ha en heading med ident', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     const heading = screen.getByRole('heading', { name: '12345678910' });
+    expect(heading).toBeVisible();
+  });
+
+  it('skal vise navnet på barnet', () => {
+    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    const heading = screen.getByText('Barnet sitt navn');
     expect(heading).toBeVisible();
   });
 

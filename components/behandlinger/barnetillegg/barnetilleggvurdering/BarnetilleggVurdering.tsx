@@ -11,9 +11,6 @@ import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useConfigForm } from '@navikt/aap-felles-react';
 import { useFieldArray } from 'react-hook-form';
-import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
-import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
-import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { ManueltBarnVurdering } from 'components/barn/manueltbarnvurdering/ManueltBarnVurdering';
@@ -25,12 +22,12 @@ interface Props {
 }
 
 export interface BarnetilleggFormFields {
-  dokumenterBruktIVurderingen: string[];
   barnetilleggVurderinger: BarneTilleggVurdering[];
 }
 
 interface BarneTilleggVurdering {
   ident: string;
+  navn: string;
   vurderinger: Vurdering[];
 }
 
@@ -46,15 +43,12 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
   const { form } = useConfigForm<BarnetilleggFormFields>({
-    dokumenterBruktIVurderingen: {
-      type: 'checkbox_nested',
-      defaultValue: [],
-    },
     barnetilleggVurderinger: {
       type: 'fieldArray',
       defaultValue: grunnlag.barnSomTrengerVurdering.map((barn) => {
         return {
           ident: barn.ident.identifikator,
+          navn: 'Barnet sitt navn',
           vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fom: '' }],
         };
       }),
@@ -73,17 +67,6 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
       steg={'BARNETILLEGG'}
     >
       <div className={'flex-column'}>
-        <CheckboxWrapper
-          label={'Dokumenter funnet som er relevante for vurdering av barnetillegg §11-20'}
-          description={'Les dokumentene og tilknytt eventuelle dokumenter benyttet til 11-20 vurderingen'}
-          control={form.control}
-          name={'dokumenterBruktIVurderingen'}
-        >
-          <DokumentTabell />
-        </CheckboxWrapper>
-
-        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
-
         <div>
           <Label size={'small'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
           <BodyShort size={'small'}>
@@ -131,6 +114,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
                 form={form}
                 barnetilleggIndex={barnetilleggIndex}
                 ident={vurdering.ident}
+                navn={vurdering.navn}
                 readOnly={readOnly}
               />
             );
