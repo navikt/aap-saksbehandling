@@ -4,9 +4,9 @@ import { FieldArrayWithId, UseFieldArrayRemove, UseFormReturn } from 'react-hook
 import { TrashIcon } from '@navikt/aksel-icons';
 import { TextFieldWrapper } from '@navikt/aap-felles-react';
 import { AktivitetspliktFormFields } from 'components/aktivitetsplikt/Aktivitetsplikt';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 import styles from './AktivitetsmeldingDatoTabell.module.css';
+import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   form: UseFormReturn<AktivitetspliktFormFields>;
@@ -78,13 +78,3 @@ export const AktivitetsmeldingDatoTabell = ({ form, fields, remove }: Props) => 
     </>
   );
 };
-
-function validerDato(value?: string) {
-  if (!value) {
-    return 'Du må sette en dato';
-  }
-  const inputDato = parseDatoFraDatePicker(value);
-  if (!inputDato) {
-    return 'Dato format er ikke gyldig. Dato må være på formatet dd.mm.yyyy';
-  }
-}
