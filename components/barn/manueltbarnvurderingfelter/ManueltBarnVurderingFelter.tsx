@@ -1,7 +1,4 @@
-import { useState } from 'react';
-
-import { Button, Radio } from '@navikt/ds-react';
-import { PlusIcon } from '@navikt/aksel-icons';
+import { Radio } from '@navikt/ds-react';
 import { JaEllerNei } from 'lib/utils/form';
 
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
@@ -20,8 +17,6 @@ interface Props {
 }
 
 export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurderingIndex, form }: Props) => {
-  const [leggTilSluttDato, setLeggTilSluttDato] = useState(false);
-
   const harForeldreAnsvar =
     form.watch(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`) ===
     JaEllerNei.Ja;
@@ -49,7 +44,7 @@ export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurder
       {harForeldreAnsvar && (
         <div className={'barnetilleggperiode'}>
           <TextFieldWrapper
-            label={'Søker har forsørgeransvar for barnet fra (dd.mm.åååå)'}
+            label={'Søker har forsørgeransvar for barnet fra'}
             control={form.control}
             name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fom`}
             type={'text'}
@@ -70,42 +65,29 @@ export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurder
             //   },
             // }}
           />
-          {leggTilSluttDato ? (
-            <TextFieldWrapper
-              label={'Sluttdato for forsørgeransvaret (dd.mm.åååå)'}
-              control={form.control}
-              name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.tom`}
-              type={'text'}
-              // rules={{
-              //   validate: (value, formValues) => {
-              //     const parsedValueTom = stringToDate(value as string, DATO_FORMATER.ddMMyyyy);
-              //     const parsedValueFom = stringToDate(
-              //       formValues.barnetilleggVurderinger[barneTilleggIndex].vurderinger[vurderingIndex]
-              //         .fom as unknown as string,
-              //       DATO_FORMATER.ddMMyyyy
-              //     );
-              //
-              //     if (parsedValueTom && parsedValueFom) {
-              //       console.log(isBefore(parsedValueTom, parsedValueFom));
-              //       return isBefore(parsedValueTom, parsedValueFom) ? 'Slutt-dato kan ikke være før start-dato' : false;
-              //     } else {
-              //       return 'noe her fungerer ikke';
-              //     }
-              //   },
-              // }}
-            />
-          ) : (
-            <Button
-              onClick={() => setLeggTilSluttDato(true)}
-              icon={<PlusIcon />}
-              className={'fit-content-button'}
-              variant={'tertiary'}
-              size={'small'}
-              type={'button'}
-            >
-              Legg til sluttdato
-            </Button>
-          )}
+          <TextFieldWrapper
+            label={'Sluttdato for forsørgeransvaret (Valgfritt)'}
+            control={form.control}
+            name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.tom`}
+            type={'text'}
+            // rules={{
+            //   validate: (value, formValues) => {
+            //     const parsedValueTom = stringToDate(value as string, DATO_FORMATER.ddMMyyyy);
+            //     const parsedValueFom = stringToDate(
+            //       formValues.barnetilleggVurderinger[barneTilleggIndex].vurderinger[vurderingIndex]
+            //         .fom as unknown as string,
+            //       DATO_FORMATER.ddMMyyyy
+            //     );
+            //
+            //     if (parsedValueTom && parsedValueFom) {
+            //       console.log(isBefore(parsedValueTom, parsedValueFom));
+            //       return isBefore(parsedValueTom, parsedValueFom) ? 'Slutt-dato kan ikke være før start-dato' : false;
+            //     } else {
+            //       return 'noe her fungerer ikke';
+            //     }
+            //   },
+            // }}
+          />
         </div>
       )}
     </div>
