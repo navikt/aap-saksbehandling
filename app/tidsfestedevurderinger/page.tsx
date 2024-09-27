@@ -2,8 +2,9 @@
 
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Button, Heading, Timeline } from '@navikt/ds-react';
-import { useState } from 'react';
 import { addMonths, subDays } from 'date-fns';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { useState } from 'react';
 
 interface FormFields {
   name: string;
@@ -18,7 +19,7 @@ export default function Page() {
   const gjennomførteVurderinger: Vurdering[] = [
     { name: 'hello', fom: new Date('2024-11-20'), tom: new Date('2024-12-24') },
     { name: 'pello', fom: new Date('2024-12-25'), tom: new Date('2025-02-19') },
-    { name: 'pello', fom: new Date('2024-02-20'), tom: new Date('2025-04-15') },
+    { name: 'pello', fom: new Date('2025-02-20'), tom: new Date('2025-04-15') },
   ];
 
   const [vurderinger, setVurderinger] = useState<Vurdering[]>([]);
@@ -35,9 +36,39 @@ export default function Page() {
     },
   });
 
-  const gjennomførteOgNyeVurderinger = [...gjennomførteVurderinger, ...vurderinger]
-    .sort((a, b) => a.fom.getTime() - b.fom.getTime())
-    .flat();
+  function sammenslåPerioder() {
+    const gamlePerioder = [...gjennomførteVurderinger].sort((a, b) => a.fom.getTime() - b.fom.getTime());
+    const nyePerioder = [...vurderinger].sort((a, b) => a.fom.getTime() - b.fom.getTime());
+
+    let sammenslåttePerioder: Vurdering[] = [];
+
+    let oldIndex = 0;
+
+    for (const newPeriod of nyePerioder) {
+      while (oldIndex < gamlePerioder.length && gamlePerioder[oldIndex].tom < newPeriod.fom) {
+        sammenslåttePerioder.push(gamlePerioder[oldIndex]);
+        oldIndex++;
+      }
+
+      while (oldIndex < gamlePerioder.length && gamlePerioder[oldIndex].fom <= newPeriod.tom) {
+        const oldPeriod = gamlePerioder[oldIndex];
+
+        if (oldPeriod.fom < newPeriod.fom && oldPeriod.tom >= newPeriod.fom) {
+          sammenslåttePerioder.push({
+            ...oldPeriod,
+            tom: new Date(subDays(newPeriod.fom.getTime(), 1)),
+          });
+        }
+        oldIndex++;
+      }
+
+      sammenslåttePerioder.push(newPeriod);
+    }
+
+    return sammenslåttePerioder;
+  }
+
+  const sammenslåttePerioder = sammenslåPerioder();
 
   return (
     <form
@@ -55,7 +86,7 @@ export default function Page() {
               return vurdering;
             }
           }),
-          { ...data, tom: addMonths(new Date(), 6) },
+          { ...data, tom: addMonths(new Date(), 2) },
         ]);
       })}
     >
@@ -70,14 +101,14 @@ export default function Page() {
               <Timeline.Row label="Perioder">
                 {gjennomførteVurderinger.map((p, i) => (
                   <Timeline.Period key={i} start={p.fom} end={p.tom} status={'success'} about={'hello pello '}>
-                    hihi
+                    <span>{formaterDatoForFrontend(p.fom)}</span> <span>{formaterDatoForFrontend(p.tom)}</span>
                   </Timeline.Period>
                 ))}
               </Timeline.Row>
               <Timeline.Row label="Nye perioder">
                 {vurderinger.map((p, i) => (
                   <Timeline.Period key={i} start={p.fom} end={p.tom} status={'success'} about={'hello pello '}>
-                    hihi
+                    <span>{formaterDatoForFrontend(p.fom)}</span> <span>{formaterDatoForFrontend(p.tom)}</span>
                   </Timeline.Period>
                 ))}
               </Timeline.Row>
@@ -88,9 +119,9 @@ export default function Page() {
             <Heading size={'small'}>Gammel og nye perioder sammenslått</Heading>
             <Timeline>
               <Timeline.Row label="Vurderinger">
-                {gjennomførteOgNyeVurderinger?.map((p, i) => (
+                {sammenslåttePerioder?.map((p, i) => (
                   <Timeline.Period key={i} start={p.fom} end={p.tom} status={'success'} about={'hello pello '}>
-                    hihi
+                    <span>{formaterDatoForFrontend(p.fom)}</span> <span>{formaterDatoForFrontend(p.tom)}</span>
                   </Timeline.Period>
                 ))}
               </Timeline.Row>
