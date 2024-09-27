@@ -1,3 +1,4 @@
+import { parse } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 export function validerDato(value?: string) {
@@ -8,4 +9,11 @@ export function validerDato(value?: string) {
   if (!inputDato) {
     return 'Dato format er ikke gyldig. Dato må være på formatet dd.mm.åååå';
   }
+}
+
+export function erDatoFoerDato(inputDato: string, referanseDato: string): boolean {
+  return (
+    new Date(parse(inputDato as string, 'dd.MM.yyyy', new Date())) <
+    new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()))
+  );
 }

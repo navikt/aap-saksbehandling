@@ -6,8 +6,7 @@ import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import styles from './Periodetabell.module.css';
 import { SelectWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { UseFormReturn } from 'react-hook-form';
-import { parse } from 'date-fns';
-import { validerDato } from 'lib/validation/dateValidation';
+import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   perioder: MeldepliktPeriode[];
@@ -99,10 +98,3 @@ export const Periodetabell = ({ perioder, vurderingstidspunkt, readOnly, form, r
     </Table>
   );
 };
-
-function erDatoFoerDato(inputDato: string, referanseDato: string): boolean {
-  return (
-    new Date(parse(inputDato as string, 'dd.MM.yyyy', new Date())) <
-    new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()))
-  );
-}
