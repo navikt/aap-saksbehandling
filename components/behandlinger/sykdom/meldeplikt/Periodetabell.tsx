@@ -6,8 +6,8 @@ import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import styles from './Periodetabell.module.css';
 import { SelectWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { UseFormReturn } from 'react-hook-form';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { parse } from 'date-fns';
+import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   perioder: MeldepliktPeriode[];
@@ -99,16 +99,6 @@ export const Periodetabell = ({ perioder, vurderingstidspunkt, readOnly, form, r
     </Table>
   );
 };
-
-function validerDato(value?: string) {
-  if (!value) {
-    return 'Du må sette en dato';
-  }
-  const inputDato = parseDatoFraDatePicker(value);
-  if (!inputDato) {
-    return 'Dato format er ikke gyldig. Dato må være på formatet dd.mm.yyyy';
-  }
-}
 
 function erDatoFoerDato(inputDato: string, referanseDato: string): boolean {
   return (

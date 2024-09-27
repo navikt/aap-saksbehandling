@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
 import { userEvent } from '@testing-library/user-event';
@@ -125,7 +125,7 @@ describe('Meldeplikt', () => {
       const fraDato = screen.getByRole('textbox', { name: 'Gjelder fra' });
       await user.type(fraDato, '31.02.2024');
       await klikkPåBekreft();
-      expect(screen.getByText('Dato format er ikke gyldig. Dato må være på formatet dd.mm.yyyy')).toBeVisible();
+      expect(screen.getByText('Dato format er ikke gyldig. Dato må være på formatet dd.mm.åååå')).toBeVisible();
     });
 
     it('viser feilmelding dersom slutt-tidspunkt er før start-tidspunkt', async () => {
