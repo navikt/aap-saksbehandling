@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { erDatoFoerDato, validerDato } from './dateValidation';
+import { erDatoFoerDato, validerDato, erDatoIFremtiden } from './dateValidation';
 import { addDays, format, subDays } from 'date-fns';
 
 describe('Dato-validering', () => {
@@ -28,6 +28,23 @@ describe('Dato-validering', () => {
       const referansedato = format(new Date(), 'dd.MM.yyyy');
       const dato = format(addDays(new Date(), 10), 'dd.MM.yyyy');
       expect(erDatoFoerDato(dato, referansedato)).toBeFalsy();
+    });
+  });
+
+  describe('er dato tilbake i tid', () => {
+    it('returnerer true når datoen er i fremtiden', () => {
+      const dato = format(addDays(new Date(), 2), 'dd.MM.yyyy');
+      expect(erDatoIFremtiden(dato)).toBeTruthy();
+    });
+
+    it('returnerer false når datoen ikke er i fremtiden', () => {
+      const dato = format(subDays(new Date(), 2), 'dd.MM.yyyy');
+      expect(erDatoIFremtiden(dato)).toBeFalsy();
+    });
+
+    it('returnerer false når datoen er i dag', () => {
+      const dato = format(new Date(), 'dd.MM.yyyy');
+      expect(erDatoIFremtiden(dato)).toBeFalsy();
     });
   });
 });

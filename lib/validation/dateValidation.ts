@@ -1,4 +1,4 @@
-import { parse } from 'date-fns';
+import { isFuture, parse } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 export function validerDato(value?: string) {
@@ -16,4 +16,8 @@ export function erDatoFoerDato(inputDato: string, referanseDato: string): boolea
     new Date(parse(inputDato as string, 'dd.MM.yyyy', new Date())) <
     new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()))
   );
+}
+
+export function erDatoIFremtiden(value: string): boolean {
+  return isFuture(parse(value as string, 'dd.MM.yyyy', new Date()));
 }
