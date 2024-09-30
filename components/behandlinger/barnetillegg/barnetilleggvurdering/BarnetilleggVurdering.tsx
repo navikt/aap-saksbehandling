@@ -27,6 +27,7 @@ export interface BarnetilleggFormFields {
 
 interface BarneTilleggVurdering {
   ident: string;
+  fødselsdato: string;
   navn: string;
   vurderinger: Vurdering[];
 }
@@ -48,6 +49,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
       defaultValue: grunnlag.barnSomTrengerVurdering.map((barn) => {
         return {
           ident: barn.ident.identifikator,
+          fødselsdato: barn.fødselsdato,
           navn: 'Barnet sitt navn',
           vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fom: '' }],
         };
@@ -114,6 +116,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
                 form={form}
                 barnetilleggIndex={barnetilleggIndex}
                 ident={vurdering.ident}
+                fødselsdato={vurdering.fødselsdato}
                 navn={vurdering.navn}
                 readOnly={readOnly}
               />

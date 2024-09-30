@@ -5,6 +5,7 @@ import { userEvent } from '@testing-library/user-event';
 import { BarnetilleggGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { addDays } from 'date-fns';
+import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 const grunnlag: BarnetilleggGrunnlag = {
   folkeregisterbarn: [
@@ -13,6 +14,7 @@ const grunnlag: BarnetilleggGrunnlag = {
         identifikator: '12345678910',
         aktivIdent: true,
       },
+      fødselsdato: '2023-06-05',
       forsorgerPeriode: {
         fom: '2020-02-02',
         tom: '2038-02-02',
@@ -26,6 +28,7 @@ const grunnlag: BarnetilleggGrunnlag = {
         identifikator: '23456789010',
         aktivIdent: true,
       },
+      fødselsdato: '2023-05-05',
       forsorgerPeriode: {
         fom: '2020-01-30',
         tom: '2038-01-30',
@@ -78,16 +81,17 @@ describe('barnetillegg', () => {
 describe('Manuelt registrerte barn', () => {
   const user = userEvent.setup();
 
-  it('skal ha en heading med ident', () => {
+  it('skal ha en heading med ident og hvilken rolle brukeren har for barnet', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
-    const heading = screen.getByRole('heading', { name: '12345678910' });
+    const heading = screen.getByRole('heading', { name: 'Oppgitt fosterbarn - 23456789010' });
     expect(heading).toBeVisible();
   });
 
   it('skal vise navnet på barnet', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
-    const heading = screen.getByText('Barnet sitt navn');
-    expect(heading).toBeVisible();
+    const alder = kalkulerAlder(new Date(grunnlag.barnSomTrengerVurdering[0].fødselsdato))
+    const tekst = screen.getByText(`Barnet sitt navn (${alder})`);
+    expect(tekst).toBeVisible();
   });
 
   it('skal ha et begrunnelsesfelt', () => {

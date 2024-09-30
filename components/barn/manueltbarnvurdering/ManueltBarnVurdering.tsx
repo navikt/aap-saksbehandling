@@ -5,16 +5,18 @@ import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { ManueltBarnVurderingFelter } from 'components/barn/manueltbarnvurderingfelter/ManueltBarnVurderingFelter';
 
 import styles from './ManueltBarnVurdering.module.css';
+import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
   barnetilleggIndex: number;
   ident: string;
   navn: string;
+  fødselsdato: string;
   readOnly: boolean;
 }
 
-export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, navn, readOnly }: Props) => {
+export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, navn, readOnly, fødselsdato }: Props) => {
   const {
     fields: vurderinger,
     remove,
@@ -31,9 +33,9 @@ export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, navn, rea
           <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'3rem'} />
         </div>
         <div>
-          <Heading size={'small'}>{ident}</Heading>
+          <Heading size={'small'}>Oppgitt fosterbarn - {ident}</Heading>
           <BodyShort size={'small'}>
-            {navn} {}
+            {navn} ({kalkulerAlder(new Date(fødselsdato))})
           </BodyShort>
         </div>
       </div>

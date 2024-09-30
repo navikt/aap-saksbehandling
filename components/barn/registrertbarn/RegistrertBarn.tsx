@@ -3,6 +3,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { IdentifisertBarn } from 'lib/types/types';
 
 import styles from './RegistrertBarn.module.css';
+import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 interface Props {
   registrertBarn: IdentifisertBarn;
@@ -14,8 +15,8 @@ export const RegistrertBarn = ({ registrertBarn }: Props) => {
       <ExpansionCard.Header>
         <ExpansionCard.Title>
           <div>
-            <Heading size={'small'}>{registrertBarn.ident.identifikator}</Heading>
-            <BodyShort size={'small'}>Eget barn</BodyShort>
+            <Heading size={'small'}>Eget barn - {registrertBarn.ident.identifikator}</Heading>
+            <BodyShort size={'small'}>Barnet sitt navn ({kalkulerAlder(new Date(registrertBarn.fødselsdato))})</BodyShort>
           </div>
         </ExpansionCard.Title>
       </ExpansionCard.Header>
