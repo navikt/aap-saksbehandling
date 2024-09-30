@@ -21,12 +21,12 @@ const user = userEvent.setup();
 
 describe('SoningsvurderingV2', () => {
   it('har overskrift på nivå 3', () => {
-    render(<SoningsvurderingV2 soningsgrunnlag={soningsgrunnlag} readOnly={false} />);
+    render(<SoningsvurderingV2 soningsgrunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
     expect(screen.getByRole('heading', { level: 3, name: 'Soning § 11-26' })).toBeVisible();
   });
 
   it('har en tekst som informerer om at søker har soningsforhold', () => {
-    render(<SoningsvurderingV2 soningsgrunnlag={soningsgrunnlag} readOnly={false} />);
+    render(<SoningsvurderingV2 soningsgrunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
     expect(screen.getByText('Søker har følgende soningsforhold')).toBeVisible();
   });
 
