@@ -150,7 +150,7 @@ describe('Manuelt registrerte barn', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
 
-    const sluttDatoFelt = screen.getByRole('textbox', {  name: /til \(valgfritt\)/i});
+    const sluttDatoFelt = screen.getByRole('textbox', { name: /til \(valgfritt\)/i });
     expect(sluttDatoFelt).toBeVisible();
   });
 
@@ -209,6 +209,31 @@ describe('Manuelt registrerte barn', () => {
     render(<BarnetilleggVurdering readOnly={true} grunnlag={grunnlag} behandlingsversjon={1} />);
     const knapp = screen.queryByRole('button', { name: 'Bekreft' });
     expect(knapp).not.toBeInTheDocument();
+  });
+
+  it('skal ha en knapp for å legge til flere perioder', () => {
+    render(<BarnetilleggVurdering readOnly={true} grunnlag={grunnlag} behandlingsversjon={1} />);
+    const knapp = screen.getByRole('button', { name: 'Legg til periode' });
+    expect(knapp).toBeInTheDocument();
+  });
+
+  it('skal være mulig å legge til flere perioder', async () => {
+    render(<BarnetilleggVurdering readOnly={true} grunnlag={grunnlag} behandlingsversjon={1} />);
+
+    const begrunnelsesFelterFørDetErLagtTilEnNy = screen.getAllByRole('textbox', {
+      name: 'Vurder om det skal gis barnetillegg for barnet',
+    });
+
+    expect(begrunnelsesFelterFørDetErLagtTilEnNy.length).toBe(1);
+
+    const knapp = screen.getByRole('button', { name: 'Legg til periode' });
+    await user.click(knapp);
+
+    const begrunnelsesFelter = screen.getAllByRole('textbox', {
+      name: 'Vurder om det skal gis barnetillegg for barnet',
+    });
+
+    expect(begrunnelsesFelter.length).toBe(2);
   });
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {

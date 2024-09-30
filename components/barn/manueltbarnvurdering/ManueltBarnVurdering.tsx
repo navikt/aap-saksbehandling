@@ -1,6 +1,6 @@
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
-import { QuestionmarkDiamondIcon, TrashIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon, QuestionmarkDiamondIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { ManueltBarnVurderingFelter } from 'components/barn/manueltbarnvurderingfelter/ManueltBarnVurderingFelter';
 
@@ -67,11 +67,12 @@ export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, navn, rea
       <Button
         onClick={() => append({ begrunnelse: '', harForeldreAnsvar: '', fom: '' })}
         className={'fit-content-button'}
-        variant={'secondary'}
-        size={'small'}
+        variant={'tertiary'}
+        size={'medium'}
+        icon={<PlusCircleIcon />}
         type={'button'}
       >
-        Legg til flere perioder
+        Legg til periode
       </Button>
     </section>
   );
