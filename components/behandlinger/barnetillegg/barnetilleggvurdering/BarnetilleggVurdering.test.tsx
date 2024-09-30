@@ -51,14 +51,6 @@ describe('barnetillegg', () => {
     expect(heading).toBeVisible();
   });
 
-  it('skal ha en description for manuelle barn som er lagt inn av søker', () => {
-    render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
-    const description = screen.getByText(
-      'Les dokumentene og tilknytt relevante dokumenter til vurdering om det skal beregnes barnetillegg'
-    );
-    expect(description).toBeVisible();
-  });
-
   it('skal ha en heading for registrerte barn fra folkeregisteret', () => {
     render(<BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={0} readOnly={false} />);
     const heading = screen.getByText('Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg');
@@ -89,7 +81,7 @@ describe('Manuelt registrerte barn', () => {
 
   it('skal vise navnet på barnet', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
-    const alder = kalkulerAlder(new Date(grunnlag.barnSomTrengerVurdering[0].fødselsdato))
+    const alder = kalkulerAlder(new Date(grunnlag.barnSomTrengerVurdering[0].fødselsdato));
     const tekst = screen.getByText(`Barnet sitt navn (${alder})`);
     expect(tekst).toBeVisible();
   });

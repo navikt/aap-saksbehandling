@@ -70,10 +70,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
     >
       <div className={'flex-column'}>
         <div>
-          <Label size={'small'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
-          <BodyShort size={'small'}>
-            Les dokumentene og tilknytt relevante dokumenter til vurdering om det skal beregnes barnetillegg
-          </BodyShort>
+          <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
         </div>
         <form
           className={'flex-column'}
@@ -126,7 +123,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
 
         {grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0 && (
           <>
-            <Label size={'small'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
+            <Label size={'medium'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
             {grunnlag.folkeregisterbarn.map((barn, index) => (
               <RegistrertBarn key={index} registrertBarn={barn} />
             ))}
