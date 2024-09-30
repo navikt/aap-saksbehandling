@@ -44,7 +44,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om det vil være unødig tyngende for søker å overholde meldeplikten',
+        label: 'Vurder innbyggers behov for fritak fra meldeplikt',
         description: 'Begrunn vurderingen',
         rules: { required: 'Du må begrunne vurderingen din' },
         defaultValue: grunnlag?.vurderinger[0].begrunnelse,

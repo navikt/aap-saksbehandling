@@ -9,7 +9,7 @@ describe('Meldeplikt', () => {
   it('skal være default lukket', () => {
     render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
     const textbox = screen.queryByRole('textbox', {
-      name: 'Vurder om det vil være unødig tyngende for søker å overholde meldeplikten',
+      name: 'Vurder innbyggers behov for fritak fra meldeplikt',
     });
     expect(textbox).toBeNull();
   });
@@ -25,7 +25,7 @@ describe('Meldeplikt', () => {
     await openAccordionCard();
 
     const textbox = screen.getByRole('textbox', {
-      name: /vurder om det vil være unødig tyngende for søker å overholde meldeplikten/i,
+      name: 'Vurder innbyggers behov for fritak fra meldeplikt',
     });
     expect(textbox).toBeVisible();
   });
