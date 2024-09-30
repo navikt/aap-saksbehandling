@@ -69,65 +69,70 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
       steg={'BARNETILLEGG'}
     >
       <div className={'flex-column'}>
-        <div>
-          <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
-        </div>
-        <form
-          className={'flex-column'}
-          id={'barnetillegg'}
-          onSubmit={form.handleSubmit((data) => {
-            løsBehovOgGåTilNesteSteg({
-              behandlingVersjon: behandlingsversjon,
-              behov: {
-                behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
-                vurderingerForBarnetillegg: {
-                  vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
-                    return {
-                      ident: { identifikator: vurderteBarn.ident, aktivIdent: false },
-                      vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
+        {grunnlag.barnSomTrengerVurdering && grunnlag.barnSomTrengerVurdering.length > 0 && (
+          <div className={'flex-column'}>
+            <div>
+              <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
+            </div>
+
+            <form
+              className={'flex-column'}
+              id={'barnetillegg'}
+              onSubmit={form.handleSubmit((data) => {
+                løsBehovOgGåTilNesteSteg({
+                  behandlingVersjon: behandlingsversjon,
+                  behov: {
+                    behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
+                    vurderingerForBarnetillegg: {
+                      vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
                         return {
-                          begrunnelse: vurdering.begrunnelse,
-                          harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
-                          periode: {
-                            fom: vurdering.fom
-                              ? formaterDatoForBackend(parse(vurdering.fom, DATO_FORMATER.ddMMyyyy, new Date()))
-                              : '',
-                            tom: vurdering.tom
-                              ? formaterDatoForBackend(parse(vurdering.tom, DATO_FORMATER.ddMMyyyy, new Date()))
-                              : '',
-                          },
+                          ident: { identifikator: vurderteBarn.ident, aktivIdent: false },
+                          vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
+                            return {
+                              begrunnelse: vurdering.begrunnelse,
+                              harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
+                              periode: {
+                                fom: vurdering.fom
+                                  ? formaterDatoForBackend(parse(vurdering.fom, DATO_FORMATER.ddMMyyyy, new Date()))
+                                  : '',
+                                tom: vurdering.tom
+                                  ? formaterDatoForBackend(parse(vurdering.tom, DATO_FORMATER.ddMMyyyy, new Date()))
+                                  : '',
+                              },
+                            };
+                          }),
                         };
                       }),
-                    };
-                  }),
-                },
-              },
-              referanse: behandlingsReferanse,
-            });
-          })}
-        >
-          {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
-            return (
-              <ManueltBarnVurdering
-                key={vurdering.id}
-                form={form}
-                barnetilleggIndex={barnetilleggIndex}
-                ident={vurdering.ident}
-                fødselsdato={vurdering.fødselsdato}
-                navn={vurdering.navn}
-                readOnly={readOnly}
-              />
-            );
-          })}
-        </form>
+                    },
+                  },
+                  referanse: behandlingsReferanse,
+                });
+              })}
+            >
+              {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
+                return (
+                  <ManueltBarnVurdering
+                    key={vurdering.id}
+                    form={form}
+                    barnetilleggIndex={barnetilleggIndex}
+                    ident={vurdering.ident}
+                    fødselsdato={vurdering.fødselsdato}
+                    navn={vurdering.navn}
+                    readOnly={readOnly}
+                  />
+                );
+              })}
+            </form>
+          </div>
+        )}
 
         {grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0 && (
-          <>
+          <div className={'flex-column'}>
             <Label size={'medium'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
             {grunnlag.folkeregisterbarn.map((barn, index) => (
               <RegistrertBarn key={index} registrertBarn={barn} />
             ))}
-          </>
+          </div>
         )}
 
         {!readOnly && (

@@ -7,6 +7,7 @@ import { TextAreaWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 
 import 'components/barn/manueltbarnvurderingfelter/ManueltBarnVurderingFelter.css';
+import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   ident: string;
@@ -31,7 +32,9 @@ export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurder
         rules={{ required: 'Du må gi en begrunnelse' }}
       />
       <RadioGroupWrapper
-        label={'Har innbygger hatt  forsørgeransvar  for fosterbarnet i to år før søknadsdato, eller er forsørgeransvaret av varig karakter?'}
+        label={
+          'Har innbygger hatt  forsørgeransvar  for fosterbarnet i to år før søknadsdato, eller er forsørgeransvaret av varig karakter?'
+        }
         control={form.control}
         name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`}
         readOnly={readOnly}
@@ -48,45 +51,41 @@ export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurder
             control={form.control}
             name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fom`}
             type={'text'}
-            // rules={{
-            //   validate: (value) => {
-            //     if (!value) {
-            //       return 'Du må sette en dato for når søker har forsørgeransvar for barnet fra';
-            //     } else {
-            //       const parsedValue = stringToDate(value as string, DATO_FORMATER.ddMMyyyy);
-            //       if (!parsedValue) {
-            //         return 'Dato for når søker har forsørgeransvar fra er ikke gyldig';
-            //       } else {
-            //         return isFuture(parsedValue)
-            //           ? 'Dato for når søker har forsørgeransvar fra kan ikke være frem i tid'
-            //           : false;
-            //       }
-            //     }
-            //   },
-            // }}
+            rules={{
+              validate: {
+                validerDato: (value) => validerDato(value as string),
+                erDatoTilbakeITid: (value) => {
+                  if (erDatoIFremtiden(value as string)) {
+                    return 'Dato for når søker har forsørgeransvar fra kan ikke være frem i tid';
+                  }
+                },
+              },
+            }}
           />
           <TextFieldWrapper
             label={'Til (valgfritt)'}
             control={form.control}
             name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.tom`}
             type={'text'}
-            // rules={{
-            //   validate: (value, formValues) => {
-            //     const parsedValueTom = stringToDate(value as string, DATO_FORMATER.ddMMyyyy);
-            //     const parsedValueFom = stringToDate(
-            //       formValues.barnetilleggVurderinger[barneTilleggIndex].vurderinger[vurderingIndex]
-            //         .fom as unknown as string,
-            //       DATO_FORMATER.ddMMyyyy
-            //     );
-            //
-            //     if (parsedValueTom && parsedValueFom) {
-            //       console.log(isBefore(parsedValueTom, parsedValueFom));
-            //       return isBefore(parsedValueTom, parsedValueFom) ? 'Slutt-dato kan ikke være før start-dato' : false;
-            //     } else {
-            //       return 'noe her fungerer ikke';
-            //     }
-            //   },
-            // }}
+            rules={{
+              validate: {
+                validerDato: (value, formValues) => {
+                  if (formValues.barnetilleggVurderinger[barneTilleggIndex].vurderinger[vurderingIndex].fom !== '')
+                    return validerDato(value as string);
+                },
+                erDatoFoer: (value, formValues) => {
+                  if (formValues.barnetilleggVurderinger[barneTilleggIndex].vurderinger[vurderingIndex].fom !== '')
+                    if (
+                      erDatoFoerDato(
+                        value as string,
+                        formValues.barnetilleggVurderinger[barneTilleggIndex].vurderinger[vurderingIndex].fom
+                      )
+                    ) {
+                      return 'Slutt-dato kan ikke være før start-dato';
+                    }
+                },
+              },
+            }}
           />
         </div>
       )}

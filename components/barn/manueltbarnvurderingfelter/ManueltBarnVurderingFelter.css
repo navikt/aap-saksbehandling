@@ -8,8 +8,8 @@
 }
 
 .barnetilleggperiode {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--a-spacing-4);
-  align-items: flex-end;
+  align-items: flex-start;
 }

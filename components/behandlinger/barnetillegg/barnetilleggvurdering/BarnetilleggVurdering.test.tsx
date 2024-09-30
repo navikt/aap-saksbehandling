@@ -132,7 +132,7 @@ describe('Manuelt registrerte barn', () => {
     expect(felt).toBeVisible();
   });
 
-  it.skip('skal ha vise feilmelding dersom feltet for datoen søkeren har forsørgeransvar for barnet fra ikke er besvart', async () => {
+  it('skal ha vise feilmelding dersom feltet for datoen søkeren har forsørgeransvar for barnet fra ikke er besvart', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
 
     const forsørgeransvarFelt = screen.queryByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
@@ -142,7 +142,7 @@ describe('Manuelt registrerte barn', () => {
     await fyllUtEnBegrunnelse();
     await klikkPåBekreft();
 
-    const feilmelding = screen.getByText('Du må sette en dato for når søker har forsørgeransvar for barnet fra');
+    const feilmelding = screen.getByText('Du må sette en dato');
     expect(feilmelding).toBeVisible();
   });
 
@@ -154,12 +154,12 @@ describe('Manuelt registrerte barn', () => {
     expect(sluttDatoFelt).toBeVisible();
   });
 
-  it.skip('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
+  it('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     await fyllUtEnBegrunnelse();
     const datofelt = screen.getByRole('textbox', {
-      name: /søker har forsørgeransvar for barnet fra \(dd\.mm\.åååå\)/i,
+      name: /forsørgeransvar fra/i,
     });
     const imorgen = addDays(new Date(), 1);
 
@@ -171,31 +171,29 @@ describe('Manuelt registrerte barn', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it.skip('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
+  it('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     const datofelt = screen.getByRole('textbox', {
-      name: /søker har forsørgeransvar for barnet fra \(dd\.mm\.åååå\)/i,
+      name: /forsørgeransvar fra/i,
     });
     await user.type(datofelt, '12.2003');
 
     await klikkPåBekreft();
 
-    const feilmelding = screen.getByText('Dato for når søker har forsørgeransvar fra er ikke gyldig');
+    const feilmelding = screen.getByText('Dato format er ikke gyldig. Dato må være på formatet dd.mm.åååå');
     expect(feilmelding).toBeVisible();
   });
 
-  it.skip('viser en feilmelding dersom til-dato er satt før fra-dato', async () => {
+  it('viser en feilmelding dersom til-dato er satt før fra-dato', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     await fyllUtEnBegrunnelse();
     const startDato = screen.getByRole('textbox', {
-      name: /søker har forsørgeransvar for barnet fra \(dd\.mm\.åååå\)/i,
+      name: /forsørgeransvar fra/i,
     });
 
-    const leggTilSluttDatoKnapp = screen.getByRole('button', { name: 'Legg til sluttdato' });
-    await user.click(leggTilSluttDatoKnapp);
-    const sluttDato = screen.getByRole('textbox', { name: /sluttdato for forsørgeransvaret \(dd\.mm\.åååå\)/i });
+    const sluttDato = screen.getByRole('textbox', {  name: /til \(valgfritt\)/i});
 
     await user.type(startDato, '10.08.2023');
     await user.type(sluttDato, '09.08.2023');
@@ -247,7 +245,7 @@ describe('Manuelt registrerte barn', () => {
 
   const fyllUtEnBegrunnelse = async () => {
     const begrunnelsesfelt = screen.getByRole('textbox', {
-      name: 'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet',
+      name: 'Vurder om det skal gis barnetillegg for barnet',
     });
     await user.type(begrunnelsesfelt, 'Dette er en begrunnelse');
   };
