@@ -3,7 +3,7 @@
 import { ChildHairEyesIcon } from '@navikt/aksel-icons';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { BodyShort, Button, Label } from '@navikt/ds-react';
+import { Button, Label } from '@navikt/ds-react';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
 import { BarnetilleggGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
