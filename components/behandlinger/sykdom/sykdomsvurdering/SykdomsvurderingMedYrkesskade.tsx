@@ -22,7 +22,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { FormEvent } from 'react';
 import { SykdomProps } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { validerÅrstall } from 'lib/utils/validation';
+import { validerÅrstall } from 'lib/validation/dateValidation';
 
 interface FormFields {
   harSkadeSykdomEllerLyte: string;
