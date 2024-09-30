@@ -24,14 +24,14 @@ export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurder
   return (
     <div className={'flex-column'}>
       <TextAreaWrapper
-        label={'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet'}
+        label={'Vurder om det skal gis barnetillegg for barnet'}
         control={form.control}
         name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
         readOnly={readOnly}
         rules={{ required: 'Du må gi en begrunnelse' }}
       />
       <RadioGroupWrapper
-        label={'Skal det beregnes barnetillegg for dette barnet?'}
+        label={'Har innbygger hatt  forsørgeransvar  for fosterbarnet i to år før søknadsdato, eller er forsørgeransvaret av varig karakter?'}
         control={form.control}
         name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`}
         readOnly={readOnly}
@@ -44,7 +44,7 @@ export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurder
       {harForeldreAnsvar && (
         <div className={'barnetilleggperiode'}>
           <TextFieldWrapper
-            label={'Søker har forsørgeransvar for barnet fra'}
+            label={'Forsørgeransvar fra'}
             control={form.control}
             name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fom`}
             type={'text'}
@@ -66,7 +66,7 @@ export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurder
             // }}
           />
           <TextFieldWrapper
-            label={'Sluttdato for forsørgeransvaret (Valgfritt)'}
+            label={'Til (valgfritt)'}
             control={form.control}
             name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.tom`}
             type={'text'}

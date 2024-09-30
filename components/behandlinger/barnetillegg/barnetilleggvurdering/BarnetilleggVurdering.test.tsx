@@ -89,7 +89,7 @@ describe('Manuelt registrerte barn', () => {
   it('skal ha et begrunnelsesfelt', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     const felt = screen.getByRole('textbox', {
-      name: 'Vurder §11-20 og om det skal beregnes barnetillegg for dette barnet',
+      name: 'Vurder om det skal gis barnetillegg for barnet',
     });
     expect(felt).toBeVisible();
   });
@@ -105,7 +105,9 @@ describe('Manuelt registrerte barn', () => {
 
   it('skal ha et felt hvor det besvares om det skal beregnes barnetillegg for barnet', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
-    const felt = screen.getByRole('group', { name: 'Skal det beregnes barnetillegg for dette barnet?' });
+    const felt = screen.getByRole('group', {
+      name: /har innbygger hatt forsørgeransvar for fosterbarnet i to år før søknadsdato, eller er forsørgeransvaret av varig karakter\?/i,
+    });
     expect(felt).toBeVisible();
   });
 
@@ -126,7 +128,7 @@ describe('Manuelt registrerte barn', () => {
 
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
 
-    const felt = screen.getByRole('textbox', { name: /søker har forsørgeransvar for barnet fra/i });
+    const felt = screen.getByRole('textbox', { name: /forsørgeransvar fra/i });
     expect(felt).toBeVisible();
   });
 
@@ -148,7 +150,7 @@ describe('Manuelt registrerte barn', () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
 
-    const sluttDatoFelt = screen.getByRole('textbox', { name: /Sluttdato for forsørgeransvaret/i });
+    const sluttDatoFelt = screen.getByRole('textbox', {  name: /til \(valgfritt\)/i});
     expect(sluttDatoFelt).toBeVisible();
   });
 
@@ -211,7 +213,7 @@ describe('Manuelt registrerte barn', () => {
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
     const skalBeregnesBarnetilleggFelt = screen.getByRole('group', {
-      name: 'Skal det beregnes barnetillegg for dette barnet?',
+      name: /har innbygger hatt forsørgeransvar for fosterbarnet i to år før søknadsdato, eller er forsørgeransvaret av varig karakter\?/i,
     });
     const jaVerdi = within(skalBeregnesBarnetilleggFelt).getByRole('radio', { name: 'Ja' });
 
