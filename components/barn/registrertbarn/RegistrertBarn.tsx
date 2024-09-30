@@ -16,7 +16,9 @@ export const RegistrertBarn = ({ registrertBarn }: Props) => {
         <ExpansionCard.Title>
           <div>
             <Heading size={'small'}>Eget barn - {registrertBarn.ident.identifikator}</Heading>
-            <BodyShort size={'small'}>Barnet sitt navn ({kalkulerAlder(new Date(registrertBarn.fødselsdato))})</BodyShort>
+            <BodyShort size={'medium'}>
+              Barnet sitt navn ({kalkulerAlder(new Date(registrertBarn.fødselsdato))})
+            </BodyShort>
           </div>
         </ExpansionCard.Title>
       </ExpansionCard.Header>

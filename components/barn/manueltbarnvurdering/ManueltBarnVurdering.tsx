@@ -34,7 +34,7 @@ export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, navn, rea
         </div>
         <div>
           <Heading size={'small'}>Oppgitt fosterbarn - {ident}</Heading>
-          <BodyShort size={'small'}>
+          <BodyShort size={'medium'}>
             {navn} ({kalkulerAlder(new Date(fødselsdato))})
           </BodyShort>
         </div>
