@@ -193,7 +193,7 @@ describe('Manuelt registrerte barn', () => {
       name: /forsørgeransvar fra/i,
     });
 
-    const sluttDato = screen.getByRole('textbox', {  name: /til \(valgfritt\)/i});
+    const sluttDato = screen.getByRole('textbox', { name: /til \(valgfritt\)/i });
 
     await user.type(startDato, '10.08.2023');
     await user.type(sluttDato, '09.08.2023');
@@ -232,6 +232,35 @@ describe('Manuelt registrerte barn', () => {
     });
 
     expect(begrunnelsesFelter.length).toBe(2);
+  });
+
+  it('skal ikke være mulig å fjerne den første perioden', async () => {
+    render(<BarnetilleggVurdering readOnly={true} grunnlag={grunnlag} behandlingsversjon={1} />);
+
+    expect(screen.queryByRole('button', { name: /fjern periode/i })).not.toBeInTheDocument();
+  });
+
+  it('knapp for å slette en periode skal vises dersom det legges til flere enn èn periode', async () => {
+    render(<BarnetilleggVurdering readOnly={true} grunnlag={grunnlag} behandlingsversjon={1} />);
+
+    expect(
+      screen.getAllByRole('textbox', {
+        name: 'Vurder om det skal gis barnetillegg for barnet',
+      }).length
+    ).toBe(1);
+
+    expect(screen.queryByRole('button', { name: /fjern periode/i })).not.toBeInTheDocument();
+
+    const leggTilPeriodeKnapp = screen.getByRole('button', { name: /legg til periode/i });
+    await user.click(leggTilPeriodeKnapp);
+
+    expect(
+      screen.getAllByRole('textbox', {
+        name: 'Vurder om det skal gis barnetillegg for barnet',
+      }).length
+    ).toBe(2);
+
+    expect(screen.getByRole('button', { name: /fjern periode/i })).toBeInTheDocument();
   });
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {

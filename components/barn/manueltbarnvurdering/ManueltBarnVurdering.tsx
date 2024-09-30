@@ -40,28 +40,32 @@ export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, navn, rea
         </div>
       </div>
       <div>
-        {vurderinger.map((vurdering, vurderingIndex) => (
-          <div key={vurdering.id} className={styles.vurdering}>
-            <ManueltBarnVurderingFelter
-              form={form}
-              readOnly={readOnly}
-              ident={ident}
-              barneTilleggIndex={barnetilleggIndex}
-              vurderingIndex={vurderingIndex}
-            />
-
-            <Button
-              onClick={() => remove(vurderingIndex)}
-              className={'fit-content-button'}
-              type={'button'}
-              size={'small'}
-              variant={'tertiary'}
-              icon={<TrashIcon />}
-            >
-              Fjern periode
-            </Button>
-          </div>
-        ))}
+        {vurderinger.map((vurdering, vurderingIndex) => {
+          const kanFjernePeriode = vurderingIndex !== 0;
+          return (
+            <div key={vurdering.id} className={styles.vurdering}>
+              <ManueltBarnVurderingFelter
+                form={form}
+                readOnly={readOnly}
+                ident={ident}
+                barneTilleggIndex={barnetilleggIndex}
+                vurderingIndex={vurderingIndex}
+              />
+              {kanFjernePeriode && (
+                <Button
+                  onClick={() => remove(vurderingIndex)}
+                  className={'fit-content-button'}
+                  type={'button'}
+                  size={'small'}
+                  variant={'tertiary'}
+                  icon={<TrashIcon />}
+                >
+                  Fjern periode
+                </Button>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <Button
