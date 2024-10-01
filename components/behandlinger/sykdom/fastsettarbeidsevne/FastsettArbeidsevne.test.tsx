@@ -36,43 +36,19 @@ describe('FastsettArbeidsevne', () => {
     ).toBeVisible();
   });
 
-  it('har en rad i tabellen som initiell tilstand hvis det ikke finnes noe data', async () => {
+  it('har et felt for å angi arbeidsevne', async () => {
     await åpneVilkårskort();
-    expect(screen.getAllByRole('row')).toHaveLength(2);
+    expect(screen.getByRole('textbox', { name: 'Arbeidsevne' })).toBeVisible();
   });
 
-  it('har en knapp for å legge til nye perioder', async () => {
+  it('har et felt for å angi enhet for arbeidsevne', async () => {
     await åpneVilkårskort();
-    expect(screen.getByRole('button', { name: 'Legg til periode' })).toBeVisible();
+    expect(screen.getByRole('combobox', { name: 'Enhet' })).toBeVisible();
   });
 
-  it('klikk på knapp for å legge til en rad legger til en rad', async () => {
+  it('har et felt for å angi når arbeidsevnen gjelder fra', async () => {
     await åpneVilkårskort();
-    expect(screen.getAllByRole('row')).toHaveLength(2);
-    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
-    expect(screen.getAllByRole('row')).toHaveLength(3);
-  });
-
-  describe('Periodetabell', () => {
-    it('har et input-felt for arbeidsevne', async () => {
-      await åpneVilkårskort();
-      expect(screen.getByRole('textbox', { name: 'Arbeidsevne' })).toBeVisible();
-    });
-
-    it('har et select-element for å velge enhet for arbeidsevne', async () => {
-      await åpneVilkårskort();
-      expect(screen.getByRole('combobox', { name: 'Enhet' })).toBeVisible();
-    });
-
-    it('har et felt for når perioden starter', async () => {
-      await åpneVilkårskort();
-      expect(screen.getByRole('textbox', { name: 'Gjelder fra' })).toBeVisible();
-    });
-
-    it('har et felt for når perioden slutter', async () => {
-      await åpneVilkårskort();
-      expect(screen.getByRole('textbox', { name: 'Til og med (valgfritt)' })).toBeVisible();
-    });
+    expect(screen.getByRole('textbox', { name: 'Arbeidsevne gjelder fra' })).toBeVisible();
   });
 
   async function åpneVilkårskort() {

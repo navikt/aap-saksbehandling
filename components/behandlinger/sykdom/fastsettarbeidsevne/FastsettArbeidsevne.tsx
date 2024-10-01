@@ -2,16 +2,14 @@
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormEvent } from 'react';
-import { FastsettArbeidsevnePeriodetabell } from 'components/behandlinger/sykdom/fastsettarbeidsevne/fastsettarbeidsevneperiodetabell/FastsettArbeidsevnePeriodetabell';
 
-import styles from './FastsettArbeidsevne.module.css';
-import { PercentIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { PercentIcon } from '@navikt/aksel-icons';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { Veiledning } from 'components/veiledning/Veiledning';
-import { Button } from '@navikt/ds-react';
-import { useFieldArray } from 'react-hook-form';
+import { validerDato } from 'lib/validation/dateValidation';
+
+import styles from './FastsettArbeidsevne.module.css';
 
 interface Props {
   behandlingVersjon: number;
@@ -20,14 +18,16 @@ interface Props {
 
 export type FastsettArbeidsevnePeriode = {
   arbeidsevne: string;
-  enhet?: 'PROSENT' | 'TIMER';
+  enhet: 'PROSENT' | 'TIMER';
   fom: string;
   tom: string;
 };
 
 export type FastsettArbeidsevneFormFields = {
   begrunnelse: string;
-  perioder: FastsettArbeidsevnePeriode[];
+  arbeidsevne: string;
+  enhet: 'PROSENT' | 'TIMER';
+  arbeidsevneGjelderFra: string;
 };
 
 export const FastsettArbeidsevne = ({ readOnly }: Props) => {
@@ -39,13 +39,32 @@ export const FastsettArbeidsevne = ({ readOnly }: Props) => {
       description: 'Hvis ikke annet er oppgitt, så antas innbygger å ha 0% arbeidsevne og rett på full ytelse',
       rules: { required: 'Du må begrunne vurderingen' },
     },
-    perioder: {
-      type: 'fieldArray',
-      defaultValue: [{ arbeidsevne: '', enhet: undefined, fom: '', tom: '' }],
+    arbeidsevne: {
+      type: 'text',
+      label: 'Arbeidsevne',
+      rules: { required: 'Du må angi hvor stor arbeidsevne innbygger har' },
+    },
+    enhet: {
+      type: 'select',
+      label: 'Enhet',
+      options: [
+        { value: '', label: '-' },
+        { value: 'PROSENT', label: '%' },
+        { value: 'TIMER', label: 'T' },
+      ],
+      rules: { required: 'Du må angi en enhet for arbeidsevnen' },
+    },
+    arbeidsevneGjelderFra: {
+      type: 'text',
+      label: 'Arbeidsevne gjelder fra',
+      description: 'Datoformat dd.mm.åååå',
+      rules: {
+        required: 'Du må angi datoen arbeidsevnen gjelder fra',
+        validate: (value) => validerDato(value as string),
+      },
     },
   });
   const { isLoading, status } = useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
-  const { fields, append, remove } = useFieldArray({ control: form.control, name: 'perioder' });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     // må implementeres når backend er klar
@@ -70,22 +89,11 @@ export const FastsettArbeidsevne = ({ readOnly }: Props) => {
         visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
-        <Veiledning header={'Slik vurderes dette'} tekst={<span>Her trengs det en tekst</span>} defaultOpen={false} />
-        <div className={styles.fastsettArbeidsevne}>
-          <FastsettArbeidsevnePeriodetabell fields={fields} form={form} readOnly={readOnly} remove={remove} />
+        <div className={styles.rad}>
+          <FormField form={form} formField={formFields.arbeidsevne} />
+          <FormField form={form} formField={formFields.enhet} />
         </div>
-        {!readOnly && (
-          <div>
-            <Button
-              variant={'tertiary'}
-              type={'button'}
-              icon={<PlusCircleIcon />}
-              onClick={() => append({ arbeidsevne: '', fom: '', tom: '', enhet: undefined })}
-            >
-              Legg til periode
-            </Button>
-          </div>
-        )}
+        <FormField form={form} formField={formFields.arbeidsevneGjelderFra} />
       </Form>
     </VilkårsKort>
   );
