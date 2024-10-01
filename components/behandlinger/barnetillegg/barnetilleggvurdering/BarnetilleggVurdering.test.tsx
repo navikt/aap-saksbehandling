@@ -210,13 +210,13 @@ describe('Oppgitte barn', () => {
   });
 
   it('skal ha en knapp for å legge til flere perioder', () => {
-    render(<BarnetilleggVurdering readOnly={true} grunnlag={grunnlag} behandlingsversjon={1} />);
+    render(<BarnetilleggVurdering readOnly={false} grunnlag={grunnlag} behandlingsversjon={1} />);
     const knapp = screen.getByRole('button', { name: 'Legg til periode' });
     expect(knapp).toBeInTheDocument();
   });
 
   it('skal være mulig å legge til flere perioder', async () => {
-    render(<BarnetilleggVurdering readOnly={true} grunnlag={grunnlag} behandlingsversjon={1} />);
+    render(<BarnetilleggVurdering readOnly={false} grunnlag={grunnlag} behandlingsversjon={1} />);
 
     const begrunnelsesFelterFørDetErLagtTilEnNy = screen.getAllByRole('textbox', {
       name: 'Vurder om det skal gis barnetillegg for barnet',
@@ -235,13 +235,13 @@ describe('Oppgitte barn', () => {
   });
 
   it('skal ikke være mulig å fjerne den første perioden', async () => {
-    render(<BarnetilleggVurdering readOnly={true} grunnlag={grunnlag} behandlingsversjon={1} />);
+    render(<BarnetilleggVurdering readOnly={false} grunnlag={grunnlag} behandlingsversjon={1} />);
 
     expect(screen.queryByRole('button', { name: /fjern periode/i })).not.toBeInTheDocument();
   });
 
   it('knapp for å slette en periode skal vises dersom det legges til flere enn èn periode', async () => {
-    render(<BarnetilleggVurdering readOnly={true} grunnlag={grunnlag} behandlingsversjon={1} />);
+    render(<BarnetilleggVurdering readOnly={false} grunnlag={grunnlag} behandlingsversjon={1} />);
 
     expect(
       screen.getAllByRole('textbox', {
@@ -261,6 +261,28 @@ describe('Oppgitte barn', () => {
     ).toBe(2);
 
     expect(screen.getByRole('button', { name: /fjern periode/i })).toBeInTheDocument();
+  });
+
+  it('skal vise en feilmelding dersom det finnes overlappende perioder', async () => {
+    render(<BarnetilleggVurdering readOnly={false} grunnlag={grunnlag} behandlingsversjon={1} />);
+    const leggTilPeriodeKnapp = screen.getByRole('button', { name: /legg til periode/i });
+    await user.click(leggTilPeriodeKnapp);
+
+    const jaValg = screen.getAllByRole('radio', { name: /ja/i });
+    await user.click(jaValg[0])
+    await user.click(jaValg[1])
+
+
+    const fomInput = screen.getAllByRole('textbox', { name: /forsørgeransvar fra/i });
+
+    await user.type(fomInput[0], '19.09.2024');
+    await user.type(fomInput[1], '19.09.2025');
+
+    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    await user.click(bekreftKnapp);
+
+    const feilmelding = screen.getByText('Det finnes overlappende perioder');
+    expect(feilmelding).toBeVisible();
   });
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {

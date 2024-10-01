@@ -1,23 +1,32 @@
 import { Periode } from 'lib/types/types';
 import { parse } from 'date-fns';
 
-interface ParsedPeriode {
-  fom: Date;
-  tom: Date;
+interface PeriodeMedValgfriTom {
+  fom: string;
+  tom?: string;
 }
 
-export function harPerioderSomOverlapper(perioder: Periode[]): boolean {
-  const parsedPerioder: ParsedPeriode[] = perioder.map((periode) => {
+interface NumeriskPeriode {
+  fom: number;
+  tom: number;
+}
+
+export function harPerioderSomOverlapper(perioder: PeriodeMedValgfriTom[]): boolean {
+  const toNumber = (dateStr: string | undefined): number => {
+    return dateStr ? parseTilddmmyyyy(dateStr).getTime() : Infinity;
+  };
+
+  const parsedPerioder: NumeriskPeriode[] = perioder.map((periode) => {
     return {
-      tom: parseTilddmmyyyy(periode.tom),
-      fom: parseTilddmmyyyy(periode.fom),
+      tom: toNumber(periode.tom),
+      fom: parseTilddmmyyyy(periode.fom).getTime(),
     };
   });
 
-  const sortertePerioder = parsedPerioder.sort((a, b) => a.fom.getTime() - b.fom.getTime());
+  const sortertePerioder = parsedPerioder.sort((a, b) => a.fom - b.fom);
 
   let erOverlappendePerioder = false;
-  let forrigePeriode: ParsedPeriode | null = null;
+  let forrigePeriode: NumeriskPeriode | null = null;
 
   sortertePerioder.forEach((periode) => {
     if (forrigePeriode) {
