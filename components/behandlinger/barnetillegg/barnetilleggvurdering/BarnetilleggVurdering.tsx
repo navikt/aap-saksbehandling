@@ -13,7 +13,7 @@ import { useConfigForm } from '@navikt/aap-felles-react';
 import { useFieldArray } from 'react-hook-form';
 import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { ManueltBarnVurdering } from 'components/barn/manueltbarnvurdering/ManueltBarnVurdering';
+import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
 
 interface Props {
   behandlingsversjon: number;
@@ -111,7 +111,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
             >
               {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
                 return (
-                  <ManueltBarnVurdering
+                  <OppgitteBarnVurdering
                     key={vurdering.id}
                     form={form}
                     barnetilleggIndex={barnetilleggIndex}

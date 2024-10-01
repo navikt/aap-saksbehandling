@@ -6,7 +6,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { TextAreaWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 
-import 'components/barn/manueltbarnvurderingfelter/ManueltBarnVurderingFelter.css';
+import 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter.css';
 import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
 }
 
-export const ManueltBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurderingIndex, form }: Props) => {
+export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurderingIndex, form }: Props) => {
   const harForeldreAnsvar =
     form.watch(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`) ===
     JaEllerNei.Ja;

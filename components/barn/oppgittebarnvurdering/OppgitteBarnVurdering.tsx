@@ -2,9 +2,9 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { PlusCircleIcon, QuestionmarkDiamondIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading } from '@navikt/ds-react';
-import { ManueltBarnVurderingFelter } from 'components/barn/manueltbarnvurderingfelter/ManueltBarnVurderingFelter';
+import { OppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter';
 
-import styles from './ManueltBarnVurdering.module.css';
+import styles from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
   readOnly: boolean;
 }
 
-export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, navn, readOnly, fødselsdato }: Props) => {
+export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, readOnly, fødselsdato }: Props) => {
   const {
     fields: vurderinger,
     remove,
@@ -44,7 +44,7 @@ export const ManueltBarnVurdering = ({ form, barnetilleggIndex, ident, navn, rea
           const kanFjernePeriode = vurderingIndex !== 0;
           return (
             <div key={vurdering.id} className={styles.vurdering}>
-              <ManueltBarnVurderingFelter
+              <OppgitteBarnVurderingFelter
                 form={form}
                 readOnly={readOnly}
                 ident={ident}
