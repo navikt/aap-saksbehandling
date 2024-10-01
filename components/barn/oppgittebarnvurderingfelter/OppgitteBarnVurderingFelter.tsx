@@ -69,12 +69,11 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
             type={'text'}
             rules={{
               validate: {
-                validerDato: (value, formValues) => {
-                  if (formValues.barnetilleggVurderinger[barneTilleggIndex].vurderinger[vurderingIndex].fom !== '')
-                    return validerDato(value as string);
+                validerDato: (value) => {
+                  if (value) return validerDato(value as string);
                 },
                 erDatoFoer: (value, formValues) => {
-                  if (formValues.barnetilleggVurderinger[barneTilleggIndex].vurderinger[vurderingIndex].fom !== '')
+                  if (value)
                     if (
                       erDatoFoerDato(
                         value as string,

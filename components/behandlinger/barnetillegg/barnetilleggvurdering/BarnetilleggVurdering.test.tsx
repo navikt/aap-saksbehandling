@@ -70,7 +70,7 @@ describe('barnetillegg', () => {
   });
 });
 
-describe('Manuelt registrerte barn', () => {
+describe('Oppgitte barn', () => {
   const user = userEvent.setup();
 
   it('skal ha en heading med ident og hvilken rolle brukeren har for barnet', () => {
