@@ -39,7 +39,7 @@
     "@tiptap/react": "^2.6.6",
     "@tiptap/starter-kit": "^2.6.6",
     "@vercel/otel": "^1.10.0",
-    "date-fns": "^3.6.0",
+    "date-fns": "^4.1.0",
     "next": "^14.2.8",
     "next-sanity": "^9.4.7",
     "node-loader": "^2.0.0",
