@@ -5,9 +5,14 @@ export function validerDato(value?: string) {
   if (!value) {
     return 'Du må sette en dato';
   }
+
+  if (!new RegExp(/^\d{2}\.\d{2}\.\d{4}$/).test(value)) {
+    return 'Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå';
+  }
+
   const inputDato = parseDatoFraDatePicker(value);
   if (!inputDato) {
-    return 'Dato format er ikke gyldig. Dato må være på formatet dd.mm.åååå';
+    return 'Datoen er ikke gyldig';
   }
 }
 

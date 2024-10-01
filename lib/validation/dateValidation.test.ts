@@ -8,8 +8,17 @@ describe('Dato-validering', () => {
       expect(validerDato('')).toEqual('Du må sette en dato');
     });
 
+    it('gir feilmelding når datoformatet er ugyldig', () => {
+      expect(validerDato('12.0.2039')).toEqual('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå');
+      expect(validerDato('12.2020')).toEqual('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå');
+      expect(validerDato('2039')).toEqual('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå');
+      expect(validerDato('2024-02-02')).toEqual('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå');
+      expect(validerDato('2022.12.01')).toEqual('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå');
+      expect(validerDato('Andre juli')).toEqual('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå');
+    });
+
     it('gir feilmelding når datoen er ugydlig', () => {
-      expect(validerDato('31.02.2024')).toEqual('Dato format er ikke gyldig. Dato må være på formatet dd.mm.åååå');
+      expect(validerDato('31.02.2024')).toEqual('Datoen er ikke gyldig');
     });
 
     it('gir undefined når datoen er gyldig', () => {

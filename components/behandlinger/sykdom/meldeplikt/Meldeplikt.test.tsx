@@ -125,7 +125,7 @@ describe('Meldeplikt', () => {
       const fraDato = screen.getByRole('textbox', { name: 'Gjelder fra' });
       await user.type(fraDato, '31.02.2024');
       await klikkPåBekreft();
-      expect(screen.getByText('Dato format er ikke gyldig. Dato må være på formatet dd.mm.åååå')).toBeVisible();
+      expect(screen.getByText('Datoen er ikke gyldig')).toBeVisible();
     });
 
     it('viser feilmelding dersom slutt-tidspunkt er før start-tidspunkt', async () => {

@@ -181,7 +181,7 @@ describe('Oppgitte barn', () => {
 
     await klikkPåBekreft();
 
-    const feilmelding = screen.getByText('Dato format er ikke gyldig. Dato må være på formatet dd.mm.åååå');
+    const feilmelding = screen.getByText('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå');
     expect(feilmelding).toBeVisible();
   });
 
