@@ -51,6 +51,37 @@ describe('FastsettArbeidsevne', () => {
     expect(screen.getByRole('textbox', { name: 'Arbeidsevne gjelder fra' })).toBeVisible();
   });
 
+  describe('validering', () => {
+    it('viser feilmelding dersom begrunnelse ikke er fylt ut', async () => {
+      await åpneVilkårskort();
+      await klikkPåBekreft();
+      expect(screen.getByText('Du må begrunne vurderingen')).toBeVisible();
+    });
+
+    it('viser feilmelding når arbeidsevne ikke er besvart', async () => {
+      await åpneVilkårskort();
+      await klikkPåBekreft();
+      expect(screen.getByText('Du må angi hvor stor arbeidsevne innbygger har')).toBeVisible();
+    });
+
+    it('viser feilmelding dersom enhet ikke er fylt ut', async () => {
+      await åpneVilkårskort();
+      await klikkPåBekreft();
+      expect(screen.getByText('Du må angi en enhet for arbeidsevnen')).toBeVisible();
+    });
+
+    it('viser feilmelding dersom dato når arbeidsevnen gjelder fra ikke er besvart', async () => {
+      await åpneVilkårskort();
+      await klikkPåBekreft();
+      expect(screen.getByText('Du må angi datoen arbeidsevnen gjelder fra')).toBeVisible();
+    });
+  });
+
+  async function klikkPåBekreft() {
+    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    await user.click(bekreftKnapp);
+  }
+
   async function åpneVilkårskort() {
     const region = screen.getByRole('region', {
       name: 'Reduksjon av maks utbetalt ytelse ved delvis nedsatt arbeidsevne § 11-23 2.ledd (valgfritt)',
