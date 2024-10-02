@@ -14,6 +14,8 @@ import { useFieldArray } from 'react-hook-form';
 import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
+import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
+import { FormEvent } from 'react';
 
 interface Props {
   behandlingsversjon: number;
@@ -62,6 +64,55 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
     name: 'barnetilleggVurderinger',
   });
 
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    form.handleSubmit((data) => {
+      form.clearErrors();
+      const overlappendePerioderIVurderinger = getOverlappendePerioderIVurderinger(data);
+
+      if (overlappendePerioderIVurderinger.length > 0) {
+        overlappendePerioderIVurderinger.forEach((barn) => {
+          barn.vurderingIndexer.forEach((vurderingIndex) => {
+            form.setError(`barnetilleggVurderinger.${barn.barnetillegIndex}.vurderinger.${vurderingIndex}.tom`, {
+              message: 'Til og med dato har overlappende perioder',
+            });
+            form.setError(`barnetilleggVurderinger.${barn.barnetillegIndex}.vurderinger.${vurderingIndex}.fom`, {
+              message: 'Fra og med dato har overlappende perioder',
+            });
+          });
+        });
+      } else {
+        løsBehovOgGåTilNesteSteg({
+          behandlingVersjon: behandlingsversjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
+            vurderingerForBarnetillegg: {
+              vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
+                return {
+                  ident: { identifikator: vurderteBarn.ident, aktivIdent: false },
+                  vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
+                    return {
+                      begrunnelse: vurdering.begrunnelse,
+                      harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
+                      periode: {
+                        fom: vurdering.fom
+                          ? formaterDatoForBackend(parse(vurdering.fom, DATO_FORMATER.ddMMyyyy, new Date()))
+                          : '',
+                        tom: vurdering.tom
+                          ? formaterDatoForBackend(parse(vurdering.tom, DATO_FORMATER.ddMMyyyy, new Date()))
+                          : '',
+                      },
+                    };
+                  }),
+                };
+              }),
+            },
+          },
+          referanse: behandlingsReferanse,
+        });
+      }
+    })(event);
+  }
+
   return (
     <VilkårsKort
       heading={'Barnetillegg § 11-20 tredje og fjerde ledd'}
@@ -75,40 +126,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
               <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
             </div>
 
-            <form
-              className={'flex-column'}
-              id={'barnetillegg'}
-              onSubmit={form.handleSubmit((data) => {
-                løsBehovOgGåTilNesteSteg({
-                  behandlingVersjon: behandlingsversjon,
-                  behov: {
-                    behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
-                    vurderingerForBarnetillegg: {
-                      vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
-                        return {
-                          ident: { identifikator: vurderteBarn.ident, aktivIdent: false },
-                          vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
-                            return {
-                              begrunnelse: vurdering.begrunnelse,
-                              harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
-                              periode: {
-                                fom: vurdering.fom
-                                  ? formaterDatoForBackend(parse(vurdering.fom, DATO_FORMATER.ddMMyyyy, new Date()))
-                                  : '',
-                                tom: vurdering.tom
-                                  ? formaterDatoForBackend(parse(vurdering.tom, DATO_FORMATER.ddMMyyyy, new Date()))
-                                  : '',
-                              },
-                            };
-                          }),
-                        };
-                      }),
-                    },
-                  },
-                  referanse: behandlingsReferanse,
-                });
-              })}
-            >
+            <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit}>
               {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
                 return (
                   <OppgitteBarnVurdering
@@ -144,3 +162,22 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
     </VilkårsKort>
   );
 };
+
+function getOverlappendePerioderIVurderinger(data: BarnetilleggFormFields) {
+  return data.barnetilleggVurderinger.reduce<{ barnetillegIndex: number; vurderingIndexer: number[] }[]>(
+    (acc, barn, barnetillegIndex) => {
+      const vurderingIndexer = perioderSomOverlapper(
+        barn.vurderinger
+          .filter(({ harForeldreAnsvar }) => harForeldreAnsvar === JaEllerNei.Ja)
+          .map(({ tom, fom }) => ({ tom, fom }))
+      );
+
+      if (vurderingIndexer && vurderingIndexer.length > 0) {
+        acc.push({ barnetillegIndex, vurderingIndexer });
+      }
+
+      return acc;
+    },
+    []
+  );
+}

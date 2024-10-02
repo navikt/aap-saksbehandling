@@ -7,7 +7,7 @@ import { TextAreaWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 
 import 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter.css';
-import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
+import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   ident: string;
@@ -54,11 +54,6 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
             rules={{
               validate: {
                 validerDato: (value) => validerDato(value as string),
-                erDatoTilbakeITid: (value) => {
-                  if (erDatoIFremtiden(value as string)) {
-                    return 'Dato for når søker har forsørgeransvar fra kan ikke være frem i tid';
-                  }
-                },
               },
             }}
           />

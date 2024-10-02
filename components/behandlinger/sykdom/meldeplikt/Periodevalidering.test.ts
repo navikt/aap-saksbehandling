@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  harPerioderSomOverlapper,
+  perioderSomOverlapper,
   sjekkOmPerioderInkludererDatoer,
 } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 import { Periode } from 'lib/types/types';
@@ -25,14 +25,14 @@ const perioderSomIkkeOverlapper: Periode[] = [
   },
 ];
 
-const perioderSomOverlapper: Periode[] = [
+const perioderSomOverlapperObjekt: Periode[] = [
   {
     fom: '01.01.2024',
     tom: '01.02.2024',
   },
   {
-    fom: '15.02.2024',
-    tom: '20.01.2024',
+    fom: '20.01.2024',
+    tom: '15.02.2024',
   },
   {
     fom: '21.01.2024',
@@ -41,16 +41,16 @@ const perioderSomOverlapper: Periode[] = [
 ];
 
 describe('harPerioderSomOverlapper', () => {
-  it('returnerer false når det kun finnes en periode', () => {
-    expect(harPerioderSomOverlapper([enPeriode])).toBeFalsy();
+  it('returnerer undefined når det kun finnes en periode', () => {
+    expect(perioderSomOverlapper([enPeriode])).toBeUndefined();
   });
 
-  it('returnerer false når det ikke finnes perioder med overlapp', () => {
-    expect(harPerioderSomOverlapper(perioderSomIkkeOverlapper)).toBeFalsy();
+  it('returnerer undefined når det ikke finnes perioder med overlapp', () => {
+    expect(perioderSomOverlapper(perioderSomIkkeOverlapper)).toBeUndefined();
   });
 
-  it('returnerer true når det finnes perioder som overlapper', () => {
-    expect(harPerioderSomOverlapper(perioderSomOverlapper)).toBeTruthy();
+  it('returnerer array med overlappende periode index når det finnes perioder som overlapper', () => {
+    expect(perioderSomOverlapper(perioderSomOverlapperObjekt)).toStrictEqual([0, 1]);
   });
 });
 

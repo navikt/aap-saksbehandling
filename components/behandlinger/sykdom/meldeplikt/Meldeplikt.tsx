@@ -18,7 +18,7 @@ import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { useFieldArray } from 'react-hook-form';
 import {
-  harPerioderSomOverlapper,
+  perioderSomOverlapper,
   sjekkOmPerioderInkludererDatoer,
 } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 
@@ -76,7 +76,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
           fom: periode.fom,
           tom: periode.tom,
         }));
-      const perioderOverlapper = perioderMedFritak.length > 0 && harPerioderSomOverlapper(perioderMedFritak);
+      const perioderOverlapper = perioderMedFritak.length > 0 && perioderSomOverlapper(perioderMedFritak);
       const datoerUtenFritak = data.fritaksvurdering
         .filter((periode) => periode.fritakFraMeldeplikt === JaEllerNei.Nei)
         .map((periode) => periode.fom);

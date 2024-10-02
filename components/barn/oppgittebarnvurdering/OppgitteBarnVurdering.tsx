@@ -1,13 +1,11 @@
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { PlusCircleIcon, QuestionmarkDiamondIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
+import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { OppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter';
 
 import styles from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
-import { JaEllerNei } from 'lib/utils/form';
-import { harPerioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
@@ -26,24 +24,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
   } = useFieldArray({
     control: form.control,
     name: `barnetilleggVurderinger.${barnetilleggIndex}.vurderinger`,
-    rules: {
-      validate: (value) => {
-        const vurderingPerioder = value
-          .filter((vurdering) => vurdering.harForeldreAnsvar === JaEllerNei.Ja)
-          .map((vurdering) => {
-            return { fom: vurdering.fom, tom: vurdering?.tom };
-          });
-
-        if (harPerioderSomOverlapper(vurderingPerioder)) {
-          return 'Det finnes overlappende perioder';
-        }
-      },
-    },
   });
-
-  const overlappendePerioderFeilMelding =
-    form.formState?.errors?.barnetilleggVurderinger &&
-    form.formState?.errors?.barnetilleggVurderinger[barnetilleggIndex]?.vurderinger?.root?.message;
 
   return (
     <section className={`${styles.barnekort} flex-column`}>
@@ -86,8 +67,6 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
           );
         })}
       </div>
-
-      {overlappendePerioderFeilMelding && <Alert variant={'error'}>{overlappendePerioderFeilMelding}</Alert>}
 
       <Button
         onClick={() => append({ begrunnelse: '', harForeldreAnsvar: '', fom: '' })}

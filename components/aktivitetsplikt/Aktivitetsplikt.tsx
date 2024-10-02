@@ -11,7 +11,7 @@ import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotab
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useFieldArray } from 'react-hook-form';
-import { harPerioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
+import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 import { useState } from 'react';
 
 interface AktvitetsPeriode {
@@ -116,7 +116,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
               }
             });
 
-            const harOverlappendePerioder = harPerioderSomOverlapper(perioder);
+            const harOverlappendePerioder = perioderSomOverlapper(perioder);
 
             if (harOverlappendePerioder) {
               setErrorMessage('Det finnes overlappende perioder');

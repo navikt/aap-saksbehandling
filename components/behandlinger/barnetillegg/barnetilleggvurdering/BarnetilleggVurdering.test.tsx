@@ -3,8 +3,6 @@ import { render, screen, within } from '@testing-library/react';
 import { BarnetilleggVurdering } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { userEvent } from '@testing-library/user-event';
 import { BarnetilleggGrunnlag } from 'lib/types/types';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import { addDays } from 'date-fns';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 const grunnlag: BarnetilleggGrunnlag = {
@@ -154,23 +152,6 @@ describe('Oppgitte barn', () => {
     expect(sluttDatoFelt).toBeVisible();
   });
 
-  it('gir en feilmelding dersom det legges inn en dato frem i tid for når søker har foreldreansvar fra', async () => {
-    render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
-    await svarJaPåOmDetSkalBeregnesBarnetillegg();
-    await fyllUtEnBegrunnelse();
-    const datofelt = screen.getByRole('textbox', {
-      name: /forsørgeransvar fra/i,
-    });
-    const imorgen = addDays(new Date(), 1);
-
-    await user.type(datofelt, formaterDatoForFrontend(imorgen));
-
-    await klikkPåBekreft();
-
-    const feilmelding = screen.getByText('Dato for når søker har forsørgeransvar fra kan ikke være frem i tid');
-    expect(feilmelding).toBeVisible();
-  });
-
   it('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
     render(<BarnetilleggVurdering behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
@@ -263,15 +244,18 @@ describe('Oppgitte barn', () => {
     expect(screen.getByRole('button', { name: /fjern periode/i })).toBeInTheDocument();
   });
 
-  it('skal vise en feilmelding dersom det finnes overlappende perioder', async () => {
+  it('skal vise en feilmelding på feltene det gjelder dersom det finnes overlappende perioder', async () => {
     render(<BarnetilleggVurdering readOnly={false} grunnlag={grunnlag} behandlingsversjon={1} />);
     const leggTilPeriodeKnapp = screen.getByRole('button', { name: /legg til periode/i });
     await user.click(leggTilPeriodeKnapp);
 
-    const jaValg = screen.getAllByRole('radio', { name: /ja/i });
-    await user.click(jaValg[0])
-    await user.click(jaValg[1])
+    const begrunnelseFelt = screen.getAllByRole('textbox', { name: /vurder om det skal gis barnetillegg for barnet/i });
+    await user.type(begrunnelseFelt[0], 'min begrunnelse');
+    await user.type(begrunnelseFelt[1], 'min begrunnelse');
 
+    const jaValg = screen.getAllByRole('radio', { name: /ja/i });
+    await user.click(jaValg[0]);
+    await user.click(jaValg[1]);
 
     const fomInput = screen.getAllByRole('textbox', { name: /forsørgeransvar fra/i });
 
@@ -281,8 +265,11 @@ describe('Oppgitte barn', () => {
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(bekreftKnapp);
 
-    const feilmelding = screen.getByText('Det finnes overlappende perioder');
-    expect(feilmelding).toBeVisible();
+    screen.logTestingPlaygroundURL();
+    const feilmeldingerPåTilOgMedFelt = screen.getAllByText('Til og med dato har overlappende perioder');
+    const feilmeldingerPåFraOgMedFelt = screen.getAllByText('Fra og med dato har overlappende perioder');
+    expect(feilmeldingerPåFraOgMedFelt.length).toBe(2);
+    expect(feilmeldingerPåTilOgMedFelt.length).toBe(2);
   });
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
