@@ -17,6 +17,9 @@ import { FormEvent } from 'react';
 import { SykdomProps } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { validerDato } from 'lib/validation/dateValidation';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { parse } from 'date-fns';
+import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
 interface FormFields {
   harSkadeSykdomEllerLyte: string;
@@ -91,7 +94,7 @@ export const SykdomsvurderingMedYrkesskade = ({
         type: 'text',
         label: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)',
         defaultValue: grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato
-          ? grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato.toString()
+          ? formaterDatoForVisning(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato)
           : undefined,
         rules: {
           required: 'Du må sette en dato for når arbeidsevnen ble nedsatt',
@@ -124,7 +127,9 @@ export const SykdomsvurderingMedYrkesskade = ({
             nedreGrense: data.erÅrsakssammenheng === JaEllerNei.Ja ? 'TRETTI' : 'FEMTI',
             erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
               data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
-            nedsattArbeidsevneDato: Number(data.nedsattArbeidsevneDato),
+            nedsattArbeidsevneDato: formaterDatoForBackend(
+              parse(data.nedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())
+            ),
             yrkesskadevurdering: {
               erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
             },
