@@ -6,6 +6,7 @@ import { Button } from '@navikt/ds-react';
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
 import { JaEllerNei } from 'lib/utils/form';
 import { SelectWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
+import { validerÅrstall } from 'lib/validation/dateValidation';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;
@@ -29,6 +30,7 @@ export const OpprettSakBarn = ({ form }: Props) => {
                   control={form.control}
                   name={`barn.${index}.fodselsdato`}
                   type={'text'}
+                  rules={{ validate: (value) => validerÅrstall(value as string) }}
                 />
                 <SelectWrapper label={'Hvilket barn er det?'} name={`barn.${index}.harRelasjon`} control={form.control}>
                   <option value={'manueltBarn'}>Manuelt barn</option>
