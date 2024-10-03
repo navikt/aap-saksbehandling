@@ -13,6 +13,9 @@ import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useFieldArray } from 'react-hook-form';
 import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 import { useState } from 'react';
+import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
+import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
+import { parse } from 'date-fns';
 
 interface AktvitetsPeriode {
   type: 'periode';
@@ -33,7 +36,7 @@ interface Props {
 
 export interface AktivitetspliktFormFields {
   brudd: AktivitetspliktBrudd;
-  paragraf?: AktivitetspliktParagraf;
+  paragraf: AktivitetspliktParagraf;
   begrunnelse: string;
   perioder: DatoBruddPåAktivitetsplikt[];
 }
@@ -118,17 +121,31 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
 
             const harOverlappendePerioder = perioderSomOverlapper(perioder);
 
+            let paragraf: AktivitetspliktParagraf;
+
+            if (['IKKE_MØTT_TIL_MØTE', 'IKKE_SENDT_INN_DOKUMENTASJON'].includes(data.brudd)) {
+              paragraf = 'PARAGRAF_11_9';
+            } else if (data.brudd === 'IKKE_AKTIVT_BIDRAG') {
+              paragraf = 'PARAGRAF_11_7';
+            } else {
+              paragraf = data.paragraf;
+            }
+
             if (harOverlappendePerioder) {
               setErrorMessage('Det finnes overlappende perioder');
             } else {
-              // Ikke åpne denne før backend er klar.
-              // await opprettAktivitetspliktBrudd({
-              //   brudd: data.brudd,
-              //   begrunnelse: data.begrunnelse,
-              //   paragraf: data.paragraf !== undefined ? data.paragraf : 'PARAGRAF_11_7',
-              //   perioder: perioder,
-              //   saksnummer: saksnummer,
-              // });
+              await opprettAktivitetspliktBrudd({
+                brudd: data.brudd,
+                begrunnelse: data.begrunnelse,
+                paragraf: paragraf,
+                perioder: perioder.map((periode) => {
+                  return {
+                    fom: formaterDatoForBackend(parse(periode.fom, DATO_FORMATER.ddMMyyyy, new Date())),
+                    tom: formaterDatoForBackend(parse(periode.tom, DATO_FORMATER.ddMMyyyy, new Date())),
+                  };
+                }),
+                saksnummer: saksnummer,
+              });
               await revalidateAktivitetspliktHendelser(saksnummer);
             }
           })}
