@@ -5,7 +5,7 @@ import { ChildHairEyesIcon } from '@navikt/aksel-icons';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Button, Label } from '@navikt/ds-react';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
-import { BarnetilleggGrunnlag } from 'lib/types/types';
+import { BarnetilleggGrunnlag, BehandlingPersoninfo } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -20,6 +20,7 @@ import { FormEvent } from 'react';
 interface Props {
   behandlingsversjon: number;
   grunnlag: BarnetilleggGrunnlag;
+  behandlingPersonInfo: BehandlingPersoninfo;
   readOnly: boolean;
 }
 
@@ -41,7 +42,7 @@ interface Vurdering {
   tom?: string;
 }
 
-export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }: Props) => {
+export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandlingPersonInfo, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
@@ -135,7 +136,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
                     barnetilleggIndex={barnetilleggIndex}
                     ident={vurdering.ident}
                     fødselsdato={vurdering.fødselsdato}
-                    navn={vurdering.navn}
+                    navn={behandlingPersonInfo.info[vurdering.ident]}
                     readOnly={readOnly}
                   />
                 );
@@ -148,7 +149,11 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
           <div className={'flex-column'}>
             <Label size={'medium'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
             {grunnlag.folkeregisterbarn.map((barn, index) => (
-              <RegistrertBarn key={index} registrertBarn={barn} />
+              <RegistrertBarn
+                key={index}
+                registrertBarn={barn}
+                navn={behandlingPersonInfo.info[barn.ident.identifikator]}
+              />
             ))}
           </div>
         )}

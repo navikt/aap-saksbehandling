@@ -3,7 +3,7 @@ import {
   AktivitetspliktHendelser,
   AlderGrunnlag,
   BarnetilleggGrunnlag,
-  BehandlingFlytOgTilstand,
+  BehandlingFlytOgTilstand, BehandlingPersoninfo,
   BehandlingResultat,
   BeregningsGrunnlag,
   BeregningsVurdering,
@@ -60,6 +60,16 @@ export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersonin
     return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
   } catch (e) {
     logWarning(`Fant ikke sak med referanse ${saksnummer}`);
+    notFound();
+  }
+};
+
+export const hentBehandlingPersoninfo = async (behandlingsreferanse: string): Promise<BehandlingPersoninfo> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/personinformasjon`;
+  try {
+    return await fetchProxy<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
+  } catch (e) {
+    logWarning(`Fant ikke behandling med referanse ${behandlingsreferanse}`);
     notFound();
   }
 };
@@ -232,7 +242,6 @@ export const avbrytJobb = async (jobbId: string) => {
   const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/avbryt/${jobbId}`;
   return await fetchProxy<string>(url, saksbehandlingApiScope, 'GET');
 };
-
 
 export const rekjørFeiledeJobber = async () => {
   const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/rekjorAlleFeilede`;

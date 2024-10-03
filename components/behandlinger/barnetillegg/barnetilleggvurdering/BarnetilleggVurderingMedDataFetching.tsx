@@ -1,5 +1,8 @@
 import { BarnetilleggVurdering } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
-import { hentBarnetilleggGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentBarnetilleggGrunnlag,
+  hentBehandlingPersoninfo,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 type Props = {
   behandlingsreferanse: string;
@@ -13,6 +16,7 @@ export const BarnetilleggVurderingMedDataFetching = async ({
   readOnly,
 }: Props) => {
   const grunnlag = await hentBarnetilleggGrunnlag(behandlingsreferanse);
+  const behandlingPersoninfo = await hentBehandlingPersoninfo(behandlingsreferanse);
 
-  return <BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={behandlingsversjon} readOnly={readOnly} />;
+  return <BarnetilleggVurdering grunnlag={grunnlag} behandlingsversjon={behandlingsversjon} readOnly={readOnly} behandlingPersonInfo={behandlingPersoninfo}/>;
 };

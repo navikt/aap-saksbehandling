@@ -7,9 +7,10 @@ import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 interface Props {
   registrertBarn: IdentifisertBarn;
+  navn: string;
 }
 
-export const RegistrertBarn = ({ registrertBarn }: Props) => {
+export const RegistrertBarn = ({ registrertBarn, navn }: Props) => {
   return (
     <ExpansionCard aria-label={'registrert-barn'} size={'small'} defaultOpen={true} className={styles.barn}>
       <ExpansionCard.Header>
@@ -17,7 +18,7 @@ export const RegistrertBarn = ({ registrertBarn }: Props) => {
           <div>
             <Heading size={'small'}>Eget barn - {registrertBarn.ident.identifikator}</Heading>
             <BodyShort size={'medium'}>
-              Barnet sitt navn ({kalkulerAlder(new Date(registrertBarn.fødselsdato))})
+              {navn} ({kalkulerAlder(new Date(registrertBarn.fødselsdato))})
             </BodyShort>
           </div>
         </ExpansionCard.Title>
