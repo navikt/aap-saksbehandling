@@ -73,10 +73,10 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, readOnly }
         overlappendePerioderIVurderinger.forEach((barn) => {
           barn.vurderingIndexer.forEach((vurderingIndex) => {
             form.setError(`barnetilleggVurderinger.${barn.barnetillegIndex}.vurderinger.${vurderingIndex}.tom`, {
-              message: 'Til og med dato har overlappende perioder',
+              message: 'Perioder med forsørgeransvar kan ikke overlappe',
             });
             form.setError(`barnetilleggVurderinger.${barn.barnetillegIndex}.vurderinger.${vurderingIndex}.fom`, {
-              message: 'Fra og med dato har overlappende perioder',
+              message: 'Perioder med forsørgeransvar kan ikke overlappe',
             });
           });
         });

@@ -266,10 +266,8 @@ describe('Oppgitte barn', () => {
     await user.click(bekreftKnapp);
 
     screen.logTestingPlaygroundURL();
-    const feilmeldingerPåTilOgMedFelt = screen.getAllByText('Til og med dato har overlappende perioder');
-    const feilmeldingerPåFraOgMedFelt = screen.getAllByText('Fra og med dato har overlappende perioder');
-    expect(feilmeldingerPåFraOgMedFelt.length).toBe(2);
-    expect(feilmeldingerPåTilOgMedFelt.length).toBe(2);
+    const feilmeldinger = screen.getAllByText('Perioder med forsørgeransvar kan ikke overlappe');
+    expect(feilmeldinger.length).toBe(4);
   });
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
