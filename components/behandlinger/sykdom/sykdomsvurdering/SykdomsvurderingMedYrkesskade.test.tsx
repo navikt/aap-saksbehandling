@@ -172,7 +172,9 @@ describe('Sykdomsvurdering med yrkesskade', () => {
     await velgAtSykdomSkadeEllerLyteErVesentligMedvirkendeÅrsak();
     await velgAtArbeidsevnenErNedsattMedMinst50prosent();
 
-    expect(await screen.findByRole('textbox', { name: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)' })).toBeVisible();
+    expect(
+      await screen.findByRole('textbox', { name: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)' })
+    ).toBeVisible();
   });
 
   it('Skal vise feilmelding dersom felt for hvilket år arbeisevnen ble nedsatt ikke er besvart', async () => {

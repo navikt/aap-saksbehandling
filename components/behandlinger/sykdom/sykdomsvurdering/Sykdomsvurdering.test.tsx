@@ -81,7 +81,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
   it('felt for når arbeidsevnen ble nedsatt vises ikke når innbygger ikke har sykdom, skade eller lyte', async () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
     await velgAtInnbyggerIkkeHarSykdomSkadeEllerLyte();
-    const felt = screen.queryByRole('textbox', { name: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)' });
+    const felt = screen.queryByRole('textbox', { name: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)' });
     expect(felt).toBeNull();
   });
 
@@ -96,7 +96,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
       })
     );
     expect(
-      screen.queryByRole('textbox', { name: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)' })
+      screen.queryByRole('textbox', { name: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)' })
     ).not.toBeInTheDocument();
   });
 
@@ -110,7 +110,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
         name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
       })
     );
-    expect(screen.getByRole('textbox', { name: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)' })).toBeVisible();
   });
 
   it('Skal ikke vise felt for om sykdom, skade eller lyte er årsaken til nedsatt arbeidsevne dersom arbeidsevnen ikke er nedsatt', () => {

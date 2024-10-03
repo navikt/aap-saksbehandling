@@ -92,7 +92,8 @@ export const SykdomsvurderingMedYrkesskade = ({
       },
       nedsattArbeidsevneDato: {
         type: 'text',
-        label: 'Hvilket år ble arbeidsevnen nedsatt? (§11-5)',
+        label: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)',
+        description: 'Datoformat dd.mm.åååå',
         defaultValue: grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato
           ? formaterDatoForVisning(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato)
           : undefined,
