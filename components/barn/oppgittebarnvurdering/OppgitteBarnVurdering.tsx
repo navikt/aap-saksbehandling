@@ -60,7 +60,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
                   variant={'tertiary'}
                   icon={<TrashIcon />}
                 >
-                  Fjern periode
+                  Fjern vurdering
                 </Button>
               )}
             </div>
