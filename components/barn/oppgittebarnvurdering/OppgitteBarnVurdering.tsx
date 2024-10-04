@@ -76,7 +76,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
         icon={<PlusCircleIcon />}
         type={'button'}
       >
-        Legg til periode
+        Legg til vurdering
       </Button>
     </section>
   );
