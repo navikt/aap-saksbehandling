@@ -279,7 +279,7 @@ describe('Oppgitte barn', () => {
     expect(knapp).not.toBeInTheDocument();
   });
 
-  it('skal ha en knapp for å legge til flere perioder', () => {
+  it('skal ha en knapp for å legge til flere vurderinger', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
@@ -288,11 +288,11 @@ describe('Oppgitte barn', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const knapp = screen.getByRole('button', { name: 'Legg til periode' });
+    const knapp = screen.getByRole('button', { name: 'Legg til vurdering' });
     expect(knapp).toBeInTheDocument();
   });
 
-  it('skal være mulig å legge til flere perioder', async () => {
+  it('skal være mulig å legge til flere vurderinger', async () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
@@ -308,7 +308,7 @@ describe('Oppgitte barn', () => {
 
     expect(begrunnelsesFelterFørDetErLagtTilEnNy.length).toBe(1);
 
-    const knapp = screen.getByRole('button', { name: 'Legg til periode' });
+    const knapp = screen.getByRole('button', { name: 'Legg til vurdering' });
     await user.click(knapp);
 
     const begrunnelsesFelter = screen.getAllByRole('textbox', {
@@ -318,7 +318,7 @@ describe('Oppgitte barn', () => {
     expect(begrunnelsesFelter.length).toBe(2);
   });
 
-  it('skal ikke være mulig å fjerne den første perioden', async () => {
+  it('skal ikke være mulig å fjerne den første vurderinger', async () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
@@ -328,10 +328,10 @@ describe('Oppgitte barn', () => {
       />
     );
 
-    expect(screen.queryByRole('button', { name: /fjern periode/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /fjern vurdering/i })).not.toBeInTheDocument();
   });
 
-  it('knapp for å slette en periode skal vises dersom det legges til flere enn èn periode', async () => {
+  it('knapp for å slette en vurdering skal vises dersom det legges til flere enn èn vurdering', async () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
@@ -347,10 +347,10 @@ describe('Oppgitte barn', () => {
       }).length
     ).toBe(1);
 
-    expect(screen.queryByRole('button', { name: /fjern periode/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /fjern vurdering/i })).not.toBeInTheDocument();
 
-    const leggTilPeriodeKnapp = screen.getByRole('button', { name: /legg til periode/i });
-    await user.click(leggTilPeriodeKnapp);
+    const leggTilVurderingKnapp = screen.getByRole('button', { name: /legg til vurdering/i });
+    await user.click(leggTilVurderingKnapp);
 
     expect(
       screen.getAllByRole('textbox', {
@@ -358,7 +358,7 @@ describe('Oppgitte barn', () => {
       }).length
     ).toBe(2);
 
-    expect(screen.getByRole('button', { name: /fjern periode/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /fjern vurdering/i })).toBeInTheDocument();
   });
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
