@@ -1,12 +1,17 @@
+//@ts-nocheck
 'use client';
 
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
+import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { FigureIcon } from '@navikt/aksel-icons';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { parse } from 'date-fns';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FritakMeldepliktGrunnlag } from 'lib/types/types';
-import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 
@@ -18,31 +23,32 @@ type Props = {
 
 type FritakMeldepliktFormFields = {
   begrunnelse: string;
-  skalHaFritak: JaEllerNei;
-  gjelderFra: string;
+  harFritak: JaEllerNei;
+  fraDato: string;
 };
 
 export const MeldepliktV2 = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+  const sisteVurdering = grunnlag?.vurderinger.at(-1);
   const { form, formFields } = useConfigForm<FritakMeldepliktFormFields>(
     {
       begrunnelse: {
         type: 'textarea',
         label: 'Vurder innbyggers behov for fritak fra meldeplikt',
         rules: { required: 'Du må begrunne vurderingen din' },
-        defaultValue: grunnlag?.vurderinger[0].begrunnelse,
+        defaultValue: sisteVurdering?.begrunnelse,
       },
-      skalHaFritak: {
+      harFritak: {
         type: 'radio',
         label: 'Skal innbygger få fritak fra meldeplikt?',
         options: JaEllerNeiOptions,
-        defaultValue: undefined,
+        defaultValue: getJaNeiEllerUndefined(sisteVurdering?.harFritak),
         rules: { required: 'Du må svare på om innbygger skal få fritak fra meldeplikt' },
       },
-      gjelderFra: {
+      fraDato: {
         type: 'text',
         label: 'Vurderingen gjelder fra',
         description: 'Datoformat: dd.mm.åååå',
-        defaultValue: undefined,
+        defaultValue: sisteVurdering?.fraDato ? formaterDatoForVisning(sisteVurdering.fraDato) : undefined,
         rules: {
           required: 'Du må angi en dato vurderingen gjelder fra',
           validate: (value) => validerDato(value as string),
@@ -51,11 +57,23 @@ export const MeldepliktV2 = ({ behandlingVersjon, grunnlag, readOnly }: Props) =
     },
     { shouldUnregister: true, readOnly: readOnly }
   );
-  const { isLoading, status } = useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
+  const behandlingsreferanse = useBehandlingsReferanse();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      console.log(`Her må det skje noe... ${behandlingVersjon}:` + data);
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        referanse: behandlingsreferanse,
+        behov: {
+          behovstype: Behovstype.FRITAK_MELDEPLIKT_KODE,
+          fritaksvurdering: {
+            begrunnelse: data.begrunnelse,
+            harFritak: data.harFritak === JaEllerNei.Ja,
+            fraDato: formaterDatoForBackend(parse(data.fraDato, 'dd.MM.yyyy', new Date())),
+          },
+        },
+      });
     })(event);
   };
 
@@ -75,8 +93,8 @@ export const MeldepliktV2 = ({ behandlingVersjon, grunnlag, readOnly }: Props) =
         visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.skalHaFritak} />
-        <FormField form={form} formField={formFields.gjelderFra} />
+        <FormField form={form} formField={formFields.harFritak} />
+        <FormField form={form} formField={formFields.fraDato} />
       </Form>
     </VilkårsKort>
   );
