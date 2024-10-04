@@ -245,21 +245,6 @@ describe('Oppgitte barn', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it('skal vise felt for sluttdato for forsørgeransvare dersom man trykker på knappen legg til sluttdato', async () => {
-    render(
-      <BarnetilleggVurdering
-        behandlingsversjon={1}
-        grunnlag={grunnlag}
-        readOnly={false}
-        behandlingPersonInfo={behandlingPersonInfo}
-      />
-    );
-    await svarJaPåOmDetSkalBeregnesBarnetillegg();
-
-    const sluttDatoFelt = screen.getByRole('textbox', { name: /til \(valgfritt\)/i });
-    expect(sluttDatoFelt).toBeVisible();
-  });
-
   it('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
     render(
       <BarnetilleggVurdering
@@ -279,31 +264,6 @@ describe('Oppgitte barn', () => {
 
     const feilmelding = screen.getByText('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå');
     expect(feilmelding).toBeVisible();
-  });
-
-  it('viser en feilmelding dersom til-dato er satt før fra-dato', async () => {
-    render(
-      <BarnetilleggVurdering
-        behandlingsversjon={1}
-        grunnlag={grunnlag}
-        readOnly={false}
-        behandlingPersonInfo={behandlingPersonInfo}
-      />
-    );
-    await svarJaPåOmDetSkalBeregnesBarnetillegg();
-    await fyllUtEnBegrunnelse();
-    const startDato = screen.getByRole('textbox', {
-      name: /forsørgeransvar fra/i,
-    });
-
-    const sluttDato = screen.getByRole('textbox', { name: /til \(valgfritt\)/i });
-
-    await user.type(startDato, '10.08.2023');
-    await user.type(sluttDato, '09.08.2023');
-
-    await klikkPåBekreft();
-
-    expect(screen.getByText('Slutt-dato kan ikke være før start-dato')).toBeVisible();
   });
 
   it('skal ikke vise knapp for å fullføre vurdering dersom readonly er satt til true', () => {
@@ -399,38 +359,6 @@ describe('Oppgitte barn', () => {
     ).toBe(2);
 
     expect(screen.getByRole('button', { name: /fjern periode/i })).toBeInTheDocument();
-  });
-
-  it('skal vise en feilmelding på feltene det gjelder dersom det finnes overlappende perioder', async () => {
-    render(
-      <BarnetilleggVurdering
-        readOnly={false}
-        grunnlag={grunnlag}
-        behandlingsversjon={1}
-        behandlingPersonInfo={behandlingPersonInfo}
-      />
-    );
-    const leggTilPeriodeKnapp = screen.getByRole('button', { name: /legg til periode/i });
-    await user.click(leggTilPeriodeKnapp);
-
-    const begrunnelseFelt = screen.getAllByRole('textbox', { name: /vurder om det skal gis barnetillegg for barnet/i });
-    await user.type(begrunnelseFelt[0], 'min begrunnelse');
-    await user.type(begrunnelseFelt[1], 'min begrunnelse');
-
-    const jaValg = screen.getAllByRole('radio', { name: /ja/i });
-    await user.click(jaValg[0]);
-    await user.click(jaValg[1]);
-
-    const fomInput = screen.getAllByRole('textbox', { name: /forsørgeransvar fra/i });
-
-    await user.type(fomInput[0], '19.09.2024');
-    await user.type(fomInput[1], '19.09.2025');
-
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-    await user.click(bekreftKnapp);
-
-    const feilmeldinger = screen.getAllByText('Perioder med forsørgeransvar kan ikke overlappe');
-    expect(feilmeldinger.length).toBe(4);
   });
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {

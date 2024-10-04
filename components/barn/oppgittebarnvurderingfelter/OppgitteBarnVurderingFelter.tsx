@@ -7,7 +7,7 @@ import { TextAreaWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 
 import 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter.css';
-import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
+import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   ident: string;
@@ -45,43 +45,17 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
       </RadioGroupWrapper>
 
       {harForeldreAnsvar && (
-        <div className={'barnetilleggperiode'}>
-          <TextFieldWrapper
-            label={'Forsørgeransvar fra'}
-            control={form.control}
-            name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fom`}
-            type={'text'}
-            rules={{
-              validate: {
-                validerDato: (value) => validerDato(value as string),
-              },
-            }}
-          />
-          <TextFieldWrapper
-            label={'Til (valgfritt)'}
-            control={form.control}
-            name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.tom`}
-            type={'text'}
-            rules={{
-              validate: {
-                validerDato: (value) => {
-                  if (value) return validerDato(value as string);
-                },
-                erDatoFoer: (value, formValues) => {
-                  if (value)
-                    if (
-                      erDatoFoerDato(
-                        value as string,
-                        formValues.barnetilleggVurderinger[barneTilleggIndex].vurderinger[vurderingIndex].fom
-                      )
-                    ) {
-                      return 'Slutt-dato kan ikke være før start-dato';
-                    }
-                },
-              },
-            }}
-          />
-        </div>
+        <TextFieldWrapper
+          label={'Forsørgeransvar fra'}
+          control={form.control}
+          name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`}
+          type={'text'}
+          rules={{
+            validate: {
+              validerDato: (value) => validerDato(value as string),
+            },
+          }}
+        />
       )}
     </div>
   );

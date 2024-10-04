@@ -14,7 +14,6 @@ import { useFieldArray } from 'react-hook-form';
 import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
-import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 import { FormEvent } from 'react';
 
 interface Props {
@@ -38,8 +37,7 @@ interface BarneTilleggVurdering {
 interface Vurdering {
   begrunnelse: string;
   harForeldreAnsvar: string;
-  fom: string;
-  tom?: string;
+  fraDato?: string;
 }
 
 export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandlingPersonInfo, readOnly }: Props) => {
@@ -54,7 +52,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
           ident: barn.ident.identifikator,
           fødselsdato: barn.fødselsdato,
           navn: 'Barnet sitt navn',
-          vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fom: '' }],
+          vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
         };
       }),
     },
@@ -67,50 +65,29 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     form.handleSubmit((data) => {
-      form.clearErrors();
-      const overlappendePerioderIVurderinger = getOverlappendePerioderIVurderinger(data);
-
-      if (overlappendePerioderIVurderinger.length > 0) {
-        overlappendePerioderIVurderinger.forEach((barn) => {
-          barn.vurderingIndexer.forEach((vurderingIndex) => {
-            form.setError(`barnetilleggVurderinger.${barn.barnetillegIndex}.vurderinger.${vurderingIndex}.tom`, {
-              message: 'Perioder med forsørgeransvar kan ikke overlappe',
-            });
-            form.setError(`barnetilleggVurderinger.${barn.barnetillegIndex}.vurderinger.${vurderingIndex}.fom`, {
-              message: 'Perioder med forsørgeransvar kan ikke overlappe',
-            });
-          });
-        });
-      } else {
-        løsBehovOgGåTilNesteSteg({
-          behandlingVersjon: behandlingsversjon,
-          behov: {
-            behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
-            vurderingerForBarnetillegg: {
-              vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
-                return {
-                  ident: { identifikator: vurderteBarn.ident, aktivIdent: false },
-                  vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
-                    return {
-                      begrunnelse: vurdering.begrunnelse,
-                      harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
-                      periode: {
-                        fom: vurdering.fom
-                          ? formaterDatoForBackend(parse(vurdering.fom, DATO_FORMATER.ddMMyyyy, new Date()))
-                          : '',
-                        tom: vurdering.tom
-                          ? formaterDatoForBackend(parse(vurdering.tom, DATO_FORMATER.ddMMyyyy, new Date()))
-                          : '',
-                      },
-                    };
-                  }),
-                };
-              }),
-            },
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingsversjon,
+        behov: {
+          behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
+          vurderingerForBarnetillegg: {
+            vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
+              return {
+                ident: vurderteBarn.ident,
+                vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
+                  return {
+                    begrunnelse: vurdering.begrunnelse,
+                    harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
+                    fraDato: vurdering.fraDato
+                      ? formaterDatoForBackend(parse(vurdering.fraDato, DATO_FORMATER.ddMMyyyy, new Date()))
+                      : formaterDatoForBackend(new Date()), //TODO Sett søknadstidspunkt dersom fraDato ikke blir satt
+                  };
+                }),
+              };
+            }),
           },
-          referanse: behandlingsReferanse,
-        });
-      }
+        },
+        referanse: behandlingsReferanse,
+      });
     })(event);
   }
 
@@ -167,22 +144,3 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
     </VilkårsKort>
   );
 };
-
-function getOverlappendePerioderIVurderinger(data: BarnetilleggFormFields) {
-  return data.barnetilleggVurderinger.reduce<{ barnetillegIndex: number; vurderingIndexer: number[] }[]>(
-    (acc, barn, barnetillegIndex) => {
-      const vurderingIndexer = perioderSomOverlapper(
-        barn.vurderinger
-          .filter(({ harForeldreAnsvar }) => harForeldreAnsvar === JaEllerNei.Ja)
-          .map(({ tom, fom }) => ({ tom, fom }))
-      );
-
-      if (vurderingIndexer && vurderingIndexer.length > 0) {
-        acc.push({ barnetillegIndex, vurderingIndexer });
-      }
-
-      return acc;
-    },
-    []
-  );
-}

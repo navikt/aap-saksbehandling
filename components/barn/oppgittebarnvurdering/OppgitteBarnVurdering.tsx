@@ -3,9 +3,9 @@ import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/bar
 import { PlusCircleIcon, QuestionmarkDiamondIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { OppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter';
+import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 import styles from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
-import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
@@ -69,7 +69,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
       </div>
 
       <Button
-        onClick={() => append({ begrunnelse: '', harForeldreAnsvar: '', fom: '' })}
+        onClick={() => append({ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' })}
         className={'fit-content-button'}
         variant={'tertiary'}
         size={'medium'}

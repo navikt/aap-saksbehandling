@@ -128,7 +128,7 @@ export type BarnetilleggVurderingType =
 export type VurderingAvForeldreAnsvar =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingAvForeldreAnsvar'];
 export type VurdertBarn =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarn'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto'];
 
 export type Ident = components['schemas']['no.nav.aap.verdityper.sakogbehandling.Ident'];
 
