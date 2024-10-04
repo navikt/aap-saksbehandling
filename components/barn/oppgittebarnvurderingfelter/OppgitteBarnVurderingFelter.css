@@ -6,10 +6,3 @@
 .navds-text-field__input {
   max-width: 13ch;
 }
-
-.barnetilleggperiode {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--a-spacing-4);
-  align-items: flex-start;
-}
