@@ -361,6 +361,58 @@ describe('Oppgitte barn', () => {
     expect(screen.getByRole('button', { name: /fjern vurdering/i })).toBeInTheDocument();
   });
 
+  it('knapp for å legge til en vurdering skal bare vises hvis det er besvart ja på om innbygger har forsørgeransvar', async () => {
+    render(
+      <BarnetilleggVurdering
+        readOnly={false}
+        grunnlag={grunnlag}
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+
+    expect(screen.queryByRole('button', { name: /legg til vurdering/i })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('radio', { name: /ja/i }));
+
+    const leggTilVurderingKnapp = screen.getByRole('button', { name: /legg til vurdering/i });
+    expect(leggTilVurderingKnapp).toBeInTheDocument();
+  });
+
+  it('knapp for å legge til en vurdering skal ikke vises hvis det er besvart nei på om innbygger har forsørgeransvar', async () => {
+    render(
+      <BarnetilleggVurdering
+        readOnly={false}
+        grunnlag={grunnlag}
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+
+    expect(screen.queryByRole('button', { name: /legg til vurdering/i })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('radio', { name: /ja/i }));
+
+    expect(screen.queryByRole('button', { name: /legg til vurdering/i })).not.toBeInTheDocument();
+  });
+
+  it('knapp for å legge til en ny vurdering skal ikke være synlig dersom det har blitt valgt nei på forsørgeransvar', async () => {
+    render(
+      <BarnetilleggVurdering
+        readOnly={false}
+        grunnlag={grunnlag}
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+
+    expect(screen.getByRole('button', { name: /legg til vurdering/i })).toBeInTheDocument();
+
+    await user.click(screen.getByRole('radio', { name: /nei/i }));
+
+    expect(screen.queryByRole('button', { name: /legg til vurdering/i })).not.toBeInTheDocument();
+  });
+
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
     const skalBeregnesBarnetilleggFelt = screen.getByRole('group', {
       name: /har innbygger hatt forsørgeransvar for fosterbarnet i to år før søknadsdato, eller er forsørgeransvaret av varig karakter\?/i,
