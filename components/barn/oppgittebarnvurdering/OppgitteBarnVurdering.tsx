@@ -4,6 +4,7 @@ import { PlusCircleIcon, QuestionmarkDiamondIcon, TrashIcon } from '@navikt/akse
 import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { OppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
+import { JaEllerNei } from 'lib/utils/form';
 
 import styles from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
 
@@ -25,6 +26,10 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
     control: form.control,
     name: `barnetilleggVurderinger.${barnetilleggIndex}.vurderinger`,
   });
+
+  const kanLeggeTilNyVurdering = form
+    .watch(`barnetilleggVurderinger.${barnetilleggIndex}`)
+    .vurderinger.every((vurdering) => vurdering.harForeldreAnsvar !== JaEllerNei.Nei);
 
   return (
     <section className={`${styles.barnekort} flex-column`}>
@@ -67,17 +72,18 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
           );
         })}
       </div>
-
-      <Button
-        onClick={() => append({ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' })}
-        className={'fit-content-button'}
-        variant={'tertiary'}
-        size={'medium'}
-        icon={<PlusCircleIcon />}
-        type={'button'}
-      >
-        Legg til vurdering
-      </Button>
+      {kanLeggeTilNyVurdering && (
+        <Button
+          onClick={() => append({ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' })}
+          className={'fit-content-button'}
+          variant={'tertiary'}
+          size={'medium'}
+          icon={<PlusCircleIcon />}
+          type={'button'}
+        >
+          Legg til vurdering
+        </Button>
+      )}
     </section>
   );
 };

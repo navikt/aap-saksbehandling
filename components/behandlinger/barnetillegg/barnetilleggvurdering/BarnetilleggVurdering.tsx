@@ -81,8 +81,6 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
     name: 'barnetilleggVurderinger',
   });
 
-  console.log('grunnlag', grunnlag);
-
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
