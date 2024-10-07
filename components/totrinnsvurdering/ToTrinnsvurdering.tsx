@@ -96,6 +96,8 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'SYKDOM/#FASTSETT_ARBEIDSEVNE';
     case Behovstype.VURDER_SYKEPENGEERSTATNING_KODE:
       return 'SYKDOM/#VURDER_SYKEPENGEERSTATNING';
+    case Behovstype.AVKLAR_BARNETILLEGG_KODE:
+      return '/BARNETILLEGG/#BARNETILLEGG';
     default:
       return 'SYKDOM';
   }

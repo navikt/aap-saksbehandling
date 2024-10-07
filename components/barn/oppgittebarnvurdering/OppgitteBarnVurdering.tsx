@@ -27,9 +27,10 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
     name: `barnetilleggVurderinger.${barnetilleggIndex}.vurderinger`,
   });
 
-  const kanLeggeTilNyVurdering = form
-    .watch(`barnetilleggVurderinger.${barnetilleggIndex}`)
-    .vurderinger.every((vurdering) => vurdering.harForeldreAnsvar !== JaEllerNei.Nei);
+  const kanLeggeTilNyVurdering =
+    form
+      .watch(`barnetilleggVurderinger.${barnetilleggIndex}`)
+      .vurderinger.every((vurdering) => vurdering.harForeldreAnsvar !== JaEllerNei.Nei) && !readOnly;
 
   return (
     <section className={`${styles.barnekort} flex-column`}>
@@ -56,7 +57,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
                 barneTilleggIndex={barnetilleggIndex}
                 vurderingIndex={vurderingIndex}
               />
-              {kanFjernePeriode && (
+              {kanFjernePeriode && !readOnly && (
                 <Button
                   onClick={() => remove(vurderingIndex)}
                   className={'fit-content-button'}
