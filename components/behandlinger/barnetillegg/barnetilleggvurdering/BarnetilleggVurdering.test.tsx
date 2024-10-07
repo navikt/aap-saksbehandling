@@ -6,6 +6,7 @@ import { BarnetilleggGrunnlag, BehandlingPersoninfo } from 'lib/types/types';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 const grunnlag: BarnetilleggGrunnlag = {
+  søknadstidspunkt: '12.12.2023',
   folkeregisterbarn: [
     {
       ident: {

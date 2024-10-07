@@ -15,6 +15,8 @@ import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { notFound } from 'next/navigation';
 import { StegGruppe } from 'lib/types/types';
+import { DokumentMedDataFetching } from 'components/dokument/DokumentMedDataFetching';
+import { isLocal } from 'lib/utils/environment';
 
 interface Props {
   children: ReactNode;
@@ -51,6 +53,7 @@ const Layout = async ({ children, params }: Props) => {
         {children}
         <div className={`${styles.høyrekolonne} flex-column`}>
           <Behandlingsinfo behandling={behandling} saksnummer={params.saksId} />
+          {isLocal() && <DokumentMedDataFetching saksnummer={params.saksId} />}
           <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
         </div>
       </HGrid>
