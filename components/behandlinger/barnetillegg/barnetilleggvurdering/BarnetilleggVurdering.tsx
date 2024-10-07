@@ -48,7 +48,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
     return {
       ident: barn.ident,
       navn: behandlingPersonInfo.info[barn.ident],
-      fødselsdato: 'hei',
+      fødselsdato: barn.fødselsdato,
       vurderinger: barn.vurderinger.map((value) => {
         return {
           begrunnelse: value.begrunnelse,
@@ -92,13 +92,11 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
             vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
               return {
                 ident: vurderteBarn.ident,
-                vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
+                vurderinger: vurderteBarn.vurderinger.map((vurdering, index) => {
                   return {
                     begrunnelse: vurdering.begrunnelse,
                     harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
-                    fraDato: vurdering.fraDato
-                      ? formaterDatoForBackend(parse(vurdering.fraDato, DATO_FORMATER.ddMMyyyy, new Date()))
-                      : formaterDatoForBackend(new Date()), //TODO Sett søknadstidspunkt dersom fraDato ikke blir satt
+                    fraDato: getFraDato(index, vurdering.fraDato),
                   };
                 }),
               };
@@ -108,6 +106,14 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
         referanse: behandlingsReferanse,
       });
     })(event);
+  }
+
+  function getFraDato(index: number, value?: string): string {
+    if (value && index !== 0) {
+      return formaterDatoForBackend(parse(value, DATO_FORMATER.ddMMyyyy, new Date()));
+    } else {
+      return grunnlag.søknadstidspunkt;
+    }
   }
 
   const erFolkeregistrerteBarn = grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0;

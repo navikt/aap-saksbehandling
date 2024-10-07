@@ -118,17 +118,8 @@ export type ErStudentStatus =
 export type SkalGjenopptaStudieStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['skalGjenopptaStudieStatus'];
 
-export type OppgitteBarn = components['schemas']['no.nav.aap.verdityper.sakogbehandling.Ident'];
 export type IdentifisertBarn =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.IdentifiserteBarnDto'];
-
-export type BarnetilleggVurderingType =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingerForBarnetillegg'];
-
-export type VurderingAvForeldreAnsvar =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingAvForeldreAnsvar'];
-export type VurdertBarn =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto'];
 
 export type Ident = components['schemas']['no.nav.aap.verdityper.sakogbehandling.Ident'];
 
@@ -137,9 +128,6 @@ export type AktivitetspliktHendelse =
 
 export type BruddAktivitetsplikt =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktRequest'];
-
-export type PeriodeAktivitet =
-  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['perioder'];
 
 export type AktivitetspliktHendelser =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktResponse'];
