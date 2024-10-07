@@ -18,9 +18,14 @@ interface Props {
 }
 
 export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurderingIndex, form }: Props) => {
-  const harForeldreAnsvar =
-    form.watch(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`) ===
-    JaEllerNei.Ja;
+  const harForeldreAnsvar = form.watch(
+    `barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`
+  );
+
+  const skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt = harForeldreAnsvar === JaEllerNei.Nei && vurderingIndex !== 0;
+
+  const skalSetteEnFraOgMedDato =
+    (harForeldreAnsvar === JaEllerNei.Nei && vurderingIndex !== 0) || harForeldreAnsvar === JaEllerNei.Ja;
 
   return (
     <div className={'flex-column'}>
@@ -43,10 +48,9 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
         <Radio value={JaEllerNei.Ja}>Ja</Radio>
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
-
-      {harForeldreAnsvar && (
+      {skalSetteEnFraOgMedDato && (
         <TextFieldWrapper
-          label={'Forsørgeransvar fra'}
+          label={skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt ? 'Forsørgeransvar opphører fra' : 'Forsørgeransvar fra'}
           control={form.control}
           name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`}
           type={'text'}

@@ -377,6 +377,40 @@ describe('Oppgitte barn', () => {
     expect(screen.queryByRole('button', { name: /legg til vurdering/i })).not.toBeInTheDocument();
   });
 
+  it('skal vise dato felt når man besvarer nei på forsørgeransvar så lenge det ikke er første vurdering', async () => {
+    render(
+      <BarnetilleggVurdering
+        readOnly={false}
+        grunnlag={grunnlag}
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+
+    await user.click(screen.getByRole('radio', { name: /ja/i }));
+
+    await user.click(screen.getByRole('button', { name: 'Legg til vurdering' }));
+
+    await user.click(screen.getAllByRole('radio', { name: /nei/i })[1]);
+
+    expect(screen.getByText('Forsørgeransvar opphører fra')).toBeInTheDocument();
+  });
+
+  it('skal ikke vise dato felt når man besvarer nei på forsørgeransvar i første vurdering', async () => {
+    render(
+      <BarnetilleggVurdering
+        readOnly={false}
+        grunnlag={grunnlag}
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+
+    await user.click(screen.getByRole('radio', { name: /nei/i }));
+
+    expect(screen.queryByRole('Forsørgeransvar opphører fra')).not.toBeInTheDocument();
+  });
+
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
     const skalBeregnesBarnetilleggFelt = screen.getByRole('group', {
       name: /har innbygger hatt forsørgeransvar for fosterbarnet i to år før søknadsdato, eller er forsørgeransvaret av varig karakter\?/i,
