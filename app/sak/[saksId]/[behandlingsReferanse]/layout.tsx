@@ -31,8 +31,6 @@ const Layout = async ({ children, params }: Props) => {
     notFound();
   }
 
-  const visToTrinnsvurdering = flytResponse.visning.visKvalitetssikringKort || flytResponse.visning.visBeslutterKort;
-
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.flyt
     .filter((steg) => steg.skalVises)
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
@@ -49,7 +47,7 @@ const Layout = async ({ children, params }: Props) => {
 
       <StegGruppeIndikatorAksel flytRespons={flytResponse} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
 
-      <HGrid columns={visToTrinnsvurdering ? '1fr 3fr 2fr' : '1fr 3fr 1fr'}>
+      <HGrid columns="1fr 3fr 2fr">
         {children}
         <div className={`${styles.høyrekolonne} flex-column`}>
           <Behandlingsinfo behandling={behandling} saksnummer={params.saksId} />
