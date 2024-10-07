@@ -19,7 +19,6 @@ const grunnlag: BarnetilleggGrunnlag = {
       },
     },
   ],
-  oppgitteBarn: [],
   barnSomTrengerVurdering: [
     {
       ident: {

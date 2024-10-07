@@ -69,6 +69,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
   });
 
   const defaultValue = [...vurderteBarn, ...barnSomTrengerVurdering].flat();
+
   const { form } = useConfigForm<BarnetilleggFormFields>({
     barnetilleggVurderinger: {
       type: 'fieldArray',
@@ -109,6 +110,8 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
     })(event);
   }
 
+  const erFolkeregistrerteBarn = grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0;
+
   return (
     <VilkårsKort
       heading={'Barnetillegg § 11-20 tredje og fjerde ledd'}
@@ -137,7 +140,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
             })}
           </form>
         </div>
-        {grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0 && (
+        {erFolkeregistrerteBarn && (
           <div className={'flex-column'}>
             <Label size={'medium'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
             {grunnlag.folkeregisterbarn.map((barn, index) => (
