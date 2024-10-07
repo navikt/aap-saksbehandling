@@ -2,6 +2,7 @@ import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurderin
 import { hentAlleDokumenterPåSak, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { SykdomsvurderingMedYrkesskade } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedYrkesskade';
 import { DokumentInfo, SykdomsGrunnlag } from 'lib/types/types';
+import { logInfo } from '@navikt/aap-felles-utils';
 
 interface Props {
   saksId: string;
@@ -27,6 +28,8 @@ export const SykdomsvurderingMedDataFetching = async ({
     hentSykdomsGrunnlag(behandlingsReferanse),
     hentAlleDokumenterPåSak(saksId),
   ]);
+
+  logInfo('dokumenter på sak', tilknyttedeDokumenter);
 
   return grunnlag.skalVurdereYrkesskade ? (
     <SykdomsvurderingMedYrkesskade
