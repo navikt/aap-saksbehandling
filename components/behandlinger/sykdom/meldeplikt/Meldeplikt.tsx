@@ -35,7 +35,7 @@ type FritakMeldepliktFormFields = {
   fritaksvurderinger: Fritaksvurderinger[];
 };
 
-export const MeldepliktV2 = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   let defaultValues: Fritaksvurderinger[] = grunnlag?.vurderinger.map((vurdering) => ({
     begrunnelse: vurdering.begrunnelse,
     fraDato: formaterDatoForFrontend(vurdering.fraDato),

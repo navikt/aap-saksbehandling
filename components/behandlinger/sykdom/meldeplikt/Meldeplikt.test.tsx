@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { MeldepliktV2 } from './MeldepliktV2';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
 
 const user = userEvent.setup();
 
 describe('Meldeplikt v2', () => {
   beforeEach(() => {
-    render(<MeldepliktV2 behandlingVersjon={0} readOnly={false} />);
+    render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
   });
 
   it('har overskrift for å identifisere steget', () => {
