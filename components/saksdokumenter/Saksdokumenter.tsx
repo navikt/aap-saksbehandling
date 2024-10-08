@@ -94,7 +94,7 @@ export const Saksdokumenter = ({ dokumenter = dokumenterMock }: Props) => {
                 <Table.DataCell align={'center'}>{formaterDatoForFrontend(dokument.journalførtDato)}</Table.DataCell>
               </Table.Row>
             );
-          })}{' '}
+          })}
         </Table.Body>
       </Table>
     </div>
