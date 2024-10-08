@@ -1,8 +1,0 @@
-/*
-* Dette er en ren css klasse ettersom vi manipulerer en klasse fra designsystemet og module legger på en egen id.
-*
-* Vi ønsker å sette en max bredde på input feltet uten at det skal gå utover bredden på label.
-*/
-.navds-text-field__input {
-  max-width: 13ch;
-}
