@@ -7,3 +7,18 @@
 .periodeoverlapp_feilmelding {
   margin-top: var(--a-spacing-4);
 }
+
+.periodekort {
+  background-color: var(--a-bg-default);
+  border: 1px solid var(--a-border-subtle);
+  padding: var(--a-spacing-4);
+  border-radius: var(--a-border-radius-large);
+}
+
+.vurdering {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-4);
+  border-bottom: 1px solid var(--a-border-subtle);
+  padding: var(--a-spacing-4);
+}

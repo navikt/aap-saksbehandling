@@ -1,5 +1,5 @@
 import { hentUnntakMeldepliktGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
+import { MeldepliktV2 } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktV2';
 
 interface Props {
   behandlingsReferanse: string;
@@ -10,5 +10,5 @@ interface Props {
 export const MeldepliktMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentUnntakMeldepliktGrunnlag(behandlingsReferanse);
 
-  return <Meldeplikt grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
+  return <MeldepliktV2 grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
 };
