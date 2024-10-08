@@ -89,6 +89,10 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
             faarFriKostOgLosji: data.faarFriKostOgLosji === JaEllerNei.Ja,
             forsoergerEktefelle: jaNeiEllerUndefinedToNullableBoolean(data.forsoergerEktefelle),
             harFasteUtgifter: jaNeiEllerUndefinedToNullableBoolean(data.harFasteUtgifter),
+            periode: {
+              fom: '',
+              tom: '',
+            },
           },
         },
         referanse: behandlingsreferanse,
