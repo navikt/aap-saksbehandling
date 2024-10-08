@@ -6,7 +6,6 @@ import { UseFormReturn } from 'react-hook-form';
 import { TextAreaWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 
-import 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter.css';
 import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
