@@ -11,7 +11,7 @@ export const Dokument = () => {
   return (
     <div className={'flex-column'}>
       <Tabs
-        size={'medium'}
+        size={'small'}
         defaultValue={toggleGroupValue}
         onChange={(value) => setToggleGroupValue(value)}
         value={toggleGroupValue}

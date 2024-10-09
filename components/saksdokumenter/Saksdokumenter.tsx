@@ -4,7 +4,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@navikt/aksel-icons';
 import { Link, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
-interface Dokument {
+export interface Dokument {
   navn: string;
   journalpostId: string;
   dokumentId: string;
@@ -28,7 +28,7 @@ const dokumenterMock: Dokument[] = [
     journalførtDato: '2025.12.12',
     dokumentId: '123',
     journalpostId: '456',
-    type: 'type',
+    type: 'sykemelding',
     ekstern: true,
   },
   {
@@ -36,7 +36,7 @@ const dokumenterMock: Dokument[] = [
     journalførtDato: '2024.12.12',
     dokumentId: '456',
     journalpostId: '789',
-    type: 'type',
+    type: 'legeerklæring',
     ekstern: true,
   },
 ];
@@ -48,8 +48,9 @@ export const Saksdokumenter = ({ dokumenter = dokumenterMock }: Props) => {
       label: 'Søk i dokumenter',
     },
     dokumentType: {
-      type: 'text',
+      type: 'select',
       label: 'Vis typer',
+      options: Array.from(new Set([...[''], ...(dokumenter?.map((dokument) => dokument.type) || [])])),
     },
   });
 
@@ -62,12 +63,16 @@ export const Saksdokumenter = ({ dokumenter = dokumenterMock }: Props) => {
       <Table size={'small'}>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell align={'center'}>Inn / ut</Table.HeaderCell>
-            <Table.HeaderCell align={'center'}>Dokument</Table.HeaderCell>
-            <Table.ColumnHeader sortable align={'center'}>
+            <Table.HeaderCell align={'center'} textSize={'small'}>
+              Inn / ut
+            </Table.HeaderCell>
+            <Table.HeaderCell align={'center'} textSize={'small'}>
+              Dokument
+            </Table.HeaderCell>
+            <Table.ColumnHeader sortable align={'center'} textSize={'small'}>
               Type
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortable align={'center'}>
+            <Table.ColumnHeader sortable align={'center'} textSize={'small'}>
               Journalført
             </Table.ColumnHeader>
           </Table.Row>
