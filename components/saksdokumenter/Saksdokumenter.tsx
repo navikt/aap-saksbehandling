@@ -1,17 +1,8 @@
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { ArrowLeftIcon, ArrowRightIcon } from '@navikt/aksel-icons';
+import { ArrowRightIcon } from '@navikt/aksel-icons';
 
 import { Link, Table } from '@navikt/ds-react';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-
-export interface Dokument {
-  navn: string;
-  journalpostId: string;
-  dokumentId: string;
-  type: string;
-  journalførtDato: string;
-  ekstern: boolean;
-}
+import { DokumentInfo } from 'lib/types/types';
 
 interface FormFields {
   dokumentnavn: string;
@@ -19,25 +10,21 @@ interface FormFields {
 }
 
 interface Props {
-  dokumenter?: Dokument[];
+  dokumenter?: DokumentInfo[];
 }
 
-const dokumenterMock: Dokument[] = [
+const dokumenterMock: DokumentInfo[] = [
   {
-    navn: 'søknad.pdf',
-    journalførtDato: '2025.12.12',
-    dokumentId: '123',
+    tittel: 'søknad.pdf',
+    dokumentInfoId: '123',
     journalpostId: '456',
-    type: 'sykemelding',
-    ekstern: true,
+    variantformat: 'ARKIV',
   },
   {
-    navn: 'legeerklæring.pdf',
-    journalførtDato: '2024.12.12',
-    dokumentId: '456',
+    tittel: 'legeerklæring.pdf',
+    dokumentInfoId: '456',
     journalpostId: '789',
-    type: 'legeerklæring',
-    ekstern: true,
+    variantformat: 'ARKIV',
   },
 ];
 
@@ -50,7 +37,7 @@ export const Saksdokumenter = ({ dokumenter = dokumenterMock }: Props) => {
     dokumentType: {
       type: 'select',
       label: 'Vis typer',
-      options: Array.from(new Set([...[''], ...(dokumenter?.map((dokument) => dokument.type) || [])])),
+      options: Array.from(new Set([...[''], ...(dokumenter?.map((dokument) => dokument.variantformat) || [])])),
     },
   });
 
@@ -63,43 +50,45 @@ export const Saksdokumenter = ({ dokumenter = dokumenterMock }: Props) => {
       <Table size={'small'}>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell align={'center'} textSize={'small'}>
+            <Table.HeaderCell align={'left'} textSize={'small'}>
               Inn / ut
             </Table.HeaderCell>
-            <Table.HeaderCell align={'center'} textSize={'small'}>
+            <Table.HeaderCell align={'left'} textSize={'small'}>
               Dokument
             </Table.HeaderCell>
-            <Table.ColumnHeader sortable align={'center'} textSize={'small'}>
+            <Table.HeaderCell align={'left'} textSize={'small'}>
               Type
-            </Table.ColumnHeader>
-            <Table.ColumnHeader sortable align={'center'} textSize={'small'}>
+            </Table.HeaderCell>
+            <Table.HeaderCell align={'left'} textSize={'small'}>
               Journalført
-            </Table.ColumnHeader>
+            </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {dokumenter?.map((dokument) => {
-            return (
-              <Table.Row key={dokument.dokumentId}>
-                <Table.DataCell align={'center'}>
-                  <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                    {dokument.ekstern ? <ArrowRightIcon fontSize={'1.5rem'} /> : <ArrowLeftIcon fontSize={'1.5rem'} />}
-                  </div>
-                </Table.DataCell>
-                <Table.DataCell align={'center'}>
-                  <Link
-                    href={`/api/dokument/${dokument.journalpostId}/${dokument.dokumentId}`}
-                    onClick={() => console.log('åpner dokument')}
-                    target="_b∏lank"
-                  >
-                    {dokument.navn}
-                  </Link>
-                </Table.DataCell>
-                <Table.DataCell align={'center'}>{dokument.type}</Table.DataCell>
-                <Table.DataCell align={'center'}>{formaterDatoForFrontend(dokument.journalførtDato)}</Table.DataCell>
-              </Table.Row>
-            );
-          })}
+          {dokumenter
+            ?.filter((dokument) => !form.watch('dokumentnavn') || dokument.tittel.includes(form.watch('dokumentnavn')))
+            .map((dokument) => {
+              return (
+                <Table.Row key={dokument.dokumentInfoId}>
+                  <Table.DataCell align={'left'}>
+                    <div style={{ display: 'flex' }}>
+                      <ArrowRightIcon fontSize={'1.5rem'} />
+                    </div>
+                  </Table.DataCell>
+                  <Table.DataCell align={'left'}>
+                    <Link
+                      href={`/api/dokument/${dokument.journalpostId}/${dokument.dokumentInfoId}`}
+                      onClick={() => console.log('åpner dokument')}
+                      target="_blank"
+                    >
+                      {dokument.tittel}
+                    </Link>
+                  </Table.DataCell>
+                  <Table.DataCell align={'left'}>{dokument.variantformat}</Table.DataCell>
+                  <Table.DataCell align={'left'}>12.12.2024</Table.DataCell>
+                </Table.Row>
+              );
+            })}
         </Table.Body>
       </Table>
     </div>
