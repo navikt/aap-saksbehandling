@@ -5,19 +5,17 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 import styles from './PdfVisning.module.css';
-import { BrevData } from 'components/brevbygger/Brevbygger';
 
 const pdfjsWorker = require('pdfjs-dist/build/pdf.worker.entry.js');
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 interface Props {
   tittel: string;
-  brevdata: BrevData[];
   isOpen: boolean;
   setIsOpen: Dispatch<boolean>;
 }
 
-export const PdfVisning = ({ tittel, brevdata, isOpen, setIsOpen }: Props) => {
+export const PdfVisning = ({ tittel, isOpen, setIsOpen }: Props) => {
   const [pdfFilInnhold, setPfdFilInnhold] = useState<string>();
   const [numPages, setNumPages] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState(1);
@@ -39,11 +37,6 @@ export const PdfVisning = ({ tittel, brevdata, isOpen, setIsOpen }: Props) => {
         },
         saksnummer: 'AABBCC123',
         dato: '11. august 2023',
-        underblokker: brevdata.map((brev) => ({
-          overskrift: brev.overskrift,
-          nivå: brev.nivå,
-          content: brev.content?.content,
-        })),
       };
 
       console.log('postData', postData);
@@ -72,7 +65,7 @@ export const PdfVisning = ({ tittel, brevdata, isOpen, setIsOpen }: Props) => {
     }
 
     hentPdf();
-  }, [brevdata, tittel, isOpen]);
+  }, [tittel, isOpen]);
 
   return (
     <Modal
