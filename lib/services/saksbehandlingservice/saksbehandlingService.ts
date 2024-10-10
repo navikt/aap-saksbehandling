@@ -2,8 +2,10 @@ import { notFound } from 'next/navigation';
 import {
   AktivitetspliktHendelser,
   AlderGrunnlag,
+  ArbeidsevneGrunnlag,
   BarnetilleggGrunnlag,
-  BehandlingFlytOgTilstand, BehandlingPersoninfo,
+  BehandlingFlytOgTilstand,
+  BehandlingPersoninfo,
   BehandlingResultat,
   BeregningsGrunnlag,
   BeregningsVurdering,
@@ -143,6 +145,11 @@ export const hentAlderGrunnlag = async (behandlingsReferanse: string): Promise<A
 export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string): Promise<FritakMeldepliktGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/fritak-meldeplikt`;
   return await fetchProxy<FritakMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentFastsettArbeidsevneGrunnlag = async (behandlingsReferanse: string): Promise<ArbeidsevneGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/arbeidsevne`;
+  return await fetchProxy<ArbeidsevneGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBistandsbehovGrunnlag = async (behandlingsReferanse: string): Promise<BistandsGrunnlag> => {
