@@ -21,21 +21,21 @@ const grunnlag: YrkesskadeGrunnlag = {
 describe('yrkesskade visning', () => {
   it('skal ha en tabell med pensjonsgivende inntekt for de siste 3 årene', () => {
     render(<YrkesskadeVisning grunnlag={grunnlag} />);
-    const tabellOverskrift = screen.getByText(
-      'Standard grunnlagsberegning basert på pensjonsgivende inntekt siste 3 år før redusert arbeidsevne'
-    );
+    const tabellOverskrift = screen.getByText('Grunnlagsberegning § 11-19');
     expect(tabellOverskrift).toBeVisible();
   });
 
-  it('skal ha en tabell med pensjonsgivende inntekt for de siste 3 årene', () => {
+  it('skal ha en tabell med grunnlagsberegning for 11-19 med yrkesskadefordel', () => {
     render(<YrkesskadeVisning grunnlag={grunnlag} />);
-    const tabellOverskrift = screen.getByText('Beregning av grunnlag som følge av yrkesskade');
+    const tabellOverskrift = screen.getByText(
+      'Grunnlagsberegning § 11-19, jf. grunnlag ved yrkesskadefordel etter § 11-22'
+    );
     expect(tabellOverskrift).toBeVisible();
   });
 
   it('skal ha en tabell som viser en oppsummering og det faktiske grunnlaget', () => {
     render(<YrkesskadeVisning grunnlag={grunnlag} />);
-    const tabellOverskrift = screen.getByText('Innbyggers grunnlag er satt til gunstigste av følgende');
+    const tabellOverskrift = screen.getByText('Innbyggers grunnlag er satt til det gunstigste av følgende:');
     expect(tabellOverskrift).toBeVisible();
   });
 
@@ -49,6 +49,8 @@ describe('yrkesskade visning', () => {
 
   it('rad med inntekt siste år viser årstall', () => {
     render(<YrkesskadeVisning grunnlag={grunnlag} />);
-    expect(screen.getByRole('cell', { name: `Inntekt siste år (${grunnlag.inntektSisteÅr.år})` })).toBeVisible();
+    expect(
+      screen.getByRole('cell', { name: `§ 11-19 Inntekt siste år (${grunnlag.inntektSisteÅr.år})` })
+    ).toBeVisible();
   });
 });

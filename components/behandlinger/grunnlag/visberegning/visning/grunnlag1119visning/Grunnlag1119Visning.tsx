@@ -14,6 +14,9 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
     throw new Error('Kunne ikke finne påkrevd grunnlag for 11-19');
   }
 
+  const foersteAar = grunnlag.inntekter.at(0)?.år;
+  const sisteAar = grunnlag.inntekter.at(-1)?.år;
+
   return (
     <div className={styles.visning}>
       <InntektTabell
@@ -22,7 +25,7 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
         grunnlagBeregnet={grunnlag.grunnlag}
       />
       <div className={'flex-column'}>
-        <Label size={'medium'}>Innbyggers grunnlag er satt til gunstigste av følgende</Label>
+        <Label size={'medium'}>Innbyggers grunnlag er satt til det gunstigste av følgende:</Label>
         <Table size={'medium'}>
           <Table.Header>
             <Table.Row>
@@ -32,15 +35,17 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
           </Table.Header>
           <Table.Body>
             <Table.Row>
-              <Table.DataCell>Gjennomsnittlig inntekt siste 3 år</Table.DataCell>
+              <Table.DataCell>
+                § 11-19 {`Gjennomsnitt inntekt siste 3 år (${foersteAar} - ${sisteAar})`}{' '}
+              </Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.gjennomsnittligInntektSiste3år)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>Inntekt siste år ({grunnlag.inntektSisteÅr.år})</Table.DataCell>
+              <Table.DataCell>§ 11-19 Inntekt siste år ({grunnlag.inntektSisteÅr.år})</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr.justertTilMaks6G)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.HeaderCell scope={'row'}>Grunnlag satt til</Table.HeaderCell>
+              <Table.HeaderCell scope={'row'}>Fastsatt grunnlag</Table.HeaderCell>
               <Table.DataCell align={'right'}>
                 <b>{formaterTilG(grunnlag.grunnlag)}</b>
               </Table.DataCell>

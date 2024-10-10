@@ -44,6 +44,9 @@ const grunnlag: UføreGrunnlag = {
 describe('UføreVisning', () => {
   it('rad for inntekt siste år viser årstall', () => {
     render(<UføreVisning grunnlag={grunnlag} />);
-    expect(screen.getByRole('cell', { name: `Inntekt siste år (${grunnlag.inntektSisteÅr.år})` })).toBeVisible();
+    expect(
+      screen.getByRole('cell', { name: `§ 11-19 Inntekt siste år (${grunnlag.inntektSisteÅr.år})` })
+    ).toBeVisible();
+    expect(screen.getByRole('cell', { name: `§§ 11-19 / 11-28 Inntekt siste år (${grunnlag.inntektSisteÅrUfør.år})` }));
   });
 });

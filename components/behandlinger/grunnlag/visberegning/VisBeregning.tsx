@@ -21,7 +21,7 @@ export const VisBeregning = ({ grunnlag }: Props) => {
   return (
     <>
       <VilkårsKort
-        heading={'Grunnlagsberegning § 11-19'}
+        heading={finnHeading(beregningsVisning)}
         // @ts-ignore-line TODO Finne ut hvordan vi skal vise disse kortene
         steg={'VIS_BEREGNING'}
         icon={<SackKronerIcon title="beregning-ikon" fontSize={'inherit'} />}
@@ -35,4 +35,17 @@ export const VisBeregning = ({ grunnlag }: Props) => {
       </VilkårsKort>
     </>
   );
+};
+
+const finnHeading = (beregningsVisning: string): string => {
+  if (beregningsVisning === 'YRKESSKADE') {
+    return 'Grunnlagsberegning §§ 11-19 / 11-22';
+  }
+  if (beregningsVisning === 'UFØRE') {
+    return 'Grunnlagsberegning §§ 11-19 / 11-28';
+  }
+  if (beregningsVisning === 'YRKESSKADE_UFØRE') {
+    return 'Grunnlagsberegning §§ 11-19 / 11-28 / 11-22';
+  }
+  return 'Grunnlagsberegning § 11-19';
 };
