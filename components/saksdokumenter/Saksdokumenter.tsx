@@ -1,8 +1,9 @@
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { ArrowRightIcon } from '@navikt/aksel-icons';
+import { ArrowLeftIcon, ArrowRightIcon } from '@navikt/aksel-icons';
 
 import { Link, Table } from '@navikt/ds-react';
 import { DokumentInfo } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface FormFields {
   dokumentnavn: string;
@@ -13,22 +14,28 @@ interface Props {
   dokumenter?: DokumentInfo[];
 }
 
-const dokumenterMock: DokumentInfo[] = [
-  {
-    tittel: 'søknad.pdf',
-    dokumentInfoId: '123',
-    journalpostId: '456',
-    variantformat: 'ARKIV',
-  },
-  {
-    tittel: 'legeerklæring.pdf',
-    dokumentInfoId: '456',
-    journalpostId: '789',
-    variantformat: 'ARKIV',
-  },
-];
+// const dokumenterMock: DokumentInfo[] = [
+//   {
+//     tittel: 'søknad.pdf',
+//     dokumentInfoId: '123',
+//     journalpostId: '456',
+//     variantformat: 'ORIGINAL',
+//     brevkode: 'hello',
+//     erUtgående: true,
+//     datoOpprettet: '2024-12-12',
+//   },
+//   {
+//     tittel: 'legeerklæring.pdf',
+//     dokumentInfoId: '456',
+//     journalpostId: '789',
+//     variantformat: 'ARKIV',
+//     brevkode: 'pello',
+//     datoOpprettet: '2024-12-5',
+//     erUtgående: true,
+//   },
+// ];
 
-export const Saksdokumenter = ({ dokumenter = dokumenterMock }: Props) => {
+export const Saksdokumenter = ({ dokumenter }: Props) => {
   const { form, formFields } = useConfigForm<FormFields>({
     dokumentnavn: {
       type: 'text',
@@ -67,12 +74,17 @@ export const Saksdokumenter = ({ dokumenter = dokumenterMock }: Props) => {
         <Table.Body>
           {dokumenter
             ?.filter((dokument) => !form.watch('dokumentnavn') || dokument.tittel.includes(form.watch('dokumentnavn')))
+            .filter((dokument) => !form.watch('dokumentType') || dokument.variantformat === form.watch('dokumentType'))
             .map((dokument) => {
               return (
                 <Table.Row key={dokument.dokumentInfoId}>
                   <Table.DataCell align={'left'}>
                     <div style={{ display: 'flex' }}>
-                      <ArrowRightIcon fontSize={'1.5rem'} />
+                      {dokument.erUtgående ? (
+                        <ArrowRightIcon fontSize={'1.5rem'} />
+                      ) : (
+                        <ArrowLeftIcon fontSize={'1.5rem'} />
+                      )}
                     </div>
                   </Table.DataCell>
                   <Table.DataCell align={'left'}>
@@ -84,8 +96,8 @@ export const Saksdokumenter = ({ dokumenter = dokumenterMock }: Props) => {
                       {dokument.tittel}
                     </Link>
                   </Table.DataCell>
-                  <Table.DataCell align={'left'}>{dokument.variantformat}</Table.DataCell>
-                  <Table.DataCell align={'left'}>12.12.2024</Table.DataCell>
+                  <Table.DataCell align={'left'}>{dokument.brevkode}</Table.DataCell>
+                  <Table.DataCell align={'left'}>{formaterDatoForFrontend(dokument.datoOpprettet)}</Table.DataCell>
                 </Table.Row>
               );
             })}

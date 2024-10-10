@@ -10,6 +10,9 @@ const etDokument: DokumentInfo[] = [
     dokumentInfoId: '123',
     journalpostId: '456',
     variantformat: 'ARKIV',
+    brevkode: 'arkiv',
+    datoOpprettet: '2024-12-12',
+    erUtgående: true,
   },
 ];
 
@@ -19,12 +22,18 @@ const toDokument: DokumentInfo[] = [
     dokumentInfoId: '123',
     journalpostId: '456',
     variantformat: 'ARKIV',
+    brevkode: 'arkiv',
+    datoOpprettet: '2024-12-12',
+    erUtgående: true,
   },
   {
     tittel: 'legeerklæring.pdf',
     dokumentInfoId: '456',
     journalpostId: '789',
     variantformat: 'ARKIV',
+    brevkode: 'arkiv',
+    datoOpprettet: '2024-12-12',
+    erUtgående: true,
   },
 ];
 

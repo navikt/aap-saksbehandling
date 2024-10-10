@@ -4,8 +4,13 @@ import { Tabs, Tooltip } from '@navikt/ds-react';
 import { ClockDashedIcon, FilesIcon, HddDownIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
+import { DokumentInfo } from 'lib/types/types';
 
-export const Dokument = () => {
+interface Props {
+  dokumenter?: DokumentInfo[];
+}
+
+export const Saksbehandlingsoversikt = ({ dokumenter }: Props) => {
   const [toggleGroupValue, setToggleGroupValue] = useState<string>('saksdokumenter');
 
   return (
@@ -27,7 +32,7 @@ export const Dokument = () => {
         </Tooltip>
       </Tabs>
 
-      {toggleGroupValue === 'saksdokumenter' && <Saksdokumenter />}
+      {toggleGroupValue === 'saksdokumenter' && <Saksdokumenter dokumenter={dokumenter} />}
       {toggleGroupValue === 'innhent_dokument' && <div>Her kommer det innhenting av dokumenter</div>}
       {toggleGroupValue === 'sakshistorikk' && <div>Her kommer det sakshistorikk</div>}
     </div>
