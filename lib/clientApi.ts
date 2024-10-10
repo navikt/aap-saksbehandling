@@ -5,7 +5,6 @@ import {
   SaksInfo,
   SettPåVent,
 } from './types/types';
-import { Brevmal } from 'lib/utils/sanity';
 
 async function fetchProxy<ResponseBody>(
   url: string,
@@ -45,10 +44,6 @@ export function hentAlleSaker() {
 
 export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
   return fetchProxy('/api/behandling/los-behov/', 'POST', avklaringsBehov);
-}
-
-export function hentBrevmalFraSanity(brevmalid: string) {
-  return fetchProxy<Brevmal>(`/api/sanity/brevmal/${brevmalid}`, 'GET');
 }
 
 export function opprettAktivitetspliktBrudd(aktivitet: BruddAktivitetsplikt) {
