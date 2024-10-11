@@ -846,6 +846,48 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/fritak-meldeplikt/simulering': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.SimulerFritakMeldepliktDto'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.SimulertFritakMeldepliktDto'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/medlemskap': {
     parameters: {
       query?: never;
@@ -1844,7 +1886,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-10-10T12:08:32.003503
+       * @example 2024-10-10T22:49:01.915361
        */
       tidspunkt: string;
     };
@@ -2245,7 +2287,7 @@ export interface components {
       harFritak: boolean;
       /**
        * Format: date-time
-       * @example 2024-10-10T12:08:32.003503
+       * @example 2024-10-10T22:49:01.915361
        */
       vurderingsTidspunkt: string;
     };
@@ -2257,6 +2299,12 @@ export interface components {
        */
       fraDato: string;
       harFritak: boolean;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.SimulerFritakMeldepliktDto': {
+      fritaksvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritaksvurderingDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.SimulertFritakMeldepliktDto': {
+      gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritakMeldepliktVurderingDto'][];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.VurderingerForSamordning': {
       vurderteSamordninger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.ytelsevurdering.SamordningVurdering'][];
@@ -2498,7 +2546,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-10-10T12:08:32.003503
+       * @example 2024-10-10T22:49:01.915361
        */
       opprettet: string;
       /** Format: uuid */
@@ -2524,7 +2572,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-10-10T12:08:32.003503
+       * @example 2024-10-10T22:49:01.915361
        */
       tidsstempel: string;
     };
@@ -2734,7 +2782,7 @@ export interface components {
       brevkode?: string | null;
       /**
        * Format: date-time
-       * @example 2024-10-10T12:08:32.003503
+       * @example 2024-10-10T22:49:01.915361
        */
       datoOpprettet: string;
       dokumentInfoId: string;
@@ -2747,7 +2795,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-10-10T12:08:32.003503
+       * @example 2024-10-10T22:49:01.915361
        */
       opprettet: string;
       /** Format: uuid */
@@ -2775,7 +2823,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-10-10T12:08:32.003503
+       * @example 2024-10-10T22:49:01.915361
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -2786,7 +2834,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-10-10T12:08:32.003503
+       * @example 2024-10-10T22:49:01.915361
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -2820,7 +2868,7 @@ export interface components {
       navn: string;
       /**
        * Format: date-time
-       * @example 2024-10-10T12:08:32.003503
+       * @example 2024-10-10T22:49:01.915361
        */
       'planlagtKj\u00F8retidspunkt': string;
       /** @enum {string} */

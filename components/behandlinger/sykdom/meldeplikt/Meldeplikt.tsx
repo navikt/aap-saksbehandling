@@ -28,7 +28,6 @@ type Fritaksvurderinger = {
   begrunnelse: string;
   harFritak: string;
   fraDato: string;
-  erReadOnly: boolean;
 };
 
 type FritakMeldepliktFormFields = {
@@ -40,8 +39,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     begrunnelse: vurdering.begrunnelse,
     fraDato: formaterDatoForFrontend(vurdering.fraDato),
     harFritak: vurdering.harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
-    erReadOnly: true,
-  })) || [{ begrunnelse: '', fraDato: '', harFritak: '', erReadOnly: false }];
+  })) || [{ begrunnelse: '', fraDato: '', harFritak: '' }];
 
   const { form } = useConfigForm<FritakMeldepliktFormFields>({
     fritaksvurderinger: {
@@ -61,6 +59,28 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
   const behandlingsreferanse = useBehandlingsReferanse();
+
+  {
+    /*
+  const simulate = async () => {
+    const validationResult = await form.trigger(); // force validation
+    if (validationResult) {
+      const vurderinger: FritaksvurderingDto[] = form.getValues().fritaksvurderinger.map((vurdering) => ({
+        begrunnelse: vurdering.begrunnelse,
+        harFritak: vurdering.harFritak === JaEllerNei.Ja,
+        fraDato: formaterDatoForBackend(parse(vurdering.fraDato, 'dd.MM.yyyy', new Date())),
+      }));
+
+      // @ts-ignore THOMAS! HJELP!
+      const res: SimulertMeldeplikt = await simulerMeldeplikt(behandlingsreferanse, {
+        fritaksvurderinger: vurderinger,
+      });
+    } else {
+      console.log(`form is not valid ${validationResult}`);
+    }
+  };
+  */
+  }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -117,14 +137,14 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
               control={form.control}
               name={`fritaksvurderinger.${index}.begrunnelse`}
               rules={{ required: 'Du må begrunne vurderingen din' }}
-              readOnly={readOnly || vurdering.erReadOnly}
+              readOnly={readOnly}
             />
             <RadioGroupWrapper
               label={'Skal innbygger få fritak fra meldeplikt?'}
               control={form.control}
               name={`fritaksvurderinger.${index}.harFritak`}
               rules={{ required: 'Du må svare på om innbygger skal få fritak fra meldeplikt' }}
-              readOnly={readOnly || vurdering.erReadOnly}
+              readOnly={readOnly}
             >
               <Radio value={JaEllerNei.Ja}>Ja</Radio>
               <Radio value={JaEllerNei.Nei}>Nei</Radio>
@@ -139,9 +159,9 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
                 required: 'Du må angi en dato vurderingen gjelder fra',
                 validate: (value) => validerDato(value as string),
               }}
-              readOnly={readOnly || vurdering.erReadOnly}
+              readOnly={readOnly}
             />
-            {!readOnly && !vurdering.erReadOnly && fritakMeldepliktVurderinger.length > 1 && (
+            {!readOnly && fritakMeldepliktVurderinger.length > 1 && (
               <div>
                 <Button onClick={() => remove(index)} type={'button'} variant={'tertiary'} icon={<TrashIcon />}>
                   Fjern periode
@@ -151,17 +171,30 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
           </div>
         ))}
         {!readOnly && (
-          <div>
-            <Button
-              onClick={() => append({ begrunnelse: '', harFritak: '', fraDato: '', erReadOnly: false })}
-              type={'button'}
-              variant={'tertiary'}
-              size={'medium'}
-              icon={<PlusCircleIcon />}
-            >
-              Legg til periode
-            </Button>
-          </div>
+          <>
+            <div>
+              <Button
+                onClick={() => append({ begrunnelse: '', harFritak: '', fraDato: '' })}
+                type={'button'}
+                variant={'tertiary'}
+                size={'medium'}
+                icon={<PlusCircleIcon />}
+              >
+                Legg til periode
+              </Button>
+            </div>
+            {/*<div>
+              <Button
+                onClick={() => simulate()}
+                type={'button'}
+                variant={'secondary'}
+                size={'medium'}
+                icon={<TestFlaskIcon />}
+              >
+                Simuler
+              </Button>
+            </div>*/}
+          </>
         )}
       </Form>
     </VilkårsKort>

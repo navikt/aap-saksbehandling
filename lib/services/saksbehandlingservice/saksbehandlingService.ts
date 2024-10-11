@@ -3,7 +3,8 @@ import {
   AktivitetspliktHendelser,
   AlderGrunnlag,
   BarnetilleggGrunnlag,
-  BehandlingFlytOgTilstand, BehandlingPersoninfo,
+  BehandlingFlytOgTilstand,
+  BehandlingPersoninfo,
   BehandlingResultat,
   BeregningsGrunnlag,
   BeregningsVurdering,
@@ -22,6 +23,8 @@ import {
   SakPersoninfo,
   SaksInfo,
   SettPåVent,
+  SimulerMeldeplikt,
+  SimulertMeldeplikt,
   SoningsgrunnlagResponse,
   StudentGrunnlag,
   SykdomsGrunnlag,
@@ -199,6 +202,11 @@ export const hentResultat = async (referanse: string): Promise<BehandlingResulta
 export const hentBeregningsGrunnlag = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/beregning/grunnlag/${referanse}`;
   return await fetchProxy<BeregningsGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const simulerMeldeplikt = async (referanse: string, requestBody: SimulerMeldeplikt) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/grunnlag/fritak-meldeplikt/simulering`;
+  return await fetchProxy<SimulertMeldeplikt>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
 export const settBehandlingPåVent = async (referanse: string, requestBody: SettPåVent) => {
