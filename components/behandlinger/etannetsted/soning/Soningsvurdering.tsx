@@ -1,85 +1,56 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { PadlockLockedIcon } from '@navikt/aksel-icons';
-import { Alert } from '@navikt/ds-react';
+import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { Soningsgrunnlag } from 'lib/types/types';
+import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
+import { Behovstype, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
-import { FormEvent } from 'react';
-import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import {
-  Behovstype,
-  getJaNeiEllerUndefined,
-  JaEllerNei,
-  JaEllerNeiOptions,
-  jaNeiEllerUndefinedToNullableBoolean,
-} from 'lib/utils/form';
-import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
-import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
-import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
-import { SoningsgrunnlagResponse } from 'lib/types/types';
-import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { FormEvent } from 'react';
+import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
-  behandlingsreferanse: string;
-  behandlingVersjon: number;
-  grunnlag: SoningsgrunnlagResponse;
+  grunnlag: Soningsgrunnlag;
   readOnly: boolean;
+  behandlingsversjon: number;
 }
 
 interface FormFields {
-  dokumenterBruktIVurderingen: string[];
-  soningUtenforFengsel: JaEllerNei;
-  begrunnelseForSoningUtenforAnstalt: string;
-  arbeidUtenforAnstalt: JaEllerNei;
-  førsteArbeidsdag: Date;
-  begrunnelseForArbeidUtenforAnstalt: string;
+  begrunnelse: string;
+  skalYtelsenStoppes: JaEllerNei;
+  fraDato: string;
 }
 
-export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVersjon, readOnly }: Props) => {
-  const soningsvurdering = grunnlag.soningsvurdering;
-  const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
-  const { formFields, form } = useConfigForm<FormFields>(
+export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Props) => {
+  const { isLoading, status, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
+  const behandlingsreferanse = useBehandlingsReferanse();
+  const { form, formFields } = useConfigForm<FormFields>(
     {
-      dokumenterBruktIVurderingen: {
-        type: 'checkbox_nested',
-        label: 'Dokumenter funnet som er relevante for vurdering av AAP under straffegjennomføring §11-26',
-        description: 'Les dokumentene og tilknytt eventuelt dokumenter til 11-26 vurderingen',
-      },
-
-      soningUtenforFengsel: {
-        type: 'radio',
-        defaultValue: getJaNeiEllerUndefined(soningsvurdering?.soningUtenforFengsel),
-        label: 'Gjennomfører søker straff utenfor fengsel?',
-        options: JaEllerNeiOptions,
-        rules: { required: 'Du må oppgi om søker soner straff i eller utenfor fengsel' },
-      },
-
-      begrunnelseForSoningUtenforAnstalt: {
+      begrunnelse: {
         type: 'textarea',
-        defaultValue: soningsvurdering?.begrunnelse ?? undefined,
-        label: 'Skriv en beskrivelse av hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel',
-        rules: { required: 'Du må begrunne hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel' },
+        defaultValue: grunnlag.soningsvurdering?.begrunnelse ?? undefined,
+        label:
+          'Vurder om medlemmet soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
+        rules: { required: 'Du må begrunne vurderingen din' },
       },
-
-      arbeidUtenforAnstalt: {
+      skalYtelsenStoppes: {
         type: 'radio',
-        defaultValue: getJaNeiEllerUndefined(soningsvurdering?.arbeidUtenforAnstalt),
-        label: 'Har søker arbeid utenfor institusjonen?',
+        label: 'Skal ytelsen stoppes på grunn av soning?',
+        defaultValue: undefined,
+        rules: { required: 'Du må ta stilling til om ytelsen skal stoppes på grunn av soning' },
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om søker har arbeid utenfor institusjonen' },
       },
-      førsteArbeidsdag: {
-        type: 'date',
-        defaultValue: stringToDate(soningsvurdering?.førsteArbeidsdag),
-        label: 'Dato for første arbeidsdag',
-        rules: { required: 'Dato for første arbeidsdag må registreres' },
-      },
-      begrunnelseForArbeidUtenforAnstalt: {
-        type: 'textarea',
-        defaultValue: soningsvurdering?.begrunnelse ?? undefined,
-        label: 'Skriv en beskrivelse av hvorfor det er vurdert at søker har arbeid utenfor institusjonen',
-        rules: { required: 'Du må begrunne hvorfor det er vurdert at søker har arbeid utenfor institusjonen' },
+      fraDato: {
+        label: 'Ytelsen skal opphøre fra dato',
+        type: 'text',
+        defaultValue: '',
+        rules: {
+          required: 'Når ytelsen skal stoppes må du sette hvilken dato den skal stoppes fra',
+          validate: (value) => validerDato(value as string),
+        },
       },
     },
     { shouldUnregister: true, readOnly: readOnly }
@@ -88,21 +59,9 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_SONINGSFORRHOLD,
-          soningsvurdering: {
-            dokumenterBruktIVurdering: [],
-            soningUtenforFengsel: data.soningUtenforFengsel === JaEllerNei.Ja,
-            begrunnelse: data.begrunnelseForSoningUtenforAnstalt || data.begrunnelseForArbeidUtenforAnstalt,
-            førsteArbeidsdag: data.førsteArbeidsdag && formaterDatoForBackend(data.førsteArbeidsdag),
-            arbeidUtenforAnstalt: jaNeiEllerUndefinedToNullableBoolean(data.arbeidUtenforAnstalt),
-            periode: {
-              fom: '',
-              tom: '',
-            },
-          },
-        },
+        // @ts-ignore TODO Legg inn korrekt vurdering når backend er klar
+        behov: { behovstype: Behovstype.AVKLAR_SONINGSFORRHOLD, soningsvurdering: { begrunnelse: data.begrunnelse } },
+        behandlingVersjon: behandlingsversjon,
         referanse: behandlingsreferanse,
       });
     })(event);
@@ -110,39 +69,15 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
 
   return (
     <VilkårsKort heading={'Soning § 11-26'} steg={'DU_ER_ET_ANNET_STED'} icon={<PadlockLockedIcon />}>
-      <Form
-        onSubmit={handleSubmit}
-        status={status}
-        isLoading={isLoading}
-        steg={'DU_ER_ET_ANNET_STED'}
-        visBekreftKnapp={!readOnly}
-      >
-        <Alert variant={'warning'}>Vi har fått informasjon om at søker har soningsforhold</Alert>
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
-          <DokumentTabell />
-        </FormField>
-        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
+      <Form onSubmit={handleSubmit} steg={'DU_ER_ET_ANNET_STED'} status={status} isLoading={isLoading}>
         <InstitusjonsoppholdTabell
-          label={'Søker har følgende soningsforrhold'}
-          beskrivelse={
-            'Under opphold i fengsel har ikke søker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP'
-          }
+          label="Søker har følgende soningsforhold"
+          beskrivelse="Under opphold i fengsel har ikke søker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP"
           instutisjonsopphold={grunnlag.soningsopphold}
         />
-
-        <FormField form={form} formField={formFields.soningUtenforFengsel} />
-        {form.watch(formFields.soningUtenforFengsel.name) === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.begrunnelseForSoningUtenforAnstalt} />
-        )}
-        {form.watch(formFields.soningUtenforFengsel.name) === JaEllerNei.Nei && (
-          <FormField form={form} formField={formFields.arbeidUtenforAnstalt} />
-        )}
-        {form.watch(formFields.arbeidUtenforAnstalt.name) === JaEllerNei.Ja && (
-          <>
-            <FormField form={form} formField={formFields.førsteArbeidsdag} />
-            <FormField form={form} formField={formFields.begrunnelseForArbeidUtenforAnstalt} />
-          </>
-        )}
+        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.skalYtelsenStoppes} />
+        {form.watch('skalYtelsenStoppes') === JaEllerNei.Ja && <FormField form={form} formField={formFields.fraDato} />}
       </Form>
     </VilkårsKort>
   );

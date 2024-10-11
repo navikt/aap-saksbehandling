@@ -25,7 +25,7 @@ import {
   SettPåVent,
   SimulerMeldeplikt,
   SimulertMeldeplikt,
-  SoningsgrunnlagResponse,
+  Soningsgrunnlag,
   StudentGrunnlag,
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
@@ -170,9 +170,9 @@ export const hentHelseInstitusjonsVurdering = async (
   return fetchProxy<HelseinstitusjonGrunnlagResponse>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentSoningsvurdering = async (behandlingsreferanse: string): Promise<SoningsgrunnlagResponse> => {
+export const hentSoningsvurdering = async (behandlingsreferanse: string): Promise<Soningsgrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/institusjon/soning`;
-  return fetchProxy<SoningsgrunnlagResponse>(url, saksbehandlingApiScope, 'GET');
+  return fetchProxy<Soningsgrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentTilkjentYtelse = async (behandlingsReferanse: string): Promise<TilkjentYtelseGrunnlag> => {
