@@ -5,7 +5,7 @@ import { PadlockLockedIcon } from '@navikt/aksel-icons';
 import { Alert } from '@navikt/ds-react';
 import { Form } from 'components/form/Form';
 import { FormEvent } from 'react';
-import { useConfigForm, FormField } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import {
   Behovstype,
@@ -14,8 +14,6 @@ import {
   JaEllerNeiOptions,
   jaNeiEllerUndefinedToNullableBoolean,
 } from 'lib/utils/form';
-import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
-import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
 import { SoningsgrunnlagResponse } from 'lib/types/types';
 import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
@@ -28,7 +26,6 @@ interface Props {
 }
 
 interface FormFields {
-  dokumenterBruktIVurderingen: string[];
   soningUtenforFengsel: JaEllerNei;
   begrunnelseForSoningUtenforAnstalt: string;
   arbeidUtenforAnstalt: JaEllerNei;
@@ -41,12 +38,6 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
   const { formFields, form } = useConfigForm<FormFields>(
     {
-      dokumenterBruktIVurderingen: {
-        type: 'checkbox_nested',
-        label: 'Dokumenter funnet som er relevante for vurdering av AAP under straffegjennomføring §11-26',
-        description: 'Les dokumentene og tilknytt eventuelt dokumenter til 11-26 vurderingen',
-      },
-
       soningUtenforFengsel: {
         type: 'radio',
         defaultValue: getJaNeiEllerUndefined(soningsvurdering?.soningUtenforFengsel),
@@ -118,10 +109,6 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
         visBekreftKnapp={!readOnly}
       >
         <Alert variant={'warning'}>Vi har fått informasjon om at søker har soningsforhold</Alert>
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
-          <DokumentTabell />
-        </FormField>
-        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
         <InstitusjonsoppholdTabell
           label={'Søker har følgende soningsforrhold'}
           beskrivelse={

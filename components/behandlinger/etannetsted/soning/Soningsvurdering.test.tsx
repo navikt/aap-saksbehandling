@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -24,40 +24,6 @@ describe('Soningsvurdering', () => {
 
   test('viser melding om at søker har soningsforhold', () => {
     expect(screen.getByText('Vi har fått informasjon om at søker har soningsforhold')).toBeVisible();
-  });
-
-  describe('vedleggspanel', () => {
-    test('har en liste over dokumenter som kan tilknyttes vurderingen', () => {
-      const tilknyttedeDokumenterListe = screen.getByRole('group', {
-        name: 'Dokumenter funnet som er relevante for vurdering av AAP under straffegjennomføring §11-26',
-      });
-      expect(tilknyttedeDokumenterListe).toBeVisible();
-    });
-
-    test('listen over dokumenter har korrekt beskrivelse', () => {
-      expect(screen.getByText('Les dokumentene og tilknytt eventuelt dokumenter til 11-26 vurderingen')).toBeVisible();
-    });
-
-    // TODO: Test feiler fordi dokumenterBruktIVurdering ikke blir oppdatert når testen kjører, fungerer i nettleser.
-    // Fiks test når vi faktisk skal bruke dokumentlisten
-    test.skip('skal vise en liste med tilknyttede dokumenter som har blitt valgt', async () => {
-      const rad = screen.getByRole('row', {
-        name: /^Sykemelding/,
-      });
-
-      await user.click(
-        within(rad).getByRole('checkbox', {
-          name: 'Tilknytt dokument til vurdering',
-        })
-      );
-
-      const list = screen.getByRole('list', {
-        name: 'Tilknyttede dokumenter',
-      });
-
-      const dokument = within(list).getByText('Sykemelding');
-      expect(dokument).toBeVisible();
-    });
   });
 
   test('viser kun spørsmål om søker gjennomfører straff utenfor fengsel initielt', () => {
