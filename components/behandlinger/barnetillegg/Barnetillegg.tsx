@@ -19,19 +19,15 @@ export const Barnetillegg = async ({ behandlingsreferanse }: Props) => {
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={flyt.behandlingVersjon}
     >
-      {stegSomSkalVises.map((steg) => {
-        if (steg === 'BARNETILLEGG') {
-          return (
-            <StegSuspense key={steg}>
-              <BarnetilleggVurderingMedDataFetching
-                behandlingsreferanse={behandlingsreferanse}
-                behandlingsversjon={flyt.behandlingVersjon}
-                readOnly={flyt.visning.saksbehandlerReadOnly}
-              />
-            </StegSuspense>
-          );
-        }
-      })}
+      {stegSomSkalVises.includes('BARNETILLEGG') && (
+        <StegSuspense>
+          <BarnetilleggVurderingMedDataFetching
+            behandlingsreferanse={behandlingsreferanse}
+            behandlingsversjon={flyt.behandlingVersjon}
+            readOnly={flyt.visning.saksbehandlerReadOnly}
+          />
+        </StegSuspense>
+      )}
     </GruppeSteg>
   );
 };

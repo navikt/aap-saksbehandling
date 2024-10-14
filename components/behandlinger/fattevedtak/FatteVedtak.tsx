@@ -20,15 +20,11 @@ export const FatteVedtak = async ({ behandlingsReferanse }: Props) => {
       prosessering={flyt.prosessering}
       visVenteKort={flyt.visning.visVentekort}
     >
-      {stegSomSkalVises.map((steg) => {
-        if (steg === 'FATTE_VEDTAK') {
-          return (
-            <StegSuspense key={steg}>
-              <FatteVedtakMedDataFetching behandlingsReferanse={behandlingsReferanse} />
-            </StegSuspense>
-          );
-        }
-      })}
+      {stegSomSkalVises.includes('FATTE_VEDTAK') && (
+        <StegSuspense>
+          <FatteVedtakMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+        </StegSuspense>
+      )}
     </GruppeSteg>
   );
 };
