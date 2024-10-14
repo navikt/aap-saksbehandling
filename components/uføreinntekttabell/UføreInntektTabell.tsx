@@ -6,16 +6,17 @@ import { formaterTilG, formaterTilNok, formaterTilProsent } from 'lib/utils/stri
 interface Props {
   inntekter: Array<UføreInntekt>;
   gjennomsnittSiste3år: number;
+  ytterligereNedsattArbeidsevneÅr: string;
 }
 
-export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år }: Props) => {
+export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, ytterligereNedsattArbeidsevneÅr }: Props) => {
   const foersteAar = inntekter.at(0)?.år;
   const sisteAar = inntekter.at(-1)?.år;
 
   return (
     <div className={'flex-column'}>
       <Label size={'medium'}>Grunnlagsberegning § 11-19 etter oppjustering jf. § 11-28 fjerde ledd</Label>
-      <Detail>Innbygger fikk ytterligere nedsatt arbeidsevne i HENT_AAR_HER</Detail>
+      <Detail>Innbygger fikk ytterligere nedsatt arbeidsevne i {ytterligereNedsattArbeidsevneÅr}</Detail>
       <ReadMore header={'Se detaljer for beregning ved uføre'}>
         Der innbygger har gradert uføre skal det beregningen benytte gunstigste av: 1) Tidspunktet da innbyggers
         arbeidsevne ble redusert med minst 50%. Typisk uføretidspunktet for gradert uføretrygd. 2) Tidspunktet da
@@ -41,7 +42,9 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år }: Props)
               <Table.DataCell align={'right'}>
                 {formaterTilNok(inntekt.inntektIKroner)} ({formaterTilG(inntekt.inntektIG)})
               </Table.DataCell>
-              <Table.DataCell align={'right'}>{formaterTilNok(inntekt.justertForUføreGrad)} (TODO G)</Table.DataCell>
+              <Table.DataCell align={'right'}>
+                {formaterTilNok(inntekt.justertForUføreGrad)} ({formaterTilG(inntekt.justertForUføreGradiG)})
+              </Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(inntekt.justertTilMaks6G)}</Table.DataCell>
             </Table.Row>
           ))}

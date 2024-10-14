@@ -22,12 +22,13 @@ export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
       <InntektTabell
         inntekter={grunnlag?.yrkesskadeGrunnlag.inntekter}
         gjennomsnittSiste3år={grunnlag?.yrkesskadeGrunnlag.gjennomsnittligInntektSiste3år}
-        grunnlagBeregnet={grunnlag.grunnlag}
+        yrkesevneNedsattÅr={'TODO YS_UFØRE'}
       />
 
       <UføreInntektTabell
         inntekter={grunnlag.uføreGrunnlag.uføreInntekter}
         gjennomsnittSiste3år={grunnlag.uføreGrunnlag.gjennomsnittligInntektSiste3årUfør}
+        ytterligereNedsattArbeidsevneÅr={grunnlag.uføreGrunnlag.nedsattArbeidsevneÅr}
       />
 
       <YrkesskadeBeregningTabell grunnlag={grunnlag.yrkesskadeGrunnlag} visning="YRKESSKADE_UFØR" />

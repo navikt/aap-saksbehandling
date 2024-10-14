@@ -4,6 +4,7 @@ import { UføreVisning } from 'components/behandlinger/grunnlag/visberegning/vis
 import { UføreGrunnlag } from 'lib/types/types';
 
 const grunnlag: UføreGrunnlag = {
+  nedsattArbeidsevneÅr: '2024',
   gjennomsnittligInntektSiste3år: 50000,
   gjennomsnittligInntektSiste3årUfør: 50000,
   grunnlag: 6,
@@ -20,6 +21,7 @@ const grunnlag: UføreGrunnlag = {
     justertTilMaks6G: 500000,
     uføreGrad: 50,
     justertForUføreGrad: 250000,
+    justertForUføreGradiG: 2.5,
   },
   inntekter: [
     {
@@ -34,6 +36,7 @@ const grunnlag: UføreGrunnlag = {
       år: '2021',
       uføreGrad: 50,
       justertForUføreGrad: 250000,
+      justertForUføreGradiG: 2.5,
       inntektIG: 500000,
       justertTilMaks6G: 50000,
       inntektIKroner: 5000,

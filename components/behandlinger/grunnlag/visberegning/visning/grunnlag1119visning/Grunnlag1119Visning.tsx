@@ -22,7 +22,7 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
       <InntektTabell
         inntekter={grunnlag.inntekter}
         gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
-        grunnlagBeregnet={grunnlag.grunnlag}
+        yrkesevneNedsattÅr={grunnlag.årstall}
       />
       <div className={'flex-column'}>
         <Label size={'medium'}>Innbyggers grunnlag er satt til det gunstigste av følgende:</Label>

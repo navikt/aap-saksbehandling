@@ -44,8 +44,10 @@ export const YrkesskadeBeregningTabell = ({ grunnlag, visning }: Props) => {
             <Table.DataCell align={'right'}>
               {formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)}
             </Table.DataCell>
-            <Table.DataCell align={'right'}>TODO G</Table.DataCell>
-            <Table.DataCell align={'right'}>TODO G</Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilG(grunnlag.yrkesskadeinntekt.andelGangerInntektIG)}
+            </Table.DataCell>
+            <Table.DataCell align={'right'}>{formaterTilG(grunnlag.yrkesskadeinntekt.justertTilMaks6G)}</Table.DataCell>
           </Table.Row>
           <Table.Row>
             <Table.DataCell>
@@ -55,10 +57,12 @@ export const YrkesskadeBeregningTabell = ({ grunnlag, visning }: Props) => {
             </Table.DataCell>
             <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.inntektIG)}</Table.DataCell>
             <Table.DataCell align={'right'}>
-              {formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)}
+              {formaterTilProsent(grunnlag.standardBeregning.prosentVekting)}
+            </Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilG(grunnlag.standardBeregning.andelGangerInntektIG)}
             </Table.DataCell>
             <Table.DataCell align={'right'}>TODO G</Table.DataCell>
-            <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.justertTilMaks6G)}</Table.DataCell>
           </Table.Row>
           <Table.Row>
             <Table.DataCell>
