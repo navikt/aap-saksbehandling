@@ -59,22 +59,12 @@ export const hentSak = async (saksnummer: string): Promise<SaksInfo> => {
 };
 export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
-  try {
-    return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
-  } catch (e) {
-    logWarning(`Fant ikke sak med referanse ${saksnummer}`);
-    notFound();
-  }
+  return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBehandlingPersoninfo = async (behandlingsreferanse: string): Promise<BehandlingPersoninfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/personinformasjon`;
-  try {
-    return await fetchProxy<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
-  } catch (e) {
-    logWarning(`Fant ikke behandling med referanse ${behandlingsreferanse}`);
-    notFound();
-  }
+  return await fetchProxy<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const lagreBruddPåAktivitetsplikten = async (aktivitet: BruddAktivitetsplikt) => {
