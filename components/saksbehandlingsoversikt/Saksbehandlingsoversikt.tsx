@@ -21,13 +21,13 @@ export const Saksbehandlingsoversikt = ({ dokumenter }: Props) => {
         onChange={(value) => setToggleGroupValue(value)}
         value={toggleGroupValue}
       >
-        <Tooltip content={'saksdokumenter'}>
+        <Tooltip content={'Åpne saksdokumenter'}>
           <Tabs.Tab value="saksdokumenter" label={'Saksdokumenter'} icon={<FilesIcon aria-hidden />} />
         </Tooltip>
-        <Tooltip content={'innhent_dokument'}>
+        <Tooltip content={'Åpne innhent dokument'}>
           <Tabs.Tab value="innhent_dokument" label={'Innhent dokument'} icon={<HddDownIcon aria-hidden />} />
         </Tooltip>
-        <Tooltip content={'sakshistorikk'}>
+        <Tooltip content={'Åpne sakshistorikk'}>
           <Tabs.Tab value="sakshistorikk" label={'Sakshistorikk'} icon={<ClockDashedIcon aria-hidden />} />
         </Tooltip>
       </Tabs>
