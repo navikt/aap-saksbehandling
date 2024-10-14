@@ -8,7 +8,7 @@ const grunnlag: Grunnlag1119 = {
   grunnlag: 6,
   inntektSisteÅr: { inntektIG: 0, inntektIKroner: 0, justertTilMaks6G: 0, år: '2023' },
   inntekter: [{ inntektIG: 0, inntektIKroner: 0, justertTilMaks6G: 0, år: '2010' }],
-  årstall: '2024',
+  nedsattArbeidsevneÅr: '2024',
 };
 
 describe('grunnlag 11-19 visning', () => {

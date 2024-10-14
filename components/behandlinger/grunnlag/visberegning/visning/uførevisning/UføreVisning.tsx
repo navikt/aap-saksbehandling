@@ -25,14 +25,15 @@ export const UføreVisning = ({ grunnlag }: Props) => {
       <InntektTabell
         inntekter={grunnlag.inntekter}
         gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
-        yrkesevneNedsattÅr={'TODO UFØREVISNING'}
+        yrkesevneNedsattÅr={grunnlag.nedsattArbeidsevneÅr}
       />
 
       <UføreInntektTabell
         inntekter={grunnlag.uføreInntekter}
         gjennomsnittSiste3år={6}
-        ytterligereNedsattArbeidsevneÅr={grunnlag.nedsattArbeidsevneÅr}
+        ytterligereNedsattArbeidsevneÅr={grunnlag.ytterligereNedsattArbeidsevneÅr}
       />
+
       <div className={'flex-column'}>
         <Label size={'medium'}>Innbyggers grunnlag er satt til det gunstigste av følgende:</Label>
         <Table size={'medium'}>

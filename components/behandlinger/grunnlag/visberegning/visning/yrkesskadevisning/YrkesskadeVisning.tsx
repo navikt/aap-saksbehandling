@@ -24,7 +24,7 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
       <InntektTabell
         inntekter={grunnlag.inntekter}
         gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
-        yrkesevneNedsattÅr="TODO YS"
+        yrkesevneNedsattÅr={grunnlag.nedsattArbeidsevneÅr}
       />
       <YrkesskadeBeregningTabell grunnlag={grunnlag} visning="YRKESSKADE" />
       <div className={'flex-column'}>

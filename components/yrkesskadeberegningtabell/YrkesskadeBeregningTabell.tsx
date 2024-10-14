@@ -47,13 +47,30 @@ export const YrkesskadeBeregningTabell = ({ grunnlag, visning }: Props) => {
             <Table.DataCell align={'right'}>
               {formaterTilG(grunnlag.yrkesskadeinntekt.andelGangerInntektIG)}
             </Table.DataCell>
-            <Table.DataCell align={'right'}>{formaterTilG(grunnlag.yrkesskadeinntekt.justertTilMaks6G)}</Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilG(grunnlag.yrkesskadeinntekt.andelGangerInntektIG)}
+            </Table.DataCell>
           </Table.Row>
           <Table.Row>
             <Table.DataCell>
               {visning === 'YRKESSKADE'
                 ? 'Høyeste grunnlag beregnet etter § 11-19'
                 : 'Høyeste grunnlag beregnet etter §§ 11-19 / 11-28'}
+            </Table.DataCell>
+            <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardYrkesskade.inntektIG)}</Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilProsent(grunnlag.standardYrkesskade.prosentVekting)}
+            </Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilG(grunnlag.standardYrkesskade.andelGangerInntektIG)}
+            </Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilG(grunnlag.standardYrkesskade.andelGangerInntektIG)}
+            </Table.DataCell>
+          </Table.Row>
+          <Table.Row>
+            <Table.DataCell>
+              + {visning === 'YRKESSKADE' ? 'Resterende andel § 11-19' : 'Resterende andel §§ 11-19 / 11-28'}
             </Table.DataCell>
             <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.inntektIG)}</Table.DataCell>
             <Table.DataCell align={'right'}>
@@ -62,16 +79,9 @@ export const YrkesskadeBeregningTabell = ({ grunnlag, visning }: Props) => {
             <Table.DataCell align={'right'}>
               {formaterTilG(grunnlag.standardBeregning.andelGangerInntektIG)}
             </Table.DataCell>
-            <Table.DataCell align={'right'}>TODO G</Table.DataCell>
-          </Table.Row>
-          <Table.Row>
-            <Table.DataCell>
-              + {visning === 'YRKESSKADE' ? 'Resterende andel § 11-19' : 'Resterende andel §§ 11-19 / 11-28'}
+            <Table.DataCell align={'right'}>
+              + {formaterTilG(grunnlag.standardBeregning.andelGangerInntektIG)}
             </Table.DataCell>
-            <Table.DataCell align={'right'}>TODO G</Table.DataCell>
-            <Table.DataCell align={'right'}>TODO %</Table.DataCell>
-            <Table.DataCell align={'right'}>TODO G</Table.DataCell>
-            <Table.DataCell align={'right'}>+ TODO G</Table.DataCell>
           </Table.Row>
           <Table.Row>
             <Table.DataCell>= Totalt grunnlag beregnet med yrkesskadefordel</Table.DataCell>
