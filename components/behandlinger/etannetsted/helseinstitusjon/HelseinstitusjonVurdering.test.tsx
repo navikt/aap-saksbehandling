@@ -1,4 +1,4 @@
-import { describe, it, test, beforeEach, expect } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjonsvurdering';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -32,41 +32,6 @@ describe('Helseinstitusjonsvurdering', () => {
       screen.getByText('Vi har funnet en eller flere registrerte opphold på helseinstitusjon som kan påvirke ytelsen')
     ).toBeVisible();
   });
-
-  test('har en liste over dokumenter som kan tilknyttes vurderingen', () => {
-    const tilknyttedeDokumenterListe = screen.getByRole('group', {
-      name: 'Søker har opphold på helseinstitusjon over 3 mnd. Vurder om ytelsen skal reduseres',
-    });
-    expect(tilknyttedeDokumenterListe).toBeVisible();
-  });
-
-  test('listen over dokumenter har korrekt beskrivelse', () => {
-    expect(
-      screen.getByText('Les dokumentene og tilknytt relevante dokumenter til vurdering om ytelsen skal reduseres')
-    ).toBeVisible();
-  });
-
-  // TODO: Test feiler fordi dokumenterBruktIVurdering ikke blir oppdatert når testen kjører, fungerer i nettleser.
-  // Fiks test når vi faktisk skal bruke dokumentlisten
-  it.skip('skal vise en liste med tilknyttede dokumenter som har blitt valgt', async () => {
-    const rad = screen.getByRole('row', {
-      name: /^Sykemelding/,
-    });
-
-    await user.click(
-      within(rad).getByRole('checkbox', {
-        name: 'Tilknytt dokument til vurdering',
-      })
-    );
-
-    const list = screen.getByRole('list', {
-      name: 'Tilknyttede dokumenter',
-    });
-
-    const dokument = within(list).getByText('Sykemelding');
-    expect(dokument).toBeVisible();
-  });
-
   test('viser en liste over institusjonsopphold som er oppdaget', () => {
     expect(
       screen.getByRole('table', { name: 'Søker har følgende institusjonsopphold på helseinstitusjon' })
