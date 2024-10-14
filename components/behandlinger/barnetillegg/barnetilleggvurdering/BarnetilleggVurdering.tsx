@@ -19,7 +19,7 @@ import { FormEvent } from 'react';
 interface Props {
   behandlingsversjon: number;
   grunnlag: BarnetilleggGrunnlag;
-  behandlingPersonInfo: BehandlingPersoninfo;
+  behandlingPersonInfo?: BehandlingPersoninfo;
   readOnly: boolean;
 }
 
@@ -47,7 +47,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
   const vurderteBarn: BarneTilleggVurdering[] = grunnlag.vurderteBarn.map((barn) => {
     return {
       ident: barn.ident,
-      navn: behandlingPersonInfo.info[barn.ident],
+      navn: behandlingPersonInfo?.info[barn.ident] || 'Ukjent',
       fødselsdato: barn.fødselsdato,
       vurderinger: barn.vurderinger.map((value) => {
         return {
@@ -62,7 +62,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
   const barnSomTrengerVurdering: BarneTilleggVurdering[] = grunnlag.barnSomTrengerVurdering.map((barn) => {
     return {
       ident: barn.ident.identifikator,
-      navn: behandlingPersonInfo.info[barn.ident.identifikator],
+      navn: behandlingPersonInfo?.info[barn.ident.identifikator] || 'Ukjent',
       vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
       fødselsdato: barn.fødselsdato,
     };
@@ -118,6 +118,8 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
 
   const erFolkeregistrerteBarn = grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0;
 
+  // TODO Fix this Thomas
+  const harVurderinger = grunnlag.barnSomTrengerVurdering && grunnlag.barnSomTrengerVurdering.length > 0;
   return (
     <VilkårsKort
       heading={'Barnetillegg § 11-20 tredje og fjerde ledd'}
@@ -125,27 +127,29 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
       steg={'BARNETILLEGG'}
     >
       <div className={'flex-column'}>
-        <div className={'flex-column'}>
-          <div>
-            <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
-          </div>
+        {harVurderinger && (
+          <div className={'flex-column'}>
+            <div>
+              <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
+            </div>
 
-          <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit}>
-            {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
-              return (
-                <OppgitteBarnVurdering
-                  key={vurdering.id}
-                  form={form}
-                  barnetilleggIndex={barnetilleggIndex}
-                  ident={vurdering.ident}
-                  fødselsdato={vurdering.fødselsdato}
-                  navn={behandlingPersonInfo.info[vurdering.ident]}
-                  readOnly={readOnly}
-                />
-              );
-            })}
-          </form>
-        </div>
+            <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit}>
+              {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
+                return (
+                  <OppgitteBarnVurdering
+                    key={vurdering.id}
+                    form={form}
+                    barnetilleggIndex={barnetilleggIndex}
+                    ident={vurdering.ident}
+                    fødselsdato={vurdering.fødselsdato}
+                    navn={behandlingPersonInfo?.info[vurdering.ident] || 'Ukjent'}
+                    readOnly={readOnly}
+                  />
+                );
+              })}
+            </form>
+          </div>
+        )}
         {erFolkeregistrerteBarn && (
           <div className={'flex-column'}>
             <Label size={'medium'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
@@ -153,12 +157,12 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
               <RegistrertBarn
                 key={index}
                 registrertBarn={barn}
-                navn={behandlingPersonInfo.info[barn.ident.identifikator]}
+                navn={behandlingPersonInfo?.info[barn.ident.identifikator] || 'Ukjent'}
               />
             ))}
           </div>
         )}
-        {!readOnly && (
+        {!readOnly && harVurderinger && (
           <Button className={'fit-content-button'} form={'barnetillegg'} loading={isLoading}>
             Bekreft
           </Button>
