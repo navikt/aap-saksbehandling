@@ -50,6 +50,7 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -63,6 +64,7 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -76,6 +78,7 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -89,6 +92,7 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -100,6 +104,7 @@ describe('barnetillegg', () => {
     render(
       <BarnetilleggVurdering
         grunnlag={grunnlag}
+        harAvklaringsbehov={true}
         behandlingsversjon={0}
         readOnly={true}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -119,6 +124,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -135,6 +141,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -149,6 +156,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -164,6 +172,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -180,6 +189,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -195,6 +205,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -211,6 +222,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -230,6 +242,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -251,6 +264,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
+        harAvklaringsbehov={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -270,6 +284,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={true}
+        harAvklaringsbehov={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -283,6 +298,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
+        harAvklaringsbehov={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -296,6 +312,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
+        harAvklaringsbehov={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -322,6 +339,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
+        harAvklaringsbehov={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -335,6 +353,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
+        harAvklaringsbehov={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -365,6 +384,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
+        harAvklaringsbehov={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -382,6 +402,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
+        harAvklaringsbehov={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -401,6 +422,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
+        harAvklaringsbehov={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}

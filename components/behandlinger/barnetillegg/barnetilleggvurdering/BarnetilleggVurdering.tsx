@@ -21,6 +21,7 @@ interface Props {
   grunnlag: BarnetilleggGrunnlag;
   behandlingPersonInfo?: BehandlingPersoninfo;
   readOnly: boolean;
+  harAvklaringsbehov: boolean;
 }
 
 export interface BarnetilleggFormFields {
@@ -40,7 +41,13 @@ interface Vurdering {
   fraDato?: string;
 }
 
-export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandlingPersonInfo, readOnly }: Props) => {
+export const BarnetilleggVurdering = ({
+  grunnlag,
+  harAvklaringsbehov,
+  behandlingsversjon,
+  behandlingPersonInfo,
+  readOnly,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
@@ -118,8 +125,6 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
 
   const erFolkeregistrerteBarn = grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0;
 
-  // TODO Fix this Thomas
-  const harVurderinger = grunnlag.barnSomTrengerVurdering && grunnlag.barnSomTrengerVurdering.length > 0;
   return (
     <VilkårsKort
       heading={'Barnetillegg § 11-20 tredje og fjerde ledd'}
@@ -127,7 +132,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
       steg={'BARNETILLEGG'}
     >
       <div className={'flex-column'}>
-        {harVurderinger && (
+        {harAvklaringsbehov && (
           <div className={'flex-column'}>
             <div>
               <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
@@ -162,7 +167,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
             ))}
           </div>
         )}
-        {!readOnly && harVurderinger && (
+        {!readOnly && harAvklaringsbehov && (
           <Button className={'fit-content-button'} form={'barnetillegg'} loading={isLoading}>
             Bekreft
           </Button>
