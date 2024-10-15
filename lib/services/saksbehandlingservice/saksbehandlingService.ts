@@ -209,6 +209,11 @@ export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
   return await fetchProxy<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const forberedSak = async (referanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentLocalToken = async () => {
   const url = 'http://localhost:8081/token';
   try {

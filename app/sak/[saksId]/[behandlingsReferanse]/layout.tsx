@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { hentSaksinfo } from 'lib/clientApi';
 import {
+  forberedSak,
   hentBehandling,
   hentFlyt,
   hentSak,
@@ -23,6 +24,7 @@ interface Props {
 }
 
 const Layout = async ({ children, params }: Props) => {
+  await forberedSak(params.behandlingsReferanse);
   const saksInfo = await hentSaksinfo();
   const personInfo = await hentSakPersoninfo(params.saksId);
   const sak = await hentSak(params.saksId);
