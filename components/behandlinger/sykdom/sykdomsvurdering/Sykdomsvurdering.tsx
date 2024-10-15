@@ -17,6 +17,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
+import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 
 interface FormFields {
   harSkadeSykdomEllerLyte: string;
@@ -76,8 +77,6 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
       },
       dokumenterBruktIVurderingen: {
         type: 'checkbox_nested',
-        label: 'Dokumenter funnet som er relevant for vurdering av §11-5',
-        description: 'Tilknytt minst ett dokument §11-5 vurdering',
       },
       nedsattArbeidsevneDato: {
         type: 'text',
@@ -126,6 +125,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
     form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') === JaEllerNei.Ja &&
     form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja;
 
+  console.log(form.watch('dokumenterBruktIVurderingen'));
   return (
     <VilkårsKort
       heading={'Nedsatt arbeidsevne - § 11-5'}
@@ -141,7 +141,12 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         visBekreftKnapp={!readOnly}
       >
         <RegistrertBehandler />
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
+        <CheckboxWrapper
+          name={'dokumenterBruktIVurderingen'}
+          control={form.control}
+          label={'Dokumenter funnet som er relevant for vurdering av §11-5'}
+          description={'Tilknytt minst ett dokument §11-5 vurdering'}
+        >
           <DokumentTabell
             dokumenter={tilknyttedeDokumenter.map((d) => ({
               journalpostId: d.journalpostId,
@@ -150,7 +155,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
               erTilknyttet: false,
             }))}
           />
-        </FormField>
+        </CheckboxWrapper>
         <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} />
         <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
