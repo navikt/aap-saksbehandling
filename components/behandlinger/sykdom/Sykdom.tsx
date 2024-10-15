@@ -47,18 +47,18 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
           />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('VURDER_BISTANDSBEHOV') && (
+      {stegSomSkalVises.includes('FASTSETT_ARBEIDSEVNE') && (
         <StegSuspense>
-          <OppfølgingMedDataFetching
+          <FastsettArbeidsevneMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
           />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('FASTSETT_ARBEIDSEVNE') && (
+      {stegSomSkalVises.includes('VURDER_BISTANDSBEHOV') && (
         <StegSuspense>
-          <FastsettArbeidsevneMedDataFetching
+          <OppfølgingMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
