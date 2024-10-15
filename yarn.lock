@@ -2371,7 +2371,7 @@ __metadata:
     jsdom: "npm:^25.0.1"
     json-diff: "npm:^1.0.6"
     lint-staged: "npm:^15.2.10"
-    next: "npm:^14.2.15"
+    next: "npm:^14.2.14"
     node-loader: "npm:^2.0.0"
     openapi-typescript: "npm:7.4.1"
     pino-pretty: "npm:^11.2.2"
@@ -6273,7 +6273,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:^14.2.15":
+"next@npm:^14.2.14":
   version: 14.2.15
   resolution: "next@npm:14.2.15"
   dependencies:
