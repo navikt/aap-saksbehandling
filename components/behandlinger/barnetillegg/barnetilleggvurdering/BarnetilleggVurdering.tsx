@@ -19,7 +19,7 @@ import { FormEvent } from 'react';
 interface Props {
   behandlingsversjon: number;
   grunnlag: BarnetilleggGrunnlag;
-  behandlingPersonInfo?: BehandlingPersoninfo;
+  behandlingPersonInfo: BehandlingPersoninfo;
   readOnly: boolean;
   harAvklaringsbehov: boolean;
 }
@@ -54,7 +54,7 @@ export const BarnetilleggVurdering = ({
   const vurderteBarn: BarneTilleggVurdering[] = grunnlag.vurderteBarn.map((barn) => {
     return {
       ident: barn.ident,
-      navn: behandlingPersonInfo?.info[barn.ident] || 'Ukjent',
+      navn: behandlingPersonInfo?.info[barn.ident],
       fødselsdato: barn.fødselsdato,
       vurderinger: barn.vurderinger.map((value) => {
         return {
@@ -69,7 +69,7 @@ export const BarnetilleggVurdering = ({
   const barnSomTrengerVurdering: BarneTilleggVurdering[] = grunnlag.barnSomTrengerVurdering.map((barn) => {
     return {
       ident: barn.ident.identifikator,
-      navn: behandlingPersonInfo?.info[barn.ident.identifikator] || 'Ukjent',
+      navn: behandlingPersonInfo?.info[barn.ident.identifikator],
       vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
       fødselsdato: barn.fødselsdato,
     };
