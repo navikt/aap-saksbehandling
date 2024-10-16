@@ -38,12 +38,7 @@ describe('FastsettArbeidsevne', () => {
 
   it('har et felt for å angi arbeidsevne', async () => {
     await åpneVilkårskort();
-    expect(screen.getByRole('textbox', { name: 'Arbeidsevne' })).toBeVisible();
-  });
-
-  it('har et felt for å angi enhet for arbeidsevne', async () => {
-    await åpneVilkårskort();
-    expect(screen.getByRole('combobox', { name: 'Enhet' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Arbeidsevne i prosent' })).toBeVisible();
   });
 
   it('har et felt for å angi når arbeidsevnen gjelder fra', async () => {

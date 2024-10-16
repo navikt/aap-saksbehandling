@@ -4,7 +4,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormEvent } from 'react';
 
 import { PercentIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { SelectWrapper, TextAreaWrapper, TextFieldWrapper, useConfigForm } from '@navikt/aap-felles-react';
+import { TextAreaWrapper, TextFieldWrapper, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 
@@ -18,6 +18,7 @@ import { parse } from 'date-fns';
 
 import styles from './FastsettArbeidsevne.module.css';
 import { Button } from '@navikt/ds-react';
+import { pipe } from 'lib/utils/functional';
 
 interface Props {
   grunnlag?: ArbeidsevneGrunnlag;
@@ -34,6 +35,21 @@ type Arbeidsevnevurderinger = {
 
 type FastsettArbeidsevneFormFields = {
   arbeidsevnevurderinger: Arbeidsevnevurderinger[];
+};
+
+const ANTALL_TIMER_FULL_UKE = 37.5;
+
+const prosentTilTimer = (prosent: string): number => (Number.parseInt(prosent, 10) / 100) * ANTALL_TIMER_FULL_UKE;
+const rundNedTilNaermesteHalve = (tall: number): number => Math.floor(tall * 2) / 2;
+const tilNorskDesimalFormat = (tall: number): string => tall.toLocaleString('no-NB');
+
+const tilAvrundetTimetall = pipe(prosentTilTimer, rundNedTilNaermesteHalve, tilNorskDesimalFormat);
+
+const regnOmTilTimer = (value: string) => {
+  if (!value) {
+    return '(- timer)';
+  }
+  return `(${tilAvrundetTimetall(value)} timer)`;
 };
 
 export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
@@ -110,20 +126,16 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
                 control={form.control}
                 name={`arbeidsevnevurderinger.${index}.arbeidsevne`}
                 type={'text'}
-                label={'Arbeidsevne'}
+                label={'Arbeidsevne i prosent'}
                 rules={{ required: 'Du må angi hvor stor arbeidsevne innbygger har' }}
                 readOnly={readOnly}
               />
-              <SelectWrapper
-                name={`arbeidsevnevurderinger.${index}.enhet`}
-                control={form.control}
-                label="Enhet"
-                readOnly={readOnly}
-                rules={{ required: 'Du må angi en enhet for arbeidsevnen' }}
-              >
-                <option value={'PROSENT'}>%</option>
-                <option value={'TIMER'}>T</option>
-              </SelectWrapper>
+              <div className={styles.timekolonne}>
+                {regnOmTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`))}
+                {/*
+                {prosentTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`)) + ' timer'}
+		*/}
+              </div>
             </div>
             <TextFieldWrapper
               type="text"
