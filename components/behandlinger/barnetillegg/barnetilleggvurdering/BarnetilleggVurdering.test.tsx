@@ -113,6 +113,34 @@ describe('barnetillegg', () => {
     const knapp = screen.queryByRole('button', { name: 'Bekreft' });
     expect(knapp).not.toBeInTheDocument();
   });
+
+  it('skal ikke vise knapp for å fullføre steget dersom det ikke finnes et avklaringsbehov', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={grunnlag}
+        harAvklaringsbehov={false}
+        behandlingsversjon={0}
+        readOnly={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const knapp = screen.queryByRole('button', { name: 'Bekreft' });
+    expect(knapp).not.toBeInTheDocument();
+  });
+
+  it('skal  vise knapp for å fullføre steget dersom det finnes et avklaringsbehov', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={grunnlag}
+        harAvklaringsbehov={true}
+        behandlingsversjon={0}
+        readOnly={false}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const knapp = screen.getByRole('button', { name: 'Bekreft' });
+    expect(knapp).toBeVisible();
+  });
 });
 
 describe('Oppgitte barn', () => {
