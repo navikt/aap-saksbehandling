@@ -59,13 +59,6 @@ describe('FastsettArbeidsevne', () => {
       expect(screen.getByText('Du må angi hvor stor arbeidsevne innbygger har')).toBeVisible();
     });
 
-    // TODO må sjekke hva som skal være default her. Tomt? Prosent? Time?
-    it.skip('viser feilmelding dersom enhet ikke er fylt ut', async () => {
-      await åpneVilkårskort();
-      await klikkPåBekreft();
-      expect(screen.getByText('Du må angi en enhet for arbeidsevnen')).toBeVisible();
-    });
-
     it('viser feilmelding dersom dato når arbeidsevnen gjelder fra ikke er besvart', async () => {
       await åpneVilkårskort();
       await klikkPåBekreft();
