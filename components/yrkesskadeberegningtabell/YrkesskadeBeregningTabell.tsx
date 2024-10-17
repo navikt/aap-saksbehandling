@@ -1,16 +1,21 @@
-import { Label, ReadMore, Table } from '@navikt/ds-react';
-import { formaterTilG, formaterTilProsent } from 'lib/utils/string';
+import { Detail, Label, ReadMore, Table } from '@navikt/ds-react';
+import { formaterTilG, formaterTilNok, formaterTilProsent } from 'lib/utils/string';
 import React from 'react';
 import { YrkesskadeGrunnlag } from 'lib/types/types';
 
 interface Props {
   grunnlag: YrkesskadeGrunnlag;
+  visning: 'YRKESSKADE' | 'YRKESSKADE_UFØR';
 }
 
-export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
+export const YrkesskadeBeregningTabell = ({ grunnlag, visning }: Props) => {
   return (
     <div className={'flex-column'}>
-      <Label size={'medium'}>Beregning av grunnlag som følge av yrkesskade</Label>
+      <Label size={'medium'}>Grunnlagsberegning § 11-19, jf. grunnlag ved yrkesskadefordel etter § 11-22</Label>
+      <Detail>
+        {`Anslått inntekt ved yrkesskadetidspunktet (${grunnlag.inntektSisteÅr.år}) er oppgitt til å være ${formaterTilNok(grunnlag.yrkesskadeinntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)} (${formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}) Yrkesskaden er
+        oppgitt å ha ${formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)} årsakssammenheng med nedsatt arbeidsevne.`}
+      </Detail>
       <ReadMore header={'Se detaljer om beregningen for innbygger med yrkesskade'}>
         Der yrkesskade er medvirkende årsak til redusert arbeidsevne skal det beregnes et grunnlag basert på anslått
         inntekt for det året yrkesskaden inntraff. Innbygger skal få det gunstigste grunnlaget av: 1) standard
@@ -23,44 +28,65 @@ export const YrkesskadeBeregningTabell = ({ grunnlag }: Props) => {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
-            <Table.HeaderCell align={'right'}>Inntekt i G</Table.HeaderCell>
+            <Table.HeaderCell align={'right'}>Inntekt</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Andel av grunnlag</Table.HeaderCell>
             <Table.HeaderCell align={'right'}>Andel*inntekt</Table.HeaderCell>
-            <Table.HeaderCell align={'right'}>Benyttet i YS grunnlag</Table.HeaderCell>
+            <Table.HeaderCell align={'right'}>Inntektsgrunnlag (maks 6 G)</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           <Table.Row>
             <Table.DataCell>Anslått inntekt yrkesskade ({grunnlag.inntektSisteÅr.år})</Table.DataCell>
             <Table.DataCell align={'right'}>
-              {formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}
+              {formaterTilNok(grunnlag.yrkesskadeinntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)} (
+              {formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)})
             </Table.DataCell>
             <Table.DataCell align={'right'}>
               {formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)}
             </Table.DataCell>
-            <Table.DataCell align={'right'}>{formaterTilG(5.42)}</Table.DataCell>
-            <Table.DataCell align={'right'}>{formaterTilG(5.24)}</Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilG(grunnlag.yrkesskadeinntekt.andelGangerInntektIG)}
+            </Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilG(grunnlag.yrkesskadeinntekt.andelGangerInntektIG)}
+            </Table.DataCell>
           </Table.Row>
           <Table.Row>
-            <Table.DataCell>Grunnlag standard beregnet</Table.DataCell>
+            <Table.DataCell>
+              {visning === 'YRKESSKADE'
+                ? 'Høyeste grunnlag beregnet etter § 11-19'
+                : 'Høyeste grunnlag beregnet etter §§ 11-19 / 11-28'}
+            </Table.DataCell>
+            <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardYrkesskade.inntektIG)}</Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilProsent(grunnlag.standardYrkesskade.prosentVekting)}
+            </Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilG(grunnlag.standardYrkesskade.andelGangerInntektIG)}
+            </Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilG(grunnlag.standardYrkesskade.andelGangerInntektIG)}
+            </Table.DataCell>
+          </Table.Row>
+          <Table.Row>
+            <Table.DataCell>
+              + {visning === 'YRKESSKADE' ? 'Resterende andel § 11-19' : 'Resterende andel §§ 11-19 / 11-28'}
+            </Table.DataCell>
             <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.inntektIG)}</Table.DataCell>
             <Table.DataCell align={'right'}>
-              {formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)}
+              {formaterTilProsent(grunnlag.standardBeregning.prosentVekting)}
             </Table.DataCell>
-            <Table.DataCell align={'right'}>4.2 G</Table.DataCell>
-            <Table.DataCell align={'right'}>{formaterTilG(grunnlag.standardBeregning.justertTilMaks6G)}</Table.DataCell>
+            <Table.DataCell align={'right'}>
+              {formaterTilG(grunnlag.standardBeregning.andelGangerInntektIG)}
+            </Table.DataCell>
+            <Table.DataCell align={'right'}>
+              + {formaterTilG(grunnlag.standardBeregning.andelGangerInntektIG)}
+            </Table.DataCell>
           </Table.Row>
           <Table.Row>
-            <Table.DataCell>Resterende andel, standard beregnet</Table.DataCell>
-            <Table.DataCell align={'right'}>4 G</Table.DataCell>
-            <Table.DataCell align={'right'}>40%</Table.DataCell>
-            <Table.DataCell align={'right'}>4 G</Table.DataCell>
-            <Table.DataCell align={'right'}>4 G</Table.DataCell>
-          </Table.Row>
-          <Table.Row>
-            <Table.DataCell>Totalt yrkesskade grunnlag</Table.DataCell>
+            <Table.DataCell>= Totalt grunnlag beregnet med yrkesskadefordel</Table.DataCell>
             <Table.DataCell align={'right'} colSpan={4}>
-              {formaterTilG(grunnlag.yrkesskadeGrunnlag)}
+              = {formaterTilG(grunnlag.yrkesskadeGrunnlag)}
             </Table.DataCell>
           </Table.Row>
         </Table.Body>

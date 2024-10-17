@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { SideProsesser } from 'components/sideprosesser/SideProsesser';
+import { BehandlingPåVentKortMedDataFetching } from 'components/sideprosesser/BehandlingPåVentKortMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { FlytProsessering } from 'lib/types/types';
 
@@ -15,11 +15,12 @@ export const GruppeSteg = ({ children, visVenteKort, behandlingReferanse, behand
   return (
     <div className={'flex-column'}>
       {prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={prosessering} />}
-      <SideProsesser
-        visVenteKort={visVenteKort}
-        behandlingReferanse={behandlingReferanse}
-        behandlingVersjon={behandlingVersjon}
-      />
+      {visVenteKort && (
+        <BehandlingPåVentKortMedDataFetching
+          behandlingReferanse={behandlingReferanse}
+          behandlingVersjon={behandlingVersjon}
+        />
+      )}
       {children}
     </div>
   );

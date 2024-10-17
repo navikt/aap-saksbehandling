@@ -4,8 +4,13 @@ import Image from 'next/image';
 import { Heading } from '@navikt/ds-react';
 import ErrorBilde from '../public/error.jpg';
 
+interface Props {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+
 //500 Page
-const Error = () => {
+const Error = ({ error }: Props) => {
   return (
     <div
       style={{
@@ -17,7 +22,7 @@ const Error = () => {
       }}
     >
       <Heading level="2" size="medium" spacing>
-        Det har oppstått en feil 🙃.
+        Det har oppstått en feil 🙃. Gi denne identifikatoren til en frontend-utvikler: {error?.digest}
       </Heading>
       <Image src={ErrorBilde} alt="404" width={500} height={500} />
     </div>

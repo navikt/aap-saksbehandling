@@ -2,7 +2,7 @@
 
 import { isAfter } from 'date-fns';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { useConfigForm, FormField } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { BooksIcon } from '@navikt/aksel-icons';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
@@ -11,8 +11,6 @@ import { ErStudentStatus, SkalGjenopptaStudieStatus, StudentGrunnlag } from 'lib
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
-import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { BodyShort, Label } from '@navikt/ds-react';
 
@@ -30,7 +28,6 @@ interface FormFields {
   harBehovForBehandling: string;
   avbruttDato: Date;
   avbruddMerEnn6Måneder: string;
-  dokumenterBruktIVurderingen: string[];
 }
 
 export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
@@ -108,11 +105,6 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
         defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.avbruddMerEnn6Måneder),
         rules: { required: 'Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.' },
       },
-      dokumenterBruktIVurderingen: {
-        type: 'checkbox_nested',
-        label: 'Dokumenter funnet som er relevante for vurdering av student §11-14',
-        description: 'Les dokumentene og tilknytt minst ett dokument til 11-14 vurderingen.',
-      },
     },
     { readOnly: readOnly }
   );
@@ -167,11 +159,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
           )}
         </div>
 
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
-          <DokumentTabell />
-        </FormField>
         <FormField form={form} formField={formFields.begrunnelse} />
-        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
         <FormField form={form} formField={formFields.harAvbruttStudie} />
         <FormField form={form} formField={formFields.godkjentStudieAvLånekassen} />
         <FormField form={form} formField={formFields.avbruttPgaSykdomEllerSkade} />

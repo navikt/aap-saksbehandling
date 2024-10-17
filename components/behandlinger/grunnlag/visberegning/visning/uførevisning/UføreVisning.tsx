@@ -14,17 +14,28 @@ export const UføreVisning = ({ grunnlag }: Props) => {
     throw new Error('Kunne ikke finne påkrevd grunnlag for uføre');
   }
 
+  const foersteAar = grunnlag.inntekter.at(0)?.år;
+  const sisteAar = grunnlag.inntekter.at(-1)?.år;
+
+  const uføreFørsteÅr = grunnlag.uføreInntekter.at(0)?.år;
+  const uføreSisteÅr = grunnlag.uføreInntekter.at(-1)?.år;
+
   return (
     <div className={'flex-column'}>
       <InntektTabell
         inntekter={grunnlag.inntekter}
         gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
-        grunnlagBeregnet={grunnlag.grunnlag}
+        yrkesevneNedsattÅr={grunnlag.nedsattArbeidsevneÅr}
       />
 
-      <UføreInntektTabell inntekter={grunnlag.uføreInntekter} gjennomsnittSiste3år={6} />
+      <UføreInntektTabell
+        inntekter={grunnlag.uføreInntekter}
+        gjennomsnittSiste3år={6}
+        ytterligereNedsattArbeidsevneÅr={grunnlag.ytterligereNedsattArbeidsevneÅr}
+      />
+
       <div className={'flex-column'}>
-        <Label size={'medium'}>Innbyggers grunnlag er satt til gunstigste av følgende</Label>
+        <Label size={'medium'}>Innbyggers grunnlag er satt til det gunstigste av følgende:</Label>
         <Table size={'medium'}>
           <Table.Header>
             <Table.Row>
@@ -34,25 +45,25 @@ export const UføreVisning = ({ grunnlag }: Props) => {
           </Table.Header>
           <Table.Body>
             <Table.Row>
-              <Table.DataCell>Snitt inntekt siste 3 år</Table.DataCell>
+              <Table.DataCell>{`§ 11-19 Gjennomsnitt inntekt siste 3 år (${foersteAar} - ${sisteAar})`}</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.gjennomsnittligInntektSiste3år)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>Inntekt siste år ({grunnlag.inntektSisteÅr.år})</Table.DataCell>
+              <Table.DataCell>§ 11-19 Inntekt siste år ({grunnlag.inntektSisteÅr.år})</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr.inntektIG)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>Snitt inntekt siste 3 år ufør</Table.DataCell>
+              <Table.DataCell>{`§§ 11-19 / 11-28 Gjennomsnitt inntekt siste 3 år (${uføreFørsteÅr} - ${uføreSisteÅr})`}</Table.DataCell>
               <Table.DataCell align={'right'}>
                 {formaterTilG(grunnlag.gjennomsnittligInntektSiste3årUfør)}
               </Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>Inntekt siste år ufør</Table.DataCell>
+              <Table.DataCell>{`§§ 11-19 / 11-28 Inntekt siste år (${grunnlag.inntektSisteÅrUfør.år})`}</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅrUfør.inntektIG)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.HeaderCell scope={'row'}>Grunnlag satt til</Table.HeaderCell>
+              <Table.HeaderCell scope={'row'}>Fastsatt grunnlag</Table.HeaderCell>
               <Table.DataCell align={'right'}>
                 <b>{formaterTilG(grunnlag.grunnlag)}</b>
               </Table.DataCell>

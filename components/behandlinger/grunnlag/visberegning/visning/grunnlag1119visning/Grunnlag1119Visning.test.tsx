@@ -8,17 +8,16 @@ const grunnlag: Grunnlag1119 = {
   grunnlag: 6,
   inntektSisteÅr: { inntektIG: 0, inntektIKroner: 0, justertTilMaks6G: 0, år: '2023' },
   inntekter: [{ inntektIG: 0, inntektIKroner: 0, justertTilMaks6G: 0, år: '2010' }],
+  nedsattArbeidsevneÅr: '2024',
 };
 
 describe('grunnlag 11-19 visning', () => {
   it('skal ha en tabell med pensjonsgivende inntekt for de siste 3 årene', () => {
     render(<Grunnlag1119Visning grunnlag={grunnlag} />);
-    const tabellOverskrift = screen.getByText(
-      'Standard grunnlagsberegning basert på pensjonsgivende inntekt siste 3 år før redusert arbeidsevne'
-    );
+    const tabellOverskrift = screen.getByText('Grunnlagsberegning § 11-19');
     expect(tabellOverskrift).toBeVisible();
 
-    const headers = ['Periode', 'Pensjonsgivende inntekt', 'Inntekt i G', 'Justert til maks 6G'];
+    const headers = ['Periode', 'Pensjonsgivende inntekt', 'Inntektsgrunnlag \\(maks 6 G\\)'];
     headers.forEach((header) => {
       expect(screen.getByRole('columnheader', { name: new RegExp(`^${header}$`) })).toBeVisible();
     });
@@ -26,7 +25,7 @@ describe('grunnlag 11-19 visning', () => {
 
   it('skal ha en tabell som viser en oppsummering og det faktiske grunnlaget', () => {
     render(<Grunnlag1119Visning grunnlag={grunnlag} />);
-    const tabellOverskrift = screen.getByText('Innbyggers grunnlag er satt til gunstigste av følgende');
+    const tabellOverskrift = screen.getByText('Innbyggers grunnlag er satt til det gunstigste av følgende:');
     expect(tabellOverskrift).toBeVisible();
 
     const headers = ['Beskrivelse', 'Grunnlag'];
@@ -34,11 +33,13 @@ describe('grunnlag 11-19 visning', () => {
       expect(screen.getByRole('columnheader', { name: new RegExp(`^${header}$`) })).toBeVisible();
     });
 
-    expect(screen.getByRole('rowheader', { name: 'Grunnlag satt til' })).toBeVisible();
+    expect(screen.getByRole('rowheader', { name: 'Fastsatt grunnlag' })).toBeVisible();
   });
 
   it('rad med inntekt siste år viser årstall', () => {
     render(<Grunnlag1119Visning grunnlag={grunnlag} />);
-    expect(screen.getByRole('cell', { name: `Inntekt siste år (${grunnlag.inntektSisteÅr.år})` })).toBeVisible();
+    expect(
+      screen.getByRole('cell', { name: `§ 11-19 Inntekt siste år (${grunnlag.inntektSisteÅr.år})` })
+    ).toBeVisible();
   });
 });

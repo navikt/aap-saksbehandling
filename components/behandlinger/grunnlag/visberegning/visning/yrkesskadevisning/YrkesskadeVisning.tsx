@@ -16,16 +16,19 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
     throw new Error('Kunne ikke finne påkrevd grunnlag for yrkesskade');
   }
 
+  const foersteAar = grunnlag.inntekter.at(0)?.år;
+  const sisteAar = grunnlag.inntekter.at(-1)?.år;
+
   return (
     <div className={styles.visning}>
       <InntektTabell
         inntekter={grunnlag.inntekter}
         gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
-        grunnlagBeregnet={grunnlag.grunnlag}
+        yrkesevneNedsattÅr={grunnlag.nedsattArbeidsevneÅr}
       />
-      <YrkesskadeBeregningTabell grunnlag={grunnlag} />
+      <YrkesskadeBeregningTabell grunnlag={grunnlag} visning="YRKESSKADE" />
       <div className={'flex-column'}>
-        <Label size={'medium'}>Innbyggers grunnlag er satt til gunstigste av følgende </Label>
+        <Label size={'medium'}>Innbyggers grunnlag er satt til det gunstigste av følgende:</Label>
         <Table size={'medium'}>
           <Table.Header>
             <Table.Row>
@@ -35,19 +38,19 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
           </Table.Header>
           <Table.Body>
             <Table.Row>
-              <Table.DataCell>Gjennomsnittlig inntekt siste 3 år</Table.DataCell>
+              <Table.DataCell>{`§ 11-19 Gjennomsnitt inntekt siste 3 år ${foersteAar} - ${sisteAar}`}</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.gjennomsnittligInntektSiste3år)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>Inntekt siste år ({grunnlag.inntektSisteÅr.år})</Table.DataCell>
+              <Table.DataCell>§ 11-19 Inntekt siste år ({grunnlag.inntektSisteÅr.år})</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅr.justertTilMaks6G)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>Yrkesskade grunnlag</Table.DataCell>
+              <Table.DataCell>§§ 11-19 / 11-22 Grunnlag med yrkesskadefordel</Table.DataCell>
               <Table.DataCell align={'right'}>{formaterTilG(grunnlag.yrkesskadeGrunnlag)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.HeaderCell scope={'row'}>Grunnlag satt til</Table.HeaderCell>
+              <Table.HeaderCell scope={'row'}>Fastsatt grunnlag</Table.HeaderCell>
               <Table.DataCell align={'right'}>
                 <b>{formaterTilG(grunnlag.grunnlag)}</b>
               </Table.DataCell>

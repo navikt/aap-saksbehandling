@@ -4,6 +4,7 @@ import {
   OpprettTestcase,
   SaksInfo,
   SettPåVent,
+  SimulerMeldeplikt,
 } from './types/types';
 
 async function fetchProxy<ResponseBody>(
@@ -60,6 +61,10 @@ export function rekjørFeiledeJobber() {
 
 export function avbrytKjørendeJobb(jobbId: number) {
   return fetch(`/api/drift/jobb/avbryt/${jobbId}`, { method: 'GET' });
+}
+
+export function simulerMeldeplikt(referanse: string, vurderinger: SimulerMeldeplikt) {
+  return fetchProxy(`/api/behandling/${referanse}/simuler-meldeplikt`, 'POST', vurderinger);
 }
 
 export interface SaksInformasjon {

@@ -2,15 +2,12 @@ import { BehandlingP책VentKort } from 'components/behandlingp책vent/BehandlingP�
 import { hentBehandlingP책VentInformasjon } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
-  visVenteKort: boolean;
   behandlingReferanse: string;
   behandlingVersjon: number;
 }
 
-export const SideProsesser = async ({ visVenteKort, behandlingVersjon, behandlingReferanse }: Props) => {
+export const BehandlingP책VentKortMedDataFetching = async ({ behandlingVersjon, behandlingReferanse }: Props) => {
   const venteInformasjon = await hentBehandlingP책VentInformasjon(behandlingReferanse);
 
-  return (
-    <>{visVenteKort && <BehandlingP책VentKort behandlingVersjon={behandlingVersjon} informasjon={venteInformasjon} />}</>
-  );
+  return <BehandlingP책VentKort behandlingVersjon={behandlingVersjon} informasjon={venteInformasjon} />;
 };

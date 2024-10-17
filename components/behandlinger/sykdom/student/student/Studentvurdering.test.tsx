@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { render, screen } from '@testing-library/react';
 import { Studentvurdering } from 'components/behandlinger/sykdom/student/student/Studentvurdering';
 import { userEvent } from '@testing-library/user-event';
 import { addDays } from 'date-fns';
@@ -12,19 +12,6 @@ describe('Student', () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
     const heading = screen.getByText('Student - § 11-14');
     expect(heading).toBeVisible();
-  });
-
-  it('har en liste over dokumenter som kan tilknyttes vurderingen', () => {
-    render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
-    const tilknyttedeDokumenterListe = screen.getByRole('group', {
-      name: 'Dokumenter funnet som er relevante for vurdering av student §11-14',
-    });
-    expect(tilknyttedeDokumenterListe).toBeVisible();
-  });
-
-  it('listen over dokumenter som kan knyttes til saken har korrekt beskrivelse', () => {
-    render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
-    expect(screen.getByText('Les dokumentene og tilknytt minst ett dokument til 11-14 vurderingen.')).toBeVisible();
   });
 
   it('har et fritekstfelt for vurdering av vilkåret', () => {
@@ -130,28 +117,6 @@ describe('Student', () => {
     expect(
       await screen.findByText('Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.')
     ).toBeVisible();
-  });
-
-  // TODO: Test feiler fordi dokumenterBruktIVurdering ikke blir oppdatert når testen kjører, fungerer i nettleser.
-  // Fiks test når vi faktisk skal bruke dokumentlisten
-  it.skip('skal vise en liste med tilknyttede dokumenter som har blitt valgt', async () => {
-    render(<Studentvurdering behandlingVersjon={0} readOnly={false} />);
-    const rad = screen.getByRole('row', {
-      name: /sykemelding/i,
-    });
-
-    await user.click(
-      within(rad).getByRole('checkbox', {
-        name: /tilknytt dokument til vurdering/i,
-      })
-    );
-
-    const list = screen.getByRole('list', {
-      name: /tilknyttede dokumenter/i,
-    });
-
-    const dokument = within(list).getByText(/sykemelding/i);
-    expect(dokument).toBeVisible();
   });
 
   it('skal vise korrekt informasjon fra søknaden dersom det har blitt besvart ja i søknaden', async () => {

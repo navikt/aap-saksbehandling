@@ -24,6 +24,8 @@ import {
   SakPersoninfo,
   SaksInfo,
   SettPåVent,
+  SimulerMeldeplikt,
+  SimulertMeldeplikt,
   SoningsgrunnlagResponse,
   StudentGrunnlag,
   SykdomsGrunnlag,
@@ -58,22 +60,12 @@ export const hentSak = async (saksnummer: string): Promise<SaksInfo> => {
 };
 export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
-  try {
-    return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
-  } catch (e) {
-    logWarning(`Fant ikke sak med referanse ${saksnummer}`);
-    notFound();
-  }
+  return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBehandlingPersoninfo = async (behandlingsreferanse: string): Promise<BehandlingPersoninfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/personinformasjon`;
-  try {
-    return await fetchProxy<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
-  } catch (e) {
-    logWarning(`Fant ikke behandling med referanse ${behandlingsreferanse}`);
-    notFound();
-  }
+  return await fetchProxy<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const lagreBruddPåAktivitetsplikten = async (aktivitet: BruddAktivitetsplikt) => {
@@ -208,6 +200,11 @@ export const hentBeregningsGrunnlag = async (referanse: string) => {
   return await fetchProxy<BeregningsGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const simulerMeldeplikt = async (referanse: string, requestBody: SimulerMeldeplikt) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/grunnlag/fritak-meldeplikt/simulering`;
+  return await fetchProxy<SimulertMeldeplikt>(url, saksbehandlingApiScope, 'POST', requestBody);
+};
+
 export const settBehandlingPåVent = async (referanse: string, requestBody: SettPåVent) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/sett-på-vent`;
   return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
@@ -216,6 +213,11 @@ export const settBehandlingPåVent = async (referanse: string, requestBody: Sett
 export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/vente-informasjon`;
   return await fetchProxy<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const forberedSak = async (referanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentLocalToken = async () => {

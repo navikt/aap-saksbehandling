@@ -22,18 +22,19 @@ export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
       <InntektTabell
         inntekter={grunnlag?.yrkesskadeGrunnlag.inntekter}
         gjennomsnittSiste3år={grunnlag?.yrkesskadeGrunnlag.gjennomsnittligInntektSiste3år}
-        grunnlagBeregnet={grunnlag.grunnlag}
+        yrkesevneNedsattÅr={grunnlag?.uføreGrunnlag.nedsattArbeidsevneÅr}
       />
 
       <UføreInntektTabell
         inntekter={grunnlag.uføreGrunnlag.uføreInntekter}
         gjennomsnittSiste3år={grunnlag.uføreGrunnlag.gjennomsnittligInntektSiste3årUfør}
+        ytterligereNedsattArbeidsevneÅr={grunnlag.uføreGrunnlag.ytterligereNedsattArbeidsevneÅr}
       />
 
-      <YrkesskadeBeregningTabell grunnlag={grunnlag.yrkesskadeGrunnlag} />
+      <YrkesskadeBeregningTabell grunnlag={grunnlag.yrkesskadeGrunnlag} visning="YRKESSKADE_UFØR" />
 
       <div className={'flex-column'}>
-        <Label size={'medium'}>Faktisk grunnlag er satt til høyeste verdi av følgende</Label>
+        <Label size={'medium'}>Innbyggers grunnlag er satt til det gunstigste av følgende:</Label>
         <Table size={'medium'}>
           <Table.Header>
             <Table.Row>
@@ -43,39 +44,47 @@ export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
           </Table.Header>
           <Table.Body>
             <Table.Row>
-              <Table.DataCell>{formaterLabelForInntekter(grunnlag.yrkesskadeGrunnlag.inntekter)}</Table.DataCell>
+              <Table.DataCell>
+                § 11-19 {formaterLabelForInntekter(grunnlag.yrkesskadeGrunnlag.inntekter)}
+              </Table.DataCell>
               <Table.DataCell align={'right'}>
                 {formaterTilG(grunnlag.yrkesskadeGrunnlag.gjennomsnittligInntektSiste3år)}
               </Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>Inntekt siste år ({grunnlag.yrkesskadeGrunnlag.inntektSisteÅr.år})</Table.DataCell>
+              <Table.DataCell>
+                § 11-19 Inntekt siste år ({grunnlag.yrkesskadeGrunnlag.inntektSisteÅr.år})
+              </Table.DataCell>
               <Table.DataCell align={'right'}>
                 {formaterTilG(grunnlag.yrkesskadeGrunnlag.inntektSisteÅr.justertTilMaks6G)}
               </Table.DataCell>
             </Table.Row>
 
             <Table.Row>
-              <Table.DataCell>{formaterLabelForInntekter(grunnlag.uføreGrunnlag.uføreInntekter)}</Table.DataCell>
+              <Table.DataCell>
+                §§ 11-19 / 11-28 {formaterLabelForInntekter(grunnlag.uføreGrunnlag.uføreInntekter)}
+              </Table.DataCell>
               <Table.DataCell align={'right'}>
                 {formaterTilG(grunnlag.uføreGrunnlag.gjennomsnittligInntektSiste3årUfør)}
               </Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>Inntekt siste år</Table.DataCell>
+              <Table.DataCell>
+                §§ 11-19 / 11-28 Inntekt siste år ({grunnlag.uføreGrunnlag.inntektSisteÅrUfør.år})
+              </Table.DataCell>
               <Table.DataCell align={'right'}>
                 {formaterTilG(grunnlag.uføreGrunnlag.inntektSisteÅrUfør.justertTilMaks6G)}
               </Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.DataCell>Yrkesskade grunnlag</Table.DataCell>
+              <Table.DataCell>§§ 11-19 / 11-22 Grunnlag med yrkesskadefordel</Table.DataCell>
               <Table.DataCell align={'right'}>
                 {formaterTilG(grunnlag.yrkesskadeGrunnlag.yrkesskadeGrunnlag)}
               </Table.DataCell>
             </Table.Row>
             <Table.Row>
               <Table.DataCell>
-                <b>Faktisk grunnlag</b>
+                <b>Fastsatt grunnlag</b>
               </Table.DataCell>
               <Table.DataCell align={'right'}>
                 <b>{formaterTilG(grunnlag.grunnlag)}</b>
@@ -93,5 +102,5 @@ function formaterLabelForInntekter(inntekt: Array<Inntekt>): string {
   const firstYear = sortedInntekt[0].år;
   const lastYear = sortedInntekt[sortedInntekt.length - 1].år;
 
-  return `Gjennomsnittlig inntekt siste 3 år (${firstYear} - ${lastYear})`;
+  return `Gjennomsnitt inntekt siste 3 år (${firstYear} - ${lastYear})`;
 }

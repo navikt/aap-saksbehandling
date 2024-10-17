@@ -19,14 +19,14 @@ export const ToTrinnsvurderingToggleGroup = ({ activeToggle, setToggleValue, erK
       value={activeToggle}
       className={erKvalitetssikring ? styles.tabs : ''}
     >
-      <Tooltip content={'Totrinnsvurdering'}>
+      <Tooltip content={'Åpne totrinnsvurdering'}>
         <Tabs.Tab
           value="totrinnsvurdering"
           label={erKvalitetssikring ? 'Kvalitetssikrer' : 'Beslutter'}
           icon={<PersonGavelFillIcon aria-hidden />}
         />
       </Tooltip>
-      <Tooltip content={'Historikk'}>
+      <Tooltip content={'Åpne historikk'}>
         <Tabs.Tab value="historikk" label={'Historikk'} icon={<ClockDashedIcon aria-hidden />} />
       </Tooltip>
     </Tabs>

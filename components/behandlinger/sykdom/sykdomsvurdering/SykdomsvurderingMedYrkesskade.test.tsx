@@ -41,7 +41,7 @@ describe('Sykdomsvurdering med yrkesskade', () => {
   });
 
   it('skal ha en liste over tilknyttede dokumenter til vilkåret ', () => {
-    const tilknyttedeDokumenterListe = screen.getByRole('list', { name: /tilknyttede dokumenter/i });
+    const tilknyttedeDokumenterListe = screen.getByRole('heading', { name: /tilknyttede dokumenter/i });
     expect(tilknyttedeDokumenterListe).toBeVisible();
   });
 

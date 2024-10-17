@@ -20,6 +20,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
+import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 
 interface FormFields {
   harSkadeSykdomEllerLyte: string;
@@ -104,8 +105,6 @@ export const SykdomsvurderingMedYrkesskade = ({
       },
       dokumenterBruktIVurderingen: {
         type: 'checkbox_nested',
-        label: 'Dokumenter funnet som er relevant for vurdering av §11-22 1.ledd og §11-5',
-        description: 'Tilknytt minst ett dokument til §11-22 1.ledd og §11-5 vurdering',
       },
     },
     { shouldUnregister: true, readOnly: readOnly }
@@ -174,7 +173,12 @@ export const SykdomsvurderingMedYrkesskade = ({
 
         <RegistrertBehandler />
 
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
+        <CheckboxWrapper
+          name={'dokumenterBruktIVurderingen'}
+          control={form.control}
+          label={'Dokumenter funnet som er relevant for vurdering av §11-5'}
+          description={'Tilknytt minst ett dokument §11-5 vurdering'}
+        >
           <DokumentTabell
             dokumenter={tilknyttedeDokumenter.map((d) => ({
               journalpostId: d.journalpostId,
@@ -183,7 +187,7 @@ export const SykdomsvurderingMedYrkesskade = ({
               erTilknyttet: false,
             }))}
           />
-        </FormField>
+        </CheckboxWrapper>
 
         <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} />
@@ -195,6 +199,7 @@ export const SykdomsvurderingMedYrkesskade = ({
             tekst={
               'Sykdom, skade eller lyte er (som hovedregel) en medisinsk tilstand med en vitenskapelig anerkjent diagnose. Sykdomslignende symptomer kan også oppfylle lovens krav til sykdom, så det er ikke alltid et krav at det er stilt en diagnose for at vilkåret skal være oppfylt.'
             }
+            defaultOpen={false}
           />
         </section>
         {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
@@ -206,6 +211,7 @@ export const SykdomsvurderingMedYrkesskade = ({
                 tekst={
                   'Med arbeidsevne menes den enkeltes evne til å møte de krav som stilles i utførelsen av et normal inntektsgivende arbeid. Arbeidsevnen anses som nedsatt når medlemmet helt eller delvis er ute av stand til å utføre arbeidsoppgavene i ulike jobber som han eller hun er kvalifisert til.'
                 }
+                defaultOpen={false}
               />
             </section>
             <section>
@@ -215,6 +221,7 @@ export const SykdomsvurderingMedYrkesskade = ({
                 tekst={
                   'Det tas utgangspunkt i alminnelig arbeidstid på 37,5 timer per uke for å vurdere om arbeidsevnen er nedsatt med minst halvparten. Hver enkelt sak vurderes konkret ut fra hvordan de faktiske forholdene påvirker medlemmets evne til å utføre arbeid. At inntekten reduseres med mer enn halvparten, er ikke relevant for vurderingen av om arbeidsevnen er nedsatt.'
                 }
+                defaultOpen={false}
               />
             </section>
             <section>
@@ -224,6 +231,7 @@ export const SykdomsvurderingMedYrkesskade = ({
                 tekst={
                   'Det må være årsakssammenheng mellom sykdom, skade eller lyte og den nedsatte arbeidsevnen. At sykdom, skade eller lyte skal utgjøre en vesentlig medvirkende årsak, betyr at den alene må utgjøre en større del enn andre årsaker. Andre årsaker kan samlet utgjøre en større del, men sykdom, skade eller lyte må likevel være vesentlig medvirkende årsak. Det er ikke tilstrekkelig å ha sykdom, skade eller lyte. Det er først når den reduserte arbeidsevnen forklares med funksjonstap som skyldes sykdom, skade og lyte at årsakssammenhengen anses oppfylt.'
                 }
+                defaultOpen={false}
               />
             </section>
 
