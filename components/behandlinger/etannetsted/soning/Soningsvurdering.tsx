@@ -88,10 +88,6 @@ export const Soningsvurdering = ({ behandlingsreferanse, grunnlag, behandlingVer
             begrunnelse: data.begrunnelseForSoningUtenforAnstalt || data.begrunnelseForArbeidUtenforAnstalt,
             førsteArbeidsdag: data.førsteArbeidsdag && formaterDatoForBackend(data.førsteArbeidsdag),
             arbeidUtenforAnstalt: jaNeiEllerUndefinedToNullableBoolean(data.arbeidUtenforAnstalt),
-            periode: {
-              fom: '',
-              tom: '',
-            },
           },
         },
         referanse: behandlingsreferanse,
