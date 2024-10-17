@@ -29,7 +29,6 @@ interface Props {
 type Arbeidsevnevurderinger = {
   begrunnelse: string;
   arbeidsevne: string;
-  enhet: 'PROSENT' | 'TIMER';
   fom: string;
 };
 
@@ -42,8 +41,7 @@ const ANTALL_TIMER_FULL_UKE = 37.5;
 const prosentTilTimer = (prosent: string): number => (Number.parseInt(prosent, 10) / 100) * ANTALL_TIMER_FULL_UKE;
 const rundNedTilNaermesteHalve = (tall: number): number => Math.floor(tall * 2) / 2;
 const tilNorskDesimalFormat = (tall: number): string => tall.toLocaleString('no-NB');
-
-const tilAvrundetTimetall = pipe(prosentTilTimer, rundNedTilNaermesteHalve, tilNorskDesimalFormat);
+const tilAvrundetTimetall = pipe<string>(prosentTilTimer, rundNedTilNaermesteHalve, tilNorskDesimalFormat);
 
 const regnOmTilTimer = (value: string) => {
   if (!value) {
@@ -56,9 +54,8 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
   const defaultValues: Arbeidsevnevurderinger[] = grunnlag?.vurderinger.map((vurdering) => ({
     begrunnelse: vurdering.begrunnelse,
     arbeidsevne: vurdering.arbeidsevne.toString(),
-    enhet: 'PROSENT',
     fom: formaterDatoForFrontend(vurdering.fraDato),
-  })) || [{ begrunnelse: '', arbeidsevne: '', enhet: 'PROSENT', fom: '' }];
+  })) || [{ begrunnelse: '', arbeidsevne: '', fom: '' }];
 
   const { form } = useConfigForm<FastsettArbeidsevneFormFields>({
     arbeidsevnevurderinger: {
@@ -161,7 +158,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
         {!readOnly && (
           <div>
             <Button
-              onClick={() => append({ begrunnelse: '', arbeidsevne: '', enhet: 'PROSENT', fom: '' })}
+              onClick={() => append({ begrunnelse: '', arbeidsevne: '', fom: '' })}
               type={'button'}
               variant={'tertiary'}
               size={'medium'}
