@@ -33,7 +33,7 @@ import {
   TilkjentYtelseGrunnlag,
   VenteInformasjon,
 } from 'lib/types/types';
-import { fetchProxy, fetchPdf } from 'lib/services/fetchProxy';
+import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { logError, logWarning } from '@navikt/aap-felles-utils';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
@@ -44,7 +44,7 @@ export const hentBehandling = async (behandlingsReferanse: string): Promise<Deta
   try {
     return await fetchProxy<DetaljertBehandling>(url, saksbehandlingApiScope, 'GET');
   } catch (e) {
-    logWarning(`Fant ikke behandling med referanse ${behandlingsReferanse}`);
+    logWarning(`Fant ikke behandling med referanse ${behandlingsReferanse}`, JSON.stringify(e));
     notFound();
   }
 };
@@ -54,10 +54,11 @@ export const hentSak = async (saksnummer: string): Promise<SaksInfo> => {
   try {
     return await fetchProxy<SaksInfo>(url, saksbehandlingApiScope, 'GET');
   } catch (e) {
-    logWarning(`Fant ikke sak med referanse ${saksnummer}`);
+    logWarning(`Fant ikke sak med referanse ${saksnummer}`, JSON.stringify(e));
     notFound();
   }
 };
+
 export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
   return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
@@ -215,7 +216,7 @@ export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
   return await fetchProxy<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const forberedSak = async (referanse: string) => {
+export const forberedBehandling = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
