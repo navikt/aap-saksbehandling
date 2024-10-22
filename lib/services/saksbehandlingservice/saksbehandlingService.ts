@@ -76,7 +76,9 @@ export const lagreBruddPåAktivitetsplikten = async (aktivitet: BruddAktivitetsp
 
 export const hentAktivitetspliktHendelser = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}`;
-  return await fetchProxy<AktivitetspliktHendelser>(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy<AktivitetspliktHendelser>(url, saksbehandlingApiScope, 'GET', undefined, [
+    `aktivitetsplikt/${saksnummer}`,
+  ]);
 };
 
 export const hentAlleSaker = async (): Promise<SaksInfo[]> => {
@@ -178,7 +180,9 @@ export const hentTilkjentYtelse = async (behandlingsReferanse: string): Promise<
 };
 export const hentFlyt = async (behandlingsReferanse: string): Promise<BehandlingFlytOgTilstand> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
-  return await fetchProxy<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
+    `flyt/${behandlingsReferanse}`,
+  ]);
 };
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {

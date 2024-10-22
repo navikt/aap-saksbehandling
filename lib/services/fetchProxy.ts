@@ -34,10 +34,11 @@ export const fetchProxy = async <ResponseBody>(
   url: string,
   scope: string,
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE' = 'GET',
-  requestBody?: object
+  requestBody?: object,
+  tags?: string[]
 ): Promise<ResponseBody> => {
   const oboToken = isLocal() ? await hentLocalToken() : await getOnBefalfOfToken(scope, url);
-  return await fetchWithRetry<ResponseBody>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody);
+  return await fetchWithRetry<ResponseBody>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags);
 };
 
 export const fetchPdf = async (url: string, scope: string): Promise<Blob | undefined> => {
@@ -63,11 +64,14 @@ export const fetchWithRetry = async <ResponseBody>(
   method: string,
   oboToken: string,
   retries: number,
-  requestBody?: object
+  requestBody?: object,
+  tags?: string[]
 ): Promise<ResponseBody> => {
   if (retries === 0) {
     throw new Error(`Unable to fetch ${url}: ${retries} retries left`);
   }
+
+  console.log('url hello pello', url);
 
   const response = await fetch(url, {
     method,
@@ -77,7 +81,7 @@ export const fetchWithRetry = async <ResponseBody>(
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    next: { revalidate: 0 },
+    next: { revalidate: 0, tags },
   });
 
   // Mulige statuskoder:
@@ -103,7 +107,7 @@ export const fetchWithRetry = async <ResponseBody>(
     logError(
       `Kall mot ${url} feilet med statuskode ${response.status}, prøver på nytt. Antall forsøk igjen: ${retries}`
     );
-    return await fetchWithRetry(url, method, oboToken, retries - 1, requestBody);
+    return await fetchWithRetry(url, method, oboToken, retries - 1, requestBody, tags);
   }
 
   const contentType = response.headers.get('content-type');
