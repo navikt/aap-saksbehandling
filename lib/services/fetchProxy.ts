@@ -71,8 +71,6 @@ export const fetchWithRetry = async <ResponseBody>(
     throw new Error(`Unable to fetch ${url}: ${retries} retries left`);
   }
 
-  console.log('url hello pello', url);
-
   const response = await fetch(url, {
     method,
     body: JSON.stringify(requestBody),
