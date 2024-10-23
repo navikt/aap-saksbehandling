@@ -5,14 +5,18 @@ import { Soningsgrunnlag } from 'lib/types/types';
 import userEvent from '@testing-library/user-event';
 
 const soningsgrunnlag: Soningsgrunnlag = {
-  soningsopphold: [
+  soningsforhold: [
     {
-      oppholdFra: '2024-08-06',
-      avsluttetDato: '2024-12-01',
-      oppholdstype: 'sdf',
-      institusjonstype: 'fs',
-      kildeinstitusjon: 'a',
-      status: '',
+      status: 'GODKJENT',
+      vurderingsdato: '',
+      info: {
+        status: 'hei',
+        oppholdFra: '',
+        institusjonstype: '',
+        kildeinstitusjon: '',
+        oppholdstype: '',
+      },
+      vurdering: { begrunnelse: 'hei og hå', fraDato: '', skalOpphøre: false },
     },
   ],
 };

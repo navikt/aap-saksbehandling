@@ -15,7 +15,7 @@ export const SoningsvurderingMedDataFetching = async ({
   const grunnlag = await hentSoningsvurdering(behandlingsreferanse);
 
   return (
-    grunnlag.soningsopphold.length > 0 && (
+    grunnlag.soningsforhold.length > 0 && (
       <Soningsvurdering behandlingsversjon={behandlingsversjon} grunnlag={grunnlag} readOnly={readOnly} />
     )
   );

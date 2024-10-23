@@ -2,24 +2,17 @@
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { HospitalIcon } from '@navikt/aksel-icons';
-import { Alert } from '@navikt/ds-react';
 import { Form } from 'components/form/Form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { FormEvent } from 'react';
-import {
-  Behovstype,
-  getJaNeiEllerUndefined,
-  JaEllerNei,
-  JaEllerNeiOptions,
-  jaNeiEllerUndefinedToNullableBoolean,
-} from 'lib/utils/form';
+import { Behovstype, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
-import { HelseinstitusjonGrunnlagResponse } from 'lib/types/types';
+import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 
 type Props = {
-  grunnlag: HelseinstitusjonGrunnlagResponse;
+  grunnlag: HelseinstitusjonGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
 };
@@ -31,7 +24,7 @@ interface FormFields {
   harFasteUtgifter: JaEllerNei;
 }
 
-export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
+export const Helseinstitusjonsvurdering = ({ behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
   const { formFields, form } = useConfigForm<FormFields>(
@@ -39,20 +32,17 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
       begrunnelse: {
         type: 'textarea',
         label: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen',
-        defaultValue: grunnlag?.helseinstitusjonGrunnlag?.begrunnelse,
         rules: { required: 'Du må begrunne vurderingen din' },
       },
       forsoergerEktefelle: {
         type: 'radio',
         label: 'Forsørger søker ektefelle eller tilsvarende?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.helseinstitusjonGrunnlag?.forsoergerEktefelle),
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om søker forsørger ektefelle eller tilsvarende' },
       },
       harFasteUtgifter: {
         type: 'radio',
         label: 'Har søker faste utgifter nødvendig for å beholde bolig og andre eiendeler?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.helseinstitusjonGrunnlag?.harFasteUtgifter),
         options: JaEllerNeiOptions,
         rules: {
           required: 'Du må svare på om søker har faste utgifter nødvendig for å beholde bolig og andre eiendeler',
@@ -61,7 +51,6 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
       faarFriKostOgLosji: {
         type: 'radio',
         label: 'Får søker fri kost og losji?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.helseinstitusjonGrunnlag?.faarFriKostOgLosji),
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om søker får fri kost og losji' },
       },
@@ -71,17 +60,13 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      console.log(data);
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_HELSEINSTITUSJON,
-          helseinstitusjonVurdering: {
-            dokumenterBruktIVurdering: [],
-            begrunnelse: data.begrunnelse,
-            faarFriKostOgLosji: data.faarFriKostOgLosji === JaEllerNei.Ja,
-            forsoergerEktefelle: jaNeiEllerUndefinedToNullableBoolean(data.forsoergerEktefelle),
-            harFasteUtgifter: jaNeiEllerUndefinedToNullableBoolean(data.harFasteUtgifter),
-          },
+          //@ts-ignore Fiks denne når backend er klar
+          helseinstitusjonVurdering: {},
         },
         referanse: behandlingsreferanse,
       });
@@ -100,15 +85,10 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
         steg={'AVKLAR_STUDENT'}
         visBekreftKnapp={!readOnly}
       >
-        {grunnlag.helseinstitusjonOpphold.length > 0 && (
-          <Alert variant={'warning'}>
-            Vi har funnet en eller flere registrerte opphold på helseinstitusjon som kan påvirke ytelsen
-          </Alert>
-        )}
         <InstitusjonsoppholdTabell
           label={'Søker har følgende institusjonsopphold på helseinstitusjon'}
           beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP ytelse'}
-          instutisjonsopphold={grunnlag.helseinstitusjonOpphold}
+          instutisjonsopphold={[]}
         />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.forsoergerEktefelle} />

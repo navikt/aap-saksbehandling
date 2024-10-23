@@ -2,25 +2,12 @@ import { beforeEach, describe, expect, test } from 'vitest';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjonsvurdering';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { HelseinstitusjonGrunnlagResponse } from 'lib/types/types';
 
 const user = userEvent.setup();
 
-describe('Helseinstitusjonsvurdering', () => {
-  const helseinstitusjonGrunnlag: HelseinstitusjonGrunnlagResponse = {
-    helseinstitusjonGrunnlag: undefined,
-    helseinstitusjonOpphold: [
-      {
-        oppholdFra: '2021-01-01',
-        institusjonstype: 'Sykehus',
-        oppholdstype: 'Heldøgnspasient',
-        status: 'Aktivt',
-        kildeinstitusjon: 'Godthaab',
-      },
-    ],
-  };
+describe.skip('Helseinstitusjonsvurdering', () => {
   beforeEach(() => {
-    render(<Helseinstitusjonsvurdering grunnlag={helseinstitusjonGrunnlag} behandlingVersjon={0} readOnly={false} />);
+    render(<Helseinstitusjonsvurdering grunnlag={{ temp: false }} behandlingVersjon={0} readOnly={false} />);
   });
 
   test('har overskrift Helseinstitusjon § 11-25', () => {

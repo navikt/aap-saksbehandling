@@ -24,14 +24,13 @@ interface FormFields {
   fraDato: string;
 }
 
-export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Props) => {
+export const Soningsvurdering = ({ readOnly, behandlingsversjon }: Props) => {
   const { isLoading, status, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
   const behandlingsreferanse = useBehandlingsReferanse();
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
-        defaultValue: grunnlag.soningsvurdering?.begrunnelse ?? undefined,
         label:
           'Vurder om medlemmet soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
         rules: { required: 'Du må begrunne vurderingen din' },
@@ -58,9 +57,9 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      console.log(data);
       løsBehovOgGåTilNesteSteg({
-        // @ts-ignore TODO Legg inn korrekt vurdering når backend er klar
-        behov: { behovstype: Behovstype.AVKLAR_SONINGSFORRHOLD, soningsvurdering: { begrunnelse: data.begrunnelse } },
+        behov: { behovstype: Behovstype.AVKLAR_SONINGSFORRHOLD, soningsvurdering: { vurderinger: [] } },
         behandlingVersjon: behandlingsversjon,
         referanse: behandlingsreferanse,
       });
@@ -73,7 +72,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
         <InstitusjonsoppholdTabell
           label="Søker har følgende soningsforhold"
           beskrivelse="Under opphold i fengsel har ikke søker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP"
-          instutisjonsopphold={grunnlag.soningsopphold}
+          instutisjonsopphold={[]}
         />
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.skalYtelsenStoppes} />
