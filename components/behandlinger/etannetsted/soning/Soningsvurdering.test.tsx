@@ -10,22 +10,23 @@ const soningsgrunnlag: Soningsgrunnlag = {
       status: 'GODKJENT',
       vurderingsdato: '',
       info: {
-        status: 'hei',
-        oppholdFra: '',
-        institusjonstype: '',
-        kildeinstitusjon: '',
-        oppholdstype: '',
+        institusjonstype: 'Fengsel',
+        oppholdstype: 'Soningsfange',
+        status: 'AKTIV',
+        oppholdFra: '2022-10-23',
+        avsluttetDato: '2025-10-23',
+        kildeinstitusjon: 'Azkaban',
       },
-      vurdering: { begrunnelse: 'hei og hå', fraDato: '', skalOpphøre: false },
     },
   ],
 };
 
 const user = userEvent.setup();
 
-describe('SoningsvurderingV2', () => {
+describe('Soningsvurdering', () => {
   it('har overskrift på nivå 3', () => {
     render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
+    screen.logTestingPlaygroundURL();
     expect(screen.getByRole('heading', { level: 3, name: 'Soning § 11-26' })).toBeVisible();
   });
 
