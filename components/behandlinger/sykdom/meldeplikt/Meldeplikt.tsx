@@ -108,7 +108,10 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       vilkårTilhørerNavKontor
       defaultOpen={showAsOpen}
     >
-      <ReadMore header={'Vilkåret skal kun vurderes ved behov. Se mer om vurdering av fritak fra meldeplikt'}>
+      <ReadMore
+        header={'Vilkåret skal kun vurderes ved behov. Se mer om vurdering av fritak fra meldeplikt'}
+        size={'small'}
+      >
         <BodyShort size={'small'}>Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:</BodyShort>
         <List as={'ol'} size={'small'}>
           <List.Item>
@@ -181,7 +184,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
                 size={'medium'}
                 icon={<PlusCircleIcon />}
               >
-                Legg til periode
+                Legg til ny start/slutt på periode
               </Button>
             </div>
             {/*<div>
