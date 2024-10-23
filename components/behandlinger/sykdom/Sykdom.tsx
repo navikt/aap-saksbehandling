@@ -28,64 +28,52 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
       prosessering={flyt.prosessering}
       visVenteKort={flyt.visning.visVentekort}
     >
-      {stegSomSkalVises.map((steg) => {
-        if (steg === 'AVKLAR_SYKDOM') {
-          return (
-            <StegSuspense key={steg}>
-              <SykdomsvurderingMedDataFetching
-                saksId={sakId}
-                behandlingsReferanse={behandlingsReferanse}
-                readOnly={saksBehandlerReadOnly}
-                behandlingVersjon={behandlingVersjon}
-              />
-            </StegSuspense>
-          );
-        }
-        if (steg === 'FRITAK_MELDEPLIKT') {
-          return (
-            <StegSuspense key={steg}>
-              <MeldepliktMedDataFetching
-                behandlingsReferanse={behandlingsReferanse}
-                readOnly={saksBehandlerReadOnly}
-                behandlingVersjon={behandlingVersjon}
-              />
-            </StegSuspense>
-          );
-        }
-        if (steg === 'VURDER_BISTANDSBEHOV') {
-          return (
-            <StegSuspense key={steg}>
-              <OppfølgingMedDataFetching
-                behandlingsReferanse={behandlingsReferanse}
-                readOnly={saksBehandlerReadOnly}
-                behandlingVersjon={behandlingVersjon}
-              />
-            </StegSuspense>
-          );
-        }
-        if (steg === 'FASTSETT_ARBEIDSEVNE') {
-          return (
-            <StegSuspense key={steg}>
-              <FastsettArbeidsevneMedDataFetching
-                behandlingsReferanse={behandlingsReferanse}
-                readOnly={saksBehandlerReadOnly}
-                behandlingVersjon={behandlingVersjon}
-              />
-            </StegSuspense>
-          );
-        }
-        if (steg === 'VURDER_SYKEPENGEERSTATNING') {
-          return (
-            <StegSuspense key={steg}>
-              <SykepengeerstatningMedDataFetching
-                behandlingsReferanse={behandlingsReferanse}
-                readOnly={saksBehandlerReadOnly}
-                behandlingVersjon={behandlingVersjon}
-              />
-            </StegSuspense>
-          );
-        }
-      })}
+      {stegSomSkalVises.includes('AVKLAR_SYKDOM') && (
+        <StegSuspense>
+          <SykdomsvurderingMedDataFetching
+            saksId={sakId}
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
+      {stegSomSkalVises.includes('FRITAK_MELDEPLIKT') && (
+        <StegSuspense>
+          <MeldepliktMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
+      {stegSomSkalVises.includes('FASTSETT_ARBEIDSEVNE') && (
+        <StegSuspense>
+          <FastsettArbeidsevneMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
+      {stegSomSkalVises.includes('VURDER_BISTANDSBEHOV') && (
+        <StegSuspense>
+          <OppfølgingMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
+      {stegSomSkalVises.includes('VURDER_SYKEPENGEERSTATNING') && (
+        <StegSuspense>
+          <SykepengeerstatningMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
     </GruppeSteg>
   );
 };

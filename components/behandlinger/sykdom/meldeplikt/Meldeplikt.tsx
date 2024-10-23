@@ -98,6 +98,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       });
     })(event);
   };
+  const showAsOpen = !!(readOnly && grunnlag?.vurderinger && grunnlag.vurderinger.length > 0);
 
   return (
     <VilkårsKort
@@ -105,7 +106,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       steg="FRITAK_MELDEPLIKT"
       icon={<FigureIcon fontSize={'inherit'} />}
       vilkårTilhørerNavKontor
-      defaultOpen={false}
+      defaultOpen={showAsOpen}
     >
       <ReadMore header={'Vilkåret skal kun vurderes ved behov. Se mer om vurdering av fritak fra meldeplikt'}>
         <BodyShort size={'small'}>Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:</BodyShort>

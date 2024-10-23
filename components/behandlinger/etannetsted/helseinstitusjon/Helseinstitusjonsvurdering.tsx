@@ -6,17 +6,15 @@ import { Alert } from '@navikt/ds-react';
 import { Form } from 'components/form/Form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { useConfigForm, FormField } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { FormEvent } from 'react';
-import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import {
   Behovstype,
+  getJaNeiEllerUndefined,
   JaEllerNei,
   JaEllerNeiOptions,
-  getJaNeiEllerUndefined,
   jaNeiEllerUndefinedToNullableBoolean,
 } from 'lib/utils/form';
-import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
 import { HelseinstitusjonGrunnlagResponse } from 'lib/types/types';
 
@@ -28,7 +26,6 @@ type Props = {
 
 interface FormFields {
   begrunnelse: string;
-  dokumenterBruktIVurderingen: string[];
   faarFriKostOgLosji: JaEllerNei;
   forsoergerEktefelle: JaEllerNei;
   harFasteUtgifter: JaEllerNei;
@@ -68,11 +65,6 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om søker får fri kost og losji' },
       },
-      dokumenterBruktIVurderingen: {
-        type: 'checkbox_nested',
-        label: 'Søker har opphold på helseinstitusjon over 3 mnd. Vurder om ytelsen skal reduseres',
-        description: 'Les dokumentene og tilknytt relevante dokumenter til vurdering om ytelsen skal reduseres',
-      },
     },
     { shouldUnregister: true, readOnly: readOnly }
   );
@@ -89,10 +81,6 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
             faarFriKostOgLosji: data.faarFriKostOgLosji === JaEllerNei.Ja,
             forsoergerEktefelle: jaNeiEllerUndefinedToNullableBoolean(data.forsoergerEktefelle),
             harFasteUtgifter: jaNeiEllerUndefinedToNullableBoolean(data.harFasteUtgifter),
-            periode: {
-              fom: '',
-              tom: '',
-            },
           },
         },
         referanse: behandlingsreferanse,
@@ -117,10 +105,6 @@ export const Helseinstitusjonsvurdering = ({ grunnlag, behandlingVersjon, readOn
             Vi har funnet en eller flere registrerte opphold på helseinstitusjon som kan påvirke ytelsen
           </Alert>
         )}
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
-          <DokumentTabell />
-        </FormField>
-        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
         <InstitusjonsoppholdTabell
           label={'Søker har følgende institusjonsopphold på helseinstitusjon'}
           beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP ytelse'}

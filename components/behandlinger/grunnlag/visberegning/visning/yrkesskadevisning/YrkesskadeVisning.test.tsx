@@ -8,13 +8,18 @@ const grunnlag: YrkesskadeGrunnlag = {
   grunnlag: 0,
   inntektSisteÅr: { inntektIG: 0, inntektIKroner: 0, justertTilMaks6G: 0, år: '2023' },
   inntekter: [],
-  standardBeregning: { inntektIG: 0, justertTilMaks6G: 0, prosentVekting: 0 },
+  standardBeregning: { inntektIG: 0, prosentVekting: 0, andelGangerInntektIG: 1, andelGangerInntekt: 1120000 },
+  standardYrkesskade: { andelGangerInntekt: 168000, andelGangerInntektIG: 1.89, inntektIG: 1.5, prosentVekting: 50 },
+  yrkesskadeTidspunkt: '2023-01-02',
+  nedsattArbeidsevneÅr: '2024',
   yrkesskadeGrunnlag: 0,
   yrkesskadeinntekt: {
     antattÅrligInntektIGYrkesskadeTidspunktet: 0,
     antattÅrligInntektIKronerYrkesskadeTidspunktet: 0,
-    justertTilMaks6G: 0,
+    justertTilMaks6G: 2,
     prosentVekting: 0,
+    andelGangerInntekt: 220000,
+    andelGangerInntektIG: 2,
   },
 };
 

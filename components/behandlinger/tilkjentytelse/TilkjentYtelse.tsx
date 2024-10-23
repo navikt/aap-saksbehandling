@@ -9,15 +9,15 @@ interface Props {
 export const TilkjentYtelse = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
   return (
-    <StegSuspense>
-      <GruppeSteg
-        behandlingVersjon={flyt.behandlingVersjon}
-        behandlingReferanse={behandlingsReferanse}
-        prosessering={flyt.prosessering}
-        visVenteKort={flyt.visning.visVentekort}
-      >
+    <GruppeSteg
+      behandlingVersjon={flyt.behandlingVersjon}
+      behandlingReferanse={behandlingsReferanse}
+      prosessering={flyt.prosessering}
+      visVenteKort={flyt.visning.visVentekort}
+    >
+      <StegSuspense>
         <TilkjentMedDatafetching behandlingsReferanse={behandlingsReferanse} readOnly={false} />
-      </GruppeSteg>
-    </StegSuspense>
+      </StegSuspense>
+    </GruppeSteg>
   );
 };
