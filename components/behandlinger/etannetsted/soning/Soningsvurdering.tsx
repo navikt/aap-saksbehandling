@@ -1,6 +1,6 @@
 'use client';
 
-import { PadlockLockedIcon } from '@navikt/aksel-icons';
+import { PadlockLockedIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Soningsgrunnlag } from 'lib/types/types';
 import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
@@ -13,7 +13,7 @@ import { FormEvent } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
-import { Radio } from '@navikt/ds-react';
+import { BodyShort, Button, Label, Radio } from '@navikt/ds-react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 
@@ -30,42 +30,37 @@ interface FormFields {
 interface Vurdering {
   begrunnelse: string;
   skalOpphøre: string;
-  fraDato?: string;
+  fraDato: string;
 }
 
 export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Props) => {
   const { isLoading, status, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  console.log('grunnlag', grunnlag);
-
-  const defaultValue: Vurdering[] = grunnlag.soningsforhold.map((soning) => {
-    if (soning.vurdering) {
+  const defaultValue: Vurdering[] = grunnlag.vurderinger.map((forhold) => {
+    if (forhold.vurdering) {
       return {
-        begrunnelse: soning.vurdering.begrunnelse,
-        skalOpphøre: soning.vurdering.skalOpphøre ? JaEllerNei.Ja : JaEllerNei.Nei,
-        fraDato: formaterDatoForFrontend(soning.vurdering.fraDato),
+        begrunnelse: forhold.vurdering.begrunnelse,
+        skalOpphøre: forhold.vurdering.skalOpphøre ? JaEllerNei.Ja : JaEllerNei.Nei,
+        fraDato: formaterDatoForFrontend(forhold.vurdering.fraDato),
       };
     } else {
       return {
         begrunnelse: '',
         skalOpphøre: '',
-        fraDato: '',
+        fraDato: formaterDatoForFrontend(forhold.vurderingsdato),
       };
     }
   });
 
-  const { form } = useConfigForm<FormFields>(
-    {
-      soningsvurderinger: {
-        type: 'fieldArray',
-        defaultValue: defaultValue,
-      },
+  const { form } = useConfigForm<FormFields>({
+    soningsvurderinger: {
+      type: 'fieldArray',
+      defaultValue: defaultValue,
     },
-    { shouldUnregister: true }
-  );
+  });
 
-  const { fields } = useFieldArray({ control: form.control, name: 'soningsvurderinger' });
+  const { fields, remove, append } = useFieldArray({ control: form.control, name: 'soningsvurderinger' });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -77,7 +72,6 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
               return {
                 begrunnelse: vurdering.begrunnelse,
                 skalOpphore: vurdering.skalOpphøre === JaEllerNei.Ja,
-                //@ts-ignore //TODO Hva skjer dersom ytelsen skal opphøre?
                 fraDato: formaterDatoForBackend(parse(vurdering.fraDato, 'dd.MM.yyyy', new Date())),
               };
             }),
@@ -95,9 +89,10 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
         <InstitusjonsoppholdTabell
           label="Søker har følgende soningsforhold"
           beskrivelse="Under opphold i fengsel har ikke søker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP"
-          instutisjonsopphold={grunnlag.soningsforhold.map((soningsforhold) => soningsforhold.info)}
+          instutisjonsopphold={grunnlag.soningsforhold}
         />
         {fields.map((field, index) => {
+          const erFørsteVurdering = index === 0;
           return (
             <div key={field.id} className={'flex-column'}>
               <TextAreaWrapper
@@ -119,22 +114,49 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
                 <Radio value={JaEllerNei.Ja}>Ja</Radio>
                 <Radio value={JaEllerNei.Nei}>Nei</Radio>
               </RadioGroupWrapper>
-              {form.watch(`soningsvurderinger.${index}.skalOpphøre`) === JaEllerNei.Ja && (
+              {erFørsteVurdering ? (
+                <div>
+                  <Label size={'small'}>Fra dato</Label>
+                  <BodyShort>{field.fraDato}</BodyShort>
+                </div>
+              ) : (
                 <TextFieldWrapper
                   type={'text'}
                   name={`soningsvurderinger.${index}.fraDato`}
                   control={form.control}
-                  label={'Ytelsen skal opphøre fra dato'}
+                  label={'Vurderingen skal gjelde fra dato'}
                   rules={{
-                    required: 'Når ytelsen skal stoppes må du sette hvilken dato den skal stoppes fra',
+                    required: 'Du må sette en dato for når vurderingen skal gjelde fra',
                     validate: (value) => validerDato(value as string),
                   }}
                   readOnly={readOnly}
                 />
               )}
+              {!erFørsteVurdering && (
+                <Button
+                  type={'button'}
+                  icon={<TrashIcon />}
+                  className={'fit-content-button'}
+                  variant={'tertiary'}
+                  size={'small'}
+                  onClick={() => remove(index)}
+                >
+                  Fjern vurdering
+                </Button>
+              )}
             </div>
           );
         })}
+        <Button
+          type={'button'}
+          icon={<PlusCircleIcon />}
+          className={'fit-content-button'}
+          variant={'tertiary'}
+          size={'small'}
+          onClick={() => append({ begrunnelse: '', fraDato: '', skalOpphøre: '' })}
+        >
+          Legg til ny vurdering
+        </Button>
       </Form>
     </VilkårsKort>
   );

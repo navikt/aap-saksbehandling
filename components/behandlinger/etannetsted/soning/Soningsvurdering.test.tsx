@@ -1,22 +1,25 @@
 import { describe, expect, it } from 'vitest';
 import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Soningsgrunnlag } from 'lib/types/types';
 import userEvent from '@testing-library/user-event';
 
 const soningsgrunnlag: Soningsgrunnlag = {
   soningsforhold: [
     {
-      status: 'GODKJENT',
-      vurderingsdato: '',
-      info: {
-        institusjonstype: 'Fengsel',
-        oppholdstype: 'Soningsfange',
-        status: 'AKTIV',
-        oppholdFra: '2022-10-23',
-        avsluttetDato: '2025-10-23',
-        kildeinstitusjon: 'Azkaban',
-      },
+      institusjonstype: 'Fengsel',
+      oppholdstype: 'Soningsfange',
+      status: 'AKTIV',
+      oppholdFra: '2022-10-23',
+      avsluttetDato: '2025-10-23',
+      kildeinstitusjon: 'Azkaban',
+    },
+  ],
+  vurderinger: [
+    {
+      vurderingsdato: '2022-10-23',
+      vurdering: undefined,
+      status: 'UAVKLART',
     },
   ],
 };
@@ -63,16 +66,20 @@ describe('Soningsvurdering', () => {
     expect(screen.getByRole('group', { name: 'Skal ytelsen stoppes på grunn av soning?' })).toBeVisible();
   });
 
-  it('datofelt for når ytelsen skal stanses fra vises ikke initielt', () => {
+  it('datofelt for når vurderingen skal gjelde fra vises ikke på den første vurderingen', () => {
     render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
-    expect(screen.queryByRole('textbox', { name: 'Når skal ytelsen stanses fra?' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('textbox', { name: 'Vurderingen skal gjelde fra dato' })).not.toBeInTheDocument();
   });
 
-  it('viser et datofelt for når ytelsen skal stoppes fra når det svares "ja" på at ytelsen skal stoppes', async () => {
+  it('dato for når vurderingen skal gjelde fra vises som ren tekst på den første vurderingen', () => {
     render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
-    const gruppe = screen.getByRole('group', { name: 'Skal ytelsen stoppes på grunn av soning?' });
-    const jaValg = within(gruppe).getByRole('radio', { name: 'Ja' });
-    await user.click(jaValg);
-    expect(screen.getByRole('textbox', { name: 'Ytelsen skal opphøre fra dato' })).toBeVisible();
+    expect(screen.getAllByText('23.10.2022')[1]).toBeVisible(); // Det finnes en lik dato i tabellen også
+  });
+
+  it('viser et datofelt for når vurderingen skal gjelde fra så lenge det ikke er den første vurderingen', async () => {
+    render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
+    const leggTilNyVurderingKnapp = screen.getByRole('button', { name: /legg til ny vurdering/i });
+    await user.click(leggTilNyVurderingKnapp);
+    expect(screen.getByRole('textbox', { name: 'Vurderingen skal gjelde fra dato' })).toBeVisible();
   });
 });
