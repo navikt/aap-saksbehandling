@@ -73,6 +73,7 @@ describe('Soningsvurdering', () => {
 
   it('dato for når vurderingen skal gjelde fra vises som ren tekst på den første vurderingen', () => {
     render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
+    expect(screen.getByText('Vurderingen gjelder fra dato')).toBeVisible();
     expect(screen.getAllByText('23.10.2022')[1]).toBeVisible(); // Det finnes en lik dato i tabellen også
   });
 

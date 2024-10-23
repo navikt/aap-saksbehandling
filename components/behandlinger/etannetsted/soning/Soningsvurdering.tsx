@@ -118,7 +118,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
               </RadioGroupWrapper>
               {erFørsteVurdering ? (
                 <div>
-                  <Label size={'small'}>Fra dato</Label>
+                  <Label size={'small'}>Vurderingen gjelder fra dato</Label>
                   <BodyShort>{field.fraDato}</BodyShort>
                 </div>
               ) : (
