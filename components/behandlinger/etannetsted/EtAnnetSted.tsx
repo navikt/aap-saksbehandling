@@ -5,9 +5,9 @@ import { HelseinstitusjonsvurderingMedDataFetching } from 'components/behandling
 import { SoningsvurderingMedDataFetching } from './soning/SoningsvurderingMedDataFetching';
 import { Behovstype } from 'lib/utils/form';
 
-type Props = {
+interface Props {
   behandlingsreferanse: string;
-};
+}
 
 export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
@@ -16,14 +16,12 @@ export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
 
   /*
    TODO 09.08.2024 - hacky løsning for å midlertidig kunne vise soning og opphold på helseinstitusjon
-   Må tweake på navn for å få det på en linje, for å få satt ts-ignore
    */
-  const hinst = Behovstype.AVKLAR_HELSEINSTITUSJON;
-  const soning = Behovstype.AVKLAR_SONINGSFORRHOLD;
-  // @ts-ignore
-  const vurderHelseinstitusjon = avklaringsBehov?.avklaringsbehov.find((b) => b.definisjon.kode === hinst) != null;
-  // @ts-ignore
-  const vurderSoning = avklaringsBehov?.avklaringsbehov.find((behov) => behov.definisjon.kode === soning) != null;
+  const vurderHelseinstitusjon =
+    avklaringsBehov?.avklaringsbehov.find((b) => b.definisjon.kode === Behovstype.AVKLAR_HELSEINSTITUSJON) != null;
+  const vurderSoning =
+    avklaringsBehov?.avklaringsbehov.find((behov) => behov.definisjon.kode === Behovstype.AVKLAR_SONINGSFORRHOLD) !=
+    null;
 
   return (
     <GruppeSteg
