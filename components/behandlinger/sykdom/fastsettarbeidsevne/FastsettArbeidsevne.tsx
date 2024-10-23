@@ -19,6 +19,7 @@ import { parse } from 'date-fns';
 import styles from './FastsettArbeidsevne.module.css';
 import { Button } from '@navikt/ds-react';
 import { pipe } from 'lib/utils/functional';
+import { Veiledning } from 'components/veiledning/Veiledning';
 
 interface Props {
   grunnlag?: ArbeidsevneGrunnlag;
@@ -45,7 +46,7 @@ const tilAvrundetTimetall = pipe<string>(prosentTilTimer, rundNedTilNaermesteHal
 
 const regnOmTilTimer = (value: string) => {
   if (!value) {
-    return '(- timer)';
+    return undefined;
   }
   return `(${tilAvrundetTimetall(value)} timer)`;
 };
@@ -110,6 +111,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
         steg={'FASTSETT_ARBEIDSEVNE'}
         visBekreftKnapp={!readOnly}
       >
+        <Veiledning defaultOpen={false} />
         {arbeidsevneVurderinger.map((vurdering, index) => (
           <div key={vurdering.id} className={`${styles.vurdering} flex-column`}>
             <TextAreaWrapper
@@ -166,7 +168,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
               size={'medium'}
               icon={<PlusCircleIcon />}
             >
-              Legg til vurdering
+              Legg til ny arbeidsevne
             </Button>
           </div>
         )}
