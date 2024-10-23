@@ -17,6 +17,8 @@ import { BodyShort, Button, Label, Radio } from '@navikt/ds-react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 
+import styles from './Soningsvurdering.module.css';
+
 interface Props {
   grunnlag: Soningsgrunnlag;
   readOnly: boolean;
@@ -94,7 +96,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
         {fields.map((field, index) => {
           const erFørsteVurdering = index === 0;
           return (
-            <div key={field.id} className={'flex-column'}>
+            <div key={field.id} className={styles.vurdering}>
               <TextAreaWrapper
                 name={`soningsvurderinger.${index}.begrunnelse`}
                 control={form.control}
