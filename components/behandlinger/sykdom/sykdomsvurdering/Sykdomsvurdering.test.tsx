@@ -32,9 +32,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
   it('Skal vise korrekt description på begrunnelsesfelt', async () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
 
-    const label = screen.getByText(
-      'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige? Hvis yrkesskade er funnet: vurder mot YS'
-    );
+    const label = screen.getByText('Hvilken sykdom / skade / lyte. Hva er det mest vesentlige?');
 
     expect(label).toBeVisible();
   });
