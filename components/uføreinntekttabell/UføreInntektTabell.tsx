@@ -17,7 +17,7 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, ytterlig
     <div className={'flex-column'}>
       <Label size={'medium'}>Grunnlagsberegning § 11-19 etter oppjustering jf. § 11-28 fjerde ledd</Label>
       <Detail>Innbygger fikk ytterligere nedsatt arbeidsevne i {ytterligereNedsattArbeidsevneÅr}</Detail>
-      <ReadMore header={'Se detaljer for beregning ved uføre'}>
+      <ReadMore header={'Se detaljer for beregning ved uføre'} size={'small'}>
         Der innbygger har gradert uføre skal det beregningen benytte gunstigste av: 1) Tidspunktet da innbyggers
         arbeidsevne ble redusert med minst 50%. Typisk uføretidspunktet for gradert uføretrygd. 2) Tidspunktet da
         arbeidsevne ble ytterligere nedsatt. Typisk når innbygger får ytterligere redusert arbeidsevne. I det siste

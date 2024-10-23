@@ -16,7 +16,7 @@ export const YrkesskadeBeregningTabell = ({ grunnlag, visning }: Props) => {
         {`Anslått inntekt ved yrkesskadetidspunktet (${grunnlag.inntektSisteÅr.år}) er oppgitt til å være ${formaterTilNok(grunnlag.yrkesskadeinntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)} (${formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}) Yrkesskaden er
         oppgitt å ha ${formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)} årsakssammenheng med nedsatt arbeidsevne.`}
       </Detail>
-      <ReadMore header={'Se detaljer om beregningen for innbygger med yrkesskade'}>
+      <ReadMore header={'Se detaljer om beregningen for innbygger med yrkesskade'} size={'small'}>
         Der yrkesskade er medvirkende årsak til redusert arbeidsevne skal det beregnes et grunnlag basert på anslått
         inntekt for det året yrkesskaden inntraff. Innbygger skal få det gunstigste grunnlaget av: 1) standard
         grunnlagsberegning, og 2) beregning av den antatte inntekten ved yrkesskadetidspunkt. Anslått inntekt ved
