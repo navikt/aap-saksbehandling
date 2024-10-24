@@ -140,19 +140,18 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
                   readOnly={readOnly}
                 />
               )}
-              {!erFørsteVurdering ||
-                (!readOnly && (
-                  <Button
-                    type={'button'}
-                    icon={<TrashIcon />}
-                    className={'fit-content-button'}
-                    variant={'tertiary'}
-                    size={'small'}
-                    onClick={() => remove(index)}
-                  >
-                    Fjern vurdering
-                  </Button>
-                ))}
+              {!erFørsteVurdering && !readOnly && (
+                <Button
+                  type={'button'}
+                  icon={<TrashIcon />}
+                  className={'fit-content-button'}
+                  variant={'tertiary'}
+                  size={'small'}
+                  onClick={() => remove(index)}
+                >
+                  Fjern vurdering
+                </Button>
+              )}
             </div>
           );
         })}
