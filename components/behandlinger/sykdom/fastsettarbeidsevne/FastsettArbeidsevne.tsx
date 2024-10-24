@@ -98,7 +98,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
 
   return (
     <VilkårsKort
-      heading={'Reduksjon av maks utbetalt ytelse ved delvis nedsatt arbeidsevne § 11-23 2.ledd (valgfritt)'}
+      heading={'Vurdering av etablert og uutnyttet arbeidsevne'}
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
       defaultOpen={showAsOpen}
@@ -115,7 +115,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
         {arbeidsevneVurderinger.map((vurdering, index) => (
           <div key={vurdering.id} className={`${styles.vurdering} flex-column`}>
             <TextAreaWrapper
-              label={'Vurder om innbygger har arbeidsevne'}
+              label={'Vurder om innbygger har arbeidsevne som er utnyttet eller ikke utnyttet'}
               description={'Hvis ikke annet er oppgitt, så antas innbygger å ha 0% arbeidsevne og rett på full ytelse'}
               control={form.control}
               name={`arbeidsevnevurderinger.${index}.begrunnelse`}
@@ -127,7 +127,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
                 control={form.control}
                 name={`arbeidsevnevurderinger.${index}.arbeidsevne`}
                 type={'text'}
-                label={'Arbeidsevne i prosent'}
+                label={'Oppgi den etablerte arbeidsevnen eller den uutnyttede arbeidsevnen i prosent'}
                 rules={{ required: 'Du må angi hvor stor arbeidsevne innbygger har' }}
                 readOnly={readOnly}
               />
@@ -143,7 +143,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
               control={form.control}
               description={'Datoformat: dd.mm.åååå'}
               name={`arbeidsevnevurderinger.${index}.fom`}
-              label={'Arbeidsevne gjelder fra'}
+              label={'Den etablerte eller uutnyttede arbeidsevnen gjelder fra'}
               rules={{
                 required: 'Du må angi datoen arbeidsevnen gjelder fra',
                 validate: (value) => validerDato(value as string),
