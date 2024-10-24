@@ -1,11 +1,11 @@
 import { BodyShort, Label, Table } from '@navikt/ds-react';
-import { InstitusjonsoppholdResponse } from 'lib/types/types';
+import { Institusjonsopphold } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 type Props = {
   label: string;
   beskrivelse: string;
-  instutisjonsopphold: InstitusjonsoppholdResponse[];
+  instutisjonsopphold: Institusjonsopphold[];
 };
 
 export const InstitusjonsoppholdTabell = ({ label, beskrivelse, instutisjonsopphold }: Props) => {

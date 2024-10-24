@@ -3,29 +3,25 @@ import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingServi
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { HelseinstitusjonsvurderingMedDataFetching } from 'components/behandlinger/etannetsted/helseinstitusjon/HelseinstitusjonsvurderingMedDataFetching';
 import { SoningsvurderingMedDataFetching } from './soning/SoningsvurderingMedDataFetching';
-import { getStegSomSkalVises } from 'lib/utils/steg';
 import { Behovstype } from 'lib/utils/form';
 
-type Props = {
+interface Props {
   behandlingsreferanse: string;
-};
+}
 
 export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
-  const stegSomSkalVises = getStegSomSkalVises('ET_ANNET_STED', flyt);
   const etAnnetStedGruppe = flyt.flyt.find((gruppe) => gruppe.stegGruppe === 'ET_ANNET_STED');
   const avklaringsBehov = etAnnetStedGruppe?.steg.find((steg) => steg.avklaringsbehov);
 
   /*
    TODO 09.08.2024 - hacky løsning for å midlertidig kunne vise soning og opphold på helseinstitusjon
-   Må tweake på navn for å få det på en linje, for å få satt ts-ignore
    */
-  const hinst = Behovstype.AVKLAR_HELSEINSTITUSJON;
-  const soning = Behovstype.AVKLAR_SONINGSFORRHOLD;
-  // @ts-ignore
-  const vurderHelseinstitusjon = avklaringsBehov?.avklaringsbehov.find((b) => b.definisjon.kode === hinst) != null;
-  // @ts-ignore
-  const vurderSoning = avklaringsBehov?.avklaringsbehov.find((behov) => behov.definisjon.kode === soning) != null;
+  const vurderHelseinstitusjon =
+    avklaringsBehov?.avklaringsbehov.find((b) => b.definisjon.kode === Behovstype.AVKLAR_HELSEINSTITUSJON) != null;
+  const vurderSoning =
+    avklaringsBehov?.avklaringsbehov.find((behov) => behov.definisjon.kode === Behovstype.AVKLAR_SONINGSFORRHOLD) !=
+    null;
 
   return (
     <GruppeSteg
@@ -34,30 +30,24 @@ export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={flyt.behandlingVersjon}
     >
-      {stegSomSkalVises.map((steg) => {
-        if (vurderHelseinstitusjon) {
-          return (
-            <StegSuspense key={steg}>
-              <HelseinstitusjonsvurderingMedDataFetching
-                behandlingsreferanse={behandlingsreferanse}
-                readOnly={flyt.visning.saksbehandlerReadOnly}
-                behandlingVersjon={flyt.behandlingVersjon}
-              />
-            </StegSuspense>
-          );
-        }
-        if (vurderSoning) {
-          return (
-            <StegSuspense key={steg}>
-              <SoningsvurderingMedDataFetching
-                behandlingsreferanse={behandlingsreferanse}
-                behandlingsversjon={flyt.behandlingVersjon}
-                readOnly={flyt.visning.saksbehandlerReadOnly}
-              />
-            </StegSuspense>
-          );
-        }
-      })}
+      {vurderHelseinstitusjon && (
+        <StegSuspense>
+          <HelseinstitusjonsvurderingMedDataFetching
+            behandlingsreferanse={behandlingsreferanse}
+            readOnly={flyt.visning.saksbehandlerReadOnly}
+            behandlingVersjon={flyt.behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
+      {vurderSoning && (
+        <StegSuspense>
+          <SoningsvurderingMedDataFetching
+            behandlingsreferanse={behandlingsreferanse}
+            behandlingsversjon={flyt.behandlingVersjon}
+            readOnly={flyt.visning.saksbehandlerReadOnly}
+          />
+        </StegSuspense>
+      )}
     </GruppeSteg>
   );
 };

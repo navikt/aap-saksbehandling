@@ -1,4 +1,4 @@
-import { BodyShort, List } from '@navikt/ds-react';
+import { BodyShort, Label, List } from '@navikt/ds-react';
 
 interface Props {
   dokumenter?: string[];
@@ -6,14 +6,17 @@ interface Props {
 
 export const TilknyttedeDokumenter = ({ dokumenter }: Props) => {
   return (
-    <List as={'ul'} title={'Tilknyttede dokumenter'} size={'small'}>
-      {dokumenter && dokumenter.length > 0 ? (
-        dokumenter?.map((dokument) => <List.Item key={dokument}>{dokument}</List.Item>)
-      ) : (
-        <BodyShort as={'p'} size={'small'}>
-          Ingen dokumenter er valgt
-        </BodyShort>
-      )}
-    </List>
+    <section>
+      <Label size={'small'}>Tilknyttede dokumenter</Label>
+      <List as={'ul'} size={'small'}>
+        {dokumenter && dokumenter.length > 0 ? (
+          dokumenter?.map((dokument) => <List.Item key={dokument}>{dokument}</List.Item>)
+        ) : (
+          <BodyShort as={'p'} size={'small'}>
+            Ingen dokumenter er valgt
+          </BodyShort>
+        )}
+      </List>
+    </section>
   );
 };

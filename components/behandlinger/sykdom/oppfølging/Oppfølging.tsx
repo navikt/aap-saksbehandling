@@ -10,7 +10,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { BodyLong } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react';
 
 interface Props {
   behandlingVersjon: number;
@@ -41,21 +41,22 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
       },
       erBehovForAktivBehandling: {
         type: 'radio',
-        label: 'Har innbygger behov for aktiv behandling?',
+        label: 'a: Har innbygger behov for aktiv behandling?',
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAktivBehandling),
         rules: { required: 'Du må svare på om innbygger har behov for aktiv behandling' },
         options: JaEllerNeiOptions,
       },
       erBehovForArbeidsrettetTiltak: {
         type: 'radio',
-        label: 'Har innbygger behov for arbeidsrettet tiltak?',
+        label: 'b: Har innbygger behov for arbeidsrettet tiltak?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForArbeidsrettetTiltak),
         rules: { required: 'Du må svare på om innbygger har behov for arbeidsrettet tiltak' },
       },
       erBehovForAnnenOppfølging: {
         type: 'radio',
-        label: 'Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+        label:
+          'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAnnenOppfølging),
         rules: { required: 'Du må svare på om innbygger anses for å ha en viss mulighet til å komme i arbeid' },
@@ -99,57 +100,26 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
         status={status}
         visBekreftKnapp={!readOnly}
       >
+        <Veiledning
+          defaultOpen={false}
+          tekst={
+            <div>
+              Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
+              innbygger oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav
+              a (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
+              vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
+              svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
+              <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-6">
+                Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6
+              </Link>
+              <span> </span>
+              <Link href="https://lovdata.no"> (lovdata.no)</Link>
+            </div>
+          }
+        />
         <FormField form={form} formField={formFields.begrunnelse} />
-        <section>
-          <FormField form={form} formField={formFields.erBehovForAktivBehandling} />
-          <Veiledning
-            defaultOpen={false}
-            header={'Slik vurderes dette'}
-            tekst={
-              <div>
-                <BodyLong spacing size={'small'}>
-                  Med aktiv behandling menes behandling som behandlende lege anbefaler medlemmet å gjennomføre med mål
-                  om å bedre arbeidsevnen. Behandling kan gis av for eksempel lege, psykolog, fysioterapeut,
-                  kiropraktorer, manuell terapeut mv. Det er en forutsetning at behandlingen er et ledd i en medisinsk
-                  behandlingsplan for å bedre arbeidsevnen.
-                </BodyLong>
-                <BodyLong spacing size={'small'}>
-                  Det er ikke et vilkår at det foregår uavbrutte behandlingstiltak. Behandlingen kan variere fra
-                  operative inngrep med innleggelse i helseinstitusjon til kortere, mer passive perioder med rekreasjon.
-                </BodyLong>
-                <BodyLong spacing size={'small'}>
-                  Det må også alltid vurderes om det er andre og mer aktive tiltak som er mer hensiktsmessige for å
-                  bedre arbeidsevnen
-                </BodyLong>
-              </div>
-            }
-          />
-        </section>
-        <section>
-          <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} />
-          <Veiledning
-            header={'Slik vurderes dette'}
-            defaultOpen={false}
-            tekst={
-              <div>
-                <BodyLong size={'small'} spacing>
-                  Med et arbeidsrettet tiltak etter folketrygdloven § 11-6 menes
-                </BodyLong>
-                <BodyLong size={'small'} spacing>
-                  a.tiltak etter forskrift 11. desember 2015 nr. 1598 om arbeidsmarkedstiltak (tiltaksforskriften), med
-                  unntak av varig tilrettelagt arbeid i forskriften kapittel 14,b.etablering av egen virksomhet, se
-                  folketrygdloven § 11-15, ogc.andre aktiviteter i regi av offentlige eller private virksomheter,
-                  herunder frivillige aktører, som er egnet til å styrke medlemmets mulighet for overgang til arbeid.
-                </BodyLong>
-                <BodyLong size={'small'} spacing>
-                  Forsøk med hjemmel i § 12 i lov om arbeidsmarkedstjenester (arbeidsmarkedsloven) kan anses som et
-                  arbeidsrettet tiltak, dersom det framgår av forskriften at deltakeren har rett på
-                  arbeidsavklaringspenger
-                </BodyLong>
-              </div>
-            }
-          />
-        </section>
+        <FormField form={form} formField={formFields.erBehovForAktivBehandling} />
+        <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} />
 
         {form.watch('erBehovForAktivBehandling') === JaEllerNei.Nei &&
           form.watch('erBehovForArbeidsrettetTiltak') === JaEllerNei.Nei && (

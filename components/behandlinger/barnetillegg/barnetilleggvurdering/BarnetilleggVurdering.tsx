@@ -21,6 +21,7 @@ interface Props {
   grunnlag: BarnetilleggGrunnlag;
   behandlingPersonInfo: BehandlingPersoninfo;
   readOnly: boolean;
+  harAvklaringsbehov: boolean;
 }
 
 export interface BarnetilleggFormFields {
@@ -40,14 +41,20 @@ interface Vurdering {
   fraDato?: string;
 }
 
-export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandlingPersonInfo, readOnly }: Props) => {
+export const BarnetilleggVurdering = ({
+  grunnlag,
+  harAvklaringsbehov,
+  behandlingsversjon,
+  behandlingPersonInfo,
+  readOnly,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
   const vurderteBarn: BarneTilleggVurdering[] = grunnlag.vurderteBarn.map((barn) => {
     return {
       ident: barn.ident,
-      navn: behandlingPersonInfo.info[barn.ident],
+      navn: behandlingPersonInfo?.info[barn.ident],
       fødselsdato: barn.fødselsdato,
       vurderinger: barn.vurderinger.map((value) => {
         return {
@@ -62,7 +69,7 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
   const barnSomTrengerVurdering: BarneTilleggVurdering[] = grunnlag.barnSomTrengerVurdering.map((barn) => {
     return {
       ident: barn.ident.identifikator,
-      navn: behandlingPersonInfo.info[barn.ident.identifikator],
+      navn: behandlingPersonInfo?.info[barn.ident.identifikator],
       vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
       fødselsdato: barn.fødselsdato,
     };
@@ -125,27 +132,29 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
       steg={'BARNETILLEGG'}
     >
       <div className={'flex-column'}>
-        <div className={'flex-column'}>
-          <div>
-            <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
-          </div>
+        {harAvklaringsbehov && (
+          <div className={'flex-column'}>
+            <div>
+              <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
+            </div>
 
-          <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit}>
-            {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
-              return (
-                <OppgitteBarnVurdering
-                  key={vurdering.id}
-                  form={form}
-                  barnetilleggIndex={barnetilleggIndex}
-                  ident={vurdering.ident}
-                  fødselsdato={vurdering.fødselsdato}
-                  navn={behandlingPersonInfo.info[vurdering.ident]}
-                  readOnly={readOnly}
-                />
-              );
-            })}
-          </form>
-        </div>
+            <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit}>
+              {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
+                return (
+                  <OppgitteBarnVurdering
+                    key={vurdering.id}
+                    form={form}
+                    barnetilleggIndex={barnetilleggIndex}
+                    ident={vurdering.ident}
+                    fødselsdato={vurdering.fødselsdato}
+                    navn={behandlingPersonInfo?.info[vurdering.ident] || 'Ukjent'}
+                    readOnly={readOnly}
+                  />
+                );
+              })}
+            </form>
+          </div>
+        )}
         {erFolkeregistrerteBarn && (
           <div className={'flex-column'}>
             <Label size={'medium'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
@@ -153,12 +162,12 @@ export const BarnetilleggVurdering = ({ grunnlag, behandlingsversjon, behandling
               <RegistrertBarn
                 key={index}
                 registrertBarn={barn}
-                navn={behandlingPersonInfo.info[barn.ident.identifikator]}
+                navn={behandlingPersonInfo?.info[barn.ident.identifikator] || 'Ukjent'}
               />
             ))}
           </div>
         )}
-        {!readOnly && (
+        {!readOnly && harAvklaringsbehov && (
           <Button className={'fit-content-button'} form={'barnetillegg'} loading={isLoading}>
             Bekreft
           </Button>

@@ -98,6 +98,10 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'SYKDOM/#VURDER_SYKEPENGEERSTATNING';
     case Behovstype.AVKLAR_BARNETILLEGG_KODE:
       return '/BARNETILLEGG/#BARNETILLEGG';
+    case Behovstype.AVKLAR_SONINGSFORRHOLD:
+      return '/ET_ANNET_STED';
+    case Behovstype.AVKLAR_HELSEINSTITUSJON:
+      return '/ET_ANNET_STED';
     default:
       return 'SYKDOM';
   }

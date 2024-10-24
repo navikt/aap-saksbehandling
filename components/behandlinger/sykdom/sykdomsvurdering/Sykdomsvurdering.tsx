@@ -6,7 +6,6 @@ import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
-import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -17,18 +16,18 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
+import { Link } from '@navikt/ds-react';
 
 interface FormFields {
   harSkadeSykdomEllerLyte: string;
   erArbeidsevnenNedsatt: string;
-  dokumenterBruktIVurderingen: string[];
   erSkadeSykdomEllerLyteVesentligdel: string;
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   begrunnelse: string;
   nedsattArbeidsevneDato: string;
 }
 
-export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilknyttedeDokumenter }: SykdomProps) => {
+export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
@@ -37,8 +36,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
       begrunnelse: {
         type: 'textarea',
         label: 'Vurder den nedsatte arbeidsevnen',
-        description:
-          'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige? Hvis yrkesskade er funnet: vurder mot YS',
+        description: 'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige?',
         defaultValue: grunnlag?.sykdomsvurdering?.begrunnelse,
         rules: { required: 'Du må begrunne' },
       },
@@ -73,11 +71,6 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         rules: {
           required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
         },
-      },
-      dokumenterBruktIVurderingen: {
-        type: 'checkbox_nested',
-        label: 'Dokumenter funnet som er relevant for vurdering av §11-5',
-        description: 'Tilknytt minst ett dokument §11-5 vurdering',
       },
       nedsattArbeidsevneDato: {
         type: 'text',
@@ -141,61 +134,30 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         visBekreftKnapp={!readOnly}
       >
         <RegistrertBehandler />
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
-          <DokumentTabell
-            dokumenter={tilknyttedeDokumenter.map((d) => ({
-              journalpostId: d.journalpostId,
-              dokumentId: d.dokumentInfoId,
-              tittel: d.tittel,
-              erTilknyttet: false,
-            }))}
-          />
-        </FormField>
-        <Veiledning />
+        <Veiledning
+          tekst={
+            <div>
+              Folketrygdloven § 11-5 består av fire vilkår som du må ta stilling til og som alle må være oppfylt for at
+              § 11-5 skal være oppfylt. Det vil si at hvis du svarer nei på ett av spørsmålene under, vil ikke vilkåret
+              være oppfylt.
+              <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-5" target="_blank">
+                Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5
+              </Link>
+              <span> </span>
+              <Link href="https://lovdata.no" target="_blank">
+                (lovdata.no)
+              </Link>
+            </div>
+          }
+        />
         <FormField form={form} formField={formFields.begrunnelse} />
-        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
-        <section>
-          <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} />
-          <Veiledning
-            header={'Slik vurderes dette'}
-            defaultOpen={false}
-            tekst={
-              'Sykdom, skade eller lyte er (som hovedregel) en medisinsk tilstand med en vitenskapelig anerkjent diagnose. Sykdomslignende symptomer kan også oppfylle lovens krav til sykdom, så det er ikke alltid et krav at det er stilt en diagnose for at vilkåret skal være oppfylt.'
-            }
-          />
-        </section>
+        <TilknyttedeDokumenter dokumenter={[]} />
+        <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} />
         {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
           <>
-            <section>
-              <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
-              <Veiledning
-                header={'Slik vurderes dette'}
-                defaultOpen={false}
-                tekst={
-                  'Med arbeidsevne menes den enkeltes evne til å møte de krav som stilles i utførelsen av et normal inntektsgivende arbeid. Arbeidsevnen anses som nedsatt når medlemmet helt eller delvis er ute av stand til å utføre arbeidsoppgavene i ulike jobber som han eller hun er kvalifisert til.'
-                }
-              />
-            </section>
-            <section>
-              <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
-              <Veiledning
-                header={'Slik vurderes dette'}
-                defaultOpen={false}
-                tekst={
-                  'Det tas utgangspunkt i alminnelig arbeidstid på 37,5 timer per uke for å vurdere om arbeidsevnen er nedsatt med minst halvparten. Hver enkelt sak vurderes konkret ut fra hvordan de faktiske forholdene påvirker medlemmets evne til å utføre arbeid. At inntekten reduseres med mer enn halvparten, er ikke relevant for vurderingen av om arbeidsevnen er nedsatt.'
-                }
-              />
-            </section>
-            <section>
-              <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
-              <Veiledning
-                header={'Slik vurderes dette'}
-                defaultOpen={false}
-                tekst={
-                  'Det må være årsakssammenheng mellom sykdom, skade eller lyte og den nedsatte arbeidsevnen. At sykdom, skade eller lyte skal utgjøre en vesentlig medvirkende årsak, betyr at den alene må utgjøre en større del enn andre årsaker. Andre årsaker kan samlet utgjøre en større del, men sykdom, skade eller lyte må likevel være vesentlig medvirkende årsak. Det er ikke tilstrekkelig å ha sykdom, skade eller lyte. Det er først når den reduserte arbeidsevnen forklares med funksjonstap som skyldes sykdom, skade og lyte at årsakssammenhengen anses oppfylt.'
-                }
-              />
-            </section>
+            <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
+            <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
+            <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
           </>
         )}
         {visFeltForNårArbeidsevnenBleNedsatt && <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />}

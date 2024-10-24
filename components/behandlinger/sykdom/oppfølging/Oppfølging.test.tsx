@@ -30,14 +30,14 @@ describe('Oppfølging', () => {
   it('Skal ha felt for om innbygger har behov for aktiv behandling', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
     const felt = screen.getByRole('group', {
-      name: 'Har innbygger behov for aktiv behandling?',
+      name: 'a: Har innbygger behov for aktiv behandling?',
     });
     expect(felt).toBeVisible();
   });
 
   it('Skal ha felt for om innbygger har behov for arbeidsrettet tiltak', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
-    const felt = screen.getByRole('group', { name: 'Har innbygger behov for arbeidsrettet tiltak?' });
+    const felt = screen.getByRole('group', { name: 'b: Har innbygger behov for arbeidsrettet tiltak?' });
     expect(felt).toBeVisible();
   });
 
@@ -45,12 +45,12 @@ describe('Oppfølging', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
     expect(
       screen.queryByRole('group', {
-        name: 'Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+        name: 'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
       })
     ).not.toBeInTheDocument();
 
     const harInnbyggetBehovForAktivBehandling = screen.getByRole('group', {
-      name: 'Har innbygger behov for aktiv behandling?',
+      name: 'a: Har innbygger behov for aktiv behandling?',
     });
 
     const jaFeltHarInnbyggerBehovForAktivBehandling = within(harInnbyggetBehovForAktivBehandling).getByRole('radio', {
@@ -60,7 +60,7 @@ describe('Oppfølging', () => {
     await user.click(jaFeltHarInnbyggerBehovForAktivBehandling);
 
     const harInnbyggerBehovForArbeidsrettetTiltakFelt = screen.getByRole('group', {
-      name: 'Har innbygger behov for arbeidsrettet tiltak?',
+      name: 'b: Har innbygger behov for arbeidsrettet tiltak?',
     });
     const neiHarInnbyggerBehovForArbeidsrettetTiltakFelt = within(
       harInnbyggerBehovForArbeidsrettetTiltakFelt
@@ -70,7 +70,7 @@ describe('Oppfølging', () => {
 
     expect(
       screen.queryByRole('group', {
-        name: 'Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+        name: 'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
       })
     ).not.toBeInTheDocument();
   });
@@ -79,12 +79,12 @@ describe('Oppfølging', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
     expect(
       screen.queryByRole('group', {
-        name: 'Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+        name: 'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
       })
     ).not.toBeInTheDocument();
 
     const harInnbyggetBehovForAktivBehandling = screen.getByRole('group', {
-      name: 'Har innbygger behov for aktiv behandling?',
+      name: 'a: Har innbygger behov for aktiv behandling?',
     });
 
     const neiFeltHarInnbyggerBehovForAktivBehandling = within(harInnbyggetBehovForAktivBehandling).getByRole('radio', {
@@ -94,7 +94,7 @@ describe('Oppfølging', () => {
     await user.click(neiFeltHarInnbyggerBehovForAktivBehandling);
 
     const harInnbyggerBehovForArbeidsrettetTiltakFelt = screen.getByRole('group', {
-      name: 'Har innbygger behov for arbeidsrettet tiltak?',
+      name: 'b: Har innbygger behov for arbeidsrettet tiltak?',
     });
     const neiHarInnbyggerBehovForArbeidsrettetTiltakFelt = within(
       harInnbyggerBehovForArbeidsrettetTiltakFelt
@@ -104,23 +104,9 @@ describe('Oppfølging', () => {
 
     expect(
       await screen.findByRole('group', {
-        name: 'Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+        name: 'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
       })
     ).toBeInTheDocument();
-  });
-
-  it('Skal ha synlig vilkårsveiledning for feltet har innbygger behov for arbeidsrettet tiltak', () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
-    const vilkårsveiledningTekst = screen.getByText('Med et arbeidsrettet tiltak etter folketrygdloven § 11-6 menes');
-    expect(vilkårsveiledningTekst).toBeVisible();
-  });
-
-  it('Skal ha synlig vilkårsveiledning for feltet har innbygger behov for aktiv behandling', () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
-    const vilkårsveiledningTekst = screen.getByText(
-      /med aktiv behandling menes behandling som behandlende lege anbefaler medlemmet å gjennomføre med mål om å bedre arbeidsevnen\. behandling kan gis av for eksempel lege, psykolog, fysioterapeut, kiropraktorer, manuell terapeut mv\. det er en forutsetning at behandlingen er et ledd i en medisinsk behandlingsplan for å bedre arbeidsevnen\./i
-    );
-    expect(vilkårsveiledningTekst).toBeVisible();
   });
 
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
@@ -160,7 +146,7 @@ describe('Oppfølging', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
 
     const harInnbyggetBehovForAktivBehandling = screen.getByRole('group', {
-      name: 'Har innbygger behov for aktiv behandling?',
+      name: 'a: Har innbygger behov for aktiv behandling?',
     });
 
     const neiFeltHarInnbyggerBehovForAktivBehandling = within(harInnbyggetBehovForAktivBehandling).getByRole('radio', {
@@ -170,7 +156,7 @@ describe('Oppfølging', () => {
     await user.click(neiFeltHarInnbyggerBehovForAktivBehandling);
 
     const harInnbyggerBehovForArbeidsrettetTiltakFelt = screen.getByRole('group', {
-      name: 'Har innbygger behov for arbeidsrettet tiltak?',
+      name: 'b: Har innbygger behov for arbeidsrettet tiltak?',
     });
     const neiHarInnbyggerBehovForArbeidsrettetTiltakFelt = within(
       harInnbyggerBehovForArbeidsrettetTiltakFelt

@@ -22,18 +22,14 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
       prosessering={flyt.prosessering}
       visVenteKort={flyt.visning.visVentekort}
     >
-      {stegSomSkalVises.map((steg) => {
-        if (steg === 'FORESLÅ_VEDTAK') {
-          return (
-            <StegSuspense key={steg}>
-              <ForeslåVedtakMedDataFetching
-                behandlingsReferanse={behandlingsReferanse}
-                behandlingVersjon={behandlingVersjon}
-              />
-            </StegSuspense>
-          );
-        }
-      })}
+      {stegSomSkalVises.includes('FORESLÅ_VEDTAK') && (
+        <StegSuspense>
+          <ForeslåVedtakMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            behandlingVersjon={behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
     </GruppeSteg>
   );
 };

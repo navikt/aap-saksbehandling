@@ -1,171 +1,86 @@
-import { describe, test, expect, beforeEach } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
-import { render, screen, within } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
-import { SoningsgrunnlagResponse } from 'lib/types/types';
+import { render, screen } from '@testing-library/react';
+import { Soningsgrunnlag } from 'lib/types/types';
+import userEvent from '@testing-library/user-event';
+
+const soningsgrunnlag: Soningsgrunnlag = {
+  soningsforhold: [
+    {
+      institusjonstype: 'Fengsel',
+      oppholdstype: 'Soningsfange',
+      status: 'AKTIV',
+      oppholdFra: '2022-10-23',
+      avsluttetDato: '2025-10-23',
+      kildeinstitusjon: 'Azkaban',
+    },
+  ],
+  vurderinger: [
+    {
+      vurderingsdato: '2022-10-23',
+      vurdering: undefined,
+      status: 'UAVKLART',
+    },
+  ],
+};
 
 const user = userEvent.setup();
 
 describe('Soningsvurdering', () => {
-  beforeEach(() => {
-    render(
-      <Soningsvurdering
-        behandlingsreferanse={'smooth-reference'}
-        behandlingVersjon={0}
-        grunnlag={{ soningsopphold: [] } as SoningsgrunnlagResponse}
-        readOnly={false}
-      />
-    );
+  it('har overskrift på nivå 3', () => {
+    render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
+    screen.logTestingPlaygroundURL();
+    expect(screen.getByRole('heading', { level: 3, name: 'Soning § 11-26' })).toBeVisible();
   });
 
-  test('har overskrift Soningsvurdering § 11-26', () => {
-    expect(screen.getByRole('heading', { name: 'Soning § 11-26', level: 3 })).toBeVisible();
+  it('har en tekst som informerer om at søker har soningsforhold', () => {
+    render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
+    expect(screen.getByText('Søker har følgende soningsforhold')).toBeVisible();
   });
 
-  test('viser melding om at søker har soningsforhold', () => {
-    expect(screen.getByText('Vi har fått informasjon om at søker har soningsforhold')).toBeVisible();
-  });
-
-  describe('vedleggspanel', () => {
-    test('har en liste over dokumenter som kan tilknyttes vurderingen', () => {
-      const tilknyttedeDokumenterListe = screen.getByRole('group', {
-        name: 'Dokumenter funnet som er relevante for vurdering av AAP under straffegjennomføring §11-26',
-      });
-      expect(tilknyttedeDokumenterListe).toBeVisible();
-    });
-
-    test('listen over dokumenter har korrekt beskrivelse', () => {
-      expect(screen.getByText('Les dokumentene og tilknytt eventuelt dokumenter til 11-26 vurderingen')).toBeVisible();
-    });
-
-    // TODO: Test feiler fordi dokumenterBruktIVurdering ikke blir oppdatert når testen kjører, fungerer i nettleser.
-    // Fiks test når vi faktisk skal bruke dokumentlisten
-    test.skip('skal vise en liste med tilknyttede dokumenter som har blitt valgt', async () => {
-      const rad = screen.getByRole('row', {
-        name: /^Sykemelding/,
-      });
-
-      await user.click(
-        within(rad).getByRole('checkbox', {
-          name: 'Tilknytt dokument til vurdering',
-        })
-      );
-
-      const list = screen.getByRole('list', {
-        name: 'Tilknyttede dokumenter',
-      });
-
-      const dokument = within(list).getByText('Sykemelding');
-      expect(dokument).toBeVisible();
-    });
-  });
-
-  test('viser kun spørsmål om søker gjennomfører straff utenfor fengsel initielt', () => {
-    expect(screen.getByRole('group', { name: 'Gjennomfører søker straff utenfor fengsel?' })).toBeVisible();
+  it('har en beskrivelse av hvordan vilkåret skal vurderes', () => {
+    render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
     expect(
-      screen.queryByText('Skriv en beskrivelse av hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel')
-    ).not.toBeInTheDocument();
-    expect(screen.queryByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' })).not.toBeInTheDocument();
-  });
-
-  test('viser feilmelding dersom man ikke har svart på om søker soner straff i fengsel', async () => {
-    await user.click(screen.getByText('Bekreft'));
-
-    expect(screen.getByText('Du må oppgi om søker soner straff i eller utenfor fengsel')).toBeVisible();
-  });
-
-  test('viser begrunnelsesfelt når straff sones utenfor fengsel', async () => {
-    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
-      name: 'Gjennomfører søker straff utenfor fengsel?',
-    });
-    await user.click(within(straffUtenforFengselSpærsmål).getByRole('radio', { name: 'Ja' }));
-
-    expect(
-      screen.getByText('Skriv en beskrivelse av hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel')
+      screen.getByText(
+        'Under opphold i fengsel har ikke søker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP'
+      )
     ).toBeVisible();
   });
 
-  test('viser feilmelding dersom begrunnelse for vurderingen av soning utenfor fengsel ikke er besvart', async () => {
-    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
-      name: 'Gjennomfører søker straff utenfor fengsel?',
-    });
-    await user.click(within(straffUtenforFengselSpærsmål).getByText('Ja'));
-    await user.click(screen.getByText('Bekreft'));
+  it('har en tabell som lister opp soningsopphold', () => {
+    render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
+    expect(screen.getAllByRole('row')).toHaveLength(2);
+  });
 
+  it('har et felt for begrunnelse', () => {
+    render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
     expect(
-      screen.getByText('Du må begrunne hvorfor det er vurdert at søker gjennomfører straff utenfor fengsel')
+      screen.getByRole('textbox', {
+        name: 'Vurder om medlemmet soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
+      })
     ).toBeVisible();
   });
 
-  test('viser valg for om søker har arbeid utenfor institusjonen når straff gjennomføres i fengsel', async () => {
-    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
-      name: 'Gjennomfører søker straff utenfor fengsel?',
-    });
-    await user.click(within(straffUtenforFengselSpærsmål).getByRole('radio', { name: 'Nei' }));
-
-    expect(screen.getByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' })).toBeVisible();
+  it('har et for å avgjøre om ytelsen skal stanses', () => {
+    render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
+    expect(screen.getByRole('group', { name: 'Skal ytelsen stoppes på grunn av soning?' })).toBeVisible();
   });
 
-  test('Spørsmål om arbeid utenfor institusjon må besvares', async () => {
-    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
-      name: 'Gjennomfører søker straff utenfor fengsel?',
-    });
-    await user.click(within(straffUtenforFengselSpærsmål).getByRole('radio', { name: 'Nei' }));
-    await user.click(screen.getByText('Bekreft'));
-
-    expect(screen.getByText('Du må svare på om søker har arbeid utenfor institusjonen')).toBeVisible();
+  it('datofelt for når vurderingen skal gjelde fra vises ikke på den første vurderingen', () => {
+    render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
+    expect(screen.queryByRole('textbox', { name: 'Vurderingen skal gjelde fra dato' })).not.toBeInTheDocument();
   });
 
-  test('viser begrunnelsesfelt når søker arbeider utenfor institusjonen', async () => {
-    const straffUtenforFengselSpørsmål = screen.getByRole('group', {
-      name: 'Gjennomfører søker straff utenfor fengsel?',
-    });
-    await user.click(within(straffUtenforFengselSpørsmål).getByRole('radio', { name: 'Nei' }));
-
-    const arbeidUtenforFengselSpærsmål = screen.getByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' });
-    await user.click(within(arbeidUtenforFengselSpærsmål).getByRole('radio', { name: 'Ja' }));
-
-    expect(
-      screen.getByText('Skriv en beskrivelse av hvorfor det er vurdert at søker har arbeid utenfor institusjonen')
-    ).toBeVisible();
+  it('dato for når vurderingen skal gjelde fra vises som ren tekst på den første vurderingen', () => {
+    render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
+    expect(screen.getByText('Vurderingen gjelder fra dato')).toBeVisible();
+    expect(screen.getAllByText('23.10.2022')[1]).toBeVisible(); // Det finnes en lik dato i tabellen også
   });
 
-  test('dersom søker jobber utenfor institusjon må dato for første arbeidsdag registreres', async () => {
-    const straffUtenforFengselSpørsmål = screen.getByRole('group', {
-      name: 'Gjennomfører søker straff utenfor fengsel?',
-    });
-    await user.click(within(straffUtenforFengselSpørsmål).getByRole('radio', { name: 'Nei' }));
-
-    const arbeidUtenforFengselSpærsmål = screen.getByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' });
-    await user.click(within(arbeidUtenforFengselSpærsmål).getByRole('radio', { name: 'Ja' }));
-    expect(screen.getByRole('textbox', { name: 'Dato for første arbeidsdag' })).toBeVisible();
-  });
-
-  test('gir feilmelding dersom dato for første arbeidsdag ikke er besvart', async () => {
-    const straffUtenforFengselSpærsmål = screen.getByRole('group', {
-      name: 'Gjennomfører søker straff utenfor fengsel?',
-    });
-    await user.click(within(straffUtenforFengselSpærsmål).getByRole('radio', { name: 'Nei' }));
-
-    const arbeidUtenforFengselSpørsmål = screen.getByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' });
-    await user.click(within(arbeidUtenforFengselSpørsmål).getByRole('radio', { name: 'Ja' }));
-    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-    expect(screen.getByText('Dato for første arbeidsdag må registreres')).toBeVisible();
-  });
-
-  test('gir feilmelding dersom man ikke begrunner hvorfor det er vurdert at søker har arbeid utenfor institusjonen', async () => {
-    const straffUtenforFengselSpørsmål = screen.getByRole('group', {
-      name: 'Gjennomfører søker straff utenfor fengsel?',
-    });
-    await user.click(within(straffUtenforFengselSpørsmål).getByRole('radio', { name: 'Nei' }));
-
-    const arbeidUtenforFengselSpørsmål = screen.getByRole('group', { name: 'Har søker arbeid utenfor institusjonen?' });
-    await user.click(within(arbeidUtenforFengselSpørsmål).getByRole('radio', { name: 'Ja' }));
-
-    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-
-    expect(
-      screen.getByText('Du må begrunne hvorfor det er vurdert at søker har arbeid utenfor institusjonen')
-    ).toBeVisible();
+  it('viser et datofelt for når vurderingen skal gjelde fra så lenge det ikke er den første vurderingen', async () => {
+    render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
+    const leggTilNyVurderingKnapp = screen.getByRole('button', { name: /legg til ny vurdering/i });
+    await user.click(leggTilNyVurderingKnapp);
+    expect(screen.getByRole('textbox', { name: 'Vurderingen skal gjelde fra dato' })).toBeVisible();
   });
 });

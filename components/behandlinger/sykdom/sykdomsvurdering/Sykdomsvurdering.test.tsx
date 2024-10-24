@@ -19,7 +19,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
 
   it('skal ha en liste over tilknyttede dokumenter til vilkåret ', () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
-    const tilknyttedeDokumenterListe = screen.getByRole('list', { name: 'Tilknyttede dokumenter' });
+    const tilknyttedeDokumenterListe = screen.getByText('Tilknyttede dokumenter');
     expect(tilknyttedeDokumenterListe).toBeVisible();
   });
 
@@ -32,9 +32,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
   it('Skal vise korrekt description på begrunnelsesfelt', async () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
 
-    const label = screen.getByText(
-      'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige? Hvis yrkesskade er funnet: vurder mot YS'
-    );
+    const label = screen.getByText('Hvilken sykdom / skade / lyte. Hva er det mest vesentlige?');
 
     expect(label).toBeVisible();
   });

@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import {
   AktivitetspliktHendelser,
   AlderGrunnlag,
+  ArbeidsevneGrunnlag,
   BarnetilleggGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingPersoninfo,
@@ -25,14 +26,14 @@ import {
   SettPåVent,
   SimulerMeldeplikt,
   SimulertMeldeplikt,
-  SoningsgrunnlagResponse,
+  Soningsgrunnlag,
   StudentGrunnlag,
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
   VenteInformasjon,
 } from 'lib/types/types';
-import { fetchProxy, fetchPdf } from 'lib/services/fetchProxy';
+import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { logError, logWarning } from '@navikt/aap-felles-utils';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
@@ -43,7 +44,7 @@ export const hentBehandling = async (behandlingsReferanse: string): Promise<Deta
   try {
     return await fetchProxy<DetaljertBehandling>(url, saksbehandlingApiScope, 'GET');
   } catch (e) {
-    logWarning(`Fant ikke behandling med referanse ${behandlingsReferanse}`);
+    logWarning(`Fant ikke behandling med referanse ${behandlingsReferanse}`, JSON.stringify(e));
     notFound();
   }
 };
@@ -53,28 +54,19 @@ export const hentSak = async (saksnummer: string): Promise<SaksInfo> => {
   try {
     return await fetchProxy<SaksInfo>(url, saksbehandlingApiScope, 'GET');
   } catch (e) {
-    logWarning(`Fant ikke sak med referanse ${saksnummer}`);
-    notFound();
-  }
-};
-export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
-  try {
-    return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
-  } catch (e) {
-    logWarning(`Fant ikke sak med referanse ${saksnummer}`);
+    logWarning(`Fant ikke sak med referanse ${saksnummer}`, JSON.stringify(e));
     notFound();
   }
 };
 
+export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
+  return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentBehandlingPersoninfo = async (behandlingsreferanse: string): Promise<BehandlingPersoninfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/personinformasjon`;
-  try {
-    return await fetchProxy<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
-  } catch (e) {
-    logWarning(`Fant ikke behandling med referanse ${behandlingsreferanse}`);
-    notFound();
-  }
+  return await fetchProxy<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const lagreBruddPåAktivitetsplikten = async (aktivitet: BruddAktivitetsplikt) => {
@@ -84,7 +76,9 @@ export const lagreBruddPåAktivitetsplikten = async (aktivitet: BruddAktivitetsp
 
 export const hentAktivitetspliktHendelser = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}`;
-  return await fetchProxy<AktivitetspliktHendelser>(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy<AktivitetspliktHendelser>(url, saksbehandlingApiScope, 'GET', undefined, [
+    `aktivitetsplikt/${saksnummer}`,
+  ]);
 };
 
 export const hentAlleSaker = async (): Promise<SaksInfo[]> => {
@@ -148,6 +142,11 @@ export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string)
   return await fetchProxy<FritakMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentFastsettArbeidsevneGrunnlag = async (behandlingsReferanse: string): Promise<ArbeidsevneGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/arbeidsevne`;
+  return await fetchProxy<ArbeidsevneGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentBistandsbehovGrunnlag = async (behandlingsReferanse: string): Promise<BistandsGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/bistand`;
   return await fetchProxy<BistandsGrunnlag>(url, saksbehandlingApiScope, 'GET');
@@ -170,9 +169,9 @@ export const hentHelseInstitusjonsVurdering = async (
   return fetchProxy<HelseinstitusjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentSoningsvurdering = async (behandlingsreferanse: string): Promise<SoningsgrunnlagResponse> => {
+export const hentSoningsvurdering = async (behandlingsreferanse: string): Promise<Soningsgrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/institusjon/soning`;
-  return fetchProxy<SoningsgrunnlagResponse>(url, saksbehandlingApiScope, 'GET');
+  return fetchProxy<Soningsgrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentTilkjentYtelse = async (behandlingsReferanse: string): Promise<TilkjentYtelseGrunnlag> => {
@@ -181,7 +180,9 @@ export const hentTilkjentYtelse = async (behandlingsReferanse: string): Promise<
 };
 export const hentFlyt = async (behandlingsReferanse: string): Promise<BehandlingFlytOgTilstand> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
-  return await fetchProxy<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
+    `flyt/${behandlingsReferanse}`,
+  ]);
 };
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {
@@ -217,6 +218,11 @@ export const settBehandlingPåVent = async (referanse: string, requestBody: Sett
 export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/vente-informasjon`;
   return await fetchProxy<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const forberedBehandling = async (referanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentLocalToken = async () => {

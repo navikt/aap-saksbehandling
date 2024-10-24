@@ -20,6 +20,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
+import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 
 interface FormFields {
   harSkadeSykdomEllerLyte: string;
@@ -104,8 +105,6 @@ export const SykdomsvurderingMedYrkesskade = ({
       },
       dokumenterBruktIVurderingen: {
         type: 'checkbox_nested',
-        label: 'Dokumenter funnet som er relevant for vurdering av §11-22 1.ledd og §11-5',
-        description: 'Tilknytt minst ett dokument til §11-22 1.ledd og §11-5 vurdering',
       },
     },
     { shouldUnregister: true, readOnly: readOnly }
@@ -174,7 +173,12 @@ export const SykdomsvurderingMedYrkesskade = ({
 
         <RegistrertBehandler />
 
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
+        <CheckboxWrapper
+          name={'dokumenterBruktIVurderingen'}
+          control={form.control}
+          label={'Dokumenter funnet som er relevant for vurdering av §11-5'}
+          description={'Tilknytt minst ett dokument §11-5 vurdering'}
+        >
           <DokumentTabell
             dokumenter={tilknyttedeDokumenter.map((d) => ({
               journalpostId: d.journalpostId,
@@ -183,7 +187,7 @@ export const SykdomsvurderingMedYrkesskade = ({
               erTilknyttet: false,
             }))}
           />
-        </FormField>
+        </CheckboxWrapper>
 
         <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} />
