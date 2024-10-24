@@ -19,7 +19,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
 
   it('skal ha en liste over tilknyttede dokumenter til vilkåret ', () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
-    const tilknyttedeDokumenterListe = screen.getByRole('heading', { name: 'Tilknyttede dokumenter' });
+    const tilknyttedeDokumenterListe = screen.getByText('Tilknyttede dokumenter');
     expect(tilknyttedeDokumenterListe).toBeVisible();
   });
 
