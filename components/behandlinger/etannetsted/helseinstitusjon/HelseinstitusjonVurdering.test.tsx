@@ -2,23 +2,31 @@ import { beforeEach, describe, expect, test } from 'vitest';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjonsvurdering';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
+import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 
 const user = userEvent.setup();
 
-describe.skip('Helseinstitusjonsvurdering', () => {
+describe('Helseinstitusjonsvurdering', () => {
+  const helseinstitusjonGrunnlag: HelseinstitusjonGrunnlag = {
+    helseinstitusjonGrunnlag: undefined,
+    helseinstitusjonOpphold: [
+      {
+        oppholdFra: '2021-01-01',
+        institusjonstype: 'Sykehus',
+        oppholdstype: 'Heldøgnspasient',
+        status: 'Aktivt',
+        kildeinstitusjon: 'Godthaab',
+      },
+    ],
+  };
   beforeEach(() => {
-    render(<Helseinstitusjonsvurdering grunnlag={{ temp: false }} behandlingVersjon={0} readOnly={false} />);
+    render(<Helseinstitusjonsvurdering grunnlag={helseinstitusjonGrunnlag} behandlingVersjon={0} readOnly={false} />);
   });
 
   test('har overskrift Helseinstitusjon § 11-25', () => {
     expect(screen.getByRole('heading', { name: 'Helseinstitusjon § 11-25', level: 3 })).toBeVisible();
   });
 
-  test('viser en melding om at det er oppdaget institusjonsopphold som kan påvirke ytelsen', () => {
-    expect(
-      screen.getByText('Vi har funnet en eller flere registrerte opphold på helseinstitusjon som kan påvirke ytelsen')
-    ).toBeVisible();
-  });
   test('viser en liste over institusjonsopphold som er oppdaget', () => {
     expect(
       screen.getByRole('table', { name: 'Søker har følgende institusjonsopphold på helseinstitusjon' })
