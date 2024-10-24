@@ -81,5 +81,5 @@
   "resolutions": {
     "prosemirror-model": "1.19.4"
   },
-  "packageManager": "yarn@4.5.0"
+  "packageManager": "yarn@4.5.1"
 }
