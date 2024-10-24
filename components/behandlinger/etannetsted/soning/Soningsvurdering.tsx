@@ -87,7 +87,13 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
 
   return (
     <VilkårsKort heading={'Soning § 11-26'} steg={'DU_ER_ET_ANNET_STED'} icon={<PadlockLockedIcon />}>
-      <Form onSubmit={handleSubmit} steg={'DU_ER_ET_ANNET_STED'} status={status} isLoading={isLoading}>
+      <Form
+        onSubmit={handleSubmit}
+        steg={'DU_ER_ET_ANNET_STED'}
+        status={status}
+        isLoading={isLoading}
+        visBekreftKnapp={!readOnly}
+      >
         <InstitusjonsoppholdTabell
           label="Søker har følgende soningsforhold"
           beskrivelse="Under opphold i fengsel har ikke søker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP"
@@ -134,31 +140,34 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
                   readOnly={readOnly}
                 />
               )}
-              {!erFørsteVurdering && (
-                <Button
-                  type={'button'}
-                  icon={<TrashIcon />}
-                  className={'fit-content-button'}
-                  variant={'tertiary'}
-                  size={'small'}
-                  onClick={() => remove(index)}
-                >
-                  Fjern vurdering
-                </Button>
-              )}
+              {!erFørsteVurdering ||
+                (!readOnly && (
+                  <Button
+                    type={'button'}
+                    icon={<TrashIcon />}
+                    className={'fit-content-button'}
+                    variant={'tertiary'}
+                    size={'small'}
+                    onClick={() => remove(index)}
+                  >
+                    Fjern vurdering
+                  </Button>
+                ))}
             </div>
           );
         })}
-        <Button
-          type={'button'}
-          icon={<PlusCircleIcon />}
-          className={'fit-content-button'}
-          variant={'tertiary'}
-          size={'small'}
-          onClick={() => append({ begrunnelse: '', fraDato: '', skalOpphøre: '' })}
-        >
-          Legg til ny vurdering
-        </Button>
+        {!readOnly && (
+          <Button
+            type={'button'}
+            icon={<PlusCircleIcon />}
+            className={'fit-content-button'}
+            variant={'tertiary'}
+            size={'small'}
+            onClick={() => append({ begrunnelse: '', fraDato: '', skalOpphøre: '' })}
+          >
+            Legg til ny vurdering
+          </Button>
+        )}
       </Form>
     </VilkårsKort>
   );
