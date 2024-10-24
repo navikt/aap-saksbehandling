@@ -1,9 +1,6 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import styles from './layout.module.css';
 import { ReactNode, Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import { InformasjonsKolonne } from 'components/informasjonskolonne/InformasjonsKolonne';
-import { getStegSomSkalVises } from 'lib/utils/steg';
 import { StegGruppe } from 'lib/types/types';
 
 const Layout = async ({
@@ -21,8 +18,6 @@ const Layout = async ({
     notFound();
   }
 
-  const stegSomSkalVises = getStegSomSkalVises(decodeURI(params.aktivGruppe) as StegGruppe, flytResponse);
-
   return (
     <>
       <Suspense
@@ -33,7 +28,6 @@ const Layout = async ({
           </>
         }
       >
-        <InformasjonsKolonne stegSomSkalVises={stegSomSkalVises} className={styles.venstrekolonne} />
         {children}
       </Suspense>
     </>
