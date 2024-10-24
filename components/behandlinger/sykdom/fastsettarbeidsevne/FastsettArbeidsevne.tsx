@@ -98,7 +98,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
 
   return (
     <VilkårsKort
-      heading={'Vurdering av etablert og uutnyttet arbeidsevne'}
+      heading={'Vurdering av etablert og uutnyttet arbeidsevne § 11-23'}
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
       defaultOpen={showAsOpen}
@@ -133,9 +133,6 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
               />
               <div className={styles.timekolonne}>
                 {regnOmTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`))}
-                {/*
-                {prosentTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`)) + ' timer'}
-		*/}
               </div>
             </div>
             <TextFieldWrapper
