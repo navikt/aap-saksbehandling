@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest';
-import { Helseinstitusjonsvurdering } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjonsvurdering';
+import { Helseinstitusjon } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjon';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
@@ -31,7 +31,7 @@ const x: HelseinstitusjonGrunnlag = {
 
 describe.skip('Helseinstitusjonsvurdering', () => {
   beforeEach(() => {
-    render(<Helseinstitusjonsvurdering grunnlag={x} behandlingVersjon={0} readOnly={false} />);
+    render(<Helseinstitusjon grunnlag={x} behandlingVersjon={0} readOnly={false} />);
   });
 
   test('har overskrift Helseinstitusjon § 11-25', () => {

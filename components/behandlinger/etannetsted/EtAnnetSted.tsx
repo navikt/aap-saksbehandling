@@ -1,7 +1,7 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { HelseinstitusjonsvurderingMedDataFetching } from 'components/behandlinger/etannetsted/helseinstitusjon/HelseinstitusjonsvurderingMedDataFetching';
+import { HelseinstitusjonMedDataFetching } from 'components/behandlinger/etannetsted/helseinstitusjon/HelseinstitusjonMedDataFetching';
 import { SoningsvurderingMedDataFetching } from './soning/SoningsvurderingMedDataFetching';
 import { Behovstype } from 'lib/utils/form';
 
@@ -32,7 +32,7 @@ export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
     >
       {vurderHelseinstitusjon && (
         <StegSuspense>
-          <HelseinstitusjonsvurderingMedDataFetching
+          <HelseinstitusjonMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             behandlingVersjon={flyt.behandlingVersjon}
