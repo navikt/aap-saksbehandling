@@ -3,9 +3,8 @@ import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { Oppfølging } from './Oppfølging';
 
+const user = userEvent.setup();
 describe('Oppfølging', () => {
-  const user = userEvent.setup();
-
   it('Skal ha en overskrift', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
 
@@ -41,81 +40,56 @@ describe('Oppfølging', () => {
     expect(felt).toBeVisible();
   });
 
-  it('Skal ikke vise felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid dersom en av de foregående feltene er besvart med nei', async () => {
+  it('har felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
     expect(
       screen.queryByRole('group', {
         name: 'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
       })
-    ).not.toBeInTheDocument();
-
-    const harInnbyggetBehovForAktivBehandling = screen.getByRole('group', {
-      name: 'a: Har innbygger behov for aktiv behandling?',
-    });
-
-    const jaFeltHarInnbyggerBehovForAktivBehandling = within(harInnbyggetBehovForAktivBehandling).getByRole('radio', {
-      name: 'Ja',
-    });
-
-    await user.click(jaFeltHarInnbyggerBehovForAktivBehandling);
-
-    const harInnbyggerBehovForArbeidsrettetTiltakFelt = screen.getByRole('group', {
-      name: 'b: Har innbygger behov for arbeidsrettet tiltak?',
-    });
-    const neiHarInnbyggerBehovForArbeidsrettetTiltakFelt = within(
-      harInnbyggerBehovForArbeidsrettetTiltakFelt
-    ).getByRole('radio', { name: 'Nei' });
-
-    await user.click(neiHarInnbyggerBehovForArbeidsrettetTiltakFelt);
-
-    expect(
-      screen.queryByRole('group', {
-        name: 'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
-      })
-    ).not.toBeInTheDocument();
+    ).toBeVisible();
   });
 
-  it('Skal vise felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid dersom begge foregående feltene er besvart med nei', async () => {
+  it('skjuler felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid dersom a er besvart med ja', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
-    expect(
-      screen.queryByRole('group', {
-        name: 'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
-      })
-    ).not.toBeInTheDocument();
 
-    const harInnbyggetBehovForAktivBehandling = screen.getByRole('group', {
-      name: 'a: Har innbygger behov for aktiv behandling?',
-    });
+    expect(finnGruppeForBokstavC()).toBeVisible();
 
-    const neiFeltHarInnbyggerBehovForAktivBehandling = within(harInnbyggetBehovForAktivBehandling).getByRole('radio', {
-      name: 'Nei',
-    });
+    await velgJa(finnGruppeForBokstavA());
+    expect(finnGruppeForBokstavC()).not.toBeInTheDocument();
+  });
 
-    await user.click(neiFeltHarInnbyggerBehovForAktivBehandling);
+  it('skjuler felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid dersom b er besvart med nei', async () => {
+    render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
 
-    const harInnbyggerBehovForArbeidsrettetTiltakFelt = screen.getByRole('group', {
-      name: 'b: Har innbygger behov for arbeidsrettet tiltak?',
-    });
-    const neiHarInnbyggerBehovForArbeidsrettetTiltakFelt = within(
-      harInnbyggerBehovForArbeidsrettetTiltakFelt
-    ).getByRole('radio', { name: 'Nei' });
+    expect(finnGruppeForBokstavC()).toBeVisible();
 
-    await user.click(neiHarInnbyggerBehovForArbeidsrettetTiltakFelt);
+    await velgJa(finnGruppeForBokstavB());
+    expect(finnGruppeForBokstavC()).not.toBeInTheDocument();
+  });
 
-    expect(
-      await screen.findByRole('group', {
-        name: 'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
-      })
-    ).toBeInTheDocument();
+  it('skjuler felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid dersom både a og b er besvart med ja', async () => {
+    render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
+
+    expect(finnGruppeForBokstavC()).toBeVisible();
+
+    await velgJa(finnGruppeForBokstavA());
+    await velgJa(finnGruppeForBokstavB());
+
+    expect(finnGruppeForBokstavC()).not.toBeInTheDocument();
+  });
+
+  it('viser felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid dersom a og b er besvart med nei', async () => {
+    render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
+    await velgNei(finnGruppeForBokstavA());
+    await velgNei(finnGruppeForBokstavB());
+
+    expect(finnGruppeForBokstavC()).toBeVisible();
   });
 
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
 
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-
-    await user.click(bekreftKnapp);
-
+    await trykkPåBekreft();
     const feilmelding = screen.getByText('Du må gi en begrunnelse om innbygger har behov for oppfølging');
     expect(feilmelding).toBeVisible();
   });
@@ -123,10 +97,7 @@ describe('Oppfølging', () => {
   it('Skal vise feilmelding dersom feltet om innbygger har behov for aktiv behandling ikke er besvart', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
 
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-
-    await user.click(bekreftKnapp);
-
+    await trykkPåBekreft();
     const feilmelding = screen.getByText('Du må svare på om innbygger har behov for aktiv behandling');
     expect(feilmelding).toBeVisible();
   });
@@ -134,9 +105,7 @@ describe('Oppfølging', () => {
   it('Skal vise feilmelding dersom feltet om innbygger har behov for arbeidsrettet tiltak ikke er besvart', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} />);
 
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-
-    await user.click(bekreftKnapp);
+    await trykkPåBekreft();
 
     const feilmelding = screen.getByText('Du må svare på om innbygger har behov for arbeidsrettet tiltak');
     expect(feilmelding).toBeVisible();
@@ -164,13 +133,27 @@ describe('Oppfølging', () => {
 
     await user.click(neiHarInnbyggerBehovForArbeidsrettetTiltakFelt);
 
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-
-    await user.click(bekreftKnapp);
-
+    await trykkPåBekreft();
     const feilmelding = screen.getByText(
       'Du må svare på om innbygger anses for å ha en viss mulighet til å komme i arbeid'
     );
     expect(feilmelding).toBeVisible();
   });
 });
+
+const trykkPåBekreft = async () => await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+const finnGruppeForBokstavA = () => screen.getByRole('group', { name: 'a: Har innbygger behov for aktiv behandling?' });
+const finnGruppeForBokstavB = () =>
+  screen.getByRole('group', { name: 'b: Har innbygger behov for arbeidsrettet tiltak?' });
+const finnGruppeForBokstavC = () =>
+  screen.queryByRole('group', {
+    name: 'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+  });
+
+const velgJa = async (group: HTMLElement) => {
+  await user.click(within(group).getByRole('radio', { name: 'Ja' }));
+};
+
+const velgNei = async (group: HTMLElement) => {
+  await user.click(within(group).getByRole('radio', { name: 'Nei' }));
+};
