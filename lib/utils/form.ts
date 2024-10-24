@@ -26,7 +26,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5003':
       return 'Avklar sykdom (§ 11-5)';
     case '5004':
-      return '2.ledd Fastsett arbeidsevne (§ 11-23)';
+      return 'Vurdering av etablert og uutnyttet arbeidsevne (§ 11-23)';
     case '5005':
       return 'Fritak meldeplikt (§ 11-10)';
     case '5006':
