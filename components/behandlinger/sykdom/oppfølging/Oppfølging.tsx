@@ -118,11 +118,11 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
           }
         />
         <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.erBehovForAktivBehandling} />
-        <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} />
+        <FormField form={form} formField={formFields.erBehovForAktivBehandling} horizontalRadio />
+        <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} horizontalRadio />
         {form.watch('erBehovForAktivBehandling') !== JaEllerNei.Ja &&
           form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
-            <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} />
+            <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
           )}
       </Form>
     </VilkårsKort>
