@@ -18,6 +18,10 @@
   box-shadow: var(--a-shadow-xsmall);
 }
 
+:is(.vilkårsKortNAV, .vilkårsKortNAY):last-of-type {
+  margin-bottom: var(--a-spacing-18);
+}
+
 .header,
 .content,
 .header:hover,
