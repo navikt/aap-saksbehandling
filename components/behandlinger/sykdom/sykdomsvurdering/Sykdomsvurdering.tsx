@@ -152,12 +152,16 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
         />
         <FormField form={form} formField={formFields.begrunnelse} />
         <TilknyttedeDokumenter dokumenter={[]} />
-        <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} />
+        <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
         {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
           <>
-            <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
-            <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense} />
-            <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
+            <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
+            <FormField
+              form={form}
+              formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense}
+              horizontalRadio
+            />
+            <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} horizontalRadio />
           </>
         )}
         {visFeltForNårArbeidsevnenBleNedsatt && <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />}
