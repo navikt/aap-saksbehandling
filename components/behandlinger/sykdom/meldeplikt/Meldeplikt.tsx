@@ -150,6 +150,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
               name={`fritaksvurderinger.${index}.harFritak`}
               rules={{ required: 'Du må svare på om innbygger skal få fritak fra meldeplikt' }}
               readOnly={readOnly}
+              horisontal
             >
               <Radio value={JaEllerNei.Ja}>Ja</Radio>
               <Radio value={JaEllerNei.Nei}>Nei</Radio>
