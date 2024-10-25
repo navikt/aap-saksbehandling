@@ -98,7 +98,8 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       });
     })(event);
   };
-  const showAsOpen = !!(readOnly && grunnlag?.vurderinger && grunnlag.vurderinger.length > 0);
+
+  const showAsOpen = !!grunnlag?.vurderinger && grunnlag.vurderinger.length > 0;
 
   return (
     <VilkårsKort

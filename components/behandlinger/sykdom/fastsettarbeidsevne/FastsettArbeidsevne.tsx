@@ -94,7 +94,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
     })(event);
   };
 
-  const showAsOpen = !!(readOnly && grunnlag?.vurderinger && grunnlag.vurderinger.length >= 1);
+  const showAsOpen = !!grunnlag?.vurderinger && grunnlag.vurderinger.length >= 1;
 
   return (
     <VilkårsKort
