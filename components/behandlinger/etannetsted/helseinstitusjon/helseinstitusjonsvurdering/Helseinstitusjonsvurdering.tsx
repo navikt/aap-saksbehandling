@@ -38,6 +38,7 @@ export const Helseinstitusjonsvurdering = ({ form, helseinstitusjonoppholdIndex,
               label={'Forsørger søker ektefelle eller tilsvarende?'}
               rules={{ required: 'Du må svare på om søker forsørger ektefelle eller tilsvarende' }}
               readOnly={readonly}
+              horisontal
             >
               <Radio value={JaEllerNei.Ja}>Ja</Radio>
               <Radio value={JaEllerNei.Nei}>Nei</Radio>
@@ -50,6 +51,7 @@ export const Helseinstitusjonsvurdering = ({ form, helseinstitusjonoppholdIndex,
                 required: 'Du må svare på om søker har faste utgifter nødvendig for å beholde bolig og andre eiendeler',
               }}
               readOnly={readonly}
+              horisontal
             >
               <Radio value={JaEllerNei.Ja}>Ja</Radio>
               <Radio value={JaEllerNei.Nei}>Nei</Radio>
@@ -62,6 +64,7 @@ export const Helseinstitusjonsvurdering = ({ form, helseinstitusjonoppholdIndex,
                 required: 'Du må svare på om søker får fri kost og losji',
               }}
               readOnly={readonly}
+              horisontal
             >
               <Radio value={JaEllerNei.Ja}>Ja</Radio>
               <Radio value={JaEllerNei.Nei}>Nei</Radio>
