@@ -29,7 +29,6 @@ const user = userEvent.setup();
 describe('Soningsvurdering', () => {
   it('har overskrift på nivå 3', () => {
     render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
-    screen.logTestingPlaygroundURL();
     expect(screen.getByRole('heading', { level: 3, name: 'Soning § 11-26' })).toBeVisible();
   });
 
