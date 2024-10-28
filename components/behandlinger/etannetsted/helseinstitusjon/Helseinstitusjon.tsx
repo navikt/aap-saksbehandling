@@ -24,15 +24,11 @@ interface Props {
 }
 
 export interface HelseinstitusjonsFormFields {
-  helseinstitusjonsvurderinger: HelseinstitusjonInterface[];
-}
-
-interface HelseinstitusjonInterface {
-  periode: Periode;
-  vurderinger?: Vurdering[];
+  helseinstitusjonsvurderinger: Vurdering[];
 }
 
 interface Vurdering {
+  periode: Periode;
   begrunnelse: string;
   harFasteUtgifter?: JaEllerNei;
   forsoergerEktefelle?: JaEllerNei;
@@ -43,25 +39,20 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
 
-  const defaultValue: HelseinstitusjonInterface[] = grunnlag.vurderinger.map((helseinstitusjonsperiode) => {
-    return {
-      periode: helseinstitusjonsperiode.periode,
-      vurderinger:
-        helseinstitusjonsperiode.vurderinger && helseinstitusjonsperiode.vurderinger?.length > 0
-          ? helseinstitusjonsperiode.vurderinger.map((vurdering) => {
-              return {
-                begrunnelse: vurdering.begrunnelse,
-                harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
-                forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
-                faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
-              };
-            })
-          : [
-              {
-                begrunnelse: '',
-              },
-            ],
-    };
+  const defaultValue: Vurdering[] = grunnlag.vurderinger.flatMap((item) => {
+    if (item.vurderinger && item.vurderinger.length > 0) {
+      return item.vurderinger.map((vurdering) => {
+        return {
+          begrunnelse: vurdering.begrunnelse,
+          harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
+          forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
+          faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
+          periode: vurdering.periode,
+        };
+      });
+    } else {
+      return [{ begrunnelse: '', periode: item.periode }];
+    }
   });
 
   const { form } = useConfigForm<HelseinstitusjonsFormFields>({
@@ -78,11 +69,21 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      console.log(data);
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_HELSEINSTITUSJON,
+          helseinstitusjonVurdering: {
+            vurderinger: data.helseinstitusjonsvurderinger.map((vurdering) => {
+              return {
+                begrunnelse: vurdering.begrunnelse,
+                harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
+                faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
+                forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
+                periode: vurdering.periode,
+              };
+            }),
+          },
         },
         referanse: behandlingsreferanse,
       });
