@@ -36,16 +36,10 @@ interface Props {
 
 export interface AktivitetspliktFormFields {
   brudd: AktivitetspliktBrudd;
-  paragraf: AktivitetspliktParagraf;
   begrunnelse: string;
   perioder: DatoBruddPåAktivitetsplikt[];
+  paragraf?: AktivitetspliktParagraf;
 }
-
-const paragrafOptions: ValuePair<AktivitetspliktParagraf>[] = [
-  { label: '11-7 noe tekst her som forklarer hva 11-7 er for noe', value: 'PARAGRAF_11_7' },
-  { label: '11-8 fravær fra fastsatt aktivitet', value: 'PARAGRAF_11_8' },
-  { label: '11-9 reduksjon av AAP ved brudd på nærmere bestemte aktivitetsplikter', value: 'PARAGRAF_11_9' },
-];
 
 const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
   { label: 'Ikke møtt i tiltak', value: 'IKKE_MØTT_TIL_TILTAK' },
@@ -73,7 +67,10 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         type: 'radio',
         label: 'Velg paragraf',
         rules: { required: 'Du må velge en paragraf' },
-        options: paragrafOptions.filter((paragraf) => paragraf.value !== 'PARAGRAF_11_7'),
+        options: [
+          { label: '11-8 fravær fra fastsatt aktivitet', value: 'PARAGRAF_11_8' },
+          { label: '11-9 reduksjon av AAP ved brudd på nærmere bestemte aktivitetsplikter', value: 'PARAGRAF_11_9' },
+        ],
       },
       begrunnelse: {
         type: 'textarea',
@@ -121,29 +118,21 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
 
             const harOverlappendePerioder = perioderSomOverlapper(perioder);
 
-            let paragraf: AktivitetspliktParagraf;
-
-            if (['IKKE_MØTT_TIL_MØTE', 'IKKE_SENDT_INN_DOKUMENTASJON'].includes(data.brudd)) {
-              paragraf = 'PARAGRAF_11_9';
-            } else if (data.brudd === 'IKKE_AKTIVT_BIDRAG') {
-              paragraf = 'PARAGRAF_11_7';
-            } else {
-              paragraf = data.paragraf;
-            }
-
             if (harOverlappendePerioder) {
               setErrorMessage('Det finnes overlappende perioder');
             } else {
               await opprettAktivitetspliktBrudd({
                 brudd: data.brudd,
                 begrunnelse: data.begrunnelse,
-                paragraf: paragraf,
+                paragraf: data.paragraf,
                 perioder: perioder.map((periode) => {
                   return {
                     fom: formaterDatoForBackend(parse(periode.fom, DATO_FORMATER.ddMMyyyy, new Date())),
                     tom: formaterDatoForBackend(parse(periode.tom, DATO_FORMATER.ddMMyyyy, new Date())),
                   };
                 }),
+                grunn: 'INGEN_GYLDIG_GRUNN',
+                dokumenttype: 'BRUDD',
                 saksnummer: saksnummer,
               });
               await revalidateAktivitetspliktHendelser(saksnummer);

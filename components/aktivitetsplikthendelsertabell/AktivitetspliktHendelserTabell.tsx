@@ -1,7 +1,7 @@
 import { AktivitetspliktHendelse } from 'lib/types/types';
 
 import styles from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell.module.css';
-import { Button, Checkbox, Table } from '@navikt/ds-react';
+import { Button, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 
@@ -38,7 +38,6 @@ export const AktivitetspliktHendelserTabell = ({ aktivitetspliktHendelser }: Pro
                     <Table.HeaderCell>Årsak</Table.HeaderCell>
                     <Table.HeaderCell>Dato fra og med</Table.HeaderCell>
                     <Table.HeaderCell>Dato til og med</Table.HeaderCell>
-                    <Table.HeaderCell>Er gyldig fravær?</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -49,11 +48,6 @@ export const AktivitetspliktHendelserTabell = ({ aktivitetspliktHendelser }: Pro
                         <Table.DataCell>{aktivitetspliktHendelse.brudd}</Table.DataCell>
                         <Table.DataCell>{formaterDatoForFrontend(aktivitetspliktHendelse.periode.fom)}</Table.DataCell>
                         <Table.DataCell>{formaterDatoForFrontend(aktivitetspliktHendelse.periode.tom)}</Table.DataCell>
-                        <Table.DataCell>
-                          <Checkbox size={'small'} hideLabel value={aktivitetspliktHendelse.hendelseId}>
-                            Gyldig fravær
-                          </Checkbox>
-                        </Table.DataCell>
                       </Table.Row>
                     );
                   })}
