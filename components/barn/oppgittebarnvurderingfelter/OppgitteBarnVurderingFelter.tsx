@@ -43,6 +43,7 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
         name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`}
         readOnly={readOnly}
         rules={{ required: 'Du må besvare om det skal beregnes barnetillegg for barnet' }}
+        horisontal
       >
         <Radio value={JaEllerNei.Ja}>Ja</Radio>
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
