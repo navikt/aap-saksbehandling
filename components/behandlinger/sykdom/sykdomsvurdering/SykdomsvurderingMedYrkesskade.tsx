@@ -193,7 +193,7 @@ export const SykdomsvurderingMedYrkesskade = ({
         <FormField form={form} formField={formFields.begrunnelse} />
         <TilknyttedeDokumenter dokumenter={dokumenterBruktIVurderingen} />
         <section>
-          <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} />
+          <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
           <Veiledning
             header={'Slik vurderes dette'}
             tekst={
@@ -205,7 +205,7 @@ export const SykdomsvurderingMedYrkesskade = ({
         {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
           <>
             <section>
-              <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} />
+              <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
               <Veiledning
                 header={'Slik vurderes dette'}
                 tekst={
@@ -215,7 +215,7 @@ export const SykdomsvurderingMedYrkesskade = ({
               />
             </section>
             <section>
-              <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} />
+              <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} horizontalRadio />
               <Veiledning
                 header={'Slik vurderes dette'}
                 tekst={
@@ -225,7 +225,7 @@ export const SykdomsvurderingMedYrkesskade = ({
               />
             </section>
             <section>
-              <FormField form={form} formField={formFields.erÅrsakssammenheng} />
+              <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
               <Veiledning
                 header={'Slik vurderes dette'}
                 tekst={
@@ -244,6 +244,7 @@ export const SykdomsvurderingMedYrkesskade = ({
                     ? 'Er arbeidsevnen nedsatt med minst 50%?'
                     : 'Er arbeidsevnen nedsatt med minst 30%?',
               }}
+              horizontalRadio
             />
 
             {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja &&
