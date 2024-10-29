@@ -58,7 +58,7 @@ export function oppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: Oppd
 }
 
 export function feilregistrerAktivitetspliktBrudd(saksnummer: string, aktivitet: FeilregistrerAktivitetspliktBrudd) {
-  return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/oppdater`, 'POST', aktivitet);
+  return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/feilregistrer`, 'POST', aktivitet);
 }
 
 export function rekjørJobb(jobbId: number) {

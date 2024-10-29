@@ -1,25 +1,27 @@
 'use client';
 
-import { Button, Label, Table } from '@navikt/ds-react';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { Button, Table } from '@navikt/ds-react';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import {
   AktivitetspliktBrudd,
   AktivitetspliktHendelse,
   AktivitetspliktHendelseParagraf,
-  AktivitetspliktParagraf,
+  OppdaterAktivitetsplitGrunn,
 } from 'lib/types/types';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { useState } from 'react';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useSaksnummer } from 'hooks/BehandlingHook';
+import { feilregistrerAktivitetspliktBrudd, oppdaterAktivitetspliktBrudd } from 'lib/clientApi';
+import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 
 interface Props {
   aktivitetspliktHendelse: AktivitetspliktHendelse;
 }
 
 interface Formfields {
-  dokumenttype: string;
-  paragraf: AktivitetspliktParagraf;
+  erFeilregistrering: string;
+  grunn: OppdaterAktivitetsplitGrunn;
 }
 
 export const AktivitetspliktHendelserRow = ({ aktivitetspliktHendelse }: Props) => {
@@ -27,35 +29,23 @@ export const AktivitetspliktHendelserRow = ({ aktivitetspliktHendelse }: Props) 
   const [isOpen, setIsOpen] = useState(false);
 
   const { form, formFields } = useConfigForm<Formfields>({
-    paragraf: {
-      type: 'select',
+    erFeilregistrering: {
+      type: 'radio',
+      label: 'Er dette fraværet en feilregistrering?',
+      options: JaEllerNeiOptions,
+      rules: { required: 'Du må besvare om dette er en feilregistrering' },
+    },
+    grunn: {
+      type: 'radio',
       label: 'Grunn',
       defaultValue: aktivitetspliktHendelse.grunn,
       options: [
-        { label: '', value: '' },
         { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
         { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
         { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
       ],
     },
-    dokumenttype: {
-      type: 'radio',
-      label: 'Dokumenttype',
-      defaultValue: 'BRUDD',
-      options: [
-        {
-          label: 'Brudd',
-          value: 'BRUDD',
-        },
-        {
-          label: 'Feilregistrering',
-          value: 'FEILREGISTRERING',
-        },
-      ],
-    },
   });
-
-  console.log(aktivitetspliktHendelse);
 
   return (
     <Table.ExpandableRow
@@ -65,18 +55,31 @@ export const AktivitetspliktHendelserRow = ({ aktivitetspliktHendelse }: Props) 
       content={
         <form
           onSubmit={form.handleSubmit(async (data) => {
-            if (data.dokumenttype === 'FEILREGISTRERING') {
-              // await feilregisterAktivitetspliktBrudd();
+            if (data.erFeilregistrering === JaEllerNei.Ja) {
+              await feilregistrerAktivitetspliktBrudd(saksnummer, {
+                brudd: aktivitetspliktHendelse.brudd,
+                periode: {
+                  fom: formaterDatoForBackend(new Date(aktivitetspliktHendelse.periode.fom)),
+                  tom: formaterDatoForBackend(new Date(aktivitetspliktHendelse.periode.tom)),
+                },
+                paragraf: aktivitetspliktHendelse.paragraf,
+              });
             } else {
-              // await endreAktivitetspliktBrudd();
+              await oppdaterAktivitetspliktBrudd(saksnummer, {
+                brudd: aktivitetspliktHendelse.brudd,
+                periode: aktivitetspliktHendelse.periode,
+                paragraf: aktivitetspliktHendelse.paragraf,
+                grunn: data.grunn,
+              });
             }
             await revalidateAktivitetspliktHendelser(saksnummer);
           })}
         >
           <div className={'flex-column'}>
-            <Label>Rediger fravær</Label>
-            <FormField form={form} formField={formFields.dokumenttype} />
-            <FormField form={form} formField={formFields.paragraf} />
+            <FormField form={form} formField={formFields.erFeilregistrering} />
+            {form.watch('erFeilregistrering') === JaEllerNei.Nei && (
+              <FormField form={form} formField={formFields.grunn} />
+            )}
 
             <div>
               <Button size={'small'}>Lagre</Button>
@@ -85,8 +88,8 @@ export const AktivitetspliktHendelserRow = ({ aktivitetspliktHendelse }: Props) 
                 type={'button'}
                 variant={'tertiary'}
                 onClick={() => {
-                  form.reset();
                   setIsOpen(false);
+                  form.reset();
                 }}
               >
                 Avbryt
