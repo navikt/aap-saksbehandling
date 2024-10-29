@@ -137,6 +137,9 @@ export type AktivitetspliktHendelser =
 export type AktivitetspliktParagraf =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['paragraf'];
 
+export type AktivitetspliktGrunn =
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['grunn'];
+
 export type AktivitetspliktBrudd =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktRequest']['brudd'];
 

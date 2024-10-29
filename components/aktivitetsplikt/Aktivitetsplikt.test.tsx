@@ -48,6 +48,15 @@ describe('aktivitetsmelding', () => {
     expect(paragrafFelt).toBeVisible();
   });
 
+  it('skal dukke opp et felt for å velge en grunn for fravær dersom man velger paragraf 11-8', async () => {
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_8();
+
+    const grunnFelt = screen.getByRole('combobox', { name: /grunn/i });
+    expect(grunnFelt).toBeVisible();
+  });
+
   it('skal dukke opp et felt for å velge en paragraf dersom man velger ikke møtt i behandling/utredning', async () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
     const ikkeMøttIBehandlingValg = screen.getByRole('radio', { name: /ikke møtt i behandling\/ utredning/i });

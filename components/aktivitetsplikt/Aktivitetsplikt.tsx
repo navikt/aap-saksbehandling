@@ -5,7 +5,12 @@ import { AktivitetspliktHendelserTabell } from 'components/aktivitetsplikthendel
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Alert, Button } from '@navikt/ds-react';
-import { AktivitetspliktBrudd, AktivitetspliktHendelse, AktivitetspliktParagraf } from 'lib/types/types';
+import {
+  AktivitetspliktBrudd,
+  AktivitetspliktGrunn,
+  AktivitetspliktHendelse,
+  AktivitetspliktParagraf,
+} from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
 import { useSaksnummer } from 'hooks/BehandlingHook';
@@ -39,6 +44,7 @@ export interface AktivitetspliktFormFields {
   begrunnelse: string;
   perioder: DatoBruddPåAktivitetsplikt[];
   paragraf?: AktivitetspliktParagraf;
+  grunn?: AktivitetspliktGrunn;
 }
 
 const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
@@ -77,6 +83,17 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         label: 'Begrunnelse',
         description: 'Skriv begrunnelse og henvis eventuelt til rett kilde/dokumentasjon',
         rules: { required: 'Du må skrive en begrunnelse for brudd på aktivitetsplikten' },
+      },
+      grunn: {
+        type: 'select',
+        label: 'Grunn',
+        options: [
+          { label: '', value: '' },
+          { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
+          { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
+          { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
+        ],
+        rules: { required: 'Du må velge en grunn' },
       },
       perioder: {
         type: 'fieldArray',
@@ -131,7 +148,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
                     tom: formaterDatoForBackend(parse(periode.tom, DATO_FORMATER.ddMMyyyy, new Date())),
                   };
                 }),
-                grunn: 'INGEN_GYLDIG_GRUNN',
+                grunn: data.grunn,
                 dokumenttype: 'BRUDD',
                 saksnummer: saksnummer,
               });
@@ -141,6 +158,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         >
           <FormField form={form} formField={formFields.brudd} />
           {skalVelgeParagraf && <FormField form={form} formField={formFields.paragraf} />}
+          {form.watch('paragraf') === 'PARAGRAF_11_8' && <FormField form={form} formField={formFields.grunn} />}
 
           {skalViseDatoFeltOgBegrunnelsesfelt && (
             <div className={'flex-column'}>
