@@ -4,6 +4,7 @@ import { InntektTabell } from 'components/inntekttabell/InntektTabell';
 import { Label, Table } from '@navikt/ds-react';
 import { formaterTilG } from 'lib/utils/string';
 import { UføreInntektTabell } from 'components/uføreinntekttabell/UføreInntektTabell';
+import { sorterEtterÅrIStigendeRekkefølge } from 'lib/utils/arrays';
 
 interface Props {
   grunnlag?: UføreGrunnlag;
@@ -14,11 +15,14 @@ export const UføreVisning = ({ grunnlag }: Props) => {
     throw new Error('Kunne ikke finne påkrevd grunnlag for uføre');
   }
 
-  const foersteAar = grunnlag.inntekter.at(0)?.år;
-  const sisteAar = grunnlag.inntekter.at(-1)?.år;
+  const sorterteInntekter = sorterEtterÅrIStigendeRekkefølge(grunnlag.inntekter);
+  const sorterteUføreinntekter = sorterEtterÅrIStigendeRekkefølge(grunnlag.uføreInntekter);
 
-  const uføreFørsteÅr = grunnlag.uføreInntekter.at(0)?.år;
-  const uføreSisteÅr = grunnlag.uføreInntekter.at(-1)?.år;
+  const foersteAar = sorterteInntekter.at(0)?.år;
+  const sisteAar = sorterteInntekter.at(-1)?.år;
+
+  const uføreFørsteÅr = sorterteUføreinntekter.at(0)?.år;
+  const uføreSisteÅr = sorterteUføreinntekter.at(-1)?.år;
 
   return (
     <div className={'flex-column'}>

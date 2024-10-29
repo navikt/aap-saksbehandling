@@ -7,6 +7,7 @@ import { UføreInntektTabell } from 'components/uføreinntekttabell/UføreInntek
 import { YrkesskadeBeregningTabell } from 'components/yrkesskadeberegningtabell/YrkesskadeBeregningTabell';
 import { Label, Table } from '@navikt/ds-react';
 import { formaterTilG } from 'lib/utils/string';
+import { sorterEtterÅrIStigendeRekkefølge } from 'lib/utils/arrays';
 
 interface Props {
   grunnlag?: YrkesskadeUføreGrunnlag;
@@ -17,16 +18,19 @@ export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
     throw new Error('Kunne ikke finne påkrevd grunnlag for uføre og yrkesskade');
   }
 
+  const sorterteInntekterYS = sorterEtterÅrIStigendeRekkefølge(grunnlag.yrkesskadeGrunnlag.inntekter);
+  const sorterteInntekterUføre = sorterEtterÅrIStigendeRekkefølge(grunnlag.uføreGrunnlag.uføreInntekter);
+
   return (
     <div className={styles.visning}>
       <InntektTabell
-        inntekter={grunnlag?.yrkesskadeGrunnlag.inntekter}
+        inntekter={sorterteInntekterYS}
         gjennomsnittSiste3år={grunnlag?.yrkesskadeGrunnlag.gjennomsnittligInntektSiste3år}
         yrkesevneNedsattÅr={grunnlag?.uføreGrunnlag.nedsattArbeidsevneÅr}
       />
 
       <UføreInntektTabell
-        inntekter={grunnlag.uføreGrunnlag.uføreInntekter}
+        inntekter={sorterteInntekterUføre}
         gjennomsnittSiste3år={grunnlag.uføreGrunnlag.gjennomsnittligInntektSiste3årUfør}
         ytterligereNedsattArbeidsevneÅr={grunnlag.uføreGrunnlag.ytterligereNedsattArbeidsevneÅr}
       />

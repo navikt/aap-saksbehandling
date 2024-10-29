@@ -3,7 +3,10 @@ import { render, screen } from '@testing-library/react';
 import { InntektTabell } from 'components/inntekttabell/InntektTabell';
 import { Inntekt } from 'lib/types/types';
 
-const inntekter: Array<Inntekt> = [{ år: '2020', justertTilMaks6G: 6, inntektIG: 6, inntektIKroner: 1000000 }];
+const inntekter: Array<Inntekt> = [
+  { år: '2021', justertTilMaks6G: 6, inntektIG: 6, inntektIKroner: 1100000 },
+  { år: '2020', justertTilMaks6G: 6, inntektIG: 6, inntektIKroner: 1000000 },
+];
 
 describe('tabell for å vise inntekter', () => {
   it('skal ha en overskrift', () => {
@@ -51,6 +54,6 @@ describe('tabell for å vise inntekter', () => {
   it('skal rendre en rad', () => {
     render(<InntektTabell inntekter={inntekter} gjennomsnittSiste3år={6} yrkesevneNedsattÅr="2015" />);
     const rows = screen.getAllByRole('row');
-    expect(rows).toHaveLength(3); // Inneholder headers og gjennomsnitt siste 3 år
+    expect(rows).toHaveLength(4); // Inneholder headers og gjennomsnitt siste 3 år
   });
 });

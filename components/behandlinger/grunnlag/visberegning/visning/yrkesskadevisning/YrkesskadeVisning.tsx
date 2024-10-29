@@ -6,6 +6,7 @@ import { YrkesskadeGrunnlag } from 'lib/types/types';
 
 import styles from '../Visning.module.css';
 import { YrkesskadeBeregningTabell } from 'components/yrkesskadeberegningtabell/YrkesskadeBeregningTabell';
+import { sorterEtterÅrIStigendeRekkefølge } from 'lib/utils/arrays';
 
 interface Props {
   grunnlag?: YrkesskadeGrunnlag;
@@ -16,13 +17,15 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
     throw new Error('Kunne ikke finne påkrevd grunnlag for yrkesskade');
   }
 
-  const foersteAar = grunnlag.inntekter.at(0)?.år;
-  const sisteAar = grunnlag.inntekter.at(-1)?.år;
+  const sorterteInntekter = sorterEtterÅrIStigendeRekkefølge(grunnlag.inntekter);
+
+  const foersteAar = sorterteInntekter.at(0)?.år;
+  const sisteAar = sorterteInntekter.at(-1)?.år;
 
   return (
     <div className={styles.visning}>
       <InntektTabell
-        inntekter={grunnlag.inntekter}
+        inntekter={sorterteInntekter}
         gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
         yrkesevneNedsattÅr={grunnlag.nedsattArbeidsevneÅr}
       />

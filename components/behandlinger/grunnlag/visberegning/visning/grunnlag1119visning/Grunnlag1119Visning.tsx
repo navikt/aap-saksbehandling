@@ -4,6 +4,7 @@ import { Label, Table } from '@navikt/ds-react';
 import styles from '../Visning.module.css';
 import { Grunnlag1119 } from 'lib/types/types';
 import { formaterTilG } from 'lib/utils/string';
+import { sorterEtterÅrIStigendeRekkefølge } from 'lib/utils/arrays';
 
 interface Props {
   grunnlag?: Grunnlag1119;
@@ -14,13 +15,14 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
     throw new Error('Kunne ikke finne påkrevd grunnlag for 11-19');
   }
 
-  const foersteAar = grunnlag.inntekter.at(0)?.år;
-  const sisteAar = grunnlag.inntekter.at(-1)?.år;
+  const sorterteInntekter = sorterEtterÅrIStigendeRekkefølge(grunnlag.inntekter);
+  const foersteAar = sorterteInntekter.at(0)?.år;
+  const sisteAar = sorterteInntekter.at(-1)?.år;
 
   return (
     <div className={styles.visning}>
       <InntektTabell
-        inntekter={grunnlag.inntekter}
+        inntekter={sorterteInntekter}
         gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3år}
         yrkesevneNedsattÅr={grunnlag.nedsattArbeidsevneÅr}
       />
