@@ -171,6 +171,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
                 }),
                 grunn: data.grunn ? data.grunn : undefined,
               });
+              form.reset();
               await revalidateAktivitetspliktHendelser(saksnummer);
             }
           })}
