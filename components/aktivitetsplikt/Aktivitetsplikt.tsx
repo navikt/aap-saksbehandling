@@ -91,6 +91,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         type: 'radio',
         label: 'Grunn',
         options: [
+          { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
           { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
           { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
           { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
@@ -176,7 +177,9 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         >
           <FormField form={form} formField={formFields.brudd} />
           {skalVelgeParagraf && <FormField form={form} formField={formFields.paragraf} />}
-          {form.watch('paragraf') === 'PARAGRAF_11_8' && <FormField form={form} formField={formFields.grunn} />}
+          {(form.watch('paragraf') === 'PARAGRAF_11_8' || form.watch('brudd') === 'IKKE_MØTT_TIL_ANNEN_AKTIVITET') && (
+            <FormField form={form} formField={{ ...formFields.grunn, label: hentGrunnLabel(form.watch('brudd')) }} />
+          )}
 
           {skalViseDatoFeltOgBegrunnelsesfelt && (
             <div className={'flex-column'}>
@@ -218,11 +221,11 @@ function hentDatoLabel(valgtBrudd: AktivitetspliktBrudd): string {
     case 'IKKE_MØTT_TIL_MØTE':
       return 'Dato for ikke møtt i tiltak';
     case 'IKKE_MØTT_TIL_BEHANDLING_ELLER_UTREDNING':
-      return 'Dato for ikke møtt til behandling / utredning';
+      return 'Dato for ikke møtt til behandling eller utredning';
     case 'IKKE_MØTT_TIL_TILTAK':
       return 'Dato for ikke møtt til tiltak';
     case 'IKKE_MØTT_TIL_ANNEN_AKTIVITET':
-      return 'Dato for møtt til annen aktivitet';
+      return 'Dato for ikke møtt til annen aktivitet';
     case 'IKKE_SENDT_INN_DOKUMENTASJON':
       return 'Dato for ikke sendt inn dokumentasjon';
     case 'IKKE_AKTIVT_BIDRAG':
@@ -230,5 +233,18 @@ function hentDatoLabel(valgtBrudd: AktivitetspliktBrudd): string {
     default: {
       return 'Dato for fravær';
     }
+  }
+}
+
+function hentGrunnLabel(valgtBrudd: AktivitetspliktBrudd): string {
+  switch (valgtBrudd) {
+    case 'IKKE_MØTT_TIL_BEHANDLING_ELLER_UTREDNING':
+      return 'Grunn for å ikke møtt til behandling eller utredning';
+    case 'IKKE_MØTT_TIL_TILTAK':
+      return 'Grunn for å ikke møtt i tiltak';
+    case 'IKKE_MØTT_TIL_ANNEN_AKTIVITET':
+      return 'Grunn for å ikke møtt til annen aktivitet';
+    default:
+      throw new Error('Ugyldig brudd er valgt for å hente label til grunn.');
   }
 }
