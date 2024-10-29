@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { Aktivitetsplikt } from 'components/aktivitetsplikt/Aktivitetsplikt';
 import { userEvent } from '@testing-library/user-event';
 
@@ -59,8 +59,7 @@ describe('aktivitetsmelding', () => {
 
   it('skal dukke opp et felt for å velge en paragraf dersom man velger ikke møtt i behandling/utredning', async () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
-    const ikkeMøttIBehandlingValg = screen.getByRole('radio', { name: /ikke møtt i behandling\/ utredning/i });
-    await user.click(ikkeMøttIBehandlingValg);
+    await velgIkkeMøttITiltakSomBrudd();
 
     const paragrafFelt = screen.getByRole('group', { name: /velg paragraf/i });
     expect(paragrafFelt).toBeVisible();
@@ -202,6 +201,13 @@ describe('aktivitetsmelding', () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
+
+    const group = screen.getByRole('group', {
+      name: /grunn/i,
+    });
+
+    const sykdomEllerskadeValg = within(group).getByText(/sykdom eller skade/i);
+    await user.click(sykdomEllerskadeValg);
 
     const leggTilPeriodeKnapp = screen.getByRole('button', { name: /legg til periode/i });
     await user.click(leggTilPeriodeKnapp);
