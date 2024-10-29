@@ -33,6 +33,7 @@ import {
   TilkjentYtelseGrunnlag,
   VenteInformasjon,
   OppdaterAktivitetspliktBrudd,
+  FeilregistrerAktivitetspliktBrudd,
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { logError, logWarning } from '@navikt/aap-felles-utils';
@@ -77,6 +78,14 @@ export const opprettBruddPåAktivitetsplikten = async (saksnummer: string, aktiv
 
 export const oppdaterBruddPåAktivitetsplikten = async (saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd) => {
   const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/oppdater`;
+  return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
+};
+
+export const feilregistrerBruddPåAktivitetsplikten = async (
+  saksnummer: string,
+  aktivitet: FeilregistrerAktivitetspliktBrudd
+) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/feilregistrer`;
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 

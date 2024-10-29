@@ -6,6 +6,7 @@ import {
   SettPåVent,
   SimulerMeldeplikt,
   OppdaterAktivitetspliktBrudd,
+  FeilregistrerAktivitetspliktBrudd,
 } from './types/types';
 
 async function fetchProxy<ResponseBody>(
@@ -53,6 +54,10 @@ export function opprettAktivitetspliktBrudd(saksnummer: string, aktivitet: Oppre
 }
 
 export function oppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd) {
+  return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/oppdater`, 'POST', aktivitet);
+}
+
+export function feilregistrerAktivitetspliktBrudd(saksnummer: string, aktivitet: FeilregistrerAktivitetspliktBrudd) {
   return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/oppdater`, 'POST', aktivitet);
 }
 
