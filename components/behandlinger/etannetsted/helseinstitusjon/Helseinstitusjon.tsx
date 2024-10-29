@@ -2,7 +2,7 @@
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { HospitalIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Heading, Label } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
@@ -108,7 +108,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
           return (
             <div key={field.id} className={styles.vurdering}>
               <div>
-                <Label size={'small'}>Periode</Label>
+                <Label size={'medium'}>Periode</Label>
                 <BodyShort>
                   {formaterDatoForFrontend(field.periode.fom)} - {formaterDatoForFrontend(field.periode.tom)}
                 </BodyShort>
@@ -117,12 +117,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
             </div>
           );
         })}
-        <Alert variant={'info'}>
-          <Heading size={'small'}>Institusjonsoppholdet kan medføre redusert ytelse fra dd.mm.yyyy</Heading>
-          <BodyShort>
-            Innbygger vil få 50% reduksjon i ytelse fra og med dd.mm.yyyy hvis oppholdet vedvarer forbi denne datoen
-          </BodyShort>
-        </Alert>
       </Form>
     </VilkårsKort>
   );

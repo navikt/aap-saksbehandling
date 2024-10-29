@@ -29,7 +29,7 @@ const x: HelseinstitusjonGrunnlag = {
   ],
 };
 
-describe.skip('Helseinstitusjonsvurdering', () => {
+describe('Helseinstitusjonsvurdering', () => {
   beforeEach(() => {
     render(<Helseinstitusjon grunnlag={x} behandlingVersjon={0} readOnly={false} />);
   });
@@ -75,7 +75,7 @@ describe.skip('Helseinstitusjonsvurdering', () => {
     await user.click(within(forsoergerEktefelleGruppe).getByRole('radio', { name: 'Nei' }));
     await user.click(within(harFasteUtgifterGruppe).getByRole('radio', { name: 'Nei' }));
 
-    expect(screen.getByRole('group', { name: 'Får søker fri kost og losji?' })).toBeVisible();
+    expect(screen.getByRole('group', { name: /får søker fri kost og losji\?/i })).toBeVisible();
   });
 
   test('viser ikke spørsmål om søker får fri kost og losji hvis man svarer ja på at søker forsørger ektefelle', async () => {

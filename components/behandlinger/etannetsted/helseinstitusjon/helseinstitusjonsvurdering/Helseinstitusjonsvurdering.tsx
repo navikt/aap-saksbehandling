@@ -12,6 +12,10 @@ interface Props {
 }
 
 export const Helseinstitusjonsvurdering = ({ form, helseinstitusjonoppholdIndex, readonly }: Props) => {
+  const visSpørsmålOmSøkerFårFiKostOgLosji =
+    form.watch(`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.forsoergerEktefelle`) === JaEllerNei.Nei &&
+    form.watch(`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.harFasteUtgifter`) === JaEllerNei.Nei;
+
   return (
     <div className={'flex-column'}>
       <TextAreaWrapper
@@ -45,19 +49,21 @@ export const Helseinstitusjonsvurdering = ({ form, helseinstitusjonoppholdIndex,
         <Radio value={JaEllerNei.Ja}>Ja</Radio>
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
-      <RadioGroupWrapper
-        name={`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.faarFriKostOgLosji`}
-        control={form.control}
-        label={'Får søker fri kost og losji?'}
-        rules={{
-          required: 'Du må svare på om søker får fri kost og losji',
-        }}
-        readOnly={readonly}
-        horisontal
-      >
-        <Radio value={JaEllerNei.Ja}>Ja</Radio>
-        <Radio value={JaEllerNei.Nei}>Nei</Radio>
-      </RadioGroupWrapper>
+      {visSpørsmålOmSøkerFårFiKostOgLosji && (
+        <RadioGroupWrapper
+          name={`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.faarFriKostOgLosji`}
+          control={form.control}
+          label={'Får søker fri kost og losji?'}
+          rules={{
+            required: 'Du må svare på om søker får fri kost og losji',
+          }}
+          readOnly={readonly}
+          horisontal
+        >
+          <Radio value={JaEllerNei.Ja}>Ja</Radio>
+          <Radio value={JaEllerNei.Nei}>Nei</Radio>
+        </RadioGroupWrapper>
+      )}
     </div>
   );
 };
