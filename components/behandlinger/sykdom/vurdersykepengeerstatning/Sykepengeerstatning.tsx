@@ -95,7 +95,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
           <DokumentTabell />
         </FormField>
         <Veiledning />
-        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.erOppfylt} />
         {form.watch('erOppfylt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.grunn} />}
       </Form>

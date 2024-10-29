@@ -117,7 +117,7 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
             </div>
           }
         />
-        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.erBehovForAktivBehandling} horizontalRadio />
         <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} horizontalRadio />
         {form.watch('erBehovForAktivBehandling') !== JaEllerNei.Ja &&

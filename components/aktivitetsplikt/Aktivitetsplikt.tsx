@@ -167,7 +167,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
                 </Button>
               </div>
               {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
-              <FormField form={form} formField={formFields.begrunnelse} />
+              <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             </div>
           )}
           <Button className={'fit-content-button'}>Bekreft</Button>

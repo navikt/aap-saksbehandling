@@ -34,6 +34,7 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
         name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
         readOnly={readOnly}
         rules={{ required: 'Du må gi en begrunnelse' }}
+        className="begrunnelse"
       />
       <RadioGroupWrapper
         label={

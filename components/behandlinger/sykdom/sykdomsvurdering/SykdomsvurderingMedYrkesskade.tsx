@@ -190,7 +190,7 @@ export const SykdomsvurderingMedYrkesskade = ({
         </CheckboxWrapper>
 
         <Veiledning />
-        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <TilknyttedeDokumenter dokumenter={dokumenterBruktIVurderingen} />
         <section>
           <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />

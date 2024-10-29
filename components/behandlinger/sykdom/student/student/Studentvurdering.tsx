@@ -159,7 +159,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
           )}
         </div>
 
-        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.harAvbruttStudie} horizontalRadio />
         <FormField form={form} formField={formFields.godkjentStudieAvLånekassen} horizontalRadio />
         <FormField form={form} formField={formFields.avbruttPgaSykdomEllerSkade} horizontalRadio />

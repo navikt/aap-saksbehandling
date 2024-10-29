@@ -76,7 +76,7 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
       >
         <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
         <FormField form={form} formField={formFields.antattÅrligInntekt} />
-        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       </Form>
     </VilkårsKort>
   );
