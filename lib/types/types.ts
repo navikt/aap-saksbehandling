@@ -131,6 +131,9 @@ export type AktivitetspliktHendelse =
 export type OpprettAktivitetspliktBrudd =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OpprettAktivitetspliktDTO'];
 
+export type OppdaterAktivitetspliktBrudd =
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OppdaterAktivitetspliktDTO'];
+
 export type AktivitetspliktHendelser =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktResponse'];
 

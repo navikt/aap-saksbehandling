@@ -5,6 +5,7 @@ import {
   SaksInfo,
   SettPåVent,
   SimulerMeldeplikt,
+  OppdaterAktivitetspliktBrudd,
 } from './types/types';
 
 async function fetchProxy<ResponseBody>(
@@ -49,6 +50,10 @@ export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
 
 export function opprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {
   return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/opprett`, 'POST', aktivitet);
+}
+
+export function oppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd) {
+  return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/oppdater`, 'POST', aktivitet);
 }
 
 export function rekjørJobb(jobbId: number) {

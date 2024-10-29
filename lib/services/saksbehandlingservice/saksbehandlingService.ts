@@ -32,6 +32,7 @@ import {
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
   VenteInformasjon,
+  OppdaterAktivitetspliktBrudd,
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { logError, logWarning } from '@navikt/aap-felles-utils';
@@ -71,6 +72,11 @@ export const hentBehandlingPersoninfo = async (behandlingsreferanse: string): Pr
 
 export const opprettBruddPåAktivitetsplikten = async (saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) => {
   const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/opprett`;
+  return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
+};
+
+export const oppdaterBruddPåAktivitetsplikten = async (saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/oppdater`;
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 
