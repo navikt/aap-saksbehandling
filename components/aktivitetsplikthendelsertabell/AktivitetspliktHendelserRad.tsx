@@ -2,21 +2,17 @@
 
 import { Button, Table } from '@navikt/ds-react';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import {
-  AktivitetspliktBrudd,
-  AktivitetspliktHendelse,
-  AktivitetspliktHendelseParagraf,
-  OppdaterAktivitetsplitGrunn,
-} from 'lib/types/types';
+import { AktivitetspliktBrudd, AktivitetspliktHendelseParagraf, OppdaterAktivitetsplitGrunn } from 'lib/types/types';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { useState } from 'react';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { feilregistrerAktivitetspliktBrudd, oppdaterAktivitetspliktBrudd } from 'lib/clientApi';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { AktivitetspliktHendelserMedFormId } from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 
 interface Props {
-  aktivitetspliktHendelse: AktivitetspliktHendelse;
+  aktivitetspliktHendelse: AktivitetspliktHendelserMedFormId;
 }
 
 interface Formfields {
@@ -24,7 +20,7 @@ interface Formfields {
   grunn: OppdaterAktivitetsplitGrunn;
 }
 
-export const AktivitetspliktHendelserRow = ({ aktivitetspliktHendelse }: Props) => {
+export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) => {
   const saksnummer = useSaksnummer();
   const [isOpen, setIsOpen] = useState(false);
 

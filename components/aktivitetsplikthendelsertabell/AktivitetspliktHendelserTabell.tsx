@@ -2,10 +2,12 @@ import { AktivitetspliktHendelse } from 'lib/types/types';
 
 import styles from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell.module.css';
 import { Table } from '@navikt/ds-react';
-import { AktivitetspliktHendelserRow } from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserRow';
+import { AktivitetspliktHendelserRad } from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserRad';
+
+export type AktivitetspliktHendelserMedFormId = AktivitetspliktHendelse & { id: string };
 
 interface Props {
-  aktivitetspliktHendelser?: AktivitetspliktHendelse[];
+  aktivitetspliktHendelser?: AktivitetspliktHendelserMedFormId[];
 }
 
 export const AktivitetspliktHendelserTabell = ({ aktivitetspliktHendelser }: Props) => {
@@ -29,8 +31,11 @@ export const AktivitetspliktHendelserTabell = ({ aktivitetspliktHendelser }: Pro
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {aktivitetspliktHendelser?.map((aktivitetspliktHendelse, index) => (
-                <AktivitetspliktHendelserRow key={index} aktivitetspliktHendelse={aktivitetspliktHendelse} />
+              {aktivitetspliktHendelser?.map((aktivitetspliktHendelse) => (
+                <AktivitetspliktHendelserRad
+                  key={aktivitetspliktHendelse.id}
+                  aktivitetspliktHendelse={aktivitetspliktHendelse}
+                />
               ))}
             </Table.Body>
           </Table>
