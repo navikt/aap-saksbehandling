@@ -22,6 +22,8 @@ import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
 import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
+import { v4 as uuidv4 } from 'uuid';
+
 interface AktvitetsPeriode {
   type: 'periode';
   fom: string;
@@ -132,7 +134,14 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
       icon={<FigureIcon fontSize={'inherit'} />}
     >
       <div className={'flex-column'}>
-        <AktivitetspliktHendelserTabell aktivitetspliktHendelser={aktivitetspliktHendelser} />
+        <AktivitetspliktHendelserTabell
+          aktivitetspliktHendelser={aktivitetspliktHendelser.map((hendelse) => {
+            return {
+              id: uuidv4(),
+              ...hendelse,
+            };
+          })}
+        />
         <form
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
