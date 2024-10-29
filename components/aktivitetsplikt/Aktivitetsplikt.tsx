@@ -110,10 +110,21 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
   const valgtBrudd = form.watch('brudd');
   const valgtParagraf = form.watch('paragraf');
 
-  const skalVelgeParagraf = ['IKKE_MØTT_TIL_TILTAK', 'IKKE_MØTT_TIL_BEHANDLING'].includes(valgtBrudd);
+  const bruddSomSkalViseDatoFeltOgBegrennelsesfelt: AktivitetspliktBrudd[] = [
+    'IKKE_AKTIVT_BIDRAG',
+    'IKKE_SENDT_INN_DOKUMENTASJON',
+    'IKKE_MØTT_TIL_MØTE',
+    'IKKE_MØTT_TIL_ANNEN_AKTIVITET',
+  ];
+
+  const bruddSomSkalViseParagrafValg: AktivitetspliktBrudd[] = [
+    'IKKE_MØTT_TIL_TILTAK',
+    'IKKE_MØTT_TIL_BEHANDLING_ELLER_UTREDNING',
+  ];
+
+  const skalVelgeParagraf = bruddSomSkalViseParagrafValg.includes(valgtBrudd);
   const skalViseDatoFeltOgBegrunnelsesfelt =
-    Boolean(valgtParagraf) ||
-    ['IKKE_AKTIVT_BIDRAG', 'IKKE_SENDT_INN_DOKUMENTASJON', 'IKKE_MØTT_TIL_MØTE'].includes(valgtBrudd);
+    Boolean(valgtParagraf) || bruddSomSkalViseDatoFeltOgBegrennelsesfelt.includes(valgtBrudd);
 
   return (
     <SideProsessKort
