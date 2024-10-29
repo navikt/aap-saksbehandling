@@ -53,7 +53,7 @@ describe('aktivitetsmelding', () => {
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
-    const grunnFelt = screen.getByRole('combobox', { name: /grunn/i });
+    const grunnFelt = screen.getByRole('group', { name: /grunn/i });
     expect(grunnFelt).toBeVisible();
   });
 

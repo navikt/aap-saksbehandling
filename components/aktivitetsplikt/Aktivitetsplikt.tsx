@@ -49,13 +49,14 @@ export interface AktivitetspliktFormFields {
 
 const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
   { label: 'Ikke møtt i tiltak', value: 'IKKE_MØTT_TIL_TILTAK' },
-  { label: 'Ikke møtt i behandling/ utredning', value: 'IKKE_MØTT_TIL_BEHANDLING' },
+  { label: 'Ikke møtt i behandling/ utredning', value: 'IKKE_MØTT_TIL_BEHANDLING_ELLER_UTREDNING' },
   { label: 'Ikke møtt til møte med Nav', value: 'IKKE_MØTT_TIL_MØTE' },
   {
     label: 'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om på aktivitet',
     value: 'IKKE_SENDT_INN_DOKUMENTASJON',
   },
   { label: 'Ikke bidratt til egen avklaring', value: 'IKKE_AKTIVT_BIDRAG' },
+  { label: 'Ikke møtt til annen aktivitet', value: 'IKKE_MØTT_TIL_ANNEN_AKTIVITET' },
 ];
 
 export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
@@ -85,10 +86,9 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         rules: { required: 'Du må skrive en begrunnelse for brudd på aktivitetsplikten' },
       },
       grunn: {
-        type: 'select',
+        type: 'radio',
         label: 'Grunn',
         options: [
-          { label: '', value: '' },
           { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
           { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
           { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
@@ -138,7 +138,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
             if (harOverlappendePerioder) {
               setErrorMessage('Det finnes overlappende perioder');
             } else {
-              await opprettAktivitetspliktBrudd({
+              await opprettAktivitetspliktBrudd(saksnummer, {
                 brudd: data.brudd,
                 begrunnelse: data.begrunnelse,
                 paragraf: data.paragraf,
@@ -148,9 +148,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
                     tom: formaterDatoForBackend(parse(periode.tom, DATO_FORMATER.ddMMyyyy, new Date())),
                   };
                 }),
-                grunn: data.grunn,
-                dokumenttype: 'BRUDD',
-                saksnummer: saksnummer,
+                grunn: data.grunn ? data.grunn : undefined,
               });
               await revalidateAktivitetspliktHendelser(saksnummer);
             }
@@ -199,8 +197,8 @@ function hentDatoLabel(valgtBrudd: AktivitetspliktBrudd): string {
   switch (valgtBrudd) {
     case 'IKKE_MØTT_TIL_MØTE':
       return 'Dato for ikke møtt i tiltak';
-    case 'IKKE_MØTT_TIL_BEHANDLING':
-      return 'Dato for ikke møtt til behandling';
+    case 'IKKE_MØTT_TIL_BEHANDLING_ELLER_UTREDNING':
+      return 'Dato for ikke møtt til behandling / utredning';
     case 'IKKE_MØTT_TIL_TILTAK':
       return 'Dato for ikke møtt til tiltak';
     case 'IKKE_MØTT_TIL_ANNEN_AKTIVITET':

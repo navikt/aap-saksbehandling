@@ -1,5 +1,5 @@
 import {
-  BruddAktivitetsplikt,
+  OpprettAktivitetspliktBrudd,
   LøsAvklaringsbehovPåBehandling,
   OpprettTestcase,
   SaksInfo,
@@ -47,8 +47,8 @@ export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
   return fetchProxy('/api/behandling/los-behov/', 'POST', avklaringsBehov);
 }
 
-export function opprettAktivitetspliktBrudd(aktivitet: BruddAktivitetsplikt) {
-  return fetchProxy('/api/aktivitetsplikt/lagre', 'POST', aktivitet);
+export function opprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {
+  return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/opprett`, 'POST', aktivitet);
 }
 
 export function rekjørJobb(jobbId: number) {

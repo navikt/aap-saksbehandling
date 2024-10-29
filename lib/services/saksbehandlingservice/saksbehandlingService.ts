@@ -10,7 +10,7 @@ import {
   BeregningsGrunnlag,
   BeregningsVurdering,
   BistandsGrunnlag,
-  BruddAktivitetsplikt,
+  OpprettAktivitetspliktBrudd,
   DetaljertBehandling,
   DokumentInfo,
   FatteVedtakGrunnlag,
@@ -69,8 +69,8 @@ export const hentBehandlingPersoninfo = async (behandlingsreferanse: string): Pr
   return await fetchProxy<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const lagreBruddPåAktivitetsplikten = async (aktivitet: BruddAktivitetsplikt) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/lagre`;
+export const opprettBruddPåAktivitetsplikten = async (saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/opprett`;
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 
