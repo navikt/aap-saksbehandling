@@ -9,6 +9,5 @@ type Props = {
 
 export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentHelseInstitusjonsVurdering(behandlingsreferanse);
-  console.log('HELSEGRUNNLAG', grunnlag);
   return <Helseinstitusjon grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
 };

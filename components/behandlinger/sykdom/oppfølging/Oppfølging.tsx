@@ -67,7 +67,6 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      console.log(data);
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
