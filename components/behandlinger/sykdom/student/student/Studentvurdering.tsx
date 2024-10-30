@@ -76,6 +76,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
       },
       avbruttDato: {
         type: 'date_input',
+        allowShortDates: true,
         label: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?',
         defaultValue:
           grunnlag?.studentvurdering?.avbruttStudieDato &&

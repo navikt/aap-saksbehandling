@@ -93,6 +93,7 @@ export const SykdomsvurderingMedYrkesskade = ({
       },
       nedsattArbeidsevneDato: {
         type: 'date_input',
+        allowShortDates: true,
         label: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)',
         description: 'Datoformat dd.mm.åååå',
         defaultValue: grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato
