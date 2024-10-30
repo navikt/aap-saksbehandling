@@ -49,7 +49,7 @@ const Layout = async ({ children, params }: Props) => {
       <StegGruppeIndikatorAksel flytRespons={flytResponse} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
 
       <HGrid columns="4fr 2fr">
-        <div>{children}</div>
+        <div className={styles.venstrekolonne}>{children}</div>
         <div className={`${styles.høyrekolonne} flex-column`}>
           <Behandlingsinfo behandling={behandling} saksnummer={params.saksId} />
           <SaksbehandlingsoversiktMedDataFetching saksnummer={params.saksId} />

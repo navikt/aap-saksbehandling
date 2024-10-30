@@ -1,6 +1,5 @@
 import { Sykdom } from 'components/behandlinger/sykdom/Sykdom';
 import { StegGruppe } from 'lib/types/types';
-import styles from './OppgaveKolonne.module.css';
 import { Grunnlag } from 'components/behandlinger/grunnlag/Grunnlag';
 import { TilkjentYtelse } from 'components/behandlinger/tilkjentytelse/TilkjentYtelse';
 import { FatteVedtak } from 'components/behandlinger/fattevedtak/FatteVedtak';
@@ -19,7 +18,7 @@ interface Props {
 
 export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, saksId }: Props) => {
   return (
-    <div className={styles.kolonne}>
+    <>
       {aktivGruppe === 'LOVVALG' && <div>LOVVALG</div>}
       {aktivGruppe === 'ALDER' && <AlderMedDataFetching behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'STUDENT' && <Student behandlingsreferanse={behandlingsReferanse} />}
@@ -34,6 +33,6 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, saksId
       {aktivGruppe === 'VEDTAK' && <Vedtak behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'FATTE_VEDTAK' && <FatteVedtak behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'IVERKSETT_VEDTAK' && <div>Behandling avsluttet</div>}
-    </div>
+    </>
   );
 };
