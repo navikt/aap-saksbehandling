@@ -2520,7 +2520,7 @@ __metadata:
     lint-staged: "npm:^15.2.10"
     next: "npm:^14.2.14"
     node-loader: "npm:^2.0.0"
-    openapi-typescript: "npm:7.4.1"
+    openapi-typescript: "npm:7.4.2"
     pino-pretty: "npm:^11.2.2"
     prettier: "npm:^3.3.3"
     react: "npm:18.3.1"
@@ -6757,9 +6757,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-typescript@npm:7.4.1":
-  version: 7.4.1
-  resolution: "openapi-typescript@npm:7.4.1"
+"openapi-typescript@npm:7.4.2":
+  version: 7.4.2
+  resolution: "openapi-typescript@npm:7.4.2"
   dependencies:
     "@redocly/openapi-core": "npm:^1.25.3"
     ansi-colors: "npm:^4.1.3"
@@ -6771,7 +6771,7 @@ __metadata:
     typescript: ^5.x
   bin:
     openapi-typescript: bin/cli.js
-  checksum: 10c0/e671d6e439bf8ec1ce68628cb9091be50f529b7f1fc2247ce5e0837fabd16cf1afd797da195c2c1a1925f6bc20d64fd37190b186f3489250267e0ec831bc21c3
+  checksum: 10c0/a8728957234b39c7d404bc779b53878eb1469d83055983cae8efc4d6467495a4f89afd3699b465bb3548fbea8bab06011f3a613db53b23745e5841a6c47928be
   languageName: node
   linkType: hard
 
