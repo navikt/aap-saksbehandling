@@ -120,6 +120,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
               control={form.control}
               name={`arbeidsevnevurderinger.${index}.begrunnelse`}
               rules={{ required: 'Du må begrunne vurderingen din' }}
+              className={'begrunnelse'}
               readOnly={readOnly}
             />
             <div className={styles.rad}>

@@ -58,6 +58,7 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
               control={form.control}
               name={`totrinnsvurderinger.${index}.begrunnelse`}
               rules={{ required: 'Du må gi en begrunnelse' }}
+              className={'begrunnelse'}
             />
             <CheckboxWrapper
               label={'Velg grunn'}

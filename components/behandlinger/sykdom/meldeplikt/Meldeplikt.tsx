@@ -142,6 +142,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
               control={form.control}
               name={`fritaksvurderinger.${index}.begrunnelse`}
               rules={{ required: 'Du må begrunne vurderingen din' }}
+              className={'begrunnelse'}
               readOnly={readOnly}
             />
             <RadioGroupWrapper
