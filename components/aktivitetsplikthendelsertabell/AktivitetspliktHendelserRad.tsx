@@ -36,6 +36,7 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
       label: 'Grunn',
       defaultValue: aktivitetspliktHendelse.grunn,
       options: [
+        { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
         { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
         { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
         { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
@@ -77,12 +78,12 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
               <FormField form={form} formField={formFields.grunn} />
             )}
 
-            <div>
+            <div className={'flex-row'}>
               <Button size={'small'}>Lagre</Button>
               <Button
                 size={'small'}
                 type={'button'}
-                variant={'tertiary'}
+                variant={'secondary'}
                 onClick={() => {
                   setIsOpen(false);
                   form.reset();

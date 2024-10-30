@@ -89,7 +89,6 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
       },
       grunn: {
         type: 'radio',
-        label: 'Grunn',
         options: [
           { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
           { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
@@ -156,7 +155,9 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
 
             const harOverlappendePerioder = perioderSomOverlapper(perioder);
 
-            if (harOverlappendePerioder) {
+            if (perioder && perioder.length <= 0) {
+              setErrorMessage('Du må legge til en enkeltdato eller periode');
+            } else if (harOverlappendePerioder) {
               setErrorMessage('Det finnes overlappende perioder');
             } else {
               await opprettAktivitetspliktBrudd(saksnummer, {
