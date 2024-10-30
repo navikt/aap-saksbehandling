@@ -89,6 +89,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
       },
       grunn: {
         type: 'radio',
+        label: 'Velg grunn for bruddet',
         options: [
           { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
           { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
@@ -180,7 +181,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
           <FormField form={form} formField={formFields.brudd} />
           {skalVelgeParagraf && <FormField form={form} formField={formFields.paragraf} />}
           {(form.watch('paragraf') === 'PARAGRAF_11_8' || form.watch('brudd') === 'IKKE_MØTT_TIL_ANNEN_AKTIVITET') && (
-            <FormField form={form} formField={{ ...formFields.grunn, label: hentGrunnLabel(form.watch('brudd')) }} />
+            <FormField form={form} formField={formFields.grunn} />
           )}
 
           {skalViseDatoFeltOgBegrunnelsesfelt && (
@@ -235,18 +236,5 @@ function hentDatoLabel(valgtBrudd: AktivitetspliktBrudd): string {
     default: {
       return 'Dato for fravær';
     }
-  }
-}
-
-function hentGrunnLabel(valgtBrudd: AktivitetspliktBrudd): string {
-  switch (valgtBrudd) {
-    case 'IKKE_MØTT_TIL_BEHANDLING_ELLER_UTREDNING':
-      return 'Grunn for å ikke møtt til behandling eller utredning';
-    case 'IKKE_MØTT_TIL_TILTAK':
-      return 'Grunn for å ikke møtt i tiltak';
-    case 'IKKE_MØTT_TIL_ANNEN_AKTIVITET':
-      return 'Grunn for å ikke møtt til annen aktivitet';
-    default:
-      throw new Error('Ugyldig brudd er valgt for å hente label til grunn.');
   }
 }
