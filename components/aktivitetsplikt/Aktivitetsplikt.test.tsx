@@ -23,8 +23,7 @@ describe('Felt for å registrere brudd', () => {
   it('skal vise en feilmelding dersom brudd på aktivitetsplikten ikke er besvart', async () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
 
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-    await user.click(bekreftKnapp);
+    await trykkPåBekreftKnapp();
     const feilmelding = screen.getByText('Du må registrere et brudd på aktivitetsplikten');
     expect(feilmelding).toBeVisible();
   });
@@ -91,8 +90,7 @@ describe('Felt for å velge paragraf', () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
 
     await velgIkkeMøttITiltakSomBrudd();
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-    await user.click(bekreftKnapp);
+    await trykkPåBekreftKnapp();
     const feilmelding = screen.getByText('Du må velge en paragraf');
     expect(feilmelding).toBeVisible();
   });
@@ -130,7 +128,7 @@ describe('Felt for å velge grunn', () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
-    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+    await trykkPåBekreftKnapp();
 
     const feilmelding = screen.getByText('Du må velge en grunn');
     expect(feilmelding).toBeVisible();
@@ -153,8 +151,7 @@ describe('Felt for begrunnelse', () => {
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-    await user.click(bekreftKnapp);
+    await trykkPåBekreftKnapp();
     const feilmelding = screen.getByText('Du må skrive en begrunnelse for brudd på aktivitetsplikten');
     expect(feilmelding).toBeVisible();
   });
@@ -170,8 +167,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     const enkeltDatoKnapp = screen.getByRole('button', { name: 'Legg til enkeltdato' });
     await user.click(enkeltDatoKnapp);
 
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-    await user.click(bekreftKnapp);
+    await trykkPåBekreftKnapp();
     const feilmelding = screen.getByText('Du må sette en dato');
     expect(feilmelding).toBeVisible();
   });
@@ -270,8 +266,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     });
 
     await user.type(begrunnelseFelt, 'Dette er en begrunnelse');
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-    await user.click(bekreftKnapp);
+    await trykkPåBekreftKnapp();
 
     const feilmelding = screen.getByText('Det finnes overlappende perioder');
     expect(feilmelding).toBeVisible();
@@ -294,8 +289,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     });
 
     await user.type(begrunnelseFelt, 'Dette er en begrunnelse');
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-    await user.click(bekreftKnapp);
+    await trykkPåBekreftKnapp();
 
     const feilmelding = screen.getByText('Du må legge til en enkeltdato eller periode');
     expect(feilmelding).toBeVisible();
@@ -310,4 +304,9 @@ async function velgIkkeMøttITiltakSomBrudd() {
 async function velgParagraf_11_8() {
   const paragraf_11_8Felt = screen.getByRole('radio', { name: '11-8 fravær fra fastsatt aktivitet' });
   await user.click(paragraf_11_8Felt);
+}
+
+async function trykkPåBekreftKnapp() {
+  const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+  await user.click(bekreftKnapp);
 }
