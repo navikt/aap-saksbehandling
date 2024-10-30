@@ -62,7 +62,7 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
         rules: { required: 'Du må svare på om innbygger anses for å ha en viss mulighet til å komme i arbeid' },
       },
     },
-    { readOnly: readOnly }
+    { readOnly: readOnly, shouldUnregister: true }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
