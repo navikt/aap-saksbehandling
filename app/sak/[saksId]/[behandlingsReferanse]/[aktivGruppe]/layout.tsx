@@ -19,20 +19,7 @@ const Layout = async ({
     notFound();
   }
 
-  return (
-    <>
-      <Suspense
-        fallback={
-          <>
-            <div></div>
-            <div></div>
-          </>
-        }
-      >
-        {children}
-      </Suspense>
-    </>
-  );
+  return <Suspense>{children}</Suspense>;
 };
 
 export default Layout;
