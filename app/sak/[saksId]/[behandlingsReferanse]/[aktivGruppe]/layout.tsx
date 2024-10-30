@@ -3,6 +3,7 @@ import { ReactNode, Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { StegGruppe } from 'lib/types/types';
 import '@navikt/aap-felles-css';
+import { Skeleton } from '@navikt/ds-react';
 
 const Layout = async ({
   params,
@@ -19,7 +20,7 @@ const Layout = async ({
     notFound();
   }
 
-  return <Suspense>{children}</Suspense>;
+  return <Suspense fallback={<Skeleton variant="rectangle" height={'40vh'} />}>{children}</Suspense>;
 };
 
 export default Layout;
