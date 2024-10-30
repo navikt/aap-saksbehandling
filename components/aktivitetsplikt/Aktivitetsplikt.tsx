@@ -146,6 +146,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         <form
           className={styles.form}
           onSubmit={form.handleSubmit(async (data) => {
+            setErrorMessage('');
             const perioder = data.perioder.map((periode) => {
               if (periode.type === 'enkeltdag') {
                 return { fom: periode.dato, tom: periode.dato };
@@ -174,6 +175,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
                 grunn: data.grunn ? data.grunn : undefined,
               });
               form.reset();
+              remove();
               await revalidateAktivitetspliktHendelser(saksnummer);
             }
           })}
