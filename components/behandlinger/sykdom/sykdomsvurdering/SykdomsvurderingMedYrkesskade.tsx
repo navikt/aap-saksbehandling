@@ -92,7 +92,7 @@ export const SykdomsvurderingMedYrkesskade = ({
         rules: { required: 'Du må svare på om arbeidsevnen er nedsatt.' },
       },
       nedsattArbeidsevneDato: {
-        type: 'text',
+        type: 'date_input',
         label: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)',
         description: 'Datoformat dd.mm.åååå',
         defaultValue: grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato

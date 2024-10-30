@@ -73,7 +73,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
         },
       },
       nedsattArbeidsevneDato: {
-        type: 'text',
+        type: 'date_input',
         label: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)',
         description: 'Datoformat dd.mm.åååå',
         defaultValue: grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato

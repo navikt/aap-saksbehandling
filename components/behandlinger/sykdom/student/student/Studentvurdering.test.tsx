@@ -194,6 +194,6 @@ describe('Student', () => {
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
-    expect(screen.getByText('Dato for når studieevnen ble 100% nedsatt / avbrutt er ugyldig.')).toBeVisible();
+    expect(screen.getByText('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå')).toBeVisible();
   });
 });

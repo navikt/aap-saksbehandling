@@ -11,8 +11,9 @@ import { ErStudentStatus, SkalGjenopptaStudieStatus, StudentGrunnlag } from 'lib
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { BodyShort, Label } from '@navikt/ds-react';
+import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   behandlingVersjon: number;
@@ -74,26 +75,24 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
         rules: { required: 'Du må svare på om søker har behov for behandling for å gjenoppta studiet.' },
       },
       avbruttDato: {
-        type: 'date',
+        type: 'date_input',
         label: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?',
-        defaultValue: grunnlag?.studentvurdering?.avbruttStudieDato
-          ? new Date(grunnlag?.studentvurdering?.avbruttStudieDato)
-          : undefined,
+        defaultValue:
+          grunnlag?.studentvurdering?.avbruttStudieDato &&
+          formaterDatoForFrontend(grunnlag.studentvurdering.avbruttStudieDato),
         rules: {
           required: 'Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.',
           validate: (value) => {
-            if (value instanceof Date || !value || typeof value === 'string') {
-              const inputDato = parseDatoFraDatePicker(value);
-              if (inputDato) {
-                return isAfter(inputDato, new Date())
-                  ? 'Dato for når stuideevnen ble 100% nedsatt / avbrutt kan ikke være frem i tid.'
-                  : true;
-              }
-              return 'Dato for når studieevnen ble 100% nedsatt / avbrutt er ugyldig.';
-            } else {
-              // rhf bruker en union av alle typer som mulige input-typer til validate
-              // må derfor ha med en typesjekk og en catch-all for sikkerhetsskyld
-              return 'Dato for når studieevnen ble 100% nedsatt / avbrutt inneholder en ugyldig verdi.';
+            const valideringsresultat = validerDato(value as string);
+            if (valideringsresultat) {
+              return valideringsresultat;
+            }
+
+            const inputDato = parseDatoFraDatePicker(value);
+            if (inputDato) {
+              return isAfter(inputDato, new Date())
+                ? 'Dato for når stuideevnen ble 100% nedsatt / avbrutt kan ikke være frem i tid.'
+                : true;
             }
           },
         },
