@@ -1,6 +1,6 @@
 'use client';
 
-import { isAfter } from 'date-fns';
+import { isAfter, parse } from 'date-fns';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
@@ -27,7 +27,7 @@ interface FormFields {
   godkjentStudieAvLånekassen: string;
   avbruttPgaSykdomEllerSkade: string;
   harBehovForBehandling: string;
-  avbruttDato: Date;
+  avbruttDato: string;
   avbruddMerEnn6Måneder: string;
 }
 
@@ -77,9 +77,9 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
       avbruttDato: {
         type: 'date_input',
         label: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?',
-        defaultValue:
-          grunnlag?.studentvurdering?.avbruttStudieDato &&
-          formaterDatoForFrontend(grunnlag.studentvurdering.avbruttStudieDato),
+        defaultValue: grunnlag?.studentvurdering?.avbruttStudieDato
+          ? formaterDatoForFrontend(grunnlag.studentvurdering.avbruttStudieDato)
+          : undefined,
         rules: {
           required: 'Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.',
           validate: (value) => {
@@ -116,7 +116,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
           behovstype: Behovstype.AVKLAR_STUDENT_KODE,
           studentvurdering: {
             begrunnelse: data.begrunnelse,
-            avbruttStudieDato: formaterDatoForBackend(data.avbruttDato),
+            avbruttStudieDato: formaterDatoForBackend(parse(data.avbruttDato, 'dd.MM.yyyy', new Date())),
             harAvbruttStudie: data.harAvbruttStudie === JaEllerNei.Ja,
             harBehovForBehandling: data.harBehovForBehandling === JaEllerNei.Ja,
             avbruddMerEnn6Måneder: data.avbruddMerEnn6Måneder === JaEllerNei.Ja,
