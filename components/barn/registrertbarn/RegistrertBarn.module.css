@@ -1,17 +1,7 @@
 .barn {
-    --ac-expansioncard-bg: var(--a-white);
-    --ac-expansioncard-header-bg: var(--a-white);
-    --ac-expansioncard-header-open-bg: var(--a-white);
-    --ac-expansioncard-header-bg-hover: var(--a-white);
-    --ac-expansioncard-border-radius: var(--a-border-radius-large);
-    --ac-expansioncard-border-hover-color: none;
-    box-shadow: var(--a-shadow-xsmall);
+  padding-bottom: 1rem;
 }
 
-.barn:hover {
-    --ac-expansioncard-border-hover-color: var(--a-border-strong);
-    --ac-expansioncard-header-bg-hover: var(--a-surface-hover);
+.barn:not(:last-of-type) {
+  border-bottom: 2px solid var(--a-border-divider);
 }
-
-
-

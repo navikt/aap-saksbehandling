@@ -14,28 +14,19 @@ const registrertBarn: IdentifisertBarn = {
 };
 
 describe('registrert barn', () => {
-  it('skal ha en heading med ident og hvilken rolle brukeren har for barnet', () => {
+  it('har en heading med navn,pid og alder', () => {
     render(<RegistrertBarn registrertBarn={registrertBarn} navn={'TOR NADO'} />);
-    const heading = screen.getByText('Eget barn - 98765432121');
-    expect(heading).toBeVisible();
+    const forventetAlder = kalkulerAlder(new Date(registrertBarn.fødselsdato));
+    expect(screen.getByText(`TOR NADO, ${registrertBarn.ident.identifikator} (${forventetAlder})`)).toBeVisible();
   });
 
-  it('skal vise navnet på barnet og alderen', () => {
+  it('har en tekst som viser at det er et folkeregistrert barn', () => {
     render(<RegistrertBarn registrertBarn={registrertBarn} navn={'TOR NADO'} />);
-    const alder = kalkulerAlder(new Date(registrertBarn.fødselsdato));
-    const tekst = screen.getByText(`TOR NADO (${alder})`);
-    expect(tekst).toBeVisible();
+    expect(screen.getByText('Folkeregistrert barn')).toBeVisible();
   });
 
-  it('skal vise label for forsørgerperioden for barnet', () => {
+  it('viser forsørgerperiode', () => {
     render(<RegistrertBarn registrertBarn={registrertBarn} navn={'TOR NADO'} />);
-    const label = screen.getByText('Forsørgerperiode');
-    expect(label).toBeVisible();
-  });
-
-  it('skal vise forsørgerperioden med datoer hvis de er satt', () => {
-    render(<RegistrertBarn registrertBarn={registrertBarn} navn={'TOR NADO'} />);
-    const periode = screen.getByText('03.03.2020 - 03.03.2038');
-    expect(periode).toBeVisible();
+    expect(screen.getByText(/^Forsørgerperiode: 03.03.2020 - 03.03.2038$/)).toBeVisible();
   });
 });
