@@ -111,12 +111,11 @@ export function kalkulerAlder(fødselsdato: Date): string {
   const dagensDato = new Date();
 
   let år = dagensDato.getFullYear() - fødselsdato.getFullYear();
-  let måneder = dagensDato.getMonth() - fødselsdato.getMonth();
+  const måneder = dagensDato.getMonth() - fødselsdato.getMonth();
 
   if (måneder < 0 || måneder === 0) {
     år--;
-    måneder += 12;
   }
 
-  return `${år} år og ${måneder} måneder`;
+  return `${år} år`;
 }
