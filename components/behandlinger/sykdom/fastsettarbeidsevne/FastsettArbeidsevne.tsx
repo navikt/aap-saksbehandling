@@ -4,7 +4,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormEvent } from 'react';
 
 import { PercentIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { TextAreaWrapper, TextFieldWrapper, useConfigForm } from '@navikt/aap-felles-react';
+import { DateInputWrapper, TextAreaWrapper, TextFieldWrapper, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 
@@ -136,8 +136,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
                 {regnOmTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`))}
               </div>
             </div>
-            <TextFieldWrapper
-              type="text"
+            <DateInputWrapper
               control={form.control}
               description={'Datoformat: dd.mm.åååå'}
               name={`arbeidsevnevurderinger.${index}.fom`}
