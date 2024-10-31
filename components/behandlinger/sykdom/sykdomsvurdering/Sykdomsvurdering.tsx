@@ -103,9 +103,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
             nedreGrense: 'FEMTI',
             erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
               data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
-            nedsattArbeidsevneDato: formaterDatoForBackend(
-              parse(data.nedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())
-            ),
+            nedsattArbeidsevneDato:
+              data.nedsattArbeidsevneDato &&
+              formaterDatoForBackend(parse(data.nedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())),
           },
         },
         referanse: behandlingsReferanse,

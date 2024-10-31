@@ -127,9 +127,9 @@ export const SykdomsvurderingMedYrkesskade = ({
             nedreGrense: data.erÅrsakssammenheng === JaEllerNei.Ja ? 'TRETTI' : 'FEMTI',
             erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
               data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
-            nedsattArbeidsevneDato: formaterDatoForBackend(
-              parse(data.nedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())
-            ),
+            nedsattArbeidsevneDato:
+              data.nedsattArbeidsevneDato &&
+              formaterDatoForBackend(parse(data.nedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())),
             yrkesskadevurdering: {
               erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
             },
