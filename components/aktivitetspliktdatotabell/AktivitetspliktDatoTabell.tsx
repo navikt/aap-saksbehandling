@@ -5,7 +5,7 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { TextFieldWrapper } from '@navikt/aap-felles-react';
 import { AktivitetspliktFormFields } from 'components/aktivitetsplikt/Aktivitetsplikt';
 
-import styles from './AktivitetsmeldingDatoTabell.module.css';
+import styles from 'components/aktivitetspliktdatotabell/AktivitetspliktDatoTabell.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
   remove: UseFieldArrayRemove;
 }
 
-export const AktivitetsmeldingDatoTabell = ({ form, fields, remove }: Props) => {
+export const AktivitetspliktDatoTabell = ({ form, fields, remove }: Props) => {
   return (
     <>
       <Table size={'small'}>

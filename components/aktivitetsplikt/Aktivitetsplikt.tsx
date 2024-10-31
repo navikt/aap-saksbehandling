@@ -12,7 +12,7 @@ import {
   AktivitetspliktParagraf,
 } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
-import { AktivitetsmeldingDatoTabell } from 'components/aktivitetsmeldingdatotabell/AktivitetsmeldingDatoTabell';
+import { AktivitetspliktDatoTabell } from 'components/aktivitetspliktdatotabell/AktivitetspliktDatoTabell';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useFieldArray } from 'react-hook-form';
@@ -189,7 +189,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
           {skalViseDatoFeltOgBegrunnelsesfelt && (
             <div className={'flex-column'}>
               <b>{hentDatoLabel(valgtBrudd)}</b>
-              <AktivitetsmeldingDatoTabell form={form} fields={fields} remove={remove} />
+              <AktivitetspliktDatoTabell form={form} fields={fields} remove={remove} />
               <div className={'flex-row'}>
                 <Button
                   icon={<PlusCircleIcon />}
