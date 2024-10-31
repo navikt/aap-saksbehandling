@@ -37,7 +37,6 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
       },
       ytterligereNedsattArbeidsevneDato: {
         type: 'date_input',
-        allowShortDates: true,
         label: 'Ytterligere nedsatt arbeidsevne dato',
         defaultValue: vurdering?.ytterligereNedsattArbeidsevneDato
           ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
