@@ -4,12 +4,13 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
-import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { BeregningsVurdering } from 'lib/types/types';
 import { numberToString } from 'lib/utils/string';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { parse } from 'date-fns';
 
 interface Props {
   vurdering?: BeregningsVurdering;
@@ -19,7 +20,7 @@ interface Props {
 
 interface FormFields {
   begrunnelse: string;
-  ytterligereNedsattArbeidsevneDato: Date;
+  ytterligereNedsattArbeidsevneDato: string;
   antattÅrligInntekt: string;
 }
 
@@ -35,9 +36,12 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
         defaultValue: getStringEllerUndefined(vurdering?.begrunnelse),
       },
       ytterligereNedsattArbeidsevneDato: {
-        type: 'date',
+        type: 'date_input',
+        allowShortDates: true,
         label: 'Ytterligere nedsatt arbeidsevne dato',
-        defaultValue: stringToDate(vurdering?.ytterligereNedsattArbeidsevneDato),
+        defaultValue: vurdering?.ytterligereNedsattArbeidsevneDato
+          ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
+          : undefined,
       },
       antattÅrligInntekt: {
         type: 'number',
@@ -56,7 +60,9 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
           behovstype: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
           beregningVurdering: {
             begrunnelse: data.begrunnelse,
-            ytterligereNedsattArbeidsevneDato: formaterDatoForBackend(data.ytterligereNedsattArbeidsevneDato),
+            ytterligereNedsattArbeidsevneDato: formaterDatoForBackend(
+              parse(data.ytterligereNedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())
+            ),
             antattÅrligInntekt: data.antattÅrligInntekt ? { verdi: Number(data.antattÅrligInntekt) } : undefined,
           },
         },
