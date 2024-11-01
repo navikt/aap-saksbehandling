@@ -14,6 +14,7 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { validerDato } from 'lib/validation/dateValidation';
+import { Veiledning } from 'components/veiledning/Veiledning';
 
 interface Props {
   behandlingVersjon: number;
@@ -157,7 +158,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
             </BodyShort>
           )}
         </div>
-
+        <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.harAvbruttStudie} horizontalRadio />
         {form.watch('harAvbruttStudie') === JaEllerNei.Ja && (
