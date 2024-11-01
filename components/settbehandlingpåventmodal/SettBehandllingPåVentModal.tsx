@@ -49,6 +49,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
       fromDate: new Date(),
       label: 'Tidspunkt',
       rules: { required: 'Du må sette en frist' },
+      strategy: 'fixed',
     },
     grunn: {
       type: 'select',
