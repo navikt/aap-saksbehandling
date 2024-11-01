@@ -160,11 +160,21 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
 
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.harAvbruttStudie} horizontalRadio />
-        <FormField form={form} formField={formFields.godkjentStudieAvLånekassen} horizontalRadio />
-        <FormField form={form} formField={formFields.avbruttPgaSykdomEllerSkade} horizontalRadio />
-        <FormField form={form} formField={formFields.harBehovForBehandling} horizontalRadio />
-        <FormField form={form} formField={formFields.avbruddMerEnn6Måneder} horizontalRadio />
-        <FormField form={form} formField={formFields.avbruttDato} />
+        {form.watch('harAvbruttStudie') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.godkjentStudieAvLånekassen} horizontalRadio />
+        )}
+        {form.watch('godkjentStudieAvLånekassen') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.avbruttPgaSykdomEllerSkade} horizontalRadio />
+        )}
+        {form.watch('avbruttPgaSykdomEllerSkade') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.harBehovForBehandling} horizontalRadio />
+        )}
+        {form.watch('harBehovForBehandling') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.avbruddMerEnn6Måneder} horizontalRadio />
+        )}
+        {form.watch('avbruddMerEnn6Måneder') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.avbruttDato} />
+        )}
       </Form>
     </VilkårsKort>
   );

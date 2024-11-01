@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { Studentvurdering } from 'components/behandlinger/sykdom/student/student/Studentvurdering';
 import { userEvent } from '@testing-library/user-event';
 import { addDays } from 'date-fns';
@@ -24,32 +24,47 @@ describe('Student', () => {
     expect(screen.getByRole('group', { name: 'Har søker avbrutt et studie?' })).toBeVisible();
   });
 
-  it('har et valg for om studiet er godkjent av Lånekassen', () => {
+  it('har et valg for om studiet er godkjent av Lånekassen', async () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
+    await velgAtSøkerHarAvbruttEtStudie();
     expect(screen.getByRole('group', { name: 'Er studiet godkjent av Lånekassen?' })).toBeVisible();
   });
 
-  it('har et valg for om studie er avbrutt pga sykdom eller skade', () => {
+  it('har et valg for om studie er avbrutt pga sykdom eller skade', async () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
+    await velgAtSøkerHarAvbruttEtStudie();
+    await velgAtStudieErGodkjentAvLånekassen();
     expect(screen.getByRole('group', { name: 'Er studie avbrutt pga sykdom eller skade?' })).toBeVisible();
   });
 
-  it('har et valg for om bruker har behov for behandling', () => {
+  it('har et valg for om bruker har behov for behandling', async () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
+    await velgAtSøkerHarAvbruttEtStudie();
+    await velgAtStudieErGodkjentAvLånekassen();
+    await velgAtStudieErAvbruttPgaSykdomEllerSkade();
     expect(
       screen.getByRole('group', { name: 'Har bruker behov for behandling for å gjenoppta studiet?' })
     ).toBeVisible();
   });
 
-  it('har et felt for å sette når studieevnen ble nedsatt fra', () => {
+  it('har et felt for å sette når studieevnen ble nedsatt fra', async () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
+    await velgAtSøkerHarAvbruttEtStudie();
+    await velgAtStudieErGodkjentAvLånekassen();
+    await velgAtStudieErAvbruttPgaSykdomEllerSkade();
+    await velgAtBrukerHarBehovForBehandling();
+    await velgAtDetErForventetAtStudieKanGjenopptasInnen6Mnd();
     expect(
       screen.getByRole('textbox', { name: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?' })
     ).toBeVisible();
   });
 
-  it('spør om avbruddet er forventet å vare mer enn 6 mnd', () => {
+  it('spør om avbruddet er forventet å vare mer enn 6 mnd', async () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
+    await velgAtSøkerHarAvbruttEtStudie();
+    await velgAtStudieErGodkjentAvLånekassen();
+    await velgAtStudieErAvbruttPgaSykdomEllerSkade();
+    await velgAtBrukerHarBehovForBehandling();
     expect(
       screen.getByRole('group', { name: 'Er det forventet at søker kan gjenoppta studiet innen 6 måneder?' })
     ).toBeVisible();
@@ -73,6 +88,7 @@ describe('Student', () => {
 
   it('viser feilmelding hvis det ikke er svart på om studiet er godkjent av Lånekassen', async () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
+    await velgAtSøkerHarAvbruttEtStudie();
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
@@ -81,6 +97,9 @@ describe('Student', () => {
 
   it('viser feilemdling hvis det ikke er svart på om studiet er avbrutt pga sykdom eller skade', async () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
+    await velgAtSøkerHarAvbruttEtStudie();
+    await velgAtStudieErGodkjentAvLånekassen();
+
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
@@ -91,6 +110,11 @@ describe('Student', () => {
 
   it('viser feilmelding hvis det ikke er svart på om bruker trenger behandling for å gjenoppta studiet', async () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
+
+    await velgAtSøkerHarAvbruttEtStudie();
+    await velgAtStudieErGodkjentAvLånekassen();
+    await velgAtStudieErAvbruttPgaSykdomEllerSkade();
+
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
@@ -101,6 +125,12 @@ describe('Student', () => {
 
   it('viser feilmelding hvis det ikke er svart på når studieevnen ble nedsatt', async () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
+    await velgAtSøkerHarAvbruttEtStudie();
+    await velgAtStudieErGodkjentAvLånekassen();
+    await velgAtStudieErAvbruttPgaSykdomEllerSkade();
+    await velgAtBrukerHarBehovForBehandling();
+    await velgAtDetErForventetAtStudieKanGjenopptasInnen6Mnd();
+
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
@@ -111,6 +141,11 @@ describe('Student', () => {
 
   it('viser feilmelding hvis det ikke er svart på om det er forventet at fraværet blir over 6 mnd', async () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
+    await velgAtSøkerHarAvbruttEtStudie();
+    await velgAtStudieErGodkjentAvLånekassen();
+    await velgAtStudieErAvbruttPgaSykdomEllerSkade();
+    await velgAtBrukerHarBehovForBehandling();
+
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
@@ -164,6 +199,11 @@ describe('Student', () => {
         grunnlag={{ oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
       />
     );
+    await velgAtSøkerHarAvbruttEtStudie();
+    await velgAtStudieErGodkjentAvLånekassen();
+    await velgAtStudieErAvbruttPgaSykdomEllerSkade();
+    await velgAtBrukerHarBehovForBehandling();
+    await velgAtDetErForventetAtStudieKanGjenopptasInnen6Mnd();
     const datoinput = screen.getByRole('textbox', {
       name: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?',
     });
@@ -186,6 +226,13 @@ describe('Student', () => {
         grunnlag={{ oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
       />
     );
+
+    await velgAtSøkerHarAvbruttEtStudie();
+    await velgAtStudieErGodkjentAvLånekassen();
+    await velgAtStudieErAvbruttPgaSykdomEllerSkade();
+    await velgAtBrukerHarBehovForBehandling();
+    await velgAtDetErForventetAtStudieKanGjenopptasInnen6Mnd();
+
     const datoinput = screen.getByRole('textbox', {
       name: 'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?',
     });
@@ -197,3 +244,40 @@ describe('Student', () => {
     expect(screen.getByText('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå')).toBeVisible();
   });
 });
+
+const velgAtSøkerHarAvbruttEtStudie = async () =>
+  await user.click(
+    within(screen.getByRole('group', { name: 'Har søker avbrutt et studie?' })).getByRole('radio', { name: 'Ja' })
+  );
+
+const velgAtStudieErGodkjentAvLånekassen = async () =>
+  await user.click(
+    within(screen.getByRole('group', { name: 'Er studiet godkjent av Lånekassen?' })).getByRole('radio', {
+      name: 'Ja',
+    })
+  );
+
+const velgAtStudieErAvbruttPgaSykdomEllerSkade = async () =>
+  await user.click(
+    within(screen.getByRole('group', { name: 'Er studie avbrutt pga sykdom eller skade?' })).getByRole('radio', {
+      name: 'Ja',
+    })
+  );
+
+const velgAtBrukerHarBehovForBehandling = async () =>
+  await user.click(
+    within(screen.getByRole('group', { name: 'Har bruker behov for behandling for å gjenoppta studiet?' })).getByRole(
+      'radio',
+      {
+        name: 'Ja',
+      }
+    )
+  );
+const velgAtDetErForventetAtStudieKanGjenopptasInnen6Mnd = async () =>
+  await user.click(
+    within(
+      screen.getByRole('group', { name: 'Er det forventet at søker kan gjenoppta studiet innen 6 måneder?' })
+    ).getByRole('radio', {
+      name: 'Ja',
+    })
+  );
