@@ -5,7 +5,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Soningsgrunnlag } from 'lib/types/types';
 import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { TextAreaWrapper, TextFieldWrapper, useConfigForm } from '@navikt/aap-felles-react';
+import { DateInputWrapper, TextAreaWrapper, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -128,8 +128,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
                   <BodyShort>{field.fraDato}</BodyShort>
                 </div>
               ) : (
-                <TextFieldWrapper
-                  type={'text'}
+                <DateInputWrapper
                   name={`soningsvurderinger.${index}.fraDato`}
                   control={form.control}
                   label={'Vurderingen skal gjelde fra dato'}
