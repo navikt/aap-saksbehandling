@@ -106,7 +106,24 @@ describe('Felt for å velge grunn', () => {
     expect(grunnFelt).toBeVisible();
   });
 
-  it('Skal ha alle valgene i feltet for å registrere en grunn for bruddet', async () => {
+  it('skal dukke opp et felt for å velge en grunn for fravær dersom man velger paragraf 11-9', async () => {
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_9();
+
+    const grunnFelt = screen.getByRole('group', { name: 'Velg grunn for bruddet' });
+    expect(grunnFelt).toBeVisible();
+  });
+
+  it('skal dukke opp et felt for å velge en grunn for fravær dersom man velger brudd ikke møtt til annen aktivitet', async () => {
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    await user.click(screen.getByRole('radio', { name: 'Ikke møtt til annen aktivitet' }));
+
+    const grunnFelt = screen.getByRole('group', { name: 'Velg grunn for bruddet' });
+    expect(grunnFelt).toBeVisible();
+  });
+
+  it('Skal ha alle valgene i feltet for å registrere en grunn for bruddet hvis der er paragraf 11-8', async () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
@@ -119,9 +136,30 @@ describe('Felt for å velge grunn', () => {
 
     const sterkeVelferdsgrunner = screen.getByRole('radio', { name: 'Sterke velferdsgrunner' });
     expect(sterkeVelferdsgrunner).toBeVisible();
+  });
+
+  it('Skal ha alle valgene i feltet for å registrere en grunn for bruddet hvis der er paragraf 11-9', async () => {
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_9();
+
+    const ingenGyldigGrunn = screen.getByRole('radio', { name: 'Ingen gyldig grunn' });
+    expect(ingenGyldigGrunn).toBeVisible();
 
     const rimeligGrunn = screen.getByRole('radio', { name: 'Rimelig grunn' });
     expect(rimeligGrunn).toBeVisible();
+  });
+
+  it('Skal resette valget som har blitt satt på grunn dersom man går fra en paragraf til en annen', async () => {
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_8();
+
+    await user.click(screen.getByRole('radio', { name: 'Ingen gyldig grunn' }));
+
+    expect(screen.getByRole('radio', { name: 'Ingen gyldig grunn' })).toBeChecked();
+    await velgParagraf_11_9();
+    expect(screen.getByRole('radio', { name: 'Ingen gyldig grunn' })).not.toBeChecked();
   });
 
   it('Skal vise en feilmelding dersom grunn ikke er besvart', async () => {
@@ -303,6 +341,13 @@ async function velgIkkeMøttITiltakSomBrudd() {
 
 async function velgParagraf_11_8() {
   const paragraf_11_8Felt = screen.getByRole('radio', { name: '11-8 fravær fra fastsatt aktivitet' });
+  await user.click(paragraf_11_8Felt);
+}
+
+async function velgParagraf_11_9() {
+  const paragraf_11_8Felt = screen.getByRole('radio', {
+    name: '11-9 reduksjon av AAP ved brudd på nærmere bestemte aktivitetsplikter',
+  });
   await user.click(paragraf_11_8Felt);
 }
 

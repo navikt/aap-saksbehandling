@@ -4,7 +4,7 @@ import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { AktivitetspliktHendelserTabell } from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Button, Radio } from '@navikt/ds-react';
 import {
   AktivitetspliktBrudd,
   AktivitetspliktGrunn,
@@ -17,12 +17,13 @@ import { useSaksnummer } from 'hooks/BehandlingHook';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useFieldArray } from 'react-hook-form';
 import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
 import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
 import { v4 as uuidv4 } from 'uuid';
+import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 
 interface AktvitetsPeriode {
   type: 'periode';
@@ -46,7 +47,7 @@ export interface AktivitetspliktFormFields {
   begrunnelse: string;
   perioder: DatoBruddPåAktivitetsplikt[];
   paragraf?: AktivitetspliktParagraf;
-  grunn?: AktivitetspliktGrunn;
+  grunn?: AktivitetspliktGrunn | null;
 }
 
 const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
@@ -88,15 +89,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         rules: { required: 'Du må skrive en begrunnelse for brudd på aktivitetsplikten' },
       },
       grunn: {
-        type: 'radio',
-        label: 'Velg grunn for bruddet',
-        options: [
-          { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
-          { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
-          { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
-          { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
-        ],
-        rules: { required: 'Du må velge en grunn' },
+        type: 'radio_nested',
       },
       perioder: {
         type: 'fieldArray',
@@ -110,8 +103,8 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
     name: 'perioder',
   });
 
-  const valgtBrudd = form.watch('brudd');
-  const valgtParagraf = form.watch('paragraf');
+  const brudd = form.watch('brudd');
+  const paragraf = form.watch('paragraf');
 
   const bruddSomSkalViseDatoFeltOgBegrennelsesfelt: AktivitetspliktBrudd[] = [
     'IKKE_AKTIVT_BIDRAG',
@@ -125,9 +118,23 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
     'IKKE_MØTT_TIL_BEHANDLING_ELLER_UTREDNING',
   ];
 
-  const skalVelgeParagraf = bruddSomSkalViseParagrafValg.includes(valgtBrudd);
+  const skalVelgeParagraf = bruddSomSkalViseParagrafValg.includes(brudd);
   const skalViseDatoFeltOgBegrunnelsesfelt =
-    Boolean(valgtParagraf) || bruddSomSkalViseDatoFeltOgBegrennelsesfelt.includes(valgtBrudd);
+    Boolean(paragraf) || bruddSomSkalViseDatoFeltOgBegrennelsesfelt.includes(brudd);
+
+  const grunnForBruddHvis119 = [
+    { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
+    { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+  ];
+  const grunnForBruddHvis118 = [
+    { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
+    { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
+    { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+  ];
+
+  useEffect(() => {
+    form.setValue('grunn', null);
+  }, [brudd, paragraf]);
 
   return (
     <SideProsessKort
@@ -182,13 +189,43 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
         >
           <FormField form={form} formField={formFields.brudd} />
           {skalVelgeParagraf && <FormField form={form} formField={formFields.paragraf} />}
+          {(form.watch('paragraf') === 'PARAGRAF_11_9' || form.watch('brudd') === 'IKKE_MØTT_TIL_MØTE') && (
+            <RadioGroupWrapper
+              control={form.control}
+              name={'grunn'}
+              label={'Velg grunn for bruddet'}
+              rules={{ required: 'Du må velge en grunn' }}
+            >
+              {grunnForBruddHvis119.map((grunn, index) => {
+                return (
+                  <Radio key={index} value={grunn.value}>
+                    {grunn.label}
+                  </Radio>
+                );
+              })}
+            </RadioGroupWrapper>
+          )}
+
           {(form.watch('paragraf') === 'PARAGRAF_11_8' || form.watch('brudd') === 'IKKE_MØTT_TIL_ANNEN_AKTIVITET') && (
-            <FormField form={form} formField={formFields.grunn} />
+            <RadioGroupWrapper
+              control={form.control}
+              name={'grunn'}
+              label={'Velg grunn for bruddet'}
+              rules={{ required: 'Du må velge en grunn' }}
+            >
+              {grunnForBruddHvis118.map((grunn, index) => {
+                return (
+                  <Radio key={index} value={grunn.value}>
+                    {grunn.label}
+                  </Radio>
+                );
+              })}
+            </RadioGroupWrapper>
           )}
 
           {skalViseDatoFeltOgBegrunnelsesfelt && (
             <div className={'flex-column'}>
-              <b>{hentDatoLabel(valgtBrudd)}</b>
+              <b>{hentDatoLabel(brudd)}</b>
               <AktivitetspliktDatoTabell form={form} fields={fields} remove={remove} />
               <div className={'flex-row'}>
                 <Button
