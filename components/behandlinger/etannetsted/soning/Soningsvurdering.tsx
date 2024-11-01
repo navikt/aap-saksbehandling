@@ -110,6 +110,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
                   'Vurder om medlemmet soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning'
                 }
                 rules={{ required: 'Du må gi en begrunnelse' }}
+                className={'begrunnelse'}
                 readOnly={readOnly}
               />
               <RadioGroupWrapper
