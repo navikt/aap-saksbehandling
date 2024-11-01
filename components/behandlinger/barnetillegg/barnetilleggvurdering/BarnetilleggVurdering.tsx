@@ -16,6 +16,8 @@ import { parse } from 'date-fns';
 import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
 import { FormEvent } from 'react';
 
+import styles from './BarnetilleggVurdering.module.css';
+
 interface Props {
   behandlingsversjon: number;
   grunnlag: BarnetilleggGrunnlag;
@@ -158,13 +160,15 @@ export const BarnetilleggVurdering = ({
         {erFolkeregistrerteBarn && (
           <div className={'flex-column'}>
             <Label size={'medium'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
-            {grunnlag.folkeregisterbarn.map((barn, index) => (
-              <RegistrertBarn
-                key={index}
-                registrertBarn={barn}
-                navn={behandlingPersonInfo?.info[barn.ident.identifikator] || 'Ukjent'}
-              />
-            ))}
+            <div className={styles.registrerte_barn}>
+              {grunnlag.folkeregisterbarn.map((barn, index) => (
+                <RegistrertBarn
+                  key={index}
+                  registrertBarn={barn}
+                  navn={behandlingPersonInfo?.info[barn.ident.identifikator] || 'Ukjent'}
+                />
+              ))}
+            </div>
           </div>
         )}
         {!readOnly && harAvklaringsbehov && (

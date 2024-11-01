@@ -1,0 +1,6 @@
+.registrerte_barn {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: max-content;
+}

@@ -4,4 +4,5 @@
 
 .barn:not(:last-of-type) {
   border-bottom: 2px solid var(--a-border-divider);
+  margin-right: calc(var(--a-spacing-8) * -1);
 }
