@@ -1,6 +1,6 @@
 'use client';
 
-import { TextAreaWrapper, TextFieldWrapper, useConfigForm } from '@navikt/aap-felles-react';
+import { DateInputWrapper, TextAreaWrapper, useConfigForm } from '@navikt/aap-felles-react';
 import { FigureIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, List, Radio, ReadMore } from '@navikt/ds-react';
 import { Form } from 'components/form/Form';
@@ -156,12 +156,11 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
               <Radio value={JaEllerNei.Ja}>Ja</Radio>
               <Radio value={JaEllerNei.Nei}>Nei</Radio>
             </RadioGroupWrapper>
-            <TextFieldWrapper
+            <DateInputWrapper
               label={'Vurderingen gjelder fra'}
               description={'Datoformat: dd.mm.åååå'}
               control={form.control}
               name={`fritaksvurderinger.${index}.fraDato`}
-              type={'text'}
               rules={{
                 required: 'Du må angi en dato vurderingen gjelder fra',
                 validate: (value) => validerDato(value as string),
