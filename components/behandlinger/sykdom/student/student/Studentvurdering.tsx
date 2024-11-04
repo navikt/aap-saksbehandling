@@ -25,11 +25,11 @@ interface Props {
 interface FormFields {
   begrunnelse: string;
   harAvbruttStudie: string;
-  godkjentStudieAvLånekassen: string;
-  avbruttPgaSykdomEllerSkade: string;
-  harBehovForBehandling: string;
-  avbruttDato: string;
-  avbruddMerEnn6Måneder: string;
+  godkjentStudieAvLånekassen?: string;
+  avbruttPgaSykdomEllerSkade?: string;
+  harBehovForBehandling?: string;
+  avbruttDato?: string;
+  avbruddMerEnn6Måneder?: string;
 }
 
 export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
@@ -117,14 +117,21 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
           behovstype: Behovstype.AVKLAR_STUDENT_KODE,
           studentvurdering: {
             begrunnelse: data.begrunnelse,
+            harAvbruttStudie: data.harAvbruttStudie === JaEllerNei.Ja,
             avbruttStudieDato:
               data.avbruttDato && formaterDatoForBackend(parse(data.avbruttDato, 'dd.MM.yyyy', new Date())),
-            harAvbruttStudie: data.harAvbruttStudie === JaEllerNei.Ja,
-            harBehovForBehandling: data.harBehovForBehandling === JaEllerNei.Ja,
-            avbruddMerEnn6Måneder: data.avbruddMerEnn6Måneder === JaEllerNei.Ja,
-            avbruttPgaSykdomEllerSkade: data.avbruttPgaSykdomEllerSkade === JaEllerNei.Ja,
-            godkjentStudieAvLånekassen: data.godkjentStudieAvLånekassen === JaEllerNei.Ja,
-            dokumenterBruktIVurdering: [],
+            harBehovForBehandling: data.harBehovForBehandling
+              ? data.harBehovForBehandling === JaEllerNei.Ja
+              : undefined,
+            avbruddMerEnn6Måneder: data.avbruddMerEnn6Måneder
+              ? data.avbruddMerEnn6Måneder === JaEllerNei.Ja
+              : undefined,
+            avbruttPgaSykdomEllerSkade: data.avbruttPgaSykdomEllerSkade
+              ? data.avbruttPgaSykdomEllerSkade === JaEllerNei.Ja
+              : undefined,
+            godkjentStudieAvLånekassen: data.godkjentStudieAvLånekassen
+              ? data.godkjentStudieAvLånekassen === JaEllerNei.Ja
+              : undefined,
           },
         },
         referanse: behandlingsReferanse,
