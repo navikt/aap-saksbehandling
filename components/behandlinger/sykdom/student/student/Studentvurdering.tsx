@@ -117,7 +117,8 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
           behovstype: Behovstype.AVKLAR_STUDENT_KODE,
           studentvurdering: {
             begrunnelse: data.begrunnelse,
-            avbruttStudieDato: formaterDatoForBackend(parse(data.avbruttDato, 'dd.MM.yyyy', new Date())),
+            avbruttStudieDato:
+              data.avbruttDato && formaterDatoForBackend(parse(data.avbruttDato, 'dd.MM.yyyy', new Date())),
             harAvbruttStudie: data.harAvbruttStudie === JaEllerNei.Ja,
             harBehovForBehandling: data.harBehovForBehandling === JaEllerNei.Ja,
             avbruddMerEnn6Måneder: data.avbruddMerEnn6Måneder === JaEllerNei.Ja,
