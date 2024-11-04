@@ -39,6 +39,8 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
 
+  console.log('grunnlag', grunnlag);
+
   const defaultValue: Vurdering[] = grunnlag.vurderinger.flatMap((item) => {
     if (item.vurderinger && item.vurderinger.length > 0) {
       return item.vurderinger.map((vurdering) => {
@@ -55,6 +57,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
     }
   });
 
+  console.log('default value', defaultValue);
   const { form } = useConfigForm<HelseinstitusjonsFormFields>({
     helseinstitusjonsvurderinger: {
       type: 'fieldArray',
