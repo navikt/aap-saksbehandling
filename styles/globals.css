@@ -23,3 +23,7 @@
 .begrunnelse {
   max-width: 90ch;
 }
+
+.prosent_input > input {
+  max-width: 6ch;
+}

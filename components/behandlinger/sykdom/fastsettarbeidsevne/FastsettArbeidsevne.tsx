@@ -124,16 +124,19 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
               readOnly={readOnly}
             />
             <div className={styles.rad}>
-              <TextFieldWrapper
-                control={form.control}
-                name={`arbeidsevnevurderinger.${index}.arbeidsevne`}
-                type={'text'}
-                label={'Oppgi den etablerte arbeidsevnen eller den uutnyttede arbeidsevnen i prosent'}
-                rules={{ required: 'Du må angi hvor stor arbeidsevne innbygger har' }}
-                readOnly={readOnly}
-              />
-              <div className={styles.timekolonne}>
-                {regnOmTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`))}
+              <div>
+                <TextFieldWrapper
+                  control={form.control}
+                  name={`arbeidsevnevurderinger.${index}.arbeidsevne`}
+                  type={'text'}
+                  label={'Oppgi den etablerte arbeidsevnen eller den uutnyttede arbeidsevnen i prosent'}
+                  rules={{ required: 'Du må angi hvor stor arbeidsevne innbygger har' }}
+                  readOnly={readOnly}
+                  className="prosent_input"
+                />
+                <div className={styles.timekolonne}>
+                  {regnOmTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`))}
+                </div>
               </div>
             </div>
             <DateInputWrapper
