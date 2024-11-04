@@ -29,7 +29,7 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
   return (
     <div className={'flex-column'}>
       <TextAreaWrapper
-        label={'Vurder om det skal gis barnetillegg for barnet'}
+        label={'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter'}
         control={form.control}
         name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
         readOnly={readOnly}
@@ -37,9 +37,7 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
         className="begrunnelse"
       />
       <RadioGroupWrapper
-        label={
-          'Har innbygger hatt  forsørgeransvar  for fosterbarnet i to år før søknadsdato, eller er forsørgeransvaret av varig karakter?'
-        }
+        label={'Har fosterhjemsordningen vart i to år eller er den av varig karakter?'}
         control={form.control}
         name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`}
         readOnly={readOnly}
@@ -51,7 +49,11 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
       </RadioGroupWrapper>
       {skalSetteEnFraOgMedDato && (
         <TextFieldWrapper
-          label={skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt ? 'Forsørgeransvar opphører fra' : 'Forsørgeransvar fra'}
+          label={
+            skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt
+              ? 'Forsørgeransvar opphører fra'
+              : 'Oppgi dato for når barnetillegget skal gis fra'
+          }
           control={form.control}
           name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`}
           type={'text'}

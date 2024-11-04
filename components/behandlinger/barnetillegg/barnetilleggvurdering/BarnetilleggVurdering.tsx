@@ -137,7 +137,7 @@ export const BarnetilleggVurdering = ({
         {harAvklaringsbehov && (
           <div className={'flex-column'}>
             <div>
-              <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes for barnetillegg</Label>
+              <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes</Label>
             </div>
 
             <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit}>

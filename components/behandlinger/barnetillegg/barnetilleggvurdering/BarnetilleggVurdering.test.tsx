@@ -68,7 +68,7 @@ describe('barnetillegg', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const heading = screen.getByText('Følgende barn er oppgitt av søker og må vurderes for barnetillegg');
+    const heading = screen.getByText('Følgende barn er oppgitt av søker og må vurderes');
     expect(heading).toBeVisible();
   });
 
@@ -189,7 +189,7 @@ describe('Oppgitte barn', () => {
       />
     );
     const felt = screen.getByRole('textbox', {
-      name: 'Vurder om det skal gis barnetillegg for barnet',
+      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
     });
     expect(felt).toBeVisible();
   });
@@ -222,7 +222,7 @@ describe('Oppgitte barn', () => {
       />
     );
     const felt = screen.getByRole('group', {
-      name: /har innbygger hatt forsørgeransvar for fosterbarnet i to år før søknadsdato, eller er forsørgeransvaret av varig karakter\?/i,
+      name: 'Har fosterhjemsordningen vart i to år eller er den av varig karakter?',
     });
     expect(felt).toBeVisible();
   });
@@ -260,7 +260,7 @@ describe('Oppgitte barn', () => {
 
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
 
-    const felt = screen.getByRole('textbox', { name: /forsørgeransvar fra/i });
+    const felt = screen.getByRole('textbox', { name: 'Oppgi dato for når barnetillegget skal gis fra' });
     expect(felt).toBeVisible();
   });
 
@@ -298,7 +298,7 @@ describe('Oppgitte barn', () => {
     );
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
     const datofelt = screen.getByRole('textbox', {
-      name: /forsørgeransvar fra/i,
+      name: 'Oppgi dato for når barnetillegget skal gis fra',
     });
     await user.type(datofelt, '12.2003');
 
@@ -348,7 +348,7 @@ describe('Oppgitte barn', () => {
     );
 
     const begrunnelsesFelterFørDetErLagtTilEnNy = screen.getAllByRole('textbox', {
-      name: 'Vurder om det skal gis barnetillegg for barnet',
+      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
     });
 
     expect(begrunnelsesFelterFørDetErLagtTilEnNy.length).toBe(1);
@@ -357,7 +357,7 @@ describe('Oppgitte barn', () => {
     await user.click(knapp);
 
     const begrunnelsesFelter = screen.getAllByRole('textbox', {
-      name: 'Vurder om det skal gis barnetillegg for barnet',
+      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
     });
 
     expect(begrunnelsesFelter.length).toBe(2);
@@ -390,7 +390,7 @@ describe('Oppgitte barn', () => {
 
     expect(
       screen.getAllByRole('textbox', {
-        name: 'Vurder om det skal gis barnetillegg for barnet',
+        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
       }).length
     ).toBe(1);
 
@@ -401,7 +401,7 @@ describe('Oppgitte barn', () => {
 
     expect(
       screen.getAllByRole('textbox', {
-        name: 'Vurder om det skal gis barnetillegg for barnet',
+        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
       }).length
     ).toBe(2);
 
@@ -464,7 +464,7 @@ describe('Oppgitte barn', () => {
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
     const skalBeregnesBarnetilleggFelt = screen.getByRole('group', {
-      name: /har innbygger hatt forsørgeransvar for fosterbarnet i to år før søknadsdato, eller er forsørgeransvaret av varig karakter\?/i,
+      name: 'Har fosterhjemsordningen vart i to år eller er den av varig karakter?',
     });
     const jaVerdi = within(skalBeregnesBarnetilleggFelt).getByRole('radio', { name: 'Ja' });
 
@@ -473,7 +473,7 @@ describe('Oppgitte barn', () => {
 
   const fyllUtEnBegrunnelse = async () => {
     const begrunnelsesfelt = screen.getByRole('textbox', {
-      name: 'Vurder om det skal gis barnetillegg for barnet',
+      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
     });
     await user.type(begrunnelsesfelt, 'Dette er en begrunnelse');
   };
