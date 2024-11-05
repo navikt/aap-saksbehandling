@@ -132,6 +132,9 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
     { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
   ];
 
+  /**
+   * Feltet for grunn må nullstilles dersom brudd eller paragraf endres, siden alternativene for grunn varierer avhengig av valgene i paragraf/brudd.
+   */
   useEffect(() => {
     form.setValue('grunn', null);
   }, [brudd, paragraf]);
