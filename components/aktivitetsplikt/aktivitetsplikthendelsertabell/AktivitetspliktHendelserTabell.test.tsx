@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import {
   AktivitetspliktHendelserMedFormId,
   AktivitetspliktHendelserTabell,
-} from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
+} from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 
 const aktivitetspliktHendelser: AktivitetspliktHendelserMedFormId[] = [
   {

@@ -1,7 +1,7 @@
 'use client';
 
 import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { AktivitetspliktHendelserTabell } from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
+import { AktivitetspliktHendelserTabell } from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Alert, Button, Radio } from '@navikt/ds-react';
@@ -12,7 +12,7 @@ import {
   AktivitetspliktParagraf,
 } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
-import { AktivitetspliktDatoTabell } from 'components/aktivitetspliktdatotabell/AktivitetspliktDatoTabell';
+import { AktivitetspliktDatoTabell } from 'components/aktivitetsplikt/aktivitetspliktdatotabell/AktivitetspliktDatoTabell';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useFieldArray } from 'react-hook-form';

@@ -5,7 +5,7 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { TextFieldWrapper } from '@navikt/aap-felles-react';
 import { AktivitetspliktFormFields } from 'components/aktivitetsplikt/Aktivitetsplikt';
 
-import styles from 'components/aktivitetspliktdatotabell/AktivitetspliktDatoTabell.module.css';
+import styles from 'components/aktivitetsplikt/aktivitetspliktdatotabell/AktivitetspliktDatoTabell.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {

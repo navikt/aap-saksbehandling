@@ -9,7 +9,7 @@ import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { feilregistrerAktivitetspliktBrudd, oppdaterAktivitetspliktBrudd } from 'lib/clientApi';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { AktivitetspliktHendelserMedFormId } from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
+import { AktivitetspliktHendelserMedFormId } from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 
 interface Props {
   aktivitetspliktHendelse: AktivitetspliktHendelserMedFormId;

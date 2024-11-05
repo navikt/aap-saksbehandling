@@ -1,8 +1,8 @@
 import { AktivitetspliktHendelse } from 'lib/types/types';
 
-import styles from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell.module.css';
+import styles from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell.module.css';
 import { Table } from '@navikt/ds-react';
-import { AktivitetspliktHendelserRad } from 'components/aktivitetsplikthendelsertabell/AktivitetspliktHendelserRad';
+import { AktivitetspliktHendelserRad } from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserRad';
 
 export type AktivitetspliktHendelserMedFormId = AktivitetspliktHendelse & { id: string };
 
