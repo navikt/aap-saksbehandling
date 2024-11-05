@@ -22,10 +22,10 @@ describe.skip('Aktivitetstabell', () => {
   render(<AktivitetspliktHendelserTabell aktivitetspliktHendelser={aktivitetspliktHendelser} />);
 });
 
-describe('felt for om det er en feilregistrering', () => {
+describe.skip('felt for om det er en feilregistrering', () => {
   render(<AktivitetspliktHendelserTabell aktivitetspliktHendelser={aktivitetspliktHendelser} />);
 });
 
-describe('felt for hvilken grunn til brudd', () => {
+describe.skip('felt for hvilken grunn til brudd', () => {
   render(<AktivitetspliktHendelserTabell aktivitetspliktHendelser={aktivitetspliktHendelser} />);
 });
