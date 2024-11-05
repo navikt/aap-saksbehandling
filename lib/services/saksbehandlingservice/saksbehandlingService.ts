@@ -10,16 +10,17 @@ import {
   BeregningsGrunnlag,
   BeregningsVurdering,
   BistandsGrunnlag,
-  OpprettAktivitetspliktBrudd,
   DetaljertBehandling,
   DokumentInfo,
   FatteVedtakGrunnlag,
+  FeilregistrerAktivitetspliktBrudd,
   FritakMeldepliktGrunnlag,
   HelseinstitusjonGrunnlag,
-  JobbInfo,
   KvalitetssikringGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   MedlemskapGrunnlag,
+  OppdaterAktivitetspliktBrudd,
+  OpprettAktivitetspliktBrudd,
   OpprettTestcase,
   SakPersoninfo,
   SaksInfo,
@@ -32,8 +33,6 @@ import {
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
   VenteInformasjon,
-  OppdaterAktivitetspliktBrudd,
-  FeilregistrerAktivitetspliktBrudd,
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { logError, logWarning } from '@navikt/aap-felles-utils';
@@ -250,34 +249,4 @@ export const hentLocalToken = async () => {
     logError('hentLocalToken feilet', err);
     return Promise.resolve('dummy-token');
   }
-};
-
-export const hentFeilendeJObber = async () => {
-  const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/feilende`;
-  return await fetchProxy<JobbInfo[]>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentPlanlagteJobber = async () => {
-  const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/planlagte-jobber`;
-  return await fetchProxy<JobbInfo[]>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const rekjørJobb = async (jobbId: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/rekjor/${jobbId}`;
-  return await fetchProxy<string>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const avbrytJobb = async (jobbId: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/avbryt/${jobbId}`;
-  return await fetchProxy<string>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const rekjørFeiledeJobber = async () => {
-  const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/rekjorAlleFeilede`;
-  return await fetchProxy<string>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentSisteKjørteJobber = async () => {
-  const url = `${saksbehandlingApiBaseUrl}/drift/api/jobb/sisteKjørte`;
-  return await fetchProxy<JobbInfo[]>(url, saksbehandlingApiScope, 'GET');
 };

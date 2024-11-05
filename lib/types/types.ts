@@ -113,8 +113,6 @@ export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.fl
 export type AvslagÅrsak =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['avslagsårsak'];
 
-export type JobbInfo = components['schemas']['no.nav.aap.motor.api.JobbInfoDto'];
-
 export type ErStudentStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['erStudentStatus'];
 export type SkalGjenopptaStudieStatus =

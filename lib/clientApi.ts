@@ -61,18 +61,6 @@ export function feilregistrerAktivitetspliktBrudd(saksnummer: string, aktivitet:
   return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/feilregistrer`, 'POST', aktivitet);
 }
 
-export function rekjørJobb(jobbId: number) {
-  return fetch(`/api/drift/jobb/rekjor/${jobbId}`, { method: 'GET' });
-}
-
-export function rekjørFeiledeJobber() {
-  return fetch('/api/drift/jobb/rekjorfeilede', { method: 'GET' });
-}
-
-export function avbrytKjørendeJobb(jobbId: number) {
-  return fetch(`/api/drift/jobb/avbryt/${jobbId}`, { method: 'GET' });
-}
-
 export function simulerMeldeplikt(referanse: string, vurderinger: SimulerMeldeplikt) {
   return fetchProxy(`/api/behandling/${referanse}/simuler-meldeplikt`, 'POST', vurderinger);
 }
