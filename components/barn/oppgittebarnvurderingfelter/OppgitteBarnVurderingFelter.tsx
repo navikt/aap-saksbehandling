@@ -3,7 +3,7 @@ import { JaEllerNei } from 'lib/utils/form';
 
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { UseFormReturn } from 'react-hook-form';
-import { TextAreaWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
+import { DateInputWrapper, TextAreaWrapper } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 
 import { validerDato } from 'lib/validation/dateValidation';
@@ -48,7 +48,7 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
       {skalSetteEnFraOgMedDato && (
-        <TextFieldWrapper
+        <DateInputWrapper
           label={
             skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt
               ? 'Forsørgeransvar opphører fra'
@@ -56,7 +56,6 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
           }
           control={form.control}
           name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`}
-          type={'text'}
           rules={{
             validate: {
               validerDato: (value) => validerDato(value as string),
