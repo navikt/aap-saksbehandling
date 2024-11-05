@@ -5,6 +5,7 @@ import { ClockDashedIcon, FilesIcon, HddDownIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { DokumentInfo } from 'lib/types/types';
+import { InnhentDokumentasjon } from 'components/innhetdokumentasjon/InnhentDokumentasjon';
 
 interface Props {
   dokumenter?: DokumentInfo[];
@@ -33,7 +34,7 @@ export const Saksbehandlingsoversikt = ({ dokumenter }: Props) => {
       </Tabs>
 
       {toggleGroupValue === 'saksdokumenter' && <Saksdokumenter dokumenter={dokumenter} />}
-      {toggleGroupValue === 'innhent_dokument' && <div>Her kommer det innhenting av dokumenter</div>}
+      {toggleGroupValue === 'innhent_dokument' && <InnhentDokumentasjon />}
       {toggleGroupValue === 'sakshistorikk' && <div>Her kommer det sakshistorikk</div>}
     </div>
   );
