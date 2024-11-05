@@ -137,7 +137,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
    */
   useEffect(() => {
     form.setValue('grunn', null);
-  }, [brudd, paragraf]);
+  }, [brudd, paragraf, form]);
 
   return (
     <SideProsessKort
