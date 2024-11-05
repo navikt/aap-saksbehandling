@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { InnhentDokumentasjon } from 'components/innhetdokumentasjon/InnhentDokumentasjon';
+import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDokumentasjon';
 import { describe, test, expect, beforeEach } from 'vitest';
 
 const user = userEvent.setup();

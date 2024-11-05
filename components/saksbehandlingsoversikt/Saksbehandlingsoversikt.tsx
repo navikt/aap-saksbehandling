@@ -5,7 +5,7 @@ import { ClockDashedIcon, FilesIcon, HddDownIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { DokumentInfo } from 'lib/types/types';
-import { InnhentDokumentasjon } from 'components/innhetdokumentasjon/InnhentDokumentasjon';
+import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDokumentasjon';
 
 interface Props {
   dokumenter?: DokumentInfo[];
