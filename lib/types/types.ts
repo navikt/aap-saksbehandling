@@ -170,3 +170,6 @@ export type FritaksvurderingDto =
 export type Periode = components['schemas']['no.nav.aap.komponenter.type.Periode'];
 
 export type BehandlingPersoninfo = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingPersoninfo'];
+
+export type AvklaringsbehovKode =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løser.vedtak.TotrinnsVurdering']['definisjon'];
