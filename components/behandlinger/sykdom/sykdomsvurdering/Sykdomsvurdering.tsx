@@ -25,8 +25,9 @@ interface FormFields {
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   begrunnelse: string;
   nedsattArbeidsevneDato: string;
-  hoveddiagnose: string;
-  bidiagnose: string[];
+  hoveddiagnose?: string;
+  bidiagnose?: string[];
+  erArbeidsevnenAvEnVissVarighet?: string;
 }
 
 export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: SykdomProps) => {
@@ -96,6 +97,12 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
         type: 'combobox_multiple',
         label: 'Bidiagnoser (valgfritt)',
         options: ['Bidiagnose 1', 'Bidiagnose 2', 'Bidiagnose 3', 'Bidiagnose 4'],
+      },
+      erArbeidsevnenAvEnVissVarighet: {
+        type: 'radio',
+        label: 'Er den nedsatte arbeidsevnen av en viss varighet?',
+        rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet' },
+        options: JaEllerNeiOptions,
       },
     },
     { shouldUnregister: true, readOnly: readOnly }
@@ -177,6 +184,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
                 Innbygger vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
               </Alert>
             )}
+            {/*{form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (*/}
+            {/*  <FormField form={form} formField={formFields.erArbeidsevnenAvEnVissVarighet} horizontalRadio />*/}
+            {/*)}*/}
             <FormField
               form={form}
               formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense}

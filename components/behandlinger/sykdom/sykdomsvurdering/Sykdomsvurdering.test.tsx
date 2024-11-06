@@ -91,6 +91,43 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     });
   });
 
+  // TODO Ta inn når backend er klar - Thomas
+  describe.skip('felt for nedsettelsen er av en viss varighet', () => {
+    it('feltet skal vises', async () => {
+      render(
+        <Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />
+      );
+      await velgAtInnbyggerHarSykdomSkadeLyte();
+
+      const harInnbyggerNedsattArbeidsevneFelt = screen.getByRole('group', {
+        name: 'Har innbygger nedsatt arbeidsevne?',
+      });
+
+      await user.click(within(harInnbyggerNedsattArbeidsevneFelt).getByRole('radio', { name: 'Ja' }));
+
+      const felt = screen.getByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' });
+      expect(felt).toBeVisible();
+    });
+
+    it('skal vise en feilmelding hvis feltet ikke er besvart', async () => {
+      render(
+        <Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />
+      );
+      await velgAtInnbyggerHarSykdomSkadeLyte();
+
+      const harInnbyggerNedsattArbeidsevneFelt = screen.getByRole('group', {
+        name: 'Har innbygger nedsatt arbeidsevne?',
+      });
+
+      await user.click(within(harInnbyggerNedsattArbeidsevneFelt).getByRole('radio', { name: 'Ja' }));
+
+      const button = screen.getByRole('button', { name: /Bekreft/ });
+      await user.click(button);
+
+      expect(screen.getByText('Du må svare på om den nedsatte arbeidsevnen er av en viss varighet')).toBeVisible();
+    });
+  });
+
   it('viser ikke felt for om arbeidsevnen er nedsatt før spørsmål om sykdom, skade eller lyte er besvart', () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
     expect(screen.queryByRole('group', { name: 'Har innbygger nedsatt arbeidsevne?' })).not.toBeInTheDocument();
