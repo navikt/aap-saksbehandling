@@ -42,7 +42,7 @@
     "@navikt/aap-felles-prettier": "^2.0.16",
     "@navikt/eslint-config-aap": "^2.0.16",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@types/node": "22.7.5",
     "@types/react": "^18.3.11",
@@ -51,8 +51,8 @@
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
-    "@vitejs/plugin-react": "^4.3.2",
-    "@vitest/coverage-v8": "^2.1.2",
+    "@vitejs/plugin-react": "^4.3.3",
+    "@vitest/coverage-v8": "^2.1.4",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.15",
     "eslint-config-standard": "^17.1.0",
@@ -71,8 +71,8 @@
     "prettier": "^3.3.3",
     "typescript": "^5.6.3",
     "vite-tsconfig-paths": "^5.0.1",
-    "vitest": "^2.1.2",
-    "vitest-fetch-mock": "^0.3.0"
+    "vitest": "^2.1.4",
+    "vitest-fetch-mock": "^0.4.1"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --cache --fix",
