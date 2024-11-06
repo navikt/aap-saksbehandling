@@ -42,6 +42,38 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     expect(screen.getByRole('group', { name: 'Har innbygger sykdom, skade eller lyte?' })).toBeVisible();
   });
 
+  // TODO Ta inn når backend er klar - Thomas
+  describe.skip('felt for å sette diagnoser', () => {
+    it.skip('skal ha et felt for å sette en hoveddiagnose dersom innbygger har sykdom, skade eller lyte', async () => {
+      render(
+        <Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />
+      );
+      await velgAtInnbyggerHarSykdomSkadeLyte();
+
+      expect(screen.getByRole('combobox', { name: 'Hoveddiagnose' })).toBeVisible();
+    });
+
+    it.skip('skal ha vise en feilmelding dersom det ikke har blitt satt en hoveddiagnose', async () => {
+      render(
+        <Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />
+      );
+      await velgAtInnbyggerHarSykdomSkadeLyte();
+      const button = screen.getByRole('button', { name: /Bekreft/ });
+      await user.click(button);
+
+      expect(screen.getByText('Du må velge en hoveddiagnose')).toBeVisible();
+    });
+
+    it.skip('skal ha et felt for å sette bidiagnoser dersom innbygger har sykdom, skade eller lyte', async () => {
+      render(
+        <Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />
+      );
+      await velgAtInnbyggerHarSykdomSkadeLyte();
+
+      expect(screen.getByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).toBeVisible();
+    });
+  });
+
   it('viser ikke felt for om arbeidsevnen er nedsatt før spørsmål om sykdom, skade eller lyte er besvart', () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
     expect(screen.queryByRole('group', { name: 'Har innbygger nedsatt arbeidsevne?' })).not.toBeInTheDocument();

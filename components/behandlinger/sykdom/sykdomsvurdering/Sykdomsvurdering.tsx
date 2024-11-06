@@ -25,6 +25,8 @@ interface FormFields {
   erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   begrunnelse: string;
   nedsattArbeidsevneDato: string;
+  hoveddiagnose: string;
+  bidiagnose: string[];
 }
 
 export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: SykdomProps) => {
@@ -84,6 +86,17 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
           validate: (value) => validerDato(value as string),
         },
       },
+      hoveddiagnose: {
+        type: 'combobox',
+        label: 'Hoveddiagnose',
+        options: ['Diagnose 1', 'Diagnose 2', 'Diagnose 3', 'Diagnose 4'],
+        rules: { required: 'Du må velge en hoveddiagnose' },
+      },
+      bidiagnose: {
+        type: 'combobox_multiple',
+        label: 'Bidiagnoser (valgfritt)',
+        options: ['Bidiagnose 1', 'Bidiagnose 2', 'Bidiagnose 3', 'Bidiagnose 4'],
+      },
     },
     { shouldUnregister: true, readOnly: readOnly }
   );
@@ -119,6 +132,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
     form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') === JaEllerNei.Ja &&
     form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja;
 
+  console.log(form.watch());
   return (
     <VilkårsKort
       heading={'Nedsatt arbeidsevne - § 11-5'}
@@ -155,6 +169,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
         <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
         {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
           <>
+            {/*TODO Ta inn når backend er klar - Thomas*/}
+            {/*<FormField form={form} formField={formFields.hoveddiagnose} />*/}
+            {/*<FormField form={form} formField={formFields.bidiagnose} />*/}
             <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
             <FormField
               form={form}
