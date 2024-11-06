@@ -42,6 +42,23 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     expect(screen.getByRole('group', { name: 'Har innbygger sykdom, skade eller lyte?' })).toBeVisible();
   });
 
+  it('skal vise en informasjonsvarsling dersom det blir besvart av innbygger ikke har nedsatt arbeidsevne', async () => {
+    render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
+    await velgAtInnbyggerHarSykdomSkadeLyte();
+
+    const harInnbyggerNedsattArbeidsevneFelt = screen.getByRole('group', {
+      name: 'Har innbygger nedsatt arbeidsevne?',
+    });
+
+    await user.click(within(harInnbyggerNedsattArbeidsevneFelt).getByRole('radio', { name: 'Nei' }));
+
+    const informasjonsvarsling = screen.getByText(
+      'Innbygger vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.'
+    );
+
+    expect(informasjonsvarsling).toBeVisible();
+  });
+
   // TODO Ta inn når backend er klar - Thomas
   describe.skip('felt for å sette diagnoser', () => {
     it.skip('skal ha et felt for å sette en hoveddiagnose dersom innbygger har sykdom, skade eller lyte', async () => {

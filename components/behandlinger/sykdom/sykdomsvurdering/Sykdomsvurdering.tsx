@@ -16,7 +16,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
-import { Link } from '@navikt/ds-react';
+import { Alert, Link } from '@navikt/ds-react';
 
 interface FormFields {
   harSkadeSykdomEllerLyte: string;
@@ -132,7 +132,6 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
     form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') === JaEllerNei.Ja &&
     form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja;
 
-  console.log(form.watch());
   return (
     <VilkårsKort
       heading={'Nedsatt arbeidsevne - § 11-5'}
@@ -173,6 +172,11 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
             {/*<FormField form={form} formField={formFields.hoveddiagnose} />*/}
             {/*<FormField form={form} formField={formFields.bidiagnose} />*/}
             <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
+            {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei && (
+              <Alert variant={'info'} size={'small'} className={'fit-content'}>
+                Innbygger vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
+              </Alert>
+            )}
             <FormField
               form={form}
               formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense}
