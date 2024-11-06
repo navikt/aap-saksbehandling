@@ -60,7 +60,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
               {kanFjernePeriode && !readOnly && (
                 <Button
                   onClick={() => remove(vurderingIndex)}
-                  className={'fit-content-button'}
+                  className={'fit-content'}
                   type={'button'}
                   size={'small'}
                   variant={'tertiary'}
@@ -76,7 +76,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
       {kanLeggeTilNyVurdering && (
         <Button
           onClick={() => append({ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' })}
-          className={'fit-content-button'}
+          className={'fit-content'}
           variant={'tertiary'}
           size={'medium'}
           icon={<PlusCircleIcon />}

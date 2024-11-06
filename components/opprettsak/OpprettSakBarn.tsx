@@ -42,7 +42,7 @@ export const OpprettSakBarn = ({ form }: Props) => {
                   size={'small'}
                   icon={<TrashIcon />}
                   onClick={() => remove(index)}
-                  className={'fit-content-button'}
+                  className={'fit-content'}
                 >
                   Fjern barn
                 </Button>
@@ -52,7 +52,7 @@ export const OpprettSakBarn = ({ form }: Props) => {
               {fields.length === index + 1 && (
                 <Button
                   type="button"
-                  className={'fit-content-button'}
+                  className={'fit-content'}
                   size={'small'}
                   onClick={() => {
                     append({ fodselsdato: '', harRelasjon: JaEllerNei.Ja });

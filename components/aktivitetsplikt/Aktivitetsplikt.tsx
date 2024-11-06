@@ -254,7 +254,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
               <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             </div>
           )}
-          <Button className={'fit-content-button'}>Bekreft</Button>
+          <Button className={'fit-content'}>Bekreft</Button>
         </form>
       </div>
     </SideProsessKort>

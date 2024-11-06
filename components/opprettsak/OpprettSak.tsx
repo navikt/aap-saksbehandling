@@ -89,7 +89,7 @@ export const OpprettSak = () => {
         <FormField form={form} formField={formFields.institusjon} />
       </div>
       <OpprettSakBarn form={form} />
-      <Button className={'fit-content-button'}>Opprett test sak</Button>
+      <Button className={'fit-content'}>Opprett test sak</Button>
     </form>
   );
 };

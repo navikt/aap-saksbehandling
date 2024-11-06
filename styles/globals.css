@@ -1,10 +1,5 @@
-/* Må overstyre fokus i editor siden det ikke er mulig å styre dette via props */
-.ProseMirror-focused {
-  outline: none;
-}
-
-/* Hjelper mot at knappene fra Aksel bruker full bredde når man bruker grid/flex */
-.fit-content-button {
+/* Hjelper mot at elementer bruker full bredde når man bruker grid/flex, men kun bredden som den trenger */
+.fit-content {
   width: fit-content;
 }
 

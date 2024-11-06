@@ -60,7 +60,7 @@ export const DokumentTabell = ({ dokumenter = defaultDokumenter }: Props) => {
         )}
       </Table>
       <Button
-        className={`fit-content-button ${styles.leggTilDokumentKnapp}`}
+        className={`fit-content ${styles.leggTilDokumentKnapp}`}
         size={'small'}
         icon={<PlusIcon />}
         variant={'tertiary'}

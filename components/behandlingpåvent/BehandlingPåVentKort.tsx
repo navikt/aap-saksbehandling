@@ -55,7 +55,7 @@ export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props)
 
             await revalidateFlyt(behandlingsReferanse);
           }}
-          className={'fit-content-button'}
+          className={'fit-content'}
         >
           Åpne behandling
         </Button>

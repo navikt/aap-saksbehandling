@@ -129,7 +129,7 @@ export default function Page() {
           </div>
         </div>
       )}
-      <Button className={'fit-content-button'}>Bekreft</Button>
+      <Button className={'fit-content'}>Bekreft</Button>
     </form>
   );
 }

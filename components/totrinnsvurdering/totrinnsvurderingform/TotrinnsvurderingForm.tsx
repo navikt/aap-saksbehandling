@@ -108,7 +108,7 @@ export const TotrinnsvurderingForm = ({
       ))}
       {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
       {!readOnly && (
-        <Button size={'medium'} className={'fit-content-button'} loading={isLoading}>
+        <Button size={'medium'} className={'fit-content'} loading={isLoading}>
           Send inn
         </Button>
       )}

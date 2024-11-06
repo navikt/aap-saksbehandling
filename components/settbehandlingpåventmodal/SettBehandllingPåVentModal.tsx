@@ -95,7 +95,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button form={'settBehandlingPåVent'} className={'fit-content-button'} loading={isLoading}>
+        <Button form={'settBehandlingPåVent'} className={'fit-content'} loading={isLoading}>
           Sett på vent
         </Button>
         <Button variant={'secondary'} onClick={onClose}>

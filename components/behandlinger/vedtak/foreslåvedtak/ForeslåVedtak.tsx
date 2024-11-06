@@ -26,7 +26,7 @@ export const ForeslåVedtak = ({ behandlingResultat, behandlingVersjon }: Props)
         <Vilkårsoppsummering behandlingResultat={behandlingResultat} />
         <ServerSentEventStatusAlert status={status} />
         <Button
-          className={'fit-content-button'}
+          className={'fit-content'}
           loading={isLoading}
           onClick={async () => {
             løsBehovOgGåTilNesteSteg({

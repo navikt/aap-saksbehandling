@@ -172,7 +172,7 @@ export const BarnetilleggVurdering = ({
           </div>
         )}
         {!readOnly && harAvklaringsbehov && (
-          <Button className={'fit-content-button'} form={'barnetillegg'} loading={isLoading}>
+          <Button className={'fit-content'} form={'barnetillegg'} loading={isLoading}>
             Bekreft
           </Button>
         )}

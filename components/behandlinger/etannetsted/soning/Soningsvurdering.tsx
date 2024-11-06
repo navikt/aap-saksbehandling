@@ -144,7 +144,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
                 <Button
                   type={'button'}
                   icon={<TrashIcon />}
-                  className={'fit-content-button'}
+                  className={'fit-content'}
                   variant={'tertiary'}
                   size={'small'}
                   onClick={() => remove(index)}
@@ -159,7 +159,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
           <Button
             type={'button'}
             icon={<PlusCircleIcon />}
-            className={'fit-content-button'}
+            className={'fit-content'}
             variant={'tertiary'}
             size={'small'}
             onClick={() => append({ begrunnelse: '', fraDato: '', skalOpphøre: '' })}
