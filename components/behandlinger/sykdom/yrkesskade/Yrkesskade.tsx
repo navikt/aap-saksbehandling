@@ -24,24 +24,30 @@ interface FormFields {
 
 export const Yrkesskade = ({ behandlingVersjon, behandlingsReferanse, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('VURDER_YRKESSKADE');
-  const { form, formFields } = useConfigForm<FormFields>({
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Vurder om yrkesskade er medvirkende årsak til nedsatt arbeidsevne',
+  const { form, formFields } = useConfigForm<FormFields>(
+    {
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Vurder om yrkesskade er medvirkende årsak til nedsatt arbeidsevne',
+        rules: { required: 'Du må begrunne' },
+      },
+      erÅrsakssammenheng: {
+        type: 'radio',
+        label: 'Finnes det en årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne?',
+        options: JaEllerNeiOptions,
+        rules: { required: 'Du må svare på om det finnes en årsakssammenheng' },
+      },
+      relevanteSaker: {
+        type: 'checkbox_nested',
+      },
+      andelAvNedsettelsen: {
+        type: 'number',
+        label: 'Hvor stor andel totalt av nedsatt arbeidsevne skyldes yrkesskadene?',
+        rules: { required: 'Du må svare på hvor stor andel av den nedsatte arbeidsevnen skyldes yrkesskadene' },
+      },
     },
-    erÅrsakssammenheng: {
-      type: 'radio',
-      label: 'Finnes det en årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne?',
-      options: JaEllerNeiOptions,
-    },
-    relevanteSaker: {
-      type: 'checkbox_nested',
-    },
-    andelAvNedsettelsen: {
-      type: 'number',
-      label: 'Hvor stor andel totalt av nedsatt arbeidsevne skyldes yrkesskadene?',
-    },
-  });
+    { readOnly }
+  );
 
   return (
     <VilkårsKort
