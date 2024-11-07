@@ -55,15 +55,16 @@ export const Yrkesskade = ({ readOnly }: Props) => {
         status={'DONE'}
       >
         <Veiledning />
-        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
         <FormField form={form} formField={formFields.erÅrsakssammenhengMellomYrkesskadeOgNedsattArbeidsevne} />
         <CheckboxWrapper
           name={'dokumenter'}
           control={form.control}
           label={'Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.'}
           readOnly={readOnly}
+          rules={{ required: 'Du må velge minst én yrkesskade' }}
         >
-          <div>Hei</div>
+          <div></div>
         </CheckboxWrapper>
         <FormField form={form} formField={formFields.andelAvTotalNedsattArbeidsevneSkyldesYrkesskadene} />
       </Form>
