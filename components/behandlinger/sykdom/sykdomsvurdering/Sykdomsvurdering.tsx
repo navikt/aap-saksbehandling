@@ -1,7 +1,13 @@
 'use client';
 
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import {
+  Behovstype,
+  getJaNeiEllerUndefined,
+  getStringEllerUndefined,
+  JaEllerNei,
+  JaEllerNeiOptions,
+} from 'lib/utils/form';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
@@ -91,12 +97,16 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
         type: 'radio',
         label: 'Er den nedsatte arbeidsevnen av en viss varighet?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet),
         rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet' },
         options: JaEllerNeiOptions,
       },
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: {
         type: 'radio',
         label: 'Er arbeidsevnen nedsatt med minst 30%?',
+        defaultValue: getJaNeiEllerUndefined(
+          grunnlag.sykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+        ),
         rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30%.' },
         options: JaEllerNeiOptions,
       },
@@ -105,6 +115,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         label: 'Vurdering om arbeidsevne er nedsatt med minst 30% (§11-22)',
         description:
           'Innbygger har yrkesskade, og kan ha rett på AAP med en nedsatt arbeidsevne på minst 30%. Nay vurderer årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne.',
+        defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadeBegrunnelse),
       },
     },
     { shouldUnregister: true, readOnly: readOnly }

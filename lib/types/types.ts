@@ -171,3 +171,6 @@ export type BehandlingPersoninfo = components['schemas']['no.nav.aap.behandlings
 
 export type AvklaringsbehovKode =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løser.vedtak.TotrinnsVurdering']['definisjon'];
+
+export type YrkesskadeVurderingGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadeVurderingGrunnlagDto'];

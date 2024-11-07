@@ -1082,6 +1082,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/sykdom/yrkesskade': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadeVurderingGrunnlagDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/sykdom/sykepengergrunnlag': {
     parameters: {
       query?: never;
@@ -2161,7 +2199,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2024-11-07T13:12:20.056902
+       * @example 2024-11-07T13:40:08.113273
        */
       tidspunkt: string;
     };
@@ -2889,7 +2927,7 @@ export interface components {
       fraDato: string;
       /**
        * Format: date-time
-       * @example 2024-11-07T13:12:20.056902
+       * @example 2024-11-07T13:40:08.113273
        */
       vurderingsTidspunkt: string;
     };
@@ -3055,7 +3093,7 @@ export interface components {
       harFritak: boolean;
       /**
        * Format: date-time
-       * @example 2024-11-07T13:12:20.056902
+       * @example 2024-11-07T13:40:08.113273
        */
       vurderingsTidspunkt: string;
     };
@@ -3131,8 +3169,13 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerGrunnlagDto': {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.SykepengerVurdering'];
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadeVurderingGrunnlagDto': {
+      opplysninger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.InnhentetSykdomsOpplysninger'];
+      yrkesskadeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadevurderingDto'];
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadevurderingDto': {
-      andelAvNedsettelsen?: components['schemas']['no.nav.aap.verdityper.Prosent'];
+      /** Format: int32 */
+      andelAvNedsettelsen?: number | null;
       begrunnelse: string;
       'er\u00C5rsakssammenheng': boolean;
       relevanteSaker: string[];
@@ -3198,6 +3241,7 @@ export interface components {
         | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'FASTSETT_SYKDOMSVILKÅRET'
         | 'VURDER_YRKESSKADE'
         | 'FRITAK_MELDEPLIKT'
         | 'KVALITETSSIKRING'
@@ -3252,6 +3296,7 @@ export interface components {
         | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'FASTSETT_SYKDOMSVILKÅRET'
         | 'VURDER_YRKESSKADE'
         | 'FRITAK_MELDEPLIKT'
         | 'KVALITETSSIKRING'
@@ -3292,6 +3337,7 @@ export interface components {
         | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'FASTSETT_SYKDOMSVILKÅRET'
         | 'VURDER_YRKESSKADE'
         | 'FRITAK_MELDEPLIKT'
         | 'KVALITETSSIKRING'
@@ -3314,7 +3360,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2024-11-07T13:12:20.056902
+       * @example 2024-11-07T13:40:08.113273
        */
       opprettet: string;
       /** Format: uuid */
@@ -3340,7 +3386,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2024-11-07T13:12:20.056902
+       * @example 2024-11-07T13:40:08.113273
        */
       tidsstempel: string;
     };
@@ -3380,6 +3426,7 @@ export interface components {
         | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'FASTSETT_SYKDOMSVILKÅRET'
         | 'VURDER_YRKESSKADE'
         | 'FRITAK_MELDEPLIKT'
         | 'KVALITETSSIKRING'
@@ -3575,6 +3622,7 @@ export interface components {
         | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'FASTSETT_SYKDOMSVILKÅRET'
         | 'VURDER_YRKESSKADE'
         | 'FRITAK_MELDEPLIKT'
         | 'KVALITETSSIKRING'
@@ -3610,7 +3658,7 @@ export interface components {
       brevkode?: string | null;
       /**
        * Format: date-time
-       * @example 2024-11-07T13:12:20.056902
+       * @example 2024-11-07T13:40:08.113273
        */
       datoOpprettet: string;
       dokumentInfoId: string;
@@ -3623,7 +3671,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2024-11-07T13:12:20.056902
+       * @example 2024-11-07T13:40:08.113273
        */
       opprettet: string;
       /** Format: uuid */
@@ -3651,7 +3699,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-11-07T13:12:20.056902
+       * @example 2024-11-07T13:40:08.113273
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -3662,7 +3710,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2024-11-07T13:12:20.056902
+       * @example 2024-11-07T13:40:08.113273
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -3696,7 +3744,7 @@ export interface components {
       navn: string;
       /**
        * Format: date-time
-       * @example 2024-11-07T13:12:20.056902
+       * @example 2024-11-07T13:40:08.113273
        */
       'planlagtKj\u00F8retidspunkt': string;
       /** @enum {string} */

@@ -33,6 +33,7 @@ import {
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
   VenteInformasjon,
+  YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { logError, logWarning } from '@navikt/aap-felles-utils';
@@ -118,6 +119,13 @@ export const hentDokument = async (journalPostId: string, dokumentInfoId: string
 export const hentMedlemskapGrunnlag = async (behandlingsReferanse: string): Promise<MedlemskapGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/medlemskap`;
   return await fetchProxy<MedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentYrkesskadeVurderingGrunnlag = async (
+  behandlingsReferanse: string
+): Promise<YrkesskadeVurderingGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/yrkesskade`;
+  return await fetchProxy<YrkesskadeVurderingGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentStudentGrunnlag = async (behandlingsReferanse: string): Promise<StudentGrunnlag> => {

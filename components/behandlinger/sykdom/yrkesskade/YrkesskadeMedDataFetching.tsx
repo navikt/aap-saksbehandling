@@ -1,4 +1,5 @@
 import { Yrkesskade } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
+import { hentYrkesskadeVurderingGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -7,7 +8,13 @@ interface Props {
 }
 
 export const YrkesskadeMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
+  const yrkesskadeVurderingGrunnlag = await hentYrkesskadeVurderingGrunnlag(behandlingsReferanse);
   return (
-    <Yrkesskade readOnly={readOnly} behandlingVersjon={behandlingVersjon} behandlingsReferanse={behandlingsReferanse} />
+    <Yrkesskade
+      yrkesskadeVurderingGrunnlag={yrkesskadeVurderingGrunnlag}
+      readOnly={readOnly}
+      behandlingVersjon={behandlingVersjon}
+      behandlingsReferanse={behandlingsReferanse}
+    />
   );
 };
