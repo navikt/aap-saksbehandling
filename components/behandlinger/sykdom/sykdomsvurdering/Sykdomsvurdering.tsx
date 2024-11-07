@@ -203,17 +203,18 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
           </>
         )}
 
-        {grunnlag.skalVurdereYrkesskade && (
-          <>
-            <Veiledning />
-            <FormField form={form} formField={formFields.yrkesskadeBegrunnelse} className={'begrunnelse'} />
-            <FormField
-              form={form}
-              formField={formFields.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
-              horizontalRadio
-            />
-          </>
-        )}
+        {grunnlag.skalVurdereYrkesskade &&
+          form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei && (
+            <>
+              <Veiledning />
+              <FormField form={form} formField={formFields.yrkesskadeBegrunnelse} className={'begrunnelse'} />
+              <FormField
+                form={form}
+                formField={formFields.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
+                horizontalRadio
+              />
+            </>
+          )}
       </Form>
     </VilkårsKort>
   );
