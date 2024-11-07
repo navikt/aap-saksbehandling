@@ -7,6 +7,7 @@ import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldep
 import { SykepengeerstatningMedDataFetching } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningMedDataFetching';
 import { FastsettArbeidsevneMedDataFetching } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevneMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { YrkesskadeMedDataFetching } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -59,6 +60,15 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
       {stegSomSkalVises.includes('VURDER_BISTANDSBEHOV') && (
         <StegSuspense>
           <OppfølgingMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
+      {stegSomSkalVises.includes('AVKLAR_SYKDOM') && (
+        <StegSuspense>
+          <YrkesskadeMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
