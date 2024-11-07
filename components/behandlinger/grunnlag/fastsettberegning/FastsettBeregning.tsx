@@ -20,7 +20,8 @@ interface Props {
 
 interface FormFields {
   begrunnelse: string;
-  ytterligereNedsattArbeidsevneDato: string;
+  nedsattArbeidsevneDato: string;
+  ytterligereNedsattArbeidsevneDato?: string;
   antattÅrligInntekt: string;
 }
 
@@ -42,6 +43,13 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
           ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
           : undefined,
       },
+      nedsattArbeidsevneDato: {
+        type: 'date_input',
+        label: 'Nedsatt arbeidsevne dato',
+        defaultValue: vurdering?.ytterligereNedsattArbeidsevneDato
+          ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
+          : undefined,
+      },
       antattÅrligInntekt: {
         type: 'number',
         label: 'Antatt årlig inntekt',
@@ -59,9 +67,12 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
           behovstype: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
           beregningVurdering: {
             begrunnelse: data.begrunnelse,
-            ytterligereNedsattArbeidsevneDato: formaterDatoForBackend(
-              parse(data.ytterligereNedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())
+            nedsattArbeidsevneDato: formaterDatoForBackend(
+              parse(data.nedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())
             ),
+            ytterligereNedsattArbeidsevneDato: data.ytterligereNedsattArbeidsevneDato
+              ? formaterDatoForBackend(parse(data.ytterligereNedsattArbeidsevneDato, 'dd.MM.yyyy', new Date()))
+              : undefined,
             antattÅrligInntekt: data.antattÅrligInntekt ? { verdi: Number(data.antattÅrligInntekt) } : undefined,
           },
         },
@@ -79,6 +90,7 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
         status={status}
         visBekreftKnapp={!readOnly}
       >
+        <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
         <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
         <FormField form={form} formField={formFields.antattÅrligInntekt} />
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />

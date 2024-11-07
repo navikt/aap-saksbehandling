@@ -6,36 +6,40 @@ import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
-import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { SykdomProps } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { validerDato } from 'lib/validation/dateValidation';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import { parse } from 'date-fns';
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { Alert, Link } from '@navikt/ds-react';
+import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
+import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
+import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 
 interface FormFields {
+  dokumenterBruktIVurderingen: string[];
   harSkadeSykdomEllerLyte: string;
-  erArbeidsevnenNedsatt: string;
-  erSkadeSykdomEllerLyteVesentligdel: string;
-  erNedsettelseIArbeidsevneHøyereEnnNedreGrense: string;
   begrunnelse: string;
-  nedsattArbeidsevneDato: string;
+  erArbeidsevnenNedsatt?: string;
+  erSkadeSykdomEllerLyteVesentligdel?: string;
+  erNedsettelseIArbeidsevneAvEnVissVarighet?: string;
+  erNedsettelseIArbeidsevneMerEnnHalvparten?: string;
+  erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: string;
+  yrkesskadeBegrunnelse?: string;
   hoveddiagnose?: string;
   bidiagnose?: string[];
-  erArbeidsevnenAvEnVissVarighet?: string;
 }
 
-export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: SykdomProps) => {
+export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilknyttedeDokumenter }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
+      dokumenterBruktIVurderingen: {
+        type: 'radio_nested',
+        label: 'Dokumenter brukt i vurderingen',
+      },
       begrunnelse: {
         type: 'textarea',
         label: 'Vurder den nedsatte arbeidsevnen',
@@ -57,12 +61,10 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om innbygger har nedsatt arbeidsevne' },
       },
-      erNedsettelseIArbeidsevneHøyereEnnNedreGrense: {
+      erNedsettelseIArbeidsevneMerEnnHalvparten: {
         type: 'radio',
-        label: grunnlag.skalVurdereYrkesskade
-          ? 'Er arbeidsevnen nedsatt med minst 30%?'
-          : 'Er arbeidsevnen nedsatt med minst 50%?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneHøyereEnnNedreGrense),
+        label: 'Er arbeidsevnen nedsatt med minst 50%?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten),
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om arbeidsevnen er nedsatt med minst 50%' },
       },
@@ -73,18 +75,6 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
         options: JaEllerNeiOptions,
         rules: {
           required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
-        },
-      },
-      nedsattArbeidsevneDato: {
-        type: 'date_input',
-        label: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)',
-        description: 'Datoformat dd.mm.åååå',
-        defaultValue: grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato
-          ? formaterDatoForVisning(grunnlag?.sykdomsvurdering?.nedsattArbeidsevneDato)
-          : undefined,
-        rules: {
-          required: 'Du må sette en dato for når arbeidsevnen ble nedsatt',
-          validate: (value) => validerDato(value as string),
         },
       },
       hoveddiagnose: {
@@ -98,11 +88,23 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
         label: 'Bidiagnoser (valgfritt)',
         options: ['Bidiagnose 1', 'Bidiagnose 2', 'Bidiagnose 3', 'Bidiagnose 4'],
       },
-      erArbeidsevnenAvEnVissVarighet: {
+      erNedsettelseIArbeidsevneAvEnVissVarighet: {
         type: 'radio',
         label: 'Er den nedsatte arbeidsevnen av en viss varighet?',
         rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet' },
         options: JaEllerNeiOptions,
+      },
+      erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: {
+        type: 'radio',
+        label: 'Er arbeidsevnen nedsatt med minst 30%?',
+        rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30%.' },
+        options: JaEllerNeiOptions,
+      },
+      yrkesskadeBegrunnelse: {
+        type: 'textarea',
+        label: 'Vurdering om arbeidsevne er nedsatt med minst 30% (§11-22)',
+        description:
+          'Innbygger har yrkesskade, og kan ha rett på AAP med en nedsatt arbeidsevne på minst 30%. Nay vurderer årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne.',
       },
     },
     { shouldUnregister: true, readOnly: readOnly }
@@ -115,29 +117,22 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
         behov: {
           behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
           sykdomsvurdering: {
-            erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
-            begrunnelse: data.begrunnelse,
             dokumenterBruktIVurdering: [],
+            begrunnelse: data.begrunnelse,
             harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
+            erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
             erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
-            nedreGrense: 'FEMTI',
-            erNedsettelseIArbeidsevneHøyereEnnNedreGrense:
-              data.erNedsettelseIArbeidsevneHøyereEnnNedreGrense === JaEllerNei.Ja,
-            nedsattArbeidsevneDato:
-              data.nedsattArbeidsevneDato &&
-              formaterDatoForBackend(parse(data.nedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())),
+            erNedsettelseIArbeidsevneMerEnnHalvparten: data.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Ja,
+            erNedsettelseIArbeidsevneAvEnVissVarighet: data.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Ja,
+            erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense:
+              data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Ja,
+            yrkesskadeBegrunnelse: data?.yrkesskadeBegrunnelse,
           },
         },
         referanse: behandlingsReferanse,
       });
     })(event);
   };
-
-  const visFeltForNårArbeidsevnenBleNedsatt =
-    form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja &&
-    form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja &&
-    form.watch('erNedsettelseIArbeidsevneHøyereEnnNedreGrense') === JaEllerNei.Ja &&
-    form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja;
 
   return (
     <VilkårsKort
@@ -170,32 +165,55 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly }: Sykd
             </div>
           }
         />
+        <CheckboxWrapper
+          name={'dokumenterBruktIVurderingen'}
+          control={form.control}
+          label={'Dokumenter funnet som er relevant for vurdering av §11-5'}
+          description={'Tilknytt minst ett dokument §11-5 vurdering'}
+        >
+          <DokumentTabell
+            dokumenter={tilknyttedeDokumenter.map((d) => ({
+              journalpostId: d.journalpostId,
+              dokumentId: d.dokumentInfoId,
+              tittel: d.tittel,
+              erTilknyttet: false,
+            }))}
+          />
+        </CheckboxWrapper>
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-        <TilknyttedeDokumenter dokumenter={[]} />
+        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
         <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
         {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
+        )}
+
+        {/*TODO Ta inn når backend er klar - Thomas*/}
+        {/*<FormField form={form} formField={formFields.hoveddiagnose} />*/}
+        {/*<FormField form={form} formField={formFields.bidiagnose} />*/}
+        {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei && (
+          <Alert variant={'info'} size={'small'} className={'fit-content'}>
+            Innbygger vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
+          </Alert>
+        )}
+        {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
           <>
-            {/*TODO Ta inn når backend er klar - Thomas*/}
-            {/*<FormField form={form} formField={formFields.hoveddiagnose} />*/}
-            {/*<FormField form={form} formField={formFields.bidiagnose} />*/}
-            <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
-            {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei && (
-              <Alert variant={'info'} size={'small'} className={'fit-content'}>
-                Innbygger vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
-              </Alert>
-            )}
-            {/*{form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (*/}
-            {/*  <FormField form={form} formField={formFields.erArbeidsevnenAvEnVissVarighet} horizontalRadio />*/}
-            {/*)}*/}
-            <FormField
-              form={form}
-              formField={formFields.erNedsettelseIArbeidsevneHøyereEnnNedreGrense}
-              horizontalRadio
-            />
+            <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneAvEnVissVarighet} horizontalRadio />
+            <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneMerEnnHalvparten} horizontalRadio />
             <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} horizontalRadio />
           </>
         )}
-        {visFeltForNårArbeidsevnenBleNedsatt && <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />}
+
+        {grunnlag.skalVurdereYrkesskade && (
+          <>
+            <Veiledning />
+            <FormField form={form} formField={formFields.yrkesskadeBegrunnelse} className={'begrunnelse'} />
+            <FormField
+              form={form}
+              formField={formFields.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
+              horizontalRadio
+            />
+          </>
+        )}
       </Form>
     </VilkårsKort>
   );

@@ -29,6 +29,14 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     expect(textbox).toBeVisible();
   });
 
+  it('Skal vise feilmelding dersom begrunnelse felt ikke har blitt besvart', async () => {
+    render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
+    const button = screen.getByRole('button', { name: 'Bekreft' });
+    await user.click(button);
+
+    expect(await screen.findByText('Du må begrunne')).toBeVisible();
+  });
+
   it('Skal vise korrekt description på begrunnelsesfelt', async () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
 
@@ -91,8 +99,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     });
   });
 
-  // TODO Ta inn når backend er klar - Thomas
-  describe.skip('felt for nedsettelsen er av en viss varighet', () => {
+  describe('felt for nedsettelsen er av en viss varighet', () => {
     it('feltet skal vises', async () => {
       render(
         <Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />
@@ -149,6 +156,8 @@ describe('sykdomsvurdering uten yrkesskade', () => {
   it('Skal ha et felt for om sykdom, skade eller lyte er årsaken til nedsatt arbeidsevne', async () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
     await velgAtInnbyggerHarSykdomSkadeLyte();
+    await velgJaIGruppe(screen.getByRole('group', { name: 'Har innbygger nedsatt arbeidsevne?' }));
+
     const radioGroup = screen.getByRole('group', {
       name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
     });
@@ -158,6 +167,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
   it('Skal ha et felt for om arbeidsevnen er nedsatt med minst 50 prosent', async () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
     await velgAtInnbyggerHarSykdomSkadeLyte();
+    await velgJaIGruppe(screen.getByRole('group', { name: 'Har innbygger nedsatt arbeidsevne?' }));
     const radioGroup = screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 50%?' });
     expect(radioGroup).toBeVisible();
   });
@@ -167,34 +177,6 @@ describe('sykdomsvurdering uten yrkesskade', () => {
     await velgAtInnbyggerIkkeHarSykdomSkadeEllerLyte();
     const felt = screen.queryByRole('textbox', { name: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)' });
     expect(felt).toBeNull();
-  });
-
-  it('felt for når arbeidsevnen ble nedsatt vises ikke når det er valgt nei på ett eller flere valg', async () => {
-    render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
-    await velgAtInnbyggerHarSykdomSkadeLyte();
-    await velgNeiIGruppe(screen.getByRole('group', { name: 'Har innbygger nedsatt arbeidsevne?' }));
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 50%?' }));
-    await velgJaIGruppe(
-      screen.getByRole('group', {
-        name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
-      })
-    );
-    expect(
-      screen.queryByRole('textbox', { name: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)' })
-    ).not.toBeInTheDocument();
-  });
-
-  it('felt for når arbeidsevnen ble nedsatt vises når alle spørsmål er besvart med ja', async () => {
-    render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
-    await velgAtInnbyggerHarSykdomSkadeLyte();
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Har innbygger nedsatt arbeidsevne?' }));
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 50%?' }));
-    await velgJaIGruppe(
-      screen.getByRole('group', {
-        name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
-      })
-    );
-    expect(screen.getByRole('textbox', { name: 'Fra hvilken dato ble arbeidsevnen nedsatt? (§11-5)' })).toBeVisible();
   });
 
   it('Skal ikke vise felt for om sykdom, skade eller lyte er årsaken til nedsatt arbeidsevne dersom arbeidsevnen ikke er nedsatt', () => {
@@ -230,6 +212,7 @@ describe('sykdomsvurdering uten yrkesskade', () => {
   it('Skal vise feilmelding dersom felt for om sykdom, skade eller lyte er årsaken til nedsatt arbeidsevne ikke er besvart', async () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
     await velgAtInnbyggerHarSykdomSkadeLyte();
+    await velgJaIGruppe(screen.getByRole('group', { name: 'Har innbygger nedsatt arbeidsevne?' }));
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
@@ -250,26 +233,11 @@ describe('sykdomsvurdering uten yrkesskade', () => {
   it('Skal vise feilmelding dersom felt for om arbeidsevnen er nedsatt med minst 50% ikke er besvart', async () => {
     render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
     await velgAtInnbyggerHarSykdomSkadeLyte();
+    await velgJaIGruppe(screen.getByRole('group', { name: 'Har innbygger nedsatt arbeidsevne?' }));
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
     expect(await screen.findByText('Du må svare på om arbeidsevnen er nedsatt med minst 50%')).toBeVisible();
-  });
-
-  it('Skal vise feilmelding dersom felt for hvilket år arbeisevnen ble nedsatt ikke er besvart', async () => {
-    render(<Sykdomsvurdering grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} tilknyttedeDokumenter={[]} />);
-    await velgAtInnbyggerHarSykdomSkadeLyte();
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Har innbygger nedsatt arbeidsevne?' }));
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 50%?' }));
-    await velgJaIGruppe(
-      screen.getByRole('group', {
-        name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
-      })
-    );
-    const button = screen.getByRole('button', { name: /Bekreft/ });
-    await user.click(button);
-
-    expect(await screen.findByText('Du må sette en dato for når arbeidsevnen ble nedsatt')).toBeVisible();
   });
 
   const velgAtInnbyggerHarSykdomSkadeLyte = async () => {
@@ -294,7 +262,4 @@ describe('sykdomsvurdering uten yrkesskade', () => {
 
   const velgJaIGruppe = async (gruppe: HTMLElement): Promise<void> =>
     await user.click(within(gruppe).getByRole('radio', { name: 'Ja' }));
-
-  const velgNeiIGruppe = async (gruppe: HTMLElement): Promise<void> =>
-    await user.click(within(gruppe).getByRole('radio', { name: 'Nei' }));
 });
