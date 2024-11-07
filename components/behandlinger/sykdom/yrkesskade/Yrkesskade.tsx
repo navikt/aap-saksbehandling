@@ -4,9 +4,10 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { HandBandageIcon } from '@navikt/aksel-icons';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { JaEllerNeiOptions } from 'lib/utils/form';
+import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 import { Form } from 'components/form/Form';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -16,26 +17,27 @@ interface Props {
 
 interface FormFields {
   begrunnelse: string;
-  erÅrsakssammenhengMellomYrkesskadeOgNedsattArbeidsevne: string;
-  andelAvTotalNedsattArbeidsevneSkyldesYrkesskadene?: string;
-  dokumenter?: string[];
+  erÅrsakssammenheng: string;
+  relevanteSaker?: string[];
+  andelAvNedsettelsen?: string;
 }
 
-export const Yrkesskade = ({ readOnly }: Props) => {
+export const Yrkesskade = ({ behandlingVersjon, behandlingsReferanse, readOnly }: Props) => {
+  const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('VURDER_YRKESSKADE');
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
       label: 'Vurder om yrkesskade er medvirkende årsak til nedsatt arbeidsevne',
     },
-    erÅrsakssammenhengMellomYrkesskadeOgNedsattArbeidsevne: {
+    erÅrsakssammenheng: {
       type: 'radio',
       label: 'Finnes det en årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne?',
       options: JaEllerNeiOptions,
     },
-    dokumenter: {
+    relevanteSaker: {
       type: 'checkbox_nested',
     },
-    andelAvTotalNedsattArbeidsevneSkyldesYrkesskadene: {
+    andelAvNedsettelsen: {
       type: 'number',
       label: 'Hvor stor andel totalt av nedsatt arbeidsevne skyldes yrkesskadene?',
     },
@@ -44,21 +46,35 @@ export const Yrkesskade = ({ readOnly }: Props) => {
   return (
     <VilkårsKort
       heading={'Yrkesskade §§ 11-22 1.ledd'}
-      steg={'AVKLAR_SYKDOM'}
+      steg={'VURDER_YRKESSKADE'}
       vilkårTilhørerNavKontor={false}
       icon={<HandBandageIcon />}
     >
       <Form
-        steg={'AVKLAR_SYKDOM'}
-        onSubmit={form.handleSubmit((data) => console.log(data))}
-        isLoading={false}
-        status={'DONE'}
+        steg={'VURDER_YRKESSKADE'}
+        onSubmit={form.handleSubmit((data) => {
+          løsBehovOgGåTilNesteSteg({
+            behov: {
+              yrkesskadesvurdering: {
+                begrunnelse: data.begrunnelse,
+                erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
+                //@ts-ignore TODO Fiks typer i backend
+                andelAvNedsettelsen: data?.andelAvNedsettelsen,
+                relevanteSaker: [],
+              },
+            },
+            behandlingVersjon: behandlingVersjon,
+            referanse: behandlingsReferanse,
+          });
+        })}
+        isLoading={isLoading}
+        status={status}
       >
         <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-        <FormField form={form} formField={formFields.erÅrsakssammenhengMellomYrkesskadeOgNedsattArbeidsevne} />
+        <FormField form={form} formField={formFields.erÅrsakssammenheng} />
         <CheckboxWrapper
-          name={'dokumenter'}
+          name={'relevanteSaker'}
           control={form.control}
           label={'Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.'}
           readOnly={readOnly}
@@ -66,7 +82,7 @@ export const Yrkesskade = ({ readOnly }: Props) => {
         >
           <div></div>
         </CheckboxWrapper>
-        <FormField form={form} formField={formFields.andelAvTotalNedsattArbeidsevneSkyldesYrkesskadene} />
+        <FormField form={form} formField={formFields.andelAvNedsettelsen} />
       </Form>
     </VilkårsKort>
   );

@@ -66,7 +66,7 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
           />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('AVKLAR_SYKDOM') && (
+      {stegSomSkalVises.includes('VURDER_YRKESSKADE') && (
         <StegSuspense>
           <YrkesskadeMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
