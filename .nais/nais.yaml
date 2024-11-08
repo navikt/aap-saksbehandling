@@ -63,3 +63,4 @@ spec:
       rules:
         - application: "behandlingsflyt"
         - application: "saksbehandling-pdfgen"
+        - application: "dokumentinnhenting"
