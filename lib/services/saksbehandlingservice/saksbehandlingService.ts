@@ -10,6 +10,7 @@ import {
   BeregningsGrunnlag,
   BeregningsVurdering,
   BistandsGrunnlag,
+  BrevGrunnlag,
   DetaljertBehandling,
   DokumentInfo,
   FatteVedtakGrunnlag,
@@ -169,6 +170,11 @@ export const hentBistandsbehovGrunnlag = async (behandlingsReferanse: string): P
 export const hentFatteVedtakGrunnlang = async (behandlingsReferanse: string): Promise<FatteVedtakGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/fatte-vedtak`;
   return await fetchProxy<FatteVedtakGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentBrevGrunnlag = async (behandlingsReferanse: string): Promise<BrevGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/brev`;
+  return await fetchProxy<BrevGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBeregningsVurdering = async (behandlingsReferanse: string): Promise<BeregningsVurdering> => {
