@@ -11,6 +11,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { parse } from 'date-fns';
+import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   vurdering?: BeregningsVurdering;
@@ -42,6 +43,14 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
         defaultValue: vurdering?.ytterligereNedsattArbeidsevneDato
           ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
           : undefined,
+        rules: {
+          validate: (value) => {
+            const valideringsresultat = validerDato(value as string);
+            if (valideringsresultat) {
+              return valideringsresultat;
+            }
+          },
+        },
       },
       nedsattArbeidsevneDato: {
         type: 'date_input',
@@ -49,6 +58,14 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
         defaultValue: vurdering?.ytterligereNedsattArbeidsevneDato
           ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
           : undefined,
+        rules: {
+          validate: (value) => {
+            const valideringsresultat = validerDato(value as string);
+            if (valideringsresultat) {
+              return valideringsresultat;
+            }
+          },
+        },
       },
       antattÅrligInntekt: {
         type: 'number',
@@ -61,6 +78,7 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      console.log(data);
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
