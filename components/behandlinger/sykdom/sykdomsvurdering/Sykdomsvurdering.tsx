@@ -5,6 +5,7 @@ import {
   Behovstype,
   getJaNeiEllerUndefined,
   getStringEllerUndefined,
+  getTrueFalseEllerUndefined,
   JaEllerNei,
   JaEllerNeiOptions,
 } from 'lib/utils/form';
@@ -17,7 +18,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { FormEvent } from 'react';
 import { SykdomProps } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { Alert, Link } from '@navikt/ds-react';
+import { Alert, Heading, Link } from '@navikt/ds-react';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
@@ -26,11 +27,11 @@ interface FormFields {
   dokumenterBruktIVurderingen: string[];
   harSkadeSykdomEllerLyte: string;
   begrunnelse: string;
-  erArbeidsevnenNedsatt?: string;
-  erSkadeSykdomEllerLyteVesentligdel?: string;
-  erNedsettelseIArbeidsevneAvEnVissVarighet?: string;
-  erNedsettelseIArbeidsevneMerEnnHalvparten?: string;
-  erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: string;
+  erArbeidsevnenNedsatt?: JaEllerNei;
+  erSkadeSykdomEllerLyteVesentligdel?: JaEllerNei;
+  erNedsettelseIArbeidsevneAvEnVissVarighet?: JaEllerNei;
+  erNedsettelseIArbeidsevneMerEnnHalvparten?: JaEllerNei;
+  erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
   hoveddiagnose?: string;
   bidiagnose?: string[];
@@ -115,6 +116,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         label: 'Vurdering om arbeidsevne er nedsatt med minst 30% (§11-22)',
         description:
           'Innbygger har yrkesskade, og kan ha rett på AAP med en nedsatt arbeidsevne på minst 30%. Nay vurderer årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne.',
+        rules: { required: 'Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med mist 30%' },
         defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadeBegrunnelse),
       },
     },
@@ -131,12 +133,17 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
             dokumenterBruktIVurdering: [],
             begrunnelse: data.begrunnelse,
             harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
-            erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
-            erSkadeSykdomEllerLyteVesentligdel: data.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja,
-            erNedsettelseIArbeidsevneMerEnnHalvparten: data.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Ja,
-            erNedsettelseIArbeidsevneAvEnVissVarighet: data.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Ja,
-            erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense:
-              data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Ja,
+            erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
+            erSkadeSykdomEllerLyteVesentligdel: getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel),
+            erNedsettelseIArbeidsevneMerEnnHalvparten: getTrueFalseEllerUndefined(
+              data.erNedsettelseIArbeidsevneMerEnnHalvparten
+            ),
+            erNedsettelseIArbeidsevneAvEnVissVarighet: getTrueFalseEllerUndefined(
+              data.erNedsettelseIArbeidsevneAvEnVissVarighet
+            ),
+            erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getTrueFalseEllerUndefined(
+              data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+            ),
             yrkesskadeBegrunnelse: data?.yrkesskadeBegrunnelse,
           },
         },
@@ -217,6 +224,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         {grunnlag.skalVurdereYrkesskade &&
           form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei && (
             <>
+              <Heading size={'small'}>Nedsatt arbeidsevne §§ 11-5 / 11-22</Heading>
               <Veiledning />
               <FormField form={form} formField={formFields.yrkesskadeBegrunnelse} className={'begrunnelse'} />
               <FormField
