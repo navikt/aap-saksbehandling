@@ -1,8 +1,28 @@
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { Button, Heading } from '@navikt/ds-react';
-import { FormEvent } from 'react';
+import { Button, Heading, Search } from '@navikt/ds-react';
+import { FormEvent, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
+import { søkPåBehandler } from 'lib/clientApi';
+
+export type Behandler = {
+  type?: string;
+  behandlerRef: string;
+  fnr?: string;
+  fornavn: string;
+  mellomnavn?: string;
+  etternavn: string;
+  orgnummer?: string;
+  kontor?: string;
+  adresse?: string;
+  postnummer?: string;
+  poststed?: string;
+  telefon?: string;
+};
+
+export type BehandleroppslagResponse = {
+  behandlere: Behandler[];
+};
 
 type FormFields = {
   behandler: string;
@@ -21,6 +41,7 @@ interface Props {
 }
 
 export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
+  const [behandlere, setBehandlere] = useState<BehandleroppslagResponse>();
   const { form, formFields } = useConfigForm<FormFields>({
     behandler: {
       type: 'combobox',
@@ -47,11 +68,32 @@ export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
     })(event);
   };
 
+  const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const value = event.currentTarget.searchit.value;
+    if (value && value.length >= 3) {
+      const res = await søkPåBehandler(value);
+      setBehandlere(res);
+    }
+  };
+
   return (
     <>
       <Heading level={'3'} size={'small'}>
         Etterspør informasjon fra lege
       </Heading>
+      <form role="search" onSubmit={handleSearch}>
+        <Search name="searchit" label="Velg behandler som skal motta meldingen" variant="secondary" size={'small'} />
+      </form>
+      {behandlere?.behandlere && behandlere.behandlere.length > 0 && (
+        <div>
+          {behandlere.behandlere.map((behandler) => (
+            <div key={behandler.behandlerRef}>
+              {behandler.fornavn} {behandler.etternavn}
+            </div>
+          ))}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <FormField form={form} formField={formFields.behandler} />
         <FormField form={form} formField={formFields.dokumentasjonstype} />

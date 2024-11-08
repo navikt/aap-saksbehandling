@@ -1,3 +1,4 @@
+import { BehandleroppslagResponse } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import {
   OpprettAktivitetspliktBrudd,
   LøsAvklaringsbehovPåBehandling,
@@ -63,6 +64,10 @@ export function feilregistrerAktivitetspliktBrudd(saksnummer: string, aktivitet:
 
 export function simulerMeldeplikt(referanse: string, vurderinger: SimulerMeldeplikt) {
   return fetchProxy(`/api/behandling/${referanse}/simuler-meldeplikt`, 'POST', vurderinger);
+}
+
+export function søkPåBehandler(fritekst: string) {
+  return fetchProxy<BehandleroppslagResponse>(`/api/dokumentinnhenting/behandleroppslag`, 'POST', { fritekst });
 }
 
 export interface SaksInformasjon {
