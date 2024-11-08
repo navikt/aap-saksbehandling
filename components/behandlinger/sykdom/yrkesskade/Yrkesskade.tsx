@@ -9,6 +9,8 @@ import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
+import { Checkbox, Table } from '@navikt/ds-react';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   yrkesskadeVurderingGrunnlag: YrkesskadeVurderingGrunnlag;
@@ -96,9 +98,34 @@ export const Yrkesskade = ({
           control={form.control}
           label={'Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.'}
           readOnly={readOnly}
-          // rules={{ required: 'Du må velge minst én yrkesskade' }}
+          rules={{ required: 'Du må velge minst én yrkesskade' }}
         >
-          <div></div>
+          <Table>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell textSize={'small'}>Tilknytt yrkesskade</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Skadenummer</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Kilde</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Skadedato</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            {yrkesskadeVurderingGrunnlag.opplysninger.innhentedeYrkesskader.length > 0 && (
+              <Table.Body>
+                {yrkesskadeVurderingGrunnlag.opplysninger.innhentedeYrkesskader.map((yrkesskade) => (
+                  <Table.Row key={yrkesskade.ref}>
+                    <Table.DataCell textSize={'small'}>
+                      <Checkbox size={'small'} hideLabel value={yrkesskade.ref}>
+                        Tilknytt yrkesskade til vurdering
+                      </Checkbox>
+                    </Table.DataCell>
+                    <Table.DataCell textSize={'small'}>{yrkesskade.ref}</Table.DataCell>
+                    <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
+                    <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(yrkesskade.skadedato)}</Table.DataCell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            )}
+          </Table>
         </CheckboxWrapper>
         <FormField form={form} formField={formFields.andelAvNedsettelsen} />
       </Form>
