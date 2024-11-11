@@ -10,7 +10,9 @@ import { LegeerklæringStatus } from 'lib/types/types';
 
 export const InnhentDokumentasjon = () => {
   const saksnummer = useSaksnummer();
-  const { data, isLoading, error } = useSWR('dialogmeldinger', () => hentAlleDialogmeldingerPåSak(saksnummer));
+  const { data, isLoading, error } = useSWR(`api/dokumentinnhenting/status/${saksnummer}`, () =>
+    hentAlleDialogmeldingerPåSak(saksnummer)
+  );
   const [visSkjema, oppdaterVisSkjema] = useState<boolean>(false);
   return (
     <section>
