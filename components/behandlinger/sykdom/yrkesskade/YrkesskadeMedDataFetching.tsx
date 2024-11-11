@@ -11,7 +11,7 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsReferanse, behandli
   const yrkesskadeVurderingGrunnlag = await hentYrkesskadeVurderingGrunnlag(behandlingsReferanse);
   return (
     <Yrkesskade
-      yrkesskadeVurderingGrunnlag={yrkesskadeVurderingGrunnlag}
+      grunnlag={yrkesskadeVurderingGrunnlag}
       readOnly={readOnly}
       behandlingVersjon={behandlingVersjon}
       behandlingsReferanse={behandlingsReferanse}
