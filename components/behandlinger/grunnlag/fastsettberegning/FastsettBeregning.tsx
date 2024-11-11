@@ -12,6 +12,10 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { parse } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
+import { Veiledning } from 'components/veiledning/Veiledning';
+import styles from './FastsettBeregning.module.css';
+import { Heading } from '@navikt/ds-react';
+import { CalendarIcon } from '@navikt/aksel-icons';
 
 interface Props {
   vurdering?: BeregningsVurdering;
@@ -20,9 +24,10 @@ interface Props {
 }
 
 interface FormFields {
-  begrunnelse: string;
+  nedsattArbeidsevneDatobegrunnelse: string;
   nedsattArbeidsevneDato: string;
   ytterligereNedsattArbeidsevneDato?: string;
+  ytterligereNedsattArbeidsevneDatobegrunnelse: string;
   antattÅrligInntekt: string;
 }
 
@@ -32,14 +37,15 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
-      begrunnelse: {
+      nedsattArbeidsevneDatobegrunnelse: {
         type: 'textarea',
-        label: 'Begrunnelse',
+        label: 'Vurder når innbygger fikk nedsatt arbeidsevne',
         defaultValue: getStringEllerUndefined(vurdering?.begrunnelse),
+        rules: { required: 'Du må skrive en begrunnelse for når innbygger fikk nedsatt arbeidsevne' },
       },
-      ytterligereNedsattArbeidsevneDato: {
+      nedsattArbeidsevneDato: {
         type: 'date_input',
-        label: 'Ytterligere nedsatt arbeidsevne dato',
+        label: 'Dato når arbeidsevnen ble nedsatt',
         defaultValue: vurdering?.ytterligereNedsattArbeidsevneDato
           ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
           : undefined,
@@ -52,9 +58,15 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
           },
         },
       },
-      nedsattArbeidsevneDato: {
+      ytterligereNedsattArbeidsevneDatobegrunnelse: {
+        type: 'textarea',
+        label: 'Vurder når innbygger fikk ytterligere nedsatt arbeidsevne',
+        defaultValue: getStringEllerUndefined(vurdering?.begrunnelse),
+        rules: { required: 'Du må skrive en begrunnelse for når innbygger fikk ytterligere nedsatt arbeidsevne' },
+      },
+      ytterligereNedsattArbeidsevneDato: {
         type: 'date_input',
-        label: 'Nedsatt arbeidsevne dato',
+        label: 'Dato arbeidsevnen ble ytterligere nedsatt',
         defaultValue: vurdering?.ytterligereNedsattArbeidsevneDato
           ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
           : undefined,
@@ -84,7 +96,7 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
         behov: {
           behovstype: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
           beregningVurdering: {
-            begrunnelse: data.begrunnelse,
+            begrunnelse: data.nedsattArbeidsevneDatobegrunnelse,
             nedsattArbeidsevneDato: formaterDatoForBackend(
               parse(data.nedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())
             ),
@@ -100,7 +112,11 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
   };
 
   return (
-    <VilkårsKort heading={'Fastsett beregning'} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}>
+    <VilkårsKort
+      heading={'Beregningstidspunkt nedsatt arbeidsevne og ytterligere nedsatt arbeidsevne'}
+      steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
+      icon={<CalendarIcon />}
+    >
       <Form
         steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
         onSubmit={handleSubmit}
@@ -108,10 +124,21 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
         status={status}
         visBekreftKnapp={!readOnly}
       >
+        <Veiledning header={'Slik vurderes vilkåret for tidspunkt for nedsatt arbeidsevne'} />
+        <FormField form={form} formField={formFields.nedsattArbeidsevneDatobegrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
-        <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
-        <FormField form={form} formField={formFields.antattÅrligInntekt} />
-        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+
+        <div className={styles.ytterligerenedsattfelter}>
+          <Heading size={'small'}>Tidspunkt arbeidsevne ble ytterligere nedsatt § 11-28</Heading>
+          <Veiledning header={'Slik vurderes vilkåret for tidspunkt for ytterligere nedsatt arbeidsevne'} />
+          <FormField form={form} formField={formFields.antattÅrligInntekt} />
+          <FormField
+            form={form}
+            formField={formFields.ytterligereNedsattArbeidsevneDatobegrunnelse}
+            className={'begrunnelse'}
+          />
+          <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
+        </div>
       </Form>
     </VilkårsKort>
   );
