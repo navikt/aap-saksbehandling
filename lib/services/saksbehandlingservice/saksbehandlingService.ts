@@ -18,6 +18,7 @@ import {
   FritakMeldepliktGrunnlag,
   HelseinstitusjonGrunnlag,
   KvalitetssikringGrunnlag,
+  LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   MedlemskapGrunnlag,
   OppdaterAktivitetspliktBrudd,
@@ -242,6 +243,11 @@ export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
 
 export const forberedBehandling = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentAlleDialogmeldingerPåSak = async (saksnummer: string): Promise<LegeerklæringStatus[]> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/status/${saksnummer}`;
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 

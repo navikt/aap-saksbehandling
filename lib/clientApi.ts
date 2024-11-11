@@ -70,6 +70,10 @@ export function søkPåBehandler(fritekst: string) {
   return fetchProxy<BehandleroppslagResponse>(`/api/dokumentinnhenting/behandleroppslag`, 'POST', { fritekst });
 }
 
+export function hentAlleDialogmeldingerPåSak(saksnummer: string) {
+  return fetchProxy(`/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
+}
+
 export interface SaksInformasjon {
   søker: {
     navn: string;
