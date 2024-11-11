@@ -4,6 +4,7 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { FastsettBeregningMedDataFeching } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregningMedDataFeching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { VisBeregning } from 'components/behandlinger/grunnlag/visberegning/VisBeregning';
+import { YrkesskadeGrunnlagBeregningMedDataFetching } from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/YrkesskadeGrunnlagBeregningMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -33,6 +34,12 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
             readOnly={readOnly}
             behandlingVersjon={behandlingVersjon}
           />
+        </StegSuspense>
+      )}
+
+      {stegSomSkalVises.includes('FASTSETT_BEREGNINGSTIDSPUNKT') && (
+        <StegSuspense>
+          <YrkesskadeGrunnlagBeregningMedDataFetching readOnly={readOnly} behandlingVersjon={behandlingVersjon} />
         </StegSuspense>
       )}
 
