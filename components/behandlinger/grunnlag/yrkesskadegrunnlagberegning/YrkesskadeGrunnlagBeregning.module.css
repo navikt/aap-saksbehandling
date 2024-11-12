@@ -1,0 +1,16 @@
+.input {
+  max-width: 20ch;
+}
+
+.inntektfelt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-2);
+}
+
+.inntektwrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--a-spacing-2);
+  align-items: flex-end;
+}
