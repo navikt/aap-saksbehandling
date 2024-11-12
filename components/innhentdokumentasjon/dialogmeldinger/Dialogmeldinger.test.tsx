@@ -27,8 +27,8 @@ const dialogmeldinger: LegeerklæringStatus[] = [
 describe('Dialogmeldinger', () => {
   test('viser en tabell med oversikt over dialogmeldinger når det er funnet dialogmeldinger', () => {
     render(<Dialogmeldinger dialogmeldinger={dialogmeldinger} />);
-    expect(screen.getByRole('columnheader', { name: 'Bestilt dato' })).toBeVisible();
     expect(screen.getByRole('columnheader', { name: 'Status' })).toBeVisible();
+    expect(screen.getByRole('columnheader', { name: 'Bestilt dato' })).toBeVisible();
   });
 
   test('viser en rad med dato for bestilling og status på bestillingen', () => {
