@@ -1012,10 +1012,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-breveditor-css@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@navikt/aap-breveditor-css@npm:0.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor-css%2F0.1.0%2Fb94ba40be9346259073255cb02026787782de4c6"
-  checksum: 10c0/f81bbac7e38ecc130d81c2c5fb7614c20beb120d12c4d917663f4779aee4088dff5612585f443f2fb07e293db2cbe656018d124fe378e7945f8b2ad68acc1ee6
+"@navikt/aap-breveditor-css@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@navikt/aap-breveditor-css@npm:0.1.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor-css%2F0.1.1%2F14c453a70437647ba48b9b21bb5ead0cae5a9e07"
+  checksum: 10c0/86053ba8560ca32bdeb3e8af240ef2b42e0e92cf4af77d790308b724d2ba5940770d7fcd6127d6e63de068f85f729ef163b42b7618235e78ca641fd8c321b097
   languageName: node
   linkType: hard
 
@@ -2901,7 +2901,7 @@ __metadata:
   dependencies:
     "@grafana/faro-web-sdk": "npm:^1.10.2"
     "@navikt/aap-breveditor": "npm:^0.1.2"
-    "@navikt/aap-breveditor-css": "npm:^0.1.0"
+    "@navikt/aap-breveditor-css": "npm:^0.1.1"
     "@navikt/aap-felles-css": "npm:^2.0.16"
     "@navikt/aap-felles-prettier": "npm:^2.0.16"
     "@navikt/aap-felles-react": "npm:^2.0.16"
