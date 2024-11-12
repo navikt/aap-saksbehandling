@@ -44,8 +44,8 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null
 const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
   return (
     <Table.Row>
-      <Table.DataCell>{mapStatusTilTekst(melding.status)}</Table.DataCell>
-      <Table.DataCell>{formaterDatoForVisning(melding.opprettet)}</Table.DataCell>
+      <Table.DataCell className={styles.status}>{mapStatusTilTekst(melding.status)}</Table.DataCell>
+      <Table.DataCell className={styles.dato}>{formaterDatoForVisning(melding.opprettet)}</Table.DataCell>
       <Table.DataCell className={styles.behandlernavn}>Behandlernavn</Table.DataCell>
       <Table.DataCell>
         {melding.status === 'OK' && (
@@ -65,7 +65,7 @@ export const Dialogmeldinger = ({ dialogmeldinger }: Props) => {
   }
 
   return (
-    <Table size={'small'} className={styles.stupidtable}>
+    <Table size={'small'}>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Status</Table.HeaderCell>

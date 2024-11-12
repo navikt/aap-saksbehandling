@@ -4,3 +4,11 @@
   text-overflow: ellipsis;
   max-width: 20ch;
 }
+
+.status {
+  width: 15%;
+}
+
+.dato {
+  width: 15%;
+}
