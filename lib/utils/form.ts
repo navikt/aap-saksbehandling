@@ -46,9 +46,9 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '9001':
       return 'Manuelt satt på vent';
     case '5010':
-      return 'Avklar soningsvurdering';
+      return 'Avklar soningsvurdering (§ 11-26)';
     case '5011':
-      return 'Avklar helseinstitusjon';
+      return 'Avklar helseinstitusjon (§ 11-25)';
   }
 }
 
