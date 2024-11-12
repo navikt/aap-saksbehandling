@@ -39,7 +39,11 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
 
       {stegSomSkalVises.includes('FASTSETT_BEREGNINGSTIDSPUNKT') && (
         <StegSuspense>
-          <YrkesskadeGrunnlagBeregningMedDataFetching readOnly={readOnly} behandlingVersjon={behandlingVersjon} />
+          <YrkesskadeGrunnlagBeregningMedDataFetching
+            readOnly={readOnly}
+            behandlingVersjon={behandlingVersjon}
+            behandlingsreferanse={behandlingsReferanse}
+          />
         </StegSuspense>
       )}
 

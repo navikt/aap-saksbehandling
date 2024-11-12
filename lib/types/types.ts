@@ -181,3 +181,6 @@ export type YrkesskadeVurderingGrunnlag =
 
 export type RegistrerYrkesskade =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.RegistrertYrkesskade'];
+
+export type YrkeskadeBeregningGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.flate.BeregningYrkesskadeAvklaringDto'];

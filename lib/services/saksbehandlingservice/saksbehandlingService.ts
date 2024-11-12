@@ -35,6 +35,7 @@ import {
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
   VenteInformasjon,
+  YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
@@ -186,9 +187,16 @@ export const hentBrevGrunnlag = async (behandlingsReferanse: string): Promise<Br
   return await fetchProxy<BrevGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentBeregningsVurdering = async (behandlingsReferanse: string): Promise<BeregningsVurdering> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregningsvurdering`;
+export const hentBeregningstidspunktVurdering = async (behandlingsReferanse: string): Promise<BeregningsVurdering> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregning/tidspunkt`;
   return await fetchProxy<BeregningsVurdering>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentBeregningYrkesskadeVurdering = async (
+  behandlingsReferanse: string
+): Promise<YrkeskadeBeregningGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregning/yrkesskade`;
+  return await fetchProxy<YrkeskadeBeregningGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentHelseInstitusjonsVurdering = async (

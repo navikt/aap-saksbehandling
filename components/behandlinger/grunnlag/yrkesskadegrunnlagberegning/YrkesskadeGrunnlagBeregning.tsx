@@ -11,9 +11,11 @@ import { YrkesskadeTabell } from 'components/behandlinger/grunnlag/yrkesskadegru
 import { BodyShort, Label } from '@navikt/ds-react';
 
 import styles from './YrkesskadeGrunnlagBeregning.module.css';
+import { YrkeskadeBeregningGrunnlag } from 'lib/types/types';
 
 interface Props {
   behandlingVersjon: number;
+  yrkeskadeBeregningGrunnlag: YrkeskadeBeregningGrunnlag;
   readOnly: boolean;
 }
 
@@ -29,13 +31,21 @@ interface Inntekt {
   gverdi: number;
 }
 
-export const YrkesskadeGrunnlagBeregning = ({ behandlingVersjon, readOnly }: Props) => {
-  console.log(behandlingVersjon);
+export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnlag }: Props) => {
   const { isLoading, status } = useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
-  const defaultValue: Inntekt[] = [
-    { ref: 'YRK', inntekt: '', begrunnelse: '', skadetidspunkt: '2020-10-10', gverdi: 124000 },
-    { ref: 'SYK', inntekt: '', begrunnelse: '', skadetidspunkt: '2007-2-10', gverdi: 96000 },
-  ];
+
+  const defaultValue: Inntekt[] = yrkeskadeBeregningGrunnlag.skalVurderes.map((yrkesskade) => {
+    const vurdertYrkesskade = yrkeskadeBeregningGrunnlag.vurderinger.find(
+      (vurdering) => vurdering.referanse === yrkesskade.referanse
+    );
+    return {
+      ref: yrkesskade.referanse,
+      gverdi: yrkesskade.grunnbeløp.verdi,
+      skadetidspunkt: yrkesskade.skadeDato,
+      inntekt: vurdertYrkesskade ? vurdertYrkesskade.antattÅrligInntekt.verdi.toString() : '',
+      begrunnelse: vurdertYrkesskade ? vurdertYrkesskade.begrunnelse : '',
+    };
+  });
 
   const { form } = useConfigForm<FormFields>(
     {
