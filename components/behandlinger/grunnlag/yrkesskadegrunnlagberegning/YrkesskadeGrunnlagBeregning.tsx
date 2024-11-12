@@ -20,10 +20,10 @@ interface Props {
 }
 
 interface FormFields {
-  antattÅrligArbeidsinntekt: Inntekt[];
+  vurderinger: AntattÅrligInntektVurdering[];
 }
 
-interface Inntekt {
+interface AntattÅrligInntektVurdering {
   inntekt: string;
   begrunnelse: string;
   ref: string;
@@ -34,7 +34,7 @@ interface Inntekt {
 export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnlag }: Props) => {
   const { isLoading, status } = useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
 
-  const defaultValue: Inntekt[] = yrkeskadeBeregningGrunnlag.skalVurderes.map((yrkesskade) => {
+  const defaultValue: AntattÅrligInntektVurdering[] = yrkeskadeBeregningGrunnlag.skalVurderes.map((yrkesskade) => {
     const vurdertYrkesskade = yrkeskadeBeregningGrunnlag.vurderinger.find(
       (vurdering) => vurdering.referanse === yrkesskade.referanse
     );
@@ -49,7 +49,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
 
   const { form } = useConfigForm<FormFields>(
     {
-      antattÅrligArbeidsinntekt: {
+      vurderinger: {
         type: 'fieldArray',
         defaultValue: defaultValue,
       },
@@ -57,7 +57,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
     { readOnly: readOnly }
   );
 
-  const { fields } = useFieldArray({ control: form.control, name: 'antattÅrligArbeidsinntekt' });
+  const { fields } = useFieldArray({ control: form.control, name: 'vurderinger' });
 
   return (
     <VilkårsKort
@@ -68,7 +68,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
       <Form onSubmit={form.handleSubmit(() => {})} steg={'FASTSETT_GRUNNLAG'} status={status} isLoading={isLoading}>
         <YrkesskadeTabell yrkesskader={[{ ref: 'YRK', kilde: 'Yrkesskaderegisteret', skadedato: '2024-10-10' }]} />
         {fields.map((field, index) => {
-          const grunnlag = Number(form.watch(`antattÅrligArbeidsinntekt.${index}.inntekt`)) / field.gverdi;
+          const grunnlag = Number(form.watch(`vurderinger.${index}.inntekt`)) / field.gverdi;
 
           return (
             <div key={field.id} className={'flex-column'}>
@@ -78,7 +78,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
                   <TextFieldWrapper
                     label={`Anslått årlig arbeidsinntekt på skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}
                     hideLabel
-                    name={`antattÅrligArbeidsinntekt.${index}.inntekt`}
+                    name={`vurderinger.${index}.inntekt`}
                     control={form.control}
                     type={'number'}
                     className={styles.input}
@@ -88,7 +88,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
                 </div>
               </div>
               <TextAreaWrapper
-                name={`antattÅrligArbeidsinntekt.${index}.begrunnelse`}
+                name={`vurderinger.${index}.begrunnelse`}
                 control={form.control}
                 label={`Begrunnelse for anslått årlig arbeidsinntekt for skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}
                 readOnly={readOnly}
