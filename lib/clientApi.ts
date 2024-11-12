@@ -8,6 +8,7 @@ import {
   SimulerMeldeplikt,
   OppdaterAktivitetspliktBrudd,
   FeilregistrerAktivitetspliktBrudd,
+  DokumentInfo,
 } from './types/types';
 
 async function fetchProxy<ResponseBody>(
@@ -72,6 +73,10 @@ export function søkPåBehandler(fritekst: string) {
 
 export function hentAlleDialogmeldingerPåSak(saksnummer: string) {
   return fetchProxy(`/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
+}
+
+export function hentAlleDokumenterPåSak(saksnummer: string) {
+  return fetchProxy<DokumentInfo[]>(`/api/sak/${saksnummer}/dokumenter`, 'GET');
 }
 
 export interface SaksInformasjon {
