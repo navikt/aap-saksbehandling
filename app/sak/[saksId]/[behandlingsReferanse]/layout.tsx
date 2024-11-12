@@ -52,7 +52,7 @@ const Layout = async ({ children, params }: Props) => {
         <section className={styles.venstrekolonne}>{children}</section>
         <aside className={`${styles.høyrekolonne} flex-column`}>
           <Behandlingsinfo behandling={behandling} saksnummer={params.saksId} />
-          <SaksbehandlingsoversiktMedDataFetching saksnummer={params.saksId} />
+          <SaksbehandlingsoversiktMedDataFetching />
           <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
         </aside>
       </HGrid>

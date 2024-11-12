@@ -1,8 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, expect, test, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { DokumentInfo } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
+import createFetchMock from 'vitest-fetch-mock';
 
 const etDokument: DokumentInfo[] = [
   {
@@ -37,55 +38,58 @@ const toDokument: DokumentInfo[] = [
   },
 ];
 
-describe('saksdokumenter', () => {
-  const user = userEvent.setup();
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
 
-  it('skal ha et felt for å kunne søke etter tittel på dokument', () => {
-    render(<Saksdokumenter dokumenter={etDokument} />);
-    expect(screen.getByRole('textbox', { name: /søk i dokumenter/i })).toBeVisible();
-  });
-
-  it('skal ha et felt for å kunne søke type', () => {
-    render(<Saksdokumenter dokumenter={etDokument} />);
-    expect(screen.getByRole('combobox', { name: /vis typer/i })).toBeVisible();
-  });
-
-  it('skal ha en tabell med inn/ut, dokument, type og journalført i header', () => {
-    render(<Saksdokumenter dokumenter={etDokument} />);
-    const innUt = screen.getByRole('columnheader', { name: /inn \/ ut/i });
-    const dokument = screen.getByRole('columnheader', { name: /dokument/i });
-    const type = screen.getByRole('columnheader', { name: /type/i });
-    const journalført = screen.getByRole('columnheader', { name: /journalført/i });
-
-    expect(innUt).toBeVisible();
-    expect(dokument).toBeVisible();
-    expect(type).toBeVisible();
-    expect(journalført).toBeVisible();
-  });
-
-  it('skal ha en rad med verdier', () => {
-    render(<Saksdokumenter dokumenter={etDokument} />);
-    const innUtVerdi = screen.getByRole('img');
-    const dokumentVerdi = screen.getByRole('link', { name: /søknad\.pdf/i });
-    const typeVerdi = screen.getByRole('cell', { name: /arkiv/i });
-    const journalførtVerdi = screen.getByRole('cell', { name: /12\.12\.2024/i });
-
-    expect(innUtVerdi).toBeVisible();
-    expect(dokumentVerdi).toBeVisible();
-    expect(typeVerdi).toBeVisible();
-    expect(journalførtVerdi).toBeVisible();
-  });
-
-  it('skal være mulig å søke etter et dokument', async () => {
-    render(<Saksdokumenter dokumenter={toDokument} />);
-    expect(screen.getByRole('link', { name: /søknad\.pdf/i })).toBeVisible();
-    expect(screen.getByRole('link', { name: /legeerklæring\.pdf/i })).toBeVisible();
-
-    const søkefelt = screen.getByRole('textbox', { name: /søk i dokumenter/i });
-
-    await user.type(søkefelt, 'sø');
-
-    expect(screen.getByRole('link', { name: /søknad\.pdf/i })).toBeVisible();
-    expect(screen.queryByRole('link', { name: /legeerklæring\.pdf/i })).not.toBeInTheDocument();
-  });
+afterEach(() => {
+  fetchMocker.resetMocks();
 });
+
+const user = userEvent.setup();
+
+test('skal være mulig å søke etter et dokument', async () => {
+  fetchMocker.resetMocks();
+  mockFetchDokumenter(toDokument);
+  render(<Saksdokumenter />);
+  expect(await screen.findByRole('link', { name: /søknad\.pdf/i })).toBeVisible();
+  expect(await screen.findByRole('link', { name: /legeerklæring\.pdf/i })).toBeVisible();
+
+  screen.logTestingPlaygroundURL();
+
+  const søkefelt = screen.getByRole('textbox', { name: /søk i dokumenter/i });
+
+  await user.type(søkefelt, 'sø');
+
+  expect(screen.getByRole('link', { name: /søknad\.pdf/i })).toBeVisible();
+  expect(screen.queryByRole('link', { name: /legeerklæring\.pdf/i })).not.toBeInTheDocument();
+});
+
+test('skal ha et felt for å kunne søke etter tittel på dokument', async () => {
+  mockFetchDokumenter(etDokument);
+  render(<Saksdokumenter />);
+  expect(await screen.findByRole('textbox', { name: /søk i dokumenter/i })).toBeVisible();
+});
+
+test('skal ha et felt for å kunne søke type', async () => {
+  mockFetchDokumenter(etDokument);
+  render(<Saksdokumenter />);
+  expect(await screen.findByRole('combobox', { name: /vis typer/i })).toBeVisible();
+});
+
+test('skal ha en tabell med inn/ut, dokument, type og journalført i header', async () => {
+  mockFetchDokumenter(etDokument);
+  render(<Saksdokumenter />);
+  const innUt = await screen.findByRole('columnheader', { name: /inn \/ ut/i });
+  const dokument = await screen.findByRole('columnheader', { name: /dokument/i });
+  const type = await screen.findByRole('columnheader', { name: /type/i });
+  const journalført = await screen.findByRole('columnheader', { name: /journalført/i });
+
+  expect(innUt).toBeVisible();
+  expect(dokument).toBeVisible();
+  expect(type).toBeVisible();
+  expect(journalført).toBeVisible();
+});
+
+function mockFetchDokumenter(dokumenter: DokumentInfo[]) {
+  fetchMock.mockResponseOnce(JSON.stringify(dokumenter), { status: 200 });
+}

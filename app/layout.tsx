@@ -1,4 +1,5 @@
 import '@navikt/ds-css';
+import '@navikt/aap-breveditor-css';
 import 'styles/globals.css';
 
 import { AppHeader } from 'components/appheader/AppHeader';

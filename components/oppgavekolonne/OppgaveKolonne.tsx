@@ -9,6 +9,7 @@ import { Student } from 'components/behandlinger/sykdom/student/Student';
 import { Barnetillegg } from 'components/behandlinger/barnetillegg/Barnetillegg';
 import { EtAnnetSted } from 'components/behandlinger/etannetsted/EtAnnetSted';
 import { MedlemskapMedDataFetching } from 'components/behandlinger/medlemskap/MedlemskapMedDataFetching';
+import { Brev } from 'components/behandlinger/brev/Brev';
 
 interface Props {
   saksId: string;
@@ -33,6 +34,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, saksId
       {aktivGruppe === 'VEDTAK' && <Vedtak behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'FATTE_VEDTAK' && <FatteVedtak behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'IVERKSETT_VEDTAK' && <div>Behandling avsluttet</div>}
+      {aktivGruppe === 'BREV' && <Brev behandlingsReferanse={behandlingsReferanse} />}
     </>
   );
 };

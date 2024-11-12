@@ -6,7 +6,6 @@ import { Form } from 'components/form/Form';
 import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { BeregningsVurdering } from 'lib/types/types';
-import { numberToString } from 'lib/utils/string';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -27,8 +26,7 @@ interface FormFields {
   nedsattArbeidsevneDatobegrunnelse: string;
   nedsattArbeidsevneDato: string;
   ytterligereNedsattArbeidsevneDato?: string;
-  ytterligereNedsattArbeidsevneDatobegrunnelse: string;
-  antattÅrligInntekt: string;
+  ytterligereNedsattArbeidsevneDatobegrunnelse?: string;
 }
 
 export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Props) => {
@@ -79,11 +77,6 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
           },
         },
       },
-      antattÅrligInntekt: {
-        type: 'number',
-        label: 'Antatt årlig inntekt',
-        defaultValue: numberToString(vurdering?.antattÅrligInntekt),
-      },
     },
     { readOnly: readOnly }
   );
@@ -103,7 +96,7 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
             ytterligereNedsattArbeidsevneDato: data.ytterligereNedsattArbeidsevneDato
               ? formaterDatoForBackend(parse(data.ytterligereNedsattArbeidsevneDato, 'dd.MM.yyyy', new Date()))
               : undefined,
-            antattÅrligInntekt: data.antattÅrligInntekt ? { verdi: Number(data.antattÅrligInntekt) } : undefined,
+            ytterligereNedsattBegrunnelse: data?.ytterligereNedsattArbeidsevneDatobegrunnelse,
           },
         },
         referanse: behandlingsReferanse,
@@ -131,7 +124,6 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
         <div className={styles.ytterligerenedsattfelter}>
           <Heading size={'small'}>Tidspunkt arbeidsevne ble ytterligere nedsatt § 11-28</Heading>
           <Veiledning header={'Slik vurderes vilkåret for tidspunkt for ytterligere nedsatt arbeidsevne'} />
-          <FormField form={form} formField={formFields.antattÅrligInntekt} />
           <FormField
             form={form}
             formField={formFields.ytterligereNedsattArbeidsevneDatobegrunnelse}

@@ -2,40 +2,20 @@ import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@navikt/aksel-icons';
 
 import { Link, Table } from '@navikt/ds-react';
-import { DokumentInfo } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import useSWR from 'swr';
+import { useSaksnummer } from 'hooks/BehandlingHook';
+import { hentAlleDokumenterPåSak } from 'lib/clientApi';
 
 interface FormFields {
   dokumentnavn: string;
   dokumentType: string;
 }
 
-interface Props {
-  dokumenter?: DokumentInfo[];
-}
+export const Saksdokumenter = () => {
+  const saksnummer = useSaksnummer();
+  const { data: dokumenter } = useSWR(`api/sak/${saksnummer}/dokumenter`, () => hentAlleDokumenterPåSak(saksnummer));
 
-// const dokumenterMock: DokumentInfo[] = [
-//   {
-//     tittel: 'søknad.pdf',
-//     dokumentInfoId: '123',
-//     journalpostId: '456',
-//     variantformat: 'ORIGINAL',
-//     brevkode: 'hello',
-//     erUtgående: true,
-//     datoOpprettet: '2024-12-12',
-//   },
-//   {
-//     tittel: 'legeerklæring.pdf',
-//     dokumentInfoId: '456',
-//     journalpostId: '789',
-//     variantformat: 'ARKIV',
-//     brevkode: 'pello',
-//     datoOpprettet: '2024-12-5',
-//     erUtgående: true,
-//   },
-// ];
-
-export const Saksdokumenter = ({ dokumenter }: Props) => {
   const { form, formFields } = useConfigForm<FormFields>({
     dokumentnavn: {
       type: 'text',
