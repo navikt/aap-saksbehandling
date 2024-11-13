@@ -33,7 +33,6 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
-  console.log('wtf');
   const { formFields, form } = useConfigForm<FormFields>(
     {
       nedsattArbeidsevneDatobegrunnelse: {
