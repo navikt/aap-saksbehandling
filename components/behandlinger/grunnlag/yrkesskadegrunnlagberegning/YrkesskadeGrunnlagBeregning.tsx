@@ -12,6 +12,8 @@ import { BodyShort, Label } from '@navikt/ds-react';
 
 import styles from './YrkesskadeGrunnlagBeregning.module.css';
 import { YrkeskadeBeregningGrunnlag } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -31,9 +33,9 @@ interface AntattÅrligInntektVurdering {
   gverdi: number;
 }
 
-export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnlag }: Props) => {
-  const { isLoading, status } = useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
-
+export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnlag, behandlingVersjon }: Props) => {
+  const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
+  const behandlingsReferanse = useBehandlingsReferanse();
   const defaultValue: AntattÅrligInntektVurdering[] = yrkeskadeBeregningGrunnlag.skalVurderes.map((yrkesskade) => {
     const vurdertYrkesskade = yrkeskadeBeregningGrunnlag.vurderinger.find(
       (vurdering) => vurdering.referanse === yrkesskade.referanse
@@ -65,7 +67,29 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
       steg={'FASTSETT_GRUNNLAG'}
       icon={<BandageIcon />}
     >
-      <Form onSubmit={form.handleSubmit(() => {})} steg={'FASTSETT_GRUNNLAG'} status={status} isLoading={isLoading}>
+      <Form
+        onSubmit={form.handleSubmit((data) => {
+          løsBehovOgGåTilNesteSteg({
+            behov: {
+              behovstype: Behovstype.FASTSETT_YRKESSKADEINNTEKT,
+              yrkesskadeInntektVurdering: {
+                vurderinger: data.vurderinger.map((vurdering) => {
+                  return {
+                    begrunnelse: vurdering.begrunnelse,
+                    antattÅrligInntekt: { verdi: Number(vurdering.inntekt) },
+                    referanse: vurdering.ref,
+                  };
+                }),
+              },
+            },
+            referanse: behandlingsReferanse,
+            behandlingVersjon: behandlingVersjon,
+          });
+        })}
+        steg={'FASTSETT_GRUNNLAG'}
+        status={status}
+        isLoading={isLoading}
+      >
         <YrkesskadeTabell yrkesskader={[{ ref: 'YRK', kilde: 'Yrkesskaderegisteret', skadedato: '2024-10-10' }]} />
         {fields.map((field, index) => {
           const grunnlag = Number(form.watch(`vurderinger.${index}.inntekt`)) / field.gverdi;
