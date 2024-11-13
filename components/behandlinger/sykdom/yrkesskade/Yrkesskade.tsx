@@ -1,6 +1,5 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { HandBandageIcon } from '@navikt/aksel-icons';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
@@ -11,6 +10,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { Checkbox, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { VilkårsKortForUvisstEnhet } from 'components/vilkårskort/VilkårskortForUvisstEnhet';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -57,7 +57,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
   );
 
   return (
-    <VilkårsKort
+    <VilkårsKortForUvisstEnhet
       heading={'Yrkesskade §§ 11-22 1.ledd'}
       steg={'VURDER_YRKESSKADE'}
       vilkårTilhørerNavKontor={false}
@@ -128,6 +128,6 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
           </>
         )}
       </Form>
-    </VilkårsKort>
+    </VilkårsKortForUvisstEnhet>
   );
 };
