@@ -1,9 +1,12 @@
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { Button, Heading, Search } from '@navikt/ds-react';
+import { Button, Heading } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
-import { søkPåBehandler } from 'lib/clientApi';
+import { BestillLegeerklæring } from 'lib/types/types';
+import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
+import { Behandlersøk } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Behandlersøk';
+import { bestillDialogmelding } from 'lib/clientApi';
 
 export type Behandler = {
   type?: string;
@@ -34,8 +37,19 @@ interface Props {
   onCancel: () => void;
 }
 
+export const formaterBehandlernavn = (behandler: Behandler): string => {
+  if (behandler.mellomnavn) {
+    return `${behandler.fornavn} ${behandler.mellomnavn} ${behandler.etternavn}`;
+  }
+  return `${behandler.fornavn} ${behandler.etternavn}`;
+};
+
 export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
-  const [behandlere, setBehandlere] = useState<BehandleroppslagResponse>();
+  const [valgtBehandler, setValgtBehandler] = useState<Behandler>();
+  const [behandlerError, setBehandlerError] = useState<string>();
+  const saksnummer = useSaksnummer();
+  const behandlingsreferanse = useBehandlingsReferanse();
+
   const { form, formFields } = useConfigForm<FormFields>({
     behandler: {
       type: 'text',
@@ -45,7 +59,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
     dokumentasjonstype: {
       type: 'select',
       label: 'Type dokumentasjon',
-      options: ['L8', 'L40'],
+      options: ['', 'L8', 'L40'],
       rules: { required: 'Du må velge hvilken type dokumentasjon som skal bestilles' },
     },
     melding: {
@@ -56,20 +70,30 @@ export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
   });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit((data) => {
-      console.log(data);
-    })(event);
+    setBehandlerError(undefined);
+    if (!valgtBehandler) {
+      event.preventDefault();
+      setBehandlerError('Du må velge en behandler');
+      form.trigger();
+    } else {
+      form.handleSubmit(async (data) => {
+        const body: BestillLegeerklæring = {
+          behandlerNavn: formaterBehandlernavn(valgtBehandler),
+          behandlerRef: valgtBehandler.behandlerRef,
+          dokumentasjonType: data.dokumentasjonstype,
+          fritekst: data.melding,
+          saksnummer: saksnummer,
+          behandlingsReferanse: behandlingsreferanse,
+          veilederNavn: 'Hvor henter jeg denne fra?',
+        };
+        await bestillDialogmelding(body);
+      })(event);
+    }
   };
 
-  const velgBehandler = (behandlerRef: string) => form.setValue('behandler', behandlerRef);
-
-  const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const value = event.currentTarget.behandlersøk.value;
-    if (value && value.length >= 3) {
-      const res = await søkPåBehandler(value);
-      setBehandlere(res);
-    }
+  const velgEnBehandler = (behandler?: Behandler) => {
+    setBehandlerError(undefined);
+    setValgtBehandler(behandler);
   };
 
   return (
@@ -77,31 +101,8 @@ export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
       <Heading level={'3'} size={'small'}>
         Etterspør informasjon fra lege
       </Heading>
-      <form role="search" onSubmit={handleSearch}>
-        <Search name="behandlersøk" label="Søk på behandler" variant="secondary" size={'small'} />
-      </form>
-      {behandlere?.behandlere && behandlere.behandlere.length > 0 && (
-        <div>
-          {behandlere.behandlere.map((behandler) => (
-            <div key={behandler.behandlerRef}>
-              <span>
-                {behandler.fornavn} {behandler?.mellomnavn} {behandler.etternavn}
-              </span>
-              <Button
-                variant="secondary"
-                type="button"
-                size="small"
-                onClick={() => velgBehandler(behandler.behandlerRef)}
-              >
-                Velg
-              </Button>
-            </div>
-          ))}
-        </div>
-      )}
-
+      <Behandlersøk velgBehandler={velgEnBehandler} behandlerError={behandlerError} />
       <form onSubmit={handleSubmit}>
-        <FormField form={form} formField={formFields.behandler} />
         <FormField form={form} formField={formFields.dokumentasjonstype} />
         <FormField form={form} formField={formFields.melding} />
         <div className={styles.rad}>

@@ -9,6 +9,7 @@ import {
   BehandlingResultat,
   BeregningsGrunnlag,
   BeregningsVurdering,
+  BestillLegeerklæring,
   BistandsGrunnlag,
   BrevGrunnlag,
   DetaljertBehandling,
@@ -249,6 +250,11 @@ export const forberedBehandling = async (referanse: string) => {
 export const hentAlleDialogmeldingerPåSak = async (saksnummer: string): Promise<LegeerklæringStatus[]> => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/status/${saksnummer}`;
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+};
+
+export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/bestill`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
 export const hentLocalToken = async () => {

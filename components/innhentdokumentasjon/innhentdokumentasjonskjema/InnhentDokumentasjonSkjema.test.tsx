@@ -14,8 +14,8 @@ describe('InnhentDokumentasjon', () => {
     expect(screen.getByRole('heading', { name: 'Etterspør informasjon fra lege' })).toBeVisible();
   });
 
-  test('har et felt for å velge hvilken behandler som skal motta meldingen', async () => {
-    expect(screen.getByRole('textbox', { name: 'Velg behandler som skal motta meldingen' })).toBeVisible();
+  test('har et felt for å søke etter behandler', async () => {
+    expect(screen.getByRole('textbox', { name: /^Behandler$/ })).toBeVisible();
   });
 
   test('har et felt for å velge dokumentasjonstype', async () => {
@@ -46,7 +46,7 @@ describe('validering', () => {
 
   test('gir feilmelding dersom behandler ikke er valgt', async () => {
     await klikkPåSendDialogmelding();
-    expect(screen.getByText('Du må velge hvilke(n) behandler som skal motta meldingen')).toBeVisible();
+    expect(screen.getByText('Du må velge en behandler')).toBeVisible();
   });
 
   test('gir feilmelding dersom dokumentasjonstype ikke er valgt', async () => {

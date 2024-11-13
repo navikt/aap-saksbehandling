@@ -176,3 +176,5 @@ export type AvklaringsbehovKode =
 
 export type LegeerklæringStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.LegeerklæringStatusResponse'];
+export type BestillLegeerklæring =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.BestillLegeerklæringDto'];
