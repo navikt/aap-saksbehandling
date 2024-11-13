@@ -3,6 +3,9 @@ import { Alert, BodyShort, Button, Table } from '@navikt/ds-react';
 import { LegeerklæringStatus } from 'lib/types/types';
 import { ReactNode } from 'react';
 
+import styles from './Dialogmeldinger.module.css';
+import { ThumbDownIcon, TimerPauseIcon } from '@navikt/aksel-icons';
+
 type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
 };
@@ -24,7 +27,7 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null
     case 'OK':
       return (
         <Alert size={'small'} variant="success">
-          Ok
+          Mottatt
         </Alert>
       );
     case 'AVVIST':
@@ -41,18 +44,15 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null
 const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
   return (
     <Table.Row>
-      <Table.DataCell>{formaterDatoForVisning(melding.opprettet)}</Table.DataCell>
-      <Table.DataCell className="statusrad">{mapStatusTilTekst(melding.status)}</Table.DataCell>
+      <Table.DataCell className={styles.status}>{mapStatusTilTekst(melding.status)}</Table.DataCell>
+      <Table.DataCell className={styles.dato}>{formaterDatoForVisning(melding.opprettet)}</Table.DataCell>
+      <Table.DataCell className={styles.behandlernavn}>Behandlernavn</Table.DataCell>
       <Table.DataCell>
         {melding.status === 'OK' && (
-          <Button variant="secondary" type="button" size="small">
-            Avslå legeerklæring
-          </Button>
+          <Button variant="secondary" type="button" size="small" icon={<ThumbDownIcon title="Avslå legeerklæring" />} />
         )}
         {melding.status === 'SENDT' && (
-          <Button variant="secondary" type="button" size="small">
-            Send purring
-          </Button>
+          <Button variant="secondary" type="button" size="small" icon={<TimerPauseIcon title="Send purring" />} />
         )}
       </Table.DataCell>
     </Table.Row>
@@ -68,8 +68,9 @@ export const Dialogmeldinger = ({ dialogmeldinger }: Props) => {
     <Table size={'small'}>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell>Bestilt dato</Table.HeaderCell>
           <Table.HeaderCell>Status</Table.HeaderCell>
+          <Table.HeaderCell>Bestilt dato</Table.HeaderCell>
+          <Table.HeaderCell>Behandler</Table.HeaderCell>
           <Table.HeaderCell>Handling</Table.HeaderCell>
         </Table.Row>
       </Table.Header>

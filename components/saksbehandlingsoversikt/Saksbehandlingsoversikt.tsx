@@ -20,8 +20,8 @@ export const Saksbehandlingsoversikt = () => {
         <Tooltip content={'Åpne saksdokumenter'}>
           <Tabs.Tab value="saksdokumenter" label={'Saksdokumenter'} icon={<FilesIcon aria-hidden />} />
         </Tooltip>
-        <Tooltip content={'Åpne innhent dokument'}>
-          <Tabs.Tab value="innhent_dokument" label={'Innhent dokument'} icon={<HddDownIcon aria-hidden />} />
+        <Tooltip content={'Åpne hent opplysninger'}>
+          <Tabs.Tab value="hent_opplysninger" label={'Hent opplysninger'} icon={<HddDownIcon aria-hidden />} />
         </Tooltip>
         <Tooltip content={'Åpne sakshistorikk'}>
           <Tabs.Tab value="sakshistorikk" label={'Sakshistorikk'} icon={<ClockDashedIcon aria-hidden />} />
@@ -29,7 +29,7 @@ export const Saksbehandlingsoversikt = () => {
       </Tabs>
 
       {toggleGroupValue === 'saksdokumenter' && <Saksdokumenter />}
-      {toggleGroupValue === 'innhent_dokument' && <InnhentDokumentasjon />}
+      {toggleGroupValue === 'hent_opplysninger' && <InnhentDokumentasjon />}
       {toggleGroupValue === 'sakshistorikk' && <div>Her kommer det sakshistorikk</div>}
     </div>
   );

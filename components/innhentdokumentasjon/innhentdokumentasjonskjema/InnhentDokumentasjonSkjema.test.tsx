@@ -15,7 +15,7 @@ describe('InnhentDokumentasjon', () => {
   });
 
   test('har et felt for å velge hvilken behandler som skal motta meldingen', async () => {
-    expect(screen.getByRole('combobox', { name: 'Velg behandler som skal motta meldingen' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Velg behandler som skal motta meldingen' })).toBeVisible();
   });
 
   test('har et felt for å velge dokumentasjonstype', async () => {

@@ -17,7 +17,7 @@
   "dependencies": {
     "@grafana/faro-web-sdk": "^1.10.2",
     "@navikt/aap-breveditor": "^0.1.2",
-    "@navikt/aap-breveditor-css": "^0.1.0",
+    "@navikt/aap-breveditor-css": "^0.1.1",
     "@navikt/aap-felles-css": "^2.0.16",
     "@navikt/aap-felles-react": "^2.0.16",
     "@navikt/aap-felles-utils": "^2.0.16",
@@ -80,7 +80,8 @@
     "*.{js,ts,tsx,css,md}": "prettier --write"
   },
   "resolutions": {
-    "prosemirror-model": "1.19.4"
+    "prosemirror-model": "1.19.4",
+    "undici": "6.20.1"
   },
   "packageManager": "yarn@4.5.1"
 }

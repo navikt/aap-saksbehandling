@@ -1,8 +1,6 @@
 'use client';
 import React from 'react';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import Image from 'next/image';
-import Medlemskapkatt from '../../../public/medlemskapkatt.jpg';
 import { MedlemskapGrunnlag } from 'lib/types/types';
 import { Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -45,7 +43,6 @@ export const Medlemskap = async ({ grunnlag }: Props) => {
           </Table.Body>
         </Table>
       )}
-      <Image src={Medlemskapkatt} alt="medlemskap-katt" width={500} height={500} />
     </VilkårsKort>
   );
 };
