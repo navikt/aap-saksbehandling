@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
-  const vurdering = await hentBeregningstidspunktVurdering(behandlingsReferanse);
+  const grunnlag = await hentBeregningstidspunktVurdering(behandlingsReferanse);
 
-  return <FastsettBeregning readOnly={readOnly} vurdering={vurdering} behandlingVersjon={behandlingVersjon} />;
+  return <FastsettBeregning readOnly={readOnly} grunnlag={grunnlag} behandlingVersjon={behandlingVersjon} />;
 };

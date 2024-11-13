@@ -8,7 +8,7 @@ import {
   BehandlingPersoninfo,
   BehandlingResultat,
   BeregningsGrunnlag,
-  BeregningsVurdering,
+  BeregningTidspunktGrunnlag,
   BistandsGrunnlag,
   BrevGrunnlag,
   DetaljertBehandling,
@@ -187,9 +187,11 @@ export const hentBrevGrunnlag = async (behandlingsReferanse: string): Promise<Br
   return await fetchProxy<BrevGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentBeregningstidspunktVurdering = async (behandlingsReferanse: string): Promise<BeregningsVurdering> => {
+export const hentBeregningstidspunktVurdering = async (
+  behandlingsReferanse: string
+): Promise<BeregningTidspunktGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregning/tidspunkt`;
-  return await fetchProxy<BeregningsVurdering>(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy<BeregningTidspunktGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBeregningYrkesskadeVurdering = async (

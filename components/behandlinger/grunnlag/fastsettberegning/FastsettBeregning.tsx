@@ -4,7 +4,7 @@ import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { BeregningsVurdering } from 'lib/types/types';
+import { BeregningTidspunktGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -17,7 +17,7 @@ import { CalendarIcon } from '@navikt/aksel-icons';
 import { VilkårsKortForUvisstEnhet } from 'components/vilkårskort/VilkårskortForUvisstEnhet';
 
 interface Props {
-  vurdering?: BeregningsVurdering;
+  grunnlag?: BeregningTidspunktGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
 }
@@ -29,23 +29,24 @@ interface FormFields {
   ytterligereNedsattArbeidsevneDatobegrunnelse?: string;
 }
 
-export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Props) => {
+export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
+  console.log('wtf');
   const { formFields, form } = useConfigForm<FormFields>(
     {
       nedsattArbeidsevneDatobegrunnelse: {
         type: 'textarea',
         label: 'Vurder når innbygger fikk nedsatt arbeidsevne',
-        defaultValue: getStringEllerUndefined(vurdering?.begrunnelse),
+        defaultValue: getStringEllerUndefined(grunnlag?.vurdering?.begrunnelse),
         rules: { required: 'Du må skrive en begrunnelse for når innbygger fikk nedsatt arbeidsevne' },
       },
       nedsattArbeidsevneDato: {
         type: 'date_input',
         label: 'Dato når arbeidsevnen ble nedsatt',
-        defaultValue: vurdering?.ytterligereNedsattArbeidsevneDato
-          ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
+        defaultValue: grunnlag?.vurdering?.nedsattArbeidsevneDato
+          ? formaterDatoForFrontend(grunnlag?.vurdering.nedsattArbeidsevneDato)
           : undefined,
         rules: {
           validate: (value) => {
@@ -59,14 +60,14 @@ export const FastsettBeregning = ({ vurdering, behandlingVersjon, readOnly }: Pr
       ytterligereNedsattArbeidsevneDatobegrunnelse: {
         type: 'textarea',
         label: 'Vurder når innbygger fikk ytterligere nedsatt arbeidsevne',
-        defaultValue: getStringEllerUndefined(vurdering?.begrunnelse),
+        defaultValue: getStringEllerUndefined(grunnlag?.vurdering?.ytterligereNedsattBegrunnelse),
         rules: { required: 'Du må skrive en begrunnelse for når innbygger fikk ytterligere nedsatt arbeidsevne' },
       },
       ytterligereNedsattArbeidsevneDato: {
         type: 'date_input',
         label: 'Dato arbeidsevnen ble ytterligere nedsatt',
-        defaultValue: vurdering?.ytterligereNedsattArbeidsevneDato
-          ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
+        defaultValue: grunnlag?.vurdering?.ytterligereNedsattArbeidsevneDato
+          ? formaterDatoForFrontend(grunnlag?.vurdering.ytterligereNedsattArbeidsevneDato)
           : undefined,
         rules: {
           validate: (value) => {
