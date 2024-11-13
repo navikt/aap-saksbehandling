@@ -13,6 +13,7 @@ export enum Behovstype {
   AVKLAR_SONINGSFORRHOLD = '5010',
   AVKLAR_HELSEINSTITUSJON = '5011',
   YRKESSKADE_KODE = '5013',
+  FASTSETT_YRKESSKADEINNTEKT = '5014',
   FORESLÅ_VEDTAK_KODE = '5098',
   FATTE_VEDTAK_KODE = '5099',
   KVALITETSSIKRING_KODE = '5097',
@@ -52,6 +53,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Avklar helseinstitusjon (§ 11-25)';
     case '5013':
       return 'Vurder yrkesskade';
+    case '5014':
+      return 'Vurder yrkesskadeinntekt';
   }
 }
 
