@@ -215,10 +215,6 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         )}
 
         {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} horizontalRadio />
-        )}
-
-        {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja && (
           <>
             <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneAvEnVissVarighet} horizontalRadio />
           </>
@@ -243,6 +239,10 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
               />
             </>
           )}
+
+        {form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') && (
+          <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} horizontalRadio />
+        )}
       </Form>
     </VilkårsKort>
   );
