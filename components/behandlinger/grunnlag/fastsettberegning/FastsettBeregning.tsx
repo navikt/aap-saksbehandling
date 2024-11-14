@@ -8,7 +8,7 @@ import { BeregningTidspunktGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { parse } from 'date-fns';
+import { isBefore, parse } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import styles from './FastsettBeregning.module.css';
@@ -69,10 +69,14 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
           ? formaterDatoForFrontend(grunnlag?.vurdering.ytterligereNedsattArbeidsevneDato)
           : undefined,
         rules: {
-          validate: (value) => {
+          validate: (value, formValues) => {
             const valideringsresultat = validerDato(value as string);
             if (valideringsresultat) {
               return valideringsresultat;
+            }
+
+            if (value && isBefore(new Date(value as string), new Date(formValues.nedsattArbeidsevneDato))) {
+              return 'Ytterligere nedsatt dato kan ikke være før datoen arbeidsevnen ble nedsatt';
             }
           },
         },

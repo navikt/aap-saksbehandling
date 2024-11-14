@@ -109,6 +109,19 @@ describe('Felt for å sette dato for ytterligere nedsatt arbeidsevne', () => {
     const feilmelding = screen.getAllByText('Du må sette en dato')[0];
     expect(feilmelding).toBeVisible();
   });
+
+  it('skal vise feilmelding dersom ytterligere nedsatt dato er før datoen arbeidsevnen ble nedsatt', async () => {
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    const nedsattDato = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
+    await user.type(nedsattDato, '11.11.2011');
+
+    const ytterligereNedsattDato = screen.getByRole('textbox', { name: 'Dato arbeidsevnen ble ytterligere nedsatt' });
+    await user.type(ytterligereNedsattDato, '11.11.2010');
+
+    await velgBekreft();
+    const feilmelding = screen.getByText('Ytterligere nedsatt dato kan ikke være før datoen arbeidsevnen ble nedsatt');
+    expect(feilmelding).toBeVisible();
+  });
 });
 
 async function velgBekreft() {
