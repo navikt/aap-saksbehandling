@@ -1,3 +1,4 @@
+import { logError } from '@navikt/aap-felles-utils';
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { hentBrevGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
@@ -5,5 +6,10 @@ export const SkriveBrevMedDataFetching = async ({ behandlingsReferanse }: { beha
   const brevGrunnlag = await hentBrevGrunnlag(behandlingsReferanse);
   console.log('brevGrunnlag', brevGrunnlag);
 
-  return <SkriveBrev grunnlag={brevGrunnlag} />;
+  if (!brevGrunnlag.brev) {
+    logError('Ikke noe brev definert i grunnlaget');
+    return null;
+  }
+
+  return <SkriveBrev grunnlag={brevGrunnlag.brev} />;
 };

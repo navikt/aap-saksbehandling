@@ -12,9 +12,12 @@ import styles from './InnhentDokumentasjon.module.css';
 
 export const InnhentDokumentasjon = () => {
   const saksnummer = useSaksnummer();
-  const { data, isLoading, error } = useSWR(`api/dokumentinnhenting/status/${saksnummer}`, () =>
-    hentAlleDialogmeldingerPåSak(saksnummer)
+  const { data, isLoading, error } = useSWR(
+    `api/dokumentinnhenting/status/${saksnummer}`,
+    () => hentAlleDialogmeldingerPåSak(saksnummer),
+    { revalidateOnFocus: false }
   );
+
   const [visSkjema, oppdaterVisSkjema] = useState<boolean>(false);
   const skjulSkjema = () => oppdaterVisSkjema(false);
   return (
