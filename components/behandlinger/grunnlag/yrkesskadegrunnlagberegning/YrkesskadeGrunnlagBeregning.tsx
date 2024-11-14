@@ -89,6 +89,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
         steg={'FASTSETT_GRUNNLAG'}
         status={status}
         isLoading={isLoading}
+        visBekreftKnapp={!readOnly}
       >
         <YrkesskadeTabell yrkesskader={[{ ref: 'YRK', kilde: 'Yrkesskaderegisteret', skadedato: '2024-10-10' }]} />
         {fields.map((field, index) => {
@@ -96,6 +97,13 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
 
           return (
             <div key={field.id} className={'flex-column'}>
+              <TextAreaWrapper
+                name={`vurderinger.${index}.begrunnelse`}
+                control={form.control}
+                label={`Begrunnelse for anslått årlig arbeidsinntekt for skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}
+                readOnly={readOnly}
+                className={'begrunnelse'}
+              />
               <div className={styles.inntektfelt}>
                 <Label size="small">{`Anslått årlig arbeidsinntekt på skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}</Label>
                 <div className={styles.inntektwrapper}>
@@ -111,13 +119,6 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
                   <BodyShort>{grunnlag.toFixed(2)} G</BodyShort>
                 </div>
               </div>
-              <TextAreaWrapper
-                name={`vurderinger.${index}.begrunnelse`}
-                control={form.control}
-                label={`Begrunnelse for anslått årlig arbeidsinntekt for skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}
-                readOnly={readOnly}
-                className={'begrunnelse'}
-              />
             </div>
           );
         })}
