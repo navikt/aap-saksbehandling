@@ -12,15 +12,19 @@ const dialogmeldinger: LegeerklæringStatus[] = [
     status: 'BESTILT',
     statusTekst: 'Hva skal det stå her?',
     saksnummer: '4KD09J',
+    behandlerNavn: 'Doogie Houser',
+    fritekst: 'hello',
   },
   {
     behandlerRef: '5849',
     dialogmeldingUuid: 'uuuid-4',
+    fritekst: 'hello',
     opprettet: '2024-08-22',
     personId: '12345678910',
     status: 'OK',
     statusTekst: 'Hva skal det stå her?',
     saksnummer: '4KD09J',
+    behandlerNavn: 'Gregory House',
   },
 ];
 

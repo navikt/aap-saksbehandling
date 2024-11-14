@@ -1,4 +1,4 @@
-import { BehandleroppslagResponse } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
+import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import {
   OpprettAktivitetspliktBrudd,
   LøsAvklaringsbehovPåBehandling,
@@ -9,6 +9,7 @@ import {
   OppdaterAktivitetspliktBrudd,
   FeilregistrerAktivitetspliktBrudd,
   DokumentInfo,
+  BestillLegeerklæring,
 } from './types/types';
 
 async function fetchProxy<ResponseBody>(
@@ -68,7 +69,7 @@ export function simulerMeldeplikt(referanse: string, vurderinger: SimulerMeldepl
 }
 
 export function søkPåBehandler(fritekst: string) {
-  return fetchProxy<BehandleroppslagResponse>(`/api/dokumentinnhenting/behandleroppslag`, 'POST', { fritekst });
+  return fetchProxy<Behandler[]>(`/api/dokumentinnhenting/behandleroppslag`, 'POST', { fritekst });
 }
 
 export function hentAlleDialogmeldingerPåSak(saksnummer: string) {
@@ -77,6 +78,10 @@ export function hentAlleDialogmeldingerPåSak(saksnummer: string) {
 
 export function hentAlleDokumenterPåSak(saksnummer: string) {
   return fetchProxy<DokumentInfo[]>(`/api/sak/${saksnummer}/dokumenter`, 'GET');
+}
+
+export function bestillDialogmelding(bestilling: BestillLegeerklæring) {
+  return fetchProxy(`/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
 
 export interface SaksInformasjon {

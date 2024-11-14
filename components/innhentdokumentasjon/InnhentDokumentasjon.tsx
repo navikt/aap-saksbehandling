@@ -16,6 +16,7 @@ export const InnhentDokumentasjon = () => {
     hentAlleDialogmeldingerPåSak(saksnummer)
   );
   const [visSkjema, oppdaterVisSkjema] = useState<boolean>(false);
+  const skjulSkjema = () => oppdaterVisSkjema(false);
   return (
     <section>
       {!visSkjema && (
@@ -34,7 +35,7 @@ export const InnhentDokumentasjon = () => {
           {data && <Dialogmeldinger dialogmeldinger={data as LegeerklæringStatus[]} />}
         </VStack>
       )}
-      {visSkjema && <InnhentDokumentasjonSkjema onCancel={() => oppdaterVisSkjema(false)} />}
+      {visSkjema && <InnhentDokumentasjonSkjema onCancel={skjulSkjema} />}
     </section>
   );
 };

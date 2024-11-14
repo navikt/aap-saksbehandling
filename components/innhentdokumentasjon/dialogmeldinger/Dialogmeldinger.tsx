@@ -46,7 +46,7 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
     <Table.Row>
       <Table.DataCell className={styles.status}>{mapStatusTilTekst(melding.status)}</Table.DataCell>
       <Table.DataCell className={styles.dato}>{formaterDatoForVisning(melding.opprettet)}</Table.DataCell>
-      <Table.DataCell className={styles.behandlernavn}>Behandlernavn</Table.DataCell>
+      <Table.DataCell className={styles.behandlernavn}>{melding.behandlerNavn}</Table.DataCell>
       <Table.DataCell>
         {melding.status === 'OK' && (
           <Button variant="secondary" type="button" size="small" icon={<ThumbDownIcon title="Avslå legeerklæring" />} />
