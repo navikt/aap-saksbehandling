@@ -21,6 +21,7 @@ export interface OpprettSakFormFields {
   fødselsdato: Date;
   yrkesskade: string;
   student: string;
+  uføre: string;
   barn?: Barn[];
   institusjon?: Institusjon[];
 }
@@ -48,6 +49,10 @@ export const OpprettSak = () => {
       type: 'fieldArray',
       defaultValue: [{ fodselsdato: '2015', harRelasjon: 'folkeregistrertBarn' }],
     },
+    uføre: {
+      type: 'number',
+      label: 'Uføre?',
+    },
     institusjon: {
       type: 'checkbox',
       label: 'Institujon',
@@ -66,6 +71,7 @@ export const OpprettSak = () => {
           fødselsdato: formaterDatoForBackend(data.fødselsdato),
           yrkesskade: data.yrkesskade === JaEllerNei.Ja,
           student: data.student === JaEllerNei.Ja,
+          uføre: Number(data.uføre),
           barn:
             data.barn?.map((barn) => {
               return {
@@ -87,6 +93,7 @@ export const OpprettSak = () => {
         <FormField form={form} formField={formFields.yrkesskade} />
         <FormField form={form} formField={formFields.student} />
         <FormField form={form} formField={formFields.institusjon} />
+        <FormField form={form} formField={formFields.uføre} />
       </div>
       <OpprettSakBarn form={form} />
       <Button className={'fit-content'}>Opprett test sak</Button>

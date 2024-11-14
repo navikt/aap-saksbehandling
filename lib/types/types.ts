@@ -16,8 +16,10 @@ export type FritakMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritakMeldepliktGrunnlagDto'];
 export type ArbeidsevneGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.ArbeidsevneGrunnlagDto'];
-export type BeregningsVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.flate.BeregningsVurderingDTO'];
+
+export type BeregningTidspunktGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.flate.BeregningTidspunktAvklaringDto'];
+
 export type TilkjentYtelseGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.flate.TilkjentYtelseDto'];
 export type KvalitetssikringGrunnlag =
@@ -177,5 +179,14 @@ export type AvklaringsbehovKode =
 
 export type LegeerklæringStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.LegeerklæringStatusResponse'];
+export type YrkesskadeVurderingGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.YrkesskadeVurderingGrunnlagDto'];
+
+export type RegistrerYrkesskade =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.RegistrertYrkesskade'];
+
+export type YrkeskadeBeregningGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.flate.BeregningYrkesskadeAvklaringDto'];
+
 export type BestillLegeerklæring =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.BestillLegeerklæringDto'];

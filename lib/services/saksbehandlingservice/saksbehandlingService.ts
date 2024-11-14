@@ -8,7 +8,7 @@ import {
   BehandlingPersoninfo,
   BehandlingResultat,
   BeregningsGrunnlag,
-  BeregningsVurdering,
+  BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
   BistandsGrunnlag,
   BrevGrunnlag,
@@ -36,6 +36,8 @@ import {
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
   VenteInformasjon,
+  YrkeskadeBeregningGrunnlag,
+  YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { logError, logWarning } from '@navikt/aap-felles-utils';
@@ -123,6 +125,13 @@ export const hentMedlemskapGrunnlag = async (behandlingsReferanse: string): Prom
   return await fetchProxy<MedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentYrkesskadeVurderingGrunnlag = async (
+  behandlingsReferanse: string
+): Promise<YrkesskadeVurderingGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/yrkesskade`;
+  return await fetchProxy<YrkesskadeVurderingGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentStudentGrunnlag = async (behandlingsReferanse: string): Promise<StudentGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/student`;
   return await fetchProxy<StudentGrunnlag>(url, saksbehandlingApiScope, 'GET');
@@ -179,9 +188,18 @@ export const hentBrevGrunnlag = async (behandlingsReferanse: string): Promise<Br
   return await fetchProxy<BrevGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentBeregningsVurdering = async (behandlingsReferanse: string): Promise<BeregningsVurdering> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregningsvurdering`;
-  return await fetchProxy<BeregningsVurdering>(url, saksbehandlingApiScope, 'GET');
+export const hentBeregningstidspunktVurdering = async (
+  behandlingsReferanse: string
+): Promise<BeregningTidspunktGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregning/tidspunkt`;
+  return await fetchProxy<BeregningTidspunktGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentBeregningYrkesskadeVurdering = async (
+  behandlingsReferanse: string
+): Promise<YrkeskadeBeregningGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregning/yrkesskade`;
+  return await fetchProxy<YrkeskadeBeregningGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentHelseInstitusjonsVurdering = async (

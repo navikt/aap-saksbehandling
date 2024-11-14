@@ -1,5 +1,5 @@
 import { FastsettBeregning } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregning';
-import { hentBeregningsVurdering } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBeregningstidspunktVurdering } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
-  const vurdering = await hentBeregningsVurdering(behandlingsReferanse);
+  const grunnlag = await hentBeregningstidspunktVurdering(behandlingsReferanse);
 
-  return <FastsettBeregning readOnly={readOnly} vurdering={vurdering} behandlingVersjon={behandlingVersjon} />;
+  return <FastsettBeregning readOnly={readOnly} grunnlag={grunnlag} behandlingVersjon={behandlingVersjon} />;
 };

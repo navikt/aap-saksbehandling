@@ -1,6 +1,5 @@
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { hentAlleDokumenterPåSak, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { SykdomsvurderingMedYrkesskade } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedYrkesskade';
 import { DokumentInfo, SykdomsGrunnlag } from 'lib/types/types';
 
 interface Props {
@@ -28,14 +27,7 @@ export const SykdomsvurderingMedDataFetching = async ({
     hentAlleDokumenterPåSak(saksId),
   ]);
 
-  return grunnlag.skalVurdereYrkesskade ? (
-    <SykdomsvurderingMedYrkesskade
-      grunnlag={grunnlag}
-      readOnly={readOnly}
-      behandlingVersjon={behandlingVersjon}
-      tilknyttedeDokumenter={tilknyttedeDokumenter}
-    />
-  ) : (
+  return (
     <Sykdomsvurdering
       grunnlag={grunnlag}
       readOnly={readOnly}
