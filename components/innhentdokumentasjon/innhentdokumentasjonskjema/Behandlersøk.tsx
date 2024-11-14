@@ -31,7 +31,7 @@ export const Behandlersøk = ({ velgBehandler, behandlerError }: Props) => {
       settVisPopover(true);
       setSøker(true);
       const res = await søkPåBehandler(value);
-      oppdaterBehandlerliste(res?.behandlere ?? []);
+      oppdaterBehandlerliste(res ?? []);
     }
   };
 

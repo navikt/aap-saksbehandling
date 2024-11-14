@@ -23,10 +23,6 @@ export type Behandler = {
   telefon?: string;
 };
 
-export type BehandleroppslagResponse = {
-  behandlere: Behandler[];
-};
-
 type FormFields = {
   behandler: string;
   dokumentasjonstype: 'L8' | 'L40';
