@@ -137,7 +137,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
                       const valueAsNumber = Number(value);
                       if (isNaN(valueAsNumber)) {
                         return 'Prosent må være et tall';
-                      } else if (erProsent(valueAsNumber)) {
+                      } else if (!erProsent(valueAsNumber)) {
                         return 'Prosent kan bare være mellom 0 og 100';
                       }
                     },
