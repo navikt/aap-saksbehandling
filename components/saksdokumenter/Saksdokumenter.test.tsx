@@ -54,8 +54,6 @@ test('skal være mulig å søke etter et dokument', async () => {
   expect(await screen.findByRole('link', { name: /søknad\.pdf/i })).toBeVisible();
   expect(await screen.findByRole('link', { name: /legeerklæring\.pdf/i })).toBeVisible();
 
-  screen.logTestingPlaygroundURL();
-
   const søkefelt = screen.getByRole('textbox', { name: /søk i dokumenter/i });
 
   await user.type(søkefelt, 'sø');

@@ -89,7 +89,7 @@ describe('Tabell for å tilknytte yrkesskader til vurderingen', () => {
 describe('Felt for å si hvor stor andel skyldes yrkesskadene', () => {
   it('skal være synlig dersom det finnes en årsakssammenheng', async () => {
     await velgJaPåÅrsakssammenheng();
-    const felt = screen.getByRole('spinbutton', {
+    const felt = screen.getByRole('textbox', {
       name: 'Hvor stor andel totalt av nedsatt arbeidsevne skyldes yrkesskadene?',
     });
 
