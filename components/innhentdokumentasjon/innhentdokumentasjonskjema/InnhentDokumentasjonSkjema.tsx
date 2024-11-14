@@ -82,7 +82,10 @@ export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
           behandlingsReferanse: behandlingsreferanse,
           veilederNavn: 'Hvor henter jeg denne fra?',
         };
-        await bestillDialogmelding(body);
+        const res = await bestillDialogmelding(body);
+        if (res) {
+          onCancel();
+        }
       })(event);
     }
   };
