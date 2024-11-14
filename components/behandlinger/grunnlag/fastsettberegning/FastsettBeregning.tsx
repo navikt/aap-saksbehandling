@@ -104,12 +104,12 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
     })(event);
   };
 
+  const heading = grunnlag?.skalVurdereYtterligere
+    ? 'Beregningstidspunkt nedsatt arbeidsevne og ytterligere nedsatt arbeidsevne § 11-5'
+    : 'Beregningstidspunkt nedsatt arbeidsevne § 11-5';
+
   return (
-    <VilkårsKortForUvisstEnhet
-      heading={'Beregningstidspunkt nedsatt arbeidsevne og ytterligere nedsatt arbeidsevne'}
-      steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
-      icon={<CalendarIcon />}
-    >
+    <VilkårsKortForUvisstEnhet heading={heading} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'} icon={<CalendarIcon />}>
       <Form
         steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
         onSubmit={handleSubmit}
@@ -121,16 +121,18 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
         <FormField form={form} formField={formFields.nedsattArbeidsevneDatobegrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
 
-        <div className={styles.ytterligerenedsattfelter}>
-          <Heading size={'small'}>Tidspunkt arbeidsevne ble ytterligere nedsatt § 11-28</Heading>
-          <Veiledning header={'Slik vurderes vilkåret for tidspunkt for ytterligere nedsatt arbeidsevne'} />
-          <FormField
-            form={form}
-            formField={formFields.ytterligereNedsattArbeidsevneDatobegrunnelse}
-            className={'begrunnelse'}
-          />
-          <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
-        </div>
+        {grunnlag?.skalVurdereYtterligere && (
+          <div className={styles.ytterligerenedsattfelter}>
+            <Heading size={'small'}>Tidspunkt arbeidsevne ble ytterligere nedsatt § 11-28</Heading>
+            <Veiledning header={'Slik vurderes vilkåret for tidspunkt for ytterligere nedsatt arbeidsevne'} />
+            <FormField
+              form={form}
+              formField={formFields.ytterligereNedsattArbeidsevneDatobegrunnelse}
+              className={'begrunnelse'}
+            />
+            <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
+          </div>
+        )}
       </Form>
     </VilkårsKortForUvisstEnhet>
   );
