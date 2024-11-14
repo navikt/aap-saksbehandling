@@ -11,6 +11,7 @@ import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { Checkbox, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { VilkårsKortForUvisstEnhet } from 'components/vilkårskort/VilkårskortForUvisstEnhet';
+import { erProsent } from 'lib/utils/validering';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -47,10 +48,20 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
         type: 'checkbox_nested',
       },
       andelAvNedsettelsen: {
-        type: 'number',
+        type: 'text',
         label: 'Hvor stor andel totalt av nedsatt arbeidsevne skyldes yrkesskadene?',
         defaultValue: grunnlag.yrkesskadeVurdering?.andelAvNedsettelsen?.toString(),
-        rules: { required: 'Du må svare på hvor stor andel av den nedsatte arbeidsevnen skyldes yrkesskadene' },
+        rules: {
+          required: 'Du må svare på hvor stor andel av den nedsatte arbeidsevnen skyldes yrkesskadene',
+          validate: (value) => {
+            const valueAsNumber = Number(value);
+            if (isNaN(valueAsNumber)) {
+              return 'Prosent må være et tall';
+            } else if (erProsent(valueAsNumber)) {
+              return 'Prosent kan bare være mellom 0 og 100';
+            }
+          },
+        },
       },
     },
     { readOnly }
@@ -124,7 +135,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
                 )}
               </Table>
             </CheckboxWrapper>
-            <FormField form={form} formField={formFields.andelAvNedsettelsen} />
+            <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
           </>
         )}
       </Form>

@@ -20,6 +20,7 @@ import styles from './FastsettArbeidsevne.module.css';
 import { Button } from '@navikt/ds-react';
 import { pipe } from 'lib/utils/functional';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { erProsent } from 'lib/utils/validering';
 
 interface Props {
   grunnlag?: ArbeidsevneGrunnlag;
@@ -130,7 +131,17 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
                   name={`arbeidsevnevurderinger.${index}.arbeidsevne`}
                   type={'text'}
                   label={'Oppgi den etablerte arbeidsevnen eller den uutnyttede arbeidsevnen i prosent'}
-                  rules={{ required: 'Du må angi hvor stor arbeidsevne innbygger har' }}
+                  rules={{
+                    required: 'Du må angi hvor stor arbeidsevne innbygger har',
+                    validate: (value) => {
+                      const valueAsNumber = Number(value);
+                      if (isNaN(valueAsNumber)) {
+                        return 'Prosent må være et tall';
+                      } else if (erProsent(valueAsNumber)) {
+                        return 'Prosent kan bare være mellom 0 og 100';
+                      }
+                    },
+                  }}
                   readOnly={readOnly}
                   className="prosent_input"
                 />
