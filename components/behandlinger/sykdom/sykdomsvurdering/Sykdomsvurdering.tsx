@@ -87,7 +87,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
       hoveddiagnose: {
         type: 'combobox',
         label: 'Hoveddiagnose',
-        options: ['Diagnose 1', 'Diagnose 2', 'Diagnose 3', 'Diagnose 4'],
+        options: [],
         rules: { required: 'Du må velge en hoveddiagnose' },
       },
       bidiagnose: {
@@ -166,6 +166,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         steg={'AVKLAR_SYKDOM'}
         visBekreftKnapp={!readOnly}
       >
+        <FormField form={form} formField={formFields.hoveddiagnose} />
         <RegistrertBehandler />
         <Veiledning
           tekst={
@@ -205,9 +206,6 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
           <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
         )}
 
-        {/*TODO Ta inn når backend er klar - Thomas*/}
-        {/*<FormField form={form} formField={formFields.hoveddiagnose} />*/}
-        {/*<FormField form={form} formField={formFields.bidiagnose} />*/}
         {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei && (
           <Alert variant={'info'} size={'small'} className={'fit-content'}>
             Innbygger vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
