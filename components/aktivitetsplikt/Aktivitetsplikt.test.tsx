@@ -2,12 +2,25 @@ import { describe, expect, it } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { Aktivitetsplikt } from 'components/aktivitetsplikt/Aktivitetsplikt';
 import { userEvent } from '@testing-library/user-event';
+import { SaksInfo } from 'lib/types/types';
 
 const user = userEvent.setup();
 
+const sak: SaksInfo = {
+  behandlinger: [],
+  ident: 'ukjent',
+  opprettetTidspunkt: '2024-11-11',
+  periode: {
+    fom: '',
+    tom: '',
+  },
+  saksnummer: '123',
+  status: 'OPPRETTET',
+};
+
 describe('generelt', () => {
   it('skal ha en tabell for tidligere brudd på aktivitetsplikten', () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     const overskriftTabell = screen.getByText('Tidligere brudd på aktivitetsplikten');
     expect(overskriftTabell).toBeVisible();
   });
@@ -15,13 +28,13 @@ describe('generelt', () => {
 
 describe('Felt for å registrere brudd', () => {
   it('skal ha et felt for å registrere brudd på aktivitetsplikten', () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     const felt = screen.getByRole('group', { name: 'Registrer brudd på aktivitetsplikt' });
     expect(felt).toBeVisible();
   });
 
   it('skal vise en feilmelding dersom brudd på aktivitetsplikten ikke er besvart', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
 
     await trykkPåBekreftKnapp();
     const feilmelding = screen.getByText('Du må registrere et brudd på aktivitetsplikten');
@@ -29,7 +42,7 @@ describe('Felt for å registrere brudd', () => {
   });
 
   it('skal ha alle valgene i feltet for å registrere brudd på aktivitetsplikten', () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     const ikkeMøtttilTiltakValg = screen.getByRole('radio', { name: 'Ikke møtt i tiltak' });
     expect(ikkeMøtttilTiltakValg).toBeVisible();
 
@@ -58,7 +71,7 @@ describe('Felt for å registrere brudd', () => {
 
 describe('Felt for å velge paragraf', () => {
   it('skal dukke opp et felt for å velge en paragraf dersom man velger ikke møtt til tiltak', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
 
     const paragrafFelt = screen.getByRole('group', { name: 'Velg paragraf' });
@@ -66,7 +79,7 @@ describe('Felt for å velge paragraf', () => {
   });
 
   it('skal dukke opp et felt for å velge en paragraf dersom man velger ikke møtt i behandling/utredning', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
 
     const paragrafFelt = screen.getByRole('group', { name: 'Velg paragraf' });
@@ -74,7 +87,7 @@ describe('Felt for å velge paragraf', () => {
   });
 
   it('skal ha alle valgene i feltet for hvilken paragraf', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
 
     const paragraf_11_8Felt = screen.getByRole('radio', { name: '11-8 fravær fra fastsatt aktivitet' });
@@ -87,7 +100,7 @@ describe('Felt for å velge paragraf', () => {
   });
 
   it('skal vise en feilmelding dersom hvilken paragraf det gjelder ikke er besvart', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
 
     await velgIkkeMøttITiltakSomBrudd();
     await trykkPåBekreftKnapp();
@@ -98,7 +111,7 @@ describe('Felt for å velge paragraf', () => {
 
 describe('Felt for å velge grunn', () => {
   it('skal dukke opp et felt for å velge en grunn for fravær dersom man velger paragraf 11-8', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
@@ -107,7 +120,7 @@ describe('Felt for å velge grunn', () => {
   });
 
   it('skal dukke opp et felt for å velge en grunn for fravær dersom man velger paragraf 11-9', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_9();
 
@@ -116,7 +129,7 @@ describe('Felt for å velge grunn', () => {
   });
 
   it('skal dukke opp et felt for å velge en grunn for fravær dersom man velger brudd ikke møtt til annen aktivitet', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await user.click(screen.getByRole('radio', { name: 'Ikke møtt til annen aktivitet' }));
 
     const grunnFelt = screen.getByRole('group', { name: 'Velg grunn for bruddet' });
@@ -124,7 +137,7 @@ describe('Felt for å velge grunn', () => {
   });
 
   it('Skal ha alle valgene i feltet for å registrere en grunn for bruddet hvis der er paragraf 11-8', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
@@ -139,7 +152,7 @@ describe('Felt for å velge grunn', () => {
   });
 
   it('Skal ha alle valgene i feltet for å registrere en grunn for bruddet hvis der er paragraf 11-9', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_9();
 
@@ -151,7 +164,7 @@ describe('Felt for å velge grunn', () => {
   });
 
   it('Skal resette valget som har blitt satt på grunn dersom man går fra en paragraf til en annen', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
@@ -163,7 +176,7 @@ describe('Felt for å velge grunn', () => {
   });
 
   it('Skal vise en feilmelding dersom grunn ikke er besvart', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
     await trykkPåBekreftKnapp();
@@ -175,7 +188,7 @@ describe('Felt for å velge grunn', () => {
 
 describe('Felt for begrunnelse', () => {
   it('skal dukke opp et begrunnelsesfelt for brudd på aktivitetsplikt dersom man velger en paragraf', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
@@ -184,7 +197,7 @@ describe('Felt for begrunnelse', () => {
   });
 
   it('skal vise en feilmelding dersom begrunnelse ikke er besvart', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
 
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
@@ -197,7 +210,7 @@ describe('Felt for begrunnelse', () => {
 
 describe('Felt for å registrere enkeltdato eller periode', () => {
   it('skal vise en feilmelding dersom dato for brudd på aktivitetsplikten ikke er besvart', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
 
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
@@ -211,7 +224,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
   });
 
   it('skal være mulig å legge til flere rader med enkeltdato', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
 
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
@@ -224,7 +237,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
   });
 
   it('skal være mulig å slette en rad med enkeltdato', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
 
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
@@ -240,7 +253,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
   });
 
   it('skal være mulig å legge til flere rader med perioder', async () => {
-    await render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    await render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
 
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
@@ -255,7 +268,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
   });
 
   it('skal være mulig å slette en rad med perioder', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
 
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
@@ -275,7 +288,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
   });
 
   it('skal vise en feilmelding dersom det finnes overlappende perioder', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
@@ -311,7 +324,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
   });
 
   it('skal vise en feilmelding dersom det ikke er lagt til enkeltdato eller periode', async () => {
-    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} />);
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 

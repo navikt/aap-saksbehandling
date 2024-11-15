@@ -4,12 +4,13 @@ import { FigureIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { AktivitetspliktHendelserTabell } from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
-import { Alert, Button, Radio } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Label, Radio } from '@navikt/ds-react';
 import {
   AktivitetspliktBrudd,
   AktivitetspliktGrunn,
   AktivitetspliktHendelse,
   AktivitetspliktParagraf,
+  SaksInfo,
 } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { AktivitetspliktDatoTabell } from 'components/aktivitetsplikt/aktivitetspliktdatotabell/AktivitetspliktDatoTabell';
@@ -19,7 +20,7 @@ import { useFieldArray } from 'react-hook-form';
 import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 import { useEffect, useState } from 'react';
 import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
-import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
+import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -40,6 +41,7 @@ export type DatoBruddPåAktivitetsplikt = EnkeltDag | AktvitetsPeriode;
 
 interface Props {
   aktivitetspliktHendelser: AktivitetspliktHendelse[];
+  sak: SaksInfo;
 }
 
 export interface AktivitetspliktFormFields {
@@ -62,7 +64,7 @@ const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
   { label: 'Ikke møtt til annen aktivitet', value: 'IKKE_MØTT_TIL_ANNEN_AKTIVITET' },
 ];
 
-export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
+export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
   const saksnummer = useSaksnummer();
   const [errorMessage, setErrorMessage] = useState('');
   const { form, formFields } = useConfigForm<AktivitetspliktFormFields>(
@@ -228,8 +230,18 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser }: Props) => {
 
           {skalViseDatoFeltOgBegrunnelsesfelt && (
             <div className={'flex-column'}>
-              <b>{hentDatoLabel(brudd)}</b>
-              <AktivitetspliktDatoTabell form={form} fields={fields} remove={remove} />
+              <div>
+                <Label size={'small'}>{hentDatoLabel(brudd)}</Label>
+                <BodyShort size={'small'}>
+                  Søknadstidspunkt: {formaterDatoForFrontend(sak.opprettetTidspunkt)}
+                </BodyShort>
+              </div>
+              <AktivitetspliktDatoTabell
+                form={form}
+                fields={fields}
+                remove={remove}
+                søknadstidspunkt={new Date(sak.opprettetTidspunkt)}
+              />
               <div className={'flex-row'}>
                 <Button
                   icon={<PlusCircleIcon />}

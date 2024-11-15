@@ -2,19 +2,21 @@ import { Button, Table } from '@navikt/ds-react';
 
 import { FieldArrayWithId, UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { TextFieldWrapper } from '@navikt/aap-felles-react';
+import { DateInputWrapper } from '@navikt/aap-felles-react';
 import { AktivitetspliktFormFields } from 'components/aktivitetsplikt/Aktivitetsplikt';
 
 import styles from 'components/aktivitetsplikt/aktivitetspliktdatotabell/AktivitetspliktDatoTabell.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
+import { isBefore } from 'date-fns';
 
 interface Props {
   form: UseFormReturn<AktivitetspliktFormFields>;
   fields: FieldArrayWithId<AktivitetspliktFormFields, 'perioder'>[];
   remove: UseFieldArrayRemove;
+  søknadstidspunkt: Date;
 }
 
-export const AktivitetspliktDatoTabell = ({ form, fields, remove }: Props) => {
+export const AktivitetspliktDatoTabell = ({ form, fields, remove, søknadstidspunkt }: Props) => {
   return (
     <>
       <Table size={'small'}>
@@ -31,14 +33,21 @@ export const AktivitetspliktDatoTabell = ({ form, fields, remove }: Props) => {
             <Table.Row key={field.id}>
               <Table.DataCell className={'navds-table__data-cell--align-top'}>
                 <div className={styles.tekstfelt}>
-                  <TextFieldWrapper
+                  <DateInputWrapper
                     label={field.type === 'enkeltdag' ? 'dato' : 'fra og med dato'}
                     control={form.control}
-                    type={'text'}
-                    hideLabel={true}
                     name={field.type === 'enkeltdag' ? `perioder.${index}.dato` : `perioder.${index}.fom`}
                     rules={{
-                      validate: (value) => validerDato(value as string),
+                      validate: (value) => {
+                        const valideringsresultat = validerDato(value as string);
+                        if (valideringsresultat) {
+                          return valideringsresultat;
+                        }
+
+                        if (isBefore(new Date(value as string), søknadstidspunkt)) {
+                          return 'Bruddperioden kan ikke starte før søknadstidspunktet';
+                        }
+                      },
                     }}
                   />
                 </div>
@@ -46,12 +55,10 @@ export const AktivitetspliktDatoTabell = ({ form, fields, remove }: Props) => {
               {field.type === 'periode' ? (
                 <Table.DataCell>
                   <div className={styles.tekstfelt}>
-                    <TextFieldWrapper
+                    <DateInputWrapper
                       label={'til og med dato'}
                       control={form.control}
-                      type={'text'}
                       name={`perioder.${index}.tom`}
-                      hideLabel={true}
                       rules={{ validate: (value) => validerDato(value as string) }}
                     />
                   </div>
