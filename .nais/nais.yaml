@@ -64,3 +64,5 @@ spec:
         - application: "behandlingsflyt"
         - application: "saksbehandling-pdfgen"
         - application: "dokumentinnhenting"
+      external:
+        - host: "cdn.nav.no"
