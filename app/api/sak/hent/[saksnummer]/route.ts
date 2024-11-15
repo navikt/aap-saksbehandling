@@ -1,7 +1,8 @@
 import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: { saksnummer: string } }) {
+export async function GET(req: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
+  const params = await props.params;
   const data = await hentSak(params.saksnummer);
 
   if (data !== undefined) {

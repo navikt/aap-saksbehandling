@@ -25,7 +25,8 @@ const testdata: LegeerklæringStatus[] = [
 ];
 */
 
-export async function GET(_: NextRequest, { params }: { params: { saksnummer: string } }) {
+export async function GET(_: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
+  const params = await props.params;
   try {
     const data = await hentAlleDialogmeldingerPåSak(params.saksnummer);
     return new Response(JSON.stringify(data), { status: 200 });

@@ -2,7 +2,8 @@ import { NextRequest } from 'next/server';
 import { opprettBruddPåAktivitetsplikten } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError } from '@navikt/aap-felles-utils';
 
-export async function POST(req: NextRequest, { params }: { params: { saksnummer: string } }) {
+export async function POST(req: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
+  const params = await props.params;
   const body = await req.json();
   try {
     await opprettBruddPåAktivitetsplikten(params.saksnummer, body);

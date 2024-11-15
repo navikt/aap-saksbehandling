@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { Heading } from '@navikt/ds-react';
 import styles from './page.module.css';
 
-const Page = async ({ params }: { params: { saksId: string } }) => {
+const Page = async (props: { params: Promise<{ saksId: string }> }) => {
+  const params = await props.params;
   const sak = await hentSak(params.saksId);
 
   return (

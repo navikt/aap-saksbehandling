@@ -2,11 +2,10 @@ import { OppgaveKolonne } from 'components/oppgavekolonne/OppgaveKolonne';
 
 import { StegGruppe } from 'lib/types/types';
 
-const Page = async ({
-  params,
-}: {
-  params: { behandlingsReferanse: string; aktivGruppe: StegGruppe; saksId: string };
+const Page = async (props: {
+  params: Promise<{ behandlingsReferanse: string; aktivGruppe: StegGruppe; saksId: string }>;
 }) => {
+  const params = await props.params;
   return (
     <OppgaveKolonne
       saksId={params.saksId}
