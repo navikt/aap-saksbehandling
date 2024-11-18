@@ -1,5 +1,5 @@
 import { logError } from '@navikt/aap-felles-utils';
-import { forhåndsvisDialogmelding } from 'lib/clientApi';
+import { forhåndsvisDialogmelding } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
