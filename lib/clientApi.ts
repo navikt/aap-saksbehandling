@@ -11,6 +11,7 @@ import {
   DokumentInfo,
   BestillLegeerklæring,
   ForhåndsvisDialogmelding,
+  ForhåndsvisDialogmeldingResponse,
 } from './types/types';
 
 async function fetchProxy<ResponseBody>(
@@ -86,7 +87,7 @@ export function bestillDialogmelding(bestilling: BestillLegeerklæring) {
 }
 
 export function forhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
-  return fetchProxy(`/api/dokumentinnhenting/forhaandsvis`, 'POST', dialogmelding);
+  return fetchProxy<ForhåndsvisDialogmeldingResponse>(`/api/dokumentinnhenting/forhaandsvis`, 'POST', dialogmelding);
 }
 
 export interface SaksInformasjon {

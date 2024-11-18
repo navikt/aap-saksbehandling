@@ -193,3 +193,6 @@ export type BestillLegeerklæring =
 
 export type ForhåndsvisDialogmelding =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.Forh\u00E5ndsvisBrevRequest'];
+
+export type ForhåndsvisDialogmeldingResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.BrevResponse'];

@@ -48,7 +48,7 @@ export const Forhåndsvisning = ({
       <Modal.Body>
         {isLoading && <Loader />}
         {error && <Alert variant="error">Klarte ikke å forhåndsvise melding</Alert>}
-        {data && data}
+        {data && data.konstruertBrev}
       </Modal.Body>
       <Modal.Footer>
         <Button type="button" variant="secondary" onClick={() => modalRef.current?.close()}>

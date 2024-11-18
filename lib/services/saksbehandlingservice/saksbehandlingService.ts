@@ -17,6 +17,7 @@ import {
   FatteVedtakGrunnlag,
   FeilregistrerAktivitetspliktBrudd,
   ForhåndsvisDialogmelding,
+  ForhåndsvisDialogmeldingResponse,
   FritakMeldepliktGrunnlag,
   HelseinstitusjonGrunnlag,
   KvalitetssikringGrunnlag,
@@ -276,7 +277,9 @@ export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) =
   return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
-export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogmelding) => {
+export const forhåndsvisDialogmelding = async (
+  requestBody: ForhåndsvisDialogmelding
+): Promise<ForhåndsvisDialogmeldingResponse> => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/brevpreview`;
   return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
 };
