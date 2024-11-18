@@ -9,7 +9,7 @@ const user = userEvent.setup();
 const sak: SaksInfo = {
   behandlinger: [],
   ident: 'ukjent',
-  opprettetTidspunkt: '2024-11-11',
+  opprettetTidspunkt: '2019-11-11',
   periode: {
     fom: '',
     tom: '',
