@@ -32,6 +32,7 @@ type FormFields = {
 
 interface Props {
   onCancel: () => void;
+  onSuccess: () => void;
 }
 
 export const formaterBehandlernavn = (behandler: Behandler): string => {
@@ -41,7 +42,7 @@ export const formaterBehandlernavn = (behandler: Behandler): string => {
   return `${behandler.fornavn} ${behandler.etternavn}`;
 };
 
-export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
+export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [valgtBehandler, setValgtBehandler] = useState<Behandler>();
   const [behandlerError, setBehandlerError] = useState<string>();
   const [visModal, setVisModal] = useState<boolean>(false);
@@ -86,7 +87,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
         };
         const res = await bestillDialogmelding(body);
         if (res) {
-          onCancel();
+          onSuccess();
         }
       })(event);
     }
