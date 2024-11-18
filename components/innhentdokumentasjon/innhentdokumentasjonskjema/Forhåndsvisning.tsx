@@ -12,6 +12,12 @@ type Props = {
   onClose: () => void;
 };
 
+const formaterTekst = (input: string) => {
+  const parts = input.split('\\n');
+  const noNewline = parts.map((part) => part.replaceAll('\\n', ''));
+  return noNewline;
+};
+
 export const Forhåndsvisning = ({
   saksnummer,
   fritekst,
@@ -33,8 +39,6 @@ export const Forhåndsvisning = ({
     { revalidateOnFocus: false, shouldRetryOnError: false }
   );
 
-  console.log(data);
-
   return (
     <Modal
       header={{ heading: 'Forhåndsvisning av melding' }}
@@ -48,7 +52,13 @@ export const Forhåndsvisning = ({
       <Modal.Body>
         {isLoading && <Loader />}
         {error && <Alert variant="error">Klarte ikke å forhåndsvise melding</Alert>}
-        {data && data.konstruertBrev}
+        {data && (
+          <div style={{ whiteSpace: 'pre-wrap' }}>
+            {formaterTekst(data.konstruertBrev).map((part, index) => (
+              <p key={index}>{part}</p>
+            ))}
+          </div>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button type="button" variant="secondary" onClick={() => modalRef.current?.close()}>
