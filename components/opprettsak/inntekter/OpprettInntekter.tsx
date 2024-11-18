@@ -2,40 +2,43 @@ import React from 'react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { OpprettSakFormFields } from 'components/opprettsak/OpprettSak';
 import styles from 'components/opprettsak/OpprettSak.module.css';
-import { Button } from '@navikt/ds-react';
+import { Button, Label } from '@navikt/ds-react';
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { JaEllerNei } from 'lib/utils/form';
-import { SelectWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
+import { TextFieldWrapper } from '@navikt/aap-felles-react';
 import { validerÅrstall } from 'lib/validation/dateValidation';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;
 }
 
-export const OpprettSakBarn = ({ form }: Props) => {
+export const OpprettInntekter = ({ form }: Props) => {
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'barn',
+    name: 'inntekter',
   });
 
   return (
-    <div>
+    <div className={'flex-column'}>
+      <Label>Inntekter</Label>
       {fields.map((field, index) => {
         return (
           <div key={field.id} className={'flex-column'}>
             <div>
               <div className={styles.barn}>
                 <TextFieldWrapper
-                  label={`Barn ${index + 1} Årstall`}
+                  label={`Inntekt ${index + 1} Årstall`}
                   control={form.control}
-                  name={`barn.${index}.fodselsdato`}
+                  name={`inntekter.${index}.år`}
                   type={'text'}
                   rules={{ validate: (value) => validerÅrstall(value as string) }}
                 />
-                <SelectWrapper label={'Hvilket barn er det?'} name={`barn.${index}.harRelasjon`} control={form.control}>
-                  <option value={'manueltBarn'}>Manuelt barn</option>
-                  <option value={'folkeregistrertBarn'}>Folkeregistrert barn</option>
-                </SelectWrapper>
+                <TextFieldWrapper
+                  label={`Inntekt ${index + 1} Beløp`}
+                  control={form.control}
+                  name={`inntekter.${index}.beløp`}
+                  type={'number'}
+                  rules={{ required: 'Du må oppgi en inntekt' }}
+                />
                 <Button
                   type="button"
                   variant={'tertiary'}
@@ -44,7 +47,7 @@ export const OpprettSakBarn = ({ form }: Props) => {
                   onClick={() => remove(index)}
                   className={'fit-content'}
                 >
-                  Fjern barn
+                  Fjern inntekt
                 </Button>
               </div>
             </div>
@@ -55,12 +58,12 @@ export const OpprettSakBarn = ({ form }: Props) => {
                   className={'fit-content'}
                   size={'small'}
                   onClick={() => {
-                    append({ fodselsdato: '', harRelasjon: JaEllerNei.Ja });
+                    append({ år: '', beløp: '' });
                   }}
                   variant={'tertiary'}
                   icon={<PlusIcon />}
                 >
-                  Legg til barn
+                  Legg til inntekt
                 </Button>
               )}
             </div>

@@ -40,7 +40,7 @@ export type FatteVedtakGrunnlag =
 
 export type AlderGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.alder.flate.AlderDTO'];
 
-export type BrevGrunnlag = components['schemas']['no.nav.aap.brev.kontrakt.BrevbestillingResponse'];
+export type BrevGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag'];
 export type Brev = components['schemas']['no.nav.aap.brev.kontrakt.Brev'];
 
 // Behandling
