@@ -10,6 +10,7 @@ import {
   FeilregistrerAktivitetspliktBrudd,
   DokumentInfo,
   BestillLegeerklæring,
+  ForhåndsvisDialogmelding,
 } from './types/types';
 
 async function fetchProxy<ResponseBody>(
@@ -82,6 +83,10 @@ export function hentAlleDokumenterPåSak(saksnummer: string) {
 
 export function bestillDialogmelding(bestilling: BestillLegeerklæring) {
   return fetchProxy(`/api/dokumentinnhenting/bestill`, 'POST', bestilling);
+}
+
+export function forhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
+  return fetchProxy(`/api/dokumentinnhenting/forhaandsvis`, 'POST', dialogmelding);
 }
 
 export interface SaksInformasjon {

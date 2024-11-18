@@ -190,3 +190,6 @@ export type YrkeskadeBeregningGrunnlag =
 
 export type BestillLegeerklæring =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.BestillLegeerklæringDto'];
+
+export type ForhåndsvisDialogmelding =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.Forh\u00E5ndsvisBrevRequest'];
