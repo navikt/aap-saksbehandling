@@ -10,7 +10,6 @@ interface Props {
   meldeperioder: Meldeperiode[];
 }
 export const Tilkjent = ({ grunnlag, meldeperioder }: Props) => {
-  console.log('grunnlag:', grunnlag);
   return (
     <VilkårsKort heading="Tilkent ytelse" icon={<PiggybankIcon />} steg="BEREGN_TILKJENT_YTELSE">
       <Label>Grafen viser tilkjent ytelse for valgt periode</Label>
