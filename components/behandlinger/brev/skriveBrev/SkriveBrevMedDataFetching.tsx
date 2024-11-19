@@ -4,7 +4,6 @@ import { hentBrevGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandl
 
 export const SkriveBrevMedDataFetching = async ({ behandlingsReferanse }: { behandlingsReferanse: string }) => {
   const brevGrunnlag = await hentBrevGrunnlag(behandlingsReferanse);
-  console.log('brevGrunnlag', brevGrunnlag);
 
   if (!brevGrunnlag.brev) {
     logError('Ikke noe brev definert i grunnlaget');
