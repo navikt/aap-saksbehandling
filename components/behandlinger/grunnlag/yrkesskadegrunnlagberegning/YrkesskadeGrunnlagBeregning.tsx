@@ -63,7 +63,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
 
   return (
     <VilkårsKortForUvisstEnhet
-      heading={'Yrkesskade grunnlagsberegning § 11-19 / 11-22'}
+      heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       icon={<BandageIcon />}
     >
