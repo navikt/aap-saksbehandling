@@ -1038,50 +1038,50 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-css@npm:^2.0.20":
-  version: 2.0.20
-  resolution: "@navikt/aap-felles-css@npm:2.0.20::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F2.0.20%2F715ee3aea7c4d6c8433b6f2a078acce6825fddd7"
-  checksum: 10c0/7293eb2bc452daf62fab9522db9947c6975b36fccfce5e50bdf463bd35721fca2eaa1cd12cedd35aea6910e2aeae46280be898b9cdba89602579a9ca9ab5d663
+"@navikt/aap-felles-css@npm:^2.0.21":
+  version: 2.0.21
+  resolution: "@navikt/aap-felles-css@npm:2.0.21::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F2.0.21%2F0357304ddaa7be7eba04c9f468e34417f3af1720"
+  checksum: 10c0/7ac7b95724b74b28365fadc765dc837c415ea4a9aa6ef5872c994c41fc88011dbc8b3cb1a197433736ae8077f2d7849259f3a1f3f6e89560d8ece1e57448319b
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-prettier@npm:^2.0.20":
-  version: 2.0.20
-  resolution: "@navikt/aap-felles-prettier@npm:2.0.20::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F2.0.20%2F9cf3e9b8a5de832632e50be04894e9ac3ae4f4d9"
+"@navikt/aap-felles-prettier@npm:^2.0.21":
+  version: 2.0.21
+  resolution: "@navikt/aap-felles-prettier@npm:2.0.21::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F2.0.21%2F39a228970e02794699485ee91a055e66924351ef"
   dependencies:
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
     prettier: "npm:^3.3.3"
-  checksum: 10c0/14931b558da9dceda9f1856f1588e924a029941e2cfe68d318c01ab04b179db3ee9f416354e59d9fa3753f280b9cc040604d7b2aed2106eb80c6ec0fef2c1058
+  checksum: 10c0/4dd2ceb7c8837ac67bd815a727e1ae8514908e7c342cb6321606ced11d24220e805c25aa71f7c1f0866b9e0a59846f88ccf577511f151f5756434558a21cde1f
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-react@npm:^2.0.20":
-  version: 2.0.20
-  resolution: "@navikt/aap-felles-react@npm:2.0.20::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-react%2F2.0.20%2F4f98fe7699af8c71adedd9f3d0300d7d45475760"
+"@navikt/aap-felles-react@npm:^2.0.21":
+  version: 2.0.21
+  resolution: "@navikt/aap-felles-react@npm:2.0.21::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-react%2F2.0.21%2F0590119fe72e506b6611445fd3ee8b8915be23ad"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.4.3"
     "@navikt/ds-css": "npm:^7.4.3"
     "@navikt/ds-react": "npm:^7.4.3"
     react: "npm:19.0.0-rc-66855b96-20241106"
     react-dom: "npm:19.0.0-rc-66855b96-20241106"
-    react-hook-form: "npm:^7.53.0"
+    react-hook-form: "npm:^7.53.2"
     uuid: "npm:^10.0.0"
-  checksum: 10c0/924ec0de92d9e00fa00466c399332a19d4df657c3e2d1a2908cdfc5c0cfa364fe1a27c92480ee7265579d799dc03753f1f4fa23cd6a5de126604e43e77ace157
+  checksum: 10c0/1b56857291d02dbbff7effa69581d7520790dbc2af547352ba39a97acdeabd02ca4648a24686aeab57b2a12a356aa276965c3214a101be3de87f1e21b434caa3
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils-client@npm:^2.0.20":
-  version: 2.0.20
-  resolution: "@navikt/aap-felles-utils-client@npm:2.0.20::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils-client%2F2.0.20%2F81f973efddbe7547e56dfec121f9e8a210bbd534"
+"@navikt/aap-felles-utils-client@npm:^2.0.21":
+  version: 2.0.21
+  resolution: "@navikt/aap-felles-utils-client@npm:2.0.21::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils-client%2F2.0.21%2F2d5754797fdead931955ae047c93a6189eacbe44"
   dependencies:
     date-fns: "npm:^3.6.0"
-  checksum: 10c0/c62dfd35b5211a5f752ea296df3f3e37297bfaa4e623e48a09407a3af02a87d983bb2ccff51fd05125885c3779bca122e2a275f0eff29d7735dcb1c51a373311
+  checksum: 10c0/c3ba141e7d6a7a2a3a32e730c40d90e6930c1ae7e03bbbdce9e1666bca3691e0baa8d04d9299faa9e1da790d18d9f0449d075a350215d8e22e5c36b42006627b
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils@npm:^2.0.20":
-  version: 2.0.20
-  resolution: "@navikt/aap-felles-utils@npm:2.0.20::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F2.0.20%2Fb3381628f923f18a4d0e9dfee48e40ba8e8d77c7"
+"@navikt/aap-felles-utils@npm:^2.0.21":
+  version: 2.0.21
+  resolution: "@navikt/aap-felles-utils@npm:2.0.21::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F2.0.21%2Faa5b75382ebd73b878a304db8a2b0c40d213e6c6"
   dependencies:
     "@navikt/oasis": "npm:^3.4.0"
     axios: "npm:^1.7.7"
@@ -1091,7 +1091,7 @@ __metadata:
     pino: "npm:^9.4.0"
     prom-client: "npm:^15.1.3"
     server-only: "npm:^0.0.1"
-  checksum: 10c0/53e15b973a10146071a019a0836e844ff94836d9e152a6c8230747c7900f6a7e66a2dd31973928a2fa4b0b609b71eb47c3626797fee8cc7486d0414e412781ad
+  checksum: 10c0/60cd17232c96bc59d74a369ceb92ede9857d18b4745cb5b1d7155433914e9746a939d362f3b75f57db7e43d1630db48bc8171c8f6495e751da4f87245695fa28
   languageName: node
   linkType: hard
 
@@ -1173,9 +1173,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/eslint-config-aap@npm:^2.0.20":
-  version: 2.0.20
-  resolution: "@navikt/eslint-config-aap@npm:2.0.20::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Feslint-config-aap%2F2.0.20%2Ffd31433e8b9b020600facf772bc17af6d0392789"
+"@navikt/eslint-config-aap@npm:^2.0.21":
+  version: 2.0.21
+  resolution: "@navikt/eslint-config-aap@npm:2.0.21::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Feslint-config-aap%2F2.0.21%2F7e8f01d571295cfac9403528ec6e9c16140f9334"
   peerDependencies:
     "@typescript-eslint/eslint-plugin": ^7.7.0
     "@typescript-eslint/parser": ^7.7.0
@@ -1185,7 +1185,7 @@ __metadata:
     eslint-plugin-jsx-a11y: ^6.7.1
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
-  checksum: 10c0/5cac2ae82f032bdff374e8b3037a6fee7a0b984368c452979598d15b1646896992252d2e47b45cf49078245c1ccac521792bf3b919961c8acc2e68f4304a865a
+  checksum: 10c0/96884e8c0d5dd5da98b132571bf39a7b3aa36d461f275a8a5031b15ca159bf7b6dd62144d7a9df6a6cca0edd06e84c79d387797e0150a02d4af6d56046578ff1
   languageName: node
   linkType: hard
 
@@ -2834,15 +2834,15 @@ __metadata:
     "@grafana/faro-web-sdk": "npm:^1.10.2"
     "@navikt/aap-breveditor": "npm:^0.1.3"
     "@navikt/aap-breveditor-css": "npm:^0.1.2"
-    "@navikt/aap-felles-css": "npm:^2.0.20"
-    "@navikt/aap-felles-prettier": "npm:^2.0.20"
-    "@navikt/aap-felles-react": "npm:^2.0.20"
-    "@navikt/aap-felles-utils": "npm:^2.0.20"
-    "@navikt/aap-felles-utils-client": "npm:^2.0.20"
+    "@navikt/aap-felles-css": "npm:^2.0.21"
+    "@navikt/aap-felles-prettier": "npm:^2.0.21"
+    "@navikt/aap-felles-react": "npm:^2.0.21"
+    "@navikt/aap-felles-utils": "npm:^2.0.21"
+    "@navikt/aap-felles-utils-client": "npm:^2.0.21"
     "@navikt/aksel-icons": "npm:7.5.1"
     "@navikt/ds-css": "npm:7.5.1"
     "@navikt/ds-react": "npm:7.5.1"
-    "@navikt/eslint-config-aap": "npm:^2.0.20"
+    "@navikt/eslint-config-aap": "npm:^2.0.21"
     "@navikt/oasis": "npm:^3.4.0"
     "@portabletext/react": "npm:^3.1.0"
     "@testing-library/dom": "npm:^10.4.0"
@@ -2880,7 +2880,7 @@ __metadata:
     prettier: "npm:^3.3.3"
     react: "npm:19.0.0-rc-66855b96-20241106"
     react-dom: "npm:19.0.0-rc-66855b96-20241106"
-    react-hook-form: "npm:7.53.0"
+    react-hook-form: "npm:7.53.2"
     recharts: "npm:^2.13.3"
     swr: "npm:^2.2.5"
     typescript: "npm:^5.6.3"
@@ -7646,12 +7646,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.53.0, react-hook-form@npm:^7.53.0":
-  version: 7.53.0
-  resolution: "react-hook-form@npm:7.53.0"
+"react-hook-form@npm:7.53.2, react-hook-form@npm:^7.53.2":
+  version: 7.53.2
+  resolution: "react-hook-form@npm:7.53.2"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 10c0/6d62b150618a833c17d59e669b707661499e2bb516a8d340ca37699f99eb448bbba7b5b78324938c8948014e21efaa32e3510c2ba246fd5e97a96fca0cfa7c98
+  checksum: 10c0/18336d8e8798a70dcd0af703a0becca2d5dbf82a7b7a3ca334ae0e1f26410490bc3ef2ea51adcf790bb1e7006ed7a763fd00d664e398f71225b23529a7ccf0bf
   languageName: node
   linkType: hard
 
