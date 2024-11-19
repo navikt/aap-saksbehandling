@@ -58,7 +58,7 @@ export const OpprettSak = () => {
     },
     inntekter: {
       type: 'fieldArray',
-      defaultValue: [{ år: '2015', beløp: '200 000' }],
+      defaultValue: [{ år: '2015', beløp: '200000' }],
     },
     uføre: {
       type: 'number',
