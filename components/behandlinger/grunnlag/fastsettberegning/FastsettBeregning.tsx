@@ -87,7 +87,6 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      console.log(data);
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {

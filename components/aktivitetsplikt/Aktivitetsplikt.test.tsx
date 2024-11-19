@@ -9,7 +9,7 @@ const user = userEvent.setup();
 const sak: SaksInfo = {
   behandlinger: [],
   ident: 'ukjent',
-  opprettetTidspunkt: '2024-11-11',
+  opprettetTidspunkt: '2019-11-11',
   periode: {
     fom: '',
     tom: '',
@@ -209,6 +209,23 @@ describe('Felt for begrunnelse', () => {
 });
 
 describe('Felt for å registrere enkeltdato eller periode', () => {
+  it('skal vise en feilmelding dersom dato for brudd på aktivitetsplikten er før søknadstidspunkt', async () => {
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
+
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_8();
+
+    const enkeltDatoKnapp = screen.getByRole('button', { name: 'Legg til enkeltdato' });
+    await user.click(enkeltDatoKnapp);
+
+    const datoFelt = screen.getByRole('textbox', { name: 'dato' });
+    await user.type(datoFelt, '01.01.2019');
+
+    await trykkPåBekreftKnapp();
+    const feilmelding = screen.getByText('Bruddperioden kan ikke starte før søknadstidspunktet');
+    expect(feilmelding).toBeVisible();
+  });
+
   it('skal vise en feilmelding dersom dato for brudd på aktivitetsplikten ikke er besvart', async () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
 

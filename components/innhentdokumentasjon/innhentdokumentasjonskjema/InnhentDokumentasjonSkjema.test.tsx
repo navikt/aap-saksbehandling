@@ -7,7 +7,7 @@ const user = userEvent.setup();
 
 describe('InnhentDokumentasjon', () => {
   beforeEach(() => {
-    render(<InnhentDokumentasjonSkjema onCancel={vi.fn} />);
+    render(<InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />);
   });
 
   test('har en overskrift på nivå 3 når man viser skjema', async () => {
@@ -41,7 +41,7 @@ describe('InnhentDokumentasjon', () => {
 
 describe('validering', () => {
   beforeEach(async () => {
-    render(<InnhentDokumentasjonSkjema onCancel={vi.fn} />);
+    render(<InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />);
   });
 
   test('gir feilmelding dersom behandler ikke er valgt', async () => {

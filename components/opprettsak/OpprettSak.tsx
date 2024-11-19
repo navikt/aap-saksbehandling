@@ -7,12 +7,18 @@ import { Button } from '@navikt/ds-react';
 import styles from './OpprettSak.module.css';
 import { mutate } from 'swr';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { OpprettSakBarn } from 'components/opprettsak/OpprettSakBarn';
+import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { OpprettInntekter } from 'components/opprettsak/inntekter/OpprettInntekter';
 
 interface Barn {
   fodselsdato: string;
   harRelasjon: string;
+}
+
+interface Inntekt {
+  år: string;
+  beløp: string;
 }
 
 type Institusjon = 'fengsel' | 'sykehus';
@@ -23,6 +29,7 @@ export interface OpprettSakFormFields {
   student: string;
   uføre: string;
   barn?: Barn[];
+  inntekter?: Inntekt[];
   institusjon?: Institusjon[];
 }
 
@@ -48,6 +55,10 @@ export const OpprettSak = () => {
     barn: {
       type: 'fieldArray',
       defaultValue: [{ fodselsdato: '2015', harRelasjon: 'folkeregistrertBarn' }],
+    },
+    inntekter: {
+      type: 'fieldArray',
+      defaultValue: [{ år: '2015', beløp: '200 000' }],
     },
     uføre: {
       type: 'number',
@@ -83,6 +94,13 @@ export const OpprettSak = () => {
             sykehus: data?.institusjon?.includes('sykehus'),
             fengsel: data?.institusjon?.includes('fengsel'),
           },
+          inntekterPerAr:
+            data.inntekter?.map((inntekt) => {
+              return {
+                år: Number(inntekt.år),
+                beløp: { verdi: Number(inntekt.beløp) },
+              };
+            }) || [],
         });
         await mutate('api/sak/alle');
       })}
@@ -95,7 +113,10 @@ export const OpprettSak = () => {
         <FormField form={form} formField={formFields.institusjon} />
         <FormField form={form} formField={formFields.uføre} />
       </div>
-      <OpprettSakBarn form={form} />
+      <div className={'flex-column'}>
+        <OpprettSakBarn form={form} />
+        <OpprettInntekter form={form} />
+      </div>
       <Button className={'fit-content'}>Opprett test sak</Button>
     </form>
   );

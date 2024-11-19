@@ -1,4 +1,5 @@
-import { Button, Loader, Popover, TextField } from '@navikt/ds-react';
+import { Loader, Popover, TextField } from '@navikt/ds-react';
+import { Behandlerliste } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Behandlerliste';
 import {
   Behandler,
   formaterBehandlernavn,
@@ -61,15 +62,7 @@ export const Behandlersøk = ({ velgBehandler, behandlerError }: Props) => {
         <Popover.Content>
           <>
             {søker && <Loader />}
-            {behandlere &&
-              behandlere?.length > 0 &&
-              behandlere?.map((behandler) => (
-                <div key={behandler.behandlerRef}>
-                  <Button type="button" variant="tertiary-neutral" onClick={() => velgEnBehandler(behandler)}>
-                    {formaterBehandlernavn(behandler)}
-                  </Button>
-                </div>
-              ))}
+            <Behandlerliste behandlere={behandlere} velgBehandler={velgEnBehandler} />
           </>
         </Popover.Content>
       </Popover>

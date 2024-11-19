@@ -12,7 +12,7 @@ import styles from './InnhentDokumentasjon.module.css';
 
 export const InnhentDokumentasjon = () => {
   const saksnummer = useSaksnummer();
-  const { data, isLoading, error } = useSWR(
+  const { data, isLoading, error, mutate } = useSWR(
     `api/dokumentinnhenting/status/${saksnummer}`,
     () => hentAlleDialogmeldingerPåSak(saksnummer),
     { revalidateOnFocus: false }
@@ -20,6 +20,10 @@ export const InnhentDokumentasjon = () => {
 
   const [visSkjema, oppdaterVisSkjema] = useState<boolean>(false);
   const skjulSkjema = () => oppdaterVisSkjema(false);
+  const skjulOgRefresh = () => {
+    skjulSkjema();
+    mutate();
+  };
   return (
     <section>
       {!visSkjema && (
@@ -38,7 +42,7 @@ export const InnhentDokumentasjon = () => {
           {data && <Dialogmeldinger dialogmeldinger={data as LegeerklæringStatus[]} />}
         </VStack>
       )}
-      {visSkjema && <InnhentDokumentasjonSkjema onCancel={skjulSkjema} />}
+      {visSkjema && <InnhentDokumentasjonSkjema onCancel={skjulSkjema} onSuccess={skjulOgRefresh} />}
     </section>
   );
 };

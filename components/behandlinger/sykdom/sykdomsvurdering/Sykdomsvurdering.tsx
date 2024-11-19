@@ -166,6 +166,11 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         steg={'AVKLAR_SYKDOM'}
         visBekreftKnapp={!readOnly}
       >
+        {grunnlag.skalVurdereYrkesskade && (
+          <Alert variant={'warning'} size={'small'}>
+            Det har blitt funnet én eller flere yrkesskader på brukeren
+          </Alert>
+        )}
         <RegistrertBehandler />
         <Veiledning
           tekst={

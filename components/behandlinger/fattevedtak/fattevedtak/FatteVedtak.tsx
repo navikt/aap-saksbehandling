@@ -20,26 +20,13 @@ interface Props {
   fatteVedtakGrunnlag: FatteVedtakGrunnlag;
 }
 
-export const FatteVedtak = ({
-  fritakMeldepliktGrunnlag,
-  sykepengeerstatningGrunnlag,
-  studentGrunnlag,
-  sykdomsGrunnlag,
-  bistandsGrunnlag,
-  fatteVedtakGrunnlag,
-}: Props) => {
+export const FatteVedtak = ({ sykdomsGrunnlag }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-
-  console.log('fritakMeldepliktGrunnlag', fritakMeldepliktGrunnlag);
-  console.log('sykepengeerstatningGrunnlag', sykepengeerstatningGrunnlag);
-  console.log('studentGrunnlag', studentGrunnlag);
-  console.log('sykdomsGrunnlag', sykdomsGrunnlag);
-  console.log('bistandsGrunnlag', bistandsGrunnlag);
-  console.log('fatteVedtakGrunnlag', fatteVedtakGrunnlag);
 
   return (
     <VilkårsKort heading={'Fatte vedtak'} steg={'FATTE_VEDTAK'}>
       {behandlingsReferanse}
+      {JSON.stringify(sykdomsGrunnlag)}
     </VilkårsKort>
   );
 };

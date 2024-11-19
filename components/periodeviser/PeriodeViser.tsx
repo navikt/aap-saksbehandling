@@ -16,7 +16,6 @@ export const PeriodeViser = ({ tilkjentYtelse, meldeperioder }: Props) => {
   const [valgtMeldeperiode, setValgtMeldeperiode] = useState<Meldeperiode | undefined>(meldeperioder[0]); // TODO Bruke en bedre default
 
   const getPerioderInsideMeldeperiode = (tilkjentYtelse: TilkjentYtelseGrunnlag, valgtMeldeperiode?: Meldeperiode) => {
-    console.log({ tilkjentYtelse, valgtMeldeperiode });
     if (!valgtMeldeperiode) {
       return [];
     }

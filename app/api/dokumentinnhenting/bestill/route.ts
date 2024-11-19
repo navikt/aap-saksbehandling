@@ -4,8 +4,6 @@ import { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  console.log('Bestill en dialogmelding!');
-  console.log(body);
   try {
     const res = await bestillDialogmelding(body);
     return new Response(JSON.stringify({ response: res }), { status: 200 });

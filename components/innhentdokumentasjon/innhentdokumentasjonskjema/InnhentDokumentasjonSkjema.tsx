@@ -7,6 +7,7 @@ import { BestillLegeerklæring } from 'lib/types/types';
 import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
 import { Behandlersøk } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Behandlersøk';
 import { bestillDialogmelding } from 'lib/clientApi';
+import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
 
 export type Behandler = {
   type?: string;
@@ -31,6 +32,7 @@ type FormFields = {
 
 interface Props {
   onCancel: () => void;
+  onSuccess: () => void;
 }
 
 export const formaterBehandlernavn = (behandler: Behandler): string => {
@@ -40,9 +42,10 @@ export const formaterBehandlernavn = (behandler: Behandler): string => {
   return `${behandler.fornavn} ${behandler.etternavn}`;
 };
 
-export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
+export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [valgtBehandler, setValgtBehandler] = useState<Behandler>();
   const [behandlerError, setBehandlerError] = useState<string>();
+  const [visModal, setVisModal] = useState<boolean>(false);
   const saksnummer = useSaksnummer();
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -84,7 +87,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
         };
         const res = await bestillDialogmelding(body);
         if (res) {
-          onCancel();
+          onSuccess();
         }
       })(event);
     }
@@ -93,6 +96,16 @@ export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
   const velgEnBehandler = (behandler?: Behandler) => {
     setBehandlerError(undefined);
     setValgtBehandler(behandler);
+  };
+
+  const forhåndsvis = async () => {
+    const validationResult = await form.trigger(); // force validation
+    if (!valgtBehandler) {
+      setBehandlerError('Du må velge en behandler');
+    }
+    if (validationResult && valgtBehandler) {
+      setVisModal(true);
+    }
   };
 
   return (
@@ -106,9 +119,19 @@ export const InnhentDokumentasjonSkjema = ({ onCancel }: Props) => {
         <FormField form={form} formField={formFields.melding} />
         <div className={styles.rad}>
           <Button size={'small'}>Send dialogmelding</Button>
-          <Button variant="secondary" type="button" size={'small'}>
+          <Button size={'small'} variant="secondary" type="button" onClick={forhåndsvis}>
             Forhåndsvis
           </Button>
+          {visModal && (
+            <Forhåndsvisning
+              saksnummer={saksnummer}
+              fritekst={form.getValues('melding')}
+              dokumentasjonsType={form.getValues('dokumentasjonstype')}
+              veilederNavn={'Hvor henter jeg denne fra?'}
+              visModal={visModal}
+              onClose={() => setVisModal(false)}
+            />
+          )}
           <Button variant="tertiary" type="button" onClick={onCancel} size={'small'}>
             Avbryt
           </Button>
