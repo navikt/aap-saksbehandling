@@ -6,7 +6,6 @@ const nextConfig = {
   assetPrefix: process.env.ASSET_PREFIX ?? undefined,
 
   experimental: {
-    instrumentationHook: true,
     optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
   },
   webpack: (config) => {

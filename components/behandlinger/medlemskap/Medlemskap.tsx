@@ -9,7 +9,7 @@ interface Props {
   grunnlag: MedlemskapGrunnlag;
 }
 
-export const Medlemskap = async ({ grunnlag }: Props) => {
+export const Medlemskap = ({ grunnlag }: Props) => {
   const unntakListe = grunnlag?.medlemskap?.unntak ?? [];
   return (
     <VilkårsKort heading={'Medlemskap'} steg={'VURDER_MEDLEMSKAP'}>
