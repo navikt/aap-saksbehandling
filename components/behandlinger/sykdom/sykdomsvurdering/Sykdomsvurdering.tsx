@@ -24,9 +24,9 @@ import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 
 interface FormFields {
-  dokumenterBruktIVurderingen: string[];
   harSkadeSykdomEllerLyte: string;
   begrunnelse: string;
+  dokumenterBruktIVurderingen?: string[];
   erArbeidsevnenNedsatt?: JaEllerNei;
   erSkadeSykdomEllerLyteVesentligdel?: JaEllerNei;
   erNedsettelseIArbeidsevneAvEnVissVarighet?: JaEllerNei;
@@ -131,9 +131,10 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         behov: {
           behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
           sykdomsvurdering: {
-            dokumenterBruktIVurdering: data.dokumenterBruktIVurderingen.map((dokument) => {
-              return { identifikator: dokument };
-            }),
+            dokumenterBruktIVurdering:
+              data.dokumenterBruktIVurderingen?.map((dokument) => {
+                return { identifikator: dokument };
+              }) || [],
             begrunnelse: data.begrunnelse,
             harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
             erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
