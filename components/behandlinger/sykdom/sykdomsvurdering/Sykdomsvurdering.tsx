@@ -44,8 +44,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
   const { formFields, form } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
-        type: 'radio_nested',
+        type: 'checkbox_nested',
         label: 'Dokumenter brukt i vurderingen',
+        defaultValue: grunnlag.sykdomsvurdering?.dokumenterBruktIVurdering.map((dokument) => dokument.identifikator),
       },
       begrunnelse: {
         type: 'textarea',
@@ -130,7 +131,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         behov: {
           behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
           sykdomsvurdering: {
-            dokumenterBruktIVurdering: [],
+            dokumenterBruktIVurdering: data.dokumenterBruktIVurderingen.map((dokument) => {
+              return { identifikator: dokument };
+            }),
             begrunnelse: data.begrunnelse,
             harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
             erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
