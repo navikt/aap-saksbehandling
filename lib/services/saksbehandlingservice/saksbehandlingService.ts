@@ -37,6 +37,7 @@ import {
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
+  UnderveisGrunnlag,
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
@@ -282,6 +283,11 @@ export const forhåndsvisDialogmelding = async (
 ): Promise<ForhåndsvisDialogmeldingResponse> => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/brevpreview`;
   return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
+};
+
+export const hentUnderveisGrunnlag = async (behandlingsreferanse: string): Promise<UnderveisGrunnlag[]> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/underveis/${behandlingsreferanse}`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentLocalToken = async () => {
