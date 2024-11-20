@@ -252,7 +252,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
             </>
           )}
 
-        {form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') && (
+        {(form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Ja ||
+          (form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei &&
+            grunnlag.skalVurdereYrkesskade)) && (
           <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} horizontalRadio />
         )}
       </Form>
