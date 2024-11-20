@@ -24,9 +24,9 @@ import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 
 interface FormFields {
-  dokumenterBruktIVurderingen: string[];
   harSkadeSykdomEllerLyte: string;
   begrunnelse: string;
+  dokumenterBruktIVurderingen?: string[];
   erArbeidsevnenNedsatt?: JaEllerNei;
   erSkadeSykdomEllerLyteVesentligdel?: JaEllerNei;
   erNedsettelseIArbeidsevneAvEnVissVarighet?: JaEllerNei;
@@ -44,8 +44,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
   const { formFields, form } = useConfigForm<FormFields>(
     {
       dokumenterBruktIVurderingen: {
-        type: 'radio_nested',
+        type: 'checkbox_nested',
         label: 'Dokumenter brukt i vurderingen',
+        defaultValue: grunnlag.sykdomsvurdering?.dokumenterBruktIVurdering.map((dokument) => dokument.identifikator),
       },
       begrunnelse: {
         type: 'textarea',
@@ -130,7 +131,10 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         behov: {
           behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
           sykdomsvurdering: {
-            dokumenterBruktIVurdering: [],
+            dokumenterBruktIVurdering:
+              data.dokumenterBruktIVurderingen?.map((dokument) => {
+                return { identifikator: dokument };
+              }) || [],
             begrunnelse: data.begrunnelse,
             harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
             erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
@@ -204,7 +208,10 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
           />
         </CheckboxWrapper>
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-        <TilknyttedeDokumenter dokumenter={form.watch('dokumenterBruktIVurderingen')} />
+        <TilknyttedeDokumenter
+          valgteDokumenter={form.watch('dokumenterBruktIVurderingen')}
+          tilknyttedeDokumenterPåBehandling={tilknyttedeDokumenter}
+        />
         <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
         {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
@@ -245,7 +252,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
             </>
           )}
 
-        {form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') && (
+        {(form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Ja ||
+          (form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei &&
+            grunnlag.skalVurdereYrkesskade)) && (
           <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} horizontalRadio />
         )}
       </Form>

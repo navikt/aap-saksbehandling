@@ -2,10 +2,9 @@
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FigureIcon } from '@navikt/aksel-icons';
-import { useConfigForm, FormField } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Form } from 'components/form/Form';
-import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { SykepengeerstatningGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -19,7 +18,6 @@ interface Props {
 }
 
 interface FormFields {
-  dokumenterBruktIVurderingen: string[];
   begrunnelse: string;
   erOppfylt: string;
   grunn: string[];
@@ -31,11 +29,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
-      dokumenterBruktIVurderingen: {
-        type: 'checkbox_nested',
-        label: 'Dokumenter funnet som er relevant for vurdering av §11-13',
-        description: 'Tilknytt minst ett dokument til vurdering',
-      },
       begrunnelse: {
         type: 'textarea',
         label: 'Vurder om søker har rett til sykepengeerstatning',
@@ -91,9 +84,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
         steg={'VURDER_SYKEPENGEERSTATNING'}
         visBekreftKnapp={!readOnly}
       >
-        <FormField form={form} formField={formFields.dokumenterBruktIVurderingen}>
-          <DokumentTabell />
-        </FormField>
         <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.erOppfylt} />

@@ -46,6 +46,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
       },
       relevanteSaker: {
         type: 'checkbox_nested',
+        defaultValue: grunnlag.yrkesskadeVurdering?.relevanteSaker,
       },
       andelAvNedsettelsen: {
         type: 'text',
