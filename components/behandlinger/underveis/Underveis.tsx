@@ -10,21 +10,21 @@ type Props = {
 
 const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => (
   <Table.Row>
+    <Table.HeaderCell>
+      {formaterDatoForVisning(periode.periode.fom)} - {formaterDatoForVisning(periode.periode.tom)}
+    </Table.HeaderCell>
+    <Table.DataCell>{periode.utfall}</Table.DataCell>
     <Table.DataCell>{periode.avslagsårsak}</Table.DataCell>
     <Table.DataCell>
-      <div>Gradering: {periode.gradering.gradering}</div>
-      <div>Andel arbeid: {periode.gradering.andelArbeid}</div>
-      <div>Grenseverdi: {periode.gradering.grenseverdi}</div>
-      <div>Fastsatt arbeidsevne: {periode.gradering.fastsattArbeidsevne}</div>
+      <div>Gradering: {periode.gradering.gradering}%</div>
+      <div>Andel arbeid: {periode.gradering.andelArbeid}%</div>
+      <div>Fastsatt arbeidsevne: {periode.gradering.fastsattArbeidsevne}%</div>
+      <div>Grenseverdi: {periode.gradering.grenseverdi}%</div>
     </Table.DataCell>
+    <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
     <Table.DataCell>
       {formaterDatoForVisning(periode.meldePeriode.fom)} - {formaterDatoForVisning(periode.meldePeriode.tom)}
     </Table.DataCell>
-    <Table.DataCell>
-      {formaterDatoForVisning(periode.periode.fom)} - {formaterDatoForVisning(periode.periode.tom)}
-    </Table.DataCell>
-    <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
-    <Table.DataCell>{periode.utfall}</Table.DataCell>
   </Table.Row>
 );
 
@@ -33,12 +33,12 @@ export const Underveis = ({ grunnlag }: Props) => {
     <Table>
       <Table.Header>
         <Table.Row>
+          <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
+          <Table.HeaderCell>Utfall</Table.HeaderCell>
           <Table.HeaderCell>Avslagsårsak</Table.HeaderCell>
           <Table.HeaderCell>Gradering</Table.HeaderCell>
+          <Table.HeaderCell>Trekk (dagsatser)</Table.HeaderCell>
           <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
-          <Table.HeaderCell>Periode</Table.HeaderCell>
-          <Table.HeaderCell>Trekk</Table.HeaderCell>
-          <Table.HeaderCell>Utfall</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
