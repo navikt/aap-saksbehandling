@@ -196,3 +196,6 @@ export type ForhåndsvisDialogmelding =
 
 export type ForhåndsvisDialogmeldingResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.BrevResponse'];
+
+export type UnderveisGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.underveis.flate.UnderveisperiodeDto'];

@@ -10,6 +10,7 @@ import { Barnetillegg } from 'components/behandlinger/barnetillegg/Barnetillegg'
 import { EtAnnetSted } from 'components/behandlinger/etannetsted/EtAnnetSted';
 import { MedlemskapMedDataFetching } from 'components/behandlinger/medlemskap/MedlemskapMedDataFetching';
 import { Brev } from 'components/behandlinger/brev/Brev';
+import { UnderveisMedDataFetching } from 'components/behandlinger/underveis/UnderveisMedDataFetching';
 
 interface Props {
   saksId: string;
@@ -26,7 +27,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, saksId
       {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} sakId={saksId} />}
       {aktivGruppe === 'MEDLEMSKAP' && <MedlemskapMedDataFetching behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'UNDERVEIS' && <div>UNDERVEIS</div>}
+      {aktivGruppe === 'UNDERVEIS' && <UnderveisMedDataFetching behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'ET_ANNET_STED' && <EtAnnetSted behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'BARNETILLEGG' && <Barnetillegg behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'TILKJENT_YTELSE' && <TilkjentYtelse behandlingsReferanse={behandlingsReferanse} />}
