@@ -6,7 +6,7 @@ Frontendapplikasjon for ny saksbehandlingsløsning på AAP
 
 ### Github package registry
 
-Vi bruker Github sitt package registry for npm pakker, siden flere av Nav sine pakker kun blir publisert her.
+Vi bruker Github sitt package registry for npm-pakker, siden flere av Nav sine pakker kun blir publisert her.
 
 For å kunne kjøre `yarn install` lokalt må du logge inn mot Github package registry. Legg til følgende i .bashrc eller .zshrc lokalt på din maskin:
 I .bashrc eller .zshrc:
