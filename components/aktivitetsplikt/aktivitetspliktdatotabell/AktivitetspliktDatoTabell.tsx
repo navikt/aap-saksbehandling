@@ -7,7 +7,7 @@ import { AktivitetspliktFormFields } from 'components/aktivitetsplikt/Aktivitets
 
 import styles from 'components/aktivitetsplikt/aktivitetspliktdatotabell/AktivitetspliktDatoTabell.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
-import { isBefore, parse } from 'date-fns';
+import { isBefore, parse, startOfDay } from 'date-fns';
 
 interface Props {
   form: UseFormReturn<AktivitetspliktFormFields>;
@@ -44,7 +44,10 @@ export const AktivitetspliktDatoTabell = ({ form, fields, remove, søknadstidspu
                           return valideringsresultat;
                         }
 
-                        if (value && isBefore(parse(value as string, 'dd.MM.yyyy', new Date()), søknadstidspunkt)) {
+                        const bruddDate = startOfDay(parse(value as string, 'dd.MM.yyyy', new Date()));
+                        const søknadsTidspunktStartOfDay = startOfDay(søknadstidspunkt);
+
+                        if (isBefore(bruddDate, søknadsTidspunktStartOfDay)) {
                           return 'Bruddperioden kan ikke starte før søknadstidspunktet';
                         }
                       },
