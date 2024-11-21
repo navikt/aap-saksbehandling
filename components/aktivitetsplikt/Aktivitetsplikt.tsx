@@ -125,13 +125,13 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
     Boolean(paragraf) || bruddSomSkalViseDatoFeltOgBegrennelsesfelt.includes(brudd);
 
   const grunnForBruddHvis119 = [
-    { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
     { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+    { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
   ];
   const grunnForBruddHvis118 = [
+    { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
     { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
     { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
-    { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
   ];
 
   /**
