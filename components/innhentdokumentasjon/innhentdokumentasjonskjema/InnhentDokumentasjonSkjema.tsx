@@ -58,7 +58,11 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     dokumentasjonstype: {
       type: 'select',
       label: 'Type dokumentasjon',
-      options: ['', 'L8', 'L40'],
+      options: [
+        { label: 'Velg dokumentasjonstype', value: '' },
+        { label: 'Tilleggsopplysninger (L8)', value: 'L8' },
+        { label: 'Legeerklæring ved arbeidsuførhet (L40)', value: 'L40' },
+      ],
       rules: { required: 'Du må velge hvilken type dokumentasjon som skal bestilles' },
     },
     melding: {
