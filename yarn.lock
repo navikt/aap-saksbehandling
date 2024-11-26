@@ -1019,9 +1019,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-breveditor@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "@navikt/aap-breveditor@npm:0.1.5::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor%2F0.1.5%2F0f37620f3ecc0cafd81040bca9c58fccc8821039"
+"@navikt/aap-breveditor@npm:^0.1.6":
+  version: 0.1.6
+  resolution: "@navikt/aap-breveditor@npm:0.1.6::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor%2F0.1.6%2F50a4ebcc01b2e785245fe69ff9bf894977dcb7cc"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.5.1"
     "@navikt/ds-css": "npm:^7.5.1"
@@ -1034,7 +1034,7 @@ __metadata:
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     uuid: "npm:^10.0.0"
-  checksum: 10c0/e0a9bb679fa13ad7250637624d2178da836f6673de6363f7d20585179a09d1ed41fca15cbc81d7a85124a5307827615efcc3ac91b0ee217ded24eb231dc9d1bb
+  checksum: 10c0/64c4db00a8d4bd81a96b0cc0c97197723edef44ca0c07ae87392c72146271126b2424f44e700f3ac4faceb4bd7f1a22da13344013ec449cd8d32aceaa8c94fef
   languageName: node
   linkType: hard
 
@@ -2861,7 +2861,7 @@ __metadata:
   resolution: "aap-saksbehandling@workspace:."
   dependencies:
     "@grafana/faro-web-sdk": "npm:^1.12.2"
-    "@navikt/aap-breveditor": "npm:^0.1.5"
+    "@navikt/aap-breveditor": "npm:^0.1.6"
     "@navikt/aap-breveditor-css": "npm:^0.1.2"
     "@navikt/aap-felles-css": "npm:^2.0.16"
     "@navikt/aap-felles-prettier": "npm:^2.0.16"
