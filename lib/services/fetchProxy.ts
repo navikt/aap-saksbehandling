@@ -33,7 +33,7 @@ const getOnBefalfOfToken = async (audience: string, url: string): Promise<string
 export const fetchProxy = async <ResponseBody>(
   url: string,
   scope: string,
-  method: 'GET' | 'POST' | 'PATCH' | 'DELETE' = 'GET',
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET',
   requestBody?: object,
   tags?: string[]
 ): Promise<ResponseBody> => {

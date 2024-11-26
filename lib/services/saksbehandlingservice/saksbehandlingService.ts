@@ -11,6 +11,7 @@ import {
   BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
   BistandsGrunnlag,
+  Brev,
   BrevGrunnlag,
   DetaljertBehandling,
   DokumentInfo,
@@ -231,6 +232,11 @@ export const hentFlyt = async (behandlingsReferanse: string): Promise<Behandling
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/løs-behov`;
   return await fetchProxy<void>(url, saksbehandlingApiScope, 'POST', avklaringsBehov);
+};
+
+export const mellomlagreBrev = async (brevbestillingReferanse: string, brev: Brev) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/oppdater'`;
+  return await fetchProxy<void>(url, saksbehandlingApiScope, 'PUT', brev);
 };
 
 export const opprettTestSak = async (sak: OpprettTestcase) => {

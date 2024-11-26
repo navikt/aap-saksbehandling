@@ -10,5 +10,5 @@ export const SkriveBrevMedDataFetching = async ({ behandlingsReferanse }: { beha
     return null;
   }
 
-  return <SkriveBrev grunnlag={brevGrunnlag.brev} />;
+  return <SkriveBrev referanse={brevGrunnlag.brevbestillingReferanse} grunnlag={brevGrunnlag.brev} />;
 };
