@@ -21,7 +21,10 @@ export const Brev = async ({ behandlingsReferanse }: Props) => {
     >
       {/*{stegSomSkalVises.includes('BREV') && (*/}
       <StegSuspense>
-        <SkriveBrevMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+        <SkriveBrevMedDataFetching
+          behandlingsReferanse={behandlingsReferanse}
+          behandlingVersjon={flyt.behandlingVersjon}
+        />
       </StegSuspense>
       {/*})}*/}
     </GruppeSteg>
