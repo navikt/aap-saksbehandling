@@ -1,5 +1,5 @@
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { Button, Heading } from '@navikt/ds-react';
+import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
@@ -46,6 +46,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [valgtBehandler, setValgtBehandler] = useState<Behandler>();
   const [behandlerError, setBehandlerError] = useState<string>();
   const [visModal, setVisModal] = useState<boolean>(false);
+  const [visBestillingsfeil, setVisBestillingsfeil] = useState<boolean>(false);
   const saksnummer = useSaksnummer();
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -73,6 +74,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    setVisBestillingsfeil(false);
     setBehandlerError(undefined);
     if (!valgtBehandler) {
       event.preventDefault();
@@ -92,6 +94,8 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         const res = await bestillDialogmelding(body);
         if (res) {
           onSuccess();
+        } else {
+          setVisBestillingsfeil(true);
         }
       })(event);
     }
@@ -140,6 +144,13 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
             Avbryt
           </Button>
         </div>
+        {visBestillingsfeil && (
+          <div className={styles.rad}>
+            <Alert variant="error" size={'small'}>
+              Noe gikk galt ved bestilling av dialogmelding
+            </Alert>
+          </div>
+        )}
       </form>
     </>
   );
