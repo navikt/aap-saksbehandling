@@ -235,7 +235,7 @@ export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovP�
 };
 
 export const mellomlagreBrev = async (brevbestillingReferanse: string, brev: Brev) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/oppdater'`;
+  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/oppdater`;
   return await fetchProxy<void>(url, saksbehandlingApiScope, 'PUT', brev);
 };
 
