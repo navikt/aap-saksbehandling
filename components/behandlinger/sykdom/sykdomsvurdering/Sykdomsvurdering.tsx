@@ -209,7 +209,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         </CheckboxWrapper>
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
         <TilknyttedeDokumenter
-          valgteDokumenter={form.watch('dokumenterBruktIVurderingen')}
+          valgteDokumenter={form
+            .watch('dokumenterBruktIVurderingen')
+            ?.filter((dokument) => dokument != 'dokumentasjonMangler')}
           tilknyttedeDokumenterPåBehandling={tilknyttedeDokumenter}
         />
         <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />

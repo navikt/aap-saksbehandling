@@ -17,6 +17,7 @@ export enum Behovstype {
   FORESLÅ_VEDTAK_KODE = '5098',
   FATTE_VEDTAK_KODE = '5099',
   KVALITETSSIKRING_KODE = '5097',
+  SKRIV_BREV_KODE = '5050',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -55,6 +56,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Vurder yrkesskade';
     case '5014':
       return 'Vurder yrkesskadeinntekt';
+    case '5050':
+      return 'Skriv brev';
   }
 }
 

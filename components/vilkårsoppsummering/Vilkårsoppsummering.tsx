@@ -14,7 +14,7 @@ export const Vilkårsoppsummering = ({ behandlingResultat }: Props) => {
       <BodyShort>
         {antallStegSomErFullført.length} av {behandlingResultat.vilkårene.length} vilkår oppfylt
       </BodyShort>
-      <div>
+      <div className={'flex-column'}>
         {behandlingResultat.vilkårene.map((vilkår) => {
           return <VilkårsoppsummeringItem key={vilkår.vilkårtype} vilkår={vilkår} />;
         })}

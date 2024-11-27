@@ -2,7 +2,13 @@ import { logError } from '@navikt/aap-felles-utils';
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { hentBrevGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
-export const SkriveBrevMedDataFetching = async ({ behandlingsReferanse }: { behandlingsReferanse: string }) => {
+export const SkriveBrevMedDataFetching = async ({
+  behandlingsReferanse,
+  behandlingVersjon,
+}: {
+  behandlingsReferanse: string;
+  behandlingVersjon: number;
+}) => {
   const brevGrunnlag = await hentBrevGrunnlag(behandlingsReferanse);
 
   if (!brevGrunnlag.brev) {
@@ -10,5 +16,11 @@ export const SkriveBrevMedDataFetching = async ({ behandlingsReferanse }: { beha
     return null;
   }
 
-  return <SkriveBrev grunnlag={brevGrunnlag.brev} />;
+  return (
+    <SkriveBrev
+      referanse={brevGrunnlag.brevbestillingReferanse}
+      grunnlag={brevGrunnlag.brev}
+      behandlingVersjon={behandlingVersjon}
+    />
+  );
 };
