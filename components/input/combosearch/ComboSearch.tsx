@@ -7,9 +7,11 @@ interface ComboboxProps<T> {
   label: string;
   fetcher: (input: string) => Promise<T[] | undefined>;
   searchAsString: (input: T) => string;
+  setValue: (input: T) => void;
+  error?: string;
 }
 
-export const ComboSearch = <T,>({ label, fetcher, searchAsString }: ComboboxProps<T>) => {
+export const ComboSearch = <T,>({ label, fetcher, searchAsString, setValue, error }: ComboboxProps<T>) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,6 +40,7 @@ export const ComboSearch = <T,>({ label, fetcher, searchAsString }: ComboboxProp
 
   const selectItem = (index: number) => {
     setSearchValue(searchAsString(searchResults[index]));
+    setValue(searchResults[index]);
     setShowPopover(false);
   };
 
@@ -55,7 +58,7 @@ export const ComboSearch = <T,>({ label, fetcher, searchAsString }: ComboboxProp
 
   return (
     <div ref={containerRef}>
-      <TextField label={label} value={searchValue} onChange={onChange} ref={inputRef} />
+      <TextField label={label} value={searchValue} onChange={onChange} ref={inputRef} size={'small'} error={error} />
       {searchResults && searchResults.length > 0 && (
         <Popover
           ref={popoverRef}

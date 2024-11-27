@@ -5,9 +5,9 @@ import { FormEvent, useState } from 'react';
 import styles from './InnhentDokumentasjonSkjema.module.css';
 import { BestillLegeerklæring } from 'lib/types/types';
 import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
-import { Behandlersøk } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Behandlersøk';
-import { bestillDialogmelding } from 'lib/clientApi';
+import { bestillDialogmelding, søkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
+import { ComboSearch } from 'components/input/combosearch/ComboSearch';
 
 export type Behandler = {
   type?: string;
@@ -121,7 +121,15 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
       <Heading level={'3'} size={'small'}>
         Etterspør informasjon fra lege
       </Heading>
-      <Behandlersøk velgBehandler={velgEnBehandler} behandlerError={behandlerError} />
+      {/*<Behandlersøk velgBehandler={velgEnBehandler} behandlerError={behandlerError} />*/}
+      <ComboSearch
+        label={'Behandler'}
+        searchAsString={(behandler: Behandler) => formaterBehandlernavn(behandler)}
+        fetcher={søkPåBehandler}
+        setValue={velgEnBehandler}
+        error={behandlerError}
+      />
+
       <form onSubmit={handleSubmit}>
         <FormField form={form} formField={formFields.dokumentasjonstype} />
         <FormField form={form} formField={formFields.melding} />
