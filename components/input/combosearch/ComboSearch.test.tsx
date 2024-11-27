@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 const user = userEvent.setup();
 const mockFetcher = vi.fn();
+const mockSetValue = vi.fn();
 const mockResult = ['treff en', 'treff to', 'treff tre', 'treff fire'];
 
 const label = 'Søk';
@@ -16,13 +17,13 @@ describe('ComboSearch', () => {
 
   test('har et input-felt', () => {
     const formater = (input: string) => input;
-    render(<ComboSearch label={label} fetcher={mockFetcher} searchAsString={formater} />);
+    render(<ComboSearch label={label} fetcher={mockFetcher} searchAsString={formater} setValue={mockSetValue} />);
     expect(screen.getByRole('textbox', { name: label })).toBeVisible();
   });
 
   test('viser det som blir skrevet inn i feltet', async () => {
     const formater = (input: string) => input;
-    render(<ComboSearch label={label} fetcher={mockFetcher} searchAsString={formater} />);
+    render(<ComboSearch label={label} fetcher={mockFetcher} searchAsString={formater} setValue={mockSetValue} />);
     const søkefelt = finnSøkefelt();
     await user.type(søkefelt, 'Søk nå');
     expect(søkefelt).toHaveValue('Søk nå');
@@ -30,14 +31,14 @@ describe('ComboSearch', () => {
 
   test('kaller fetcher når det skrives noe', async () => {
     const formater = (input: string) => input;
-    render(<ComboSearch label={label} fetcher={mockFetcher} searchAsString={formater} />);
+    render(<ComboSearch label={label} fetcher={mockFetcher} searchAsString={formater} setValue={mockSetValue} />);
     await user.type(finnSøkefelt(), 'søk på noe');
     expect(mockFetcher).toHaveBeenLastCalledWith('søk på noe');
   });
 
   test('viser en liste med resultater', async () => {
     const formater = (input: string) => input;
-    render(<ComboSearch label={label} fetcher={mockFetcher} searchAsString={formater} />);
+    render(<ComboSearch label={label} fetcher={mockFetcher} searchAsString={formater} setValue={mockSetValue} />);
     mockFetcher.mockReturnValue(mockResult);
     await user.type(finnSøkefelt(), 'Søk nå');
 
@@ -58,7 +59,7 @@ describe('ComboSearch', () => {
     ];
 
     const formater = (input: Treff) => input.navn;
-    render(<ComboSearch label={label} fetcher={mockFetcher} searchAsString={formater} />);
+    render(<ComboSearch label={label} fetcher={mockFetcher} searchAsString={formater} setValue={mockSetValue} />);
     mockFetcher.mockReturnValue(opts);
 
     await user.type(finnSøkefelt(), 'Søk nå');
