@@ -1,8 +1,14 @@
-import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { forberedBehandling, hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 import { redirect } from 'next/navigation';
 
 const Page = async ({ params }: { params: { saksId: string; behandlingsReferanse: string } }) => {
+  const behandlingErForberedt = await forberedBehandling(params.behandlingsReferanse);
+
+  if (!behandlingErForberedt) {
+    return <div>Noe gikk galt i forbered behandling</div>;
+  }
+
   const behandling = await hentBehandling(params.behandlingsReferanse);
   const flyt = await hentFlyt(params.behandlingsReferanse);
 

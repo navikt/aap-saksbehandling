@@ -269,9 +269,9 @@ export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
   return await fetchProxy<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const forberedBehandling = async (referanse: string) => {
+export const forberedBehandling = async (referanse: string): Promise<Boolean> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 
 export const hentAlleDialogmeldingerPåSak = async (saksnummer: string): Promise<LegeerklæringStatus[]> => {
@@ -307,3 +307,40 @@ export const hentLocalToken = async () => {
     return Promise.resolve('dummy-token');
   }
 };
+
+async function ventTilProsesseringErFerdig(
+  behandlingsreferanse: string,
+  maksAntallForsøk: number = 10,
+  interval: number = 1000
+): Promise<boolean> {
+  let forsøk = 0;
+  let erProsesseringFerdig = false;
+
+  while (forsøk < maksAntallForsøk) {
+    forsøk++;
+
+    try {
+      const response = await hentFlyt(behandlingsreferanse);
+
+      const status = response.prosessering.status;
+
+      if (status === 'FERDIG') {
+        erProsesseringFerdig = true;
+        break;
+      }
+
+      if (status === 'FEILET') {
+        erProsesseringFerdig = false;
+        break;
+      }
+    } catch (error) {
+      erProsesseringFerdig = false;
+    }
+
+    if (forsøk < maksAntallForsøk) {
+      await new Promise((resolve) => setTimeout(resolve, interval * 1.3));
+    }
+  }
+
+  return erProsesseringFerdig;
+}
