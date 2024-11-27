@@ -271,7 +271,6 @@ export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
 
 export const forberedBehandling = async (referanse: string): Promise<Boolean> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
-  console.log('HELLO PELLO FORBERED BEHANDLING');
   return await fetchProxy(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 
@@ -320,21 +319,26 @@ async function ventTilProsesseringErFerdig(
   while (forsøk < maksAntallForsøk) {
     forsøk++;
 
+    console.log('Forsøk nummer: ' + forsøk);
     try {
       const response = await hentFlyt(behandlingsreferanse);
 
       const status = response.prosessering.status;
 
       if (status === 'FERDIG') {
+        // console.log('Prosessering er feridg');
         erProsesseringFerdig = true;
         break;
       }
 
       if (status === 'FEILET') {
+        // console.log('Prosessering feilet pga' + JSON.stringify(response.prosessering.ventendeOppgaver));
+        logError('Prosessering feilet pga' + JSON.stringify(response.prosessering.ventendeOppgaver));
         erProsesseringFerdig = false;
         break;
       }
     } catch (error) {
+      logError('Noe gikk fullstendig galt', JSON.stringify(error));
       erProsesseringFerdig = false;
     }
 
