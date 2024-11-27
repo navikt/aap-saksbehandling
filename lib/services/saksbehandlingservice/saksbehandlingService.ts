@@ -17,6 +17,7 @@ import {
   DokumentInfo,
   FatteVedtakGrunnlag,
   FeilregistrerAktivitetspliktBrudd,
+  FlytProsessering,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
   FritakMeldepliktGrunnlag,
@@ -269,7 +270,7 @@ export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
   return await fetchProxy<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const forberedBehandling = async (referanse: string): Promise<Boolean> => {
+export const forberedBehandling = async (referanse: string): Promise<undefined | FlytProsessering> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
   return await fetchProxy(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
@@ -312,34 +313,27 @@ async function ventTilProsesseringErFerdig(
   behandlingsreferanse: string,
   maksAntallForsøk: number = 10,
   interval: number = 1000
-): Promise<boolean> {
+): Promise<undefined | FlytProsessering> {
   let forsøk = 0;
-  let erProsesseringFerdig = false;
+  let prosessering: FlytProsessering | undefined = undefined;
 
   while (forsøk < maksAntallForsøk) {
     forsøk++;
 
     console.log('Forsøk nummer: ' + forsøk);
-    try {
-      const response = await hentFlyt(behandlingsreferanse);
+    const response = await hentFlyt(behandlingsreferanse);
 
-      const status = response.prosessering.status;
+    const status = response.prosessering.status;
 
-      if (status === 'FERDIG') {
-        // console.log('Prosessering er feridg');
-        erProsesseringFerdig = true;
-        break;
-      }
+    if (status === 'FERDIG') {
+      prosessering = undefined;
+      break;
+    }
 
-      if (status === 'FEILET') {
-        // console.log('Prosessering feilet pga' + JSON.stringify(response.prosessering.ventendeOppgaver));
-        logError('Prosessering feilet pga' + JSON.stringify(response.prosessering.ventendeOppgaver));
-        erProsesseringFerdig = false;
-        break;
-      }
-    } catch (error) {
-      logError('Noe gikk fullstendig galt', JSON.stringify(error));
-      erProsesseringFerdig = false;
+    if (status === 'FEILET') {
+      logError('Prosessering feilet pga' + JSON.stringify(response.prosessering.ventendeOppgaver));
+      prosessering = response.prosessering;
+      break;
     }
 
     if (forsøk < maksAntallForsøk) {
@@ -347,5 +341,5 @@ async function ventTilProsesseringErFerdig(
     }
   }
 
-  return erProsesseringFerdig;
+  return prosessering;
 }
