@@ -271,6 +271,7 @@ export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
 
 export const forberedBehandling = async (referanse: string): Promise<Boolean> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
+  console.log('HELLO PELLO FORBERED BEHANDLING');
   return await fetchProxy(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 
