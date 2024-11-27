@@ -3,22 +3,24 @@ import { FormEvent, useRef, useState } from 'react';
 
 import styles from './ComboSearch.module.css';
 
-interface ComboboxProps {
+interface ComboboxProps<T> {
   label: string;
-  fetcher: (input: string) => Promise<string[] | undefined>;
+  fetcher: (input: string) => Promise<T[] | undefined>;
+  searchAsString: (input: T) => string;
 }
 
-export const ComboSearch = ({ label, fetcher }: ComboboxProps) => {
+export const ComboSearch = <T,>({ label, fetcher, searchAsString }: ComboboxProps<T>) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [search, setSearch] = useState<string>('');
+
+  const [searchValue, setSearchValue] = useState<string>('');
   const [searching, setSearching] = useState<boolean>(false);
-  const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [searchResults, setSearchResults] = useState<T[]>([]);
   const [showPopover, setShowPopover] = useState<boolean>(false);
 
   const onChange = async (event: FormEvent<HTMLInputElement>) => {
-    setSearch(event.currentTarget.value);
+    setSearchValue(event.currentTarget.value);
     if (!event.currentTarget.value) {
       setSearchResults([]);
       setShowPopover(false);
@@ -35,7 +37,7 @@ export const ComboSearch = ({ label, fetcher }: ComboboxProps) => {
   };
 
   const selectItem = (index: number) => {
-    setSearch(searchResults[index]);
+    setSearchValue(searchAsString(searchResults[index]));
     setShowPopover(false);
   };
 
@@ -53,7 +55,7 @@ export const ComboSearch = ({ label, fetcher }: ComboboxProps) => {
 
   return (
     <div ref={containerRef}>
-      <TextField label={label} value={search} onChange={onChange} ref={inputRef} />
+      <TextField label={label} value={searchValue} onChange={onChange} ref={inputRef} />
       {searchResults && searchResults.length > 0 && (
         <Popover
           ref={popoverRef}
@@ -69,10 +71,10 @@ export const ComboSearch = ({ label, fetcher }: ComboboxProps) => {
             <ul role="listbox" className={styles.list}>
               {searchResults.map((hit, index) => (
                 <li
-                  key={hit}
+                  key={searchAsString(hit)}
                   tabIndex={0}
                   role="option"
-                  aria-selected={hit === search}
+                  aria-selected={hit === searchValue}
                   onMouseUp={() => selectItem(index)}
                   onKeyUp={(event) => {
                     if (event.key === 'Enter') {
@@ -87,7 +89,7 @@ export const ComboSearch = ({ label, fetcher }: ComboboxProps) => {
                   }}
                   className={styles.listItem}
                 >
-                  {hit}
+                  {searchAsString(hit)}
                 </li>
               ))}
             </ul>
