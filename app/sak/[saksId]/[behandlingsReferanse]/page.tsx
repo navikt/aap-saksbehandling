@@ -1,13 +1,17 @@
-import { forberedBehandling, hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  forberedBehandlingOgVentPåProsessering,
+  hentBehandling,
+  hentFlyt,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 import { redirect } from 'next/navigation';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 
 const Page = async ({ params }: { params: { saksId: string; behandlingsReferanse: string } }) => {
-  const forberedBehandlingFeiletResponse = await forberedBehandling(params.behandlingsReferanse);
+  const forberedBehandlingResponse = await forberedBehandlingOgVentPåProsessering(params.behandlingsReferanse);
 
-  if (forberedBehandlingFeiletResponse) {
-    return <FlytProsesseringAlert flytProsessering={forberedBehandlingFeiletResponse} />;
+  if (forberedBehandlingResponse && forberedBehandlingResponse.status === 'FEILET') {
+    return <FlytProsesseringAlert flytProsessering={forberedBehandlingResponse} />;
   }
 
   const behandling = await hentBehandling(params.behandlingsReferanse);

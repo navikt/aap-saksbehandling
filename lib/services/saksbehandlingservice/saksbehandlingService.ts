@@ -270,7 +270,9 @@ export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
   return await fetchProxy<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const forberedBehandling = async (referanse: string): Promise<undefined | FlytProsessering> => {
+export const forberedBehandlingOgVentPåProsessering = async (
+  referanse: string
+): Promise<undefined | FlytProsessering> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
   return await fetchProxy(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
