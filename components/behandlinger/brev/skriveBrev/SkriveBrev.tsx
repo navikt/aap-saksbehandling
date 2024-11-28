@@ -50,7 +50,7 @@ export const SkriveBrev = ({
             behandlingVersjon: behandlingVersjon,
             behov: {
               behovstype: Behovstype.SKRIV_BREV_KODE,
-              brevbestillingReferanse: { referanse },
+              brevbestillingReferanse: { brevbestillingReferanse: referanse },
             },
             referanse: behandlingsReferanse,
           })

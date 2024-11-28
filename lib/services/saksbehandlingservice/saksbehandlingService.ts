@@ -45,7 +45,7 @@ import {
   YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
-import { logError, logWarning } from '@navikt/aap-felles-utils';
+import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -274,6 +274,7 @@ export const forberedBehandlingOgVentPåProsessering = async (
   referanse: string
 ): Promise<undefined | FlytProsessering> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
+  logInfo('Forbereder behandling ' + referanse);
   return await fetchProxy(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 

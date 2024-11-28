@@ -7,6 +7,7 @@ const behandling: DetaljertBehandling = {
   type: 'Førstegangsbehandling',
   status: 'UTREDES',
   opprettet: '12.12.2024',
+  skalForberede: false,
   aktivtSteg: 'START_BEHANDLING',
   avklaringsbehov: [],
   referanse: '1234',
