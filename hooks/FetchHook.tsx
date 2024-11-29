@@ -53,7 +53,6 @@ export function useOpprettSak(): {
   const { method, isLoading } = useFetch(opprettSak);
 
   async function opprettSakMethod(body: OpprettTestcase) {
-    console.log('why not');
     await method(body);
   }
 
