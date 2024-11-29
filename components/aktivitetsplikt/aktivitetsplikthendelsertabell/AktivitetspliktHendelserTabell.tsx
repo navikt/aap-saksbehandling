@@ -1,7 +1,7 @@
 import { AktivitetspliktHendelse } from 'lib/types/types';
 
 import styles from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell.module.css';
-import { Table } from '@navikt/ds-react';
+import { BodyShort, Label, Table } from '@navikt/ds-react';
 import { AktivitetspliktHendelserRad } from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserRad';
 
 export type AktivitetspliktHendelserMedFormId = AktivitetspliktHendelse & { id: string };
@@ -14,11 +14,11 @@ export const AktivitetspliktHendelserTabell = ({ aktivitetspliktHendelser }: Pro
   const harAktivitetsmeldingeraktivitetsmeldinger = aktivitetspliktHendelser && aktivitetspliktHendelser.length > 0;
 
   return (
-    <div>
+    <div className={styles.aktivitetsplikthendelser}>
       <section className={styles.heading}>
-        <b>Tidligere brudd på aktivitetsplikten</b>
+        <Label size={'medium'}>Tidligere brudd på aktivitetsplikten</Label>
         {!harAktivitetsmeldingeraktivitetsmeldinger ? (
-          <span>Ingen tidligere brudd registrert</span>
+          <BodyShort>Ingen tidligere brudd registrert</BodyShort>
         ) : (
           <Table size={'small'}>
             <Table.Header>
