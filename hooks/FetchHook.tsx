@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { clientOpprettAktivitetspliktBrudd, clientOpprettSak } from 'lib/clientApi';
-import { OpprettAktivitetspliktBrudd, OpprettTestcase } from 'lib/types/types';
+import { clientBestillDialogmelding, clientOpprettAktivitetspliktBrudd, clientOpprettSak } from 'lib/clientApi';
+import { BestillLegeerklæring, OpprettAktivitetspliktBrudd, OpprettTestcase } from 'lib/types/types';
 
 export function useFetch<FunctionParameters extends any[], ResponseBody>(
   fetchFunction: (...functionParameters: FunctionParameters) => Promise<ResponseBody>
@@ -57,4 +57,18 @@ export function useOpprettSak(): {
   }
 
   return { opprettSak: opprettSakMethod, isLoading };
+}
+
+export function useBestillDialogmelding(): {
+  bestillDialogmelding: (bestilling: BestillLegeerklæring) => Promise<void>;
+  isLoading: boolean;
+  error?: string;
+} {
+  const { method, isLoading, error } = useFetch(clientBestillDialogmelding);
+
+  async function bestill(body: BestillLegeerklæring) {
+    await method(body);
+  }
+
+  return { bestillDialogmelding: bestill, isLoading, error };
 }

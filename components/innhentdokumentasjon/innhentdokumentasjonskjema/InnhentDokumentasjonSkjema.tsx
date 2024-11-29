@@ -5,9 +5,10 @@ import { FormEvent, useState } from 'react';
 import styles from './InnhentDokumentasjonSkjema.module.css';
 import { BestillLegeerklæring } from 'lib/types/types';
 import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
-import { clientBestillDialogmelding, clientSøkPåBehandler } from 'lib/clientApi';
+import { clientSøkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
 import { ComboSearch } from 'components/input/combosearch/ComboSearch';
+import { useBestillDialogmelding } from 'hooks/FetchHook';
 
 export type Behandler = {
   type?: string;
@@ -50,6 +51,8 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const saksnummer = useSaksnummer();
   const behandlingsreferanse = useBehandlingsReferanse();
 
+  const { bestillDialogmelding, isLoading, error } = useBestillDialogmelding();
+
   const { form, formFields } = useConfigForm<FormFields>({
     behandler: {
       type: 'text',
@@ -91,8 +94,8 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
           behandlingsReferanse: behandlingsreferanse,
           veilederNavn: 'Hvor henter jeg denne fra?',
         };
-        const res = await clientBestillDialogmelding(body);
-        if (res) {
+        bestillDialogmelding(body);
+        if (!error) {
           onSuccess();
         } else {
           setVisBestillingsfeil(true);
@@ -134,8 +137,10 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         <FormField form={form} formField={formFields.dokumentasjonstype} />
         <FormField form={form} formField={formFields.melding} />
         <div className={styles.rad}>
-          <Button size={'small'}>Send dialogmelding</Button>
-          <Button size={'small'} variant="secondary" type="button" onClick={forhåndsvis}>
+          <Button size={'small'} loading={isLoading}>
+            Send dialogmelding
+          </Button>
+          <Button size={'small'} variant="secondary" type="button" onClick={forhåndsvis} disabled={isLoading}>
             Forhåndsvis
           </Button>
           {visModal && (
@@ -148,7 +153,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
               onClose={() => setVisModal(false)}
             />
           )}
-          <Button variant="tertiary" type="button" onClick={onCancel} size={'small'}>
+          <Button variant="tertiary" type="button" onClick={onCancel} size={'small'} disabled={isLoading}>
             Avbryt
           </Button>
         </div>
