@@ -94,6 +94,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
         })}
         isLoading={isLoading}
         status={status}
+        visBekreftKnapp={!readOnly}
       >
         <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
