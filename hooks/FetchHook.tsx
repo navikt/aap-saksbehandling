@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
 import { OpprettAktivitetspliktBrudd } from 'lib/types/types';
 
-export function useFetch<RequestBody, ResponseBody>(
-  fetchFunction: (body: RequestBody) => Promise<ResponseBody>
+export function useFetch<FunctionParameters extends any[], ResponseBody>(
+  fetchFunction: (...functionParameters: FunctionParameters) => Promise<ResponseBody>
 ): {
-  method: (body: RequestBody) => Promise<void>;
+  method: (...functionParameters: FunctionParameters) => Promise<void>;
   isLoading: boolean;
   data?: ResponseBody;
   error?: string;
@@ -14,11 +14,11 @@ export function useFetch<RequestBody, ResponseBody>(
   const [error, setError] = useState<string>();
   const [data, setData] = useState<ResponseBody>();
 
-  async function method(body: RequestBody) {
+  async function method(...functionParameters: FunctionParameters) {
     setIsLoading(true);
 
     try {
-      const dataFromFetch = await fetchFunction(body);
+      const dataFromFetch = await fetchFunction(...functionParameters);
       if (dataFromFetch) {
         setData(dataFromFetch);
       }
@@ -40,7 +40,7 @@ export function useAktivitetsplikt(saksnummer: string): {
   const { method, error, isLoading } = useFetch(opprettAktivitetspliktBrudd);
 
   async function opprettAktivitetsPlikt(aktivitet: OpprettAktivitetspliktBrudd) {
-    await method({ saksnummer, aktivitet });
+    await method(saksnummer, aktivitet);
   }
 
   return { opprettAktivitetsplikt: opprettAktivitetsPlikt, isLoading, error };

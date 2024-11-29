@@ -1,18 +1,18 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import {
-  OpprettAktivitetspliktBrudd,
+  BestillLegeerklæring,
+  Brev,
+  DokumentInfo,
+  FeilregistrerAktivitetspliktBrudd,
+  ForhåndsvisDialogmelding,
+  ForhåndsvisDialogmeldingResponse,
   LøsAvklaringsbehovPåBehandling,
+  OppdaterAktivitetspliktBrudd,
+  OpprettAktivitetspliktBrudd,
   OpprettTestcase,
   SaksInfo,
   SettPåVent,
   SimulerMeldeplikt,
-  OppdaterAktivitetspliktBrudd,
-  FeilregistrerAktivitetspliktBrudd,
-  DokumentInfo,
-  BestillLegeerklæring,
-  ForhåndsvisDialogmelding,
-  ForhåndsvisDialogmeldingResponse,
-  Brev,
 } from './types/types';
 
 async function fetchProxy<ResponseBody>(
@@ -55,8 +55,8 @@ export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
   return fetchProxy('/api/behandling/los-behov/', 'POST', avklaringsBehov);
 }
 
-export function opprettAktivitetspliktBrudd(body: { saksnummer: string; aktivitet: OpprettAktivitetspliktBrudd }) {
-  return fetchProxy(`/api/aktivitetsplikt/${body.saksnummer}/opprett`, 'POST', body.aktivitet);
+export function opprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {
+  return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/opprett`, 'POST', aktivitet);
 }
 
 export function oppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd) {
