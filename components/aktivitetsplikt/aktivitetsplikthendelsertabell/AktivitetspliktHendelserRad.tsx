@@ -7,7 +7,7 @@ import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { useState } from 'react';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useSaksnummer } from 'hooks/BehandlingHook';
-import { feilregistrerAktivitetspliktBrudd, oppdaterAktivitetspliktBrudd } from 'lib/clientApi';
+import { clientFeilregistrerAktivitetspliktBrudd, clientOppdaterAktivitetspliktBrudd } from 'lib/clientApi';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { AktivitetspliktHendelserMedFormId } from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 
@@ -53,7 +53,7 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
         <form
           onSubmit={form.handleSubmit(async (data) => {
             if (data.erFeilregistrering === JaEllerNei.Ja) {
-              await feilregistrerAktivitetspliktBrudd(saksnummer, {
+              await clientFeilregistrerAktivitetspliktBrudd(saksnummer, {
                 brudd: aktivitetspliktHendelse.brudd,
                 periode: {
                   fom: formaterDatoForBackend(new Date(aktivitetspliktHendelse.periode.fom)),
@@ -62,7 +62,7 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
                 paragraf: aktivitetspliktHendelse.paragraf,
               });
             } else {
-              await oppdaterAktivitetspliktBrudd(saksnummer, {
+              await clientOppdaterAktivitetspliktBrudd(saksnummer, {
                 brudd: aktivitetspliktHendelse.brudd,
                 periode: aktivitetspliktHendelse.periode,
                 paragraf: aktivitetspliktHendelse.paragraf,

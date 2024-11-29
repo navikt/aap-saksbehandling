@@ -5,7 +5,7 @@ import { Link, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import useSWR from 'swr';
 import { useSaksnummer } from 'hooks/BehandlingHook';
-import { hentAlleDokumenterPåSak } from 'lib/clientApi';
+import { clientHentAlleDokumenterPåSak } from 'lib/clientApi';
 
 interface FormFields {
   dokumentnavn: string;
@@ -14,7 +14,9 @@ interface FormFields {
 
 export const Saksdokumenter = () => {
   const saksnummer = useSaksnummer();
-  const { data: dokumenter } = useSWR(`api/sak/${saksnummer}/dokumenter`, () => hentAlleDokumenterPåSak(saksnummer));
+  const { data: dokumenter } = useSWR(`api/sak/${saksnummer}/dokumenter`, () =>
+    clientHentAlleDokumenterPåSak(saksnummer)
+  );
 
   const { form, formFields } = useConfigForm<FormFields>({
     dokumentnavn: {

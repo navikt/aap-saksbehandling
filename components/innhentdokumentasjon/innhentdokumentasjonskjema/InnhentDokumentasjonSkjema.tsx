@@ -5,7 +5,7 @@ import { FormEvent, useState } from 'react';
 import styles from './InnhentDokumentasjonSkjema.module.css';
 import { BestillLegeerklæring } from 'lib/types/types';
 import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
-import { bestillDialogmelding, søkPåBehandler } from 'lib/clientApi';
+import { clientBestillDialogmelding, clientSøkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
 import { ComboSearch } from 'components/input/combosearch/ComboSearch';
 
@@ -91,7 +91,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
           behandlingsReferanse: behandlingsreferanse,
           veilederNavn: 'Hvor henter jeg denne fra?',
         };
-        const res = await bestillDialogmelding(body);
+        const res = await clientBestillDialogmelding(body);
         if (res) {
           onSuccess();
         } else {
@@ -125,7 +125,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
       <ComboSearch
         label={'Behandler'}
         searchAsString={(behandler: Behandler) => formaterBehandlernavn(behandler)}
-        fetcher={søkPåBehandler}
+        fetcher={clientSøkPåBehandler}
         setValue={velgEnBehandler}
         error={behandlerError}
       />

@@ -1,5 +1,5 @@
 import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
-import { forhåndsvisDialogmelding } from 'lib/clientApi';
+import { clientForhåndsvisDialogmelding } from 'lib/clientApi';
 import { useRef } from 'react';
 import useSWR from 'swr';
 
@@ -30,7 +30,7 @@ export const Forhåndsvisning = ({
   const { data, isLoading, error } = useSWR(
     `forhåndsvisDialogmelding/${saksnummer}`,
     () =>
-      forhåndsvisDialogmelding({
+      clientForhåndsvisDialogmelding({
         saksnummer: saksnummer,
         veilederNavn: veilederNavn,
         dokumentasjonType: dokumentasjonsType,

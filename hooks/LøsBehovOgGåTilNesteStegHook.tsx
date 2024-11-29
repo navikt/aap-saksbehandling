@@ -5,7 +5,7 @@ import {
 } from 'app/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
-import { løsBehov } from 'lib/clientApi';
+import { clientLøsBehov } from 'lib/clientApi';
 
 export const useLøsBehovOgGåTilNesteSteg = (
   steg: StegType
@@ -21,7 +21,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
 
   const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling) => {
     setIsLoading(true);
-    await løsBehov(behov);
+    await clientLøsBehov(behov);
     listenSSE();
   };
 
@@ -53,7 +53,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
       if (eventData.status === 'POLLING') {
         setStatus(eventData.status);
         console.log('POLLING', eventData);
-        setIsLoading(false)
+        setIsLoading(false);
       }
     };
     eventSource.onerror = (event: any) => {

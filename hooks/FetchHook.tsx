@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { opprettAktivitetspliktBrudd, opprettSak } from 'lib/clientApi';
+import { clientOpprettAktivitetspliktBrudd, clientOpprettSak } from 'lib/clientApi';
 import { OpprettAktivitetspliktBrudd, OpprettTestcase } from 'lib/types/types';
 
 export function useFetch<FunctionParameters extends any[], ResponseBody>(
@@ -37,7 +37,7 @@ export function useAktivitetsplikt(saksnummer: string): {
   isLoading: boolean;
   error?: string;
 } {
-  const { method, error, isLoading } = useFetch(opprettAktivitetspliktBrudd);
+  const { method, error, isLoading } = useFetch(clientOpprettAktivitetspliktBrudd);
 
   async function opprettAktivitetsPlikt(aktivitet: OpprettAktivitetspliktBrudd) {
     await method(saksnummer, aktivitet);
@@ -50,7 +50,7 @@ export function useOpprettSak(): {
   opprettSak: (opprettTestCase: OpprettTestcase) => Promise<void>;
   isLoading: boolean;
 } {
-  const { method, isLoading } = useFetch(opprettSak);
+  const { method, isLoading } = useFetch(clientOpprettSak);
 
   async function opprettSakMethod(body: OpprettTestcase) {
     await method(body);

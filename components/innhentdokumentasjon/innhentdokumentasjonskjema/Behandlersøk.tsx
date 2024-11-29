@@ -4,7 +4,7 @@ import {
   Behandler,
   formaterBehandlernavn,
 } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
-import { søkPåBehandler } from 'lib/clientApi';
+import { clientSøkPåBehandler } from 'lib/clientApi';
 import { FormEvent, useRef, useState } from 'react';
 
 type Props = {
@@ -31,7 +31,7 @@ export const Behandlersøk = ({ velgBehandler, behandlerError }: Props) => {
     if (value && value.length >= 3) {
       settVisPopover(true);
       setSøker(true);
-      const res = await søkPåBehandler(value);
+      const res = await clientSøkPåBehandler(value);
       oppdaterBehandlerliste(res ?? []);
     }
   };

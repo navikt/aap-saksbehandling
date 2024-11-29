@@ -2,7 +2,7 @@ import { Alert, Button, Loader, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
 import { InnhentDokumentasjonSkjema } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
-import { hentAlleDialogmeldingerPåSak } from 'lib/clientApi';
+import { clientHentAlleDialogmeldingerPåSak } from 'lib/clientApi';
 import useSWR from 'swr';
 import { Dialogmeldinger } from 'components/innhentdokumentasjon/dialogmeldinger/Dialogmeldinger';
 import { useSaksnummer } from 'hooks/BehandlingHook';
@@ -14,7 +14,7 @@ export const InnhentDokumentasjon = () => {
   const saksnummer = useSaksnummer();
   const { data, isLoading, error, mutate } = useSWR(
     `api/dokumentinnhenting/status/${saksnummer}`,
-    () => hentAlleDialogmeldingerPåSak(saksnummer),
+    () => clientHentAlleDialogmeldingerPåSak(saksnummer),
     { revalidateOnFocus: false }
   );
 

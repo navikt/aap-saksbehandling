@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Modal } from '@navikt/ds-react';
 import { useConfigForm, FormField, ValuePair } from '@navikt/aap-felles-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { settBehandlingPåVent } from 'lib/clientApi';
+import { clientSettBehandlingPåVent } from 'lib/clientApi';
 import { revalidateFlyt } from 'lib/actions/actions';
 
 import styles from './SettBehandlingPåVentModal.module.css';
@@ -76,7 +76,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
             id={'settBehandlingPåVent'}
             onSubmit={form.handleSubmit(async (data) => {
               setIsLoading(true);
-              await settBehandlingPåVent(referanse, {
+              await clientSettBehandlingPåVent(referanse, {
                 begrunnelse: data.begrunnelse,
                 behandlingVersjon: behandlingVersjon,
                 frist: formaterDatoForBackend(data.frist),
