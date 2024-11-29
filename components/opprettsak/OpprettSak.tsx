@@ -1,6 +1,5 @@
 'use client';
 
-import { opprettSak } from 'lib/clientApi';
 import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import { Button } from '@navikt/ds-react';
 
@@ -10,6 +9,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { OpprettInntekter } from 'components/opprettsak/inntekter/OpprettInntekter';
+import { useOpprettSak } from 'hooks/FetchHook';
 
 interface Barn {
   fodselsdato: string;
@@ -34,6 +34,7 @@ export interface OpprettSakFormFields {
 }
 
 export const OpprettSak = () => {
+  const { isLoading, opprettSak } = useOpprettSak();
   const { formFields, form } = useConfigForm<OpprettSakFormFields>({
     fødselsdato: {
       type: 'date',
@@ -117,7 +118,9 @@ export const OpprettSak = () => {
         <OpprettSakBarn form={form} />
         <OpprettInntekter form={form} />
       </div>
-      <Button className={'fit-content'}>Opprett test sak</Button>
+      <Button className={'fit-content'} loading={isLoading}>
+        Opprett test sak
+      </Button>
     </form>
   );
 };

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
-import { OpprettAktivitetspliktBrudd } from 'lib/types/types';
+import { OpprettAktivitetspliktBrudd, OpprettTestcase } from 'lib/types/types';
 
 export function useFetch<FunctionParameters extends any[], ResponseBody>(
   fetchFunction: (...functionParameters: FunctionParameters) => Promise<ResponseBody>
@@ -44,4 +44,17 @@ export function useAktivitetsplikt(saksnummer: string): {
   }
 
   return { opprettAktivitetsplikt: opprettAktivitetsPlikt, isLoading, error };
+}
+
+export function useOpprettSak(): {
+  opprettSak: (opprettTestCase: OpprettTestcase) => Promise<void>;
+  isLoading: boolean;
+} {
+  const { method, isLoading } = useFetch(opprettSak);
+
+  async function opprettSak(body: OpprettTestcase) {
+    await method(body);
+  }
+
+  return { opprettSak, isLoading };
 }
