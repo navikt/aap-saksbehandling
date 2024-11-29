@@ -55,8 +55,8 @@ export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
   return fetchProxy('/api/behandling/los-behov/', 'POST', avklaringsBehov);
 }
 
-export function opprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {
-  return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/opprett`, 'POST', aktivitet);
+export function opprettAktivitetspliktBrudd(body: { saksnummer: string; aktivitet: OpprettAktivitetspliktBrudd }) {
+  return fetchProxy(`/api/aktivitetsplikt/${body.saksnummer}/opprett`, 'POST', body.aktivitet);
 }
 
 export function oppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd) {

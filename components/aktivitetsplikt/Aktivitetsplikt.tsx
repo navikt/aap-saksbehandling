@@ -19,12 +19,12 @@ import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useFieldArray } from 'react-hook-form';
 import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 import { useEffect, useState } from 'react';
-import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
 import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
 import { v4 as uuidv4 } from 'uuid';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
+import { useAktivitetsplikt } from 'hooks/FetchHook';
 
 interface AktvitetsPeriode {
   type: 'periode';
@@ -67,6 +67,9 @@ const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
 export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
   const saksnummer = useSaksnummer();
   const [errorMessage, setErrorMessage] = useState('');
+
+  const { isLoading, opprettAktivitetsplikt } = useAktivitetsplikt(saksnummer);
+
   const [skalRegistrereBrudd, setSkalRegistrereBrudd] = useState(false);
 
   const { form, formFields } = useConfigForm<AktivitetspliktFormFields>(
@@ -169,7 +172,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
               } else if (harOverlappendePerioder) {
                 setErrorMessage('Det finnes overlappende perioder');
               } else {
-                await opprettAktivitetspliktBrudd(saksnummer, {
+                await opprettAktivitetsplikt({
                   brudd: data.brudd,
                   begrunnelse: data.begrunnelse,
                   paragraf: data.paragraf,
@@ -264,7 +267,9 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
               </div>
             )}
             <div className={'flex-row'}>
-              <Button className={'fit-content'}>Bekreft</Button>
+              <Button className={'fit-content'} loading={isLoading}>
+                Bekreft
+              </Button>
               <Button
                 className={'fit-content'}
                 onClick={() => setSkalRegistrereBrudd(false)}
