@@ -18,7 +18,7 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const { data, mutate, isLoading } = useSWR('api/sak/alle', hentAlleSaker, { fallbackData: alleSaker });
+  const { data, mutate, isLoading, isValidating } = useSWR('api/sak/alle', hentAlleSaker, { fallbackData: alleSaker });
 
   const searchValue = searchParams.get('ident');
 
@@ -43,7 +43,7 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
           onClick={() => mutate()}
           size={'medium'}
           variant={'tertiary'}
-          loading={isLoading}
+          loading={isLoading || isValidating}
         >
           Refresh listen
         </Button>
