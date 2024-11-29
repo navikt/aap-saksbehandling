@@ -52,6 +52,7 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
   return (
     <Table.ExpandableRow
       open={isOpen}
+      expandOnRowClick={true}
       togglePlacement={'right'}
       onOpenChange={() => setIsOpen(!isOpen)}
       content={
