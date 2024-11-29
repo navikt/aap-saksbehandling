@@ -2,7 +2,12 @@
 
 import { Button, Table } from '@navikt/ds-react';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { AktivitetspliktBrudd, AktivitetspliktHendelseParagraf, OppdaterAktivitetsplitGrunn } from 'lib/types/types';
+import {
+  AktivitetspliktBrudd,
+  AktivitetspliktGrunn,
+  AktivitetspliktHendelseParagraf,
+  OppdaterAktivitetsplitGrunn,
+} from 'lib/types/types';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { useState } from 'react';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
@@ -98,6 +103,7 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
     >
       <Table.DataCell>{hentParagrafTekst(aktivitetspliktHendelse.paragraf)}</Table.DataCell>
       <Table.DataCell>{hentBruddTekst(aktivitetspliktHendelse.brudd)}</Table.DataCell>
+      <Table.DataCell>{hentGrunnTekst(aktivitetspliktHendelse.grunn)}</Table.DataCell>
       <Table.DataCell>{formaterDatoForFrontend(aktivitetspliktHendelse.periode.fom)}</Table.DataCell>
       <Table.DataCell>{formaterDatoForFrontend(aktivitetspliktHendelse.periode.tom)}</Table.DataCell>
     </Table.ExpandableRow>
@@ -129,5 +135,18 @@ function hentParagrafTekst(valgtBrudd: AktivitetspliktHendelseParagraf): string 
       return '11-8';
     case 'PARAGRAF_11_9':
       return '11-9';
+  }
+}
+
+function hentGrunnTekst(grunn: AktivitetspliktGrunn): string {
+  switch (grunn) {
+    case 'INGEN_GYLDIG_GRUNN':
+      return 'Ingen gyldig grunn';
+    case 'RIMELIG_GRUNN':
+      return 'Rimelig grunn';
+    case 'STERKE_VELFERDSGRUNNER':
+      return 'Sterkre velferdsgrunner';
+    case 'SYKDOM_ELLER_SKADE':
+      return 'Sykdom eller skade';
   }
 }

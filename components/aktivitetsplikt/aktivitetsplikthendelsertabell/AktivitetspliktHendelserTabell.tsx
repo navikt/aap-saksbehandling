@@ -25,6 +25,7 @@ export const AktivitetspliktHendelserTabell = ({ aktivitetspliktHendelser }: Pro
               <Table.Row>
                 <Table.HeaderCell>Type brudd</Table.HeaderCell>
                 <Table.HeaderCell>Årsak</Table.HeaderCell>
+                <Table.HeaderCell>Grunn</Table.HeaderCell>
                 <Table.HeaderCell>Dato fra og med</Table.HeaderCell>
                 <Table.HeaderCell>Dato til og med</Table.HeaderCell>
                 <Table.HeaderCell></Table.HeaderCell>

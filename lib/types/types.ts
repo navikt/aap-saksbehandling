@@ -147,7 +147,7 @@ export type AktivitetspliktParagraf =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OpprettAktivitetspliktDTO']['paragraf'];
 
 export type AktivitetspliktGrunn =
-  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OpprettAktivitetspliktDTO']['grunn'];
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktHendelseDto']['grunn'];
 
 export type OppdaterAktivitetsplitGrunn =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OppdaterAktivitetspliktDTO']['grunn'];
