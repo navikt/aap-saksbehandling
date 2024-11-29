@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
+import { opprettAktivitetspliktBrudd, opprettSak } from 'lib/clientApi';
 import { OpprettAktivitetspliktBrudd, OpprettTestcase } from 'lib/types/types';
 
 export function useFetch<FunctionParameters extends any[], ResponseBody>(
@@ -52,9 +52,10 @@ export function useOpprettSak(): {
 } {
   const { method, isLoading } = useFetch(opprettSak);
 
-  async function opprettSak(body: OpprettTestcase) {
+  async function opprettSakMethod(body: OpprettTestcase) {
+    console.log('why not');
     await method(body);
   }
 
-  return { opprettSak, isLoading };
+  return { opprettSak: opprettSakMethod, isLoading };
 }
