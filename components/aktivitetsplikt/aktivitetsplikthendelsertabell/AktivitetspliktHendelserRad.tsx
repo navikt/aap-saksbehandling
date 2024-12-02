@@ -1,27 +1,29 @@
 'use client';
 
-import { Button, Table } from '@navikt/ds-react';
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { BodyLong, Button, Label, Table } from '@navikt/ds-react';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import {
   AktivitetspliktBrudd,
   AktivitetspliktGrunn,
   AktivitetspliktHendelseParagraf,
   OppdaterAktivitetsplitGrunn,
+  Periode,
 } from 'lib/types/types';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { useState } from 'react';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useSaksnummer } from 'hooks/BehandlingHook';
-import { clientFeilregistrerAktivitetspliktBrudd, clientOppdaterAktivitetspliktBrudd } from 'lib/clientApi';
-import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { clientOppdaterAktivitetspliktBrudd } from 'lib/clientApi';
 import { AktivitetspliktHendelserMedFormId } from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
+import { useFetch } from 'hooks/FetchHook';
+
+import styles from './AktivitetspliktHendelserTabell.module.css';
 
 interface Props {
   aktivitetspliktHendelse: AktivitetspliktHendelserMedFormId;
 }
 
 interface Formfields {
-  erFeilregistrering: string;
   grunn: OppdaterAktivitetsplitGrunn;
 }
 
@@ -29,22 +31,19 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
   const saksnummer = useSaksnummer();
   const [isOpen, setIsOpen] = useState(false);
 
+  const { isLoading, method: oppdaterAktivitetspliktBrudd } = useFetch(clientOppdaterAktivitetspliktBrudd);
+
   const { form, formFields } = useConfigForm<Formfields>({
-    erFeilregistrering: {
-      type: 'radio',
-      label: 'Er dette fraværet en feilregistrering?',
-      options: JaEllerNeiOptions,
-      rules: { required: 'Du må besvare om dette er en feilregistrering' },
-    },
     grunn: {
       type: 'radio',
-      label: 'Grunn',
+      label: 'Endre grunn',
       defaultValue: aktivitetspliktHendelse.grunn,
       options: [
         { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
         { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
         { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
         { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
+        { label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' },
       ],
     },
   });
@@ -58,34 +57,28 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
       content={
         <form
           onSubmit={form.handleSubmit(async (data) => {
-            if (data.erFeilregistrering === JaEllerNei.Ja) {
-              await clientFeilregistrerAktivitetspliktBrudd(saksnummer, {
-                brudd: aktivitetspliktHendelse.brudd,
-                periode: {
-                  fom: formaterDatoForBackend(new Date(aktivitetspliktHendelse.periode.fom)),
-                  tom: formaterDatoForBackend(new Date(aktivitetspliktHendelse.periode.tom)),
-                },
-                paragraf: aktivitetspliktHendelse.paragraf,
-              });
-            } else {
-              await clientOppdaterAktivitetspliktBrudd(saksnummer, {
-                brudd: aktivitetspliktHendelse.brudd,
-                periode: aktivitetspliktHendelse.periode,
-                paragraf: aktivitetspliktHendelse.paragraf,
-                grunn: data.grunn,
-              });
-            }
+            await oppdaterAktivitetspliktBrudd(saksnummer, {
+              brudd: aktivitetspliktHendelse.brudd,
+              periode: aktivitetspliktHendelse.periode,
+              paragraf: aktivitetspliktHendelse.paragraf,
+              grunn: data.grunn,
+            });
+
             await revalidateAktivitetspliktHendelser(saksnummer);
           })}
         >
           <div className={'flex-column'}>
-            <FormField form={form} formField={formFields.erFeilregistrering} />
-            {form.watch('erFeilregistrering') === JaEllerNei.Nei && (
-              <FormField form={form} formField={formFields.grunn} />
-            )}
+            <div>
+              <Label size={'small'}>Begrunnelse</Label>
+              <BodyLong>Her kommer full tekst om begrunnelse</BodyLong>
+            </div>
+
+            <FormField form={form} formField={formFields.grunn} />
 
             <div className={'flex-row'}>
-              <Button size={'small'}>Lagre</Button>
+              <Button size={'small'} loading={isLoading}>
+                Lagre
+              </Button>
               <Button
                 size={'small'}
                 type={'button'}
@@ -105,11 +98,19 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
       <Table.DataCell>{hentParagrafTekst(aktivitetspliktHendelse.paragraf)}</Table.DataCell>
       <Table.DataCell>{hentBruddTekst(aktivitetspliktHendelse.brudd)}</Table.DataCell>
       <Table.DataCell>{hentGrunnTekst(aktivitetspliktHendelse.grunn)}</Table.DataCell>
-      <Table.DataCell>{formaterDatoForFrontend(aktivitetspliktHendelse.periode.fom)}</Table.DataCell>
-      <Table.DataCell>{formaterDatoForFrontend(aktivitetspliktHendelse.periode.tom)}</Table.DataCell>
+      <Table.DataCell className={styles.begrunnelse}>Her kommer det begrunnelse</Table.DataCell>
+      <Table.DataCell>{formaterPeriodeForVisning(aktivitetspliktHendelse.periode)}</Table.DataCell>
     </Table.ExpandableRow>
   );
 };
+
+function formaterPeriodeForVisning(periode: Periode): string {
+  if (periode.fom === periode.tom) {
+    return formaterDatoForFrontend(periode.fom);
+  } else {
+    return `${formaterDatoForFrontend(periode.fom)} - ${formaterDatoForFrontend(periode.tom)}`;
+  }
+}
 
 function hentBruddTekst(valgtBrudd: AktivitetspliktBrudd): string {
   switch (valgtBrudd) {

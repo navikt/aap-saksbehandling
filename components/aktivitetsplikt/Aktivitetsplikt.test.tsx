@@ -27,7 +27,7 @@ describe('generelt', () => {
 
   it('skal ha en knapp for å registrere et nytt skjema', () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
-    const knapp = screen.getByRole('button', { name: 'Registrer et nytt brudd' });
+    const knapp = screen.getByRole('button', { name: 'Registrer fravær eller brudd' });
     expect(knapp).toBeVisible();
   });
 
@@ -440,6 +440,6 @@ async function trykkPåBekreftKnapp() {
 }
 
 async function åpneRegistrerNyttBruddSkjema() {
-  const knapp = screen.getByRole('button', { name: 'Registrer et nytt brudd' });
+  const knapp = screen.getByRole('button', { name: 'Registrer fravær eller brudd' });
   await user.click(knapp);
 }

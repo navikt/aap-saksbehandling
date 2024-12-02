@@ -282,7 +282,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
           </form>
         ) : (
           <Button onClick={() => setSkalRegistrereBrudd(true)} className={'fit-content'}>
-            Registrer et nytt brudd
+            Registrer fravær eller brudd
           </Button>
         )}
         <AktivitetspliktHendelserTabell
