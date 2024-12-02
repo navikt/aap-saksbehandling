@@ -46,6 +46,7 @@ import {
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
+import { headers } from 'next/headers';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -301,6 +302,10 @@ export const hentUnderveisGrunnlag = async (behandlingsreferanse: string): Promi
 };
 
 export const hentLocalToken = async () => {
+  // Må hente headers for å tvinge dynamic route ved lokal utvikling
+  // TODO: Revurder i next 15
+  headers()
+
   const url = 'http://localhost:8081/token';
   try {
     return fetch(url, { method: 'POST', next: { revalidate: 0 } })
