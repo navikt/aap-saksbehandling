@@ -126,7 +126,7 @@ export type SkalGjenopptaStudieStatus =
 export type IdentifisertBarn =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.IdentifiserteBarnDto'];
 
-export type Ident = components['schemas']['no.nav.aap.verdityper.sakogbehandling.Ident'];
+export type Ident = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
 
 export type AktivitetspliktHendelse =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktHendelseDto'];
@@ -134,8 +134,8 @@ export type AktivitetspliktHendelse =
 export type OpprettAktivitetspliktBrudd =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OpprettAktivitetspliktDTO'];
 
-export type OppdaterAktivitetspliktBrudd =
-  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OppdaterAktivitetspliktDTO'];
+export type OppdaterAktivitetspliktBrudd2 =
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OppdaterAktivitetspliktDTOV2'];
 
 export type FeilregistrerAktivitetspliktBrudd =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.FeilregistrerAktivitetspliktDTO'];

@@ -26,7 +26,7 @@ import {
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   MedlemskapGrunnlag,
-  OppdaterAktivitetspliktBrudd,
+  OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
   SakPersoninfo,
@@ -86,8 +86,11 @@ export const opprettBruddPåAktivitetsplikten = async (saksnummer: string, aktiv
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 
-export const oppdaterBruddPåAktivitetsplikten = async (saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/oppdater`;
+export const oppdaterBruddPåAktivitetsplikten = async (
+  saksnummer: string,
+  aktivitet: OppdaterAktivitetspliktBrudd2
+) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/v2/oppdater`;
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 
@@ -304,7 +307,7 @@ export const hentUnderveisGrunnlag = async (behandlingsreferanse: string): Promi
 export const hentLocalToken = async () => {
   // Må hente headers for å tvinge dynamic route ved lokal utvikling
   // TODO: Revurder i next 15
-  headers()
+  headers();
 
   const url = 'http://localhost:8081/token';
   try {

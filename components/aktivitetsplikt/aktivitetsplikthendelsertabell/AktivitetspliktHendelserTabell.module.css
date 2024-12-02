@@ -14,3 +14,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.feilregistrering {
+  text-decoration: line-through;
+}

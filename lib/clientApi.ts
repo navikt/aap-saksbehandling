@@ -3,11 +3,10 @@ import {
   BestillLegeerklæring,
   Brev,
   DokumentInfo,
-  FeilregistrerAktivitetspliktBrudd,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
   LøsAvklaringsbehovPåBehandling,
-  OppdaterAktivitetspliktBrudd,
+  OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
   SaksInfo,
@@ -59,15 +58,8 @@ export function clientOpprettAktivitetspliktBrudd(saksnummer: string, aktivitet:
   return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/opprett`, 'POST', aktivitet);
 }
 
-export function clientOppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd) {
+export function clientOppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd2) {
   return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/oppdater`, 'POST', aktivitet);
-}
-
-export function clientFeilregistrerAktivitetspliktBrudd(
-  saksnummer: string,
-  aktivitet: FeilregistrerAktivitetspliktBrudd
-) {
-  return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/feilregistrer`, 'POST', aktivitet);
 }
 
 export function clientSimulerMeldeplikt(referanse: string, vurderinger: SimulerMeldeplikt) {

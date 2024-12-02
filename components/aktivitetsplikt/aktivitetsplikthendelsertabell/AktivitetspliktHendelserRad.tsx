@@ -25,6 +25,7 @@ interface Props {
 
 interface Formfields {
   grunn: OppdaterAktivitetsplitGrunn;
+  begrunnelse: string;
 }
 
 export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) => {
@@ -45,8 +46,16 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
         { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
         { label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' },
       ],
+      rules: { required: 'Du må velge én grunn' },
+    },
+    begrunnelse: {
+      type: 'textarea',
+      label: 'Begrunnelse',
+      rules: { required: 'Du må skrive en begrunnelse' },
     },
   });
+
+  const erFeilregistrering = aktivitetspliktHendelse.grunn === 'FEILREGISTRERING';
 
   return (
     <Table.ExpandableRow
@@ -62,18 +71,22 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
               periode: aktivitetspliktHendelse.periode,
               paragraf: aktivitetspliktHendelse.paragraf,
               grunn: data.grunn,
+              begrunnelse: data.begrunnelse,
             });
 
             await revalidateAktivitetspliktHendelser(saksnummer);
           })}
         >
           <div className={'flex-column'}>
-            <div>
-              <Label size={'small'}>Begrunnelse</Label>
-              <BodyLong>Her kommer full tekst om begrunnelse</BodyLong>
-            </div>
+            {aktivitetspliktHendelse.begrunnelse && (
+              <div>
+                <Label size={'small'}>Begrunnelse</Label>
+                <BodyLong>{aktivitetspliktHendelse.begrunnelse}</BodyLong>
+              </div>
+            )}
 
             <FormField form={form} formField={formFields.grunn} />
+            <FormField form={form} formField={formFields.begrunnelse} />
 
             <div className={'flex-row'}>
               <Button size={'small'} loading={isLoading}>
@@ -95,10 +108,14 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
         </form>
       }
     >
-      <Table.DataCell>{hentParagrafTekst(aktivitetspliktHendelse.paragraf)}</Table.DataCell>
-      <Table.DataCell>{hentBruddTekst(aktivitetspliktHendelse.brudd)}</Table.DataCell>
+      <Table.DataCell className={erFeilregistrering ? styles.feilregistrering : ''}>
+        {hentParagrafTekst(aktivitetspliktHendelse.paragraf)}
+      </Table.DataCell>
+      <Table.DataCell className={erFeilregistrering ? styles.feilregistrering : ''}>
+        {hentBruddTekst(aktivitetspliktHendelse.brudd)}
+      </Table.DataCell>
       <Table.DataCell>{hentGrunnTekst(aktivitetspliktHendelse.grunn)}</Table.DataCell>
-      <Table.DataCell className={styles.begrunnelse}>Her kommer det begrunnelse</Table.DataCell>
+      <Table.DataCell className={styles.begrunnelse}>{aktivitetspliktHendelse.begrunnelse}</Table.DataCell>
       <Table.DataCell>{formaterPeriodeForVisning(aktivitetspliktHendelse.periode)}</Table.DataCell>
     </Table.ExpandableRow>
   );
@@ -150,5 +167,7 @@ function hentGrunnTekst(grunn: AktivitetspliktGrunn): string {
       return 'Sterkre velferdsgrunner';
     case 'SYKDOM_ELLER_SKADE':
       return 'Sykdom eller skade';
+    case 'FEILREGISTRERING':
+      return 'Feilregistrering';
   }
 }

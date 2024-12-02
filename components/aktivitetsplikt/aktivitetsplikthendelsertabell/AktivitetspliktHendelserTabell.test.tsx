@@ -11,6 +11,7 @@ const aktivitetspliktHendelser: AktivitetspliktHendelserMedFormId[] = [
     brudd: 'IKKE_AKTIVT_BIDRAG',
     paragraf: 'PARAGRAF_11_7',
     grunn: 'INGEN_GYLDIG_GRUNN',
+    begrunnelse: 'Dette er en begrunnelse',
     periode: {
       fom: '2024-10-04',
       tom: '2024-10-04',
