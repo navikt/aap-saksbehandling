@@ -1,4 +1,4 @@
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 
@@ -7,8 +7,8 @@ import { BestillLegeerklæring } from 'lib/types/types';
 import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
 import { clientSøkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
-import { ComboSearch } from 'components/input/combosearch/ComboSearch';
 import { useBestillDialogmelding } from 'hooks/FetchHook';
+import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSearch';
 
 export type Behandler = {
   type?: string;
@@ -26,7 +26,7 @@ export type Behandler = {
 };
 
 type FormFields = {
-  behandler: string;
+  behandler: ValuePair;
   dokumentasjonstype: 'L8' | 'L40';
   melding: string;
 };
@@ -44,8 +44,6 @@ export const formaterBehandlernavn = (behandler: Behandler): string => {
 };
 
 export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
-  const [valgtBehandler, setValgtBehandler] = useState<Behandler>();
-  const [behandlerError, setBehandlerError] = useState<string>();
   const [visModal, setVisModal] = useState<boolean>(false);
   const [visBestillingsfeil, setVisBestillingsfeil] = useState<boolean>(false);
   const saksnummer = useSaksnummer();
@@ -57,7 +55,16 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     behandler: {
       type: 'text',
       label: 'Velg behandler som skal motta meldingen',
-      rules: { required: 'Du må velge hvilke(n) behandler som skal motta meldingen' },
+      rules: { required: 'Du må velge en behandler' },
+    },
+    // TODO midlertidige felt. Trenger ny type i aap-felles-frontend for denne komponenten
+    'behandler.value': {
+      type: 'text',
+      label: '_',
+    },
+    'behandler.label': {
+      type: 'text',
+      label: '_',
     },
     dokumentasjonstype: {
       type: 'select',
@@ -77,46 +84,38 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    setVisBestillingsfeil(false);
-    setBehandlerError(undefined);
-    if (!valgtBehandler) {
-      event.preventDefault();
-      setBehandlerError('Du må velge en behandler');
-      form.trigger();
-    } else {
-      form.handleSubmit(async (data) => {
-        const body: BestillLegeerklæring = {
-          behandlerNavn: formaterBehandlernavn(valgtBehandler),
-          behandlerRef: valgtBehandler.behandlerRef,
-          dokumentasjonType: data.dokumentasjonstype,
-          fritekst: data.melding,
-          saksnummer: saksnummer,
-          behandlingsReferanse: behandlingsreferanse,
-          veilederNavn: 'Hvor henter jeg denne fra?',
-        };
-        bestillDialogmelding(body);
-        if (!error) {
-          onSuccess();
-        } else {
-          setVisBestillingsfeil(true);
-        }
-      })(event);
-    }
-  };
-
-  const velgEnBehandler = (behandler?: Behandler) => {
-    setBehandlerError(undefined);
-    setValgtBehandler(behandler);
+    form.handleSubmit(async (data) => {
+      const body: BestillLegeerklæring = {
+        behandlerNavn: data.behandler.label,
+        behandlerRef: data.behandler.value,
+        dokumentasjonType: data.dokumentasjonstype,
+        fritekst: data.melding,
+        saksnummer: saksnummer,
+        behandlingsReferanse: behandlingsreferanse,
+        veilederNavn: 'Hvor henter jeg denne fra?',
+      };
+      bestillDialogmelding(body);
+      if (!error) {
+        onSuccess();
+      } else {
+        setVisBestillingsfeil(true);
+      }
+    })(event);
   };
 
   const forhåndsvis = async () => {
     const validationResult = await form.trigger(); // force validation
-    if (!valgtBehandler) {
-      setBehandlerError('Du må velge en behandler');
-    }
-    if (validationResult && valgtBehandler) {
+    if (validationResult) {
       setVisModal(true);
     }
+  };
+
+  const behandlersøk = async (input: string) => {
+    const resultat = await clientSøkPåBehandler(input);
+    if (!resultat) {
+      return [];
+    }
+    return resultat.map((uh) => ({ label: formaterBehandlernavn(uh), value: uh.behandlerRef }));
   };
 
   return (
@@ -124,16 +123,14 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
       <Heading level={'3'} size={'small'}>
         Etterspør informasjon fra lege
       </Heading>
-      {/*<Behandlersøk velgBehandler={velgEnBehandler} behandlerError={behandlerError} />*/}
-      <ComboSearch
-        label={'Behandler'}
-        searchAsString={(behandler: Behandler) => formaterBehandlernavn(behandler)}
-        fetcher={clientSøkPåBehandler}
-        setValue={velgEnBehandler}
-        error={behandlerError}
-      />
-
       <form onSubmit={handleSubmit}>
+        <AsyncComboSearch
+          label={'Behandler'}
+          form={form}
+          feltnavn={formFields.behandler.name}
+          fetcher={behandlersøk}
+          rules={formFields.behandler.rules}
+        />
         <FormField form={form} formField={formFields.dokumentasjonstype} />
         <FormField form={form} formField={formFields.melding} />
         <div className={styles.rad}>
