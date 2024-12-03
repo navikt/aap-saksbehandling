@@ -154,8 +154,6 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
     })(event);
   };
 
-  console.log(form.watch());
-
   return (
     <VilkårsKort
       heading={'Nedsatt arbeidsevne - § 11-5'}
