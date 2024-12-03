@@ -1,6 +1,5 @@
 'use client';
 
-import { VilkårsKortForUvisstEnhet } from 'components/vilkårskort/VilkårskortForUvisstEnhet';
 import { BandageIcon } from '@navikt/aksel-icons';
 import { TextAreaWrapper, TextFieldWrapper, useConfigForm } from '@navikt/aap-felles-react';
 import { useFieldArray } from 'react-hook-form';
@@ -14,6 +13,7 @@ import styles from './YrkesskadeGrunnlagBeregning.module.css';
 import { YrkeskadeBeregningGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 
 interface Props {
   behandlingVersjon: number;
@@ -62,7 +62,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
   const { fields } = useFieldArray({ control: form.control, name: 'vurderinger' });
 
   return (
-    <VilkårsKortForUvisstEnhet
+    <VilkårsKort
       heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       icon={<BandageIcon />}
@@ -127,6 +127,6 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
           );
         })}
       </Form>
-    </VilkårsKortForUvisstEnhet>
+    </VilkårsKort>
   );
 };
