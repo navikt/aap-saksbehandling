@@ -1,18 +1,17 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import {
-  OpprettAktivitetspliktBrudd,
+  BestillLegeerklæring,
+  Brev,
+  DokumentInfo,
+  ForhåndsvisDialogmelding,
+  ForhåndsvisDialogmeldingResponse,
   LøsAvklaringsbehovPåBehandling,
+  OppdaterAktivitetspliktBrudd2,
+  OpprettAktivitetspliktBrudd,
   OpprettTestcase,
   SaksInfo,
   SettPåVent,
   SimulerMeldeplikt,
-  OppdaterAktivitetspliktBrudd,
-  FeilregistrerAktivitetspliktBrudd,
-  DokumentInfo,
-  BestillLegeerklæring,
-  ForhåndsvisDialogmelding,
-  ForhåndsvisDialogmeldingResponse,
-  Brev,
 } from './types/types';
 
 async function fetchProxy<ResponseBody>(
@@ -39,59 +38,55 @@ async function fetchProxy<ResponseBody>(
   }
 }
 
-export function settBehandlingPåVent(referanse: string, settPåVent: SettPåVent) {
+export function clientSettBehandlingPåVent(referanse: string, settPåVent: SettPåVent) {
   return fetchProxy(`/api/behandling/${referanse}/sett-paa-vent`, 'POST', settPåVent);
 }
 
-export function opprettSak(sak: OpprettTestcase) {
+export function clientOpprettSak(sak: OpprettTestcase) {
   return fetchProxy('/api/test/opprett', 'POST', sak);
 }
 
-export function hentAlleSaker() {
+export function clientHentAlleSaker() {
   return fetchProxy<SaksInfo[]>('/api/sak/alle', 'GET');
 }
 
-export function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
+export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
   return fetchProxy('/api/behandling/los-behov/', 'POST', avklaringsBehov);
 }
 
-export function opprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {
+export function clientOpprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {
   return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/opprett`, 'POST', aktivitet);
 }
 
-export function oppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd) {
+export function clientOppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd2) {
   return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/oppdater`, 'POST', aktivitet);
 }
 
-export function feilregistrerAktivitetspliktBrudd(saksnummer: string, aktivitet: FeilregistrerAktivitetspliktBrudd) {
-  return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/feilregistrer`, 'POST', aktivitet);
-}
-
-export function simulerMeldeplikt(referanse: string, vurderinger: SimulerMeldeplikt) {
+export function clientSimulerMeldeplikt(referanse: string, vurderinger: SimulerMeldeplikt) {
   return fetchProxy(`/api/behandling/${referanse}/simuler-meldeplikt`, 'POST', vurderinger);
 }
 
-export function søkPåBehandler(fritekst: string) {
+export function clientSøkPåBehandler(fritekst: string) {
   return fetchProxy<Behandler[]>(`/api/dokumentinnhenting/behandleroppslag`, 'POST', { fritekst });
 }
 
-export function hentAlleDialogmeldingerPåSak(saksnummer: string) {
+export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
   return fetchProxy(`/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
 }
 
-export function hentAlleDokumenterPåSak(saksnummer: string) {
+export function clientHentAlleDokumenterPåSak(saksnummer: string) {
   return fetchProxy<DokumentInfo[]>(`/api/sak/${saksnummer}/dokumenter`, 'GET');
 }
 
-export function bestillDialogmelding(bestilling: BestillLegeerklæring) {
+export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return fetchProxy(`/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
 
-export function forhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
+export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
   return fetchProxy<ForhåndsvisDialogmeldingResponse>(`/api/dokumentinnhenting/forhaandsvis`, 'POST', dialogmelding);
 }
 
-export function mellomlagreBrev(brevbestillingReferanse: string, brev: Brev) {
+export function clientMellomlagreBrev(brevbestillingReferanse: string, brev: Brev) {
   return fetchProxy(`/api/brev/${brevbestillingReferanse}/oppdater`, 'POST', brev);
 }
 

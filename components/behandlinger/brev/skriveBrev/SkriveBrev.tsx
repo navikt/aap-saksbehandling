@@ -5,7 +5,7 @@ import { Button } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { mellomlagreBrev } from 'lib/clientApi';
+import { clientMellomlagreBrev } from 'lib/clientApi';
 import { Brev } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 
@@ -27,7 +27,7 @@ export const SkriveBrev = ({
   const debouncedBrev = useDebounce<Brev>(brev, 2000);
 
   const mellomlagreBackendRequest = useCallback(async () => {
-    await mellomlagreBrev(referanse, debouncedBrev);
+    await clientMellomlagreBrev(referanse, debouncedBrev);
   }, [debouncedBrev, referanse]);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export const SkriveBrev = ({
             behandlingVersjon: behandlingVersjon,
             behov: {
               behovstype: Behovstype.SKRIV_BREV_KODE,
-              brevbestillingReferanse: { referanse },
+              brevbestillingReferanse: { brevbestillingReferanse: referanse },
             },
             referanse: behandlingsReferanse,
           })

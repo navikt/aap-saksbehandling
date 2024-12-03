@@ -17,6 +17,7 @@ import {
   DokumentInfo,
   FatteVedtakGrunnlag,
   FeilregistrerAktivitetspliktBrudd,
+  FlytProsessering,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
   FritakMeldepliktGrunnlag,
@@ -25,7 +26,7 @@ import {
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   MedlemskapGrunnlag,
-  OppdaterAktivitetspliktBrudd,
+  OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
   SakPersoninfo,
@@ -44,7 +45,8 @@ import {
   YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
-import { logError, logWarning } from '@navikt/aap-felles-utils';
+import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
+import { headers } from 'next/headers';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -84,8 +86,11 @@ export const opprettBruddPåAktivitetsplikten = async (saksnummer: string, aktiv
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 
-export const oppdaterBruddPåAktivitetsplikten = async (saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/oppdater`;
+export const oppdaterBruddPåAktivitetsplikten = async (
+  saksnummer: string,
+  aktivitet: OppdaterAktivitetspliktBrudd2
+) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/v2/oppdater`;
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 
@@ -269,9 +274,12 @@ export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
   return await fetchProxy<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const forberedBehandling = async (referanse: string) => {
+export const forberedBehandlingOgVentPåProsessering = async (
+  referanse: string
+): Promise<undefined | FlytProsessering> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+  logInfo('Forbereder behandling ' + referanse);
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 
 export const hentAlleDialogmeldingerPåSak = async (saksnummer: string): Promise<LegeerklæringStatus[]> => {
@@ -297,6 +305,10 @@ export const hentUnderveisGrunnlag = async (behandlingsreferanse: string): Promi
 };
 
 export const hentLocalToken = async () => {
+  // Må hente headers for å tvinge dynamic route ved lokal utvikling
+  // TODO: Revurder i next 15
+  headers();
+
   const url = 'http://localhost:8081/token';
   try {
     return fetch(url, { method: 'POST', next: { revalidate: 0 } })
@@ -307,3 +319,38 @@ export const hentLocalToken = async () => {
     return Promise.resolve('dummy-token');
   }
 };
+
+async function ventTilProsesseringErFerdig(
+  behandlingsreferanse: string,
+  maksAntallForsøk: number = 10,
+  interval: number = 1000
+): Promise<undefined | FlytProsessering> {
+  let forsøk = 0;
+  let prosessering: FlytProsessering | undefined = undefined;
+
+  while (forsøk < maksAntallForsøk) {
+    forsøk++;
+
+    console.log('Forsøk nummer: ' + forsøk);
+    const response = await hentFlyt(behandlingsreferanse);
+
+    const status = response.prosessering.status;
+
+    if (status === 'FERDIG') {
+      prosessering = undefined;
+      break;
+    }
+
+    if (status === 'FEILET') {
+      logError('Prosessering feilet pga' + JSON.stringify(response.prosessering.ventendeOppgaver));
+      prosessering = response.prosessering;
+      break;
+    }
+
+    if (forsøk < maksAntallForsøk) {
+      await new Promise((resolve) => setTimeout(resolve, interval * 1.3));
+    }
+  }
+
+  return prosessering;
+}

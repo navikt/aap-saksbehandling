@@ -44,6 +44,10 @@ spec:
         - id: loki
   envFrom:
     - secret: kelvin-env-local
+  filesFrom:
+    - emptyDir:
+        medium: Memory
+      mountPath: /app/.next/cache
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}

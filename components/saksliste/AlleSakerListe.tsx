@@ -1,6 +1,6 @@
 'use client';
 
-import { hentAlleSaker } from 'lib/clientApi';
+import { clientHentAlleSaker } from 'lib/clientApi';
 import { SaksInfo } from 'lib/types/types';
 import Link from 'next/link';
 import useSWR from 'swr';
@@ -18,7 +18,9 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const { data, mutate, isLoading } = useSWR('api/sak/alle', hentAlleSaker, { fallbackData: alleSaker });
+  const { data, mutate, isLoading, isValidating } = useSWR('api/sak/alle', clientHentAlleSaker, {
+    fallbackData: alleSaker,
+  });
 
   const searchValue = searchParams.get('ident');
 
@@ -43,7 +45,7 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
           onClick={() => mutate()}
           size={'medium'}
           variant={'tertiary'}
-          loading={isLoading}
+          loading={isLoading || isValidating}
         >
           Refresh listen
         </Button>

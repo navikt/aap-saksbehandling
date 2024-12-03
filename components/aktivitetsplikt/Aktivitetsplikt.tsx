@@ -19,12 +19,12 @@ import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useFieldArray } from 'react-hook-form';
 import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 import { useEffect, useState } from 'react';
-import { opprettAktivitetspliktBrudd } from 'lib/clientApi';
 import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
 import { v4 as uuidv4 } from 'uuid';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
+import { useAktivitetsplikt } from 'hooks/FetchHook';
 
 interface AktvitetsPeriode {
   type: 'periode';
@@ -67,6 +67,11 @@ const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
 export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
   const saksnummer = useSaksnummer();
   const [errorMessage, setErrorMessage] = useState('');
+
+  const { isLoading, opprettAktivitetsplikt } = useAktivitetsplikt(saksnummer);
+
+  const [skalRegistrereBrudd, setSkalRegistrereBrudd] = useState(false);
+
   const { form, formFields } = useConfigForm<AktivitetspliktFormFields>(
     {
       brudd: {
@@ -147,6 +152,139 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
       icon={<FigureIcon fontSize={'inherit'} />}
     >
       <div className={'flex-column'}>
+        {skalRegistrereBrudd ? (
+          <form
+            className={styles.form}
+            onSubmit={form.handleSubmit(async (data) => {
+              setErrorMessage('');
+              const perioder = data.perioder.map((periode) => {
+                if (periode.type === 'enkeltdag') {
+                  return { fom: periode.dato, tom: periode.dato };
+                } else {
+                  return { fom: periode.fom, tom: periode.tom };
+                }
+              });
+
+              const harOverlappendePerioder = perioderSomOverlapper(perioder);
+
+              if (perioder && perioder.length <= 0) {
+                setErrorMessage('Du må legge til en enkeltdato eller periode');
+              } else if (harOverlappendePerioder) {
+                setErrorMessage('Det finnes overlappende perioder');
+              } else {
+                await opprettAktivitetsplikt({
+                  brudd: data.brudd,
+                  begrunnelse: data.begrunnelse,
+                  paragraf: data.paragraf,
+                  perioder: perioder.map((periode) => {
+                    return {
+                      fom: formaterDatoForBackend(parse(periode.fom, DATO_FORMATER.ddMMyyyy, new Date())),
+                      tom: formaterDatoForBackend(parse(periode.tom, DATO_FORMATER.ddMMyyyy, new Date())),
+                    };
+                  }),
+                  grunn: data.grunn ? data.grunn : undefined,
+                });
+                form.reset();
+                remove();
+                setSkalRegistrereBrudd(false);
+                await revalidateAktivitetspliktHendelser(saksnummer);
+              }
+            })}
+          >
+            <FormField form={form} formField={formFields.brudd} />
+            {skalVelgeParagraf && <FormField form={form} formField={formFields.paragraf} />}
+            {(form.watch('paragraf') === 'PARAGRAF_11_9' || form.watch('brudd') === 'IKKE_MØTT_TIL_MØTE') && (
+              <RadioGroupWrapper
+                control={form.control}
+                name={'grunn'}
+                label={'Velg grunn for bruddet'}
+                rules={{ required: 'Du må velge en grunn' }}
+              >
+                {grunnForBruddHvis119.map((grunn, index) => {
+                  return (
+                    <Radio key={index} value={grunn.value}>
+                      {grunn.label}
+                    </Radio>
+                  );
+                })}
+              </RadioGroupWrapper>
+            )}
+
+            {(form.watch('paragraf') === 'PARAGRAF_11_8' ||
+              form.watch('brudd') === 'IKKE_MØTT_TIL_ANNEN_AKTIVITET') && (
+              <RadioGroupWrapper
+                control={form.control}
+                name={'grunn'}
+                label={'Velg grunn for bruddet'}
+                rules={{ required: 'Du må velge en grunn' }}
+              >
+                {grunnForBruddHvis118.map((grunn, index) => {
+                  return (
+                    <Radio key={index} value={grunn.value}>
+                      {grunn.label}
+                    </Radio>
+                  );
+                })}
+              </RadioGroupWrapper>
+            )}
+
+            {skalViseDatoFeltOgBegrunnelsesfelt && (
+              <div className={'flex-column'}>
+                <div>
+                  <Label size={'small'}>{hentDatoLabel(brudd)}</Label>
+                  <BodyShort size={'small'}>
+                    Søknadstidspunkt: {formaterDatoForFrontend(sak.opprettetTidspunkt)}
+                  </BodyShort>
+                </div>
+                <AktivitetspliktDatoTabell
+                  form={form}
+                  fields={fields}
+                  remove={remove}
+                  søknadstidspunkt={new Date(sak.opprettetTidspunkt)}
+                />
+                <div className={'flex-row'}>
+                  <Button
+                    icon={<PlusCircleIcon />}
+                    type={'button'}
+                    variant={'tertiary'}
+                    size={'small'}
+                    onClick={() => append({ type: 'enkeltdag', dato: '' })}
+                  >
+                    Legg til enkeltdato
+                  </Button>
+                  <Button
+                    icon={<PlusCircleIcon />}
+                    type={'button'}
+                    variant={'tertiary'}
+                    size={'small'}
+                    onClick={() => append({ type: 'periode', fom: '', tom: '' })}
+                  >
+                    Legg til periode
+                  </Button>
+                </div>
+                {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
+                <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+              </div>
+            )}
+            <div className={'flex-row'}>
+              <Button className={'fit-content'} loading={isLoading}>
+                Bekreft
+              </Button>
+              <Button
+                className={'fit-content'}
+                onClick={() => setSkalRegistrereBrudd(false)}
+                variant={'secondary'}
+                type={'button'}
+              >
+                Avbryt
+              </Button>
+            </div>
+          </form>
+        ) : (
+          <Button onClick={() => setSkalRegistrereBrudd(true)} className={'fit-content'}>
+            Registrer fravær eller brudd
+          </Button>
+        )}
         <AktivitetspliktHendelserTabell
           aktivitetspliktHendelser={aktivitetspliktHendelser.map((hendelse) => {
             return {
@@ -155,119 +293,6 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
             };
           })}
         />
-        <form
-          className={styles.form}
-          onSubmit={form.handleSubmit(async (data) => {
-            setErrorMessage('');
-            const perioder = data.perioder.map((periode) => {
-              if (periode.type === 'enkeltdag') {
-                return { fom: periode.dato, tom: periode.dato };
-              } else {
-                return { fom: periode.fom, tom: periode.tom };
-              }
-            });
-
-            const harOverlappendePerioder = perioderSomOverlapper(perioder);
-
-            if (perioder && perioder.length <= 0) {
-              setErrorMessage('Du må legge til en enkeltdato eller periode');
-            } else if (harOverlappendePerioder) {
-              setErrorMessage('Det finnes overlappende perioder');
-            } else {
-              await opprettAktivitetspliktBrudd(saksnummer, {
-                brudd: data.brudd,
-                begrunnelse: data.begrunnelse,
-                paragraf: data.paragraf,
-                perioder: perioder.map((periode) => {
-                  return {
-                    fom: formaterDatoForBackend(parse(periode.fom, DATO_FORMATER.ddMMyyyy, new Date())),
-                    tom: formaterDatoForBackend(parse(periode.tom, DATO_FORMATER.ddMMyyyy, new Date())),
-                  };
-                }),
-                grunn: data.grunn ? data.grunn : undefined,
-              });
-              form.reset();
-              remove();
-              await revalidateAktivitetspliktHendelser(saksnummer);
-            }
-          })}
-        >
-          <FormField form={form} formField={formFields.brudd} />
-          {skalVelgeParagraf && <FormField form={form} formField={formFields.paragraf} />}
-          {(form.watch('paragraf') === 'PARAGRAF_11_9' || form.watch('brudd') === 'IKKE_MØTT_TIL_MØTE') && (
-            <RadioGroupWrapper
-              control={form.control}
-              name={'grunn'}
-              label={'Velg grunn for bruddet'}
-              rules={{ required: 'Du må velge en grunn' }}
-            >
-              {grunnForBruddHvis119.map((grunn, index) => {
-                return (
-                  <Radio key={index} value={grunn.value}>
-                    {grunn.label}
-                  </Radio>
-                );
-              })}
-            </RadioGroupWrapper>
-          )}
-
-          {(form.watch('paragraf') === 'PARAGRAF_11_8' || form.watch('brudd') === 'IKKE_MØTT_TIL_ANNEN_AKTIVITET') && (
-            <RadioGroupWrapper
-              control={form.control}
-              name={'grunn'}
-              label={'Velg grunn for bruddet'}
-              rules={{ required: 'Du må velge en grunn' }}
-            >
-              {grunnForBruddHvis118.map((grunn, index) => {
-                return (
-                  <Radio key={index} value={grunn.value}>
-                    {grunn.label}
-                  </Radio>
-                );
-              })}
-            </RadioGroupWrapper>
-          )}
-
-          {skalViseDatoFeltOgBegrunnelsesfelt && (
-            <div className={'flex-column'}>
-              <div>
-                <Label size={'small'}>{hentDatoLabel(brudd)}</Label>
-                <BodyShort size={'small'}>
-                  Søknadstidspunkt: {formaterDatoForFrontend(sak.opprettetTidspunkt)}
-                </BodyShort>
-              </div>
-              <AktivitetspliktDatoTabell
-                form={form}
-                fields={fields}
-                remove={remove}
-                søknadstidspunkt={new Date(sak.opprettetTidspunkt)}
-              />
-              <div className={'flex-row'}>
-                <Button
-                  icon={<PlusCircleIcon />}
-                  type={'button'}
-                  variant={'tertiary'}
-                  size={'small'}
-                  onClick={() => append({ type: 'enkeltdag', dato: '' })}
-                >
-                  Legg til enkeltdato
-                </Button>
-                <Button
-                  icon={<PlusCircleIcon />}
-                  type={'button'}
-                  variant={'tertiary'}
-                  size={'small'}
-                  onClick={() => append({ type: 'periode', fom: '', tom: '' })}
-                >
-                  Legg til periode
-                </Button>
-              </div>
-              {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
-              <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-            </div>
-          )}
-          <Button className={'fit-content'}>Bekreft</Button>
-        </form>
       </div>
     </SideProsessKort>
   );

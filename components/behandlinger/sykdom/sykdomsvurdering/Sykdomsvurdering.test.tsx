@@ -311,7 +311,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
 });
 
 describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at arbeidsevnen er nedsatt', () => {
-  it('feltet skal vises', async () => {
+  it('feltet skal vises dersom arbeidsevnen er nedsatt med minst 50%', async () => {
     render(
       <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
@@ -324,6 +324,28 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
     await velgJaIGruppe(screen.getByRole('group', { name: 'Har innbygger nedsatt arbeidsevne?' }));
     await velgJaIGruppe(screen.getByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' }));
     await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 50%?' }));
+
+    const felt = screen.getByRole('group', {
+      name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
+    });
+
+    expect(felt).toBeVisible();
+  });
+
+  it('feltet skal vises dersom arbeidsevnen ikke er nedsatt med minst 50%, men nedsatt med 30%', async () => {
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagMedYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+      />
+    );
+    await velgAtInnbyggerHarSykdomSkadeLyte();
+    await velgJaIGruppe(screen.getByRole('group', { name: 'Har innbygger nedsatt arbeidsevne?' }));
+    await velgJaIGruppe(screen.getByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' }));
+    await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 50%?' }));
+    await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30%?' }));
 
     const felt = screen.getByRole('group', {
       name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',

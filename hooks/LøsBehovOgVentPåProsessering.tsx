@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { FlytProsesseringStatus, LøsAvklaringsbehovPåBehandling } from 'lib/types/types';
-import { løsBehov } from 'lib/clientApi';
+import { clientLøsBehov } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/api/behandling/hent/[referanse]/prosessering/route';
 import { revalidateFlyt } from 'lib/actions/actions';
 
@@ -15,7 +15,7 @@ export const useLøsBehovOgVentPåProsessering = (): {
   const [isLoading, setIsLoading] = useState(false);
 
   const løsBehovOgVentPåProsessering = async (behov: LøsAvklaringsbehovPåBehandling) => {
-    await løsBehov(behov);
+    await clientLøsBehov(behov);
     listenSSE();
   };
 

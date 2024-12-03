@@ -8,7 +8,7 @@ export async function POST(req: NextRequest, props: { params: Promise<{ saksnumm
   try {
     await oppdaterBruddPåAktivitetsplikten(params.saksnummer, body);
   } catch (err) {
-    logError(`/aktivitetsplikt/${params.saksnummer}/oppdater`, err);
+    logError(`/aktivitetsplikt/${params.saksnummer}/v2/oppdater`, err);
     return new Response(JSON.stringify({ message: 'Oppdatering av brudd på aktivitetsplikt feilet' }), { status: 500 });
   }
   return new Response(JSON.stringify({}), { status: 200 });
