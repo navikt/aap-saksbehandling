@@ -91,7 +91,11 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
         isLoading={isLoading}
         visBekreftKnapp={!readOnly}
       >
-        <YrkesskadeTabell yrkesskader={[{ ref: 'YRK', kilde: 'Yrkesskaderegisteret', skadedato: '2024-10-10' }]} />
+        <YrkesskadeTabell
+          yrkesskader={yrkeskadeBeregningGrunnlag.skalVurderes.map((vurdering) => {
+            return { kilde: 'YRK', ref: vurdering.referanse, skadedato: vurdering.skadeDato };
+          })}
+        />
         {fields.map((field, index) => {
           const grunnlag = Number(form.watch(`vurderinger.${index}.inntekt`)) / field.gverdi;
 
