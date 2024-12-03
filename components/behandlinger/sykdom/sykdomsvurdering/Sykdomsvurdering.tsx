@@ -22,6 +22,7 @@ import { Alert, Heading, Link } from '@navikt/ds-react';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
+import { DiagnoseSystem } from 'lib/diagnosesøker/DiagnoseSøker';
 
 interface FormFields {
   harSkadeSykdomEllerLyte: string;
@@ -33,7 +34,8 @@ interface FormFields {
   erNedsettelseIArbeidsevneMerEnnHalvparten?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
-  hoveddiagnose?: string;
+  system: DiagnoseSystem;
+  hoveddiagnose: string;
   bidiagnose?: string[];
 }
 
@@ -85,16 +87,12 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
           required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
         },
       },
+      system: { type: 'select', label: 'Velg system', options: ['', 'ICD10', 'ICPC2'] },
       hoveddiagnose: {
-        type: 'combobox',
-        label: 'Hoveddiagnose',
-        options: ['Diagnose 1', 'Diagnose 2', 'Diagnose 3', 'Diagnose 4'],
-        rules: { required: 'Du må velge en hoveddiagnose' },
+        type: 'fieldArray',
       },
       bidiagnose: {
-        type: 'combobox_multiple',
-        label: 'Bidiagnoser (valgfritt)',
-        options: ['Bidiagnose 1', 'Bidiagnose 2', 'Bidiagnose 3', 'Bidiagnose 4'],
+        type: 'fieldArray',
       },
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
         type: 'radio',
@@ -155,6 +153,8 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
       });
     })(event);
   };
+
+  console.log(form.watch());
 
   return (
     <VilkårsKort
@@ -220,8 +220,23 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         )}
 
         {/*TODO Ta inn når backend er klar - Thomas*/}
-        {/*<FormField form={form} formField={formFields.hoveddiagnose} />*/}
-        {/*<FormField form={form} formField={formFields.bidiagnose} />*/}
+        {/*<FormField form={form} formField={formFields.system} />*/}
+        {/*<AsyncComboSearch*/}
+        {/*  label={'Velg hoveddiagnose'}*/}
+        {/*  feltnavn={'hoveddiagnose'}*/}
+        {/*  form={form}*/}
+        {/*  rules={{ required: 'Du må velge en hoved diagnose' }}*/}
+        {/*  fetcher={async (search) => diagnoseSøker(form.watch('system'), search)}*/}
+        {/*/>*/}
+        {/*<AsyncComboSearch*/}
+        {/*  label={'Velg bidiagnoser'}*/}
+        {/*  feltnavn={'bidiagnose'}*/}
+        {/*  isMulti={true}*/}
+        {/*  form={form}*/}
+        {/*  rules={{ required: 'Du må velge en bidiagnose' }}*/}
+        {/*  fetcher={async (search) => diagnoseSøker(form.watch('system'), search)}*/}
+        {/*/>*/}
+
         {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei && (
           <Alert variant={'info'} size={'small'} className={'fit-content'}>
             Innbygger vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
