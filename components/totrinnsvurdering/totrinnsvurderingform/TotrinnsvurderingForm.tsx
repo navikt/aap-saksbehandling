@@ -43,11 +43,24 @@ export const TotrinnsvurderingForm = ({
       defaultValue: grunnlag.vurderinger.map((vurdering) => {
         return {
           definisjon: vurdering.definisjon,
+          godkjent: erGodkjentEllerUndefined(vurdering.godkjent),
+          begrunnelse: vurdering.begrunnelse || '',
+          grunner: vurdering.grunner?.map((grunn) => {
+            return grunn.årsak;
+          }),
+          årsakFritekst: vurdering.grunner?.find((grunn) => grunn.årsakFritekst)?.årsakFritekst || '',
         };
       }),
     },
   });
 
+  function erGodkjentEllerUndefined(value: undefined | null | boolean): undefined | 'true' | 'false' {
+    if (value === undefined || value === null) {
+      return undefined;
+    }
+
+    return value ? 'true' : 'false';
+  }
   const { fields } = useFieldArray({
     control: form.control,
     name: 'totrinnsvurderinger',
