@@ -4,7 +4,7 @@ import { useState } from 'react';
 import AsyncSelect from 'react-select/async';
 import { ValuePair } from '@navikt/aap-felles-react';
 import { Label } from '@navikt/ds-react';
-import { customStyles } from 'components/input/asyncselectstyling/AsyncSelectStyling';
+import { customStyles } from 'components/input/asynccombosearch/AsyncComboSearchStyling';
 import { FormTesting } from 'components/input/combosearch/ComboSearch2';
 
 const Page = () => {
