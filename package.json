@@ -84,5 +84,5 @@
     "prosemirror-model": "1.19.4",
     "undici": "6.20.1"
   },
-  "packageManager": "yarn@4.5.1"
+  "packageManager": "yarn@4.5.3"
 }
