@@ -1,11 +1,17 @@
 import { StylesConfig } from 'react-select';
 
 export const customStyles: StylesConfig = {
+  container: (provided) => ({
+    ...provided,
+  }),
   // Denne er for selve komponenten
   control: (provided, state) => ({
     ...provided,
-    border: '2px solid #003D79', // TODO Kan vi bruke fargene fra designsystemet her?
-    boxShadow: state.isFocused ? '0 0 0 3px rgba(0, 61, 121, 0.3)' : 'none',
+    border: '1px solid #9197A2', // TODO Kan vi bruke fargene fra designsystemet her?
+    boxShadow: state.isFocused ? '0 0 0 4px #00347D' : 'none',
+    ':hover': {
+      borderColor: '#0357B5',
+    },
   }),
 
   // Denne er for chipsene når det er mulig å velge flere
