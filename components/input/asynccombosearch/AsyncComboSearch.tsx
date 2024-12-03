@@ -27,8 +27,11 @@ export const AsyncComboSearch = <FormValues extends FieldValues>({
     rules={rules}
     render={({ field, fieldState }) => (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-        <Label size={'small'}>{label}</Label>
+        <Label size={'small'} htmlFor={'combosearchbox'}>
+          {label}
+        </Label>
         <AsyncSelect
+          inputId="combosearchbox"
           isMulti={isMulti}
           placeholder=""
           isClearable
