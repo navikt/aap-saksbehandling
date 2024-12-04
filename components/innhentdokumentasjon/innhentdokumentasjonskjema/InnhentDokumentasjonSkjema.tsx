@@ -53,18 +53,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
 
   const { form, formFields } = useConfigForm<FormFields>({
     behandler: {
-      type: 'text',
-      label: 'Velg behandler som skal motta meldingen',
-      rules: { required: 'Du må velge en behandler' },
-    },
-    // TODO midlertidige felt. Trenger ny type i aap-felles-frontend for denne komponenten
-    'behandler.value': {
-      type: 'text',
-      label: '_',
-    },
-    'behandler.label': {
-      type: 'text',
-      label: '_',
+      type: 'async_combobox',
     },
     dokumentasjonstype: {
       type: 'select',
@@ -119,17 +108,17 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   };
 
   return (
-    <>
+    <div className={'flex-column'}>
       <Heading level={'3'} size={'small'}>
         Etterspør informasjon fra lege
       </Heading>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={'flex-column'}>
         <AsyncComboSearch
-          label={'Behandler'}
+          label={'Velg behandler som skal motta meldingen'}
           form={form}
-          feltnavn={formFields.behandler.name}
+          name={'behandler'}
           fetcher={behandlersøk}
-          rules={formFields.behandler.rules}
+          rules={{ required: 'Du må velge en behandler' }}
         />
         <FormField form={form} formField={formFields.dokumentasjonstype} />
         <FormField form={form} formField={formFields.melding} />
@@ -162,6 +151,6 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
           </div>
         )}
       </form>
-    </>
+    </div>
   );
 };
