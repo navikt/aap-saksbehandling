@@ -37,7 +37,10 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
   function hentOptionsForBrudd(brudd: AktivitetspliktHendelseParagraf): ValuePair[] {
     switch (brudd) {
       case 'PARAGRAF_11_7':
-        return [{ label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' }];
+        return [
+          { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+          { label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' },
+        ];
       case 'PARAGRAF_11_8':
         return [
           { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
