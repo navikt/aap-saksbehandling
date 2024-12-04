@@ -1,6 +1,6 @@
 'use client';
 
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import {
   Behovstype,
   getJaNeiEllerUndefined,
@@ -25,18 +25,18 @@ import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 import { DiagnoseSystem } from 'lib/diagnosesøker/DiagnoseSøker';
 
 interface FormFields {
-  harSkadeSykdomEllerLyte: string;
-  begrunnelse: string;
   dokumenterBruktIVurderingen?: string[];
+  begrunnelse: string;
+  harSkadeSykdomEllerLyte: string;
+  system?: DiagnoseSystem;
+  hoveddiagnose?: ValuePair;
+  bidiagnose?: ValuePair[];
   erArbeidsevnenNedsatt?: JaEllerNei;
   erSkadeSykdomEllerLyteVesentligdel?: JaEllerNei;
   erNedsettelseIArbeidsevneAvEnVissVarighet?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
-  system: DiagnoseSystem;
-  hoveddiagnose: string;
-  bidiagnose?: string[];
 }
 
 export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilknyttedeDokumenter }: SykdomProps) => {
@@ -87,12 +87,19 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
           required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
         },
       },
-      system: { type: 'select', label: 'Velg system', options: ['', 'ICD10', 'ICPC2'] },
+      system: {
+        type: 'select',
+        label: 'Velg system',
+        options: ['', 'ICD10', 'ICPC2'],
+        defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.kodeverk),
+      },
+      //@ts-ignore
       hoveddiagnose: {
-        type: 'fieldArray',
+        type: 'async_combobox',
+        defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.diagnose),
       },
       bidiagnose: {
-        type: 'fieldArray',
+        type: 'async_combobox',
       },
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
         type: 'radio',
@@ -135,6 +142,8 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
               }) || [],
             begrunnelse: data.begrunnelse,
             harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
+            // kodeverk: data?.system,
+            // diagnose: data?.hoveddiagnose?.value,
             erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
             erSkadeSykdomEllerLyteVesentligdel: getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel),
             erNedsettelseIArbeidsevneMerEnnHalvparten: getTrueFalseEllerUndefined(
@@ -153,6 +162,15 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
       });
     })(event);
   };
+
+  // async function fetchDiagnoseOptions(value: string) {
+  //   const system = form.watch('system');
+  //   if (!system) {
+  //     return [];
+  //   } else {
+  //     return diagnoseSøker(system, value);
+  //   }
+  // }
 
   return (
     <VilkårsKort
@@ -215,26 +233,33 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         />
         <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
         {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
-        )}
+          <>
+            {/*<FormField form={form} formField={formFields.system} />*/}
+            {/*{form.watch('system') && (*/}
+            {/*  <>*/}
+            {/*    <AsyncComboSearch*/}
+            {/*      label={'Hoveddiagnose'}*/}
+            {/*      form={form}*/}
+            {/*      name={'hoveddiagnose'}*/}
+            {/*      fetcher={fetchDiagnoseOptions}*/}
+            {/*      defaultOptions={true}*/}
+            {/*      rules={{ required: 'Du må velge en hoveddiagnose' }}*/}
+            {/*    />*/}
 
-        {/*TODO Ta inn når backend er klar - Thomas*/}
-        {/*<FormField form={form} formField={formFields.system} />*/}
-        {/*<AsyncComboSearch*/}
-        {/*  label={'Velg hoveddiagnose'}*/}
-        {/*  feltnavn={'hoveddiagnose'}*/}
-        {/*  form={form}*/}
-        {/*  rules={{ required: 'Du må velge en hoved diagnose' }}*/}
-        {/*  fetcher={async (search) => diagnoseSøker(form.watch('system'), search)}*/}
-        {/*/>*/}
-        {/*<AsyncComboSearch*/}
-        {/*  label={'Velg bidiagnoser'}*/}
-        {/*  feltnavn={'bidiagnose'}*/}
-        {/*  isMulti={true}*/}
-        {/*  form={form}*/}
-        {/*  rules={{ required: 'Du må velge en bidiagnose' }}*/}
-        {/*  fetcher={async (search) => diagnoseSøker(form.watch('system'), search)}*/}
-        {/*/>*/}
+            {/*    <AsyncComboSearch*/}
+            {/*      label={'Bidiagnoser'}*/}
+            {/*      form={form}*/}
+            {/*      isMulti={true}*/}
+            {/*      name={'bidiagnose'}*/}
+            {/*      fetcher={fetchDiagnoseOptions}*/}
+            {/*      defaultOptions={true}*/}
+            {/*      rules={{ required: 'Du må velge en behandler' }}*/}
+            {/*    />*/}
+            {/*  </>*/}
+            {/*)}*/}
+            <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
+          </>
+        )}
 
         {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei && (
           <Alert variant={'info'} size={'small'} className={'fit-content'}>
