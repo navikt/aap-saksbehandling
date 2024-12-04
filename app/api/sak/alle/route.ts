@@ -9,3 +9,4 @@ export async function GET() {
     return new Response(JSON.stringify({ message: 'Ingen saker funnet.' }), { status: 500 });
   }
 }
+export const dynamic = "force-dynamic";

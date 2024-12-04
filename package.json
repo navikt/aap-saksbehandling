@@ -18,10 +18,10 @@
     "@grafana/faro-web-sdk": "^1.12.2",
     "@navikt/aap-breveditor": "^0.1.7",
     "@navikt/aap-breveditor-css": "^0.1.3",
-    "@navikt/aap-felles-css": "^2.0.16",
-    "@navikt/aap-felles-react": "^2.0.16",
-    "@navikt/aap-felles-utils": "^2.0.16",
-    "@navikt/aap-felles-utils-client": "^2.0.16",
+    "@navikt/aap-felles-css": "^2.0.28",
+    "@navikt/aap-felles-react": "^2.0.28",
+    "@navikt/aap-felles-utils": "^2.0.28",
+    "@navikt/aap-felles-utils-client": "^2.0.28",
     "@navikt/aksel-icons": "7.6.0",
     "@navikt/diagnosekoder": "^1.2024.1",
     "@navikt/ds-css": "7.6.0",
@@ -36,15 +36,15 @@
     "node-loader": "^2.0.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-hook-form": "7.53.0",
+    "react-hook-form": "7.53.2",
     "react-select": "^5.8.3",
     "recharts": "^2.13.3",
     "swr": "^2.2.5",
     "uuid": "^11.0.3"
   },
   "devDependencies": {
-    "@navikt/aap-felles-prettier": "^2.0.16",
-    "@navikt/eslint-config-aap": "^2.0.16",
+    "@navikt/aap-felles-prettier": "^2.0.28",
+    "@navikt/eslint-config-aap": "^2.0.28",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
@@ -83,8 +83,11 @@
     "*.{js,ts,tsx,css,md}": "prettier --write"
   },
   "resolutions": {
-    "prosemirror-model": "1.19.4",
-    "undici": "6.20.1"
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "next": "^14.2.17",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1"
   },
   "packageManager": "yarn@4.5.3"
 }

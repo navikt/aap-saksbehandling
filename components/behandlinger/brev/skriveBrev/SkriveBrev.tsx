@@ -51,6 +51,7 @@ export const SkriveBrev = ({
 
   const { løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('BREV');
 
+  // @ts-ignore
   return (
     <div>
       <div className={style.sistLagret}>
