@@ -10,3 +10,4 @@ export async function GET(req: NextRequest, { params }: { params: { referanse: s
     return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });
   }
 }
+export const dynamic = "force-dynamic";
