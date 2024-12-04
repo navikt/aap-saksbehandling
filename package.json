@@ -18,10 +18,10 @@
     "@grafana/faro-web-sdk": "^1.12.2",
     "@navikt/aap-breveditor": "^0.1.7",
     "@navikt/aap-breveditor-css": "^0.1.3",
-    "@navikt/aap-felles-css": "^2.0.16",
-    "@navikt/aap-felles-react": "^2.0.16",
-    "@navikt/aap-felles-utils": "^2.0.16",
-    "@navikt/aap-felles-utils-client": "^2.0.16",
+    "@navikt/aap-felles-css": "^2.0.28",
+    "@navikt/aap-felles-react": "^2.0.28",
+    "@navikt/aap-felles-utils": "^2.0.28",
+    "@navikt/aap-felles-utils-client": "^2.0.28",
     "@navikt/aksel-icons": "7.6.0",
     "@navikt/diagnosekoder": "^1.2024.1",
     "@navikt/ds-css": "7.6.0",
@@ -43,7 +43,7 @@
     "uuid": "^11.0.3"
   },
   "devDependencies": {
-    "@navikt/aap-felles-prettier": "^2.0.16",
+    "@navikt/aap-felles-prettier": "^2.0.28",
     "@navikt/eslint-config-aap": "^2.0.16",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.5.0",
