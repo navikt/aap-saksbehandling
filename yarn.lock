@@ -1250,16 +1250,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-breveditor-css@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "@navikt/aap-breveditor-css@npm:0.1.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor-css%2F0.1.2%2Ffb65d319c92f626c5cd6aa2b4717d5eeed2a612e"
-  checksum: 10c0/d1f5eff06d8a4be62d249fb37e6766b8880e8fad56fd0b17f4cd380304ddd4e31191b422e93ae09381e9f9b30c8a0f7bd6420139cb3da97cbee8d98261d6c73f
+"@navikt/aap-breveditor-css@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@navikt/aap-breveditor-css@npm:0.1.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor-css%2F0.1.3%2F103508c5fdacf39c693bd8601ac4a9071cbb0dc4"
+  checksum: 10c0/b73bcad3caaad135544e3ff2571cae8c94f991a8d1a6a6e4b012b925820ab5dd10053e4a0c2ec8487cb61680a0265b4644dc90bdbdd1773344bc7614d0578ecb
   languageName: node
   linkType: hard
 
-"@navikt/aap-breveditor@npm:^0.1.6":
-  version: 0.1.6
-  resolution: "@navikt/aap-breveditor@npm:0.1.6::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor%2F0.1.6%2F50a4ebcc01b2e785245fe69ff9bf894977dcb7cc"
+"@navikt/aap-breveditor@npm:^0.1.7":
+  version: 0.1.7
+  resolution: "@navikt/aap-breveditor@npm:0.1.7::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor%2F0.1.7%2Fa39781f80452278505f9d60c7f092ceeed47264b"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.5.1"
     "@navikt/ds-css": "npm:^7.5.1"
@@ -1272,7 +1272,7 @@ __metadata:
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     uuid: "npm:^10.0.0"
-  checksum: 10c0/64c4db00a8d4bd81a96b0cc0c97197723edef44ca0c07ae87392c72146271126b2424f44e700f3ac4faceb4bd7f1a22da13344013ec449cd8d32aceaa8c94fef
+  checksum: 10c0/577222cdbf5974e6d1c35fa08f6863b4aa7e70f9de321e2c746ef27cd898283318d9451c1e62d8e2e33187691b653b9c6332fc825b2790799768d9cbbd269c91
   languageName: node
   linkType: hard
 
@@ -3172,8 +3172,8 @@ __metadata:
   resolution: "aap-saksbehandling@workspace:."
   dependencies:
     "@grafana/faro-web-sdk": "npm:^1.12.2"
-    "@navikt/aap-breveditor": "npm:^0.1.6"
-    "@navikt/aap-breveditor-css": "npm:^0.1.2"
+    "@navikt/aap-breveditor": "npm:^0.1.7"
+    "@navikt/aap-breveditor-css": "npm:^0.1.3"
     "@navikt/aap-felles-css": "npm:^2.0.16"
     "@navikt/aap-felles-prettier": "npm:^2.0.16"
     "@navikt/aap-felles-react": "npm:^2.0.16"
