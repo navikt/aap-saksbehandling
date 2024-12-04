@@ -195,6 +195,7 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
           control={form.control}
           label={'Dokumenter funnet som er relevant for vurdering av §11-5'}
           description={'Tilknytt minst ett dokument §11-5 vurdering'}
+          readOnly={readOnly}
         >
           <DokumentTabell
             dokumenter={tilknyttedeDokumenter.map((d) => ({
