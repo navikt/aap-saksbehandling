@@ -1,7 +1,8 @@
 import { components } from './schema';
 
 // Grunnlag
-export type DokumentInfo = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.adapters.Dokument'];
+export type DokumentInfo =
+  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.adapters.SafListDokument'];
 export type MedlemskapGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.medlemskap.flate.MedlemskapGrunnlagDto'];
 export type StudentGrunnlag =
@@ -137,8 +138,8 @@ export type OpprettAktivitetspliktBrudd =
 export type OppdaterAktivitetspliktBrudd2 =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OppdaterAktivitetspliktDTOV2'];
 
-export type FeilregistrerAktivitetspliktBrudd =
-  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.FeilregistrerAktivitetspliktDTO'];
+export type OppdaterAktivitetsplitGrunn =
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OppdaterAktivitetspliktDTOV2']['grunn'];
 
 export type AktivitetspliktHendelser =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktResponse'];
@@ -148,9 +149,6 @@ export type AktivitetspliktParagraf =
 
 export type AktivitetspliktGrunn =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.BruddAktivitetspliktHendelseDto']['grunn'];
-
-export type OppdaterAktivitetsplitGrunn =
-  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OppdaterAktivitetspliktDTO']['grunn'];
 
 export type AktivitetspliktBrudd =
   components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.OpprettAktivitetspliktDTO']['brudd'];
@@ -171,6 +169,8 @@ export type FritaksvurderingDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritaksvurderingDto'];
 
 export type Periode = components['schemas']['no.nav.aap.komponenter.type.Periode'];
+export type AktivitetspliktPeriode =
+  components['schemas']['no.nav.aap.behandlingsflyt.hendelse.bruddaktivitetsplikt.PeriodeDTO'];
 
 export type BehandlingPersoninfo = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.BehandlingPersoninfo'];
 

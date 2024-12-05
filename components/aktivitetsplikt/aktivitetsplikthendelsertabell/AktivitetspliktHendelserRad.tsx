@@ -6,8 +6,8 @@ import {
   AktivitetspliktBrudd,
   AktivitetspliktGrunn,
   AktivitetspliktHendelseParagraf,
+  AktivitetspliktPeriode,
   OppdaterAktivitetsplitGrunn,
-  Periode,
 } from 'lib/types/types';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { useState } from 'react';
@@ -138,11 +138,11 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
   );
 };
 
-function formaterPeriodeForVisning(periode: Periode): string {
-  if (periode.fom === periode.tom) {
-    return formaterDatoForFrontend(periode.fom);
-  } else {
+function formaterPeriodeForVisning(periode: AktivitetspliktPeriode): string {
+  if (periode.tom) {
     return `${formaterDatoForFrontend(periode.fom)} - ${formaterDatoForFrontend(periode.tom)}`;
+  } else {
+    return `${formaterDatoForFrontend(periode.fom)} - `;
   }
 }
 
@@ -184,6 +184,8 @@ function hentGrunnTekst(grunn: AktivitetspliktGrunn): string {
       return 'Sterkre velferdsgrunner';
     case 'SYKDOM_ELLER_SKADE':
       return 'Sykdom eller skade';
+    case 'BIDRAR_AKTIVT':
+      return 'Bidrar aktivt';
     case 'FEILREGISTRERING':
       return 'Feilregistrering';
   }
