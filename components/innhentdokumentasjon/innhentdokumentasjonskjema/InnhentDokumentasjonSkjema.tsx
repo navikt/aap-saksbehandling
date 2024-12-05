@@ -77,6 +77,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
       const body: BestillLegeerklæring = {
         behandlerNavn: data.behandler.label,
         behandlerRef: data.behandler.value,
+        behandlerHprNr: 'Hva skal dette være?', //TODO Hva skal dette være?
         dokumentasjonType: data.dokumentasjonstype,
         fritekst: data.melding,
         saksnummer: saksnummer,
