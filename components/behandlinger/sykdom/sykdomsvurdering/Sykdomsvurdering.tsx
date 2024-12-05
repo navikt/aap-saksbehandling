@@ -105,7 +105,7 @@ export const Sykdomsvurdering = ({
       hoveddiagnose: {
         type: 'async_combobox',
         defaultValue: hoveddiagnoseDefaultOptions?.find(
-          (value) => value.value === grunnlag.sykdomsvurdering?.hovedDiagnose
+          (value) => value.value === grunnlag.sykdomsvurdering?.hoveddiagnose
         ),
       },
       bidiagnose: {
@@ -156,7 +156,7 @@ export const Sykdomsvurdering = ({
             begrunnelse: data.begrunnelse,
             harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
             kodeverk: data?.kodeverk,
-            hovedDiagnose: data?.hoveddiagnose?.value,
+            hoveddiagnose: data?.hoveddiagnose?.value,
             bidiagnoser: data.bidiagnose?.map((diagnose) => diagnose.value),
             erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
             erSkadeSykdomEllerLyteVesentligdel: getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel),
@@ -181,15 +181,13 @@ export const Sykdomsvurdering = ({
 
   useEffect(() => {
     if (kodeverkValue !== grunnlag.sykdomsvurdering?.kodeverk) {
-      console.log('nå setter vi verdien til undefined');
       form.setValue('hoveddiagnose', null);
       form.setValue('bidiagnose', null);
     } else {
-      console.log('nå resetter vi feltet');
       form.resetField('hoveddiagnose');
       form.resetField('bidiagnose');
     }
-  }, [kodeverkValue, grunnlag.sykdomsvurdering?.kodeverk]);
+  }, [kodeverkValue, grunnlag.sykdomsvurdering?.kodeverk, form]);
 
   const defaultOptionsHoveddiagnose = hoveddiagnoseDefaultOptions
     ? hoveddiagnoseDefaultOptions

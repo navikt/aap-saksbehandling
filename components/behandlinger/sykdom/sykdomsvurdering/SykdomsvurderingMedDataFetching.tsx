@@ -38,7 +38,7 @@ export const SykdomsvurderingMedDataFetching = async ({
   );
 
   const hovedDiagnoseDefaultOptions = await getDefaultOptions(
-    grunnlag.sykdomsvurdering?.hovedDiagnose,
+    grunnlag.sykdomsvurdering?.hoveddiagnose,
     grunnlag.sykdomsvurdering?.kodeverk as DiagnoseSystem
   );
 
