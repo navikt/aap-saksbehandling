@@ -15,22 +15,23 @@ import { VitalsIcon } from '@navikt/aksel-icons';
 import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { SykdomProps } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Alert, Heading, Link } from '@navikt/ds-react';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
-import { DiagnoseSystem } from 'lib/diagnosesøker/DiagnoseSøker';
+import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
+import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSearch';
 
 interface FormFields {
   dokumenterBruktIVurderingen?: string[];
   begrunnelse: string;
   harSkadeSykdomEllerLyte: string;
-  system?: DiagnoseSystem;
-  hoveddiagnose?: ValuePair;
-  bidiagnose?: ValuePair[];
+  kodeverk?: DiagnoseSystem;
+  hoveddiagnose?: ValuePair | null;
+  bidiagnose?: ValuePair[] | null;
   erArbeidsevnenNedsatt?: JaEllerNei;
   erSkadeSykdomEllerLyteVesentligdel?: JaEllerNei;
   erNedsettelseIArbeidsevneAvEnVissVarighet?: JaEllerNei;
@@ -39,7 +40,14 @@ interface FormFields {
   yrkesskadeBegrunnelse?: string;
 }
 
-export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilknyttedeDokumenter }: SykdomProps) => {
+export const Sykdomsvurdering = ({
+  grunnlag,
+  behandlingVersjon,
+  readOnly,
+  tilknyttedeDokumenter,
+  bidiagnoserDeafultOptions,
+  hoveddiagnoseDefaultOptions,
+}: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
@@ -87,19 +95,24 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
           required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
         },
       },
-      system: {
-        type: 'select',
-        label: 'Velg system',
-        options: ['', 'ICD10', 'ICPC2'],
+      kodeverk: {
+        type: 'radio',
+        label: 'Velg system for diagnoser',
+        options: ['ICD10', 'ICPC2'],
         defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.kodeverk),
+        rules: { required: 'Du må velge et system for diagnoser' },
       },
-      //@ts-ignore
       hoveddiagnose: {
         type: 'async_combobox',
-        defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.diagnose),
+        defaultValue: hoveddiagnoseDefaultOptions?.find(
+          (value) => value.value === grunnlag.sykdomsvurdering?.hovedDiagnose
+        ),
       },
       bidiagnose: {
         type: 'async_combobox',
+        defaultValue: bidiagnoserDeafultOptions?.filter((option) =>
+          grunnlag.sykdomsvurdering?.bidiagnoser?.includes(option.value)
+        ),
       },
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
         type: 'radio',
@@ -142,8 +155,9 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
               }) || [],
             begrunnelse: data.begrunnelse,
             harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
-            // kodeverk: data?.system,
-            // diagnose: data?.hoveddiagnose?.value,
+            kodeverk: data?.kodeverk,
+            hovedDiagnose: data?.hoveddiagnose?.value,
+            bidiagnoser: data.bidiagnose?.map((diagnose) => diagnose.value),
             erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
             erSkadeSykdomEllerLyteVesentligdel: getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel),
             erNedsettelseIArbeidsevneMerEnnHalvparten: getTrueFalseEllerUndefined(
@@ -163,14 +177,26 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
     })(event);
   };
 
-  // async function fetchDiagnoseOptions(value: string) {
-  //   const system = form.watch('system');
-  //   if (!system) {
-  //     return [];
-  //   } else {
-  //     return diagnoseSøker(system, value);
-  //   }
-  // }
+  const kodeverkValue = form.watch('kodeverk');
+
+  useEffect(() => {
+    if (kodeverkValue !== grunnlag.sykdomsvurdering?.kodeverk) {
+      console.log('nå setter vi verdien til undefined');
+      form.setValue('hoveddiagnose', null);
+      form.setValue('bidiagnose', null);
+    } else {
+      console.log('nå resetter vi feltet');
+      form.resetField('hoveddiagnose');
+      form.resetField('bidiagnose');
+    }
+  }, [kodeverkValue, grunnlag.sykdomsvurdering?.kodeverk]);
+
+  const defaultOptionsHoveddiagnose = hoveddiagnoseDefaultOptions
+    ? hoveddiagnoseDefaultOptions
+    : diagnoseSøker(kodeverkValue!, '');
+  const defaultOptionsBidiagnose = hoveddiagnoseDefaultOptions
+    ? hoveddiagnoseDefaultOptions
+    : diagnoseSøker(kodeverkValue!, '');
 
   return (
     <VilkårsKort
@@ -234,29 +260,29 @@ export const Sykdomsvurdering = ({ grunnlag, behandlingVersjon, readOnly, tilkny
         <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
         {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
           <>
-            {/*<FormField form={form} formField={formFields.system} />*/}
-            {/*{form.watch('system') && (*/}
-            {/*  <>*/}
-            {/*    <AsyncComboSearch*/}
-            {/*      label={'Hoveddiagnose'}*/}
-            {/*      form={form}*/}
-            {/*      name={'hoveddiagnose'}*/}
-            {/*      fetcher={fetchDiagnoseOptions}*/}
-            {/*      defaultOptions={true}*/}
-            {/*      rules={{ required: 'Du må velge en hoveddiagnose' }}*/}
-            {/*    />*/}
-
-            {/*    <AsyncComboSearch*/}
-            {/*      label={'Bidiagnoser'}*/}
-            {/*      form={form}*/}
-            {/*      isMulti={true}*/}
-            {/*      name={'bidiagnose'}*/}
-            {/*      fetcher={fetchDiagnoseOptions}*/}
-            {/*      defaultOptions={true}*/}
-            {/*      rules={{ required: 'Du må velge en behandler' }}*/}
-            {/*    />*/}
-            {/*  </>*/}
-            {/*)}*/}
+            <FormField form={form} formField={formFields.kodeverk} horizontalRadio />
+            {kodeverkValue && (
+              <>
+                <AsyncComboSearch
+                  label={'Hoveddiagnose'}
+                  form={form}
+                  name={'hoveddiagnose'}
+                  fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
+                  defaultOptions={defaultOptionsHoveddiagnose}
+                  rules={{ required: 'Du må velge en hoveddiagnose' }}
+                  readOnly={readOnly}
+                />
+                <AsyncComboSearch
+                  label={'Bidiagnoser (valgfritt)'}
+                  form={form}
+                  isMulti={true}
+                  name={'bidiagnose'}
+                  fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
+                  defaultOptions={defaultOptionsBidiagnose}
+                  readOnly={readOnly}
+                />
+              </>
+            )}
             <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
           </>
         )}

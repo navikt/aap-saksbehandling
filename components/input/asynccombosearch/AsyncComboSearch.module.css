@@ -1,0 +1,12 @@
+.combosearch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-2);
+}
+
+.labelwrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--a-spacing-2);
+  align-items: center;
+}
