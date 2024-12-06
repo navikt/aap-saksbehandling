@@ -12,6 +12,7 @@ const testdata: LegeerklæringStatus[] = [
     saksnummer: 'string',
     status: 'SENDT',
     behandlerNavn: 'Trude Lutt',
+    fritekst: 'Fritekst til behandler',
   },
   {
     behandlerRef: '1234',
@@ -21,6 +22,7 @@ const testdata: LegeerklæringStatus[] = [
     saksnummer: 'string',
     status: 'OK',
     behandlerNavn: 'Iren Panikk',
+    fritekst: 'Fritekst til behandler',
   },
 ];
 */
