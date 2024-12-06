@@ -23,6 +23,7 @@ export type Behandler = {
   postnummer?: string;
   poststed?: string;
   telefon?: string;
+  hprId?: string;
 };
 
 type FormFields = {
@@ -105,7 +106,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     if (!resultat) {
       return [];
     }
-    return resultat.map((uh) => ({ label: formaterBehandlernavn(uh), value: uh.behandlerRef }));
+    return resultat.map((behandler) => ({ label: formaterBehandlernavn(behandler), value: behandler.behandlerRef }));
   };
 
   return (
