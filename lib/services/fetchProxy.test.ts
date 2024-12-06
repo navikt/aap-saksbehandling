@@ -22,7 +22,7 @@ describe('fetchWithRetry', () => {
     expect(response).toEqual(dummyResponse);
   });
   it('skal returnere undefined ved 204 status kode', async () => {
-    fetchMocker.once('', { status: 204 });
+    fetchMocker.once(undefined, { status: 204 });
     const response = await fetchWithRetry('url', 'GET', 'dummytoken', 3);
     expect(response).toBe(undefined);
   });
