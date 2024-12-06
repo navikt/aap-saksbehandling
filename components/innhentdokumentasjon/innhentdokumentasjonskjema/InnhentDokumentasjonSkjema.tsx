@@ -77,8 +77,8 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     form.handleSubmit(async (data) => {
       const body: BestillLegeerklæring = {
         behandlerNavn: data.behandler.label,
-        behandlerRef: data.behandler.value,
-        behandlerHprNr: 'Hva skal dette være?', //TODO Hva skal dette være?
+        behandlerRef: data.behandler.value.split('::')[0],
+        behandlerHprNr: data.behandler.value.split('::')[1],
         dokumentasjonType: data.dokumentasjonstype,
         fritekst: data.melding,
         saksnummer: saksnummer,
@@ -106,7 +106,10 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     if (!resultat) {
       return [];
     }
-    return resultat.map((behandler) => ({ label: formaterBehandlernavn(behandler), value: behandler.behandlerRef }));
+    return resultat.map((behandler) => ({
+      label: formaterBehandlernavn(behandler),
+      value: `${behandler.behandlerRef}::${behandler.hprId}`,
+    }));
   };
 
   return (
