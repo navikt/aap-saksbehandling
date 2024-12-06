@@ -107,7 +107,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
       return [];
     }
     return resultat.map((behandler) => ({
-      label: formaterBehandlernavn(behandler),
+      label: `${formaterBehandlernavn(behandler)} - ${behandler.kontor}`,
       value: `${behandler.behandlerRef}::${behandler.hprId}`,
     }));
   };
@@ -125,13 +125,11 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
           fetcher={behandlersøk}
           rules={{ required: 'Du må velge en behandler' }}
         />
-        <FormField form={form} formField={formFields.dokumentasjonstype} />
+        <FormField form={form} formField={formFields.dokumentasjonstype} size={'medium'} />
         <FormField form={form} formField={formFields.melding} />
         <div className={styles.rad}>
-          <Button size={'small'} loading={isLoading}>
-            Send dialogmelding
-          </Button>
-          <Button size={'small'} variant="secondary" type="button" onClick={forhåndsvis} disabled={isLoading}>
+          <Button loading={isLoading}>Send dialogmelding</Button>
+          <Button variant="secondary" type="button" onClick={forhåndsvis} disabled={isLoading}>
             Forhåndsvis
           </Button>
           {visModal && (
@@ -144,7 +142,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
               onClose={() => setVisModal(false)}
             />
           )}
-          <Button variant="tertiary" type="button" onClick={onCancel} size={'small'} disabled={isLoading}>
+          <Button variant="tertiary" type="button" onClick={onCancel} disabled={isLoading}>
             Avbryt
           </Button>
         </div>

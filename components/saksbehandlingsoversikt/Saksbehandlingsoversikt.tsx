@@ -11,12 +11,7 @@ export const Saksbehandlingsoversikt = () => {
 
   return (
     <div className={'flex-column'}>
-      <Tabs
-        size={'small'}
-        defaultValue={toggleGroupValue}
-        onChange={(value) => setToggleGroupValue(value)}
-        value={toggleGroupValue}
-      >
+      <Tabs defaultValue={toggleGroupValue} onChange={(value) => setToggleGroupValue(value)} value={toggleGroupValue}>
         <Tooltip content={'Åpne saksdokumenter'}>
           <Tabs.Tab value="saksdokumenter" label={'Saksdokumenter'} icon={<FilesIcon aria-hidden />} />
         </Tooltip>
