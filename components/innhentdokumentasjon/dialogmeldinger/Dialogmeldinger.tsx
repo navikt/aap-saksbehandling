@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 
 import styles from './Dialogmeldinger.module.css';
 import { ThumbDownIcon, TimerPauseIcon } from '@navikt/aksel-icons';
+import { sorterEtterNyesteDato } from 'lib/utils/date';
 
 type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
@@ -75,9 +76,11 @@ export const Dialogmeldinger = ({ dialogmeldinger }: Props) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {dialogmeldinger.map((dialogmelding) => (
-          <Dialogmelding key={dialogmelding.dialogmeldingUuid} melding={dialogmelding} />
-        ))}
+        {dialogmeldinger
+          .sort((a, b) => sorterEtterNyesteDato(a.opprettet, b.opprettet))
+          .map((dialogmelding) => (
+            <Dialogmelding key={dialogmelding.dialogmeldingUuid} melding={dialogmelding} />
+          ))}
       </Table.Body>
     </Table>
   );
