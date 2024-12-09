@@ -2,6 +2,7 @@ import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingServic
 import Link from 'next/link';
 import { Heading } from '@navikt/ds-react';
 import styles from './page.module.css';
+import { formaterDatoTidForVisning } from '@navikt/aap-felles-utils-client';
 
 const Page = async ({ params }: { params: { saksId: string } }) => {
   const sak = await hentSak(params.saksId);
@@ -9,13 +10,24 @@ const Page = async ({ params }: { params: { saksId: string } }) => {
   return (
     <div className={styles.saksoversikt}>
       <Heading size={'medium'}>Alle behandlinger for en sak:</Heading>
-      <ul>
-        {sak?.behandlinger?.map((behandling) => (
-          <li key={behandling.referanse}>
-            <Link href={`/sak/${params.saksId}/${behandling.referanse}`}>{behandling.referanse}</Link>
-          </li>
-        ))}
-      </ul>
+      <table style={{ maxWidth: '30rem' }}>
+        <thead>
+          <tr>
+            <th>Referanse</th>
+            <th>Opprettet</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sak?.behandlinger?.map((behandling) => (
+            <tr key={behandling.referanse}>
+              <td>
+                <Link href={`/sak/${params.saksId}/${behandling.referanse}`}>{behandling.referanse}</Link>
+              </td>
+              <td>{formaterDatoTidForVisning(behandling.opprettet)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <Heading size={'medium'}>Aktivitet</Heading>
       <Link href={`/sak/${params.saksId}/aktivitet`}>Registrer brudd på aktivitetsplikten</Link>
     </div>
