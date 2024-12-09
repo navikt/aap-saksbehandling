@@ -29,13 +29,13 @@ describe('fetchWithRetry', () => {
   it('skal kaste error ved 404 status kode', async () => {
     const nonExistingUrl = 'url';
     fetchMocker.once('', { status: 404 });
-    expect(fetchWithRetry(nonExistingUrl, 'GET', 'dummytoken', 3)).rejects.toThrowError(
+    await expect(fetchWithRetry(nonExistingUrl, 'GET', 'dummytoken', 3)).rejects.toThrowError(
       `Ikke funnet: ${nonExistingUrl}`
     );
   });
   it('skal kaste error ved 500 status kode', async () => {
     const errorUrl = 'url';
     fetchMocker.once(JSON.stringify({ message: 'error' }), { status: 500 });
-    expect(fetchWithRetry(errorUrl, 'GET', 'dummytoken', 3)).rejects.toThrowError(`Unable to fetch url: error`);
+    await expect(fetchWithRetry(errorUrl, 'GET', 'dummytoken', 3)).rejects.toThrowError(`Unable to fetch url: error`);
   });
 });
