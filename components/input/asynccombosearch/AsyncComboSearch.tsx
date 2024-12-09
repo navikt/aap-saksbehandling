@@ -16,6 +16,7 @@ type Props<FormValues extends FieldValues> = {
   defaultOptions?: ValuePair[];
   isMulti?: boolean;
   rules?: RegisterOptions<FormValues>;
+  size?: 'small' | 'medium';
 };
 
 export const AsyncComboSearch = <FormValues extends FieldValues>({
@@ -27,6 +28,7 @@ export const AsyncComboSearch = <FormValues extends FieldValues>({
   defaultOptions,
   isMulti = false,
   rules,
+  size = 'medium',
 }: Props<FormValues>) => {
   return (
     <Controller
@@ -37,7 +39,7 @@ export const AsyncComboSearch = <FormValues extends FieldValues>({
         <div className={styles.combosearch}>
           <div className={styles.labelwrapper}>
             {readOnly && <PadlockLockedFillIcon />}
-            <Label size={'small'} htmlFor={name}>
+            <Label size={size} htmlFor={name}>
               {label}
             </Label>
           </div>

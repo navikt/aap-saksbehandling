@@ -124,6 +124,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
           name={'behandler'}
           fetcher={behandlersøk}
           rules={{ required: 'Du må velge en behandler' }}
+          size={'small'}
         />
         <FormField form={form} formField={formFields.dokumentasjonstype} size={'medium'} />
         <FormField form={form} formField={formFields.melding} />
