@@ -6,12 +6,20 @@ import { useState } from 'react';
 import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDokumentasjon';
 
+import styles from './Saksbehandlingsoversikt.module.css';
+
 export const Saksbehandlingsoversikt = () => {
   const [toggleGroupValue, setToggleGroupValue] = useState<string>('saksdokumenter');
 
   return (
     <div className={'flex-column'}>
-      <Tabs defaultValue={toggleGroupValue} onChange={(value) => setToggleGroupValue(value)} value={toggleGroupValue}>
+      <Tabs
+        defaultValue={toggleGroupValue}
+        onChange={(value) => setToggleGroupValue(value)}
+        value={toggleGroupValue}
+        className={styles.stretch}
+        fill
+      >
         <Tooltip content={'Åpne saksdokumenter'}>
           <Tabs.Tab value="saksdokumenter" label={'Saksdokumenter'} icon={<FilesIcon aria-hidden />} />
         </Tooltip>
