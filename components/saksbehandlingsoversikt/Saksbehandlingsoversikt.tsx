@@ -12,7 +12,7 @@ export const Saksbehandlingsoversikt = () => {
   const [toggleGroupValue, setToggleGroupValue] = useState<string>('saksdokumenter');
 
   return (
-    <div className={'flex-column'}>
+    <div className={'flex-column flex-column-fill'}>
       <Tabs
         defaultValue={toggleGroupValue}
         onChange={(value) => setToggleGroupValue(value)}
@@ -32,10 +32,11 @@ export const Saksbehandlingsoversikt = () => {
           </Tooltip>
         </Tabs.List>
       </Tabs>
-
-      {toggleGroupValue === 'saksdokumenter' && <Saksdokumenter />}
-      {toggleGroupValue === 'hent_opplysninger' && <InnhentDokumentasjon />}
-      {toggleGroupValue === 'sakshistorikk' && <div>Her kommer det sakshistorikk</div>}
+      <div className={styles.tabContent}>
+        {toggleGroupValue === 'saksdokumenter' && <Saksdokumenter />}
+        {toggleGroupValue === 'hent_opplysninger' && <InnhentDokumentasjon />}
+        {toggleGroupValue === 'sakshistorikk' && <div>Her kommer det sakshistorikk</div>}
+      </div>
     </div>
   );
 };
