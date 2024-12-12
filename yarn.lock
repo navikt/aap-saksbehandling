@@ -2837,7 +2837,7 @@ __metadata:
     lint-staged: "npm:^15.2.11"
     lodash: "npm:^4.17.21"
     next: "npm:^14.2.20"
-    node-loader: "npm:^2.0.0"
+    node-loader: "npm:^2.1.0"
     openapi-typescript: "npm:7.4.4"
     pino-pretty: "npm:^13.0.0"
     prettier: "npm:^3.3.3"
@@ -6217,7 +6217,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loader-utils@npm:^2.0.0":
+"loader-utils@npm:^2.0.3":
   version: 2.0.4
   resolution: "loader-utils@npm:2.0.4"
   dependencies:
@@ -6745,14 +6745,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-loader@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "node-loader@npm:2.0.0"
+"node-loader@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "node-loader@npm:2.1.0"
   dependencies:
-    loader-utils: "npm:^2.0.0"
+    loader-utils: "npm:^2.0.3"
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 10c0/ceacf34ccb05c5efe7fbed2224dfa42ec9dd8e5bd70e9dc90bb618ee6372cc1ff54edc60d1d71f4ff52c4b4db0ac410caa6ae74d90bbc68b88a70bba5f75c727
+  checksum: 10c0/9f641336a0f22ca9b239c101e0343c4111ece400bb40bcbbf92f48e062c5ba4cc657d0c321b8806d1d79edd0910b17507af84c6b0a7d00735f808263b262876b
   languageName: node
   linkType: hard
 
