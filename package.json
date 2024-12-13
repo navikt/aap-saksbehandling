@@ -36,7 +36,7 @@
     "next": "15.0.3",
     "node-loader": "^2.0.0",
     "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0",
     "react-hook-form": "7.53.2",
     "react-select": "^5.9.0",
     "recharts": "^2.15.0",
@@ -51,9 +51,9 @@
     "@testing-library/react": "^16.1.0",
     "@types/lodash": "^4",
     "@types/node": "22.7.5",
-    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react": "^19.0.1",
     "@types/react-collapse": "^5.0.4",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
+    "@types/react-dom": "^19.0.2",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
@@ -83,10 +83,6 @@
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --cache --fix",
     "*.{js,ts,tsx,css,md}": "prettier --write"
-  },
-  "resolutions": {
-    "@types/react": "npm:types-react@19.0.0-rc.1",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
   },
   "packageManager": "yarn@4.5.3"
 }
