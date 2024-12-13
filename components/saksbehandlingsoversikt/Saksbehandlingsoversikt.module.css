@@ -9,3 +9,11 @@
   padding: var(--a-spacing-4);
   margin: calc(var(--a-spacing-4) * -1);
 }
+
+.fillHeight:last-child {
+  flex: 1 1 100%;
+}
+
+.fillHeight:not(:last-child) {
+  margin-bottom: var(--a-spacing-4);
+}

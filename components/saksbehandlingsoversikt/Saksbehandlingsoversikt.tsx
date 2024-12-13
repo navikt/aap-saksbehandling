@@ -12,7 +12,7 @@ export const Saksbehandlingsoversikt = () => {
   const [toggleGroupValue, setToggleGroupValue] = useState<string>('saksdokumenter');
 
   return (
-    <div className={'flex-column flex-column-fill'}>
+    <div className={`flex-column ${styles.fillHeight}`}>
       <Tabs
         defaultValue={toggleGroupValue}
         onChange={(value) => setToggleGroupValue(value)}

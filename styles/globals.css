@@ -15,10 +15,6 @@
   gap: var(--a-spacing-4);
 }
 
-.flex-column-fill {
-  flex: 1 1 100%;
-}
-
 .begrunnelse {
   max-width: 90ch;
 }
