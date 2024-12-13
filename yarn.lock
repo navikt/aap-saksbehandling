@@ -2843,7 +2843,7 @@ __metadata:
     prettier: "npm:^3.3.3"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
-    react-hook-form: "npm:7.53.2"
+    react-hook-form: "npm:7.54.1"
     react-select: "npm:^5.9.0"
     recharts: "npm:^2.15.0"
     swr: "npm:^2.2.5"
@@ -7637,7 +7637,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.53.2, react-hook-form@npm:^7.53.2":
+"react-hook-form@npm:7.54.1":
+  version: 7.54.1
+  resolution: "react-hook-form@npm:7.54.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10c0/2d960ddf8aa654f34e36f5d995f0ec067a4c01340d650eca44f22aa4421e278dcc449c8522e66c5c66b1c61d62fbdf914b9e0a8de9deb4c6346cc3b37ef4eb82
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.53.2":
   version: 7.53.2
   resolution: "react-hook-form@npm:7.53.2"
   peerDependencies:
