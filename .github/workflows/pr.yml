@@ -7,7 +7,7 @@ on:
       - '**.md'
 
 jobs:
-  buildDev:
+  buildDevPullRequest:
     uses: navikt/aap-workflows/.github/workflows/frontend-next-only-build.yml@main
     permissions:
       contents: read

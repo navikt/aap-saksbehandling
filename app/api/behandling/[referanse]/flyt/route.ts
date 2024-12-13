@@ -11,3 +11,4 @@ export async function GET(req: NextRequest, props: { params: Promise<{ referanse
     return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });
   }
 }
+export const dynamic = 'force-dynamic';

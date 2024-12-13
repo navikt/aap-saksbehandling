@@ -10,8 +10,8 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { Checkbox, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { VilkårsKortForUvisstEnhet } from 'components/vilkårskort/VilkårskortForUvisstEnhet';
 import { erProsent } from 'lib/utils/validering';
+import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -69,7 +69,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
   );
 
   return (
-    <VilkårsKortForUvisstEnhet
+    <VilkårsKort
       heading={'Yrkesskade §§ 11-22 1.ledd'}
       steg={'VURDER_YRKESSKADE'}
       vilkårTilhørerNavKontor={false}
@@ -141,6 +141,6 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
           </>
         )}
       </Form>
-    </VilkårsKortForUvisstEnhet>
+    </VilkårsKort>
   );
 };

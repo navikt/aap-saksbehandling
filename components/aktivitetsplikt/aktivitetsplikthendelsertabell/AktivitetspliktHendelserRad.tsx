@@ -6,10 +6,10 @@ import {
   AktivitetspliktBrudd,
   AktivitetspliktGrunn,
   AktivitetspliktHendelseParagraf,
+  AktivitetspliktPeriode,
   OppdaterAktivitetsplitGrunn,
-  Periode,
 } from 'lib/types/types';
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { useState } from 'react';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useSaksnummer } from 'hooks/BehandlingHook';
@@ -34,18 +34,35 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
 
   const { isLoading, method: oppdaterAktivitetspliktBrudd } = useFetch(clientOppdaterAktivitetspliktBrudd);
 
+  function hentOptionsForBrudd(brudd: AktivitetspliktHendelseParagraf): ValuePair[] {
+    switch (brudd) {
+      case 'PARAGRAF_11_7':
+        return [
+          { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+          { label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' },
+        ];
+      case 'PARAGRAF_11_8':
+        return [
+          { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+          { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
+          { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
+          { label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' },
+        ];
+      case 'PARAGRAF_11_9':
+        return [
+          { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+          { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
+          { label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' },
+        ];
+    }
+  }
+
   const { form, formFields } = useConfigForm<Formfields>({
     grunn: {
       type: 'radio',
       label: 'Endre grunn',
       defaultValue: aktivitetspliktHendelse.grunn,
-      options: [
-        { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
-        { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
-        { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
-        { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
-        { label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' },
-      ],
+      options: hentOptionsForBrudd(aktivitetspliktHendelse.paragraf),
       rules: { required: 'Du må velge én grunn' },
     },
     begrunnelse: {
@@ -121,11 +138,11 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
   );
 };
 
-function formaterPeriodeForVisning(periode: Periode): string {
-  if (periode.fom === periode.tom) {
-    return formaterDatoForFrontend(periode.fom);
-  } else {
+function formaterPeriodeForVisning(periode: AktivitetspliktPeriode): string {
+  if (periode.tom) {
     return `${formaterDatoForFrontend(periode.fom)} - ${formaterDatoForFrontend(periode.tom)}`;
+  } else {
+    return `${formaterDatoForFrontend(periode.fom)} - `;
   }
 }
 
@@ -167,6 +184,8 @@ function hentGrunnTekst(grunn: AktivitetspliktGrunn): string {
       return 'Sterkre velferdsgrunner';
     case 'SYKDOM_ELLER_SKADE':
       return 'Sykdom eller skade';
+    case 'BIDRAR_AKTIVT':
+      return 'Bidrar aktivt';
     case 'FEILREGISTRERING':
       return 'Feilregistrering';
   }

@@ -18,6 +18,7 @@ const testdata: Behandler[] = [
     postnummer: '7478',
     poststed: 'Trondheim',
     telefon: '72594500',
+    hprId: 'hpr-2348',
   },
   {
     behandlerRef: '26a75263-1362-4520-f348-5f57c840bc91',
@@ -30,6 +31,7 @@ const testdata: Behandler[] = [
     postnummer: '7478',
     poststed: 'Trondheim',
     telefon: '72594500',
+    hprId: 'hpr-cf17',
   },
   {
     behandlerRef: 'unik-id-for-behandler',
@@ -43,6 +45,7 @@ const testdata: Behandler[] = [
     postnummer: '7478',
     poststed: 'Trondheim',
     telefon: '72594500',
+    hprId: 'hpr-a80e',
   },
 ];
 */

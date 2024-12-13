@@ -35,6 +35,7 @@ export const AktivitetspliktDatoTabell = ({ form, fields, remove, søknadstidspu
                 <div className={styles.tekstfelt}>
                   <DateInputWrapper
                     label={field.type === 'enkeltdag' ? 'dato' : 'fra og med dato'}
+                    hideLabel={true}
                     control={form.control}
                     name={field.type === 'enkeltdag' ? `perioder.${index}.dato` : `perioder.${index}.fom`}
                     rules={{
@@ -61,6 +62,7 @@ export const AktivitetspliktDatoTabell = ({ form, fields, remove, søknadstidspu
                     <DateInputWrapper
                       label={'til og med dato'}
                       control={form.control}
+                      hideLabel={true}
                       name={`perioder.${index}.tom`}
                       rules={{ validate: (value) => validerDato(value as string) }}
                     />

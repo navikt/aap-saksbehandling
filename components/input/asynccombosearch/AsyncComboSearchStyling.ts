@@ -7,7 +7,7 @@ export const customStyles: StylesConfig = {
   // Denne er for selve komponenten
   control: (provided, state) => ({
     ...provided,
-    border: '1px solid #9197A2', // TODO Kan vi bruke fargene fra designsystemet her?
+    border: '1px solid #9197A2',
     boxShadow: state.isFocused ? '0 0 0 4px #00347D' : 'none',
     ':hover': {
       borderColor: '#0357B5',

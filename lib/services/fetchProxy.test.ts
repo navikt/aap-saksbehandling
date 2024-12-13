@@ -22,20 +22,20 @@ describe('fetchWithRetry', () => {
     expect(response).toEqual(dummyResponse);
   });
   it('skal returnere undefined ved 204 status kode', async () => {
-    fetchMocker.once('', { status: 204 });
+    fetchMocker.once(undefined, { status: 204 });
     const response = await fetchWithRetry('url', 'GET', 'dummytoken', 3);
     expect(response).toBe(undefined);
   });
   it('skal kaste error ved 404 status kode', async () => {
     const nonExistingUrl = 'url';
     fetchMocker.once('', { status: 404 });
-    expect(fetchWithRetry(nonExistingUrl, 'GET', 'dummytoken', 3)).rejects.toThrowError(
+    await expect(fetchWithRetry(nonExistingUrl, 'GET', 'dummytoken', 3)).rejects.toThrowError(
       `Ikke funnet: ${nonExistingUrl}`
     );
   });
   it('skal kaste error ved 500 status kode', async () => {
     const errorUrl = 'url';
     fetchMocker.once(JSON.stringify({ message: 'error' }), { status: 500 });
-    expect(fetchWithRetry(errorUrl, 'GET', 'dummytoken', 3)).rejects.toThrowError(`Unable to fetch url: error`);
+    await expect(fetchWithRetry(errorUrl, 'GET', 'dummytoken', 3)).rejects.toThrowError(`Unable to fetch url: error`);
   });
 });

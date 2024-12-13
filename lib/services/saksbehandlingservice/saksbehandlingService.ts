@@ -16,7 +16,6 @@ import {
   DetaljertBehandling,
   DokumentInfo,
   FatteVedtakGrunnlag,
-  FeilregistrerAktivitetspliktBrudd,
   FlytProsessering,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
@@ -91,14 +90,6 @@ export const oppdaterBruddPåAktivitetsplikten = async (
   aktivitet: OppdaterAktivitetspliktBrudd2
 ) => {
   const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/v2/oppdater`;
-  return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
-};
-
-export const feilregistrerBruddPåAktivitetsplikten = async (
-  saksnummer: string,
-  aktivitet: FeilregistrerAktivitetspliktBrudd
-) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/feilregistrer`;
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 

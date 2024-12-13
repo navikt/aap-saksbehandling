@@ -14,7 +14,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import styles from './FastsettBeregning.module.css';
 import { Heading } from '@navikt/ds-react';
 import { CalendarIcon } from '@navikt/aksel-icons';
-import { VilkårsKortForUvisstEnhet } from 'components/vilkårskort/VilkårskortForUvisstEnhet';
+import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -112,7 +112,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
     : 'Beregningstidspunkt nedsatt arbeidsevne § 11-5';
 
   return (
-    <VilkårsKortForUvisstEnhet heading={heading} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'} icon={<CalendarIcon />}>
+    <VilkårsKort heading={heading} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'} icon={<CalendarIcon />}>
       <Form
         steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
         onSubmit={handleSubmit}
@@ -137,6 +137,6 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
           </div>
         )}
       </Form>
-    </VilkårsKortForUvisstEnhet>
+    </VilkårsKort>
   );
 };

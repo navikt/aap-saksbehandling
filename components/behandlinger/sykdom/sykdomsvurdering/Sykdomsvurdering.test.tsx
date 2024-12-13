@@ -185,9 +185,42 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
   });
 });
 
-// TODO Ta inn når backend er klar - Thomas
-describe.skip('felt for å sette diagnoser', () => {
-  it.skip('skal ha et felt for å sette en hoveddiagnose dersom innbygger har sykdom, skade eller lyte', async () => {
+describe('felt for å sette diagnoser', () => {
+  it('skal ha et felt for å velge et system for diagnoser', async () => {
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+      />
+    );
+
+    await velgAtInnbyggerHarSykdomSkadeLyte();
+
+    const systemFelt = screen.getByRole('group', { name: /velg system for diagnoser/i });
+    expect(systemFelt).toBeVisible();
+  });
+
+  it('skal vise en feilmelding dersom felt for å velge system ikke er valgt', async () => {
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+      />
+    );
+
+    await velgAtInnbyggerHarSykdomSkadeLyte();
+
+    await velgBekreft();
+
+    const feilmelding = screen.getByText('Du må velge et system for diagnoser');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('skal ha et felt for å sette en hoveddiagnose dersom innbygger har sykdom, skade eller lyte', async () => {
     render(
       <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
@@ -197,11 +230,13 @@ describe.skip('felt for å sette diagnoser', () => {
       />
     );
     await velgAtInnbyggerHarSykdomSkadeLyte();
+    const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
+    await user.click(ICD10option);
 
     expect(screen.getByRole('combobox', { name: 'Hoveddiagnose' })).toBeVisible();
   });
 
-  it.skip('skal ha vise en feilmelding dersom det ikke har blitt satt en hoveddiagnose', async () => {
+  it('skal ha vise en feilmelding dersom det ikke har blitt satt en hoveddiagnose', async () => {
     render(
       <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
@@ -211,12 +246,14 @@ describe.skip('felt for å sette diagnoser', () => {
       />
     );
     await velgAtInnbyggerHarSykdomSkadeLyte();
+    const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
+    await user.click(ICD10option);
     await velgBekreft();
 
     expect(screen.getByText('Du må velge en hoveddiagnose')).toBeVisible();
   });
 
-  it.skip('skal ha et felt for å sette bidiagnoser dersom innbygger har sykdom, skade eller lyte', async () => {
+  it('skal ha et felt for å sette bidiagnoser dersom innbygger har sykdom, skade eller lyte', async () => {
     render(
       <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
@@ -226,6 +263,8 @@ describe.skip('felt for å sette diagnoser', () => {
       />
     );
     await velgAtInnbyggerHarSykdomSkadeLyte();
+    const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
+    await user.click(ICD10option);
 
     expect(screen.getByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).toBeVisible();
   });

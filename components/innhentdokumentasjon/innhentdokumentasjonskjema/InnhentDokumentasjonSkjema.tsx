@@ -1,4 +1,4 @@
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 
@@ -7,8 +7,8 @@ import { BestillLegeerklæring } from 'lib/types/types';
 import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
 import { clientSøkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
-import { ComboSearch } from 'components/input/combosearch/ComboSearch';
 import { useBestillDialogmelding } from 'hooks/FetchHook';
+import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSearch';
 
 export type Behandler = {
   type?: string;
@@ -23,10 +23,11 @@ export type Behandler = {
   postnummer?: string;
   poststed?: string;
   telefon?: string;
+  hprId?: string;
 };
 
 type FormFields = {
-  behandler: string;
+  behandler: ValuePair;
   dokumentasjonstype: 'L8' | 'L40';
   melding: string;
 };
@@ -44,8 +45,6 @@ export const formaterBehandlernavn = (behandler: Behandler): string => {
 };
 
 export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
-  const [valgtBehandler, setValgtBehandler] = useState<Behandler>();
-  const [behandlerError, setBehandlerError] = useState<string>();
   const [visModal, setVisModal] = useState<boolean>(false);
   const [visBestillingsfeil, setVisBestillingsfeil] = useState<boolean>(false);
   const saksnummer = useSaksnummer();
@@ -55,9 +54,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
 
   const { form, formFields } = useConfigForm<FormFields>({
     behandler: {
-      type: 'text',
-      label: 'Velg behandler som skal motta meldingen',
-      rules: { required: 'Du må velge hvilke(n) behandler som skal motta meldingen' },
+      type: 'async_combobox',
     },
     dokumentasjonstype: {
       type: 'select',
@@ -77,70 +74,63 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    setVisBestillingsfeil(false);
-    setBehandlerError(undefined);
-    if (!valgtBehandler) {
-      event.preventDefault();
-      setBehandlerError('Du må velge en behandler');
-      form.trigger();
-    } else {
-      form.handleSubmit(async (data) => {
-        const body: BestillLegeerklæring = {
-          behandlerNavn: formaterBehandlernavn(valgtBehandler),
-          behandlerRef: valgtBehandler.behandlerRef,
-          dokumentasjonType: data.dokumentasjonstype,
-          fritekst: data.melding,
-          saksnummer: saksnummer,
-          behandlingsReferanse: behandlingsreferanse,
-          veilederNavn: 'Hvor henter jeg denne fra?',
-        };
-        bestillDialogmelding(body);
-        if (!error) {
-          onSuccess();
-        } else {
-          setVisBestillingsfeil(true);
-        }
-      })(event);
-    }
-  };
-
-  const velgEnBehandler = (behandler?: Behandler) => {
-    setBehandlerError(undefined);
-    setValgtBehandler(behandler);
+    form.handleSubmit(async (data) => {
+      const body: BestillLegeerklæring = {
+        behandlerNavn: data.behandler.label,
+        behandlerRef: data.behandler.value.split('::')[0],
+        behandlerHprNr: data.behandler.value.split('::')[1],
+        dokumentasjonType: data.dokumentasjonstype,
+        fritekst: data.melding,
+        saksnummer: saksnummer,
+        behandlingsReferanse: behandlingsreferanse,
+        veilederNavn: 'Hvor henter jeg denne fra?',
+      };
+      bestillDialogmelding(body);
+      if (!error) {
+        onSuccess();
+      } else {
+        setVisBestillingsfeil(true);
+      }
+    })(event);
   };
 
   const forhåndsvis = async () => {
     const validationResult = await form.trigger(); // force validation
-    if (!valgtBehandler) {
-      setBehandlerError('Du må velge en behandler');
-    }
-    if (validationResult && valgtBehandler) {
+    if (validationResult) {
       setVisModal(true);
     }
   };
 
+  const behandlersøk = async (input: string) => {
+    const resultat = await clientSøkPåBehandler(input);
+    if (!resultat) {
+      return [];
+    }
+    return resultat.map((behandler) => ({
+      label: `${formaterBehandlernavn(behandler)} - ${behandler.kontor}`,
+      value: `${behandler.behandlerRef}::${behandler.hprId}`,
+    }));
+  };
+
   return (
-    <>
+    <div className={'flex-column'}>
       <Heading level={'3'} size={'small'}>
         Etterspør informasjon fra lege
       </Heading>
-      {/*<Behandlersøk velgBehandler={velgEnBehandler} behandlerError={behandlerError} />*/}
-      <ComboSearch
-        label={'Behandler'}
-        searchAsString={(behandler: Behandler) => formaterBehandlernavn(behandler)}
-        fetcher={clientSøkPåBehandler}
-        setValue={velgEnBehandler}
-        error={behandlerError}
-      />
-
-      <form onSubmit={handleSubmit}>
-        <FormField form={form} formField={formFields.dokumentasjonstype} />
+      <form onSubmit={handleSubmit} className={'flex-column'}>
+        <AsyncComboSearch
+          label={'Velg behandler som skal motta meldingen'}
+          form={form}
+          name={'behandler'}
+          fetcher={behandlersøk}
+          rules={{ required: 'Du må velge en behandler' }}
+          size={'small'}
+        />
+        <FormField form={form} formField={formFields.dokumentasjonstype} size={'medium'} />
         <FormField form={form} formField={formFields.melding} />
         <div className={styles.rad}>
-          <Button size={'small'} loading={isLoading}>
-            Send dialogmelding
-          </Button>
-          <Button size={'small'} variant="secondary" type="button" onClick={forhåndsvis} disabled={isLoading}>
+          <Button loading={isLoading}>Send dialogmelding</Button>
+          <Button variant="secondary" type="button" onClick={forhåndsvis} disabled={isLoading}>
             Forhåndsvis
           </Button>
           {visModal && (
@@ -153,7 +143,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
               onClose={() => setVisModal(false)}
             />
           )}
-          <Button variant="tertiary" type="button" onClick={onCancel} size={'small'} disabled={isLoading}>
+          <Button variant="tertiary" type="button" onClick={onCancel} disabled={isLoading}>
             Avbryt
           </Button>
         </div>
@@ -165,6 +155,6 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
           </div>
         )}
       </form>
-    </>
+    </div>
   );
 };
