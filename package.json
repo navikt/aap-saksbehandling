@@ -87,7 +87,7 @@
   "resolutions": {
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "next": "^14.2.17",
+    "next": "^14.2.20",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1"
   },
