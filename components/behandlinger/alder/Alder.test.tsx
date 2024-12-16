@@ -13,6 +13,7 @@ const grunnlagOppfylt: AlderGrunnlag = {
       },
       utfall: 'OPPFYLT',
       manuellVurdering: false,
+      versjon: "1",
     },
   ],
 };
@@ -28,6 +29,7 @@ const grunnlagIkkeOppfylt: AlderGrunnlag = {
       utfall: 'IKKE_OPPFYLT',
       manuellVurdering: false,
       avslagsårsak: 'BRUKER_OVER_67',
+      versjon: "1",
     },
   ],
 };
