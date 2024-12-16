@@ -196,8 +196,6 @@ describe('felt for å sette diagnoser', () => {
       />
     );
 
-    await velgAtInnbyggerHarSykdomSkadeLyte();
-
     const systemFelt = screen.getByRole('group', { name: /velg system for diagnoser/i });
     expect(systemFelt).toBeVisible();
   });
@@ -211,8 +209,6 @@ describe('felt for å sette diagnoser', () => {
         tilknyttedeDokumenter={[]}
       />
     );
-
-    await velgAtInnbyggerHarSykdomSkadeLyte();
 
     await velgBekreft();
 
@@ -229,7 +225,6 @@ describe('felt for å sette diagnoser', () => {
         tilknyttedeDokumenter={[]}
       />
     );
-    await velgAtInnbyggerHarSykdomSkadeLyte();
     const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
     await user.click(ICD10option);
 
@@ -245,7 +240,6 @@ describe('felt for å sette diagnoser', () => {
         tilknyttedeDokumenter={[]}
       />
     );
-    await velgAtInnbyggerHarSykdomSkadeLyte();
     const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
     await user.click(ICD10option);
     await velgBekreft();
@@ -262,7 +256,6 @@ describe('felt for å sette diagnoser', () => {
         tilknyttedeDokumenter={[]}
       />
     );
-    await velgAtInnbyggerHarSykdomSkadeLyte();
     const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
     await user.click(ICD10option);
 

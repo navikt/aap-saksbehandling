@@ -25,4 +25,16 @@ describe('diagnose søker', () => {
     const resultat = diagnoseSøker('ICD10', 'hello pello diagnosen');
     expect(resultat).toStrictEqual([]);
   });
+
+  it('skal inneholde et valg for ingen diagnose dersom det ikke har blitt skrevet inn et søk', () => {
+    const resultat = diagnoseSøker('ICD10', '');
+    const ingenDiagnoseOption = resultat.find((option) => option.value === 'INGEN_DIAGNOSE');
+    expect(ingenDiagnoseOption).toStrictEqual({ label: 'Ingen diagnose', value: 'INGEN_DIAGNOSE' });
+  });
+
+  it('skal ikke inneholde et valg for ingen diagnose dersom det har blitt skrevet inn et søk', () => {
+    const resultat = diagnoseSøker('ICD10', 'covid');
+    const ingenDiagnoseOption = resultat.find((option) => option.value === 'INGEN_DIAGNOSE');
+    expect(ingenDiagnoseOption).toBeUndefined();
+  });
 });

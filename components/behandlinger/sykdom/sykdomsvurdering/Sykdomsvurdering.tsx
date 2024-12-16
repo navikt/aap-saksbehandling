@@ -256,33 +256,33 @@ export const Sykdomsvurdering = ({
           tilknyttedeDokumenterPåBehandling={tilknyttedeDokumenter}
         />
         <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
-        {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
+
+        <FormField form={form} formField={formFields.kodeverk} horizontalRadio />
+        {kodeverkValue && (
           <>
-            <FormField form={form} formField={formFields.kodeverk} horizontalRadio />
-            {kodeverkValue && (
-              <>
-                <AsyncComboSearch
-                  label={'Hoveddiagnose'}
-                  form={form}
-                  name={'hoveddiagnose'}
-                  fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
-                  defaultOptions={defaultOptionsHoveddiagnose}
-                  rules={{ required: 'Du må velge en hoveddiagnose' }}
-                  readOnly={readOnly}
-                />
-                <AsyncComboSearch
-                  label={'Bidiagnoser (valgfritt)'}
-                  form={form}
-                  isMulti={true}
-                  name={'bidiagnose'}
-                  fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
-                  defaultOptions={defaultOptionsBidiagnose}
-                  readOnly={readOnly}
-                />
-              </>
-            )}
-            <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
+            <AsyncComboSearch
+              label={'Hoveddiagnose'}
+              form={form}
+              name={'hoveddiagnose'}
+              fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
+              defaultOptions={defaultOptionsHoveddiagnose}
+              rules={{ required: 'Du må velge en hoveddiagnose' }}
+              readOnly={readOnly}
+            />
+            <AsyncComboSearch
+              label={'Bidiagnoser (valgfritt)'}
+              form={form}
+              isMulti={true}
+              name={'bidiagnose'}
+              fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
+              defaultOptions={defaultOptionsBidiagnose}
+              readOnly={readOnly}
+            />
           </>
+        )}
+
+        {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
         )}
 
         {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei && (

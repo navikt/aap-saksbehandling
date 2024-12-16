@@ -4,39 +4,36 @@ import { ValuePair } from '@navikt/aap-felles-react';
 
 export type DiagnoseSystem = 'ICD10' | 'ICPC2';
 
-const fuseICD10 = new Fuse(ICD10, { keys: ['code', 'text'], threshold: 0.2 });
-const fuseICPC2 = new Fuse(ICPC2, { keys: ['code', 'text'], threshold: 0.2 });
+const fuseOptions = { keys: ['code', 'text'], threshold: 0.2 };
+const fuseICD10 = new Fuse(ICD10, fuseOptions);
+const fuseICPC2 = new Fuse(ICPC2, fuseOptions);
+
+const ingenDiagnoseOption: ValuePair = { label: 'Ingen diagnose', value: 'INGEN_DIAGNOSE' };
 
 export function diagnoseSøker(kodeverk: DiagnoseSystem, value: string): ValuePair[] {
-  if (kodeverk === 'ICD10') {
-    if ((value ?? '').trim() === '') {
-      return ICD10.slice(0, 50).map((diagnose) => {
-        return mapDiagnoseToValuePair(diagnose);
-      });
-    } else {
-      return fuseICD10
+  const erValueTom = (value ?? '').trim() === '';
+  const data = kodeverk === 'ICD10' ? ICD10 : ICPC2;
+  const fuse = kodeverk === 'ICD10' ? fuseICD10 : fuseICPC2;
+
+  const diagnoses = erValueTom
+    ? []
+    : fuse
         .search(value)
-        .slice(0, 50)
-        .map((it) => it.item)
-        .map((diagnose) => {
-          return mapDiagnoseToValuePair(diagnose);
-        });
-    }
-  } else {
-    if ((value ?? '').trim() === '') {
-      return ICPC2.slice(0, 50).map((diagnose) => {
-        return mapDiagnoseToValuePair(diagnose);
-      });
-    } else {
-      return fuseICPC2
-        .search(value)
-        .slice(0, 50)
-        .map((it) => it.item)
-        .map((diagnose) => {
-          return mapDiagnoseToValuePair(diagnose);
-        });
-    }
+        .slice(0, 49)
+        .map((result) => result.item);
+
+  if (erValueTom) {
+    return [
+      ingenDiagnoseOption,
+      ...diagnoses.map(mapDiagnoseToValuePair),
+      ...(erValueTom ? data.slice(0, 49).map(mapDiagnoseToValuePair) : []),
+    ];
   }
+
+  return [
+    ...diagnoses.map(mapDiagnoseToValuePair),
+    ...(erValueTom ? data.slice(0, 49).map(mapDiagnoseToValuePair) : []),
+  ];
 }
 
 function mapDiagnoseToValuePair(value: ICPC2Diagnosekode | ICD10Diagnosekode): ValuePair {
