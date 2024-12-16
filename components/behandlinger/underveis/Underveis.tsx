@@ -22,6 +22,7 @@ const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => (
       <div>Grenseverdi: {periode.gradering.grenseverdi}%</div>
     </Table.DataCell>
     <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
+    <Table.DataCell>{periode.brukerAvKvoter.join(" og ")}</Table.DataCell>
     <Table.DataCell>
       {formaterDatoForVisning(periode.meldePeriode.fom)} - {formaterDatoForVisning(periode.meldePeriode.tom)}
     </Table.DataCell>
@@ -38,6 +39,7 @@ export const Underveis = ({ grunnlag }: Props) => {
           <Table.HeaderCell>Avslagsårsak</Table.HeaderCell>
           <Table.HeaderCell>Gradering</Table.HeaderCell>
           <Table.HeaderCell>Trekk (dagsatser)</Table.HeaderCell>
+          <Table.HeaderCell>Kvoter</Table.HeaderCell>
           <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
