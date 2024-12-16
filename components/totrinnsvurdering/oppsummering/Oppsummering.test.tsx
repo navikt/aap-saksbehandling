@@ -34,7 +34,7 @@ describe('Oppsummering', () => {
     const label = screen.getByText('Vilkår');
     expect(label).toBeVisible();
     const link = screen.getByRole('link', {
-      name: 'Avklar sykdom (§ 11-5)',
+      name: 'Nedsatt arbeidsevne § 11-5',
     });
 
     expect(link).toBeVisible();

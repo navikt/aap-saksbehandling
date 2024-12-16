@@ -31,7 +31,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const overskriftLenke = screen.getByRole('link', { name: 'Avklar sykdom (§ 11-5)' });
+    const overskriftLenke = screen.getByRole('link', { name: 'Nedsatt arbeidsevne § 11-5' });
     expect(overskriftLenke).toBeVisible();
     expect(overskriftLenke).toHaveAttribute('href', `${link}/SYKDOM#AVKLAR_SYKDOM`);
   });
