@@ -128,6 +128,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
   const skalVelgeParagraf = bruddSomSkalViseParagrafValg.includes(brudd);
   const skalViseDatoFeltOgBegrunnelsesfelt =
     Boolean(paragraf) || bruddSomSkalViseDatoFeltOgBegrennelsesfelt.includes(brudd);
+  const erMuligÅLeggeTilPeriode = brudd !== 'IKKE_MØTT_TIL_MØTE' && brudd !== 'IKKE_SENDT_INN_DOKUMENTASJON';
 
   const grunnForBruddHvis119 = [
     { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
@@ -145,8 +146,6 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
   useEffect(() => {
     form.setValue('grunn', null);
   }, [brudd, paragraf, form]);
-
-  const erMuligÅLeggeTilPeriode = brudd !== 'IKKE_MØTT_TIL_MØTE' && brudd !== 'IKKE_SENDT_INN_DOKUMENTASJON';
 
   return (
     <SideProsessKort
@@ -195,7 +194,9 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
           >
             <FormField form={form} formField={formFields.brudd} />
             {skalVelgeParagraf && <FormField form={form} formField={formFields.paragraf} />}
-            {(form.watch('paragraf') === 'PARAGRAF_11_9' || form.watch('brudd') === 'IKKE_MØTT_TIL_MØTE') && (
+            {(paragraf === 'PARAGRAF_11_9' ||
+              brudd === 'IKKE_MØTT_TIL_MØTE' ||
+              brudd === 'IKKE_SENDT_INN_DOKUMENTASJON') && (
               <RadioGroupWrapper
                 control={form.control}
                 name={'grunn'}
@@ -212,8 +213,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
               </RadioGroupWrapper>
             )}
 
-            {(form.watch('paragraf') === 'PARAGRAF_11_8' ||
-              form.watch('brudd') === 'IKKE_MØTT_TIL_ANNEN_AKTIVITET') && (
+            {(paragraf === 'PARAGRAF_11_8' || brudd === 'IKKE_MØTT_TIL_ANNEN_AKTIVITET') && (
               <RadioGroupWrapper
                 control={form.control}
                 name={'grunn'}

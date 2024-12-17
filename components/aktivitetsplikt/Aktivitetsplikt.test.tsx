@@ -175,6 +175,17 @@ describe('Felt for å velge grunn', () => {
     expect(grunnFelt).toBeVisible();
   });
 
+  it('skal dukke opp et felt for å velge en grunn for fravær dersom man velger brudd for ikke sendt inn dokumentasjon', async () => {
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
+    await åpneRegistrerNyttBruddSkjema();
+    await user.click(
+      screen.getByRole('radio', { name: 'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om på aktivitet' })
+    );
+
+    const grunnFelt = screen.getByRole('group', { name: 'Velg grunn for bruddet' });
+    expect(grunnFelt).toBeVisible();
+  });
+
   it('Skal ha alle valgene i feltet for å registrere en grunn for bruddet hvis der er paragraf 11-8', async () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
     await åpneRegistrerNyttBruddSkjema();
