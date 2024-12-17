@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { BodyShort, Button, Label } from '@navikt/ds-react';
-import { Behovstype } from 'lib/utils/form';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { revalidateFlyt } from 'lib/actions/actions';
@@ -37,28 +36,28 @@ export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props)
               <Label>Årsak</Label>
               <BodyShort>{mapÅrsakerTilString(informasjon.grunn)}</BodyShort>
             </div>
+
+            <BodyShort as={'p'}>Behandlingen er på vent. Vil du åpne den igjen?</BodyShort>
+            <Button
+              size={'medium'}
+              loading={isLoading}
+              onClick={async () => {
+                løsBehovOgVentPåProsessering({
+                  behandlingVersjon: behandlingVersjon,
+                  behov: {
+                    behovstype: informasjon?.definisjon.kode,
+                  },
+                  referanse: behandlingsReferanse,
+                });
+
+                await revalidateFlyt(behandlingsReferanse);
+              }}
+              className={'fit-content'}
+            >
+              Åpne behandling
+            </Button>
           </>
         )}
-
-        <BodyShort as={'p'}>Behandlingen er på vent. Vil du åpne den igjen?</BodyShort>
-        <Button
-          size={'medium'}
-          loading={isLoading}
-          onClick={async () => {
-            løsBehovOgVentPåProsessering({
-              behandlingVersjon: behandlingVersjon,
-              behov: {
-                behovstype: Behovstype.MANUELT_SATT_PÅ_VENT_KODE,
-              },
-              referanse: behandlingsReferanse,
-            });
-
-            await revalidateFlyt(behandlingsReferanse);
-          }}
-          className={'fit-content'}
-        >
-          Åpne behandling
-        </Button>
       </div>
     </SideProsessKort>
   );
