@@ -1059,10 +1059,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/diagnosekoder@npm:^1.2024.1":
-  version: 1.2024.1
-  resolution: "@navikt/diagnosekoder@npm:1.2024.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fdiagnosekoder%2F1.2024.1%2F9fd2b352dfb354fed52b56d3df15a9420ecc4825"
-  checksum: 10c0/6fa90dba4a2a8f549d3dd74cc426d0eaf2b8f9a8233c08f3e0cfda2fba726b1116b82981b5fc4c54e1b34cc1eacd77099424c86e893328b6028cc72d64c45bb9
+"@navikt/diagnosekoder@npm:^1.2025.0":
+  version: 1.2025.0
+  resolution: "@navikt/diagnosekoder@npm:1.2025.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fdiagnosekoder%2F1.2025.0%2F2675cb1178884832541008211afed1a73de742b7"
+  checksum: 10c0/071851ecf31e85d26f9f188a11b1f0d5612031e12569ff813a4fb73367c9b2770a03bb784ad4d625e753a999bfa2b50e1449d94acf698257ef3733b75691b502
   languageName: node
   linkType: hard
 
@@ -2799,7 +2799,7 @@ __metadata:
     "@navikt/aap-felles-utils": "npm:^4.0.1"
     "@navikt/aap-felles-utils-client": "npm:^4.0.1"
     "@navikt/aksel-icons": "npm:7.8.0"
-    "@navikt/diagnosekoder": "npm:^1.2024.1"
+    "@navikt/diagnosekoder": "npm:^1.2025.0"
     "@navikt/ds-css": "npm:7.8.0"
     "@navikt/ds-react": "npm:7.8.0"
     "@navikt/eslint-config-aap": "npm:^4.0.0"
