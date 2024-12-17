@@ -23,7 +23,7 @@
     "@navikt/aap-felles-utils": "^4.0.1",
     "@navikt/aap-felles-utils-client": "^4.0.1",
     "@navikt/aksel-icons": "7.8.0",
-    "@navikt/diagnosekoder": "^1.2024.1",
+    "@navikt/diagnosekoder": "^1.2025.0",
     "@navikt/ds-css": "7.8.0",
     "@navikt/ds-react": "7.8.0",
     "@navikt/oasis": "^3.6.0",
