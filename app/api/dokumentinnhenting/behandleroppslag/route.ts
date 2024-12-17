@@ -1,11 +1,12 @@
 import { logError } from '@navikt/aap-felles-utils';
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import { fetchProxy } from 'lib/services/fetchProxy';
+import { isLocal } from 'lib/utils/environment';
 import { NextRequest } from 'next/server';
 
 const dokumentinnhentingApiBaseUrl = 'http://dokumentinnhenting';
 const dokumentinnhentingApiScope = 'api://dev-gcp.aap.dokumentinnhenting/.default';
-/*
+
 const testdata: Behandler[] = [
   {
     behandlerRef: '26a75260-1366-4517-b348-5f57c840ba76',
@@ -48,8 +49,11 @@ const testdata: Behandler[] = [
     hprId: 'hpr-a80e',
   },
 ];
-*/
+
 export async function POST(req: NextRequest) {
+  if (isLocal()) {
+    return new Response(JSON.stringify(testdata), { status: 200 });
+  }
   const body = await req.json();
   try {
     const url = `${dokumentinnhentingApiBaseUrl}/syfo/behandleroppslag/search`;
