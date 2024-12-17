@@ -6,17 +6,19 @@ import { clientHentAlleDialogmeldingerPåSak } from 'lib/clientApi';
 import useSWR from 'swr';
 import { Dialogmeldinger } from 'components/innhentdokumentasjon/dialogmeldinger/Dialogmeldinger';
 import { useSaksnummer } from 'hooks/BehandlingHook';
-import { LegeerklæringStatus } from 'lib/types/types';
 
 import styles from './InnhentDokumentasjon.module.css';
 
 export const InnhentDokumentasjon = () => {
   const saksnummer = useSaksnummer();
-  const { data, isLoading, error, mutate } = useSWR(
-    `api/dokumentinnhenting/status/${saksnummer}`,
-    () => clientHentAlleDialogmeldingerPåSak(saksnummer),
-    { revalidateOnFocus: false }
-  );
+  const {
+    data: dialogmeldinger,
+    isLoading,
+    error,
+    mutate,
+  } = useSWR(`api/dokumentinnhenting/status/${saksnummer}`, () => clientHentAlleDialogmeldingerPåSak(saksnummer), {
+    revalidateOnFocus: false,
+  });
 
   const [visSkjema, oppdaterVisSkjema] = useState<boolean>(false);
   const skjulSkjema = () => oppdaterVisSkjema(false);
@@ -39,7 +41,7 @@ export const InnhentDokumentasjon = () => {
             </div>
           )}
           {error && <Alert variant="error">Noe gikk galt under henting av dialogmeldinger</Alert>}
-          {data && <Dialogmeldinger dialogmeldinger={data as LegeerklæringStatus[]} />}
+          {dialogmeldinger && <Dialogmeldinger dialogmeldinger={dialogmeldinger} />}
         </VStack>
       )}
       {visSkjema && <InnhentDokumentasjonSkjema onCancel={skjulSkjema} onSuccess={skjulOgRefresh} />}

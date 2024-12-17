@@ -5,6 +5,7 @@ import {
   DokumentInfo,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
+  LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
@@ -71,7 +72,7 @@ export function clientSøkPåBehandler(fritekst: string) {
 }
 
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
-  return fetchProxy(`/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
+  return fetchProxy<LegeerklæringStatus[]>(`/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
 }
 
 export function clientHentAlleDokumenterPåSak(saksnummer: string) {
