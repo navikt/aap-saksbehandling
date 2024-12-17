@@ -415,6 +415,28 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     const feilmelding = screen.getByText('Du må legge til en enkeltdato eller periode');
     expect(feilmelding).toBeVisible();
   });
+
+  it('skal ikke være mulig å legge til periode når det er ikke møtt til møte', async () => {
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
+    await åpneRegistrerNyttBruddSkjema();
+    const ikkeMøttTilMøte = screen.getByRole('radio', { name: 'Ikke møtt til møte med Nav' });
+    await user.click(ikkeMøttTilMøte);
+
+    expect(screen.getByRole('button', { name: 'Legg til enkeltdato' })).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Legg til periode' })).not.toBeInTheDocument();
+  });
+
+  it('skal ikke være mulig å legge til periode når det er ikke er sendt inn dokumentasjon', async () => {
+    render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
+    await åpneRegistrerNyttBruddSkjema();
+    const ikkeMøttTilMøte = screen.getByRole('radio', {
+      name: 'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om på aktivitet',
+    });
+    await user.click(ikkeMøttTilMøte);
+
+    expect(screen.getByRole('button', { name: 'Legg til enkeltdato' })).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Legg til periode' })).not.toBeInTheDocument();
+  });
 });
 
 async function velgIkkeMøttITiltakSomBrudd() {

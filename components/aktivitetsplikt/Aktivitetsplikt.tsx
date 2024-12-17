@@ -146,6 +146,8 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
     form.setValue('grunn', null);
   }, [brudd, paragraf, form]);
 
+  const erMuligÅLeggeTilPeriode = brudd !== 'IKKE_MØTT_TIL_MØTE' && brudd !== 'IKKE_SENDT_INN_DOKUMENTASJON';
+
   return (
     <SideProsessKort
       heading={'Registrering av gyldig og ugyldig fravær - (aktivitetsplikten §§ 11-7, 11-8, 11-9)'}
@@ -252,15 +254,17 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
                   >
                     Legg til enkeltdato
                   </Button>
-                  <Button
-                    icon={<PlusCircleIcon />}
-                    type={'button'}
-                    variant={'tertiary'}
-                    size={'small'}
-                    onClick={() => append({ type: 'periode', fom: '', tom: '' })}
-                  >
-                    Legg til periode
-                  </Button>
+                  {erMuligÅLeggeTilPeriode && (
+                    <Button
+                      icon={<PlusCircleIcon />}
+                      type={'button'}
+                      variant={'tertiary'}
+                      size={'small'}
+                      onClick={() => append({ type: 'periode', fom: '', tom: '' })}
+                    >
+                      Legg til periode
+                    </Button>
+                  )}
                 </div>
                 {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
                 <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
