@@ -261,6 +261,50 @@ describe('felt for å sette diagnoser', () => {
 
     expect(screen.getByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).toBeVisible();
   });
+
+  it('skal ikke vise felt for bidiagnose dersom det har blitt valgt ingen diagnose på hoveddiagnose', async () => {
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+      />
+    );
+    const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
+    await user.click(ICD10option);
+
+    const hoveddiagnose = screen.getByRole('combobox', { name: 'Hoveddiagnose' });
+    await user.click(hoveddiagnose);
+
+    const ingenDiagnoseOption = screen.getByText('Ingen diagnose');
+    await user.click(ingenDiagnoseOption);
+
+    expect(screen.queryByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).not.toBeInTheDocument();
+  });
+
+  it('skal vise felt for bidiagnose dersom det har blitt valgt noe annet enn ingen diagnose på hoveddiagnose', async () => {
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+      />
+    );
+    const ICD10option = screen.getByRole('radio', { name: 'ICPC2' });
+    await user.click(ICD10option);
+
+    const hoveddiagnose = screen.getByRole('combobox', { name: 'Hoveddiagnose' });
+    await user.click(hoveddiagnose);
+
+    await user.type(hoveddiagnose, 'Frysninger');
+
+    const frysningerOption = screen.getByText('Frysninger (A02)');
+    await user.click(frysningerOption);
+
+    expect(screen.getByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).toBeVisible();
+  });
 });
 
 describe('felt for nedsettelsen er av en viss varighet', () => {

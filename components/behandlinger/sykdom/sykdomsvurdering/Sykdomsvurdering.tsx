@@ -269,15 +269,17 @@ export const Sykdomsvurdering = ({
               rules={{ required: 'Du må velge en hoveddiagnose' }}
               readOnly={readOnly}
             />
-            <AsyncComboSearch
-              label={'Bidiagnoser (valgfritt)'}
-              form={form}
-              isMulti={true}
-              name={'bidiagnose'}
-              fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
-              defaultOptions={defaultOptionsBidiagnose}
-              readOnly={readOnly}
-            />
+            {form.watch('hoveddiagnose')?.value !== 'INGEN_DIAGNOSE' && (
+              <AsyncComboSearch
+                label={'Bidiagnoser (valgfritt)'}
+                form={form}
+                isMulti={true}
+                name={'bidiagnose'}
+                fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
+                defaultOptions={defaultOptionsBidiagnose}
+                readOnly={readOnly}
+              />
+            )}
           </>
         )}
 
