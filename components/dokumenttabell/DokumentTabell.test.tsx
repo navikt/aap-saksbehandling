@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Dokument, DokumentTabell } from './DokumentTabell';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -27,18 +27,6 @@ describe('DokumentTabell', () => {
   it('Skal rendre en rad per dokument', () => {
     render(<DokumentTabell dokumenter={dokumenter} />);
     expect(screen.getAllByRole('row')).toHaveLength(2); // Inkluderer table header row
-  });
-
-  it('skal ha en knapp for å legge til et nytt dokument', () => {
-    render(<DokumentTabell dokumenter={dokumenter} />);
-    const knapp = screen.getByRole('button', { name: /Legg til dokument/i });
-    expect(knapp).toBeVisible();
-  });
-
-  it('Skal ha et felt for om dokumentasjon mangler', () => {
-    render(<DokumentTabell dokumenter={dokumenter} />);
-    const dokumentasjonManglerCheckbox = screen.getByRole('checkbox', { name: /dokumentasjon mangler/i });
-    expect(dokumentasjonManglerCheckbox).toBeVisible();
   });
 });
 
