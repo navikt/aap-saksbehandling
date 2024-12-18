@@ -22,7 +22,7 @@ import { Alert, Heading, Link } from '@navikt/ds-react';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
-import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
+import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSearch';
 
 interface FormFields {
@@ -269,7 +269,7 @@ export const Sykdomsvurdering = ({
               rules={{ required: 'Du må velge en hoveddiagnose' }}
               readOnly={readOnly}
             />
-            {form.watch('hoveddiagnose')?.value !== 'INGEN_DIAGNOSE' && (
+            {form.watch('hoveddiagnose')?.value !== ingenDiagnoseCode && (
               <AsyncComboSearch
                 label={'Bidiagnoser (valgfritt)'}
                 form={form}

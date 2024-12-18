@@ -6,9 +6,12 @@ export type DiagnoseSystem = 'ICD10' | 'ICPC2';
 
 export type DiagnoseOption = { text: string; code: string } | ICPC2Diagnosekode | ICD10Diagnosekode;
 
+// Trekker ut denne som en konstant for å gi mer sikkerhet ved bruk i render-metoden i sykdom og mapDiagnoseToValuePair
+export const ingenDiagnoseCode = 'INGEN_DIAGNOSE';
+
 const ingenDiagnoseOption = {
   text: 'Ingen diagnose',
-  code: 'INGEN_DIAGNOSE',
+  code: ingenDiagnoseCode,
 };
 
 const ICD10options = [ingenDiagnoseOption, ...ICD10];
@@ -45,7 +48,7 @@ export function diagnoseSøker(kodeverk: DiagnoseSystem, value: string): ValuePa
 
 function mapDiagnoseToValuePair(value: DiagnoseOption): ValuePair {
   // Vi trenger ikke å vise koden i label på ingen diagnose valget
-  if (value.code === 'INGEN_DIAGNOSE') {
+  if (value.code === ingenDiagnoseCode) {
     return {
       label: value.text,
       value: value.code,
