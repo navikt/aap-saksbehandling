@@ -1,10 +1,9 @@
 'use client';
 
-import { Button, Checkbox, Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react';
 import { DokumentTabellRad } from 'components/dokumenttabell/DokumentTabellRad';
 
 import styles from './DokumentTabell.module.css';
-import { PlusIcon } from '@navikt/aksel-icons';
 
 export interface Dokument {
   journalpostId: string;
@@ -59,16 +58,6 @@ export const DokumentTabell = ({ dokumenter = defaultDokumenter }: Props) => {
           </Table.Body>
         )}
       </Table>
-      <Button
-        className={`fit-content ${styles.leggTilDokumentKnapp}`}
-        size={'small'}
-        icon={<PlusIcon />}
-        variant={'tertiary'}
-        onClick={(e) => e.preventDefault()}
-      >
-        Legg til dokument
-      </Button>
-      <Checkbox value={'dokumentasjonMangler'}>Dokumentasjon mangler</Checkbox>
     </div>
   );
 };
