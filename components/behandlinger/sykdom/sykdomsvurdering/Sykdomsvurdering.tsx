@@ -98,7 +98,7 @@ export const Sykdomsvurdering = ({
       kodeverk: {
         type: 'radio',
         label: 'Velg system for diagnoser',
-        options: ['ICD10', 'ICPC2'],
+        options: ['ICPC2', 'ICD10'],
         defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.kodeverk),
         rules: { required: 'Du må velge et system for diagnoser' },
       },
