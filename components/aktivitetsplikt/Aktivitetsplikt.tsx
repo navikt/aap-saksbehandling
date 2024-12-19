@@ -1,7 +1,6 @@
 'use client';
 
 import { FigureIcon } from '@navikt/aksel-icons';
-import { AktivitetspliktHendelserTabell } from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
 import { Button } from '@navikt/ds-react';
 import { AktivitetspliktHendelse, SaksInfo } from 'lib/types/types';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
@@ -9,6 +8,7 @@ import { useState } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 import { AktivitetspliktForm } from 'components/aktivitetsplikt/aktivitetspliktform/AktivitetspliktForm';
+import { AktivitetspliktHendelser } from 'components/aktivitetsplikt/aktivitetsplikthendelser/AktivitetspliktHendelser';
 
 interface Props {
   aktivitetspliktHendelser: AktivitetspliktHendelse[];
@@ -31,8 +31,8 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
             Registrer fravær eller brudd
           </Button>
         )}
-        <AktivitetspliktHendelserTabell
-          aktivitetspliktHendelser={aktivitetspliktHendelser.map((hendelse) => {
+        <AktivitetspliktHendelser
+          hendelser={aktivitetspliktHendelser.map((hendelse) => {
             return {
               id: uuidv4(),
               ...hendelse,

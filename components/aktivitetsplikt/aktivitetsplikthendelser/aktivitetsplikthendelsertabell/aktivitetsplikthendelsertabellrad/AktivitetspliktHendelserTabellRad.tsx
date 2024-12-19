@@ -14,12 +14,13 @@ import { useState } from 'react';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { clientOppdaterAktivitetspliktBrudd } from 'lib/clientApi';
-import { AktivitetspliktHendelserMedFormId } from 'components/aktivitetsplikt/aktivitetsplikthendelsertabell/AktivitetspliktHendelserTabell';
+
 import { useFetch } from 'hooks/FetchHook';
 
-import styles from './AktivitetspliktHendelserTabell.module.css';
+import styles from './AktivitetspliktHendelserTabellRad.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
+import { AktivitetspliktHendelserMedFormId } from 'components/aktivitetsplikt/aktivitetsplikthendelser/AktivitetspliktHendelser';
 
 interface Props {
   aktivitetspliktHendelse: AktivitetspliktHendelserMedFormId;
@@ -31,7 +32,7 @@ interface Formfields {
   bidrarAktivtIgjenDato: string;
 }
 
-export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) => {
+export const AktivitetspliktHendelserTabellRad = ({ aktivitetspliktHendelse }: Props) => {
   const saksnummer = useSaksnummer();
   const [isOpen, setIsOpen] = useState(false);
 
