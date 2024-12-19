@@ -12,10 +12,10 @@ export const AktivitetspliktHendelser = ({ hendelser }: Props) => {
   return (
     <section className={'flex-column'}>
       <Label size={'medium'}>Tidligere brudd på aktivitetsplikten</Label>
-      {!hendelser ? (
-        <BodyShort>Ingen tidligere brudd registrert</BodyShort>
-      ) : (
+      {hendelser && hendelser.length > 0 ? (
         <AktivitetspliktHendelserTabell aktivitetspliktHendelser={hendelser} />
+      ) : (
+        <BodyShort>Ingen tidligere brudd registrert</BodyShort>
       )}
     </section>
   );
