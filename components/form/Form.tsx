@@ -13,17 +13,26 @@ interface Props {
   isLoading: boolean;
   status: ServerSentEventStatus | undefined;
   children: ReactNode;
+  knappTekst?: string;
   visBekreftKnapp?: boolean;
 }
 
-export const Form = ({ steg, onSubmit, status, isLoading, children, visBekreftKnapp = true }: Props) => {
+export const Form = ({
+  steg,
+  onSubmit,
+  status,
+  isLoading,
+  children,
+  visBekreftKnapp = true,
+  knappTekst = 'Bekreft',
+}: Props) => {
   return (
     <form className={styles.form} onSubmit={onSubmit} id={steg}>
       {children}
       <ServerSentEventStatusAlert status={status} />
       {visBekreftKnapp && (
         <Button className={styles.button} loading={isLoading}>
-          Bekreft
+          {knappTekst}
         </Button>
       )}
     </form>
