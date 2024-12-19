@@ -13,7 +13,7 @@ import { useAktivitetsplikt } from 'hooks/FetchHook';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { AktivitetspliktBrudd, AktivitetspliktGrunn, AktivitetspliktParagraf, SaksInfo } from 'lib/types/types';
 import { useFieldArray } from 'react-hook-form';
-import { hentDatoLabel } from 'components/aktivitetsplikt/AktivitetspliktUtil';
+import { hentDatoLabel } from 'components/aktivitetsplikt/util/AktivitetspliktUtil';
 
 interface Props {
   sak: SaksInfo;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formaterPerioder } from 'components/aktivitetsplikt/AktivitetspliktUtil';
+import { formaterPerioder } from 'components/aktivitetsplikt/util/AktivitetspliktUtil';
 
 describe('formaterPerioder', () => {
   it('skal returnere et array med et objekt som inneholder tom og fom dersom det er av type periode', () => {
