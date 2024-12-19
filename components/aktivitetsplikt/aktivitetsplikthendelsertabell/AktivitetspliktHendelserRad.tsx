@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyLong, Button, Label, Table } from '@navikt/ds-react';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import {
   AktivitetspliktBrudd,
   AktivitetspliktGrunn,
@@ -18,6 +18,8 @@ import { AktivitetspliktHendelserMedFormId } from 'components/aktivitetsplikt/ak
 import { useFetch } from 'hooks/FetchHook';
 
 import styles from './AktivitetspliktHendelserTabell.module.css';
+import { validerDato } from 'lib/validation/dateValidation';
+import { parse } from 'date-fns';
 
 interface Props {
   aktivitetspliktHendelse: AktivitetspliktHendelserMedFormId;
@@ -26,6 +28,7 @@ interface Props {
 interface Formfields {
   grunn: OppdaterAktivitetsplitGrunn;
   begrunnelse: string;
+  bidrarAktivtIgjenDato: string;
 }
 
 export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) => {
@@ -34,11 +37,12 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
 
   const { isLoading, method: oppdaterAktivitetspliktBrudd } = useFetch(clientOppdaterAktivitetspliktBrudd);
 
-  function hentOptionsForBrudd(brudd: AktivitetspliktHendelseParagraf): ValuePair[] {
+  function hentOptionsForBrudd(brudd: AktivitetspliktHendelseParagraf): ValuePair<AktivitetspliktGrunn>[] {
     switch (brudd) {
       case 'PARAGRAF_11_7':
         return [
           { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+          { label: 'Bidrar aktivt igjen', value: 'BIDRAR_AKTIVT' },
           { label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' },
         ];
       case 'PARAGRAF_11_8':
@@ -65,6 +69,23 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
       options: hentOptionsForBrudd(aktivitetspliktHendelse.paragraf),
       rules: { required: 'Du må velge én grunn' },
     },
+    bidrarAktivtIgjenDato: {
+      type: 'date_input',
+      label: 'Bidrar aktivt igjen fra',
+      description: 'Datoformat: dd.mm.åååå',
+      defaultValue:
+        aktivitetspliktHendelse.grunn === 'BIDRAR_AKTIVT'
+          ? formaterDatoForFrontend(aktivitetspliktHendelse.periode.fom)
+          : undefined,
+      rules: {
+        validate: (value) => {
+          const valideringsresultat = validerDato(value as string);
+          if (valideringsresultat) {
+            return valideringsresultat;
+          }
+        },
+      },
+    },
     begrunnelse: {
       type: 'textarea',
       label: 'Begrunnelse',
@@ -83,9 +104,14 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
       content={
         <form
           onSubmit={form.handleSubmit(async (data) => {
+            const periode =
+              data.grunn === 'BIDRAR_AKTIVT'
+                ? { fom: formaterDatoForBackend(parse(data.bidrarAktivtIgjenDato, 'dd.MM.yyyy', new Date())) }
+                : aktivitetspliktHendelse.periode;
+
             await oppdaterAktivitetspliktBrudd(saksnummer, {
               brudd: aktivitetspliktHendelse.brudd,
-              periode: aktivitetspliktHendelse.periode,
+              periode: periode,
               paragraf: aktivitetspliktHendelse.paragraf,
               grunn: data.grunn,
               begrunnelse: data.begrunnelse,
@@ -103,7 +129,10 @@ export const AktivitetspliktHendelserRad = ({ aktivitetspliktHendelse }: Props) 
             )}
 
             <FormField form={form} formField={formFields.grunn} />
-            <FormField form={form} formField={formFields.begrunnelse} />
+            {form.watch('grunn') === 'BIDRAR_AKTIVT' && (
+              <FormField form={form} formField={formFields.bidrarAktivtIgjenDato} />
+            )}
+            <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
 
             <div className={'flex-row'}>
               <Button size={'small'} loading={isLoading}>
