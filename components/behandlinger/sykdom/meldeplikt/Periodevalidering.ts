@@ -1,4 +1,3 @@
-import { Periode } from 'lib/types/types';
 import { parse } from 'date-fns';
 
 export interface PeriodeMedValgfriTom {
@@ -45,14 +44,3 @@ export function perioderSomOverlapper(perioder: PeriodeMedValgfriTom[]): number[
 function parseTilddmmyyyy(value: string) {
   return parse(value, 'dd.MM.yyyy', new Date());
 }
-
-export const sjekkOmPerioderInkludererDatoer = (datoer: string[], perioder: Periode[]) => {
-  for (let i = 0; i < datoer.length; i++) {
-    const dato = new Date(datoer[i]);
-    const res = perioder.find((periode) => dato >= new Date(periode.fom) && dato <= new Date(periode.tom));
-    if (res) {
-      return true;
-    }
-  }
-  return false;
-};
