@@ -12,8 +12,6 @@ import {
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
-import { RegistrertBehandler } from 'components/registrertbehandler/RegistrertBehandler';
-import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent, useEffect } from 'react';
 import { SykdomProps } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
@@ -53,38 +51,38 @@ export const Sykdomsvurdering = ({
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
-      dokumenterBruktIVurderingen: {
-        type: 'checkbox_nested',
-        label: 'Dokumenter brukt i vurderingen',
-        defaultValue: grunnlag.sykdomsvurdering?.dokumenterBruktIVurdering.map((dokument) => dokument.identifikator),
-      },
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder den nedsatte arbeidsevnen',
-        description: 'Hvilken sykdom / skade / lyte. Hva er det mest vesentlige?',
+        label: 'Vilkårsvurdering',
+        description: 'Vekt og vurder opplysningene mot hverandre, og vurder om brukeren oppfyller vilkårene i § 11-5',
         defaultValue: grunnlag?.sykdomsvurdering?.begrunnelse,
         rules: { required: 'Du må begrunne' },
       },
+      dokumenterBruktIVurderingen: {
+        type: 'checkbox_nested',
+        label: 'Hvilke dokumenter er brukt i vurderingen?',
+        defaultValue: grunnlag.sykdomsvurdering?.dokumenterBruktIVurdering.map((dokument) => dokument.identifikator),
+      },
       harSkadeSykdomEllerLyte: {
         type: 'radio',
-        label: 'Har innbygger sykdom, skade eller lyte?',
+        label: 'Har bruker sykdom, skade eller lyte?',
         defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.harSkadeSykdomEllerLyte),
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om innbygger har sykdom, skade eller lyte' },
+        rules: { required: 'Du må svare på om bruker har sykdom, skade eller lyte' },
       },
       erArbeidsevnenNedsatt: {
         type: 'radio',
-        label: 'Har innbygger nedsatt arbeidsevne?',
+        label: 'Har bruker nedsatt arbeidsevne?',
         defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erArbeidsevnenNedsatt),
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om innbygger har nedsatt arbeidsevne' },
+        rules: { required: 'Du må svare på om bruker har nedsatt arbeidsevne' },
       },
       erNedsettelseIArbeidsevneMerEnnHalvparten: {
         type: 'radio',
-        label: 'Er arbeidsevnen nedsatt med minst 50%?',
+        label: 'Er arbeidsevnen nedsatt med minst halvparten?',
         defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten),
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om arbeidsevnen er nedsatt med minst 50%' },
+        rules: { required: 'Du må svare på om arbeidsevnen er nedsatt med minst halvparten' },
       },
       erSkadeSykdomEllerLyteVesentligdel: {
         type: 'radio',
@@ -134,7 +132,7 @@ export const Sykdomsvurdering = ({
         type: 'textarea',
         label: 'Vurdering om arbeidsevne er nedsatt med minst 30% (§11-22)',
         description:
-          'Innbygger har yrkesskade, og kan ha rett på AAP med en nedsatt arbeidsevne på minst 30%. Nay vurderer årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne.',
+          'Bruker har yrkesskade, og kan ha rett på AAP med en nedsatt arbeidsevne på minst 30%. Nay vurderer årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne.',
         rules: { required: 'Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med mist 30%' },
         defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadeBegrunnelse),
       },
@@ -198,7 +196,7 @@ export const Sykdomsvurdering = ({
 
   return (
     <VilkårsKort
-      heading={'Nedsatt arbeidsevne - § 11-5'}
+      heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
       steg="AVKLAR_SYKDOM"
       icon={<VitalsIcon />}
       vilkårTilhørerNavKontor={true}
@@ -215,28 +213,13 @@ export const Sykdomsvurdering = ({
             Det har blitt funnet én eller flere yrkesskader på brukeren
           </Alert>
         )}
-        <RegistrertBehandler />
-        <Veiledning
-          tekst={
-            <div>
-              Folketrygdloven § 11-5 består av fire vilkår som du må ta stilling til og som alle må være oppfylt for at
-              § 11-5 skal være oppfylt. Det vil si at hvis du svarer nei på ett av spørsmålene under, vil ikke vilkåret
-              være oppfylt.
-              <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-5" target="_blank">
-                Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5
-              </Link>
-              <span> </span>
-              <Link href="https://lovdata.no" target="_blank">
-                (lovdata.no)
-              </Link>
-            </div>
-          }
-        />
+        <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-5" target="_blank">
+          Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
+        </Link>
         <CheckboxWrapper
           name={'dokumenterBruktIVurderingen'}
           control={form.control}
-          label={'Dokumenter funnet som er relevant for vurdering av §11-5'}
-          description={'Tilknytt minst ett dokument §11-5 vurdering'}
+          label={'Hvilke dokumenter er brukt i vurderingen?'}
           readOnly={readOnly}
         >
           <DokumentTabell
@@ -289,7 +272,7 @@ export const Sykdomsvurdering = ({
 
         {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei && (
           <Alert variant={'info'} size={'small'} className={'fit-content'}>
-            Innbygger vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
+            Bruker vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
           </Alert>
         )}
 
@@ -309,7 +292,6 @@ export const Sykdomsvurdering = ({
           form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei && (
             <>
               <Heading size={'small'}>Nedsatt arbeidsevne §§ 11-5 / 11-22</Heading>
-              <Veiledning />
               <FormField form={form} formField={formFields.yrkesskadeBegrunnelse} className={'begrunnelse'} />
               <FormField
                 form={form}
