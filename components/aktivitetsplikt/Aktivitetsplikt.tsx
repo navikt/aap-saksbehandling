@@ -158,9 +158,14 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
             className={styles.form}
             onSubmit={form.handleSubmit(async (data) => {
               setErrorMessage('');
+
               const perioder = data.perioder.map((periode) => {
                 if (periode.type === 'enkeltdag') {
-                  return { fom: periode.dato, tom: periode.dato };
+                  if (data.brudd === 'IKKE_AKTIVT_BIDRAG') {
+                    return { fom: periode.dato, tom: undefined };
+                  } else {
+                    return { fom: periode.dato, tom: periode.dato };
+                  }
                 } else {
                   return { fom: periode.fom, tom: periode.tom };
                 }
@@ -180,7 +185,9 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
                   perioder: perioder.map((periode) => {
                     return {
                       fom: formaterDatoForBackend(parse(periode.fom, DATO_FORMATER.ddMMyyyy, new Date())),
-                      tom: formaterDatoForBackend(parse(periode.tom, DATO_FORMATER.ddMMyyyy, new Date())),
+                      tom: periode.tom
+                        ? formaterDatoForBackend(parse(periode.tom, DATO_FORMATER.ddMMyyyy, new Date()))
+                        : undefined,
                     };
                   }),
                   grunn: data.grunn ? data.grunn : undefined,
