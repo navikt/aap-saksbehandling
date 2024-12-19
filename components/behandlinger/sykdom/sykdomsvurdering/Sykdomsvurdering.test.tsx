@@ -106,7 +106,7 @@ describe('felt for begrunnelse', () => {
         tilknyttedeDokumenter={[]}
       />
     );
-    const button = screen.getByRole('button', { name: 'Bekreft' });
+    const button = screen.getByRole('button', { name: 'Bekreft vurdering' });
     await user.click(button);
 
     expect(await screen.findByText('Du må begrunne')).toBeVisible();
@@ -569,7 +569,7 @@ describe('yrkesskade', () => {
 });
 
 const velgBekreft = async () => {
-  const button = screen.getByRole('button', { name: /Bekreft/ });
+  const button = screen.getByRole('button', { name: 'Bekreft vurdering' });
   await user.click(button);
 };
 
