@@ -1,19 +1,18 @@
 import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
 import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
-import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
-import { Alert, BodyShort, Button, Label, Radio } from '@navikt/ds-react';
-import { AktivitetspliktDatoTabell } from 'components/aktivitetsplikt/aktivitetspliktdatotabell/AktivitetspliktDatoTabell';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { Button, Radio } from '@navikt/ds-react';
+import { AktivitetspliktDato } from 'components/aktivitetsplikt/aktivitetspliktdato/AktivitetspliktDato';
 import { Dispatch, useEffect, useState } from 'react';
 import { useAktivitetsplikt } from 'hooks/FetchHook';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { AktivitetspliktBrudd, AktivitetspliktGrunn, AktivitetspliktParagraf, SaksInfo } from 'lib/types/types';
 import { useFieldArray } from 'react-hook-form';
-import { hentDatoLabel } from 'components/aktivitetsplikt/util/AktivitetspliktUtil';
+import { formaterPerioder } from 'components/aktivitetsplikt/util/AktivitetspliktUtil';
 
 interface Props {
   sak: SaksInfo;
@@ -114,7 +113,6 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd }: Props) => {
   const skalVelgeParagraf = bruddSomSkalViseParagrafValg.includes(brudd);
   const skalViseDatoFeltOgBegrunnelsesfelt =
     Boolean(paragraf) || bruddSomSkalViseDatoFeltOgBegrennelsesfelt.includes(brudd);
-  const erMuligÅLeggeTilPeriode = brudd !== 'IKKE_MØTT_TIL_MØTE' && brudd !== 'IKKE_SENDT_INN_DOKUMENTASJON';
 
   const grunnForBruddHvis119 = [
     { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
@@ -139,18 +137,7 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd }: Props) => {
       onSubmit={form.handleSubmit(async (data) => {
         setErrorMessage('');
 
-        const perioder = data.perioder.map((periode) => {
-          if (periode.type === 'enkeltdag') {
-            if (data.brudd === 'IKKE_AKTIVT_BIDRAG') {
-              return { fom: periode.dato, tom: undefined };
-            } else {
-              return { fom: periode.dato, tom: periode.dato };
-            }
-          } else {
-            return { fom: periode.fom, tom: periode.tom };
-          }
-        });
-
+        const perioder = formaterPerioder(data.perioder, data.brudd);
         const harOverlappendePerioder = perioderSomOverlapper(perioder);
 
         if (perioder && perioder.length <= 0) {
@@ -217,39 +204,14 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd }: Props) => {
 
       {skalViseDatoFeltOgBegrunnelsesfelt && (
         <div className={'flex-column'}>
-          <div>
-            <Label size={'small'}>{hentDatoLabel(brudd)}</Label>
-            <BodyShort size={'small'}>Søknadstidspunkt: {formaterDatoForFrontend(sak.opprettetTidspunkt)}</BodyShort>
-          </div>
-          <AktivitetspliktDatoTabell
+          <AktivitetspliktDato
             form={form}
             fields={fields}
+            append={append}
             remove={remove}
             søknadstidspunkt={new Date(sak.opprettetTidspunkt)}
+            errorMessage={errorMessage}
           />
-          <div className={'flex-row'}>
-            <Button
-              icon={<PlusCircleIcon />}
-              type={'button'}
-              variant={'tertiary'}
-              size={'small'}
-              onClick={() => append({ type: 'enkeltdag', dato: '' })}
-            >
-              Legg til enkeltdato
-            </Button>
-            {erMuligÅLeggeTilPeriode && (
-              <Button
-                icon={<PlusCircleIcon />}
-                type={'button'}
-                variant={'tertiary'}
-                size={'small'}
-                onClick={() => append({ type: 'periode', fom: '', tom: '' })}
-              >
-                Legg til periode
-              </Button>
-            )}
-          </div>
-          {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
           <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         </div>
       )}

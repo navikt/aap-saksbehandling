@@ -1,24 +1,35 @@
-import { Button, Table } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Label, Table } from '@navikt/ds-react';
 
-import { FieldArrayWithId, UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
-import { TrashIcon } from '@navikt/aksel-icons';
+import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from '@navikt/aap-felles-react';
 
-import styles from 'components/aktivitetsplikt/aktivitetspliktdatotabell/AktivitetspliktDatoTabell.module.css';
+import styles from 'components/aktivitetsplikt/aktivitetspliktdato/AktivitetspliktDato.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
 import { isBefore, parse, startOfDay } from 'date-fns';
 import { AktivitetspliktFormFields } from '../aktivitetspliktform/AktivitetspliktForm';
+import { hentDatoLabel } from 'components/aktivitetsplikt/util/AktivitetspliktUtil';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   form: UseFormReturn<AktivitetspliktFormFields>;
   fields: FieldArrayWithId<AktivitetspliktFormFields, 'perioder'>[];
   remove: UseFieldArrayRemove;
+  append: UseFieldArrayAppend<AktivitetspliktFormFields, 'perioder'>;
   søknadstidspunkt: Date;
+  errorMessage?: string;
 }
 
-export const AktivitetspliktDatoTabell = ({ form, fields, remove, søknadstidspunkt }: Props) => {
+export const AktivitetspliktDato = ({ form, fields, remove, søknadstidspunkt, append, errorMessage }: Props) => {
+  const erMuligÅLeggeTilPeriode =
+    form.watch('brudd') !== 'IKKE_MØTT_TIL_MØTE' && form.watch('brudd') !== 'IKKE_SENDT_INN_DOKUMENTASJON';
+
   return (
-    <>
+    <div className={'flex-column'}>
+      <div>
+        <Label size={'small'}>{hentDatoLabel(form.watch('brudd'))}</Label>
+        <BodyShort size={'small'}>Søknadstidspunkt: {formaterDatoForFrontend(søknadstidspunkt)}</BodyShort>
+      </div>
       <Table size={'small'}>
         <Table.Header>
           <Table.Row>
@@ -80,13 +91,36 @@ export const AktivitetspliktDatoTabell = ({ form, fields, remove, søknadstidspu
                   icon={<TrashIcon />}
                   onClick={() => remove(index)}
                 >
-                  Slett
+                  {`Fjern ${field.type === 'periode' ? 'periode' : 'enkeltdato'}`}
                 </Button>
               </Table.DataCell>
             </Table.Row>
           ))}
         </Table.Body>
       </Table>
-    </>
+      <div className={'flex-row'}>
+        <Button
+          icon={<PlusCircleIcon />}
+          type={'button'}
+          variant={'tertiary'}
+          size={'small'}
+          onClick={() => append({ type: 'enkeltdag', dato: '' })}
+        >
+          Legg til enkeltdato
+        </Button>
+        {erMuligÅLeggeTilPeriode && (
+          <Button
+            icon={<PlusCircleIcon />}
+            type={'button'}
+            variant={'tertiary'}
+            size={'small'}
+            onClick={() => append({ type: 'periode', fom: '', tom: '' })}
+          >
+            Legg til periode
+          </Button>
+        )}
+      </div>
+      {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
+    </div>
   );
 };

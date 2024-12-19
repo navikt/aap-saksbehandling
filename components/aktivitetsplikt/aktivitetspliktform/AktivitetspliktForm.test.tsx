@@ -252,7 +252,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     expect(datoFelt.length).toEqual(2);
   });
 
-  it('skal være mulig å slette en rad med enkeltdato', async () => {
+  it('skal være mulig å fjerne en rad med enkeltdato', async () => {
     render(<AktivitetspliktForm setSkalRegistrereBrudd={() => vitest.fn} sak={sak} />);
 
     await velgIkkeMøttITiltakSomBrudd();
@@ -263,7 +263,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     await user.click(leggTilEnkeltdatoKnapp);
     expect(screen.getAllByRole('textbox', { name: 'dato' }).length).toEqual(2);
 
-    const slettKnapp = screen.getAllByRole('button', { name: 'Slett' });
+    const slettKnapp = screen.getAllByRole('button', { name: 'Fjern enkeltdato' });
     await user.click(slettKnapp[0]);
     expect(screen.getAllByRole('textbox', { name: 'dato' }).length).toEqual(1);
   });
@@ -283,7 +283,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     expect(tilOgMedDatoFelt.length).toEqual(2);
   });
 
-  it('skal være mulig å slette en rad med perioder', async () => {
+  it('skal være mulig å fjerne en rad med perioder', async () => {
     render(<AktivitetspliktForm setSkalRegistrereBrudd={() => vitest.fn} sak={sak} />);
 
     await velgIkkeMøttITiltakSomBrudd();
@@ -296,7 +296,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     expect(screen.getAllByRole('textbox', { name: 'fra og med dato' }).length).toEqual(2);
     expect(screen.getAllByRole('textbox', { name: 'til og med dato' }).length).toEqual(2);
 
-    const slettKnapp = screen.getAllByRole('button', { name: 'Slett' });
+    const slettKnapp = screen.getAllByRole('button', { name: 'Fjern periode' });
     await user.click(slettKnapp[0]);
 
     expect(screen.getAllByRole('textbox', { name: 'fra og med dato' }).length).toEqual(1);
