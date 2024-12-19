@@ -1,5 +1,5 @@
 import { AktivitetspliktBrudd } from 'lib/types/types';
-import { DatoBruddPåAktivitetsplikt } from 'components/aktivitetsplikt/Aktivitetsplikt';
+import { DatoBruddPåAktivitetsplikt } from 'components/aktivitetsplikt/aktivitetspliktform/AktivitetspliktForm';
 
 export function hentDatoLabel(valgtBrudd: AktivitetspliktBrudd): string {
   switch (valgtBrudd) {

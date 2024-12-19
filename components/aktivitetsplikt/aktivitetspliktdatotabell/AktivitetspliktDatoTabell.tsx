@@ -3,11 +3,11 @@ import { Button, Table } from '@navikt/ds-react';
 import { FieldArrayWithId, UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from '@navikt/aap-felles-react';
-import { AktivitetspliktFormFields } from 'components/aktivitetsplikt/Aktivitetsplikt';
 
 import styles from 'components/aktivitetsplikt/aktivitetspliktdatotabell/AktivitetspliktDatoTabell.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
 import { isBefore, parse, startOfDay } from 'date-fns';
+import { AktivitetspliktFormFields } from '../aktivitetspliktform/AktivitetspliktForm';
 
 interface Props {
   form: UseFormReturn<AktivitetspliktFormFields>;
