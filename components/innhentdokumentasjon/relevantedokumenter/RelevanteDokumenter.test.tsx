@@ -1,0 +1,40 @@
+import { render, screen } from '@testing-library/react';
+import { RelevanteDokumenter } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
+import { beforeEach, describe, expect, test } from 'vitest';
+
+describe('Relevante dokumenter', () => {
+  beforeEach(() => {
+    render(<RelevanteDokumenter />);
+  });
+
+  test('har en overskrift som informerer om at det kan finnes relevante dokumenter', () => {
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'Følgende helseopplysninger kan være relevant for saken' })
+    ).toBeVisible();
+  });
+
+  test('har en kort beskrivelse av hva disse dokumentene kan være', () => {
+    expect(
+      screen.getByText(
+        'NAV har tidligere mottatt følgende helseopplysninger som kan være relevant for innbyggers AAP sak. Velg dokumenter som er aktuelle for å koble de til saken.'
+      )
+    ).toBeVisible();
+  });
+
+  test('har et felt for å søke etter dokumenter som er listet ut', () => {
+    expect(screen.getByRole('textbox', { name: 'Søk i helseopplysninger' })).toBeVisible();
+  });
+
+  test('har et felt for å kunne filtrere dokumentlisten på typer', () => {
+    expect(screen.getByRole('combobox', { name: 'Vis typer' })).toBeVisible();
+  });
+
+  test('har en tabell for alle dokumenter som er funnet', () => {
+    expect(screen.getByRole('columnheader', { name: 'Dokument' })).toBeVisible();
+    expect(screen.getByRole('columnheader', { name: 'Type' })).toBeVisible();
+  });
+
+  test('tabellen kan sorteres på type', () => {
+    expect(screen.getByRole('button', { name: 'Type' })).toBeVisible();
+  });
+});

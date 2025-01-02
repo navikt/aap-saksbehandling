@@ -91,6 +91,10 @@ export function clientMellomlagreBrev(brevbestillingReferanse: string, brev: Bre
   return fetchProxy(`/api/brev/${brevbestillingReferanse}/oppdater`, 'POST', brev);
 }
 
+export function clientHentRelevanteDokumenter(saksnummer: string) {
+  return fetchProxy(`/api/saf/${saksnummer}`, 'POST');
+}
+
 export interface SaksInformasjon {
   søker: {
     navn: string;

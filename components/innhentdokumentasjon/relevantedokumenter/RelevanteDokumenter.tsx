@@ -1,0 +1,62 @@
+import { FormField, useConfigForm } from '@navikt/aap-felles-react';
+import { Alert, BodyShort, Heading, Table } from '@navikt/ds-react';
+
+interface FormFields {
+  dokumentnavn: string;
+  dokumenttype: string;
+}
+
+type Variantformat = 'ARKIV' | 'SLADDET' | 'ORIGINAL';
+
+export interface RelevantDokumentType {
+  tema: string;
+  dokumentInfoId: string;
+  journalpostId: string;
+  brevkode?: string;
+  tittel: string;
+  erUtgående: boolean;
+  datoOpprettet: string;
+  variantformat: Variantformat;
+}
+
+export const RelevanteDokumenter = () => {
+  const { form, formFields } = useConfigForm<FormFields>({
+    dokumentnavn: {
+      type: 'text',
+      label: 'Søk i helseopplysninger',
+    },
+    dokumenttype: {
+      type: 'select',
+      label: 'Vis typer',
+      options: [],
+    },
+  });
+
+  return (
+    <div>
+      <Alert variant="info">
+        <Heading level="3" size="medium">
+          Følgende helseopplysninger kan være relevant for saken
+        </Heading>
+      </Alert>
+      <BodyShort>
+        NAV har tidligere mottatt følgende helseopplysninger som kan være relevant for innbyggers AAP sak. Velg
+        dokumenter som er aktuelle for å koble de til saken.
+      </BodyShort>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <FormField form={form} formField={formFields.dokumentnavn} />
+        <FormField form={form} formField={formFields.dokumenttype} />
+      </div>
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Dokument</Table.HeaderCell>
+            <Table.ColumnHeader sortable sortKey="type">
+              Type
+            </Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+      </Table>
+    </div>
+  );
+};
