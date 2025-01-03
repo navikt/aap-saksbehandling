@@ -40,6 +40,18 @@ export const RelevanteDokumenter = () => {
     },
   });
 
+  if (isLoading) {
+    return (
+      <Alert variant="info">
+        <Loader title="Søker etter relevante dokumenter" />
+      </Alert>
+    );
+  }
+
+  if (relevanteDokumenter && relevanteDokumenter?.length === 0) {
+    return <Alert variant="info">Fant ingen relevante helseopplysninger</Alert>;
+  }
+
   return (
     <div style={{ marginTop: '1rem', border: '1px solid #000', padding: '0.5rem' }}>
       <Alert variant="info">Følgende helseopplysninger kan være relevant for saken</Alert>
@@ -61,13 +73,6 @@ export const RelevanteDokumenter = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {isLoading && (
-            <Table.Row>
-              <Table.DataCell colSpan={2}>
-                <Loader title="Laster relaterte dokumenter" />
-              </Table.DataCell>
-            </Table.Row>
-          )}
           {relevanteDokumenter &&
             relevanteDokumenter.length > 0 &&
             relevanteDokumenter.map((relevantDokument) => (
@@ -76,11 +81,6 @@ export const RelevanteDokumenter = () => {
                 <Table.DataCell>{relevantDokument.variantformat}</Table.DataCell>
               </Table.Row>
             ))}
-          {relevanteDokumenter && relevanteDokumenter.length === 0 && (
-            <Table.Row>
-              <Table.DataCell colSpan={2}>Fant ingen relevante dokumenter</Table.DataCell>
-            </Table.Row>
-          )}
         </Table.Body>
       </Table>
     </div>

@@ -23,16 +23,18 @@ fetchMock.enableMocks();
 
 describe('Relevante dokumenter', () => {
   beforeEach(() => {
-    fetchMock.resetMocks();
-    mockFetchRelevanteDokumenter(relevanteDokumenter);
-    render(<RelevanteDokumenter />);
+    fetchMock.mockReset();
   });
 
-  test('har en overskrift som informerer om at det kan finnes relevante dokumenter', () => {
-    expect(screen.getByText('Følgende helseopplysninger kan være relevant for saken')).toBeVisible();
+  test('har en overskrift som informerer om at det kan finnes relevante dokumenter', async () => {
+    mockFetchRelevanteDokumenter(relevanteDokumenter);
+    render(<RelevanteDokumenter />);
+    expect(await screen.findByText('Følgende helseopplysninger kan være relevant for saken')).toBeVisible();
   });
 
   test('har en kort beskrivelse av hva disse dokumentene kan være', () => {
+    mockFetchRelevanteDokumenter(relevanteDokumenter);
+    render(<RelevanteDokumenter />);
     expect(
       screen.getByText(
         'NAV har tidligere mottatt følgende helseopplysninger som kan være relevant for innbyggers AAP sak. Velg dokumenter som er aktuelle for å koble de til saken.'
@@ -41,23 +43,33 @@ describe('Relevante dokumenter', () => {
   });
 
   test('har et felt for å søke etter dokumenter som er listet ut', () => {
+    mockFetchRelevanteDokumenter(relevanteDokumenter);
+    render(<RelevanteDokumenter />);
     expect(screen.getByRole('textbox', { name: 'Søk i helseopplysninger' })).toBeVisible();
   });
 
   test('har et felt for å kunne filtrere dokumentlisten på typer', () => {
+    mockFetchRelevanteDokumenter(relevanteDokumenter);
+    render(<RelevanteDokumenter />);
     expect(screen.getByRole('combobox', { name: 'Vis typer' })).toBeVisible();
   });
 
   test('har en tabell for alle dokumenter som er funnet', () => {
+    mockFetchRelevanteDokumenter(relevanteDokumenter);
+    render(<RelevanteDokumenter />);
     expect(screen.getByRole('columnheader', { name: 'Dokument' })).toBeVisible();
     expect(screen.getByRole('columnheader', { name: 'Type' })).toBeVisible();
   });
 
   test('tabellen kan sorteres på type', () => {
+    mockFetchRelevanteDokumenter(relevanteDokumenter);
+    render(<RelevanteDokumenter />);
     expect(screen.getByRole('button', { name: 'Type' })).toBeVisible();
   });
 
   test('viser en rad pr dokument', () => {
+    mockFetchRelevanteDokumenter(relevanteDokumenter);
+    render(<RelevanteDokumenter />);
     expect(screen.getAllByRole('row')).toHaveLength(2);
   });
 });
