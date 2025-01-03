@@ -21,7 +21,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ saksnumme
   }
   try {
     const res = await hentRelevanteDokumenter(saksnummer);
-    return new Response(JSON.stringify({ response: res }), { status: 200 });
+    return new Response(JSON.stringify(res), { status: 200 });
   } catch (error) {
     logError('Feil ved henting av relevante dokumenter', error);
     return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });

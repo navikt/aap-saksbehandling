@@ -36,9 +36,7 @@ export const RelevanteDokumenter = () => {
     dokumenttype: {
       type: 'select',
       label: 'Vis typer',
-      options: Array.from(
-        new Set([...[''], ...(relevanteDokumenter?.map((relevantDokument) => relevantDokument.variantformat) || [])])
-      ),
+      options: [],
     },
   });
 
@@ -70,12 +68,19 @@ export const RelevanteDokumenter = () => {
               </Table.DataCell>
             </Table.Row>
           )}
-          {relevanteDokumenter?.map((relevantDokument) => (
-            <Table.Row key={relevantDokument.dokumentInfoId}>
-              <Table.DataCell>{relevantDokument.tittel}</Table.DataCell>
-              <Table.DataCell>{relevantDokument.variantformat}</Table.DataCell>
+          {relevanteDokumenter &&
+            relevanteDokumenter.length > 0 &&
+            relevanteDokumenter.map((relevantDokument) => (
+              <Table.Row key={relevantDokument.dokumentInfoId}>
+                <Table.DataCell>{relevantDokument.tittel}</Table.DataCell>
+                <Table.DataCell>{relevantDokument.variantformat}</Table.DataCell>
+              </Table.Row>
+            ))}
+          {relevanteDokumenter && relevanteDokumenter.length === 0 && (
+            <Table.Row>
+              <Table.DataCell colSpan={2}>Fant ingen relevante dokumenter</Table.DataCell>
             </Table.Row>
-          ))}
+          )}
         </Table.Body>
       </Table>
     </div>
