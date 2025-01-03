@@ -1,5 +1,5 @@
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { Alert, BodyShort, Heading, Table } from '@navikt/ds-react';
+import { Alert, BodyShort, Loader, Table } from '@navikt/ds-react';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { clientHentRelevanteDokumenter } from 'lib/clientApi';
 import useSWR from 'swr';
@@ -24,7 +24,7 @@ export interface RelevantDokumentType {
 
 export const RelevanteDokumenter = () => {
   const saksnummer = useSaksnummer();
-  const { data: relevanteDokumenter } = useSWR(`/api/dokumentinnhenting/saf/${saksnummer}`, () =>
+  const { data: relevanteDokumenter, isLoading } = useSWR(`/api/dokumentinnhenting/saf/${saksnummer}`, () =>
     clientHentRelevanteDokumenter(saksnummer)
   );
 
@@ -43,12 +43,8 @@ export const RelevanteDokumenter = () => {
   });
 
   return (
-    <div>
-      <Alert variant="info">
-        <Heading level="3" size="medium">
-          Følgende helseopplysninger kan være relevant for saken
-        </Heading>
-      </Alert>
+    <div style={{ marginTop: '1rem', border: '1px solid #000', padding: '0.5rem' }}>
+      <Alert variant="info">Følgende helseopplysninger kan være relevant for saken</Alert>
       <BodyShort>
         NAV har tidligere mottatt følgende helseopplysninger som kan være relevant for innbyggers AAP sak. Velg
         dokumenter som er aktuelle for å koble de til saken.
@@ -67,6 +63,13 @@ export const RelevanteDokumenter = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
+          {isLoading && (
+            <Table.Row>
+              <Table.DataCell colSpan={2}>
+                <Loader title="Laster relaterte dokumenter" />
+              </Table.DataCell>
+            </Table.Row>
+          )}
           {relevanteDokumenter?.map((relevantDokument) => (
             <Table.Row key={relevantDokument.dokumentInfoId}>
               <Table.DataCell>{relevantDokument.tittel}</Table.DataCell>

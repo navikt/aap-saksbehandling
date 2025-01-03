@@ -8,6 +8,7 @@ import { Dialogmeldinger } from 'components/innhentdokumentasjon/dialogmeldinger
 import { useSaksnummer } from 'hooks/BehandlingHook';
 
 import styles from './InnhentDokumentasjon.module.css';
+import { RelevanteDokumenter } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 
 export const InnhentDokumentasjon = () => {
   const saksnummer = useSaksnummer();
@@ -45,6 +46,7 @@ export const InnhentDokumentasjon = () => {
         </VStack>
       )}
       {visSkjema && <InnhentDokumentasjonSkjema onCancel={skjulSkjema} onSuccess={skjulOgRefresh} />}
+      <RelevanteDokumenter />
     </section>
   );
 };

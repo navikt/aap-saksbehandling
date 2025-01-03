@@ -29,9 +29,7 @@ describe('Relevante dokumenter', () => {
   });
 
   test('har en overskrift som informerer om at det kan finnes relevante dokumenter', () => {
-    expect(
-      screen.getByRole('heading', { level: 3, name: 'Følgende helseopplysninger kan være relevant for saken' })
-    ).toBeVisible();
+    expect(screen.getByText('Følgende helseopplysninger kan være relevant for saken')).toBeVisible();
   });
 
   test('har en kort beskrivelse av hva disse dokumentene kan være', () => {
