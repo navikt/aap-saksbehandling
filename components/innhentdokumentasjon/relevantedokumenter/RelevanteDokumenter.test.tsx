@@ -1,9 +1,30 @@
 import { render, screen } from '@testing-library/react';
-import { RelevanteDokumenter } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
-import { beforeEach, describe, expect, test } from 'vitest';
+import {
+  RelevantDokumentType,
+  RelevanteDokumenter,
+} from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import createFetchMock from 'vitest-fetch-mock';
+
+const relevanteDokumenter: RelevantDokumentType[] = [
+  {
+    tema: 'AAP',
+    dokumentInfoId: 'diid',
+    journalpostId: 'jpid',
+    tittel: 'Sykemelding 39u',
+    erUtgående: false,
+    datoOpprettet: '2024-12-20',
+    variantformat: 'ORIGINAL',
+  },
+];
+
+const fetchMock = createFetchMock(vi);
+fetchMock.enableMocks();
 
 describe('Relevante dokumenter', () => {
   beforeEach(() => {
+    fetchMock.resetMocks();
+    mockFetchRelevanteDokumenter(relevanteDokumenter);
     render(<RelevanteDokumenter />);
   });
 
@@ -37,4 +58,12 @@ describe('Relevante dokumenter', () => {
   test('tabellen kan sorteres på type', () => {
     expect(screen.getByRole('button', { name: 'Type' })).toBeVisible();
   });
+
+  test('viser en rad pr dokument', () => {
+    expect(screen.getAllByRole('row')).toHaveLength(2);
+  });
 });
+
+function mockFetchRelevanteDokumenter(dokumenter: RelevantDokumentType[]) {
+  fetchMock.mockResponseOnce(JSON.stringify(dokumenter), { status: 200 });
+}

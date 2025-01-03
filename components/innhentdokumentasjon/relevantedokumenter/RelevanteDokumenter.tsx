@@ -1,5 +1,8 @@
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Alert, BodyShort, Heading, Table } from '@navikt/ds-react';
+import { useSaksnummer } from 'hooks/BehandlingHook';
+import { clientHentRelevanteDokumenter } from 'lib/clientApi';
+import useSWR from 'swr';
 
 interface FormFields {
   dokumentnavn: string;
@@ -20,6 +23,11 @@ export interface RelevantDokumentType {
 }
 
 export const RelevanteDokumenter = () => {
+  const saksnummer = useSaksnummer();
+  const { data: relevanteDokumenter } = useSWR(`/api/dokumentinnhenting/saf/${saksnummer}`, () =>
+    clientHentRelevanteDokumenter(saksnummer)
+  );
+
   const { form, formFields } = useConfigForm<FormFields>({
     dokumentnavn: {
       type: 'text',
@@ -28,7 +36,9 @@ export const RelevanteDokumenter = () => {
     dokumenttype: {
       type: 'select',
       label: 'Vis typer',
-      options: [],
+      options: Array.from(
+        new Set([...[''], ...(relevanteDokumenter?.map((relevantDokument) => relevantDokument.variantformat) || [])])
+      ),
     },
   });
 
@@ -56,6 +66,14 @@ export const RelevanteDokumenter = () => {
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
+        <Table.Body>
+          {relevanteDokumenter?.map((relevantDokument) => (
+            <Table.Row key={relevantDokument.dokumentInfoId}>
+              <Table.DataCell>{relevantDokument.tittel}</Table.DataCell>
+              <Table.DataCell>{relevantDokument.variantformat}</Table.DataCell>
+            </Table.Row>
+          ))}
+        </Table.Body>
       </Table>
     </div>
   );

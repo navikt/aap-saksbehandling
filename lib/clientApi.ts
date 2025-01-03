@@ -14,6 +14,7 @@ import {
   SettPåVent,
   SimulerMeldeplikt,
 } from './types/types';
+import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 
 async function fetchProxy<ResponseBody>(
   url: string,
@@ -92,7 +93,7 @@ export function clientMellomlagreBrev(brevbestillingReferanse: string, brev: Bre
 }
 
 export function clientHentRelevanteDokumenter(saksnummer: string) {
-  return fetchProxy(`/api/saf/${saksnummer}`, 'POST');
+  return fetchProxy<RelevantDokumentType[]>(`/api/saf/${saksnummer}`, 'POST');
 }
 
 export interface SaksInformasjon {
