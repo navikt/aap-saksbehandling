@@ -93,7 +93,7 @@ export function clientMellomlagreBrev(brevbestillingReferanse: string, brev: Bre
 }
 
 export function clientHentRelevanteDokumenter(saksnummer: string) {
-  return fetchProxy<RelevantDokumentType[]>(`/api/saf/${saksnummer}`, 'POST');
+  return fetchProxy<RelevantDokumentType[]>(`/api/dokumentinnhenting/saf/${saksnummer}`, 'POST');
 }
 
 export interface SaksInformasjon {
