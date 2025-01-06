@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { oppdaterBruddPåAktivitetsplikten } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { oppdaterBruddPåAktivitetsplikten } from '../../../../../../lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError } from '@navikt/aap-felles-utils';
 
 export async function POST(req: NextRequest, { params }: { params: { saksnummer: string } }) {
@@ -7,7 +7,7 @@ export async function POST(req: NextRequest, { params }: { params: { saksnummer:
   try {
     await oppdaterBruddPåAktivitetsplikten(params.saksnummer, body);
   } catch (err) {
-    logError(`/aktivitetsplikt/${params.saksnummer}/v2/oppdater`, err);
+    logError(`/sak/${params.saksnummer}/aktivitetsplikt/oppdater`, err);
     return new Response(JSON.stringify({ message: 'Oppdatering av brudd på aktivitetsplikt feilet' }), { status: 500 });
   }
   return new Response(JSON.stringify({}), { status: 200 });

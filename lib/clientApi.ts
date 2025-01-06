@@ -57,11 +57,11 @@ export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandlin
 }
 
 export function clientOpprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {
-  return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/opprett`, 'POST', aktivitet);
+  return fetchProxy(`/api/sak/${saksnummer}/aktivitetsplikt/opprett`, 'POST', aktivitet);
 }
 
 export function clientOppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd2) {
-  return fetchProxy(`/api/aktivitetsplikt/${saksnummer}/oppdater`, 'POST', aktivitet);
+  return fetchProxy(`/api/sak/${saksnummer}/aktivitetsplikt/oppdater`, 'POST', aktivitet);
 }
 
 export function clientSimulerMeldeplikt(referanse: string, vurderinger: SimulerMeldeplikt) {

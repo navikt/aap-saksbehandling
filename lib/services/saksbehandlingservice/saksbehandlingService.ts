@@ -81,7 +81,7 @@ export const hentBehandlingPersoninfo = async (behandlingsreferanse: string): Pr
 };
 
 export const opprettBruddPåAktivitetsplikten = async (saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/opprett`;
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/aktivitetsplikt/opprett`;
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 
@@ -89,12 +89,12 @@ export const oppdaterBruddPåAktivitetsplikten = async (
   saksnummer: string,
   aktivitet: OppdaterAktivitetspliktBrudd2
 ) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}/v2/oppdater`;
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/aktivitetsplikt/oppdater`;
   return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 
 export const hentAktivitetspliktHendelser = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${saksnummer}`;
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/aktivitetsplikt`;
   return await fetchProxy<AktivitetspliktHendelser>(url, saksbehandlingApiScope, 'GET', undefined, [
     `aktivitetsplikt/${saksnummer}`,
   ]);
