@@ -36,7 +36,9 @@ export const RelevanteDokumenter = () => {
     dokumenttype: {
       type: 'select',
       label: 'Vis typer',
-      options: [],
+      options: Array.from(
+        new Set([...[''], ...(relevanteDokumenter?.map((dokument) => dokument.variantformat) || [])])
+      ),
     },
   });
 
