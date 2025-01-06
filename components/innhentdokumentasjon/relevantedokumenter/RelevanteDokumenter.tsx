@@ -75,9 +75,14 @@ export const RelevanteDokumenter = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {relevanteDokumenter &&
-            relevanteDokumenter.length > 0 &&
-            relevanteDokumenter.map((relevantDokument) => (
+          {relevanteDokumenter
+            ?.filter(
+              (dokument) =>
+                !form.watch('dokumentnavn') ||
+                dokument.tittel.toUpperCase().includes(form.watch('dokumentnavn').toUpperCase())
+            )
+            .filter((dokument) => !form.watch('dokumenttype') || dokument.variantformat === form.watch('dokumenttype'))
+            .map((relevantDokument) => (
               <Table.Row key={relevantDokument.dokumentInfoId}>
                 <Table.DataCell>{relevantDokument.tittel}</Table.DataCell>
                 <Table.DataCell>{relevantDokument.variantformat}</Table.DataCell>
