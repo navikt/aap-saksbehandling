@@ -36,8 +36,6 @@ spec:
       enabled: true
       autoLogin: true
   observability:
-    tracing:
-      enabled: true
     autoInstrumentation:
       enabled: true
       runtime: nodejs
