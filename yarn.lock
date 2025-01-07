@@ -980,20 +980,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-css@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "@navikt/aap-felles-css@npm:4.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F4.0.1%2Fee1dc3ca44a4ee962680b60d887dbf39f9b62014"
-  checksum: 10c0/2c9ee533d55c336f5344fd10f30413f81b6000a8524f26da6670a263a40d289feff3dc2d511b3ce7bde730c1b0771ce07b2cd7ca48a5bc7fab6d779d19927443
+"@navikt/aap-felles-css@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@navikt/aap-felles-css@npm:4.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F4.1.0%2F7cd14b1e21f080c43fca4ff948302fd5ed464337"
+  checksum: 10c0/11f64a01e34ae8042593e5974a9dc82ae8493a4b43aab95dbf70c14f1daede093412fa7f134a43319456b4e631db237a542e1b61f735b1965fe059e42f04ebe2
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-prettier@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "@navikt/aap-felles-prettier@npm:4.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F4.0.1%2Fb8de49826f54559464d9b81161c72b0266ea2f37"
+"@navikt/aap-felles-prettier@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@navikt/aap-felles-prettier@npm:4.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F4.1.0%2Fb2fb4122e5af09aba5de4ce314222f7a4e25168a"
   dependencies:
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
     prettier: "npm:^3.3.3"
-  checksum: 10c0/a70239de0f15eab650502dfc3d64ddb4e04dbc6238c0bec0717e1a3442f48de10c27986f251098dd323bac65ab9d49d2f04720c73f9b31d6bb48637832e73d29
+  checksum: 10c0/b7afa5dfd631c30dae076c9d523265d85b14df277ba776ed7b24b8e7799b72f6e31888417f74f813e1e19d03e80126f1dc49031e89cfcbf578ec2e2a7178a5c8
   languageName: node
   linkType: hard
 
@@ -1013,18 +1013,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils-client@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "@navikt/aap-felles-utils-client@npm:4.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils-client%2F4.0.1%2Ffbcf61a04a5cba73101a6a32ea8f0dee886c8a6d"
+"@navikt/aap-felles-utils-client@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@navikt/aap-felles-utils-client@npm:4.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils-client%2F4.1.0%2F5f24d798b04c738bd457c2b6c3e0d3ae74263edc"
   dependencies:
     date-fns: "npm:^3.6.0"
-  checksum: 10c0/f01fa20ce8e2c8d407692780a4ab3dd9ba14cd54115493f6dc8176d0bb188fc3d5dadeffa8f065e64100361a78d08b6dd07e10d8d37a4e8f567da6f96e9a6526
+  checksum: 10c0/3ea44dda8af77ba4bac269a2dbc5fcad321f4a257808e5df2b3253d37b90b437338e0cfa0c7b5f175606d5271a2880766f84537fecd26e9ed79405a03b7928ad
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "@navikt/aap-felles-utils@npm:4.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F4.0.1%2F020504709a803e9899abf8ed1a2d50b1435f1718"
+"@navikt/aap-felles-utils@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@navikt/aap-felles-utils@npm:4.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F4.1.0%2F28aa4f2d4eb13956cfaf29b7a8d08e4016b2a02b"
   dependencies:
     "@navikt/oasis": "npm:^3.4.0"
     axios: "npm:^1.7.7"
@@ -1034,7 +1034,7 @@ __metadata:
     pino: "npm:^9.4.0"
     prom-client: "npm:^15.1.3"
     server-only: "npm:^0.0.1"
-  checksum: 10c0/8d2d6a1f2e2dcbe907ef838b8e1f4485a1898c7ff406aebfa4b94e105531a3f4ebf4ba00d17bf7fd2602f88de18c2adae6ade69287af91499f22741277896aa1
+  checksum: 10c0/1c681ccb345fbab0564ddc640e41f13b96789f0031ef0d59960f309cfae5e5affd5b43d4aa1ff166929746d816ffa79b1a1f48402f9cdecbc0a5c4622ae0f0e6
   languageName: node
   linkType: hard
 
@@ -2792,11 +2792,11 @@ __metadata:
     "@grafana/faro-web-sdk": "npm:^1.12.2"
     "@navikt/aap-breveditor": "npm:^0.1.7"
     "@navikt/aap-breveditor-css": "npm:^0.1.3"
-    "@navikt/aap-felles-css": "npm:^4.0.1"
-    "@navikt/aap-felles-prettier": "npm:^4.0.1"
+    "@navikt/aap-felles-css": "npm:^4.1.0"
+    "@navikt/aap-felles-prettier": "npm:^4.1.0"
     "@navikt/aap-felles-react": "npm:^4.0.1"
-    "@navikt/aap-felles-utils": "npm:^4.0.1"
-    "@navikt/aap-felles-utils-client": "npm:^4.0.1"
+    "@navikt/aap-felles-utils": "npm:^4.1.0"
+    "@navikt/aap-felles-utils-client": "npm:^4.1.0"
     "@navikt/aksel-icons": "npm:7.8.0"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
     "@navikt/ds-css": "npm:7.8.0"
