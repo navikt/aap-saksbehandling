@@ -38,6 +38,9 @@ spec:
   observability:
     tracing:
       enabled: true
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
     logging:
       destinations:
         - id: elastic
