@@ -1,53 +1,22 @@
-'use client';
+import { UnderveisgrunnlagMedDataFetching } from 'components/behandlinger/underveis/underveisgrunnlag/UnderveisgrunnlagMedDatafetching';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
-import { Table } from '@navikt/ds-react';
-import { UnderveisGrunnlag } from 'lib/types/types';
+interface Props {
+  behandlingsreferanse: string;
+}
 
-type Props = {
-  grunnlag: UnderveisGrunnlag[];
-};
+export const Underveis = async ({ behandlingsreferanse }: Props) => {
+  const flyt = await hentFlyt(behandlingsreferanse);
 
-const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => (
-  <Table.Row>
-    <Table.HeaderCell>
-      {formaterDatoForVisning(periode.periode.fom)} - {formaterDatoForVisning(periode.periode.tom)}
-    </Table.HeaderCell>
-    <Table.DataCell>{periode.utfall}</Table.DataCell>
-    <Table.DataCell>{periode.avslagsårsak}</Table.DataCell>
-    <Table.DataCell>
-      <div>Gradering: {periode.gradering.gradering}%</div>
-      <div>Andel arbeid: {periode.gradering.andelArbeid}%</div>
-      <div>Fastsatt arbeidsevne: {periode.gradering.fastsattArbeidsevne}%</div>
-      <div>Grenseverdi: {periode.gradering.grenseverdi}%</div>
-    </Table.DataCell>
-    <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
-    <Table.DataCell>{periode.brukerAvKvoter.join(" og ")}</Table.DataCell>
-    <Table.DataCell>
-      {formaterDatoForVisning(periode.meldePeriode.fom)} - {formaterDatoForVisning(periode.meldePeriode.tom)}
-    </Table.DataCell>
-  </Table.Row>
-);
-
-export const Underveis = ({ grunnlag }: Props) => {
   return (
-    <Table>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
-          <Table.HeaderCell>Utfall</Table.HeaderCell>
-          <Table.HeaderCell>Avslagsårsak</Table.HeaderCell>
-          <Table.HeaderCell>Gradering</Table.HeaderCell>
-          <Table.HeaderCell>Trekk (dagsatser)</Table.HeaderCell>
-          <Table.HeaderCell>Kvoter</Table.HeaderCell>
-          <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {grunnlag.map((periode, index) => (
-          <Perioderad key={index} periode={periode} />
-        ))}
-      </Table.Body>
-    </Table>
+    <GruppeSteg
+      behandlingVersjon={flyt.behandlingVersjon}
+      behandlingReferanse={behandlingsreferanse}
+      prosessering={flyt.prosessering}
+      visVenteKort={flyt.visning.visVentekort}
+    >
+      <UnderveisgrunnlagMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+    </GruppeSteg>
   );
 };
