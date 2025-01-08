@@ -90,14 +90,11 @@ export type FlytProsessering =
 export type FlytProsesseringStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingFlytOgTilstandDto']['prosessering']['status'];
 
-export type BeregningsGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.BeregningDTO'];
+export type BeregningsGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.BeregningDTO'];
 
-export type Grunnlag1119 =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.Grunnlag11_19DTO'];
+export type Grunnlag1119 = components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.Grunnlag11_19DTO'];
 
-export type UføreGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.UføreGrunnlagDTO'];
+export type UføreGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.UføreGrunnlagDTO'];
 
 export type YrkesskadeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.YrkesskadeGrunnlagDTO'];
@@ -106,12 +103,10 @@ export type YrkesskadeUføreGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.YrkesskadeUføreGrunnlagDTO'];
 
 export type Inntekt = components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.InntektDTO'];
-export type UføreInntekt =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.UføreInntektDTO'];
+export type UføreInntekt = components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.UføreInntektDTO'];
 
 export type SettPåVent = components['schemas']['no.nav.aap.behandlingsflyt.flyt.SettPåVentRequest'];
-export type SettPåVentÅrsaker =
-  components['schemas']['no.nav.aap.behandlingsflyt.flyt.SettPåVentRequest']['grunn'];
+export type SettPåVentÅrsaker = components['schemas']['no.nav.aap.behandlingsflyt.flyt.SettPåVentRequest']['grunn'];
 
 export type VenteInformasjon = components['schemas']['no.nav.aap.behandlingsflyt.flyt.Venteinformasjon'];
 
@@ -199,3 +194,6 @@ export type ForhåndsvisDialogmeldingResponse =
 
 export type UnderveisGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.underveis.flate.UnderveisperiodeDto'];
+
+export type AktivitetspliktGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.bruddaktivitetsplikt.Effektuer11_7Dto'];

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import {
+  AktivitetspliktGrunnlag,
   AktivitetspliktHendelser,
   AlderGrunnlag,
   ArbeidsevneGrunnlag,
@@ -292,6 +293,11 @@ export const forhåndsvisDialogmelding = async (
 
 export const hentUnderveisGrunnlag = async (behandlingsreferanse: string): Promise<UnderveisGrunnlag[]> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/underveis/${behandlingsreferanse}`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentAktivitetspliktGrunnlag = async (behandlingsreferanse: string): Promise<AktivitetspliktGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/aktivitetsplikt/effektuer`;
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 

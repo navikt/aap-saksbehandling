@@ -176,7 +176,7 @@ function formaterPeriodeForVisning(periode: AktivitetspliktPeriode): string {
   }
 }
 
-function hentBruddTekst(valgtBrudd: AktivitetspliktBrudd): string {
+export function hentBruddTekst(valgtBrudd: AktivitetspliktBrudd): string {
   switch (valgtBrudd) {
     case 'IKKE_MØTT_TIL_BEHANDLING_ELLER_UTREDNING':
       return 'Ikke møtt til behandling eller utredning';
@@ -204,7 +204,7 @@ function hentParagrafTekst(valgtBrudd: AktivitetspliktHendelseParagraf): string 
   }
 }
 
-function hentGrunnTekst(grunn: AktivitetspliktGrunn): string {
+export function hentGrunnTekst(grunn: AktivitetspliktGrunn): string {
   switch (grunn) {
     case 'INGEN_GYLDIG_GRUNN':
       return 'Ingen gyldig grunn';

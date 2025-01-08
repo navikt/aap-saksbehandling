@@ -14,6 +14,7 @@ export enum Behovstype {
   AVKLAR_HELSEINSTITUSJON = '5011',
   YRKESSKADE_KODE = '5013',
   FASTSETT_YRKESSKADEINNTEKT = '5014',
+  EFFEKTUER_11_7_KODE = '5015',
   FORESLÅ_VEDTAK_KODE = '5098',
   FATTE_VEDTAK_KODE = '5099',
   KVALITETSSIKRING_KODE = '5097',
@@ -56,6 +57,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Vurder yrkesskade';
     case '5014':
       return 'Vurder yrkesskadeinntekt';
+    case '5015':
+      return 'Aktivitetsplikt § 11-7';
     case '5050':
       return 'Skriv brev';
   }
