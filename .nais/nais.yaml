@@ -61,6 +61,9 @@ spec:
   tokenx:
     enabled: true
   accessPolicy:
+    inbound:
+      rules:
+        - application: "oppgavestyring-frontend"
     outbound:
       rules:
         - application: "behandlingsflyt"
