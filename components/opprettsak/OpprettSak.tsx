@@ -39,6 +39,7 @@ export const OpprettSak = () => {
     fødselsdato: {
       type: 'date',
       defaultValue: new Date('2000-01-01'),
+      toDate: new Date(),
       label: 'Fødselsdato',
     },
     yrkesskade: {
