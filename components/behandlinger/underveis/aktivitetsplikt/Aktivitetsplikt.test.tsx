@@ -61,7 +61,7 @@ describe('Brukers aktivitetsplikt', () => {
 
   test('viser en rad pr brudd', () => {
     render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
-    expect(screen.getAllByRole('row')).toHaveLength(testgrunnlag.gjeldendeBrudd.length + 1); // antall gjeldende brudd + header
+    expect(screen.getAllByRole('row')).toHaveLength(testgrunnlag.gjeldendeBrudd.length + 2); // antall gjeldende brudd + header og siste rad med lenke
   });
 
   test('viser brudd', () => {
@@ -100,6 +100,11 @@ describe('Brukers aktivitetsplikt', () => {
         `Svar mottatt fra innbygger:${formaterDatoForVisning(testgrunnlag.forhåndsvarselSvar?.mottattDato!)}`
       )
     ).toBeVisible();
+  });
+
+  test('har en lenke til skjema for aktivitetsplikt', () => {
+    render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
+    expect(screen.getByRole('link', { name: 'Registrer ny informasjon' })).toBeVisible();
   });
 });
 

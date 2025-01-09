@@ -2,14 +2,14 @@
 
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
-import { Table } from '@navikt/ds-react';
+import { Link, Table } from '@navikt/ds-react';
 import {
   hentBruddTekst,
   hentGrunnTekst,
 } from 'components/aktivitetsplikt/aktivitetsplikthendelser/aktivitetsplikthendelsertabell/aktivitetsplikthendelsertabellrad/AktivitetspliktHendelserTabellRad';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { AktivitetspliktGrunnlag, AktivitetspliktPeriode } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -31,6 +31,7 @@ interface FormFields {
 
 export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
+  const saksnummer = useSaksnummer();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('EFFEKTUER_11_7');
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
@@ -78,6 +79,11 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
               <Table.DataCell>{formaterPeriodeForVisning(gjeldendeBrudd.periode)}</Table.DataCell>
             </Table.Row>
           ))}
+          <Table.Row>
+            <Table.DataCell colSpan={4} className={styles.linkCell}>
+              <Link href={`/sak/${saksnummer}/aktivitet`}>Registrer ny informasjon</Link>
+            </Table.DataCell>
+          </Table.Row>
         </Table.Body>
       </Table>
       <section className={styles.statusrad}>

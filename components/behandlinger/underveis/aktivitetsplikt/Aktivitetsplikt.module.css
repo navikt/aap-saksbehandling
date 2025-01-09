@@ -22,3 +22,7 @@
 .red {
   color: var(--a-icon-danger);
 }
+
+.linkCell {
+  text-align: end;
+}
