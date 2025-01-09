@@ -16,6 +16,9 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
 
+import styles from './Aktivitetsplikt.module.css';
+import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+
 interface Props {
   grunnlag?: AktivitetspliktGrunnlag;
   behandlingVersjon: number;
@@ -77,15 +80,17 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
           ))}
         </Table.Body>
       </Table>
-      <div>
-        <div>
+      <section className={styles.statusrad}>
+        <div className={styles.statusfelt}>
+          <StatusIkon visOkStatusIkon={!!grunnlag.forhåndsvarselDato} />
           Forhåndsvarsel sendt: {grunnlag.forhåndsvarselDato && formaterDatoForVisning(grunnlag.forhåndsvarselDato)}
         </div>
-        <div>
+        <div className={styles.statusfelt}>
+          <StatusIkon visOkStatusIkon={!!grunnlag.forhåndsvarselSvar?.mottattDato} />
           Svar mottatt fra innbygger:
           {grunnlag.forhåndsvarselSvar && formaterDatoForVisning(grunnlag.forhåndsvarselSvar.mottattDato)}
         </div>
-      </div>
+      </section>
       <Form
         onSubmit={handleSubmit}
         status={status}
@@ -98,6 +103,13 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
     </VilkårsKort>
   );
 };
+
+const StatusIkon = ({ visOkStatusIkon }: { visOkStatusIkon: boolean }) =>
+  visOkStatusIkon ? (
+    <CheckmarkCircleIcon className={`${styles.statusikon} ${styles.green}`} />
+  ) : (
+    <XMarkOctagonIcon className={`${styles.statusikon} ${styles.red}`} />
+  );
 
 function formaterPeriodeForVisning(periode: AktivitetspliktPeriode) {
   if (periode.tom) {
