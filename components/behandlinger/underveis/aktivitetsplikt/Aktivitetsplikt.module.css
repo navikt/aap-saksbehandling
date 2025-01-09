@@ -3,6 +3,7 @@
   flex-direction: row;
   align-items: flex-start;
   gap: var(--a-spacing-8);
+  margin-top: var(--a-spacing-8);
 }
 
 .statusfelt {
