@@ -2,7 +2,7 @@
 
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
-import { Link, Table } from '@navikt/ds-react';
+import { BodyShort, Link, Table } from '@navikt/ds-react';
 import {
   hentBruddTekst,
   hentGrunnTekst,
@@ -12,7 +12,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { AktivitetspliktGrunnlag, AktivitetspliktPeriode } from 'lib/types/types';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
 
@@ -58,6 +58,9 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
   if (!grunnlag || grunnlag.gjeldendeBrudd.length === 0) {
     return;
   }
+
+  const finnTidligsteDato = () =>
+    grunnlag.gjeldendeBrudd.map((brudd) => brudd.periode.fom).sort(sorterEtterNyesteDato)[0];
 
   return (
     <VilkårsKort steg={'EFFEKTUER_11_7'} heading={'§ 11-7 Bidrar ikke til egen avklaring / behandling'}>
@@ -105,6 +108,9 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
         visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
+        <BodyShort>
+          Med gjeldende § 11-7 brudd vil innbygger få stans i ytelsen fra {formaterDatoForVisning(finnTidligsteDato())}
+        </BodyShort>
       </Form>
     </VilkårsKort>
   );

@@ -106,6 +106,15 @@ describe('Brukers aktivitetsplikt', () => {
     render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
     expect(screen.getByRole('link', { name: 'Registrer ny informasjon' })).toBeVisible();
   });
+
+  test('har en tekst som viser når bruker vil få stans i ytelsen', () => {
+    render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
+    expect(
+      screen.getByText(
+        `Med gjeldende § 11-7 brudd vil innbygger få stans i ytelsen fra ${formaterDatoForVisning(testgrunnlag.gjeldendeBrudd[0].periode.fom)}`
+      )
+    ).toBeVisible();
+  });
 });
 
 describe('validering', () => {
