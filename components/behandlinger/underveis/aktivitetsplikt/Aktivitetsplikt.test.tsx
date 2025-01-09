@@ -1,3 +1,4 @@
+import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Aktivitetsplikt } from 'components/behandlinger/underveis/aktivitetsplikt/Aktivitetsplikt';
@@ -6,7 +7,16 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { describe, expect, test } from 'vitest';
 
 const testgrunnlag: AktivitetspliktGrunnlag = {
-  forhåndsvarselDato: '2025-01-07',
+  forhåndsvarselDato: '2025-01-02',
+  forhåndsvarselSvar: {
+    mottattDato: '2025-01-12',
+    journalpostId: {
+      identifikator: 'asdfjkl',
+    },
+    dokumentInfoId: {
+      dokumentInfoId: 'dokument-id',
+    },
+  },
   gjeldendeBrudd: [
     {
       begrunnelse: 'Hadde influensa. Sykemelding fra lege.',
@@ -74,6 +84,22 @@ describe('Brukers aktivitetsplikt', () => {
     const tilDato = formaterDatoForFrontend(testgrunnlag.gjeldendeBrudd[0].periode.tom!);
     render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
     expect(screen.getByRole('cell', { name: `${fraDato} - ${tilDato}` })).toBeVisible();
+  });
+
+  test('viser når forhåndsvarsel ble sendt', () => {
+    render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
+    expect(
+      screen.getByText(`Forhåndsvarsel sendt: ${formaterDatoForVisning(testgrunnlag.forhåndsvarselDato!)}`)
+    ).toBeVisible();
+  });
+
+  test('viser dato for motatt svar når det har kommet et svar', () => {
+    render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
+    expect(
+      screen.getByText(
+        `Svar mottatt fra innbygger:${formaterDatoForVisning(testgrunnlag.forhåndsvarselSvar?.mottattDato!)}`
+      )
+    ).toBeVisible();
   });
 });
 

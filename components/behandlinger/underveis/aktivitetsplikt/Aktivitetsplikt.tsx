@@ -1,6 +1,7 @@
 'use client';
 
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
+import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { Table } from '@navikt/ds-react';
 import {
   hentBruddTekst,
@@ -76,6 +77,15 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
           ))}
         </Table.Body>
       </Table>
+      <div>
+        <div>
+          Forhåndsvarsel sendt: {grunnlag.forhåndsvarselDato && formaterDatoForVisning(grunnlag.forhåndsvarselDato)}
+        </div>
+        <div>
+          Svar mottatt fra innbygger:
+          {grunnlag.forhåndsvarselSvar && formaterDatoForVisning(grunnlag.forhåndsvarselSvar.mottattDato)}
+        </div>
+      </div>
       <Form
         onSubmit={handleSubmit}
         status={status}
