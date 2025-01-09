@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       headers: {
         "Access-Control-Allow-Methods": `GET`,
         "Access-Control-Allow-Headers": `Content-Type, Authorization`,
-        "Access-Control-Allow-Origin": `${process.env.OPPGAVESTYRING_FRONTEND_HOST}`,
+        "Access-Control-Allow-Origin": `${process.env.NEXT_PUBLIC_OPPGAVESTYRING_URL}`,
       },
       status: 200
     });
