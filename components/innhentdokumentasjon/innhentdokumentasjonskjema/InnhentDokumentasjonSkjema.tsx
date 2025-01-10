@@ -83,7 +83,6 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         fritekst: data.melding,
         saksnummer: saksnummer,
         behandlingsReferanse: behandlingsreferanse,
-        veilederNavn: 'Hvor henter jeg denne fra?',
       };
       bestillDialogmelding(body);
       if (!error) {
@@ -138,7 +137,6 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
               saksnummer={saksnummer}
               fritekst={form.getValues('melding')}
               dokumentasjonsType={form.getValues('dokumentasjonstype')}
-              veilederNavn={'Hvor henter jeg denne fra?'}
               visModal={visModal}
               onClose={() => setVisModal(false)}
             />

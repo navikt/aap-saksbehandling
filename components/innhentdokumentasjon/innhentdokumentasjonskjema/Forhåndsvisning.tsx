@@ -6,7 +6,6 @@ import useSWR from 'swr';
 type Props = {
   saksnummer: string;
   fritekst: string;
-  veilederNavn: string;
   dokumentasjonsType: 'L8' | 'L40';
   visModal: boolean;
   onClose: () => void;
@@ -18,21 +17,13 @@ const formaterTekst = (input: string) => {
   return noNewline;
 };
 
-export const Forhåndsvisning = ({
-  saksnummer,
-  fritekst,
-  veilederNavn,
-  dokumentasjonsType,
-  visModal,
-  onClose,
-}: Props) => {
+export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, visModal, onClose }: Props) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const { data, isLoading, error } = useSWR(
     `forhåndsvisDialogmelding/${saksnummer}`,
     () =>
       clientForhåndsvisDialogmelding({
         saksnummer: saksnummer,
-        veilederNavn: veilederNavn,
         dokumentasjonType: dokumentasjonsType,
         fritekst: fritekst,
       }),
