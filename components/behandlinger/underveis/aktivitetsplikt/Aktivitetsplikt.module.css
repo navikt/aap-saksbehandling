@@ -3,13 +3,14 @@
   flex-direction: row;
   align-items: flex-start;
   gap: var(--a-spacing-8);
-  margin-top: var(--a-spacing-8);
+  margin-top: var(--a-spacing-4);
 }
 
 .statusfelt {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
   justify-items: center;
+  gap: var(--a-spacing-2);
 }
 
 .statusikon {

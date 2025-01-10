@@ -92,12 +92,16 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
       <section className={styles.statusrad}>
         <div className={styles.statusfelt}>
           <StatusIkon visOkStatusIkon={!!grunnlag.forhåndsvarselDato} />
-          Forhåndsvarsel sendt: {grunnlag.forhåndsvarselDato && formaterDatoForVisning(grunnlag.forhåndsvarselDato)}
+          <span>
+            Forhåndsvarsel sendt: {grunnlag.forhåndsvarselDato && formaterDatoForVisning(grunnlag.forhåndsvarselDato)}
+          </span>
         </div>
         <div className={styles.statusfelt}>
           <StatusIkon visOkStatusIkon={!!grunnlag.forhåndsvarselSvar?.mottattDato} />
-          Svar mottatt fra innbygger:
-          {grunnlag.forhåndsvarselSvar && formaterDatoForVisning(grunnlag.forhåndsvarselSvar.mottattDato)}
+          <span>
+            Svar mottatt fra innbygger:
+            {grunnlag.forhåndsvarselSvar && formaterDatoForVisning(grunnlag.forhåndsvarselSvar.mottattDato)}
+          </span>
         </div>
       </section>
       <Form
