@@ -119,7 +119,7 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
         steg={'EFFEKTUER_11_7'}
         visBekreftKnapp={!readOnly}
       >
-        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <BodyShort>
           Med gjeldende § 11-7 brudd vil innbygger få stans i ytelsen fra {formaterDatoForVisning(finnTidligsteDato())}
         </BodyShort>
