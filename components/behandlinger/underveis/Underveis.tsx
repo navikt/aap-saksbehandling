@@ -2,7 +2,6 @@ import { AktivitetspliktMedDatafetching } from 'components/behandlinger/undervei
 import { UnderveisgrunnlagMedDataFetching } from 'components/behandlinger/underveis/underveisgrunnlag/UnderveisgrunnlagMedDatafetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegSomSkalVises } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
@@ -10,9 +9,8 @@ interface Props {
 
 export const Underveis = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
-
-  const stegSomSkalVises = getStegSomSkalVises('UNDERVEIS', flyt);
-  const visAktivitetsplikt = true;
+  // TODO utkommentert midlertidig for testing. Må få på plass varsel til bruker i backend
+  //const stegSomSkalVises = getStegSomSkalVises('UNDERVEIS', flyt);
 
   return (
     <GruppeSteg
@@ -21,13 +19,13 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
       prosessering={flyt.prosessering}
       visVenteKort={flyt.visning.visVentekort}
     >
-      {stegSomSkalVises.includes('EFFEKTUER_11_7') && visAktivitetsplikt && (
-        <AktivitetspliktMedDatafetching
-          behandlingsreferanse={behandlingsreferanse}
-          behandlingVersjon={flyt.behandlingVersjon}
-          readOnly={flyt.visning.saksbehandlerReadOnly}
-        />
-      )}
+      {/*stegSomSkalVises.includes('EFFEKTUER_11_7') && (*/}
+      <AktivitetspliktMedDatafetching
+        behandlingsreferanse={behandlingsreferanse}
+        behandlingVersjon={flyt.behandlingVersjon}
+        readOnly={flyt.visning.saksbehandlerReadOnly}
+      />
+      {/*)}*/}
       <UnderveisgrunnlagMedDataFetching behandlingsreferanse={behandlingsreferanse} />
     </GruppeSteg>
   );
