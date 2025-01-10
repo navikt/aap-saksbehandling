@@ -100,6 +100,16 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
             Svar mottatt fra innbygger:
             {grunnlag.forhåndsvarselSvar && formaterDatoForVisning(grunnlag.forhåndsvarselSvar.mottattDato)}
           </span>
+          {grunnlag.forhåndsvarselSvar && (
+            <span>
+              <Link
+                href={`/api/dokument/${grunnlag.forhåndsvarselSvar.journalpostId}/${grunnlag.forhåndsvarselSvar.dokumentInfoId}`}
+                target="_blank"
+              >
+                Vis svar
+              </Link>
+            </span>
+          )}
         </div>
       </section>
       <Form

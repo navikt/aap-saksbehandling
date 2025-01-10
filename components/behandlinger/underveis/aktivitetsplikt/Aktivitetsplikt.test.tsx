@@ -115,6 +115,17 @@ describe('Brukers aktivitetsplikt', () => {
       )
     ).toBeVisible();
   });
+
+  test('viser en lenke for å se svar når det har kommet et svar fra bruker', () => {
+    render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
+    expect(screen.getByRole('link', { name: 'Vis svar' })).toBeVisible();
+  });
+
+  test('lenke vises ikke dersom det ikke har kommet et svar fra bruker', () => {
+    const grunnlagUtenSvarFraBruker = { ...testgrunnlag, forhåndsvarselSvar: undefined };
+    render(<Aktivitetsplikt grunnlag={grunnlagUtenSvarFraBruker} readOnly={false} behandlingVersjon={1} />);
+    expect(screen.queryByRole('link', { name: 'Vis svar' })).not.toBeInTheDocument();
+  });
 });
 
 describe('validering', () => {
