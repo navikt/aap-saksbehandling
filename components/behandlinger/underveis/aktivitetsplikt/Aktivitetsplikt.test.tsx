@@ -61,7 +61,7 @@ describe('Brukers aktivitetsplikt', () => {
 
   test('viser en rad pr brudd', () => {
     render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
-    expect(screen.getAllByRole('row')).toHaveLength(testgrunnlag.gjeldendeBrudd.length + 2); // antall gjeldende brudd + header og siste rad med lenke
+    expect(screen.getAllByRole('row')).toHaveLength(testgrunnlag.gjeldendeBrudd.length + 1); // antall gjeldende brudd + header
   });
 
   test('viser brudd', () => {
@@ -104,7 +104,7 @@ describe('Brukers aktivitetsplikt', () => {
 
   test('har en lenke til skjema for aktivitetsplikt', () => {
     render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
-    expect(screen.getByRole('link', { name: 'Registrer ny informasjon' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Registrer ny / endre informasjon' })).toBeVisible();
   });
 
   test('har en tekst som viser når bruker vil få stans i ytelsen', () => {

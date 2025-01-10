@@ -25,6 +25,10 @@
   color: var(--a-icon-danger);
 }
 
-.linkCell {
-  text-align: end;
+.link {
+  font-size: var(--a-font-size-large);
+}
+
+.bruddTabell {
+  margin-bottom: var(--a-spacing-4);
 }

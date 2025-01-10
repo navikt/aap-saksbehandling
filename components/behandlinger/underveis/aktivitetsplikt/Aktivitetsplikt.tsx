@@ -64,7 +64,7 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
 
   return (
     <VilkårsKort steg={'EFFEKTUER_11_7'} heading={'§ 11-7 Bidrar ikke til egen avklaring / behandling'}>
-      <Table size={'small'}>
+      <Table size={'small'} className={styles.bruddTabell}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Brudd</Table.HeaderCell>
@@ -82,13 +82,11 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
               <Table.DataCell>{formaterPeriodeForVisning(gjeldendeBrudd.periode)}</Table.DataCell>
             </Table.Row>
           ))}
-          <Table.Row>
-            <Table.DataCell colSpan={4} className={styles.linkCell}>
-              <Link href={`/sak/${saksnummer}/aktivitet`}>Registrer ny informasjon</Link>
-            </Table.DataCell>
-          </Table.Row>
         </Table.Body>
       </Table>
+      <Link className={styles.link} href={`/sak/${saksnummer}/aktivitet`}>
+        Registrer ny / endre informasjon
+      </Link>
       <section className={styles.statusrad}>
         <div className={styles.statusfelt}>
           <StatusIkon visOkStatusIkon={!!grunnlag.forhåndsvarselDato} />
