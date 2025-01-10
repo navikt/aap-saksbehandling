@@ -3,7 +3,11 @@ import { NextResponse } from 'next/server';
 import { finnSakerForIdent } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError } from '@navikt/aap-felles-utils';
 
-const allowedOrigins = ['http://localhost:3000', 'https://aap-saksbehandling.ansatt.dev.nav.no', 'https://www.nav.no'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://aap-saksbehandling.ansatt.dev.nav.no',
+  'https://aap-oppgavestyring.ansatt.dev.nav.no',
+  'https://www.nav.no'];
 
 export async function POST(req: Request) {
   const body: FinnSakForIdent = await req.json();
