@@ -41,7 +41,7 @@
     "react-select": "^5.9.0",
     "recharts": "^2.15.0",
     "swr": "^2.2.5",
-    "uuid": "^11.0.4"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@navikt/aap-felles-prettier": "^4.1.1",
