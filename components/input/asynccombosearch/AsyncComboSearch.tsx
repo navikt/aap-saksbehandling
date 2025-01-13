@@ -1,11 +1,16 @@
 import { Controller, FieldPath, FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
-import { ErrorMessage, Label } from '@navikt/ds-react';
+import { ErrorMessage, Label, Skeleton } from '@navikt/ds-react';
 import { customStyles } from './AsyncComboSearchStyling';
 import { ValuePair } from '@navikt/aap-felles-react';
 import { PadlockLockedFillIcon } from '@navikt/aksel-icons';
 
 import styles from './AsyncComboSearch.module.css';
-import AsyncSelect from 'react-select/async';
+import dynamic from 'next/dynamic';
+
+const AsyncSelectWithoutSSR = dynamic(() => import('react-select/async'), {
+  ssr: false,
+  loading: () => <Skeleton variant="rectangle" height={'36px'} />,
+});
 
 type Props<FormValues extends FieldValues> = {
   form: UseFormReturn<FormValues>;
@@ -43,7 +48,7 @@ export const AsyncComboSearch = <FormValues extends FieldValues>({
               {label}
             </Label>
           </div>
-          <AsyncSelect
+          <AsyncSelectWithoutSSR
             isDisabled={readOnly}
             inputId={name}
             isMulti={isMulti}
