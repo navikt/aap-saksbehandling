@@ -231,7 +231,7 @@ describe('felt for å sette diagnoser', () => {
     const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
     await user.click(ICD10option);
 
-    expect(screen.getByRole('combobox', { name: 'Hoveddiagnose' })).toBeVisible();
+    expect(await screen.findByRole('combobox', { name: 'Hoveddiagnose' })).toBeVisible();
   });
 
   it('skal ha vise en feilmelding dersom det ikke har blitt satt en hoveddiagnose', async () => {
@@ -262,7 +262,7 @@ describe('felt for å sette diagnoser', () => {
     const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
     await user.click(ICD10option);
 
-    expect(screen.getByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).toBeVisible();
+    expect(await screen.findByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).toBeVisible();
   });
 
   it('skal ikke vise felt for bidiagnose dersom det har blitt valgt ingen diagnose på hoveddiagnose', async () => {
@@ -277,7 +277,7 @@ describe('felt for å sette diagnoser', () => {
     const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
     await user.click(ICD10option);
 
-    const hoveddiagnose = screen.getByRole('combobox', { name: 'Hoveddiagnose' });
+    const hoveddiagnose = await screen.findByRole('combobox', { name: 'Hoveddiagnose' });
     await user.click(hoveddiagnose);
 
     const ingenDiagnoseOption = screen.getByText('Ingen diagnose');
@@ -298,7 +298,7 @@ describe('felt for å sette diagnoser', () => {
     const ICD10option = screen.getByRole('radio', { name: 'ICPC2' });
     await user.click(ICD10option);
 
-    const hoveddiagnose = screen.getByRole('combobox', { name: 'Hoveddiagnose' });
+    const hoveddiagnose = await screen.findByRole('combobox', { name: 'Hoveddiagnose' });
     await user.click(hoveddiagnose);
 
     await user.type(hoveddiagnose, 'Frysninger');
@@ -306,7 +306,7 @@ describe('felt for å sette diagnoser', () => {
     const frysningerOption = screen.getByText('Frysninger (A02)');
     await user.click(frysningerOption);
 
-    expect(screen.getByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).toBeVisible();
+    expect(await screen.findByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).toBeVisible();
   });
 });
 
