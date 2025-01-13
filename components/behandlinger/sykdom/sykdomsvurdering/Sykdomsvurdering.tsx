@@ -185,7 +185,8 @@ export const Sykdomsvurdering = ({
       form.resetField('hoveddiagnose');
       form.resetField('bidiagnose');
     }
-  }, [kodeverkValue, grunnlag.sykdomsvurdering?.kodeverk, form]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- tar ikke med form som en dependency da den fører til at useEffect kjøres feil
+  }, [kodeverkValue, grunnlag.sykdomsvurdering?.kodeverk]);
 
   const defaultOptionsHoveddiagnose = hoveddiagnoseDefaultOptions
     ? hoveddiagnoseDefaultOptions
