@@ -313,7 +313,7 @@ export const hentAktivitetspliktGrunnlag = async (behandlingsreferanse: string):
 export const hentLocalToken = async () => {
   // Må hente headers for å tvinge dynamic route ved lokal utvikling
   // TODO: Revurder i next 15
-  headers();
+  await headers();
 
   const url = 'http://localhost:8081/token';
   try {

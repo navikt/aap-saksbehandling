@@ -27,7 +27,8 @@ const testdata: LegeerklæringStatus[] = [
   },
 ];
 
-export async function GET(_: NextRequest, { params }: { params: { saksnummer: string } }) {
+export async function GET(_: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
+  const params = await props.params;
   if (isLocal()) {
     return new Response(JSON.stringify(testdata), { status: 200 });
   }

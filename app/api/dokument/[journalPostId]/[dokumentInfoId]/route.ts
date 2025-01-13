@@ -3,8 +3,9 @@ import { NextApiRequest } from 'next';
 
 export async function GET(
   req: NextApiRequest,
-  { params }: { params: { journalPostId: string; dokumentInfoId: string } }
+  props: { params: Promise<{ journalPostId: string; dokumentInfoId: string }> }
 ) {
+  const params = await props.params;
   const blob = await hentDokument(params.journalPostId, params.dokumentInfoId);
 
   if (blob !== undefined) {

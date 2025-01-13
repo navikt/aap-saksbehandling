@@ -3,7 +3,8 @@ import {
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextApiRequest } from 'next';
 
-export async function GET(req: NextApiRequest, { params }: { params: { saksnummer: string } }) {
+export async function GET(req: NextApiRequest, props: { params: Promise<{ saksnummer: string }> }) {
+    const params = await props.params;
     const data = await hentLesetilgang(params.saksnummer);
 
     if (data !== undefined) {

@@ -2,7 +2,11 @@ import { logError } from '@navikt/aap-felles-utils';
 import { mellomlagreBrev } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
 
-export async function POST(req: NextRequest, { params }: { params: { brevbestillingReferanse: string } }) {
+export async function POST(
+  req: NextRequest,
+  props: { params: Promise<{ brevbestillingReferanse: string }> }
+) {
+  const params = await props.params;
   const body = await req.json();
   try {
     const res = await mellomlagreBrev(params.brevbestillingReferanse, body);

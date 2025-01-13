@@ -2,7 +2,10 @@ import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/sak
 
 import { redirect } from 'next/navigation';
 
-const Page = async ({ params }: { params: { saksId: string; behandlingsReferanse: string } }) => {
+const Page = async (
+  props: { params: Promise<{ saksId: string; behandlingsReferanse: string }> }
+) => {
+  const params = await props.params;
   const behandling = await hentBehandling(params.behandlingsReferanse);
   const flyt = await hentFlyt(params.behandlingsReferanse);
 

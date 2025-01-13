@@ -19,10 +19,16 @@ import { SaksbehandlingsoversiktMedDataFetching } from 'components/saksbehandlin
 
 interface Props {
   children: ReactNode;
-  params: { saksId: string; behandlingsReferanse: string };
+  params: Promise<{ saksId: string; behandlingsReferanse: string }>;
 }
 
-const Layout = async ({ children, params }: Props) => {
+const Layout = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const saksInfo = await hentSaksinfo();
   const personInfo = await hentSakPersoninfo(params.saksId);
   const sak = await hentSak(params.saksId);
