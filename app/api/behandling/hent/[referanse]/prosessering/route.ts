@@ -9,7 +9,7 @@ export interface FlytProsesseringServerSentEvent {
 }
 
 /* @ts-ignore-line */
-export async function GET(__request, context: { params: { referanse: string } }) {
+export async function GET(__request, context: { params: Promise<{ referanse: string }> }) {
   let responseStream = new TransformStream();
   const writer = responseStream.writable.getWriter();
 
@@ -25,7 +25,7 @@ export async function GET(__request, context: { params: { referanse: string } })
         return;
       }
 
-      const flyt = await hentFlyt(context.params.referanse);
+      const flyt = await hentFlyt((await context.params).referanse);
       if (flyt.prosessering.status === 'FERDIG' || flyt.prosessering.status === 'FEILET') {
         console.log('Prosessering er ferdig!');
         const json: FlytProsesseringServerSentEvent = {

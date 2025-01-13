@@ -18,7 +18,7 @@ export type ServerSentEventStatus = 'POLLING' | 'ERROR' | 'DONE';
 
 export async function GET(
   __request: NextRequest,
-  context: { params: { referanse: string; gruppe: string; steg: string } }
+  context: { params: Promise<{ referanse: string; gruppe: string; steg: string }> }
 ) {
   let responseStream = new TransformStream();
   const writer = responseStream.writable.getWriter();
@@ -43,7 +43,7 @@ export async function GET(
         writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
       }
 
-      const flyt = await hentFlyt(context.params.referanse);
+      const flyt = await hentFlyt((await context.params).referanse);
 
       if (flyt.prosessering.status === 'FEILET') {
         const json: ServerSentEventData = {
@@ -64,8 +64,8 @@ export async function GET(
         const json: ServerSentEventData = {
           aktivGruppe,
           aktivtSteg,
-          skalBytteGruppe: aktivGruppe !== context.params.gruppe,
-          skalBytteSteg: aktivtSteg !== context.params.steg,
+          skalBytteGruppe: aktivGruppe !== (await context.params).gruppe,
+          skalBytteSteg: aktivtSteg !== (await context.params).steg,
           status: 'DONE',
         };
 

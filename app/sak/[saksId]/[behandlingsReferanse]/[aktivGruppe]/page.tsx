@@ -7,11 +7,12 @@ import {
   hentBehandling,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
-const Page = async ({
-  params,
-}: {
-  params: { behandlingsReferanse: string; aktivGruppe: StegGruppe; saksId: string };
-}) => {
+const Page = async (
+  props: {
+    params: Promise<{ behandlingsReferanse: string; aktivGruppe: StegGruppe; saksId: string }>;
+  }
+) => {
+  const params = await props.params;
   const behandling = await hentBehandling(params.behandlingsReferanse);
 
   if (behandling.skalForberede) {

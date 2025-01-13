@@ -1,7 +1,8 @@
 import { NextRequest } from 'next/server';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
-export async function GET(req: NextRequest, { params }: { params: { referanse: string } }) {
+export async function GET(req: NextRequest, props: { params: Promise<{ referanse: string }> }) {
+  const params = await props.params;
   try {
     const data = await hentFlyt(params.referanse);
     return new Response(JSON.stringify(data), { status: 200 });
