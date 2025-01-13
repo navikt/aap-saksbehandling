@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 import styles from './Dialogmeldinger.module.css';
 import { ThumbDownIcon, TimerPauseIcon } from '@navikt/aksel-icons';
 import { sorterEtterNyesteDato } from 'lib/utils/date';
+import { clientPurrPåLegeerklæring } from 'lib/clientApi';
 
 type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
@@ -53,7 +54,13 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
           <Button variant="secondary" type="button" size="small" icon={<ThumbDownIcon title="Avslå legeerklæring" />} />
         )}
         {melding.status === 'SENDT' && (
-          <Button variant="secondary" type="button" size="small" icon={<TimerPauseIcon title="Send purring" />} />
+          <Button
+            variant="secondary"
+            type="button"
+            size="small"
+            icon={<TimerPauseIcon title="Send purring" />}
+            onClick={() => clientPurrPåLegeerklæring(melding.dialogmeldingUuid)}
+          />
         )}
       </Table.DataCell>
     </Table.Row>

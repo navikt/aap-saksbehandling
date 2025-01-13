@@ -96,6 +96,10 @@ export function clientHentRelevanteDokumenter(saksnummer: string) {
   return fetchProxy<RelevantDokumentType[]>(`/api/dokumentinnhenting/saf/${saksnummer}`, 'POST');
 }
 
+export function clientPurrPåLegeerklæring(dialogmeldingUUID: string) {
+  return fetchProxy(`/api/dokumentinnhenting/purring/${dialogmeldingUUID}`, 'POST');
+}
+
 export interface SaksInformasjon {
   søker: {
     navn: string;

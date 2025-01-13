@@ -103,7 +103,7 @@ export const hentAktivitetspliktHendelser = async (saksnummer: string) => {
 
 export const finnSakerForIdent = async (ident: string): Promise<SaksInfo[]> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/finn`;
-  return await fetchProxy<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', {ident});
+  return await fetchProxy<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
 };
 export const hentAlleSaker = async (): Promise<SaksInfo[]> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;
@@ -293,6 +293,11 @@ export const forhåndsvisDialogmelding = async (
 ): Promise<ForhåndsvisDialogmeldingResponse> => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/brevpreview`;
   return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
+};
+
+export const purrPåLegeerklæring = async (dialogmeldingUUID: string): Promise<void> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/purring/${dialogmeldingUUID}`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'POST');
 };
 
 export const hentUnderveisGrunnlag = async (behandlingsreferanse: string): Promise<UnderveisGrunnlag[]> => {
