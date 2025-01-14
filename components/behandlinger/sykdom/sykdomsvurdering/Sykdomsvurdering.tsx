@@ -176,11 +176,22 @@ export const Sykdomsvurdering = ({
   };
 
   const kodeverkValue = form.watch('kodeverk');
-
   useEffect(() => {
     if (kodeverkValue !== grunnlag.sykdomsvurdering?.kodeverk) {
       form.setValue('hoveddiagnose', null);
       form.setValue('bidiagnose', null);
+    } else if (
+      kodeverkValue === grunnlag.sykdomsvurdering?.kodeverk &&
+      Array.isArray(hoveddiagnoseDefaultOptions) &&
+      hoveddiagnoseDefaultOptions.length
+    ) {
+      // kode for å omgå en bug som oppstår under test når man kan kvalitetssikre sin egen vurdering
+      // bør kunne slettes når man ikke lengre kan kvalitetssikre sin egen vurdering
+      form.resetField('hoveddiagnose', {
+        defaultValue: hoveddiagnoseDefaultOptions?.find(
+          (value) => value.value === grunnlag.sykdomsvurdering?.hoveddiagnose
+        ),
+      });
     } else {
       form.resetField('hoveddiagnose');
       form.resetField('bidiagnose');
