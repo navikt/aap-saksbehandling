@@ -242,7 +242,9 @@ export const Sykdomsvurdering = ({
         />
         <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
 
-        <FormField form={form} formField={formFields.kodeverk} horizontalRadio />
+        {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.kodeverk} horizontalRadio />
+        )}
         {kodeverkValue && (
           <>
             <AsyncComboSearch

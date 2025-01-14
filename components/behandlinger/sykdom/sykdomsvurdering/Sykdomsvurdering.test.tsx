@@ -189,7 +189,7 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
 });
 
 describe('felt for å sette diagnoser', () => {
-  it('skal ha et felt for å velge et system for diagnoser', async () => {
+  it('felt for å sette diagnoser vises ikke initielt', async () => {
     render(
       <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
@@ -199,8 +199,22 @@ describe('felt for å sette diagnoser', () => {
       />
     );
 
-    const systemFelt = screen.getByRole('group', { name: /velg system for diagnoser/i });
-    expect(systemFelt).toBeVisible();
+    expect(screen.queryByRole('group', { name: 'Velg system for diagnoser' })).not.toBeInTheDocument();
+  });
+
+  it('skal ha et felt for å velge et system for diagnoser når man har svart ja på at bruker har sykdom, skade eller lyte', async () => {
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+      />
+    );
+
+    await velgAtBrukerHarSykdomSkadeLyte();
+
+    expect(screen.getByRole('group', { name: 'Velg system for diagnoser' })).toBeVisible();
   });
 
   it('skal vise en feilmelding dersom felt for å velge system ikke er valgt', async () => {
@@ -213,6 +227,7 @@ describe('felt for å sette diagnoser', () => {
       />
     );
 
+    await velgAtBrukerHarSykdomSkadeLyte();
     await velgBekreft();
 
     const feilmelding = screen.getByText('Du må velge et system for diagnoser');
@@ -228,10 +243,12 @@ describe('felt for å sette diagnoser', () => {
         tilknyttedeDokumenter={[]}
       />
     );
-    const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
+
+    await velgAtBrukerHarSykdomSkadeLyte();
+    const ICD10option = await screen.findByRole('radio', { name: 'ICD10' });
     await user.click(ICD10option);
 
-    expect(await screen.findByRole('combobox', { name: 'Hoveddiagnose' })).toBeVisible();
+    expect(await screen.findByRole('combobox', { name: 'Hoveddiagnose' }, { timeout: 2000 })).toBeVisible();
   });
 
   it('skal ha vise en feilmelding dersom det ikke har blitt satt en hoveddiagnose', async () => {
@@ -243,6 +260,8 @@ describe('felt for å sette diagnoser', () => {
         tilknyttedeDokumenter={[]}
       />
     );
+
+    await velgAtBrukerHarSykdomSkadeLyte();
     const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
     await user.click(ICD10option);
     await velgBekreft();
@@ -259,6 +278,8 @@ describe('felt for å sette diagnoser', () => {
         tilknyttedeDokumenter={[]}
       />
     );
+
+    await velgAtBrukerHarSykdomSkadeLyte();
     const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
     await user.click(ICD10option);
 
@@ -274,6 +295,8 @@ describe('felt for å sette diagnoser', () => {
         tilknyttedeDokumenter={[]}
       />
     );
+
+    await velgAtBrukerHarSykdomSkadeLyte();
     const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
     await user.click(ICD10option);
 
@@ -295,6 +318,8 @@ describe('felt for å sette diagnoser', () => {
         tilknyttedeDokumenter={[]}
       />
     );
+
+    await velgAtBrukerHarSykdomSkadeLyte();
     const ICD10option = screen.getByRole('radio', { name: 'ICPC2' });
     await user.click(ICD10option);
 
