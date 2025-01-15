@@ -5,11 +5,20 @@ import { hentRelevanteDokumenter } from 'lib/services/dokumentinnhentingservice/
 const mockData: RelevantDokumentType[] = [
   {
     tema: 'AAP',
-    dokumentInfoId: 'diid',
-    journalpostId: 'jpid',
+    dokumentInfoId: 'diid-1',
+    journalpostId: 'jpid-1',
     tittel: 'Sykemelding 39u',
     erUtgående: false,
     datoOpprettet: '2024-12-20',
+    variantformat: 'ORIGINAL',
+  },
+  {
+    tema: 'AAP',
+    dokumentInfoId: 'diid-2',
+    journalpostId: 'jpid-2',
+    tittel: 'L40 - legeerklæring',
+    erUtgående: false,
+    datoOpprettet: '2024-12-27',
     variantformat: 'ORIGINAL',
   },
 ];

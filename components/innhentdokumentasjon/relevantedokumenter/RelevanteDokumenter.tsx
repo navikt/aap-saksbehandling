@@ -1,5 +1,5 @@
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { Alert, BodyShort, Loader, Table } from '@navikt/ds-react';
+import { Alert, BodyShort, Checkbox, Loader, Table } from '@navikt/ds-react';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { clientHentRelevanteDokumenter } from 'lib/clientApi';
 import useSWR from 'swr';
@@ -84,7 +84,9 @@ export const RelevanteDokumenter = () => {
             .filter((dokument) => !form.watch('dokumenttype') || dokument.variantformat === form.watch('dokumenttype'))
             .map((relevantDokument) => (
               <Table.Row key={relevantDokument.dokumentInfoId}>
-                <Table.DataCell>{relevantDokument.tittel}</Table.DataCell>
+                <Table.DataCell>
+                  <Checkbox value={relevantDokument.dokumentInfoId}>{relevantDokument.tittel}</Checkbox>
+                </Table.DataCell>
                 <Table.DataCell>{relevantDokument.variantformat}</Table.DataCell>
               </Table.Row>
             ))}
