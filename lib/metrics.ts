@@ -32,5 +32,4 @@ class AppMetrics {
 
 global._metrics = global._metrics || new AppMetrics();
 
-// eslint-disable-next-line import/no-unused-modules
 export default global._metrics;

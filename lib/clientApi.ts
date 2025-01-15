@@ -35,6 +35,7 @@ async function fetchProxy<ResponseBody>(
       console.error(data.message);
       return undefined;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     throw new Error('Noe gikk galt.');
   }
