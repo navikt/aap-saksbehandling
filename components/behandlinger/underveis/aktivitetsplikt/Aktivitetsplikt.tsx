@@ -33,14 +33,17 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
   const behandlingsreferanse = useBehandlingsReferanse();
   const saksnummer = useSaksnummer();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('EFFEKTUER_11_7');
-  const { form, formFields } = useConfigForm<FormFields>({
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Vurdering',
-      defaultValue: grunnlag?.begrunnelse || undefined, // TODO sjekk ut denne
-      rules: { required: 'Du må begrunne' },
+  const { form, formFields } = useConfigForm<FormFields>(
+    {
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Vurdering',
+        defaultValue: grunnlag?.begrunnelse || undefined, // TODO sjekk ut denne
+        rules: { required: 'Du må begrunne' },
+      },
     },
-  });
+    { readOnly: readOnly }
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
