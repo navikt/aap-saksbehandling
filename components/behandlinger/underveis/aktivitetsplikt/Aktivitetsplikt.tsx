@@ -22,14 +22,14 @@ import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 interface Props {
   grunnlag?: AktivitetspliktGrunnlag;
   behandlingVersjon: number;
-  readOnly: boolean;
+  readOnly?: boolean; // ikke i bruk, kun midlertidig
 }
 
 interface FormFields {
   begrunnelse: string;
 }
 
-export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
+export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const saksnummer = useSaksnummer();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('EFFEKTUER_11_7');
@@ -41,8 +41,8 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
         defaultValue: grunnlag?.begrunnelse || undefined, // TODO sjekk ut denne
         rules: { required: 'Du må begrunne' },
       },
-    },
-    { readOnly: readOnly }
+    }
+    //{ readOnly: readOnly } //ignorerer flagg fra backend midlertidig
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -120,7 +120,7 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
         status={status}
         isLoading={isLoading}
         steg={'EFFEKTUER_11_7'}
-        visBekreftKnapp={!readOnly}
+        visBekreftKnapp={true} // OIST ignorerer flagg fra backend midlertidig
       >
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <BodyShort>
