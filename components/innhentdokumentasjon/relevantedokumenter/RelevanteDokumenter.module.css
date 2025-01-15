@@ -1,0 +1,32 @@
+.blaaBoks {
+  background-color: var(--a-surface-info-subtle);
+  border: 1px solid var(--a-border-info);
+  border-radius: var(--a-border-radius-medium);
+
+  padding: var(--a-spacing-4);
+}
+
+.icon {
+  font-size: var(--a-size-heading-medium);
+  color: var(--a-icon-info);
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.heading {
+  display: flex;
+  flex-direction: row;
+  gap: var(--a-spacing-2);
+
+  margin-bottom: var(--a-spacing-2);
+}
+
+.filterrad {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.beskrivelse {
+  margin-bottom: var(--a-spacing-2);
+}

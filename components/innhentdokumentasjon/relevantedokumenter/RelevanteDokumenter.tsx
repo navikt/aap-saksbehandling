@@ -1,8 +1,11 @@
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { Alert, BodyShort, Checkbox, Loader, Table } from '@navikt/ds-react';
+import { Alert, BodyShort, Checkbox, Heading, Loader, Table } from '@navikt/ds-react';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { clientHentRelevanteDokumenter } from 'lib/clientApi';
 import useSWR from 'swr';
+
+import styles from './RelevanteDokumenter.module.css';
+import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
 interface FormFields {
   dokumentnavn: string;
@@ -55,13 +58,20 @@ export const RelevanteDokumenter = () => {
   }
 
   return (
-    <div style={{ marginTop: '1rem', border: '1px solid #000', padding: '0.5rem' }}>
-      <Alert variant="info">Følgende helseopplysninger kan være relevant for saken</Alert>
-      <BodyShort>
-        NAV har tidligere mottatt følgende helseopplysninger som kan være relevant for innbyggers AAP sak. Velg
-        dokumenter som er aktuelle for å koble de til saken.
-      </BodyShort>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+    <section className={styles.blaaBoks}>
+      <div className={styles.heading}>
+        <InformationSquareFillIcon className={styles.icon} />
+        <div>
+          <Heading level={'3'} size={'small'}>
+            Følgende helseopplysninger kan være relevant for saken
+          </Heading>
+          <BodyShort className={styles.beskrivelse}>
+            NAV har tidligere mottatt følgende helseopplysninger som kan være relevant for innbyggers AAP sak. Velg
+            dokumenter som er aktuelle for å koble de til saken.
+          </BodyShort>
+        </div>
+      </div>
+      <div className={styles.filterrad}>
         <FormField form={form} formField={formFields.dokumentnavn} />
         <FormField form={form} formField={formFields.dokumenttype} />
       </div>
@@ -92,6 +102,6 @@ export const RelevanteDokumenter = () => {
             ))}
         </Table.Body>
       </Table>
-    </div>
+    </section>
   );
 };
