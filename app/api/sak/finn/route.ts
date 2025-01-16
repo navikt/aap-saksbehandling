@@ -20,15 +20,16 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ message: 'Noe gikk galt' }), { status: 500 });
   }
 
+  return NextResponse.json(data, { status: 200 });
   // const origin = req.headers.get('Origin') ?? '';
-  return NextResponse.json(data, {
-    headers: {
-      'Access-Control-Allow-Methods': `*`,
-      'Access-Control-Allow-Headers':
-        '*',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': 'true',
-    },
-    status: 200,
-  });
+  // return NextResponse.json(data, {
+  //   headers: {
+  //     'Access-Control-Allow-Methods': `*`,
+  //     'Access-Control-Allow-Headers':
+  //       '*',
+  //     'Access-Control-Allow-Origin': '*',
+  //     'Access-Control-Allow-Credentials': 'true',
+  //   },
+  //   status: 200,
+  // });
 }
