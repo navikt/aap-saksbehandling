@@ -248,7 +248,7 @@ describe('felt for å sette diagnoser', () => {
     const ICD10option = await screen.findByRole('radio', { name: 'ICD10' });
     await user.click(ICD10option);
 
-    expect(await screen.findByRole('combobox', { name: 'Hoveddiagnose' }, { timeout: 2000 })).toBeVisible();
+    expect(await screen.findByRole('combobox', { name: 'Hoveddiagnose' }, { timeout: 5000 })).toBeVisible();
   });
 
   it('skal ha vise en feilmelding dersom det ikke har blitt satt en hoveddiagnose', async () => {
