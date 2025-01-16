@@ -23,9 +23,9 @@ export async function POST(req: Request) {
   // const origin = req.headers.get('Origin') ?? '';
   return NextResponse.json(data, {
     headers: {
-      'Access-Control-Allow-Methods': `POST`,
+      'Access-Control-Allow-Methods': `*`,
       'Access-Control-Allow-Headers':
-        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+        '*',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': 'true',
     },
