@@ -3,11 +3,11 @@ import { NextResponse } from 'next/server';
 import { finnSakerForIdent } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError } from '@navikt/aap-felles-utils';
 
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://aap-saksbehandling.ansatt.dev.nav.no',
-  'https://aap-oppgavestyring.ansatt.dev.nav.no',
-  'https://www.nav.no'];
+// const allowedOrigins = [
+//   'http://localhost:3000',
+//   'https://aap-saksbehandling.ansatt.dev.nav.no',
+//   'https://aap-oppgavestyring.ansatt.dev.nav.no',
+//   'https://www.nav.no'];
 
 export async function POST(req: Request) {
   const body: FinnSakForIdent = await req.json();
@@ -20,13 +20,13 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ message: 'Noe gikk galt' }), { status: 500 });
   }
 
-  const origin = req.headers.get('Origin') ?? '';
+  // const origin = req.headers.get('Origin') ?? '';
   return NextResponse.json(data, {
     headers: {
       'Access-Control-Allow-Methods': `GET`,
       'Access-Control-Allow-Headers':
         'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
-      'Access-Control-Allow-Origin': allowedOrigins.includes(origin) ? origin : '',
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': 'true',
     },
     status: 200,
