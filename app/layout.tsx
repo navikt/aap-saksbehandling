@@ -4,7 +4,7 @@ import '@navikt/aap-felles-css';
 import 'styles/globals.css';
 
 import { hentBrukerInformasjon, verifyUserLoggedIn } from '@navikt/aap-felles-utils';
-import {KelvinAppHeader} from "@navikt/aap-felles-react";
+import { KelvinAppHeader } from '@navikt/aap-felles-react/cjs/KelvinAppHeader/KelvinAppHeader';
 
 export const metadata = {
   title: 'Kelvin',
