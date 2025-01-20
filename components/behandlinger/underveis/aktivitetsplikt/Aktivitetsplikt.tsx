@@ -29,7 +29,7 @@ interface FormFields {
   begrunnelse: string;
 }
 
-export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon }: Props) => {
+export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly}: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const saksnummer = useSaksnummer();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('EFFEKTUER_11_7');
@@ -41,8 +41,8 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon }: Props) => {
         defaultValue: grunnlag?.begrunnelse || undefined, // TODO sjekk ut denne
         rules: { required: 'Du må begrunne' },
       },
-    }
-    //{ readOnly: readOnly } //ignorerer flagg fra backend midlertidig
+    },
+    { readOnly: readOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
