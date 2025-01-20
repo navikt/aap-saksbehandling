@@ -2,7 +2,6 @@ import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingServi
 import { ReactNode, Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { StegGruppe } from 'lib/types/types';
-import '@navikt/aap-felles-css';
 import { Skeleton } from '@navikt/ds-react';
 
 const Layout = async (
