@@ -11,15 +11,17 @@ export const SkriveBrevMedDataFetching = async ({
 }) => {
   const brevGrunnlag = await hentBrevGrunnlag(behandlingsReferanse);
 
-  if (!brevGrunnlag.brev) {
+  const førsteBrevgrunnlag = brevGrunnlag.brevGrunnlag[0];
+
+  if (!førsteBrevgrunnlag.brev) {
     logError('Ikke noe brev definert i grunnlaget');
     return null;
   }
 
   return (
     <SkriveBrev
-      referanse={brevGrunnlag.brevbestillingReferanse}
-      grunnlag={brevGrunnlag.brev}
+      referanse={førsteBrevgrunnlag.brevbestillingReferanse}
+      grunnlag={førsteBrevgrunnlag.brev}
       behandlingVersjon={behandlingVersjon}
     />
   );
