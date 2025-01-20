@@ -1,0 +1,34 @@
+.cardHeading {
+  display: flex;
+  flex-direction: row;
+  gap: var(--a-spacing-2);
+  align-items: flex-end;
+}
+
+.cardHeading > svg {
+  font-size: var(--a-font-size-xlarge);
+}
+
+.tidligereVurderinger {
+  --ac-expansioncard-bg: var(--a-surface-default);
+  --ac-expansioncard-header-bg: var(--a-surface-transparent);
+  --ac-expansioncard-header-bg-hover: var(--a-surface-hover);
+  --ac-expansioncard-header-open-bg: var(--a-surface-transparent);
+  --ac-expansioncard-border-color: var(--a-border-default);
+  --ac-expansioncard-border-open-color: var(--a-border-default);
+  --ac-expansioncard-border-radius: var(--a-border-radius-large);
+  --ac-expansioncard-button-border-radius: var(--a-border-radius-medium);
+  --ac-expansioncard-border-hover-color: var(--a-border-strong);
+}
+
+.statusIkon {
+  font-size: var(--a-font-size-xlarge);
+}
+
+.ikkeOppfylt {
+  color: var(--a-icon-danger);
+}
+
+.oppfylt {
+  color: var(--a-icon-success);
+}
