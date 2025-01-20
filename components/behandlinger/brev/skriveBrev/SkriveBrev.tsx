@@ -53,7 +53,7 @@ export const SkriveBrev = ({
 
   // @ts-ignore
   return (
-    <div>
+    <div className={style.brevbygger}>
       <div className={style.sistLagret}>
         {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
         {isSaving && <Loader />}

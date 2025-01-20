@@ -1,6 +1,8 @@
 import { logError } from '@navikt/aap-felles-utils';
+import { SaksopplysningerKolonne } from 'components/behandlinger/brev/skriveBrev/SaksopplysningerKolonne';
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { hentBrevGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import styles from './SkriveBrevMedDataFetching.module.css';
 
 export const SkriveBrevMedDataFetching = async ({
   behandlingsReferanse,
@@ -19,10 +21,13 @@ export const SkriveBrevMedDataFetching = async ({
   }
 
   return (
-    <SkriveBrev
-      referanse={førsteBrevgrunnlag.brevbestillingReferanse}
-      grunnlag={førsteBrevgrunnlag.brev}
-      behandlingVersjon={behandlingVersjon}
-    />
+    <div className={styles.flex}>
+      <SaksopplysningerKolonne />
+      <SkriveBrev
+        referanse={førsteBrevgrunnlag.brevbestillingReferanse}
+        grunnlag={førsteBrevgrunnlag.brev}
+        behandlingVersjon={behandlingVersjon}
+      />
+    </div>
   );
 };
