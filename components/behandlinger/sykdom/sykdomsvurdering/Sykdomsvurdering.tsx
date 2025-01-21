@@ -210,7 +210,7 @@ export const Sykdomsvurdering = ({
     <VilkårsKort
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
       steg="AVKLAR_SYKDOM"
-      icon={<VitalsIcon />}
+      icon={<VitalsIcon aria-hidden />}
       vilkårTilhørerNavKontor={true}
     >
       <Form

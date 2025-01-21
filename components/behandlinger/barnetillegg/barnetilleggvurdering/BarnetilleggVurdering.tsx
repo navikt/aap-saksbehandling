@@ -130,7 +130,7 @@ export const BarnetilleggVurdering = ({
   return (
     <VilkårsKort
       heading={'Barnetillegg § 11-20 tredje og fjerde ledd'}
-      icon={<ChildHairEyesIcon title="barnetilleg-ikon" fontSize="1.5rem" />}
+      icon={<ChildHairEyesIcon title="barnetilleg-ikon" fontSize="1.5rem" aria-hidden />}
       steg={'BARNETILLEGG'}
     >
       <div className={'flex-column'}>

@@ -86,7 +86,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
   };
 
   return (
-    <VilkårsKort heading={'Soning § 11-26'} steg={'DU_ER_ET_ANNET_STED'} icon={<PadlockLockedIcon />}>
+    <VilkårsKort heading={'Soning § 11-26'} steg={'DU_ER_ET_ANNET_STED'} icon={<PadlockLockedIcon aria-hidden />}>
       <Form
         onSubmit={handleSubmit}
         steg={'DU_ER_ET_ANNET_STED'}
@@ -143,7 +143,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
               {!erFørsteVurdering && !readOnly && (
                 <Button
                   type={'button'}
-                  icon={<TrashIcon />}
+                  icon={<TrashIcon aria-hidden />}
                   className={'fit-content'}
                   variant={'tertiary'}
                   size={'small'}
@@ -158,7 +158,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
         {!readOnly && (
           <Button
             type={'button'}
-            icon={<PlusCircleIcon />}
+            icon={<PlusCircleIcon aria-hidden />}
             className={'fit-content'}
             variant={'tertiary'}
             size={'small'}

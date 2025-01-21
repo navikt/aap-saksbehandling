@@ -103,7 +103,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
       defaultOpen={showAsOpen}
-      icon={<PercentIcon />}
+      icon={<PercentIcon aria-hidden />}
     >
       <Form
         onSubmit={handleSubmit}
@@ -163,7 +163,12 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
             />
             {!readOnly && arbeidsevneVurderinger.length > 1 && (
               <div>
-                <Button onClick={() => remove(index)} type={'button'} variant={'tertiary'} icon={<TrashIcon />}>
+                <Button
+                  onClick={() => remove(index)}
+                  type={'button'}
+                  variant={'tertiary'}
+                  icon={<TrashIcon aria-hidden />}
+                >
                   Fjern periode
                 </Button>
               </div>
@@ -177,7 +182,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
               type={'button'}
               variant={'tertiary'}
               size={'medium'}
-              icon={<PlusCircleIcon />}
+              icon={<PlusCircleIcon aria-hidden />}
             >
               Legg til ny arbeidsevne
             </Button>

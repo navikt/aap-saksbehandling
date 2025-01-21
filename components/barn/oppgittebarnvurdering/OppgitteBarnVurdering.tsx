@@ -64,7 +64,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
                   type={'button'}
                   size={'small'}
                   variant={'tertiary'}
-                  icon={<TrashIcon />}
+                  icon={<TrashIcon aria-hidden />}
                 >
                   Fjern vurdering
                 </Button>
@@ -79,7 +79,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
           className={'fit-content'}
           variant={'tertiary'}
           size={'medium'}
-          icon={<PlusCircleIcon />}
+          icon={<PlusCircleIcon aria-hidden />}
           type={'button'}
         >
           Legg til vurdering

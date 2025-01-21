@@ -21,7 +21,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
   return (
     <SideProsessKort
       heading={'Registrering av gyldig og ugyldig fravær - (aktivitetsplikten §§ 11-7, 11-8, 11-9)'}
-      icon={<FigureIcon fontSize={'inherit'} />}
+      icon={<FigureIcon fontSize={'inherit'} aria-hidden />}
     >
       <div className={'flex-column'}>
         {skalRegistrereBrudd ? (

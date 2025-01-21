@@ -63,9 +63,9 @@ export const Saksdokumenter = () => {
                   <Table.DataCell align={'left'}>
                     <div style={{ display: 'flex' }}>
                       {dokument.erUtgående ? (
-                        <ArrowRightIcon fontSize={'1.5rem'} />
+                        <ArrowRightIcon fontSize={'1.5rem'} title={'Utgående dokument'} />
                       ) : (
-                        <ArrowLeftIcon fontSize={'1.5rem'} />
+                        <ArrowLeftIcon fontSize={'1.5rem'} title={'Inngående dokument'} />
                       )}
                     </div>
                   </Table.DataCell>

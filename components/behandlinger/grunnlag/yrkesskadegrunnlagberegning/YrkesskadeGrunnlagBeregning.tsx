@@ -65,7 +65,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
     <VilkårsKort
       heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
-      icon={<BandageIcon />}
+      icon={<BandageIcon aria-hidden />}
     >
       <Form
         onSubmit={form.handleSubmit((data) => {

@@ -22,7 +22,7 @@ export const VisBeregning = ({ grunnlag }: Props) => {
         heading={finnHeading(beregningsVisning)}
         // @ts-ignore-line TODO Finne ut hvordan vi skal vise disse kortene
         steg={'VIS_BEREGNING'}
-        icon={<SackKronerIcon title="beregning-ikon" fontSize={'inherit'} />}
+        icon={<SackKronerIcon title="beregning-ikon" fontSize={'inherit'} aria-hidden />}
       >
         {beregningsVisning === 'STANDARD' && <Grunnlag1119Visning grunnlag={grunnlag.grunnlag11_19} />}
         {beregningsVisning === 'UFØRE' && <UføreVisning grunnlag={grunnlag.grunnlagUføre} />}

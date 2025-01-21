@@ -105,7 +105,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     <VilkårsKort
       heading={'Unntak fra meldeplikt § 11-10 (valgfritt)'}
       steg="FRITAK_MELDEPLIKT"
-      icon={<FigureIcon fontSize={'inherit'} />}
+      icon={<FigureIcon fontSize={'inherit'} aria-hidden />}
       vilkårTilhørerNavKontor
       defaultOpen={showAsOpen}
     >
@@ -169,7 +169,12 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
             />
             {!readOnly && fritakMeldepliktVurderinger.length > 1 && (
               <div>
-                <Button onClick={() => remove(index)} type={'button'} variant={'tertiary'} icon={<TrashIcon />}>
+                <Button
+                  onClick={() => remove(index)}
+                  type={'button'}
+                  variant={'tertiary'}
+                  icon={<TrashIcon aria-hidden />}
+                >
                   Fjern periode
                 </Button>
               </div>
@@ -184,7 +189,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
                 type={'button'}
                 variant={'tertiary'}
                 size={'medium'}
-                icon={<PlusCircleIcon />}
+                icon={<PlusCircleIcon aria-hidden />}
               >
                 Legg til ny start/slutt på periode
               </Button>
@@ -195,7 +200,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
                 type={'button'}
                 variant={'secondary'}
                 size={'medium'}
-                icon={<TestFlaskIcon />}
+                icon={<TestFlaskIcon aria-hidden />}
               >
                 Simuler
               </Button>

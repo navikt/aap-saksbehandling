@@ -76,7 +76,11 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
   };
 
   return (
-    <VilkårsKort heading={'Sykepengeerstatning § 11-13'} steg="VURDER_SYKEPENGEERSTATNING" icon={<FigureIcon />}>
+    <VilkårsKort
+      heading={'Sykepengeerstatning § 11-13'}
+      steg="VURDER_SYKEPENGEERSTATNING"
+      icon={<FigureIcon aria-hidden />}
+    >
       <Form
         onSubmit={handleSubmit}
         status={status}

@@ -88,7 +88,7 @@ export const AktivitetspliktDato = ({ form, fields, remove, søknadstidspunkt, a
                   type={'button'}
                   size={'small'}
                   variant={'tertiary'}
-                  icon={<TrashIcon />}
+                  icon={<TrashIcon aria-hidden />}
                   onClick={() => remove(index)}
                 >
                   {`Fjern ${field.type === 'periode' ? 'periode' : 'enkeltdato'}`}
@@ -100,7 +100,7 @@ export const AktivitetspliktDato = ({ form, fields, remove, søknadstidspunkt, a
       </Table>
       <div className={'flex-row'}>
         <Button
-          icon={<PlusCircleIcon />}
+          icon={<PlusCircleIcon aria-hidden />}
           type={'button'}
           variant={'tertiary'}
           size={'small'}
@@ -110,7 +110,7 @@ export const AktivitetspliktDato = ({ form, fields, remove, søknadstidspunkt, a
         </Button>
         {erMuligÅLeggeTilPeriode && (
           <Button
-            icon={<PlusCircleIcon />}
+            icon={<PlusCircleIcon aria-hidden />}
             type={'button'}
             variant={'tertiary'}
             size={'small'}

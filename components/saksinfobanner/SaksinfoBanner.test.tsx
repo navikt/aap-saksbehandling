@@ -62,7 +62,7 @@ describe('SaksinfoBanner', () => {
       />
     );
 
-    const knapp = screen.getByRole('button', { name: /saksmeny chevron-saksmeny/i });
+    const knapp = screen.getByRole('button', { name: 'Saksmeny' });
 
     expect(knapp).toBeVisible();
   });

@@ -143,7 +143,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
     <VilkårsKort
       heading={getHeaderForSteg(mapStegTypeTilDetaljertSteg('AVKLAR_STUDENT'))}
       steg={'AVKLAR_STUDENT'}
-      icon={<BooksIcon fontSize={'inherit'} />}
+      icon={<BooksIcon fontSize={'inherit'} aria-hidden />}
     >
       <Form
         onSubmit={handleSubmit}

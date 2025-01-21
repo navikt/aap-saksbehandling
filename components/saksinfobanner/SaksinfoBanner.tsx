@@ -29,7 +29,7 @@ export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVer
           size={'small'}
           as={Dropdown.Toggle}
           variant={'secondary'}
-          icon={<ChevronDownIcon title="chevron-saksmeny" fontSize="1.5rem" />}
+          icon={<ChevronDownIcon title="chevron-saksmeny" fontSize="1.5rem" aria-hidden />}
           iconPosition={'right'}
         >
           Saksmeny

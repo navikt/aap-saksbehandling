@@ -112,7 +112,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
     : 'Beregningstidspunkt nedsatt arbeidsevne § 11-5';
 
   return (
-    <VilkårsKort heading={heading} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'} icon={<CalendarIcon />}>
+    <VilkårsKort heading={heading} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'} icon={<CalendarIcon aria-hidden />}>
       <Form
         steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
         onSubmit={handleSubmit}

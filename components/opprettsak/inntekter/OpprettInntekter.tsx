@@ -43,7 +43,7 @@ export const OpprettInntekter = ({ form }: Props) => {
                   type="button"
                   variant={'tertiary'}
                   size={'small'}
-                  icon={<TrashIcon />}
+                  icon={<TrashIcon aria-hidden />}
                   onClick={() => remove(index)}
                   className={'fit-content'}
                 >
@@ -61,7 +61,7 @@ export const OpprettInntekter = ({ form }: Props) => {
                     append({ år: '', beløp: '' });
                   }}
                   variant={'tertiary'}
-                  icon={<PlusIcon />}
+                  icon={<PlusIcon aria-hidden />}
                 >
                   Legg til inntekt
                 </Button>

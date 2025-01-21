@@ -73,7 +73,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
       heading={'Yrkesskade §§ 11-22 1.ledd'}
       steg={'VURDER_YRKESSKADE'}
       vilkårTilhørerNavKontor={false}
-      icon={<HandBandageIcon />}
+      icon={<HandBandageIcon aria-hidden />}
     >
       <Form
         steg={'VURDER_YRKESSKADE'}

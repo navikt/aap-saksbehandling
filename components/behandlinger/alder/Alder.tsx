@@ -19,7 +19,11 @@ export const Alder = ({ grunnlag }: Props) => {
   );
 
   return (
-    <VilkårsKort heading={'Alder'} steg={'VURDER_ALDER'} icon={<PersonTallShortFillIcon fontSize={'1.5rem'} />}>
+    <VilkårsKort
+      heading={'Alder'}
+      steg={'VURDER_ALDER'}
+      icon={<PersonTallShortFillIcon fontSize={'1.5rem'} aria-hidden />}
+    >
       <div className={'flex-column'}>
         <div>
           <Label>Fødselsdato</Label>

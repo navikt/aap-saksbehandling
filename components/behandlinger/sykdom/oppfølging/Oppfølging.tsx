@@ -89,7 +89,7 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
     <VilkårsKort
       heading="Behov for oppfølging § 11-6"
       steg="VURDER_BISTANDSBEHOV"
-      icon={<PersonGroupIcon />}
+      icon={<PersonGroupIcon aria-hidden />}
       vilkårTilhørerNavKontor={true}
     >
       <Form

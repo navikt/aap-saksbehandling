@@ -41,7 +41,7 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
           }}
         />
         <Button
-          icon={<ArrowCirclepathIcon />}
+          icon={<ArrowCirclepathIcon aria-hidden />}
           onClick={() => mutate()}
           size={'medium'}
           variant={'tertiary'}

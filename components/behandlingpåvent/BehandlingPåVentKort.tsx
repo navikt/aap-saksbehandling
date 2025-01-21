@@ -20,7 +20,7 @@ export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props)
   const { løsBehovOgVentPåProsessering, isLoading } = useLøsBehovOgVentPåProsessering();
 
   return (
-    <SideProsessKort heading={'Behandling på vent'} icon={<HourglassBottomFilledIcon />}>
+    <SideProsessKort heading={'Behandling på vent'} icon={<HourglassBottomFilledIcon aria-hidden />}>
       <div className={'flex-column'}>
         {informasjon && (
           <>
