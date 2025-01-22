@@ -310,6 +310,11 @@ export const hentAktivitetspliktGrunnlag = async (behandlingsreferanse: string):
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
+export const sendFakeMeldekort = async (body: Object): Promise<void> => {
+  const url = `${saksbehandlingApiBaseUrl}api/hendelse/send`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'POST', body);
+};
+
 export const hentLocalToken = async () => {
   // Må hente headers for å tvinge dynamic route ved lokal utvikling
   // TODO: Revurder i next 15
