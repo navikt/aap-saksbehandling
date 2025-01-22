@@ -23,7 +23,13 @@ describe('Tidligere vurdering', () => {
     vedtaksdato: '2024-11-28',
   };
   test('overskrift består av om vilkår er oppfylt, hvem som har saksbehandlet og vedtaksdato', () => {
-    render(<Vurdering vurdering={vurdering} />);
+    render(
+      <table>
+        <tbody>
+          <Vurdering vurdering={vurdering} />
+        </tbody>
+      </table>
+    );
     expect(screen.getByText('Vilkår oppfylt')).toBeVisible();
     expect(screen.getByText(/(XSAKSBEH)/)).toBeVisible();
 
