@@ -96,6 +96,7 @@ export const OpprettSak = () => {
             sykehus: data?.institusjon?.includes('sykehus'),
             fengsel: data?.institusjon?.includes('fengsel'),
           },
+          medlemskap: true,
           inntekterPerAr:
             data.inntekter?.map((inntekt) => {
               return {
