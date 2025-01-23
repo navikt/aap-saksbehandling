@@ -31,6 +31,7 @@ export interface OpprettSakFormFields {
   barn?: Barn[];
   inntekter?: Inntekt[];
   institusjon?: Institusjon[];
+  medlemskap?: string;
 }
 
 export const OpprettSak = () => {
@@ -74,6 +75,12 @@ export const OpprettSak = () => {
         { label: 'Er i fengsel', value: 'fengsel' },
       ],
     },
+    medlemskap: {
+      type: 'radio',
+      label: 'Har medlemskap folketrygden?',
+      defaultValue: JaEllerNei.Ja,
+      options: JaEllerNeiOptions,
+    },
   });
 
   return (
@@ -96,7 +103,7 @@ export const OpprettSak = () => {
             sykehus: data?.institusjon?.includes('sykehus'),
             fengsel: data?.institusjon?.includes('fengsel'),
           },
-          medlemskap: true,
+          medlemskap: data.medlemskap === JaEllerNei.Ja,
           inntekterPerAr:
             data.inntekter?.map((inntekt) => {
               return {
@@ -113,6 +120,7 @@ export const OpprettSak = () => {
         <FormField form={form} formField={formFields.fødselsdato} />
         <FormField form={form} formField={formFields.yrkesskade} />
         <FormField form={form} formField={formFields.student} />
+        <FormField form={form} formField={formFields.medlemskap} />
         <FormField form={form} formField={formFields.institusjon} />
         <FormField form={form} formField={formFields.uføre} />
       </div>
