@@ -3,7 +3,7 @@ import { BodyShort, Button } from '@navikt/ds-react';
 import { sendFakeMeldekort } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 const pad = (input: number): string => input.toString().padStart(2, '0');
-const formaterDato = (dato: Date): string => `${dato.getFullYear()}-${pad(dato.getMonth() + 1)}-${pad(dato.getDay())}`;
+const formaterDato = (dato: Date): string => `${dato.getFullYear()}-${pad(dato.getMonth() + 1)}-${pad(dato.getDate())}`;
 
 export function DummyMeldekort({ saksid }: { saksid: string }) {
   // komponenten skal kun brukes lokalt
