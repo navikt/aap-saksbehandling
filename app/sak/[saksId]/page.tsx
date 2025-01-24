@@ -4,7 +4,8 @@ import { Heading } from '@navikt/ds-react';
 import styles from './page.module.css';
 import { formaterDatoTidForVisning } from '@navikt/aap-felles-utils-client';
 import { isLocal } from 'lib/utils/environment';
-import { DummyMeldekort } from 'components/dummymeldekort/DummyMeldekort';
+import { DummyMeldekort } from 'components/devtools/DummyMeldekort';
+import { SendNySoknad } from 'components/devtools/SendNySoknad';
 
 const Page = async (props: { params: Promise<{ saksId: string }> }) => {
   const params = await props.params;
@@ -37,6 +38,7 @@ const Page = async (props: { params: Promise<{ saksId: string }> }) => {
         <>
           <Heading size={'medium'}>Send et meldekort for inneværende mnd</Heading>
           <DummyMeldekort saksid={params.saksId} />
+          <SendNySoknad saksid={params.saksId} />
         </>
       )}
     </div>
