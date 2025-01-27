@@ -29,7 +29,7 @@
     "@navikt/oasis": "^3.6.0",
     "@portabletext/react": "^3.2.0",
     "@testing-library/user-event": "14.6.1",
-    "@vercel/otel": "^1.10.0",
+    "@vercel/otel": "^1.10.1",
     "date-fns": "^4.1.0",
     "fuse.js": "^7.0.0",
     "lodash": "^4.17.21",
