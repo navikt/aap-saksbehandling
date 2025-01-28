@@ -1,4 +1,4 @@
-import { Detail, Label } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react';
 import { SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
 import styles from './SaksInfo.module.css';
 
@@ -12,7 +12,7 @@ export const SaksInfo = ({ personInformasjon, sak }: Props) => {
       <div className={styles.ikon} />
       <Label size="small">{personInformasjon.navn}</Label>
       <span aria-hidden>/</span>
-      <Detail>{sak?.ident}</Detail>
+      <BodyShort>{sak?.ident}</BodyShort>
     </div>
   );
 };
