@@ -2,7 +2,6 @@
 
 import { Button, Dropdown } from '@navikt/ds-react';
 import styles from './SaksinfoBanner.module.css';
-import { SaksInformasjon } from 'lib/clientApi';
 import { SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
@@ -11,18 +10,17 @@ import { ChevronDownIcon } from '@navikt/aksel-icons';
 
 interface Props {
   personInformasjon: SakPersoninfo;
-  saksInfo: SaksInformasjon;
   sak: SaksInfoType;
   referanse: string;
   behandlingVersjon: number;
 }
 
-export const SaksinfoBanner = ({ personInformasjon, saksInfo, sak, behandlingVersjon, referanse }: Props) => {
+export const SaksinfoBanner = ({ personInformasjon, sak, behandlingVersjon, referanse }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
 
   return (
     <div className={styles.saksinfoBanner}>
-      <SaksInfo saksInfo={saksInfo} sak={sak} personInformasjon={personInformasjon} />
+      <SaksInfo sak={sak} personInformasjon={personInformasjon} />
 
       <Dropdown>
         <Button

@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { hentSaksinfo } from 'lib/clientApi';
 import {
   hentBehandling,
   hentFlyt,
@@ -25,11 +24,8 @@ interface Props {
 const Layout = async (props: Props) => {
   const params = await props.params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
-  const saksInfo = await hentSaksinfo();
   const personInfo = await hentSakPersoninfo(params.saksId);
   const sak = await hentSak(params.saksId);
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
@@ -46,7 +42,6 @@ const Layout = async (props: Props) => {
     <div>
       <SaksinfoBanner
         personInformasjon={personInfo}
-        saksInfo={saksInfo}
         sak={sak}
         behandlingVersjon={flytResponse.behandlingVersjon}
         referanse={params.behandlingsReferanse}

@@ -100,28 +100,3 @@ export function clientHentRelevanteDokumenter(saksnummer: string) {
 export function clientPurrPåLegeerklæring(dialogmeldingUUID: string) {
   return fetchProxy(`/api/dokumentinnhenting/purring/${dialogmeldingUUID}`, 'POST');
 }
-
-export interface SaksInformasjon {
-  søker: {
-    navn: string;
-    fnr: string;
-  };
-  labels: { type: string }[];
-  sistEndret: {
-    navn: string;
-    tidspunkt: string;
-  };
-}
-export async function hentSaksinfo(): Promise<SaksInformasjon> {
-  return {
-    søker: {
-      navn: 'Peder Ås',
-      fnr: '123456 78910',
-    },
-    labels: [{ type: 'Førstegangsbehandling' }, { type: 'Fra sykepenger' }, { type: 'Lokalkontor: NAV Grünerløkka' }],
-    sistEndret: {
-      navn: 'Marte Kirkerud',
-      tidspunkt: '12.12.2020 kl 12:12',
-    },
-  };
-}
