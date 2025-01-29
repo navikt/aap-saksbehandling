@@ -18,7 +18,7 @@ const user = userEvent.setup();
 describe('Felt for å registrere brudd', () => {
   it('skal ha et felt for å registrere brudd på aktivitetsplikten', async () => {
     render(<AktivitetspliktForm setSkalRegistrereBrudd={() => vitest.fn} sak={sak} />);
-    const felt = screen.getByRole('group', { name: 'Registrer brudd på aktivitetsplikt' });
+    const felt = screen.getByRole('group', { name: 'Velg en årsak' });
     expect(felt).toBeVisible();
   });
 
@@ -26,7 +26,7 @@ describe('Felt for å registrere brudd', () => {
     render(<AktivitetspliktForm setSkalRegistrereBrudd={() => vitest.fn} sak={sak} />);
 
     await trykkPåBekreftKnapp();
-    const feilmelding = screen.getByText('Du må registrere et brudd på aktivitetsplikten');
+    const feilmelding = screen.getByText('Du må velge en årsak');
     expect(feilmelding).toBeVisible();
   });
 
@@ -35,14 +35,14 @@ describe('Felt for å registrere brudd', () => {
     const ikkeMøtttilTiltakValg = screen.getByRole('radio', { name: 'Ikke møtt i tiltak' });
     expect(ikkeMøtttilTiltakValg).toBeVisible();
 
-    const ikkeMøttIBehandlingValg = screen.getByRole('radio', { name: 'Ikke møtt i behandling/ utredning' });
+    const ikkeMøttIBehandlingValg = screen.getByRole('radio', { name: 'Ikke møtt i behandling eller utredning' });
     expect(ikkeMøttIBehandlingValg).toBeVisible();
 
     const ikkeMøttTilMøteMedNavFelt = screen.getByRole('radio', { name: 'Ikke møtt til møte med Nav' });
     expect(ikkeMøttTilMøteMedNavFelt).toBeVisible();
 
     const ikkeSendtInnDokumentasjonFelt = screen.getByRole('radio', {
-      name: 'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om på aktivitet',
+      name: 'Ikke sendt inn dokumentasjon som Nav har bedt om',
     });
     expect(ikkeSendtInnDokumentasjonFelt).toBeVisible();
 
@@ -79,11 +79,11 @@ describe('Felt for å velge paragraf', () => {
     render(<AktivitetspliktForm setSkalRegistrereBrudd={() => vitest.fn} sak={sak} />);
     await velgIkkeMøttITiltakSomBrudd();
 
-    const paragraf_11_8Felt = screen.getByRole('radio', { name: '11-8 fravær fra fastsatt aktivitet' });
+    const paragraf_11_8Felt = screen.getByRole('radio', { name: '§ 11-8 Fravær fra fastsatt aktivitet' });
     expect(paragraf_11_8Felt).toBeVisible();
 
     const paragraf_11_9Felt = screen.getByRole('radio', {
-      name: '11-9 reduksjon av AAP ved brudd på nærmere bestemte aktivitetsplikter',
+      name: '§ 11-9 Reduksjon av arbeidsavklaringspenger ved brudd på nærmere bestemte aktivitetsplikter',
     });
     expect(paragraf_11_9Felt).toBeVisible();
   });
@@ -104,7 +104,7 @@ describe('Felt for å velge grunn', () => {
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
-    const grunnFelt = screen.getByRole('group', { name: 'Velg grunn for bruddet' });
+    const grunnFelt = screen.getByRole('group', { name: 'Velg en årsak' });
     expect(grunnFelt).toBeVisible();
   });
 
@@ -113,7 +113,7 @@ describe('Felt for å velge grunn', () => {
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_9();
 
-    const grunnFelt = screen.getByRole('group', { name: 'Velg grunn for bruddet' });
+    const grunnFelt = screen.getByRole('group', { name: 'Velg en årsak' });
     expect(grunnFelt).toBeVisible();
   });
 
@@ -121,17 +121,15 @@ describe('Felt for å velge grunn', () => {
     render(<AktivitetspliktForm setSkalRegistrereBrudd={() => vitest.fn} sak={sak} />);
     await user.click(screen.getByRole('radio', { name: 'Ikke møtt til annen aktivitet' }));
 
-    const grunnFelt = screen.getByRole('group', { name: 'Velg grunn for bruddet' });
+    const grunnFelt = screen.getByRole('group', { name: 'Velg en årsak' });
     expect(grunnFelt).toBeVisible();
   });
 
   it('skal dukke opp et felt for å velge en grunn for fravær dersom man velger brudd for ikke sendt inn dokumentasjon', async () => {
     render(<AktivitetspliktForm setSkalRegistrereBrudd={() => vitest.fn} sak={sak} />);
-    await user.click(
-      screen.getByRole('radio', { name: 'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om på aktivitet' })
-    );
+    await user.click(screen.getByRole('radio', { name: 'Ikke sendt inn dokumentasjon som Nav har bedt om' }));
 
-    const grunnFelt = screen.getByRole('group', { name: 'Velg grunn for bruddet' });
+    const grunnFelt = screen.getByRole('group', { name: 'Velg en årsak' });
     expect(grunnFelt).toBeVisible();
   });
 
@@ -140,14 +138,14 @@ describe('Felt for å velge grunn', () => {
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
-    const ingenGyldigGrunn = screen.getByRole('radio', { name: 'Ingen gyldig grunn' });
-    expect(ingenGyldigGrunn).toBeVisible();
-
     const sykdomEllerSkade = screen.getByRole('radio', { name: 'Sykdom eller skade' });
     expect(sykdomEllerSkade).toBeVisible();
 
     const sterkeVelferdsgrunner = screen.getByRole('radio', { name: 'Sterke velferdsgrunner' });
     expect(sterkeVelferdsgrunner).toBeVisible();
+
+    const ingenGyldigGrunn = screen.getByRole('radio', { name: 'Ingen av grunnene over' });
+    expect(ingenGyldigGrunn).toBeVisible();
   });
 
   it('Skal ha alle valgene i feltet for å registrere en grunn for bruddet hvis der er paragraf 11-9', async () => {
@@ -155,7 +153,7 @@ describe('Felt for å velge grunn', () => {
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_9();
 
-    const ingenGyldigGrunn = screen.getByRole('radio', { name: 'Ingen gyldig grunn' });
+    const ingenGyldigGrunn = screen.getByRole('radio', { name: 'Uten rimelig grunn' });
     expect(ingenGyldigGrunn).toBeVisible();
 
     const rimeligGrunn = screen.getByRole('radio', { name: 'Rimelig grunn' });
@@ -167,11 +165,11 @@ describe('Felt for å velge grunn', () => {
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
-    await user.click(screen.getByRole('radio', { name: 'Ingen gyldig grunn' }));
+    await user.click(screen.getByRole('radio', { name: 'Ingen av grunnene over' }));
 
-    expect(screen.getByRole('radio', { name: 'Ingen gyldig grunn' })).toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Ingen av grunnene over' })).toBeChecked();
     await velgParagraf_11_9();
-    expect(screen.getByRole('radio', { name: 'Ingen gyldig grunn' })).not.toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Uten rimelig grunn' })).not.toBeChecked();
   });
 
   it('Skal vise en feilmelding dersom grunn ikke er besvart', async () => {
@@ -214,7 +212,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
-    const enkeltDatoKnapp = screen.getByRole('button', { name: 'Legg til enkeltdato' });
+    const enkeltDatoKnapp = screen.getByRole('button', { name: 'Legg til dag' });
     await user.click(enkeltDatoKnapp);
 
     const datoFelt = screen.getByRole('textbox', { name: 'dato' });
@@ -231,7 +229,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
-    const enkeltDatoKnapp = screen.getByRole('button', { name: 'Legg til enkeltdato' });
+    const enkeltDatoKnapp = screen.getByRole('button', { name: 'Legg til dag' });
     await user.click(enkeltDatoKnapp);
 
     await trykkPåBekreftKnapp();
@@ -245,7 +243,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
-    const leggTilEnkeltdatoKnapp = screen.getByRole('button', { name: 'Legg til enkeltdato' });
+    const leggTilEnkeltdatoKnapp = screen.getByRole('button', { name: 'Legg til dag' });
     await user.click(leggTilEnkeltdatoKnapp);
     await user.click(leggTilEnkeltdatoKnapp);
     const datoFelt = screen.getAllByRole('textbox', { name: 'dato' });
@@ -258,12 +256,12 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     await velgIkkeMøttITiltakSomBrudd();
     await velgParagraf_11_8();
 
-    const leggTilEnkeltdatoKnapp = screen.getByRole('button', { name: 'Legg til enkeltdato' });
+    const leggTilEnkeltdatoKnapp = screen.getByRole('button', { name: 'Legg til dag' });
     await user.click(leggTilEnkeltdatoKnapp);
     await user.click(leggTilEnkeltdatoKnapp);
     expect(screen.getAllByRole('textbox', { name: 'dato' }).length).toEqual(2);
 
-    const slettKnapp = screen.getAllByRole('button', { name: 'Fjern enkeltdato' });
+    const slettKnapp = screen.getAllByRole('button', { name: 'Fjern dag' });
     await user.click(slettKnapp[0]);
     expect(screen.getAllByRole('textbox', { name: 'dato' }).length).toEqual(1);
   });
@@ -309,7 +307,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     await velgParagraf_11_8();
 
     const group = screen.getByRole('group', {
-      name: 'Velg grunn for bruddet',
+      name: 'Velg grunn for bruddet § 11-8',
     });
 
     const sykdomEllerskadeValg = within(group).getByText('Sykdom eller skade');
@@ -345,7 +343,7 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     await velgParagraf_11_8();
 
     const group = screen.getByRole('group', {
-      name: 'Velg grunn for bruddet',
+      name: 'Velg grunn for bruddet § 11-8',
     });
 
     const sykdomEllerskadeValg = within(group).getByText('Sykdom eller skade');
@@ -367,18 +365,18 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     const ikkeMøttTilMøte = screen.getByRole('radio', { name: 'Ikke møtt til møte med Nav' });
     await user.click(ikkeMøttTilMøte);
 
-    expect(screen.getByRole('button', { name: 'Legg til enkeltdato' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Legg til dag' })).toBeVisible();
     expect(screen.queryByRole('button', { name: 'Legg til periode' })).not.toBeInTheDocument();
   });
 
   it('skal ikke være mulig å legge til periode når det er ikke er sendt inn dokumentasjon', async () => {
     render(<AktivitetspliktForm setSkalRegistrereBrudd={() => vitest.fn} sak={sak} />);
     const ikkeMøttTilMøte = screen.getByRole('radio', {
-      name: 'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om på aktivitet',
+      name: 'Ikke sendt inn dokumentasjon som Nav har bedt om',
     });
     await user.click(ikkeMøttTilMøte);
 
-    expect(screen.getByRole('button', { name: 'Legg til enkeltdato' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Legg til dag' })).toBeVisible();
     expect(screen.queryByRole('button', { name: 'Legg til periode' })).not.toBeInTheDocument();
   });
 });
@@ -389,13 +387,13 @@ async function velgIkkeMøttITiltakSomBrudd() {
 }
 
 async function velgParagraf_11_8() {
-  const paragraf_11_8Felt = screen.getByRole('radio', { name: '11-8 fravær fra fastsatt aktivitet' });
+  const paragraf_11_8Felt = screen.getByRole('radio', { name: '§ 11-8 Fravær fra fastsatt aktivitet' });
   await user.click(paragraf_11_8Felt);
 }
 
 async function velgParagraf_11_9() {
   const paragraf_11_8Felt = screen.getByRole('radio', {
-    name: '11-9 reduksjon av AAP ved brudd på nærmere bestemte aktivitetsplikter',
+    name: '§ 11-9 Reduksjon av arbeidsavklaringspenger ved brudd på nærmere bestemte aktivitetsplikter',
   });
   await user.click(paragraf_11_8Felt);
 }

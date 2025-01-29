@@ -33,10 +33,10 @@ export const AktivitetspliktDato = ({ form, fields, remove, søknadstidspunkt, a
       <Table size={'small'}>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell textSize={'small'}>Dato</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Dato for brudd</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Til og med dato</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Type</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Handling</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Dag eller periode</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Fjern registrering</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -82,7 +82,7 @@ export const AktivitetspliktDato = ({ form, fields, remove, søknadstidspunkt, a
               ) : (
                 <Table.DataCell />
               )}
-              <Table.DataCell>{field.type === 'periode' ? 'Periode' : 'Enkeltdato'}</Table.DataCell>
+              <Table.DataCell>{field.type === 'periode' ? 'Periode' : 'Dag'}</Table.DataCell>
               <Table.DataCell>
                 <Button
                   type={'button'}
@@ -91,7 +91,7 @@ export const AktivitetspliktDato = ({ form, fields, remove, søknadstidspunkt, a
                   icon={<TrashIcon aria-hidden />}
                   onClick={() => remove(index)}
                 >
-                  {`Fjern ${field.type === 'periode' ? 'periode' : 'enkeltdato'}`}
+                  {`Fjern ${field.type === 'periode' ? 'periode' : 'dag'}`}
                 </Button>
               </Table.DataCell>
             </Table.Row>
@@ -106,7 +106,7 @@ export const AktivitetspliktDato = ({ form, fields, remove, søknadstidspunkt, a
           size={'small'}
           onClick={() => append({ type: 'enkeltdag', dato: '' })}
         >
-          Legg til enkeltdato
+          Legg til dag
         </Button>
         {erMuligÅLeggeTilPeriode && (
           <Button

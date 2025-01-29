@@ -42,10 +42,10 @@ export interface AktivitetspliktFormFields {
 
 const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
   { label: 'Ikke møtt i tiltak', value: 'IKKE_MØTT_TIL_TILTAK' },
-  { label: 'Ikke møtt i behandling/ utredning', value: 'IKKE_MØTT_TIL_BEHANDLING_ELLER_UTREDNING' },
+  { label: 'Ikke møtt i behandling eller utredning', value: 'IKKE_MØTT_TIL_BEHANDLING_ELLER_UTREDNING' },
   { label: 'Ikke møtt til møte med Nav', value: 'IKKE_MØTT_TIL_MØTE' },
   {
-    label: 'Bruker har ikke sendt inn dokumentasjon som Nav har bedt om på aktivitet',
+    label: 'Ikke sendt inn dokumentasjon som Nav har bedt om',
     value: 'IKKE_SENDT_INN_DOKUMENTASJON',
   },
   { label: 'Ikke bidratt til egen avklaring', value: 'IKKE_AKTIVT_BIDRAG' },
@@ -61,17 +61,20 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd }: Props) => {
     {
       brudd: {
         type: 'radio',
-        label: 'Registrer brudd på aktivitetsplikt',
+        label: 'Velg en årsak',
         options: bruddOptions,
-        rules: { required: 'Du må registrere et brudd på aktivitetsplikten' },
+        rules: { required: 'Du må velge en årsak' },
       },
       paragraf: {
         type: 'radio',
         label: 'Velg paragraf',
         rules: { required: 'Du må velge en paragraf' },
         options: [
-          { label: '11-8 fravær fra fastsatt aktivitet', value: 'PARAGRAF_11_8' },
-          { label: '11-9 reduksjon av AAP ved brudd på nærmere bestemte aktivitetsplikter', value: 'PARAGRAF_11_9' },
+          { label: '§ 11-8 Fravær fra fastsatt aktivitet', value: 'PARAGRAF_11_8' },
+          {
+            label: '§ 11-9 Reduksjon av arbeidsavklaringspenger ved brudd på nærmere bestemte aktivitetsplikter',
+            value: 'PARAGRAF_11_9',
+          },
         ],
       },
       begrunnelse: {
@@ -115,13 +118,13 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd }: Props) => {
     Boolean(paragraf) || bruddSomSkalViseDatoFeltOgBegrennelsesfelt.includes(brudd);
 
   const grunnForBruddHvis119 = [
-    { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+    { label: 'Uten rimelig grunn', value: 'INGEN_GYLDIG_GRUNN' },
     { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
   ];
   const grunnForBruddHvis118 = [
-    { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
     { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
     { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
+    { label: 'Ingen av grunnene over', value: 'INGEN_GYLDIG_GRUNN' },
   ];
 
   /**
@@ -167,12 +170,13 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd }: Props) => {
       })}
     >
       <FormField form={form} formField={formFields.brudd} />
+      <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       {skalVelgeParagraf && <FormField form={form} formField={formFields.paragraf} />}
       {(paragraf === 'PARAGRAF_11_9' || brudd === 'IKKE_MØTT_TIL_MØTE' || brudd === 'IKKE_SENDT_INN_DOKUMENTASJON') && (
         <RadioGroupWrapper
           control={form.control}
           name={'grunn'}
-          label={'Velg grunn for bruddet'}
+          label={'Velg grunn for bruddet § 11-9'}
           rules={{ required: 'Du må velge en grunn' }}
         >
           {grunnForBruddHvis119.map((grunn, index) => {
@@ -189,7 +193,7 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd }: Props) => {
         <RadioGroupWrapper
           control={form.control}
           name={'grunn'}
-          label={'Velg grunn for bruddet'}
+          label={'Velg grunn for bruddet § 11-8'}
           rules={{ required: 'Du må velge en grunn' }}
         >
           {grunnForBruddHvis118.map((grunn, index) => {
@@ -212,7 +216,6 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd }: Props) => {
             søknadstidspunkt={new Date(sak.opprettetTidspunkt)}
             errorMessage={errorMessage}
           />
-          <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         </div>
       )}
       <div className={'flex-row'}>

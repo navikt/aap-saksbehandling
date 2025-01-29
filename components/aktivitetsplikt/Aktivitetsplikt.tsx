@@ -20,7 +20,7 @@ export const Aktivitetsplikt = ({ aktivitetspliktHendelser, sak }: Props) => {
 
   return (
     <SideProsessKort
-      heading={'Registrering av gyldig og ugyldig fravær - (aktivitetsplikten §§ 11-7, 11-8, 11-9)'}
+      heading={'Registrer fravær eller brudd på aktivitetsplikten'}
       icon={<FigureIcon fontSize={'inherit'} aria-hidden />}
     >
       <div className={'flex-column'}>

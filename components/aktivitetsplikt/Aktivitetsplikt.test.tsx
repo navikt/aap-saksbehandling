@@ -33,20 +33,20 @@ describe('Aktivitetsplikt', () => {
 
   it('skal åpne skjemaet for å registrere et nytt brudd når man trykker på "registrer et nytt brudd"', async () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
-    expect(screen.queryByRole('group', { name: 'Registrer brudd på aktivitetsplikt' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('group', { name: 'Velg en årsak' })).not.toBeInTheDocument();
 
     await åpneRegistrerNyttBruddSkjema();
 
-    expect(screen.getByRole('group', { name: 'Registrer brudd på aktivitetsplikt' })).toBeVisible();
+    expect(screen.getByRole('group', { name: 'Velg en årsak' })).toBeVisible();
   });
 
   it('skal lukke skjemaet dersom man trykker på avbryt', async () => {
     render(<Aktivitetsplikt aktivitetspliktHendelser={[]} sak={sak} />);
-    expect(screen.queryByRole('group', { name: 'Registrer brudd på aktivitetsplikt' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('group', { name: 'Velg en årsak' })).not.toBeInTheDocument();
 
     await åpneRegistrerNyttBruddSkjema();
 
-    expect(screen.getByRole('group', { name: 'Registrer brudd på aktivitetsplikt' })).toBeVisible();
+    expect(screen.getByRole('group', { name: 'Velg en årsak' })).toBeVisible();
 
     const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
     await user.click(avbrytKnapp);
