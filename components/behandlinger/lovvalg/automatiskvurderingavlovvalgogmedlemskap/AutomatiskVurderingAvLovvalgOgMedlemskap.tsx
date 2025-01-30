@@ -1,53 +1,51 @@
 'use client'
 
 import {VilkårsKort} from "components/vilkårskort/VilkårsKort";
-import {Heading, Table} from "@navikt/ds-react";
+import {Alert, Heading, HStack, Table, VStack} from "@navikt/ds-react";
 import styles from "components/behandlinger/alder/Alder.module.css";
-import {CheckmarkCircleFillIcon, XMarkOctagonFillIcon} from "@navikt/aksel-icons";
-type IndikasjonerLovvalgOgMedlemskap = {
-  tilhørighetTilNorge: {kilde: string; opplysning: string; resultat: string;}[];
-}
+import { CheckmarkIcon, ExclamationmarkTriangleIcon} from "@navikt/aksel-icons";
+import {AutomatiskLovvalgOgMedlemskapVurdering} from "lib/types/types";
+import {
+  TilhørigetsVurderingTabell
+} from "components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørigetsVurderingTabell";
 interface Props {
-  grunnlag: IndikasjonerLovvalgOgMedlemskap;
+  vurdering: AutomatiskLovvalgOgMedlemskapVurdering;
 }
-export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({grunnlag}: Props) => {
+export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({vurdering}: Props) => {
+  console.log('vurdering', vurdering);
   return (
     <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
-
-      <Heading size={"small"}>Indikasjoner på tilhørighet til Norge</Heading>
-      <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell scope="col">Kilde</Table.HeaderCell>
-            <Table.HeaderCell scope="col">Opplysning</Table.HeaderCell>
-            <Table.HeaderCell scope="col">Resultat</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {grunnlag.tilhørighetTilNorge.map((indikasjon, index) => {
-            return (
-              <Table.Row key={index}>
-                <Table.DataCell>{indikasjon.kilde}</Table.DataCell>
-                <Table.DataCell>{indikasjon.opplysning}</Table.DataCell>
-                <Table.DataCell>
-                    {indikasjon.resultat === 'JA' ? (
-                      <>
-                        <CheckmarkCircleFillIcon title="Oppfylt" className={styles.oppfyltIcon} />
-                        Ja
-                      </>
-
-                    ) : (
-                      <>
-                        <XMarkOctagonFillIcon title={'Ikke oppfylt'} className={styles.avslåttIcon} />
-                        Nei
-                      </>
-                    )}
-                </Table.DataCell>
-              </Table.Row>
-            );
-          })}
-        </Table.Body>
-      </Table>
+      <VStack gap={'5'}>
+        <div>
+          <Heading size={"small"}>Indikasjoner på tilhørighet til Norge</Heading>
+          <TilhørigetsVurderingTabell
+            resultatIkonTrue={
+              <CheckmarkIcon title={'Indikerer at opplysning stemmer'} className={styles.oppfyltIcon} />
+            }
+            resultatIkonFalse={
+              <ExclamationmarkTriangleIcon title={'Indikerer at opplysning ikke stemmer'} className={styles.avslåttIcon} />
+            }
+            vurdering={vurdering.tilhørighetVurdering.filter(e => e.indikasjon === 'I_NORGE')}
+          />
+        </div>
+        <div>
+          <Heading size={"small"}>Indikasjoner på tilhørighet utenfor Norge</Heading>
+          <TilhørigetsVurderingTabell
+            resultatIkonTrue={
+              <ExclamationmarkTriangleIcon title={'Indikerer at opplysning stemmer'} className={styles.avslåttIcon} />
+            }
+            resultatIkonFalse={
+              <CheckmarkIcon title={'Indikerer at opplysning ikke stemmer'} className={styles.oppfyltIcon} />
+            }
+            vurdering={vurdering.tilhørighetVurdering.filter(e => e.indikasjon === 'UTENFOR_NORGE')}
+          />
+        </div>
+        {!vurdering.kanBehandlesAutomatisk && (
+          <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'}>
+            Opplysningene tilsier at det kan være utenlandsk lovvalg eller manglende medlemskap. Lovvalg og medlemskap må vurderes manuelt.
+          </Alert>
+        )}
+      </VStack>
     </VilkårsKort>
   )
 }

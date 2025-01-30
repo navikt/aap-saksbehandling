@@ -4,6 +4,7 @@ import {
   AktivitetspliktHendelser,
   AlderGrunnlag,
   ArbeidsevneGrunnlag,
+  AutomatiskLovvalgOgMedlemskapVurdering,
   BarnetilleggGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingPersoninfo,
@@ -309,6 +310,11 @@ export const hentAktivitetspliktGrunnlag = async (behandlingsreferanse: string):
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/aktivitetsplikt/effektuer`;
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
+
+export const hentAutomatiskLovvalgOgMedlemskapVurdering = async (behandlingsReferanse: string): Promise<AutomatiskLovvalgOgMedlemskapVurdering> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/lovvalgmedlemskap/vurdering`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'POST', {behandlingsReferanse});
+}
 
 export const sendFakeMeldekort = async (body: Object): Promise<void> => {
   const url = `${saksbehandlingApiBaseUrl}api/hendelse/send`;

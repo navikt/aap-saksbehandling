@@ -198,3 +198,6 @@ export type UnderveisGrunnlag =
 
 export type AktivitetspliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.bruddaktivitetsplikt.Effektuer11_7Dto'];
+
+export type AutomatiskLovvalgOgMedlemskapVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering'];
