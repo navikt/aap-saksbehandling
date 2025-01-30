@@ -79,7 +79,7 @@ describe('aktivitetspliktHendelserTabellRad', () => {
       render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />);
       await åpneRad();
 
-      const ingenGyldigGrunnValg = screen.getByRole('radio', { name: 'Ingen gyldig grunn' });
+      const ingenGyldigGrunnValg = screen.getByRole('radio', { name: 'Uten rimelig grunn' });
       expect(ingenGyldigGrunnValg).toBeVisible();
 
       const bidrarAktivtIgjenValg = screen.getByRole('radio', { name: 'Bidrar aktivt igjen' });
@@ -95,7 +95,7 @@ describe('aktivitetspliktHendelserTabellRad', () => {
       render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse118} />);
       await åpneRad();
 
-      const ingenGyldigGrunnValg = screen.getByRole('radio', { name: 'Ingen gyldig grunn' });
+      const ingenGyldigGrunnValg = screen.getByRole('radio', { name: 'Uten rimelig grunn' });
       expect(ingenGyldigGrunnValg).toBeVisible();
 
       const sykdomEllerSkadeValg = screen.getByRole('radio', { name: 'Sykdom eller skade' });
@@ -114,7 +114,7 @@ describe('aktivitetspliktHendelserTabellRad', () => {
       render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse119} />);
       await åpneRad();
 
-      const ingenGyldigGrunnValg = screen.getByRole('radio', { name: 'Ingen gyldig grunn' });
+      const ingenGyldigGrunnValg = screen.getByRole('radio', { name: 'Uten rimelig grunn' });
       expect(ingenGyldigGrunnValg).toBeVisible();
 
       const rimeligGrunnValg = screen.getByRole('radio', { name: 'Rimelig grunn' });
