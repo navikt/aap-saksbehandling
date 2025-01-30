@@ -1372,7 +1372,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.alder.flate.AlderDTO'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.alder.AlderDTO'];
           };
         };
       };
@@ -2296,13 +2296,52 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.underveis.flate.UnderveisperiodeDto'][];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'][];
           };
         };
       };
     };
     put?: never;
     post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/lovvalgmedlemskap/vurdering': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.LovvalgMedlemskapVurderingRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering'];
+          };
+        };
+      };
+    };
     delete?: never;
     options?: never;
     head?: never;
@@ -2348,9 +2387,7 @@ export interface paths {
     trace?: never;
   };
 }
-
 export type webhooks = Record<string, never>;
-
 export interface components {
   schemas: {
     'kotlin.Number': Record<string, never>;
@@ -2367,7 +2404,7 @@ export interface components {
       barn: components['schemas']['no.nav.aap.behandlingsflyt.TestBarn'][];
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       'f\u00F8dselsdato': string;
       inntekterPerAr?: components['schemas']['no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto'][] | null;
@@ -2381,7 +2418,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.TestBarn': {
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fodselsdato: string;
       harRelasjon: boolean;
@@ -2402,7 +2439,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       tidspunkt: string;
     };
@@ -3115,7 +3152,7 @@ export interface components {
       folkeregisterbarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.IdentifiserteBarnDto'][];
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       's\u00F8knadstidspunkt': string;
       vurderteBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.ExtendedVurdertBarnDto'][];
@@ -3123,7 +3160,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.ExtendedVurdertBarnDto': {
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       'f\u00F8dselsdato': string;
       ident: string;
@@ -3133,7 +3170,7 @@ export interface components {
       forsorgerPeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       'f\u00F8dselsdato': string;
       ident: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
@@ -3220,6 +3257,14 @@ export interface components {
       'uf\u00F8reGrunnlag': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.Uf\u00F8reGrunnlagDTO'];
       yrkesskadeGrunnlag: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.YrkesskadeGrunnlagDTO'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.alder.AlderDTO': {
+      /**
+       * Format: date
+       * @example 2025-01-30
+       */
+      'f\u00F8dselsdato': string;
+      'vilk\u00E5rsperioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilk\u00E5rsresultat.Vilk\u00E5rsperiode'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag': {
       brevGrunnlag: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev'][];
     };
@@ -3232,12 +3277,12 @@ export interface components {
       mottaker: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       oppdatert: string;
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       opprettet: string;
       /** @enum {string} */
@@ -3284,7 +3329,7 @@ export interface components {
       begrunnelse?: string | null;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       'forh\u00E5ndsvarselDato'?: string | null;
       'forh\u00E5ndsvarselSvar'?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.bruddaktivitetsplikt.Forh\u00E5ndsvarselSvar'];
@@ -3295,7 +3340,7 @@ export interface components {
       journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       mottattDato: string;
     };
@@ -3347,12 +3392,12 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.bruddaktivitetsplikt.PeriodeDTO': {
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fom: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       tom?: string | null;
     };
@@ -3377,6 +3422,10 @@ export interface components {
       historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
     };
+    'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.LovvalgMedlemskapVurderingRequest': {
+      /** Format: uuid */
+      behandlingsReferanse: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.Tilkjent': {
       /** Format: int32 */
       antallBarn: number;
@@ -3395,24 +3444,7 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       tilkjent: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.Tilkjent'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.alder.flate.AlderDTO': {
-      /**
-       * Format: date
-       * @example 2025-01-23
-       */
-      'f\u00F8dselsdato': string;
-      'vilk\u00E5rsperioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilk\u00E5rsresultat.Vilk\u00E5rsperiode'][];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.ytelsevurdering.SamordningVurdering': {
-      vurderingPerioder: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.ytelsevurdering.SamordningVurderingPeriode'][];
-      ytelseType: string;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.ytelsevurdering.SamordningVurderingPeriode': {
-      gradering?: components['schemas']['no.nav.aap.komponenter.verdityper.Prosent'];
-      kronesum?: components['schemas']['kotlin.Number'];
-      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.underveis.flate.GraderingDto': {
+    'no.nav.aap.behandlingsflyt.behandling.underveis.GraderingDto': {
       /**
        * Format: int32
        * @description Hvor mye man har jobbet i en meldeperiode i prosent
@@ -3434,7 +3466,7 @@ export interface components {
        */
       grenseverdi: number;
     };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.underveis.flate.UnderveisperiodeDto': {
+    'no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto': {
       /** @enum {string|null} */
       'avslags\u00E5rsak'?:
         | 'IKKE_GRUNNLEGGENDE_RETT'
@@ -3447,12 +3479,33 @@ export interface components {
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | null;
       brukerAvKvoter: ('ORDINÆR' | 'STUDENT' | 'ETABLERINGSFASE' | 'UTVIKLINGSFASE' | 'SYKEPENGEERSTATNING')[];
-      gradering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.underveis.flate.GraderingDto'];
+      gradering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.GraderingDto'];
       meldePeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       trekk: components['schemas']['no.nav.aap.komponenter.verdityper.Dagsatser'];
       /** @enum {string} */
       utfall: 'IKKE_VURDERT' | 'IKKE_RELEVANT' | 'OPPFYLT' | 'IKKE_OPPFYLT';
+    };
+    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering': {
+      kanBehandlesAutomatisk: boolean;
+      'tilh\u00F8righetVurdering': components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.Tilh\u00F8righetVurdering'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.Tilh\u00F8righetVurdering': {
+      fordypelse?: string | null;
+      /** @enum {string} */
+      indikasjon: 'I_NORGE' | 'UTENFOR_NORGE';
+      kilde: ('SØKNAD' | 'PDL' | 'MEDL' | 'AA_REGISTERET' | 'A_INNTEKT')[];
+      opplysning: string;
+      resultat: boolean;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.ytelsevurdering.SamordningVurdering': {
+      vurderingPerioder: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.ytelsevurdering.SamordningVurderingPeriode'][];
+      ytelseType: string;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.ytelsevurdering.SamordningVurderingPeriode': {
+      gradering?: components['schemas']['no.nav.aap.komponenter.verdityper.Prosent'];
+      kronesum?: components['schemas']['kotlin.Number'];
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilk\u00E5rsresultat.Vilk\u00E5rsperiode': {
       /** @enum {string|null} */
@@ -3484,7 +3537,7 @@ export interface components {
       fritekst: string;
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       opprettet: string;
       personId: string;
@@ -3516,12 +3569,12 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fraDato: string;
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       vurderingsTidspunkt: string;
     };
@@ -3531,7 +3584,7 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fraDato: string;
     };
@@ -3545,7 +3598,7 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fraDato: string;
       harForeldreAnsvar: boolean;
@@ -3568,12 +3621,12 @@ export interface components {
       id?: number | null;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       nedsattArbeidsevneDato: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       ytterligereNedsattArbeidsevneDato?: string | null;
       ytterligereNedsattBegrunnelse?: string | null;
@@ -3596,7 +3649,7 @@ export interface components {
       referanse: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       skadeDato: string;
     };
@@ -3620,7 +3673,7 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fraDato: string;
       'skalOpph\u00F8re': boolean;
@@ -3650,14 +3703,14 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.InstitusjonsoppholdDto': {
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       avsluttetDato?: string | null;
       institusjonstype: string;
       kildeinstitusjon: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       oppholdFra: string;
       oppholdstype: string;
@@ -3673,7 +3726,7 @@ export interface components {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.Soningsvurdering'];
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       vurderingsdato: string;
     };
@@ -3681,7 +3734,7 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fraDato: string;
       skalOpphore: boolean;
@@ -3701,13 +3754,13 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fraDato: string;
       harFritak: boolean;
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       vurderingsTidspunkt: string;
     };
@@ -3715,7 +3768,7 @@ export interface components {
       begrunnelse: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fraDato: string;
       harFritak: boolean;
@@ -3732,7 +3785,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent': {
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       avbruttDato?: string | null;
       /** @enum {string} */
@@ -3747,7 +3800,7 @@ export interface components {
       avbruttPgaSykdomEllerSkade?: boolean | null;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
@@ -3775,7 +3828,7 @@ export interface components {
       ref: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       skadedato: string;
     };
@@ -3977,7 +4030,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       opprettet: string;
       /** Format: uuid */
@@ -4004,7 +4057,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       tidsstempel: string;
     };
@@ -4078,7 +4131,7 @@ export interface components {
       behandlingVersjon: number;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       frist?: string | null;
       /** @enum {string} */
@@ -4095,7 +4148,7 @@ export interface components {
       definisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       frist: string;
       /** @enum {string} */
@@ -4173,7 +4226,19 @@ export interface components {
         | '5050';
       kreverToTrinn: boolean;
       kvalitetssikres: boolean;
-      'l\u00F8sesAv': ('VEILEDER' | 'SAKSBEHANDLER' | 'BESLUTTER' | 'LES' | 'AVDELINGSLEDER' | 'UTVIKLER')[];
+      'l\u00F8sesAv': (
+        | 'VEILEDER'
+        | 'SAKSBEHANDLER_OPPFOLGING'
+        | 'SAKSBEHANDLER'
+        | 'SAKSBEHANDLER_NASJONAL'
+        | 'KVALITETSSIKRER'
+        | 'BESLUTTER'
+        | 'LES'
+        | 'AVDELINGSLEDER'
+        | 'PRODUKSJONSSTYRING'
+        | 'UTVIKLER'
+        | 'DRIFT'
+      )[];
       /** @enum {string} */
       'l\u00F8sesISteg':
         | 'START_BEHANDLING'
@@ -4255,24 +4320,39 @@ export interface components {
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AktivitetskortV0': {
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fraOgMed: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       tilOgMed: string;
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV0': {
+      /** @enum {string} */
+      '\u00E5rsakTilBehandling':
+        | 'SØKNAD'
+        | 'AKTIVITETSMELDING'
+        | 'MELDEKORT'
+        | 'LEGEERKLÆRING'
+        | 'AVVIST_LEGEERKLÆRING'
+        | 'DIALOGMELDING'
+        | 'G_REGULERING'
+        | 'REVURDER_MEDLEMSKAP'
+        | 'REVURDER_YRKESSKADE'
+        | 'REVURDER_BEREGNING';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ArbeidIPeriode': {
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fraOgMedDato: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       tilOgMedDato: string;
       /** Format: double */
@@ -4287,16 +4367,24 @@ export interface components {
       melding?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Melding'];
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       mottattTidspunkt: string;
       referanse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.InnsendingReferanse'];
       saksnummer: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.sak.Saksnummer'];
       /** @enum {string} */
-      type: 'SØKNAD' | 'AKTIVITETSKORT' | 'PLIKTKORT' | 'LEGEERKLÆRING' | 'LEGEERKLÆRING_AVVIST' | 'DIALOGMELDING';
+      type:
+        | 'SØKNAD'
+        | 'AKTIVITETSKORT'
+        | 'PLIKTKORT'
+        | 'LEGEERKLÆRING'
+        | 'LEGEERKLÆRING_AVVIST'
+        | 'DIALOGMELDING'
+        | 'ANNET_RELEVANT_DOKUMENT';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Melding':
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Aktivitetskort']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Pliktkort']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knad'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OppgitteBarn': {
@@ -4329,15 +4417,14 @@ export interface components {
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UtenlandsPeriodeDto': {
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fraDato?: string | null;
       iArbeid?: string | null;
-      id?: string | null;
       land?: string | null;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       tilDato?: string | null;
       utenlandsId?: string | null;
@@ -4358,7 +4445,7 @@ export interface components {
       brevkode?: string | null;
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       datoOpprettet: string;
       dokumentInfoId: string;
@@ -4371,7 +4458,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       opprettet: string;
       /** Format: uuid */
@@ -4384,7 +4471,7 @@ export interface components {
       ident: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       mottattTidspunkt: string;
     };
@@ -4392,7 +4479,7 @@ export interface components {
       ident: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       's\u00F8knadsdato': string;
     };
@@ -4416,7 +4503,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -4427,7 +4514,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -4491,12 +4578,12 @@ export interface components {
     'no.nav.aap.komponenter.type.Periode': {
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       fom: string;
       /**
        * Format: date
-       * @example 2025-01-23
+       * @example 2025-01-30
        */
       tom: string;
     };
@@ -4523,7 +4610,7 @@ export interface components {
       navn: string;
       /**
        * Format: date-time
-       * @example 2025-01-23T14:09:12.040871
+       * @example 2025-01-30T15:50:50.333734
        */
       'planlagtKj\u00F8retidspunkt': string;
       /** @enum {string} */
@@ -4540,6 +4627,5 @@ export interface components {
   headers: never;
   pathItems: never;
 }
-
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;
