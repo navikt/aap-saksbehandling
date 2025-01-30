@@ -29,6 +29,7 @@ const dummygrunnlag = {
     }
   ]
 }
-export const AutomatiskVurderingMedDataFetching = ({}: Props) => {
+export const AutomatiskVurderingMedDataFetching = ({behandlingsReferanse}: Props) => {
+  console.log(behandlingsReferanse);
   return <AutomatiskVurderingAvLovvalgOgMedlemskap grunnlag={dummygrunnlag} />
 }
