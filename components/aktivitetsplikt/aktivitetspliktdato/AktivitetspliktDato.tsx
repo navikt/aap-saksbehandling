@@ -75,7 +75,21 @@ export const AktivitetspliktDato = ({ form, fields, remove, søknadstidspunkt, a
                       control={form.control}
                       hideLabel={true}
                       name={`perioder.${index}.tom`}
-                      rules={{ validate: (value) => validerDato(value as string) }}
+                      rules={{
+                        validate: (value) => {
+                          const valideringsresultat = validerDato(value as string);
+                          if (valideringsresultat) {
+                            return valideringsresultat;
+                          }
+
+                          const bruddDate = startOfDay(parse(value as string, 'dd.MM.yyyy', new Date()));
+                          const søknadsTidspunktStartOfDay = startOfDay(søknadstidspunkt);
+
+                          if (isBefore(bruddDate, søknadsTidspunktStartOfDay)) {
+                            return 'Bruddperioden kan ikke slutte før søknadstidspunktet';
+                          }
+                        },
+                      }}
                     />
                   </div>
                 </Table.DataCell>

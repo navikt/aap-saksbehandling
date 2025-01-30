@@ -223,6 +223,25 @@ describe('Felt for å registrere enkeltdato eller periode', () => {
     expect(feilmelding).toBeVisible();
   });
 
+  it('skal vise en feilmelding dersom til-og-med dato for brudd på aktivitetsplikten er før søknadstidspunkt', async () => {
+    render(<AktivitetspliktForm setSkalRegistrereBrudd={() => vitest.fn} sak={sak} />);
+
+    await velgIkkeMøttITiltakSomBrudd();
+    await velgParagraf_11_8();
+
+    const enkeltDatoKnapp = screen.getByRole('button', { name: 'Legg til periode' });
+    await user.click(enkeltDatoKnapp);
+
+    const fraOgMedFelt = screen.getByRole('textbox', { name: 'fra og med dato' });
+    const tilOgMedFelt = screen.getByRole('textbox', { name: 'til og med dato' });
+    await user.type(fraOgMedFelt, '01.01.2019');
+    await user.type(tilOgMedFelt, '02.01.2019');
+
+    await trykkPåBekreftKnapp();
+    const feilmelding = screen.getByText('Bruddperioden kan ikke slutte før søknadstidspunktet');
+    expect(feilmelding).toBeVisible();
+  });
+
   it('skal vise en feilmelding dersom dato for brudd på aktivitetsplikten ikke er besvart', async () => {
     render(<AktivitetspliktForm setSkalRegistrereBrudd={() => vitest.fn} sak={sak} />);
 
