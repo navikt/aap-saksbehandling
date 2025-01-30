@@ -1,35 +1,36 @@
-'use client'
+'use client';
 
-import {VilkårsKort} from "components/vilkårskort/VilkårsKort";
-import {Alert, Heading, HStack, Table, VStack} from "@navikt/ds-react";
-import styles from "components/behandlinger/alder/Alder.module.css";
-import { CheckmarkIcon, ExclamationmarkTriangleIcon} from "@navikt/aksel-icons";
-import {AutomatiskLovvalgOgMedlemskapVurdering} from "lib/types/types";
-import {
-  TilhørigetsVurderingTabell
-} from "components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørigetsVurderingTabell";
+import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { Alert, Heading, VStack } from '@navikt/ds-react';
+import styles from 'components/behandlinger/alder/Alder.module.css';
+import { CheckmarkIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
+import { TilhørigetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørigetsVurderingTabell';
 interface Props {
   vurdering: AutomatiskLovvalgOgMedlemskapVurdering;
 }
-export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({vurdering}: Props) => {
+export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({ vurdering }: Props) => {
   console.log('vurdering', vurdering);
   return (
     <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
       <VStack gap={'5'}>
         <div>
-          <Heading size={"small"}>Indikasjoner på tilhørighet til Norge</Heading>
+          <Heading size={'small'}>Indikasjoner på tilhørighet til Norge</Heading>
           <TilhørigetsVurderingTabell
             resultatIkonTrue={
               <CheckmarkIcon title={'Indikerer at opplysning stemmer'} className={styles.oppfyltIcon} />
             }
             resultatIkonFalse={
-              <ExclamationmarkTriangleIcon title={'Indikerer at opplysning ikke stemmer'} className={styles.avslåttIcon} />
+              <ExclamationmarkTriangleIcon
+                title={'Indikerer at opplysning ikke stemmer'}
+                className={styles.avslåttIcon}
+              />
             }
-            vurdering={vurdering.tilhørighetVurdering.filter(e => e.indikasjon === 'I_NORGE')}
+            vurdering={vurdering.tilhørighetVurdering.filter((e) => e.indikasjon === 'I_NORGE')}
           />
         </div>
         <div>
-          <Heading size={"small"}>Indikasjoner på tilhørighet utenfor Norge</Heading>
+          <Heading size={'small'}>Indikasjoner på tilhørighet utenfor Norge</Heading>
           <TilhørigetsVurderingTabell
             resultatIkonTrue={
               <ExclamationmarkTriangleIcon title={'Indikerer at opplysning stemmer'} className={styles.avslåttIcon} />
@@ -37,15 +38,16 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({vurdering}: Props) => 
             resultatIkonFalse={
               <CheckmarkIcon title={'Indikerer at opplysning ikke stemmer'} className={styles.oppfyltIcon} />
             }
-            vurdering={vurdering.tilhørighetVurdering.filter(e => e.indikasjon === 'UTENFOR_NORGE')}
+            vurdering={vurdering.tilhørighetVurdering.filter((e) => e.indikasjon === 'UTENFOR_NORGE')}
           />
         </div>
         {!vurdering.kanBehandlesAutomatisk && (
           <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'}>
-            Opplysningene tilsier at det kan være utenlandsk lovvalg eller manglende medlemskap. Lovvalg og medlemskap må vurderes manuelt.
+            Opplysningene tilsier at det kan være utenlandsk lovvalg eller manglende medlemskap. Lovvalg og medlemskap
+            må vurderes manuelt.
           </Alert>
         )}
       </VStack>
     </VilkårsKort>
-  )
-}
+  );
+};
