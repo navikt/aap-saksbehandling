@@ -42,20 +42,20 @@ export const AktivitetspliktHendelserTabellRad = ({ aktivitetspliktHendelse }: P
     switch (brudd) {
       case 'PARAGRAF_11_7':
         return [
-          { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+          { label: 'Uten rimelig grunn', value: 'INGEN_GYLDIG_GRUNN' },
           { label: 'Bidrar aktivt igjen', value: 'BIDRAR_AKTIVT' },
           { label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' },
         ];
       case 'PARAGRAF_11_8':
         return [
-          { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+          { label: 'Uten rimelig grunn', value: 'INGEN_GYLDIG_GRUNN' },
           { label: 'Sykdom eller skade', value: 'SYKDOM_ELLER_SKADE' },
           { label: 'Sterke velferdsgrunner', value: 'STERKE_VELFERDSGRUNNER' },
           { label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' },
         ];
       case 'PARAGRAF_11_9':
         return [
-          { label: 'Ingen gyldig grunn', value: 'INGEN_GYLDIG_GRUNN' },
+          { label: 'Uten rimelig grunn', value: 'INGEN_GYLDIG_GRUNN' },
           { label: 'Rimelig grunn', value: 'RIMELIG_GRUNN' },
           { label: 'Feilregistrering (Konsekvens tekst kommer her)', value: 'FEILREGISTRERING' },
         ];
