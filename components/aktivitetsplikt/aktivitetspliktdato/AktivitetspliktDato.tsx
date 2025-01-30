@@ -83,10 +83,16 @@ export const AktivitetspliktDato = ({ form, fields, remove, søknadstidspunkt, a
                           }
 
                           const bruddDate = startOfDay(parse(value as string, 'dd.MM.yyyy', new Date()));
+                          const fomDate = startOfDay(
+                            parse(form.getValues(`perioder.${index}.fom`), 'dd.MM.yyyy', new Date())
+                          );
                           const søknadsTidspunktStartOfDay = startOfDay(søknadstidspunkt);
 
                           if (isBefore(bruddDate, søknadsTidspunktStartOfDay)) {
                             return 'Bruddperioden kan ikke slutte før søknadstidspunktet';
+                          }
+                          if (isBefore(bruddDate, fomDate)) {
+                            return 'Datoen kan ikke være før fra og med dato';
                           }
                         },
                       }}
