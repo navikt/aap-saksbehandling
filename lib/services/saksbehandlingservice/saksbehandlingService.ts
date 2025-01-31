@@ -311,10 +311,12 @@ export const hentAktivitetspliktGrunnlag = async (behandlingsreferanse: string):
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentAutomatiskLovvalgOgMedlemskapVurdering = async (behandlingsReferanse: string): Promise<AutomatiskLovvalgOgMedlemskapVurdering> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/lovvalgmedlemskap/vurdering`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'POST', {behandlingsReferanse});
-}
+export const hentAutomatiskLovvalgOgMedlemskapVurdering = async (
+  behandlingsReferanse: string
+): Promise<AutomatiskLovvalgOgMedlemskapVurdering> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/lovvalgmedlemskap/vurdering/${behandlingsReferanse}`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+};
 
 export const sendFakeMeldekort = async (body: Object): Promise<void> => {
   const url = `${saksbehandlingApiBaseUrl}api/hendelse/send`;
