@@ -10,7 +10,7 @@ interface Props {
 }
 export const TilhørigetsVurderingTabell = ({ vurdering, resultatIkonTrue, resultatIkonFalse }: Props) => {
   return (
-    <Table>
+    <Table size={'small'}>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell />
