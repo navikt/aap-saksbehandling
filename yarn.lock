@@ -3252,6 +3252,8 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.1.0"
     fuse.js: "npm:^7.0.0"
     husky: "npm:^9.1.7"
+    i18n-iso-countries: "npm:^7.13.0"
+    is-european: "npm:^1.0.8"
     jsdom: "npm:^26.0.0"
     json-diff: "npm:^1.0.6"
     lint-staged: "npm:^15.4.3"
@@ -4450,6 +4452,13 @@ __metadata:
   version: 2.0.3
   resolution: "detect-libc@npm:2.0.3"
   checksum: 10c0/88095bda8f90220c95f162bf92cad70bd0e424913e655c20578600e35b91edc261af27531cf160a331e185c0ced93944bc7e09939143225f56312d7fd800fdb7
+  languageName: node
+  linkType: hard
+
+"diacritics@npm:1.3.0":
+  version: 1.3.0
+  resolution: "diacritics@npm:1.3.0"
+  checksum: 10c0/bc99c3d2e64315b1830f1573eafe1f7b06fd5dbc9687f35ea8e2e25ce8618d1444d0a2c8313b98467b0aff1d0ee35b8f9f67ef214e56e810b37da3cdb29785ac
   languageName: node
   linkType: hard
 
@@ -6128,6 +6137,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"i18n-iso-countries@npm:^7.13.0":
+  version: 7.13.0
+  resolution: "i18n-iso-countries@npm:7.13.0"
+  dependencies:
+    diacritics: "npm:1.3.0"
+  checksum: 10c0/7b9bb3d64e575857d7bcf0543fd86b50b9233689140c3e9b2dc9c125bbb71f0cbb800b9546a287ea6e9d745a3c446dc272db66863fa6d28b70add88cc0fa4fda
+  languageName: node
+  linkType: hard
+
 "iconv-lite@npm:0.6.3, iconv-lite@npm:^0.6.2":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
@@ -6381,6 +6399,15 @@ __metadata:
     call-bound: "npm:^1.0.2"
     has-tostringtag: "npm:^1.0.2"
   checksum: 10c0/1a4d199c8e9e9cac5128d32e6626fa7805175af9df015620ac0d5d45854ccf348ba494679d872d37301032e35a54fc7978fba1687e8721b2139aea7870cafa2f
+  languageName: node
+  linkType: hard
+
+"is-european@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "is-european@npm:1.0.8"
+  dependencies:
+    iso-3166: "npm:~3.1.0"
+  checksum: 10c0/0a2449d2081095bda36a897e908a72c2bd6fde1d1efaea9dc46b49e25e62c566222b392d396cd5bcd33e26f42afa7de8e0fedb41b2865e26053c6172e032485e
   languageName: node
   linkType: hard
 
@@ -6668,6 +6695,13 @@ __metadata:
   version: 3.1.1
   resolution: "isexe@npm:3.1.1"
   checksum: 10c0/9ec257654093443eb0a528a9c8cbba9c0ca7616ccb40abd6dde7202734d96bb86e4ac0d764f0f8cd965856aacbff2f4ce23e730dc19dfb41e3b0d865ca6fdcc7
+  languageName: node
+  linkType: hard
+
+"iso-3166@npm:~3.1.0":
+  version: 3.1.0
+  resolution: "iso-3166@npm:3.1.0"
+  checksum: 10c0/21913a7886e72110bbb5f473816a762bf77fdc04804097ffb321ff7b188f40565ea6e6b3ff68e4af6cc42acae7caae71d3fa74f76a671a24d86d26ec15e86a25
   languageName: node
   linkType: hard
 
