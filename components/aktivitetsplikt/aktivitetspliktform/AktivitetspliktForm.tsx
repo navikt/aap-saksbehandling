@@ -17,6 +17,7 @@ import { formaterPerioder } from 'components/aktivitetsplikt/util/Aktivitetsplik
 interface Props {
   sak: SaksInfo;
   setSkalRegistrereBrudd: Dispatch<boolean>;
+  setVisStatusmelding: Dispatch<boolean>;
 }
 
 interface AktvitetsPeriode {
@@ -52,7 +53,7 @@ const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
   { label: 'Ikke møtt til annen aktivitet', value: 'IKKE_MØTT_TIL_ANNEN_AKTIVITET' },
 ];
 
-export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd }: Props) => {
+export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd, setVisStatusmelding }: Props) => {
   const saksnummer = useSaksnummer();
   const [errorMessage, setErrorMessage] = useState('');
   const { isLoading, opprettAktivitetsplikt } = useAktivitetsplikt(saksnummer);
@@ -165,6 +166,7 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd }: Props) => {
           form.reset();
           remove();
           setSkalRegistrereBrudd(false);
+          setVisStatusmelding(true);
           await revalidateAktivitetspliktHendelser(saksnummer);
         }
       })}
