@@ -5,6 +5,7 @@ import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { landMedTrygdesamarbeid } from 'lib/utils/countries';
+import { Alert } from '@navikt/ds-react';
 
 interface Props {
   behandlingVersjon: number;
@@ -50,6 +51,7 @@ export const LovvalgVedSøknadstidspunkt = ({ readOnly }: Props) => {
         isLoading={isLoading}
         status={status}
       >
+        <Alert variant={'warning'}>Dette steget fungerer ikke enda og trenger ikke testes</Alert>
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.lovvalgsLand} />
         {lovvalgsLand === 'Annet land med avtale' && (
