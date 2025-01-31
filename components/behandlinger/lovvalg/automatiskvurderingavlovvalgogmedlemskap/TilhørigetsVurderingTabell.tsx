@@ -1,6 +1,6 @@
 'use client';
 
-import {BodyLong, HStack, Table} from '@navikt/ds-react';
+import { HStack, Table } from '@navikt/ds-react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { ReactNode } from 'react';
 interface Props {
@@ -22,10 +22,7 @@ export const TilhørigetsVurderingTabell = ({ vurdering, resultatIkonTrue, resul
       <Table.Body>
         {vurdering.map((opplysning, index) => {
           return (
-            <Table.ExpandableRow
-              key={`${opplysning.kilde.join('-')}-${index}`}
-              content={opplysning.fordypelse}
-            >
+            <Table.ExpandableRow key={`${opplysning.kilde.join('-')}-${index}`} content={opplysning.fordypelse}>
               <Table.DataCell>{opplysning.kilde.join(', ')}</Table.DataCell>
               <Table.DataCell>{opplysning.opplysning}</Table.DataCell>
               <Table.DataCell>
