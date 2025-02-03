@@ -84,7 +84,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         saksnummer: saksnummer,
         behandlingsReferanse: behandlingsreferanse,
       };
-      bestillDialogmelding(body);
+      await bestillDialogmelding(body);
       if (!error) {
         onSuccess();
       } else {
