@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Dialogmeldinger } from 'components/innhentdokumentasjon/dialogmeldinger/Dialogmeldinger';
+import { format, subDays } from 'date-fns';
 import { LegeerklæringStatus } from 'lib/types/types';
 import { describe, expect, test } from 'vitest';
 
@@ -44,5 +45,37 @@ describe('Dialogmeldinger', () => {
   test('viser en melding om det er ikke er funnet noen dialogmeldinger når listen er tom', () => {
     render(<Dialogmeldinger />);
     expect(screen.getByText('Det finnes ingen dialogmeldinger for denne saken')).toBeVisible();
+  });
+
+  test('ikon for purring vises ikke hvis det er under 14 dager siden den ble bestilt', () => {
+    const dialogmelding: LegeerklæringStatus = {
+      behandlerRef: '1234',
+      dialogmeldingUuid: 'uuuuuid',
+      opprettet: format(subDays(new Date(), 5), 'yyyy-MM-dd'),
+      personId: '12345678910',
+      status: 'BESTILT',
+      statusTekst: 'Hva skal det stå her?',
+      saksnummer: '4KD09J',
+      behandlerNavn: 'Doogie Houser',
+      fritekst: 'hello',
+    };
+    render(<Dialogmeldinger dialogmeldinger={[dialogmelding]} />);
+    expect(screen.queryByRole('button', { name: 'Send purring' })).not.toBeInTheDocument();
+  });
+
+  test('ikon for purring vises ikke hvis det er under 14 dager siden den ble bestilt', () => {
+    const dialogmelding: LegeerklæringStatus = {
+      behandlerRef: '1234',
+      dialogmeldingUuid: 'uuuuuid',
+      opprettet: format(subDays(new Date(), 15), 'yyyy-MM-dd'),
+      personId: '12345678910',
+      status: 'BESTILT',
+      statusTekst: 'Hva skal det stå her?',
+      saksnummer: '4KD09J',
+      behandlerNavn: 'Doogie Houser',
+      fritekst: 'hello',
+    };
+    render(<Dialogmeldinger dialogmeldinger={[dialogmelding]} />);
+    expect(screen.getByRole('button', { name: 'Send purring' })).toBeInTheDocument();
   });
 });

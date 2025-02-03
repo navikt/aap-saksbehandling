@@ -7,6 +7,7 @@ import styles from './Dialogmeldinger.module.css';
 import { ThumbDownIcon, TimerPauseIcon } from '@navikt/aksel-icons';
 import { sorterEtterNyesteDato } from 'lib/utils/date';
 import { clientPurrPåLegeerklæring } from 'lib/clientApi';
+import { isBefore, subDays } from 'date-fns';
 
 type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
@@ -43,6 +44,9 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null
   }
 };
 
+const grenseForPurring = subDays(new Date(), 14);
+const kanSendePurring = (opprettet: string) => isBefore(new Date(opprettet), grenseForPurring);
+
 const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
   return (
     <Table.Row>
@@ -53,7 +57,7 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
         {melding.status === 'OK' && (
           <Button variant="secondary" type="button" size="small" icon={<ThumbDownIcon title="Avslå legeerklæring" />} />
         )}
-        {melding.status === 'SENDT' && (
+        {kanSendePurring(melding.opprettet) && (
           <Button
             variant="secondary"
             type="button"
