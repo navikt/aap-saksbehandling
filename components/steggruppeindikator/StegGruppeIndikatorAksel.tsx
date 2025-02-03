@@ -1,7 +1,7 @@
 'use client';
 
 import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Stepper } from '@navikt/ds-react';
 import styles from './StegGruppeIndikator.module.css';
 
@@ -11,6 +11,7 @@ interface Props {
 }
 
 export const StegGruppeIndikatorAksel = ({ flytRespons, stegGrupperSomSkalVises }: Props) => {
+  const router = useRouter();
   const params = useParams<{ saksId: string; behandlingsReferanse: string; aktivGruppe: string }>();
   const { saksId, behandlingsReferanse, aktivGruppe } = params;
   const stegGrupper = flytRespons.flyt.filter((gruppe) => stegGrupperSomSkalVises.includes(gruppe.stegGruppe));
@@ -27,7 +28,7 @@ export const StegGruppeIndikatorAksel = ({ flytRespons, stegGrupperSomSkalVises 
                 key={gruppe.stegGruppe}
                 completed={gruppe.erFullført}
                 interactive={gruppe.erFullført || flytRespons.aktivGruppe === gruppe.stegGruppe}
-                href={`/sak/${saksId}/${behandlingsReferanse}/${gruppe.stegGruppe}`}
+                onClick={() => router.push(`/sak/${saksId}/${behandlingsReferanse}/${gruppe.stegGruppe}`)}
               >
                 {mapGruppeTypeToGruppeNavn(gruppe.stegGruppe)}
               </Stepper.Step>
