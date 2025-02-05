@@ -93,13 +93,18 @@ export const fetchWithRetry = async <ResponseBody>(
   }
 
   if (!response.ok) {
+    const statusString = `Status: ${response.status}, statusText: ${response.statusText}`;
     if (response.status === 500) {
       const responseJson = await response.json();
       logError(`klarte ikke å hente ${url}: ${responseJson.message}`);
-      throw new Error(`Unable to fetch ${url}: ${responseJson.message}`);
+      throw new Error(statusString);
+    } else if (response.status === 401 || response.status === 403) {
+      logError(`${url}, status: ${response.status}`);
+      throw new Error(statusString);
     }
     if (response.status === 404) {
-      throw new Error(`Ikke funnet: ${url}`);
+      logError(`${url}, status: ${response.status}`);
+      throw new Error(statusString);
     }
 
     logError(

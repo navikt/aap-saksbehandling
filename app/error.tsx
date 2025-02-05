@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Heading } from '@navikt/ds-react';
+import { BodyShort, Heading, VStack } from '@navikt/ds-react';
 import ErrorBilde from '../public/error.jpg';
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
 
 //500 Page
 const Error = ({ error }: Props) => {
+  console.log(error.message);
   return (
     <div
       style={{
@@ -22,9 +23,13 @@ const Error = ({ error }: Props) => {
       }}
     >
       <Heading level="2" size="medium" spacing>
-        Det har oppstått en feil 🙃. Gi denne identifikatoren til en frontend-utvikler: {error?.digest}
+        Det har oppstått en feil 🙃.
       </Heading>
-      <Image src={ErrorBilde} alt="404" width={500} height={500} />
+      <VStack align={'start'} gap={'4'}>
+        <BodyShort>{error.message}</BodyShort>
+        <BodyShort>Gi denne identifikatoren til en frontend-utvikler: {error?.digest}</BodyShort>
+        <Image src={ErrorBilde} alt="404" width={500} height={500} />
+      </VStack>
     </div>
   );
 };
