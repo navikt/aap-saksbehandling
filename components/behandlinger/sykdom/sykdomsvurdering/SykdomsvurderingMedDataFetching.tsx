@@ -8,12 +8,14 @@ import { ValuePair } from '@navikt/aap-felles-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
 
+export type TypeBehandling = 'Førstegangsbehandling' | 'Revurdering' | 'Tilbakekreving' | 'Klage';
+
 interface Props {
   saksId: string;
   behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
-  typeBehandling: string; // TODO neida, det er enum
+  typeBehandling: TypeBehandling;
 }
 
 export const SykdomsvurderingMedDataFetching = async ({

@@ -25,6 +25,7 @@ import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isBefore } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import { DokumentInfo, SykdomsGrunnlag } from 'lib/types/types';
+import { TypeBehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 
 interface FormFields {
   dokumenterBruktIVurderingen?: string[];
@@ -47,7 +48,7 @@ interface SykdomProps {
   grunnlag: SykdomsGrunnlag;
   readOnly: boolean;
   tilknyttedeDokumenter: DokumentInfo[];
-  typeBehandling: string; // TODO neida, det er enum
+  typeBehandling: TypeBehandling;
   søknadstidspunkt: string;
   bidiagnoserDeafultOptions?: ValuePair[];
   hoveddiagnoseDefaultOptions?: ValuePair[];

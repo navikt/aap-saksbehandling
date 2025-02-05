@@ -24,7 +24,7 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -39,7 +39,7 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -57,7 +57,7 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -72,7 +72,7 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -100,7 +100,7 @@ describe('felt for begrunnelse', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -115,7 +115,7 @@ describe('felt for begrunnelse', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -132,7 +132,7 @@ describe('felt for begrunnelse', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -153,7 +153,7 @@ describe('felt for om bruker har sykdom, skade eller lyte', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -167,7 +167,7 @@ describe('felt for om bruker har sykdom, skade eller lyte', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -185,7 +185,7 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -201,7 +201,7 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -219,7 +219,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -234,7 +234,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -251,7 +251,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -270,7 +270,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -289,7 +289,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -309,7 +309,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -328,7 +328,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -353,7 +353,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -382,7 +382,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -405,7 +405,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -430,7 +430,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -448,7 +448,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -469,7 +469,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -492,7 +492,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -516,7 +516,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -540,7 +540,7 @@ describe('yrkesskade', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsvurdering'}
+        typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -560,7 +560,7 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           tilknyttedeDokumenter={[]}
-          typeBehandling={'Førstegangsvurdering'}
+          typeBehandling={'Førstegangsbehandling'}
           søknadstidspunkt={søknadstidspunkt}
         />
       );
@@ -579,7 +579,7 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           tilknyttedeDokumenter={[]}
-          typeBehandling={'Førstegangsvurdering'}
+          typeBehandling={'Førstegangsbehandling'}
           søknadstidspunkt={søknadstidspunkt}
         />
       );
@@ -602,7 +602,7 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           tilknyttedeDokumenter={[]}
-          typeBehandling={'Førstegangsvurdering'}
+          typeBehandling={'Førstegangsbehandling'}
           søknadstidspunkt={søknadstidspunkt}
         />
       );
@@ -624,7 +624,7 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           tilknyttedeDokumenter={[]}
-          typeBehandling={'Førstegangsvurdering'}
+          typeBehandling={'Førstegangsbehandling'}
           søknadstidspunkt={søknadstidspunkt}
         />
       );
@@ -643,7 +643,7 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           tilknyttedeDokumenter={[]}
-          typeBehandling={'Førstegangsvurdering'}
+          typeBehandling={'Førstegangsbehandling'}
           søknadstidspunkt={søknadstidspunkt}
         />
       );
