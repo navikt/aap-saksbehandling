@@ -14,7 +14,6 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent, useEffect } from 'react';
-import { SykdomProps } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Alert, Heading, Link } from '@navikt/ds-react';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
@@ -25,6 +24,7 @@ import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSe
 import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isBefore } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
+import { DokumentInfo, SykdomsGrunnlag } from 'lib/types/types';
 
 interface FormFields {
   dokumenterBruktIVurderingen?: string[];
@@ -40,6 +40,17 @@ interface FormFields {
   erNedsettelseIArbeidsevneMerEnnHalvparten?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
+}
+
+interface SykdomProps {
+  behandlingVersjon: number;
+  grunnlag: SykdomsGrunnlag;
+  readOnly: boolean;
+  tilknyttedeDokumenter: DokumentInfo[];
+  typeBehandling: string; // TODO neida, det er enum
+  søknadstidspunkt: string;
+  bidiagnoserDeafultOptions?: ValuePair[];
+  hoveddiagnoseDefaultOptions?: ValuePair[];
 }
 
 export const Sykdomsvurdering = ({

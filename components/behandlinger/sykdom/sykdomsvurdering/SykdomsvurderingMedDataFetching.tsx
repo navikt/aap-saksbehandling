@@ -4,7 +4,6 @@ import {
   hentSak,
   hentSykdomsGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { DokumentInfo, SykdomsGrunnlag } from 'lib/types/types';
 import { ValuePair } from '@navikt/aap-felles-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
@@ -15,17 +14,6 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: string; // TODO neida, det er enum
-}
-
-export interface SykdomProps {
-  behandlingVersjon: number;
-  grunnlag: SykdomsGrunnlag;
-  readOnly: boolean;
-  tilknyttedeDokumenter: DokumentInfo[];
-  typeBehandling: string; // TODO neida, det er enum
-  søknadstidspunkt: string;
-  bidiagnoserDeafultOptions?: ValuePair[];
-  hoveddiagnoseDefaultOptions?: ValuePair[];
 }
 
 export const SykdomsvurderingMedDataFetching = async ({
