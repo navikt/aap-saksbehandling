@@ -78,6 +78,7 @@ const flyt: BehandlingFlytOgTilstand = {
     visVentekort: false,
     visKvalitetssikringKort: false,
     kvalitetssikringReadOnly: false,
+    typeBehandling: 'Førstegangsbehandling',
   },
   flyt: [],
 };

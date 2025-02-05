@@ -22,10 +22,14 @@ import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSearch';
+import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
+import { isBefore } from 'date-fns';
+import { validerDato } from 'lib/validation/dateValidation';
 
 interface FormFields {
   dokumenterBruktIVurderingen?: string[];
   begrunnelse: string;
+  vurderingenGjelderFra: string;
   harSkadeSykdomEllerLyte: string;
   kodeverk?: DiagnoseSystem;
   hoveddiagnose?: ValuePair | null;
@@ -45,6 +49,8 @@ export const Sykdomsvurdering = ({
   tilknyttedeDokumenter,
   bidiagnoserDeafultOptions,
   hoveddiagnoseDefaultOptions,
+  søknadstidspunkt,
+  typeBehandling,
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
@@ -62,6 +68,26 @@ export const Sykdomsvurdering = ({
         type: 'checkbox_nested',
         label: 'Hvilke dokumenter er brukt i vurderingen?',
         defaultValue: grunnlag.sykdomsvurdering?.dokumenterBruktIVurdering.map((dokument) => dokument.identifikator),
+      },
+      vurderingenGjelderFra: {
+        type: 'date_input',
+        label: 'Vurderingen gjelder fra',
+        defaultValue: grunnlag.sykdomsvurdering?.vurderingenGjelderFra
+          ? formaterDatoForFrontend(grunnlag.sykdomsvurdering?.vurderingenGjelderFra)
+          : undefined,
+        rules: {
+          required: 'Du må velge når vurderingen gjelder fra',
+          validate: {
+            gyldigDato: (v) => validerDato(v as string),
+            kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
+              const soknadstidspunkt = new Date(søknadstidspunkt);
+              const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
+              if (vurderingGjelderFra && isBefore(vurderingGjelderFra, soknadstidspunkt)) {
+                return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
+              }
+            },
+          },
+        },
       },
       harSkadeSykdomEllerLyte: {
         type: 'radio',
@@ -206,6 +232,8 @@ export const Sykdomsvurdering = ({
     ? hoveddiagnoseDefaultOptions
     : diagnoseSøker(kodeverkValue!, '');
 
+  const behandlingErRevurdering = typeBehandling === 'Revurdering';
+
   return (
     <VilkårsKort
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
@@ -245,6 +273,8 @@ export const Sykdomsvurdering = ({
           />
         </CheckboxWrapper>
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+        <span>{søknadstidspunkt}</span>
+        {behandlingErRevurdering && <FormField form={form} formField={formFields.vurderingenGjelderFra} />}
         <TilknyttedeDokumenter
           valgteDokumenter={form
             .watch('dokumenterBruktIVurderingen')

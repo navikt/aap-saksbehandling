@@ -3,6 +3,7 @@ import { render, screen, within } from '@testing-library/react';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { userEvent } from '@testing-library/user-event';
 import { SykdomsGrunnlag } from 'lib/types/types';
+import { format, subDays } from 'date-fns';
 
 const user = userEvent.setup();
 const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
@@ -14,7 +15,7 @@ const grunnlagMedYrkesskade: SykdomsGrunnlag = {
   skalVurdereYrkesskade: true,
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: true },
 };
-
+const søknadstidspunkt = format(new Date(), 'yyyy-MM-dd');
 describe('generelt', () => {
   it('Skal ha korrekt heading', () => {
     render(
@@ -23,6 +24,8 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     const heading = screen.getByRole('heading', { name: '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng' });
@@ -36,6 +39,8 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
 
@@ -52,6 +57,8 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     const tilknyttedeDokumenterListe = screen.getByText('Tilknyttede dokumenter');
@@ -65,6 +72,8 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -91,6 +100,8 @@ describe('felt for begrunnelse', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     const textbox = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
@@ -104,6 +115,8 @@ describe('felt for begrunnelse', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     const button = screen.getByRole('button', { name: 'Bekreft vurdering' });
@@ -119,6 +132,8 @@ describe('felt for begrunnelse', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
 
@@ -138,6 +153,8 @@ describe('felt for om bruker har sykdom, skade eller lyte', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     expect(screen.getByRole('group', { name: 'Har bruker sykdom, skade eller lyte?' })).toBeVisible();
@@ -150,6 +167,8 @@ describe('felt for om bruker har sykdom, skade eller lyte', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgBekreft();
@@ -166,6 +185,8 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -180,6 +201,8 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -196,6 +219,8 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
 
@@ -209,6 +234,8 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
 
@@ -224,6 +251,8 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
 
@@ -241,6 +270,8 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
 
@@ -258,6 +289,8 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
 
@@ -276,6 +309,8 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
 
@@ -293,6 +328,8 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
 
@@ -316,6 +353,8 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
 
@@ -343,6 +382,8 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -364,6 +405,8 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -387,6 +430,8 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -403,6 +448,8 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -422,6 +469,8 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -443,6 +492,8 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -465,6 +516,8 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -487,6 +540,8 @@ describe('yrkesskade', () => {
         readOnly={false}
         behandlingVersjon={0}
         tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsvurdering'}
+        søknadstidspunkt={søknadstidspunkt}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -505,6 +560,8 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           tilknyttedeDokumenter={[]}
+          typeBehandling={'Førstegangsvurdering'}
+          søknadstidspunkt={søknadstidspunkt}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -522,6 +579,8 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           tilknyttedeDokumenter={[]}
+          typeBehandling={'Førstegangsvurdering'}
+          søknadstidspunkt={søknadstidspunkt}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -543,6 +602,8 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           tilknyttedeDokumenter={[]}
+          typeBehandling={'Førstegangsvurdering'}
+          søknadstidspunkt={søknadstidspunkt}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -563,6 +624,8 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           tilknyttedeDokumenter={[]}
+          typeBehandling={'Førstegangsvurdering'}
+          søknadstidspunkt={søknadstidspunkt}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -580,6 +643,8 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           tilknyttedeDokumenter={[]}
+          typeBehandling={'Førstegangsvurdering'}
+          søknadstidspunkt={søknadstidspunkt}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -590,6 +655,92 @@ describe('yrkesskade', () => {
 
       expect(screen.getByText('Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30%.'));
     });
+  });
+});
+
+describe('revurdering', () => {
+  it('datofelt for når vurderingen gjelder fra vises ikke for førstegangsbehandling', () => {
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
+
+    expect(screen.queryByRole('textbox', { name: 'Vurderingen gjelder fra' })).not.toBeInTheDocument();
+  });
+
+  it('viser datofelt får når vurderingen gjelder fra', () => {
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
+
+    expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
+  });
+
+  it('viser en feilmelding dersom dato for når vurderingen gjelder fra ikke er fylt ut', async () => {
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(subDays(new Date(), 4), 'yyyy-MM-dd')}
+      />
+    );
+
+    await velgBekreft();
+    expect(screen.getByText('Du må velge når vurderingen gjelder fra')).toBeVisible();
+  });
+
+  it('viser feilmelding dersom dato for når vurderingen gjelder fra er før søknadstidspunkt', async () => {
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(subDays(new Date(), 4), 'yyyy-MM-dd')}
+      />
+    );
+
+    const datofelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });
+    const datoForVurderingInput = format(subDays(new Date(), 7), 'ddMMyy');
+    await user.type(datofelt, datoForVurderingInput);
+    await velgBekreft();
+    expect(screen.getByText('Vurderingen kan ikke gjelde fra før søknadstidspunkt')).toBeVisible();
+  });
+
+  it('viser ikke feilmelding når dato for vurderingen er etter søknadstidspunkt', async () => {
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(subDays(new Date(), 4), 'yyyy-MM-dd')}
+      />
+    );
+
+    const datofelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });
+    const datoForVurderingInput = format(new Date(), 'ddMMyy');
+    await user.type(datofelt, datoForVurderingInput);
+    await velgBekreft();
+    expect(screen.queryByText('Vurderingen kan ikke gjelde fra før søknadstidspunkt')).not.toBeInTheDocument();
   });
 });
 

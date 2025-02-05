@@ -1,5 +1,9 @@
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { hentAlleDokumenterPåSak, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentAlleDokumenterPåSak,
+  hentSak,
+  hentSykdomsGrunnlag,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { DokumentInfo, SykdomsGrunnlag } from 'lib/types/types';
 import { ValuePair } from '@navikt/aap-felles-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
@@ -10,6 +14,7 @@ interface Props {
   behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  typeBehandling: string; // TODO neida, det er enum
 }
 
 export interface SykdomProps {
@@ -17,6 +22,8 @@ export interface SykdomProps {
   grunnlag: SykdomsGrunnlag;
   readOnly: boolean;
   tilknyttedeDokumenter: DokumentInfo[];
+  typeBehandling: string; // TODO neida, det er enum
+  søknadstidspunkt: string;
   bidiagnoserDeafultOptions?: ValuePair[];
   hoveddiagnoseDefaultOptions?: ValuePair[];
 }
@@ -26,10 +33,12 @@ export const SykdomsvurderingMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
   saksId,
+  typeBehandling,
 }: Props) => {
-  const [grunnlag, tilknyttedeDokumenter] = await Promise.all([
+  const [grunnlag, tilknyttedeDokumenter, sak] = await Promise.all([
     hentSykdomsGrunnlag(behandlingsReferanse),
     hentAlleDokumenterPåSak(saksId),
+    hentSak(saksId),
   ]);
 
   const bidiagnoserDefaultOptions = await getDefaultOptions(
@@ -50,6 +59,8 @@ export const SykdomsvurderingMedDataFetching = async ({
       tilknyttedeDokumenter={tilknyttedeDokumenter}
       bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
       hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
+      søknadstidspunkt={sak.opprettetTidspunkt} // er dette det samme som søknadstidspunkt, eller kan det være noe annet
+      typeBehandling={typeBehandling}
     />
   );
 };
