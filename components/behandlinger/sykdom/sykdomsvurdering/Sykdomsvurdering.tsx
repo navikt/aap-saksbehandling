@@ -26,6 +26,7 @@ import { isBefore } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import { DokumentInfo, SykdomsGrunnlag } from 'lib/types/types';
 import { TypeBehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 
 interface FormFields {
   dokumenterBruktIVurderingen?: string[];
@@ -253,6 +254,7 @@ export const Sykdomsvurdering = ({
       icon={<VitalsIcon aria-hidden />}
       vilkårTilhørerNavKontor={true}
     >
+      {behandlingErRevurdering && <TidligereVurderinger />}
       <Form
         onSubmit={handleSubmit}
         status={status}

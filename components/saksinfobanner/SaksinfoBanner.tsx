@@ -11,8 +11,8 @@ import { ChevronDownIcon } from '@navikt/aksel-icons';
 interface Props {
   personInformasjon: SakPersoninfo;
   sak: SaksInfoType;
-  referanse: string;
-  behandlingVersjon: number;
+  referanse?: string;
+  behandlingVersjon?: number;
 }
 
 export const SaksinfoBanner = ({ personInformasjon, sak, behandlingVersjon, referanse }: Props) => {
@@ -22,32 +22,36 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandlingVersjon, refe
     <div className={styles.saksinfoBanner}>
       <SaksInfo sak={sak} personInformasjon={personInformasjon} />
 
-      <Dropdown>
-        <Button
-          size={'small'}
-          as={Dropdown.Toggle}
-          variant={'secondary'}
-          icon={<ChevronDownIcon title="chevron-saksmeny" fontSize="1.5rem" aria-hidden />}
-          iconPosition={'right'}
-        >
-          Saksmeny
-        </Button>
-        <Dropdown.Menu>
-          <Dropdown.Menu.GroupedList>
-            <Dropdown.Menu.GroupedList.Heading>Saksmeny</Dropdown.Menu.GroupedList.Heading>
-            <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
-              Sett behandling på vent
-            </Dropdown.Menu.GroupedList.Item>
-          </Dropdown.Menu.GroupedList>
-        </Dropdown.Menu>
-      </Dropdown>
+      {referanse && behandlingVersjon && (
+        <>
+          <Dropdown>
+            <Button
+              size={'small'}
+              as={Dropdown.Toggle}
+              variant={'secondary'}
+              icon={<ChevronDownIcon title="chevron-saksmeny" fontSize="1.5rem" aria-hidden />}
+              iconPosition={'right'}
+            >
+              Saksmeny
+            </Button>
+            <Dropdown.Menu>
+              <Dropdown.Menu.GroupedList>
+                <Dropdown.Menu.GroupedList.Heading>Saksmeny</Dropdown.Menu.GroupedList.Heading>
+                <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
+                  Sett behandling på vent
+                </Dropdown.Menu.GroupedList.Item>
+              </Dropdown.Menu.GroupedList>
+            </Dropdown.Menu>
+          </Dropdown>
 
-      <SettBehandllingPåVentModal
-        referanse={referanse}
-        behandlingVersjon={behandlingVersjon}
-        isOpen={settBehandlingPåVentmodalIsOpen}
-        onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}
-      />
+          <SettBehandllingPåVentModal
+            referanse={referanse}
+            behandlingVersjon={behandlingVersjon}
+            isOpen={settBehandlingPåVentmodalIsOpen}
+            onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}
+          />
+        </>
+      )}
     </div>
   );
 };
