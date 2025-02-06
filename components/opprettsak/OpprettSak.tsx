@@ -46,7 +46,7 @@ export const OpprettSak = () => {
     yrkesskade: {
       type: 'radio',
       label: 'Yrkesskade?',
-      defaultValue: JaEllerNei.Ja,
+      defaultValue: JaEllerNei.Nei,
       options: JaEllerNeiOptions,
     },
     student: {
