@@ -170,6 +170,7 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd, setVisStatusm
           await revalidateAktivitetspliktHendelser(saksnummer);
         }
       })}
+      autoComplete={'off'}
     >
       <FormField form={form} formField={formFields.brudd} />
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />

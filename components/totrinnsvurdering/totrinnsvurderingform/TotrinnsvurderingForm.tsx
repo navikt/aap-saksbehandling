@@ -107,6 +107,7 @@ export const TotrinnsvurderingForm = ({
         }
       })}
       className={'flex-column'}
+      autoComplete={'off'}
     >
       {fields.map((field, index) => (
         <TotrinnnsvurderingFelter

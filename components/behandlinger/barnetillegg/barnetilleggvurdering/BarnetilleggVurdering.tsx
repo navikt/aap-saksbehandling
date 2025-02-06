@@ -140,7 +140,7 @@ export const BarnetilleggVurdering = ({
               <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes</Label>
             </div>
 
-            <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit}>
+            <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit} autoComplete={'off'}>
               {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
                 return (
                   <OppgitteBarnVurdering

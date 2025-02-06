@@ -87,6 +87,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
               onClose();
             })}
             className={'flex-column'}
+            autoComplete={'off'}
           >
             <FormField form={form} formField={formFields.begrunnelse} />
             <FormField form={form} formField={formFields.frist} />

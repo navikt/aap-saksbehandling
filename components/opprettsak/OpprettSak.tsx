@@ -115,6 +115,7 @@ export const OpprettSak = () => {
         await mutate('api/sak/alle');
       })}
       className={styles.form}
+      autoComplete={'off'}
     >
       <div className={'flex-column'}>
         <FormField form={form} formField={formFields.fødselsdato} />

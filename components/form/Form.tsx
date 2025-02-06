@@ -27,7 +27,7 @@ export const Form = ({
   knappTekst = 'Bekreft',
 }: Props) => {
   return (
-    <form className={styles.form} onSubmit={onSubmit} id={steg}>
+    <form className={styles.form} onSubmit={onSubmit} id={steg} autoComplete={'off'}>
       {children}
       <ServerSentEventStatusAlert status={status} />
       {visBekreftKnapp && (

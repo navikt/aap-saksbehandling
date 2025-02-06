@@ -120,6 +120,7 @@ export const AktivitetspliktHendelserTabellRad = ({ aktivitetspliktHendelse }: P
 
             await revalidateAktivitetspliktHendelser(saksnummer);
           })}
+          autoComplete={'off'}
         >
           <div className={'flex-column'}>
             {aktivitetspliktHendelse.begrunnelse && (
