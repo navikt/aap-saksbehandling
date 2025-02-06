@@ -11,6 +11,7 @@ export type HistoriskVurdering = {
   status: 'oppfylt' | 'ikke_oppfylt';
   vurdertAv: string;
   vedtaksdato: string;
+  begrunnelse: string;
 };
 
 const vurderinger: HistoriskVurdering[] = [
@@ -19,12 +20,14 @@ const vurderinger: HistoriskVurdering[] = [
     vurdertAv: 'vldr',
     vedtaksdato: '2024-12-01',
     id: '234',
+    begrunnelse: 'En begrunnelse',
   },
   {
     status: 'ikke_oppfylt',
     vurdertAv: 'vldrx38',
     vedtaksdato: '2024-07-14',
     id: '490',
+    begrunnelse: 'En begrunnelse',
   },
 ];
 
@@ -50,7 +53,7 @@ const statustekst = (status: Vilkårsstatus) => (status === 'ikke_oppfylt' ? 'Vi
  */
 
 export const Vurdering = ({ vurdering }: { vurdering: HistoriskVurdering }) => {
-  const content = <span>Her kommer det en del tekst ramset opp</span>;
+  const content = <span>{vurdering.begrunnelse}</span>;
   return (
     <Table.ExpandableRow content={content} togglePlacement="right" expandOnRowClick>
       <Table.DataCell style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
@@ -77,7 +80,7 @@ export const TidligereVurderinger = () => {
           <div>
             <ClockDashedIcon title="a11y-title" />
           </div>
-          <ExpansionCard.Title>Tidligere vurderinger</ExpansionCard.Title>
+          <ExpansionCard.Title size="small">Tidligere vurderinger</ExpansionCard.Title>
         </div>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
