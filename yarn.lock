@@ -3267,7 +3267,7 @@ __metadata:
     react-hook-form: "npm:7.54.2"
     react-select: "npm:^5.10.0"
     recharts: "npm:^2.15.1"
-    swr: "npm:^2.3.1"
+    swr: "npm:^2.3.2"
     typescript: "npm:^5.7.3"
     uuid: "npm:^11.0.5"
     vite-tsconfig-paths: "npm:^5.1.4"
@@ -9789,15 +9789,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swr@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "swr@npm:2.3.1"
+"swr@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "swr@npm:2.3.2"
   dependencies:
     dequal: "npm:^2.0.3"
     use-sync-external-store: "npm:^1.4.0"
   peerDependencies:
     react: ^16.11.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/e3da27ca5ed68a0f39ca28484059763e6ec88916ea8782b2736220a2f37a90d92e75bacc98f085093fd4983739be0ee9905b91fb69481bea5c8d5b20e5ee0593
+  checksum: 10c0/981d3138c1959f1f15ddb74ed3c98f34fbcae8e68ee1b0e6ce3af7e1fcf65ecdb3a2c525b42338cbcef0f7a992d41e1aeb3982501e86239e8aeef6c34fe3b580
   languageName: node
   linkType: hard
 
