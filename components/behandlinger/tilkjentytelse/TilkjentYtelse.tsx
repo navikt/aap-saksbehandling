@@ -13,7 +13,7 @@ export const TilkjentYtelse = async ({ behandlingsReferanse }: Props) => {
       behandlingVersjon={flyt.behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.prosessering}
-      visVenteKort={flyt.visning.visVentekort}
+      visning={flyt.visning}
     >
       <StegSuspense>
         <TilkjentMedDatafetching behandlingsReferanse={behandlingsReferanse} readOnly={false} />

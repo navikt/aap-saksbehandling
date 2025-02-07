@@ -17,7 +17,7 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
       behandlingVersjon={flyt.behandlingVersjon}
       behandlingReferanse={behandlingsreferanse}
       prosessering={flyt.prosessering}
-      visVenteKort={flyt.visning.visVentekort}
+      visning={flyt.visning}
     >
       {stegSomSkalVises.includes('EFFEKTUER_11_7') && (
         <AktivitetspliktMedDatafetching

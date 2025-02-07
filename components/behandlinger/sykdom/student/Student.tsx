@@ -16,7 +16,7 @@ export const Student = async ({ behandlingsreferanse }: Props) => {
   return (
     <GruppeSteg
       prosessering={flyt.prosessering}
-      visVenteKort={flyt.visning.visVentekort}
+      visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={flyt.behandlingVersjon}
     >

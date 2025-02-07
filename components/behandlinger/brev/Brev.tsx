@@ -17,7 +17,7 @@ export const Brev = async ({ behandlingsReferanse }: Props) => {
       behandlingVersjon={flyt.behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.prosessering}
-      visVenteKort={flyt.visning.visVentekort}
+      visning={flyt.visning}
     >
       {/*{stegSomSkalVises.includes('BREV') && (*/}
       <StegSuspense>

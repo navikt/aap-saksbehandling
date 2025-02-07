@@ -9,11 +9,17 @@ const user = userEvent.setup();
 const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
   skalVurdereYrkesskade: false,
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
+  gjeldendeVedtatteSykdomsvurderinger: [],
+  sykdomsvurderinger: [],
+  historikkSykdomsvurderinger: [],
 };
 
 const grunnlagMedYrkesskade: SykdomsGrunnlag = {
   skalVurdereYrkesskade: true,
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: true },
+  gjeldendeVedtatteSykdomsvurderinger: [],
+  sykdomsvurderinger: [],
+  historikkSykdomsvurderinger: [],
 };
 const søknadstidspunkt = format(new Date(), 'yyyy-MM-dd');
 describe('generelt', () => {

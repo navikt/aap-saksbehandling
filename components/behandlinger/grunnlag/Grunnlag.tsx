@@ -37,7 +37,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
       behandlingVersjon={behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.prosessering}
-      visVenteKort={flyt.visning.visVentekort}
+      visning={flyt.visning}
     >
       {vurderFastsettBeregningstidspunkt && (
         <StegSuspense>

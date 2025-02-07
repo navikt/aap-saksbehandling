@@ -8,14 +8,14 @@ const informasjon: VenteInformasjon = {
   frist: new Date('2020-10-02').toDateString(),
   begrunnelse: 'Venter på legeerklæring',
   definisjon: {
-    kode: "5001",
+    kode: '5001',
     kreverToTrinn: false,
     kvalitetssikres: false,
-    løsesAv: ['VEILEDER'],
+    løsesAv: ['SAKSBEHANDLER_OPPFOLGING'],
     løsesISteg: 'START_BEHANDLING',
     type: 'MANUELT_PÅKREVD',
-    name: 'Navn på definisjon'
-  }
+    name: 'Navn på definisjon',
+  },
 };
 
 describe('behandlingPåVentKort', () => {

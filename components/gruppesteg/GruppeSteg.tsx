@@ -1,26 +1,27 @@
 import { ReactNode } from 'react';
 import { BehandlingPåVentKortMedDataFetching } from 'components/sideprosesser/BehandlingPåVentKortMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
-import { FlytProsessering } from 'lib/types/types';
+import { FlytProsessering, FlytVisning } from 'lib/types/types';
 
 interface Props {
   prosessering: FlytProsessering;
-  visVenteKort: boolean;
+  visning: FlytVisning;
   behandlingReferanse: string;
   behandlingVersjon: number;
   children: ReactNode;
 }
 
-export const GruppeSteg = ({ children, visVenteKort, behandlingReferanse, behandlingVersjon, prosessering }: Props) => {
+export const GruppeSteg = ({ children, visning, behandlingReferanse, behandlingVersjon, prosessering }: Props) => {
   return (
     <div className={'flex-column'}>
       {prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={prosessering} />}
-      {visVenteKort && (
+      {visning.visVentekort && (
         <BehandlingPåVentKortMedDataFetching
           behandlingReferanse={behandlingReferanse}
           behandlingVersjon={behandlingVersjon}
         />
       )}
+      {/*visning.visBrevkort && <BrevKortMedDataFetching behandlingReferanse={behandlingReferanse} />*/}
       {children}
     </div>
   );
