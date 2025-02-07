@@ -10,7 +10,6 @@ interface Props {
   vurdering: AutomatiskLovvalgOgMedlemskapVurdering;
 }
 export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({ vurdering }: Props) => {
-  console.log('vurdering', vurdering);
   return (
     <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
       <VStack gap={'5'}>

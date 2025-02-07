@@ -25,6 +25,7 @@ import {
   HelseinstitusjonGrunnlag,
   KvalitetssikringGrunnlag,
   LegeerklæringStatus,
+  LovvalgMedlemskapGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   MedlemskapGrunnlag,
   OppdaterAktivitetspliktBrudd2,
@@ -192,6 +193,13 @@ export const hentFatteVedtakGrunnlang = async (behandlingsReferanse: string): Pr
 export const hentBrevGrunnlag = async (behandlingsReferanse: string): Promise<BrevGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/brev`;
   return await fetchProxy<BrevGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentLovvalgMedlemskapGrunnlag = async (
+  behandlingsReferanse: string
+): Promise<LovvalgMedlemskapGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/lovvalgmedlemskap`;
+  return await fetchProxy<LovvalgMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBeregningstidspunktVurdering = async (

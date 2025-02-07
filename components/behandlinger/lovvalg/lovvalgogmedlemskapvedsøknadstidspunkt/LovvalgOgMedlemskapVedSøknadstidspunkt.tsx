@@ -1,0 +1,151 @@
+'use client';
+
+import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { FormField, useConfigForm } from '@navikt/aap-felles-react';
+import { Form } from 'components/form/Form';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { landMedTrygdesamarbeid } from 'lib/utils/countries';
+import { Behovstype, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { FormEvent } from 'react';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { LovvalgEØSLand, LovvalgMedlemskapGrunnlag } from 'lib/types/types';
+
+interface Props {
+  behandlingVersjon: number;
+  readOnly: boolean;
+  grunnlag: LovvalgMedlemskapGrunnlag;
+}
+
+interface FormFields {
+  lovvalgBegrunnelse: string;
+  lovvalgsLand: string;
+  annetLovvalgslandMedAvtale?: string;
+  medlemskapBegrunnelse?: string;
+  medlemAvFolkeTrygdenVedSøknadstidspunkt?: JaEllerNei;
+}
+function maplovvalgslandTilAlpha3(lovvalgsland: string) {
+  if (lovvalgsland === 'Norge') {
+    return 'NOR';
+  }
+  return null;
+}
+function mapGrunnlagTilLovvalgsland(lovvalgsland?: LovvalgEØSLand) {
+  if (lovvalgsland === null) {
+    return 'Land uten avtale';
+  } else if (lovvalgsland === 'NOR') {
+    return 'Norge';
+  } else if (lovvalgsland) {
+    return 'Annet land med avtale';
+  }
+  return undefined;
+}
+function mapGrunnlagTilAnnetLovvalgslandMedAvtale(lovvalgsland?: LovvalgEØSLand) {
+  if (lovvalgsland && lovvalgsland !== 'NOR') {
+    return lovvalgsland;
+  }
+  return undefined;
+}
+function mapGrunnlagTilMedlemAvFolketrygdenVedSøknadstidspunkt(isMedlem?: boolean | null) {
+  if (isMedlem === true) {
+    return JaEllerNei.Ja;
+  } else if (isMedlem === false) {
+    return JaEllerNei.Nei;
+  }
+  return undefined;
+}
+export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
+  const { isLoading, status, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+  const { form, formFields } = useConfigForm<FormFields>(
+    {
+      lovvalgBegrunnelse: {
+        type: 'textarea',
+        label: 'Vurder riktig lovvalg ved søknadstidspunkt',
+        rules: { required: 'Du må gi en begrunnelse på lovvalg ved søknadstidspunkt' },
+        defaultValue: grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.begrunnelse,
+      },
+      lovvalgsLand: {
+        type: 'radio',
+        label: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
+        options: ['Norge', 'Annet land med avtale', 'Land uten avtale'],
+        rules: { required: 'Du må velge riktig lovvalg ved søknadstidspunkt' },
+        defaultValue: grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.begrunnelse
+          ? mapGrunnlagTilLovvalgsland(grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand)
+          : undefined,
+      },
+      annetLovvalgslandMedAvtale: {
+        type: 'select',
+        label: 'Velg land som vi vurderer som lovvalgsland',
+        options: landMedTrygdesamarbeid,
+        defaultValue: mapGrunnlagTilAnnetLovvalgslandMedAvtale(
+          grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand
+        ),
+      },
+      medlemskapBegrunnelse: {
+        type: 'textarea',
+        label: 'Vurder brukerens medlemskap på søknadstidspunktet',
+        rules: { required: 'Du må begrunne medlemskap på søknadstidspunktet' },
+        defaultValue: grunnlag.vurdering?.medlemskapVedSøknadsTidspunkt?.begrunnelse
+          ? grunnlag.vurdering?.medlemskapVedSøknadsTidspunkt?.begrunnelse
+          : undefined,
+      },
+      medlemAvFolkeTrygdenVedSøknadstidspunkt: {
+        type: 'radio',
+        label: 'Var brukeren medlem av folketrygden ved søknadstidspunktet?',
+        options: JaEllerNeiOptions,
+        rules: { required: 'Du må velg om brukeren var medlem av folketrygden på søknadstidspunkt' },
+        defaultValue: mapGrunnlagTilMedlemAvFolketrygdenVedSøknadstidspunkt(
+          grunnlag.vurdering?.medlemskapVedSøknadsTidspunkt?.varMedlemIFolketrygd
+        ),
+      },
+    },
+    { readOnly }
+  );
+
+  const lovvalgsLand = form.watch('lovvalgsLand');
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
+          manuellVurderingForLovvalgMedlemskap: {
+            lovvalgVedSøknadsTidspunkt: {
+              begrunnelse: data.lovvalgBegrunnelse,
+              lovvalgsEØSLand:
+                data.lovvalgsLand === 'Annet land med avtale'
+                  ? (data.annetLovvalgslandMedAvtale as LovvalgEØSLand)
+                  : maplovvalgslandTilAlpha3(data.lovvalgsLand),
+            },
+            medlemskapVedSøknadsTidspunkt:
+              data.lovvalgsLand === 'Annet land med avtale'
+                ? undefined
+                : {
+                    begrunnelse: data.medlemskapBegrunnelse,
+                    varMedlemIFolketrygd: data.medlemAvFolkeTrygdenVedSøknadstidspunkt === JaEllerNei.Ja,
+                  },
+          },
+        },
+        referanse: behandlingsReferanse,
+      });
+    })(event);
+  };
+  return (
+    <VilkårsKort heading={'Lovvalg og medlemskap ved søknadstidspunkt'} steg={'VURDER_LOVVALG'}>
+      <Form steg={'VURDER_LOVVALG'} onSubmit={handleSubmit} isLoading={isLoading} status={status}>
+        <FormField form={form} formField={formFields.lovvalgBegrunnelse} />
+        <FormField form={form} formField={formFields.lovvalgsLand} />
+        {lovvalgsLand === 'Annet land med avtale' && (
+          <FormField form={form} formField={formFields.annetLovvalgslandMedAvtale} />
+        )}
+        {['Norge', 'Land uten avtale'].includes(lovvalgsLand) && (
+          <>
+            <FormField form={form} formField={formFields.medlemskapBegrunnelse} />
+            <FormField form={form} formField={formFields.medlemAvFolkeTrygdenVedSøknadstidspunkt} />
+          </>
+        )}
+      </Form>
+    </VilkårsKort>
+  );
+};

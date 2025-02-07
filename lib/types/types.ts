@@ -202,3 +202,9 @@ export type AktivitetspliktGrunnlag =
 
 export type AutomatiskLovvalgOgMedlemskapVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering'];
+
+export type LovvalgMedlemskapGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.LovvalgMedlemskapGrunnlagDto'];
+
+export type LovvalgEØSLand =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.LovvalgVedS\u00F8knadsTidspunkt']['lovvalgsEØSLand'];

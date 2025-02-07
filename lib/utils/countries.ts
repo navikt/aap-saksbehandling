@@ -13,6 +13,7 @@ const eeaCountries: ValuePair[] = countryList
   }));
 
 export const landMedTrygdesamarbeid: ValuePair[] = [
+  { value: '', label: '' },
   ...eeaCountries,
   { value: 'CHE', label: countries.getName('CHE', 'no', { select: 'official' }) || '' },
   { value: 'AUS', label: countries.getName('AUS', 'no', { select: 'official' }) || '' },
