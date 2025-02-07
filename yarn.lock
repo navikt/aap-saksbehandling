@@ -1831,24 +1831,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@portabletext/react@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@portabletext/react@npm:3.2.0"
+"@portabletext/react@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "@portabletext/react@npm:3.2.1"
   dependencies:
-    "@portabletext/toolkit": "npm:^2.0.16"
+    "@portabletext/toolkit": "npm:^2.0.17"
     "@portabletext/types": "npm:^2.0.13"
   peerDependencies:
     react: ^17 || ^18 || >=19.0.0-0
-  checksum: 10c0/8772bcb857487a3725341591a6457843d47e7890ee8577f01cf4d96fd56adf6a8158cecc83b0e3ba551523489f71cb9b8d9ff1dcfa9515636243ec627183a1c1
+  checksum: 10c0/fdc6209535088ee18eb1d3b49973bde9f9e81aec280ef1d357a67e07c33a0b999d238195db7c5009af183f9d4555ec5af6eb3de59ff0f6a9752340e455d1d381
   languageName: node
   linkType: hard
 
-"@portabletext/toolkit@npm:^2.0.16":
-  version: 2.0.16
-  resolution: "@portabletext/toolkit@npm:2.0.16"
+"@portabletext/toolkit@npm:^2.0.17":
+  version: 2.0.17
+  resolution: "@portabletext/toolkit@npm:2.0.17"
   dependencies:
     "@portabletext/types": "npm:^2.0.13"
-  checksum: 10c0/8c5ac6a06ca48daac7a330692e1eeae2e0d9a017e22aebbfd9ee557a4436e33baad4981fe5dccb3b75a915542d095ee5b965d3a5e4f812501f943f57c61406d9
+  checksum: 10c0/e02e25f48fbb2f96a594e06bca69beafde030fc5296e755bff3fcebda7d552615fe6b8132a60bf58fe5c2b249360851488ef0f9ffe977cf8679d026172b15b12
   languageName: node
   linkType: hard
 
@@ -3223,7 +3223,7 @@ __metadata:
     "@navikt/ds-react": "npm:7.11.0"
     "@navikt/eslint-config-aap": "npm:^4.2.6"
     "@navikt/oasis": "npm:^3.6.0"
-    "@portabletext/react": "npm:^3.2.0"
+    "@portabletext/react": "npm:^3.2.1"
     "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/jest-dom": "npm:^6.6.3"
     "@testing-library/react": "npm:^16.2.0"

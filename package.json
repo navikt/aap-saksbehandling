@@ -27,7 +27,7 @@
     "@navikt/ds-css": "7.11.0",
     "@navikt/ds-react": "7.11.0",
     "@navikt/oasis": "^3.6.0",
-    "@portabletext/react": "^3.2.0",
+    "@portabletext/react": "^3.2.1",
     "@testing-library/user-event": "14.6.1",
     "@vercel/otel": "^1.10.1",
     "date-fns": "^4.1.0",
