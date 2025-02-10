@@ -1,9 +1,16 @@
 import { NextResponse } from 'next/server';
 import { finnSakerForIdent } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError } from '@navikt/aap-felles-utils';
-import { SøkeResultat } from 'components/appheader/Kelvinsøk';
 import { SaksInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
+
+export interface SøkeResultat {
+  oppgaver?: {
+    label: string;
+    href: string;
+  }[];
+  saker?: { href: string; label: string }[];
+}
 
 export async function POST(req: Request) {
   const body: { søketekst: string } = await req.json();
