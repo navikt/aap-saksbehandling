@@ -287,7 +287,6 @@ export const Sykdomsvurdering = ({
           />
         </CheckboxWrapper>
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-        <span>{søknadstidspunkt}</span>
         {behandlingErRevurdering && <FormField form={form} formField={formFields.vurderingenGjelderFra} />}
         <TilknyttedeDokumenter
           valgteDokumenter={form
@@ -296,7 +295,6 @@ export const Sykdomsvurdering = ({
           tilknyttedeDokumenterPåBehandling={tilknyttedeDokumenter}
         />
         <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
-
         {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.kodeverk} horizontalRadio />
         )}
@@ -324,29 +322,24 @@ export const Sykdomsvurdering = ({
             )}
           </>
         )}
-
         {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
         )}
-
         {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei && (
           <Alert variant={'info'} size={'small'} className={'fit-content'}>
             Bruker vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
           </Alert>
         )}
-
         {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
           <>
             <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneAvEnVissVarighet} horizontalRadio />
           </>
         )}
-
         {form.watch('erNedsettelseIArbeidsevneAvEnVissVarighet') === JaEllerNei.Ja && (
           <>
             <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneMerEnnHalvparten} horizontalRadio />
           </>
         )}
-
         {grunnlag.skalVurdereYrkesskade &&
           form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei && (
             <>
@@ -359,7 +352,6 @@ export const Sykdomsvurdering = ({
               />
             </>
           )}
-
         {(form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Ja ||
           (form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei &&
             form.watch('erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense') === JaEllerNei.Ja &&
