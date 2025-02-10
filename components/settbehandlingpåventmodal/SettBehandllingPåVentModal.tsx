@@ -45,11 +45,9 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
       rules: { required: 'Du må gi en begrunnelse' },
     },
     frist: {
-      type: 'date',
-      fromDate: new Date(),
+      type: 'date_input',
       label: 'Tidspunkt for frist',
       rules: { required: 'Du må sette en frist' },
-      strategy: 'fixed',
     },
     grunn: {
       type: 'select',
