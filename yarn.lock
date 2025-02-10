@@ -1329,9 +1329,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-react@npm:^4.3.1":
-  version: 4.3.1
-  resolution: "@navikt/aap-felles-react@npm:4.3.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-react%2F4.3.1%2F49c239130b6f86f1db66b6488131671da6565fd7"
+"@navikt/aap-felles-react@npm:^4.3.2":
+  version: 4.3.2
+  resolution: "@navikt/aap-felles-react@npm:4.3.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-react%2F4.3.2%2F51548ec3fe18a112e750c7e8a27a9761ffcdec29"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.5.2"
     "@navikt/ds-css": "npm:^7.5.2"
@@ -1341,7 +1341,7 @@ __metadata:
     react-hook-form: "npm:^7.54.2"
     react-select: "npm:^5.8.3"
     uuid: "npm:^10.0.0"
-  checksum: 10c0/f3ea76304bcdcff3f3eb2ef207b8814751cb6559739997fc265447b5a5ac3e8946e8a2849dcae56e5490b770acd165e3ba1a696017f5fddb8ad5dea517aeee0b
+  checksum: 10c0/0946760ed398bf60345b29ec36998a6a3cf61b013b6b87f433f95745e2512deb8cd4c73758760fca7bf58ef49547a7518d8ce35b9f7336ec2505f7ea5fe925c0
   languageName: node
   linkType: hard
 
@@ -3214,7 +3214,7 @@ __metadata:
     "@navikt/aap-breveditor-css": "npm:^0.1.3"
     "@navikt/aap-felles-css": "npm:^4.3.1"
     "@navikt/aap-felles-prettier": "npm:^4.3.1"
-    "@navikt/aap-felles-react": "npm:^4.3.1"
+    "@navikt/aap-felles-react": "npm:^4.3.2"
     "@navikt/aap-felles-utils": "npm:^4.3.1"
     "@navikt/aap-felles-utils-client": "npm:^4.3.1"
     "@navikt/aksel-icons": "npm:7.12.2"

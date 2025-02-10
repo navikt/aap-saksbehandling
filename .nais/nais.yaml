@@ -67,6 +67,7 @@ spec:
     outbound:
       rules:
         - application: "behandlingsflyt"
+        - application: "oppgave"
         - application: "saksbehandling-pdfgen"
         - application: "dokumentinnhenting"
       external:
