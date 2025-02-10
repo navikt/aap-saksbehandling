@@ -18,15 +18,22 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ message: 'søketekst mangler' }), { status: 400 });
   }
 
-  let data: SøkeResultat = {};
+  const søketekst = body.søketekst;
+  let sakData: SaksInfo[] = [];
+  const isFnr = søketekst.length === 11;
+
+  // Saker
   try {
-    const søketekst = body.søketekst;
-    let sakData: SaksInfo[] = [];
-    const isFnr = søketekst.length === 11;
     if (isFnr) {
       sakData = await finnSakerForIdent(søketekst);
     }
-    let oppgaveData: SøkeResultat['oppgaver'] = [];
+  } catch (err) {
+    logError('/api/kelvinsøk saker', err);
+  }
+
+  // Oppgaver
+  let oppgaveData: SøkeResultat['oppgaver'] = [];
+  try {
     const oppgaver = await oppgaveTekstSøk(søketekst);
     if (oppgaver) {
       oppgaveData = oppgaver.map((oppgave: unknown) => ({
@@ -35,17 +42,16 @@ export async function POST(req: Request) {
         label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype}`,
       }));
     }
-    data = {
-      oppgaver: oppgaveData,
-      saker: sakData?.map((sak) => ({
-        href: `${process.env.NEXT_PUBLIC_SAKSBEHANDLING_URL}/sak/${sak.saksnummer}`,
-        label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer})`,
-      })),
-    };
   } catch (err) {
-    logError('/api/kelvinsøk', err);
-    return new Response(JSON.stringify({ message: 'Noe gikk galt' }), { status: 500 });
+    logError('/api/kelvinsøk oppgaver', err);
   }
+  const data = {
+    oppgaver: oppgaveData,
+    saker: sakData?.map((sak) => ({
+      href: `${process.env.NEXT_PUBLIC_SAKSBEHANDLING_URL}/sak/${sak.saksnummer}`,
+      label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer})`,
+    })),
+  };
 
   return NextResponse.json(data, {
     status: 200,
