@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { clientBestillDialogmelding, clientOpprettAktivitetspliktBrudd, clientOpprettSak } from 'lib/clientApi';
 import { BestillLegeerklæring, OpprettAktivitetspliktBrudd, OpprettTestcase } from 'lib/types/types';
+import { getErrorMessage } from 'lib/utils/errorUtil';
 
 export function useFetch<FunctionParameters extends any[], ResponseBody>(
   fetchFunction: (...functionParameters: FunctionParameters) => Promise<ResponseBody>
@@ -23,7 +24,7 @@ export function useFetch<FunctionParameters extends any[], ResponseBody>(
         setData(dataFromFetch);
       }
     } catch (error) {
-      setError(JSON.stringify(error));
+      setError(getErrorMessage(error));
     }
 
     setIsLoading(false);
