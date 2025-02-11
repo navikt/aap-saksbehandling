@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import {
+  forberedBehandlingOgVentPåProsessering,
   hentBehandling,
   hentFlyt,
   hentSak,
@@ -15,6 +16,7 @@ import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { notFound } from 'next/navigation';
 import { StegGruppe } from 'lib/types/types';
 import { SaksbehandlingsoversiktMedDataFetching } from 'components/saksbehandlingsoversikt/SaksbehandlingsoversiktMedDataFetching';
+import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 
 interface Props {
   children: ReactNode;
@@ -26,13 +28,23 @@ const Layout = async (props: Props) => {
 
   const { children } = props;
 
-  const personInfo = await hentSakPersoninfo(params.saksId);
-  const sak = await hentSak(params.saksId);
-  const flytResponse = await hentFlyt(params.behandlingsReferanse);
   const behandling = await hentBehandling(params.behandlingsReferanse);
   if (behandling === undefined) {
     notFound();
   }
+
+  // Denne må komme før resten av kallene slik at siste versjon av data er oppdatert i backend for behandlingen
+  if (behandling.skalForberede) {
+    const forberedBehandlingResponse = await forberedBehandlingOgVentPåProsessering(params.behandlingsReferanse);
+
+    if (forberedBehandlingResponse && forberedBehandlingResponse.status === 'FEILET') {
+      return <FlytProsesseringAlert flytProsessering={forberedBehandlingResponse} />;
+    }
+  }
+
+  const personInfo = await hentSakPersoninfo(params.saksId);
+  const sak = await hentSak(params.saksId);
+  const flytResponse = await hentFlyt(params.behandlingsReferanse);
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.flyt
     .filter((steg) => steg.skalVises)
