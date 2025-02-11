@@ -22,7 +22,7 @@ import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSearch';
 import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
-import { isBefore } from 'date-fns';
+import { isBefore, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import { DokumentInfo, SykdomsGrunnlag } from 'lib/types/types';
 import { TypeBehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
@@ -93,9 +93,9 @@ export const Sykdomsvurdering = ({
           validate: {
             gyldigDato: (v) => validerDato(v as string),
             kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
-              const soknadstidspunkt = new Date(søknadstidspunkt);
+              const soknadstidspunkt = startOfDay(new Date(søknadstidspunkt));
               const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
-              if (vurderingGjelderFra && isBefore(vurderingGjelderFra, soknadstidspunkt)) {
+              if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
                 return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
               }
             },
