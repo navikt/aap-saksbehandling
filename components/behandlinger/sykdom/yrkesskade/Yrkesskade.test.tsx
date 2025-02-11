@@ -25,7 +25,7 @@ const user = userEvent.setup();
 
 describe('Generelt', () => {
   it('skal har korrekt heading', () => {
-    const heading = screen.getByRole('heading', { name: 'Yrkesskade §§ 11-22 1.ledd' });
+    const heading = screen.getByRole('heading', { name: 'Yrkesskade § 11-22 1.ledd' });
     expect(heading).toBeVisible();
   });
 
