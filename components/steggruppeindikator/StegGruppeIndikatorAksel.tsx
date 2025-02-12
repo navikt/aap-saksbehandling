@@ -25,6 +25,7 @@ export const StegGruppeIndikatorAksel = ({ flytRespons, stegGrupperSomSkalVises 
           .map((gruppe) => {
             return (
               <Stepper.Step
+                as="button"
                 key={gruppe.stegGruppe}
                 completed={gruppe.erFullført}
                 interactive={gruppe.erFullført || flytRespons.aktivGruppe === gruppe.stegGruppe}
