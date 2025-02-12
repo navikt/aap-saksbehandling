@@ -748,6 +748,26 @@ describe('revurdering', () => {
     await velgBekreft();
     expect(screen.queryByText('Vurderingen kan ikke gjelde fra før søknadstidspunkt')).not.toBeInTheDocument();
   });
+
+  it('viser ikke feilmelding når dato for vurderingen er lik søknadstidspunkt', async () => {
+    const søknadstidspunkt = subDays(new Date(), 4);
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
+      />
+    );
+
+    const datofelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });
+    const datoForVurderingInput = format(søknadstidspunkt, 'ddMMyy');
+    await user.type(datofelt, datoForVurderingInput);
+    await velgBekreft();
+    expect(screen.queryByText('Vurderingen kan ikke gjelde fra før søknadstidspunkt')).not.toBeInTheDocument();
+  });
 });
 
 const velgBekreft = async () => {
