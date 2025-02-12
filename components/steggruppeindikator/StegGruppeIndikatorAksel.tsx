@@ -44,7 +44,7 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
     case 'BREV':
       return 'Brev';
     case 'MEDLEMSKAP':
-      return 'Medlemskap';
+      return 'Forutgående medlemskap';
     case 'SYKDOM':
       return 'Sykdom';
     case 'UNDERVEIS':
@@ -64,7 +64,7 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
     case 'GRUNNLAG':
       return 'Grunnlag';
     case 'LOVVALG':
-      return 'Lovvalg';
+      return 'Lovvalg og medlemskap';
     case 'FATTE_VEDTAK':
       return 'Fatte vedtak';
     case 'IVERKSETT_VEDTAK':
