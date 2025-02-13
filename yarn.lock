@@ -1521,14 +1521,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/oasis@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "@navikt/oasis@npm:3.6.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F3.6.0%2F8e7b3918165b037c18cfbc36ad4aeee04fc0650f"
+"@navikt/oasis@npm:^3.7.0":
+  version: 3.7.0
+  resolution: "@navikt/oasis@npm:3.7.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F3.7.0%2F751fcd04f8bd873590fc8ad516f906012caaf9ef"
   dependencies:
     jose: "npm:^5.2.3"
     openid-client: "npm:^5.6.5"
     prom-client: "npm:^15.1.0"
-  checksum: 10c0/ff82418115f91e8bfe2f34fab5293fb70d700f701db36a5813e8495f33903b6f2ec1386546fc2cc4edadfaa466391d1358102d01d08966ef30037a7883b4028c
+  checksum: 10c0/32d4dc1b481789ef5edf254919565aef514ea0e4900a50e2d910eb38e7d57229979e97c6ea0366480d9f2cc093647882863ea8847804337a56082a6194465c71
   languageName: node
   linkType: hard
 
@@ -3222,7 +3222,7 @@ __metadata:
     "@navikt/ds-css": "npm:7.12.2"
     "@navikt/ds-react": "npm:7.12.2"
     "@navikt/eslint-config-aap": "npm:^4.2.6"
-    "@navikt/oasis": "npm:^3.6.0"
+    "@navikt/oasis": "npm:^3.7.0"
     "@portabletext/react": "npm:^3.2.1"
     "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/jest-dom": "npm:^6.6.3"
