@@ -38,24 +38,26 @@ export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props)
             </div>
 
             <BodyShort as={'p'}>Behandlingen er på vent. Vil du åpne den igjen?</BodyShort>
-            <Button
-              size={'medium'}
-              loading={isLoading}
-              onClick={async () => {
-                løsBehovOgVentPåProsessering({
-                  behandlingVersjon: behandlingVersjon,
-                  behov: {
-                    behovstype: informasjon?.definisjon.kode,
-                  },
-                  referanse: behandlingsReferanse,
-                });
+            {informasjon.grunn !== 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING' && (
+              <Button
+                size={'medium'}
+                loading={isLoading}
+                onClick={async () => {
+                  løsBehovOgVentPåProsessering({
+                    behandlingVersjon: behandlingVersjon,
+                    behov: {
+                      behovstype: informasjon?.definisjon.kode,
+                    },
+                    referanse: behandlingsReferanse,
+                  });
 
-                await revalidateFlyt(behandlingsReferanse);
-              }}
-              className={'fit-content'}
-            >
-              Åpne behandling
-            </Button>
+                  await revalidateFlyt(behandlingsReferanse);
+                }}
+                className={'fit-content'}
+              >
+                Åpne behandling
+              </Button>
+            )}
           </>
         )}
       </div>
