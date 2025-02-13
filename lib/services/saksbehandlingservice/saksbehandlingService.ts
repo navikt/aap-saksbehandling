@@ -206,7 +206,7 @@ export const hentLovvalgMedlemskapGrunnlag = async (
 export const hentSamordningGraderingGrunnlag = async (
   behandlingsReferanse: string
 ): Promise<SamordningGraderingGrunnlag> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/samordning/`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/samordning/`;
   return await fetchProxy<SamordningGraderingGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 

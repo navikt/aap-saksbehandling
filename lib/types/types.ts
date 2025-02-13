@@ -45,7 +45,8 @@ export type AlderGrunnlag =
 export type BrevGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag'];
 export type Brev = components['schemas']['no.nav.aap.brev.kontrakt.Brev'];
 export type SamordningGraderingGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.samordning.SamordningYtelseVurderingGrunnlagDTO'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingGrunnlagDTO'];
+
 // Behandling
 export type DetaljertBehandling = components['schemas']['no.nav.aap.behandlingsflyt.flyt.DetaljertBehandlingDTO'];
 export type BehandlingFlytOgTilstand =

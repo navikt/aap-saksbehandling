@@ -77,5 +77,7 @@ function mapÅrsakerTilString(årsak: SettPåVentÅrsaker): string {
       return 'Venter på opplysninger fra utenlandske myndigheter';
     case 'VENTER_PÅ_MASKINELL_AVKLARING':
       return 'Venter på maskinell avklaring';
+    case 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING':
+      return 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING';
   }
 }

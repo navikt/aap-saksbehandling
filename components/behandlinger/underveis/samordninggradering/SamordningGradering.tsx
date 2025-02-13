@@ -33,7 +33,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
                   <td>{formaterDatoForVisning(periode.fom)}</td>
                   <td>{formaterDatoForVisning(periode.tom)}</td>
                   <td>{periode.gradering}</td>
-                  <td>{/*periode.kronesum*/}</td>
+                  <td>{periode.kronesum}</td>
                 </tr>
               ))}
             </tbody>
