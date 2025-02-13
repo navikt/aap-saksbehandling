@@ -21,7 +21,9 @@ const grunnlagMedYrkesskade: SykdomsGrunnlag = {
   sykdomsvurderinger: [],
   historikkSykdomsvurderinger: [],
 };
+
 const søknadstidspunkt = format(new Date(), 'yyyy-MM-dd');
+
 describe('generelt', () => {
   it('Skal ha korrekt heading', () => {
     render(
@@ -768,6 +770,65 @@ describe('revurdering', () => {
     await velgBekreft();
     expect(screen.queryByText('Vurderingen kan ikke gjelde fra før søknadstidspunkt')).not.toBeInTheDocument();
   });
+
+  it('viser ikke felt for en viss varighet når det gjøres en revurdering', async () => {
+    const søknadstidspunkt = subDays(new Date(), 14);
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
+      />
+    );
+    await skrivInnDatoForNårVurderingenGjelderFra(format(new Date(), 'ddMMyy'));
+    await velgAtBrukerHarSykdomSkadeLyte();
+    await velgAtBrukerHarNedsattArbeidsevne();
+    expect(
+      screen.queryByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' })
+    ).not.toBeInTheDocument();
+  });
+});
+
+describe('revurdering av førstegangsbehandling', () => {
+  it('viser felt for en viss varighet når det er revurdering av førstegangsbehandling', async () => {
+    const søknadstidspunkt = subDays(new Date(), 4);
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
+      />
+    );
+    await skrivInnDatoForNårVurderingenGjelderFra(format(søknadstidspunkt, 'ddMMyy'));
+    await velgAtBrukerHarSykdomSkadeLyte();
+    await velgAtBrukerHarNedsattArbeidsevne();
+    expect(screen.getByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' })).toBeVisible();
+  });
+
+  it('når gjelder fra dato settes til det samme som søknadstidspunkt vises spørsmål om arbeidsevnen er nedsatt med minst halvparten', async () => {
+    const søknadstidspunkt = subDays(new Date(), 4);
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
+      />
+    );
+    await skrivInnDatoForNårVurderingenGjelderFra(format(søknadstidspunkt, 'ddMMyy'));
+    await velgAtBrukerHarSykdomSkadeLyte();
+    await velgAtBrukerHarNedsattArbeidsevne();
+    await velgAtDenNedsatteArbeidsevnenErAvEnVissVarighet();
+    expect(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' })).toBeVisible();
+  });
 });
 
 const velgBekreft = async () => {
@@ -783,6 +844,17 @@ const velgAtBrukerHarSykdomSkadeLyte = async () => {
     }
   );
   await user.click(jaValg);
+};
+
+const velgAtBrukerHarNedsattArbeidsevne = async () =>
+  await velgJaIGruppe(screen.getByRole('group', { name: 'Har bruker nedsatt arbeidsevne?' }));
+
+const velgAtDenNedsatteArbeidsevnenErAvEnVissVarighet = async () =>
+  velgJaIGruppe(screen.getByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' }));
+
+const skrivInnDatoForNårVurderingenGjelderFra = async (dato: string) => {
+  const datofelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });
+  await user.type(datofelt, dato);
 };
 
 const velgNeiIGruppe = async (gruppe: HTMLElement): Promise<void> =>

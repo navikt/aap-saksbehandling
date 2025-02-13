@@ -41,6 +41,7 @@ interface FormFields {
   erNedsettelseIArbeidsevneAvEnVissVarighet?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
+  erNedsettelseIArbeidsevneMerEnnFørtiProsent?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
 }
 
@@ -68,25 +69,27 @@ export const Sykdomsvurdering = ({
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
+  const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(0);
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
         label: 'Vilkårsvurdering',
         description: 'Vekt og vurder opplysningene mot hverandre, og vurder om brukeren oppfyller vilkårene i § 11-5',
-        defaultValue: grunnlag?.sykdomsvurdering?.begrunnelse,
+        defaultValue: sykdomsvurdering?.begrunnelse,
         rules: { required: 'Du må begrunne' },
       },
       dokumenterBruktIVurderingen: {
         type: 'checkbox_nested',
         label: 'Hvilke dokumenter er brukt i vurderingen?',
-        defaultValue: grunnlag.sykdomsvurdering?.dokumenterBruktIVurdering.map((dokument) => dokument.identifikator),
+        defaultValue: sykdomsvurdering?.dokumenterBruktIVurdering.map((dokument) => dokument.identifikator),
       },
       vurderingenGjelderFra: {
         type: 'date_input',
         label: 'Vurderingen gjelder fra',
-        defaultValue: grunnlag.sykdomsvurdering?.vurderingenGjelderFra
-          ? formaterDatoForFrontend(grunnlag.sykdomsvurdering?.vurderingenGjelderFra)
+        defaultValue: sykdomsvurdering?.vurderingenGjelderFra
+          ? formaterDatoForFrontend(sykdomsvurdering?.vurderingenGjelderFra)
           : undefined,
         rules: {
           required: 'Du må velge når vurderingen gjelder fra',
@@ -105,28 +108,28 @@ export const Sykdomsvurdering = ({
       harSkadeSykdomEllerLyte: {
         type: 'radio',
         label: 'Har bruker sykdom, skade eller lyte?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.harSkadeSykdomEllerLyte),
+        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.harSkadeSykdomEllerLyte),
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om bruker har sykdom, skade eller lyte' },
       },
       erArbeidsevnenNedsatt: {
         type: 'radio',
         label: 'Har bruker nedsatt arbeidsevne?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erArbeidsevnenNedsatt),
+        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erArbeidsevnenNedsatt),
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om bruker har nedsatt arbeidsevne' },
       },
       erNedsettelseIArbeidsevneMerEnnHalvparten: {
         type: 'radio',
         label: 'Er arbeidsevnen nedsatt med minst halvparten?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten),
+        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten),
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om arbeidsevnen er nedsatt med minst halvparten' },
       },
       erSkadeSykdomEllerLyteVesentligdel: {
         type: 'radio',
         label: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
+        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
         options: JaEllerNeiOptions,
         rules: {
           required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
@@ -136,35 +139,38 @@ export const Sykdomsvurdering = ({
         type: 'radio',
         label: 'Velg system for diagnoser',
         options: ['ICPC2', 'ICD10'],
-        defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.kodeverk),
+        defaultValue: getStringEllerUndefined(sykdomsvurdering?.kodeverk),
         rules: { required: 'Du må velge et system for diagnoser' },
       },
       hoveddiagnose: {
         type: 'async_combobox',
-        defaultValue: hoveddiagnoseDefaultOptions?.find(
-          (value) => value.value === grunnlag.sykdomsvurdering?.hoveddiagnose
-        ),
+        defaultValue: hoveddiagnoseDefaultOptions?.find((value) => value.value === sykdomsvurdering?.hoveddiagnose),
       },
       bidiagnose: {
         type: 'async_combobox',
         defaultValue: bidiagnoserDeafultOptions?.filter((option) =>
-          grunnlag.sykdomsvurdering?.bidiagnoser?.includes(option.value)
+          sykdomsvurdering?.bidiagnoser?.includes(option.value)
         ),
       },
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
         type: 'radio',
         label: 'Er den nedsatte arbeidsevnen av en viss varighet?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag.sykdomsvurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet),
+        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet),
         rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet' },
         options: JaEllerNeiOptions,
       },
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: {
         type: 'radio',
         label: 'Er arbeidsevnen nedsatt med minst 30%?',
-        defaultValue: getJaNeiEllerUndefined(
-          grunnlag.sykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-        ),
+        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense),
         rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30%.' },
+        options: JaEllerNeiOptions,
+      },
+      erNedsettelseIArbeidsevneMerEnnFørtiProsent: {
+        type: 'radio',
+        label: 'Er arbeidsevnen nedsatt med minst 40%?',
+        defaultValue: undefined,
+        rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 40%' },
         options: JaEllerNeiOptions,
       },
       yrkesskadeBegrunnelse: {
@@ -173,7 +179,7 @@ export const Sykdomsvurdering = ({
         description:
           'Bruker har yrkesskade, og kan ha rett på AAP med en nedsatt arbeidsevne på minst 30%. Nay vurderer årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne.',
         rules: { required: 'Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med mist 30%' },
-        defaultValue: getStringEllerUndefined(grunnlag.sykdomsvurdering?.yrkesskadeBegrunnelse),
+        defaultValue: getStringEllerUndefined(sykdomsvurdering?.yrkesskadeBegrunnelse),
       },
     },
     { shouldUnregister: true, readOnly: readOnly }
@@ -216,27 +222,25 @@ export const Sykdomsvurdering = ({
 
   const kodeverkValue = form.watch('kodeverk');
   useEffect(() => {
-    if (kodeverkValue !== grunnlag.sykdomsvurdering?.kodeverk) {
+    if (kodeverkValue !== sykdomsvurdering?.kodeverk) {
       form.setValue('hoveddiagnose', null);
       form.setValue('bidiagnose', null);
     } else if (
-      kodeverkValue === grunnlag.sykdomsvurdering?.kodeverk &&
+      kodeverkValue === sykdomsvurdering?.kodeverk &&
       Array.isArray(hoveddiagnoseDefaultOptions) &&
       hoveddiagnoseDefaultOptions.length
     ) {
       // kode for å omgå en bug som oppstår under test når man kan kvalitetssikre sin egen vurdering
       // bør kunne slettes når man ikke lengre kan kvalitetssikre sin egen vurdering
       form.resetField('hoveddiagnose', {
-        defaultValue: hoveddiagnoseDefaultOptions?.find(
-          (value) => value.value === grunnlag.sykdomsvurdering?.hoveddiagnose
-        ),
+        defaultValue: hoveddiagnoseDefaultOptions?.find((value) => value.value === sykdomsvurdering?.hoveddiagnose),
       });
     } else {
       form.resetField('hoveddiagnose');
       form.resetField('bidiagnose');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tar ikke med form som en dependency da den fører til at useEffect kjøres feil
-  }, [kodeverkValue, grunnlag.sykdomsvurdering?.kodeverk]);
+  }, [kodeverkValue, sykdomsvurdering?.kodeverk]);
 
   const defaultOptionsHoveddiagnose = hoveddiagnoseDefaultOptions
     ? hoveddiagnoseDefaultOptions
@@ -246,6 +250,22 @@ export const Sykdomsvurdering = ({
     : diagnoseSøker(kodeverkValue!, '');
 
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
+  const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
+
+  function behandlingErRevurderingAvFørstegangsbehandling() {
+    if (!behandlingErRevurdering) {
+      return false;
+    }
+    const søknadsdato = startOfDay(new Date(søknadstidspunkt));
+    const vurderingenGjelderFra = stringToDate(form.getValues('vurderingenGjelderFra'), 'dd.MM.yyyy');
+    if (!vurderingenGjelderFra) {
+      return false;
+    }
+    return søknadsdato.getTime() === startOfDay(vurderingenGjelderFra).getTime();
+  }
+
+  const erFørstegangsbehandlingEllerRevurderingAvFørstegangsbehandling =
+    behandlingErRevurderingAvFørstegangsbehandling() || typeBehandling === 'Førstegangsbehandling';
 
   return (
     <VilkårsKort
@@ -330,16 +350,24 @@ export const Sykdomsvurdering = ({
             Bruker vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
           </Alert>
         )}
-        {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
-          <>
-            <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneAvEnVissVarighet} horizontalRadio />
-          </>
-        )}
-        {form.watch('erNedsettelseIArbeidsevneAvEnVissVarighet') === JaEllerNei.Ja && (
+        {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja &&
+          erFørstegangsbehandlingEllerRevurderingAvFørstegangsbehandling && (
+            <>
+              <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneAvEnVissVarighet} horizontalRadio />
+            </>
+          )}
+
+        {((behandlingErFørstegangsbehandling && form.watch('erNedsettelseIArbeidsevneAvEnVissVarighet')) ||
+          behandlingErRevurderingAvFørstegangsbehandling()) && (
           <>
             <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneMerEnnHalvparten} horizontalRadio />
           </>
         )}
+
+        {form.watch('erArbeidsevnenNedsatt') && behandlingErRevurdering && (
+          <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneMerEnnFørtiProsent} horizontalRadio />
+        )}
+
         {grunnlag.skalVurdereYrkesskade &&
           form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei && (
             <>

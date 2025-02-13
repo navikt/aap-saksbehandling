@@ -32,13 +32,13 @@ export const SykdomsvurderingMedDataFetching = async ({
   ]);
 
   const bidiagnoserDefaultOptions = await getDefaultOptions(
-    grunnlag.sykdomsvurdering?.bidiagnoser,
-    grunnlag.sykdomsvurdering?.kodeverk as DiagnoseSystem
+    grunnlag.sykdomsvurderinger.at(0)?.bidiagnoser,
+    grunnlag.sykdomsvurderinger.at(0)?.kodeverk as DiagnoseSystem
   );
 
   const hovedDiagnoseDefaultOptions = await getDefaultOptions(
-    grunnlag.sykdomsvurdering?.hoveddiagnose,
-    grunnlag.sykdomsvurdering?.kodeverk as DiagnoseSystem
+    grunnlag.sykdomsvurderinger.at(0)?.hoveddiagnose,
+    grunnlag.sykdomsvurderinger.at(0)?.kodeverk as DiagnoseSystem
   );
 
   return (
