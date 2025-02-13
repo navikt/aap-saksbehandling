@@ -6,6 +6,7 @@ import { formaterDatoTidForVisning } from '@navikt/aap-felles-utils-client';
 import { isLocal } from 'lib/utils/environment';
 import { DummyMeldekort } from 'components/devtools/DummyMeldekort';
 import { SendNySoknad } from 'components/devtools/SendNySoknad';
+import { BestillBrevTestKnapp } from 'components/behandlinger/brev/BestillBrevTestKnapp';
 
 const Page = async (props: { params: Promise<{ saksId: string }> }) => {
   const params = await props.params;
@@ -19,6 +20,7 @@ const Page = async (props: { params: Promise<{ saksId: string }> }) => {
           <tr>
             <th>Referanse</th>
             <th>Opprettet</th>
+            {isLocal() && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -28,6 +30,11 @@ const Page = async (props: { params: Promise<{ saksId: string }> }) => {
                 <Link href={`/sak/${params.saksId}/${behandling.referanse}`}>{behandling.referanse}</Link>
               </td>
               <td>{formaterDatoTidForVisning(behandling.opprettet)}</td>
+              {isLocal() && (
+                <td>
+                  <BestillBrevTestKnapp behandlingReferanse={behandling.referanse} />
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

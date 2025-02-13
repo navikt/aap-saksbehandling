@@ -262,6 +262,11 @@ export const opprettTestSak = async (sak: OpprettTestcase) => {
   return await fetchProxy<void>(url, saksbehandlingApiScope, 'POST', sak);
 };
 
+export const bestillTestBrev = async (bestilling: { behandlingReferanse: string }) => {
+  const url = `${saksbehandlingApiBaseUrl}/test/brev`;
+  return await fetchProxy<void>(url, saksbehandlingApiScope, 'POST', bestilling);
+};
+
 export const hentResultat = async (referanse: string): Promise<BehandlingResultat> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/resultat`;
   return await fetchProxy<BehandlingResultat>(url, saksbehandlingApiScope, 'GET');

@@ -6,7 +6,7 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev } from 'lib/types/types';
+import { Brev, BrevMottaker } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 
@@ -18,9 +18,13 @@ import style from './SkrivBrev.module.css';
 export const SkriveBrev = ({
   referanse,
   behandlingVersjon,
+  mottaker,
+  saksnummer,
   grunnlag,
 }: {
   referanse: string;
+  mottaker: BrevMottaker;
+  saksnummer?: string;
   behandlingVersjon: number;
   grunnlag: Brev;
 }) => {
@@ -35,7 +39,6 @@ export const SkriveBrev = ({
     setIsSaving(true);
     const res = await clientMellomlagreBrev(referanse, debouncedBrev);
     if (res != undefined) {
-      console.log('res', res);
       setSistLagret(new Date());
     }
     setIsSaving(false);
@@ -51,14 +54,13 @@ export const SkriveBrev = ({
 
   const { løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('BREV');
 
-  // @ts-ignore
   return (
     <div className={style.brevbygger}>
       <div className={style.sistLagret}>
         {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
         {isSaving && <Loader />}
       </div>
-      <Brevbygger brevmal={brev} onBrevChange={onChange} logo={NavLogo} />
+      <Brevbygger brevmal={brev} mottaker={mottaker} saksnummer={saksnummer} onBrevChange={onChange} logo={NavLogo} />
       <Button
         onClick={() =>
           // TODO: Mellomlagre brev før vi ferdigstiller
