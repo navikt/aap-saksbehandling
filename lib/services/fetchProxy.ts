@@ -104,7 +104,7 @@ export const fetchWithRetry = async <ResponseBody>(
       throw new Error(statusString);
     } else if (response.status === 403) {
       logWarning(`${url}, status: ${response.status}`);
-      redirect('/forbidden');
+      redirect(`/forbidden?url=${encodeURI(url)}`);
     }
     if (response.status === 404) {
       logError(`${url}, status: ${response.status}`);

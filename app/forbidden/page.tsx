@@ -1,6 +1,12 @@
+'use client';
+
 import { BodyShort, Heading, VStack } from '@navikt/ds-react';
+import { useSearchParams } from 'next/navigation';
 
 export default function ForbiddenPage() {
+  const params = useSearchParams();
+  const url = params.get('url');
+
   return (
     <div
       style={{
@@ -11,11 +17,10 @@ export default function ForbiddenPage() {
       }}
     >
       <Heading level="2" size="medium" spacing>
-        ❌ Oi! Her har du ikke tilgang gitt
+        ❌ Oi! Her har du ikke tilgang
       </Heading>
       <VStack align={'center'}>
-        <BodyShort spacing>Du har ikke tilgang til å se dette.</BodyShort>
-        <BodyShort spacing>Gå til oppgavelisten for å se oppgaver du har tilgang til.</BodyShort>
+        <BodyShort spacing>Gå til oppgavelisten for å se oppgaver du har tilgang til. Url: {url}</BodyShort>
       </VStack>
     </div>
   );
