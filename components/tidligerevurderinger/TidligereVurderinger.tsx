@@ -1,47 +1,22 @@
 import { CheckmarkCircleIcon, ClockDashedIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { ExpansionCard, Table } from '@navikt/ds-react';
 
+import { Sykdomsvurdering } from 'lib/types/types';
 import styles from './TidligereVurderinger.module.css';
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
-type Vilkårsstatus = 'oppfylt' | 'ikke_oppfylt';
-
-export type HistoriskVurdering = {
-  id: string;
-  status: 'oppfylt' | 'ikke_oppfylt';
-  vurdertAv: string;
-  vedtaksdato: string;
-  begrunnelse: string;
-};
-
-const vurderinger: HistoriskVurdering[] = [
-  {
-    status: 'oppfylt',
-    vurdertAv: 'vldr',
-    vedtaksdato: '2024-12-01',
-    id: '234',
-    begrunnelse: 'En begrunnelse',
-  },
-  {
-    status: 'ikke_oppfylt',
-    vurdertAv: 'vldrx38',
-    vedtaksdato: '2024-07-14',
-    id: '490',
-    begrunnelse: 'En begrunnelse',
-  },
-];
+type Vilkårsstatus = 'oppfylt' | 'ikke_oppfylt'; // TODO nei
 
 const Statusikon = ({ status }: { status: Vilkårsstatus }) => {
   if (status === 'ikke_oppfylt') {
     return (
       <div>
-        <CheckmarkCircleIcon className={`${styles.statusIkon} ${styles.ikkeOppfylt}`} />
+        <XMarkOctagonIcon className={`${styles.statusIkon} ${styles.ikkeOppfylt}`} />
       </div>
     );
   }
   return (
     <div>
-      <XMarkOctagonIcon className={`${styles.statusIkon} ${styles.oppfylt}`} />
+      <CheckmarkCircleIcon className={`${styles.statusIkon} ${styles.oppfylt}`} />
     </div>
   );
 };
@@ -52,22 +27,46 @@ const statustekst = (status: Vilkårsstatus) => (status === 'ikke_oppfylt' ? 'Vi
  * Det gjenstår å håndtere visningen av den faktiske vurderingen som er gjort for vilkåret
  */
 
-export const Vurdering = ({ vurdering }: { vurdering: HistoriskVurdering }) => {
-  const content = <span>{vurdering.begrunnelse}</span>;
+const mapTilJaEllerNei = (verdi?: boolean) => (verdi ? 'Ja' : 'Nei');
+
+export const Vurdering = ({ vurdering }: { vurdering: Sykdomsvurdering }) => {
+  const content = (
+    <div>
+      <span>{vurdering.begrunnelse}</span>
+      <div style={{ display: 'flex', gap: '1.5rem', flexDirection: 'row', flexWrap: 'wrap' }}>
+        <span>Har bruker sykdom, skade eller lyte: {mapTilJaEllerNei(vurdering.harSkadeSykdomEllerLyte)}</span>
+        <span>Har bruker nedsatt arbeidsevne: {mapTilJaEllerNei(vurdering.erArbeidsevnenNedsatt ?? undefined)}</span>
+        <span>
+          Er arbeidsevnen nedsatt med minst halvparten:
+          {mapTilJaEllerNei(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten ?? undefined)}
+        </span>
+        <span>
+          Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt:
+          {mapTilJaEllerNei(vurdering.erSkadeSykdomEllerLyteVesentligdel ?? undefined)}
+        </span>
+        <span>
+          Er den nedsatte arbeidsevnen av en viss varighet:
+          {mapTilJaEllerNei(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet ?? undefined)}
+        </span>
+      </div>
+    </div>
+  );
   return (
     <Table.ExpandableRow content={content} togglePlacement="right" expandOnRowClick>
       <Table.DataCell style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
-        <Statusikon status={vurdering.status} />
-        {statustekst(vurdering.status)}
+        <Statusikon status={'oppfylt'} />
+        {statustekst('oppfylt')}
       </Table.DataCell>
-      <Table.DataCell align="right">
-        ({vurdering.vurdertAv}) {formaterDatoForVisning(vurdering.vedtaksdato)}
-      </Table.DataCell>
+      {/* TODO hent ident og vedtaksdato her når backend er klar */}
+      <Table.DataCell align="right">(TODO) {vurdering.vurderingenGjelderFra}</Table.DataCell>
     </Table.ExpandableRow>
   );
 };
+interface Props {
+  gjeldendeVedtatteVurderinger: Sykdomsvurdering[];
+}
 
-export const TidligereVurderinger = () => {
+export const TidligereVurderinger = ({ gjeldendeVedtatteVurderinger }: Props) => {
   return (
     <ExpansionCard
       aria-label="Tidligere vurderinger"
@@ -86,8 +85,8 @@ export const TidligereVurderinger = () => {
       <ExpansionCard.Content>
         <Table>
           <Table.Body>
-            {vurderinger.map((vurdering) => (
-              <Vurdering vurdering={vurdering} key={vurdering.id} />
+            {gjeldendeVedtatteVurderinger.map((vurdering, index) => (
+              <Vurdering key={index} vurdering={vurdering} />
             ))}
           </Table.Body>
         </Table>

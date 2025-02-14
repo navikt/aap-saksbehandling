@@ -212,3 +212,6 @@ export type LovvalgMedlemskapGrunnlag =
 
 export type LovvalgEØSLand =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.LovvalgVedS\u00F8knadsTidspunkt']['lovvalgsEØSLand'];
+
+export type Sykdomsvurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingDto'];

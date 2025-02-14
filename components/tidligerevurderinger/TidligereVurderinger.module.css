@@ -19,6 +19,7 @@
   --ac-expansioncard-border-radius: var(--a-border-radius-large);
   --ac-expansioncard-button-border-radius: var(--a-border-radius-medium);
   --ac-expansioncard-border-hover-color: var(--a-border-strong);
+  margin-bottom: var(--a-spacing-4);
 }
 
 .statusIkon {
