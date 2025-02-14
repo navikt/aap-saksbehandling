@@ -2,9 +2,10 @@
 
 import { isLocal } from 'lib/utils/environment';
 import { requestAzureOboToken, validateToken } from '@navikt/oasis';
-import { getAccessTokenOrRedirectToLogin, logError } from '@navikt/aap-felles-utils';
+import { getAccessTokenOrRedirectToLogin, logError, logWarning } from '@navikt/aap-felles-utils';
 import { headers } from 'next/headers';
 import { hentLocalToken } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { redirect } from 'next/navigation';
 
 const NUMBER_OF_RETRIES = 3;
 
@@ -98,9 +99,12 @@ export const fetchWithRetry = async <ResponseBody>(
       const responseJson = await response.json();
       logError(`klarte ikke å hente ${url}: ${responseJson.message}`);
       throw new Error(statusString);
-    } else if (response.status === 401 || response.status === 403) {
+    } else if (response.status === 401) {
       logError(`${url}, status: ${response.status}`);
       throw new Error(statusString);
+    } else if (response.status === 403) {
+      logWarning(`${url}, status: ${response.status}`);
+      redirect('/forbidden');
     }
     if (response.status === 404) {
       logError(`${url}, status: ${response.status}`);
