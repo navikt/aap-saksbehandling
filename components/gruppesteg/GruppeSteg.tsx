@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { BehandlingPåVentKortMedDataFetching } from 'components/sideprosesser/BehandlingPåVentKortMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
-import { FlytProsessering, FlytVisning } from 'lib/types/types';
+import { FlytProsessering, FlytVisning, StegGruppe } from 'lib/types/types';
 import { BrevKortMedDataFetching } from 'components/brev/BrevKortMedDataFetching';
 
 interface Props {
@@ -9,10 +9,18 @@ interface Props {
   visning: FlytVisning;
   behandlingReferanse: string;
   behandlingVersjon: number;
+  aktivGruppe?: StegGruppe;
   children: ReactNode;
 }
 
-export const GruppeSteg = ({ children, visning, behandlingReferanse, behandlingVersjon, prosessering }: Props) => {
+export const GruppeSteg = ({
+  children,
+  visning,
+  behandlingReferanse,
+  behandlingVersjon,
+  aktivGruppe,
+  prosessering,
+}: Props) => {
   return (
     <div className={'flex-column'}>
       {prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={prosessering} />}
@@ -22,7 +30,9 @@ export const GruppeSteg = ({ children, visning, behandlingReferanse, behandlingV
           behandlingVersjon={behandlingVersjon}
         />
       )}
-      {visning.visBrevkort && <BrevKortMedDataFetching behandlingReferanse={behandlingReferanse} />}
+      {visning.visBrevkort && aktivGruppe !== 'BREV' && (
+        <BrevKortMedDataFetching behandlingReferanse={behandlingReferanse} />
+      )}
       {children}
     </div>
   );

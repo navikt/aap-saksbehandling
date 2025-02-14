@@ -20,6 +20,7 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
       behandlingVersjon={behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.prosessering}
+      aktivGruppe="BREV"
       visning={flyt.visning}
     >
       {stegSomSkalVises.includes('FORESLÅ_VEDTAK') && (
