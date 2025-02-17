@@ -8,10 +8,10 @@ import { AlderMedDataFetching } from 'components/behandlinger/alder/AlderMedData
 import { Student } from 'components/behandlinger/sykdom/student/Student';
 import { Barnetillegg } from 'components/behandlinger/barnetillegg/Barnetillegg';
 import { EtAnnetSted } from 'components/behandlinger/etannetsted/EtAnnetSted';
-import { MedlemskapMedDataFetching } from 'components/behandlinger/medlemskap/MedlemskapMedDataFetching';
 import { Brev } from 'components/behandlinger/brev/Brev';
 import { Underveis } from 'components/behandlinger/underveis/Underveis';
-import {Lovvalg} from "components/behandlinger/lovvalg/Lovvalg";
+import { Lovvalg } from 'components/behandlinger/lovvalg/Lovvalg';
+import { ForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/ForutgåendeMedlemskap';
 
 interface Props {
   saksId: string;
@@ -26,7 +26,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, saksId
       {aktivGruppe === 'ALDER' && <AlderMedDataFetching behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'STUDENT' && <Student behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} sakId={saksId} />}
-      {aktivGruppe === 'MEDLEMSKAP' && <MedlemskapMedDataFetching behandlingsReferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'MEDLEMSKAP' && <ForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'ET_ANNET_STED' && <EtAnnetSted behandlingsreferanse={behandlingsReferanse} />}

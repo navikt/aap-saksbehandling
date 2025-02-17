@@ -332,6 +332,13 @@ export const hentAktivitetspliktGrunnlag = async (behandlingsreferanse: string):
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentForutgåendeMedlemskapsVurdering = async (
+  behandlingsReferanse: string
+): Promise<AutomatiskLovvalgOgMedlemskapVurdering> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/lovvalgmedlemskap/forutgaaendevurdering/${behandlingsReferanse}`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentAutomatiskLovvalgOgMedlemskapVurdering = async (
   behandlingsReferanse: string
 ): Promise<AutomatiskLovvalgOgMedlemskapVurdering> => {
