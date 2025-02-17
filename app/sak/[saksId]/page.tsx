@@ -15,7 +15,7 @@ const Page = async (props: { params: Promise<{ saksId: string }> }) => {
   return (
     <div className={styles.saksoversikt}>
       <Heading size={'medium'}>Alle behandlinger for en sak:</Heading>
-      <table style={{ maxWidth: '30rem' }}>
+      <table style={{ maxWidth: '50rem' }}>
         <thead>
           <tr>
             <th>Referanse</th>
