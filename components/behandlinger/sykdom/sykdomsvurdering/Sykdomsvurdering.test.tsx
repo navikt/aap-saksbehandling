@@ -771,6 +771,67 @@ describe('revurdering', () => {
     expect(screen.queryByText('Vurderingen kan ikke gjelde fra før søknadstidspunkt')).not.toBeInTheDocument();
   });
 
+  it('viser spørsmål om den nedsatte arbeidsevnen er minst 40% når det ikke skal vurderes mot yrkesskade', async () => {
+    const søknadstidspunkt = subDays(new Date(), 14);
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
+      />
+    );
+    await skrivInnDatoForNårVurderingenGjelderFra(format(new Date(), 'ddMMyy'));
+    await velgAtBrukerHarSykdomSkadeLyte();
+    await velgAtBrukerHarNedsattArbeidsevne();
+    expect(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40%?' })).toBeVisible();
+    expect(screen.queryByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30%?' })).not.toBeInTheDocument();
+  });
+
+  it('viser spørsmål om den nedsatte arbeidsevnen er minst 30% når det skal vurderes mot yrkesskade', async () => {
+    const søknadstidspunkt = subDays(new Date(), 14);
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagMedYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
+      />
+    );
+    await skrivInnDatoForNårVurderingenGjelderFra(format(new Date(), 'ddMMyy'));
+    await velgAtBrukerHarSykdomSkadeLyte();
+    await velgAtBrukerHarNedsattArbeidsevne();
+    expect(screen.queryByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40%?' })).not.toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30%?' })).toBeVisible();
+  });
+
+  it('viser spørsmål for om den nedsatte arbeidsevnen i vesentlig del skyldes sykdom, skade eller lyte', async () => {
+    const søknadstidspunkt = subDays(new Date(), 14);
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
+      />
+    );
+    await skrivInnDatoForNårVurderingenGjelderFra(format(new Date(), 'ddMMyy'));
+    await velgAtBrukerHarSykdomSkadeLyte();
+    await velgAtBrukerHarNedsattArbeidsevne();
+    await velgAtArbeidsevnenErNedsattMedMinstFørtiProsent();
+    expect(
+      screen.getByRole('group', {
+        name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
+      })
+    ).toBeVisible();
+  });
+
   it('viser ikke felt for en viss varighet når det gjøres en revurdering', async () => {
     const søknadstidspunkt = subDays(new Date(), 14);
     render(
@@ -851,6 +912,9 @@ const velgAtBrukerHarNedsattArbeidsevne = async () =>
 
 const velgAtDenNedsatteArbeidsevnenErAvEnVissVarighet = async () =>
   velgJaIGruppe(screen.getByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' }));
+
+const velgAtArbeidsevnenErNedsattMedMinstFørtiProsent = async () =>
+  await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40%?' }));
 
 const skrivInnDatoForNårVurderingenGjelderFra = async (dato: string) => {
   const datofelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });

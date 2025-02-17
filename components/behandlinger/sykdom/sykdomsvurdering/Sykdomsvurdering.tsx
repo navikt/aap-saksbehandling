@@ -13,22 +13,23 @@ import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { VitalsIcon } from '@navikt/aksel-icons';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useCallback, useEffect } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { Alert, Heading, Link } from '@navikt/ds-react';
+import { Alert, Link } from '@navikt/ds-react';
 import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
-import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
-import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSearch';
+import { DiagnoseSystem } from 'lib/diagnosesøker/DiagnoseSøker';
 import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isBefore, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import { DokumentInfo, SykdomsGrunnlag } from 'lib/types/types';
 import { TypeBehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { Revurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Revurdering';
+import { Førstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/Førstegangsbehandling';
 
-interface FormFields {
+export interface SykdomsvurderingFormFields {
   dokumenterBruktIVurderingen?: string[];
   begrunnelse: string;
   vurderingenGjelderFra: string;
@@ -71,7 +72,7 @@ export const Sykdomsvurdering = ({
 
   const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(0);
 
-  const { formFields, form } = useConfigForm<FormFields>(
+  const { formFields, form } = useConfigForm<SykdomsvurderingFormFields>(
     {
       begrunnelse: {
         type: 'textarea',
@@ -242,30 +243,22 @@ export const Sykdomsvurdering = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tar ikke med form som en dependency da den fører til at useEffect kjøres feil
   }, [kodeverkValue, sykdomsvurdering?.kodeverk]);
 
-  const defaultOptionsHoveddiagnose = hoveddiagnoseDefaultOptions
-    ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue!, '');
-  const defaultOptionsBidiagnose = hoveddiagnoseDefaultOptions
-    ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue!, '');
-
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
   const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
 
-  function behandlingErRevurderingAvFørstegangsbehandling() {
+  const vurderingenGjelderFra = form.watch('vurderingenGjelderFra');
+
+  const behandlingErRevurderingAvFørstegangsbehandling = useCallback(() => {
     if (!behandlingErRevurdering) {
       return false;
     }
-    const søknadsdato = startOfDay(new Date(søknadstidspunkt));
-    const vurderingenGjelderFra = stringToDate(form.getValues('vurderingenGjelderFra'), 'dd.MM.yyyy');
-    if (!vurderingenGjelderFra) {
+    const gjelderFra = stringToDate(vurderingenGjelderFra, 'dd.MM.yyyy');
+    if (!gjelderFra) {
       return false;
     }
-    return søknadsdato.getTime() === startOfDay(vurderingenGjelderFra).getTime();
-  }
-
-  const erFørstegangsbehandlingEllerRevurderingAvFørstegangsbehandling =
-    behandlingErRevurderingAvFørstegangsbehandling() || typeBehandling === 'Førstegangsbehandling';
+    const søknadsdato = startOfDay(new Date(søknadstidspunkt));
+    return søknadsdato.getTime() === startOfDay(gjelderFra).getTime();
+  }, [behandlingErRevurdering, søknadstidspunkt, vurderingenGjelderFra]);
 
   return (
     <VilkårsKort
@@ -316,77 +309,23 @@ export const Sykdomsvurdering = ({
             ?.filter((dokument) => dokument != 'dokumentasjonMangler')}
           tilknyttedeDokumenterPåBehandling={tilknyttedeDokumenter}
         />
-        <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
-        {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.kodeverk} horizontalRadio />
+        {(behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()) && (
+          <Førstegangsbehandling
+            form={form}
+            formFields={formFields}
+            readOnly={readOnly}
+            skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+            hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
+          />
         )}
-        {kodeverkValue && (
-          <>
-            <AsyncComboSearch
-              label={'Hoveddiagnose'}
-              form={form}
-              name={'hoveddiagnose'}
-              fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
-              defaultOptions={defaultOptionsHoveddiagnose}
-              rules={{ required: 'Du må velge en hoveddiagnose' }}
-              readOnly={readOnly}
-            />
-            {form.watch('hoveddiagnose')?.value !== ingenDiagnoseCode && (
-              <AsyncComboSearch
-                label={'Bidiagnoser (valgfritt)'}
-                form={form}
-                isMulti={true}
-                name={'bidiagnose'}
-                fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
-                defaultOptions={defaultOptionsBidiagnose}
-                readOnly={readOnly}
-              />
-            )}
-          </>
-        )}
-        {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
-        )}
-        {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei && (
-          <Alert variant={'info'} size={'small'} className={'fit-content'}>
-            Bruker vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
-          </Alert>
-        )}
-        {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja &&
-          erFørstegangsbehandlingEllerRevurderingAvFørstegangsbehandling && (
-            <>
-              <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneAvEnVissVarighet} horizontalRadio />
-            </>
-          )}
-
-        {((behandlingErFørstegangsbehandling && form.watch('erNedsettelseIArbeidsevneAvEnVissVarighet')) ||
-          behandlingErRevurderingAvFørstegangsbehandling()) && (
-          <>
-            <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneMerEnnHalvparten} horizontalRadio />
-          </>
-        )}
-
-        {form.watch('erArbeidsevnenNedsatt') && behandlingErRevurdering && (
-          <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneMerEnnFørtiProsent} horizontalRadio />
-        )}
-
-        {grunnlag.skalVurdereYrkesskade &&
-          form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei && (
-            <>
-              <Heading size={'small'}>Nedsatt arbeidsevne §§ 11-5 / 11-22</Heading>
-              <FormField form={form} formField={formFields.yrkesskadeBegrunnelse} className={'begrunnelse'} />
-              <FormField
-                form={form}
-                formField={formFields.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
-                horizontalRadio
-              />
-            </>
-          )}
-        {(form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Ja ||
-          (form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei &&
-            form.watch('erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense') === JaEllerNei.Ja &&
-            grunnlag.skalVurdereYrkesskade)) && (
-          <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} horizontalRadio />
+        {behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling() && (
+          <Revurdering
+            form={form}
+            formFields={formFields}
+            readOnly={readOnly}
+            skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+            hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
+          />
         )}
       </Form>
     </VilkårsKort>
