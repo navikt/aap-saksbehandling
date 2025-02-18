@@ -28,6 +28,7 @@ import { TypeBehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { Revurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Revurdering';
 import { Førstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/Førstegangsbehandling';
+import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
 export interface SykdomsvurderingFormFields {
   dokumenterBruktIVurderingen?: string[];
@@ -69,6 +70,10 @@ export const Sykdomsvurdering = ({
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
+
+  const behandlingErRevurdering = typeBehandling === 'Revurdering';
+  const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
+  const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
 
   const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(0);
 
@@ -140,17 +145,17 @@ export const Sykdomsvurdering = ({
         type: 'radio',
         label: 'Velg system for diagnoser',
         options: ['ICPC2', 'ICD10'],
-        defaultValue: getStringEllerUndefined(sykdomsvurdering?.kodeverk),
+        defaultValue: getStringEllerUndefined(diagnosegrunnlag?.kodeverk),
         rules: { required: 'Du må velge et system for diagnoser' },
       },
       hoveddiagnose: {
         type: 'async_combobox',
-        defaultValue: hoveddiagnoseDefaultOptions?.find((value) => value.value === sykdomsvurdering?.hoveddiagnose),
+        defaultValue: hoveddiagnoseDefaultOptions?.find((value) => value.value === diagnosegrunnlag?.hoveddiagnose),
       },
       bidiagnose: {
         type: 'async_combobox',
         defaultValue: bidiagnoserDeafultOptions?.filter((option) =>
-          sykdomsvurdering?.bidiagnoser?.includes(option.value)
+          diagnosegrunnlag?.bidiagnoser?.includes(option.value)
         ),
       },
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
@@ -223,28 +228,25 @@ export const Sykdomsvurdering = ({
 
   const kodeverkValue = form.watch('kodeverk');
   useEffect(() => {
-    if (kodeverkValue !== sykdomsvurdering?.kodeverk) {
+    if (kodeverkValue !== diagnosegrunnlag?.kodeverk) {
       form.setValue('hoveddiagnose', null);
       form.setValue('bidiagnose', null);
     } else if (
-      kodeverkValue === sykdomsvurdering?.kodeverk &&
+      kodeverkValue === diagnosegrunnlag?.kodeverk &&
       Array.isArray(hoveddiagnoseDefaultOptions) &&
       hoveddiagnoseDefaultOptions.length
     ) {
       // kode for å omgå en bug som oppstår under test når man kan kvalitetssikre sin egen vurdering
       // bør kunne slettes når man ikke lengre kan kvalitetssikre sin egen vurdering
       form.resetField('hoveddiagnose', {
-        defaultValue: hoveddiagnoseDefaultOptions?.find((value) => value.value === sykdomsvurdering?.hoveddiagnose),
+        defaultValue: hoveddiagnoseDefaultOptions?.find((value) => value.value === diagnosegrunnlag?.hoveddiagnose),
       });
     } else {
       form.resetField('hoveddiagnose');
       form.resetField('bidiagnose');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tar ikke med form som en dependency da den fører til at useEffect kjøres feil
-  }, [kodeverkValue, sykdomsvurdering?.kodeverk]);
-
-  const behandlingErRevurdering = typeBehandling === 'Revurdering';
-  const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
+  }, [kodeverkValue, diagnosegrunnlag?.kodeverk]);
 
   const vurderingenGjelderFra = form.watch('vurderingenGjelderFra');
 

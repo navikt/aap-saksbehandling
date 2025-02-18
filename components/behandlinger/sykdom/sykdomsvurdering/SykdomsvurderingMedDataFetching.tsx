@@ -7,6 +7,7 @@ import {
 import { ValuePair } from '@navikt/aap-felles-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
+import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
 export type TypeBehandling = 'Førstegangsbehandling' | 'Revurdering' | 'Tilbakekreving' | 'Klage';
 
@@ -32,13 +33,13 @@ export const SykdomsvurderingMedDataFetching = async ({
   ]);
 
   const bidiagnoserDefaultOptions = await getDefaultOptions(
-    grunnlag.sykdomsvurderinger.at(0)?.bidiagnoser,
-    grunnlag.sykdomsvurderinger.at(0)?.kodeverk as DiagnoseSystem
+    finnDiagnosegrunnlag(typeBehandling, grunnlag)?.bidiagnoser,
+    finnDiagnosegrunnlag(typeBehandling, grunnlag)?.kodeverk as DiagnoseSystem
   );
 
   const hovedDiagnoseDefaultOptions = await getDefaultOptions(
-    grunnlag.sykdomsvurderinger.at(0)?.hoveddiagnose,
-    grunnlag.sykdomsvurderinger.at(0)?.kodeverk as DiagnoseSystem
+    finnDiagnosegrunnlag(typeBehandling, grunnlag)?.hoveddiagnose,
+    finnDiagnosegrunnlag(typeBehandling, grunnlag)?.kodeverk as DiagnoseSystem
   );
 
   return (

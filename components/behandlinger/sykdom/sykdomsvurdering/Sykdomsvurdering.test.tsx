@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
-import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { userEvent } from '@testing-library/user-event';
 import { SykdomsGrunnlag } from 'lib/types/types';
 import { format, subDays } from 'date-fns';
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 
 const user = userEvent.setup();
 const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
@@ -379,6 +379,45 @@ describe('felt for å sette diagnoser', () => {
     await user.click(frysningerOption);
 
     expect(await screen.findByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).toBeVisible();
+  });
+
+  // TODO OIST dette funker i browser, men ikke i test. Why?
+  it.skip('felt for hoveddiagnose er preutfylt med verdi fra gjeldende vurdering når det gjøres en revurdering', async () => {
+    const grunnlagUtenYSMedHoveddiagnose: SykdomsGrunnlag = {
+      skalVurdereYrkesskade: false,
+      opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
+      gjeldendeVedtatteSykdomsvurderinger: [
+        {
+          dokumenterBruktIVurdering: [],
+          begrunnelse: 'Sykdomsvurderingen her',
+          erArbeidsevnenNedsatt: true,
+          harSkadeSykdomEllerLyte: true,
+          kodeverk: 'ICD10',
+          hoveddiagnose: 'LUPUS',
+        },
+      ],
+      sykdomsvurderinger: [],
+      historikkSykdomsvurderinger: [],
+    };
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagUtenYSMedHoveddiagnose}
+        readOnly={false}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(subDays(new Date(), 7), 'yyyy-MM-dd')}
+        hoveddiagnoseDefaultOptions={[
+          { label: 'Lupus', value: 'LUPUS' },
+          { label: 'Generell angst', value: 'ANGST' },
+        ]}
+      />
+    );
+    await skrivInnDatoForNårVurderingenGjelderFra(format(subDays(new Date(), 1), 'ddMMyy'));
+    await velgAtBrukerHarSykdomSkadeLyte();
+    expect(screen.getByRole('radio', { name: 'ICD10' })).toBeChecked();
+    const hoveddiagnose = await screen.findByRole('combobox', { name: 'Hoveddiagnose' }, { timeout: 5000 });
+    expect(hoveddiagnose).toBeVisible();
   });
 });
 
