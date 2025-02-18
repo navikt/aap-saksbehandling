@@ -7,7 +7,7 @@ import { BodyShort, Label, Table } from '@navikt/ds-react';
 import { AlderGrunnlag, AvslagÅrsak, VilkårUtfall } from 'lib/types/types';
 
 import styles from './Alder.module.css';
-import { addYears } from 'date-fns';
+import { addYears, differenceInYears } from 'date-fns';
 
 interface Props {
   grunnlag: AlderGrunnlag;
@@ -112,14 +112,5 @@ function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak): string {
 }
 
 export function kalkulerAlder(fødselsdato: Date): string {
-  const dagensDato = new Date();
-
-  let år = dagensDato.getFullYear() - fødselsdato.getFullYear();
-  const måneder = dagensDato.getMonth() - fødselsdato.getMonth();
-
-  if (måneder < 0 || måneder === 0) {
-    år--;
-  }
-
-  return `${år} år`;
+  return `${differenceInYears(new Date(), fødselsdato)} år`;
 }
