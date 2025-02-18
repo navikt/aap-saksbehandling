@@ -356,6 +356,11 @@ export const sendLokalHendelse = async (body: Object): Promise<void> => {
   return await fetchProxy(url, saksbehandlingApiScope, 'POST', body);
 };
 
+export const auditlog = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/auditlog`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'POST');
+};
+
 export const hentLocalToken = async () => {
   // Må hente headers for å tvinge dynamic route ved lokal utvikling
   // TODO: Revurder i next 15

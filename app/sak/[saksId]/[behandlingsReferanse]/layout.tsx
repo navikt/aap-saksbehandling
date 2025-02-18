@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import {
+  auditlog,
   forberedBehandlingOgVentPåProsessering,
   hentBehandling,
   hentFlyt,
@@ -32,6 +33,8 @@ const Layout = async (props: Props) => {
   if (behandling === undefined) {
     notFound();
   }
+
+  await auditlog(params.behandlingsReferanse);
 
   // Denne må komme før resten av kallene slik at siste versjon av data er oppdatert i backend for behandlingen
   if (behandling.skalForberede) {
