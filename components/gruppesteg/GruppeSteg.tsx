@@ -31,7 +31,7 @@ export const GruppeSteg = ({
         />
       )}
       {visning.visBrevkort && aktivGruppe !== 'BREV' && (
-        <BrevKortMedDataFetching behandlingReferanse={behandlingReferanse} />
+        <BrevKortMedDataFetching behandlingReferanse={behandlingReferanse} behandlingVersjon={behandlingVersjon} />
       )}
       {children}
     </div>

@@ -5,9 +5,10 @@ import { hentBrevGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandl
 
 interface Props {
   behandlingReferanse: string;
+  behandlingVersjon: number;
 }
 
-export const BrevKortMedDataFetching = async ({ behandlingReferanse }: Props) => {
+export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingVersjon }: Props) => {
   const grunnlag = await hentBrevGrunnlag(behandlingReferanse);
 
   const brev = grunnlag.brevGrunnlag[0]?.brev;
@@ -22,7 +23,12 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse }: Props) =>
       defaultOpen={true}
     >
       {brev && (
-        <SkriveBrev grunnlag={brev} mottaker={mottaker} behandlingVersjon={0} referanse={brevbestillingReferanse} />
+        <SkriveBrev
+          grunnlag={brev}
+          mottaker={mottaker}
+          behandlingVersjon={behandlingVersjon}
+          referanse={brevbestillingReferanse}
+        />
       )}
     </VilkårsKort>
   );
