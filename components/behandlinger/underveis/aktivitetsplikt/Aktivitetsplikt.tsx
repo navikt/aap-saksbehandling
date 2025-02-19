@@ -29,7 +29,7 @@ interface FormFields {
   begrunnelse: string;
 }
 
-export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly}: Props) => {
+export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const saksnummer = useSaksnummer();
   const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('EFFEKTUER_11_7');
@@ -66,7 +66,11 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly}: Props)
     grunnlag.gjeldendeBrudd.map((brudd) => brudd.periode.fom).sort(sorterEtterNyesteDato)[0];
 
   return (
-    <VilkårsKort steg={'EFFEKTUER_11_7'} heading={'§ 11-7 Bidrar ikke til egen avklaring / behandling'}>
+    <VilkårsKort
+      steg={'EFFEKTUER_11_7'}
+      heading={'§ 11-7 Bidrar ikke til egen avklaring / behandling'}
+      vilkårTilhørerNavKontor
+    >
       <Table size={'small'} className={styles.bruddTabell}>
         <Table.Header>
           <Table.Row>
