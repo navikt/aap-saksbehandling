@@ -69,9 +69,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({ grunnlag, readOnly, beha
         label: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
         options: ['Norge', 'Annet land med avtale', 'Land uten avtale'],
         rules: { required: 'Du må velge riktig lovvalg ved søknadstidspunkt' },
-        defaultValue: grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.begrunnelse
-          ? mapGrunnlagTilLovvalgsland(grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand)
-          : undefined,
+        defaultValue: mapGrunnlagTilLovvalgsland(grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand)
       },
       annetLovvalgslandMedAvtale: {
         type: 'select',

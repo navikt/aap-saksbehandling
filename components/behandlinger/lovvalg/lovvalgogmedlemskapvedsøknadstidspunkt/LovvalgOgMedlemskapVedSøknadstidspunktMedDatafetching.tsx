@@ -1,5 +1,7 @@
 import { LovvalgOgMedlemskapVedSKnadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
-import { hentLovvalgMedlemskapGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+   hentLovvalgMedlemskapGrunnlag,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
   behandlingsReferanse: string;

@@ -210,6 +210,9 @@ export type AutomatiskLovvalgOgMedlemskapVurdering =
 export type LovvalgMedlemskapGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.LovvalgMedlemskapGrunnlagDto'];
 
+export type ForutgåendeMedlemskapGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.ForutgåendeMedlemskapGrunnlagDto'];
+
 export type LovvalgEØSLand =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.LovvalgVedS\u00F8knadsTidspunkt']['lovvalgsEØSLand'];
 

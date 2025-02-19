@@ -20,6 +20,7 @@ export enum Behovstype {
   FATTE_VEDTAK_KODE = '5099',
   KVALITETSSIKRING_KODE = '5097',
   SKRIV_BREV_KODE = '5050',
+  AVKLAR_FORUTGÅENDE_MEDLEMSKAP = '5020',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -62,6 +63,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Aktivitetsplikt § 11-7';
     case '5017':
       return 'Lovvalg og medlemskap ved søknadstidspunkt';
+    case '5020':
+      return 'Forutgående medlemskap';
     case '5050':
       return 'Skriv brev';
   }

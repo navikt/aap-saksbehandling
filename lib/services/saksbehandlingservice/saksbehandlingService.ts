@@ -20,7 +20,7 @@ import {
   FatteVedtakGrunnlag,
   FlytProsessering,
   ForhåndsvisDialogmelding,
-  ForhåndsvisDialogmeldingResponse,
+  ForhåndsvisDialogmeldingResponse, ForutgåendeMedlemskapGrunnlag,
   FritakMeldepliktGrunnlag,
   HelseinstitusjonGrunnlag,
   KvalitetssikringGrunnlag,
@@ -201,6 +201,13 @@ export const hentLovvalgMedlemskapGrunnlag = async (
 ): Promise<LovvalgMedlemskapGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/lovvalgmedlemskap`;
   return await fetchProxy<LovvalgMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentForutgåendeMedlemskapGrunnlag = async (
+  behandlingsReferanse: string
+): Promise<ForutgåendeMedlemskapGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/forutgaaendemedlemskap`;
+  return await fetchProxy<ForutgåendeMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSamordningGraderingGrunnlag = async (
