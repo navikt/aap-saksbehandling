@@ -15,17 +15,17 @@ const Page = async (props: { params: Promise<{ saksId: string }> }) => {
   return (
     <div className={styles.saksoversikt}>
       <Heading size={'medium'}>Alle behandlinger for en sak:</Heading>
-      <table style={{ maxWidth: '50rem' }}>
+      <table className={styles.behandlingstabell}>
         <thead>
-          <tr>
-            <th>Referanse</th>
-            <th>Opprettet</th>
+          <tr className={styles.row}>
+            <th className={styles.th}>Referanse</th>
+            <th className={styles.th}>Opprettet</th>
             {isLocal() && <th></th>}
           </tr>
         </thead>
         <tbody>
           {sak?.behandlinger?.map((behandling) => (
-            <tr key={behandling.referanse}>
+            <tr key={behandling.referanse} className={styles.row}>
               <td>
                 <Link href={`/sak/${params.saksId}/${behandling.referanse}`}>{behandling.referanse}</Link>
               </td>

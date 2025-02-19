@@ -7,3 +7,18 @@
   max-width: var(--a-breakpoint-2xl-down);
   margin: 0 auto;
 }
+
+.behandlingstabell {
+  border-collapse: collapse;
+}
+
+.th {
+  text-align: left;
+}
+
+.row th {
+  border-bottom: 2px solid var(--a-border-strong);
+}
+.row td {
+  border-bottom: 1px solid var(--a-border-default);
+}
