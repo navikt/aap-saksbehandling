@@ -29,6 +29,7 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { Revurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Revurdering';
 import { Førstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/Førstegangsbehandling';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { Diagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/Diagnosesøk';
 
 export interface SykdomsvurderingFormFields {
   dokumenterBruktIVurderingen?: string[];
@@ -315,18 +316,30 @@ export const Sykdomsvurdering = ({
           <Førstegangsbehandling
             form={form}
             formFields={formFields}
-            readOnly={readOnly}
             skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-            hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
+            diagnosesøker={
+              <Diagnosesøk
+                form={form}
+                formFields={formFields}
+                readOnly={readOnly}
+                hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
+              />
+            }
           />
         )}
         {behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling() && (
           <Revurdering
             form={form}
             formFields={formFields}
-            readOnly={readOnly}
             skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-            hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
+            diagnosesøker={
+              <Diagnosesøk
+                form={form}
+                formFields={formFields}
+                readOnly={readOnly}
+                hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
+              />
+            }
           />
         )}
       </Form>
