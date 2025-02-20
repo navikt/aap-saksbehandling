@@ -19,6 +19,7 @@ import { StegGruppe } from 'lib/types/types';
 import { SaksbehandlingsoversiktMedDataFetching } from 'components/saksbehandlingsoversikt/SaksbehandlingsoversiktMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
+import { logWarning } from '@navikt/aap-felles-utils';
 
 interface Props {
   children: ReactNode;
@@ -49,7 +50,12 @@ const Layout = async (props: Props) => {
   const personInfo = await hentSakPersoninfo(params.saksId);
   const sak = await hentSak(params.saksId);
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
-  const oppgave = await hentOppgave(params.behandlingsReferanse);
+  let oppgave;
+  try {
+    oppgave = await hentOppgave(params.behandlingsReferanse);
+  } catch (err: unknown) {
+    logWarning('hentOppgave feilet', err);
+  }
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.flyt
     .filter((steg) => steg.skalVises)
@@ -72,7 +78,7 @@ const Layout = async (props: Props) => {
           <Behandlingsinfo
             behandling={behandling}
             saksnummer={params.saksId}
-            oppgaveReservertAv={oppgave.reservertAv}
+            oppgaveReservertAv={oppgave?.reservertAv}
             påVent={flytResponse.visning.visVentekort}
           />
           <SaksbehandlingsoversiktMedDataFetching />
