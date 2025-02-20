@@ -18,6 +18,7 @@ import { notFound } from 'next/navigation';
 import { StegGruppe } from 'lib/types/types';
 import { SaksbehandlingsoversiktMedDataFetching } from 'components/saksbehandlingsoversikt/SaksbehandlingsoversiktMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
+import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 
 interface Props {
   children: ReactNode;
@@ -48,6 +49,7 @@ const Layout = async (props: Props) => {
   const personInfo = await hentSakPersoninfo(params.saksId);
   const sak = await hentSak(params.saksId);
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
+  const oppgave = await hentOppgave(params.behandlingsReferanse);
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.flyt
     .filter((steg) => steg.skalVises)
@@ -67,7 +69,12 @@ const Layout = async (props: Props) => {
       <HGrid columns="4fr 2fr">
         <section className={styles.venstrekolonne}>{children}</section>
         <aside className={`${styles.høyrekolonne} flex-column`}>
-          <Behandlingsinfo behandling={behandling} saksnummer={params.saksId} />
+          <Behandlingsinfo
+            behandling={behandling}
+            saksnummer={params.saksId}
+            oppgaveReservertAv={oppgave.reservertAv}
+            påVent={flytResponse.visning.visVentekort}
+          />
           <SaksbehandlingsoversiktMedDataFetching />
           <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
         </aside>

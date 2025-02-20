@@ -4,6 +4,19 @@ import { isLocal } from 'lib/utils/environment';
 const oppgaveApiBaseUrl = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
 
+export async function hentOppgave(behandlingsreferanse: string) {
+  if (isLocal()) {
+    return {
+      reservertAv: 'KK3548',
+      id: 1,
+    };
+  }
+  const url = `${oppgaveApiBaseUrl}/hent-oppgave`;
+  return await fetchProxy<{ reservertAv: string; id: number }>(url, oppgaveApiScope, 'POST', {
+    referanse: behandlingsreferanse,
+  });
+}
+
 export async function oppgaveTekstSøk(søketekst: string) {
   if (isLocal()) {
     return [
