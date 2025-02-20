@@ -16,6 +16,8 @@ import {
 } from './types/types';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 
+const BASE_URL = '/saksbehandling';
+
 async function fetchProxy<ResponseBody>(
   url: string,
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
@@ -42,61 +44,65 @@ async function fetchProxy<ResponseBody>(
 }
 
 export function clientSettBehandlingPåVent(referanse: string, settPåVent: SettPåVent) {
-  return fetchProxy(`/api/behandling/${referanse}/sett-paa-vent`, 'POST', settPåVent);
+  return fetchProxy(`${BASE_URL}/api/behandling/${referanse}/sett-paa-vent`, 'POST', settPåVent);
 }
 
 export function clientOpprettSak(sak: OpprettTestcase) {
-  return fetchProxy('/api/test/opprett', 'POST', sak);
+  return fetchProxy(`${BASE_URL}/api/test/opprett`, 'POST', sak);
 }
 
 export function clientHentAlleSaker() {
-  return fetchProxy<SaksInfo[]>('/api/sak/alle', 'GET');
+  return fetchProxy<SaksInfo[]>(`${BASE_URL}/api/sak/alle`, 'GET');
 }
 
 export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
-  return fetchProxy('/api/behandling/los-behov/', 'POST', avklaringsBehov);
+  return fetchProxy(`${BASE_URL}/api/behandling/los-behov/`, 'POST', avklaringsBehov);
 }
 
 export function clientOpprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {
-  return fetchProxy(`/api/sak/${saksnummer}/aktivitetsplikt/opprett`, 'POST', aktivitet);
+  return fetchProxy(`${BASE_URL}/api/sak/${saksnummer}/aktivitetsplikt/opprett`, 'POST', aktivitet);
 }
 
 export function clientOppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd2) {
-  return fetchProxy(`/api/sak/${saksnummer}/aktivitetsplikt/oppdater`, 'POST', aktivitet);
+  return fetchProxy(`${BASE_URL}/api/sak/${saksnummer}/aktivitetsplikt/oppdater`, 'POST', aktivitet);
 }
 
 export function clientSimulerMeldeplikt(referanse: string, vurderinger: SimulerMeldeplikt) {
-  return fetchProxy(`/api/behandling/${referanse}/simuler-meldeplikt`, 'POST', vurderinger);
+  return fetchProxy(`${BASE_URL}/api/behandling/${referanse}/simuler-meldeplikt`, 'POST', vurderinger);
 }
 
 export function clientSøkPåBehandler(fritekst: string) {
-  return fetchProxy<Behandler[]>(`/api/dokumentinnhenting/behandleroppslag`, 'POST', { fritekst });
+  return fetchProxy<Behandler[]>(`${BASE_URL}/api/dokumentinnhenting/behandleroppslag`, 'POST', { fritekst });
 }
 
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
-  return fetchProxy<LegeerklæringStatus[]>(`/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
+  return fetchProxy<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
 }
 
 export function clientHentAlleDokumenterPåSak(saksnummer: string) {
-  return fetchProxy<DokumentInfo[]>(`/api/sak/${saksnummer}/dokumenter`, 'GET');
+  return fetchProxy<DokumentInfo[]>(`${BASE_URL}/api/sak/${saksnummer}/dokumenter`, 'GET');
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
-  return fetchProxy(`/api/dokumentinnhenting/bestill`, 'POST', bestilling);
+  return fetchProxy(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
 
 export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
-  return fetchProxy<ForhåndsvisDialogmeldingResponse>(`/api/dokumentinnhenting/forhaandsvis`, 'POST', dialogmelding);
+  return fetchProxy<ForhåndsvisDialogmeldingResponse>(
+    `${BASE_URL}/api/dokumentinnhenting/forhaandsvis`,
+    'POST',
+    dialogmelding
+  );
 }
 
 export function clientMellomlagreBrev(brevbestillingReferanse: string, brev: Brev) {
-  return fetchProxy(`/api/brev/${brevbestillingReferanse}/oppdater`, 'POST', brev);
+  return fetchProxy(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater`, 'POST', brev);
 }
 
 export function clientHentRelevanteDokumenter(saksnummer: string) {
-  return fetchProxy<RelevantDokumentType[]>(`/api/dokumentinnhenting/saf/${saksnummer}`, 'POST');
+  return fetchProxy<RelevantDokumentType[]>(`${BASE_URL}/api/dokumentinnhenting/saf/${saksnummer}`, 'POST');
 }
 
 export function clientPurrPåLegeerklæring(dialogmeldingUUID: string) {
-  return fetchProxy(`/api/dokumentinnhenting/purring/${dialogmeldingUUID}`, 'POST');
+  return fetchProxy(`${BASE_URL}/api/dokumentinnhenting/purring/${dialogmeldingUUID}`, 'POST');
 }

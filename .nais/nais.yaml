@@ -12,11 +12,11 @@ spec:
   image: {{image}}
   port: 3000
   liveness:
-    path: "/api/internal/isAlive"
+    path: "/saksbehandling/api/internal/isAlive"
     initialDelay: 20
     timeout: 60
   readiness:
-    path: "/api/internal/isReady"
+    path: "/saksbehandling/api/internal/isReady"
     initialDelay: 20
     timeout: 60
   replicas:

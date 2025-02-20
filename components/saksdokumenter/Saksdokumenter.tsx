@@ -71,7 +71,7 @@ export const Saksdokumenter = () => {
                   </Table.DataCell>
                   <Table.DataCell align={'left'}>
                     <Link
-                      href={`/api/dokument/${dokument.journalpostId}/${dokument.dokumentInfoId}`}
+                      href={`/saksbehandling/api/dokument/${dokument.journalpostId}/${dokument.dokumentInfoId}`}
                       onClick={() => console.log('åpner dokument')}
                       target="_blank"
                     >
