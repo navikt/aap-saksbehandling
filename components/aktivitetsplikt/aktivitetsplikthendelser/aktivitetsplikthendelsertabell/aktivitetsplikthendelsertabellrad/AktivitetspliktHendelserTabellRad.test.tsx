@@ -3,6 +3,7 @@ import { AktivitetspliktHendelserMedFormId } from 'components/aktivitetsplikt/ak
 import { render, screen } from '@testing-library/react';
 import { AktivitetspliktHendelserTabellRad } from 'components/aktivitetsplikt/aktivitetsplikthendelser/aktivitetsplikthendelsertabell/aktivitetsplikthendelsertabellrad/AktivitetspliktHendelserTabellRad';
 import { userEvent } from '@testing-library/user-event';
+import { ReactNode } from 'react';
 
 const aktivitetspliktHendelse117: AktivitetspliktHendelserMedFormId = {
   id: '3cae893b-fc1e-44b8-a3af-e5a098d5de3b',
@@ -45,21 +46,33 @@ const user = userEvent.setup();
 describe('aktivitetspliktHendelserTabellRad', () => {
   describe('generelt', () => {
     it('skal vise begrunnelsen', async () => {
-      render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />);
+      render(
+        <TableWrapper>
+          <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />
+        </TableWrapper>
+      );
       await åpneRad();
       const begrunnelse = screen.getAllByText('Min begrunnelse')[1]; // Det første elementet er i table row og ikke i expandable content
       expect(begrunnelse).toBeVisible();
     });
 
     it('skal ha en knapp for å lagre endringene', async () => {
-      render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />);
+      render(
+        <TableWrapper>
+          <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />
+        </TableWrapper>
+      );
       await åpneRad();
       const lagreKnapp = screen.getByRole('button', { name: 'Lagre' });
       expect(lagreKnapp).toBeVisible();
     });
 
     it('skal ha en knapp for å avbryte endringene', async () => {
-      render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />);
+      render(
+        <TableWrapper>
+          <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />
+        </TableWrapper>
+      );
       await åpneRad();
       const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
       expect(avbrytKnapp).toBeVisible();
@@ -68,7 +81,11 @@ describe('aktivitetspliktHendelserTabellRad', () => {
 
   describe('felt for å endre grunn', () => {
     it('skal vise et felt', async () => {
-      render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />);
+      render(
+        <TableWrapper>
+          <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />
+        </TableWrapper>
+      );
       await åpneRad();
 
       const felt = screen.getByRole('group', { name: 'Endre grunn' });
@@ -76,7 +93,11 @@ describe('aktivitetspliktHendelserTabellRad', () => {
     });
 
     it('skal ha riktige valg dersom det er 11-7', async () => {
-      render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />);
+      render(
+        <TableWrapper>
+          <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />
+        </TableWrapper>
+      );
       await åpneRad();
 
       const ingenGyldigGrunnValg = screen.getByRole('radio', { name: 'Uten rimelig grunn' });
@@ -92,7 +113,11 @@ describe('aktivitetspliktHendelserTabellRad', () => {
     });
 
     it('skal ha riktige valg dersom det er 11-8', async () => {
-      render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse118} />);
+      render(
+        <TableWrapper>
+          <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse118} />
+        </TableWrapper>
+      );
       await åpneRad();
 
       const ingenGyldigGrunnValg = screen.getByRole('radio', { name: 'Uten rimelig grunn' });
@@ -111,7 +136,11 @@ describe('aktivitetspliktHendelserTabellRad', () => {
     });
 
     it('skal ha riktige valg dersom det er 11-9', async () => {
-      render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse119} />);
+      render(
+        <TableWrapper>
+          <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse119} />
+        </TableWrapper>
+      );
       await åpneRad();
 
       const ingenGyldigGrunnValg = screen.getByRole('radio', { name: 'Uten rimelig grunn' });
@@ -129,14 +158,22 @@ describe('aktivitetspliktHendelserTabellRad', () => {
 
   describe('felt for å skrive begrunelse', () => {
     it('skal vise felt', async () => {
-      render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />);
+      render(
+        <TableWrapper>
+          <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />
+        </TableWrapper>
+      );
       await åpneRad();
       const felt = screen.getByRole('textbox', { name: 'Begrunnelse' });
       expect(felt).toBeVisible();
     });
 
     it('skal vise en feilmeliding dersom begrunnelse ikke er besvart', async () => {
-      render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />);
+      render(
+        <TableWrapper>
+          <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />
+        </TableWrapper>
+      );
       await åpneRad();
       const lagreKnapp = screen.getByRole('button', { name: 'Lagre' });
       await user.click(lagreKnapp);
@@ -148,7 +185,11 @@ describe('aktivitetspliktHendelserTabellRad', () => {
 
   describe('felt for å sette en dato bruker bidrar aktivt igjen fra', () => {
     it('Skal vise felt dersom bruker bidrar aktivt igjen', async () => {
-      render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />);
+      render(
+        <TableWrapper>
+          <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />
+        </TableWrapper>
+      );
       await åpneRad();
 
       expect(screen.queryByRole('textbox', { name: 'Bidrar aktivt igjen fra' })).not.toBeInTheDocument();
@@ -160,7 +201,11 @@ describe('aktivitetspliktHendelserTabellRad', () => {
     });
 
     it('skal vise en feilmelding dersom det ikke er besvart', async () => {
-      render(<AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />);
+      render(
+        <TableWrapper>
+          <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />
+        </TableWrapper>
+      );
       await åpneRad();
 
       const bidrarAktivtIgjenValg = screen.getByText('Bidrar aktivt igjen');
@@ -178,3 +223,11 @@ describe('aktivitetspliktHendelserTabellRad', () => {
 async function åpneRad() {
   await user.click(screen.getByRole('img', { name: 'Vis mer' }));
 }
+
+const TableWrapper = ({ children }: { children: ReactNode }) => {
+  return (
+    <table>
+      <tbody>{children}</tbody>
+    </table>
+  );
+};
