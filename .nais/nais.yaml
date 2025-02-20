@@ -46,17 +46,12 @@ spec:
     - emptyDir:
         medium: Memory
       mountPath: /app/.next/cache
-  env:
-  {{#each env}}
-    - name: {{this.name }}
-      value: {{this.value}}
-  {{/each}}
   tokenx:
     enabled: true
   accessPolicy:
     inbound:
       rules:
-        - application: "oppgavestyring-frontend"
+        - application: "kelvin-reverse-proxy"
     outbound:
       rules:
         - application: "behandlingsflyt"
