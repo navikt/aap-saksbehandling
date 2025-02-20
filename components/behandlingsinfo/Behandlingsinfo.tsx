@@ -7,14 +7,14 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 interface Props {
   behandling: DetaljertBehandling;
   saksnummer: string;
-  oppgaveReservertAv?: string;
+  oppgaveReservertAv?: string | null;
   påVent?: boolean;
 }
 
 export const Behandlingsinfo = ({ behandling, saksnummer, oppgaveReservertAv, påVent }: Props) => {
   const status = () => {
     if (oppgaveReservertAv) {
-      return 'Reservert';
+      return `Reservert ${oppgaveReservertAv}`;
     } else if (påVent === true) {
       return 'På vent';
     }

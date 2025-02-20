@@ -18,7 +18,7 @@ import { notFound } from 'next/navigation';
 import { StegGruppe } from 'lib/types/types';
 import { SaksbehandlingsoversiktMedDataFetching } from 'components/saksbehandlingsoversikt/SaksbehandlingsoversiktMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
-import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
+import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logWarning } from '@navikt/aap-felles-utils';
 
 interface Props {
@@ -52,9 +52,10 @@ const Layout = async (props: Props) => {
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
   let oppgave;
   try {
-    oppgave = await hentOppgave(params.behandlingsReferanse);
+    const oppgaver = await oppgaveTekstSøk(personInfo.fnr);
+    oppgave = oppgaver.find((oppgave) => oppgave.behandlingRef === params.behandlingsReferanse);
   } catch (err: unknown) {
-    logWarning('hentOppgave feilet', err);
+    logWarning('henting av oppgave for behandling feilet', err);
   }
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.flyt

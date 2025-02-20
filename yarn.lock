@@ -1379,6 +1379,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@navikt/aap-oppgave-typescript-types@npm:^0.0.97":
+  version: 0.0.97
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.97::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.97%2F1ba788cb86a45a41b50c7fd9b07e676423ae0664"
+  checksum: 10c0/4c5e0ebddbdd53138c838fae191e516b90cd25f38eb26145a6ff2eab9abd848d8d92855a6a71f59817a4bd7b1e62f749fb516c07277d058b15a4dc86ee6f85c2
+  languageName: node
+  linkType: hard
+
 "@navikt/aksel-icons@npm:7.13.0, @navikt/aksel-icons@npm:^7.13.0":
   version: 7.13.0
   resolution: "@navikt/aksel-icons@npm:7.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.13.0%2F23160e57540df4f599acc7b744a08e8a34b05b70"
@@ -3226,6 +3233,7 @@ __metadata:
     "@navikt/aap-felles-react": "npm:^5.0.2"
     "@navikt/aap-felles-utils": "npm:^5.0.2"
     "@navikt/aap-felles-utils-client": "npm:^5.0.2"
+    "@navikt/aap-oppgave-typescript-types": "npm:^0.0.97"
     "@navikt/aksel-icons": "npm:7.14.0"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
     "@navikt/ds-css": "npm:7.14.0"
