@@ -32,9 +32,6 @@ spec:
     application:
       enabled: true
       allowAllUsers: true
-    sidecar:
-      enabled: true
-      autoLogin: true
   observability:
     autoInstrumentation:
       enabled: true
@@ -49,10 +46,6 @@ spec:
     - emptyDir:
         medium: Memory
       mountPath: /app/.next/cache
-  ingresses:
-  {{#each ingresses as |url|}}
-    - {{url}}
-  {{/each}}
   env:
   {{#each env}}
     - name: {{this.name }}
