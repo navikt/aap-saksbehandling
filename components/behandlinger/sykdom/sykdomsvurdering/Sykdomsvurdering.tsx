@@ -20,8 +20,8 @@ import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/Tilknytt
 import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 import { DiagnoseSystem } from 'lib/diagnosesøker/DiagnoseSøker';
-import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
-import { isBefore, startOfDay } from 'date-fns';
+import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
+import { isBefore, parse, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import { DokumentInfo, SykdomsGrunnlag } from 'lib/types/types';
 import { TypeBehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
@@ -204,6 +204,9 @@ export const Sykdomsvurdering = ({
                 return { identifikator: dokument };
               }) || [],
             begrunnelse: data.begrunnelse,
+            vurderingenGjelderFra: data.vurderingenGjelderFra
+              ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
+              : undefined,
             harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
             kodeverk: data?.kodeverk,
             hoveddiagnose: data?.hoveddiagnose?.value,
@@ -270,9 +273,7 @@ export const Sykdomsvurdering = ({
       icon={<VitalsIcon aria-hidden />}
       vilkårTilhørerNavKontor={true}
     >
-      {behandlingErRevurdering && (
-        <TidligereVurderinger gjeldendeVedtatteVurderinger={grunnlag.gjeldendeVedtatteSykdomsvurderinger} />
-      )}
+      {behandlingErRevurdering && <TidligereVurderinger tidligereVurderinger={grunnlag.historikkSykdomsvurderinger} />}
       <Form
         onSubmit={handleSubmit}
         status={status}

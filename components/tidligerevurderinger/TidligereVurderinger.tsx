@@ -3,6 +3,7 @@ import { ExpansionCard, Table } from '@navikt/ds-react';
 
 import { Sykdomsvurdering } from 'lib/types/types';
 import styles from './TidligereVurderinger.module.css';
+import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
 type Vilkårsstatus = 'oppfylt' | 'ikke_oppfylt'; // TODO nei
 
@@ -56,17 +57,20 @@ export const Vurdering = ({ vurdering }: { vurdering: Sykdomsvurdering }) => {
       <Table.DataCell style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
         <Statusikon status={'oppfylt'} />
         {statustekst('oppfylt')}
+        <span style={{ marginLeft: '0.25rem' }}>
+          {vurdering.vurderingenGjelderFra && formaterDatoForVisning(vurdering.vurderingenGjelderFra)}
+        </span>
       </Table.DataCell>
       {/* TODO hent ident og vedtaksdato her når backend er klar */}
-      <Table.DataCell align="right">(TODO) {vurdering.vurderingenGjelderFra}</Table.DataCell>
+      <Table.DataCell align="right">(TODO) (TODO)</Table.DataCell>
     </Table.ExpandableRow>
   );
 };
 interface Props {
-  gjeldendeVedtatteVurderinger: Sykdomsvurdering[];
+  tidligereVurderinger: Sykdomsvurdering[];
 }
 
-export const TidligereVurderinger = ({ gjeldendeVedtatteVurderinger }: Props) => {
+export const TidligereVurderinger = ({ tidligereVurderinger }: Props) => {
   return (
     <ExpansionCard
       aria-label="Tidligere vurderinger"
@@ -85,7 +89,7 @@ export const TidligereVurderinger = ({ gjeldendeVedtatteVurderinger }: Props) =>
       <ExpansionCard.Content>
         <Table>
           <Table.Body>
-            {gjeldendeVedtatteVurderinger.map((vurdering, index) => (
+            {tidligereVurderinger.reverse().map((vurdering, index) => (
               <Vurdering key={index} vurdering={vurdering} />
             ))}
           </Table.Body>

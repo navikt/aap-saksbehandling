@@ -21,7 +21,7 @@ const user = userEvent.setup();
 
 describe('Tidligere vurderinger', () => {
   test('har en overskrift', () => {
-    render(<TidligereVurderinger gjeldendeVedtatteVurderinger={[testvurdering]} />);
+    render(<TidligereVurderinger tidligereVurderinger={[testvurdering]} />);
     expect(screen.getByRole('heading', { name: 'Tidligere vurderinger', level: 3 })).toBeVisible();
   });
 });
