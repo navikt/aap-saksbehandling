@@ -8,3 +8,9 @@
   border-bottom: 1px solid var(--a-border-on-inverted);
   margin-bottom: var(--a-spacing-4);
 }
+.reservert {
+  background-color: var(--a-red-100);
+}
+.venter {
+  background-color: var(--a-orange-100);
+}

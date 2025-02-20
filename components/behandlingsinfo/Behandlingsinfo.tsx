@@ -7,17 +7,35 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 interface Props {
   behandling: DetaljertBehandling;
   saksnummer: string;
+  oppgaveReservertAv?: string | null;
+  påVent?: boolean;
 }
 
-export const Behandlingsinfo = ({ behandling, saksnummer }: Props) => {
+export const Behandlingsinfo = ({ behandling, saksnummer, oppgaveReservertAv, påVent }: Props) => {
+  const status = () => {
+    if (oppgaveReservertAv) {
+      return `Reservert ${oppgaveReservertAv}`;
+    } else if (påVent === true) {
+      return 'På vent';
+    }
+    return 'Åpen';
+  };
   return (
-    <div className={styles.container}>
+    <div
+      className={`${styles.container} ${oppgaveReservertAv ? styles.reservert : ''} ${påVent === true ? styles.venter : ''}`}
+    >
       <div className={styles.behandlingstype}>
         <Label as="p" size="medium" spacing>
           {behandling.type}
         </Label>
       </div>
       <HGrid columns={'1fr 1fr'} gap={'1'}>
+        <Label as="p" size="medium" spacing>
+          Status:
+        </Label>
+        <BodyShort size="medium" spacing>
+          {status()}
+        </BodyShort>
         <Label as="p" size="medium" spacing>
           Behandlingsstatus:
         </Label>

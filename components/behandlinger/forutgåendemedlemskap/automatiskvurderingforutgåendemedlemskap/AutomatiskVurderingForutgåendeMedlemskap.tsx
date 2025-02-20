@@ -11,7 +11,7 @@ interface Props {
 }
 export const AutomatiskVurderingForutgåendeMedlemskap = ({ vurdering }: Props) => {
   return (
-    <VilkårsKort heading={'Automatisk vurdering av forutgåendd medlemskap'} steg={'VURDER_MEDLEMSKAP'}>
+    <VilkårsKort heading={'Automatisk vurdering av forutgående medlemskap'} steg={'VURDER_MEDLEMSKAP'}>
       <VStack gap={'5'}>
         <div>
           <Heading size={'small'}>Indikasjoner på tilhørighet til Norge</Heading>

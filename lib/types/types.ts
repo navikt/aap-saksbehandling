@@ -1,4 +1,5 @@
 import { components } from './schema';
+import { components as oppgave } from '@navikt/aap-oppgave-typescript-types';
 
 // Grunnlag
 export type DokumentInfo =
@@ -218,3 +219,6 @@ export type LovvalgEØSLand =
 
 export type Sykdomsvurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingDto'];
+
+// oppgave
+export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];

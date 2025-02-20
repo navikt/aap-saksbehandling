@@ -79,6 +79,9 @@ export const AktivitetspliktDato = ({ form, fields, remove, søknadstidspunkt, a
                         validate: (value) => {
                           const valideringsresultat = validerDato(value as string);
                           if (valideringsresultat) {
+                            if (valideringsresultat === 'Du må sette en dato') {
+                              return 'Du må sette en sluttdato for perioden';
+                            }
                             return valideringsresultat;
                           }
 

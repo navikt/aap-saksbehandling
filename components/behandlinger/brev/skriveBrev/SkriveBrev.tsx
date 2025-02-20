@@ -14,6 +14,7 @@ import NavLogo from 'public/nav_logo.png';
 import { useCallback, useEffect, useState } from 'react';
 
 import style from './SkrivBrev.module.css';
+import { revalidateFlyt } from 'lib/actions/actions';
 
 export const SkriveBrev = ({
   referanse,
@@ -62,7 +63,7 @@ export const SkriveBrev = ({
       </div>
       <Brevbygger brevmal={brev} mottaker={mottaker} saksnummer={saksnummer} onBrevChange={onChange} logo={NavLogo} />
       <Button
-        onClick={() =>
+        onClick={async () => {
           // TODO: Mellomlagre brev før vi ferdigstiller
           løsBehovOgGåTilNesteSteg({
             behandlingVersjon: behandlingVersjon,
@@ -71,8 +72,9 @@ export const SkriveBrev = ({
               brevbestillingReferanse: referanse,
             },
             referanse: behandlingsReferanse,
-          })
-        }
+          });
+          await revalidateFlyt(behandlingsReferanse);
+        }}
       >
         Ferdigstill brev
       </Button>
