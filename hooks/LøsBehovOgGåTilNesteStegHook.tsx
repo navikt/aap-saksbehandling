@@ -27,7 +27,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
 
   const listenSSE = () => {
     const eventSource = new EventSource(
-      `/api/behandling/hent/${params.behandlingsReferanse}/${params.aktivGruppe}/${steg}/nesteSteg/`,
+      `/saksbehandling/api/behandling/hent/${params.behandlingsReferanse}/${params.aktivGruppe}/${steg}/nesteSteg/`,
       {
         withCredentials: true,
       }

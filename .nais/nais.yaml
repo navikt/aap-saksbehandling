@@ -12,11 +12,11 @@ spec:
   image: {{image}}
   port: 3000
   liveness:
-    path: "/api/internal/isAlive"
+    path: "/saksbehandling/api/internal/isAlive"
     initialDelay: 20
     timeout: 60
   readiness:
-    path: "/api/internal/isReady"
+    path: "/saksbehandling/api/internal/isReady"
     initialDelay: 20
     timeout: 60
   replicas:
@@ -32,9 +32,6 @@ spec:
     application:
       enabled: true
       allowAllUsers: true
-    sidecar:
-      enabled: true
-      autoLogin: true
   observability:
     autoInstrumentation:
       enabled: true
@@ -49,21 +46,12 @@ spec:
     - emptyDir:
         medium: Memory
       mountPath: /app/.next/cache
-  ingresses:
-  {{#each ingresses as |url|}}
-    - {{url}}
-  {{/each}}
-  env:
-  {{#each env}}
-    - name: {{this.name }}
-      value: {{this.value}}
-  {{/each}}
   tokenx:
     enabled: true
   accessPolicy:
     inbound:
       rules:
-        - application: "oppgavestyring-frontend"
+        - application: "kelvin-reverse-proxy"
     outbound:
       rules:
         - application: "behandlingsflyt"
