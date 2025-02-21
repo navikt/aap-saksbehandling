@@ -42,8 +42,7 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({ vurdering }: Props) 
         </div>
         {!vurdering.kanBehandlesAutomatisk && (
           <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'}>
-            Opplysningene tilsier at det kan være utenlandsk lovvalg eller manglende medlemskap. Lovvalg og medlemskap
-            må vurderes manuelt.
+            Opplysningene tilsier at det kan være tilhørighet utenfor Norge. Forutgående medlemskap må vurderes manuelt.
           </Alert>
         )}
       </VStack>
