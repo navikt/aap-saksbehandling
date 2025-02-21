@@ -29,8 +29,11 @@ const statustekst = (status: Vilkårsstatus) => (status === 'ikke_oppfylt' ? 'Vi
  */
 
 const mapTilJaEllerNei = (verdi?: boolean) => (verdi ? 'Ja' : 'Nei');
-
-export const Vurdering = ({ vurdering }: { vurdering: Sykdomsvurdering }) => {
+interface VurderingProps {
+  vurdering: Sykdomsvurdering;
+  søknadstidspunkt: string;
+}
+export const Vurdering = ({ vurdering, søknadstidspunkt }: VurderingProps) => {
   const content = (
     <div>
       <span>{vurdering.begrunnelse}</span>
@@ -58,19 +61,24 @@ export const Vurdering = ({ vurdering }: { vurdering: Sykdomsvurdering }) => {
         <Statusikon status={'oppfylt'} />
         {statustekst('oppfylt')}
         <span style={{ marginLeft: '0.25rem' }}>
-          {vurdering.vurderingenGjelderFra && formaterDatoForVisning(vurdering.vurderingenGjelderFra)}
+          {vurdering.vurderingenGjelderFra
+            ? formaterDatoForVisning(vurdering.vurderingenGjelderFra)
+            : formaterDatoForVisning(søknadstidspunkt)}
         </span>
       </Table.DataCell>
       {/* TODO hent ident og vedtaksdato her når backend er klar */}
-      <Table.DataCell align="right">(TODO) (TODO)</Table.DataCell>
+      <Table.DataCell align="right">
+        ({vurdering.vurdertAvIdent}) {formaterDatoForVisning(vurdering.vurdertDato)}
+      </Table.DataCell>
     </Table.ExpandableRow>
   );
 };
 interface Props {
   tidligereVurderinger: Sykdomsvurdering[];
+  søknadstidspunkt: string;
 }
 
-export const TidligereVurderinger = ({ tidligereVurderinger }: Props) => {
+export const TidligereVurderinger = ({ tidligereVurderinger, søknadstidspunkt }: Props) => {
   return (
     <ExpansionCard
       aria-label="Tidligere vurderinger"
@@ -89,8 +97,8 @@ export const TidligereVurderinger = ({ tidligereVurderinger }: Props) => {
       <ExpansionCard.Content>
         <Table>
           <Table.Body>
-            {tidligereVurderinger.reverse().map((vurdering, index) => (
-              <Vurdering key={index} vurdering={vurdering} />
+            {tidligereVurderinger.map((vurdering, index) => (
+              <Vurdering key={index} vurdering={vurdering} søknadstidspunkt={søknadstidspunkt} />
             ))}
           </Table.Body>
         </Table>

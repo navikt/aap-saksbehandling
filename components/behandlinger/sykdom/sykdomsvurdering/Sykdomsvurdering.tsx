@@ -273,7 +273,12 @@ export const Sykdomsvurdering = ({
       icon={<VitalsIcon aria-hidden />}
       vilkårTilhørerNavKontor={true}
     >
-      {behandlingErRevurdering && <TidligereVurderinger tidligereVurderinger={grunnlag.historikkSykdomsvurderinger} />}
+      {behandlingErRevurdering && (
+        <TidligereVurderinger
+          tidligereVurderinger={grunnlag.historikkSykdomsvurderinger}
+          søknadstidspunkt={søknadstidspunkt}
+        />
+      )}
       <Form
         onSubmit={handleSubmit}
         status={status}
