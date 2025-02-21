@@ -15,6 +15,8 @@ const testvurdering: Sykdomsvurdering = {
   harSkadeSykdomEllerLyte: true,
   dokumenterBruktIVurdering: [],
   begrunnelse: 'En begrunnelse',
+  vurdertAvIdent: 'IDENT',
+  vurdertDato: '2025-02-01',
 };
 
 const user = userEvent.setup();
