@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TidligereVurderinger, Vurdering } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { format, parse } from 'date-fns';
+import { format, parse, subDays } from 'date-fns';
 import { Sykdomsvurdering } from 'lib/types/types';
 import { ReactNode } from 'react';
 
@@ -55,6 +55,33 @@ describe('Tidligere vurdering', () => {
     const visMerKnapp = screen.getByRole('button', { name: 'Vis mer' });
     await user.click(visMerKnapp);
     expect(screen.getByText(testvurdering.begrunnelse)).toBeVisible();
+  });
+
+  test('når vurderingenGjelderFra er undefined gjelder vurderingen fra søknadstidspunkt', () => {
+    render(
+      <TableWrapper>
+        <Vurdering vurdering={testvurdering} søknadstidspunkt={søknadstidspunkt} />
+      </TableWrapper>
+    );
+    const forventetDato = format(parse(søknadstidspunkt, 'yyyy-MM-dd', new Date()), 'dd.MM.yyyy');
+    const forventetTekst = `Vilkår oppfylt ${forventetDato}`;
+    expect(screen.getByRole('cell', { name: forventetTekst })).toBeVisible();
+  });
+
+  test('når vurderingenGjelderFra er satt er det den som brukes som fra-tidspunkt', () => {
+    const datoForVurdering = subDays(new Date(), 5);
+    const testvurderingMedGjelderFra = {
+      ...testvurdering,
+      vurderingenGjelderFra: format(datoForVurdering, 'yyyy-MM-dd'),
+    };
+    render(
+      <TableWrapper>
+        <Vurdering vurdering={testvurderingMedGjelderFra} søknadstidspunkt={søknadstidspunkt} />
+      </TableWrapper>
+    );
+    const forventetDato = format(datoForVurdering, 'dd.MM.yyyy');
+    const forventetTekst = `Vilkår oppfylt ${forventetDato}`;
+    expect(screen.getByRole('cell', { name: forventetTekst })).toBeVisible();
   });
 });
 
