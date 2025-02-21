@@ -11,7 +11,7 @@ export const SaksInfo = ({ personInformasjon, sak }: Props) => {
     <div className={styles.søkerinfo}>
       <div className={styles.ikon} />
       <Label size="small">
-        <Link href={`/sak/${sak.saksnummer}`} title="Tilbake til K-Hub">
+        <Link href={`/saksbehandling/sak/${sak.saksnummer}`} title="Tilbake til K-Hub">
           {personInformasjon.navn}
         </Link>
       </Label>
