@@ -31,7 +31,7 @@ const Layout = async (props: Props) => {
 
   const { children } = props;
 
-  const behandling = await hentBehandling(params.behandlingsReferanse);
+  let behandling = await hentBehandling(params.behandlingsReferanse);
   if (behandling === undefined) {
     notFound();
   }
@@ -44,6 +44,8 @@ const Layout = async (props: Props) => {
 
     if (forberedBehandlingResponse && forberedBehandlingResponse.status === 'FEILET') {
       return <FlytProsesseringAlert flytProsessering={forberedBehandlingResponse} />;
+    } else {
+      behandling = await hentBehandling(params.behandlingsReferanse);
     }
   }
 
