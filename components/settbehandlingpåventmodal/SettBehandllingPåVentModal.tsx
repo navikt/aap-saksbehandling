@@ -10,6 +10,7 @@ import { revalidateFlyt } from 'lib/actions/actions';
 import styles from './SettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { SettPåVentÅrsaker } from 'lib/types/types';
+import { parse } from 'date-fns';
 
 interface Props {
   referanse: string;
@@ -20,7 +21,7 @@ interface Props {
 
 interface FormFields {
   begrunnelse: string;
-  frist: Date;
+  frist: string;
   grunn: SettPåVentÅrsaker;
 }
 
@@ -77,7 +78,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
               await clientSettBehandlingPåVent(referanse, {
                 begrunnelse: data.begrunnelse,
                 behandlingVersjon: behandlingVersjon,
-                frist: formaterDatoForBackend(data.frist),
+                frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
                 grunn: data.grunn,
               });
               await revalidateFlyt(referanse);
