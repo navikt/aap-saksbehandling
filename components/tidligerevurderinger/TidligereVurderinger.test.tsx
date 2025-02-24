@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TidligereVurderinger, Vurdering } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { format, parse, subDays } from 'date-fns';
+import { format, parse, subDays, subWeeks } from 'date-fns';
 import { Sykdomsvurdering } from 'lib/types/types';
 import { ReactNode } from 'react';
 
@@ -29,6 +29,53 @@ describe('Tidligere vurderinger', () => {
     render(<TidligereVurderinger tidligereVurderinger={[testvurdering]} søknadstidspunkt={søknadstidspunkt} />);
     expect(screen.getByRole('heading', { name: 'Tidligere vurderinger', level: 3 })).toBeVisible();
   });
+
+  test('ved flere vurderinger utledes sluttdato fra neste vurderings vurderingenGjelderFra', async () => {
+    const tolvUkerSiden = subWeeks(new Date(), 12);
+    const seksUkerSiden = subWeeks(new Date(), 6);
+    const fireUkerSiden = subWeeks(new Date(), 4);
+
+    const søknadstidspunktTilbakeITid = format(tolvUkerSiden, 'yyyy-MM-dd');
+    const testvurderinger: Sykdomsvurdering[] = [
+      {
+        erNedsettelseIArbeidsevneAvEnVissVarighet: true,
+        erSkadeSykdomEllerLyteVesentligdel: true,
+        erNedsettelseIArbeidsevneMerEnnHalvparten: true,
+        erArbeidsevnenNedsatt: true,
+        harSkadeSykdomEllerLyte: true,
+        dokumenterBruktIVurdering: [],
+        begrunnelse: 'En begrunnelse',
+        vurdertAvIdent: 'IDENT',
+        vurdertDato: format(fireUkerSiden, 'yyyy-MM-dd'),
+        vurderingenGjelderFra: format(fireUkerSiden, 'yyyy-MM-dd'),
+      },
+      {
+        erNedsettelseIArbeidsevneAvEnVissVarighet: true,
+        erSkadeSykdomEllerLyteVesentligdel: true,
+        erNedsettelseIArbeidsevneMerEnnHalvparten: true,
+        erArbeidsevnenNedsatt: true,
+        harSkadeSykdomEllerLyte: true,
+        dokumenterBruktIVurdering: [],
+        begrunnelse: 'En begrunnelse',
+        vurdertAvIdent: 'IDENT',
+        vurdertDato: format(seksUkerSiden, 'yyyy-MM-dd'),
+      },
+    ];
+    render(
+      <TidligereVurderinger tidligereVurderinger={testvurderinger} søknadstidspunkt={søknadstidspunktTilbakeITid} />
+    );
+    await åpneHistorikkvisning();
+    const historikkrader = screen.getAllByRole('row');
+    expect(historikkrader).toHaveLength(testvurderinger.length);
+    expect(
+      within(historikkrader[0]).getByRole('cell', { name: `Vilkår oppfylt ${format(fireUkerSiden, 'dd.MM.yyyy')} -` })
+    ).toBeVisible();
+    expect(
+      within(historikkrader[1]).getByRole('cell', {
+        name: `Vilkår oppfylt ${format(tolvUkerSiden, 'dd.MM.yyyy')} - ${format(subDays(fireUkerSiden, 1), 'dd.MM.yyyy')}`,
+      })
+    ).toBeVisible();
+  });
 });
 
 describe('Tidligere vurdering', () => {
@@ -38,9 +85,8 @@ describe('Tidligere vurdering', () => {
         <Vurdering vurdering={testvurdering} søknadstidspunkt={søknadstidspunkt} />
       </TableWrapper>
     );
-    expect(screen.getByText('Vilkår oppfylt')).toBeVisible();
     const forventetDatoForStart = format(søknadstidspunkt, 'dd.MM.yyyy');
-    expect(screen.getByText(forventetDatoForStart)).toBeVisible();
+    expect(screen.getByRole('cell', { name: `Vilkår oppfylt ${forventetDatoForStart} -` })).toBeVisible();
     const forventetDatoforVurdering = format(parse(testvurdering.vurdertDato, 'yyyy-MM-dd', new Date()), 'dd.MM.yyyy');
     const forventetTekst = `(${testvurdering.vurdertAvIdent}) ${forventetDatoforVurdering}`;
     expect(screen.getByText(forventetTekst)).toBeVisible();
@@ -64,7 +110,7 @@ describe('Tidligere vurdering', () => {
       </TableWrapper>
     );
     const forventetDato = format(parse(søknadstidspunkt, 'yyyy-MM-dd', new Date()), 'dd.MM.yyyy');
-    const forventetTekst = `Vilkår oppfylt ${forventetDato}`;
+    const forventetTekst = `Vilkår oppfylt ${forventetDato} -`;
     expect(screen.getByRole('cell', { name: forventetTekst })).toBeVisible();
   });
 
@@ -80,7 +126,7 @@ describe('Tidligere vurdering', () => {
       </TableWrapper>
     );
     const forventetDato = format(datoForVurdering, 'dd.MM.yyyy');
-    const forventetTekst = `Vilkår oppfylt ${forventetDato}`;
+    const forventetTekst = `Vilkår oppfylt ${forventetDato} -`;
     expect(screen.getByRole('cell', { name: forventetTekst })).toBeVisible();
   });
 });
@@ -92,4 +138,8 @@ function TableWrapper({ children }: { children: ReactNode }) {
       <tbody>{children}</tbody>
     </table>
   );
+}
+
+async function åpneHistorikkvisning() {
+  await user.click(screen.getByRole('button', { name: 'Vis mer' }));
 }

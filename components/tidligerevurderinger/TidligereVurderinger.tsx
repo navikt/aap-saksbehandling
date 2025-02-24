@@ -4,6 +4,7 @@ import { ExpansionCard, Table } from '@navikt/ds-react';
 import { Sykdomsvurdering } from 'lib/types/types';
 import styles from './TidligereVurderinger.module.css';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
+import { format, parse, subDays } from 'date-fns';
 
 type Vilkårsstatus = 'oppfylt' | 'ikke_oppfylt'; // TODO nei
 
@@ -32,8 +33,10 @@ const mapTilJaEllerNei = (verdi?: boolean) => (verdi ? 'Ja' : 'Nei');
 interface VurderingProps {
   vurdering: Sykdomsvurdering;
   søknadstidspunkt: string;
+  sluttdato?: string;
 }
-export const Vurdering = ({ vurdering, søknadstidspunkt }: VurderingProps) => {
+
+export const Vurdering = ({ vurdering, søknadstidspunkt, sluttdato }: VurderingProps) => {
   const content = (
     <div>
       <span>{vurdering.begrunnelse}</span>
@@ -64,6 +67,8 @@ export const Vurdering = ({ vurdering, søknadstidspunkt }: VurderingProps) => {
           {vurdering.vurderingenGjelderFra
             ? formaterDatoForVisning(vurdering.vurderingenGjelderFra)
             : formaterDatoForVisning(søknadstidspunkt)}
+          {' - '}
+          {sluttdato}
         </span>
       </Table.DataCell>
       {/* TODO hent ident og vedtaksdato her når backend er klar */}
@@ -73,12 +78,25 @@ export const Vurdering = ({ vurdering, søknadstidspunkt }: VurderingProps) => {
     </Table.ExpandableRow>
   );
 };
+
 interface Props {
   tidligereVurderinger: Sykdomsvurdering[];
   søknadstidspunkt: string;
 }
 
 export const TidligereVurderinger = ({ tidligereVurderinger, søknadstidspunkt }: Props) => {
+  const antallVurderinger = tidligereVurderinger.length;
+  const finnSluttdato = (index: number) => {
+    if (antallVurderinger <= 1 || index === 0) {
+      return undefined;
+    }
+    const forrigeGjelderFra = tidligereVurderinger.at(index - 1)?.vurderingenGjelderFra;
+    if (!forrigeGjelderFra) {
+      return undefined;
+    }
+    return format(subDays(parse(forrigeGjelderFra, 'yyyy-MM-dd', new Date()), 1), 'dd.MM.yyyy');
+  };
+
   return (
     <ExpansionCard
       aria-label="Tidligere vurderinger"
@@ -98,7 +116,12 @@ export const TidligereVurderinger = ({ tidligereVurderinger, søknadstidspunkt }
         <Table>
           <Table.Body>
             {tidligereVurderinger.map((vurdering, index) => (
-              <Vurdering key={index} vurdering={vurdering} søknadstidspunkt={søknadstidspunkt} />
+              <Vurdering
+                key={index}
+                vurdering={vurdering}
+                søknadstidspunkt={søknadstidspunkt}
+                sluttdato={finnSluttdato(index)}
+              />
             ))}
           </Table.Body>
         </Table>

@@ -275,7 +275,7 @@ export const Sykdomsvurdering = ({
     >
       {behandlingErRevurdering && (
         <TidligereVurderinger
-          tidligereVurderinger={grunnlag.historikkSykdomsvurderinger}
+          tidligereVurderinger={grunnlag.historikkSykdomsvurderinger.toReversed()}
           søknadstidspunkt={søknadstidspunkt}
         />
       )}
