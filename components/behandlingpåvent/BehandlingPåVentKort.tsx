@@ -4,7 +4,6 @@ import React from 'react';
 import { BodyShort, Button, Label } from '@navikt/ds-react';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
-import { revalidateFlyt } from 'lib/actions/actions';
 import { SettPåVentÅrsaker, VenteInformasjon } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -50,8 +49,6 @@ export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props)
                     },
                     referanse: behandlingsReferanse,
                   });
-
-                  await revalidateFlyt(behandlingsReferanse);
                 }}
                 className={'fit-content'}
               >

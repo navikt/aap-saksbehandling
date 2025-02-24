@@ -1,5 +1,6 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { FlytProsesseringStatus } from 'lib/types/types';
+import { NextRequest } from 'next/server';
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;
@@ -8,8 +9,7 @@ export interface FlytProsesseringServerSentEvent {
   status: FlytProsesseringStatus;
 }
 
-/* @ts-ignore-line */
-export async function GET(__request, context: { params: Promise<{ referanse: string }> }) {
+export async function GET(__request: NextRequest, context: { params: Promise<{ referanse: string }> }) {
   let responseStream = new TransformStream();
   const writer = responseStream.writable.getWriter();
 
@@ -20,8 +20,8 @@ export async function GET(__request, context: { params: Promise<{ referanse: str
         const json: FlytProsesseringServerSentEvent = {
           status: 'FEILET',
         };
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-        writer.close();
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.close();
         return;
       }
 
@@ -32,8 +32,8 @@ export async function GET(__request, context: { params: Promise<{ referanse: str
           status: flyt.prosessering.status,
         };
 
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-        writer.close();
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.close();
         return;
       } else {
         await pollFlytMedTimeoutOgRetry(timeout * 1.3, retries + 1);

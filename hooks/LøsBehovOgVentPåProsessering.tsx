@@ -21,9 +21,13 @@ export const useLøsBehovOgVentPåProsessering = (): {
 
   const listenSSE = () => {
     setIsLoading(true);
-    const eventSource = new EventSource(`/api/behandling/hent/${params.behandlingsReferanse}/prosessering/`, {
-      withCredentials: true,
-    });
+    const eventSource = new EventSource(
+      `/saksbehandling/api/behandling/hent/${params.behandlingsReferanse}/prosessering/`,
+      {
+        withCredentials: true,
+      }
+    );
+
     eventSource.onmessage = async (event: any) => {
       const eventData: FlytProsesseringServerSentEvent = JSON.parse(event.data);
       if (eventData.status === 'FERDIG') {
@@ -37,8 +41,8 @@ export const useLøsBehovOgVentPåProsessering = (): {
         eventSource.close();
       }
     };
-    eventSource.onerror = (event: any) => {
-      throw new Error('event onError', event);
+    eventSource.onerror = (event: Event) => {
+      throw new Error(`event onError ${JSON.stringify(event)}`);
     };
   };
 
