@@ -3,6 +3,10 @@
 import { BodyShort, Heading, VStack } from '@navikt/ds-react';
 import { useSearchParams } from 'next/navigation';
 
+/**
+ * Erstatning frem til denne er ut av experimental og klar for produksjon
+ * https://nextjs.org/docs/app/api-reference/file-conventions/forbidden
+ */
 export default function ForbiddenPage() {
   const params = useSearchParams();
   const url = params.get('url');
@@ -20,7 +24,10 @@ export default function ForbiddenPage() {
         ❌ Oi! Her har du ikke tilgang
       </Heading>
       <VStack align={'center'}>
-        <BodyShort spacing>Gå til oppgavelisten for å se oppgaver du har tilgang til. Url: {url}</BodyShort>
+        <BodyShort weight={'semibold'} spacing>
+          Url: {url}
+        </BodyShort>
+        <BodyShort spacing>Gå til oppgavelisten for å se oppgaver du har tilgang til.</BodyShort>
       </VStack>
     </div>
   );
