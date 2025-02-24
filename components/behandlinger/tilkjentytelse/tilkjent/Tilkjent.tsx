@@ -11,7 +11,7 @@ interface Props {
 }
 export const Tilkjent = ({ grunnlag, meldeperioder }: Props) => {
   return (
-    <VilkårsKort heading="Tilkent ytelse" icon={<PiggybankIcon aria-hidden />} steg="BEREGN_TILKJENT_YTELSE">
+    <VilkårsKort heading="Tilkjent ytelse" icon={<PiggybankIcon aria-hidden />} steg="BEREGN_TILKJENT_YTELSE">
       <Label>Grafen viser tilkjent ytelse for valgt periode</Label>
       <Detail>Tilkjent ytelse frem i tid er et anslag som kan endre seg basert på gradering og andre faktorer</Detail>
 
