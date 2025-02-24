@@ -44,8 +44,6 @@ const Layout = async (props: Props) => {
 
     if (forberedBehandlingResponse && forberedBehandlingResponse.status === 'FEILET') {
       return <FlytProsesseringAlert flytProsessering={forberedBehandlingResponse} />;
-    } else {
-      behandling = await hentBehandling(params.behandlingsReferanse);
     }
   }
 
@@ -53,6 +51,7 @@ const Layout = async (props: Props) => {
   const sak = await hentSak(params.saksId);
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
   let oppgave;
+
   try {
     const oppgaver = await oppgaveTekstSøk(personInfo.fnr);
     oppgave = oppgaver.find((oppgave) => oppgave.behandlingRef === params.behandlingsReferanse);
