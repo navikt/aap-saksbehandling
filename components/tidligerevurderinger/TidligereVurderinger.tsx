@@ -37,6 +37,14 @@ interface VurderingProps {
 }
 
 export const Vurdering = ({ vurdering, søknadstidspunkt, sluttdato }: VurderingProps) => {
+  const erVilkårOppfylt: boolean = !!(
+    vurdering.harSkadeSykdomEllerLyte &&
+    vurdering.erArbeidsevnenNedsatt &&
+    vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten &&
+    vurdering.erSkadeSykdomEllerLyteVesentligdel &&
+    vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet
+  );
+
   const content = (
     <div>
       <span>{vurdering.begrunnelse}</span>
@@ -61,8 +69,8 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, sluttdato }: Vurdering
   return (
     <Table.ExpandableRow content={content} togglePlacement="right" expandOnRowClick>
       <Table.DataCell style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
-        <Statusikon status={'oppfylt'} />
-        {statustekst('oppfylt')}
+        <Statusikon status={erVilkårOppfylt ? 'oppfylt' : 'ikke_oppfylt'} />
+        {statustekst(erVilkårOppfylt ? 'oppfylt' : 'ikke_oppfylt')}
         <span style={{ marginLeft: '0.25rem' }}>
           {vurdering.vurderingenGjelderFra
             ? formaterDatoForVisning(vurdering.vurderingenGjelderFra)
