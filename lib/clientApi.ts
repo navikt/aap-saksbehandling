@@ -58,6 +58,30 @@ export function clientHentAlleSaker() {
 export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
   return clientFetch(`${BASE_URL}/api/behandling/los-behov/`, 'POST', avklaringsBehov);
 }
+async function løsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
+  return fetch(`${BASE_URL}/api/behandling/los-behov/`, {
+    method: 'POST',
+    body: JSON.stringify(avklaringsBehov),
+  });
+}
+export async function clientLøsBehovRetryMedBehandlingsversjonRefresh(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
+  const løsBehovRes = await løsBehov(avklaringsBehov);
+  const data = await løsBehovRes.json();
+
+  if (løsBehovRes.ok) {
+    return data;
+  } else if (løsBehovRes.status === 409){
+    console.log(`/løs-behov konflikt versjon ${avklaringsBehov.behandlingVersjon}, prøver å hente ny behandlingsversjon`);
+    const flytRes = await fetch(`${BASE_URL}/api/behandling/${avklaringsBehov.referanse}/flyt`, {
+      method: 'GET',
+    });
+    if(flytRes.ok) {
+      const nyBehandlingsVersjon = await flytRes.json().then(data => data.behandlingVersjon)
+      console.log(`ny behandlingversjon ${nyBehandlingsVersjon}, prøver /løs-behov igjen`);
+      return clientLøsBehov({...avklaringsBehov, behandlingVersjon: nyBehandlingsVersjon})
+    }
+  }
+}
 
 export function clientOpprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {
   return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/aktivitetsplikt/opprett`, 'POST', aktivitet);

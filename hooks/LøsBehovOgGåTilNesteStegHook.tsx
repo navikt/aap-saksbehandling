@@ -5,7 +5,7 @@ import {
 } from 'app/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
-import { clientLøsBehov } from 'lib/clientApi';
+import { clientLøsBehovRetryMedBehandlingsversjonRefresh } from 'lib/clientApi';
 
 export const useLøsBehovOgGåTilNesteSteg = (
   steg: StegType
@@ -21,7 +21,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
 
   const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling) => {
     setIsLoading(true);
-    await clientLøsBehov(behov);
+    await clientLøsBehovRetryMedBehandlingsversjonRefresh(behov);
     listenSSE();
   };
 
