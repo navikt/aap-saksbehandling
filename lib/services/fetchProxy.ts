@@ -2,10 +2,26 @@
 
 import { isLocal } from 'lib/utils/environment';
 import { requestAzureOboToken, validateToken } from '@navikt/oasis';
-import { getAccessTokenOrRedirectToLogin, logError, logWarning } from '@navikt/aap-felles-utils';
+import { getAccessTokenOrRedirectToLogin, logError } from '@navikt/aap-felles-utils';
 import { headers } from 'next/headers';
 import { hentLocalToken } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { redirect } from 'next/navigation';
+
+export type ResponseBody<RespponseType> = SuccessResponseBody<RespponseType> | ErrorResponseBody;
+
+export interface BaseErrorResponseBody {
+  status: number;
+}
+
+export interface ErrorResponseBody extends BaseErrorResponseBody {
+  type: 'ERROR';
+  message: string;
+}
+
+interface SuccessResponseBody<ResponseType> extends BaseErrorResponseBody {
+  type: 'SUCCESS';
+  responseJson: ResponseType;
+}
 
 const NUMBER_OF_RETRIES = 3;
 
@@ -31,15 +47,15 @@ const getOnBefalfOfToken = async (audience: string, url: string): Promise<string
   return onBehalfOf.token;
 };
 
-export const fetchProxy = async <ResponseBody>(
+export const fetchProxy = async <ResponseType>(
   url: string,
   scope: string,
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET',
   requestBody?: object,
   tags?: string[]
-): Promise<ResponseBody> => {
+): Promise<ResponseBody<ResponseType>> => {
   const oboToken = isLocal() ? await hentLocalToken() : await getOnBefalfOfToken(scope, url);
-  return await fetchWithRetry<ResponseBody>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags);
+  return await fetchWithRetry(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags);
 };
 
 export const fetchPdf = async (url: string, scope: string): Promise<Blob | undefined> => {
@@ -60,14 +76,14 @@ export const fetchPdf = async (url: string, scope: string): Promise<Blob | undef
   }
 };
 
-export const fetchWithRetry = async <ResponseBody>(
+export const fetchWithRetry = async <ResponseType>(
   url: string,
   method: string,
   oboToken: string,
   retries: number,
   requestBody?: object,
   tags?: string[]
-): Promise<ResponseBody> => {
+): Promise<ResponseBody<ResponseType>> => {
   if (retries === 0) {
     throw new Error(`Unable to fetch ${url}: ${retries} retries left`);
   }
@@ -90,25 +106,23 @@ export const fetchWithRetry = async <ResponseBody>(
   // 500
 
   if (response.status === 204) {
-    return undefined as ResponseBody;
+    return { type: 'SUCCESS', responseJson: undefined as ResponseType, status: response.status };
   }
 
   if (!response.ok) {
-    const statusString = `Status: ${response.status}, statusText: ${response.statusText}`;
     if (response.status === 500) {
       const responseJson = await response.json();
       logError(`klarte ikke å hente ${url}: ${responseJson.message}`);
-      throw new Error(statusString);
-    } else if (response.status === 401) {
+      return { type: 'ERROR', message: 'Noe gikk galt.', status: response.status };
+    } else if (response.status === 401 || response.status === 403) {
       logError(`${url}, status: ${response.status}`);
-      throw new Error(statusString);
-    } else if (response.status === 403) {
-      logWarning(`${url}, status: ${response.status}`);
       redirect(`/forbidden?url=${encodeURI(url)}`);
-    }
-    if (response.status === 404) {
+    } else if (response.status === 404) {
       logError(`${url}, status: ${response.status}`);
-      throw new Error(statusString);
+      return { type: 'ERROR', message: 'Not found', status: response.status };
+    } else if (response.status === 409) {
+      logError(`${url}, status: ${response.status}`);
+      return { type: 'ERROR', message: 'Conflict', status: response.status };
     }
 
     logError(
@@ -119,8 +133,10 @@ export const fetchWithRetry = async <ResponseBody>(
 
   const contentType = response.headers.get('content-type');
   if (contentType && contentType.includes('text')) {
-    return (await response.text()) as ResponseBody;
+    return { type: 'SUCCESS', responseJson: response.text() as ResponseType, status: response.status };
   }
 
-  return await response.json();
+  const responseJson = await response.json();
+
+  return { type: 'SUCCESS', responseJson: responseJson, status: response.status };
 };

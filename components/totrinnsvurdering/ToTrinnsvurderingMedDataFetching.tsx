@@ -4,6 +4,7 @@ import {
   hentKvalitetssikringGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ToTrinnsvurdering } from 'components/totrinnsvurdering/ToTrinnsvurdering';
+import { FetchProxyError } from 'components/fetchproxyerror/FetchProxyError';
 
 interface Props {
   behandlingsReferanse: string;
@@ -14,26 +15,38 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
   const kvalitetssikringGrunnlag = await hentKvalitetssikringGrunnlag(behandlingsReferanse);
   const flyt = await hentFlyt(behandlingsReferanse);
 
-  const behandlingVersjon = flyt.behandlingVersjon;
+  if (fatteVedtakGrunnlag.type === 'ERROR') {
+    return <FetchProxyError error={fatteVedtakGrunnlag} />;
+  }
+
+  if (kvalitetssikringGrunnlag.type === 'ERROR') {
+    return <FetchProxyError error={kvalitetssikringGrunnlag} />;
+  }
+
+  if (flyt.type === 'ERROR') {
+    return <FetchProxyError error={flyt} />;
+  }
+
+  const behandlingVersjon = flyt.responseJson.behandlingVersjon;
 
   return (
     <>
-      {flyt.visning.visBeslutterKort && (
+      {flyt.responseJson.visning.visBeslutterKort && (
         <ToTrinnsvurdering
-          grunnlag={fatteVedtakGrunnlag}
+          grunnlag={fatteVedtakGrunnlag.responseJson}
           erKvalitetssikring={false}
           behandlingsReferanse={behandlingsReferanse}
           behandlingVersjon={behandlingVersjon}
-          readOnly={flyt.visning.beslutterReadOnly}
+          readOnly={flyt.responseJson.visning.beslutterReadOnly}
         />
       )}
-      {flyt.visning.visKvalitetssikringKort && (
+      {flyt.responseJson.visning.visKvalitetssikringKort && (
         <ToTrinnsvurdering
-          grunnlag={kvalitetssikringGrunnlag}
+          grunnlag={kvalitetssikringGrunnlag.responseJson}
           behandlingsReferanse={behandlingsReferanse}
           erKvalitetssikring={true}
           behandlingVersjon={behandlingVersjon}
-          readOnly={flyt.visning.kvalitetssikringReadOnly}
+          readOnly={flyt.responseJson.visning.kvalitetssikringReadOnly}
         />
       )}
     </>
