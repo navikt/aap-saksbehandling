@@ -4,9 +4,8 @@ import { FormEvent, ReactNode } from 'react';
 import styles from 'components/form/Form.module.css';
 import { Button } from '@navikt/ds-react';
 import { StegType } from 'lib/types/types';
-import { ServerSentEventStatus } from 'app/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
-import {LøsBehovOgGåTilNesteStegStatus} from "hooks/LøsBehovOgGåTilNesteStegHook";
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 
 interface Props {
   steg: StegType;
