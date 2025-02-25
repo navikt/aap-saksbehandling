@@ -68,11 +68,11 @@ describe('Tidligere vurderinger', () => {
     const historikkrader = screen.getAllByRole('row');
     expect(historikkrader).toHaveLength(testvurderinger.length);
     expect(
-      within(historikkrader[0]).getByRole('cell', { name: `Vilkår oppfylt ${format(fireUkerSiden, 'dd.MM.yyyy')} -` })
+      within(historikkrader[0]).getByRole('cell', { name: `${format(fireUkerSiden, 'dd.MM.yyyy')} -` })
     ).toBeVisible();
     expect(
       within(historikkrader[1]).getByRole('cell', {
-        name: `Vilkår oppfylt ${format(tolvUkerSiden, 'dd.MM.yyyy')} - ${format(subDays(fireUkerSiden, 1), 'dd.MM.yyyy')}`,
+        name: `${format(tolvUkerSiden, 'dd.MM.yyyy')} - ${format(subDays(fireUkerSiden, 1), 'dd.MM.yyyy')}`,
       })
     ).toBeVisible();
   });
@@ -86,7 +86,7 @@ describe('Tidligere vurdering', () => {
       </TableWrapper>
     );
     const forventetDatoForStart = format(søknadstidspunkt, 'dd.MM.yyyy');
-    expect(screen.getByRole('cell', { name: `Vilkår oppfylt ${forventetDatoForStart} -` })).toBeVisible();
+    expect(screen.getByRole('cell', { name: `${forventetDatoForStart} -` })).toBeVisible();
     const forventetDatoforVurdering = format(parse(testvurdering.vurdertDato, 'yyyy-MM-dd', new Date()), 'dd.MM.yyyy');
     const forventetTekst = `(${testvurdering.vurdertAvIdent}) ${forventetDatoforVurdering}`;
     expect(screen.getByText(forventetTekst)).toBeVisible();
@@ -110,7 +110,7 @@ describe('Tidligere vurdering', () => {
       </TableWrapper>
     );
     const forventetDato = format(parse(søknadstidspunkt, 'yyyy-MM-dd', new Date()), 'dd.MM.yyyy');
-    const forventetTekst = `Vilkår oppfylt ${forventetDato} -`;
+    const forventetTekst = `${forventetDato} -`;
     expect(screen.getByRole('cell', { name: forventetTekst })).toBeVisible();
   });
 
@@ -126,7 +126,7 @@ describe('Tidligere vurdering', () => {
       </TableWrapper>
     );
     const forventetDato = format(datoForVurdering, 'dd.MM.yyyy');
-    const forventetTekst = `Vilkår oppfylt ${forventetDato} -`;
+    const forventetTekst = `${forventetDato} -`;
     expect(screen.getByRole('cell', { name: forventetTekst })).toBeVisible();
   });
 });

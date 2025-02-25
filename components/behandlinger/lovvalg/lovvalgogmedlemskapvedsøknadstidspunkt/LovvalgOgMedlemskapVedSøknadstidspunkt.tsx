@@ -54,7 +54,12 @@ function mapGrunnlagTilMedlemAvFolketrygdenVedSøknadstidspunkt(isMedlem?: boole
   }
   return undefined;
 }
-export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({ grunnlag, readOnly, behandlingVersjon, overstyring }: Props) => {
+export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
+  grunnlag,
+  readOnly,
+  behandlingVersjon,
+  overstyring,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { isLoading, status, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
   const { form, formFields } = useConfigForm<FormFields>(
@@ -70,7 +75,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({ grunnlag, readOnly, beha
         label: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
         options: ['Norge', 'Annet land med avtale', 'Land uten avtale'],
         rules: { required: 'Du må velge riktig lovvalg ved søknadstidspunkt' },
-        defaultValue: mapGrunnlagTilLovvalgsland(grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand)
+        defaultValue: mapGrunnlagTilLovvalgsland(grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand),
       },
       annetLovvalgslandMedAvtale: {
         type: 'select',
@@ -108,10 +113,9 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({ grunnlag, readOnly, beha
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
-          behovstype: overstyring
-            ? Behovstype.MANUELL_OVERSTYRING_LOVVALG
-            : Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
+          behovstype: overstyring ? Behovstype.MANUELL_OVERSTYRING_LOVVALG : Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
           manuellVurderingForLovvalgMedlemskap: {
+            overstyrt: false,
             lovvalgVedSøknadsTidspunkt: {
               begrunnelse: data.lovvalgBegrunnelse,
               lovvalgsEØSLand:
