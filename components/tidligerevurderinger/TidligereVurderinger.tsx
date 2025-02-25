@@ -1,33 +1,10 @@
-import { CheckmarkCircleIcon, ClockDashedIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { ExpansionCard, Table } from '@navikt/ds-react';
 
 import { Sykdomsvurdering } from 'lib/types/types';
 import styles from './TidligereVurderinger.module.css';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { format, parse, subDays } from 'date-fns';
-
-type Vilkårsstatus = 'oppfylt' | 'ikke_oppfylt'; // TODO nei
-
-const Statusikon = ({ status }: { status: Vilkårsstatus }) => {
-  if (status === 'ikke_oppfylt') {
-    return (
-      <div>
-        <XMarkOctagonIcon className={`${styles.statusIkon} ${styles.ikkeOppfylt}`} />
-      </div>
-    );
-  }
-  return (
-    <div>
-      <CheckmarkCircleIcon className={`${styles.statusIkon} ${styles.oppfylt}`} />
-    </div>
-  );
-};
-
-const statustekst = (status: Vilkårsstatus) => (status === 'ikke_oppfylt' ? 'Vilkår ikke oppfylt' : 'Vilkår oppfylt');
-
-/*
- * Det gjenstår å håndtere visningen av den faktiske vurderingen som er gjort for vilkåret
- */
 
 const mapTilJaEllerNei = (verdi?: boolean) => (verdi ? 'Ja' : 'Nei');
 interface VurderingProps {
@@ -37,14 +14,6 @@ interface VurderingProps {
 }
 
 export const Vurdering = ({ vurdering, søknadstidspunkt, sluttdato }: VurderingProps) => {
-  const erVilkårOppfylt: boolean = !!(
-    vurdering.harSkadeSykdomEllerLyte &&
-    vurdering.erArbeidsevnenNedsatt &&
-    vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten &&
-    vurdering.erSkadeSykdomEllerLyteVesentligdel &&
-    vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet
-  );
-
   const content = (
     <div>
       <span>{vurdering.begrunnelse}</span>
@@ -69,8 +38,6 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, sluttdato }: Vurdering
   return (
     <Table.ExpandableRow content={content} togglePlacement="right" expandOnRowClick>
       <Table.DataCell style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
-        <Statusikon status={erVilkårOppfylt ? 'oppfylt' : 'ikke_oppfylt'} />
-        {statustekst(erVilkårOppfylt ? 'oppfylt' : 'ikke_oppfylt')}
         <span style={{ marginLeft: '0.25rem' }}>
           {vurdering.vurderingenGjelderFra
             ? formaterDatoForVisning(vurdering.vurderingenGjelderFra)
@@ -79,7 +46,6 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, sluttdato }: Vurdering
           {sluttdato}
         </span>
       </Table.DataCell>
-      {/* TODO hent ident og vedtaksdato her når backend er klar */}
       <Table.DataCell align="right">
         ({vurdering.vurdertAvIdent}) {formaterDatoForVisning(vurdering.vurdertDato)}
       </Table.DataCell>
