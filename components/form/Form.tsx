@@ -6,12 +6,13 @@ import { Button } from '@navikt/ds-react';
 import { StegType } from 'lib/types/types';
 import { ServerSentEventStatus } from 'app/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
+import {LøsBehovOgGåTilNesteStegStatus} from "hooks/LøsBehovOgGåTilNesteStegHook";
 
 interface Props {
   steg: StegType;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
-  status: ServerSentEventStatus | undefined;
+  status: LøsBehovOgGåTilNesteStegStatus;
   children: ReactNode;
   knappTekst?: string;
   visBekreftKnapp?: boolean;

@@ -1,9 +1,9 @@
-import { ServerSentEventStatus } from 'app/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
-import { Alert, BodyShort } from '@navikt/ds-react';
+import { Alert, BodyShort, Button } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 
 interface Props {
-  status?: ServerSentEventStatus;
+  status?: LøsBehovOgGåTilNesteStegStatus;
 }
 
 export const ServerSentEventStatusAlert = ({ status }: Props) => {
@@ -25,7 +25,26 @@ export const ServerSentEventStatusAlert = ({ status }: Props) => {
       )}
       {status === 'POLLING' && (
         <Alert variant="info">
-          <BodyShort spacing>Maskinen bruker litt lengre tid på å jobbe enn vanlig. Ta deg en kopp kaffe.</BodyShort>
+          <BodyShort spacing>Maskinen bruker litt lengre tid på å jobbe enn vanlig.</BodyShort>
+          <BodyShort size={'small'}>
+            <b>SakId:</b>
+            {` ${saksId}`}
+          </BodyShort>
+          <BodyShort size={'small'}>
+            <b>Behandlingsreferanse:</b>
+            {` ${behandlingsReferanse}`}
+          </BodyShort>
+        </Alert>
+      )}
+      {status === 'CLIENT_CONFLICT' && (
+        <Alert variant="error">
+          <BodyShort spacing>Det ser ut til at noe har endret seg i behandlingen siden du sist oppdaterte.</BodyShort>
+          <Button onClick={() => window && window.location.reload()}>Oppdater siden</Button>
+        </Alert>
+      )}
+      {status === 'CLIENT_ERROR' && (
+        <Alert variant="error">
+          <BodyShort spacing>Noe gikk galt ved løsing av behov</BodyShort>
           <BodyShort size={'small'}>
             <b>SakId:</b>
             {` ${saksId}`}

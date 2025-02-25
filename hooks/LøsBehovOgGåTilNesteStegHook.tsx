@@ -7,21 +7,31 @@ import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { clientLøsBehov } from 'lib/clientApi';
 
+export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | 'CLIENT_ERROR' | 'CLIENT_CONFLICT' | undefined;
 export const useLøsBehovOgGåTilNesteSteg = (
   steg: StegType
 ): {
-  status: ServerSentEventStatus | undefined;
+  status: LøsBehovOgGåTilNesteStegStatus;
   isLoading: boolean;
   løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling) => void;
 } => {
   const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
   const router = useRouter();
-  const [status, setStatus] = useState<ServerSentEventStatus | undefined>();
+  const [status, setStatus] = useState<LøsBehovOgGåTilNesteStegStatus>();
   const [isLoading, setIsLoading] = useState(false);
 
   const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling) => {
     setIsLoading(true);
-    await clientLøsBehov(behov);
+    const løsbehovRes = await clientLøsBehov(behov);
+    if (løsbehovRes.type === 'ERROR') {
+      if (løsbehovRes.status === 409) {
+        setStatus('CLIENT_CONFLICT');
+      } else {
+        setStatus('CLIENT_ERROR');
+      }
+      setIsLoading(false);
+      return;
+    }
     listenSSE();
   };
 
