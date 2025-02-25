@@ -115,7 +115,6 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
         behov: {
           behovstype: overstyring ? Behovstype.MANUELL_OVERSTYRING_LOVVALG : Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
           manuellVurderingForLovvalgMedlemskap: {
-            overstyrt: false,
             lovvalgVedSøknadsTidspunkt: {
               begrunnelse: data.lovvalgBegrunnelse,
               lovvalgsEØSLand:

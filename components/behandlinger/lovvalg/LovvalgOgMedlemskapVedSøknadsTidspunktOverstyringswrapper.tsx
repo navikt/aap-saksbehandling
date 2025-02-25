@@ -30,6 +30,7 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
         vurdering={automatiskVurdering}
         setOverstyring={setOverstyring}
         visOverstyrKnapp={visOverstyrKnapp}
+        visOverstyringsBehov={overstyring}
       />
       {children}
       {overstyring && stegSomSkalVises.length === 0 && (
