@@ -61,6 +61,16 @@ function mapAvslagsårsakTilAvslagNavn(avslagÅrsak: AvslagÅrsak) {
       return 'Ikke sykdom av viss varighet';
     case 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL':
       return 'Sykdom, skade eller lyte er ikke vesentlig medvirkende til nedsatt arbeidsevne';
+    case 'IKKE_OPPFYLT_OPPHOLDSKRAV_EØS':
+      return 'Ikke oppfylt oppholdskrav EØS';
+    case 'NORGE_IKKE_KOMPETENT_STAT':
+      return 'Norge ikke kompetent stat';
+    case 'IKKE_MEDLEM_FORUTGÅENDE':
+      return 'Ikke forutgående medlemskap';
+    case 'IKKE_MEDLEM':
+      return 'Ikke medlem';
+    default:
+      return avslagÅrsak;
   }
 }
 
