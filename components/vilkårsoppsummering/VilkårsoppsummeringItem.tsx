@@ -78,5 +78,9 @@ function mapVilkårTypeTilVilkårNavn(steg: VilkårType): string {
       return 'Grunnlaget';
     case 'SYKEPENGEERSTATNING':
       return 'Sykepengeerstatning';
+    case 'LOVVALG':
+      return 'Lovvalg';
+    default:
+      return steg;
   }
 }
