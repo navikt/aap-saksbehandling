@@ -20,6 +20,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching = async ({
       behandlingVersjon={behandlingVersjon}
       grunnlag={grunnlag}
       readOnly={readOnly}
+      overstyring={!!grunnlag?.vurdering?.overstyrt}
     />
   );
 };
