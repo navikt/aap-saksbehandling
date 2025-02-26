@@ -1,6 +1,0 @@
-.søkerinfo {
-  display: flex;
-  flex-direction: row;
-  gap: var(--a-spacing-2);
-  align-items: center;
-}
