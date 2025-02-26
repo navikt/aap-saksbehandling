@@ -119,15 +119,18 @@ export const TidligereVurderinger = ({ historiskeVurderinger, gjeldendeVurdering
       <ExpansionCard.Content>
         <Table>
           <Table.Body>
-            {historiskeVurderinger.map((vurdering, index) => (
-              <Vurdering
-                key={index}
-                vurdering={vurdering}
-                søknadstidspunkt={søknadstidspunkt}
-                sluttdato={finnSluttdato(index)}
-                vurderingErGjeldende={erVurderingenGjeldende(vurdering)}
-              />
-            ))}
+            {historiskeVurderinger.map((vurdering, index) => {
+              const vurderingErGjeldende = erVurderingenGjeldende(vurdering);
+              return (
+                <Vurdering
+                  key={index}
+                  vurdering={vurdering}
+                  søknadstidspunkt={søknadstidspunkt}
+                  sluttdato={vurderingErGjeldende ? finnSluttdato(index) : undefined}
+                  vurderingErGjeldende={vurderingErGjeldende}
+                />
+              );
+            })}
           </Table.Body>
         </Table>
       </ExpansionCard.Content>

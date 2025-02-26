@@ -81,7 +81,7 @@ describe('Tidligere vurderinger', () => {
     render(
       <TidligereVurderinger
         historiskeVurderinger={historiskeVurderinger}
-        gjeldendeVurderinger={[]}
+        gjeldendeVurderinger={historiskeVurderinger}
         søknadstidspunkt={søknadstidspunktTilbakeITid}
       />
     );
@@ -94,6 +94,57 @@ describe('Tidligere vurderinger', () => {
     expect(
       within(historikkrader[1]).getByRole('cell', {
         name: `${format(tolvUkerSiden, 'dd.MM.yyyy')} - ${format(subDays(fireUkerSiden, 1), 'dd.MM.yyyy')}`,
+      })
+    ).toBeVisible();
+  });
+
+  test('sluttdato utledes ikke for en vurdering som ikke er gjeldende', async () => {
+    const tolvUkerSiden = subWeeks(new Date(), 12);
+    const seksUkerSiden = subWeeks(new Date(), 6);
+    const fireUkerSiden = subWeeks(new Date(), 4);
+
+    const søknadstidspunktTilbakeITid = format(tolvUkerSiden, 'yyyy-MM-dd');
+    const historiskeVurderinger: Sykdomsvurdering[] = [
+      {
+        erNedsettelseIArbeidsevneAvEnVissVarighet: true,
+        erSkadeSykdomEllerLyteVesentligdel: true,
+        erNedsettelseIArbeidsevneMerEnnHalvparten: true,
+        erArbeidsevnenNedsatt: true,
+        harSkadeSykdomEllerLyte: true,
+        dokumenterBruktIVurdering: [],
+        begrunnelse: 'En begrunnelse',
+        vurdertAvIdent: 'IDENT',
+        vurdertDato: format(fireUkerSiden, 'yyyy-MM-dd'),
+        vurderingenGjelderFra: format(fireUkerSiden, 'yyyy-MM-dd'),
+      },
+      {
+        erNedsettelseIArbeidsevneAvEnVissVarighet: true,
+        erSkadeSykdomEllerLyteVesentligdel: true,
+        erNedsettelseIArbeidsevneMerEnnHalvparten: true,
+        erArbeidsevnenNedsatt: true,
+        harSkadeSykdomEllerLyte: true,
+        dokumenterBruktIVurdering: [],
+        begrunnelse: 'En begrunnelse',
+        vurdertAvIdent: 'IDENT',
+        vurdertDato: format(seksUkerSiden, 'yyyy-MM-dd'),
+      },
+    ];
+    render(
+      <TidligereVurderinger
+        historiskeVurderinger={historiskeVurderinger}
+        gjeldendeVurderinger={[historiskeVurderinger[0]]}
+        søknadstidspunkt={søknadstidspunktTilbakeITid}
+      />
+    );
+    await åpneHistorikkvisning();
+    const historikkrader = screen.getAllByRole('row');
+    expect(historikkrader).toHaveLength(historiskeVurderinger.length);
+    expect(
+      within(historikkrader[0]).getByRole('cell', { name: `${format(fireUkerSiden, 'dd.MM.yyyy')} -` })
+    ).toBeVisible();
+    expect(
+      within(historikkrader[1]).getByRole('cell', {
+        name: `${format(tolvUkerSiden, 'dd.MM.yyyy')} -`,
       })
     ).toBeVisible();
   });
