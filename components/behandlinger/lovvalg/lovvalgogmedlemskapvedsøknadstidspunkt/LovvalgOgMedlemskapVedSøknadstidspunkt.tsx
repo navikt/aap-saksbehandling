@@ -14,6 +14,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   grunnlag: LovvalgMedlemskapGrunnlag;
+  overstyring?: boolean;
 }
 
 interface FormFields {
@@ -53,7 +54,12 @@ function mapGrunnlagTilMedlemAvFolketrygdenVedSøknadstidspunkt(isMedlem?: boole
   }
   return undefined;
 }
-export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
+export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
+  grunnlag,
+  readOnly,
+  behandlingVersjon,
+  overstyring,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { isLoading, status, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
   const { form, formFields } = useConfigForm<FormFields>(
@@ -107,9 +113,8 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({ grunnlag, readOnly, beha
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
-          behovstype: Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
+          behovstype: overstyring ? Behovstype.MANUELL_OVERSTYRING_LOVVALG : Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
           manuellVurderingForLovvalgMedlemskap: {
-            overstyrt: false,
             lovvalgVedSøknadsTidspunkt: {
               begrunnelse: data.lovvalgBegrunnelse,
               lovvalgsEØSLand:
@@ -130,8 +135,11 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({ grunnlag, readOnly, beha
       });
     })(event);
   };
+  const heading = overstyring
+    ? 'Overstyring av lovvalg og medlemskap ved søknadstidspunkt'
+    : 'Lovvalg og medlemskap ved søknadstidspunkt';
   return (
-    <VilkårsKort heading={'Lovvalg og medlemskap ved søknadstidspunkt'} steg={'VURDER_LOVVALG'}>
+    <VilkårsKort heading={heading} steg={'VURDER_LOVVALG'}>
       <Form steg={'VURDER_LOVVALG'} onSubmit={handleSubmit} isLoading={isLoading} status={status}>
         <FormField form={form} formField={formFields.lovvalgBegrunnelse} />
         <FormField form={form} formField={formFields.lovvalgsLand} />

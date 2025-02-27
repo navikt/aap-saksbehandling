@@ -6,14 +6,36 @@ import styles from './TidligereVurderinger.module.css';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { format, parse, subDays } from 'date-fns';
 
+function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): boolean {
+  if (objekt1 === objekt2) return true;
+
+  if (typeof objekt1 !== 'object' || typeof objekt2 !== 'object' || objekt1 === null || objekt2 === null) {
+    return false;
+  }
+
+  const keys1 = Object.keys(objekt1).filter((key) => !ignorerFelt.includes(key));
+  const keys2 = Object.keys(objekt2).filter((key) => !ignorerFelt.includes(key));
+
+  if (keys1.length !== keys2.length) return false;
+
+  for (const key of keys1) {
+    if (!keys2.includes(key) || !deepEqual(objekt1[key], objekt2[key], ignorerFelt)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 const mapTilJaEllerNei = (verdi?: boolean) => (verdi ? 'Ja' : 'Nei');
 interface VurderingProps {
   vurdering: Sykdomsvurdering;
   søknadstidspunkt: string;
+  vurderingErGjeldende: boolean;
   sluttdato?: string;
 }
 
-export const Vurdering = ({ vurdering, søknadstidspunkt, sluttdato }: VurderingProps) => {
+export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, sluttdato }: VurderingProps) => {
   const content = (
     <div>
       <span>{vurdering.begrunnelse}</span>
@@ -38,7 +60,7 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, sluttdato }: Vurdering
   return (
     <Table.ExpandableRow content={content} togglePlacement="right" expandOnRowClick>
       <Table.DataCell style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
-        <span style={{ marginLeft: '0.25rem' }}>
+        <span style={{ marginLeft: '0.25rem', textDecoration: vurderingErGjeldende ? 'none' : 'line-through' }}>
           {vurdering.vurderingenGjelderFra
             ? formaterDatoForVisning(vurdering.vurderingenGjelderFra)
             : formaterDatoForVisning(søknadstidspunkt)}
@@ -54,21 +76,29 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, sluttdato }: Vurdering
 };
 
 interface Props {
-  tidligereVurderinger: Sykdomsvurdering[];
+  historiskeVurderinger: Sykdomsvurdering[];
+  gjeldendeVurderinger: Sykdomsvurdering[];
   søknadstidspunkt: string;
 }
 
-export const TidligereVurderinger = ({ tidligereVurderinger, søknadstidspunkt }: Props) => {
-  const antallVurderinger = tidligereVurderinger.length;
+export const TidligereVurderinger = ({ historiskeVurderinger, gjeldendeVurderinger, søknadstidspunkt }: Props) => {
+  const antallVurderinger = historiskeVurderinger.length;
   const finnSluttdato = (index: number) => {
     if (antallVurderinger <= 1 || index === 0) {
       return undefined;
     }
-    const forrigeGjelderFra = tidligereVurderinger.at(index - 1)?.vurderingenGjelderFra;
+    const forrigeGjelderFra = historiskeVurderinger.at(index - 1)?.vurderingenGjelderFra;
     if (!forrigeGjelderFra) {
       return undefined;
     }
     return format(subDays(parse(forrigeGjelderFra, 'yyyy-MM-dd', new Date()), 1), 'dd.MM.yyyy');
+  };
+
+  const erVurderingenGjeldende = (historiskVurdering: Sykdomsvurdering) => {
+    const vurderingenFinnesSomGjeldende = gjeldendeVurderinger.some((gjeldendeVurdering) =>
+      deepEqual(historiskVurdering, gjeldendeVurdering, ['dokumenterBruktIVurderingen', 'bidiagnoser'])
+    );
+    return vurderingenFinnesSomGjeldende;
   };
 
   return (
@@ -89,14 +119,18 @@ export const TidligereVurderinger = ({ tidligereVurderinger, søknadstidspunkt }
       <ExpansionCard.Content>
         <Table>
           <Table.Body>
-            {tidligereVurderinger.map((vurdering, index) => (
-              <Vurdering
-                key={index}
-                vurdering={vurdering}
-                søknadstidspunkt={søknadstidspunkt}
-                sluttdato={finnSluttdato(index)}
-              />
-            ))}
+            {historiskeVurderinger.map((vurdering, index) => {
+              const vurderingErGjeldende = erVurderingenGjeldende(vurdering);
+              return (
+                <Vurdering
+                  key={index}
+                  vurdering={vurdering}
+                  søknadstidspunkt={søknadstidspunkt}
+                  sluttdato={vurderingErGjeldende ? finnSluttdato(index) : undefined}
+                  vurderingErGjeldende={vurderingErGjeldende}
+                />
+              );
+            })}
           </Table.Body>
         </Table>
       </ExpansionCard.Content>

@@ -16,6 +16,7 @@ export enum Behovstype {
   FASTSETT_YRKESSKADEINNTEKT = '5014',
   EFFEKTUER_11_7_KODE = '5015',
   AVKLAR_LOVVALG_MEDLEMSKAP = '5017',
+  MANUELL_OVERSTYRING_LOVVALG = '5021',
   FORESLÅ_VEDTAK_KODE = '5098',
   FATTE_VEDTAK_KODE = '5099',
   KVALITETSSIKRING_KODE = '5097',
@@ -65,6 +66,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Lovvalg og medlemskap ved søknadstidspunkt';
     case '5020':
       return 'Forutgående medlemskap';
+    case '5021':
+      return 'Overstyr lovvalg';
     case '5050':
       return 'Skriv brev';
   }
