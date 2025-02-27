@@ -100,7 +100,9 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
-          behovstype: overstyring ? Behovstype.MANUELL_OVERSTYRING_MEDLEMSKAP : Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
+          behovstype: overstyring
+            ? Behovstype.MANUELL_OVERSTYRING_MEDLEMSKAP
+            : Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP,
           manuellVurderingForForutgåendeMedlemskap: {
             begrunnelse: data.begrunnelse,
             harForutgåendeMedlemskap: data.harForutgåendeMedlemskap === JaEllerNei.Ja,
