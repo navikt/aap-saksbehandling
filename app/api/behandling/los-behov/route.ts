@@ -9,9 +9,12 @@ export async function POST(req: NextRequest) {
   try {
     const løsbehovRes = await løsAvklaringsbehov(body);
 
+    if (løsbehovRes.type === 'ERROR') {
+      logError(`/løs-behov, behovstype: ${body.behov?.behovstype}, message: ${løsbehovRes.message}`);
+    }
     return new Response(JSON.stringify(løsbehovRes), { status: løsbehovRes.status });
   } catch (error) {
-    logError('/løs-behov', error);
+    logError(`/løs-behov ${body.behov?.behovstype}`, error);
     return new Response(JSON.stringify({ message: getErrorMessage(error) }), { status: 500 });
   }
 }
