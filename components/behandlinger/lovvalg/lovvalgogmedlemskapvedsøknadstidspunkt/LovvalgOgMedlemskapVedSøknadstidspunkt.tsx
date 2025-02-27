@@ -14,7 +14,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   grunnlag: LovvalgMedlemskapGrunnlag;
-  overstyring?: boolean;
+  overstyring: boolean;
 }
 
 interface FormFields {

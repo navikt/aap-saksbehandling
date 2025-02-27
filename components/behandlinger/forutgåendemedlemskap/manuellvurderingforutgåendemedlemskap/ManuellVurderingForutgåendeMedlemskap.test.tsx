@@ -20,6 +20,19 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
     expect(heading).toBeVisible();
   });
 
+  it('Skal ha riktig overskrift ved overstyring', () => {
+    render(
+      <ManuellVurderingForutgåendeMedlemskap
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={true}
+      />
+    );
+    const heading = screen.getByText('Overstyring § 11-2 Forutgående medlemskap');
+    expect(heading).toBeVisible();
+  });
+
   it('Skal ha felt for begrunnelse', () => {
     render(
       <ManuellVurderingForutgåendeMedlemskap

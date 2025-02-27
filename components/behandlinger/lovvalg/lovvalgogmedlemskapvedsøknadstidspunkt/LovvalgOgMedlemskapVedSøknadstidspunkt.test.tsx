@@ -8,19 +8,53 @@ const user = userEvent.setup();
 const grunnlag: LovvalgMedlemskapGrunnlag = {};
 describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal ha en overskrift', () => {
-    render(<LovvalgOgMedlemskapVedSKnadstidspunkt readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={false}
+      />
+    );
     const heading = screen.getByText('Lovvalg og medlemskap ved søknadstidspunkt');
     expect(heading).toBeVisible();
   });
 
+  it('Skal ha riktig overskrift ved overstyring', () => {
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={true}
+      />
+    );
+    const heading = screen.getByText('Overstyring av lovvalg og medlemskap ved søknadstidspunkt');
+    expect(heading).toBeVisible();
+  });
+
   it('Skal ha felt for begrunnelse', () => {
-    render(<LovvalgOgMedlemskapVedSKnadstidspunkt readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={false}
+      />
+    );
     const begrunnelse = screen.getByRole('textbox', { name: 'Vurder riktig lovvalg ved søknadstidspunkt' });
     expect(begrunnelse).toBeVisible();
   });
 
   it('Skal ha felt for lovvalg', () => {
-    render(<LovvalgOgMedlemskapVedSKnadstidspunkt readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={false}
+      />
+    );
     const felt = screen.getByRole('group', {
       name: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
     });
@@ -28,7 +62,14 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   });
 
   it('skjuler felt for lovvalgsland hvis lovvalg ikke er Annet land med avtale', async () => {
-    render(<LovvalgOgMedlemskapVedSKnadstidspunkt readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={false}
+      />
+    );
     const lovvalg = screen.getByRole('group', {
       name: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
     });
@@ -41,7 +82,14 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   });
 
   it('viser felt for lovvalgsland hvis lovvalg er Annet land med avtale', async () => {
-    render(<LovvalgOgMedlemskapVedSKnadstidspunkt readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={false}
+      />
+    );
     const lovvalg = screen.getByRole('group', {
       name: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
     });
@@ -55,21 +103,42 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   });
 
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
-    render(<LovvalgOgMedlemskapVedSKnadstidspunkt readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={false}
+      />
+    );
     await trykkPåBekreft();
     const feilmelding = screen.getByText('Du må gi en begrunnelse på lovvalg ved søknadstidspunkt');
     expect(feilmelding).toBeVisible();
   });
 
   it('Skal vise feilmelding dersom feltet om lovvalg ikke er besvart', async () => {
-    render(<LovvalgOgMedlemskapVedSKnadstidspunkt readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={false}
+      />
+    );
     await trykkPåBekreft();
     const feilmelding = screen.getByText('Du må velge riktig lovvalg ved søknadstidspunkt');
     expect(feilmelding).toBeVisible();
   });
 
   it('viser felt medlemskapbegrunnelse og vurdering hvis Norge eller Land uten avtale er valgt', async () => {
-    render(<LovvalgOgMedlemskapVedSKnadstidspunkt readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={false}
+      />
+    );
     const lovvalg = screen.getByRole('group', {
       name: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
     });
@@ -85,7 +154,14 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   });
 
   it('skjuler felt for medlemskapsbegrunnelse hvis lovvalgsland er Annet land med avtale', async () => {
-    render(<LovvalgOgMedlemskapVedSKnadstidspunkt readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={false}
+      />
+    );
     const lovvalg = screen.getByRole('group', {
       name: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
     });
@@ -100,7 +176,14 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   });
 
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
-    render(<LovvalgOgMedlemskapVedSKnadstidspunkt readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={false}
+      />
+    );
     const lovvalg = screen.getByRole('group', {
       name: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
     });
@@ -111,7 +194,14 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   });
 
   it('Skal vise feilmelding dersom feltet om medlemskap ikke er besvart', async () => {
-    render(<LovvalgOgMedlemskapVedSKnadstidspunkt readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    render(
+      <LovvalgOgMedlemskapVedSKnadstidspunkt
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlag}
+        overstyring={false}
+      />
+    );
     const lovvalg = screen.getByRole('group', {
       name: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
     });
