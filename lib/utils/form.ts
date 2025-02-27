@@ -22,6 +22,7 @@ export enum Behovstype {
   KVALITETSSIKRING_KODE = '5097',
   SKRIV_BREV_KODE = '5050',
   AVKLAR_FORUTGÅENDE_MEDLEMSKAP = '5020',
+  MANUELL_OVERSTYRING_MEDLEMSKAP = '5022',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -68,6 +69,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Forutgående medlemskap';
     case '5021':
       return 'Overstyr lovvalg';
+    case '5022':
+      return 'Overstyr forutgående medlemskap';
     case '5050':
       return 'Skriv brev';
   }
