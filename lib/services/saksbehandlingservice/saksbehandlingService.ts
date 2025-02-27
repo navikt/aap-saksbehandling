@@ -20,7 +20,8 @@ import {
   FatteVedtakGrunnlag,
   FlytProsessering,
   ForhåndsvisDialogmelding,
-  ForhåndsvisDialogmeldingResponse, ForutgåendeMedlemskapGrunnlag,
+  ForhåndsvisDialogmeldingResponse,
+  ForutgåendeMedlemskapGrunnlag,
   FritakMeldepliktGrunnlag,
   HelseinstitusjonGrunnlag,
   KvalitetssikringGrunnlag,
@@ -50,6 +51,7 @@ import {
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 import { headers } from 'next/headers';
+import { apiFetch } from 'lib/services/apiFetch';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -256,7 +258,7 @@ export const hentFlyt = async (behandlingsReferanse: string): Promise<Behandling
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/løs-behov`;
-  return await fetchProxy<void>(url, saksbehandlingApiScope, 'POST', avklaringsBehov);
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', avklaringsBehov);
 };
 
 export const mellomlagreBrev = async (brevbestillingReferanse: string, brev: Brev) => {

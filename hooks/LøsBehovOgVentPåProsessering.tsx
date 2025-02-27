@@ -5,17 +5,32 @@ import { clientLøsBehov } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/api/behandling/hent/[referanse]/prosessering/route';
 import { revalidateFlyt } from 'lib/actions/actions';
 
+export type LøsBehovOgVentPåProsesseringStatus =
+  | FlytProsesseringStatus
+  | 'CLIENT_ERROR'
+  | 'CLIENT_CONFLICT'
+  | undefined;
 export const useLøsBehovOgVentPåProsessering = (): {
-  status: FlytProsesseringStatus | undefined;
+  status: LøsBehovOgVentPåProsesseringStatus;
   isLoading: boolean;
   løsBehovOgVentPåProsessering: (behov: LøsAvklaringsbehovPåBehandling) => void;
 } => {
   const params = useParams<{ behandlingsReferanse: string }>();
-  const [status, setStatus] = useState<FlytProsesseringServerSentEvent['status'] | undefined>();
+  const [status, setStatus] = useState<LøsBehovOgVentPåProsesseringStatus>();
   const [isLoading, setIsLoading] = useState(false);
 
   const løsBehovOgVentPåProsessering = async (behov: LøsAvklaringsbehovPåBehandling) => {
-    await clientLøsBehov(behov);
+    const løsbehovRes = await clientLøsBehov(behov);
+    if (løsbehovRes.type === 'ERROR') {
+      if (løsbehovRes.status === 409) {
+        setStatus('CLIENT_CONFLICT');
+      } else {
+        setStatus('CLIENT_ERROR');
+      }
+      setIsLoading(false);
+      return;
+    }
+    listenSSE();
     listenSSE();
   };
 

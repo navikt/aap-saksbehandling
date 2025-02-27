@@ -11,7 +11,7 @@ describe('ServerSentEventStatusAlert', () => {
 
   it('skal vise korrekt melding dersom status er POLLING', () => {
     render(<ServerSentEventStatusAlert status={'POLLING'} />);
-    const melding = screen.getByText(/maskinen bruker litt lengre tid på å jobbe enn vanlig\. ta deg en kopp kaffe\./i);
+    const melding = screen.getByText(/maskinen bruker litt lengre tid på å jobbe enn vanlig\./i);
     expect(melding).toBeVisible();
   });
 });

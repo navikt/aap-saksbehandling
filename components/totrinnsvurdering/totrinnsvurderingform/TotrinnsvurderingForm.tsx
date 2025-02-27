@@ -10,6 +10,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { useConfigForm } from '@navikt/aap-felles-react';
 import { useFieldArray } from 'react-hook-form';
 import { useState } from 'react';
+import {ServerSentEventStatusAlert} from "components/serversenteventstatusalert/ServerSentEventStatusAlert";
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -33,7 +34,7 @@ export const TotrinnsvurderingForm = ({
   erKvalitetssikring,
 }: Props) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg(
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg(
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
 
@@ -109,6 +110,7 @@ export const TotrinnsvurderingForm = ({
       className={'flex-column'}
       autoComplete={'off'}
     >
+      <ServerSentEventStatusAlert status={status} resetStatus={resetStatus} />
       {fields.map((field, index) => (
         <TotrinnnsvurderingFelter
           key={field.id}

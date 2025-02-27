@@ -28,7 +28,7 @@ interface FormFields {
 }
 
 export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, readOnly }: Props) => {
-  const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('VURDER_YRKESSKADE');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('VURDER_YRKESSKADE');
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -94,6 +94,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
         })}
         isLoading={isLoading}
         status={status}
+        resetStatus={resetStatus}
         visBekreftKnapp={!readOnly}
       >
         <Veiledning />

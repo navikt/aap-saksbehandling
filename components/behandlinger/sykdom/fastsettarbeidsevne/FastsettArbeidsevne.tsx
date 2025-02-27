@@ -75,7 +75,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
     name: 'arbeidsevnevurderinger',
   });
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -108,6 +108,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
       <Form
         onSubmit={handleSubmit}
         status={status}
+        resetStatus={resetStatus}
         isLoading={isLoading}
         steg={'FASTSETT_ARBEIDSEVNE'}
         visBekreftKnapp={!readOnly}

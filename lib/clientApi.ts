@@ -15,6 +15,8 @@ import {
   SimulerMeldeplikt,
 } from './types/types';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
+import { FetchResponse } from 'lib/services/apiFetch';
+import { getErrorMessage } from 'lib/utils/errorUtil';
 
 const BASE_URL = '/saksbehandling';
 
@@ -43,6 +45,42 @@ async function clientFetch<ResponseBody>(
   }
 }
 
+async function clientFetchV2<ResponseBody>(
+  url: string,
+  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+  body?: object
+): Promise<FetchResponse<ResponseBody>> {
+  try {
+    const res = await fetch(url, {
+      method,
+      body: body && JSON.stringify(body),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      return {
+        type: 'SUCCESS',
+        status: res.status,
+        responseJson: data as ResponseBody,
+      };
+    } else {
+      return {
+        type: 'ERROR',
+        status: res.status,
+        message: data.message || res.statusText,
+      };
+    }
+     
+  } catch (e) {
+    return {
+      type: 'ERROR',
+      message: getErrorMessage(e),
+      status: 500,
+    };
+  }
+}
+
 export function clientSettBehandlingPåVent(referanse: string, settPåVent: SettPåVent) {
   return clientFetch(`${BASE_URL}/api/behandling/${referanse}/sett-paa-vent`, 'POST', settPåVent);
 }
@@ -56,7 +94,7 @@ export function clientHentAlleSaker() {
 }
 
 export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
-  return clientFetch(`${BASE_URL}/api/behandling/los-behov/`, 'POST', avklaringsBehov);
+  return clientFetchV2(`${BASE_URL}/api/behandling/los-behov/`, 'POST', avklaringsBehov);
 }
 
 export function clientOpprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {

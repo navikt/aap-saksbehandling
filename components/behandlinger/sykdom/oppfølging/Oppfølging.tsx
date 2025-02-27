@@ -27,7 +27,7 @@ interface FormFields {
 
 export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -97,6 +97,7 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
         onSubmit={handleSubmit}
         isLoading={isLoading}
         status={status}
+        resetStatus={resetStatus}
         visBekreftKnapp={!readOnly}
       >
         <Veiledning

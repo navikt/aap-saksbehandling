@@ -1,12 +1,16 @@
-import { ServerSentEventStatus } from 'app/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
-import { Alert, BodyShort } from '@navikt/ds-react';
+'use client';
+
+import { Alert, BodyShort, Button } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { revalidateFlyt } from 'lib/actions/actions';
 
 interface Props {
-  status?: ServerSentEventStatus;
+  status?: LøsBehovOgGåTilNesteStegStatus;
+  resetStatus?: () => void;
 }
 
-export const ServerSentEventStatusAlert = ({ status }: Props) => {
+export const ServerSentEventStatusAlert = ({ status, resetStatus }: Props) => {
   const { behandlingsReferanse, saksId } = useParams<{ behandlingsReferanse: string; saksId: string }>();
   return (
     <>
@@ -25,7 +29,34 @@ export const ServerSentEventStatusAlert = ({ status }: Props) => {
       )}
       {status === 'POLLING' && (
         <Alert variant="info">
-          <BodyShort spacing>Maskinen bruker litt lengre tid på å jobbe enn vanlig. Ta deg en kopp kaffe.</BodyShort>
+          <BodyShort spacing>Maskinen bruker litt lengre tid på å jobbe enn vanlig.</BodyShort>
+          <BodyShort size={'small'}>
+            <b>SakId:</b>
+            {` ${saksId}`}
+          </BodyShort>
+          <BodyShort size={'small'}>
+            <b>Behandlingsreferanse:</b>
+            {` ${behandlingsReferanse}`}
+          </BodyShort>
+        </Alert>
+      )}
+      {status === 'CLIENT_CONFLICT' && (
+        <Alert variant="error">
+          <BodyShort spacing>Det ser ut til at noe har endret seg i behandlingen siden du sist vi sjekket.</BodyShort>
+          <Button
+            type={'button'}
+            onClick={async () => {
+              await revalidateFlyt(behandlingsReferanse);
+              resetStatus && resetStatus();
+            }}
+          >
+            Oppdater
+          </Button>
+        </Alert>
+      )}
+      {status === 'CLIENT_ERROR' && (
+        <Alert variant="error">
+          <BodyShort spacing>Noe gikk galt ved løsing av behov</BodyShort>
           <BodyShort size={'small'}>
             <b>SakId:</b>
             {` ${saksId}`}

@@ -36,7 +36,7 @@ interface Vurdering {
 }
 
 export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Props) => {
-  const { isLoading, status, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
+  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const defaultValue: Vurdering[] = grunnlag.vurderinger.map((forhold) => {
@@ -91,6 +91,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
         onSubmit={handleSubmit}
         steg={'DU_ER_ET_ANNET_STED'}
         status={status}
+        resetStatus={resetStatus}
         isLoading={isLoading}
         visBekreftKnapp={!readOnly}
       >
