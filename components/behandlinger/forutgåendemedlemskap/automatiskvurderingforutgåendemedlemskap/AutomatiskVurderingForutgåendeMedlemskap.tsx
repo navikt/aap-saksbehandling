@@ -1,15 +1,24 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Alert, Heading, VStack } from '@navikt/ds-react';
+import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/alder/Alder.module.css';
 import { CheckmarkIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { TilhørigetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørigetsVurderingTabell';
+import { Dispatch, SetStateAction } from 'react';
 interface Props {
   vurdering: AutomatiskLovvalgOgMedlemskapVurdering;
+  setOverstyring: Dispatch<SetStateAction<boolean>>;
+  visOverstyrKnapp?: boolean;
+  visOverstyringsBehov?: boolean;
 }
-export const AutomatiskVurderingForutgåendeMedlemskap = ({ vurdering }: Props) => {
+export const AutomatiskVurderingForutgåendeMedlemskap = ({
+  vurdering,
+  setOverstyring,
+  visOverstyrKnapp,
+  visOverstyringsBehov,
+}: Props) => {
   return (
     <VilkårsKort heading={'Automatisk vurdering av forutgående medlemskap'} steg={'VURDER_MEDLEMSKAP'}>
       <VStack gap={'5'}>
@@ -44,6 +53,19 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({ vurdering }: Props) 
           <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'}>
             Opplysningene tilsier at det kan være tilhørighet utenfor Norge. Forutgående medlemskap må vurderes manuelt.
           </Alert>
+        )}
+        {visOverstyrKnapp && (
+          <HStack>
+            {visOverstyringsBehov ? (
+              <Button variant={'secondary'} onClick={() => setOverstyring(false)}>
+                Angre overstyring
+              </Button>
+            ) : (
+              <Button variant={'secondary'} onClick={() => setOverstyring(true)}>
+                Overstyr
+              </Button>
+            )}
+          </HStack>
         )}
       </VStack>
     </VilkårsKort>
