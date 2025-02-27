@@ -1,10 +1,9 @@
-'use client'
+'use client';
 
 import { Alert, BodyShort, Button } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { revalidateFlyt } from 'lib/actions/actions';
-import {useState} from "react";
 
 interface Props {
   status?: LøsBehovOgGåTilNesteStegStatus;
@@ -49,7 +48,6 @@ export const ServerSentEventStatusAlert = ({ status, resetStatus }: Props) => {
             onClick={async () => {
               await revalidateFlyt(behandlingsReferanse);
               resetStatus && resetStatus();
-
             }}
           >
             Oppdater
