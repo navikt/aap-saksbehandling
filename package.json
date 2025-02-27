@@ -35,7 +35,7 @@
     "i18n-iso-countries": "^7.14.0",
     "is-european": "^1.0.8",
     "lodash": "^4.17.21",
-    "next": "15.1.7",
+    "next": "15.2.0",
     "node-loader": "^2.1.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -49,7 +49,7 @@
     "@eslint/eslintrc": "^3.3.0",
     "@eslint/js": "^9.21.0",
     "@navikt/aap-felles-prettier": "^5.0.4",
-    "@navikt/aap-oppgave-typescript-types": "^0.0.98",
+    "@navikt/aap-oppgave-typescript-types": "^0.0.99",
     "@navikt/eslint-config-aap": "^5.0.3",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -83,7 +83,7 @@
     "typescript": "^5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.7",
-    "vitest-fetch-mock": "^0.4.3"
+    "vitest-fetch-mock": "^0.4.4"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --cache --fix",

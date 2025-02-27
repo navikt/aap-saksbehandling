@@ -1403,10 +1403,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:^0.0.98":
-  version: 0.0.98
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.98::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.98%2Fb98da9415b09740f27cd2110dfebfdc69d84cc7a"
-  checksum: 10c0/b558edbb97095bceb8118d7789ebe5f8a7c5125d14fd699a76e86d51a6d3ec96ad76efbb683cf17db747990ea22901183452188c3c1eb5df9d537d90587c32ea
+"@navikt/aap-oppgave-typescript-types@npm:^0.0.99":
+  version: 0.0.99
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.99::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.99%2F1755daaed759cd1572b7d4c841560d9d94894fb3"
+  checksum: 10c0/6271053b2890d91492c03feac29283a6d3d9f524ab76046821fd6ddf9b8bf5d63456176ed777ca01496d40e1494a09516ec8a9c2a032fb84779bc8f851ffca45
   languageName: node
   linkType: hard
 
@@ -1579,10 +1579,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.1.7":
-  version: 15.1.7
-  resolution: "@next/env@npm:15.1.7"
-  checksum: 10c0/ad7761078552d8c88fe3c87224a3761d1bca82a15c747f417f561f92a4521898f227e3e7d2e8e65227a5ac8364ea8a2351c1febec5b5aa2ac1dcf016dd065edd
+"@next/env@npm:15.2.0":
+  version: 15.2.0
+  resolution: "@next/env@npm:15.2.0"
+  checksum: 10c0/e05ea6510e0d124fb9a42fafe091143594eb828a83aa2cf38a3624048c30fbf679744c048905c9a56ac87cba34dd7802392013c13e03fe022e441b3303cf32b6
   languageName: node
   linkType: hard
 
@@ -1602,9 +1602,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-arm64@npm:15.1.7":
-  version: 15.1.7
-  resolution: "@next/swc-darwin-arm64@npm:15.1.7"
+"@next/swc-darwin-arm64@npm:15.2.0":
+  version: 15.2.0
+  resolution: "@next/swc-darwin-arm64@npm:15.2.0"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
@@ -1616,9 +1616,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-x64@npm:15.1.7":
-  version: 15.1.7
-  resolution: "@next/swc-darwin-x64@npm:15.1.7"
+"@next/swc-darwin-x64@npm:15.2.0":
+  version: 15.2.0
+  resolution: "@next/swc-darwin-x64@npm:15.2.0"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
@@ -1630,9 +1630,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-gnu@npm:15.1.7":
-  version: 15.1.7
-  resolution: "@next/swc-linux-arm64-gnu@npm:15.1.7"
+"@next/swc-linux-arm64-gnu@npm:15.2.0":
+  version: 15.2.0
+  resolution: "@next/swc-linux-arm64-gnu@npm:15.2.0"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
@@ -1644,9 +1644,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-musl@npm:15.1.7":
-  version: 15.1.7
-  resolution: "@next/swc-linux-arm64-musl@npm:15.1.7"
+"@next/swc-linux-arm64-musl@npm:15.2.0":
+  version: 15.2.0
+  resolution: "@next/swc-linux-arm64-musl@npm:15.2.0"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
@@ -1658,9 +1658,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-gnu@npm:15.1.7":
-  version: 15.1.7
-  resolution: "@next/swc-linux-x64-gnu@npm:15.1.7"
+"@next/swc-linux-x64-gnu@npm:15.2.0":
+  version: 15.2.0
+  resolution: "@next/swc-linux-x64-gnu@npm:15.2.0"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
@@ -1672,9 +1672,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-musl@npm:15.1.7":
-  version: 15.1.7
-  resolution: "@next/swc-linux-x64-musl@npm:15.1.7"
+"@next/swc-linux-x64-musl@npm:15.2.0":
+  version: 15.2.0
+  resolution: "@next/swc-linux-x64-musl@npm:15.2.0"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
@@ -1686,9 +1686,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-win32-arm64-msvc@npm:15.1.7":
-  version: 15.1.7
-  resolution: "@next/swc-win32-arm64-msvc@npm:15.1.7"
+"@next/swc-win32-arm64-msvc@npm:15.2.0":
+  version: 15.2.0
+  resolution: "@next/swc-win32-arm64-msvc@npm:15.2.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
@@ -1700,9 +1700,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-win32-x64-msvc@npm:15.1.7":
-  version: 15.1.7
-  resolution: "@next/swc-win32-x64-msvc@npm:15.1.7"
+"@next/swc-win32-x64-msvc@npm:15.2.0":
+  version: 15.2.0
+  resolution: "@next/swc-win32-x64-msvc@npm:15.2.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -3257,7 +3257,7 @@ __metadata:
     "@navikt/aap-felles-react": "npm:^5.0.4"
     "@navikt/aap-felles-utils": "npm:^5.0.4"
     "@navikt/aap-felles-utils-client": "npm:^5.0.4"
-    "@navikt/aap-oppgave-typescript-types": "npm:^0.0.98"
+    "@navikt/aap-oppgave-typescript-types": "npm:^0.0.99"
     "@navikt/aksel-icons": "npm:7.14.2"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
     "@navikt/ds-css": "npm:7.14.2"
@@ -3298,7 +3298,7 @@ __metadata:
     json-diff: "npm:^1.0.6"
     lint-staged: "npm:^15.4.3"
     lodash: "npm:^4.17.21"
-    next: "npm:15.1.7"
+    next: "npm:15.2.0"
     node-loader: "npm:^2.1.0"
     openapi-typescript: "npm:7.6.1"
     pino-pretty: "npm:^13.0.0"
@@ -3313,7 +3313,7 @@ __metadata:
     uuid: "npm:^11.1.0"
     vite-tsconfig-paths: "npm:^5.1.4"
     vitest: "npm:^3.0.7"
-    vitest-fetch-mock: "npm:^0.4.3"
+    vitest-fetch-mock: "npm:^0.4.4"
   languageName: unknown
   linkType: soft
 
@@ -7642,19 +7642,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:15.1.7":
-  version: 15.1.7
-  resolution: "next@npm:15.1.7"
+"next@npm:15.2.0":
+  version: 15.2.0
+  resolution: "next@npm:15.2.0"
   dependencies:
-    "@next/env": "npm:15.1.7"
-    "@next/swc-darwin-arm64": "npm:15.1.7"
-    "@next/swc-darwin-x64": "npm:15.1.7"
-    "@next/swc-linux-arm64-gnu": "npm:15.1.7"
-    "@next/swc-linux-arm64-musl": "npm:15.1.7"
-    "@next/swc-linux-x64-gnu": "npm:15.1.7"
-    "@next/swc-linux-x64-musl": "npm:15.1.7"
-    "@next/swc-win32-arm64-msvc": "npm:15.1.7"
-    "@next/swc-win32-x64-msvc": "npm:15.1.7"
+    "@next/env": "npm:15.2.0"
+    "@next/swc-darwin-arm64": "npm:15.2.0"
+    "@next/swc-darwin-x64": "npm:15.2.0"
+    "@next/swc-linux-arm64-gnu": "npm:15.2.0"
+    "@next/swc-linux-arm64-musl": "npm:15.2.0"
+    "@next/swc-linux-x64-gnu": "npm:15.2.0"
+    "@next/swc-linux-x64-musl": "npm:15.2.0"
+    "@next/swc-win32-arm64-msvc": "npm:15.2.0"
+    "@next/swc-win32-x64-msvc": "npm:15.2.0"
     "@swc/counter": "npm:0.1.3"
     "@swc/helpers": "npm:0.5.15"
     busboy: "npm:1.6.0"
@@ -7699,7 +7699,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 10c0/9d0f26c3742fb4339b931124607f267558357f2a9cd1cde4ea7d5755cea56a2f751b5898e1babd686ae97ee1f6043c94177f1dcc9c69db50b61d27e441970dfe
+  checksum: 10c0/d6c7d88723d65feffc3ca1e65b989000ced2eb0ad83b86b9b383b57a8fa437bf4483893f5efba35c52b7ee8d521b6f75dd594d851be59e2e9edc6aa0d4dcf952
   languageName: node
   linkType: hard
 
@@ -10484,12 +10484,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest-fetch-mock@npm:^0.4.3":
-  version: 0.4.3
-  resolution: "vitest-fetch-mock@npm:0.4.3"
+"vitest-fetch-mock@npm:^0.4.4":
+  version: 0.4.4
+  resolution: "vitest-fetch-mock@npm:0.4.4"
   peerDependencies:
     vitest: ">=2.0.0"
-  checksum: 10c0/ddaf7bc3d5ee0ff9d873af85a3aedee09e896b86ba58d11a65e4544cdd3164616b294a1bd1a409e6fbc5873c67bba92fb5f4b8373dae492b2206ba63132096e0
+  checksum: 10c0/703ca88088ce312ba215744a2288452ae6d1061a76db9ac447b17c4e2398ca7f5df4d945e38ed0b526e868ad12c18859c61b8c19d19b1769ae17dad2a2db83d0
   languageName: node
   linkType: hard
 

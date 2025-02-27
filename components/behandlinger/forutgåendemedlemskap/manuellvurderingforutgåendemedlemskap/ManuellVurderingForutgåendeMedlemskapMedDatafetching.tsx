@@ -13,11 +13,14 @@ export const ManuellVurderingForutgåendeMedlemskapMedDatafetching = async ({
   readOnly,
 }: Props) => {
   const grunnlag = await hentForutgåendeMedlemskapGrunnlag(behandlingsReferanse);
+  console.log('grunnlag');
+  console.log(grunnlag.vurdering);
   return (
     <ManuellVurderingForutgåendeMedlemskap
       behandlingVersjon={behandlingVersjon}
       grunnlag={grunnlag}
       readOnly={readOnly}
+      overstyring={!!grunnlag.vurdering?.overstyrt}
     />
   );
 };
