@@ -1,6 +1,7 @@
 import { Alert, BodyShort, Button } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { revalidateFlyt } from 'lib/actions/actions';
 
 interface Props {
   status?: LøsBehovOgGåTilNesteStegStatus;
@@ -39,7 +40,13 @@ export const ServerSentEventStatusAlert = ({ status }: Props) => {
       {status === 'CLIENT_CONFLICT' && (
         <Alert variant="error">
           <BodyShort spacing>Det ser ut til at noe har endret seg i behandlingen siden du sist oppdaterte.</BodyShort>
-          <Button onClick={() => window && window.location.reload()}>Oppdater siden</Button>
+          <Button
+            onClick={async () => {
+              await revalidateFlyt(behandlingsReferanse);
+            }}
+          >
+            Oppdater siden
+          </Button>
         </Alert>
       )}
       {status === 'CLIENT_ERROR' && (
