@@ -1,13 +1,17 @@
+'use client'
+
 import { Alert, BodyShort, Button } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { revalidateFlyt } from 'lib/actions/actions';
+import {useState} from "react";
 
 interface Props {
   status?: LøsBehovOgGåTilNesteStegStatus;
+  resetStatus?: () => void;
 }
 
-export const ServerSentEventStatusAlert = ({ status }: Props) => {
+export const ServerSentEventStatusAlert = ({ status, resetStatus }: Props) => {
   const { behandlingsReferanse, saksId } = useParams<{ behandlingsReferanse: string; saksId: string }>();
   return (
     <>
@@ -39,13 +43,16 @@ export const ServerSentEventStatusAlert = ({ status }: Props) => {
       )}
       {status === 'CLIENT_CONFLICT' && (
         <Alert variant="error">
-          <BodyShort spacing>Det ser ut til at noe har endret seg i behandlingen siden du sist oppdaterte.</BodyShort>
+          <BodyShort spacing>Det ser ut til at noe har endret seg i behandlingen siden du sist vi sjekket.</BodyShort>
           <Button
+            type={'button'}
             onClick={async () => {
               await revalidateFlyt(behandlingsReferanse);
+              resetStatus && resetStatus();
+
             }}
           >
-            Oppdater siden
+            Oppdater
           </Button>
         </Alert>
       )}

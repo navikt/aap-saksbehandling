@@ -50,7 +50,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
   overstyring,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { isLoading, status, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -117,7 +117,13 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
   const heading = overstyring ? 'Overstyring § 11-2 Forutgående medlemskap' : '§ 11-2 Forutgående medlemskap';
   return (
     <VilkårsKort heading={heading} steg={'VURDER_MEDLEMSKAP'}>
-      <Form steg={'VURDER_MEDLEMSKAP'} onSubmit={handleSubmit} isLoading={isLoading} status={status}>
+      <Form
+        steg={'VURDER_MEDLEMSKAP'}
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        status={status}
+        resetStatus={resetStatus}
+      >
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.harForutgåendeMedlemskap} />
         {harForutgåendeMedlemskap === JaEllerNei.Nei && <FormField form={form} formField={formFields.unntaksvilkår} />}

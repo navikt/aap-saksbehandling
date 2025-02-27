@@ -12,6 +12,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
   steg: StegType
 ): {
   status: LøsBehovOgGåTilNesteStegStatus;
+  resetStatus: () => void;
   isLoading: boolean;
   løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling) => void;
 } => {
@@ -71,5 +72,9 @@ export const useLøsBehovOgGåTilNesteSteg = (
     };
   };
 
-  return { isLoading, status, løsBehovOgGåTilNesteSteg };
+  function resetStatus() {
+    setStatus(undefined);
+  }
+
+  return { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg };
 };

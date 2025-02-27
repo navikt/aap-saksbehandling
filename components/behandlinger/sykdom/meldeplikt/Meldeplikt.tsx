@@ -57,7 +57,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     name: 'fritaksvurderinger',
   });
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status } = useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
   const behandlingsreferanse = useBehandlingsReferanse();
 
   {
@@ -131,6 +131,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       <Form
         onSubmit={handleSubmit}
         status={status}
+        resetStatus={resetStatus}
         isLoading={isLoading}
         steg={'FRITAK_MELDEPLIKT'}
         visBekreftKnapp={!readOnly}

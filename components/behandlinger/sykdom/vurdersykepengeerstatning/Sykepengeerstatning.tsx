@@ -25,7 +25,7 @@ interface FormFields {
 
 export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
+  const { løsBehovOgGåTilNesteSteg, status, resetStatus, isLoading } = useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -84,6 +84,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
       <Form
         onSubmit={handleSubmit}
         status={status}
+        resetStatus={resetStatus}
         isLoading={isLoading}
         steg={'VURDER_SYKEPENGEERSTATNING'}
         visBekreftKnapp={!readOnly}

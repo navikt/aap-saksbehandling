@@ -12,6 +12,7 @@ interface Props {
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
+  resetStatus?: () => void;
   children: ReactNode;
   knappTekst?: string;
   visBekreftKnapp?: boolean;
@@ -21,6 +22,7 @@ export const Form = ({
   steg,
   onSubmit,
   status,
+  resetStatus,
   isLoading,
   children,
   visBekreftKnapp = true,
@@ -29,7 +31,7 @@ export const Form = ({
   return (
     <form className={styles.form} onSubmit={onSubmit} id={steg} autoComplete={'off'}>
       {children}
-      <ServerSentEventStatusAlert status={status} />
+      <ServerSentEventStatusAlert status={status} resetStatus={resetStatus} />
       {visBekreftKnapp && (
         <Button className={styles.button} loading={isLoading}>
           {knappTekst}

@@ -18,13 +18,13 @@ interface Props {
 
 export const ForeslåVedtak = ({ behandlingResultat, behandlingVersjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { status, løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
+  const { status, resetStatus, løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
 
   return (
     <VilkårsKort heading="Foreslå vedtak" steg={'FORESLÅ_VEDTAK'}>
       <div className={styles.foreslåvedtak}>
         <Vilkårsoppsummering behandlingResultat={behandlingResultat} />
-        <ServerSentEventStatusAlert status={status} />
+        <ServerSentEventStatusAlert status={status} resetStatus={resetStatus} />
         <Button
           className={'fit-content'}
           loading={isLoading}

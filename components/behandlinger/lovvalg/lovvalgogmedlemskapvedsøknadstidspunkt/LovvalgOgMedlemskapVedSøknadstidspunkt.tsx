@@ -61,7 +61,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
   overstyring,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { isLoading, status, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
   const { form, formFields } = useConfigForm<FormFields>(
     {
       lovvalgBegrunnelse: {
@@ -140,7 +140,13 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
     : 'Lovvalg og medlemskap ved søknadstidspunkt';
   return (
     <VilkårsKort heading={heading} steg={'VURDER_LOVVALG'}>
-      <Form steg={'VURDER_LOVVALG'} onSubmit={handleSubmit} isLoading={isLoading} status={status}>
+      <Form
+        steg={'VURDER_LOVVALG'}
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        status={status}
+        resetStatus={resetStatus}
+      >
         <FormField form={form} formField={formFields.lovvalgBegrunnelse} />
         <FormField form={form} formField={formFields.lovvalgsLand} />
         {lovvalgsLand === 'Annet land med avtale' && (

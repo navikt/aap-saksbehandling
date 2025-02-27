@@ -31,7 +31,7 @@ interface FormFields {
 
 export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
+  const { løsBehovOgGåTilNesteSteg, status, resetStatus, isLoading } = useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -118,6 +118,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
         onSubmit={handleSubmit}
         isLoading={isLoading}
         status={status}
+        resetStatus={resetStatus}
         visBekreftKnapp={!readOnly}
       >
         <Veiledning header={'Slik vurderes vilkåret for tidspunkt for nedsatt arbeidsevne'} />
