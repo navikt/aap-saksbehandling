@@ -42,7 +42,7 @@ export const ServerSentEventStatusAlert = ({ status, resetStatus }: Props) => {
       )}
       {status === 'CLIENT_CONFLICT' && (
         <Alert variant="error">
-          <BodyShort spacing>Det ser ut til at noe har endret seg i behandlingen siden du sist vi sjekket.</BodyShort>
+          <BodyShort spacing>Det ser ut til at noe har endret seg i behandlingen siden sist vi sjekket.</BodyShort>
           <Button
             type={'button'}
             onClick={async () => {
