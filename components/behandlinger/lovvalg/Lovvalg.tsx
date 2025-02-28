@@ -1,23 +1,17 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import {
   hentAutomatiskLovvalgOgMedlemskapVurdering,
-  hentFlyt
+  hentFlyt,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
-import {
-  LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper
-} from "components/behandlinger/lovvalg/LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringswrapper";
-import {
-  LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching
-} from "components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunktMedDatafetching";
+import { LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringswrapper';
+import { LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunktMedDatafetching';
 interface Props {
   behandlingsReferanse: string;
   sakId: string;
 }
 export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
-  console.log(flyt.flyt.find(e => e.stegGruppe === 'LOVVALG'));
-  console.log(flyt.flyt.find(e => e.stegGruppe === 'LOVVALG')?.steg[0]?.avklaringsbehov);
   const behandlingsVersjon = flyt.behandlingVersjon;
   const stegSomSkalVises = getStegSomSkalVises('LOVVALG', flyt);
   const saksBehandlerReadOnly = flyt.visning.saksbehandlerReadOnly;
@@ -39,11 +33,13 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
         readOnly={saksBehandlerReadOnly}
         visOverstyrKnapp={visOverstyrKnapp}
       >
-        {stegSomSkalVises.includes('VURDER_LOVVALG') && <LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching
-          behandlingsReferanse={behandlingsReferanse}
-          behandlingVersjon={behandlingsVersjon}
-          readOnly={saksBehandlerReadOnly}
-        />}
+        {stegSomSkalVises.includes('VURDER_LOVVALG') && (
+          <LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching
+            behandlingsReferanse={behandlingsReferanse}
+            behandlingVersjon={behandlingsVersjon}
+            readOnly={saksBehandlerReadOnly}
+          />
+        )}
       </LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper>
     </GruppeSteg>
   );
