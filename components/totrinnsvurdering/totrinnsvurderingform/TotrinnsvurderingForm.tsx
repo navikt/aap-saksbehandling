@@ -10,7 +10,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { useConfigForm } from '@navikt/aap-felles-react';
 import { useFieldArray } from 'react-hook-form';
 import { useState } from 'react';
-import {ServerSentEventStatusAlert} from "components/serversenteventstatusalert/ServerSentEventStatusAlert";
+import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -125,7 +125,7 @@ export const TotrinnsvurderingForm = ({
       {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
       {!readOnly && (
         <Button size={'medium'} className={'fit-content'} loading={isLoading}>
-          Send inn
+          Bekreft
         </Button>
       )}
     </form>

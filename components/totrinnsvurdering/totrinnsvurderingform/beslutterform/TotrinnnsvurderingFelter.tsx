@@ -41,13 +41,13 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
       </div>
       <div className={styles.felter}>
         <RadioGroupWrapper
-          label={'Er du enig i vurderingen av vilkåret?'}
+          label={'Godkjenner du vilkårsvurderingen?'}
           control={form.control}
           name={`totrinnsvurderinger.${index}.godkjent`}
           readOnly={readOnly}
         >
-          <Radio value={'true'}>Godkjenn</Radio>
-          <Radio value={'false'}>Send tilbake</Radio>
+          <Radio value={'true'}>Ja</Radio>
+          <Radio value={'false'}>Nei</Radio>
         </RadioGroupWrapper>
 
         {vurderingErIkkeGodkjent && (
