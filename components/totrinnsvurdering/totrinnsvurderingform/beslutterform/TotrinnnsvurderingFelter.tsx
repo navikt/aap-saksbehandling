@@ -21,10 +21,10 @@ interface Props {
 
 export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, form, index, field }: Props) => {
   const grunnOptions: ValuePair<ToTrinnsVurderingGrunn>[] = [
-    { label: 'Mangelfull begrunnelse', value: 'MANGELFULL_BEGRUNNELSE' },
-    { label: 'Manglende utredning', value: 'MANGLENDE_UTREDNING' },
-    { label: 'Feil lovanvendelse', value: 'FEIL_LOVANVENDELSE' },
-    { label: 'Annet', value: 'ANNET' },
+    { label: 'Mangler i utredning før vilkårsvurderingen', value: 'MANGLENDE_UTREDNING' },
+    { label: 'Mangler i vilkårsvurderingen', value: 'MANGELFULL_BEGRUNNELSE' },
+    { label: 'Feil resultat i vedtaket', value: 'FEIL_LOVANVENDELSE' },
+    { label: 'Annen returgrunn', value: 'ANNET' },
   ];
 
   const vurderingErIkkeGodkjent = form.watch(`totrinnsvurderinger.${index}.godkjent`) === 'false';
@@ -53,7 +53,7 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
         {vurderingErIkkeGodkjent && (
           <>
             <TextAreaWrapper
-              label={'Begrunnelse'}
+              label={'Beskriv returårsak'}
               readOnly={readOnly}
               control={form.control}
               name={`totrinnsvurderinger.${index}.begrunnelse`}
@@ -61,7 +61,7 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
               className={'begrunnelse'}
             />
             <CheckboxWrapper
-              label={'Velg grunn'}
+              label={'Returårsak'}
               description={'Du må minst velge èn grunn'}
               readOnly={readOnly}
               control={form.control}
