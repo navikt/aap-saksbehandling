@@ -18,6 +18,7 @@ export const Brev = async ({ behandlingsReferanse }: Props) => {
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.prosessering}
       visning={flyt.visning}
+      aktivGruppe="BREV"
     >
       {/*{stegSomSkalVises.includes('BREV') && (*/}
       <StegSuspense>
