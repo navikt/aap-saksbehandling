@@ -139,7 +139,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
         {fritakMeldepliktVurderinger.map((vurdering, index) => (
           <div className={`${styles.vurdering} flex-column`} key={vurdering.id}>
             <TextAreaWrapper
-              label={'Vurder innbyggers behov for fritak fra meldeplikt'}
+              label={'Vurder brukers behov for fritak fra meldeplikt'}
               control={form.control}
               name={`fritaksvurderinger.${index}.begrunnelse`}
               rules={{ required: 'Du må begrunne vurderingen din' }}
@@ -147,10 +147,10 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
               readOnly={readOnly}
             />
             <RadioGroupWrapper
-              label={'Skal innbygger få fritak fra meldeplikt?'}
+              label={'Skal bruker få fritak fra meldeplikt?'}
               control={form.control}
               name={`fritaksvurderinger.${index}.harFritak`}
-              rules={{ required: 'Du må svare på om innbygger skal få fritak fra meldeplikt' }}
+              rules={{ required: 'Du må svare på om bruker skal få fritak fra meldeplikt' }}
               readOnly={readOnly}
               horisontal
             >

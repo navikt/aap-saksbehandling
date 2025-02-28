@@ -102,7 +102,7 @@ describe('Brukers aktivitetsplikt', () => {
     render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
     expect(
       screen.getByText(
-        `Med gjeldende § 11-7 brudd vil innbygger få stans i ytelsen fra ${formaterDatoForVisning(testgrunnlag.gjeldendeBrudd[0].periode.fom)}`
+        `Med gjeldende § 11-7 brudd vil bruker få stans i ytelsen fra ${formaterDatoForVisning(testgrunnlag.gjeldendeBrudd[0].periode.fom)}`
       )
     ).toBeVisible();
   });

@@ -39,7 +39,7 @@ export const UføreVisning = ({ grunnlag }: Props) => {
       />
 
       <div className={'flex-column'}>
-        <Label size={'medium'}>Innbyggers grunnlag er satt til det gunstigste av følgende:</Label>
+        <Label size={'medium'}>Brukers grunnlag er satt til det gunstigste av følgende:</Label>
         <Table size={'medium'}>
           <Table.Header>
             <Table.Row>

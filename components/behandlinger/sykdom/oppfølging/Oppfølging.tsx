@@ -35,33 +35,33 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om innbygger har behov for oppfølging',
+        label: 'Vurder om bruker har behov for oppfølging',
         description:
           'Beskriv oppfølgingsbehov, behovet for arbeidsrettet oppfølging og vurdering om det er en mulighet for å komme tilbake i arbeid og eventuell annen oppfølging fra nav',
         defaultValue: grunnlag?.vurdering?.begrunnelse,
-        rules: { required: 'Du må gi en begrunnelse om innbygger har behov for oppfølging' },
+        rules: { required: 'Du må gi en begrunnelse om bruker har behov for oppfølging' },
       },
       erBehovForAktivBehandling: {
         type: 'radio',
-        label: 'a: Har innbygger behov for aktiv behandling?',
+        label: 'a: Har bruker behov for aktiv behandling?',
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAktivBehandling),
-        rules: { required: 'Du må svare på om innbygger har behov for aktiv behandling' },
+        rules: { required: 'Du må svare på om bruker har behov for aktiv behandling' },
         options: JaEllerNeiOptions,
       },
       erBehovForArbeidsrettetTiltak: {
         type: 'radio',
-        label: 'b: Har innbygger behov for arbeidsrettet tiltak?',
+        label: 'b: Har bruker behov for arbeidsrettet tiltak?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForArbeidsrettetTiltak),
-        rules: { required: 'Du må svare på om innbygger har behov for arbeidsrettet tiltak' },
+        rules: { required: 'Du må svare på om bruker har behov for arbeidsrettet tiltak' },
       },
       erBehovForAnnenOppfølging: {
         type: 'radio',
         label:
-          'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+          'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAnnenOppfølging),
-        rules: { required: 'Du må svare på om innbygger anses for å ha en viss mulighet til å komme i arbeid' },
+        rules: { required: 'Du må svare på om bruker anses for å ha en viss mulighet til å komme i arbeid' },
       },
     },
     { readOnly: readOnly, shouldUnregister: true }
@@ -107,7 +107,7 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
           tekst={
             <div>
               Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
-              innbygger oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav
+              bruker oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav
               a (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
               vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
               svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}

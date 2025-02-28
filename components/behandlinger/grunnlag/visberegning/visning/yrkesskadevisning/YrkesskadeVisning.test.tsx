@@ -40,14 +40,14 @@ describe('yrkesskade visning', () => {
 
   it('skal ha en tabell som viser en oppsummering og det faktiske grunnlaget', () => {
     render(<YrkesskadeVisning grunnlag={grunnlag} />);
-    const tabellOverskrift = screen.getByText('Innbyggers grunnlag er satt til det gunstigste av følgende:');
+    const tabellOverskrift = screen.getByText('Brukers grunnlag er satt til det gunstigste av følgende:');
     expect(tabellOverskrift).toBeVisible();
   });
 
   it('viser detaljer for beregningen', () => {
     render(<YrkesskadeVisning grunnlag={grunnlag} />);
     expect(
-      screen.getByRole('button', { name: 'Se detaljer om beregningen for innbygger med yrkesskade' })
+      screen.getByRole('button', { name: 'Se detaljer om beregningen for bruker med yrkesskade' })
     ).toBeVisible();
     expect(screen.getByText(/^Der yrkesskade er medvirkende årsak til redusert/));
   });

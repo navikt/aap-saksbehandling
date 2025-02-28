@@ -16,10 +16,10 @@ export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, yrkesevneNedsa
   return (
     <div className={'flex-column'}>
       <Label size={'medium'}>Grunnlagsberegning § 11-19</Label>
-      <Detail>Innbygger fikk arbeidsevnen nedsatt i {yrkesevneNedsattÅr}</Detail>
+      <Detail>Bruker fikk arbeidsevnen nedsatt i {yrkesevneNedsattÅr}</Detail>
       <ReadMore header={'Se detaljer om standard grunnlagsberegning'} size={'small'}>
         Inntekter er hentet fra skatteetaten og a-inntekt. Inntekt i G er justert for G-verdi for relevant år.
-        Grunnlaget for AAP beregnes basert på innbyggers inntekt de siste tre årene før arbeidsevne ble redusert.
+        Grunnlaget for AAP beregnes basert på brukers inntekt de siste tre årene før arbeidsevne ble redusert.
         Beregningen benytter den gunstigste av siste år og gjennomsnitt siste tre år. Maks grunnlag er 6 G.
       </ReadMore>
       <Table size={'medium'}>

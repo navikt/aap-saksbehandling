@@ -20,7 +20,7 @@ describe('FastsettArbeidsevne', () => {
     render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} />);
     expect(
       screen.queryByRole('textbox', {
-        name: 'Vurder om innbygger har arbeidsevne som er utnyttet eller ikke utnyttet',
+        name: 'Vurder om bruker har arbeidsevne som er utnyttet eller ikke utnyttet',
       })
     ).not.toBeInTheDocument();
   });
@@ -34,14 +34,14 @@ describe('FastsettArbeidsevne', () => {
       gjeldendeVedtatteVurderinger: [],
     };
     render(<FastsettArbeidsevne readOnly={true} behandlingVersjon={0} grunnlag={grunnlag} />);
-    expect(screen.getByText('Vurder om innbygger har arbeidsevne som er utnyttet eller ikke utnyttet')).toBeVisible();
+    expect(screen.getByText('Vurder om bruker har arbeidsevne som er utnyttet eller ikke utnyttet')).toBeVisible();
   });
 
-  it('har et felt hvor saksbehandler skal begrunne om innbygger har arbeidsevne', async () => {
+  it('har et felt hvor saksbehandler skal begrunne om bruker har arbeidsevne', async () => {
     render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} />);
     await åpneVilkårskort();
     expect(
-      screen.getByRole('textbox', { name: 'Vurder om innbygger har arbeidsevne som er utnyttet eller ikke utnyttet' })
+      screen.getByRole('textbox', { name: 'Vurder om bruker har arbeidsevne som er utnyttet eller ikke utnyttet' })
     ).toBeVisible();
   });
 
@@ -49,7 +49,7 @@ describe('FastsettArbeidsevne', () => {
     render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} />);
     await åpneVilkårskort();
     expect(
-      screen.getByText('Hvis ikke annet er oppgitt, så antas innbygger å ha 0% arbeidsevne og rett på full ytelse')
+      screen.getByText('Hvis ikke annet er oppgitt, så antas bruker å ha 0% arbeidsevne og rett på full ytelse')
     ).toBeVisible();
   });
 
@@ -83,7 +83,7 @@ describe('FastsettArbeidsevne', () => {
       render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} />);
       await åpneVilkårskort();
       await klikkPåBekreft();
-      expect(screen.getByText('Du må angi hvor stor arbeidsevne innbygger har')).toBeVisible();
+      expect(screen.getByText('Du må angi hvor stor arbeidsevne bruker har')).toBeVisible();
     });
 
     it('viser feilmelding dersom dato når arbeidsevnen gjelder fra ikke er besvart', async () => {
