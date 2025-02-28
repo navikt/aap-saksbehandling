@@ -23,11 +23,12 @@ export function DummyMeldekort({ saksid }: { saksid: string }) {
         type: 'JOURNALPOST',
         verdi: new Date().getTime(),
       },
-      type: 'PLIKTKORT',
+      type: 'MELDEKORT',
       kanal: 'DIGITAL',
       mottattTidspunkt: new Date().toISOString(),
       melding: {
-        meldingType: 'PliktkortV0',
+        meldingType: 'MeldekortV0',
+        harDuArbeidet: true,
         timerArbeidPerPeriode: [
           {
             fraOgMedDato: formaterDato(mndStart),
