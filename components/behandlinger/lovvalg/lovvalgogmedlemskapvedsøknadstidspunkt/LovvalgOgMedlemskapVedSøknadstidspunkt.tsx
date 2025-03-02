@@ -146,6 +146,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
         isLoading={isLoading}
         status={status}
         resetStatus={resetStatus}
+        visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.lovvalgBegrunnelse} />
         <FormField form={form} formField={formFields.lovvalgsLand} />

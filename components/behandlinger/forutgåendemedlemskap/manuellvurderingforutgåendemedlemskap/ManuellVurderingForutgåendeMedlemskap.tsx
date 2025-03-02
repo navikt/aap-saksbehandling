@@ -123,6 +123,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
         isLoading={isLoading}
         status={status}
         resetStatus={resetStatus}
+        visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.harForutgåendeMedlemskap} />
