@@ -48,10 +48,10 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const godkjennValg = screen.getByRole('radio', { name: /godkjenn/i });
+    const godkjennValg = screen.getByRole('radio', { name: /ja/i });
     expect(godkjennValg).toBeVisible();
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     expect(vurderPåNyttValg).toBeVisible();
   });
 
@@ -67,7 +67,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const knapp = screen.getByRole('button', { name: /send inn/i });
+    const knapp = screen.getByRole('button', { name: /bekreft/i });
     expect(knapp).toBeVisible();
   });
 
@@ -83,10 +83,10 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const begrunnelseFelt = await screen.getByRole('textbox', { name: /begrunnelse/i });
+    const begrunnelseFelt = await screen.getByRole('textbox', { name: /beskriv returårsak/i });
     expect(begrunnelseFelt).toBeVisible();
   });
 
@@ -102,14 +102,14 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const mangelfullBegrunnelse = screen.getByRole('checkbox', { name: /mangelfull begrunnelse/i });
-    const manglendeUtredning = screen.getByRole('checkbox', { name: /manglende utredning/i });
-    const feilLovanvendelse = screen.getByRole('checkbox', { name: /feil lovanvendelse/i });
+    const mangelfullBegrunnelse = screen.getByRole('checkbox', { name: /mangler i vilkårsvurderingen/i });
+    const manglendeUtredning = screen.getByRole('checkbox', { name: /mangler i utredning før vilkårsvurderingen/i });
+    const feilLovanvendelse = screen.getByRole('checkbox', { name: /feil resultat i vedtaket/i });
     const annet = screen.getByRole('checkbox', {
-      name: /annet/i,
+      name: /annen returgrunn/i,
     });
 
     expect(mangelfullBegrunnelse).toBeVisible();
@@ -130,10 +130,10 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const grunnerFelt = screen.getByRole('group', { name: /velg grunn/i });
+    const grunnerFelt = screen.getByRole('group', { name: /returårsak/i });
     expect(grunnerFelt).toBeVisible();
   });
 
@@ -149,10 +149,10 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const knapp = screen.getByRole('button', { name: /send inn/i });
+    const knapp = screen.getByRole('button', { name: /bekreft/i });
     await user.click(knapp);
 
     const errorMessage = screen.getByText('Du må gi en begrunnelse');
@@ -171,10 +171,10 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const knapp = screen.getByRole('button', { name: /send inn/i });
+    const knapp = screen.getByRole('button', { name: /bekreft/i });
     await user.click(knapp);
 
     const errorMessage = await screen.getByText('Du må oppgi en grunn');
@@ -193,16 +193,16 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const fritekstFelt = await screen.queryByRole('textbox', { name: /beskriv returårsak/i });
+    const fritekstFelt = await screen.queryByRole('textbox', { name: /beskriv annen returårsak/i });
     expect(fritekstFelt).not.toBeInTheDocument();
 
-    const annetValg = screen.getByRole('checkbox', { name: /annet/i });
+    const annetValg = screen.getByRole('checkbox', { name: /annen returgrunn/i });
     await user.click(annetValg);
 
-    const fritekstFeltEtterAnnetErValgt = screen.getByRole('textbox', { name: /beskriv returårsak/i });
+    const fritekstFeltEtterAnnetErValgt = screen.getByRole('textbox', { name: /beskriv annen returårsak/i });
     expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
   });
 
@@ -218,19 +218,19 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /send tilbake/i });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const fritekstFelt = await screen.queryByRole('textbox', { name: /beskriv returårsak/i });
+    const fritekstFelt = await screen.queryByRole('textbox', { name: /beskriv annen returårsak/i });
     expect(fritekstFelt).not.toBeInTheDocument();
 
-    const annetValg = screen.getByRole('checkbox', { name: /annet/i });
+    const annetValg = screen.getByRole('checkbox', { name: /annen returgrunn/i });
     await user.click(annetValg);
 
-    const fritekstFeltEtterAnnetErValgt = await screen.queryByRole('textbox', { name: /beskriv returårsak/i });
+    const fritekstFeltEtterAnnetErValgt = await screen.queryByRole('textbox', { name: /beskriv annen returårsak/i });
     expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
 
-    const knapp = screen.getByRole('button', { name: /send inn/i });
+    const knapp = screen.getByRole('button', { name: /bekreft/i });
     await user.click(knapp);
 
     const errorMessage = await screen.getByText('Du må skrive en grunn');
@@ -249,12 +249,12 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: 'Send tilbake' });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const begrunnelse = screen.getByRole('textbox', { name: 'Begrunnelse' });
+    const begrunnelse = screen.getByRole('textbox', { name: 'Beskriv returårsak' });
     await user.type(begrunnelse, 'En grunn');
-    const mangelfullBegrunnelse = screen.getByRole('checkbox', { name: 'Mangelfull begrunnelse' });
+    const mangelfullBegrunnelse = screen.getByRole('checkbox', { name: 'Mangler i vilkårsvurderingen' });
 
     // Feilen kommer dersom man velger en grunn, for så å fjerne avkryssningen igjen
     await user.click(mangelfullBegrunnelse);
@@ -262,7 +262,7 @@ describe('totrinnsvurderingform', () => {
     await user.click(mangelfullBegrunnelse);
     expect(mangelfullBegrunnelse).not.toBeChecked();
 
-    await user.click(screen.getByRole('button', { name: 'Send inn' }));
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
     expect(screen.getByText('Du må oppgi en grunn')).toBeVisible();
   });
 
@@ -278,7 +278,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const sendInnButton = screen.getByRole('button', { name: /send inn/i });
+    const sendInnButton = screen.getByRole('button', { name: /bekreft/i });
     expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
 
     await user.click(sendInnButton);

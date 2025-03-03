@@ -77,7 +77,7 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
 
             {annetGrunnErValgt && (
               <TextFieldWrapper
-                label={'Beskriv returårsak'}
+                label={'Beskriv annen returårsak'}
                 readOnly={readOnly}
                 control={form.control}
                 name={`totrinnsvurderinger.${index}.årsakFritekst`}
