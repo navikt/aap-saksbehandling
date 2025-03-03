@@ -3,15 +3,17 @@ import styles from './Behandlingsinfo.module.css';
 import { DetaljertBehandling } from 'lib/types/types';
 import { storForbokstav } from 'lib/utils/string';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { BrukerInformasjon } from '@navikt/aap-felles-utils';
 
 interface Props {
   behandling: DetaljertBehandling;
   saksnummer: string;
+  brukerInformasjon: BrukerInformasjon;
   oppgaveReservertAv?: string | null;
   påVent?: boolean;
 }
 
-export const Behandlingsinfo = ({ behandling, saksnummer, oppgaveReservertAv, påVent }: Props) => {
+export const Behandlingsinfo = ({ behandling, saksnummer, oppgaveReservertAv, påVent, brukerInformasjon }: Props) => {
   const status = () => {
     if (oppgaveReservertAv) {
       return `Reservert ${oppgaveReservertAv}`;
@@ -20,9 +22,12 @@ export const Behandlingsinfo = ({ behandling, saksnummer, oppgaveReservertAv, p�
     }
     return 'Åpen';
   };
+
+  const erReservertAvInnloggetBruker = brukerInformasjon.NAVident === oppgaveReservertAv;
+
   return (
     <div
-      className={`${styles.container} ${oppgaveReservertAv ? styles.reservert : ''} ${påVent === true ? styles.venter : ''}`}
+      className={`${styles.container} ${oppgaveReservertAv && !erReservertAvInnloggetBruker ? styles.reservert : ''} ${påVent === true ? styles.venter : ''}`}
     >
       <div className={styles.behandlingstype}>
         <Label as="p" size="medium" spacing>

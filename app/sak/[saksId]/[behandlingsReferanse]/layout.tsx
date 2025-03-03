@@ -19,7 +19,7 @@ import { StegGruppe } from 'lib/types/types';
 import { SaksbehandlingsoversiktMedDataFetching } from 'components/saksbehandlingsoversikt/SaksbehandlingsoversiktMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
-import { logWarning } from '@navikt/aap-felles-utils';
+import { hentBrukerInformasjon, logWarning } from '@navikt/aap-felles-utils';
 
 interface Props {
   children: ReactNode;
@@ -48,6 +48,7 @@ const Layout = async (props: Props) => {
   }
 
   const personInfo = await hentSakPersoninfo(params.saksId);
+  const brukerInformasjon = await hentBrukerInformasjon();
   const sak = await hentSak(params.saksId);
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
   let oppgave;
@@ -82,6 +83,7 @@ const Layout = async (props: Props) => {
             saksnummer={params.saksId}
             oppgaveReservertAv={oppgave?.reservertAv}
             påVent={flytResponse.visning.visVentekort}
+            brukerInformasjon={brukerInformasjon}
           />
           <SaksbehandlingsoversiktMedDataFetching />
           <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
