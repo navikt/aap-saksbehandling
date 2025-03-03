@@ -444,7 +444,11 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
       })
     );
     await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?' }));
+    await velgJaIGruppe(
+      screen.getByRole('group', {
+        name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
+      })
+    );
 
     const felt = screen.getByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' });
     expect(felt).toBeVisible();
@@ -468,7 +472,11 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
       })
     );
     await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?' }));
+    await velgJaIGruppe(
+      screen.getByRole('group', {
+        name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
+      })
+    );
 
     await velgBekreft();
 
@@ -905,7 +913,11 @@ describe('revurdering av førstegangsbehandling', () => {
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgAtBrukerHarNedsattArbeidsevne();
     await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?' }));
+    await velgJaIGruppe(
+      screen.getByRole('group', {
+        name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
+      })
+    );
     expect(screen.getByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' })).toBeVisible();
   });
 
@@ -945,9 +957,6 @@ const velgAtBrukerHarSykdomSkadeLyte = async () => {
 
 const velgAtBrukerHarNedsattArbeidsevne = async () =>
   await velgJaIGruppe(screen.getByRole('group', { name: 'Har bruker nedsatt arbeidsevne?' }));
-
-const velgAtDenNedsatteArbeidsevnenErAvEnVissVarighet = async () =>
-  velgJaIGruppe(screen.getByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' }));
 
 const velgAtArbeidsevnenErNedsattMedMinstFørtiProsent = async () =>
   await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40%?' }));
