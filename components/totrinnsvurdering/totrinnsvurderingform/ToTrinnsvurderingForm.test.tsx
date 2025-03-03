@@ -196,13 +196,13 @@ describe('totrinnsvurderingform', () => {
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const fritekstFelt = await screen.queryByRole('textbox', { name: /beskriv annen returårsak/i });
+    const fritekstFelt = await screen.queryByRole('textbox', { name: /annen returgrunn/i });
     expect(fritekstFelt).not.toBeInTheDocument();
 
     const annetValg = screen.getByRole('checkbox', { name: /annen returgrunn/i });
     await user.click(annetValg);
 
-    const fritekstFeltEtterAnnetErValgt = screen.getByRole('textbox', { name: /beskriv annen returårsak/i });
+    const fritekstFeltEtterAnnetErValgt = screen.getByRole('textbox', { name: /annen returgrunn/i });
     expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
   });
 
@@ -221,13 +221,13 @@ describe('totrinnsvurderingform', () => {
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const fritekstFelt = await screen.queryByRole('textbox', { name: /beskriv annen returårsak/i });
+    const fritekstFelt = await screen.queryByRole('textbox', { name: /annen returgrunn/i });
     expect(fritekstFelt).not.toBeInTheDocument();
 
     const annetValg = screen.getByRole('checkbox', { name: /annen returgrunn/i });
     await user.click(annetValg);
 
-    const fritekstFeltEtterAnnetErValgt = await screen.queryByRole('textbox', { name: /beskriv annen returårsak/i });
+    const fritekstFeltEtterAnnetErValgt = await screen.queryByRole('textbox', { name: /annen returgrunn/i });
     expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
 
     const knapp = screen.getByRole('button', { name: /bekreft/i });
