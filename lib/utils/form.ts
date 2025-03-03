@@ -66,11 +66,11 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5017':
       return 'Lovvalg og medlemskap ved søknadstidspunkt';
     case '5020':
-      return 'Forutgående medlemskap';
+      return '§ 11-2 Forutgående medlemskap';
     case '5021':
       return 'Overstyr lovvalg';
     case '5022':
-      return 'Overstyr forutgående medlemskap';
+      return 'Overstyr § 11-2 forutgående medlemskap';
     case '5050':
       return 'Skriv brev';
   }
