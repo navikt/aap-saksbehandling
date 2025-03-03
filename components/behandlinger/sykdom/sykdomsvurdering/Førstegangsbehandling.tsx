@@ -25,13 +25,8 @@ export const Førstegangsbehandling = ({ form, formFields, skalVurdereYrkesskade
           Bruker vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
         </Alert>
       )}
-      {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
-        <>
-          <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneAvEnVissVarighet} horizontalRadio />
-        </>
-      )}
 
-      {form.watch('erNedsettelseIArbeidsevneAvEnVissVarighet') === JaEllerNei.Ja && (
+      {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
         <>
           <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneMerEnnHalvparten} horizontalRadio />
         </>
@@ -53,6 +48,11 @@ export const Førstegangsbehandling = ({ form, formFields, skalVurdereYrkesskade
           form.watch('erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense') === JaEllerNei.Ja &&
           skalVurdereYrkesskade)) && (
         <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} horizontalRadio />
+      )}
+      {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja && (
+        <>
+          <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneAvEnVissVarighet} horizontalRadio />
+        </>
       )}
     </>
   );
