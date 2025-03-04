@@ -4,7 +4,7 @@ import { PersonGroupIcon } from '@navikt/aksel-icons';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
-import { BistandsGrunnlag } from 'lib/types/types';
+import { BistandsGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -15,6 +15,7 @@ import { Link } from '@navikt/ds-react';
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
+  typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
 }
 
@@ -27,7 +28,8 @@ interface FormFields {
 
 export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } =
+    useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
   const { formFields, form } = useConfigForm<FormFields>(
     {

@@ -1,5 +1,4 @@
-import { TypeBehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
-import { SykdomsGrunnlag } from 'lib/types/types';
+import { SykdomsGrunnlag, TypeBehandling } from 'lib/types/types';
 
 export function finnDiagnosegrunnlag(typeBehandling: TypeBehandling, grunnlag: SykdomsGrunnlag) {
   if (typeBehandling === 'Revurdering' && !grunnlag.sykdomsvurderinger.at(0)?.kodeverk) {
