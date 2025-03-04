@@ -83,7 +83,7 @@
     "typescript": "^5.8.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.7",
-    "vitest-fetch-mock": "^0.4.4"
+    "vitest-fetch-mock": "^0.4.5"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --cache --fix",

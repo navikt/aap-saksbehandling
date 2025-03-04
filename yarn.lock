@@ -3313,7 +3313,7 @@ __metadata:
     uuid: "npm:^11.1.0"
     vite-tsconfig-paths: "npm:^5.1.4"
     vitest: "npm:^3.0.7"
-    vitest-fetch-mock: "npm:^0.4.4"
+    vitest-fetch-mock: "npm:^0.4.5"
   languageName: unknown
   linkType: soft
 
@@ -10484,12 +10484,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest-fetch-mock@npm:^0.4.4":
-  version: 0.4.4
-  resolution: "vitest-fetch-mock@npm:0.4.4"
+"vitest-fetch-mock@npm:^0.4.5":
+  version: 0.4.5
+  resolution: "vitest-fetch-mock@npm:0.4.5"
   peerDependencies:
     vitest: ">=2.0.0"
-  checksum: 10c0/703ca88088ce312ba215744a2288452ae6d1061a76db9ac447b17c4e2398ca7f5df4d945e38ed0b526e868ad12c18859c61b8c19d19b1769ae17dad2a2db83d0
+  checksum: 10c0/c877ae9e1769481dd0c955ce311651030b6eee0bb1d8f9c9388f33a0d8f7f2b6e451268e0ed171d5a26b4390dd887656caa366d2152b1d552bc09b27c2dd8792
   languageName: node
   linkType: hard
 
