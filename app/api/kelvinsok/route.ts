@@ -48,7 +48,7 @@ export async function POST(req: Request) {
   const data = {
     oppgaver: oppgaveData,
     saker: sakData?.map((sak) => ({
-      href: `${process.env.NEXT_PUBLIC_SAKSBEHANDLING_URL}/sak/${sak.saksnummer}`,
+      href: `/saksbehandling/sak/${sak.saksnummer}`,
       label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer})`,
     })),
   };
@@ -59,11 +59,11 @@ export async function POST(req: Request) {
 }
 function buildSaksbehandlingsURL(oppgave: unknown): string {
   // @ts-ignore
-  return `${process.env.NEXT_PUBLIC_SAKSBEHANDLING_URL}/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
+  return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
 }
 function buildPostmottakURL(oppgave: unknown): string {
   // @ts-ignore
-  return `${process.env.NEXT_PUBLIC_POSTMOTTAK_URL}/postmottak/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
+  return `/postmottak/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
 }
 export function byggKelvinURL(oppgave: unknown): string {
   // @ts-ignore
