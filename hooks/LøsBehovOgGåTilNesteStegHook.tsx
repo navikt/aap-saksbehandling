@@ -6,7 +6,6 @@ import {
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { clientLøsBehov } from 'lib/clientApi';
-import { revalidateFlyt } from 'lib/actions/actions';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | 'CLIENT_ERROR' | 'CLIENT_CONFLICT' | undefined;
 export const useLøsBehovOgGåTilNesteSteg = (
@@ -54,12 +53,14 @@ export const useLøsBehovOgGåTilNesteSteg = (
           );
         }
 
-        if (eventData.skalBytteSteg) {
-          router.refresh();
-        } else {
-          await revalidateFlyt(params.behandlingsReferanse);
-        }
+        // TODO Teste ut denne mer
+        // if (eventData.skalBytteSteg) {
+        //   router.refresh();
+        // } else {
+        //   await revalidateFlyt(params.behandlingsReferanse);
+        // }
 
+        router.refresh();
         setIsLoading(false);
       }
       if (eventData.status === 'ERROR') {
