@@ -6,6 +6,7 @@ import {
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { clientLøsBehov } from 'lib/clientApi';
+import { revalidateFlyt } from 'lib/actions/actions';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | 'CLIENT_ERROR' | 'CLIENT_CONFLICT' | undefined;
 export const useLøsBehovOgGåTilNesteSteg = (
@@ -52,7 +53,13 @@ export const useLøsBehovOgGåTilNesteSteg = (
             `/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}/#${eventData.aktivtSteg}`
           );
         }
-        router.refresh();
+
+        if (eventData.skalBytteSteg) {
+          router.refresh();
+        } else {
+          await revalidateFlyt(params.behandlingsReferanse);
+        }
+
         setIsLoading(false);
       }
       if (eventData.status === 'ERROR') {
