@@ -10,7 +10,6 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { isBefore, parse } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
-import { Veiledning } from 'components/veiledning/Veiledning';
 import styles from './FastsettBeregning.module.css';
 import { Heading } from '@navikt/ds-react';
 import { CalendarIcon } from '@navikt/aksel-icons';
@@ -31,13 +30,14 @@ interface FormFields {
 
 export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, status, resetStatus, isLoading } = useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
+  const { løsBehovOgGåTilNesteSteg, status, resetStatus, isLoading } =
+    useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
       nedsattArbeidsevneDatobegrunnelse: {
         type: 'textarea',
-        label: 'Vurder når bruker fikk nedsatt arbeidsevne',
+        label: 'Vilkårsvurdering',
         defaultValue: getStringEllerUndefined(grunnlag?.vurdering?.begrunnelse),
         rules: { required: 'Du må skrive en begrunnelse for når bruker fikk nedsatt arbeidsevne' },
       },
@@ -108,8 +108,8 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
   };
 
   const heading = grunnlag?.skalVurdereYtterligere
-    ? 'Beregningstidspunkt nedsatt arbeidsevne og ytterligere nedsatt arbeidsevne § 11-5'
-    : 'Beregningstidspunkt nedsatt arbeidsevne § 11-5';
+    ? '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5 og § 11-28'
+    : '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5';
 
   return (
     <VilkårsKort heading={heading} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'} icon={<CalendarIcon aria-hidden />}>
@@ -121,14 +121,12 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
         resetStatus={resetStatus}
         visBekreftKnapp={!readOnly}
       >
-        <Veiledning header={'Slik vurderes vilkåret for tidspunkt for nedsatt arbeidsevne'} />
         <FormField form={form} formField={formFields.nedsattArbeidsevneDatobegrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
 
         {grunnlag?.skalVurdereYtterligere && (
           <div className={styles.ytterligerenedsattfelter}>
             <Heading size={'small'}>Tidspunkt arbeidsevne ble ytterligere nedsatt § 11-28</Heading>
-            <Veiledning header={'Slik vurderes vilkåret for tidspunkt for ytterligere nedsatt arbeidsevne'} />
             <FormField
               form={form}
               formField={formFields.ytterligereNedsattArbeidsevneDatobegrunnelse}

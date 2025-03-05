@@ -19,22 +19,14 @@ describe('Generelt', () => {
         grunnlag={{ ...grunnlag, skalVurdereYtterligere: false }}
       />
     );
-    const heading = screen.getByText('Beregningstidspunkt nedsatt arbeidsevne § 11-5');
+    const heading = screen.getByText('§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5');
     expect(heading).toBeVisible();
   });
 
   it('skal ha korrekt heading for vilkårskortet dersom det skal vurderes ytterligere nedsatt arbeidsevne', () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
-    const heading = screen.getByText(
-      'Beregningstidspunkt nedsatt arbeidsevne og ytterligere nedsatt arbeidsevne § 11-5'
-    );
+    const heading = screen.getByText('§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5 og § 11-28');
     expect(heading).toBeVisible();
-  });
-
-  it('Skal ha veiledningstekst for hvordan vilkåret vurderes for nedsatt arbeidsevne', () => {
-    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
-    const veiledning = screen.getByText('Slik vurderes vilkåret for tidspunkt for nedsatt arbeidsevne');
-    expect(veiledning).toBeVisible();
   });
 
   it('skal ha en overskrift for ytterlige nedsatt arbeidsevne', () => {
@@ -42,18 +34,12 @@ describe('Generelt', () => {
     const heading = screen.getByText('Tidspunkt arbeidsevne ble ytterligere nedsatt § 11-28');
     expect(heading).toBeVisible();
   });
-
-  it('Skal ha veiledningstekst for hvordan vilkåret vurderes for ytterligere nedsatt arbeidsevne', () => {
-    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
-    const veiledning = screen.getByText('Slik vurderes vilkåret for tidspunkt for ytterligere nedsatt arbeidsevne');
-    expect(veiledning).toBeVisible();
-  });
 });
 
 describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
   it('skal være synlig', () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
-    const felt = screen.getByRole('textbox', { name: 'Vurder når bruker fikk nedsatt arbeidsevne' });
+    const felt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(felt).toBeVisible();
   });
 
