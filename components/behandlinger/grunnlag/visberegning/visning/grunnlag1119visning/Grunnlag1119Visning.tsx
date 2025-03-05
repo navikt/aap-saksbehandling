@@ -27,7 +27,7 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
         yrkesevneNedsattÅr={grunnlag.nedsattArbeidsevneÅr}
       />
       <div className={'flex-column'}>
-        <Label size={'medium'}>Innbyggers grunnlag er satt til det gunstigste av følgende:</Label>
+        <Label size={'medium'}>Brukers grunnlag er satt til det gunstigste av følgende:</Label>
         <Table size={'medium'}>
           <Table.Header>
             <Table.Row>

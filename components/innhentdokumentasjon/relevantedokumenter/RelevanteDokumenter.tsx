@@ -66,7 +66,7 @@ export const RelevanteDokumenter = () => {
             Følgende helseopplysninger kan være relevant for saken
           </Heading>
           <BodyShort className={styles.beskrivelse}>
-            NAV har tidligere mottatt følgende helseopplysninger som kan være relevant for innbyggers AAP sak. Velg
+            NAV har tidligere mottatt følgende helseopplysninger som kan være relevant for brukers AAP sak. Velg
             dokumenter som er aktuelle for å koble de til saken.
           </BodyShort>
         </div>

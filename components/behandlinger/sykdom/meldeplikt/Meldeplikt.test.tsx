@@ -15,7 +15,7 @@ describe('Meldeplikt', () => {
   it('er lukket initielt', () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
     expect(
-      screen.queryByRole('textbox', { name: 'Vurder innbyggers behov for fritak fra meldeplikt' })
+      screen.queryByRole('textbox', { name: 'Vurder brukers behov for fritak fra meldeplikt' })
     ).not.toBeInTheDocument();
   });
 
@@ -33,32 +33,32 @@ describe('Meldeplikt', () => {
       historikk: [],
     };
     render(<Meldeplikt behandlingVersjon={0} readOnly={true} grunnlag={meldepliktGrunnlag} />);
-    expect(screen.queryByRole('textbox', { name: 'Vurder innbyggers behov for fritak fra meldeplikt' })).toBeVisible();
+    expect(screen.queryByRole('textbox', { name: 'Vurder brukers behov for fritak fra meldeplikt' })).toBeVisible();
   });
 
   it('har et felt for begrunnelse', async () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
     await åpneVilkårskort();
-    expect(screen.getByRole('textbox', { name: 'Vurder innbyggers behov for fritak fra meldeplikt' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Vurder brukers behov for fritak fra meldeplikt' })).toBeVisible();
   });
 
   it('har valg for å avgjøre om bruker skal få fritak fra meldeplikt eller ikke', async () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
     await åpneVilkårskort();
-    expect(screen.getByRole('group', { name: 'Skal innbygger få fritak fra meldeplikt?' })).toBeVisible();
+    expect(screen.getByRole('group', { name: 'Skal bruker få fritak fra meldeplikt?' })).toBeVisible();
   });
 
   it('har et valg for å si at bruker skal få fritak fra meldeplikt', async () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
     await åpneVilkårskort();
-    const fritakGruppe = screen.getByRole('group', { name: 'Skal innbygger få fritak fra meldeplikt?' });
+    const fritakGruppe = screen.getByRole('group', { name: 'Skal bruker få fritak fra meldeplikt?' });
     expect(within(fritakGruppe).getByRole('radio', { name: 'Ja' })).toBeVisible();
   });
 
   it('har et valg for å si at bruker ikke skal ha fritak fra meldeplikt', async () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
     await åpneVilkårskort();
-    const fritakGruppe = screen.getByRole('group', { name: 'Skal innbygger få fritak fra meldeplikt?' });
+    const fritakGruppe = screen.getByRole('group', { name: 'Skal bruker få fritak fra meldeplikt?' });
     expect(within(fritakGruppe).getByRole('radio', { name: 'Nei' })).toBeVisible();
   });
 

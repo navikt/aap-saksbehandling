@@ -117,8 +117,8 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
         {arbeidsevneVurderinger.map((vurdering, index) => (
           <div key={vurdering.id} className={`${styles.vurdering} flex-column`}>
             <TextAreaWrapper
-              label={'Vurder om innbygger har arbeidsevne som er utnyttet eller ikke utnyttet'}
-              description={'Hvis ikke annet er oppgitt, så antas innbygger å ha 0% arbeidsevne og rett på full ytelse'}
+              label={'Vurder om bruker har arbeidsevne som er utnyttet eller ikke utnyttet'}
+              description={'Hvis ikke annet er oppgitt, så antas bruker å ha 0% arbeidsevne og rett på full ytelse'}
               control={form.control}
               name={`arbeidsevnevurderinger.${index}.begrunnelse`}
               rules={{ required: 'Du må begrunne vurderingen din' }}
@@ -133,7 +133,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
                   type={'text'}
                   label={'Oppgi den etablerte arbeidsevnen eller den uutnyttede arbeidsevnen i prosent'}
                   rules={{
-                    required: 'Du må angi hvor stor arbeidsevne innbygger har',
+                    required: 'Du må angi hvor stor arbeidsevne bruker har',
                     validate: (value) => {
                       const valueAsNumber = Number(value);
                       if (isNaN(valueAsNumber)) {

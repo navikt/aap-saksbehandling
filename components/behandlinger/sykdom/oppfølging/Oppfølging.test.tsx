@@ -14,7 +14,7 @@ describe('Oppfølging', () => {
 
   it('Skal ha felt for begrunnelse', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
-    const begrunnelse = screen.getByRole('textbox', { name: 'Vurder om innbygger har behov for oppfølging' });
+    const begrunnelse = screen.getByRole('textbox', { name: 'Vurder om bruker har behov for oppfølging' });
     expect(begrunnelse).toBeVisible();
   });
 
@@ -26,30 +26,30 @@ describe('Oppfølging', () => {
     expect(beskrivelse).toBeVisible();
   });
 
-  it('Skal ha felt for om innbygger har behov for aktiv behandling', () => {
+  it('Skal ha felt for om bruker har behov for aktiv behandling', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
     const felt = screen.getByRole('group', {
-      name: 'a: Har innbygger behov for aktiv behandling?',
+      name: 'a: Har bruker behov for aktiv behandling?',
     });
     expect(felt).toBeVisible();
   });
 
-  it('Skal ha felt for om innbygger har behov for arbeidsrettet tiltak', () => {
+  it('Skal ha felt for om bruker har behov for arbeidsrettet tiltak', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
-    const felt = screen.getByRole('group', { name: 'b: Har innbygger behov for arbeidsrettet tiltak?' });
+    const felt = screen.getByRole('group', { name: 'b: Har bruker behov for arbeidsrettet tiltak?' });
     expect(felt).toBeVisible();
   });
 
-  it('har felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid', async () => {
+  it('har felt for om bruker anses for å ha en viss mulighet til å komme i arbeid', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
     expect(
       screen.queryByRole('group', {
-        name: 'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+        name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
       })
     ).toBeVisible();
   });
 
-  it('skjuler felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid dersom a er besvart med ja', async () => {
+  it('skjuler felt for om bruker anses for å ha en viss mulighet til å komme i arbeid dersom a er besvart med ja', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
 
     expect(finnGruppeForBokstavC()).toBeVisible();
@@ -58,7 +58,7 @@ describe('Oppfølging', () => {
     expect(finnGruppeForBokstavC()).not.toBeInTheDocument();
   });
 
-  it('skjuler felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid dersom b er besvart med nei', async () => {
+  it('skjuler felt for om bruker anses for å ha en viss mulighet til å komme i arbeid dersom b er besvart med nei', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
 
     expect(finnGruppeForBokstavC()).toBeVisible();
@@ -67,7 +67,7 @@ describe('Oppfølging', () => {
     expect(finnGruppeForBokstavC()).not.toBeInTheDocument();
   });
 
-  it('skjuler felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid dersom både a og b er besvart med ja', async () => {
+  it('skjuler felt for om bruker anses for å ha en viss mulighet til å komme i arbeid dersom både a og b er besvart med ja', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
 
     expect(finnGruppeForBokstavC()).toBeVisible();
@@ -78,7 +78,7 @@ describe('Oppfølging', () => {
     expect(finnGruppeForBokstavC()).not.toBeInTheDocument();
   });
 
-  it('viser felt for om innbygger anses for å ha en viss mulighet til å komme i arbeid dersom a og b er besvart med nei', async () => {
+  it('viser felt for om bruker anses for å ha en viss mulighet til å komme i arbeid dersom a og b er besvart med nei', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
     await velgNei(finnGruppeForBokstavA());
     await velgNei(finnGruppeForBokstavB());
@@ -90,64 +90,64 @@ describe('Oppfølging', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
 
     await trykkPåBekreft();
-    const feilmelding = screen.getByText('Du må gi en begrunnelse om innbygger har behov for oppfølging');
+    const feilmelding = screen.getByText('Du må gi en begrunnelse om bruker har behov for oppfølging');
     expect(feilmelding).toBeVisible();
   });
 
-  it('Skal vise feilmelding dersom feltet om innbygger har behov for aktiv behandling ikke er besvart', async () => {
+  it('Skal vise feilmelding dersom feltet om bruker har behov for aktiv behandling ikke er besvart', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
 
     await trykkPåBekreft();
-    const feilmelding = screen.getByText('Du må svare på om innbygger har behov for aktiv behandling');
+    const feilmelding = screen.getByText('Du må svare på om bruker har behov for aktiv behandling');
     expect(feilmelding).toBeVisible();
   });
 
-  it('Skal vise feilmelding dersom feltet om innbygger har behov for arbeidsrettet tiltak ikke er besvart', async () => {
+  it('Skal vise feilmelding dersom feltet om bruker har behov for arbeidsrettet tiltak ikke er besvart', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
 
     await trykkPåBekreft();
 
-    const feilmelding = screen.getByText('Du må svare på om innbygger har behov for arbeidsrettet tiltak');
+    const feilmelding = screen.getByText('Du må svare på om bruker har behov for arbeidsrettet tiltak');
     expect(feilmelding).toBeVisible();
   });
 
-  it('Skal vise feilmelding dersom feltet om innbygger anses for å ha en viss mulighet for å komme i arbeid ikke er besvart', async () => {
+  it('Skal vise feilmelding dersom feltet om bruker anses for å ha en viss mulighet for å komme i arbeid ikke er besvart', async () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
 
     const harInnbyggetBehovForAktivBehandling = screen.getByRole('group', {
-      name: 'a: Har innbygger behov for aktiv behandling?',
+      name: 'a: Har bruker behov for aktiv behandling?',
     });
 
-    const neiFeltHarInnbyggerBehovForAktivBehandling = within(harInnbyggetBehovForAktivBehandling).getByRole('radio', {
+    const neiFeltHarBrukerBehovForAktivBehandling = within(harInnbyggetBehovForAktivBehandling).getByRole('radio', {
       name: 'Nei',
     });
 
-    await user.click(neiFeltHarInnbyggerBehovForAktivBehandling);
+    await user.click(neiFeltHarBrukerBehovForAktivBehandling);
 
-    const harInnbyggerBehovForArbeidsrettetTiltakFelt = screen.getByRole('group', {
-      name: 'b: Har innbygger behov for arbeidsrettet tiltak?',
+    const harBrukerBehovForArbeidsrettetTiltakFelt = screen.getByRole('group', {
+      name: 'b: Har bruker behov for arbeidsrettet tiltak?',
     });
-    const neiHarInnbyggerBehovForArbeidsrettetTiltakFelt = within(
-      harInnbyggerBehovForArbeidsrettetTiltakFelt
+    const neiHarBrukerBehovForArbeidsrettetTiltakFelt = within(
+      harBrukerBehovForArbeidsrettetTiltakFelt
     ).getByRole('radio', { name: 'Nei' });
 
-    await user.click(neiHarInnbyggerBehovForArbeidsrettetTiltakFelt);
+    await user.click(neiHarBrukerBehovForArbeidsrettetTiltakFelt);
 
     await trykkPåBekreft();
     const feilmelding = screen.getByText(
-      'Du må svare på om innbygger anses for å ha en viss mulighet til å komme i arbeid'
+      'Du må svare på om bruker anses for å ha en viss mulighet til å komme i arbeid'
     );
     expect(feilmelding).toBeVisible();
   });
 });
 
 const trykkPåBekreft = async () => await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-const finnGruppeForBokstavA = () => screen.getByRole('group', { name: 'a: Har innbygger behov for aktiv behandling?' });
+const finnGruppeForBokstavA = () => screen.getByRole('group', { name: 'a: Har bruker behov for aktiv behandling?' });
 const finnGruppeForBokstavB = () =>
-  screen.getByRole('group', { name: 'b: Har innbygger behov for arbeidsrettet tiltak?' });
+  screen.getByRole('group', { name: 'b: Har bruker behov for arbeidsrettet tiltak?' });
 const finnGruppeForBokstavC = () =>
   screen.queryByRole('group', {
-    name: 'c: Kan innbygger anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+    name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
   });
 
 const velgJa = async (group: HTMLElement) => {

@@ -37,9 +37,9 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
     {
       nedsattArbeidsevneDatobegrunnelse: {
         type: 'textarea',
-        label: 'Vurder når innbygger fikk nedsatt arbeidsevne',
+        label: 'Vurder når bruker fikk nedsatt arbeidsevne',
         defaultValue: getStringEllerUndefined(grunnlag?.vurdering?.begrunnelse),
-        rules: { required: 'Du må skrive en begrunnelse for når innbygger fikk nedsatt arbeidsevne' },
+        rules: { required: 'Du må skrive en begrunnelse for når bruker fikk nedsatt arbeidsevne' },
       },
       nedsattArbeidsevneDato: {
         type: 'date_input',
@@ -58,9 +58,9 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
       },
       ytterligereNedsattArbeidsevneDatobegrunnelse: {
         type: 'textarea',
-        label: 'Vurder når innbygger fikk ytterligere nedsatt arbeidsevne',
+        label: 'Vurder når bruker fikk ytterligere nedsatt arbeidsevne',
         defaultValue: getStringEllerUndefined(grunnlag?.vurdering?.ytterligereNedsattBegrunnelse),
-        rules: { required: 'Du må skrive en begrunnelse for når innbygger fikk ytterligere nedsatt arbeidsevne' },
+        rules: { required: 'Du må skrive en begrunnelse for når bruker fikk ytterligere nedsatt arbeidsevne' },
       },
       ytterligereNedsattArbeidsevneDato: {
         type: 'date_input',
