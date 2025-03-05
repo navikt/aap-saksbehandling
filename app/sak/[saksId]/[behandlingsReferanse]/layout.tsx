@@ -48,7 +48,6 @@ const Layout = async (props: Props) => {
     }
   }
 
-  const before = new Date().getMilliseconds();
   const [personInfo, brukerInformasjon, sak, flytResponse] = await Promise.all([
     hentSakPersoninfo(params.saksId),
     hentBrukerInformasjon(),
@@ -56,8 +55,6 @@ const Layout = async (props: Props) => {
     hentFlyt(params.behandlingsReferanse),
   ]);
 
-  const after = new Date().getMilliseconds();
-  console.log('Tid forbrukt:', after - before);
   let oppgave;
 
   try {
