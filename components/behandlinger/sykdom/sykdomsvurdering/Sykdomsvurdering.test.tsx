@@ -284,7 +284,7 @@ describe('felt for å sette diagnoser', () => {
     );
 
     await velgAtBrukerHarSykdomSkadeLyte();
-    const ICD10option = await screen.findByRole('radio', { name: 'ICD10' });
+    const ICD10option = await screen.findByRole('radio', { name: 'Spesialisthelsetjenesten (ICD10)' });
     await user.click(ICD10option);
 
     expect(await screen.findByRole('combobox', { name: 'Hoveddiagnose' }, { timeout: 5000 })).toBeVisible();
@@ -303,7 +303,7 @@ describe('felt for å sette diagnoser', () => {
     );
 
     await velgAtBrukerHarSykdomSkadeLyte();
-    const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
+    const ICD10option = screen.getByRole('radio', { name: 'Spesialisthelsetjenesten (ICD10)' });
     await user.click(ICD10option);
     await velgBekreft();
 
@@ -323,10 +323,10 @@ describe('felt for å sette diagnoser', () => {
     );
 
     await velgAtBrukerHarSykdomSkadeLyte();
-    const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
+    const ICD10option = screen.getByRole('radio', { name: 'Spesialisthelsetjenesten (ICD10)' });
     await user.click(ICD10option);
 
-    expect(await screen.findByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).toBeVisible();
+    expect(await screen.findByRole('combobox', { name: 'Bidiagnoser' })).toBeVisible();
   });
 
   it('skal ikke vise felt for bidiagnose dersom det har blitt valgt ingen diagnose på hoveddiagnose', async () => {
@@ -342,7 +342,7 @@ describe('felt for å sette diagnoser', () => {
     );
 
     await velgAtBrukerHarSykdomSkadeLyte();
-    const ICD10option = screen.getByRole('radio', { name: 'ICD10' });
+    const ICD10option = screen.getByRole('radio', { name: 'Spesialisthelsetjenesten (ICD10)' });
     await user.click(ICD10option);
 
     const hoveddiagnose = await screen.findByRole('combobox', { name: 'Hoveddiagnose' });
@@ -351,7 +351,7 @@ describe('felt for å sette diagnoser', () => {
     const ingenDiagnoseOption = screen.getByText('Ingen diagnose');
     await user.click(ingenDiagnoseOption);
 
-    expect(screen.queryByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: 'Bidiagnoser' })).not.toBeInTheDocument();
   });
 
   it('skal vise felt for bidiagnose dersom det har blitt valgt noe annet enn ingen diagnose på hoveddiagnose', async () => {
@@ -367,7 +367,7 @@ describe('felt for å sette diagnoser', () => {
     );
 
     await velgAtBrukerHarSykdomSkadeLyte();
-    const ICD10option = screen.getByRole('radio', { name: 'ICPC2' });
+    const ICD10option = screen.getByRole('radio', { name: 'Primærhelsetjenesten (ICPC2)' });
     await user.click(ICD10option);
 
     const hoveddiagnose = await screen.findByRole('combobox', { name: 'Hoveddiagnose' });
@@ -378,7 +378,7 @@ describe('felt for å sette diagnoser', () => {
     const frysningerOption = screen.getByText('Frysninger (A02)');
     await user.click(frysningerOption);
 
-    expect(await screen.findByRole('combobox', { name: 'Bidiagnoser (valgfritt)' })).toBeVisible();
+    expect(await screen.findByRole('combobox', { name: 'Bidiagnoser' })).toBeVisible();
   });
 
   // TODO OIST dette funker i browser, men ikke i test. Why?
@@ -418,7 +418,7 @@ describe('felt for å sette diagnoser', () => {
     );
     await skrivInnDatoForNårVurderingenGjelderFra(format(subDays(new Date(), 1), 'ddMMyy'));
     await velgAtBrukerHarSykdomSkadeLyte();
-    expect(screen.getByRole('radio', { name: 'ICD10' })).toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Spesialisthelsetjenesten (ICD10)' })).toBeChecked();
     const hoveddiagnose = await screen.findByRole('combobox', { name: 'Hoveddiagnose' }, { timeout: 5000 });
     expect(hoveddiagnose).toBeVisible();
   });
@@ -450,7 +450,9 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
       })
     );
 
-    const felt = screen.getByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' });
+    const felt = screen.getByRole('group', {
+      name: 'Er den nedsatte arbeidsevnen forbigående slik at brukeren skal vurderes for AAP som sykepengeerstatning etter § 11-13?',
+    });
     expect(felt).toBeVisible();
   });
 
@@ -480,7 +482,11 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
 
     await velgBekreft();
 
-    expect(screen.getByText('Du må svare på om den nedsatte arbeidsevnen er av en viss varighet')).toBeVisible();
+    expect(
+      screen.getByText(
+        'Du må svare på om den nedsatte arbeidsevnen er forbigående slik at brukeren skal vurderes for AAP som sykepengeerstatning etter § 11-13'
+      )
+    ).toBeVisible();
   });
 });
 
@@ -891,7 +897,9 @@ describe('revurdering', () => {
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgAtBrukerHarNedsattArbeidsevne();
     expect(
-      screen.queryByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' })
+      screen.queryByRole('group', {
+        name: 'Er den nedsatte arbeidsevnen forbigående slik at brukeren skal vurderes for AAP som sykepengeerstatning etter § 11-13?',
+      })
     ).not.toBeInTheDocument();
   });
 });
@@ -918,7 +926,11 @@ describe('revurdering av førstegangsbehandling', () => {
         name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
       })
     );
-    expect(screen.getByRole('group', { name: 'Er den nedsatte arbeidsevnen av en viss varighet?' })).toBeVisible();
+    expect(
+      screen.getByRole('group', {
+        name: 'Er den nedsatte arbeidsevnen forbigående slik at brukeren skal vurderes for AAP som sykepengeerstatning etter § 11-13?',
+      })
+    ).toBeVisible();
   });
 
   it('når gjelder fra dato settes til det samme som søknadstidspunkt vises spørsmål om arbeidsevnen er nedsatt med minst halvparten', async () => {

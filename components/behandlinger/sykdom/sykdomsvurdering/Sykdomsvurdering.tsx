@@ -144,7 +144,10 @@ export const Sykdomsvurdering = ({
       kodeverk: {
         type: 'radio',
         label: 'Velg system for diagnoser',
-        options: ['ICPC2', 'ICD10'],
+        options: [
+          { label: 'Primærhelsetjenesten (ICPC2)', value: 'ICPC2' },
+          { label: 'Spesialisthelsetjenesten (ICD10)', value: 'ICD10' },
+        ],
         defaultValue: getStringEllerUndefined(diagnosegrunnlag?.kodeverk),
         rules: { required: 'Du må velge et system for diagnoser' },
       },
@@ -160,9 +163,13 @@ export const Sykdomsvurdering = ({
       },
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
         type: 'radio',
-        label: 'Er den nedsatte arbeidsevnen av en viss varighet?',
+        label:
+          'Er den nedsatte arbeidsevnen forbigående slik at brukeren skal vurderes for AAP som sykepengeerstatning etter § 11-13?',
         defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet),
-        rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet' },
+        rules: {
+          required:
+            'Du må svare på om den nedsatte arbeidsevnen er forbigående slik at brukeren skal vurderes for AAP som sykepengeerstatning etter § 11-13',
+        },
         options: JaEllerNeiOptions,
       },
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: {

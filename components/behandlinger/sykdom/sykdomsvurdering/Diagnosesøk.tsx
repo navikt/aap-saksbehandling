@@ -38,7 +38,7 @@ export const Diagnosesøk = ({ form, formFields, readOnly, hoveddiagnoseDefaultO
           />
           {form.watch('hoveddiagnose')?.value !== ingenDiagnoseCode && (
             <AsyncComboSearch
-              label={'Bidiagnoser (valgfritt)'}
+              label={'Bidiagnoser'}
               form={form}
               isMulti={true}
               name={'bidiagnose'}
