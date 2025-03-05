@@ -17,9 +17,8 @@ import { Behovstype } from 'lib/utils/form';
 import { parse } from 'date-fns';
 
 import styles from './FastsettArbeidsevne.module.css';
-import { Button } from '@navikt/ds-react';
+import { Button, Link } from '@navikt/ds-react';
 import { pipe } from 'lib/utils/functional';
-import { Veiledning } from 'components/veiledning/Veiledning';
 import { erProsent } from 'lib/utils/validering';
 
 interface Props {
@@ -75,7 +74,8 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
     name: 'arbeidsevnevurderinger',
   });
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } =
+    useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -99,7 +99,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
 
   return (
     <VilkårsKort
-      heading={'Vurdering av etablert og uutnyttet arbeidsevne § 11-23'}
+      heading={'§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet'}
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
       defaultOpen={showAsOpen}
@@ -113,12 +113,16 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
         steg={'FASTSETT_ARBEIDSEVNE'}
         visBekreftKnapp={!readOnly}
       >
-        <Veiledning defaultOpen={false} />
+        <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
+          Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
+        </Link>
         {arbeidsevneVurderinger.map((vurdering, index) => (
           <div key={vurdering.id} className={`${styles.vurdering} flex-column`}>
             <TextAreaWrapper
-              label={'Vurder om bruker har arbeidsevne som er utnyttet eller ikke utnyttet'}
-              description={'Hvis ikke annet er oppgitt, så antas bruker å ha 0% arbeidsevne og rett på full ytelse'}
+              label={'Vilkårsvurdering'}
+              description={
+                'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett på full ytelse.'
+              }
               control={form.control}
               name={`arbeidsevnevurderinger.${index}.begrunnelse`}
               rules={{ required: 'Du må begrunne vurderingen din' }}
@@ -131,7 +135,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
                   control={form.control}
                   name={`arbeidsevnevurderinger.${index}.arbeidsevne`}
                   type={'text'}
-                  label={'Oppgi den etablerte arbeidsevnen eller den uutnyttede arbeidsevnen i prosent'}
+                  label={'Oppgi arbeidsevnen som ikke er utnyttet i prosent'}
                   rules={{
                     required: 'Du må angi hvor stor arbeidsevne bruker har',
                     validate: (value) => {
@@ -153,9 +157,8 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
             </div>
             <DateInputWrapper
               control={form.control}
-              description={'Datoformat: dd.mm.åååå'}
               name={`arbeidsevnevurderinger.${index}.fom`}
-              label={'Den etablerte eller uutnyttede arbeidsevnen gjelder fra'}
+              label={'Dato vurderingen gjelder fra'}
               rules={{
                 required: 'Du må angi datoen arbeidsevnen gjelder fra',
                 validate: (value) => validerDato(value as string),
@@ -170,7 +173,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
                   variant={'tertiary'}
                   icon={<TrashIcon aria-hidden />}
                 >
-                  Fjern periode
+                  Fjern vurdering
                 </Button>
               </div>
             )}
@@ -185,7 +188,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
               size={'medium'}
               icon={<PlusCircleIcon aria-hidden />}
             >
-              Legg til ny arbeidsevne
+              Legg til ny vurdering
             </Button>
           </div>
         )}

@@ -10,7 +10,7 @@ describe('FastsettArbeidsevne', () => {
   it('Skal ha riktig heading', () => {
     render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} />);
     const heading = screen.getByRole('heading', {
-      name: 'Vurdering av etablert og uutnyttet arbeidsevne § 11-23',
+      name: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet',
       level: 3,
     });
     expect(heading).toBeVisible();
@@ -20,7 +20,7 @@ describe('FastsettArbeidsevne', () => {
     render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} />);
     expect(
       screen.queryByRole('textbox', {
-        name: 'Vurder om bruker har arbeidsevne som er utnyttet eller ikke utnyttet',
+        name: 'Vilkårsvurdering',
       })
     ).not.toBeInTheDocument();
   });
@@ -34,22 +34,22 @@ describe('FastsettArbeidsevne', () => {
       gjeldendeVedtatteVurderinger: [],
     };
     render(<FastsettArbeidsevne readOnly={true} behandlingVersjon={0} grunnlag={grunnlag} />);
-    expect(screen.getByText('Vurder om bruker har arbeidsevne som er utnyttet eller ikke utnyttet')).toBeVisible();
+    expect(screen.getByText('Vilkårsvurdering')).toBeVisible();
   });
 
   it('har et felt hvor saksbehandler skal begrunne om bruker har arbeidsevne', async () => {
     render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} />);
     await åpneVilkårskort();
-    expect(
-      screen.getByRole('textbox', { name: 'Vurder om bruker har arbeidsevne som er utnyttet eller ikke utnyttet' })
-    ).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
   });
 
   it('begrunnelsesfeltet har en beskrivelse', async () => {
     render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} />);
     await åpneVilkårskort();
     expect(
-      screen.getByText('Hvis ikke annet er oppgitt, så antas bruker å ha 0% arbeidsevne og rett på full ytelse')
+      screen.getByText(
+        'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett på full ytelse.'
+      )
     ).toBeVisible();
   });
 
@@ -58,7 +58,7 @@ describe('FastsettArbeidsevne', () => {
     await åpneVilkårskort();
     expect(
       screen.getByRole('textbox', {
-        name: 'Oppgi den etablerte arbeidsevnen eller den uutnyttede arbeidsevnen i prosent',
+        name: 'Oppgi arbeidsevnen som ikke er utnyttet i prosent',
       })
     ).toBeVisible();
   });
@@ -66,9 +66,7 @@ describe('FastsettArbeidsevne', () => {
   it('har et felt for å angi når arbeidsevnen gjelder fra', async () => {
     render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} />);
     await åpneVilkårskort();
-    expect(
-      screen.getByRole('textbox', { name: 'Den etablerte eller uutnyttede arbeidsevnen gjelder fra' })
-    ).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Dato vurderingen gjelder fra' })).toBeVisible();
   });
 
   describe('validering', () => {
@@ -101,7 +99,7 @@ describe('FastsettArbeidsevne', () => {
 
   async function åpneVilkårskort() {
     const region = screen.getByRole('region', {
-      name: 'Vurdering av etablert og uutnyttet arbeidsevne § 11-23',
+      name: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet',
     });
     const button = within(region).getByRole('button');
     await user.click(button);
