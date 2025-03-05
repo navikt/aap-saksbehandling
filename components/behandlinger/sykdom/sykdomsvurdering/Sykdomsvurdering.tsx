@@ -197,33 +197,35 @@ export const Sykdomsvurdering = ({
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
-          sykdomsvurdering: {
-            dokumenterBruktIVurdering:
-              data.dokumenterBruktIVurderingen?.map((dokument) => {
-                return { identifikator: dokument };
-              }) || [],
-            begrunnelse: data.begrunnelse,
-            vurderingenGjelderFra: data.vurderingenGjelderFra
-              ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
-              : undefined,
-            harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
-            kodeverk: data?.kodeverk,
-            hoveddiagnose: data?.hoveddiagnose?.value,
-            bidiagnoser: data.bidiagnose?.map((diagnose) => diagnose.value),
-            erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
-            erSkadeSykdomEllerLyteVesentligdel: getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel),
-            erNedsettelseIArbeidsevneMerEnnHalvparten:
-              behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()
-                ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten)
-                : getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnFørtiProsent),
-            erNedsettelseIArbeidsevneAvEnVissVarighet: getTrueFalseEllerUndefined(
-              data.erNedsettelseIArbeidsevneAvEnVissVarighet
-            ),
-            erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getTrueFalseEllerUndefined(
-              data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-            ),
-            yrkesskadeBegrunnelse: data?.yrkesskadeBegrunnelse,
-          },
+          sykdomsvurderinger: [
+            {
+              dokumenterBruktIVurdering:
+                data.dokumenterBruktIVurderingen?.map((dokument) => {
+                  return { identifikator: dokument };
+                }) || [],
+              begrunnelse: data.begrunnelse,
+              vurderingenGjelderFra: data.vurderingenGjelderFra
+                ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
+                : undefined,
+              harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
+              kodeverk: data?.kodeverk,
+              hoveddiagnose: data?.hoveddiagnose?.value,
+              bidiagnoser: data.bidiagnose?.map((diagnose) => diagnose.value),
+              erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
+              erSkadeSykdomEllerLyteVesentligdel: getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel),
+              erNedsettelseIArbeidsevneMerEnnHalvparten:
+                behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()
+                  ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten)
+                  : getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnFørtiProsent),
+              erNedsettelseIArbeidsevneAvEnVissVarighet: getTrueFalseEllerUndefined(
+                data.erNedsettelseIArbeidsevneAvEnVissVarighet
+              ),
+              erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getTrueFalseEllerUndefined(
+                data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+              ),
+              yrkesskadeBegrunnelse: data?.yrkesskadeBegrunnelse,
+            },
+          ],
         },
         referanse: behandlingsReferanse,
       });
