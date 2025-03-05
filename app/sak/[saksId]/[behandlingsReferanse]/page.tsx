@@ -2,12 +2,12 @@ import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/sak
 
 import { redirect } from 'next/navigation';
 
-const Page = async (
-  props: { params: Promise<{ saksId: string; behandlingsReferanse: string }> }
-) => {
+const Page = async (props: { params: Promise<{ saksId: string; behandlingsReferanse: string }> }) => {
   const params = await props.params;
-  const behandling = await hentBehandling(params.behandlingsReferanse);
-  const flyt = await hentFlyt(params.behandlingsReferanse);
+  const [behandling, flyt] = await Promise.all([
+    hentBehandling(params.behandlingsReferanse),
+    hentFlyt(params.behandlingsReferanse),
+  ]);
 
   if (behandling === undefined || flyt === undefined) {
     return <div>Behandling ikke funnet</div>;
