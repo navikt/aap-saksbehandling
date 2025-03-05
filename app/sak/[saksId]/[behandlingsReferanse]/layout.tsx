@@ -36,7 +36,8 @@ const Layout = async (props: Props) => {
     notFound();
   }
 
-  await auditlog(params.behandlingsReferanse);
+  // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
+  auditlog(params.behandlingsReferanse);
 
   // Denne må komme før resten av kallene slik at siste versjon av data er oppdatert i backend for behandlingen
   if (behandling.skalForberede) {
@@ -47,10 +48,16 @@ const Layout = async (props: Props) => {
     }
   }
 
-  const personInfo = await hentSakPersoninfo(params.saksId);
-  const brukerInformasjon = await hentBrukerInformasjon();
-  const sak = await hentSak(params.saksId);
-  const flytResponse = await hentFlyt(params.behandlingsReferanse);
+  const before = new Date().getMilliseconds();
+  const [personInfo, brukerInformasjon, sak, flytResponse] = await Promise.all([
+    hentSakPersoninfo(params.saksId),
+    hentBrukerInformasjon(),
+    hentSak(params.saksId),
+    hentFlyt(params.behandlingsReferanse),
+  ]);
+
+  const after = new Date().getMilliseconds();
+  console.log('Tid forbrukt:', after - before);
   let oppgave;
 
   try {
