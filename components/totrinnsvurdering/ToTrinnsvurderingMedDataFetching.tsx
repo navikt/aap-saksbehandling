@@ -10,10 +10,11 @@ interface Props {
 }
 
 export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }: Props) => {
-  const fatteVedtakGrunnlag = await hentFatteVedtakGrunnlang(behandlingsReferanse);
-  const kvalitetssikringGrunnlag = await hentKvalitetssikringGrunnlag(behandlingsReferanse);
-  const flyt = await hentFlyt(behandlingsReferanse);
-
+  const [fatteVedtakGrunnlag, kvalitetssikringGrunnlag, flyt] = await Promise.all([
+    hentFatteVedtakGrunnlang(behandlingsReferanse),
+    hentKvalitetssikringGrunnlag(behandlingsReferanse),
+    hentFlyt(behandlingsReferanse),
+  ]);
   const behandlingVersjon = flyt.behandlingVersjon;
 
   return (
