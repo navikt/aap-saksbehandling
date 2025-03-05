@@ -5,7 +5,6 @@ import { FigureIcon } from '@navikt/aksel-icons';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Form } from 'components/form/Form';
-import { Veiledning } from 'components/veiledning/Veiledning';
 import { SykepengeerstatningGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
@@ -25,13 +24,14 @@ interface FormFields {
 
 export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, status, resetStatus, isLoading } = useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
+  const { løsBehovOgGåTilNesteSteg, status, resetStatus, isLoading } =
+    useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om søker har rett til sykepengeerstatning',
+        label: 'Vilkårsvurdering',
         rules: { required: 'Du må begrunne avgjørelsen din.' },
         defaultValue: grunnlag?.vurdering?.begrunnelse,
       },
@@ -77,7 +77,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
 
   return (
     <VilkårsKort
-      heading={'Sykepengeerstatning § 11-13'}
+      heading={'§ 11-13 AAP som sykepengeerstatning'}
       steg="VURDER_SYKEPENGEERSTATNING"
       icon={<FigureIcon aria-hidden />}
     >
@@ -89,7 +89,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
         steg={'VURDER_SYKEPENGEERSTATNING'}
         visBekreftKnapp={!readOnly}
       >
-        <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.erOppfylt} />
         {form.watch('erOppfylt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.grunn} />}

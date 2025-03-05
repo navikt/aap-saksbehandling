@@ -11,11 +11,11 @@ describe('Sykepengeerstatning', () => {
   const user = userEvent.setup();
 
   it('har en overskrift', () => {
-    expect(screen.getByRole('heading', { name: 'Sykepengeerstatning § 11-13' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: '§ 11-13 AAP som sykepengeerstatning' })).toBeVisible();
   });
 
   it('har et begrunnelsesfelt', () => {
-    expect(screen.getByRole('textbox', { name: 'Vurder om søker har rett til sykepengeerstatning' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
   });
 
   it('har felt for krav på sykepengeerstatning', () => {
@@ -66,10 +66,5 @@ describe('Sykepengeerstatning', () => {
     await user.click(bekreftKnapp);
     const feilmelding = await screen.findByText('Du må velge minst en grunn');
     expect(feilmelding).toBeVisible();
-  });
-
-  it('Skal ha synlig vilkårsveiledning', () => {
-    const vilkårsveiledning = screen.getByText('Slik vurderes vilkåret');
-    expect(vilkårsveiledning).toBeVisible();
   });
 });
