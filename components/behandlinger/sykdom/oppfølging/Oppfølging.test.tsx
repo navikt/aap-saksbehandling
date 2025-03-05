@@ -8,22 +8,14 @@ describe('Oppfølging', () => {
   it('Skal ha en overskrift', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
 
-    const heading = screen.getByText('Behov for oppfølging § 11-6');
+    const heading = screen.getByText('§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid');
     expect(heading).toBeVisible();
   });
 
   it('Skal ha felt for begrunnelse', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
-    const begrunnelse = screen.getByRole('textbox', { name: 'Vurder om bruker har behov for oppfølging' });
+    const begrunnelse = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelse).toBeVisible();
-  });
-
-  it('Skal ha beskrivelse på felt for begrunnelse', () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
-    const beskrivelse = screen.getByText(
-      'Beskriv oppfølgingsbehov, behovet for arbeidsrettet oppfølging og vurdering om det er en mulighet for å komme tilbake i arbeid og eventuell annen oppfølging fra nav'
-    );
-    expect(beskrivelse).toBeVisible();
   });
 
   it('Skal ha felt for om bruker har behov for aktiv behandling', () => {
@@ -44,7 +36,7 @@ describe('Oppfølging', () => {
     render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
     expect(
       screen.queryByRole('group', {
-        name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+        name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
       })
     ).toBeVisible();
   });
@@ -127,9 +119,10 @@ describe('Oppfølging', () => {
     const harBrukerBehovForArbeidsrettetTiltakFelt = screen.getByRole('group', {
       name: 'b: Har bruker behov for arbeidsrettet tiltak?',
     });
-    const neiHarBrukerBehovForArbeidsrettetTiltakFelt = within(
-      harBrukerBehovForArbeidsrettetTiltakFelt
-    ).getByRole('radio', { name: 'Nei' });
+    const neiHarBrukerBehovForArbeidsrettetTiltakFelt = within(harBrukerBehovForArbeidsrettetTiltakFelt).getByRole(
+      'radio',
+      { name: 'Nei' }
+    );
 
     await user.click(neiHarBrukerBehovForArbeidsrettetTiltakFelt);
 
@@ -147,7 +140,7 @@ const finnGruppeForBokstavB = () =>
   screen.getByRole('group', { name: 'b: Har bruker behov for arbeidsrettet tiltak?' });
 const finnGruppeForBokstavC = () =>
   screen.queryByRole('group', {
-    name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+    name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
   });
 
 const velgJa = async (group: HTMLElement) => {

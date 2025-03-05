@@ -35,9 +35,7 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om bruker har behov for oppfølging',
-        description:
-          'Beskriv oppfølgingsbehov, behovet for arbeidsrettet oppfølging og vurdering om det er en mulighet for å komme tilbake i arbeid og eventuell annen oppfølging fra nav',
+        label: 'Vilkårsvurdering',
         defaultValue: grunnlag?.vurdering?.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse om bruker har behov for oppfølging' },
       },
@@ -57,8 +55,7 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
       },
       erBehovForAnnenOppfølging: {
         type: 'radio',
-        label:
-          'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra NAV?',
+        label: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAnnenOppfølging),
         rules: { required: 'Du må svare på om bruker anses for å ha en viss mulighet til å komme i arbeid' },
@@ -89,7 +86,7 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
 
   return (
     <VilkårsKort
-      heading="Behov for oppfølging § 11-6"
+      heading="§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid"
       steg="VURDER_BISTANDSBEHOV"
       icon={<PersonGroupIcon aria-hidden />}
       vilkårTilhørerNavKontor={true}
@@ -107,8 +104,8 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
           tekst={
             <div>
               Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
-              bruker oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav
-              a (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
+              bruker oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a
+              (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
               vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
               svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
               <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-6">
