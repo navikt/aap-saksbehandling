@@ -212,9 +212,10 @@ export const Sykdomsvurdering = ({
             bidiagnoser: data.bidiagnose?.map((diagnose) => diagnose.value),
             erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
             erSkadeSykdomEllerLyteVesentligdel: getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel),
-            erNedsettelseIArbeidsevneMerEnnHalvparten: getTrueFalseEllerUndefined(
-              data.erNedsettelseIArbeidsevneMerEnnHalvparten
-            ),
+            erNedsettelseIArbeidsevneMerEnnHalvparten:
+              behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()
+                ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten)
+                : getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnFørtiProsent),
             erNedsettelseIArbeidsevneAvEnVissVarighet: getTrueFalseEllerUndefined(
               data.erNedsettelseIArbeidsevneAvEnVissVarighet
             ),
