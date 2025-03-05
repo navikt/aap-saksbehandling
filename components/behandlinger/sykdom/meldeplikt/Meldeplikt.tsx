@@ -2,7 +2,7 @@
 
 import { DateInputWrapper, TextAreaWrapper, useConfigForm } from '@navikt/aap-felles-react';
 import { FigureIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, List, Radio, ReadMore } from '@navikt/ds-react';
+import { Button, Link, Radio } from '@navikt/ds-react';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -103,30 +103,15 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
 
   return (
     <VilkårsKort
-      heading={'Unntak fra meldeplikt § 11-10 (valgfritt)'}
+      heading={'§ 11-10 tredje ledd. Unntak fra meldeplikt'}
       steg="FRITAK_MELDEPLIKT"
       icon={<FigureIcon fontSize={'inherit'} aria-hidden />}
       vilkårTilhørerNavKontor
       defaultOpen={showAsOpen}
     >
-      <ReadMore
-        header={'Vilkåret skal kun vurderes ved behov. Se mer om vurdering av fritak fra meldeplikt'}
-        size={'small'}
-      >
-        <BodyShort size={'small'}>Unntak fra meldeplikten skal kun vurderes dersom saksbehandler:</BodyShort>
-        <List as={'ol'} size={'small'}>
-          <List.Item>
-            <BodyShort size={'small'}>
-              Vurderer at det vil være unødig tyngende for søker å overholde meldeplikten
-            </BodyShort>
-          </List.Item>
-          <List.Item>
-            <BodyShort size={'small'}>
-              Er usikker på om det vil være unødig tyngende for søker å overholde meldeplikten
-            </BodyShort>
-          </List.Item>
-        </List>
-      </ReadMore>
+      <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
+        Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
+      </Link>
 
       <Form
         onSubmit={handleSubmit}
@@ -139,7 +124,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
         {fritakMeldepliktVurderinger.map((vurdering, index) => (
           <div className={`${styles.vurdering} flex-column`} key={vurdering.id}>
             <TextAreaWrapper
-              label={'Vurder brukers behov for fritak fra meldeplikt'}
+              label={'Vilkårsvurdering'}
               control={form.control}
               name={`fritaksvurderinger.${index}.begrunnelse`}
               rules={{ required: 'Du må begrunne vurderingen din' }}

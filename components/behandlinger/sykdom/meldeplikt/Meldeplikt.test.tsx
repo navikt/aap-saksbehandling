@@ -9,14 +9,12 @@ const user = userEvent.setup();
 describe('Meldeplikt', () => {
   it('har overskrift for å identifisere steget', () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
-    expect(screen.getByRole('heading', { name: 'Unntak fra meldeplikt § 11-10 (valgfritt)' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: '§ 11-10 tredje ledd. Unntak fra meldeplikt' })).toBeVisible();
   });
 
   it('er lukket initielt', () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
-    expect(
-      screen.queryByRole('textbox', { name: 'Vurder brukers behov for fritak fra meldeplikt' })
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('textbox', { name: 'Vilkårsvurdering' })).not.toBeInTheDocument();
   });
 
   it('vises som åpent når det skal kvalitetssikres (readOnly er true og minst en vurdering finnes)', () => {
@@ -33,13 +31,13 @@ describe('Meldeplikt', () => {
       historikk: [],
     };
     render(<Meldeplikt behandlingVersjon={0} readOnly={true} grunnlag={meldepliktGrunnlag} />);
-    expect(screen.queryByRole('textbox', { name: 'Vurder brukers behov for fritak fra meldeplikt' })).toBeVisible();
+    expect(screen.queryByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
   });
 
   it('har et felt for begrunnelse', async () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
     await åpneVilkårskort();
-    expect(screen.getByRole('textbox', { name: 'Vurder brukers behov for fritak fra meldeplikt' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
   });
 
   it('har valg for å avgjøre om bruker skal få fritak fra meldeplikt eller ikke', async () => {
@@ -70,7 +68,7 @@ describe('Meldeplikt', () => {
 });
 
 async function åpneVilkårskort() {
-  const region = screen.getByRole('region', { name: 'Unntak fra meldeplikt § 11-10 (valgfritt)' });
+  const region = screen.getByRole('region', { name: '§ 11-10 tredje ledd. Unntak fra meldeplikt' });
   const button = within(region).getByRole('button');
   await user.click(button);
 }
