@@ -130,7 +130,7 @@ describe('felt for begrunnelse', () => {
     const button = screen.getByRole('button', { name: 'Bekreft vurdering' });
     await user.click(button);
 
-    expect(await screen.findByText('Du må begrunne')).toBeVisible();
+    expect(await screen.findByText('Du må gjøre en vilkårsvurdering')).toBeVisible();
   });
 
   it('Skal vise korrekt description på begrunnelsesfelt', async () => {

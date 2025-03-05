@@ -84,7 +84,7 @@ export const Sykdomsvurdering = ({
         label: 'Vilkårsvurdering',
         description: 'Vekt og vurder opplysningene mot hverandre, og vurder om brukeren oppfyller vilkårene i § 11-5',
         defaultValue: sykdomsvurdering?.begrunnelse,
-        rules: { required: 'Du må begrunne' },
+        rules: { required: 'Du må gjøre en vilkårsvurdering' },
       },
       dokumenterBruktIVurderingen: {
         type: 'checkbox_nested',
