@@ -62,7 +62,6 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
             />
             <CheckboxWrapper
               label={'Returårsak'}
-              description={'Du må minst velge èn grunn'}
               readOnly={readOnly}
               control={form.control}
               name={`totrinnsvurderinger.${index}.grunner`}
