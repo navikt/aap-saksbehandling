@@ -25,20 +25,15 @@ const user = userEvent.setup();
 
 describe('Generelt', () => {
   it('skal har korrekt heading', () => {
-    const heading = screen.getByRole('heading', { name: 'Yrkesskade § 11-22 1.ledd' });
+    const heading = screen.getByRole('heading', { name: '§ 11-22 AAP ved yrkesskade' });
     expect(heading).toBeVisible();
-  });
-
-  it('skal ha en tekst som viser hvordan vilkåret skal vurderes', () => {
-    const veileding = screen.getByText('Slik vurderes vilkåret');
-    expect(veileding).toBeVisible();
   });
 });
 
 describe('felt for begrunnelse', () => {
   it('skal være synlig', () => {
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om yrkesskade er medvirkende årsak til nedsatt arbeidsevne',
+      name: 'Vilkårsvurdering',
     });
     expect(begrunnelseFelt).toBeVisible();
   });

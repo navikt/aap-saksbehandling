@@ -1,7 +1,6 @@
 'use client';
 
 import { HandBandageIcon } from '@navikt/aksel-icons';
-import { Veiledning } from 'components/veiledning/Veiledning';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
@@ -33,7 +32,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om yrkesskade er medvirkende årsak til nedsatt arbeidsevne',
+        label: 'Vilkårsvurdering',
         defaultValue: grunnlag.yrkesskadeVurdering?.begrunnelse,
         rules: { required: 'Du må begrunne' },
       },
@@ -70,7 +69,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
 
   return (
     <VilkårsKort
-      heading={'Yrkesskade § 11-22 1.ledd'}
+      heading={'§ 11-22 AAP ved yrkesskade'}
       steg={'VURDER_YRKESSKADE'}
       vilkårTilhørerNavKontor={false}
       icon={<HandBandageIcon aria-hidden />}
@@ -97,7 +96,6 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
         resetStatus={resetStatus}
         visBekreftKnapp={!readOnly}
       >
-        <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
         <FormField form={form} formField={formFields.erÅrsakssammenheng} />
         {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
