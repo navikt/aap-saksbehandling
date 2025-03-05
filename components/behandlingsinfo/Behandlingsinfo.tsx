@@ -1,4 +1,4 @@
-import { BodyShort, HGrid, Label } from '@navikt/ds-react';
+import { BodyShort, Box, HGrid, Label } from '@navikt/ds-react';
 import styles from './Behandlingsinfo.module.css';
 import { DetaljertBehandling } from 'lib/types/types';
 import { storForbokstav } from 'lib/utils/string';
@@ -26,40 +26,45 @@ export const Behandlingsinfo = ({ behandling, saksnummer, oppgaveReservertAv, p�
   const erReservertAvInnloggetBruker = brukerInformasjon.NAVident === oppgaveReservertAv;
 
   return (
-    <div
-      className={`${styles.container} ${oppgaveReservertAv && !erReservertAvInnloggetBruker ? styles.reservert : ''} ${påVent === true ? styles.venter : ''}`}
+    <Box
+      padding="4"
+      borderWidth="1"
+      borderRadius="large"
+      borderColor="border-divider"
+      className={`${oppgaveReservertAv && !erReservertAvInnloggetBruker ? styles.reservert : ''} ${påVent === true ? styles.venter : ''}`}
     >
-      <div className={styles.behandlingstype}>
+      <Box borderWidth="0 0 1 0" borderColor="border-divider" marginBlock="0 4">
         <Label as="p" size="medium" spacing>
           {behandling.type}
         </Label>
-      </div>
-      <HGrid columns={'1fr 1fr'} gap={'1'}>
-        <Label as="p" size="medium" spacing>
+      </Box>
+
+      <HGrid columns={'1fr 1fr'} gap="4">
+        <Label as="p">
           Status:
         </Label>
-        <BodyShort size="medium" spacing>
+        <BodyShort>
           {status()}
         </BodyShort>
-        <Label as="p" size="medium" spacing>
+        <Label as="p">
           Behandlingsstatus:
         </Label>
-        <BodyShort size="medium" spacing>
+        <BodyShort>
           {storForbokstav(behandling.status)}
         </BodyShort>
-        <Label as="p" size="medium" spacing>
+        <Label as="p">
           Opprettet:
         </Label>
-        <BodyShort size="medium" spacing>
+        <BodyShort>
           {formaterDatoForFrontend(behandling.opprettet)}
         </BodyShort>
-        <Label as="p" size="medium" spacing>
+        <Label as="p">
           Saksnummer:
         </Label>
-        <BodyShort size="medium" spacing>
+        <BodyShort>
           {saksnummer}
         </BodyShort>
       </HGrid>
-    </div>
+    </Box>
   );
 };
