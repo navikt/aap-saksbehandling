@@ -550,7 +550,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
     expect(felt).toBeVisible();
   });
 
-  it('feltet skal vises dersom arbeidsevnen ikke er nedsatt med minst halvparten, men nedsatt med 30%', async () => {
+  it('feltet skal vises dersom arbeidsevnen ikke er nedsatt med minst halvparten, men nedsatt med 30 prosent', async () => {
     render(
       <Sykdomsvurdering
         grunnlag={grunnlagMedYrkesskade}
@@ -564,7 +564,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgJaIGruppe(screen.getByRole('group', { name: 'Har bruker nedsatt arbeidsevne?' }));
     await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30%?' }));
+    await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30 prosent?' }));
 
     const felt = screen.getByRole('group', {
       name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
@@ -596,24 +596,6 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
 });
 
 describe('yrkesskade', () => {
-  it('skal vise overskrift for feltene til yrkesskade', async () => {
-    render(
-      <Sykdomsvurdering
-        grunnlag={grunnlagMedYrkesskade}
-        readOnly={false}
-        behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsbehandling'}
-        søknadstidspunkt={søknadstidspunkt}
-      />
-    );
-    await velgAtBrukerHarSykdomSkadeLyte();
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Har bruker nedsatt arbeidsevne?' }));
-    await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
-
-    expect(screen.getByText('Nedsatt arbeidsevne §§ 11-5 / 11-22'));
-  });
-
   describe('felt for begrunnelse i yrkesskade', () => {
     it('skal ha et felt for begrunnelse dersom det finnes yrkesskade og arbeidsevnen ikke er nedsatt med halvparten', async () => {
       render(
@@ -630,7 +612,7 @@ describe('yrkesskade', () => {
       await velgJaIGruppe(screen.getByRole('group', { name: 'Har bruker nedsatt arbeidsevne?' }));
       await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
 
-      expect(screen.getByRole('textbox', { name: 'Vurdering om arbeidsevne er nedsatt med minst 30% (§11-22)' }));
+      expect(screen.getByRole('textbox', { name: '§ 11-22 AAP ved yrkesskade' }));
     });
 
     it('skal vise description', async () => {
@@ -650,7 +632,7 @@ describe('yrkesskade', () => {
 
       expect(
         screen.getByText(
-          'Bruker har yrkesskade, og kan ha rett på AAP med en nedsatt arbeidsevne på minst 30%. Nay vurderer årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne.'
+          'Brukeren har en yrkesskade som kan ha betydning for retten til AAP. Du må derfor vurdere om arbeidsevnen er nedsatt med minst 30 prosent. NAY vil vurdere om arbeidsevnen er nedsatt på grunn av yrkesskaden.'
         )
       );
     });
@@ -671,11 +653,11 @@ describe('yrkesskade', () => {
       await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
       await velgBekreft();
 
-      expect(screen.getByText('Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med mist 30%'));
+      expect(screen.getByText('Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med mist 30 prosent'));
     });
   });
 
-  describe('felt for om arbeidsevnen er nedsatt med minst 30%', () => {
+  describe('felt for om arbeidsevnen er nedsatt med minst 30 prosent', () => {
     it('skal vise feltet dersom det finnes yrkesskade og arbeidsevnen er ikke nedsatt med minst halvparten', async () => {
       render(
         <Sykdomsvurdering
@@ -691,7 +673,7 @@ describe('yrkesskade', () => {
       await velgJaIGruppe(screen.getByRole('group', { name: 'Har bruker nedsatt arbeidsevne?' }));
       await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
 
-      expect(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30%?' }));
+      expect(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30 prosent?' }));
     });
 
     it('skal vise feilmelding dersom det ikke er besvart', async () => {
@@ -710,7 +692,7 @@ describe('yrkesskade', () => {
       await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
       await velgBekreft();
 
-      expect(screen.getByText('Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30%.'));
+      expect(screen.getByText('Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.'));
     });
   });
 });
@@ -820,7 +802,7 @@ describe('revurdering', () => {
     expect(screen.queryByText('Vurderingen kan ikke gjelde fra før søknadstidspunkt')).not.toBeInTheDocument();
   });
 
-  it('viser spørsmål om den nedsatte arbeidsevnen er minst 40% når det ikke skal vurderes mot yrkesskade', async () => {
+  it('viser spørsmål om den nedsatte arbeidsevnen er minst 40 prosent når det ikke skal vurderes mot yrkesskade', async () => {
     const søknadstidspunkt = subDays(new Date(), 14);
     render(
       <Sykdomsvurdering
@@ -835,11 +817,13 @@ describe('revurdering', () => {
     await skrivInnDatoForNårVurderingenGjelderFra(format(new Date(), 'ddMMyy'));
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgAtBrukerHarNedsattArbeidsevne();
-    expect(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40%?' })).toBeVisible();
-    expect(screen.queryByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30%?' })).not.toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40 prosent?' })).toBeVisible();
+    expect(
+      screen.queryByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30 prosent?' })
+    ).not.toBeInTheDocument();
   });
 
-  it('viser spørsmål om den nedsatte arbeidsevnen er minst 30% når det skal vurderes mot yrkesskade', async () => {
+  it('viser spørsmål om den nedsatte arbeidsevnen er minst 30 prosent når det skal vurderes mot yrkesskade', async () => {
     const søknadstidspunkt = subDays(new Date(), 14);
     render(
       <Sykdomsvurdering
@@ -854,8 +838,10 @@ describe('revurdering', () => {
     await skrivInnDatoForNårVurderingenGjelderFra(format(new Date(), 'ddMMyy'));
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgAtBrukerHarNedsattArbeidsevne();
-    expect(screen.queryByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40%?' })).not.toBeInTheDocument();
-    expect(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30%?' })).toBeVisible();
+    expect(
+      screen.queryByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40 prosent?' })
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30 prosent?' })).toBeVisible();
   });
 
   it('viser spørsmål for om den nedsatte arbeidsevnen i vesentlig del skyldes sykdom, skade eller lyte', async () => {
@@ -971,7 +957,7 @@ const velgAtBrukerHarNedsattArbeidsevne = async () =>
   await velgJaIGruppe(screen.getByRole('group', { name: 'Har bruker nedsatt arbeidsevne?' }));
 
 const velgAtArbeidsevnenErNedsattMedMinstFørtiProsent = async () =>
-  await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40%?' }));
+  await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40 prosent?' }));
 
 const skrivInnDatoForNårVurderingenGjelderFra = async (dato: string) => {
   const datofelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });

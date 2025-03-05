@@ -1,5 +1,5 @@
 import { FormField, FormFields } from '@navikt/aap-felles-react';
-import { Alert, Heading } from '@navikt/ds-react';
+import { Alert } from '@navikt/ds-react';
 import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { JaEllerNei } from 'lib/utils/form';
 import { ReactNode } from 'react';
@@ -34,7 +34,6 @@ export const Førstegangsbehandling = ({ form, formFields, skalVurdereYrkesskade
 
       {skalVurdereYrkesskade && form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei && (
         <>
-          <Heading size={'small'}>Nedsatt arbeidsevne §§ 11-5 / 11-22</Heading>
           <FormField form={form} formField={formFields.yrkesskadeBegrunnelse} className={'begrunnelse'} />
           <FormField
             form={form}
