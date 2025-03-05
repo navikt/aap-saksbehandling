@@ -144,3 +144,7 @@ export function clientHentRelevanteDokumenter(saksnummer: string) {
 export function clientPurrPåLegeerklæring(dialogmeldingUUID: string) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/purring/${dialogmeldingUUID}`, 'POST');
 }
+
+export function clientSendHendelse(body: Object) {
+  return clientFetch(`${BASE_URL}/api/hendelse/send`, 'POST', body)
+}

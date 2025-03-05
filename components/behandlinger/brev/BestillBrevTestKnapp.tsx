@@ -19,5 +19,5 @@ export const BestillBrevTestKnapp = ({ behandlingReferanse }: { behandlingRefera
     }
   };
 
-  return <Button onClick={async () => bestillBrev()}>Bestill testbrev</Button>;
+  return <Button size="small" variant="secondary" onClick={async () => bestillBrev()}>Bestill testbrev</Button>;
 };

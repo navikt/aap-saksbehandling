@@ -1,16 +1,8 @@
 import { BodyShort, Button } from '@navikt/ds-react';
-import { sendLokalHendelse } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isLocal } from 'lib/utils/environment';
+import { clientSendHendelse } from "lib/clientApi";
 
 export const SendNySoknad = ({ saksid }: { saksid: string }) => {
-  // komponenten skal kun brukes lokalt
-  if (!isLocal) {
-    return;
-  }
-
   async function postSoknad() {
-    'use server';
-
     const reqBody = {
       kanal: 'DIGITAL',
       melding: {
@@ -54,7 +46,7 @@ export const SendNySoknad = ({ saksid }: { saksid: string }) => {
       saksnummer: saksid,
       type: 'SØKNAD',
     };
-    await sendLokalHendelse(reqBody);
+    await clientSendHendelse(reqBody);
   }
 
   return (

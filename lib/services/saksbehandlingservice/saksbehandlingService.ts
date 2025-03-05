@@ -355,11 +355,6 @@ export const hentAutomatiskLovvalgOgMedlemskapVurdering = async (
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
-export const sendFakeMeldekort = async (body: Object): Promise<void> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/hendelse/send`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'POST', body);
-};
-
 export const sendLokalHendelse = async (body: Object): Promise<void> => {
   const url = `${saksbehandlingApiBaseUrl}/api/hendelse/send`;
   return await fetchProxy(url, saksbehandlingApiScope, 'POST', body);
