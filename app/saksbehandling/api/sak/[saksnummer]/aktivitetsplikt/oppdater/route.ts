@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import { oppdaterBruddPåAktivitetsplikten } from '../../../../../../lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError } from '@navikt/aap-felles-utils';
+import { oppdaterBruddPåAktivitetsplikten } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 export async function POST(req: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;

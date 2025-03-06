@@ -2,12 +2,21 @@
 
 import { BodyShort, Heading, VStack } from '@navikt/ds-react';
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 /**
  * Erstatning frem til denne er ut av experimental og klar for produksjon
  * https://nextjs.org/docs/app/api-reference/file-conventions/forbidden
  */
 export default function ForbiddenPage() {
+  return (
+    <Suspense>
+      <Forbidden />
+    </Suspense>
+  );
+}
+
+const Forbidden = () => {
   const params = useSearchParams();
   const url = params.get('url');
 
@@ -31,4 +40,4 @@ export default function ForbiddenPage() {
       </VStack>
     </div>
   );
-}
+};

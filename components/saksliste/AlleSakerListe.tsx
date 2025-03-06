@@ -65,7 +65,7 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
             .map((sak) => (
               <Table.Row key={sak.saksnummer}>
                 <Table.DataCell>
-                  <Link href={`/sak/${sak.saksnummer}/`}>{sak.saksnummer}</Link>
+                  <Link href={`/saksbehandling/sak/${sak.saksnummer}/`}>{sak.saksnummer}</Link>
                 </Table.DataCell>
                 <Table.DataCell>{sak.ident}</Table.DataCell>
                 <Table.DataCell>{formaterDatoMedTidspunktForFrontend(sak.opprettetTidspunkt)}</Table.DataCell>

@@ -1,4 +1,4 @@
-import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
+import styles from 'app/saksbehandling/sak/[saksId]/aktivitet/page.module.css';
 import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';

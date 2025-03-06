@@ -1,4 +1,4 @@
-import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
+import styles from 'app/saksbehandling/sak/[saksId]/aktivitet/page.module.css';
 import { AktivitetspliktMedDatafetching } from 'components/aktivitetsplikt/AktivitetspliktMedDatafetching';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';

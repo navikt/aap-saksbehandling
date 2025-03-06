@@ -7,6 +7,7 @@ import { BestillBrevTestKnapp } from 'components/behandlinger/brev/BestillBrevTe
 import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
+import { useRouter } from 'next/navigation';
 
 const formaterBehandlingType = (behandlingtype: string) => {
   switch (behandlingtype) {
@@ -20,6 +21,7 @@ const formaterBehandlingType = (behandlingtype: string) => {
 };
 
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
+  const router = useRouter();
   return (
     <Page>
       <Page.Block width="xl">
@@ -28,7 +30,10 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             <Heading size="large">Sak {sak.saksnummer}</Heading>
 
             {!isProduction() && (
-              <Button variant="secondary" as="a" href={`/sak/${sak.saksnummer}/aktivitet`}>
+              <Button
+                variant="secondary"
+                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
+              >
                 Registrer brudd på aktivitetsplikten
               </Button>
             )}

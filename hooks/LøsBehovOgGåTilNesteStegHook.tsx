@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   ServerSentEventData,
   ServerSentEventStatus,
-} from 'app/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
+} from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { clientLøsBehov } from 'lib/clientApi';
@@ -49,7 +49,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
         eventSource.close();
         if (eventData.skalBytteGruppe || eventData.skalBytteSteg) {
           router.push(
-            `/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}/#${eventData.aktivtSteg}`
+            `/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}/#${eventData.aktivtSteg}`
           );
         }
 

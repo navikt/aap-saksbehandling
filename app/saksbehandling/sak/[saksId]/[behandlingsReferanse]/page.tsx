@@ -18,9 +18,9 @@ const Page = async (props: { params: Promise<{ saksId: string; behandlingsRefera
    * F.eks hvis Student steget er første vurdering som er gjort i behandlingen så vil vurdertGruppe være satt til Student når man kommer til besluttersteget
    */
   if (flyt.vurdertGruppe && flyt.vurdertSteg) {
-    redirect(`/sak/${params.saksId}/${behandling.referanse}/${flyt.vurdertGruppe}/#${flyt.vurdertSteg}`);
+    redirect(`/saksbehandling/sak/${params.saksId}/${behandling.referanse}/${flyt.vurdertGruppe}/#${flyt.vurdertSteg}`);
   } else {
-    redirect(`/sak/${params.saksId}/${behandling.referanse}/${flyt.aktivGruppe}`);
+    redirect(`/saksbehandling/sak/${params.saksId}/${behandling.referanse}/${flyt.aktivGruppe}`);
   }
 };
 
