@@ -11,7 +11,7 @@
   --ac-expansioncard-border-hover-color: none;
 
   border: 1px solid var(--a-border-divider);
-  border-left: 0.5rem solid var(--a-surface-alt-2);
+  border-left: 0.5rem solid var(--a-surface-alt-1-moderate);
 }
 
 :is(.vilkårsKortNAV, .vilkårsKortNAY):last-of-type {
