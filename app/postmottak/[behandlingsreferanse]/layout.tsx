@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { DokumentInfoBanner } from 'components/postmottak/dokumentinfobanner/DokumentInfoBanner';
-import styles from 'app/[behandlingsreferanse]/layout.module.css';
+import styles from './layout.module.css';
 import { StegGruppeIndikatorAksel } from 'components/postmottak/steggruppeindikator/StegGruppeIndikatorAksel';
 import { SplitVindu } from 'components/postmottak/splitvindu/SplitVindu';
 import {

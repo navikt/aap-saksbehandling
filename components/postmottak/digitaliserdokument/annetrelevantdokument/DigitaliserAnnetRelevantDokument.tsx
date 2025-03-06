@@ -1,10 +1,11 @@
 import { Submittable } from '../DigitaliserDokument.tsx';
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
-import { AnnetRelevantDokumentV0, ÅrsakTilBehandling } from 'lib/types/types.js';
+
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { VilkårsKort } from '../../vilkårskort/VilkårsKort';
 import { Nesteknapp } from '../../nesteknapp/Nesteknapp';
 import { VStack } from '@navikt/ds-react';
+import { AnnetRelevantDokumentV0, ÅrsakTilBehandling } from 'lib/types/types';
 
 export interface AnnetRelevantDokumentFormFields {
   årsak: String;

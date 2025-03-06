@@ -37,7 +37,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
         eventSource.close();
         if (eventData.skalBytteGruppe || eventData.skalBytteSteg) {
           // TODO: Legge tilbake igjen hash for aktivt-steg hvis vi tar i bruk dette?
-          router.push(`/${params.behandlingsreferanse}/${eventData.aktivGruppe}/`);
+          router.push(`/postmottak/${params.behandlingsreferanse}/${eventData.aktivGruppe}/`);
         }
         router.refresh();
         setIsLoading(false);
