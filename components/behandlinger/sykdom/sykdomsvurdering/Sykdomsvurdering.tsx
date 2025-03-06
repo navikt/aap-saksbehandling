@@ -163,12 +163,10 @@ export const Sykdomsvurdering = ({
       },
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
         type: 'radio',
-        label:
-          'Er den nedsatte arbeidsevnen forbigående slik at brukeren skal vurderes for AAP som sykepengeerstatning etter § 11-13?',
+        label: 'Er den nedsatte arbeidsevnen av en viss varighet?',
         defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet),
         rules: {
-          required:
-            'Du må svare på om den nedsatte arbeidsevnen er forbigående slik at brukeren skal vurderes for AAP som sykepengeerstatning etter § 11-13',
+          required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet',
         },
         options: JaEllerNeiOptions,
       },
