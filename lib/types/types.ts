@@ -222,5 +222,21 @@ export type LovvalgEØSLand =
 export type Sykdomsvurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingDto'];
 
+export type Søknad = components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0'];
+
+export const MeldekortV0 = 'MeldekortV0';
+export type MeldekortV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof MeldekortV0}`] & {
+    meldingType: typeof MeldekortV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
+export const AnnetRelevantDokumentV0 = 'AnnetRelevantDokumentV0';
+export type AnnetRelevantDokumentV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof AnnetRelevantDokumentV0}`] & {
+    meldingType: typeof AnnetRelevantDokumentV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
+export type ÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakTilBehandling'];
+
 // oppgave
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];

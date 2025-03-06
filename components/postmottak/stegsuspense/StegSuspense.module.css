@@ -1,0 +1,6 @@
+.skeletonHeader {
+  --ac-skeleton-bg: var(--a-blue-100);
+}
+.skeletonBody {
+  --ac-skeleton-bg: var(--a-blue-50);
+}

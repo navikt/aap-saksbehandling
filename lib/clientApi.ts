@@ -20,7 +20,7 @@ import { getErrorMessage } from 'lib/utils/errorUtil';
 
 const BASE_URL = '/saksbehandling';
 
-async function clientFetch<ResponseBody>(
+export async function clientFetch<ResponseBody>(
   url: string,
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
   body?: object
@@ -71,7 +71,6 @@ async function clientFetchV2<ResponseBody>(
         message: data.message || res.statusText,
       };
     }
-     
   } catch (e) {
     return {
       type: 'ERROR',
@@ -146,5 +145,5 @@ export function clientPurrPåLegeerklæring(dialogmeldingUUID: string) {
 }
 
 export function clientSendHendelse(body: Object) {
-  return clientFetch(`${BASE_URL}/api/hendelse/send`, 'POST', body)
+  return clientFetch(`${BASE_URL}/api/hendelse/send`, 'POST', body);
 }
