@@ -36,7 +36,7 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
       {overstyring && stegSomSkalVises.length === 0 && (
         <LovvalgOgMedlemskapVedSKnadstidspunkt
           behandlingVersjon={behandlingVersjon}
-          grunnlag={{}}
+          grunnlag={{ historiskeManuelleVurderinger: [] }}
           readOnly={readOnly}
           overstyring={true}
         />

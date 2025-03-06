@@ -106,3 +106,10 @@ export const getStringEllerUndefined = (value?: number | string | null) => {
   }
   return value.toString();
 };
+
+export function getJaNeiEllerIkkeBesvart(value?: boolean | null) {
+  if (value === undefined || value === null) {
+    return 'Ikke besvart';
+  }
+  return value ? JaEllerNei.Ja : JaEllerNei.Nei;
+}
