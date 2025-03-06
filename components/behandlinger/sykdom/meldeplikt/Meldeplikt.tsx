@@ -144,7 +144,6 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
             </RadioGroupWrapper>
             <DateInputWrapper
               label={'Vurderingen gjelder fra'}
-              description={'Datoformat: dd.mm.åååå'}
               control={form.control}
               name={`fritaksvurderinger.${index}.fraDato`}
               rules={{

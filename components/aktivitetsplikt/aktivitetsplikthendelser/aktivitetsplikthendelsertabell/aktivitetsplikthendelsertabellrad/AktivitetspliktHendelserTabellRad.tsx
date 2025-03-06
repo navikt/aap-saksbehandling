@@ -73,7 +73,6 @@ export const AktivitetspliktHendelserTabellRad = ({ aktivitetspliktHendelse }: P
     bidrarAktivtIgjenDato: {
       type: 'date_input',
       label: 'Bidrar aktivt igjen fra',
-      description: 'Datoformat: dd.mm.åååå',
       defaultValue:
         aktivitetspliktHendelse.grunn === 'BIDRAR_AKTIVT'
           ? formaterDatoForFrontend(aktivitetspliktHendelse.periode.fom)
