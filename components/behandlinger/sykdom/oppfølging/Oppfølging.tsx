@@ -11,22 +11,29 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Link } from '@navikt/ds-react';
+import { validerDato } from 'lib/validation/dateValidation';
+import { isBefore, startOfDay } from 'date-fns';
+import { stringToDate } from 'lib/utils/date';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
+  søknadstidspunkt: string;
   grunnlag?: BistandsGrunnlag;
 }
 
 interface FormFields {
   begrunnelse: string;
+  vurderingenGjelderFra: string;
   erBehovForAktivBehandling: string;
   erBehovForArbeidsrettetTiltak: string;
   erBehovForAnnenOppfølging?: string;
+  vurderAAPIOvergangTilUføre?: string; // ikke i backend enda, skal inn på førstegangsbehandling, vises hvis a-c === false, usikkert navn
+  vurderAAPIOvergangTilArbeid?: string; // ikke i backend enda, skal kun vises i revurdering hvis 11-5 && 11-6 === false, usikkert navn
 }
 
-export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+export const Oppfølging = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
@@ -38,6 +45,24 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
         label: 'Vilkårsvurdering',
         defaultValue: grunnlag?.vurdering?.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse om bruker har behov for oppfølging' },
+      },
+      vurderingenGjelderFra: {
+        type: 'date_input',
+        label: 'Vurderingen gjelder fra',
+        defaultValue: undefined,
+        rules: {
+          required: 'Du må velge når vurderingen gjelder fra',
+          validate: {
+            gyldigDato: (v) => validerDato(v as string),
+            kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
+              const soknadstidspunkt = startOfDay(new Date(søknadstidspunkt));
+              const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
+              if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
+                return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
+              }
+            },
+          },
+        },
       },
       erBehovForAktivBehandling: {
         type: 'radio',
@@ -59,6 +84,20 @@ export const Oppfølging = ({ behandlingVersjon, grunnlag, readOnly }: Props) =>
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAnnenOppfølging),
         rules: { required: 'Du må svare på om bruker anses for å ha en viss mulighet til å komme i arbeid' },
+      },
+      vurderAAPIOvergangTilUføre: {
+        type: 'radio',
+        label: 'Har brukeren rett på AAP i overgang til uføre § 11-18?',
+        options: JaEllerNeiOptions,
+        defaultValue: undefined, // må hentes fra grunnlag
+        rules: { required: 'Du må svare på om bruker har rett på AAP i overgang til uføre' },
+      },
+      vurderAAPIOvergangTilArbeid: {
+        type: 'radio',
+        label: 'Har brukeren rett på AAP i overgang til arbeid § 11-17?',
+        options: JaEllerNeiOptions,
+        defaultValue: undefined, // må hentes fra grunnlag
+        rules: { required: 'Du må svare på om bruker har rett på AAP i overgang til arbeid' },
       },
     },
     { readOnly: readOnly, shouldUnregister: true }

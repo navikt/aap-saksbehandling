@@ -65,6 +65,7 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
             typeBehandling={flyt.visning.typeBehandling}
+            saksId={sakId}
           />
         </StegSuspense>
       )}

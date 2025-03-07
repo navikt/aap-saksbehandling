@@ -2,24 +2,49 @@ import { describe, it, expect } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { Oppfølging } from './Oppfølging';
+import { format } from 'date-fns';
 
 const user = userEvent.setup();
+
+const søknadstidspunkt = format(new Date(), 'yyyy-MM-dd');
+
 describe('Oppfølging', () => {
   it('Skal ha en overskrift', () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
 
     const heading = screen.getByText('§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid');
     expect(heading).toBeVisible();
   });
 
   it('Skal ha felt for begrunnelse', () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
     const begrunnelse = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelse).toBeVisible();
   });
 
   it('Skal ha felt for om bruker har behov for aktiv behandling', () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
     const felt = screen.getByRole('group', {
       name: 'a: Har bruker behov for aktiv behandling?',
     });
@@ -27,13 +52,27 @@ describe('Oppfølging', () => {
   });
 
   it('Skal ha felt for om bruker har behov for arbeidsrettet tiltak', () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
     const felt = screen.getByRole('group', { name: 'b: Har bruker behov for arbeidsrettet tiltak?' });
     expect(felt).toBeVisible();
   });
 
   it('har felt for om bruker anses for å ha en viss mulighet til å komme i arbeid', async () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
     expect(
       screen.queryByRole('group', {
         name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
@@ -42,7 +81,14 @@ describe('Oppfølging', () => {
   });
 
   it('skjuler felt for om bruker anses for å ha en viss mulighet til å komme i arbeid dersom a er besvart med ja', async () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
 
     expect(finnGruppeForBokstavC()).toBeVisible();
 
@@ -51,7 +97,14 @@ describe('Oppfølging', () => {
   });
 
   it('skjuler felt for om bruker anses for å ha en viss mulighet til å komme i arbeid dersom b er besvart med nei', async () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
 
     expect(finnGruppeForBokstavC()).toBeVisible();
 
@@ -60,7 +113,14 @@ describe('Oppfølging', () => {
   });
 
   it('skjuler felt for om bruker anses for å ha en viss mulighet til å komme i arbeid dersom både a og b er besvart med ja', async () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
 
     expect(finnGruppeForBokstavC()).toBeVisible();
 
@@ -71,7 +131,14 @@ describe('Oppfølging', () => {
   });
 
   it('viser felt for om bruker anses for å ha en viss mulighet til å komme i arbeid dersom a og b er besvart med nei', async () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
     await velgNei(finnGruppeForBokstavA());
     await velgNei(finnGruppeForBokstavB());
 
@@ -79,7 +146,14 @@ describe('Oppfølging', () => {
   });
 
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
 
     await trykkPåBekreft();
     const feilmelding = screen.getByText('Du må gi en begrunnelse om bruker har behov for oppfølging');
@@ -87,7 +161,14 @@ describe('Oppfølging', () => {
   });
 
   it('Skal vise feilmelding dersom feltet om bruker har behov for aktiv behandling ikke er besvart', async () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
 
     await trykkPåBekreft();
     const feilmelding = screen.getByText('Du må svare på om bruker har behov for aktiv behandling');
@@ -95,7 +176,14 @@ describe('Oppfølging', () => {
   });
 
   it('Skal vise feilmelding dersom feltet om bruker har behov for arbeidsrettet tiltak ikke er besvart', async () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
 
     await trykkPåBekreft();
 
@@ -104,7 +192,14 @@ describe('Oppfølging', () => {
   });
 
   it('Skal vise feilmelding dersom feltet om bruker anses for å ha en viss mulighet for å komme i arbeid ikke er besvart', async () => {
-    render(<Oppfølging readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
 
     const harInnbyggetBehovForAktivBehandling = screen.getByRole('group', {
       name: 'a: Har bruker behov for aktiv behandling?',
