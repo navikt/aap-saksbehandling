@@ -164,6 +164,7 @@ export const Sykdomsvurdering = ({
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
         type: 'radio',
         label: 'Er den nedsatte arbeidsevnen av en viss varighet?',
+        description: 'Om du svarer nei, vil brukeren vurderes for AAP som sykepengeerstatning etter § 11-13.',
         defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet),
         rules: {
           required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet',
