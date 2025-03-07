@@ -32,13 +32,13 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5001':
       return 'Student § 11-14';
     case '5003':
-      return 'Nedsatt arbeidsevne § 11-5';
+      return '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng';
     case '5004':
-      return 'Vurdering av etablert og uutnyttet arbeidsevne § 11-23';
+      return '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet';
     case '5005':
-      return 'Unntak fra meldeplikt § 11-10';
+      return '§ 11-10 tredje ledd. Unntak fra meldeplikt';
     case '5006':
-      return 'Behov for oppfølging § 11-6';
+      return '§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid';
     case '5007':
       return 'Sykepengeerstatning § 11-13';
     case '5008':

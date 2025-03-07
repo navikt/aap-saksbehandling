@@ -31,7 +31,9 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const overskriftLenke = screen.getByRole('link', { name: 'Nedsatt arbeidsevne § 11-5' });
+    const overskriftLenke = screen.getByRole('link', {
+      name: '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng',
+    });
     expect(overskriftLenke).toBeVisible();
     expect(overskriftLenke).toHaveAttribute('href', `${link}/SYKDOM#AVKLAR_SYKDOM`);
   });

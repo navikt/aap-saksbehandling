@@ -34,7 +34,7 @@ describe('Oppsummering', () => {
     const label = screen.getByText('Vilkår');
     expect(label).toBeVisible();
     const link = screen.getByRole('link', {
-      name: 'Nedsatt arbeidsevne § 11-5',
+      name: '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng',
     });
 
     expect(link).toBeVisible();
