@@ -36,7 +36,7 @@ export const ForutgåendemedlemskapOverstyringswrapper = ({
       {overstyring && stegSomSkalVises.length === 0 && (
         <ManuellVurderingForutgåendeMedlemskap
           behandlingVersjon={behandlingVersjon}
-          grunnlag={{}}
+          grunnlag={{ historiskeManuelleVurderinger: [] }}
           readOnly={readOnly}
           overstyring={true}
         />

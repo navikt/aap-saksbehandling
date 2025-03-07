@@ -20,7 +20,7 @@ export const PeriodeViser = ({ tilkjentYtelse, meldeperioder }: Props) => {
       return [];
     }
     return tilkjentYtelse.perioder.filter(
-      (periode) => isAfter(new Date(valgtMeldeperiode.fom), new Date(periode.periode.fom))
+      (periode) => isAfter(new Date(valgtMeldeperiode.fom), new Date(periode.fraOgMed))
       //isBefore(new Date(valgtMeldeperiode.tom), new Date(periode.periode.tom))
     );
   };
@@ -48,61 +48,45 @@ export const PeriodeViser = ({ tilkjentYtelse, meldeperioder }: Props) => {
 
       {activePeriods &&
         activePeriods.map((activePeriod) => (
-          <div key={activePeriod.periode.fom}>
+          <div key={activePeriod.fraOgMed}>
             <Label as="p">
-              AAP utbetaling {formaterDatoForFrontend(activePeriod.periode.fom)} -{' '}
-              {formaterDatoForFrontend(activePeriod.periode.tom)}
+              AAP utbetaling {formaterDatoForFrontend(activePeriod.fraOgMed)} -{' '}
+              {formaterDatoForFrontend(activePeriod.fraOgMed)}
             </Label>
             <Detail>Faktisk utbetaling kan bli justert av eksterne faktorer, eks: lønnstrekk</Detail>
             <Table>
               <Table.Body>
                 <Table.Row>
                   <Table.DataCell scope="row">{'Dagsats'}</Table.DataCell>
-                  <Table.DataCell>
-                    {activePeriod.tilkjent.dagsats && activePeriod.tilkjent.dagsats.verdi}
-                  </Table.DataCell>
+                  <Table.DataCell>{activePeriod.dagsats && activePeriod.dagsats}</Table.DataCell>
                 </Table.Row>
                 <Table.Row>
                   <Table.DataCell scope="row">{'Grunnlag'}</Table.DataCell>
-                  <Table.DataCell>
-                    {activePeriod.tilkjent.grunnlag && activePeriod.tilkjent.grunnlag.verdi}
-                  </Table.DataCell>
+                  <Table.DataCell>{activePeriod.grunnlag && activePeriod.grunnlag}</Table.DataCell>
                 </Table.Row>
                 <Table.Row>
                   <Table.DataCell scope="row">{'Gradering'}</Table.DataCell>
-                  <Table.DataCell>
-                    {activePeriod.tilkjent.gradering && activePeriod.tilkjent.gradering.verdi}
-                  </Table.DataCell>
+                  <Table.DataCell>{activePeriod.gradering && activePeriod.gradering}</Table.DataCell>
                 </Table.Row>
                 <Table.Row>
                   <Table.DataCell scope="row">{'Antall barn'}</Table.DataCell>
-                  <Table.DataCell>
-                    {activePeriod.tilkjent.antallBarn && activePeriod.tilkjent.antallBarn}
-                  </Table.DataCell>
+                  <Table.DataCell>{activePeriod.antallBarn && activePeriod.antallBarn}</Table.DataCell>
                 </Table.Row>
                 <Table.Row>
                   <Table.DataCell scope="row">{'Barnetillegg'}</Table.DataCell>
-                  <Table.DataCell>
-                    {activePeriod.tilkjent.barnetillegg && activePeriod.tilkjent.barnetillegg.verdi}
-                  </Table.DataCell>
+                  <Table.DataCell>{activePeriod.barnetillegg && activePeriod.barnetillegg}</Table.DataCell>
                 </Table.Row>
                 <Table.Row>
                   <Table.DataCell scope="row">{'Barnetilleggsats'}</Table.DataCell>
-                  <Table.DataCell>
-                    {activePeriod.tilkjent.barnetilleggsats && activePeriod.tilkjent.barnetilleggsats.verdi}kr
-                  </Table.DataCell>
+                  <Table.DataCell>{activePeriod.barnetilleggsats && activePeriod.barnetilleggsats}kr</Table.DataCell>
                 </Table.Row>
                 <Table.Row>
                   <Table.DataCell scope="row">{'Grunnbeløp'}</Table.DataCell>
-                  <Table.DataCell>
-                    {activePeriod.tilkjent.grunnbeløp && activePeriod.tilkjent.grunnbeløp.verdi}kr
-                  </Table.DataCell>
+                  <Table.DataCell>{activePeriod.grunnbeløp && activePeriod.grunnbeløp}kr</Table.DataCell>
                 </Table.Row>
                 <Table.Row>
                   <Table.DataCell scope="row">{'Grunnlagsfaktor'}</Table.DataCell>
-                  <Table.DataCell>
-                    {activePeriod.tilkjent.grunnlagsfaktor && activePeriod.tilkjent.grunnlagsfaktor.verdi}
-                  </Table.DataCell>
+                  <Table.DataCell>{activePeriod.grunnlagsfaktor && activePeriod.grunnlagsfaktor}</Table.DataCell>
                 </Table.Row>
               </Table.Body>
             </Table>

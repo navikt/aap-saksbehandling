@@ -5,10 +5,11 @@ import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { landMedTrygdesamarbeid } from 'lib/utils/countries';
-import { Behovstype, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerIkkeBesvart, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { LovvalgEØSLand, LovvalgMedlemskapGrunnlag } from 'lib/types/types';
+import { TidligereVurderingerV2 } from 'components/tidligerevurderinger/TidligereVurderingerV2';
 
 interface Props {
   behandlingVersjon: number;
@@ -140,6 +141,33 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
     : 'Lovvalg og medlemskap ved søknadstidspunkt';
   return (
     <VilkårsKort heading={heading} steg={'VURDER_LOVVALG'}>
+      {grunnlag.historiskeManuelleVurderinger.length > 0 && (
+        <TidligereVurderingerV2
+          tidligereVurderinger={grunnlag.historiskeManuelleVurderinger.map((vurdering) => ({
+            ...vurdering,
+            felter: [
+              {
+                label: 'Vurder riktig lovvalg ved søknadstidspunkt',
+                value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.begrunnelse || '',
+              },
+              {
+                label: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
+                value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLand || '',
+              },
+              {
+                label: 'Vurder brukerens medlemskap på søknadstidspunktet',
+                value: vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.begrunnelse || '',
+              },
+              {
+                label: 'Var brukeren medlem av folketrygden ved søknadstidspunktet?',
+                value: getJaNeiEllerIkkeBesvart(
+                  vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.varMedlemIFolketrygd
+                ),
+              },
+            ],
+          }))}
+        />
+      )}
       <Form
         steg={'VURDER_LOVVALG'}
         onSubmit={handleSubmit}
