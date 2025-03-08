@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { finnSakerForIdent } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { logError } from '@navikt/aap-felles-utils';
+import { logError, logInfo } from '@navikt/aap-felles-utils';
 import { SaksInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 
@@ -35,6 +35,7 @@ export async function POST(req: Request) {
   let oppgaveData: SøkeResultat['oppgaver'] = [];
   try {
     const oppgaver = await oppgaveTekstSøk(søketekst);
+    logInfo(`oppgaver: ${JSON.stringify(oppgaver)}`);
     if (oppgaver) {
       oppgaveData = oppgaver.map((oppgave: unknown) => ({
         href: byggKelvinURL(oppgave),
