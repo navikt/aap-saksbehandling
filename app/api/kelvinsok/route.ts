@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { finnSakerForIdent } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { finnSakerForIdent, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError, logInfo } from '@navikt/aap-felles-utils';
 import { SaksInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
@@ -21,11 +21,14 @@ export async function POST(req: Request) {
   const søketekst = body.søketekst;
   let sakData: SaksInfo[] = [];
   const isFnr = søketekst.length === 11;
+  const isSaksnummer = søketekst.length === 11;
 
   // Saker
   try {
     if (isFnr) {
       sakData = await finnSakerForIdent(søketekst);
+    } else if (isSaksnummer) {
+      sakData = [await hentSak(søketekst)];
     }
   } catch (err) {
     logError('/api/kelvinsøk saker', err);
