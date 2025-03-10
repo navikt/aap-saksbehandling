@@ -7,9 +7,9 @@ import { DateInputWrapper } from '@navikt/aap-felles-react';
 import styles from 'components/aktivitetsplikt/aktivitetspliktdato/AktivitetspliktDato.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
 import { isBefore, parse, startOfDay } from 'date-fns';
-import { AktivitetspliktFormFields } from '../aktivitetspliktform/AktivitetspliktForm';
 import { hentDatoLabel } from 'components/aktivitetsplikt/util/AktivitetspliktUtil';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { AktivitetspliktFormFields } from 'components/aktivitetsplikt/aktivitetspliktform/AktivitetspliktForm';
 
 interface Props {
   form: UseFormReturn<AktivitetspliktFormFields>;

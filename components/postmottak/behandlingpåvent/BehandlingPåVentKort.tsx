@@ -5,8 +5,8 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { SettPåVentÅrsaker, Venteinformasjon } from 'lib/types/postmottakTypes';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { VilkårsKort } from '../vilkårskort/VilkårsKort';
 import { exhaustiveCheck } from 'lib/utils/typescript';
+import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 
 interface Props {
   informasjon?: Venteinformasjon;

@@ -9,14 +9,14 @@ import {
   stringToJaNeiIkkeOppgitt,
   stringToJaNeiVetikke,
 } from 'lib/postmottakForm';
-import { VilkårsKort } from '../../vilkårskort/VilkårsKort';
 import { Barnetillegg } from './Barnetillegg';
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 import { Student } from './Student';
-import { Submittable } from '../DigitaliserDokument.tsx';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import { VStack } from '@navikt/ds-react';
 import { Søknad } from 'lib/types/types';
+import { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument.tsx';
+import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 
 export type Barn = {
   fnr?: string;

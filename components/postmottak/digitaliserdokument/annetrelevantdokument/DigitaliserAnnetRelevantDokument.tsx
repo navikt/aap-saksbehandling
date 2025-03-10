@@ -1,11 +1,11 @@
-import { Submittable } from '../DigitaliserDokument.tsx';
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 
 import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
-import { VilkårsKort } from '../../vilkårskort/VilkårsKort';
-import { Nesteknapp } from '../../nesteknapp/Nesteknapp';
 import { VStack } from '@navikt/ds-react';
 import { AnnetRelevantDokumentV0, ÅrsakTilBehandling } from 'lib/types/types';
+import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort.jsx';
+import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
+import { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument.tsx';
 
 export interface AnnetRelevantDokumentFormFields {
   årsak: String;

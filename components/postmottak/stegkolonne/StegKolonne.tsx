@@ -1,11 +1,10 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { AvklarTemaMedDataFetching } from '../avklartema/AvklarTemaMedDataFetching';
 import { StegGruppe } from 'lib/types/postmottakTypes';
-import { FinnSakMedDataFetching } from '../finnsak/FinnSakMedDataFetching';
-import { DigitaliserDokumentMedDatafetching } from '../digitaliserdokument/DigitaliserDokumentMedDatafetching';
-import React from 'react';
-import { OverleveringMedDataFetching } from '../overlevering/OverleveringMedDataFetching';
 import { Alert, VStack } from '@navikt/ds-react';
+import { AvklarTemaMedDataFetching } from 'components/postmottak/avklartema/AvklarTemaMedDataFetching';
+import { FinnSakMedDataFetching } from 'components/postmottak/finnsak/FinnSakMedDataFetching';
+import { OverleveringMedDataFetching } from 'components/postmottak/overlevering/OverleveringMedDataFetching';
+import { DigitaliserDokumentMedDatafetching } from 'components/postmottak/digitaliserdokument/DigitaliserDokumentMedDatafetching';
 
 interface Props {
   aktivGruppe: StegGruppe;

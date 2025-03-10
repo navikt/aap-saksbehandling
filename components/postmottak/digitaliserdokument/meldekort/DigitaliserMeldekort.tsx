@@ -1,11 +1,11 @@
 'use client';
 
-import { VilkårsKort } from '../../vilkårskort/VilkårsKort';
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { MeldePerioder } from './MeldePerioder';
-import { Submittable } from '../DigitaliserDokument.tsx';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import { MeldekortV0 } from 'lib/types/types';
+import { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument.tsx';
+import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 
 interface Props extends Submittable {
   behandlingsVersjon: number;

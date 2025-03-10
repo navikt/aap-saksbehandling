@@ -4,11 +4,11 @@ import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
 import { OverleveringGrunnlag } from 'lib/types/postmottakTypes';
-import { VilkårsKort } from '../vilkårskort/VilkårsKort';
-import { ServerSentEventStatusAlert } from '../serversenteventstatusalert/ServerSentEventStatusAlert';
-import { Nesteknapp } from '../nesteknapp/Nesteknapp';
 import { FormEvent, FormEventHandler } from 'react';
 import { VStack } from '@navikt/ds-react';
+import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
+import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
+import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 
 interface Props {
   behandlingsVersjon: number;

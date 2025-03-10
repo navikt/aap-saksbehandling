@@ -3,9 +3,9 @@
 import { BodyShort, Button, Dropdown, Label } from '@navikt/ds-react';
 import styles from './DokumentInfoBanner.module.css';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { SettBehandllingPåVentModal } from '../settbehandlingpåventmodal/SettBehandllingPåVentModal';
 import { useState } from 'react';
 import { JournalpostInfo } from 'lib/types/postmottakTypes';
+import { SettBehandllingPåVentModal } from 'components/postmottak/settbehandlingpåventmodal/SettBehandllingPåVentModal';
 
 interface Props {
   behandlingsreferanse: string;
