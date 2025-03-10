@@ -1,0 +1,7 @@
+.kort {
+  padding: var(--a-spacing-8);
+
+  background-color: var(--a-bg-default);
+
+  border: 2px solid var(--a-bg-default);
+}

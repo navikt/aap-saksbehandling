@@ -245,6 +245,7 @@ export async function oppgaveTekstSøk(søketekst: string) {
   if (isLocal()) {
     return [
       {
+        reservertAv: 'DF39ZH',
         avklaringsbehovKode: '9003',
         behandlingOpprettet: '2025-01-06T12:36:44.716229',
         behandlingRef: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -255,6 +256,7 @@ export async function oppgaveTekstSøk(søketekst: string) {
         versjon: 0,
       },
       {
+        reservertAv: 'DF39ZH',
         avklaringsbehovKode: '5001',
         behandlingOpprettet: '2025-01-06T12:36:44.716229',
         behandlingRef: '34fdsff-5717-4562-b3fc-2c963f66afa6',

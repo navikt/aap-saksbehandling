@@ -9,3 +9,7 @@ export async function revalidateFlyt(behandlingReferanse: string) {
 export async function revalidateAktivitetspliktHendelser(saksnummer: string) {
   revalidateTag(`aktivitetsplikt/${saksnummer}`);
 }
+
+export async function revalidateMineOppgaver() {
+  revalidateTag(`oppgaveservice/mine-oppgaver`);
+}

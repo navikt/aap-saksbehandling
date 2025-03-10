@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { statistikkQueryparams } from '../../../aap-produksjonsstyring/lib/utils/request';
+import { statistikkQueryparams } from './request';
 
 describe('statistikkQueryParams', () => {
   test('tomt', () => {
