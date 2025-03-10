@@ -5,7 +5,7 @@ import {
 } from 'app/postmottak/api/post/[behandlingsreferanse]/hent/[gruppe]/[steg]/nesteSteg/route';
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
-import { løsBehov } from 'lib/postmottakClientApi';
+import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
 
 export const useLøsBehovOgGåTilNesteSteg = (
   steg: StegType
@@ -20,7 +20,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
   const [isLoading, setIsLoading] = useState(false);
 
   const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling) => {
-    await løsBehov(behov);
+    await postmottakLøsBehovClient(behov);
     listenSSE();
   };
   const listenSSE = () => {

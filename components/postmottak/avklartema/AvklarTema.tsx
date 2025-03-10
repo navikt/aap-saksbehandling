@@ -7,7 +7,7 @@ import { FormEvent, FormEventHandler } from 'react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
 import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
 import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
-import { endreTema, løsBehov } from 'lib/postmottakClientApi';
+import { postmottakEndreTemaClient, postmottakLøsBehovClient } from 'lib/postmottakClientApi';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import { VStack } from '@navikt/ds-react';
 
@@ -49,7 +49,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           referanse: behandlingsreferanse,
         });
       } else {
-        løsBehov({
+        postmottakLøsBehovClient({
           behandlingVersjon: behandlingsVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_TEMA,
@@ -58,7 +58,9 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           // @ts-ignore
           referanse: behandlingsreferanse,
         }).then(() =>
-          endreTema(behandlingsreferanse).then((redirectUrl) => redirectUrl && window.location.replace(redirectUrl))
+          postmottakEndreTemaClient(behandlingsreferanse).then(
+            (redirectUrl) => redirectUrl && window.location.replace(redirectUrl)
+          )
         );
       }
     })(event);

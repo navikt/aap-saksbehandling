@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { BodyShort, Button, TextField } from '@navikt/ds-react';
-import { opprettBehandling } from 'lib/postmottakClientApi';
+import { postmottakOpprettBehandlingClient } from 'lib/postmottakClientApi';
 
 export const OpprettBehandling = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -12,7 +12,7 @@ export const OpprettBehandling = () => {
   async function onClick() {
     setIsLoading(true);
     try {
-      const res = await opprettBehandling(journalpostId);
+      const res = await postmottakOpprettBehandlingClient(journalpostId);
       setMessage(`Behandlingsnummer: ${res?.referanse}`);
     } catch (err) {
       console.log(err);
