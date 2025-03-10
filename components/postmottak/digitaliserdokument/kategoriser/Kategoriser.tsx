@@ -3,7 +3,7 @@
 import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { KategoriserDokumentKategori } from 'lib/types/postmottakTypes';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
-import { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument.tsx';
+import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { ServerSentEventStatus } from 'app/postmottak/api/post/[behandlingsreferanse]/hent/[gruppe]/[steg]/nesteSteg/route';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';

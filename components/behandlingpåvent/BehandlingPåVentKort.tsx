@@ -78,5 +78,7 @@ function mapÅrsakerTilString(årsak: SettPåVentÅrsaker): string {
       return 'Venter på maskinell avklaring';
     case 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING':
       return 'Venter på videreføring av sak til utenlandsk trygdemyndighet';
+    case 'VENTER_PÅ_KLAGE_IMPLEMENTASJON':
+      return 'Venter på klageimplementasjon';
   }
 }

@@ -240,7 +240,7 @@ export type AnnetRelevantDokumentV0 =
     meldingType: typeof AnnetRelevantDokumentV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
-export type ÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakTilBehandling'];
+export type ÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
 
 // oppgave
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];

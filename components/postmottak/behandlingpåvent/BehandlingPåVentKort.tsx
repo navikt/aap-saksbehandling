@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { SettPåVentÅrsaker, Venteinformasjon } from 'lib/types/postmottakTypes';

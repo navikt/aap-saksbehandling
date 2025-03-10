@@ -1,5 +1,5 @@
 import { hentDigitaliseringGrunnlag, hentFlyt } from 'lib/services/dokumentmottakservice/dokumentMottakService';
-import { DigitaliserDokument } from './DigitaliserDokument.tsx';
+import { DigitaliserDokument } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 
 interface Props {
   behandlingsreferanse: string;

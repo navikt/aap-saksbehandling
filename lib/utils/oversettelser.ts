@@ -61,6 +61,8 @@ export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode): st
       return 'Overstyr lovvalg og medlemskap';
     case '5022':
       return 'Overstyr § 11-2 Forutgående medlemskap';
+    case '5023':
+      return 'Venter på klageimplementasjon';
     // Postmottak
     case '1337':
       return 'Kategoriser dokument';
@@ -92,6 +94,8 @@ export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker): string {
       return 'Venter på maskinell avklaring';
     case 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING':
       return 'Venter på videreføring av sak til utenlandsk trygdemyndighet';
+    case 'VENTER_PÅ_KLAGE_IMPLEMENTASJON':
+      return 'Venter på klageimplementasjon';
   }
   exhaustiveCheck(årsak);
 }

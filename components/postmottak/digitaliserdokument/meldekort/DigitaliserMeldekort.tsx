@@ -4,7 +4,7 @@ import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { MeldePerioder } from './MeldePerioder';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import { MeldekortV0 } from 'lib/types/types';
-import { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument.tsx';
+import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 
 interface Props extends Submittable {

@@ -15,7 +15,7 @@ import { Student } from './Student';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import { VStack } from '@navikt/ds-react';
 import { Søknad } from 'lib/types/types';
-import { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument.tsx';
+import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 
 export type Barn = {
