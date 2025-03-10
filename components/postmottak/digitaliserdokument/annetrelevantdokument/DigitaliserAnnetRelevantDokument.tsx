@@ -51,10 +51,10 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit }:
     {
       årsaker: {
         type: 'combobox_multiple',
-        label: 'Velg en årsak',
+        label: 'Velg en eller flere årsaker',
         options: [{ label: '', value: '' }, ...årsakOptions],
         defaultValue: defaultÅrsakOptions,
-        rules: { required: 'Du må velge en årsak' },
+        rules: { required: 'Du må velge minst en årsak' },
       },
     },
     { readOnly }
