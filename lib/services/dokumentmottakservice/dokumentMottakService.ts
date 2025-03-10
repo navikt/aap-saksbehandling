@@ -59,7 +59,9 @@ export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovP�
 };
 export const settPåVent = async (behandlingsreferanse: string, body: SettPåVentRequest): Promise<unknown> => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/sett-på-vent`;
-  return await fetchProxy<unknown>(url, dokumentMottakApiScope, 'POST', body);
+  return await fetchProxy<unknown>(url, dokumentMottakApiScope, 'POST', body, [
+    `postmottak/flyt/${behandlingsreferanse}`,
+  ]);
 };
 export const hentVenteInformasjon = async (behandlingsreferanse: string): Promise<Venteinformasjon> => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/vente-informasjon`;

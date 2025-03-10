@@ -13,3 +13,7 @@ export async function revalidateAktivitetspliktHendelser(saksnummer: string) {
 export async function revalidateMineOppgaver() {
   revalidateTag(`oppgaveservice/mine-oppgaver`);
 }
+
+export async function revalidatePostMottakFlyt(behandlingReferanse: string) {
+  revalidateTag(`postmottak/flyt/${behandlingReferanse}`);
+}

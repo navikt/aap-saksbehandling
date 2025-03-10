@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from '@navikt/ds-react';
-import { useConfigForm, FormField, ValuePair } from '@navikt/aap-felles-react';
+import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import styles from './SettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { settPåVent } from 'lib/postmottakClientApi';
 import { SettPåVentÅrsaker } from 'lib/types/postmottakTypes';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { revalidateFlyt } from 'lib/actions/actions';
+import { revalidatePostMottakFlyt } from 'lib/actions/actions';
 
 interface Props {
   behandlingVersjon: number;
@@ -80,7 +80,7 @@ export const SettBehandllingPåVentModal = ({ isOpen, onClose, behandlingsrefera
                 frist: formaterDatoForBackend(data.frist),
                 grunn: data.grunn,
               });
-              await revalidateFlyt(behandlingsreferanse);
+              await revalidatePostMottakFlyt(behandlingsreferanse);
               setIsLoading(false);
               onClose();
             })}
