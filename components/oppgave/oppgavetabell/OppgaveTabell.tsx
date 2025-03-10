@@ -63,7 +63,7 @@ export const OppgaveTabell = ({
     if (oppgave.id) setLoadingID(oppgave.id);
     try {
       await avreserverOppgaveClient(oppgave);
-    } catch (err) {
+    } catch {
       setLoadingID(null);
     }
     setLoadingID(null);
