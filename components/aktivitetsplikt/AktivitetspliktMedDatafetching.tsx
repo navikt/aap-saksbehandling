@@ -1,6 +1,6 @@
 'use server';
 
-import styles from 'app/sak/[saksId]/aktivitet/page.module.css';
+import styles from 'app/saksbehandling/sak/[saksId]/aktivitet/page.module.css';
 import { Aktivitetsplikt } from 'components/aktivitetsplikt/Aktivitetsplikt';
 import { hentAktivitetspliktHendelser, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 

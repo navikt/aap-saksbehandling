@@ -29,7 +29,9 @@ export const StegGruppeIndikatorAksel = ({ flytRespons, stegGrupperSomSkalVises 
                 key={gruppe.stegGruppe}
                 completed={gruppe.erFullført}
                 interactive={gruppe.erFullført || flytRespons.aktivGruppe === gruppe.stegGruppe}
-                onClick={() => router.push(`/sak/${saksId}/${behandlingsReferanse}/${gruppe.stegGruppe}`)}
+                onClick={() =>
+                  router.push(`/saksbehandling/sak/${saksId}/${behandlingsReferanse}/${gruppe.stegGruppe}`)
+                }
               >
                 {mapGruppeTypeToGruppeNavn(gruppe.stegGruppe)}
               </Stepper.Step>

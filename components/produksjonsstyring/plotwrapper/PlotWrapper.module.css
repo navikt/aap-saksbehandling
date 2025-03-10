@@ -1,0 +1,12 @@
+.plotWrapper {
+  border: 1px solid var(--a-border-subtle);
+  border-radius: 0.5rem;
+  padding: var(--a-spacing-3);
+  height: 400px;
+}
+.small {
+  width: 450px;
+}
+.large {
+  width: 100%;
+}

@@ -43,7 +43,8 @@ export type AlderGrunnlag =
 
 export type BrevGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag'];
 export type Brev = components['schemas']['no.nav.aap.brev.kontrakt.Brev'];
-export type BrevStatus = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev']['status'];
+export type BrevStatus =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev']['status'];
 export type BrevMottaker =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
 export type SamordningGraderingGrunnlag =
@@ -181,6 +182,9 @@ export type BehandlingPersoninfo = components['schemas']['no.nav.aap.behandlings
 export type AvklaringsbehovKode =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løser.vedtak.TotrinnsVurdering']['definisjon'];
 
+export type BehandlingsFlytAvklaringsbehovKode =
+  components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon']['kode'];
+
 export type LegeerklæringStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.LegeerklæringStatusResponse'];
 export type YrkesskadeVurderingGrunnlag =
@@ -221,6 +225,22 @@ export type LovvalgEØSLand =
 
 export type Sykdomsvurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingDto'];
+
+export type Søknad = components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0'];
+
+export const MeldekortV0 = 'MeldekortV0';
+export type MeldekortV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof MeldekortV0}`] & {
+    meldingType: typeof MeldekortV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
+export const AnnetRelevantDokumentV0 = 'AnnetRelevantDokumentV0';
+export type AnnetRelevantDokumentV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof AnnetRelevantDokumentV0}`] & {
+    meldingType: typeof AnnetRelevantDokumentV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
+export type ÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakTilBehandling'];
 
 // oppgave
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];

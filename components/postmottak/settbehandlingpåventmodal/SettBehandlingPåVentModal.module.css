@@ -1,0 +1,8 @@
+.settBehandlingPåVentModal {
+  min-width: 800px;
+}
+.settBehandlingPåVentModalForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-4);
+}

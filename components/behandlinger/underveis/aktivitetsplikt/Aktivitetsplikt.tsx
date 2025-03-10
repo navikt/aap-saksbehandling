@@ -91,7 +91,7 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
           ))}
         </Table.Body>
       </Table>
-      <Link className={styles.link} href={`/sak/${saksnummer}/aktivitet`}>
+      <Link className={styles.link} href={`/saksbehandling/sak/${saksnummer}/aktivitet`}>
         Registrer ny / endre informasjon
       </Link>
       <section className={styles.statusrad}>
