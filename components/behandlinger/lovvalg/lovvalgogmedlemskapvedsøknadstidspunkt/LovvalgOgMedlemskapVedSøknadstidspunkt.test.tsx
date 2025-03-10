@@ -130,7 +130,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it('viser felt medlemskapbegrunnelse og vurdering hvis Norge eller Land uten avtale er valgt', async () => {
+  it('viser felt medlemskapbegrunnelse og vurdering hvis Norge er valgt', async () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
         readOnly={false}

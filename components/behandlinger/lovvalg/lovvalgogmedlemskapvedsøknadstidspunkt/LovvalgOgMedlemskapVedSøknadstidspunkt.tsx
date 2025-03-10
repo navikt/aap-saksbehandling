@@ -32,9 +32,7 @@ function maplovvalgslandTilAlpha3(lovvalgsland: string) {
   return null;
 }
 function mapGrunnlagTilLovvalgsland(lovvalgsland?: LovvalgEØSLand) {
-  if (lovvalgsland === null) {
-    return 'Land uten avtale';
-  } else if (lovvalgsland === 'NOR') {
+  if (lovvalgsland === 'NOR') {
     return 'Norge';
   } else if (lovvalgsland) {
     return 'Annet land med avtale';
@@ -74,7 +72,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       lovvalgsLand: {
         type: 'radio',
         label: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
-        options: ['Norge', 'Annet land med avtale', 'Land uten avtale'],
+        options: ['Norge', 'Annet land med avtale'],
         rules: { required: 'Du må velge riktig lovvalg ved søknadstidspunkt' },
         defaultValue: mapGrunnlagTilLovvalgsland(grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand),
       },
@@ -181,7 +179,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
         {lovvalgsLand === 'Annet land med avtale' && (
           <FormField form={form} formField={formFields.annetLovvalgslandMedAvtale} />
         )}
-        {['Norge', 'Land uten avtale'].includes(lovvalgsLand) && (
+        {lovvalgsLand === 'Norge' && (
           <>
             <FormField form={form} formField={formFields.medlemskapBegrunnelse} />
             <FormField form={form} formField={formFields.medlemAvFolkeTrygdenVedSøknadstidspunkt} />
