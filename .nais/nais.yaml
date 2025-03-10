@@ -1,22 +1,22 @@
-apiVersion: 'nais.io/v1alpha1'
-kind: 'Application'
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
 metadata:
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: '50M'
-    nginx.ingress.kubernetes.io/proxy-read-timeout: '90'
-  name: 'saksbehandling'
-  namespace: 'aap'
+    nginx.ingress.kubernetes.io/proxy-body-size: "50M"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "90"
+  name: "saksbehandling"
+  namespace: "aap"
   labels:
-    'team': 'aap'
+    "team": "aap"
 spec:
-  image: { { image } }
+  image: {{image}}
   port: 3000
   liveness:
-    path: '/saksbehandling/api/internal/isAlive'
+    path: "/saksbehandling/api/internal/isAlive"
     initialDelay: 20
     timeout: 60
   readiness:
-    path: '/saksbehandling/api/internal/isReady'
+    path: "/saksbehandling/api/internal/isReady"
     initialDelay: 20
     timeout: 60
   replicas:
@@ -51,14 +51,14 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: 'kelvin-reverse-proxy'
+        - application: "kelvin-reverse-proxy"
     outbound:
       rules:
-        - application: 'behandlingsflyt'
-        - application: 'oppgave'
-        - application: 'statistikk'
-        - application: 'saksbehandling-pdfgen'
-        - application: 'dokumentinnhenting'
-        - application: 'postmottak-backend'
+        - application: "behandlingsflyt"
+        - application: "oppgave"
+        - application: "postmottak-backend"
+        - application: "statistikk"
+        - application: "saksbehandling-pdfgen"
+        - application: "dokumentinnhenting"
       external:
-        - host: 'cdn.nav.no'
+        - host: "cdn.nav.no"
