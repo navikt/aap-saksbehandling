@@ -51,6 +51,13 @@ spec:
       mountPath: /app/.next/cache
   tokenx:
     enabled: true
+  azure:
+    application:
+      enabled: true
+      allowAllUsers: true
+    sidecar:
+      enabled: true
+      autoLogin: true
   accessPolicy:
     inbound:
       rules:
