@@ -1,4 +1,3 @@
-import { logError } from '@navikt/aap-felles-utils';
 import { SaksopplysningerKolonne } from 'components/behandlinger/brev/skriveBrev/SaksopplysningerKolonne';
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import {
@@ -22,7 +21,6 @@ export const SkriveBrevMedDataFetching = async ({
   const brev = brevGrunnlag.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
 
   if (!brev?.brev) {
-    logError('Ikke noe brev definert i grunnlaget');
     return null;
   }
 
