@@ -9,11 +9,16 @@ interface Props {
 }
 
 export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingVersjon }: Props) => {
-  const grunnlag = await hentBrevGrunnlag(behandlingReferanse);
+  const grunnlagene = await hentBrevGrunnlag(behandlingReferanse);
 
-  const brev = grunnlag.brevGrunnlag[0]?.brev;
-  const mottaker = grunnlag.brevGrunnlag[0]?.mottaker;
-  const brevbestillingReferanse = grunnlag.brevGrunnlag[0]?.brevbestillingReferanse;
+  const grunnlag = grunnlagene.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
+  if (!grunnlag) {
+    return null;
+  }
+  const brev = grunnlag.brev;
+  const mottaker = grunnlag.mottaker;
+  const brevbestillingReferanse = grunnlag.brevbestillingReferanse;
+  const status = grunnlag.status;
 
   return (
     <VilkårsKort
@@ -24,6 +29,7 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
     >
       {brev && (
         <SkriveBrev
+          status={status}
           grunnlag={brev}
           mottaker={mottaker}
           behandlingVersjon={behandlingVersjon}

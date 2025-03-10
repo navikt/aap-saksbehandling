@@ -19,9 +19,9 @@ export const SkriveBrevMedDataFetching = async ({
   const sykdomsgrunnlag = await hentSykdomsGrunnlag(behandlingsReferanse);
   const bistandsbehovGrunnlag = await hentBistandsbehovGrunnlag(behandlingsReferanse);
 
-  const førsteBrevgrunnlag = brevGrunnlag.brevGrunnlag[0];
+  const brev = brevGrunnlag.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
 
-  if (!førsteBrevgrunnlag.brev) {
+  if (!brev?.brev) {
     logError('Ikke noe brev definert i grunnlaget');
     return null;
   }
@@ -30,9 +30,10 @@ export const SkriveBrevMedDataFetching = async ({
     <div className={styles.flex}>
       <SaksopplysningerKolonne sykdomsgrunnlag={sykdomsgrunnlag} bistandsbehovGrunnlag={bistandsbehovGrunnlag} />
       <SkriveBrev
-        referanse={førsteBrevgrunnlag.brevbestillingReferanse}
-        grunnlag={førsteBrevgrunnlag.brev}
-        mottaker={førsteBrevgrunnlag.mottaker}
+        status={brev.status}
+        referanse={brev.brevbestillingReferanse}
+        grunnlag={brev.brev}
+        mottaker={brev.mottaker}
         behandlingVersjon={behandlingVersjon}
       />
     </div>

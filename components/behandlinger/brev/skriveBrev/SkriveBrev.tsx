@@ -6,7 +6,7 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev, BrevMottaker } from 'lib/types/types';
+import {Brev, BrevMottaker, BrevStatus} from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 
@@ -22,12 +22,14 @@ export const SkriveBrev = ({
   mottaker,
   saksnummer,
   grunnlag,
+  status,
 }: {
   referanse: string;
   mottaker: BrevMottaker;
   saksnummer?: string;
   behandlingVersjon: number;
   grunnlag: Brev;
+  status: BrevStatus;
 }) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const [brev, setBrev] = useState<Brev>(grunnlag);
@@ -63,6 +65,7 @@ export const SkriveBrev = ({
       </div>
       <Brevbygger brevmal={brev} mottaker={mottaker} saksnummer={saksnummer} onBrevChange={onChange} logo={NavLogo} />
       <Button
+        disabled={status !== 'FORHÅNDSVISNING_KLAR'}
         onClick={async () => {
           // TODO: Mellomlagre brev før vi ferdigstiller
           løsBehovOgGåTilNesteSteg({
