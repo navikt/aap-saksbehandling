@@ -70,7 +70,7 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
 }
 function buildSaksbehandlingsURL(oppgave: Oppgave | AvklaringsbehovReferanse): string {
   // @ts-ignore
-  return `saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
+  return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
 }
 function buildPostmottakURL(oppgave: Oppgave | AvklaringsbehovReferanse): string {
   // @ts-ignore
