@@ -51,6 +51,7 @@
     "@navikt/aap-felles-prettier": "^5.1.0",
     "@navikt/aap-oppgave-typescript-types": "^0.0.106",
     "@navikt/aap-postmottak-backend-typescript-types": "^0.0.180",
+    "@navikt/aap-statistikk-typescript-types": "^0.1.43",
     "@navikt/eslint-config-aap": "^5.0.3",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",

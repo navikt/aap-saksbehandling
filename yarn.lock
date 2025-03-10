@@ -1417,6 +1417,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@navikt/aap-statistikk-typescript-types@npm:^0.1.43":
+  version: 0.1.44
+  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.44::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.44%2F7873f48a80978ae3a7d937cd94a30d4ab01adccb"
+  checksum: 10c0/9e66f37bccc976c0ce79881ec1a8c940c12eb8c21204a83c3e4b6b1974e10d824646789ef6eb3f19b046687c8dd41a16e86e8e1dc48f6a7eb4d48e09f05e3ad6
+  languageName: node
+  linkType: hard
+
 "@navikt/aksel-icons@npm:7.13.0, @navikt/aksel-icons@npm:^7.13.0":
   version: 7.13.0
   resolution: "@navikt/aksel-icons@npm:7.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.13.0%2F23160e57540df4f599acc7b744a08e8a34b05b70"
@@ -3266,6 +3273,7 @@ __metadata:
     "@navikt/aap-felles-utils-client": "npm:^5.1.0"
     "@navikt/aap-oppgave-typescript-types": "npm:^0.0.106"
     "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.180"
+    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.43"
     "@navikt/aksel-icons": "npm:7.17.1"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
     "@navikt/ds-css": "npm:7.17.1"

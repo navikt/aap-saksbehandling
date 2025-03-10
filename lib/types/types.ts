@@ -43,7 +43,8 @@ export type AlderGrunnlag =
 
 export type BrevGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag'];
 export type Brev = components['schemas']['no.nav.aap.brev.kontrakt.Brev'];
-export type BrevStatus = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev']['status'];
+export type BrevStatus =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev']['status'];
 export type BrevMottaker =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
 export type SamordningGraderingGrunnlag =
@@ -180,6 +181,9 @@ export type BehandlingPersoninfo = components['schemas']['no.nav.aap.behandlings
 
 export type AvklaringsbehovKode =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løser.vedtak.TotrinnsVurdering']['definisjon'];
+
+export type BehandlingsFlytAvklaringsbehovKode =
+  components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon']['kode'];
 
 export type LegeerklæringStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.LegeerklæringStatusResponse'];
