@@ -13,6 +13,7 @@ import { avreserverOppgaveClient, plukkOppgaveClient } from 'lib/oppgaveClientAp
 import { ComboboxControlled } from 'components/oppgave/comboboxcontrolled/ComboboxControlled';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { revalidateMineOppgaver } from 'lib/actions/actions';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   heading?: string;
@@ -36,10 +37,16 @@ export const OppgaveTabell = ({
   isLoading = false,
 }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string | undefined>();
+
   const [sort, setSort] = useState<ScopedSortState | undefined>();
+
   const [loadingID, setLoadingID] = useState<number | null>(null);
+
   const [selectedBehandlingstyper, setSelectedBehandlingstyper] = useState<ComboboxOption[]>([]);
+
   const [selectedAvklaringsbehov, setSelectedAvklaringsbehov] = useState<ComboboxOption[]>([]);
+
+  const router = useRouter();
   const sortedOppgaver = (oppgaver || []).slice().sort((a, b) => {
     if (sort) {
       return sort.direction === 'ascending' ? comparator(b, a, sort.orderBy) : comparator(a, b, sort.orderBy);
@@ -96,7 +103,7 @@ export const OppgaveTabell = ({
       const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
       if (plukketOppgave.type === 'success') {
         console.log('plukket oppgave:', plukketOppgave);
-        window.location.assign(byggKelvinURL(plukketOppgave.data));
+        router.push(byggKelvinURL(plukketOppgave.data));
       } else if (plukketOppgave.type === 'error') {
         setFeilmelding(plukketOppgave.message);
       }
