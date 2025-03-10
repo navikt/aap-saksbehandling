@@ -15,7 +15,7 @@ const Page = async () => {
       <ul>
         {alleBehandlinger.map((behandling) => (
           <li key={behandling.id}>
-            <Link href={`/postmottak/${behandling.id}/`}>
+            <Link href={`/postmottak/${behandling.id}/`} prefetch={false}>
               {behandling.id} - {behandling.steg} - {behandling.opprettet} - {behandling.status}
             </Link>
           </li>
