@@ -59,9 +59,6 @@ spec:
       enabled: true
       autoLogin: true
   accessPolicy:
-    inbound:
-      rules:
-        - application: "kelvin-reverse-proxy"
     outbound:
       rules:
         - application: "behandlingsflyt"
