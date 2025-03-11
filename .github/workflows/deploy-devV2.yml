@@ -48,13 +48,21 @@ jobs:
     deploy-dev:
         name: Deploy to dev
         runs-on: ubuntu-latest
+        environment: dev-gcp
         needs: [build-dev, test-and-verify]
-        uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
         permissions:
             contents: read
             id-token: write
         secrets: inherit
-        with:
-            cluster: dev-gcp
-            manifest: .nais/nais.yaml
-            imageSuffix: -dev-gcp
+        steps:
+            - uses: actions/checkout@v4
+            - uses: nais/login@v0
+              id: login
+              with:
+                  team: aap
+            - uses: nais/deploy/actions/deploy@v2
+              env:
+                  PRINT_PAYLOAD: true
+                  CLUSTER: dev-gcp
+                  RESOURCE: .nais/nais.yaml
+                  VAR: image=${{ steps.login.outputs.registry }}/${{ github.event.repository.name }}-dev-gcp:${{ inputs.tag }}
