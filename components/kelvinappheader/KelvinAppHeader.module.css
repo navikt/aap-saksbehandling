@@ -1,0 +1,15 @@
+.kelvinAppHeaderLink,
+.kelvinAppHeaderSearchResult p,
+.kelvinAppHeaderSearchResult label,
+.kelvinAppHeaderSearchResult .navds-heading {
+  color: var(--a-white);
+}
+
+.kelvinAppHeaderSearchResult {
+  border-top: 1px solid var(--a-gray-50);
+}
+
+.kelvinOppgavesokForm {
+  padding-top: var(--a-spacing-2);
+  background-color: var(--a-surface-inverted);
+}
