@@ -1,6 +1,7 @@
 .kelvinAppHeaderLink,
 .kelvinAppHeaderSearchResult p,
 .kelvinAppHeaderSearchResult label,
+.kelvinAppHeaderLink.navds-link,
 .kelvinAppHeaderSearchResult .navds-heading {
   color: var(--a-white);
 }
