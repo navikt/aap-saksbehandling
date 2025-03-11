@@ -12,7 +12,7 @@ export const SaksopplysningerKort = ({ tittel, begrunnelse }: { tittel: string; 
       <ExpansionCard.Content className={styles.content}>
         {begrunnelse && (
           <>
-            <Label as="p">Begrunnelse</Label>
+            <Label as="p">Vilkårsvurdering</Label>
             <BodyShort>{begrunnelse}</BodyShort>
           </>
         )}
