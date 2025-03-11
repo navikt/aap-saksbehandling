@@ -6,13 +6,13 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 import { fetchProxy } from 'lib/services/fetchProxy';
 import {
-  OppgaveAvklaringsbehovKode,
   AvklaringsbehovReferanse,
   Enhet,
   Kø,
   NesteOppgaveRequestBody,
   NesteOppgaveResponse,
   Oppgave,
+  OppgaveAvklaringsbehovKode,
   OppgaveBehandlingstype,
   OppgavelisteRequest,
   OppgavelisteResponse,
@@ -243,30 +243,37 @@ export async function plukkOppgave(oppgaveId: number, versjon: number): Promise<
 }
 export async function oppgaveTekstSøk(søketekst: string) {
   if (isLocal()) {
-    return [
+    const res: Oppgave[] = [
       {
         reservertAv: 'DF39ZH',
         avklaringsbehovKode: '9003',
         behandlingOpprettet: '2025-01-06T12:36:44.716229',
         behandlingRef: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        behandlingstype: 'FØRSTEGANGSBEHANDLING',
+        behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.KLAGE,
         id: 0,
         journalpostId: 123,
-        status: 'OPPRETTET',
+        status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
         versjon: 0,
+        enhet: '',
+        opprettetAv: '',
+        opprettetTidspunkt: '',
       },
       {
         reservertAv: 'DF39ZH',
         avklaringsbehovKode: '5001',
         behandlingOpprettet: '2025-01-06T12:36:44.716229',
         behandlingRef: '34fdsff-5717-4562-b3fc-2c963f66afa6',
-        behandlingstype: 'FØRSTEGANGSBEHANDLING',
+        behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.REVURDERING,
         id: 1,
         journalpostId: 234,
-        status: 'OPPRETTET',
+        status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
         versjon: 0,
+        enhet: '',
+        opprettetAv: '',
+        opprettetTidspunkt: '',
       },
     ];
+    return res;
   }
   const url = `${oppgaveApiBaseURL}/sok`;
   return await fetchProxy<Array<Oppgave>>(url, oppgaveApiScope, 'POST', { søketekst });

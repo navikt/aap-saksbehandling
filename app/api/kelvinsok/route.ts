@@ -3,6 +3,7 @@ import { finnSakerForIdent, hentSak } from 'lib/services/saksbehandlingservice/s
 import { logError } from '@navikt/aap-felles-utils';
 import { SaksInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
+import type { Oppgave } from 'lib/types/oppgaveTypes';
 
 export interface SøkeResultat {
   oppgaver?: {
@@ -39,9 +40,8 @@ export async function POST(req: Request) {
   try {
     const oppgaver = await oppgaveTekstSøk(søketekst);
     if (oppgaver) {
-      oppgaveData = oppgaver.map((oppgave: unknown) => ({
+      oppgaveData = oppgaver.map((oppgave) => ({
         href: byggKelvinURL(oppgave),
-        // @ts-ignore
         label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype}`,
       }));
     }
@@ -60,15 +60,13 @@ export async function POST(req: Request) {
     status: 200,
   });
 }
-function buildSaksbehandlingsURL(oppgave: unknown): string {
-  // @ts-ignore
-  return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
+function buildSaksbehandlingsURL(oppgave: Oppgave): string {
+  return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef}`;
 }
-function buildPostmottakURL(oppgave: unknown): string {
-  // @ts-ignore
-  return `/postmottak/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
+function buildPostmottakURL(oppgave: Oppgave): string {
+  return `/postmottak/${oppgave?.journalpostId}`;
 }
-export function byggKelvinURL(oppgave: unknown): string {
+export function byggKelvinURL(oppgave: Oppgave): string {
   // @ts-ignore
   if (oppgave.journalpostId) {
     return buildPostmottakURL(oppgave);
