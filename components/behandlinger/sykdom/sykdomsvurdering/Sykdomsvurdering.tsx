@@ -75,7 +75,7 @@ export const Sykdomsvurdering = ({
   const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
   const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
 
-  const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(0);
+  const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(-1);
 
   const { formFields, form } = useConfigForm<SykdomsvurderingFormFields>(
     {
