@@ -1,6 +1,6 @@
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { DigitaliserAnnetRelevantDokument } from './DigitaliserAnnetRelevantDokument';
 
@@ -15,14 +15,14 @@ const grunnlag: DigitaliseringsGrunnlag = {
 describe('DigitaliserAnnetDokument', () => {
   const user = userEvent.setup();
 
-  it.skip('skal kunne velge årsak', async () => {
+  it('at det går an å velge flere alternativer', async () => {
     render(<DigitaliserAnnetRelevantDokument submit={() => {}} grunnlag={grunnlag} readOnly={false} />);
-    const årsakFelt = screen.getByRole('combobox', { name: /Velg en eller flere årsaker/i });
-    expect(årsakFelt).toBeVisible();
-    expect(årsakFelt).toHaveValue('');
+    await user.click(screen.getByRole('combobox'));
+    await user.click(screen.getByText(/Mottatt søknad/));
+    await user.click(screen.getByText(/Mottatt meldekort/));
 
-    screen.logTestingPlaygroundURL();
-    await user.selectOptions(årsakFelt, 'Mottatt søknad');
-    expect(årsakFelt).toHaveValue('Mottatt søknad');
+    const list = screen.getByRole('list');
+    expect(within(list).getByText(/Mottatt søknad/i)).toBeVisible();
+    expect(within(list).getByText(/Mottatt meldekort/i)).toBeVisible();
   });
 });
