@@ -1,0 +1,36 @@
+apiVersion: nais.io/v1
+kind: AzureAdApplication
+metadata:
+  name: saksbehandling-lokal
+  namespace: aap
+  labels:
+    team: aap
+spec:
+  logoutUrl: "http://localhost:4000"
+  replyUrls:
+    - url: "http://localhost:4000/oauth2/callback"
+  preAuthorizedApplications:
+    - application: behandlingsflyt
+      cluster: dev-gcp
+      namespace: aap
+    - application: oppgave
+      cluster: dev-gcp
+      namespace: aap
+    - application: postmottak-backend
+      cluster: dev-gcp
+      namespace: aap
+    - application: statistikk
+      cluster: dev-gcp
+      namespace: aap
+    - application: saksbehandling-pdfgen
+      cluster: dev-gcp
+      namespace: aap
+    - application: dokumentinnhenting
+      cluster: dev-gcp
+      namespace: aap
+  tenant: trygdeetaten.no
+  secretName: azuread-saksbehandling-lokal
+  # TODO: På sikt må vi fylle inn gjeldende AD-grupper for saksbehandler her. Bruker "Alle-i-IT" midlertidig
+  claims:
+    groups:
+      - id: d12fdb94-ea30-452b-ad43-af1a3ab30157 # Alle-i-IT

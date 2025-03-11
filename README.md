@@ -15,13 +15,30 @@ I .bashrc eller .zshrc:
 
 Hvor github_pat er din personal access token laget på github (settings -> developer settings). Husk `read:packages`-rettighet og enable SSO når du oppdaterer/lager PAT.
 
-### .env.local-fil
-
-I tillegg må du kopiere `.env-template` til `.env.local` for å kunne kjøre lokalt.
-
 ### Kjøre lokalt
 
-Start `behandlingsflyt` backend lokalt ved å kjøre `TestApp`-klassen fra IntelliJ eller følge guiden her https://aap-sysdoc.ansatt.nav.no/funksjonalitet/Behandlingsflyt/teknisk/#kj%C3%B8re-lokalt
+#### Alternativ 1: Mot dev-gcp
+
+1. Hent secret med [aap-cli/get-secret.sh](https://github.com/navikt/aap-cli): \
+   `get-secret`
+2. Kopier innhold fra: \
+   `.env.dev-gcp` _og_ `.env-template-dev` inn i `.env.local` 
+3. Start wonderwall med \
+  `docker-compose up -d`
+4. Kjør opp frontend med: \
+   `yarn dev`
+5. Åpne appen via Wonderwall: \
+   http://localhost:4000
+
+**OBS**: Må også legge til følgende i `/etc/hosts`: \
+`127.0.0.1   host.docker.internal`
+
+#### Alternativ 2: Mot mock backend
+
+Start `behandlingsflyt`, `postmottak`, e.l. sin backend lokalt ved å kjøre `TestApp`-klassen fra IntelliJ eller 
+følge guiden her https://aap-sysdoc.ansatt.nav.no/funksjonalitet/Behandlingsflyt/teknisk/#kj%C3%B8re-lokalt
+
+OBS: Du må kopiere `.env-template` til `.env.local` for å kunne kjøre lokalt.
 
 ```
 yarn dev
