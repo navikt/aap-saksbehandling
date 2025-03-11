@@ -27,7 +27,7 @@ jobs:
         outputs:
             image: ${{ steps.build-and-publish.outputs.image }}
         steps:
-            - uses: navikt/aap-workflows/.github/workflows/yarn-node-and-checkout-cached.yml@main
+            - uses: navikt/aap-workflows/actions/yarn-node-and-checkout-cached.yml@main
               with:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Copy env-file # TODO: Se om vi kan finne en bedre løsning her på sikt
