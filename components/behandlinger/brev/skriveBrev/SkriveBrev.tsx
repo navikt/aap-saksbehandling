@@ -1,12 +1,12 @@
 'use client';
 
 import { Brevbygger } from '@navikt/aap-breveditor/';
-import { Button, Label, Loader } from '@navikt/ds-react';
+import { Button, Label, Loader, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { clientMellomlagreBrev } from 'lib/clientApi';
-import {Brev, BrevMottaker, BrevStatus} from 'lib/types/types';
+import { Brev, BrevMottaker, BrevStatus } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 
@@ -55,7 +55,7 @@ export const SkriveBrev = ({
     setBrev(brev);
   };
 
-  const { løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('BREV');
+  const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
 
   return (
     <div className={style.brevbygger}>
@@ -63,24 +63,28 @@ export const SkriveBrev = ({
         {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
         {isSaving && <Loader />}
       </div>
-      <Brevbygger brevmal={brev} mottaker={mottaker} saksnummer={saksnummer} onBrevChange={onChange} logo={NavLogo} />
-      <Button
-        disabled={status !== 'FORHÅNDSVISNING_KLAR'}
-        onClick={async () => {
-          // TODO: Mellomlagre brev før vi ferdigstiller
-          løsBehovOgGåTilNesteSteg({
-            behandlingVersjon: behandlingVersjon,
-            behov: {
-              behovstype: Behovstype.SKRIV_BREV_KODE,
-              brevbestillingReferanse: referanse,
-            },
-            referanse: behandlingsReferanse,
-          });
-          await revalidateFlyt(behandlingsReferanse);
-        }}
-      >
-        Ferdigstill brev
-      </Button>
+      <VStack gap={'4'}>
+        <Brevbygger brevmal={brev} mottaker={mottaker} saksnummer={saksnummer} onBrevChange={onChange} logo={NavLogo} />
+        <Button
+          disabled={status !== 'FORHÅNDSVISNING_KLAR'}
+          onClick={async () => {
+            // TODO: Mellomlagre brev før vi ferdigstiller
+            løsBehovOgGåTilNesteSteg({
+              behandlingVersjon: behandlingVersjon,
+              behov: {
+                behovstype: Behovstype.SKRIV_BREV_KODE,
+                brevbestillingReferanse: referanse,
+              },
+              referanse: behandlingsReferanse,
+            });
+            await revalidateFlyt(behandlingsReferanse);
+          }}
+          className={'fit-content'}
+          loading={isLoading}
+        >
+          Ferdigstill brev
+        </Button>
+      </VStack>
     </div>
   );
 };

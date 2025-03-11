@@ -14,9 +14,11 @@ export const SkriveBrevMedDataFetching = async ({
   behandlingsReferanse: string;
   behandlingVersjon: number;
 }) => {
-  const brevGrunnlag = await hentBrevGrunnlag(behandlingsReferanse);
-  const sykdomsgrunnlag = await hentSykdomsGrunnlag(behandlingsReferanse);
-  const bistandsbehovGrunnlag = await hentBistandsbehovGrunnlag(behandlingsReferanse);
+  const [brevGrunnlag, sykdomsgrunnlag, bistandsbehovGrunnlag] = await Promise.all([
+    hentBrevGrunnlag(behandlingsReferanse),
+    hentSykdomsGrunnlag(behandlingsReferanse),
+    hentBistandsbehovGrunnlag(behandlingsReferanse),
+  ]);
 
   const brev = brevGrunnlag.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
 
