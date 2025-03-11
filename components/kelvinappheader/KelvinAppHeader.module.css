@@ -1,9 +1,11 @@
-.kelvinAppHeaderLink,
+.kelvinAppHeader,
+.kelvinAppHeaderSearchResult,
 .kelvinAppHeaderSearchResult p,
 .kelvinAppHeaderSearchResult label,
-.kelvinAppHeaderLink.navds-link,
 .kelvinAppHeaderSearchResult .navds-heading {
   color: var(--a-white);
+  --ac-link-text: var(--a-white);
+  --ac-link-action-text: var(--a-white);
 }
 
 .kelvinAppHeaderSearchResult {
