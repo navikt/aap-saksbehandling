@@ -32,16 +32,20 @@ export const InnhentDokumentasjon = () => {
       {!visSkjema && (
         <VStack gap={'4'}>
           <div>
-            <Button type="button" variant={'secondary'} onClick={() => oppdaterVisSkjema(true)}>
+            <Button type="button" variant={'secondary'} size={'small'} onClick={() => oppdaterVisSkjema(true)}>
               Etterspør informasjon fra lege
             </Button>
           </div>
           {isLoading && (
             <div className={styles.loader}>
-              <Loader title="Ser etter dialogmeldinger..." size={'xlarge'} />
+              <Loader title="Ser etter dialogmeldinger..." size={'small'} />
             </div>
           )}
-          {error && <Alert variant="error">Noe gikk galt under henting av dialogmeldinger</Alert>}
+          {error && (
+            <Alert size={'small'} variant="error">
+              Noe gikk galt under henting av dialogmeldinger
+            </Alert>
+          )}
           {dialogmeldinger && <Dialogmeldinger dialogmeldinger={dialogmeldinger} />}
         </VStack>
       )}

@@ -18,6 +18,7 @@ export const Saksbehandlingsoversikt = () => {
         onChange={(value) => setToggleGroupValue(value)}
         value={toggleGroupValue}
         className={styles.stretch}
+        size={'small'}
         fill
       >
         <Tabs.List>

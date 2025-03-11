@@ -48,13 +48,17 @@ export const RelevanteDokumenter = () => {
   if (isLoading) {
     return (
       <Alert variant="info">
-        <Loader title="Søker etter relevante dokumenter" />
+        <Loader size={'small'} title="Søker etter relevante dokumenter" />
       </Alert>
     );
   }
 
   if (relevanteDokumenter && relevanteDokumenter?.length === 0) {
-    return <Alert variant="info">Fant ingen relevante helseopplysninger</Alert>;
+    return (
+      <Alert size={'small'} variant="info">
+        Fant ingen relevante helseopplysninger
+      </Alert>
+    );
   }
 
   return (
@@ -62,10 +66,10 @@ export const RelevanteDokumenter = () => {
       <div className={styles.heading}>
         <InformationSquareFillIcon className={styles.icon} />
         <div>
-          <Heading level={'3'} size={'small'}>
+          <Heading level={'3'} size={'xsmall'}>
             Følgende helseopplysninger kan være relevant for saken
           </Heading>
-          <BodyShort className={styles.beskrivelse}>
+          <BodyShort size={'small'} className={styles.beskrivelse}>
             NAV har tidligere mottatt følgende helseopplysninger som kan være relevant for brukers AAP sak. Velg
             dokumenter som er aktuelle for å koble de til saken.
           </BodyShort>
@@ -75,11 +79,11 @@ export const RelevanteDokumenter = () => {
         <FormField form={form} formField={formFields.dokumentnavn} />
         <FormField form={form} formField={formFields.dokumenttype} />
       </div>
-      <Table>
+      <Table size={'small'}>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Dokument</Table.HeaderCell>
-            <Table.ColumnHeader sortable sortKey="type">
+            <Table.HeaderCell textSize={'small'}>Dokument</Table.HeaderCell>
+            <Table.ColumnHeader textSize={'small'} sortable sortKey="type">
               Type
             </Table.ColumnHeader>
           </Table.Row>
@@ -94,10 +98,12 @@ export const RelevanteDokumenter = () => {
             .filter((dokument) => !form.watch('dokumenttype') || dokument.variantformat === form.watch('dokumenttype'))
             .map((relevantDokument) => (
               <Table.Row key={relevantDokument.dokumentInfoId}>
-                <Table.DataCell>
-                  <Checkbox value={relevantDokument.dokumentInfoId}>{relevantDokument.tittel}</Checkbox>
+                <Table.DataCell textSize={'small'}>
+                  <Checkbox size={'small'} value={relevantDokument.dokumentInfoId}>
+                    {relevantDokument.tittel}
+                  </Checkbox>
                 </Table.DataCell>
-                <Table.DataCell>{relevantDokument.variantformat}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{relevantDokument.variantformat}</Table.DataCell>
               </Table.Row>
             ))}
         </Table.Body>

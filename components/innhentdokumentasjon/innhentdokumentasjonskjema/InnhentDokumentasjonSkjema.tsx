@@ -128,8 +128,10 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         <FormField form={form} formField={formFields.dokumentasjonstype} size={'medium'} />
         <FormField form={form} formField={formFields.melding} />
         <div className={styles.rad}>
-          <Button loading={isLoading}>Send dialogmelding</Button>
-          <Button variant="secondary" type="button" onClick={forhåndsvis} disabled={isLoading}>
+          <Button size={'small'} loading={isLoading}>
+            Send dialogmelding
+          </Button>
+          <Button size={'small'} variant="secondary" type="button" onClick={forhåndsvis} disabled={isLoading}>
             Forhåndsvis
           </Button>
           {visModal && (
@@ -141,7 +143,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
               onClose={() => setVisModal(false)}
             />
           )}
-          <Button variant="tertiary" type="button" onClick={onCancel} disabled={isLoading}>
+          <Button size={'small'} variant="tertiary" type="button" onClick={onCancel} disabled={isLoading}>
             Avbryt
           </Button>
         </div>
