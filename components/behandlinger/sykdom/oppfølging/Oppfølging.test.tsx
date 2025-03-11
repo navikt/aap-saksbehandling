@@ -145,6 +145,94 @@ describe('Oppfølging', () => {
     expect(finnGruppeForBokstavC()).toBeVisible();
   });
 
+  it('felt for når vurderingen gjelder fra vises ikke dersom det ikke er en revurdering', () => {
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling="Førstegangsbehandling"
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
+    expect(screen.queryByRole('textbox', { name: 'Vurderingen gjelder fra' })).not.toBeInTheDocument();
+  });
+
+  /* TODO skippes inntil backend er klar */
+  it.skip('viser felt for når vurderingen gjelder fra dersom det er en revurdering', () => {
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling="Revurdering"
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
+    expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
+  });
+
+  /* TODO skippes inntil backend er klar */
+  it.skip('felt for når vurderingen gjelder fra er påkrevd', async () => {
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling="Revurdering"
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
+    expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+    expect(screen.getByText('Du må velge når vurderingen gjelder fra')).toBeVisible();
+  });
+
+  /* TODO Skippes inntil backend er klar. Mangler å avgjøre hvordan steget skal vite om 11-5 er oppfylt eller ei */
+  it.skip('viser spørsmål om bruker skal vurderes for AAP i overgang til uføre hvis det svares nei på a,b og c', async () => {
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
+    await velgNei(finnGruppeForBokstavA());
+    await velgNei(finnGruppeForBokstavB());
+    const gruppeC = screen.getByRole('group', {
+      name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
+    });
+    await velgNei(gruppeC);
+    expect(
+      screen.getByRole('heading', { name: '§ 11-18 AAP under behandling av søknad om uføretrygd', level: 3 })
+    ).toBeVisible();
+    expect(
+      screen.getByRole('group', {
+        name: 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?',
+      })
+    ).toBeVisible();
+  });
+
+  /* TODO Skippes inntil backend er klar. Mangler å avgjøre hvordan steget skal vite om 11-5 er oppfylt eller ei */
+  it.skip('viser spørsmål for om bruker skal vurderes for AAP i overgang til arbeid hvis det er en revurdering og det er avslag på både 11-5 og 11-6', async () => {
+    render(
+      <Oppfølging
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
+    await velgNei(finnGruppeForBokstavA());
+    await velgNei(finnGruppeForBokstavB());
+    const gruppeC = screen.getByRole('group', {
+      name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
+    });
+    await velgNei(gruppeC);
+    expect(screen.getByRole('heading', { name: '§ 11-17 AAP i perioden som arbeidssøker', level: 3 })).toBeVisible();
+    expect(
+      screen.getByRole('group', { name: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?' })
+    ).toBeVisible();
+  });
+
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
     render(
       <Oppfølging
