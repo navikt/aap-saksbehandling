@@ -819,6 +819,44 @@ describe('revurdering', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('feltet for erNedsettelseIArbeidsevneMerEnnHalvparten brukes som grunnlag for om nedsettelsen er på minst 40 prosent i en revurdering', () => {
+    const grunnlag: SykdomsGrunnlag = {
+      skalVurdereYrkesskade: false,
+      opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
+      gjeldendeVedtatteSykdomsvurderinger: [],
+      historikkSykdomsvurderinger: [],
+      sykdomsvurderinger: [
+        {
+          begrunnelse: 'En begrunnelse',
+          dokumenterBruktIVurdering: [],
+          harSkadeSykdomEllerLyte: true,
+          vurdertAvIdent: 'ident',
+          vurdertDato: '2025-03-11',
+          bidiagnoser: [],
+          erArbeidsevnenNedsatt: true,
+          erNedsettelseIArbeidsevneMerEnnHalvparten: true,
+          erNedsettelseIArbeidsevneAvEnVissVarighet: true,
+        },
+      ],
+    };
+    const søknadstidspunkt = subDays(new Date(), 14);
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlag}
+        readOnly={true}
+        behandlingVersjon={0}
+        tilknyttedeDokumenter={[]}
+        typeBehandling={'Revurdering'}
+        søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
+      />
+    );
+    const nedsattMed40ProsentGruppe = screen.getByRole('group', {
+      name: /Er arbeidsevnen nedsatt med minst 40 prosent?/,
+    });
+    expect(nedsattMed40ProsentGruppe).toBeVisible();
+    expect(within(nedsattMed40ProsentGruppe).getByRole('radio', { name: 'Ja' })).toBeChecked();
+  });
+
   it('viser spørsmål om den nedsatte arbeidsevnen er minst 30 prosent når det skal vurderes mot yrkesskade', async () => {
     const søknadstidspunkt = subDays(new Date(), 14);
     render(

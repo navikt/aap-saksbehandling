@@ -76,7 +76,6 @@ export const Sykdomsvurdering = ({
   const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
 
   const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(-1);
-
   const { formFields, form } = useConfigForm<SykdomsvurderingFormFields>(
     {
       begrunnelse: {
@@ -181,7 +180,7 @@ export const Sykdomsvurdering = ({
       erNedsettelseIArbeidsevneMerEnnFørtiProsent: {
         type: 'radio',
         label: 'Er arbeidsevnen nedsatt med minst 40 prosent?',
-        defaultValue: undefined,
+        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten),
         rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 40 prosent' },
         options: JaEllerNeiOptions,
       },
