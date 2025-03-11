@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
+import { finnSakerForIdent, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError } from '@navikt/aap-felles-utils';
 import { SaksInfo } from 'lib/types/types';
-import { finnSakerForIdent } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
-import { byggKelvinURL } from 'app/saksbehandling/api/kelvinsok/route';
 
 export interface SøkeResultat {
   oppgaver?: {
@@ -22,11 +21,14 @@ export async function POST(req: Request) {
   const søketekst = body.søketekst;
   let sakData: SaksInfo[] = [];
   const isFnr = søketekst.length === 11;
+  const isSaksnummer = søketekst.length === 7;
 
   // Saker
   try {
     if (isFnr) {
       sakData = await finnSakerForIdent(søketekst);
+    } else if (isSaksnummer) {
+      sakData = [await hentSak(søketekst)];
     }
   } catch (err) {
     logError('/api/kelvinsøk saker', err);
@@ -37,7 +39,7 @@ export async function POST(req: Request) {
   try {
     const oppgaver = await oppgaveTekstSøk(søketekst);
     if (oppgaver) {
-      oppgaveData = oppgaver.map((oppgave) => ({
+      oppgaveData = oppgaver.map((oppgave: unknown) => ({
         href: byggKelvinURL(oppgave),
         // @ts-ignore
         label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype}`,
@@ -49,7 +51,7 @@ export async function POST(req: Request) {
   const data = {
     oppgaver: oppgaveData,
     saker: sakData?.map((sak) => ({
-      href: `${process.env.NEXT_PUBLIC_SAKSBEHANDLING_URL}/sak/${sak.saksnummer}`,
+      href: `/saksbehandling/sak/${sak.saksnummer}`,
       label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer})`,
     })),
   };
@@ -57,4 +59,20 @@ export async function POST(req: Request) {
   return NextResponse.json(data, {
     status: 200,
   });
+}
+function buildSaksbehandlingsURL(oppgave: unknown): string {
+  // @ts-ignore
+  return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
+}
+function buildPostmottakURL(oppgave: unknown): string {
+  // @ts-ignore
+  return `/postmottak/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
+}
+export function byggKelvinURL(oppgave: unknown): string {
+  // @ts-ignore
+  if (oppgave.journalpostId) {
+    return buildPostmottakURL(oppgave);
+  } else {
+    return buildSaksbehandlingsURL(oppgave);
+  }
 }
