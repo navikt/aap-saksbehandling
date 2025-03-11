@@ -10,7 +10,7 @@ jobs:
         name: Test, lint and verify
         runs-on: ubuntu-latest
         steps:
-            - uses: navikt/aap-workflows/actions/yarn-node-and-checkout-cached.yml@main
+            - uses: navikt/aap-workflows/actions/yarn-node-and-checkout-cached@main
               with:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - run: yarn lint
@@ -27,7 +27,7 @@ jobs:
         outputs:
             image: ${{ steps.build-and-publish.outputs.image }}
         steps:
-            - uses: navikt/aap-workflows/actions/yarn-node-and-checkout-cached.yml@main
+            - uses: navikt/aap-workflows/actions/yarn-node-and-checkout-cached@main
               with:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Copy env-file # TODO: Se om vi kan finne en bedre løsning her på sikt
