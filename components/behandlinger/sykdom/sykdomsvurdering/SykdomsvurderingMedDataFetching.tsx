@@ -1,9 +1,5 @@
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import {
-  hentAlleDokumenterPåSak,
-  hentSak,
-  hentSykdomsGrunnlag,
-} from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentSak, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ValuePair } from '@navikt/aap-felles-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
@@ -25,11 +21,7 @@ export const SykdomsvurderingMedDataFetching = async ({
   saksId,
   typeBehandling,
 }: Props) => {
-  const [grunnlag, tilknyttedeDokumenter, sak] = await Promise.all([
-    hentSykdomsGrunnlag(behandlingsReferanse),
-    hentAlleDokumenterPåSak(saksId),
-    hentSak(saksId),
-  ]);
+  const [grunnlag, sak] = await Promise.all([hentSykdomsGrunnlag(behandlingsReferanse), hentSak(saksId)]);
 
   const bidiagnoserDefaultOptions = await getDefaultOptions(
     finnDiagnosegrunnlag(typeBehandling, grunnlag)?.bidiagnoser,
@@ -46,7 +38,6 @@ export const SykdomsvurderingMedDataFetching = async ({
       grunnlag={grunnlag}
       readOnly={readOnly}
       behandlingVersjon={behandlingVersjon}
-      tilknyttedeDokumenter={tilknyttedeDokumenter}
       bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
       hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
       søknadstidspunkt={sak.opprettetTidspunkt} // er dette det samme som søknadstidspunkt, eller kan det være noe annet

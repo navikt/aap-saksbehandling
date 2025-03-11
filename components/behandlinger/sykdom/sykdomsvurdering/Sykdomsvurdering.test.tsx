@@ -31,7 +31,6 @@ describe('generelt', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -46,7 +45,6 @@ describe('generelt', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -58,28 +56,12 @@ describe('generelt', () => {
     expect(link).toBeVisible();
   });
 
-  it('skal ha en liste over tilknyttede dokumenter til vilkåret ', () => {
-    render(
-      <Sykdomsvurdering
-        grunnlag={grunnlagUtenYrkesskade}
-        readOnly={false}
-        behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
-        typeBehandling={'Førstegangsbehandling'}
-        søknadstidspunkt={søknadstidspunkt}
-      />
-    );
-    const tilknyttedeDokumenterListe = screen.getByText('Tilknyttede dokumenter');
-    expect(tilknyttedeDokumenterListe).toBeVisible();
-  });
-
   it('skal vise en informasjonsvarsling dersom det blir besvart av bruker ikke har nedsatt arbeidsevne', async () => {
     render(
       <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -107,7 +89,6 @@ describe('felt for begrunnelse', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -122,7 +103,6 @@ describe('felt for begrunnelse', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -139,7 +119,6 @@ describe('felt for begrunnelse', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -160,7 +139,6 @@ describe('felt for om bruker har sykdom, skade eller lyte', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -174,7 +152,6 @@ describe('felt for om bruker har sykdom, skade eller lyte', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -192,7 +169,6 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -208,7 +184,6 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -226,7 +201,6 @@ describe('felt for å sette diagnoser', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -241,7 +215,6 @@ describe('felt for å sette diagnoser', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -258,7 +231,6 @@ describe('felt for å sette diagnoser', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -277,7 +249,6 @@ describe('felt for å sette diagnoser', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -296,7 +267,6 @@ describe('felt for å sette diagnoser', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -316,7 +286,6 @@ describe('felt for å sette diagnoser', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -335,7 +304,6 @@ describe('felt for å sette diagnoser', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -360,7 +328,6 @@ describe('felt for å sette diagnoser', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -380,48 +347,6 @@ describe('felt for å sette diagnoser', () => {
 
     expect(await screen.findByRole('combobox', { name: 'Bidiagnoser' })).toBeVisible();
   });
-
-  // TODO OIST dette funker i browser, men ikke i test. Why?
-  it.skip('felt for hoveddiagnose er preutfylt med verdi fra gjeldende vurdering når det gjøres en revurdering', async () => {
-    const grunnlagUtenYSMedHoveddiagnose: SykdomsGrunnlag = {
-      skalVurdereYrkesskade: false,
-      opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
-      gjeldendeVedtatteSykdomsvurderinger: [
-        {
-          dokumenterBruktIVurdering: [],
-          begrunnelse: 'Sykdomsvurderingen her',
-          erArbeidsevnenNedsatt: true,
-          harSkadeSykdomEllerLyte: true,
-          kodeverk: 'ICD10',
-          hoveddiagnose: 'LUPUS',
-          vurderingenGjelderFra: undefined,
-          vurdertAvIdent: 'ABC',
-          vurdertDato: '2025-02-01',
-        },
-      ],
-      sykdomsvurderinger: [],
-      historikkSykdomsvurderinger: [],
-    };
-    render(
-      <Sykdomsvurdering
-        grunnlag={grunnlagUtenYSMedHoveddiagnose}
-        readOnly={false}
-        behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
-        typeBehandling={'Revurdering'}
-        søknadstidspunkt={format(subDays(new Date(), 7), 'yyyy-MM-dd')}
-        hoveddiagnoseDefaultOptions={[
-          { label: 'Lupus', value: 'LUPUS' },
-          { label: 'Generell angst', value: 'ANGST' },
-        ]}
-      />
-    );
-    await skrivInnDatoForNårVurderingenGjelderFra(format(subDays(new Date(), 1), 'ddMMyy'));
-    await velgAtBrukerHarSykdomSkadeLyte();
-    expect(screen.getByRole('radio', { name: 'Spesialisthelsetjenesten (ICD10)' })).toBeChecked();
-    const hoveddiagnose = await screen.findByRole('combobox', { name: 'Hoveddiagnose' }, { timeout: 5000 });
-    expect(hoveddiagnose).toBeVisible();
-  });
 });
 
 describe('felt for nedsettelsen er av en viss varighet', () => {
@@ -431,7 +356,6 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -462,7 +386,6 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -493,7 +416,6 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -510,7 +432,6 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -530,7 +451,6 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -552,7 +472,6 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         grunnlag={grunnlagMedYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -575,7 +494,6 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -599,7 +517,6 @@ describe('yrkesskade', () => {
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
-          tilknyttedeDokumenter={[]}
           typeBehandling={'Førstegangsbehandling'}
           søknadstidspunkt={søknadstidspunkt}
         />
@@ -617,7 +534,6 @@ describe('yrkesskade', () => {
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
-          tilknyttedeDokumenter={[]}
           typeBehandling={'Førstegangsbehandling'}
           søknadstidspunkt={søknadstidspunkt}
         />
@@ -639,7 +555,6 @@ describe('yrkesskade', () => {
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
-          tilknyttedeDokumenter={[]}
           typeBehandling={'Førstegangsbehandling'}
           søknadstidspunkt={søknadstidspunkt}
         />
@@ -660,7 +575,6 @@ describe('yrkesskade', () => {
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
-          tilknyttedeDokumenter={[]}
           typeBehandling={'Førstegangsbehandling'}
           søknadstidspunkt={søknadstidspunkt}
         />
@@ -678,7 +592,6 @@ describe('yrkesskade', () => {
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
-          tilknyttedeDokumenter={[]}
           typeBehandling={'Førstegangsbehandling'}
           søknadstidspunkt={søknadstidspunkt}
         />
@@ -700,7 +613,6 @@ describe('revurdering', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Førstegangsbehandling'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -715,7 +627,6 @@ describe('revurdering', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={søknadstidspunkt}
       />
@@ -730,7 +641,6 @@ describe('revurdering', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={format(subDays(new Date(), 4), 'yyyy-MM-dd')}
       />
@@ -746,7 +656,6 @@ describe('revurdering', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={format(subDays(new Date(), 4), 'yyyy-MM-dd')}
       />
@@ -765,7 +674,6 @@ describe('revurdering', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={format(subDays(new Date(), 4), 'yyyy-MM-dd')}
       />
@@ -785,7 +693,6 @@ describe('revurdering', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
       />
@@ -805,7 +712,6 @@ describe('revurdering', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
       />
@@ -845,7 +751,6 @@ describe('revurdering', () => {
         grunnlag={grunnlag}
         readOnly={true}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
       />
@@ -864,7 +769,6 @@ describe('revurdering', () => {
         grunnlag={grunnlagMedYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
       />
@@ -885,7 +789,6 @@ describe('revurdering', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
       />
@@ -908,7 +811,6 @@ describe('revurdering', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
       />
@@ -932,7 +834,6 @@ describe('revurdering av førstegangsbehandling', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
       />
@@ -960,7 +861,6 @@ describe('revurdering av førstegangsbehandling', () => {
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
-        tilknyttedeDokumenter={[]}
         typeBehandling={'Revurdering'}
         søknadstidspunkt={format(søknadstidspunkt, 'yyyy-MM-dd')}
       />

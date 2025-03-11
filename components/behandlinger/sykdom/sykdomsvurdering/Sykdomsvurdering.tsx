@@ -16,14 +16,11 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { FormEvent, useCallback, useEffect } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Alert, Link } from '@navikt/ds-react';
-import { TilknyttedeDokumenter } from 'components/tilknyttededokumenter/TilknyttedeDokumenter';
-import { DokumentTabell } from 'components/dokumenttabell/DokumentTabell';
-import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 import { DiagnoseSystem } from 'lib/diagnosesøker/DiagnoseSøker';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isBefore, parse, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
-import { DokumentInfo, SykdomsGrunnlag, TypeBehandling } from 'lib/types/types';
+import { SykdomsGrunnlag, TypeBehandling } from 'lib/types/types';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { Revurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Revurdering';
 import { Førstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/Førstegangsbehandling';
@@ -31,7 +28,6 @@ import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurd
 import { Diagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/Diagnosesøk';
 
 export interface SykdomsvurderingFormFields {
-  dokumenterBruktIVurderingen?: string[];
   begrunnelse: string;
   vurderingenGjelderFra: string;
   harSkadeSykdomEllerLyte: string;
@@ -51,7 +47,6 @@ interface SykdomProps {
   behandlingVersjon: number;
   grunnlag: SykdomsGrunnlag;
   readOnly: boolean;
-  tilknyttedeDokumenter: DokumentInfo[];
   typeBehandling: TypeBehandling;
   søknadstidspunkt: string;
   bidiagnoserDeafultOptions?: ValuePair[];
@@ -62,7 +57,6 @@ export const Sykdomsvurdering = ({
   grunnlag,
   behandlingVersjon,
   readOnly,
-  tilknyttedeDokumenter,
   bidiagnoserDeafultOptions,
   hoveddiagnoseDefaultOptions,
   søknadstidspunkt,
@@ -84,11 +78,6 @@ export const Sykdomsvurdering = ({
         description: 'Vekt og vurder opplysningene mot hverandre, og vurder om brukeren oppfyller vilkårene i § 11-5',
         defaultValue: sykdomsvurdering?.begrunnelse,
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
-      },
-      dokumenterBruktIVurderingen: {
-        type: 'checkbox_nested',
-        label: 'Hvilke dokumenter er brukt i vurderingen?',
-        defaultValue: sykdomsvurdering?.dokumenterBruktIVurdering.map((dokument) => dokument.identifikator),
       },
       vurderingenGjelderFra: {
         type: 'date_input',
@@ -204,10 +193,7 @@ export const Sykdomsvurdering = ({
           behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
           sykdomsvurderinger: [
             {
-              dokumenterBruktIVurdering:
-                data.dokumenterBruktIVurderingen?.map((dokument) => {
-                  return { identifikator: dokument };
-                }) || [],
+              dokumenterBruktIVurdering: [],
               begrunnelse: data.begrunnelse,
               vurderingenGjelderFra: data.vurderingenGjelderFra
                 ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
@@ -304,29 +290,8 @@ export const Sykdomsvurdering = ({
         <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-5" target="_blank">
           Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
         </Link>
-        <CheckboxWrapper
-          name={'dokumenterBruktIVurderingen'}
-          control={form.control}
-          label={'Hvilke dokumenter er brukt i vurderingen?'}
-          readOnly={readOnly}
-        >
-          <DokumentTabell
-            dokumenter={tilknyttedeDokumenter.map((d) => ({
-              journalpostId: d.journalpostId,
-              dokumentId: d.dokumentInfoId,
-              tittel: d.tittel,
-              erTilknyttet: false,
-            }))}
-          />
-        </CheckboxWrapper>
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
         {behandlingErRevurdering && <FormField form={form} formField={formFields.vurderingenGjelderFra} />}
-        <TilknyttedeDokumenter
-          valgteDokumenter={form
-            .watch('dokumenterBruktIVurderingen')
-            ?.filter((dokument) => dokument != 'dokumentasjonMangler')}
-          tilknyttedeDokumenterPåBehandling={tilknyttedeDokumenter}
-        />
         {(behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()) && (
           <Førstegangsbehandling
             form={form}
