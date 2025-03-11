@@ -1,21 +1,15 @@
 .vilkårsKort {
-  --ac-expansioncard-border-radius: var(--a-border-radius-small);
+  --ac-expansioncard-border-radius: var(--a-border-radius-large);
   --ac-expansioncard-border-hover-color: none;
   box-shadow: var(--a-shadow-xsmall);
 }
 
-.gul {
-  --ac-expansioncard-bg: var(--a-orange-50);
-  --ac-expansioncard-header-bg: var(--a-orange-100);
-  --ac-expansioncard-header-open-bg: var(--a-orange-100);
-  --ac-expansioncard-header-bg-hover: var(--a-orange-200);
-}
-
 .blå {
-  --ac-expansioncard-bg: var(--a-blue-50);
-  --ac-expansioncard-header-bg: var(--a-blue-200);
-  --ac-expansioncard-header-open-bg: var(--a-blue-200);
-  --ac-expansioncard-header-bg-hover: var(--a-blue-300);
+  --ac-expansioncard-border-radius: var(--a-border-radius-large);
+  --ac-expansioncard-border-hover-color: none;
+
+  border: 1px solid var(--a-border-divider);
+  border-left: 0.5rem solid var(--a-surface-alt-3);
 }
 
 .header,

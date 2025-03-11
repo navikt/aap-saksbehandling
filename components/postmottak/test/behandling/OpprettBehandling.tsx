@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BodyShort, Button, TextField } from '@navikt/ds-react';
+import { Alert, Box, Button, HStack, Page, TextField } from '@navikt/ds-react';
 import { postmottakOpprettBehandlingClient } from 'lib/postmottakClientApi';
+import styles from './OpprettBehandling.module.css';
 
 export const OpprettBehandling = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,19 +24,23 @@ export const OpprettBehandling = () => {
   }
 
   return (
-    <div>
-      <TextField
-        inputMode="numeric"
-        label={'Journalpost-id'}
-        size={'small'}
-        onChange={(event) => {
-          setJournalpostId(parseInt(event.target.value));
-        }}
-      />
-      <Button onClick={() => onClick()} loading={isLoading}>
-        Opprett behandling
-      </Button>
-      {message && <BodyShort>{message}</BodyShort>}
-    </div>
+    <Page.Block width="xl" className={styles.stickyFooterWrapper}>
+      <div className={styles.stickyFooter}>
+        <HStack gap="4" align="end" marginBlock="4">
+          <TextField
+            inputMode="numeric"
+            label={'Journalpost-id'}
+            onChange={(event) => {
+              setJournalpostId(parseInt(event.target.value));
+            }}
+          />
+          <Button onClick={() => onClick()} loading={isLoading}>
+            Opprett behandling
+          </Button>
+
+          {message && <Alert variant="info">{message}</Alert>}
+        </HStack>
+      </div>
+    </Page.Block>
   );
 };
