@@ -1,59 +1,60 @@
-#name: Bygg og deploy saksbehandling til dev
-#
-#on:
-#    workflow_dispatch:
-#    push:
-#        branches:
-#            - main
-#jobs:
-#    test-and-verify:
-#        name: Test, lint and verify
-#        runs-on: ubuntu-latest
-#        steps:
-#            - uses: navikt/aap-workflows/actions/yarn-node-and-checkout-cached@main
-#              with:
-#                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-#            - run: yarn lint
-#            - run: yarn tsc
-#            - run: yarn test
-#
-#    build-dev:
-#        name: Build for dev
-#        runs-on: ubuntu-latest
-#        permissions:
-#            packages: 'write'
-#            contents: 'read'
-#            id-token: 'write'
-#        outputs:
-#            image: ${{ steps.build-and-publish.outputs.image }}
-#        steps:
-#            - uses: navikt/aap-workflows/actions/yarn-node-and-checkout-cached@main
-#              with:
-#                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-#            - name: Copy env-file # TODO: Se om vi kan finne en bedre løsning her på sikt
-#              run: cp .nais/dev-gcp.env .env
-#            - run: yarn build
-#            - name: Upload static files to NAV CDN
-#              uses: nais/deploy/actions/cdn-upload/v2@master
-#              if: ${{ inputs.cdn == true }}
-#              with:
-#               team: aap
-#               source: ./.next/static
-#               destination: /aap-saksbehandling/_next
-#            - uses: nais/docker-build-push@v0
-#              with:
-#                  team: aap
-#                  image_suffix: dev-gcp
-#                  tag: ${{ github.sha }}
-#    deploy-dev:
-#        name: Deploy to dev
-#        needs: [build-dev, test-and-verify]
-#        uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
-#        permissions:
-#          contents: read
-#          id-token: write
-#        secrets: inherit
-#        with:
-#          cluster: dev-gcp
-#          manifest: .nais/nais.yaml
-#          imageSuffix: -dev-gcp
+name: Bygg og deploy saksbehandling til dev
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  test-and-verify:
+    name: Test, lint and verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: navikt/aap-workflows/actions/yarn-node-and-checkout-cached@main
+        with:
+          NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      - run: yarn lint
+      - run: yarn tsc
+      - run: yarn test
+
+  build-dev:
+    name: Build for dev
+    runs-on: ubuntu-latest
+    permissions:
+      packages: 'write'
+      contents: 'read'
+      id-token: 'write'
+    outputs:
+      image: ${{ steps.build-and-publish.outputs.image }}
+    steps:
+      - uses: navikt/aap-workflows/actions/yarn-node-and-checkout-cached@main
+        with:
+          NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      - name: Copy env-file # TODO: Se om vi kan finne en bedre løsning her på sikt
+        run: cp .nais/dev-gcp.env .env
+      - run: yarn build
+      - name: Upload static files to NAV CDN
+        uses: nais/deploy/actions/cdn-upload/v2@master
+        if: ${{ inputs.cdn == true }}
+        with:
+          team: aap
+          source: ./.next/static
+          destination: /aap-saksbehandling/_next
+      - uses: nais/docker-build-push@v0
+        with:
+          team: aap
+          image_suffix: dev-gcp
+          tag: ${{ github.sha }}
+
+  deploy-dev:
+    name: Deploy to dev
+    needs: [ build-dev, test-and-verify ]
+    uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
+    permissions:
+      contents: read
+      id-token: write
+    secrets: inherit
+    with:
+      cluster: dev-gcp
+      manifest: .nais/nais.yaml
+      imageSuffix: -dev-gcp
