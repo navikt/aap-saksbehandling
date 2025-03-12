@@ -52,8 +52,6 @@ spec:
     - emptyDir:
         medium: Memory
       mountPath: /app/.next/cache
-  tokenx:
-    enabled: true
   accessPolicy:
     outbound:
       rules:
