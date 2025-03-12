@@ -1,0 +1,13 @@
+.radiowrapper_radiogroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.radiowrapper_horizontal .navds-radio-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.radiowrapper_horizontal .navds-radio:not(:first-of-type) {
+  margin-left: 1rem;
+}

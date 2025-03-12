@@ -2,6 +2,8 @@ import { RadioGroup } from '@navikt/ds-react';
 import React, { ReactNode } from 'react';
 import { Control, Controller, RegisterOptions, FieldValues, FieldPath } from 'react-hook-form';
 
+import styles from './RadioGroupWrapper.module.css';
+
 interface RadioProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
   control: Control<FormFieldValues>;
@@ -29,9 +31,9 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
   readOnly,
   className,
 }: RadioProps<FormFieldValues>) => {
-  const classNames = `${className} ${horisontal ? 'radiowrapper_horizontal' : ''}`;
+  const classNames = `${className} ${horisontal ? styles.radiowrapper_horizontal : ''}`;
   return (
-    <div className="radiowrapper_radiogroup">
+    <div className={styles.radiowrapper_radiogroup}>
       <Controller
         name={name}
         control={control}

@@ -1,6 +1,5 @@
 import '@navikt/ds-css';
 import '@navikt/aap-breveditor-css';
-import '@navikt/aap-felles-css';
 import 'styles/globals.css';
 
 import { hentBrukerInformasjon } from '@navikt/aap-felles-utils';

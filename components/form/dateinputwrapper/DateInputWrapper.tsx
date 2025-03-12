@@ -4,6 +4,8 @@ import { ReactNode } from 'react';
 import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 import { mapShortDateToDateString } from './dateMapper';
 
+import styles from './DateInputWrapper.module.css';
+
 export type DateInputWrapperProps<FormFieldValues extends FieldValues> = {
   name: FieldPath<FormFieldValues>;
   control: Control<FormFieldValues>;
@@ -29,7 +31,7 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
   hideLabel,
   autocomplete,
 }: DateInputWrapperProps<FormFieldValues>) => {
-  const classNames = `aap_date_input ${className}`;
+  const classNames = `${styles.aap_date_input} ${className}`;
   const transform = (input: React.FormEvent<HTMLInputElement>) => mapShortDateToDateString(input.currentTarget.value);
 
   return (
