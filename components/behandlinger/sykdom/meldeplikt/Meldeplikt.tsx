@@ -11,7 +11,7 @@ import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 import { useFieldArray } from 'react-hook-form';
-import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 
 import styles from './Meldeplikt.module.css';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';

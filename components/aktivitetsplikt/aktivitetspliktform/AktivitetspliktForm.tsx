@@ -3,7 +3,6 @@ import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt
 import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
-import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 import { Button, Radio } from '@navikt/ds-react';
 import { AktivitetspliktDato } from 'components/aktivitetsplikt/aktivitetspliktdato/AktivitetspliktDato';
 import { Dispatch, useEffect, useState } from 'react';
@@ -87,6 +86,7 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd, setVisStatusm
       },
       grunn: {
         type: 'radio_nested',
+        rules: { required: 'Du må velge en grunn' },
       },
       perioder: {
         type: 'fieldArray',
@@ -177,12 +177,7 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd, setVisStatusm
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       {skalVelgeParagraf && <FormField form={form} formField={formFields.paragraf} />}
       {(paragraf === 'PARAGRAF_11_9' || brudd === 'IKKE_MØTT_TIL_MØTE' || brudd === 'IKKE_SENDT_INN_DOKUMENTASJON') && (
-        <RadioGroupWrapper
-          control={form.control}
-          name={'grunn'}
-          label={'Velg grunn for bruddet § 11-9'}
-          rules={{ required: 'Du må velge en grunn' }}
-        >
+        <FormField form={form} formField={{ ...formFields.grunn, label: 'Velg grunn for bruddet § 11-9' }}>
           {grunnForBruddHvis119.map((grunn, index) => {
             return (
               <Radio key={index} value={grunn.value}>
@@ -190,16 +185,11 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd, setVisStatusm
               </Radio>
             );
           })}
-        </RadioGroupWrapper>
+        </FormField>
       )}
 
       {(paragraf === 'PARAGRAF_11_8' || brudd === 'IKKE_MØTT_TIL_ANNEN_AKTIVITET') && (
-        <RadioGroupWrapper
-          control={form.control}
-          name={'grunn'}
-          label={'Velg grunn for bruddet § 11-8'}
-          rules={{ required: 'Du må velge en grunn' }}
-        >
+        <FormField form={form} formField={{ ...formFields.grunn, label: 'Velg grunn for bruddet § 11-8' }}>
           {grunnForBruddHvis118.map((grunn, index) => {
             return (
               <Radio key={index} value={grunn.value}>
@@ -207,7 +197,7 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd, setVisStatusm
               </Radio>
             );
           })}
-        </RadioGroupWrapper>
+        </FormField>
       )}
 
       {skalViseDatoFeltOgBegrunnelsesfelt && (

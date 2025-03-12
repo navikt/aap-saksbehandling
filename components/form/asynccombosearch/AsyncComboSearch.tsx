@@ -1,9 +1,9 @@
 import { Controller, FieldPath, FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
 import { ErrorMessage, Label, Skeleton } from '@navikt/ds-react';
-import { customStyles } from './AsyncComboSearchStyling';
+import { customStyles } from 'components/form/asynccombosearch/AsyncComboSearchStyling';
 import { PadlockLockedFillIcon } from '@navikt/aksel-icons';
 
-import styles from './AsyncComboSearch.module.css';
+import styles from 'components/form/asynccombosearch/AsyncComboSearch.module.css';
 import dynamic from 'next/dynamic';
 import { ValuePair } from 'components/form/FormField';
 

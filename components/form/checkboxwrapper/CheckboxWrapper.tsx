@@ -1,6 +1,6 @@
 import { CheckboxGroup } from '@navikt/ds-react';
 import React, { ReactNode } from 'react';
-import { Control, Controller, RegisterOptions, FieldPath, FieldValues } from 'react-hook-form';
+import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 
 interface CheckboxProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;

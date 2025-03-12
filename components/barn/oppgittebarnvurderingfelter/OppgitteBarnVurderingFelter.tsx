@@ -3,11 +3,11 @@ import { JaEllerNei } from 'lib/utils/form';
 
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { UseFormReturn } from 'react-hook-form';
-import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 
 import { validerDato } from 'lib/validation/dateValidation';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 
 interface Props {
   ident: string;

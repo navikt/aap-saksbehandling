@@ -11,7 +11,6 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { FormEvent } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 import { BodyShort, Button, Label, Radio } from '@navikt/ds-react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
@@ -20,6 +19,7 @@ import styles from './Soningsvurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 
 interface Props {
   grunnlag: Soningsgrunnlag;

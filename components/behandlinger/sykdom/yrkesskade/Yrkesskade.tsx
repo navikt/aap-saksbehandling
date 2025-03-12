@@ -2,7 +2,6 @@
 
 import { HandBandageIcon } from '@navikt/aksel-icons';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
@@ -46,7 +45,9 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
       },
       relevanteSaker: {
         type: 'checkbox_nested',
+        label: 'Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.',
         defaultValue: grunnlag.yrkesskadeVurdering?.relevanteSaker,
+        rules: { required: 'Du må velge minst én yrkesskade' },
       },
       andelAvNedsettelsen: {
         type: 'text',
@@ -101,13 +102,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
         <FormField form={form} formField={formFields.erÅrsakssammenheng} />
         {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
           <>
-            <CheckboxWrapper
-              name={'relevanteSaker'}
-              control={form.control}
-              label={'Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.'}
-              readOnly={readOnly}
-              rules={{ required: 'Du må velge minst én yrkesskade' }}
-            >
+            <FormField form={form} formField={formFields.relevanteSaker}>
               <Table>
                 <Table.Header>
                   <Table.Row>
@@ -136,7 +131,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
                   </Table.Body>
                 )}
               </Table>
-            </CheckboxWrapper>
+            </FormField>
             <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
           </>
         )}

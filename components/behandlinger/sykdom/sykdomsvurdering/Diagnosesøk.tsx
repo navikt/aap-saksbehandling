@@ -1,5 +1,5 @@
 import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSearch';
+import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { JaEllerNei } from 'lib/utils/form';
 import { FieldPath, UseFormReturn } from 'react-hook-form';

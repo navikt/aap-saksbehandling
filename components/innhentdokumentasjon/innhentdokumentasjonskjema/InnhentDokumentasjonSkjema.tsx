@@ -7,7 +7,7 @@ import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
 import { clientSøkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
 import { useBestillDialogmelding } from 'hooks/FetchHook';
-import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSearch';
+import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 
