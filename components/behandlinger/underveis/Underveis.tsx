@@ -1,5 +1,4 @@
 import { AktivitetspliktMedDatafetching } from 'components/behandlinger/underveis/aktivitetsplikt/AktivitetspliktMedDatafetching';
-import { SamordningGraderingMedDatafetching } from 'components/behandlinger/underveis/samordninggradering/SamordningGraderingMedDatafetching';
 import { UnderveisgrunnlagMedDataFetching } from 'components/behandlinger/underveis/underveisgrunnlag/UnderveisgrunnlagMedDatafetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
@@ -27,11 +26,11 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
           readOnly={flyt.visning.saksbehandlerReadOnly}
         />
       )}
-      <SamordningGraderingMedDatafetching
-        behandlingsreferanse={behandlingsreferanse}
-        behandlingVersjon={flyt.behandlingVersjon}
-        readOnly={flyt.visning.saksbehandlerReadOnly}
-      />
+      {/*<SamordningGraderingMedDatafetching*/}
+      {/*  behandlingsreferanse={behandlingsreferanse}*/}
+      {/*  behandlingVersjon={flyt.behandlingVersjon}*/}
+      {/*  readOnly={flyt.visning.saksbehandlerReadOnly}*/}
+      {/*/>*/}
       <UnderveisgrunnlagMedDataFetching behandlingsreferanse={behandlingsreferanse} />
     </GruppeSteg>
   );

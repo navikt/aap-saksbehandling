@@ -12,6 +12,7 @@ export enum Behovstype {
   AVKLAR_BARNETILLEGG_KODE = '5009',
   AVKLAR_SONINGSFORRHOLD = '5010',
   AVKLAR_HELSEINSTITUSJON = '5011',
+  AVKLAR_SAMORDNING_GRADERING = '5012',
   YRKESSKADE_KODE = '5013',
   FASTSETT_YRKESSKADEINNTEKT = '5014',
   EFFEKTUER_11_7_KODE = '5015',
@@ -57,6 +58,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Soningsvurdering § 11-26';
     case '5011':
       return 'Helseinstitusjon § 11-25';
+    case '5012':
+      return 'Samordning gradering';
     case '5013':
       return 'Vurder yrkesskade';
     case '5014':
