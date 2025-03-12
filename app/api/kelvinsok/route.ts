@@ -64,7 +64,7 @@ function buildSaksbehandlingsURL(oppgave: Oppgave): string {
   return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef}`;
 }
 function buildPostmottakURL(oppgave: Oppgave): string {
-  return `/postmottak/${oppgave?.journalpostId}`;
+  return `/postmottak/${oppgave?.behandlingRef}`;
 }
 export function byggKelvinURL(oppgave: Oppgave): string {
   // @ts-ignore
