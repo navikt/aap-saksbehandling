@@ -8,7 +8,6 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
 import { HelseinstitusjonGrunnlag, Periode } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { useConfigForm } from '@navikt/aap-felles-react';
 import { useFieldArray } from 'react-hook-form';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/etannetsted/helseinstitusjon/helseinstitusjonsvurdering/Helseinstitusjonsvurdering';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -16,6 +15,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import styles from './Helseinstitusjon.module.css';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useConfigForm } from 'components/form/FormHook';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -37,7 +37,8 @@ interface Vurdering {
 
 export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } =
+    useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
 
   const defaultValue: Vurdering[] = grunnlag.vurderinger.flatMap((item) => {
     if (item.vurderinger && item.vurderinger.length > 0) {

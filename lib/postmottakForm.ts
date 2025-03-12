@@ -1,4 +1,4 @@
-import { ValuePair } from '@navikt/aap-felles-react';
+import { ValuePair } from 'components/form/FormField';
 
 export enum JaEllerNei {
   Ja = 'ja',

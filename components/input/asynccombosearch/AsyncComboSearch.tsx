@@ -1,11 +1,11 @@
 import { Controller, FieldPath, FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
 import { ErrorMessage, Label, Skeleton } from '@navikt/ds-react';
 import { customStyles } from './AsyncComboSearchStyling';
-import { ValuePair } from '@navikt/aap-felles-react';
 import { PadlockLockedFillIcon } from '@navikt/aksel-icons';
 
 import styles from './AsyncComboSearch.module.css';
 import dynamic from 'next/dynamic';
+import { ValuePair } from 'components/form/FormField';
 
 const AsyncSelectWithoutSSR = dynamic(() => import('react-select/async'), {
   ssr: false,

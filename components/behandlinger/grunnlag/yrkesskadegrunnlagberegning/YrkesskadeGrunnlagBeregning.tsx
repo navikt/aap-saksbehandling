@@ -1,7 +1,6 @@
 'use client';
 
 import { BandageIcon } from '@navikt/aksel-icons';
-import { TextAreaWrapper, TextFieldWrapper, useConfigForm } from '@navikt/aap-felles-react';
 import { useFieldArray } from 'react-hook-form';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Form } from 'components/form/Form';
@@ -14,6 +13,9 @@ import { YrkeskadeBeregningGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { useConfigForm } from 'components/form/FormHook';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 
 interface Props {
   behandlingVersjon: number;

@@ -1,6 +1,5 @@
 'use client';
 
-import { DateInputWrapper, TextAreaWrapper, useConfigForm } from '@navikt/aap-felles-react';
 import { FigureIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Link, Radio } from '@navikt/ds-react';
 import { Form } from 'components/form/Form';
@@ -17,6 +16,9 @@ import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 import styles from './Meldeplikt.module.css';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
+import { useConfigForm } from 'components/form/FormHook';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 
 type Props = {
   behandlingVersjon: number;

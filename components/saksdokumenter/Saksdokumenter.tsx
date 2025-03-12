@@ -1,4 +1,3 @@
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@navikt/aksel-icons';
 
 import { Link, Table } from '@navikt/ds-react';
@@ -6,6 +5,8 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import useSWR from 'swr';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { clientHentAlleDokumenterPåSak } from 'lib/clientApi';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface FormFields {
   dokumentnavn: string;

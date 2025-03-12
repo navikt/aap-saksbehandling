@@ -1,8 +1,9 @@
 import { Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SøknadFormFields } from './DigitaliserSøknad';
-import { SelectWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { TrashIcon } from '@navikt/aksel-icons';
+import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
+import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 
 interface Props {
   form: UseFormReturn<SøknadFormFields>;
@@ -48,7 +49,7 @@ export const Barnetillegg = ({ form, readOnly }: Props) => {
                           'Fødselsnummer er påkrevd. Sett postoppgaven på vent og innhent fødselsnummer hvis dette mangler.',
                       }}
                       readOnly={readOnly}
-                    />
+                    ></TextFieldWrapper>
                   </Table.DataCell>
                   <Table.DataCell>
                     <TextFieldWrapper

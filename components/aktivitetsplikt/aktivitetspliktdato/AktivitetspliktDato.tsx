@@ -2,7 +2,6 @@ import { Alert, BodyShort, Button, Label, Table } from '@navikt/ds-react';
 
 import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { DateInputWrapper } from '@navikt/aap-felles-react';
 
 import styles from 'components/aktivitetsplikt/aktivitetspliktdato/AktivitetspliktDato.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
@@ -10,6 +9,7 @@ import { isBefore, parse, startOfDay } from 'date-fns';
 import { hentDatoLabel } from 'components/aktivitetsplikt/util/AktivitetspliktUtil';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { AktivitetspliktFormFields } from 'components/aktivitetsplikt/aktivitetspliktform/AktivitetspliktForm';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
   form: UseFormReturn<AktivitetspliktFormFields>;

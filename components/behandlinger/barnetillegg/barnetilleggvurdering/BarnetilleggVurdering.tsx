@@ -9,7 +9,6 @@ import { BarnetilleggGrunnlag, BehandlingPersoninfo } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { useConfigForm } from '@navikt/aap-felles-react';
 import { useFieldArray } from 'react-hook-form';
 import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
@@ -17,7 +16,8 @@ import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/Opp
 import { FormEvent } from 'react';
 
 import styles from './BarnetilleggVurdering.module.css';
-import {ServerSentEventStatusAlert} from "components/serversenteventstatusalert/ServerSentEventStatusAlert";
+import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
+import { useConfigForm } from 'components/form/FormHook';
 
 interface Props {
   behandlingsversjon: number;

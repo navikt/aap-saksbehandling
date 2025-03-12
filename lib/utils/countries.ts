@@ -1,5 +1,5 @@
+import { ValuePair } from 'components/form/FormField';
 import countries from 'i18n-iso-countries';
-import { ValuePair } from '@navikt/aap-felles-react';
 const { eeaMember } = require('is-european');
 countries.registerLocale(require('i18n-iso-countries/langs/no.json'));
 

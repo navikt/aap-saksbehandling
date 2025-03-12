@@ -1,6 +1,5 @@
 'use client';
 
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import {
   JaNeiAvbruttIkkeOppgitt,
   JaNeiIkkeOppgitt,
@@ -17,6 +16,8 @@ import { VStack } from '@navikt/ds-react';
 import { Søknad } from 'lib/types/types';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 export type Barn = {
   fnr?: string;

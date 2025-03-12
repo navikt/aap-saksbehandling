@@ -29,7 +29,6 @@ const MultipleComboboxWrapper = <FormFieldValues extends FieldValues>({
   options,
   className,
 }: ComboboxProps<FormFieldValues>) => {
-
   return (
     <Controller
       control={control}
@@ -48,7 +47,7 @@ const MultipleComboboxWrapper = <FormFieldValues extends FieldValues>({
             error={fieldState.error?.message}
             readOnly={readOnly}
             className={className}
-            selectedOptions={field.value?.map((value) => {
+            selectedOptions={field.value?.map((value: string) => {
               const option = options.find((option) => option.value === value);
               if (option) {
                 return option;

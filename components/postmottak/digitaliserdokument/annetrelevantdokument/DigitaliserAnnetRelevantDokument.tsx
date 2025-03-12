@@ -2,12 +2,13 @@
 
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 
-import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { VStack } from '@navikt/ds-react';
 import type { AnnetRelevantDokumentV0, ÅrsakTilBehandling } from 'lib/types/types';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];

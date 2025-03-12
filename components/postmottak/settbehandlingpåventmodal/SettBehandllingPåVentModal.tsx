@@ -2,13 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from '@navikt/ds-react';
-import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import styles from './SettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { postmottakSettPåVentClient } from 'lib/postmottakClientApi';
 import { SettPåVentÅrsaker } from 'lib/types/postmottakTypes';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { revalidatePostMottakFlyt } from 'lib/actions/actions';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 
 interface Props {
   behandlingVersjon: number;

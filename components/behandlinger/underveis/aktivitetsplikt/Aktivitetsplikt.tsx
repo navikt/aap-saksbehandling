@@ -1,6 +1,5 @@
 'use client';
 
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { BodyShort, Link, Table } from '@navikt/ds-react';
 import {
@@ -18,6 +17,8 @@ import { FormEvent } from 'react';
 
 import styles from './Aktivitetsplikt.module.css';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface Props {
   grunnlag?: AktivitetspliktGrunnlag;

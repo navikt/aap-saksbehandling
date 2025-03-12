@@ -1,10 +1,10 @@
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { hentSak, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ValuePair } from '@navikt/aap-felles-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { TypeBehandling } from 'lib/types/types';
+import { ValuePair } from 'components/form/FormField';
 
 interface Props {
   saksId: string;

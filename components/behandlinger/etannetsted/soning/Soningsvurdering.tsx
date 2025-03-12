@@ -5,7 +5,6 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Soningsgrunnlag } from 'lib/types/types';
 import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { DateInputWrapper, TextAreaWrapper, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -18,6 +17,9 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 
 import styles from './Soningsvurdering.module.css';
+import { useConfigForm } from 'components/form/FormHook';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
   grunnlag: Soningsgrunnlag;
@@ -36,7 +38,8 @@ interface Vurdering {
 }
 
 export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Props) => {
-  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
+  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg } =
+    useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const defaultValue: Vurdering[] = grunnlag.vurderinger.map((forhold) => {

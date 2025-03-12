@@ -1,6 +1,5 @@
 'use client';
 
-import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import {
   Behovstype,
   getJaNeiEllerUndefined,
@@ -26,6 +25,8 @@ import { Revurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Rev
 import { Førstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/Førstegangsbehandling';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { Diagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/Diagnosesøk';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 
 export interface SykdomsvurderingFormFields {
   begrunnelse: string;

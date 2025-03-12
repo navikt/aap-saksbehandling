@@ -1,6 +1,6 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { describe, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { useConfigForm } from '../FormHook';
 import { FormField } from '../FormField';
 import { Button } from '@navikt/ds-react';

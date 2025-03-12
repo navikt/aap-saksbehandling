@@ -4,7 +4,6 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormEvent } from 'react';
 
 import { PercentIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { DateInputWrapper, TextAreaWrapper, TextFieldWrapper, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 
@@ -20,6 +19,10 @@ import styles from './FastsettArbeidsevne.module.css';
 import { Button, Link } from '@navikt/ds-react';
 import { pipe } from 'lib/utils/functional';
 import { erProsent } from 'lib/utils/validering';
+import { useConfigForm } from 'components/form/FormHook';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
   grunnlag?: ArbeidsevneGrunnlag;

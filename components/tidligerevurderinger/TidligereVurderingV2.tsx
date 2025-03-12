@@ -3,7 +3,7 @@
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { ÅpenPeriode } from 'lib/types/types';
-import { ValuePair } from '@navikt/aap-felles-react';
+import { ValuePair } from 'components/form/FormField';
 
 interface Props {
   tidligereVurdering: TidligereVurdering;

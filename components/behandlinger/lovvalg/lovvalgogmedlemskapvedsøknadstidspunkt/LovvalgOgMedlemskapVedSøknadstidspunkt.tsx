@@ -1,7 +1,6 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { landMedTrygdesamarbeid } from 'lib/utils/countries';
@@ -10,6 +9,8 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { LovvalgEØSLand, LovvalgMedlemskapGrunnlag } from 'lib/types/types';
 import { TidligereVurderingerV2 } from 'components/tidligerevurderinger/TidligereVurderingerV2';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface Props {
   behandlingVersjon: number;

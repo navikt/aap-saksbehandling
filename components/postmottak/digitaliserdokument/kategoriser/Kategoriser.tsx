@@ -1,12 +1,13 @@
 'use client';
 
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { KategoriserDokumentKategori } from 'lib/types/postmottakTypes';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { ServerSentEventStatus } from 'app/postmottak/api/post/[behandlingsreferanse]/hent/[gruppe]/[steg]/nesteSteg/route';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 
 interface Props extends Submittable {
   kategori?: KategoriserDokumentKategori;
@@ -19,7 +20,7 @@ interface FormFields {
   kategori: KategoriserDokumentKategori;
 }
 
-const kategorier: { label: string; value: KategoriserDokumentKategori }[] = [
+const kategorier: ValuePair<KategoriserDokumentKategori>[] = [
   {
     label: 'Søknad',
     value: 'SØKNAD',
@@ -38,7 +39,7 @@ const kategorier: { label: string; value: KategoriserDokumentKategori }[] = [
   },
   {
     label: 'Klage',
-    value: 'KLAGE'
+    value: 'KLAGE',
   },
   {
     label: 'Annet relevant dokument',

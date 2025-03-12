@@ -1,8 +1,9 @@
-import { FormField, FormFields } from '@navikt/aap-felles-react';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { SøknadFormFields } from './DigitaliserSøknad';
 import { JaNeiAvbruttIkkeOppgitt } from 'lib/postmottakForm';
 import { VStack } from '@navikt/ds-react';
+import { FormFields } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface Props {
   form: UseFormReturn<SøknadFormFields>;

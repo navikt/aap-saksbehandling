@@ -1,4 +1,3 @@
-import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 
@@ -9,6 +8,8 @@ import { clientSøkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
 import { useBestillDialogmelding } from 'hooks/FetchHook';
 import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSearch';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField, ValuePair } from 'components/form/FormField';
 
 export type Behandler = {
   type?: string;

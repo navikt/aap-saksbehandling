@@ -2,7 +2,6 @@
 
 import { isAfter, parse } from 'date-fns';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { BooksIcon } from '@navikt/aksel-icons';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
@@ -15,6 +14,8 @@ import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker
 import { BodyShort, Label } from '@navikt/ds-react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface Props {
   behandlingVersjon: number;

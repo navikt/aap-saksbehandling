@@ -7,10 +7,10 @@ import {
   ToTrinnsVurderingFormFields,
 } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { useConfigForm } from '@navikt/aap-felles-react';
 import { useFieldArray } from 'react-hook-form';
 import { useState } from 'react';
 import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
+import { useConfigForm } from 'components/form/FormHook';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;

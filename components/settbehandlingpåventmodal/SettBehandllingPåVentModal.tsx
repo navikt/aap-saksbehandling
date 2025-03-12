@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from '@navikt/ds-react';
-import { useConfigForm, FormField, ValuePair } from '@navikt/aap-felles-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { clientSettBehandlingPåVent } from 'lib/clientApi';
 import { revalidateFlyt } from 'lib/actions/actions';
@@ -11,6 +10,8 @@ import styles from './SettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { SettPåVentÅrsaker } from 'lib/types/types';
 import { parse } from 'date-fns';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 
 interface Props {
   referanse: string;

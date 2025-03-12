@@ -1,7 +1,6 @@
 'use client';
 
 import { HandBandageIcon } from '@navikt/aksel-icons';
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { CheckboxWrapper } from 'components/input/CheckboxWrapper';
 import { Form } from 'components/form/Form';
@@ -11,6 +10,8 @@ import { Checkbox, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { erProsent } from 'lib/utils/validering';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;

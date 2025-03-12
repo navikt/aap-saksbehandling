@@ -1,6 +1,5 @@
 'use client';
 
-import { useConfigForm, FormField } from '@navikt/aap-felles-react';
 import { Button } from '@navikt/ds-react';
 
 import styles from './OpprettSak.module.css';
@@ -10,6 +9,8 @@ import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { OpprettInntekter } from 'components/opprettsak/inntekter/OpprettInntekter';
 import { useOpprettSak } from 'hooks/FetchHook';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 
 interface Barn {
   fodselsdato: string;

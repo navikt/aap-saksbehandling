@@ -1,9 +1,10 @@
-import { FormField, FormFields, ValuePair } from '@navikt/aap-felles-react';
 import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { AsyncComboSearch } from 'components/input/asynccombosearch/AsyncComboSearch';
 import { diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { JaEllerNei } from 'lib/utils/form';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
+import { FormFields } from 'components/form/FormHook';
+import { FormField, ValuePair } from 'components/form/FormField';
 
 interface Props {
   form: UseFormReturn<SykdomsvurderingFormFields>;

@@ -9,7 +9,6 @@ import {
   AktivitetspliktPeriode,
   OppdaterAktivitetsplitGrunn,
 } from 'lib/types/types';
-import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { useState } from 'react';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useSaksnummer } from 'hooks/BehandlingHook';
@@ -21,6 +20,8 @@ import styles from './AktivitetspliktHendelserTabellRad.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { AktivitetspliktHendelserMedFormId } from 'components/aktivitetsplikt/aktivitetsplikthendelser/AktivitetspliktHendelser';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 
 interface Props {
   aktivitetspliktHendelse: AktivitetspliktHendelserMedFormId;

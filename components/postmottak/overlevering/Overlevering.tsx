@@ -1,6 +1,5 @@
 'use client';
 
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
 import { OverleveringGrunnlag } from 'lib/types/postmottakTypes';
@@ -9,6 +8,8 @@ import { VStack } from '@navikt/ds-react';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface Props {
   behandlingsVersjon: number;

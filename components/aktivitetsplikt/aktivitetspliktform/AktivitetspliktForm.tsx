@@ -3,7 +3,6 @@ import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt
 import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
-import { FormField, useConfigForm, ValuePair } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 import { Button, Radio } from '@navikt/ds-react';
 import { AktivitetspliktDato } from 'components/aktivitetsplikt/aktivitetspliktdato/AktivitetspliktDato';
@@ -13,6 +12,8 @@ import { useSaksnummer } from 'hooks/BehandlingHook';
 import { AktivitetspliktBrudd, AktivitetspliktGrunn, AktivitetspliktParagraf, SaksInfo } from 'lib/types/types';
 import { useFieldArray } from 'react-hook-form';
 import { formaterPerioder } from 'components/aktivitetsplikt/util/AktivitetspliktUtil';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField, ValuePair } from 'components/form/FormField';
 
 interface Props {
   sak: SaksInfo;

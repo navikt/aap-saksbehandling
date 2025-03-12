@@ -4,8 +4,8 @@ import { OpprettSakFormFields } from 'components/opprettsak/OpprettSak';
 import styles from 'components/opprettsak/OpprettSak.module.css';
 import { Button, Label } from '@navikt/ds-react';
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { TextFieldWrapper } from '@navikt/aap-felles-react';
 import { validerÅrstall } from 'lib/validation/dateValidation';
+import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;

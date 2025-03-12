@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js';
 import { ICD10, ICD10Diagnosekode, ICPC2, ICPC2Diagnosekode } from '@navikt/diagnosekoder';
-import { ValuePair } from '@navikt/aap-felles-react';
+import { ValuePair } from 'components/form/FormField';
 
 export type DiagnoseSystem = 'ICD10' | 'ICPC2';
 

@@ -1,4 +1,3 @@
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Alert, BodyShort, Checkbox, Heading, Loader, Table } from '@navikt/ds-react';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { clientHentRelevanteDokumenter } from 'lib/clientApi';
@@ -6,6 +5,8 @@ import useSWR from 'swr';
 
 import styles from './RelevanteDokumenter.module.css';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface FormFields {
   dokumentnavn: string;

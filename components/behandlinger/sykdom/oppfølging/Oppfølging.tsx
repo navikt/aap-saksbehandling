@@ -3,7 +3,6 @@
 import { PersonGroupIcon } from '@navikt/aksel-icons';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { BistandsGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
@@ -14,6 +13,8 @@ import { Link } from '@navikt/ds-react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { isBefore, startOfDay } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface Props {
   behandlingVersjon: number;

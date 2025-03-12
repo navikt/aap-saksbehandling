@@ -1,6 +1,5 @@
 'use client';
 
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Form } from 'components/form/Form';
 import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
@@ -14,6 +13,8 @@ import styles from './FastsettBeregning.module.css';
 import { Heading } from '@navikt/ds-react';
 import { CalendarIcon } from '@navikt/aksel-icons';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;

@@ -1,9 +1,9 @@
 import { UseFormReturn } from 'react-hook-form';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjon';
-import { TextAreaWrapper } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 import { Radio } from '@navikt/ds-react';
 import { JaEllerNei } from 'lib/utils/form';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;

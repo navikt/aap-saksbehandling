@@ -1,5 +1,6 @@
-import { FormField, FormFields } from '@navikt/aap-felles-react';
 import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
+import { FormField } from 'components/form/FormField';
+import { FormFields } from 'components/form/FormHook';
 import { JaEllerNei } from 'lib/utils/form';
 import { ReactNode } from 'react';
 import { FieldPath, UseFormReturn } from 'react-hook-form';

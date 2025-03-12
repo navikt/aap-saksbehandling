@@ -1,9 +1,10 @@
-import { FormField, FormFields } from '@navikt/aap-felles-react';
 import { Alert } from '@navikt/ds-react';
 import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
+import { FormFields } from 'components/form/FormHook';
 import { JaEllerNei } from 'lib/utils/form';
 import { ReactNode } from 'react';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
+import { FormField } from 'components/form/FormField';
 
 interface Props {
   form: UseFormReturn<SykdomsvurderingFormFields>;

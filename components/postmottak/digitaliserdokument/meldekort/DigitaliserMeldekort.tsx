@@ -1,11 +1,12 @@
 'use client';
 
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { MeldePerioder } from './MeldePerioder';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import { MeldekortV0 } from 'lib/types/types';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface Props extends Submittable {
   behandlingsVersjon: number;

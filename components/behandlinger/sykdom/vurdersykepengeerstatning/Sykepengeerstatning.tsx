@@ -2,13 +2,14 @@
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FigureIcon } from '@navikt/aksel-icons';
-import { FormField, useConfigForm } from '@navikt/aap-felles-react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Form } from 'components/form/Form';
 import { SykepengeerstatningGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 interface Props {
   behandlingVersjon: number;

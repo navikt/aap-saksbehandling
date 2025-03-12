@@ -3,10 +3,11 @@ import { JaEllerNei } from 'lib/utils/form';
 
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { UseFormReturn } from 'react-hook-form';
-import { DateInputWrapper, TextAreaWrapper } from '@navikt/aap-felles-react';
 import { RadioGroupWrapper } from 'components/input/RadioGroupWrapper';
 
 import { validerDato } from 'lib/validation/dateValidation';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
   ident: string;

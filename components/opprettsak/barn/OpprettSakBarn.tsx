@@ -5,8 +5,9 @@ import styles from 'components/opprettsak/OpprettSak.module.css';
 import { Button, Label } from '@navikt/ds-react';
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
 import { JaEllerNei } from 'lib/utils/form';
-import { SelectWrapper, TextFieldWrapper } from '@navikt/aap-felles-react';
 import { validerÅrstall } from 'lib/validation/dateValidation';
+import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
+import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;
