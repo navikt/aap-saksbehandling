@@ -35,7 +35,7 @@ interface FormFields {
   vurderAAPIOvergangTilArbeid?: string; // ikke i backend enda, skal kun vises i revurdering hvis 11-5 && 11-6 === false, usikkert navn
 }
 
-export const Oppfølging = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readOnly }: Props) => {
+export const Bistandsbehov = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');

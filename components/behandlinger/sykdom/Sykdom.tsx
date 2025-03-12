@@ -2,7 +2,7 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
-import { OppfølgingMedDataFetching } from 'components/behandlinger/sykdom/oppfølging/OppfølgingMedDataFetching';
+import { BistandsbehovMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
 import { SykepengeerstatningMedDataFetching } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningMedDataFetching';
 import { FastsettArbeidsevneMedDataFetching } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevneMedDataFetching';
@@ -60,7 +60,7 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
       )}
       {stegSomSkalVises.includes('VURDER_BISTANDSBEHOV') && (
         <StegSuspense>
-          <OppfølgingMedDataFetching
+          <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}

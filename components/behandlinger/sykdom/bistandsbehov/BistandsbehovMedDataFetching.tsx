@@ -1,5 +1,5 @@
 import { hentBistandsbehovGrunnlag, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Oppfølging } from 'components/behandlinger/sykdom/oppfølging/Oppfølging';
+import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { TypeBehandling } from 'lib/types/types';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
   saksId: string;
 }
 
-export const OppfølgingMedDataFetching = async ({
+export const BistandsbehovMedDataFetching = async ({
   behandlingsReferanse,
   behandlingVersjon,
   readOnly,
@@ -20,7 +20,7 @@ export const OppfølgingMedDataFetching = async ({
   const [grunnlag, sak] = await Promise.all([hentBistandsbehovGrunnlag(behandlingsReferanse), hentSak(saksId)]);
 
   return (
-    <Oppfølging
+    <Bistandsbehov
       grunnlag={grunnlag}
       readOnly={readOnly}
       behandlingVersjon={behandlingVersjon}

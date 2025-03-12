@@ -81,7 +81,7 @@ function mapVilkårTypeTilVilkårNavn(steg: VilkårType): string {
     case 'SYKDOMSVILKÅRET':
       return 'Sykdom';
     case 'BISTANDSVILKÅRET':
-      return 'Oppfølging';
+      return 'Bistandsbehov';
     case 'MEDLEMSKAP':
       return 'Medlemskap';
     case 'GRUNNLAGET':
