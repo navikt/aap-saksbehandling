@@ -46,8 +46,6 @@ spec:
       destinations:
         - id: elastic
         - id: loki
-  envFrom:
-    - secret: kelvin-env-local
   filesFrom:
     - emptyDir:
         medium: Memory
@@ -63,3 +61,32 @@ spec:
         - application: "dokumentinnhenting"
       external:
         - host: "cdn.nav.no"
+  env:
+#    - name: NEXT_PUBLIC_ENVIRONMENT
+#      value: dev
+    - name: ASSET_PREFIX
+      value: https://cdn.nav.no/aap/aap-saksbehandling
+    - name: BEHANDLING_API_BASE_URL
+      value: http://behandlingsflyt
+    - name: BEHANDLING_API_SCOPE
+      value: api://dev-gcp.aap.behandlingsflyt/.default
+    - name: BEHANDLING_API_AUDIENCE
+      value: dev-gcp:aap:behandlingsflyt
+    - name: SAKSBEHANDLING_PDFGEN_URL
+      value: http://saksbehandling-pdfgen
+    - name: OPPGAVE_API_BASE_URL
+      value: http://oppgave
+    - name: OPPGAVE_API_SCOPE
+      value: api://dev-gcp.aap.oppgave/.default
+    - name: DOKUMENTMOTTAK_API_BASE_URL
+      value: http://postmottak-backend
+    - name: DOKUMENTMOTTAK_API_SCOPE
+      value: api://dev-gcp.aap.postmottak-backend/.default
+    - name: STATISTIKK_API_BASE_URL
+      value: http://statistikk
+    - name: STATISTIKK_API_SCOPE
+      value: api://dev-gcp.aap.statistikk/.default
+    - name: NEXT_PUBLIC_FARO_URL
+      value: https://telemetry.ekstern.dev.nav.no/collect
+    - name: OPPGAVESTYRING_FRONTEND_HOST
+      value: aap-oppgavestyring.ansatt.dev.nav.no

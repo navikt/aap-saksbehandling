@@ -19,6 +19,9 @@ const nextConfig = {
 
   images: {
     formats: ['image/webp'],
+  },
+  env: {
+    NEXT_PUBLIC_ENVIRONMENT: process.env.NEXT_PUBLIC_ENVIRONMENT
   }
 };
 

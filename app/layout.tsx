@@ -13,6 +13,8 @@ export const metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const brukerInformasjon = await hentBrukerInformasjon();
 
+  console.log('environment:', process.env.NEXT_PUBLIC_ENVIRONMENT)
+
   return (
     <html lang="nb">
       <body>
