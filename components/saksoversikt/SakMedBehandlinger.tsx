@@ -15,6 +15,8 @@ const formaterBehandlingType = (behandlingtype: string) => {
       return 'Førstegangsbehandling';
     case 'ae0028':
       return 'Revurdering';
+    case 'ae0058':
+      return 'Klage';
     default:
       return `Ukjent behandlingtype (${behandlingtype})`;
   }
