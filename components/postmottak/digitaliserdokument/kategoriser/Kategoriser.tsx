@@ -37,6 +37,10 @@ const kategorier: { label: string; value: KategoriserDokumentKategori }[] = [
     value: 'LEGEERKLÆRING',
   },
   {
+    label: 'Klage',
+    value: 'KLAGE'
+  },
+  {
     label: 'Annet relevant dokument',
     value: 'ANNET_RELEVANT_DOKUMENT',
   },
