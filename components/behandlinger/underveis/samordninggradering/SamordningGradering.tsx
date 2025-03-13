@@ -8,7 +8,7 @@ import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { useFieldArray } from 'react-hook-form';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -49,6 +49,18 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     name: 'folketrygdYtelser',
   });
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit(async () =>
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
+        },
+        referanse: behandlingsreferanse,
+      })
+    )(event);
+  };
+
   return (
     <VilkårsKort heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser" steg="SAMORDNING_GRADERING">
       {visForm && (
@@ -82,15 +94,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
           ))}
           <Form
             steg={'SAMORDNING_GRADERING'}
-            onSubmit={form.handleSubmit(async () =>
-              løsBehovOgGåTilNesteSteg({
-                behandlingVersjon: behandlingVersjon,
-                behov: {
-                  behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
-                },
-                referanse: behandlingsreferanse,
-              })
-            )}
+            onSubmit={handleSubmit}
             isLoading={isLoading}
             status={status}
             resetStatus={resetStatus}
