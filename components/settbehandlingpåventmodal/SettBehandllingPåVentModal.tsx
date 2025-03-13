@@ -38,6 +38,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
       value: 'VENTER_PÅ_OPPLYSNINGER_FRA_UTENLANDSKE_MYNDIGHETER',
     },
     { label: 'Venter på svar fra bruker', value: 'VENTER_PÅ_SVAR_FRA_BRUKER' },
+    { label: 'Venter på svar på forhåndsvarsel', value: 'VENTER_PÅ_SVAR_PÅ_FORHÅNDSVARSEL' },
   ];
 
   const { form, formFields } = useConfigForm<FormFields>({

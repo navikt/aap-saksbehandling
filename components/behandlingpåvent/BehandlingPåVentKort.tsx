@@ -80,5 +80,7 @@ function mapÅrsakerTilString(årsak: SettPåVentÅrsaker): string {
       return 'Venter på videreføring av sak til utenlandsk trygdemyndighet';
     case 'VENTER_PÅ_KLAGE_IMPLEMENTASJON':
       return 'Venter på klageimplementasjon';
+    case 'VENTER_PÅ_SVAR_PÅ_FORHÅNDSVARSEL':
+      return 'Venter på svar på forhåndsvarsel';
   }
 }
