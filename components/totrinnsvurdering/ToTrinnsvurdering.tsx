@@ -43,7 +43,7 @@ export const ToTrinnsvurdering = ({
 
   const [toggleGroupValue, setToggleGroupValue] = useState<string>(readOnly ? 'historikk' : 'totrinnsvurdering');
 
-  const link = `/sak/${params.saksId}/${behandlingsReferanse}`;
+  const link = `/saksbehandling/sak/${params.saksId}/${behandlingsReferanse}`;
 
   const vurderteTotrinnsvurderinger = grunnlag.vurderinger.filter(
     (vurdering) => typeof vurdering.godkjent === 'boolean'
