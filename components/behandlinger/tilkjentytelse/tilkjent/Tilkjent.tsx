@@ -20,6 +20,9 @@ export const Tilkjent = ({ grunnlag }: Props) => {
             <Table.HeaderCell>Periode</Table.HeaderCell>
             <Table.HeaderCell>Dagsats</Table.HeaderCell>
             <Table.HeaderCell>Gradering</Table.HeaderCell>
+            <Table.HeaderCell>Arbeid gradering</Table.HeaderCell>
+            <Table.HeaderCell>Institusjon gradering</Table.HeaderCell>
+            <Table.HeaderCell>Samordning gradering</Table.HeaderCell>
             <Table.HeaderCell>Antall barn</Table.HeaderCell>
             <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
             <Table.HeaderCell>Utbetalingsdato</Table.HeaderCell>
@@ -33,7 +36,14 @@ export const Tilkjent = ({ grunnlag }: Props) => {
                 {formaterDatoForFrontend(periode.fraOgMed)} - {formaterDatoForFrontend(periode.tilOgMed)}
               </Table.DataCell>
               <Table.DataCell>{periode.dagsats}</Table.DataCell>
-              <Table.DataCell>{periode.gradering}</Table.DataCell>
+              <Table.DataCell>{periode.gradering}%</Table.DataCell>
+              <Table.DataCell>{periode.arbeidGradering ? `${periode.arbeidGradering}%` : 'Ingen data'}</Table.DataCell>
+              <Table.DataCell>
+                {periode.institusjonGradering ? `${periode.institusjonGradering}%` : 'Ingen data'}
+              </Table.DataCell>
+              <Table.DataCell>
+                {periode.samordningGradering ? `${periode.samordningGradering}%` : 'Ingen data'}
+              </Table.DataCell>
               <Table.DataCell>{periode.antallBarn}</Table.DataCell>
               <Table.DataCell>{periode.barnetillegg}</Table.DataCell>
               <Table.DataCell>{formaterDatoForFrontend(periode.utbetalingsdato)}</Table.DataCell>
