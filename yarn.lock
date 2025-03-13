@@ -1517,14 +1517,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:7.17.1":
-  version: 7.17.1
-  resolution: "@navikt/aksel-icons@npm:7.17.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.17.1%2F7a8b1348aba238c798807b675b348155c6e2a64d"
-  checksum: 10c0/ae4489f673e78db01d4e52c076e632f811c968b83b386557e9fb8883448b519e0024630038156485da215d89fe6a9d3afd5790f06e9809a30f74dc11193d8bfe
-  languageName: node
-  linkType: hard
-
-"@navikt/aksel-icons@npm:^7.17.2":
+"@navikt/aksel-icons@npm:7.17.2, @navikt/aksel-icons@npm:^7.17.2":
   version: 7.17.2
   resolution: "@navikt/aksel-icons@npm:7.17.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.17.2%2F182d9a4c0e8274add0a4bb38dc6c287cb4d0b8a5"
   checksum: 10c0/0b7d18e6af6ed3690ee43b9ffde7cbfd631efd1174e13f5017e46bb8785b86392ebb789cc04304730a0efd5113c3588a41d7b53bd54759dff5f0934ad80a0db4
@@ -3534,7 +3527,7 @@ __metadata:
     "@navikt/aap-oppgave-typescript-types": "npm:^0.0.110"
     "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.193"
     "@navikt/aap-statistikk-typescript-types": "npm:^0.1.46"
-    "@navikt/aksel-icons": "npm:7.17.1"
+    "@navikt/aksel-icons": "npm:7.17.2"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
     "@navikt/ds-css": "npm:7.17.2"
     "@navikt/ds-react": "npm:7.17.2"
