@@ -1,18 +1,18 @@
 'use client';
 
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { SamordningGraderingGrunnlag } from 'lib/types/types';
+import { Periode, SamordningGraderingGrunnlag } from 'lib/types/types';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
+import { Button, Detail, ExpansionCard, HStack, Select, Table, VStack } from '@navikt/ds-react';
 import { useFieldArray } from 'react-hook-form';
 import { FormEvent, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
+import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -20,12 +20,47 @@ interface Props {
   readOnly: boolean;
 }
 
+type SamordnetYtelse = {
+  ytelseType: string; // TODO nei, enum
+  gradering?: number;
+  kronseum?: number;
+  periode: Periode;
+};
+
 interface Formfields {
   begrunnelse: string;
   maksDatoEndelig: string;
   maksDato?: string;
-  folketrygdYtelser: SamordningGraderingGrunnlag['ytelser'];
+  vurderteSamordninger: SamordnetYtelse[];
 }
+
+const ytelsesoptions: ValuePair[] = [
+  { value: '', label: 'Velg ytelse' },
+  {
+    value: 'SYKEPENGER',
+    label: 'Sykepenger',
+  },
+  {
+    value: 'FORELDREPENGER',
+    label: 'Foreldrepenger',
+  },
+  {
+    value: 'PLEIEPENGER',
+    label: 'Pleiepenger',
+  },
+  {
+    value: 'SVANGERSKAPSPENGER',
+    label: 'Svangerskapspenger',
+  },
+  {
+    value: 'OMSORGSPENGER',
+    label: 'Omsorgspenger',
+  },
+  {
+    value: 'OPPLÆRINGSPENGER',
+    label: 'Opplæringspenger',
+  },
+];
 
 export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
@@ -48,9 +83,9 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
         type: 'date_input',
         label: 'Sett dato for ny revurdering',
       },
-      folketrygdYtelser: {
+      vurderteSamordninger: {
         type: 'fieldArray',
-        defaultValue: grunnlag.ytelser || [],
+        defaultValue: [],
       },
     },
     { readOnly }
@@ -58,9 +93,9 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
   const { løsBehovOgGåTilNesteSteg, status, isLoading, resetStatus } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_GRADERING');
 
-  const { fields } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control: form.control,
-    name: 'folketrygdYtelser',
+    name: 'vurderteSamordninger',
   });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -75,37 +110,14 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     )(event);
   };
 
+  function leggTilRad() {
+    append({ ytelseType: '', periode: { fom: '', tom: '' }, gradering: undefined });
+  }
+
   return (
     <VilkårsKort heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser" steg="SAMORDNING_GRADERING">
       {visForm && (
         <>
-          {fields.map((ytelse) => (
-            <section key={ytelse.ytelseType} style={{ marginBottom: '1rem' }}>
-              <div>Ytelse: {ytelse.ytelseType}</div>
-              <div>Kilde: {ytelse.kilde}</div>
-              <div>Saksreferanse: {ytelse.saksRef}</div>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Fra og med</th>
-                    <th>Til og med</th>
-                    <th>Gradering</th>
-                    <th>Kronesum</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ytelse.ytelsePerioder.map((periode) => (
-                    <tr key={periode.fom}>
-                      <td>{formaterDatoForVisning(periode.fom)}</td>
-                      <td>{formaterDatoForVisning(periode.tom)}</td>
-                      <td>{periode.gradering}</td>
-                      <td>{periode.kronesum}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </section>
-          ))}
           <Form
             steg={'SAMORDNING_GRADERING'}
             onSubmit={handleSubmit}
@@ -114,8 +126,71 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             resetStatus={resetStatus}
           >
             <FormField form={form} formField={formFields.begrunnelse} />
+            <Table>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Ytelse</Table.HeaderCell>
+                  <Table.HeaderCell>Periode</Table.HeaderCell>
+                  <Table.HeaderCell>Kilde</Table.HeaderCell>
+                  <Table.HeaderCell>Grad fra kilde</Table.HeaderCell>
+                  <Table.HeaderCell>Utbetalingsgrad</Table.HeaderCell>
+                  <Table.HeaderCell></Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {fields.map((field, index) => (
+                  <Table.Row key={field.id}>
+                    <Table.DataCell>
+                      <Select
+                        label="Ytelsestype"
+                        size={'small'}
+                        hideLabel
+                        onChange={(event) => update(index, { ...field, ytelseType: event.target.value })}
+                        value={field.ytelseType}
+                      >
+                        {ytelsesoptions.map((ytelse) => (
+                          <option value={ytelse.value} key={ytelse.value}>
+                            {ytelse.label}
+                          </option>
+                        ))}
+                      </Select>
+                    </Table.DataCell>
+                    <Table.DataCell></Table.DataCell>
+                    <Table.DataCell>Manuell</Table.DataCell>
+                    <Table.DataCell>-</Table.DataCell>
+                    <Table.DataCell>
+                      <TextFieldWrapper
+                        name={`vurderteSamordninger.${index}.gradering`}
+                        label={'Gradering'}
+                        hideLabel
+                        type={'text'}
+                        size={'small'}
+                        control={form.control}
+                        readOnly={readOnly}
+                      />
+                    </Table.DataCell>
+                    <Table.DataCell>
+                      <Button
+                        size={'small'}
+                        icon={<TrashIcon title={'Slett'} />}
+                        variant={'tertiary'}
+                        type={'button'}
+                        onClick={() => remove(index)}
+                        disabled={readOnly}
+                      ></Button>
+                    </Table.DataCell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
             <HStack>
-              <Button size={'small'} type={'button'} variant={'secondary'} icon={<PlusCircleIcon />}>
+              <Button
+                size={'small'}
+                type={'button'}
+                variant={'secondary'}
+                icon={<PlusCircleIcon />}
+                onClick={leggTilRad}
+              >
                 Legg til
               </Button>
             </HStack>
