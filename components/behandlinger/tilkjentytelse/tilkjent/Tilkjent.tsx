@@ -6,6 +6,8 @@ import { PiggybankIcon } from '@navikt/aksel-icons';
 import { Detail, Label, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
+const isNullOrUndefined = (value: number | null | undefined) => value === null || value === undefined;
+
 interface Props {
   grunnlag: TilkjentYtelseGrunnlag;
 }
@@ -37,12 +39,14 @@ export const Tilkjent = ({ grunnlag }: Props) => {
               </Table.DataCell>
               <Table.DataCell>{periode.dagsats}</Table.DataCell>
               <Table.DataCell>{periode.gradering}%</Table.DataCell>
-              <Table.DataCell>{periode.arbeidGradering ? `${periode.arbeidGradering}%` : 'Ingen data'}</Table.DataCell>
               <Table.DataCell>
-                {periode.institusjonGradering ? `${periode.institusjonGradering}%` : 'Ingen data'}
+                {!isNullOrUndefined(periode.arbeidGradering) ? `${periode.arbeidGradering}%` : 'Ingen data'}
               </Table.DataCell>
               <Table.DataCell>
-                {periode.samordningGradering ? `${periode.samordningGradering}%` : 'Ingen data'}
+                {!isNullOrUndefined(periode.institusjonGradering) ? `${periode.institusjonGradering}%` : 'Ingen data'}
+              </Table.DataCell>
+              <Table.DataCell>
+                {!isNullOrUndefined(periode.samordningGradering) ? `${periode.samordningGradering}%` : 'Ingen data'}
               </Table.DataCell>
               <Table.DataCell>{periode.antallBarn}</Table.DataCell>
               <Table.DataCell>{periode.barnetillegg}</Table.DataCell>
