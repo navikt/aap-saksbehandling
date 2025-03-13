@@ -6,7 +6,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { SamordningGraderingGrunnlag } from 'lib/types/types';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { Button, Detail, HStack, VStack } from '@navikt/ds-react';
+import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
 import { useFieldArray } from 'react-hook-form';
 import { FormEvent, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
@@ -22,6 +22,8 @@ interface Props {
 
 interface Formfields {
   begrunnelse: string;
+  maksDatoEndelig: string;
+  maksDato?: string;
   folketrygdYtelser: SamordningGraderingGrunnlag['ytelser'];
 }
 
@@ -33,6 +35,18 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
       begrunnelse: {
         type: 'textarea',
         label: 'Vurder utbetalingsgrad for folketrygdytelser',
+      },
+      maksDatoEndelig: {
+        type: 'radio',
+        label: 'Skal virkningstidspunkt revurderes nærmere?',
+        options: [
+          { label: 'Ja, virkningstidspunkt må vurderes på nytt', value: 'false' },
+          { label: 'Nei, virkningstidspunkt er bekreftet', value: 'true' },
+        ],
+      },
+      maksDato: {
+        type: 'date_input',
+        label: 'Sett dato for ny revurdering',
       },
       folketrygdYtelser: {
         type: 'fieldArray',
@@ -105,6 +119,13 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
                 Legg til
               </Button>
             </HStack>
+            <ExpansionCard aria-label="Tidligste virkningstidspunkt etter samordning er" open>
+              <ExpansionCard.Header>Tidligste virkningstidspunkt etter samordning er</ExpansionCard.Header>
+              <ExpansionCard.Content>
+                <FormField form={form} formField={formFields.maksDatoEndelig} />
+                {form.watch('maksDatoEndelig') === 'false' && <FormField form={form} formField={formFields.maksDato} />}
+              </ExpansionCard.Content>
+            </ExpansionCard>
           </Form>
         </>
       )}
