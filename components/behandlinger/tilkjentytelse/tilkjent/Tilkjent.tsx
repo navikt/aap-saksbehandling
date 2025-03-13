@@ -26,7 +26,7 @@ export const Tilkjent = ({ grunnlag }: Props) => {
             <Table.HeaderCell>Antall barn</Table.HeaderCell>
             <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
             <Table.HeaderCell>Utbetalingsdato</Table.HeaderCell>
-            <Table.HeaderCell>Redusert dagsats</Table.HeaderCell>
+            <Table.HeaderCell>Effektiv dagsats</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
