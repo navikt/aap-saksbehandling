@@ -28,8 +28,8 @@ export const Helseinstitusjonsvurdering = ({ form, helseinstitusjonoppholdIndex,
       <RadioGroupWrapper
         name={`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.forsoergerEktefelle`}
         control={form.control}
-        label={'Forsørger søker ektefelle eller tilsvarende?'}
-        rules={{ required: 'Du må svare på om søker forsørger ektefelle eller tilsvarende' }}
+        label={'Forsørger bruker ektefelle eller tilsvarende?'}
+        rules={{ required: 'Du må svare på om bruker forsørger ektefelle eller tilsvarende' }}
         readOnly={readonly}
         horisontal
       >
@@ -39,9 +39,9 @@ export const Helseinstitusjonsvurdering = ({ form, helseinstitusjonoppholdIndex,
       <RadioGroupWrapper
         name={`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.harFasteUtgifter`}
         control={form.control}
-        label={'Har søker faste utgifter nødvendig for å beholde bolig og andre eiendeler?'}
+        label={'Har bruker faste utgifter nødvendig for å beholde bolig og andre eiendeler?'}
         rules={{
-          required: 'Du må svare på om søker har faste utgifter nødvendig for å beholde bolig og andre eiendeler',
+          required: 'Du må svare på om bruker har faste utgifter nødvendig for å beholde bolig og andre eiendeler',
         }}
         readOnly={readonly}
         horisontal
@@ -53,9 +53,9 @@ export const Helseinstitusjonsvurdering = ({ form, helseinstitusjonoppholdIndex,
         <RadioGroupWrapper
           name={`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.faarFriKostOgLosji`}
           control={form.control}
-          label={'Får søker fri kost og losji?'}
+          label={'Får bruker fri kost og losji?'}
           rules={{
-            required: 'Du må svare på om søker får fri kost og losji',
+            required: 'Du må svare på om bruker får fri kost og losji',
           }}
           readOnly={readonly}
           horisontal

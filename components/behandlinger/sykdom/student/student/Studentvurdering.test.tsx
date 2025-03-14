@@ -19,9 +19,9 @@ describe('Student', () => {
     expect(screen.getByRole('textbox', { name: 'Vurder §11-14 og vilkårene i §7 i forskriften' })).toBeVisible();
   });
 
-  it('har et valg for om søker har avbrutt et studie', () => {
+  it('har et valg for om bruker har avbrutt et studie', () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
-    expect(screen.getByRole('group', { name: 'Har søker avbrutt et studie?' })).toBeVisible();
+    expect(screen.getByRole('group', { name: 'Har bruker avbrutt et studie?' })).toBeVisible();
   });
 
   it('har et valg for om studiet er godkjent av Lånekassen', async () => {
@@ -66,7 +66,7 @@ describe('Student', () => {
     await velgAtStudieErAvbruttPgaSykdomEllerSkade();
     await velgAtBrukerHarBehovForBehandling();
     expect(
-      screen.getByRole('group', { name: 'Er det forventet at søker kan gjenoppta studiet innen 6 måneder?' })
+      screen.getByRole('group', { name: 'Er det forventet at bruker kan gjenoppta studiet innen 6 måneder?' })
     ).toBeVisible();
   });
 
@@ -83,7 +83,7 @@ describe('Student', () => {
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
-    expect(await screen.findByText('Du må svare på om søker har avbrutt studie.')).toBeVisible();
+    expect(await screen.findByText('Du må svare på om bruker har avbrutt studie.')).toBeVisible();
   });
 
   it('viser feilmelding hvis det ikke er svart på om studiet er godkjent av Lånekassen', async () => {
@@ -104,7 +104,7 @@ describe('Student', () => {
     await user.click(button);
 
     expect(
-      await screen.findByText('Du må svare på om søker har avbrutt studie på grunn av sykdom eller skade.')
+      await screen.findByText('Du må svare på om bruker har avbrutt studie på grunn av sykdom eller skade.')
     ).toBeVisible();
   });
 
@@ -119,7 +119,7 @@ describe('Student', () => {
     await user.click(button);
 
     expect(
-      await screen.findByText('Du må svare på om søker har behov for behandling for å gjenoppta studiet.')
+      await screen.findByText('Du må svare på om bruker har behov for behandling for å gjenoppta studiet.')
     ).toBeVisible();
   });
 
@@ -162,7 +162,7 @@ describe('Student', () => {
         grunnlag={{ oppgittStudent: { erStudentStatus: 'JA' } }}
       />
     );
-    const tekst = screen.getByText('Er søker student: Ja, helt eller delvis');
+    const tekst = screen.getByText('Er bruker student: Ja, helt eller delvis');
     expect(tekst).toBeVisible();
   });
 
@@ -174,7 +174,7 @@ describe('Student', () => {
         grunnlag={{ oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
       />
     );
-    const tekst = screen.getByText('Er søker student: Ja, men har avbrutt studiet helt på grunn av sykdom');
+    const tekst = screen.getByText('Er bruker student: Ja, men har avbrutt studiet helt på grunn av sykdom');
     expect(tekst).toBeVisible();
   });
 
@@ -247,7 +247,7 @@ describe('Student', () => {
 
 const velgAtSøkerHarAvbruttEtStudie = async () =>
   await user.click(
-    within(screen.getByRole('group', { name: 'Har søker avbrutt et studie?' })).getByRole('radio', { name: 'Ja' })
+    within(screen.getByRole('group', { name: 'Har bruker avbrutt et studie?' })).getByRole('radio', { name: 'Ja' })
   );
 
 const velgAtStudieErGodkjentAvLånekassen = async () =>
@@ -276,7 +276,7 @@ const velgAtBrukerHarBehovForBehandling = async () =>
 const velgAtDetErForventetAtStudieKanGjenopptasInnen6Mnd = async () =>
   await user.click(
     within(
-      screen.getByRole('group', { name: 'Er det forventet at søker kan gjenoppta studiet innen 6 måneder?' })
+      screen.getByRole('group', { name: 'Er det forventet at bruker kan gjenoppta studiet innen 6 måneder?' })
     ).getByRole('radio', {
       name: 'Ja',
     })

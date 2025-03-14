@@ -15,7 +15,7 @@ const sak: SaksInfo = {
 };
 
 describe('SaksinfoBanner', () => {
-  it('komponenten rendrer med navn på søker', () => {
+  it('komponenten rendrer med navn på bruker', () => {
     render(<SaksinfoBanner personInformasjon={personInformasjon} sak={sak} referanse={'123'} behandlingVersjon={1} />);
     expect(screen.getByText('Peder Ås')).toBeVisible();
   });

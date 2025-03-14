@@ -53,7 +53,7 @@ describe('Sykepengeerstatning', () => {
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(bekreftKnapp);
     const feilmelding = await screen.findByText(
-      'Du må ta stilling til om søkeren har rett på AAP som sykepengeerstatning.'
+      'Du må ta stilling til om brukeren har rett på AAP som sykepengeerstatning.'
     );
     expect(feilmelding).toBeVisible();
   });

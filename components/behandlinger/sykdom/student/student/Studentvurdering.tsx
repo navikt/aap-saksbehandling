@@ -48,10 +48,10 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
       },
       harAvbruttStudie: {
         type: 'radio',
-        label: 'Har søker avbrutt et studie?',
+        label: 'Har bruker avbrutt et studie?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.harAvbruttStudie),
-        rules: { required: 'Du må svare på om søker har avbrutt studie.' },
+        rules: { required: 'Du må svare på om bruker har avbrutt studie.' },
       },
       godkjentStudieAvLånekassen: {
         type: 'radio',
@@ -66,7 +66,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.avbruttPgaSykdomEllerSkade),
         rules: {
-          required: 'Du må svare på om søker har avbrutt studie på grunn av sykdom eller skade.',
+          required: 'Du må svare på om bruker har avbrutt studie på grunn av sykdom eller skade.',
         },
       },
       harBehovForBehandling: {
@@ -74,7 +74,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
         label: 'Har bruker behov for behandling for å gjenoppta studiet?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.harBehovForBehandling),
-        rules: { required: 'Du må svare på om søker har behov for behandling for å gjenoppta studiet.' },
+        rules: { required: 'Du må svare på om bruker har behov for behandling for å gjenoppta studiet.' },
       },
       avbruttDato: {
         type: 'date_input',
@@ -101,7 +101,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
       },
       avbruddMerEnn6Måneder: {
         type: 'radio',
-        label: 'Er det forventet at søker kan gjenoppta studiet innen 6 måneder?',
+        label: 'Er det forventet at bruker kan gjenoppta studiet innen 6 måneder?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.studentvurdering?.avbruddMerEnn6Måneder),
         rules: { required: 'Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.' },
@@ -158,7 +158,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
           <Label size={'small'}>Relevant informasjon fra søknaden</Label>
           {grunnlag?.oppgittStudent?.erStudentStatus && (
             <BodyShort size={'small'}>
-              Er søker student: {mapErStudentStatusTilString(grunnlag.oppgittStudent.erStudentStatus)}
+              Er bruker student: {mapErStudentStatusTilString(grunnlag.oppgittStudent.erStudentStatus)}
             </BodyShort>
           )}
           {grunnlag?.oppgittStudent?.skalGjenopptaStudieStatus && (

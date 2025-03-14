@@ -58,7 +58,7 @@ describe('barnetillegg', () => {
     expect(overskrift).toBeVisible();
   });
 
-  it('skal ha en heading for manuelle barn som er lagt inn av søker', () => {
+  it('skal ha en heading for manuelle barn som er lagt inn av bruker', () => {
     render(
       <BarnetilleggVurdering
         grunnlag={grunnlag}
@@ -68,7 +68,7 @@ describe('barnetillegg', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const heading = screen.getByText('Følgende barn er oppgitt av søker og må vurderes');
+    const heading = screen.getByText('Følgende barn er oppgitt av bruker og må vurderes');
     expect(heading).toBeVisible();
   });
 
@@ -244,7 +244,7 @@ describe('Oppgitte barn', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it('skal ha et felt for å sette datoen søkeren har forsørgeransvar for barnet fra dersom det har blitt besvart ja på spørsmålet om det skal beregnes barnetillegg', async () => {
+  it('skal ha et felt for å sette datoen brukeren har forsørgeransvar for barnet fra dersom det har blitt besvart ja på spørsmålet om det skal beregnes barnetillegg', async () => {
     render(
       <BarnetilleggVurdering
         behandlingsversjon={1}
@@ -255,7 +255,7 @@ describe('Oppgitte barn', () => {
       />
     );
 
-    const forsørgerAnsvarFelt = screen.queryByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+    const forsørgerAnsvarFelt = screen.queryByRole('textbox', { name: 'Bruker har forsørgeransvar for barnet fra' });
     expect(forsørgerAnsvarFelt).not.toBeInTheDocument();
 
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
@@ -264,7 +264,7 @@ describe('Oppgitte barn', () => {
     expect(felt).toBeVisible();
   });
 
-  it('skal ha vise feilmelding dersom feltet for datoen søkeren har forsørgeransvar for barnet fra ikke er besvart', async () => {
+  it('skal ha vise feilmelding dersom feltet for datoen brukeren har forsørgeransvar for barnet fra ikke er besvart', async () => {
     render(
       <BarnetilleggVurdering
         behandlingsversjon={1}
@@ -275,7 +275,7 @@ describe('Oppgitte barn', () => {
       />
     );
 
-    const forsørgeransvarFelt = screen.queryByRole('textbox', { name: 'Søker har forsørgeransvar for barnet fra' });
+    const forsørgeransvarFelt = screen.queryByRole('textbox', { name: 'Bruker har forsørgeransvar for barnet fra' });
     expect(forsørgeransvarFelt).not.toBeInTheDocument();
 
     await svarJaPåOmDetSkalBeregnesBarnetillegg();
@@ -286,7 +286,7 @@ describe('Oppgitte barn', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  it('gir en feilmelding dersom det legges inn en ugyldig verdi for når søker har foreldreansvar fra', async () => {
+  it('gir en feilmelding dersom det legges inn en ugyldig verdi for når bruker har foreldreansvar fra', async () => {
     render(
       <BarnetilleggVurdering
         behandlingsversjon={1}

@@ -10,7 +10,7 @@ export const YrkesskadeTabell = ({ yrkesskader }: Props) => {
   return (
     <div>
       <div>
-        <Label size={'medium'}>Søker har en registrert yrkesskade med årsakssammenheng</Label>
+        <Label size={'medium'}>Bruker har en registrert yrkesskade med årsakssammenheng</Label>
         <BodyShort>
           Beregn antatt årlig arbeidsinntekt ved skadetidspunktet etter § 11-22. Inntekten skal ikke G-justeres
         </BodyShort>

@@ -99,8 +99,8 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
         visBekreftKnapp={!readOnly}
       >
         <InstitusjonsoppholdTabell
-          label="Søker har følgende soningsforhold"
-          beskrivelse="Under opphold i fengsel har ikke søker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP"
+          label="Bruker har følgende soningsforhold"
+          beskrivelse="Under opphold i fengsel har ikke bruker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP"
           instutisjonsopphold={grunnlag.soningsforhold}
         />
         {fields.map((field, index) => {
@@ -111,7 +111,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
                 name={`soningsvurderinger.${index}.begrunnelse`}
                 control={form.control}
                 label={
-                  'Vurder om medlemmet soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning'
+                  'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning'
                 }
                 rules={{ required: 'Du må gi en begrunnelse' }}
                 className={'begrunnelse'}

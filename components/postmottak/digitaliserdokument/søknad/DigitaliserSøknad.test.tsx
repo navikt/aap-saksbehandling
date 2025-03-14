@@ -26,7 +26,7 @@ describe('DigitaliserSøknad', () => {
     render(<DigitaliserSøknad submit={() => {}} grunnlag={grunnlag} readOnly={false} />);
 
     const studentRadio = screen.getByRole('group', {
-      name: /Er søkeren student?/i,
+      name: /Er brukeren student?/i,
     });
     expect(studentRadio).toBeVisible();
   });
@@ -34,7 +34,7 @@ describe('DigitaliserSøknad', () => {
     render(<DigitaliserSøknad submit={() => {}} grunnlag={grunnlag} readOnly={false} />);
 
     const studentRadio = screen.getByRole('group', {
-      name: /Er søkeren student?/i,
+      name: /Er brukeren student?/i,
     });
     await user.click(within(studentRadio).getByText('Avbrutt'));
     const studentAvbruttRadio = screen.getByRole('group', {
