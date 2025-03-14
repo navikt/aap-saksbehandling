@@ -2,7 +2,7 @@
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Periode, SamordningGraderingGrunnlag } from 'lib/types/types';
+import { Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { Button, Detail, ExpansionCard, HStack, Select, Table, VStack } from '@navikt/ds-react';
@@ -13,6 +13,9 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { parse } from 'date-fns';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -21,7 +24,7 @@ interface Props {
 }
 
 type SamordnetYtelse = {
-  ytelseType: string; // TODO nei, enum
+  ytelseType: SamordningYtelsestype;
   gradering?: number;
   kronseum?: number;
   periode: Periode;
@@ -34,8 +37,7 @@ interface Formfields {
   vurderteSamordninger: SamordnetYtelse[];
 }
 
-const ytelsesoptions: ValuePair[] = [
-  { value: '', label: 'Velg ytelse' },
+const ytelsesoptions: ValuePair<SamordningYtelsestype>[] = [
   {
     value: 'SYKEPENGER',
     label: 'Sykepenger',
@@ -99,11 +101,24 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
   });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(async () =>
+    form.handleSubmit(async (data) =>
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
+          vurderingerForSamordning: {
+            begrunnelse: data.begrunnelse,
+            maksDatoEndelig: data.maksDatoEndelig === 'true',
+            maksDato: data.maksDato,
+            vurderteSamordningerData: data.vurderteSamordninger.map((vurdertSamordning) => ({
+              gradering: vurdertSamordning.gradering,
+              periode: {
+                fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
+                tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
+              },
+              ytelseType: vurdertSamordning.ytelseType,
+            })),
+          },
         },
         referanse: behandlingsreferanse,
       })
@@ -111,7 +126,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
   };
 
   function leggTilRad() {
-    append({ ytelseType: '', periode: { fom: '', tom: '' }, gradering: undefined });
+    append({ ytelseType: 'SYKEPENGER', periode: { fom: '', tom: '' }, gradering: undefined });
   }
 
   return (
@@ -145,7 +160,9 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
                         label="Ytelsestype"
                         size={'small'}
                         hideLabel
-                        onChange={(event) => update(index, { ...field, ytelseType: event.target.value })}
+                        onChange={(event) =>
+                          update(index, { ...field, ytelseType: event.target.value as SamordningYtelsestype })
+                        }
                         value={field.ytelseType}
                       >
                         {ytelsesoptions.map((ytelse) => (
@@ -155,7 +172,10 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
                         ))}
                       </Select>
                     </Table.DataCell>
-                    <Table.DataCell></Table.DataCell>
+                    <Table.DataCell>
+                      <DateInputWrapper control={form.control} name={`vurderteSamordninger.${index}.periode.fom`} />
+                      <DateInputWrapper control={form.control} name={`vurderteSamordninger.${index}.periode.tom`} />
+                    </Table.DataCell>
                     <Table.DataCell>Manuell</Table.DataCell>
                     <Table.DataCell>-</Table.DataCell>
                     <Table.DataCell>
