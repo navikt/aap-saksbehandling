@@ -1517,10 +1517,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:7.17.2, @navikt/aksel-icons@npm:^7.17.2":
-  version: 7.17.2
-  resolution: "@navikt/aksel-icons@npm:7.17.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.17.2%2F182d9a4c0e8274add0a4bb38dc6c287cb4d0b8a5"
-  checksum: 10c0/0b7d18e6af6ed3690ee43b9ffde7cbfd631efd1174e13f5017e46bb8785b86392ebb789cc04304730a0efd5113c3588a41d7b53bd54759dff5f0934ad80a0db4
+"@navikt/aksel-icons@npm:7.17.3, @navikt/aksel-icons@npm:^7.17.3":
+  version: 7.17.3
+  resolution: "@navikt/aksel-icons@npm:7.17.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.17.3%2F587d82a2e1f22a7adff490b384a2415552363a88"
+  checksum: 10c0/da32fc699ae6abb7b64611f00c0ec4711d9b3482a5e439d7a9a9c0f706f64d4755f9e4197090c6a45555b0d24aa3a5cd4d3da91a7b17e228ae8b5a6b05598cd3
   languageName: node
   linkType: hard
 
@@ -1538,10 +1538,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:7.17.2":
-  version: 7.17.2
-  resolution: "@navikt/ds-css@npm:7.17.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.17.2%2F3065c56e160cef0dc6055c3ae0a744c0e69ac6d6"
-  checksum: 10c0/40f96cafaa011d872bf8172296dc5b055ed7462492334b975e9e618f40c7e0c012376dc05ffab16e378ec8070ea4bb4131417c470b3ab2ed59beda0ba7e856bc
+"@navikt/ds-css@npm:7.17.3":
+  version: 7.17.3
+  resolution: "@navikt/ds-css@npm:7.17.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.17.3%2F45f7fc1abf532203e58f5a50a399b507530e9882"
+  checksum: 10c0/5c826806acede94040c8189519b8799d8f0933768e81339afd4b7a35548fa251d2eae9b9f673873edf8a2ada4da11ad8cfe4faae1ec9703bf3ee52f788dbf099
   languageName: node
   linkType: hard
 
@@ -1552,21 +1552,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:7.17.2":
-  version: 7.17.2
-  resolution: "@navikt/ds-react@npm:7.17.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.17.2%2F2839637f384536ac67747cd5a41ef3bfb2a0a099"
+"@navikt/ds-react@npm:7.17.3":
+  version: 7.17.3
+  resolution: "@navikt/ds-react@npm:7.17.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.17.3%2F0b9273acb9828ef6e7d78aa9012502bd287aa362"
   dependencies:
     "@floating-ui/react": "npm:0.25.4"
     "@floating-ui/react-dom": "npm:^2.0.9"
-    "@navikt/aksel-icons": "npm:^7.17.2"
-    "@navikt/ds-tokens": "npm:^7.17.2"
+    "@navikt/aksel-icons": "npm:^7.17.3"
+    "@navikt/ds-tokens": "npm:^7.17.3"
     clsx: "npm:^2.1.0"
     date-fns: "npm:^4.0.0"
-    react-day-picker: "npm:9.5.0"
+    react-day-picker: "npm:9.6.1"
   peerDependencies:
     "@types/react": ">=17.0.30"
     react: ">=17.0.0 || >19.0.0-rc"
-  checksum: 10c0/e1e53e9d96e6b99043a78fea81af4c50769ba682e0bbf1c87ccba24b82af0e3f579f0e83c25a571df6da9671f961608255bc83ff24a31d47f4161885d9980b07
+  checksum: 10c0/a47bd1340e19178094c845b01041b387c89cc7f6bb441a1ab4421666520c2dfdd4bfe7f64ca018580d198d1ef13a6b59af96fa5ae6cd0f147f883ab3f8527c4e
   languageName: node
   linkType: hard
 
@@ -1588,10 +1588,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^7.17.2":
-  version: 7.17.2
-  resolution: "@navikt/ds-tokens@npm:7.17.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.17.2%2F0f95335df6a7ff83541f5927bf9538e0199e9c59"
-  checksum: 10c0/e33c032db23ee56e3aabc87139e0fde1e11535e8f8304f6685358b35995a64f82972a231ba08e7a9a1f340faeeabf16a59e784c5f6466aa7795071f8ecfcfd92
+"@navikt/ds-tokens@npm:^7.17.3":
+  version: 7.17.3
+  resolution: "@navikt/ds-tokens@npm:7.17.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.17.3%2Fb7c19ca8a48c08e4b9e23a2b074dbe1e33d6b7a8"
+  checksum: 10c0/2708a26f1b678d96f07a402b220ca473023b013b37d6b50971d0a1f929f05eee27bb93dab84b7ffef384f11af4070ebfd9d62637f11dc5eaea2722b94f3ba6e0
   languageName: node
   linkType: hard
 
@@ -3527,10 +3527,10 @@ __metadata:
     "@navikt/aap-oppgave-typescript-types": "npm:^0.0.112"
     "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.196"
     "@navikt/aap-statistikk-typescript-types": "npm:^0.1.47"
-    "@navikt/aksel-icons": "npm:7.17.2"
+    "@navikt/aksel-icons": "npm:7.17.3"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
-    "@navikt/ds-css": "npm:7.17.2"
-    "@navikt/ds-react": "npm:7.17.2"
+    "@navikt/ds-css": "npm:7.17.3"
+    "@navikt/ds-react": "npm:7.17.3"
     "@navikt/eslint-config-aap": "npm:^5.0.3"
     "@navikt/oasis": "npm:^3.7.0"
     "@portabletext/react": "npm:^3.2.1"
@@ -10529,16 +10529,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:9.5.0":
-  version: 9.5.0
-  resolution: "react-day-picker@npm:9.5.0"
+"react-day-picker@npm:9.6.1":
+  version: 9.6.1
+  resolution: "react-day-picker@npm:9.6.1"
   dependencies:
     "@date-fns/tz": "npm:^1.2.0"
     date-fns: "npm:^4.1.0"
     date-fns-jalali: "npm:^4.1.0-0"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 10c0/3c9d06c393f3135c63aca98b38e52738d3c78ed3bed1a2a730595cc27dbf0b1d964899ce9656cc3c223d598309b714528873dd32a0c48e41f03495917b7508c3
+  checksum: 10c0/ff89264134258850795961a3e15b8bc141118cd6045133014f6ec261cd53eb7e2a9e92d25d6ae25ec89851e91c549f9471ec08e52c85ac35c2fb49028d42d89a
   languageName: node
   linkType: hard
 
