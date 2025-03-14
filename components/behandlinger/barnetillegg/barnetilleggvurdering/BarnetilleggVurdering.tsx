@@ -138,7 +138,7 @@ export const BarnetilleggVurdering = ({
         {harAvklaringsbehov && (
           <div className={'flex-column'}>
             <div>
-              <Label size={'medium'}>Følgende barn er oppgitt av søker og må vurderes</Label>
+              <Label size={'medium'}>Følgende barn er oppgitt av bruker og må vurderes</Label>
             </div>
 
             <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit} autoComplete={'off'}>

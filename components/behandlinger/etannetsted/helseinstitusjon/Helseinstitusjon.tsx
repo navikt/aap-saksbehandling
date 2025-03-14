@@ -102,7 +102,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
         visBekreftKnapp={!readOnly}
       >
         <InstitusjonsoppholdTabell
-          label={'Søker har følgende institusjonsopphold på helseinstitusjon'}
+          label={'Bruker har følgende institusjonsopphold på helseinstitusjon'}
           beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP ytelse'}
           instutisjonsopphold={grunnlag.opphold}
         />

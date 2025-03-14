@@ -74,11 +74,11 @@ export const DigitaliserSøknad = ({ grunnlag, readOnly, submit }: Props) => {
         label: 'Yrkesskade',
         options: [JaNeiIkkeOppgitt.JA, JaNeiIkkeOppgitt.NEI, JaNeiIkkeOppgitt.IKKE_OPPGITT],
         defaultValue: søknadGrunnlag.yrkesskade ? stringToJaNeiIkkeOppgitt(søknadGrunnlag.yrkesskade) : undefined,
-        rules: { required: 'Du må velge om søker har oppgitt en yrkesskade' },
+        rules: { required: 'Du må velge om bruker har oppgitt en yrkesskade' },
       },
       erStudent: {
         type: 'radio',
-        label: 'Er søkeren student?',
+        label: 'Er brukeren student?',
         options: [
           JaNeiAvbruttIkkeOppgitt.JA,
           JaNeiAvbruttIkkeOppgitt.NEI,
@@ -88,7 +88,7 @@ export const DigitaliserSøknad = ({ grunnlag, readOnly, submit }: Props) => {
         defaultValue: søknadGrunnlag.student?.erStudent
           ? stringToJaNeiAvbruttIkkeOppgitt(søknadGrunnlag.student.erStudent)
           : undefined,
-        rules: { required: 'Du må velge et alternativ om søkers student-status' },
+        rules: { required: 'Du må velge et alternativ om brukers student-status' },
       },
       studentKommeTilbake: {
         type: 'radio',
