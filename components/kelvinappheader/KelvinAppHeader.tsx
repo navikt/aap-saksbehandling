@@ -32,10 +32,10 @@ export const KelvinAppHeader = ({ brukerInformasjon }: { brukerInformasjon: Bruk
 
   return (
     <>
-      <InternalHeader className={styles.kelvinAppHeader}>
+      <InternalHeader>
         <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
 
-        <HStack gap="4" marginInline="4">
+        <HStack gap="4" marginInline="4" className={styles.kelvinAppHeaderMenuItems}>
           <Kelvinsøk setSøkeresultat={setSøkeresultat} />
           <Link href={`/oppgave/`}>
             Oppgaveliste
