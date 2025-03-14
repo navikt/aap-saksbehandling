@@ -1,21 +1,18 @@
 'use client';
 
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { Button, Detail, ExpansionCard, HStack, Select, Table, VStack } from '@navikt/ds-react';
-import { useFieldArray } from 'react-hook-form';
+import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField, ValuePair } from 'components/form/FormField';
+import { FormField } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
-import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
+import { YtelseTabell } from 'components/behandlinger/underveis/samordninggradering/YtelseTabell';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -24,50 +21,23 @@ interface Props {
 }
 
 type SamordnetYtelse = {
-  ytelseType: SamordningYtelsestype;
+  ytelseType: SamordningYtelsestype | undefined;
   gradering?: number;
   kronseum?: number;
   periode: Periode;
 };
 
-interface Formfields {
+export interface SamordningGraderingFormfields {
   begrunnelse: string;
   maksDatoEndelig: string;
   maksDato?: string;
   vurderteSamordninger: SamordnetYtelse[];
 }
 
-const ytelsesoptions: ValuePair<SamordningYtelsestype>[] = [
-  {
-    value: 'SYKEPENGER',
-    label: 'Sykepenger',
-  },
-  {
-    value: 'FORELDREPENGER',
-    label: 'Foreldrepenger',
-  },
-  {
-    value: 'PLEIEPENGER',
-    label: 'Pleiepenger',
-  },
-  {
-    value: 'SVANGERSKAPSPENGER',
-    label: 'Svangerskapspenger',
-  },
-  {
-    value: 'OMSORGSPENGER',
-    label: 'Omsorgspenger',
-  },
-  {
-    value: 'OPPLÆRINGSPENGER',
-    label: 'Opplæringspenger',
-  },
-];
-
 export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const [visForm, setVisForm] = useState<boolean>(false);
-  const { form, formFields } = useConfigForm<Formfields>(
+  const { form, formFields } = useConfigForm<SamordningGraderingFormfields>(
     {
       begrunnelse: {
         type: 'textarea',
@@ -95,11 +65,6 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
   const { løsBehovOgGåTilNesteSteg, status, isLoading, resetStatus } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_GRADERING');
 
-  const { fields, append, remove, update } = useFieldArray({
-    control: form.control,
-    name: 'vurderteSamordninger',
-  });
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
       løsBehovOgGåTilNesteSteg({
@@ -116,7 +81,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
                 fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
                 tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
               },
-              ytelseType: vurdertSamordning.ytelseType,
+              ytelseType: vurdertSamordning.ytelseType!,
             })),
           },
         },
@@ -124,10 +89,6 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
       })
     )(event);
   };
-
-  function leggTilRad() {
-    append({ ytelseType: 'SYKEPENGER', periode: { fom: '', tom: '' }, gradering: undefined });
-  }
 
   return (
     <VilkårsKort heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser" steg="SAMORDNING_GRADERING">
@@ -141,79 +102,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             resetStatus={resetStatus}
           >
             <FormField form={form} formField={formFields.begrunnelse} />
-            <Table>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Ytelse</Table.HeaderCell>
-                  <Table.HeaderCell>Periode</Table.HeaderCell>
-                  <Table.HeaderCell>Kilde</Table.HeaderCell>
-                  <Table.HeaderCell>Grad fra kilde</Table.HeaderCell>
-                  <Table.HeaderCell>Utbetalingsgrad</Table.HeaderCell>
-                  <Table.HeaderCell></Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {fields.map((field, index) => (
-                  <Table.Row key={field.id}>
-                    <Table.DataCell>
-                      <Select
-                        label="Ytelsestype"
-                        size={'small'}
-                        hideLabel
-                        onChange={(event) =>
-                          update(index, { ...field, ytelseType: event.target.value as SamordningYtelsestype })
-                        }
-                        value={field.ytelseType}
-                      >
-                        {ytelsesoptions.map((ytelse) => (
-                          <option value={ytelse.value} key={ytelse.value}>
-                            {ytelse.label}
-                          </option>
-                        ))}
-                      </Select>
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      <DateInputWrapper control={form.control} name={`vurderteSamordninger.${index}.periode.fom`} />
-                      <DateInputWrapper control={form.control} name={`vurderteSamordninger.${index}.periode.tom`} />
-                    </Table.DataCell>
-                    <Table.DataCell>Manuell</Table.DataCell>
-                    <Table.DataCell>-</Table.DataCell>
-                    <Table.DataCell>
-                      <TextFieldWrapper
-                        name={`vurderteSamordninger.${index}.gradering`}
-                        label={'Gradering'}
-                        hideLabel
-                        type={'text'}
-                        size={'small'}
-                        control={form.control}
-                        readOnly={readOnly}
-                      />
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      <Button
-                        size={'small'}
-                        icon={<TrashIcon title={'Slett'} />}
-                        variant={'tertiary'}
-                        type={'button'}
-                        onClick={() => remove(index)}
-                        disabled={readOnly}
-                      ></Button>
-                    </Table.DataCell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table>
-            <HStack>
-              <Button
-                size={'small'}
-                type={'button'}
-                variant={'secondary'}
-                icon={<PlusCircleIcon />}
-                onClick={leggTilRad}
-              >
-                Legg til
-              </Button>
-            </HStack>
+            <YtelseTabell form={form} readOnly={readOnly} />
             <ExpansionCard aria-label="Tidligste virkningstidspunkt etter samordning er" open>
               <ExpansionCard.Header>Tidligste virkningstidspunkt etter samordning er</ExpansionCard.Header>
               <ExpansionCard.Content>
