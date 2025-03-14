@@ -4,12 +4,12 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FigureIcon } from '@navikt/aksel-icons';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Form } from 'components/form/Form';
-import { SykepengeerstatningGrunnlag } from 'lib/types/types';
+import { SykepengeerstatningGrunnlag, SykepengeerstatningVurderingGrunn } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 
 interface Props {
   behandlingVersjon: number;
@@ -20,13 +20,41 @@ interface Props {
 interface FormFields {
   begrunnelse: string;
   erOppfylt: string;
-  grunn: string[];
+  grunn: SykepengeerstatningVurderingGrunn;
 }
 
 export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, resetStatus, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
+
+  const grunnOptions: ValuePair<NonNullable<SykepengeerstatningVurderingGrunn>>[] = [
+    {
+      label:
+        'Brukeren har tidligere mottatt arbeidsavklaringspenger og innen seks måneder etter at arbeidsavklaringspengene er opphørt, blir arbeidsufør som følge av en annen sykdom',
+      value: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
+    },
+    {
+      label:
+        'Brukeren har tidligere mottatt arbeidsavklaringspenger og innen ett år etter at arbeidsavklaringspengene er opphørt, blir arbeidsufør som følge av samme sykdom',
+      value: 'SAMME_SYKDOM_INNEN_ETT_AAR',
+    },
+    {
+      label:
+        'Brukeren har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og igjen blir arbeidsufør på grunn av sykdom eller skade mens han eller hun er i arbeid',
+      value: 'SYKEPENGER_IGJEN_ARBEIDSUFOR',
+    },
+    {
+      label:
+        'Medlemmet har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og fortsatt er arbeidsufør på grunn av sykdom eller skade',
+      value: 'SYKEPENGER_FORTSATT_ARBEIDSUFOR',
+    },
+    {
+      label:
+        'Medlemmet har mottatt arbeidsavklaringspenger og deretter foreldrepenger og innen seks måneder etter foreldrepengene opphørte, blir arbeidsufør på grunn av sykdom eller skade, se § 8-2 andre ledd',
+      value: 'FORELDREPENGER_INNEN_SEKS_MND',
+    },
+  ];
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -44,16 +72,11 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harRettPå),
       },
       grunn: {
-        type: 'checkbox',
+        type: 'radio',
         label: 'Velg minst en grunn',
+        defaultValue: grunnlag?.vurdering?.grunn || undefined,
         rules: { required: 'Du må velge minst en grunn' },
-        options: [
-          'Brukeren har tidligere mottatt arbeidsavklaringspenger og innen seks måneder etter at arbeidsavklaringspengene er opphørt, blir arbeidsufør som følge av en annen sykdom',
-          'Brukeren har tidligere mottatt arbeidsavklaringspenger og innen ett år etter at arbeidsavklaringspengene er opphørt, blir arbeidsufør som følge av samme sykdom',
-          'Brukeren har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og igjen blir arbeidsufør på grunn av sykdom eller skade mens han eller hun er i arbeid',
-          'Brukeren har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og fortsatt er arbeidsufør på grunn av sykdom eller skade',
-          'Brukeren har mottatt arbeidsavklaringspenger og deretter foreldrepenger og innen seks måneder etter foreldrepengene opphørte, blir arbeidsufør på grunn av sykdom eller skade, se § 8-2 andre ledd',
-        ],
+        options: grunnOptions,
       },
     },
     { shouldUnregister: true, readOnly: readOnly }
@@ -69,6 +92,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
             begrunnelse: data.begrunnelse,
             dokumenterBruktIVurdering: [],
             harRettPå: data.erOppfylt === JaEllerNei.Ja,
+            grunn: data.grunn,
           },
         },
         referanse: behandlingsReferanse,
