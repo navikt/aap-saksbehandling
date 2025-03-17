@@ -63,8 +63,6 @@ spec:
       destinations:
         - id: elastic
         - id: loki
-  envFrom:
-    - secret: kelvin-env-local
   filesFrom:
     - emptyDir:
         medium: Memory
