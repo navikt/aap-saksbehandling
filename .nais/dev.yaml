@@ -1,0 +1,3 @@
+ingresses:
+  - "https://kelvin.ansatt.dev.nav.no"
+  - "https://kelvin.intern.dev.nav.no"

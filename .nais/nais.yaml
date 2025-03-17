@@ -11,8 +11,9 @@ metadata:
 spec:
   image: {{image}}
   ingresses:
-    - "https://kelvin.ansatt.dev.nav.no"
-    - "https://kelvin.intern.dev.nav.no"
+  {{#each ingresses as |url|}}
+    - {{url}}
+  {{/each}}
   port: 3000
   liveness:
     path: "/saksbehandling/api/internal/isAlive"
