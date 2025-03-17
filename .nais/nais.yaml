@@ -11,9 +11,9 @@ metadata:
 spec:
   image: {{image}}
   ingresses:
-  {{#each ingresses as |url|}}
+    {{#each ingresses as |url|}}
     - {{url}}
-  {{/each}}
+    {{/each}}
   port: 3000
   liveness:
     path: "/saksbehandling/api/internal/isAlive"
@@ -38,20 +38,9 @@ spec:
       allowAllUsers: false
       claims:
         groups:
-            # 0000-GA-AAP_BESLUTTER
-          - id: f0f6cad5-e3c0-4308-99a2-3630ac60174a
-            # 0000-GA-AAP_LES
-          - id: 96e18023-db50-45f7-b023-3251279df28d
-            # 0000-GA-AAP_SAKSBEHANDLER_OPPFOLGING
-          - id: 33e00155-169b-41e5-8a3f-5582ed975a15
-            # 0000-GA-AAP_KVALITETSSIKRER
-          - id: c3e18aef-a7ac-49df-806e-4fe58b81460d
-            # 0000-GA-AAP_SAKSBEHANDLER_NASJONAL
-          - id: 3377dc51-ca61-4e36-b812-21b5fc34474f
-            # 0000-GA-AAP_DRIFT
-          - id: bc89623f-4624-4978-ac54-acd048c0f2a5
-            # 0000-GA-AAP_PRODUKSJONSSTYRING
-          - id: c75883f9-4cb2-42c7-b75c-3f0f29ee3ead
+          {{#each groups}}
+          - id: {{this}}
+          {{/each}}
     sidecar:
       enabled: true
       autoLogin: true
