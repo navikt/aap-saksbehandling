@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, HStack, Table } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Table } from '@navikt/ds-react';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
@@ -9,6 +9,7 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SamordningGraderingFormfields } from 'components/behandlinger/underveis/samordninggradering/SamordningGradering';
 import { ValuePair } from 'components/form/FormField';
 import { SamordningYtelsestype } from 'lib/types/types';
+import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
@@ -53,7 +54,13 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
   });
 
   function leggTilRad() {
-    append({ ytelseType: undefined, periode: { fom: '', tom: '' }, gradering: undefined });
+    append({
+      kilde: 'Manuell',
+      ytelseType: undefined,
+      periode: { fom: '', tom: '' },
+      graderingFraKilde: undefined,
+      gradering: undefined,
+    });
   }
 
   return (
@@ -73,40 +80,48 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
           {fields.map((field, index) => (
             <Table.Row key={field.id}>
               <Table.DataCell>
-                <SelectWrapper
-                  label="Ytelsestype"
-                  size={'small'}
-                  hideLabel
-                  control={form.control}
-                  name={`vurderteSamordninger.${index}.ytelseType`}
-                  rules={{ required: 'Du må velge en ytelsetype' }}
-                >
-                  {ytelsesoptions.map((ytelse) => (
-                    <option value={ytelse.value} key={ytelse.value}>
-                      {ytelse.label}
-                    </option>
-                  ))}
-                </SelectWrapper>
+                {(field.kilde === 'Manuell' && (
+                  <SelectWrapper
+                    label="Ytelsestype"
+                    size={'small'}
+                    hideLabel
+                    control={form.control}
+                    name={`vurderteSamordninger.${index}.ytelseType`}
+                    rules={{ required: 'Du må velge en ytelsetype' }}
+                  >
+                    {ytelsesoptions.map((ytelse) => (
+                      <option value={ytelse.value} key={ytelse.value}>
+                        {ytelse.label}
+                      </option>
+                    ))}
+                  </SelectWrapper>
+                )) || <BodyShort>{field.ytelseType}</BodyShort>}
               </Table.DataCell>
               <Table.DataCell>
-                <HStack align={'center'} gap={'1'}>
-                  <DateInputWrapper
-                    control={form.control}
-                    name={`vurderteSamordninger.${index}.periode.fom`}
-                    hideLabel={true}
-                    rules={{ required: 'Du må velge dato for periodestart' }}
-                  />
-                  {'-'}
-                  <DateInputWrapper
-                    control={form.control}
-                    name={`vurderteSamordninger.${index}.periode.tom`}
-                    hideLabel={true}
-                    rules={{ required: 'Du må velge dato for periodeslutt' }}
-                  />
-                </HStack>
+                {(field.kilde === 'Manuell' && (
+                  <HStack align={'center'} gap={'1'}>
+                    <DateInputWrapper
+                      control={form.control}
+                      name={`vurderteSamordninger.${index}.periode.fom`}
+                      hideLabel={true}
+                      rules={{ required: 'Du må velge dato for periodestart' }}
+                    />
+                    {'-'}
+                    <DateInputWrapper
+                      control={form.control}
+                      name={`vurderteSamordninger.${index}.periode.tom`}
+                      hideLabel={true}
+                      rules={{ required: 'Du må velge dato for periodeslutt' }}
+                    />
+                  </HStack>
+                )) || (
+                  <BodyShort>
+                    {formaterDatoForVisning(field.periode.fom)} - {formaterDatoForVisning(field.periode.tom)}
+                  </BodyShort>
+                )}
               </Table.DataCell>
-              <Table.DataCell>Manuell</Table.DataCell>
-              <Table.DataCell>-</Table.DataCell>
+              <Table.DataCell>{field.kilde}</Table.DataCell>
+              <Table.DataCell>{field.graderingFraKilde ?? '-'}</Table.DataCell>
               <Table.DataCell>
                 <TextFieldWrapper
                   name={`vurderteSamordninger.${index}.gradering`}

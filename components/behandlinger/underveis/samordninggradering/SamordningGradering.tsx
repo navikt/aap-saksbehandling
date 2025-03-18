@@ -22,6 +22,8 @@ interface Props {
 
 type SamordnetYtelse = {
   ytelseType: SamordningYtelsestype | undefined;
+  kilde: string;
+  graderingFraKilde?: number;
   gradering?: number;
   kronseum?: number;
   periode: Periode;
@@ -35,8 +37,20 @@ export interface SamordningGraderingFormfields {
 }
 
 export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
+  // TODO må også håndtere vurderinger
+  const samordnedeYtelserDefaultValue: SamordnetYtelse[] = grunnlag.ytelser.map((ytelse) => ({
+    ytelseType: ytelse.ytelseType,
+    kilde: ytelse.kilde,
+    graderingFraKilde: ytelse.gradering || undefined,
+    gradering: undefined,
+    periode: {
+      fom: ytelse.periode.fom,
+      tom: ytelse.periode.tom,
+    },
+  }));
+
   const behandlingsreferanse = useBehandlingsReferanse();
-  const [visForm, setVisForm] = useState<boolean>(false);
+  const [visForm, setVisForm] = useState<boolean>(!!samordnedeYtelserDefaultValue.length);
   const { form, formFields } = useConfigForm<SamordningGraderingFormfields>(
     {
       begrunnelse: {
@@ -57,7 +71,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
       },
       vurderteSamordninger: {
         type: 'fieldArray',
-        defaultValue: [],
+        defaultValue: samordnedeYtelserDefaultValue || [],
       },
     },
     { readOnly }
@@ -75,9 +89,8 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             begrunnelse: data.begrunnelse,
             maksDatoEndelig: data.maksDatoEndelig === 'true',
             maksDato: data.maksDato,
-            vurderteSamordninger: data.vurderteSamordninger.map((vurdertSamordning) => ({
+            vurderteSamordningerData: data.vurderteSamordninger.map((vurdertSamordning) => ({
               gradering: vurdertSamordning.gradering,
-              vurderingPerioder: [], // TODO Fyll ut korrekt her
               periode: {
                 fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
                 tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),

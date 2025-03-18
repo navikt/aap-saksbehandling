@@ -63,6 +63,10 @@ export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode): st
       return 'Overstyr § 11-2 Forutgående medlemskap';
     case '5023':
       return 'Venter på klageimplementasjon';
+    case '5024':
+      return 'Avklar samordning uføre';
+    case '5025':
+      return 'Samordning vent på virkningstidspunkt';
     // Postmottak
     case '1337':
       return 'Kategoriser dokument';
