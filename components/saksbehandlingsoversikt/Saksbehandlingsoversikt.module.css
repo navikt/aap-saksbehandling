@@ -4,10 +4,19 @@
 }
 
 .tabContent {
-  background: var(--a-gray-50);
   flex: 1 1 100%;
   padding: var(--a-spacing-4);
   margin: calc(var(--a-spacing-4) * -1);
+}
+
+.saksbehandlingsoversikt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-4);
+  border: 1px solid var(--a-border-divider);
+  padding: var(--a-spacing-4);
+  border-radius: var(--a-border-radius-large);
+  background-color: var(--a-surface-default);
 }
 
 .fillHeight:last-child {
