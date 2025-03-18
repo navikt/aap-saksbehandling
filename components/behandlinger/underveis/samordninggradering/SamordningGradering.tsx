@@ -118,7 +118,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             status={status}
             resetStatus={resetStatus}
           >
-            <FormField form={form} formField={formFields.begrunnelse} />
+            <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell form={form} readOnly={readOnly} />
             <ExpansionCard aria-label="Tidligste virkningstidspunkt etter samordning er" open>
               <ExpansionCard.Header>Tidligste virkningstidspunkt etter samordning er</ExpansionCard.Header>
