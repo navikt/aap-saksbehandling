@@ -35,7 +35,7 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
     form.watch(`totrinnsvurderinger.${index}.grunner`)?.includes('ANNET');
 
   return (
-    <div className={styles.beslutterform}>
+    <div className={styles.totrinnsvurderingform}>
       <div
         className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
       >

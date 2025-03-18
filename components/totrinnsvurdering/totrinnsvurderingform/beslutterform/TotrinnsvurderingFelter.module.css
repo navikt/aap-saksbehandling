@@ -1,4 +1,4 @@
-.beslutterform {
+.totrinnsvurderingform {
   display: flex;
   flex-direction: column;
   border: 2px solid var(--a-gray-400);
@@ -7,15 +7,13 @@
 
 .heading {
   padding: 1rem;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
+  border-top-left-radius: var(--a-border-radius-large);
+  border-top-right-radius: var(--a-border-radius-large);
   border-bottom: 2px solid var(--a-gray-400);
 }
 
 .headingBeslutter {
   background-color: var(--a-blue-50);
-  border-top-left-radius: var(--a-border-radius-large);
-  border-top-right-radius: var(--a-border-radius-large);
 }
 
 .headingKvalitetssikrer {
