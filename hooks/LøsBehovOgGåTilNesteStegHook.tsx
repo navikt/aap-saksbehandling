@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import {
   ServerSentEventData,
   ServerSentEventStatus,
@@ -20,6 +20,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
   const router = useRouter();
   const [status, setStatus] = useState<LøsBehovOgGåTilNesteStegStatus>();
   const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling) => {
     setIsLoading(true);
@@ -53,14 +54,9 @@ export const useLøsBehovOgGåTilNesteSteg = (
           );
         }
 
-        // TODO Teste ut denne mer
-        // if (eventData.skalBytteSteg) {
-        //   router.refresh();
-        // } else {
-        //   await revalidateFlyt(params.behandlingsReferanse);
-        // }
-
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
         setIsLoading(false);
       }
       if (eventData.status === 'ERROR') {
@@ -84,5 +80,5 @@ export const useLøsBehovOgGåTilNesteSteg = (
     setStatus(undefined);
   }
 
-  return { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg };
+  return { isLoading: isLoading || isPending, status, resetStatus, løsBehovOgGåTilNesteSteg };
 };
