@@ -69,7 +69,7 @@ const Layout = async (props: Props) => {
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
 
   return (
-    <div>
+    <div className={styles.behandling}>
       <SaksinfoBanner
         personInformasjon={personInfo}
         sak={sak}
