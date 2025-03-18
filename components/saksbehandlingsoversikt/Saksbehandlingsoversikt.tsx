@@ -1,7 +1,7 @@
 'use client';
 
 import { Tabs, Tooltip } from '@navikt/ds-react';
-import { ClockDashedIcon, FilesIcon, HddDownIcon } from '@navikt/aksel-icons';
+import { FilesIcon, HddDownIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDokumentasjon';

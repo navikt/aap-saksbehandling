@@ -29,10 +29,10 @@ describe('Behandlingsinfo', () => {
     expect(screen.getByText('Utredes')).toBeVisible();
   });
 
-  it('skal ha en label for behandlingsstatus', () => {
+  it('skal ha en tag for behandlingsstatus', () => {
     render(<Behandlingsinfo behandling={behandling} saksnummer={'ERT2E'} brukerInformasjon={brukerInformasjon} />);
-    const label = screen.getByText('Behandlingsstatus:');
-    expect(label).toBeVisible();
+    const tag = screen.getByText('Utredes');
+    expect(tag).toBeVisible();
   });
 
   it('Skal vise korrekt behandlingsstatus dersom status er avsluttet ', () => {
