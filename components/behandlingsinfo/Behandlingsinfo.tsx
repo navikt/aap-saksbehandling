@@ -25,14 +25,18 @@ export const Behandlingsinfo = ({ behandling, saksnummer, oppgaveReservertAv, p�
 
   const erReservertAvInnloggetBruker = brukerInformasjon.NAVident === oppgaveReservertAv;
 
+  const hentClassName = () => {
+    if (oppgaveReservertAv && !erReservertAvInnloggetBruker) {
+      return styles.reservert;
+    } else if (påVent) {
+      return styles.venter;
+    } else {
+      return styles.behandlingsinfo;
+    }
+  };
+
   return (
-    <Box
-      padding="4"
-      borderWidth="1"
-      borderRadius="large"
-      borderColor="border-divider"
-      className={`${styles.behandlingsinfo} ${oppgaveReservertAv && !erReservertAvInnloggetBruker ? styles.reservert : ''} ${påVent === true ? styles.venter : ''}`}
-    >
+    <Box padding="4" borderWidth="1" borderRadius="large" borderColor="border-divider" className={hentClassName()}>
       <Box>
         <HStack gap={'2'} align={'baseline'}>
           <Label as="p" size="medium" spacing>
