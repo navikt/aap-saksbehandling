@@ -18,16 +18,9 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandlingVersjon, refe
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
 
   return (
-    <Box
-      role="navigation"
-      paddingBlock="3"
-      paddingInline="5"
-      borderWidth="0 0 1 0"
-      borderColor="border-subtle"
-      background="surface-subtle"
-    >
+    <Box role="navigation" paddingBlock="3" paddingInline="5" borderWidth="0 0 1 0" borderColor="border-subtle">
       <HStack gap="4" align="center" justify="space-between">
-        <SaksInfo sak={sak} personInformasjon={personInformasjon}/>
+        <SaksInfo sak={sak} personInformasjon={personInformasjon} />
 
         {referanse && behandlingVersjon && (
           <>
@@ -36,7 +29,7 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandlingVersjon, refe
                 size={'small'}
                 as={Dropdown.Toggle}
                 variant={'secondary'}
-                icon={<ChevronDownIcon title="chevron-saksmeny" fontSize="1.5rem" aria-hidden/>}
+                icon={<ChevronDownIcon title="chevron-saksmeny" fontSize="1.5rem" aria-hidden />}
                 iconPosition={'right'}
               >
                 Saksmeny
