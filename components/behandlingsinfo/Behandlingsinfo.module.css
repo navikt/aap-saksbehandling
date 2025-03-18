@@ -4,3 +4,7 @@
 .venter {
   background-color: var(--a-orange-100);
 }
+
+.behandlingsinfo {
+  background-color: var(--a-surface-default);
+}

@@ -249,3 +249,5 @@ export type ÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling
 
 // oppgave
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
+
+export type Behandlingsstatus = DetaljertBehandling['status'];

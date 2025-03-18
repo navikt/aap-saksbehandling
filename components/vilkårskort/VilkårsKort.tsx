@@ -10,7 +10,6 @@ interface Props {
   steg: StegType;
   children: ReactNode;
   defaultOpen?: boolean;
-  icon?: ReactNode;
   vilkårTilhørerNavKontor?: boolean;
 }
 
@@ -18,7 +17,6 @@ export const VilkårsKort = ({
   heading,
   steg,
   children,
-  icon,
   defaultOpen = true,
   vilkårTilhørerNavKontor = false,
 }: Props) => {
@@ -34,8 +32,7 @@ export const VilkårsKort = ({
     >
       <ExpansionCard.Header className={styles.header}>
         <div className={styles.title}>
-          {icon && <div>{icon}</div>}
-          <ExpansionCard.Title>{heading}</ExpansionCard.Title>
+          <ExpansionCard.Title size={'small'}>{heading}</ExpansionCard.Title>
         </div>
       </ExpansionCard.Header>
       <ExpansionCard.Content className={styles.content}>{children}</ExpansionCard.Content>
