@@ -13,11 +13,12 @@ interface Props {
 export const ToTrinnsvurderingToggleGroup = ({ activeToggle, setToggleValue, erKvalitetssikring }: Props) => {
   return (
     <Tabs
-      size={'small'}
       defaultValue={activeToggle}
       onChange={(value) => setToggleValue(value)}
       value={activeToggle}
-      className={erKvalitetssikring ? styles.tabs : ''}
+      size={'small'}
+      className={styles.tabs}
+      fill
     >
       <Tooltip content={'Åpne totrinnsvurdering'}>
         <Tabs.Tab
