@@ -74,7 +74,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
         type: 'radio',
         label: 'Velg én grunn',
         defaultValue: grunnlag?.vurdering?.grunn || undefined,
-        rules: { required: 'Du må velge minst en grunn' },
+        rules: { required: 'Du må velge én grunn' },
         options: grunnOptions,
       },
     },
