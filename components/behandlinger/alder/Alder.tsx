@@ -1,7 +1,7 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { CheckmarkCircleFillIcon, PersonTallShortFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { BodyShort, Label, Table } from '@navikt/ds-react';
 import { AlderGrunnlag, AvslagÅrsak, VilkårUtfall } from 'lib/types/types';
@@ -19,11 +19,7 @@ export const Alder = ({ grunnlag }: Props) => {
   );
 
   return (
-    <VilkårsKort
-      heading={'Alder'}
-      steg={'VURDER_ALDER'}
-      icon={<PersonTallShortFillIcon fontSize={'1.5rem'} aria-hidden />}
-    >
+    <VilkårsKort heading={'Alder'} steg={'VURDER_ALDER'}>
       <div className={'flex-column'}>
         <div>
           <Label>Fødselsdato</Label>

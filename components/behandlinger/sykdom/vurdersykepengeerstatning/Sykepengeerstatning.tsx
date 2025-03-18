@@ -1,7 +1,6 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { FigureIcon } from '@navikt/aksel-icons';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Form } from 'components/form/Form';
 import { SykepengeerstatningGrunnlag, SykepengeerstatningVurderingGrunn } from 'lib/types/types';
@@ -101,11 +100,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
   };
 
   return (
-    <VilkårsKort
-      heading={'§ 11-13 AAP som sykepengeerstatning'}
-      steg="VURDER_SYKEPENGEERSTATNING"
-      icon={<FigureIcon aria-hidden />}
-    >
+    <VilkårsKort heading={'§ 11-13 AAP som sykepengeerstatning'} steg="VURDER_SYKEPENGEERSTATNING">
       <Form
         onSubmit={handleSubmit}
         status={status}

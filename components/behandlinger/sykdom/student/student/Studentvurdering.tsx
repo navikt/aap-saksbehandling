@@ -3,7 +3,6 @@
 import { isAfter, parse } from 'date-fns';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
-import { BooksIcon } from '@navikt/aksel-icons';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 import { ErStudentStatus, SkalGjenopptaStudieStatus, StudentGrunnlag } from 'lib/types/types';
@@ -141,11 +140,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
   };
 
   return (
-    <VilkårsKort
-      heading={getHeaderForSteg(mapStegTypeTilDetaljertSteg('AVKLAR_STUDENT'))}
-      steg={'AVKLAR_STUDENT'}
-      icon={<BooksIcon fontSize={'inherit'} aria-hidden />}
-    >
+    <VilkårsKort heading={getHeaderForSteg(mapStegTypeTilDetaljertSteg('AVKLAR_STUDENT'))} steg={'AVKLAR_STUDENT'}>
       <Form
         onSubmit={handleSubmit}
         status={status}

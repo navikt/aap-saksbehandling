@@ -1,7 +1,5 @@
 'use client';
 
-import { ChildHairEyesIcon } from '@navikt/aksel-icons';
-
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Button, Label } from '@navikt/ds-react';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
@@ -129,11 +127,7 @@ export const BarnetilleggVurdering = ({
   const erFolkeregistrerteBarn = grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0;
 
   return (
-    <VilkårsKort
-      heading={'Barnetillegg § 11-20 tredje og fjerde ledd'}
-      icon={<ChildHairEyesIcon title="barnetilleg-ikon" fontSize="1.5rem" aria-hidden />}
-      steg={'BARNETILLEGG'}
-    >
+    <VilkårsKort heading={'Barnetillegg § 11-20 tredje og fjerde ledd'} steg={'BARNETILLEGG'}>
       <div className={'flex-column'}>
         {harAvklaringsbehov && (
           <div className={'flex-column'}>

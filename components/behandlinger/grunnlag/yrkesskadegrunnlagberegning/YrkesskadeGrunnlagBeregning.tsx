@@ -1,6 +1,5 @@
 'use client';
 
-import { BandageIcon } from '@navikt/aksel-icons';
 import { useFieldArray } from 'react-hook-form';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Form } from 'components/form/Form';
@@ -64,11 +63,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
   const { fields } = useFieldArray({ control: form.control, name: 'vurderinger' });
 
   return (
-    <VilkårsKort
-      heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
-      steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
-      icon={<BandageIcon aria-hidden />}
-    >
+    <VilkårsKort heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}>
       <Form
         onSubmit={form.handleSubmit((data) => {
           løsBehovOgGåTilNesteSteg({

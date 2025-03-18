@@ -1,6 +1,6 @@
 'use client';
 
-import { PadlockLockedIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Soningsgrunnlag } from 'lib/types/types';
 import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
@@ -89,7 +89,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
   };
 
   return (
-    <VilkårsKort heading={'Soning § 11-26'} steg={'DU_ER_ET_ANNET_STED'} icon={<PadlockLockedIcon aria-hidden />}>
+    <VilkårsKort heading={'Soning § 11-26'} steg={'DU_ER_ET_ANNET_STED'}>
       <Form
         onSubmit={handleSubmit}
         steg={'DU_ER_ET_ANNET_STED'}

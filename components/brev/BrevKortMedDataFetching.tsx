@@ -1,4 +1,3 @@
-import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { hentBrevGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
@@ -21,12 +20,7 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
   const status = grunnlag.status;
 
   return (
-    <VilkårsKort
-      heading={'Skriv brev'}
-      steg="BREV"
-      icon={<EnvelopeClosedIcon fontSize={'inherit'} aria-hidden />}
-      defaultOpen={true}
-    >
+    <VilkårsKort heading={'Skriv brev'} steg="BREV" defaultOpen={true}>
       {brev && (
         <SkriveBrev
           status={status}

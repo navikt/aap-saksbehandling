@@ -1,6 +1,5 @@
 'use client';
 
-import { HandBandageIcon } from '@navikt/aksel-icons';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -70,12 +69,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
   );
 
   return (
-    <VilkårsKort
-      heading={'§ 11-22 AAP ved yrkesskade'}
-      steg={'VURDER_YRKESSKADE'}
-      vilkårTilhørerNavKontor={false}
-      icon={<HandBandageIcon aria-hidden />}
-    >
+    <VilkårsKort heading={'§ 11-22 AAP ved yrkesskade'} steg={'VURDER_YRKESSKADE'} vilkårTilhørerNavKontor={false}>
       <Form
         steg={'VURDER_YRKESSKADE'}
         onSubmit={form.handleSubmit((data) => {

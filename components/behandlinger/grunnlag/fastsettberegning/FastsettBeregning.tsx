@@ -11,7 +11,6 @@ import { isBefore, parse } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import styles from './FastsettBeregning.module.css';
 import { Heading } from '@navikt/ds-react';
-import { CalendarIcon } from '@navikt/aksel-icons';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -113,7 +112,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
     : '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5';
 
   return (
-    <VilkårsKort heading={heading} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'} icon={<CalendarIcon aria-hidden />}>
+    <VilkårsKort heading={heading} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}>
       <Form
         steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
         onSubmit={handleSubmit}

@@ -1,6 +1,5 @@
 'use client';
 
-import { PersonGroupIcon } from '@navikt/aksel-icons';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { BistandsGrunnlag, TypeBehandling } from 'lib/types/types';
@@ -135,7 +134,6 @@ export const Bistandsbehov = ({ behandlingVersjon, søknadstidspunkt, grunnlag, 
     <VilkårsKort
       heading="§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid"
       steg="VURDER_BISTANDSBEHOV"
-      icon={<PersonGroupIcon aria-hidden />}
       vilkårTilhørerNavKontor={true}
     >
       <Form

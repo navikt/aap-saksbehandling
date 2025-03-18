@@ -1,6 +1,6 @@
 'use client';
 
-import { FigureIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Link, Radio } from '@navikt/ds-react';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
@@ -107,7 +107,6 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     <VilkårsKort
       heading={'§ 11-10 tredje ledd. Unntak fra meldeplikt'}
       steg="FRITAK_MELDEPLIKT"
-      icon={<FigureIcon fontSize={'inherit'} aria-hidden />}
       vilkårTilhørerNavKontor
       defaultOpen={showAsOpen}
     >

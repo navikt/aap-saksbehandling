@@ -10,7 +10,6 @@ import {
 } from 'lib/utils/form';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { VitalsIcon } from '@navikt/aksel-icons';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent, useCallback, useEffect } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -264,7 +263,6 @@ export const Sykdomsvurdering = ({
     <VilkårsKort
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
       steg="AVKLAR_SYKDOM"
-      icon={<VitalsIcon aria-hidden />}
       vilkårTilhørerNavKontor={true}
     >
       {behandlingErRevurdering && (
