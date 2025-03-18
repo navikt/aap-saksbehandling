@@ -74,7 +74,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
             <Table.HeaderCell>Periode</Table.HeaderCell>
             <Table.HeaderCell>Kilde</Table.HeaderCell>
             <Table.HeaderCell>Grad fra kilde</Table.HeaderCell>
-            <Table.HeaderCell>Utbetalingsgrad</Table.HeaderCell>
+            <Table.HeaderCell>Utbetalingsgrad (%)</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -123,7 +123,9 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                 )}
               </Table.DataCell>
               <Table.DataCell>{field.kilde}</Table.DataCell>
-              <Table.DataCell>{field.graderingFraKilde ?? '-'}</Table.DataCell>
+              <Table.DataCell align="right">
+                {field.graderingFraKilde ? `${field.graderingFraKilde} %` : '-'}
+              </Table.DataCell>
               <Table.DataCell>
                 <TextFieldWrapper
                   name={`vurderteSamordninger.${index}.gradering`}
