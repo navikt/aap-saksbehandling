@@ -74,6 +74,7 @@ export const SkriveBrev = ({
               behov: {
                 behovstype: Behovstype.SKRIV_BREV_KODE,
                 brevbestillingReferanse: referanse,
+                handling: 'FERDIGSTILL',
               },
               referanse: behandlingsReferanse,
             });
@@ -83,6 +84,27 @@ export const SkriveBrev = ({
           loading={isLoading}
         >
           Ferdigstill brev
+        </Button>
+        <Button
+          variant="secondary"
+          disabled={status !== 'FORHÅNDSVISNING_KLAR'}
+          onClick={async () => {
+            // TODO: Mellomlagre brev før vi ferdigstiller
+            løsBehovOgGåTilNesteSteg({
+              behandlingVersjon: behandlingVersjon,
+              behov: {
+                behovstype: Behovstype.SKRIV_BREV_KODE,
+                brevbestillingReferanse: referanse,
+                handling: 'AVBRYT',
+              },
+              referanse: behandlingsReferanse,
+            });
+            await revalidateFlyt(behandlingsReferanse);
+          }}
+          className={'fit-content'}
+          loading={isLoading}
+        >
+          Avbestill brev
         </Button>
       </VStack>
     </div>
