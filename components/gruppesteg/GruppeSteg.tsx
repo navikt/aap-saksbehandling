@@ -13,7 +13,7 @@ interface Props {
   children: ReactNode;
 }
 
-export const GruppeSteg = async ({
+export const GruppeSteg = ({
   children,
   visning,
   behandlingReferanse,
