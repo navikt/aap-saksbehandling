@@ -137,14 +137,16 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                 />
               </Table.DataCell>
               <Table.DataCell>
-                <Button
-                  size={'small'}
-                  icon={<TrashIcon title={'Slett'} />}
-                  variant={'tertiary'}
-                  type={'button'}
-                  onClick={() => remove(index)}
-                  disabled={readOnly}
-                ></Button>
+                {field.kilde === 'Manuell' && (
+                  <Button
+                    size={'small'}
+                    icon={<TrashIcon title={'Slett'} />}
+                    variant={'tertiary'}
+                    type={'button'}
+                    onClick={() => remove(index)}
+                    disabled={readOnly}
+                  />
+                )}
               </Table.DataCell>
             </Table.Row>
           ))}
