@@ -6,6 +6,7 @@ import { Kelvinsøk, SøkeResultat } from './Kelvinsøk';
 import { LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from './Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
+import { isLocal } from 'lib/utils/environment';
 
 interface BrukerInformasjon {
   navn: string;
@@ -37,21 +38,11 @@ export const KelvinAppHeader = ({ brukerInformasjon }: { brukerInformasjon: Bruk
 
         <HStack gap="4" marginInline="4" className={styles.kelvinAppHeaderMenuItems}>
           <Kelvinsøk setSøkeresultat={setSøkeresultat} />
-          <Link href={`/oppgave/`}>
-            Oppgaveliste
-          </Link>
-          <Link href={`/oppgave/produksjonsstyring`}>
-            Produksjonsstyring
-          </Link>
-          <Link href={`/saksbehandling/saksoversikt`}>
-            Saksoversikt
-          </Link>
-          <Link href={`/postmottak/`}>
-            Postmottak
-          </Link>
-          <Link href={`/saksbehandling/sanity`}>
-            Sanity
-          </Link>
+          <Link href={`/oppgave/`}>Oppgaveliste</Link>
+          <Link href={`/oppgave/produksjonsstyring`}>Produksjonsstyring</Link>
+          {isLocal() && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
+          <Link href={`/postmottak/`}>Postmottak</Link>
+          <Link href={`/saksbehandling/sanity`}>Sanity</Link>
         </HStack>
 
         <Spacer />
