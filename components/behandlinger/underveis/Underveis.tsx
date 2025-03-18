@@ -3,6 +3,7 @@ import { UnderveisgrunnlagMedDataFetching } from 'components/behandlinger/underv
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
+import { SamordningGraderingMedDatafetching } from './samordninggradering/SamordningGraderingMedDatafetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -26,11 +27,11 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
           readOnly={flyt.visning.saksbehandlerReadOnly}
         />
       )}
-      {/*<SamordningGraderingMedDatafetching*/}
-      {/*  behandlingsreferanse={behandlingsreferanse}*/}
-      {/*  behandlingVersjon={flyt.behandlingVersjon}*/}
-      {/*  readOnly={flyt.visning.saksbehandlerReadOnly}*/}
-      {/*/>*/}
+      <SamordningGraderingMedDatafetching
+        behandlingsreferanse={behandlingsreferanse}
+        behandlingVersjon={flyt.behandlingVersjon}
+        readOnly={flyt.visning.saksbehandlerReadOnly}
+      />
       <UnderveisgrunnlagMedDataFetching behandlingsreferanse={behandlingsreferanse} />
     </GruppeSteg>
   );

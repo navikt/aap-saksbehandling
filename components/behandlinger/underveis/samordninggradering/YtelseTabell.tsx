@@ -11,6 +11,8 @@ import { ValuePair } from 'components/form/FormField';
 import { SamordningYtelsestype } from 'lib/types/types';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
+import styles from './YtelseTabell.module.css';
+
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
   readOnly: boolean;
@@ -72,7 +74,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
             <Table.HeaderCell>Periode</Table.HeaderCell>
             <Table.HeaderCell>Kilde</Table.HeaderCell>
             <Table.HeaderCell>Grad fra kilde</Table.HeaderCell>
-            <Table.HeaderCell>Utbetalingsgrad</Table.HeaderCell>
+            <Table.HeaderCell>Utbetalingsgrad (%)</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -95,7 +97,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                       </option>
                     ))}
                   </SelectWrapper>
-                )) || <BodyShort>{field.ytelseType}</BodyShort>}
+                )) || <BodyShort className={styles.capitalize}>{field.ytelseType}</BodyShort>}
               </Table.DataCell>
               <Table.DataCell>
                 {(field.kilde === 'Manuell' && (
@@ -121,7 +123,9 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                 )}
               </Table.DataCell>
               <Table.DataCell>{field.kilde}</Table.DataCell>
-              <Table.DataCell>{field.graderingFraKilde ?? '-'}</Table.DataCell>
+              <Table.DataCell align="right">
+                {field.graderingFraKilde ? `${field.graderingFraKilde} %` : '-'}
+              </Table.DataCell>
               <Table.DataCell>
                 <TextFieldWrapper
                   name={`vurderteSamordninger.${index}.gradering`}
@@ -135,14 +139,16 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                 />
               </Table.DataCell>
               <Table.DataCell>
-                <Button
-                  size={'small'}
-                  icon={<TrashIcon title={'Slett'} />}
-                  variant={'tertiary'}
-                  type={'button'}
-                  onClick={() => remove(index)}
-                  disabled={readOnly}
-                ></Button>
+                {field.kilde === 'Manuell' && (
+                  <Button
+                    size={'small'}
+                    icon={<TrashIcon title={'Slett'} />}
+                    variant={'tertiary'}
+                    type={'button'}
+                    onClick={() => remove(index)}
+                    disabled={readOnly}
+                  />
+                )}
               </Table.DataCell>
             </Table.Row>
           ))}
