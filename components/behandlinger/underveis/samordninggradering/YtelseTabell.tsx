@@ -11,6 +11,8 @@ import { ValuePair } from 'components/form/FormField';
 import { SamordningYtelsestype } from 'lib/types/types';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
+import styles from './YtelseTabell.module.css';
+
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
   readOnly: boolean;
@@ -95,7 +97,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                       </option>
                     ))}
                   </SelectWrapper>
-                )) || <BodyShort>{field.ytelseType}</BodyShort>}
+                )) || <BodyShort className={styles.capitalize}>{field.ytelseType}</BodyShort>}
               </Table.DataCell>
               <Table.DataCell>
                 {(field.kilde === 'Manuell' && (
