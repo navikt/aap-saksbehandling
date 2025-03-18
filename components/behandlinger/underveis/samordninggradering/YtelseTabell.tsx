@@ -149,7 +149,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
         </Table.Body>
       </Table>
       <HStack>
-        <Button size={'small'} type={'button'} variant={'secondary'} icon={<PlusCircleIcon />} onClick={leggTilRad}>
+        <Button size={'small'} type={'button'} variant={'tertiary'} icon={<PlusCircleIcon />} onClick={leggTilRad}>
           Legg til
         </Button>
       </HStack>

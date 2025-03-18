@@ -56,6 +56,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
       begrunnelse: {
         type: 'textarea',
         label: 'Vurder utbetalingsgrad for folketrygdytelser',
+        rules: { required: 'Du må gjøre en vilkårsvurdering' },
       },
       maksDatoEndelig: {
         type: 'radio',
@@ -64,10 +65,12 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
           { label: 'Ja, virkningstidspunkt må vurderes på nytt', value: 'false' },
           { label: 'Nei, virkningstidspunkt er bekreftet', value: 'true' },
         ],
+        rules: { required: 'Du må ta stilling til om virkningstidspunkt er endelig' },
       },
       maksDato: {
         type: 'date_input',
         label: 'Sett dato for ny revurdering',
+        rules: { required: 'Du må sette en dato for revurdering' },
       },
       vurderteSamordninger: {
         type: 'fieldArray',
