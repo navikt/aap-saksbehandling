@@ -64,7 +64,7 @@ describe('Sykepengeerstatning', () => {
 
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(bekreftKnapp);
-    const feilmelding = await screen.findByText('Du må velge minst en grunn');
+    const feilmelding = await screen.findByText('Du må velge én grunn');
     expect(feilmelding).toBeVisible();
   });
 });
