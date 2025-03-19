@@ -33,11 +33,17 @@ export interface OpprettSakFormFields {
   inntekter?: Inntekt[];
   institusjon?: Institusjon[];
   medlemskap?: string;
+  søknadsdato: Date;
 }
 
 export const OpprettSak = () => {
   const { isLoading, opprettSak } = useOpprettSak();
   const { formFields, form } = useConfigForm<OpprettSakFormFields>({
+    søknadsdato: {
+      type: 'date',
+      label: 'Søknadsdato',
+      defaultValue: new Date(),
+    },
     fødselsdato: {
       type: 'date',
       defaultValue: new Date('2000-01-01'),
@@ -89,6 +95,7 @@ export const OpprettSak = () => {
       onSubmit={form.handleSubmit(async (data) => {
         await opprettSak({
           ...data,
+          søknadsdato: formaterDatoForBackend(data.søknadsdato),
           fødselsdato: formaterDatoForBackend(data.fødselsdato),
           yrkesskade: data.yrkesskade === JaEllerNei.Ja,
           student: data.student === JaEllerNei.Ja,
@@ -119,6 +126,7 @@ export const OpprettSak = () => {
       autoComplete={'off'}
     >
       <div className={'flex-column'}>
+        <FormField form={form} formField={formFields.søknadsdato} />
         <FormField form={form} formField={formFields.fødselsdato} />
         <FormField form={form} formField={formFields.yrkesskade} />
         <FormField form={form} formField={formFields.student} />
