@@ -39,6 +39,7 @@ export interface SamordningGraderingFormfields {
 
 export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   // TODO må også håndtere vurderinger
+  console.log(`SamordningGrunnlag: ${JSON.stringify(grunnlag)}`);
   const samordnedeYtelserDefaultValue: SamordnetYtelse[] = grunnlag.ytelser.map((ytelse) => ({
     ytelseType: ytelse.ytelseType,
     kilde: ytelse.kilde,
