@@ -148,7 +148,20 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                   size={'small'}
                   control={form.control}
                   readOnly={readOnly}
-                  rules={{ required: 'Du må velge utbetalingsgrad' }}
+                  rules={{
+                    required: 'Du må velge utbetalingsgrad',
+                    validate: (value) => {
+                      if (Number.isNaN(Number(value))) {
+                        return 'Prosent må angis med siffer';
+                      }
+                      if (Number(value) < 0) {
+                        return 'Utbetalingsgrad kan ikke være mindre enn 0%';
+                      }
+                      if (Number(value) > 100) {
+                        return 'Utbetalingsgrad kan ikke være mer enn 100%';
+                      }
+                    },
+                  }}
                   className={styles.utbetalingsgrad}
                 />
               </Table.DataCell>
