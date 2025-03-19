@@ -12,6 +12,7 @@ import { SamordningYtelsestype } from 'lib/types/types';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
 import styles from './YtelseTabell.module.css';
+import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
@@ -107,7 +108,12 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                       control={form.control}
                       name={`vurderteSamordninger.${index}.periode.fom`}
                       hideLabel={true}
-                      rules={{ required: 'Du må velge dato for periodestart' }}
+                      rules={{
+                        required: 'Du må velge dato for periodestart',
+                        validate: (value) => {
+                          return validerDato(value as string);
+                        },
+                      }}
                       readOnly={readOnly}
                     />
                     {'-'}
@@ -115,7 +121,12 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                       control={form.control}
                       name={`vurderteSamordninger.${index}.periode.tom`}
                       hideLabel={true}
-                      rules={{ required: 'Du må velge dato for periodeslutt' }}
+                      rules={{
+                        required: 'Du må velge dato for periodeslutt',
+                        validate: (value) => {
+                          return validerDato(value as string);
+                        },
+                      }}
                       readOnly={readOnly}
                     />
                   </HStack>
