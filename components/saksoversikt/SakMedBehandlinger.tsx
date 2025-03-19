@@ -8,6 +8,7 @@ import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
 import { useRouter } from 'next/navigation';
+import { EyeIcon } from '@navikt/aksel-icons';
 
 const formaterBehandlingType = (behandlingtype: string) => {
   switch (behandlingtype) {
@@ -24,6 +25,7 @@ const formaterBehandlingType = (behandlingtype: string) => {
 
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
+
   return (
     <Page>
       <Page.Block width="xl">
@@ -52,27 +54,31 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             </Table.Header>
 
             <Table.Body>
-              {sak?.behandlinger?.map((behandling) => (
-                <Table.Row key={behandling.referanse}>
-                  <Table.DataCell>{formaterDatoTidForVisning(behandling.opprettet)}</Table.DataCell>
-                  <Table.DataCell>{formaterBehandlingType(behandling.type)}</Table.DataCell>
-                  <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
+              {sak?.behandlinger?.map((behandling) => {
+                const behandlingErÅpen = behandling.status === 'OPPRETTET' || behandling.status === 'UTREDES';
+                return (
+                  <Table.Row key={behandling.referanse}>
+                    <Table.DataCell>{formaterDatoTidForVisning(behandling.opprettet)}</Table.DataCell>
+                    <Table.DataCell>{formaterBehandlingType(behandling.type)}</Table.DataCell>
+                    <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
 
-                  <Table.DataCell>
-                    <HStack gap="2" justify="end">
-                      {isLocal() && <BestillBrevTestKnapp behandlingReferanse={behandling.referanse} />}
+                    <Table.DataCell>
+                      <HStack gap="2" justify="end">
+                        {isLocal() && <BestillBrevTestKnapp behandlingReferanse={behandling.referanse} />}
 
-                      <Button
-                        as="a"
-                        href={`/saksbehandling/sak/${sak.saksnummer}/${behandling.referanse}`}
-                        size="small"
-                      >
-                        Åpne
-                      </Button>
-                    </HStack>
-                  </Table.DataCell>
-                </Table.Row>
-              ))}
+                        <Button
+                          as="a"
+                          href={`/saksbehandling/sak/${sak.saksnummer}/${behandling.referanse}`}
+                          size="small"
+                          icon={!behandlingErÅpen && <EyeIcon />}
+                        >
+                          {behandlingErÅpen ? 'Åpne' : 'Vis'}
+                        </Button>
+                      </HStack>
+                    </Table.DataCell>
+                  </Table.Row>
+                );
+              })}
             </Table.Body>
           </Table>
 
