@@ -35,6 +35,7 @@ import {
   SakPersoninfo,
   SaksInfo,
   SamordningGraderingGrunnlag,
+  SamordningUføreGrunnlag,
   SettPåVent,
   SimulerMeldeplikt,
   SimulertMeldeplikt,
@@ -215,8 +216,13 @@ export const hentForutgåendeMedlemskapGrunnlag = async (
 export const hentSamordningGraderingGrunnlag = async (
   behandlingsReferanse: string
 ): Promise<SamordningGraderingGrunnlag> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/samordning/`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/samordning`;
   return await fetchProxy<SamordningGraderingGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentSamordningUføreGrunnlag = async (behandlingsReferanse: string): Promise<SamordningUføreGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/samordning-ufore`;
+  return await fetchProxy<SamordningUføreGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBeregningstidspunktVurdering = async (
