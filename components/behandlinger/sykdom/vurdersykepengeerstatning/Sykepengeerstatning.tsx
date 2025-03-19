@@ -45,12 +45,12 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
     },
     {
       label:
-        'Medlemmet har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og fortsatt er arbeidsufør på grunn av sykdom eller skade',
+        'Brukeren har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og fortsatt er arbeidsufør på grunn av sykdom eller skade',
       value: 'SYKEPENGER_FORTSATT_ARBEIDSUFOR',
     },
     {
       label:
-        'Medlemmet har mottatt arbeidsavklaringspenger og deretter foreldrepenger og innen seks måneder etter foreldrepengene opphørte, blir arbeidsufør på grunn av sykdom eller skade, se § 8-2 andre ledd',
+        'Brukeren har mottatt arbeidsavklaringspenger og deretter foreldrepenger og innen seks måneder etter foreldrepengene opphørte, blir arbeidsufør på grunn av sykdom eller skade, se § 8-2 andre ledd',
       value: 'FORELDREPENGER_INNEN_SEKS_MND',
     },
   ];
