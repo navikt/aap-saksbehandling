@@ -1,11 +1,9 @@
 .sideProsessKort {
-  --ac-expansioncard-bg: var(--a-orange-50);
-  --ac-expansioncard-header-bg: var(--a-orange-100);
-  --ac-expansioncard-header-open-bg: var(--a-orange-100);
-  --ac-expansioncard-header-bg-hover: var(--a-orange-200);
-  --ac-expansioncard-border-radius: var(--a-border-radius-small);
+  --ac-expansioncard-border-radius: var(--a-border-radius-large);
   --ac-expansioncard-border-hover-color: none;
-  box-shadow: var(--a-shadow-xsmall);
+
+  border: 1px solid var(--a-border-divider);
+  border-left: 0.5rem solid var(--a-surface-warning-subtle);
 }
 
 .header,

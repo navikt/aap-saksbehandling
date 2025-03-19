@@ -17,7 +17,7 @@ export const SideProsessKort = ({ heading, children, icon, defaultOpen = true }:
       <ExpansionCard.Header className={styles.header}>
         <div className={styles.title}>
           {icon && <div>{icon}</div>}
-          <ExpansionCard.Title>{heading}</ExpansionCard.Title>
+          <ExpansionCard.Title size={'small'}>{heading}</ExpansionCard.Title>
         </div>
       </ExpansionCard.Header>
       <ExpansionCard.Content className={styles.content}>{children}</ExpansionCard.Content>
