@@ -71,6 +71,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
                           href={`/saksbehandling/sak/${sak.saksnummer}/${behandling.referanse}`}
                           size="small"
                           icon={!behandlingErÅpen && <EyeIcon />}
+                          variant={behandlingErÅpen ? 'primary' : 'secondary'}
                         >
                           {behandlingErÅpen ? 'Åpne' : 'Vis'}
                         </Button>
