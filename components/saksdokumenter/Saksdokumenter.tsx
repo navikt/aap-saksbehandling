@@ -1,12 +1,12 @@
-import { ArrowLeftIcon, ArrowRightIcon } from '@navikt/aksel-icons';
-
-import { Link, Table } from '@navikt/ds-react';
+import { Link, Table, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import useSWR from 'swr';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { clientHentAlleDokumenterPåSak } from 'lib/clientApi';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { ArrowOrange } from 'components/icons/ArrowOrange';
+import { ArrowGreen } from 'components/icons/ArrowGreen';
 
 interface FormFields {
   dokumentnavn: string;
@@ -32,7 +32,7 @@ export const Saksdokumenter = () => {
   });
 
   return (
-    <div className={'flex-column'}>
+    <VStack gap={'4'}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <FormField form={form} formField={formFields.dokumentnavn} />
         <FormField form={form} formField={formFields.dokumentType} />
@@ -64,9 +64,9 @@ export const Saksdokumenter = () => {
                   <Table.DataCell align={'left'}>
                     <div style={{ display: 'flex' }}>
                       {dokument.erUtgående ? (
-                        <ArrowRightIcon fontSize={'1.5rem'} title={'Utgående dokument'} />
+                        <ArrowOrange title={'Utgående dokument'} />
                       ) : (
-                        <ArrowLeftIcon fontSize={'1.5rem'} title={'Inngående dokument'} />
+                        <ArrowGreen title={'Inngående dokument'} />
                       )}
                     </div>
                   </Table.DataCell>
@@ -86,6 +86,6 @@ export const Saksdokumenter = () => {
             })}
         </Table.Body>
       </Table>
-    </div>
+    </VStack>
   );
 };
