@@ -13,6 +13,7 @@ import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { format, parse } from 'date-fns';
 import { YtelseTabell } from 'components/behandlinger/underveis/samordninggradering/YtelseTabell';
+import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -70,7 +71,12 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
       maksDato: {
         type: 'date_input',
         label: 'Sett dato for ny revurdering',
-        rules: { required: 'Du må sette en dato for revurdering' },
+        rules: {
+          required: 'Du må sette en dato for revurdering',
+          validate: {
+            gyldigDato: (v) => validerDato(v as string),
+          },
+        },
       },
       vurderteSamordninger: {
         type: 'fieldArray',
