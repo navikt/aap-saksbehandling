@@ -52,7 +52,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit }:
     {
       årsaker: {
         type: 'combobox_multiple',
-        label: 'Velg en eller flere årsaker',
+        label: 'Hvilke opplysninger inneholder dokumentet?',
         options: [{ label: '', value: '' }, ...årsakOptions],
         defaultValue: defaultÅrsakOptions,
         rules: { required: 'Du må velge minst en årsak' },
@@ -62,7 +62,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit }:
   );
 
   return (
-    <VilkårsKort heading={'Årsak til behandling'}>
+    <VilkårsKort heading={'Annet relevant dokument'}>
       <form
         onSubmit={form.handleSubmit((data) =>
           submit('ANNET_RELEVANT_DOKUMENT', mapTilAnnetRelevantDokumentKontrakt(data), null)

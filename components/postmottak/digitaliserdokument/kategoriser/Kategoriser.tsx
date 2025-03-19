@@ -30,10 +30,6 @@ const kategorier: ValuePair<KategoriserDokumentKategori>[] = [
     value: 'MELDEKORT',
   },
   {
-    label: 'Dialogmelding',
-    value: 'DIALOGMELDING',
-  },
-  {
     label: 'Legeerklæring',
     value: 'LEGEERKLÆRING',
   },
