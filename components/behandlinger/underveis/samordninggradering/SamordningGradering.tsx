@@ -11,7 +11,7 @@ import { FormField } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { parse } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { YtelseTabell } from 'components/behandlinger/underveis/samordninggradering/YtelseTabell';
 
 interface Props {
@@ -44,8 +44,8 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     graderingFraKilde: ytelse.gradering || undefined,
     gradering: undefined,
     periode: {
-      fom: ytelse.periode.fom,
-      tom: ytelse.periode.tom,
+      fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
+      tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
     },
   }));
 

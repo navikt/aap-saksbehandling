@@ -9,7 +9,6 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SamordningGraderingFormfields } from 'components/behandlinger/underveis/samordninggradering/SamordningGradering';
 import { ValuePair } from 'components/form/FormField';
 import { SamordningYtelsestype } from 'lib/types/types';
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
 import styles from './YtelseTabell.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
@@ -132,7 +131,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                   </HStack>
                 )) || (
                   <BodyShort>
-                    {formaterDatoForVisning(field.periode.fom)} - {formaterDatoForVisning(field.periode.tom)}
+                    {field.periode.fom} - {field.periode.tom}
                   </BodyShort>
                 )}
               </Table.DataCell>
