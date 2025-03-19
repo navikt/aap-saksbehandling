@@ -5,7 +5,7 @@ import { Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -52,6 +52,8 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
 
   const behandlingsreferanse = useBehandlingsReferanse();
   const [visForm, setVisForm] = useState<boolean>(!!samordnedeYtelserDefaultValue.length);
+  const [visRevurderVirkningstidspunkt, oppdaterVisRevurderVirkningstidspunkt] = useState<boolean>(false);
+
   const { form, formFields } = useConfigForm<SamordningGraderingFormfields>(
     {
       begrunnelse: {
@@ -85,6 +87,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     },
     { readOnly }
   );
+
   const { løsBehovOgGåTilNesteSteg, status, isLoading, resetStatus } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_GRADERING');
 
@@ -113,6 +116,15 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     )(event);
   };
 
+  const samordninger = form.watch('vurderteSamordninger').map((vurdering) => vurdering.gradering);
+  useEffect(() => {
+    if (samordninger.some((verdi) => Number(verdi) === 100)) {
+      oppdaterVisRevurderVirkningstidspunkt(true);
+    } else {
+      oppdaterVisRevurderVirkningstidspunkt(false);
+    }
+  }, [samordninger]);
+
   return (
     <VilkårsKort heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser" steg="SAMORDNING_GRADERING">
       {visForm && (
@@ -127,13 +139,17 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
           >
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell form={form} readOnly={readOnly} />
-            <ExpansionCard aria-label="Tidligste virkningstidspunkt etter samordning er" open>
-              <ExpansionCard.Header>Tidligste virkningstidspunkt etter samordning er</ExpansionCard.Header>
-              <ExpansionCard.Content>
-                <FormField form={form} formField={formFields.maksDatoEndelig} />
-                {form.watch('maksDatoEndelig') === 'false' && <FormField form={form} formField={formFields.maksDato} />}
-              </ExpansionCard.Content>
-            </ExpansionCard>
+            {visRevurderVirkningstidspunkt && (
+              <ExpansionCard aria-label="Tidligste virkningstidspunkt etter samordning er" open>
+                <ExpansionCard.Header>Tidligste virkningstidspunkt etter samordning er</ExpansionCard.Header>
+                <ExpansionCard.Content>
+                  <FormField form={form} formField={formFields.maksDatoEndelig} />
+                  {form.watch('maksDatoEndelig') === 'false' && (
+                    <FormField form={form} formField={formFields.maksDato} />
+                  )}
+                </ExpansionCard.Content>
+              </ExpansionCard>
+            )}
           </Form>
         </>
       )}
