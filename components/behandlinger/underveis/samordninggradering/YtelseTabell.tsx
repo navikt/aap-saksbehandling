@@ -88,6 +88,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                     size={'small'}
                     hideLabel
                     control={form.control}
+                    readOnly={readOnly}
                     name={`vurderteSamordninger.${index}.ytelseType`}
                     rules={{ required: 'Du må velge en ytelsetype' }}
                   >
@@ -107,6 +108,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                       name={`vurderteSamordninger.${index}.periode.fom`}
                       hideLabel={true}
                       rules={{ required: 'Du må velge dato for periodestart' }}
+                      readOnly={readOnly}
                     />
                     {'-'}
                     <DateInputWrapper
@@ -114,6 +116,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                       name={`vurderteSamordninger.${index}.periode.tom`}
                       hideLabel={true}
                       rules={{ required: 'Du må velge dato for periodeslutt' }}
+                      readOnly={readOnly}
                     />
                   </HStack>
                 )) || (
@@ -136,6 +139,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                   control={form.control}
                   readOnly={readOnly}
                   rules={{ required: 'Du må velge utbetalingsgrad' }}
+                  className={styles.utbetalingsgrad}
                 />
               </Table.DataCell>
               <Table.DataCell>
@@ -155,7 +159,14 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
         </Table.Body>
       </Table>
       <HStack>
-        <Button size={'small'} type={'button'} variant={'tertiary'} icon={<PlusCircleIcon />} onClick={leggTilRad}>
+        <Button
+          size={'small'}
+          type={'button'}
+          variant={'tertiary'}
+          icon={<PlusCircleIcon />}
+          onClick={leggTilRad}
+          disabled={readOnly}
+        >
           Legg til
         </Button>
       </HStack>

@@ -5,3 +5,7 @@
 .capitalize::first-letter {
   text-transform: none;
 }
+
+.utbetalingsgrad {
+  max-width: 10ch;
+}

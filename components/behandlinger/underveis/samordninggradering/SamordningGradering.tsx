@@ -116,6 +116,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             onSubmit={handleSubmit}
             isLoading={isLoading}
             status={status}
+            visBekreftKnapp={!readOnly}
             resetStatus={resetStatus}
           >
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
@@ -134,7 +135,13 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
         <VStack gap={'2'}>
           <Detail>Vi finner ingen ytelser fra folketrygden</Detail>
           <HStack>
-            <Button size={'small'} type={'button'} variant={'secondary'} onClick={() => setVisForm(true)}>
+            <Button
+              size={'small'}
+              type={'button'}
+              variant={'secondary'}
+              onClick={() => setVisForm(true)}
+              disabled={readOnly}
+            >
               Legg til folketrygdytelse
             </Button>
           </HStack>
