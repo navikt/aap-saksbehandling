@@ -125,7 +125,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
           vurderingerForSamordning: {
             begrunnelse: data.begrunnelse,
             maksDatoEndelig: data.maksDatoEndelig === 'true',
-            maksDato: data.maksDato,
+            maksDato: data.maksDato && formaterDatoForBackend(parse(data.maksDato, 'dd.MM.yyyy', new Date())),
             vurderteSamordningerData: data.vurderteSamordninger.map((vurdertSamordning) => ({
               gradering: vurdertSamordning.gradering,
               periode: {
