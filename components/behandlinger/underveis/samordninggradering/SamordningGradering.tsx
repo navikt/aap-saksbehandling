@@ -120,7 +120,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
         defaultValue: samordnedeYtelserDefaultValue || [],
       },
     },
-    { readOnly }
+    { readOnly: readOnly, shouldUnregister: true }
   );
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, resetStatus } =
@@ -151,12 +151,14 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     )(event);
   };
 
-  const samordninger = form.watch('vurderteSamordninger').map((vurdering) => vurdering.gradering);
+  const samordninger = form.watch('vurderteSamordninger')?.map((vurdering) => vurdering.gradering);
   useEffect(() => {
-    if (samordninger.some((verdi) => Number(verdi) === 100)) {
-      oppdaterVisRevurderVirkningstidspunkt(true);
-    } else {
-      oppdaterVisRevurderVirkningstidspunkt(false);
+    if (samordninger) {
+      if (samordninger.some((verdi) => Number(verdi) === 100)) {
+        oppdaterVisRevurderVirkningstidspunkt(true);
+      } else {
+        oppdaterVisRevurderVirkningstidspunkt(false);
+      }
     }
   }, [samordninger]);
 
