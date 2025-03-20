@@ -67,7 +67,17 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     },
   }));
 
-  const samordnedeYtelserDefaultValue = ytelserFraVurderinger || ytelserFraGrunnlag || [];
+  const finnDefaultValues = () => {
+    if (ytelserFraVurderinger.length) {
+      return ytelserFraVurderinger;
+    }
+    if (ytelserFraGrunnlag.length) {
+      return ytelserFraGrunnlag;
+    }
+    return [];
+  };
+
+  const samordnedeYtelserDefaultValue = finnDefaultValues();
 
   const behandlingsreferanse = useBehandlingsReferanse();
   const [visForm, setVisForm] = useState<boolean>(!!samordnedeYtelserDefaultValue.length);
