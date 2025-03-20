@@ -18,7 +18,14 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandlingVersjon, refe
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
 
   return (
-    <Box role="navigation" paddingBlock="3" paddingInline="5" borderWidth="0 0 1 0" borderColor="border-subtle">
+    <Box
+      role="navigation"
+      paddingBlock="3"
+      paddingInline="5"
+      borderWidth="0 0 1 0"
+      borderColor="border-subtle"
+      background="bg-subtle"
+    >
       <HStack gap="4" align="center" justify="space-between">
         <SaksInfo sak={sak} personInformasjon={personInformasjon} />
 
