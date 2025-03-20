@@ -11,7 +11,7 @@ import { FormField } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { format, parse } from 'date-fns';
+import { addDays, format, isValid, parse } from 'date-fns';
 import { YtelseTabell } from 'components/behandlinger/underveis/samordninggradering/YtelseTabell';
 import { validerDato } from 'lib/validation/dateValidation';
 
@@ -126,6 +126,21 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     }
   }, [samordninger]);
 
+  const finnTidligsteVirkningstidspunkt = () => {
+    const alleTomDatoer = form
+      .getValues('vurderteSamordninger')
+      .filter((vurdering) => !!vurdering.periode.tom)
+      .map((vurdert) => parse(vurdert.periode.tom, 'dd.MM.yyyy', new Date()))
+      .filter((dato) => isValid(dato));
+
+    if (!alleTomDatoer.length) {
+      return undefined;
+    }
+
+    const senesteDato = Math.max(...alleTomDatoer.map((e) => e.getTime()));
+    return format(addDays(new Date(senesteDato), 1), 'dd.MM.yyyy');
+  };
+
   return (
     <VilkårsKort heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser" steg="SAMORDNING_GRADERING">
       {visForm && (
@@ -142,7 +157,9 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             <YtelseTabell form={form} readOnly={readOnly} />
             {visRevurderVirkningstidspunkt && (
               <ExpansionCard aria-label="Tidligste virkningstidspunkt etter samordning er" open>
-                <ExpansionCard.Header>Tidligste virkningstidspunkt etter samordning er</ExpansionCard.Header>
+                <ExpansionCard.Header>
+                  Tidligste virkningstidspunkt etter samordning er: {finnTidligsteVirkningstidspunkt()}
+                </ExpansionCard.Header>
                 <ExpansionCard.Content>
                   <FormField form={form} formField={formFields.maksDatoEndelig} />
                   {form.watch('maksDatoEndelig') === 'false' && (
