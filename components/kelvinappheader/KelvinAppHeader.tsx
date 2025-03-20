@@ -7,6 +7,7 @@ import { LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from './Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { isLocal } from 'lib/utils/environment';
+import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
 
 interface BrukerInformasjon {
   navn: string;
@@ -46,6 +47,7 @@ export const KelvinAppHeader = ({ brukerInformasjon }: { brukerInformasjon: Bruk
         </HStack>
 
         <Spacer />
+        <AppSwitcher />
         <Brukermeny brukerInformasjon={brukerInformasjon} />
       </InternalHeader>
 

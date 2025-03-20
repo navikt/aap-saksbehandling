@@ -17,6 +17,7 @@ import {
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { FetchResponse } from 'lib/services/apiFetch';
 import { getErrorMessage } from 'lib/utils/errorUtil';
+import { ClientConfig } from "lib/types/clientConfig";
 
 const BASE_URL = '/saksbehandling';
 
@@ -146,4 +147,8 @@ export function clientPurrPåLegeerklæring(dialogmeldingUUID: string) {
 
 export function clientSendHendelse(body: Object) {
   return clientFetch(`${BASE_URL}/api/hendelse/send`, 'POST', body);
+}
+
+export function clientConfig() {
+  return clientFetch<ClientConfig>('/api/config', 'GET');
 }
