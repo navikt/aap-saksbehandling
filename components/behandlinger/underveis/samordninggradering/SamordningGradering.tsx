@@ -16,6 +16,7 @@ import { YtelseTabell } from 'components/behandlinger/underveis/samordninggrader
 import { validerDato } from 'lib/validation/dateValidation';
 
 import styles from './SamordningGradering.module.css';
+import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -42,7 +43,20 @@ export interface SamordningGraderingFormfields {
 export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   // TODO må også håndtere vurderinger
   console.log(`SamordningGrunnlag: ${JSON.stringify(grunnlag)}`);
-  const samordnedeYtelserDefaultValue: SamordnetYtelse[] = grunnlag.ytelser.map((ytelse) => ({
+
+  // TODO midlertidig hack, antar at alt som ligger i vurderinger er lagt inn manuelt
+  const ytelserFraVurderinger: SamordnetYtelse[] = grunnlag.vurderinger.map((ytelse) => ({
+    ytelseType: ytelse.ytelseType,
+    kilde: 'Manuell',
+    graderingFraKilde: undefined,
+    gradering: ytelse.gradering || undefined,
+    periode: {
+      fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
+      tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
+    },
+  }));
+
+  const ytelserFraGrunnlag: SamordnetYtelse[] = grunnlag.ytelser.map((ytelse) => ({
     ytelseType: ytelse.ytelseType,
     kilde: ytelse.kilde,
     graderingFraKilde: ytelse.gradering || undefined,
@@ -52,6 +66,8 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
       tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
     },
   }));
+
+  const samordnedeYtelserDefaultValue = ytelserFraVurderinger || ytelserFraGrunnlag || [];
 
   const behandlingsreferanse = useBehandlingsReferanse();
   const [visForm, setVisForm] = useState<boolean>(!!samordnedeYtelserDefaultValue.length);
@@ -63,6 +79,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
         type: 'textarea',
         label: 'Vurder utbetalingsgrad for folketrygdytelser',
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
+        defaultValue: grunnlag.begrunnelse || undefined,
       },
       maksDatoEndelig: {
         type: 'radio',
@@ -72,6 +89,10 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
           { label: 'Nei, virkningstidspunkt er bekreftet', value: 'true' },
         ],
         rules: { required: 'Du må ta stilling til om virkningstidspunkt er endelig' },
+        defaultValue:
+          grunnlag.maksDatoEndelig === undefined || grunnlag.maksDatoEndelig === null
+            ? undefined
+            : grunnlag.maksDatoEndelig.toString(),
       },
       maksDato: {
         type: 'date_input',
@@ -82,6 +103,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             gyldigDato: (v) => validerDato(v as string),
           },
         },
+        defaultValue: (grunnlag.maksDato && formaterDatoForVisning(grunnlag.maksDato)) || undefined,
       },
       vurderteSamordninger: {
         type: 'fieldArray',
