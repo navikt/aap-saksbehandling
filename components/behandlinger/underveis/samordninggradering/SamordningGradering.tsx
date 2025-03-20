@@ -4,7 +4,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { FormEvent, useEffect, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -14,6 +14,8 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { addDays, format, isValid, parse } from 'date-fns';
 import { YtelseTabell } from 'components/behandlinger/underveis/samordninggradering/YtelseTabell';
 import { validerDato } from 'lib/validation/dateValidation';
+
+import styles from './SamordningGradering.module.css';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -156,17 +158,17 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell form={form} readOnly={readOnly} />
             {visRevurderVirkningstidspunkt && (
-              <ExpansionCard aria-label="Tidligste virkningstidspunkt etter samordning er" open>
-                <ExpansionCard.Header>
-                  Tidligste virkningstidspunkt etter samordning er: {finnTidligsteVirkningstidspunkt()}
-                </ExpansionCard.Header>
-                <ExpansionCard.Content>
+              <Box borderRadius={'large'} className={styles.virkningstidspunktboks} maxWidth={'90ch'}>
+                <BodyShort size={'small'} className={styles.heading}>
+                  Tidligste virkningstidspunkt etter samordning er <strong>{finnTidligsteVirkningstidspunkt()}</strong>
+                </BodyShort>
+                <VStack className={styles.innhold} padding={'space-8'} gap={'2'}>
                   <FormField form={form} formField={formFields.maksDatoEndelig} />
                   {form.watch('maksDatoEndelig') === 'false' && (
                     <FormField form={form} formField={formFields.maksDato} />
                   )}
-                </ExpansionCard.Content>
-              </ExpansionCard>
+                </VStack>
+              </Box>
             )}
           </Form>
         </>
