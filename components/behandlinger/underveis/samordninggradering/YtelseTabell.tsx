@@ -58,6 +58,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
   function leggTilRad() {
     append({
       kilde: 'Manuell',
+      manuell: true,
       ytelseType: undefined,
       periode: { fom: '', tom: '' },
       graderingFraKilde: undefined,
@@ -82,7 +83,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
           {fields.map((field, index) => (
             <Table.Row key={field.id}>
               <Table.DataCell>
-                {(field.kilde === 'Manuell' && (
+                {(field.manuell && (
                   <SelectWrapper
                     label="Ytelsestype"
                     size={'small'}
@@ -98,10 +99,15 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                       </option>
                     ))}
                   </SelectWrapper>
-                )) || <BodyShort className={styles.capitalize}>{field.ytelseType}</BodyShort>}
+                )) || (
+                  <>
+                    <BodyShort className={styles.capitalize}>{field.ytelseType}</BodyShort>
+                    <input {...form.register(`vurderteSamordninger.${index}.ytelseType`)} type="hidden" />
+                  </>
+                )}
               </Table.DataCell>
               <Table.DataCell>
-                {(field.kilde === 'Manuell' && (
+                {(field.manuell && (
                   <HStack align={'center'} gap={'1'}>
                     <DateInputWrapper
                       control={form.control}
@@ -130,9 +136,13 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                     />
                   </HStack>
                 )) || (
-                  <BodyShort>
-                    {field.periode.fom} - {field.periode.tom}
-                  </BodyShort>
+                  <>
+                    <BodyShort>
+                      {field.periode.fom} - {field.periode.tom}
+                    </BodyShort>
+                    <input {...form.register(`vurderteSamordninger.${index}.periode.fom`)} type="hidden" />
+                    <input {...form.register(`vurderteSamordninger.${index}.periode.tom`)} type="hidden" />
+                  </>
                 )}
               </Table.DataCell>
               <Table.DataCell>{field.kilde}</Table.DataCell>
@@ -166,7 +176,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                 />
               </Table.DataCell>
               <Table.DataCell>
-                {field.kilde === 'Manuell' && (
+                {field.manuell && (
                   <Button
                     size={'small'}
                     icon={<TrashIcon title={'Slett'} />}

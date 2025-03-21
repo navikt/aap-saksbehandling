@@ -27,6 +27,7 @@ interface Props {
 type SamordnetYtelse = {
   ytelseType: SamordningYtelsestype | undefined;
   kilde: string;
+  manuell?: boolean;
   graderingFraKilde?: number;
   gradering?: number;
   kronseum?: number;
@@ -50,6 +51,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     kilde: 'Manuell',
     graderingFraKilde: undefined,
     gradering: ytelse.gradering || undefined,
+    manuell: ytelse.manuell || undefined,
     periode: {
       fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
       tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
@@ -137,6 +139,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             maksDatoEndelig: data.maksDatoEndelig === 'true',
             maksDato: data.maksDato && formaterDatoForBackend(parse(data.maksDato, 'dd.MM.yyyy', new Date())),
             vurderteSamordningerData: data.vurderteSamordninger.map((vurdertSamordning) => ({
+              manuell: vurdertSamordning.manuell,
               gradering: vurdertSamordning.gradering,
               periode: {
                 fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
