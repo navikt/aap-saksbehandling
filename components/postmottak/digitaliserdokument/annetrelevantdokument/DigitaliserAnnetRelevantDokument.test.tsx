@@ -18,11 +18,11 @@ describe('DigitaliserAnnetDokument', () => {
   it('at det går an å velge flere alternativer', async () => {
     render(<DigitaliserAnnetRelevantDokument submit={() => {}} grunnlag={grunnlag} readOnly={false} />);
     await user.click(screen.getByRole('combobox'));
-    await user.click(screen.getByText(/Mottatt søknad/));
-    await user.click(screen.getByText(/Mottatt meldekort/));
+    await user.click(screen.getByText(/Yrkesskade/));
+    await user.click(screen.getByText(/Samordning og avregning/));
 
     const list = screen.getByRole('list');
-    expect(within(list).getByText(/Mottatt søknad/i)).toBeVisible();
-    expect(within(list).getByText(/Mottatt meldekort/i)).toBeVisible();
+    expect(within(list).getByText(/Yrkesskade/i)).toBeVisible();
+    expect(within(list).getByText(/Samordning og avregning/i)).toBeVisible();
   });
 });
