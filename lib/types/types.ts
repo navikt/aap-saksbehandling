@@ -247,6 +247,12 @@ export type AnnetRelevantDokumentV0 =
     meldingType: typeof AnnetRelevantDokumentV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
+export const ManuellRevurderingV0 = 'ManuellRevurderingV0'
+export type ManuellRevurderingV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof ManuellRevurderingV0}`] & {
+  meldingType: typeof ManuellRevurderingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+};
+
 export type ÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
 
 // oppgave
