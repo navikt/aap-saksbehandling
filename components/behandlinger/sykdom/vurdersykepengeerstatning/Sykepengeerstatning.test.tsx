@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { render, screen } from 'lib/test/CustomRender';
 import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/Sykepengeerstatning';
 import { userEvent } from '@testing-library/user-event';
 

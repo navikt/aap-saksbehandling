@@ -1,5 +1,5 @@
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'lib/test/CustomRender';
 import userEvent from '@testing-library/user-event';
 import { Aktivitetsplikt } from 'components/behandlinger/underveis/aktivitetsplikt/Aktivitetsplikt';
 import { AktivitetspliktGrunnlag } from 'lib/types/types';

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'lib/test/CustomRender';
 import { FastsettBeregning } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregning';
 import { userEvent } from '@testing-library/user-event';
 import { BeregningTidspunktGrunnlag } from 'lib/types/types';

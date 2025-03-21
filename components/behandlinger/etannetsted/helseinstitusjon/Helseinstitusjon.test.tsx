@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test } from 'vitest';
 import { Helseinstitusjon } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjon';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 

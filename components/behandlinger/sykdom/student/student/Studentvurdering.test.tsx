@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+
 import { Studentvurdering } from 'components/behandlinger/sykdom/student/student/Studentvurdering';
 import { userEvent } from '@testing-library/user-event';
 import { addDays } from 'date-fns';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { render, screen, within } from 'lib/test/CustomRender';
 
 const user = userEvent.setup();
 

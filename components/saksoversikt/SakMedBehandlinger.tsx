@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Heading, HStack, Page, Table, VStack } from '@navikt/ds-react';
-import { isLocal, isProduction } from 'lib/utils/environment';
+import { isLocal } from 'lib/utils/environment';
 import { formaterDatoTidForVisning } from '@navikt/aap-felles-utils-client';
 import { BestillBrevTestKnapp } from 'components/behandlinger/brev/BestillBrevTestKnapp';
 import { SaksInfo } from 'lib/types/types';
@@ -23,6 +23,16 @@ const formaterBehandlingType = (behandlingtype: string) => {
   }
 };
 
+const kanRevurdere = (sak: SaksInfo): boolean => {
+  const finnesAvsluttetFørstegangsbehandling =
+    !!sak.behandlinger.filter((behandling) => behandling.type === 'ae0034' && behandling.status === 'AVSLUTTET').length
+
+  const ingenBehandlingerUnderArbeid =
+    !sak.behandlinger.filter((b) => b.status !== 'AVSLUTTET').length
+
+  return finnesAvsluttetFørstegangsbehandling && ingenBehandlingerUnderArbeid
+}
+
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
 
@@ -33,14 +43,23 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           <HStack justify="space-between">
             <Heading size="large">Sak {sak.saksnummer}</Heading>
 
-            {!isProduction() && (
+            <HStack gap="4">
               <Button
                 variant="secondary"
                 onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
               >
                 Registrer brudd på aktivitetsplikten
               </Button>
-            )}
+
+              {kanRevurdere(sak) && (
+                <Button
+                  variant="secondary"
+                  onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
+                >
+                  Opprett revurdering
+                </Button>
+              )}
+            </HStack>
           </HStack>
 
           <Table>

@@ -5,7 +5,7 @@ import { Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { BodyShort, Box, Button, Detail, HStack, VStack } from '@navikt/ds-react';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -27,6 +27,7 @@ interface Props {
 type SamordnetYtelse = {
   ytelseType: SamordningYtelsestype | undefined;
   kilde: string;
+  manuell?: boolean;
   graderingFraKilde?: number;
   gradering?: number;
   kronseum?: number;
@@ -50,6 +51,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     kilde: 'Manuell',
     graderingFraKilde: undefined,
     gradering: ytelse.gradering || undefined,
+    manuell: ytelse.manuell || undefined,
     periode: {
       fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
       tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
@@ -81,7 +83,6 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
 
   const behandlingsreferanse = useBehandlingsReferanse();
   const [visForm, setVisForm] = useState<boolean>(!!samordnedeYtelserDefaultValue.length);
-  const [visRevurderVirkningstidspunkt, oppdaterVisRevurderVirkningstidspunkt] = useState<boolean>(false);
 
   const { form, formFields } = useConfigForm<SamordningGraderingFormfields>(
     {
@@ -138,6 +139,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             maksDatoEndelig: data.maksDatoEndelig === 'true',
             maksDato: data.maksDato && formaterDatoForBackend(parse(data.maksDato, 'dd.MM.yyyy', new Date())),
             vurderteSamordningerData: data.vurderteSamordninger.map((vurdertSamordning) => ({
+              manuell: vurdertSamordning.manuell,
               gradering: vurdertSamordning.gradering,
               periode: {
                 fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
@@ -153,15 +155,8 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
   };
 
   const samordninger = form.watch('vurderteSamordninger')?.map((vurdering) => vurdering.gradering);
-  useEffect(() => {
-    if (samordninger) {
-      if (samordninger.some((verdi) => Number(verdi) === 100)) {
-        oppdaterVisRevurderVirkningstidspunkt(true);
-      } else {
-        oppdaterVisRevurderVirkningstidspunkt(false);
-      }
-    }
-  }, [samordninger]);
+
+  const visRevurderVirkningstidspunkt = samordninger.some((verdi) => Number(verdi) === 100);
 
   const finnTidligsteVirkningstidspunkt = () => {
     const alleTomDatoer = form

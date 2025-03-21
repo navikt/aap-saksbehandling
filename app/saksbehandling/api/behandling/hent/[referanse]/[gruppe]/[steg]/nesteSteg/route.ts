@@ -1,5 +1,5 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { StegGruppe, StegType } from 'lib/types/types';
+import { BehandlingsFlytAvklaringsbehovKode, StegGruppe, StegType } from 'lib/types/types';
 import { NextRequest } from 'next/server';
 
 const DEFAULT_TIMEOUT_IN_MS = 500;
@@ -8,6 +8,7 @@ const RETRIES = 0;
 export interface ServerSentEventData {
   aktivGruppe?: StegGruppe;
   aktivtSteg?: StegType;
+  aktivtStegBehovsKode?: BehandlingsFlytAvklaringsbehovKode[];
   skalBytteGruppe?: boolean;
   skalBytteSteg?: boolean;
   status: ServerSentEventStatus;
@@ -66,6 +67,7 @@ export async function GET(
           aktivtSteg,
           skalBytteGruppe: aktivGruppe !== (await context.params).gruppe,
           skalBytteSteg: aktivtSteg !== (await context.params).steg,
+          aktivtStegBehovsKode: flyt.aktivtStegDefinisjon.map((definisjon) => definisjon.kode),
           status: 'DONE',
         };
 

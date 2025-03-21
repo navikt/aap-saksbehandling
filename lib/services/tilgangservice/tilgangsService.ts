@@ -6,7 +6,7 @@ const tilgangApiScope = process.env.TILGANG_API_SCOPE ?? '';
 
 export async function sjekkTilgang(behandlingsreferanse: string, avklaringsbehovKode: string) {
   if (isLocal()) {
-    return { tilgang: false };
+    return { tilgang: true };
   }
   const url = `${tilgangApiBaseUrl}/tilgang/behandling`;
   return fetchProxy<{ tilgang: boolean }>(url, tilgangApiScope, 'POST', {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'lib/test/CustomRender';
 import { Soningsgrunnlag } from 'lib/types/types';
 import userEvent from '@testing-library/user-event';
 
