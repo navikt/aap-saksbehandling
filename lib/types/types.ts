@@ -21,6 +21,8 @@ export type FritakMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagDto'];
 export type ArbeidsevneGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.ArbeidsevneGrunnlagDto'];
+export type RefusjonskravGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagDto'];
 
 export type BeregningTidspunktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningTidspunktAvklaringDto'];
@@ -247,11 +249,11 @@ export type AnnetRelevantDokumentV0 =
     meldingType: typeof AnnetRelevantDokumentV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
-export const ManuellRevurderingV0 = 'ManuellRevurderingV0'
+export const ManuellRevurderingV0 = 'ManuellRevurderingV0';
 export type ManuellRevurderingV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof ManuellRevurderingV0}`] & {
-  meldingType: typeof ManuellRevurderingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
-};
+    meldingType: typeof ManuellRevurderingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
 
 export type ÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
 

@@ -8,6 +8,7 @@ import { SykepengeerstatningMedDataFetching } from 'components/behandlinger/sykd
 import { FastsettArbeidsevneMedDataFetching } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevneMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { YrkesskadeMedDataFetching } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedDataFetching';
+import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon/RefusjonMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -81,6 +82,16 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
       {stegSomSkalVises.includes('VURDER_SYKEPENGEERSTATNING') && (
         <StegSuspense>
           <SykepengeerstatningMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
+      {stegSomSkalVises.includes('REFUSJON_KRAV') && (
+        <StegSuspense>
+          <RefusjonMedDataFetching
+            saksId={sakId}
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}

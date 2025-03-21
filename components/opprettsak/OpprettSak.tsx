@@ -101,6 +101,16 @@ export const OpprettSak = () => {
           yrkesskade: data.yrkesskade === JaEllerNei.Ja,
           student: data.student === JaEllerNei.Ja,
           uføre: Number(data.uføre),
+          sykepenger: [
+            {
+              // @ts-ignore
+              grad: 0,
+              periode: {
+                fom: formaterDatoForBackend(new Date()),
+                tom: formaterDatoForBackend(new Date()),
+              },
+            },
+          ],
           barn:
             data.barn?.map((barn) => {
               return {

@@ -32,6 +32,7 @@ import {
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
+  RefusjonskravGrunnlag,
   SakPersoninfo,
   SaksInfo,
   SamordningGraderingGrunnlag,
@@ -358,6 +359,11 @@ export const hentAutomatiskLovvalgOgMedlemskapVurdering = async (
   behandlingsReferanse: string
 ): Promise<AutomatiskLovvalgOgMedlemskapVurdering> => {
   const url = `${saksbehandlingApiBaseUrl}/api/lovvalgmedlemskap/vurdering/${behandlingsReferanse}`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentRefusjonGrunnlag = async (behandlingsReferanse: string): Promise<RefusjonskravGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/refusjon`;
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
