@@ -93,6 +93,7 @@ export const OpprettSak = () => {
   return (
     <form
       onSubmit={form.handleSubmit(async (data) => {
+        // @ts-ignore
         await opprettSak({
           ...data,
           søknadsdato: formaterDatoForBackend(data.søknadsdato),

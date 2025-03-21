@@ -10,6 +10,8 @@ import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { SamordningUføreTabell } from 'components/behandlinger/underveis/samordninguføre/SamordningUføreTabell';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { parse } from 'date-fns';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
@@ -36,7 +38,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
     if (grunnlag.vurdering?.vurderingPerioder?.length) {
       return grunnlag.vurdering.vurderingPerioder.map((vurdering) => ({
         gradering: vurdering.uføregradTilSamordning,
-        virkningstidspunkt: vurdering.periode.fom,
+        virkningstidspunkt: vurdering.virkningstidspunkt,
       }));
     }
     if (grunnlag.grunnlag.length) {
@@ -72,10 +74,11 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
           behovstype: Behovstype.AVKLAR_SAMORDNING_UFORE,
           samordningUføreVurdering: {
             begrunnelse: data.begrunnelse,
-            // @ts-ignore
             vurderingPerioder: data.vurderteSamordninger.map((samordning) => ({
-              virkningstidspunkt: samordning.virkningstidspunkt,
-              uføregradTilSamordning: samordning.gradering,
+              virkningstidspunkt: formaterDatoForBackend(
+                parse(samordning.virkningstidspunkt, 'dd.MM.yyyy', new Date())
+              ),
+              uføregradTilSamordning: samordning.gradering!,
             })),
           },
         },

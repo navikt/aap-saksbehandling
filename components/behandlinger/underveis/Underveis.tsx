@@ -33,13 +33,13 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
         behandlingVersjon={flyt.behandlingVersjon}
         readOnly={flyt.visning.saksbehandlerReadOnly}
       />
-      {/*{stegSomSkalVises.includes('SAMORDNING_UFØRE') && (*/}
-      <SamordningUføreMedDatafetching
-        behandlingsreferanse={behandlingsreferanse}
-        behandlingVersjon={flyt.behandlingVersjon}
-        readOnly={flyt.visning.saksbehandlerReadOnly}
-      />
-      {/*)}*/}
+      {stegSomSkalVises.includes('SAMORDNING_UFØRE') && (
+        <SamordningUføreMedDatafetching
+          behandlingsreferanse={behandlingsreferanse}
+          behandlingVersjon={flyt.behandlingVersjon}
+          readOnly={flyt.visning.saksbehandlerReadOnly}
+        />
+      )}
       <UnderveisgrunnlagMedDataFetching behandlingsreferanse={behandlingsreferanse} />
     </GruppeSteg>
   );

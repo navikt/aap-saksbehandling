@@ -53,7 +53,6 @@ import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 import { headers } from 'next/headers';
 import { apiFetch } from 'lib/services/apiFetch';
-import { isLocal } from 'lib/utils/environment';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -222,21 +221,6 @@ export const hentSamordningGraderingGrunnlag = async (
 };
 
 export const hentSamordningUføreGrunnlag = async (behandlingsReferanse: string): Promise<SamordningUføreGrunnlag> => {
-  if (isLocal()) {
-    return {
-      vurdering: {
-        begrunnelse: 'jkl',
-        vurderingPerioder: [],
-      },
-      grunnlag: [
-        {
-          kilde: 'PESYS',
-          virkningstidspunkt: '2025-01-01',
-          uføregrad: 40,
-        },
-      ],
-    };
-  }
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/samordning-ufore`;
   return await fetchProxy<SamordningUføreGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
