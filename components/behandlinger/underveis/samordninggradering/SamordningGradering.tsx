@@ -43,7 +43,7 @@ export interface SamordningGraderingFormfields {
 
 export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   // TODO må også håndtere vurderinger
-  console.log(`SamordningGrunnlag: ${JSON.stringify(grunnlag)}`);
+  console.log(`SamordningGrunnlag:`, grunnlag);
 
   // TODO midlertidig hack, antar at alt som ligger i vurderinger er lagt inn manuelt
   const ytelserFraVurderinger: SamordnetYtelse[] = grunnlag.vurderinger.map((ytelse) => ({
@@ -128,8 +128,9 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_GRADERING');
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(async (data) =>
-      løsBehovOgGåTilNesteSteg({
+    form.handleSubmit(async (data) => {
+      console.log(data);
+      return løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
@@ -149,8 +150,8 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
           },
         },
         referanse: behandlingsreferanse,
-      })
-    )(event);
+      });
+    })(event);
   };
 
   const samordninger = form.watch('vurderteSamordninger')?.map((vurdering) => vurdering.gradering);

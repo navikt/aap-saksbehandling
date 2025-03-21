@@ -67,6 +67,8 @@ export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode): st
       return 'Avklar samordning uføre';
     case '5025':
       return 'Samordning vent på virkningstidspunkt';
+    case '5026':
+      return 'Refusjon';
     // Postmottak
     case '1337':
       return 'Kategoriser dokument';
