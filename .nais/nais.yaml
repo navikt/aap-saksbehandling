@@ -4,10 +4,10 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "50M"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "90"
-  name: "saksbehandling"
-  namespace: "aap"
+  name: saksbehandling
+  namespace: aap
   labels:
-    "team": "aap"
+    team: aap
 spec:
   image: {{image}}
   ingresses:
@@ -16,11 +16,11 @@ spec:
     {{/each}}
   port: 3000
   liveness:
-    path: "/saksbehandling/api/internal/isAlive"
+    path: /saksbehandling/api/internal/isAlive
     initialDelay: 20
     timeout: 60
   readiness:
-    path: "/saksbehandling/api/internal/isReady"
+    path: /saksbehandling/api/internal/isReady
     initialDelay: 20
     timeout: 60
   replicas:
@@ -59,12 +59,12 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: "behandlingsflyt"
-        - application: "oppgave"
-        - application: "postmottak-backend"
-        - application: "statistikk"
-        - application: "saksbehandling-pdfgen"
-        - application: "dokumentinnhenting"
-        - application: "tilgang"
+        - application: behandlingsflyt
+        - application: oppgave
+        - application: postmottak-backend
+        - application: statistikk
+        - application: saksbehandling-pdfgen
+        - application: dokumentinnhenting
+        - application: tilgang
       external:
-        - host: "cdn.nav.no"
+        - host: cdn.nav.no
