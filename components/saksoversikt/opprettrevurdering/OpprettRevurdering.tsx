@@ -21,7 +21,8 @@ const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
   { label: 'Samordning og avregning', value: 'SAMORDNING_OG_AVREGNING' },
   { label: 'Refusjonskrav', value: 'REFUSJONSKRAV' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
-  { label: 'Utenlandsopphold før søknadstidspunkt', value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT' },
+  // TODO: For at denne skal fungere må det gjøres litt justering i data som sendes i melding.
+  // { label: 'Utenlandsopphold før søknadstidspunkt', value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT' },
 ];
 
 export interface ManuellRevurderingFormFields {
