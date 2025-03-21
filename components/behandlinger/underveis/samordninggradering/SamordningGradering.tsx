@@ -5,7 +5,7 @@ import { Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { BodyShort, Box, Button, Detail, HStack, VStack } from '@navikt/ds-react';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -83,7 +83,6 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
 
   const behandlingsreferanse = useBehandlingsReferanse();
   const [visForm, setVisForm] = useState<boolean>(!!samordnedeYtelserDefaultValue.length);
-  const [visRevurderVirkningstidspunkt, oppdaterVisRevurderVirkningstidspunkt] = useState<boolean>(false);
 
   const { form, formFields } = useConfigForm<SamordningGraderingFormfields>(
     {
@@ -155,15 +154,8 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
   };
 
   const samordninger = form.watch('vurderteSamordninger')?.map((vurdering) => vurdering.gradering);
-  useEffect(() => {
-    if (samordninger) {
-      if (samordninger.some((verdi) => Number(verdi) === 100)) {
-        oppdaterVisRevurderVirkningstidspunkt(true);
-      } else {
-        oppdaterVisRevurderVirkningstidspunkt(false);
-      }
-    }
-  }, [samordninger]);
+
+  const visRevurderVirkningstidspunkt = samordninger.some((verdi) => Number(verdi) === 100);
 
   const finnTidligsteVirkningstidspunkt = () => {
     const alleTomDatoer = form
