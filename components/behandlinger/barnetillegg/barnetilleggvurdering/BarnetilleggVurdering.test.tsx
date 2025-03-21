@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+
 import { BarnetilleggVurdering } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { userEvent } from '@testing-library/user-event';
 import { BarnetilleggGrunnlag, BehandlingPersoninfo } from 'lib/types/types';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
+import { render, screen, within } from 'lib/test/CustomRender';
 
 const grunnlag: BarnetilleggGrunnlag = {
   søknadstidspunkt: '12.12.2023',

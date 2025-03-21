@@ -20,6 +20,8 @@ import { SaksbehandlingsoversiktMedDataFetching } from 'components/saksbehandlin
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import { hentBrukerInformasjon, logWarning } from '@navikt/aap-felles-utils';
+import { IngenFlereOppgaverModalContextProvider } from 'context/IngenFlereOppgaverModalContext';
+import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
 
 interface Props {
   children: ReactNode;
@@ -69,31 +71,34 @@ const Layout = async (props: Props) => {
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
 
   return (
-    <div className={styles.behandling}>
-      <SaksinfoBanner
-        personInformasjon={personInfo}
-        sak={sak}
-        behandlingVersjon={flytResponse.behandlingVersjon}
-        referanse={params.behandlingsReferanse}
-      />
+    <IngenFlereOppgaverModalContextProvider>
+      <div className={styles.behandling}>
+        <IngenFlereOppgaverModal />
+        <SaksinfoBanner
+          personInformasjon={personInfo}
+          sak={sak}
+          behandlingVersjon={flytResponse.behandlingVersjon}
+          referanse={params.behandlingsReferanse}
+        />
 
-      <StegGruppeIndikatorAksel flytRespons={flytResponse} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
+        <StegGruppeIndikatorAksel flytRespons={flytResponse} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
 
-      <HGrid columns="4fr 2fr">
-        <section className={styles.venstrekolonne}>{children}</section>
-        <aside className={`${styles.høyrekolonne} flex-column`}>
-          <Behandlingsinfo
-            behandling={behandling}
-            saksnummer={params.saksId}
-            oppgaveReservertAv={oppgave?.reservertAv}
-            påVent={flytResponse.visning.visVentekort}
-            brukerInformasjon={brukerInformasjon}
-          />
-          <SaksbehandlingsoversiktMedDataFetching />
-          <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
-        </aside>
-      </HGrid>
-    </div>
+        <HGrid columns="4fr 2fr">
+          <section className={styles.venstrekolonne}>{children}</section>
+          <aside className={`${styles.høyrekolonne} flex-column`}>
+            <Behandlingsinfo
+              behandling={behandling}
+              saksnummer={params.saksId}
+              oppgaveReservertAv={oppgave?.reservertAv}
+              påVent={flytResponse.visning.visVentekort}
+              brukerInformasjon={brukerInformasjon}
+            />
+            <SaksbehandlingsoversiktMedDataFetching />
+            <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
+          </aside>
+        </HGrid>
+      </div>
+    </IngenFlereOppgaverModalContextProvider>
   );
 };
 

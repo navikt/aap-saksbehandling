@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'lib/test/CustomRender';
 import { Behovstype } from 'lib/utils/form';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import { FatteVedtakGrunnlag } from 'lib/types/types';

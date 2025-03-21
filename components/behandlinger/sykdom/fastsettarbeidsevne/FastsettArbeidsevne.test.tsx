@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { FastsettArbeidsevne } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevne';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { ArbeidsevneGrunnlag } from 'lib/types/types';
 

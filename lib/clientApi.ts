@@ -1,5 +1,6 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import {
+  BehandlingsFlytAvklaringsbehovKode,
   BestillLegeerklæring,
   Brev,
   DokumentInfo,
@@ -17,7 +18,7 @@ import {
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { FetchResponse } from 'lib/services/apiFetch';
 import { getErrorMessage } from 'lib/utils/errorUtil';
-import { ClientConfig } from "lib/types/clientConfig";
+import { ClientConfig } from 'lib/types/clientConfig';
 
 const BASE_URL = '/saksbehandling';
 
@@ -151,4 +152,17 @@ export function clientSendHendelse(body: Object) {
 
 export function clientConfig() {
   return clientFetch<ClientConfig>('/api/config', 'GET');
+}
+
+export async function clientSjekkTilgang(
+  behandlingsreferanse: string,
+  behovsKode: BehandlingsFlytAvklaringsbehovKode
+): Promise<{ harTilgangTilNesteOppgave: boolean } | undefined> {
+  return clientFetch<{ harTilgangTilNesteOppgave: boolean }>(
+    `${BASE_URL}/api/behandling/${behandlingsreferanse}/sjekk-tilgang`,
+    'POST',
+    {
+      kode: behovsKode,
+    }
+  );
 }
