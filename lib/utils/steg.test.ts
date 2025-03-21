@@ -70,6 +70,17 @@ const flyt: BehandlingFlytOgTilstand = {
   aktivGruppe: 'SYKDOM',
   prosessering: { status: 'FERDIG', ventendeOppgaver: [] },
   aktivtSteg: 'AVKLAR_SYKDOM',
+  aktivtStegDefinisjon: [
+    {
+      kode: '5003',
+      kreverToTrinn: false,
+      kvalitetssikres: true,
+      løsesAv: ['SAKSBEHANDLER_OPPFOLGING'],
+      løsesISteg: 'AVKLAR_SYKDOM',
+      type: 'MANUELT_PÅKREVD',
+      name: 'SYKDOM',
+    },
+  ],
   behandlingVersjon: 0,
   visning: {
     saksbehandlerReadOnly: false,

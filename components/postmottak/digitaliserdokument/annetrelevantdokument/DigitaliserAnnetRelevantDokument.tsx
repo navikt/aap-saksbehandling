@@ -28,15 +28,17 @@ function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFiel
 }
 // TODO: Avklar hvilke årsaker som saksbehandler skal kunne sette
 const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
-  { label: 'Mottatt søknad', value: 'SØKNAD' },
-  { label: 'Mottatt aktivitetsmelding', value: 'AKTIVITETSMELDING' },
-  { label: 'Mottatt meldekort', value: 'MELDEKORT' },
-  { label: 'Mottatt legeerklæring', value: 'LEGEERKLÆRING' },
-  { label: 'Mottatt dialogmelding', value: 'DIALOGMELDING' },
-  { label: 'Revurder medlemskap', value: 'REVURDER_MEDLEMSKAP' },
-  { label: 'Revurder yrkesskade', value: 'REVURDER_YRKESSKADE' },
-  { label: 'Revurder beregning', value: 'REVURDER_BEREGNING' },
-  { label: 'Revurder lovvalg', value: 'REVURDER_LOVVALG' },
+  { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
+  { label: 'Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
+  { value: 'LOVVALG_OG_MEDLEMSKAP', label: 'Lovvalg og medlemskap' },
+  { value: 'FORUTGAENDE_MEDLEMSKAP', label: 'Forutgående medlemskap' },
+  { value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND', label: 'Sykdom, arbeidsevne og behov for bistand' },
+  { value: 'BARNETILLEGG', label: 'Barnetillegg' },
+  { value: 'INSTITUSJONSOPPHOLD', label: 'Institusjonsopphold' },
+  { value: 'SAMORDNING_OG_AVREGNING', label: 'Samordning og avregning' },
+  { value: 'REFUSJONSKRAV', label: 'Refusjonskrav' },
+  { value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT', label: 'Utenlandsopphold før søknadstidspunkt' },
+  // { value: '', label: 'Journalfør på saken uten å starte revurdering' }, venter på enum i behandlingsflyt
 ];
 
 export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit }: Props) => {
