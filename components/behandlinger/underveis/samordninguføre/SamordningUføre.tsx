@@ -11,7 +11,7 @@ import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { SamordningUføreTabell } from 'components/behandlinger/underveis/samordninguføre/SamordningUføreTabell';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { parse } from 'date-fns';
+import { format, parse } from 'date-fns';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
@@ -38,14 +38,15 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
     if (grunnlag.vurdering?.vurderingPerioder?.length) {
       return grunnlag.vurdering.vurderingPerioder.map((vurdering) => ({
         gradering: vurdering.uføregradTilSamordning,
-        virkningstidspunkt: vurdering.virkningstidspunkt,
+        virkningstidspunkt:
+          vurdering.virkningstidspunkt && format(new Date(vurdering.virkningstidspunkt), 'dd.MM.yyyy'),
       }));
     }
     if (grunnlag.grunnlag.length) {
       return grunnlag.grunnlag.map((ytelse) => ({
         kilde: ytelse.kilde,
         graderingFraKilde: ytelse.uføregrad,
-        virkningstidspunkt: ytelse.virkningstidspunkt,
+        virkningstidspunkt: ytelse.virkningstidspunkt && format(new Date(ytelse.virkningstidspunkt), 'dd.MM.yyyy'),
       }));
     }
     return [];
