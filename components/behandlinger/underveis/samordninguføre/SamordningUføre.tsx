@@ -31,6 +31,7 @@ type SamordnetUførePeriode = {
 export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, resetStatus, status } = useLøsBehovOgGåTilNesteSteg('SAMORDNING_UFØRE');
+  console.log('grunnlaguføre', grunnlag);
 
   function hentDefaultSamordningerFraVurderingerEllerGrunnlag(
     grunnlag: SamordningUføreGrunnlag

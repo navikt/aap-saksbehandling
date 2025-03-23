@@ -5,7 +5,6 @@ import styles from 'components/behandlinger/underveis/samordninggradering/Ytelse
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SamordningUføreFormFields } from 'components/behandlinger/underveis/samordninguføre/SamordningUføre';
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
 interface Props {
   form: UseFormReturn<SamordningUføreFormFields>;
@@ -29,7 +28,7 @@ export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
           {fields.map((field, index) => (
             <Table.Row key={field.id}>
               <Table.DataCell>{field.kilde}</Table.DataCell>
-              <Table.DataCell>{formaterDatoForVisning(field.virkningstidspunkt)}</Table.DataCell>
+              <Table.DataCell>{field.virkningstidspunkt}</Table.DataCell>
               <Table.DataCell>{field.graderingFraKilde}</Table.DataCell>
               <Table.DataCell>
                 <TextFieldWrapper
