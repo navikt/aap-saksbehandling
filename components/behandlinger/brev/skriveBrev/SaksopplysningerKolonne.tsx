@@ -13,6 +13,7 @@ export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag
   const gjeldendeSykdomsvurdering = sykdomsgrunnlag.sykdomsvurderinger[sykdomsgrunnlag.sykdomsvurderinger.length - 1];
   const gjeldendeBistandsbehov = bistandsbehovGrunnlag.vurdering;
   const refusjonVurdering = refusjonGrunnlag.gjeldendeVurdering;
+
   return (
     <div className={styles.kolonne}>
       <Label as="p">Vilkårsvurderinger</Label>
@@ -31,7 +32,7 @@ export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag
       {refusjonVurdering?.harKrav && (
         <SaksopplysningerKort
           tittel="Refusjonskrav"
-          begrunnelse={`Det er refusjonskrav mot sosialhjelp. ${refusjonVurdering?.fom ?? `Fra: ${refusjonVurdering.fom}`} ${refusjonVurdering.tom ?? `Til: ${refusjonVurdering.tom}`}`}
+          begrunnelse={`Det er refusjonskrav mot sosialhjelp. ${refusjonVurdering?.fom != null ? `Fra: ${refusjonVurdering.fom}` : ''} ${refusjonVurdering.tom != null ? `Til: ${refusjonVurdering.tom}` : ''}`}
         />
       )}
     </div>
