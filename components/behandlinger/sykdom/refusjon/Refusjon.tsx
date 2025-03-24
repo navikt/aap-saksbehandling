@@ -4,13 +4,13 @@ import { Form } from 'components/form/Form';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { isBefore, parse, startOfDay } from 'date-fns';
+import { /*isBefore,*/ parse /*startOfDay*/ } from 'date-fns';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { RefusjonskravGrunnlag } from 'lib/types/types';
-import { formaterDatoForBackend, stringToDate } from 'lib/utils/date';
+import { formaterDatoForBackend /*, stringToDate*/ } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { validerDato } from 'lib/validation/dateValidation';
+//import { validerDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 
 interface Props {
@@ -26,7 +26,7 @@ interface FormFields {
   vurderingenGjelderTil?: string;
 }
 
-export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readOnly }: Props) => {
+export const Refusjon = ({ behandlingVersjon, /*søknadstidspunkt, */ grunnlag, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -42,7 +42,7 @@ export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readO
       type: 'date_input',
       label: 'Refusjon fra (valgfritt)',
       defaultValue: undefined, // TODO ta inn data fra grunnlag
-      rules: {
+      /*rules: {
         validate: {
           gyldigDato: (v) => validerDato(v as string),
           kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
@@ -53,13 +53,13 @@ export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readO
             }
           },
         },
-      },
+      },*/
     },
     vurderingenGjelderTil: {
       type: 'date_input',
       label: 'til og med (valgfritt)',
       defaultValue: undefined, // TODO ta inn data fra grunnlag
-      rules: {
+      /*rules: {
         validate: {
           gyldigDato: (v) => validerDato(v as string),
           kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
@@ -70,7 +70,7 @@ export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readO
             }
           },
         },
-      },
+      },*/
     },
   });
 
