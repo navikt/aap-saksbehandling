@@ -1,16 +1,18 @@
 import { SaksopplysningerKort } from 'components/behandlinger/brev/skriveBrev/SaksopplysningerKort';
 import styles from './SaksopplysningerKolonne.module.css';
 import { Label } from '@navikt/ds-react';
-import { BistandsGrunnlag, SykdomsGrunnlag } from 'lib/types/types';
+import { BistandsGrunnlag, RefusjonskravGrunnlag, SykdomsGrunnlag } from 'lib/types/types';
 
 interface Props {
   sykdomsgrunnlag: SykdomsGrunnlag;
   bistandsbehovGrunnlag: BistandsGrunnlag;
+  refusjonGrunnlag: RefusjonskravGrunnlag;
 }
 
-export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag }: Props) => {
+export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag }: Props) => {
   const gjeldendeSykdomsvurdering = sykdomsgrunnlag.sykdomsvurderinger[sykdomsgrunnlag.sykdomsvurderinger.length - 1];
   const gjeldendeBistandsbehov = bistandsbehovGrunnlag.vurdering;
+  const refusjonVurdering = refusjonGrunnlag.gjeldendeVurdering;
   return (
     <div className={styles.kolonne}>
       <Label as="p">Vilkårsvurderinger</Label>
@@ -24,6 +26,12 @@ export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag
         <SaksopplysningerKort
           tittel="§11-6 Behov for bistand til å skaffe seg eller beholde arbeid"
           begrunnelse={gjeldendeBistandsbehov.begrunnelse}
+        />
+      )}
+      {refusjonVurdering?.harKrav && (
+        <SaksopplysningerKort
+          tittel="Refusjonskrav"
+          begrunnelse={`Det er refusjonskrav mot sosialhjelp. ${refusjonVurdering?.fom ?? `Fra: ${refusjonVurdering.fom}`} ${refusjonVurdering.tom ?? `Til: ${refusjonVurdering.tom}`}`}
         />
       )}
     </div>
