@@ -28,7 +28,7 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker } }: Prop
       <Label spacing>Oppgaver</Label>
       <VStack gap="2">
         {!oppgaver?.length ? (
-          <Detail>Fant ingen saker</Detail>
+          <Detail>Fant ingen oppgaver</Detail>
         ) : (
           oppgaver.map((søk, index) => (
             <Link key={`oppgave-resultat-${index}`} href={søk.href}>
