@@ -52,7 +52,6 @@ import {
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
-import { headers } from 'next/headers';
 import { apiFetch } from 'lib/services/apiFetch';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
@@ -375,22 +374,6 @@ export const sendLokalHendelse = async (body: Object): Promise<void> => {
 export const auditlog = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/auditlog`;
   return await fetchProxy(url, saksbehandlingApiScope, 'POST');
-};
-
-export const hentLocalToken = async () => {
-  // Må hente headers for å tvinge dynamic route ved lokal utvikling
-  // TODO: Revurder i next 15
-  await headers();
-
-  const url = 'http://localhost:8081/token';
-  try {
-    return fetch(url, { method: 'POST', next: { revalidate: 0 } })
-      .then((res) => res.json())
-      .then((data) => data?.access_token);
-  } catch (err) {
-    logError('hentLocalToken feilet', err);
-    return Promise.resolve('dummy-token');
-  }
 };
 
 async function ventTilProsesseringErFerdig(

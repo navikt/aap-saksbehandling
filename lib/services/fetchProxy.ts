@@ -4,8 +4,8 @@ import { isLocal } from 'lib/utils/environment';
 import { requestAzureOboToken, validateToken } from '@navikt/oasis';
 import { getAccessTokenOrRedirectToLogin, logError, logWarning } from '@navikt/aap-felles-utils';
 import { headers } from 'next/headers';
-import { hentLocalToken } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { redirect } from 'next/navigation';
+import { hentLocalToken } from 'lib/services/localFetch';
 
 const NUMBER_OF_RETRIES = 3;
 
@@ -38,12 +38,12 @@ export const fetchProxy = async <ResponseBody>(
   requestBody?: object,
   tags?: string[]
 ): Promise<ResponseBody> => {
-  const oboToken = isLocal() ? await hentLocalToken() : await getOnBefalfOfToken(scope, url);
+  const oboToken = isLocal() ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
   return await fetchWithRetry<ResponseBody>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags);
 };
 
 export const fetchPdf = async (url: string, scope: string): Promise<Blob | undefined> => {
-  const oboToken = isLocal() ? await hentLocalToken() : await getOnBefalfOfToken(scope, url);
+  const oboToken = isLocal() ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -69,10 +69,10 @@ export const fetchWithRetry = async <ResponseBody>(
   tags?: string[],
   errors?: string[]
 ): Promise<ResponseBody> => {
-  if (!errors) errors = []
+  if (!errors) errors = [];
 
   if (retries === 0) {
-    logError(`Unable to fetch ${url}: \n${errors.join('\n')}`)
+    logError(`Unable to fetch ${url}: \n${errors.join('\n')}`);
     throw new Error(`Feil oppsto ved kall mot ${url}`);
   }
 
@@ -115,7 +115,7 @@ export const fetchWithRetry = async <ResponseBody>(
       throw new Error(statusString);
     }
 
-    errors.push(`HTTP ${response.status} ${response.statusText}: ${url} (retries left ${retries})`)
+    errors.push(`HTTP ${response.status} ${response.statusText}: ${url} (retries left ${retries})`);
 
     return await fetchWithRetry(url, method, oboToken, retries - 1, requestBody, tags, errors);
   }
