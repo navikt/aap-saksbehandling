@@ -69,7 +69,8 @@ export const useLøsBehovOgGåTilNesteSteg = (
             )
           ).some((item) => item !== undefined && item.harTilgangTilNesteOppgave);
 
-          if (!harTilgang) {
+          // Brev har ingen egen definisjonskode som vi kan hente ut fra steget. Må skrives om i backend
+          if (!harTilgang && eventData.aktivtSteg !== 'BREV') {
             setIsModalOpen(true);
           }
         }
