@@ -156,7 +156,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
 
   const samordninger = form.watch('vurderteSamordninger')?.map((vurdering) => vurdering.gradering);
 
-  const visRevurderVirkningstidspunkt = samordninger.some((verdi) => Number(verdi) === 100);
+  const visRevurderVirkningstidspunkt = samordninger?.some((verdi) => Number(verdi) === 100);
 
   const finnTidligsteVirkningstidspunkt = () => {
     const alleTomDatoer = form
