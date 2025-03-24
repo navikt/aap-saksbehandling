@@ -1,0 +1,97 @@
+'use client';
+
+import { Form } from 'components/form/Form';
+import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { Button, HStack } from '@navikt/ds-react';
+import { FormEvent, useState } from 'react';
+import { AndreStatligeYtelserTabell } from 'components/behandlinger/underveis/samordningandrestatlige/AndreStatligeYtelserTabell';
+import { Behovstype } from 'lib/utils/form';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { parse } from 'date-fns';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { SamordningAndreStatligeYtelserYtelse } from 'lib/types/types';
+
+interface Props {
+  behandlingVersjon: number;
+  readOnly: boolean;
+}
+export interface SamordningAndreStatligeYtelserFormFields {
+  begrunnelse: string;
+  vurderteSamordninger: AnnenStatligYtelse[];
+}
+export interface AnnenStatligYtelse {
+  ytelse?: SamordningAndreStatligeYtelserYtelse;
+  fom?: string;
+  tom?: string;
+  beløp?: number;
+}
+export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon }: Props) => {
+  const [visYtelsesTabell, setVisYtelsesTabell] = useState<boolean>(false);
+  const { form, formFields } = useConfigForm<SamordningAndreStatligeYtelserFormFields>({
+    begrunnelse: {
+      type: 'textarea',
+      label: 'Vurder om bruker har andre statlige ytelser som skal avregnes med AAP',
+      rules: { required: 'Du må gjøre en vilkårsvurdering' },
+    },
+    vurderteSamordninger: {
+      type: 'fieldArray',
+    },
+  });
+  const behandlingsreferanse = useBehandlingsReferanse();
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, resetStatus } = useLøsBehovOgGåTilNesteSteg(
+    'SAMORDNING_ANDRE_STATLIGE_YTELSER'
+  );
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit(async (data) => {
+      console.log(data);
+      return løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER,
+          samordningAndreStatligeYtelserVurdering: {
+            begrunnelse: data.begrunnelse,
+            vurderingPerioder: data.vurderteSamordninger.map((vurdertSamordning) => ({
+              ytelse: vurdertSamordning.ytelse!,
+              beløp: vurdertSamordning.beløp!,
+              periode: {
+                fom: formaterDatoForBackend(parse(vurdertSamordning.fom!, 'dd.MM.yyyy', new Date())),
+                tom: formaterDatoForBackend(parse(vurdertSamordning.tom!, 'dd.MM.yyyy', new Date())),
+              },
+            })),
+          },
+        },
+        referanse: behandlingsreferanse,
+      });
+    })(event);
+  };
+
+  return (
+    // @ts-ignore
+    <VilkårsKort heading="§ 11-29 Andre statlige ytelser som skal avregnes" steg="SAMORDNING_ANDRE_STATLIGE_YTELSER">
+      {!visYtelsesTabell && (
+        <HStack>
+          <Button size={'small'} variant={'secondary'} onClick={() => setVisYtelsesTabell(true)}>
+            Legg til statlige ytelser
+          </Button>
+        </HStack>
+      )}
+      {visYtelsesTabell && (
+        // @ts-ignore
+        <Form
+          steg={'SAMORDNING_ANDRE_STATLIGE_YTELSER'}
+          onSubmit={handleSubmit}
+          isLoading={isLoading}
+          status={status}
+          resetStatus={resetStatus}
+        >
+          <FormField form={form} formField={formFields.begrunnelse} />
+          <AndreStatligeYtelserTabell form={form} readOnly={readOnly} />
+        </Form>
+      )}
+    </VilkårsKort>
+  );
+};

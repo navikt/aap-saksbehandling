@@ -1493,6 +1493,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/drift/api/jobb/{jobbId}/kjor': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description ID */
+          jobbId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': string;
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/drift/api/jobb/rekjor/{jobbId}': {
     parameters: {
       query?: never;
@@ -2787,7 +2825,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       tidspunkt: string;
     };
@@ -2832,6 +2870,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -2872,6 +2911,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -2909,6 +2949,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -2946,6 +2987,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -2983,6 +3025,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3020,6 +3063,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3057,6 +3101,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3094,10 +3139,49 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
       manuellVurderingForLovvalgMedlemskap: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.ManuellVurderingForLovvalgMedlemskapDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningAndreStatligeYtelserL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '9001'
+        | '9002'
+        | '9003'
+        | '5001'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5020'
+        | '5024'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5025'
+        | '5027'
+        | '5019'
+        | '5050'
+        | '5026';
+      samordningAndreStatligeYtelserVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningGraderingL\u00F8sning': {
       /** @enum {string} */
@@ -3131,6 +3215,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3168,6 +3253,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3205,6 +3291,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3242,6 +3329,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3279,6 +3367,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3319,6 +3408,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3356,6 +3446,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3369,6 +3460,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarLovvalgMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOverstyrtForutg\u00E5endeMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOverstyrtLovvalgMedlemskapL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningAndreStatligeYtelserL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningGraderingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningUf\u00F8reL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSoningsforholdL\u00F8sning']
@@ -3424,6 +3516,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3462,6 +3555,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3499,6 +3593,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3535,6 +3630,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3572,6 +3668,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3609,6 +3706,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3646,6 +3744,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3682,6 +3781,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3719,6 +3819,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3756,6 +3857,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3792,6 +3894,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3829,6 +3932,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3865,6 +3969,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3901,6 +4006,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3941,6 +4047,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -3977,6 +4084,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -4119,7 +4227,7 @@ export interface components {
       harFritak: boolean;
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       vurderingsTidspunkt: string;
     };
@@ -4186,12 +4294,12 @@ export interface components {
       mottaker: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       oppdatert: string;
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       opprettet: string;
       /** @enum {string} */
@@ -4512,6 +4620,17 @@ export interface components {
       opplysning: string;
       resultat: boolean;
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingDto': {
+      begrunnelse: string;
+      vurderingPerioder: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingPeriodeDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingPeriodeDto': {
+      /** Format: int32 */
+      'bel\u00F8p': number;
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string} */
+      ytelse: 'TILTAKSPENGER' | 'OMSTILLINGSSTØNAD' | 'OVERGANGSSTØNAD' | 'DAGPENGER' | 'BARNEPENSJON';
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.uf\u00F8revurdering.SamordningUf\u00F8reVurderingDto': {
       begrunnelse: string;
       vurderingPerioder: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.uf\u00F8revurdering.SamordningUf\u00F8reVurderingPeriodeDto'][];
@@ -4565,7 +4684,7 @@ export interface components {
       fritekst: string;
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       opprettet: string;
       personId: string;
@@ -4685,7 +4804,7 @@ export interface components {
       fraDato: string;
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       vurderingsTidspunkt: string;
     };
@@ -4767,6 +4886,11 @@ export interface components {
        */
       vurderingenGjelderFra?: string | null;
       vurdertAv: string;
+      /**
+       * Format: date
+       * @example 2025-03-24
+       */
+      vurdertDato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.flate.BistandVurderingL\u00F8sningDto': {
       begrunnelse: string;
@@ -5074,6 +5198,7 @@ export interface components {
         | 'FASTSETT_UTTAK'
         | 'SAMORDNING_UFØRE'
         | 'SAMORDNING_GRADERING'
+        | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'EFFEKTUER_11_7'
         | 'DU_ER_ET_ANNET_STED'
         | 'BEREGN_TILKJENT_YTELSE'
@@ -5135,6 +5260,7 @@ export interface components {
         | 'FASTSETT_UTTAK'
         | 'SAMORDNING_UFØRE'
         | 'SAMORDNING_GRADERING'
+        | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'EFFEKTUER_11_7'
         | 'DU_ER_ET_ANNET_STED'
         | 'BEREGN_TILKJENT_YTELSE'
@@ -5181,6 +5307,7 @@ export interface components {
         | 'FASTSETT_UTTAK'
         | 'SAMORDNING_UFØRE'
         | 'SAMORDNING_GRADERING'
+        | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'EFFEKTUER_11_7'
         | 'DU_ER_ET_ANNET_STED'
         | 'BEREGN_TILKJENT_YTELSE'
@@ -5194,7 +5321,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       opprettet: string;
       /** Format: uuid */
@@ -5221,7 +5348,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       tidsstempel: string;
     };
@@ -5276,6 +5403,7 @@ export interface components {
         | 'FASTSETT_UTTAK'
         | 'SAMORDNING_UFØRE'
         | 'SAMORDNING_GRADERING'
+        | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'EFFEKTUER_11_7'
         | 'DU_ER_ET_ANNET_STED'
         | 'BEREGN_TILKJENT_YTELSE'
@@ -5429,6 +5557,7 @@ export interface components {
         | '5022'
         | '5023'
         | '5025'
+        | '5027'
         | '5019'
         | '5050'
         | '5026';
@@ -5467,6 +5596,7 @@ export interface components {
         | 'FASTSETT_UTTAK'
         | 'SAMORDNING_UFØRE'
         | 'SAMORDNING_GRADERING'
+        | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'EFFEKTUER_11_7'
         | 'DU_ER_ET_ANNET_STED'
         | 'BEREGN_TILKJENT_YTELSE'
@@ -5601,7 +5731,7 @@ export interface components {
       melding?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Melding'];
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       mottattTidspunkt: string;
       referanse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.InnsendingReferanse'];
@@ -5720,7 +5850,7 @@ export interface components {
       brevkode?: string | null;
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       datoOpprettet: string;
       dokumentInfoId: string;
@@ -5733,7 +5863,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       opprettet: string;
       /** Format: uuid */
@@ -5778,7 +5908,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -5789,7 +5919,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -5887,7 +6017,7 @@ export interface components {
       navn: string;
       /**
        * Format: date-time
-       * @example 2025-03-24T14:25:03.160255
+       * @example 2025-03-24T16:17:37.843482
        */
       'planlagtKj\u00F8retidspunkt': string;
       /** @enum {string} */

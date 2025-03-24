@@ -14,6 +14,7 @@ export enum Behovstype {
   AVKLAR_HELSEINSTITUSJON = '5011',
   AVKLAR_SAMORDNING_GRADERING = '5012',
   AVKLAR_SAMORDNING_UFORE = '5024',
+  AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER = '5027',
   YRKESSKADE_KODE = '5013',
   FASTSETT_YRKESSKADEINNTEKT = '5014',
   EFFEKTUER_11_7_KODE = '5015',
@@ -78,6 +79,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Samordning uføre';
     case '5026':
       return 'Refusjonskrav';
+    case '5027':
+      return 'Samordning andre statlige ytelser';
     case '5022':
       return 'Overstyr § 11-2 forutgående medlemskap';
     case '5050':

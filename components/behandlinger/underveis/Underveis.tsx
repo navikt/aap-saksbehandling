@@ -5,6 +5,7 @@ import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingServi
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { SamordningGraderingMedDatafetching } from './samordninggradering/SamordningGraderingMedDatafetching';
 import { SamordningUføreMedDatafetching } from './samordninguføre/SamordningUføreMedDatafetching';
+import { SamordningAndreStatligeYtelserMedDatafetching } from 'components/behandlinger/underveis/samordningandrestatlige/SamordningAndreStatligeYtelserMedDatafetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -21,6 +22,11 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
       prosessering={flyt.prosessering}
       visning={flyt.visning}
     >
+      <SamordningAndreStatligeYtelserMedDatafetching
+        behandlingsreferanse={behandlingsreferanse}
+        behandlingVersjon={flyt.behandlingVersjon}
+        readOnly={flyt.visning.saksbehandlerReadOnly}
+      />
       {stegSomSkalVises.includes('EFFEKTUER_11_7') && (
         <AktivitetspliktMedDatafetching
           behandlingsreferanse={behandlingsreferanse}
