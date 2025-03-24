@@ -12,11 +12,13 @@ import { BodyShort, Heading, Link } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
+import { TidligereVurderinger } from 'components/behandlinger/sykdom/bistandsbehov/TidligereVurderinger';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
+  søknadstidspunkt: string;
   grunnlag?: BistandsGrunnlag;
 }
 
@@ -30,7 +32,7 @@ interface FormFields {
   vurderAAPIOvergangTilArbeid?: string;
 }
 
-export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
+export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling, søknadstidspunkt }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
@@ -115,7 +117,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const bistandsbehovErIkkeOppfylt =
     erBehovForAktivBehandling && erBehovForArbeidsrettetTiltak && erBehovForAnnenOppfølging;
 
-  // *sigh...*
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
 
@@ -143,6 +144,13 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         resetStatus={resetStatus}
         visBekreftKnapp={!readOnly}
       >
+        {typeBehandling === 'Revurdering' && (
+          <TidligereVurderinger
+            historiskeVurderinger={grunnlag?.historiskeVurderinger.toReversed() ?? []}
+            gjeldendeVurderinger={grunnlag?.gjeldendeVedtatteVurderinger ?? []}
+            søknadstidspunkt={søknadstidspunkt}
+          />
+        )}
         <Veiledning
           defaultOpen={false}
           tekst={
