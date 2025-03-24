@@ -6,3 +6,11 @@
   display: flex;
   height: 2rem;
 }
+
+.topBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--a-spacing-4);
+}

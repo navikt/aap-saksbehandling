@@ -1,7 +1,7 @@
 'use client';
 
 import { Brevbygger } from '@navikt/aap-breveditor/';
-import { Button, Label, Loader, VStack } from '@navikt/ds-react';
+import { ActionMenu, Button, Label, Loader, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -15,6 +15,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import style from './SkrivBrev.module.css';
 import { revalidateFlyt } from 'lib/actions/actions';
+import { ChevronDownIcon, TrashIcon } from '@navikt/aksel-icons';
 
 export const SkriveBrev = ({
   referanse,
@@ -55,20 +56,52 @@ export const SkriveBrev = ({
     setBrev(brev);
   };
 
+  const slettBrev = async () => {
+    løsBehovOgGåTilNesteSteg({
+      behandlingVersjon: behandlingVersjon,
+      behov: {
+        behovstype: Behovstype.SKRIV_BREV_KODE,
+        brevbestillingReferanse: referanse,
+        handling: 'AVBRYT',
+      },
+      referanse: behandlingsReferanse,
+    });
+    await revalidateFlyt(behandlingsReferanse);
+  };
+
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
 
   return (
     <div className={style.brevbygger}>
-      <div className={style.sistLagret}>
-        {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
-        {isSaving && <Loader />}
+      <div className={style.topBar}>
+        <div className={style.sistLagret}>
+          {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
+          {isSaving && <Loader />}
+        </div>
+        <div>
+          <ActionMenu>
+            <ActionMenu.Trigger>
+              <Button variant="secondary-neutral" icon={<ChevronDownIcon aria-hidden />} iconPosition="right">
+                Andre handlinger
+              </Button>
+            </ActionMenu.Trigger>
+            <ActionMenu.Content>
+              <ActionMenu.Group label="Brev">
+                <ActionMenu.Item variant="danger" icon={<TrashIcon />} onSelect={slettBrev}>
+                  Slett brev
+                </ActionMenu.Item>
+              </ActionMenu.Group>
+            </ActionMenu.Content>
+          </ActionMenu>
+        </div>
       </div>
+
       <VStack gap={'4'}>
         <Brevbygger brevmal={brev} mottaker={mottaker} saksnummer={saksnummer} onBrevChange={onChange} logo={NavLogo} />
         <Button
           disabled={status !== 'FORHÅNDSVISNING_KLAR'}
           onClick={async () => {
-            // TODO: Mellomlagre brev før vi ferdigstiller
+            await clientMellomlagreBrev(referanse, brev);
             løsBehovOgGåTilNesteSteg({
               behandlingVersjon: behandlingVersjon,
               behov: {
@@ -83,28 +116,7 @@ export const SkriveBrev = ({
           className={'fit-content'}
           loading={isLoading}
         >
-          Ferdigstill brev
-        </Button>
-        <Button
-          variant="secondary"
-          disabled={status !== 'FORHÅNDSVISNING_KLAR'}
-          onClick={async () => {
-            // TODO: Mellomlagre brev før vi ferdigstiller
-            løsBehovOgGåTilNesteSteg({
-              behandlingVersjon: behandlingVersjon,
-              behov: {
-                behovstype: Behovstype.SKRIV_BREV_KODE,
-                brevbestillingReferanse: referanse,
-                handling: 'AVBRYT',
-              },
-              referanse: behandlingsReferanse,
-            });
-            await revalidateFlyt(behandlingsReferanse);
-          }}
-          className={'fit-content'}
-          loading={isLoading}
-        >
-          Avbestill brev
+          Send brev
         </Button>
       </VStack>
     </div>
