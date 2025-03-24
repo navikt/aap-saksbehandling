@@ -15,11 +15,9 @@ export const BistandsbehovMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
   typeBehandling,
+  saksId,
 }: Props) => {
-  const [grunnlag, sak] = await Promise.all([
-    hentBistandsbehovGrunnlag(behandlingsReferanse),
-    hentSak(behandlingsReferanse),
-  ]);
+  const [grunnlag, sak] = await Promise.all([hentBistandsbehovGrunnlag(behandlingsReferanse), hentSak(saksId)]);
   return (
     <Bistandsbehov
       grunnlag={grunnlag}
