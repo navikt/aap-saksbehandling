@@ -7,6 +7,7 @@ import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurderin
 
 const user = userEvent.setup();
 const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   skalVurdereYrkesskade: false,
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
   gjeldendeVedtatteSykdomsvurderinger: [],
@@ -15,6 +16,7 @@ const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
 };
 
 const grunnlagMedYrkesskade: SykdomsGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   skalVurdereYrkesskade: true,
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: true },
   gjeldendeVedtatteSykdomsvurderinger: [],
@@ -727,6 +729,7 @@ describe('revurdering', () => {
 
   it('feltet for erNedsettelseIArbeidsevneMerEnnHalvparten brukes som grunnlag for om nedsettelsen er på minst 40 prosent i en revurdering', () => {
     const grunnlag: SykdomsGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
       skalVurdereYrkesskade: false,
       opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
       gjeldendeVedtatteSykdomsvurderinger: [],

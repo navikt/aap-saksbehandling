@@ -36,7 +36,7 @@ export const SykdomsvurderingMedDataFetching = async ({
   return (
     <Sykdomsvurdering
       grunnlag={grunnlag}
-      readOnly={readOnly}
+      readOnly={readOnly && !grunnlag.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
       hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
