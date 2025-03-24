@@ -4,13 +4,13 @@ import { Form } from 'components/form/Form';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { /*isBefore,*/ parse /*startOfDay*/ } from 'date-fns';
+import { isBefore, parse, startOfDay } from 'date-fns';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { RefusjonskravGrunnlag } from 'lib/types/types';
-import { formaterDatoForBackend /*, stringToDate*/ } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-//import { validerDato } from 'lib/validation/dateValidation';
+import { validerDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 
 interface Props {
@@ -26,53 +26,60 @@ interface FormFields {
   vurderingenGjelderTil?: string;
 }
 
-export const Refusjon = ({ behandlingVersjon, /*søknadstidspunkt, */ grunnlag, readOnly }: Props) => {
+export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const { formFields, form } = useConfigForm<FormFields>({
-    harKrav: {
-      type: 'radio',
-      label: 'Har Nav-kontoret refusjonskrav?',
-      defaultValue: getJaNeiEllerUndefined(grunnlag.gjeldendeVurdering?.harKrav),
-      rules: { required: 'Du må svare på om Nav-kontoret har refusjonskrav' },
-      options: JaEllerNeiOptions,
-    },
-    vurderingenGjelderFra: {
-      type: 'date_input',
-      label: 'Refusjon fra (valgfritt)',
-      defaultValue: undefined, // TODO ta inn data fra grunnlag
-      /*rules: {
-        validate: {
-          gyldigDato: (v) => validerDato(v as string),
-          kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
-            const soknadstidspunkt = startOfDay(new Date(søknadstidspunkt));
-            const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
-            if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
-              return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
-            }
+  const { formFields, form } = useConfigForm<FormFields>(
+    {
+      harKrav: {
+        type: 'radio',
+        label: 'Har Nav-kontoret refusjonskrav?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag.gjeldendeVurdering?.harKrav),
+        rules: { required: 'Du må svare på om Nav-kontoret har refusjonskrav' },
+        options: JaEllerNeiOptions,
+      },
+      vurderingenGjelderFra: {
+        type: 'date_input',
+        label: 'Refusjon fra (valgfritt)',
+        defaultValue: grunnlag.gjeldendeVurdering?.fom
+          ? formaterDatoForFrontend(grunnlag.gjeldendeVurdering?.fom)
+          : undefined,
+        rules: {
+          validate: {
+            gyldigDato: (v?) => (v ? validerDato(v as string) : true),
+            kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
+              const soknadstidspunkt = startOfDay(new Date(søknadstidspunkt));
+              const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
+              if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
+                return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
+              }
+            },
           },
         },
-      },*/
-    },
-    vurderingenGjelderTil: {
-      type: 'date_input',
-      label: 'til og med (valgfritt)',
-      defaultValue: undefined, // TODO ta inn data fra grunnlag
-      /*rules: {
-        validate: {
-          gyldigDato: (v) => validerDato(v as string),
-          kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
-            const soknadstidspunkt = startOfDay(new Date(søknadstidspunkt));
-            const vurderingenGjelderTil = stringToDate(v as string, 'dd.MM.yyyy');
-            if (vurderingenGjelderTil && isBefore(startOfDay(vurderingenGjelderTil), soknadstidspunkt)) {
-              return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
-            }
+      },
+      vurderingenGjelderTil: {
+        type: 'date_input',
+        label: 'til og med (valgfritt)',
+        defaultValue: grunnlag.gjeldendeVurdering?.tom
+          ? formaterDatoForFrontend(grunnlag.gjeldendeVurdering?.tom)
+          : undefined,
+        rules: {
+          validate: {
+            gyldigDato: (v?) => (v ? validerDato(v as string) : true),
+            kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
+              const soknadstidspunkt = startOfDay(new Date(søknadstidspunkt));
+              const vurderingenGjelderTil = stringToDate(v as string, 'dd.MM.yyyy');
+              if (vurderingenGjelderTil && isBefore(startOfDay(vurderingenGjelderTil), soknadstidspunkt)) {
+                return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
+              }
+            },
           },
         },
-      },*/
+      },
     },
-  });
+    { shouldUnregister: true, readOnly: readOnly }
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
