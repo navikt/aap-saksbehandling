@@ -1,4 +1,4 @@
-import { hentBistandsbehovGrunnlag, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBistandsbehovGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { TypeBehandling } from 'lib/types/types';
 
@@ -15,9 +15,8 @@ export const BistandsbehovMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
   typeBehandling,
-  saksId,
 }: Props) => {
-  const [grunnlag, sak] = await Promise.all([hentBistandsbehovGrunnlag(behandlingsReferanse), hentSak(saksId)]);
+  const grunnlag = await hentBistandsbehovGrunnlag(behandlingsReferanse);
 
   return (
     <Bistandsbehov
@@ -25,7 +24,6 @@ export const BistandsbehovMedDataFetching = async ({
       readOnly={readOnly}
       behandlingVersjon={behandlingVersjon}
       typeBehandling={typeBehandling}
-      søknadstidspunkt={sak.opprettetTidspunkt}
     />
   );
 };

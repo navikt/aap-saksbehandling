@@ -8,33 +8,29 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { Link } from '@navikt/ds-react';
-import { validerDato } from 'lib/validation/dateValidation';
-import { isBefore, startOfDay } from 'date-fns';
-import { stringToDate } from 'lib/utils/date';
+import { BodyShort, Heading, Link } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  søknadstidspunkt: string;
   grunnlag?: BistandsGrunnlag;
 }
 
 interface FormFields {
   begrunnelse: string;
-  vurderingenGjelderFra: string;
   erBehovForAktivBehandling: string;
   erBehovForArbeidsrettetTiltak: string;
   erBehovForAnnenOppfølging?: string;
   overgangBegrunnelse?: string;
-  vurderAAPIOvergangTilUføre?: string; // ikke i backend enda, skal inn på førstegangsbehandling, vises hvis a-c === false, usikkert navn
-  vurderAAPIOvergangTilArbeid?: string; // ikke i backend enda, skal kun vises i revurdering hvis 11-5 && 11-6 === false, usikkert navn
+  vurderAAPIOvergangTilUføre?: string;
+  vurderAAPIOvergangTilArbeid?: string;
 }
 
-export const Bistandsbehov = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readOnly }: Props) => {
+export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
@@ -46,24 +42,6 @@ export const Bistandsbehov = ({ behandlingVersjon, søknadstidspunkt, grunnlag, 
         label: 'Vilkårsvurdering',
         defaultValue: grunnlag?.vurdering?.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse om bruker har behov for oppfølging' },
-      },
-      vurderingenGjelderFra: {
-        type: 'date_input',
-        label: 'Vurderingen gjelder fra',
-        defaultValue: undefined,
-        rules: {
-          required: 'Du må velge når vurderingen gjelder fra',
-          validate: {
-            gyldigDato: (v) => validerDato(v as string),
-            kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
-              const soknadstidspunkt = startOfDay(new Date(søknadstidspunkt));
-              const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
-              if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
-                return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
-              }
-            },
-          },
-        },
       },
       erBehovForAktivBehandling: {
         type: 'radio',
@@ -88,22 +66,22 @@ export const Bistandsbehov = ({ behandlingVersjon, søknadstidspunkt, grunnlag, 
       },
       overgangBegrunnelse: {
         type: 'textarea',
-        label: 'Vurder om brukeren har rett på AAP i overgang til uføre eller arbeid',
-        defaultValue: undefined, // TODO hent fra grunnlag
+        label: 'Vurder om brukeren har rett på AAP i overgang til uføre eller arbeid', // TODO ønsker å kunne tilpasse denne
+        defaultValue: grunnlag?.vurdering?.overgangBegrunnelse || undefined,
         rules: { required: 'Du må begrunne om bruker har rett til AAP i overgang til uføre eller arbeid' },
       },
       vurderAAPIOvergangTilUføre: {
         type: 'radio',
         label: 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?',
         options: JaEllerNeiOptions,
-        defaultValue: undefined, // må hentes fra grunnlag
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilUføre),
         rules: { required: 'Du må svare på om bruker har rett på AAP i overgang til uføre' },
       },
       vurderAAPIOvergangTilArbeid: {
         type: 'radio',
         label: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?',
         options: JaEllerNeiOptions,
-        defaultValue: undefined, // må hentes fra grunnlag
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilArbeid),
         rules: { required: 'Du må svare på om bruker har rett på AAP i overgang til arbeid' },
       },
     },
@@ -129,6 +107,27 @@ export const Bistandsbehov = ({ behandlingVersjon, søknadstidspunkt, grunnlag, 
       });
     })(event);
   };
+
+  const erBehovForAktivBehandling = form.watch('erBehovForAktivBehandling') === JaEllerNei.Nei;
+  const erBehovForArbeidsrettetTiltak = form.watch('erBehovForArbeidsrettetTiltak') === JaEllerNei.Nei;
+  const erBehovForAnnenOppfølging = form.watch('erBehovForAnnenOppfølging') === JaEllerNei.Nei;
+
+  const bistandsbehovErIkkeOppfylt =
+    erBehovForAktivBehandling && erBehovForArbeidsrettetTiltak && erBehovForAnnenOppfølging;
+
+  // *sigh...*
+  const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
+  const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
+
+  const erArbeidsevnenNedsatt =
+    gjeldendeSykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten ||
+    gjeldendeSykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense;
+
+  const sykdomsvilkårErOppfylt =
+    erArbeidsevnenNedsatt &&
+    gjeldendeSykdomsvurdering.harSkadeSykdomEllerLyte &&
+    gjeldendeSykdomsvurdering.erNedsettelseIArbeidsevneAvEnVissVarighet &&
+    gjeldendeSykdomsvurdering.erSkadeSykdomEllerLyteVesentligdel;
 
   return (
     <VilkårsKort
@@ -161,9 +160,11 @@ export const Bistandsbehov = ({ behandlingVersjon, søknadstidspunkt, grunnlag, 
             </div>
           }
         />
-        {/* TODO utkommentert inntil backend er på plass
-        {typeBehandling === 'Revurdering' && <FormField form={form} formField={formFields.vurderingenGjelderFra} />}
-	*/}
+        {typeBehandling === 'Revurdering' && (
+          <BodyShort>
+            Vurderingen gjelder fra {vurderingenGjelderFra && formaterDatoForVisning(vurderingenGjelderFra)}
+          </BodyShort>
+        )}
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.erBehovForAktivBehandling} horizontalRadio />
         <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} horizontalRadio />
@@ -171,28 +172,25 @@ export const Bistandsbehov = ({ behandlingVersjon, søknadstidspunkt, grunnlag, 
           form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
             <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
           )}
-        {/* TODO utkommentert inntil backend er på plass
-	  denne skal kun vises hvis det er JA på 11-5, og NEI på alle 11-6
-          For førstegangsbehandling trengs ingen ekstra sjekk da man ikke kommer til 11-6 uten å ha ja på 11-5
-          For en revurdering kommer man til 11-6 selv om det er nei på 11-5. Må enten utlede eller få vite om 11-5 er oppfylt i en revurdering
-
-        {form.watch('erBehovForAktivBehandling') !== JaEllerNei.Ja &&
-          form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja &&
-          form.watch('erBehovForAnnenOppfølging') !== JaEllerNei.Ja && (
+        {(typeBehandling === 'Førstegangsbehandling' || (typeBehandling === 'Revurdering' && sykdomsvilkårErOppfylt)) &&
+          bistandsbehovErIkkeOppfylt && (
             <section>
-	      // Se om vi kan skille på overgang til uføre / arbeid i overskrift
               <Heading level={'3'} size="medium">
-		§ 11-17 AAP i perioden som arbeidssøker
-              </Heading>
-              <Heading level={'3'} size="medium">
-		§ 11-18 AAP under behandling av søknad om uføretrygd
+                § 11-18 AAP under behandling av søknad om uføretrygd
               </Heading>
               <FormField form={form} formField={formFields.overgangBegrunnelse} horizontalRadio />
               <FormField form={form} formField={formFields.vurderAAPIOvergangTilUføre} horizontalRadio />
-              <FormField form={form} formField={formFields.vurderAAPIOvergangTilArbeid} horizontalRadio />
             </section>
           )}
-	*/}
+        {typeBehandling === 'Revurdering' && !sykdomsvilkårErOppfylt && bistandsbehovErIkkeOppfylt && (
+          <section>
+            <Heading level={'3'} size="medium">
+              § 11-17 AAP i perioden som arbeidssøker
+            </Heading>
+            <FormField form={form} formField={formFields.overgangBegrunnelse} horizontalRadio />
+            <FormField form={form} formField={formFields.vurderAAPIOvergangTilArbeid} horizontalRadio />
+          </section>
+        )}
       </Form>
     </VilkårsKort>
   );
