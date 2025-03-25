@@ -120,16 +120,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
 
-  const erArbeidsevnenNedsatt =
-    gjeldendeSykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten ||
-    gjeldendeSykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense;
-
-  const sykdomsvilkårErOppfylt =
-    erArbeidsevnenNedsatt &&
-    gjeldendeSykdomsvurdering.harSkadeSykdomEllerLyte &&
-    gjeldendeSykdomsvurdering.erNedsettelseIArbeidsevneAvEnVissVarighet &&
-    gjeldendeSykdomsvurdering.erSkadeSykdomEllerLyteVesentligdel;
-
   return (
     <VilkårsKort
       heading="§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid"
@@ -180,7 +170,8 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
           form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
             <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
           )}
-        {(typeBehandling === 'Førstegangsbehandling' || (typeBehandling === 'Revurdering' && sykdomsvilkårErOppfylt)) &&
+        {(typeBehandling === 'Førstegangsbehandling' ||
+          (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
           bistandsbehovErIkkeOppfylt && (
             <section>
               <Heading level={'3'} size="medium">
@@ -190,7 +181,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
               <FormField form={form} formField={formFields.vurderAAPIOvergangTilUføre} horizontalRadio />
             </section>
           )}
-        {typeBehandling === 'Revurdering' && !sykdomsvilkårErOppfylt && bistandsbehovErIkkeOppfylt && (
+        {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
           <section>
             <Heading level={'3'} size="medium">
               § 11-17 AAP i perioden som arbeidssøker
