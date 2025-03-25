@@ -22,7 +22,7 @@ interface Props {
 
 interface FormFields {
   harKrav: string;
-  vurderingenGjelderFra?: string;
+  vurderingenGjelderFra: string;
   vurderingenGjelderTil?: string;
 }
 
@@ -41,13 +41,13 @@ export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readO
       },
       vurderingenGjelderFra: {
         type: 'date_input',
-        label: 'Refusjon fra (valgfritt)',
+        label: 'Refusjon fra',
         defaultValue: grunnlag.gjeldendeVurdering?.fom
           ? formaterDatoForFrontend(grunnlag.gjeldendeVurdering?.fom)
-          : undefined,
+          : formaterDatoForFrontend(søknadstidspunkt),
         rules: {
           validate: {
-            gyldigDato: (v?) => (v ? validerDato(v as string) : true),
+            gyldigDato: (v?) => validerDato(v as string),
             kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
               const soknadstidspunkt = startOfDay(new Date(søknadstidspunkt));
               const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
@@ -103,7 +103,7 @@ export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readO
   };
 
   return (
-    <VilkårsKort heading={'Refusjonskrav'} steg="REFUSJON_KRAV" vilkårTilhørerNavKontor={true}>
+    <VilkårsKort heading={'Refusjonskrav sosialstønad'} steg="REFUSJON_KRAV" vilkårTilhørerNavKontor={true}>
       <Form
         onSubmit={handleSubmit}
         status={status}

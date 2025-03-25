@@ -2,6 +2,8 @@ import { SaksopplysningerKort } from 'components/behandlinger/brev/skriveBrev/Sa
 import styles from './SaksopplysningerKolonne.module.css';
 import { Label } from '@navikt/ds-react';
 import { BistandsGrunnlag, RefusjonskravGrunnlag, SykdomsGrunnlag } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { parse } from 'date-fns';
 
 interface Props {
   sykdomsgrunnlag: SykdomsGrunnlag;
@@ -32,7 +34,17 @@ export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag
       {refusjonVurdering?.harKrav && (
         <SaksopplysningerKort
           tittel="Refusjonskrav"
-          begrunnelse={`Det er refusjonskrav mot sosialhjelp. ${refusjonVurdering?.fom != null ? `Fra: ${refusjonVurdering.fom}` : ''} ${refusjonVurdering.tom != null ? `Til: ${refusjonVurdering.tom}` : ''}`}
+          begrunnelse={`Det er refusjonskrav mot sosialhjelp. Refusjonskravet gjelder fra 
+                  ${
+                    refusjonVurdering.fom
+                      ? formaterDatoForFrontend(parse(refusjonVurdering.fom, 'yyyy-MM-dd', new Date()))
+                      : '-'
+                  }
+                  ${
+                    refusjonVurdering.tom
+                      ? `til ${formaterDatoForFrontend(parse(refusjonVurdering.tom, 'yyyy-MM-dd', new Date()))}`
+                      : ''
+                  }`}
         />
       )}
     </div>
