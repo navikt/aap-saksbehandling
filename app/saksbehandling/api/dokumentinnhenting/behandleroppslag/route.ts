@@ -1,11 +1,8 @@
 import { logError } from '@navikt/aap-felles-utils';
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
-import { fetchProxy } from 'lib/services/fetchProxy';
+import { hentBehandleroppslag } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 import { isLocal } from 'lib/utils/environment';
 import { NextRequest } from 'next/server';
-
-const dokumentinnhentingApiBaseUrl = 'http://dokumentinnhenting';
-const dokumentinnhentingApiScope = 'api://dev-gcp.aap.dokumentinnhenting/.default';
 
 const testdata: Behandler[] = [
   {
@@ -56,8 +53,7 @@ export async function POST(req: NextRequest) {
   }
   const body = await req.json();
   try {
-    const url = `${dokumentinnhentingApiBaseUrl}/syfo/behandleroppslag/search`;
-    const res = await fetchProxy<Behandler[]>(url, dokumentinnhentingApiScope, 'POST', body);
+    const res = await hentBehandleroppslag(body);
     return new Response(JSON.stringify(res), { status: 200 });
   } catch (err) {
     logError(`/dokumentinnhenting/behandleroppslag`, err);
