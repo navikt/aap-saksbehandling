@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import { logError } from '@navikt/aap-felles-utils';
 import { hentDokumentFraDokumentInfoId } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { logError } from 'lib/serverutlis/logger';
 
 export async function GET(
   req: NextRequest,

@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
-import { logError } from '@navikt/aap-felles-utils';
 import { hentStatistikkQueryParams } from 'lib/utils/request';
 import { hentBehandlingerUtvikling } from 'lib/services/statistikkservice/statistikkService';
+import { logError } from 'lib/serverutlis/logger';
 
 export async function GET(req: NextRequest) {
   const { antallDager, behandlingstyper, enheter } = hentStatistikkQueryParams(req);

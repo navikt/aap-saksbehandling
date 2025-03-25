@@ -1,5 +1,5 @@
-import { logInfo } from '@navikt/aap-felles-utils';
 import { collectDefaultMetrics, Counter, Histogram } from 'prom-client';
+import { logInfo } from 'lib/serverutlis/logger';
 
 declare global {
   var _metrics: AppMetrics;

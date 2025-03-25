@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
-import { logError } from '@navikt/aap-felles-utils';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
 import { oppgaveSøk } from 'lib/services/oppgaveservice/oppgaveservice';
+import { logError } from 'lib/serverutlis/logger';
 
 interface OppgavesokRequestBody {
   avklaringsbehovKoder: OppgaveAvklaringsbehovKode[];

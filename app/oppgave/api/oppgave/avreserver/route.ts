@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
-import { logError } from '@navikt/aap-felles-utils';
 import { AvklaringsbehovReferanse } from 'lib/types/oppgaveTypes';
 import { avreserverOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
+import { logError } from 'lib/serverutlis/logger';
 
 export async function POST(req: NextRequest) {
   try {

@@ -1,6 +1,6 @@
-import { NextRequest } from "next/server";
-import { sendLokalHendelse } from "lib/services/saksbehandlingservice/saksbehandlingService";
-import { logError } from "@navikt/aap-felles-utils";
+import { NextRequest } from 'next/server';
+import { sendLokalHendelse } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { logError } from 'lib/serverutlis/logger';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

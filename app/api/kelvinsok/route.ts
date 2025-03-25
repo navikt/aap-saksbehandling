@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { finnSakerForIdent, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { logError } from '@navikt/aap-felles-utils';
 import { SaksInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import type { Oppgave } from 'lib/types/oppgaveTypes';
+import { logError } from 'lib/serverutlis/logger';
 
 export interface SøkeResultat {
   oppgaver?: {

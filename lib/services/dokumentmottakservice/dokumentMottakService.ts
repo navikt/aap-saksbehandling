@@ -12,8 +12,8 @@ import {
   SettPåVentRequest,
   Venteinformasjon,
 } from 'lib/types/postmottakTypes';
-import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 import { notFound } from 'next/navigation';
+import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
 
 const dokumentMottakApiBaseUrl = process.env.DOKUMENTMOTTAK_API_BASE_URL;
 const dokumentMottakApiScope = process.env.DOKUMENTMOTTAK_API_SCOPE ?? '';

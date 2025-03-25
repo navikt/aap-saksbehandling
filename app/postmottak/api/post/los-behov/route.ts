@@ -1,6 +1,6 @@
 import { løsAvklaringsbehov } from 'lib/services/dokumentmottakservice/dokumentMottakService';
 import { NextRequest } from 'next/server';
-import { logError } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/serverutlis/logger';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

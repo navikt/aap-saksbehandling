@@ -1,7 +1,7 @@
-import { logInfo, logWarning } from '@navikt/aap-felles-utils';
 import { hentFlyt } from 'lib/services/dokumentmottakservice/dokumentMottakService';
 import { StegGruppe, StegType } from 'lib/types/postmottakTypes';
 import { NextRequest } from 'next/server';
+import { logInfo, logWarning } from 'lib/serverutlis/logger';
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;

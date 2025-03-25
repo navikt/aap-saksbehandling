@@ -2,10 +2,11 @@
 
 import { isLocal } from 'lib/utils/environment';
 import { requestAzureOboToken, validateToken } from '@navikt/oasis';
-import { getAccessTokenOrRedirectToLogin, logError, logWarning } from '@navikt/aap-felles-utils';
+import { getAccessTokenOrRedirectToLogin } from '@navikt/aap-felles-utils';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { hentLocalToken } from 'lib/services/localFetch';
+import { logError, logWarning } from 'lib/serverutlis/logger';
 
 const NUMBER_OF_RETRIES = 3;
 

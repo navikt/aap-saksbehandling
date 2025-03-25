@@ -51,8 +51,8 @@ import {
   YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
-import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 import { apiFetch } from 'lib/services/apiFetch';
+import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';

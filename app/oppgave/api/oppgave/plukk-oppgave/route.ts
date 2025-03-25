@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
-import { logError } from '@navikt/aap-felles-utils';
 import { PlukkOppgaveDto } from 'lib/types/oppgaveTypes';
 import { plukkOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
+import { logError } from 'lib/serverutlis/logger';
 
 export async function POST(req: NextRequest) {
   const data: PlukkOppgaveDto = await req.json().then((data) => ({ oppgaveId: data.oppgaveId, versjon: data.versjon }));

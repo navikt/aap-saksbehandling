@@ -1,8 +1,8 @@
-import { logError } from '@navikt/aap-felles-utils';
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import { hentBehandleroppslag } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 import { isLocal } from 'lib/utils/environment';
 import { NextRequest } from 'next/server';
+import { logError } from 'lib/serverutlis/logger';
 
 const testdata: Behandler[] = [
   {

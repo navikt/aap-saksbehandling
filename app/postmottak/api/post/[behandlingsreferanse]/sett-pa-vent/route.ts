@@ -1,7 +1,7 @@
 import { settPåVent } from 'lib/services/dokumentmottakservice/dokumentMottakService';
 import { NextRequest } from 'next/server';
-import { logError } from '@navikt/aap-felles-utils';
 import { SettPåVentRequest } from 'lib/types/postmottakTypes';
+import { logError } from 'lib/serverutlis/logger';
 
 export async function POST(req: NextRequest, props: { params: Promise<{ behandlingsreferanse: string }> }) {
   const params = await props.params;
