@@ -7,7 +7,7 @@ import styles from './Dialogmeldinger.module.css';
 import { ThumbDownIcon, TimerPauseIcon } from '@navikt/aksel-icons';
 import { sorterEtterNyesteDato } from 'lib/utils/date';
 import { clientPurrPåLegeerklæring } from 'lib/clientApi';
-import { isBefore, subDays } from 'date-fns';
+//import { isBefore, subDays } from 'date-fns';
 
 type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
@@ -45,8 +45,8 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null
   }
 };
 
-const grenseForPurring = subDays(new Date(), 14);
-const kanSendePurring = (opprettet: string) => isBefore(new Date(opprettet), grenseForPurring);
+//const grenseForPurring = subDays(new Date(), 14);
+//const kanSendePurring = (opprettet: string) => isBefore(new Date(opprettet), grenseForPurring);
 
 const Dialogmelding = ({ melding, saksnummer }: { melding: LegeerklæringStatus; saksnummer: string }) => {
   return (
@@ -70,15 +70,15 @@ const Dialogmelding = ({ melding, saksnummer }: { melding: LegeerklæringStatus;
               icon={<ThumbDownIcon title="Avslå legeerklæring" />}
             />
           )}
-          {kanSendePurring(melding.opprettet) && (
-            <Button
-              variant="secondary"
-              type="button"
-              size="small"
-              icon={<TimerPauseIcon title="Send purring" />}
-              onClick={() => clientPurrPåLegeerklæring(melding.dialogmeldingUuid, saksnummer)}
-            />
-          )}
+          {/*kanSendePurring(melding.opprettet) && (*/}
+          <Button
+            variant="secondary"
+            type="button"
+            size="small"
+            icon={<TimerPauseIcon title="Send purring" />}
+            onClick={() => clientPurrPåLegeerklæring(melding.dialogmeldingUuid, saksnummer)}
+          />
+          {/*)*/}
         </HStack>
       </Table.DataCell>
     </Table.Row>
