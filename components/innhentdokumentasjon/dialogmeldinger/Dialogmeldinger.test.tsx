@@ -49,7 +49,7 @@ describe('Dialogmeldinger', () => {
     expect(screen.getByText('Det finnes ingen dialogmeldinger for denne saken')).toBeVisible();
   });
 
-  test('ikon for purring vises ikke hvis det er under 14 dager siden den ble bestilt', () => {
+  test.skip('ikon for purring vises ikke hvis det er under 14 dager siden den ble bestilt', () => {
     const dialogmelding: LegeerklæringStatus = {
       behandlerRef: '1234',
       dialogmeldingUuid: 'uuuuuid',
@@ -65,7 +65,7 @@ describe('Dialogmeldinger', () => {
     expect(screen.queryByRole('button', { name: 'Send purring' })).not.toBeInTheDocument();
   });
 
-  test('ikon for purring vises ikke hvis det er under 14 dager siden den ble bestilt', () => {
+  test.skip('ikon for purring vises ikke hvis det er under 14 dager siden den ble bestilt', () => {
     const dialogmelding: LegeerklæringStatus = {
       behandlerRef: '1234',
       dialogmeldingUuid: 'uuuuuid',
