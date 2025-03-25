@@ -1,7 +1,6 @@
 'use client';
 
 import { Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
-import Link from 'next/link';
 import { ManuellRevurderingV0, SaksInfo, type ÅrsakTilBehandling } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -10,6 +9,7 @@ import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
+import styles from './OpprettRevurdering.module.css';
 
 const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
   { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
@@ -90,12 +90,17 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
         <VStack gap="4">
-          <ExpansionCard aria-label="Opprett revurdering" size={'small'} defaultOpen={true}>
-            <ExpansionCard.Header>
-              <ExpansionCard.Title>Opprett revurdering</ExpansionCard.Title>
+          <ExpansionCard
+            aria-label="Opprett revurdering"
+            size={'small'}
+            defaultOpen={true}
+            className={styles.opprettRevurderingKort}
+          >
+            <ExpansionCard.Header className={styles.header}>
+              <ExpansionCard.Title size="small">Opprett revurdering</ExpansionCard.Title>
             </ExpansionCard.Header>
 
-            <ExpansionCard.Content>
+            <ExpansionCard.Content className={styles.content}>
               <VStack gap="4">
                 <div>
                   <FormField form={form} formField={formFields.årsak} size="medium" />
@@ -106,7 +111,11 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
           </ExpansionCard>
 
           <HStack gap="4">
-            <Button type="button" variant="secondary" as={Link} href={`/saksbehandling/sak/${sak.saksnummer}`}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}`)}
+            >
               Avbryt
             </Button>
             <Button type="submit">Opprett revurdering</Button>

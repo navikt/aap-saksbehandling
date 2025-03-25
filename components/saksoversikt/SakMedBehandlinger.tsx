@@ -46,6 +46,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             <HStack gap="4">
               <Button
                 variant="secondary"
+                size="small"
                 onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
               >
                 Registrer brudd på aktivitetsplikten
@@ -54,6 +55,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
               {kanRevurdere(sak) && (
                 <Button
                   variant="secondary"
+                  size="small"
                   onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
                 >
                   Opprett revurdering

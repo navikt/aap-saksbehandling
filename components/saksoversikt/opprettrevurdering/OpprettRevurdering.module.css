@@ -1,0 +1,14 @@
+.opprettRevurderingKort {
+  --ac-expansioncard-border-radius: var(--a-border-radius-large);
+  --ac-expansioncard-border-hover-color: none;
+
+  border: 1px solid var(--a-border-divider);
+}
+
+.header,
+.content,
+.header:hover,
+.content:hover {
+  border: none;
+  box-shadow: none;
+}
