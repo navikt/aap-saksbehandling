@@ -110,6 +110,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                 {(field.manuell && (
                   <HStack align={'center'} gap={'1'}>
                     <DateInputWrapper
+                      label="Fra og med"
                       control={form.control}
                       name={`vurderteSamordninger.${index}.periode.fom`}
                       hideLabel={true}
@@ -123,6 +124,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
                     />
                     {'-'}
                     <DateInputWrapper
+                      label="Til og med"
                       control={form.control}
                       name={`vurderteSamordninger.${index}.periode.tom`}
                       hideLabel={true}

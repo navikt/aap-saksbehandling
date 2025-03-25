@@ -42,13 +42,9 @@ export interface SamordningGraderingFormfields {
 }
 
 export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
-  // TODO må også håndtere vurderinger
-  console.log(`SamordningGrunnlag:`, grunnlag);
-
-  // TODO midlertidig hack, antar at alt som ligger i vurderinger er lagt inn manuelt
   const ytelserFraVurderinger: SamordnetYtelse[] = grunnlag.vurderinger.map((ytelse) => ({
     ytelseType: ytelse.ytelseType,
-    kilde: 'Manuell',
+    kilde: '',
     graderingFraKilde: undefined,
     gradering: ytelse.gradering || undefined,
     manuell: ytelse.manuell || undefined,
