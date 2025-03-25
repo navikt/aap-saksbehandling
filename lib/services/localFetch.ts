@@ -1,4 +1,4 @@
-import { logError } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/serverutlis/logger';
 
 export async function hentLocalToken(scope: string) {
   let url = 'http://localhost:8081/token';

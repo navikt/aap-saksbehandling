@@ -1,7 +1,7 @@
 import { opprettTestSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { logError } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/serverutlis/logger';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

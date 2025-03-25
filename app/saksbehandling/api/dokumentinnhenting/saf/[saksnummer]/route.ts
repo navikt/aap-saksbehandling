@@ -1,6 +1,7 @@
-import { isLocal, logError } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/serverutlis/logger';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { hentRelevanteDokumenter } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
+import { isLocal } from 'lib/utils/environment';
 
 const mockData: RelevantDokumentType[] = [
   {

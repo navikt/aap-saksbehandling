@@ -1,6 +1,6 @@
-import { logError } from '@navikt/aap-felles-utils';
 import { forhåndsvisDialogmelding } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
+import { logError } from 'lib/serverutlis/logger';
 /*
 const response: ForhåndsvisDialogmeldingResponse = {
   konstruertBrev:

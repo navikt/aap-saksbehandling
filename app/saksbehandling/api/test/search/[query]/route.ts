@@ -1,4 +1,4 @@
-import { logError } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/serverutlis/logger';
 import { NextRequest } from 'next/server';
 
 export type Kommune = {

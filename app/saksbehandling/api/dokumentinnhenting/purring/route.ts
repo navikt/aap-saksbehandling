@@ -1,4 +1,4 @@
-import { logError } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/serverutlis/logger';
 import { purrPåLegeerklæring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isLocal } from 'lib/utils/environment';
 import { NextRequest } from 'next/server';

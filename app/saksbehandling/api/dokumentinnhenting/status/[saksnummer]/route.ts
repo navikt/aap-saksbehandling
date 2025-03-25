@@ -1,4 +1,4 @@
-import { logError } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/serverutlis/logger';
 import { hentAlleDialogmeldingerPåSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { LegeerklæringStatus } from 'lib/types/types';
 import { isLocal } from 'lib/utils/environment';
