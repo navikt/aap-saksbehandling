@@ -49,8 +49,29 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
           c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?{' '}
           {mapTilJaEllerNei(vurdering.erBehovForAnnenOppfølging ?? undefined)}
         </span>
-        {/* TODO håndtere feltene for overgang til 11-17 - 11-18 */}
       </div>
+      {vurdering.overgangBegrunnelse && (
+        <div style={{ display: 'flex', gap: '1.5rem', flexDirection: 'row', flexWrap: 'wrap' }}>
+          <span>
+            {vurdering.skalVurdereAapIOvergangTilArbeid
+              ? 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?'
+              : 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?'}
+            : {vurdering.overgangBegrunnelse}
+          </span>
+          {vurdering.skalVurdereAapIOvergangTilArbeid && (
+            <span>
+              Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?
+              {mapTilJaEllerNei(vurdering.skalVurdereAapIOvergangTilArbeid)}
+            </span>
+          )}
+          {vurdering.skalVurdereAapIOvergangTilUføre && (
+            <span>
+              Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?
+              {mapTilJaEllerNei(vurdering.skalVurdereAapIOvergangTilUføre)}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
   return (
