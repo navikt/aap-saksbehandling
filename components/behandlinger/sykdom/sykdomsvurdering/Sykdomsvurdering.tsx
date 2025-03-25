@@ -281,7 +281,7 @@ export const Sykdomsvurdering = ({
         isLoading={isLoading}
         steg={'AVKLAR_SYKDOM'}
         visBekreftKnapp={!readOnly}
-        knappTekst={'Bekreft vurdering'}
+        knappTekst={'Bekreft'}
       >
         {grunnlag.skalVurdereYrkesskade && (
           <Alert variant={'warning'} size={'small'}>

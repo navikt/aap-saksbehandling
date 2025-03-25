@@ -109,7 +109,7 @@ describe('felt for begrunnelse', () => {
         søknadstidspunkt={søknadstidspunkt}
       />
     );
-    const button = screen.getByRole('button', { name: 'Bekreft vurdering' });
+    const button = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(button);
 
     expect(await screen.findByText('Du må gjøre en vilkårsvurdering')).toBeVisible();
@@ -876,7 +876,7 @@ describe('revurdering av førstegangsbehandling', () => {
 });
 
 const velgBekreft = async () => {
-  const button = screen.getByRole('button', { name: 'Bekreft vurdering' });
+  const button = screen.getByRole('button', { name: 'Bekreft' });
   await user.click(button);
 };
 
