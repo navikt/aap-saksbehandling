@@ -145,8 +145,11 @@ export function clientHentRelevanteDokumenter(saksnummer: string) {
   return clientFetch<RelevantDokumentType[]>(`${BASE_URL}/api/dokumentinnhenting/saf/${saksnummer}`, 'POST');
 }
 
-export function clientPurrPåLegeerklæring(dialogmeldingUUID: string) {
-  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/purring/${dialogmeldingUUID}`, 'POST');
+export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, saksnummer: string) {
+  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/purring`, 'POST', {
+    dialogmeldingPurringUUID: dialogmeldingUUID,
+    saksnummer: saksnummer,
+  });
 }
 
 export function clientSendHendelse(body: Object) {

@@ -29,21 +29,23 @@ const dialogmeldinger: LegeerklæringStatus[] = [
   },
 ];
 
+const saksnummer = '1234';
+
 describe('Dialogmeldinger', () => {
   test('viser en tabell med oversikt over dialogmeldinger når det er funnet dialogmeldinger', () => {
-    render(<Dialogmeldinger dialogmeldinger={dialogmeldinger} />);
+    render(<Dialogmeldinger dialogmeldinger={dialogmeldinger} saksnummer={saksnummer} />);
     expect(screen.getByRole('columnheader', { name: 'Status' })).toBeVisible();
     expect(screen.getByRole('columnheader', { name: 'Bestilt dato' })).toBeVisible();
   });
 
   test('viser en rad med dato for bestilling og status på bestillingen', () => {
-    render(<Dialogmeldinger dialogmeldinger={[dialogmeldinger[0]]} />);
+    render(<Dialogmeldinger dialogmeldinger={[dialogmeldinger[0]]} saksnummer={saksnummer} />);
     expect(screen.getByRole('cell', { name: '28.10.2024' })).toBeVisible();
     expect(screen.getByText(/^Bestilt$/)).toBeVisible();
   });
 
   test('viser en melding om det er ikke er funnet noen dialogmeldinger når listen er tom', () => {
-    render(<Dialogmeldinger />);
+    render(<Dialogmeldinger saksnummer={saksnummer} />);
     expect(screen.getByText('Det finnes ingen dialogmeldinger for denne saken')).toBeVisible();
   });
 
@@ -59,7 +61,7 @@ describe('Dialogmeldinger', () => {
       behandlerNavn: 'Doogie Houser',
       fritekst: 'hello',
     };
-    render(<Dialogmeldinger dialogmeldinger={[dialogmelding]} />);
+    render(<Dialogmeldinger dialogmeldinger={[dialogmelding]} saksnummer={saksnummer} />);
     expect(screen.queryByRole('button', { name: 'Send purring' })).not.toBeInTheDocument();
   });
 
@@ -75,7 +77,7 @@ describe('Dialogmeldinger', () => {
       behandlerNavn: 'Doogie Houser',
       fritekst: 'hello',
     };
-    render(<Dialogmeldinger dialogmeldinger={[dialogmelding]} />);
+    render(<Dialogmeldinger dialogmeldinger={[dialogmelding]} saksnummer={saksnummer} />);
     expect(screen.getByRole('button', { name: 'Send purring' })).toBeInTheDocument();
   });
 });
