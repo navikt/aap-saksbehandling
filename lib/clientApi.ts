@@ -110,8 +110,11 @@ export function clientSimulerMeldeplikt(referanse: string, vurderinger: SimulerM
   return clientFetch(`${BASE_URL}/api/behandling/${referanse}/simuler-meldeplikt`, 'POST', vurderinger);
 }
 
-export function clientSøkPåBehandler(fritekst: string) {
-  return clientFetch<Behandler[]>(`${BASE_URL}/api/dokumentinnhenting/behandleroppslag`, 'POST', { fritekst });
+export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
+  return clientFetch<Behandler[]>(`${BASE_URL}/api/dokumentinnhenting/behandleroppslag`, 'POST', {
+    fritekst: fritekst,
+    saksnummer: saksnummer,
+  });
 }
 
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {

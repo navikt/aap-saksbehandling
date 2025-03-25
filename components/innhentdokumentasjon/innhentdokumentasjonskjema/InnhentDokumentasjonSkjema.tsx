@@ -102,7 +102,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   };
 
   const behandlersøk = async (input: string) => {
-    const resultat = await clientSøkPåBehandler(input);
+    const resultat = await clientSøkPåBehandler(input, saksnummer);
     if (!resultat) {
       return [];
     }
