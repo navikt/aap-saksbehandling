@@ -77,6 +77,8 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Student';
     case 'ET_ANNET_STED':
       return 'Institusjonsopphold';
+    case 'SAMORDNING':
+      return 'Samordning';
     case 'UDEFINERT':
       return 'Udefinert';
   }

@@ -3,10 +3,6 @@ import { UnderveisgrunnlagMedDataFetching } from 'components/behandlinger/underv
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
-import { SamordningGraderingMedDatafetching } from './samordninggradering/SamordningGraderingMedDatafetching';
-import { SamordningUføreMedDatafetching } from './samordninguføre/SamordningUføreMedDatafetching';
-import { SamordningAndreStatligeYtelserMedDatafetching } from 'components/behandlinger/underveis/samordningandrestatlige/SamordningAndreStatligeYtelserMedDatafetching';
-import { SamordningSosialhjelpMedDatafetching } from 'components/behandlinger/underveis/samordningsosial/SamordningSosialhjelpMedDatafetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -23,26 +19,8 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
       prosessering={flyt.prosessering}
       visning={flyt.visning}
     >
-      <SamordningSosialhjelpMedDatafetching behandlingsreferanse={behandlingsreferanse} />
-      <SamordningAndreStatligeYtelserMedDatafetching
-        behandlingsreferanse={behandlingsreferanse}
-        behandlingVersjon={flyt.behandlingVersjon}
-        readOnly={flyt.visning.saksbehandlerReadOnly}
-      />
       {stegSomSkalVises.includes('EFFEKTUER_11_7') && (
         <AktivitetspliktMedDatafetching
-          behandlingsreferanse={behandlingsreferanse}
-          behandlingVersjon={flyt.behandlingVersjon}
-          readOnly={flyt.visning.saksbehandlerReadOnly}
-        />
-      )}
-      <SamordningGraderingMedDatafetching
-        behandlingsreferanse={behandlingsreferanse}
-        behandlingVersjon={flyt.behandlingVersjon}
-        readOnly={flyt.visning.saksbehandlerReadOnly}
-      />
-      {stegSomSkalVises.includes('SAMORDNING_UFØRE') && (
-        <SamordningUføreMedDatafetching
           behandlingsreferanse={behandlingsreferanse}
           behandlingVersjon={flyt.behandlingVersjon}
           readOnly={flyt.visning.saksbehandlerReadOnly}
