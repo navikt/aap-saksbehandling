@@ -25,7 +25,7 @@ export const BarnetilleggVurderingMedDataFetching = async ({
       harAvklaringsbehov={harAvklaringsbehov}
       grunnlag={grunnlag}
       behandlingsversjon={behandlingsversjon}
-      readOnly={readOnly}
+      readOnly={readOnly && !grunnlag.harTilgangTilÅSaksbehandle}
       behandlingPersonInfo={behandlingPersoninfo}
     />
   );

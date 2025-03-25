@@ -160,7 +160,7 @@ describe('Student', () => {
       <Studentvurdering
         behandlingVersjon={0}
         readOnly={false}
-        grunnlag={{ oppgittStudent: { erStudentStatus: 'JA' } }}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'JA' } }}
       />
     );
     const tekst = screen.getByText('Er bruker student: Ja, helt eller delvis');
@@ -172,7 +172,7 @@ describe('Student', () => {
       <Studentvurdering
         behandlingVersjon={0}
         readOnly={false}
-        grunnlag={{ oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
       />
     );
     const tekst = screen.getByText('Er bruker student: Ja, men har avbrutt studiet helt på grunn av sykdom');
@@ -184,7 +184,7 @@ describe('Student', () => {
       <Studentvurdering
         behandlingVersjon={0}
         readOnly={false}
-        grunnlag={{ oppgittStudent: { erStudentStatus: 'NEI' } }}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'NEI' } }}
       />
     );
 
@@ -197,7 +197,7 @@ describe('Student', () => {
       <Studentvurdering
         behandlingVersjon={0}
         readOnly={false}
-        grunnlag={{ oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
       />
     );
     await velgAtSøkerHarAvbruttEtStudie();
@@ -224,7 +224,7 @@ describe('Student', () => {
       <Studentvurdering
         behandlingVersjon={0}
         readOnly={false}
-        grunnlag={{ oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
       />
     );
 

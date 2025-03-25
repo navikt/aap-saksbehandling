@@ -17,7 +17,7 @@ export const YrkesskadeGrunnlagBeregningMedDataFetching = async ({
     <YrkesskadeGrunnlagBeregning
       yrkeskadeBeregningGrunnlag={yrkesskadeVurderingGrunnlag}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly}
+      readOnly={readOnly && !yrkesskadeVurderingGrunnlag.harTilgangTilÅSaksbehandle}
     />
   );
 };

@@ -5,6 +5,7 @@ import { userEvent } from '@testing-library/user-event';
 import { BeregningTidspunktGrunnlag } from 'lib/types/types';
 
 const grunnlag: BeregningTidspunktGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   skalVurdereYtterligere: true,
 };
 

@@ -5,6 +5,7 @@ import { Soningsgrunnlag } from 'lib/types/types';
 import userEvent from '@testing-library/user-event';
 
 const soningsgrunnlag: Soningsgrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   soningsforhold: [
     {
       institusjonstype: 'Fengsel',

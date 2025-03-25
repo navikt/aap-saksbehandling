@@ -27,6 +27,7 @@ describe('FastsettArbeidsevne', () => {
 
   it('steget er åpent for beslutter når det er gjort en vurdering (minst en vurdering og readOnly er true)', () => {
     const grunnlag: ArbeidsevneGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
       vurderinger: [
         { begrunnelse: 'Grunn', fraDato: '2024-08-10', arbeidsevne: 80, vurderingsTidspunkt: '2024-08-10' },
       ],

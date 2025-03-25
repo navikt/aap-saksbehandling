@@ -7,6 +7,7 @@ import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { render, screen, within } from 'lib/test/CustomRender';
 
 const grunnlag: BarnetilleggGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   søknadstidspunkt: '12.12.2023',
   folkeregisterbarn: [
     {

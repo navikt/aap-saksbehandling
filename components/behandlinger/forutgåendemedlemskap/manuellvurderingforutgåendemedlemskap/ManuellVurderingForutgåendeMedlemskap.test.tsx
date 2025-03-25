@@ -5,7 +5,7 @@ import { ForutgåendeMedlemskapGrunnlag } from 'lib/types/types';
 import { ManuellVurderingForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingforutgåendemedlemskap/ManuellVurderingForutgåendeMedlemskap';
 
 const user = userEvent.setup();
-const grunnlag: ForutgåendeMedlemskapGrunnlag = { historiskeManuelleVurderinger: [] };
+const grunnlag: ForutgåendeMedlemskapGrunnlag = {harTilgangTilÅSaksbehandle: true, historiskeManuelleVurderinger: [] };
 describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal ha en overskrift', () => {
     render(

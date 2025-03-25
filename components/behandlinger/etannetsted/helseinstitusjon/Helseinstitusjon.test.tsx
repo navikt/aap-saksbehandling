@@ -6,7 +6,8 @@ import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 
 const user = userEvent.setup();
 
-const x: HelseinstitusjonGrunnlag = {
+const grunnlag: HelseinstitusjonGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   opphold: [
     {
       institusjonstype: 'Helseinstitusjon',
@@ -31,7 +32,7 @@ const x: HelseinstitusjonGrunnlag = {
 
 describe('Helseinstitusjonsvurdering', () => {
   beforeEach(() => {
-    render(<Helseinstitusjon grunnlag={x} behandlingVersjon={0} readOnly={false} />);
+    render(<Helseinstitusjon grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />);
   });
 
   test('har overskrift Helseinstitusjon § 11-25', () => {

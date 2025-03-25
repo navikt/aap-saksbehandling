@@ -19,6 +19,7 @@ describe('Meldeplikt', () => {
 
   it('vises som åpent når det skal kvalitetssikres (readOnly er true og minst en vurdering finnes)', () => {
     const meldepliktGrunnlag: FritakMeldepliktGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
       vurderinger: [
         {
           begrunnelse: 'Grunn',
