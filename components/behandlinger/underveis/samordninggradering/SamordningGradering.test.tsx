@@ -35,6 +35,7 @@ const grunnlagMedYtelserFraKilde: SamordningGraderingGrunnlag = {
   vurderinger: [],
   ytelser: [
     {
+      endringStatus: 'NY',
       ytelseType: 'SYKEPENGER',
       kilde: 'SP',
       gradering: 20,
