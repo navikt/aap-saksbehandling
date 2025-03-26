@@ -70,19 +70,19 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
           />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('VURDER_YRKESSKADE') && (
+      {stegSomSkalVises.includes('REFUSJON_KRAV') && (
         <StegSuspense>
-          <YrkesskadeMedDataFetching
+          <RefusjonMedDataFetching
+            saksId={sakId}
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
           />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('REFUSJON_KRAV') && (
+      {stegSomSkalVises.includes('VURDER_YRKESSKADE') && (
         <StegSuspense>
-          <RefusjonMedDataFetching
-            saksId={sakId}
+          <YrkesskadeMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
