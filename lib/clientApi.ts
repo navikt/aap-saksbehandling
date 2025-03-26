@@ -148,7 +148,7 @@ export function clientHentRelevanteDokumenter(saksnummer: string) {
 export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, behandlingsreferanse: string) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/purring`, 'POST', {
     dialogmeldingPurringUUID: dialogmeldingUUID,
-    behandlingsreferanse: behandlingsreferanse,
+    behandlingsReferanse: behandlingsreferanse,
   });
 }
 
