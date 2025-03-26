@@ -14,7 +14,6 @@ export const LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching = async ({
 }: Props) => {
   const grunnlag = await hentLovvalgMedlemskapGrunnlag(behandlingsReferanse);
 
-  console.log(grunnlag);
   return (
     <LovvalgOgMedlemskapVedSKnadstidspunkt
       behandlingVersjon={behandlingVersjon}
