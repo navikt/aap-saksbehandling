@@ -8,7 +8,7 @@ import { ThumbDownIcon, TimerPauseIcon } from '@navikt/aksel-icons';
 import { sorterEtterNyesteDato } from 'lib/utils/date';
 import { clientPurrPåLegeerklæring } from 'lib/clientApi';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-//import { isBefore, subDays } from 'date-fns';
+import { isBefore, subDays } from 'date-fns';
 
 type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
@@ -45,8 +45,8 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null
   }
 };
 
-//const grenseForPurring = subDays(new Date(), 14);
-//const kanSendePurring = (opprettet: string) => isBefore(new Date(opprettet), grenseForPurring);
+const grenseForPurring = subDays(new Date(), 14);
+const kanSendePurring = (opprettet: string) => isBefore(new Date(opprettet), grenseForPurring);
 
 const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
   const behandlingsreferanse = useBehandlingsReferanse();
@@ -71,15 +71,15 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
               icon={<ThumbDownIcon title="Avslå legeerklæring" />}
             />
           )}
-          {/*kanSendePurring(melding.opprettet) && (*/}
-          <Button
-            variant="secondary"
-            type="button"
-            size="small"
-            icon={<TimerPauseIcon title="Send purring" />}
-            onClick={() => clientPurrPåLegeerklæring(melding.dialogmeldingUuid, behandlingsreferanse)}
-          />
-          {/*)*/}
+          {kanSendePurring(melding.opprettet) && (
+            <Button
+              variant="secondary"
+              type="button"
+              size="small"
+              icon={<TimerPauseIcon title="Send purring" />}
+              onClick={() => clientPurrPåLegeerklæring(melding.dialogmeldingUuid, behandlingsreferanse)}
+            />
+          )}
         </HStack>
       </Table.DataCell>
     </Table.Row>
