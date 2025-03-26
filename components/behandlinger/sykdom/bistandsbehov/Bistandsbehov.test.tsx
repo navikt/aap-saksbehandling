@@ -304,6 +304,7 @@ describe('Førstegangsbehandling', () => {
 describe('Revurdering', () => {
   it('viser spørsmål om bruker skal vurderes for AAP i overgang til uføre hvis det svares nei på a,b og c', async () => {
     const grunnlag: BistandsGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
       harOppfylt11_5: true,
       gjeldendeVedtatteVurderinger: [
         {
@@ -363,6 +364,7 @@ describe('Revurdering', () => {
 
   it('viser spørsmål om bruker skal vurders for AAP i overgang til arbeid hvis det er avslag på både 11-5 og det svares nei på a,b og c', async () => {
     const grunnlag: BistandsGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
       harOppfylt11_5: false,
       gjeldendeVedtatteVurderinger: [
         {

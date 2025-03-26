@@ -5,6 +5,7 @@ import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 
 const grunnlag: YrkesskadeVurderingGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   opplysninger: {
     innhentedeYrkesskader: [
       {

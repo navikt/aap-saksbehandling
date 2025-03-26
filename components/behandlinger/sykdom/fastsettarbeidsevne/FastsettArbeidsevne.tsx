@@ -55,7 +55,7 @@ const regnOmTilTimer = (value: string) => {
 };
 
 export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
-  const defaultValues: Arbeidsevnevurderinger[] = grunnlag?.vurderinger.map((vurdering) => ({
+  const defaultValues: Arbeidsevnevurderinger[] = grunnlag?.vurderinger?.map((vurdering) => ({
     begrunnelse: vurdering.begrunnelse,
     arbeidsevne: vurdering.arbeidsevne.toString(),
     fom: formaterDatoForFrontend(vurdering.fraDato),

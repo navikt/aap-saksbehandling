@@ -7,6 +7,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { describe, expect, test } from 'vitest';
 
 const testgrunnlag: AktivitetspliktGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   forhåndsvarselDato: '2025-01-02',
   forhåndsvarselSvar: {
     mottattDato: '2025-01-12',

@@ -5,6 +5,7 @@ import { SamordningGraderingGrunnlag } from 'lib/types/types';
 import { describe, test, expect } from 'vitest';
 
 const grunnlagMedVurderinger: SamordningGraderingGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   begrunnelse: 'En grunn',
   vurderinger: [
     {
@@ -29,6 +30,7 @@ const grunnlagMedVurderinger: SamordningGraderingGrunnlag = {
 };
 
 const grunnlagMedYtelserFraKilde: SamordningGraderingGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   begrunnelse: 'En grunn',
   vurderinger: [],
   ytelser: [

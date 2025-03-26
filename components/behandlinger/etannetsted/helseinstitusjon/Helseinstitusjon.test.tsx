@@ -7,6 +7,7 @@ import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 const user = userEvent.setup();
 
 const x: HelseinstitusjonGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   opphold: [
     {
       institusjonstype: 'Helseinstitusjon',

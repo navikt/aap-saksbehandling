@@ -5,7 +5,7 @@ import { LovvalgOgMedlemskapVedSKnadstidspunkt } from 'components/behandlinger/l
 import { LovvalgMedlemskapGrunnlag } from 'lib/types/types';
 
 const user = userEvent.setup();
-const grunnlag: LovvalgMedlemskapGrunnlag = { historiskeManuelleVurderinger: [] };
+const grunnlag: LovvalgMedlemskapGrunnlag = { harTilgangTilÅSaksbehandle: true, historiskeManuelleVurderinger: [] };
 describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal ha en overskrift', () => {
     render(

@@ -6,6 +6,7 @@ import { FatteVedtakGrunnlag } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 
 const grunnlag: FatteVedtakGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   vurderinger: [
     {
       definisjon: Behovstype.AVKLAR_SYKDOM_KODE,
