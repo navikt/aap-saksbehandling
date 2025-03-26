@@ -46,7 +46,7 @@ export const InnhentDokumentasjon = () => {
               Noe gikk galt under henting av dialogmeldinger
             </Alert>
           )}
-          {dialogmeldinger && <Dialogmeldinger dialogmeldinger={dialogmeldinger} saksnummer={saksnummer} />}
+          {dialogmeldinger && <Dialogmeldinger dialogmeldinger={dialogmeldinger} />}
         </VStack>
       )}
       {visSkjema && <InnhentDokumentasjonSkjema onCancel={skjulSkjema} onSuccess={skjulOgRefresh} />}

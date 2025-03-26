@@ -7,11 +7,11 @@ import styles from './Dialogmeldinger.module.css';
 import { ThumbDownIcon, TimerPauseIcon } from '@navikt/aksel-icons';
 import { sorterEtterNyesteDato } from 'lib/utils/date';
 import { clientPurrPåLegeerklæring } from 'lib/clientApi';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 //import { isBefore, subDays } from 'date-fns';
 
 type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
-  saksnummer: string;
 };
 
 const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null): ReactNode => {
@@ -48,7 +48,8 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null
 //const grenseForPurring = subDays(new Date(), 14);
 //const kanSendePurring = (opprettet: string) => isBefore(new Date(opprettet), grenseForPurring);
 
-const Dialogmelding = ({ melding, saksnummer }: { melding: LegeerklæringStatus; saksnummer: string }) => {
+const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
+  const behandlingsreferanse = useBehandlingsReferanse();
   return (
     <Table.Row>
       <Table.DataCell textSize={'small'} className={styles.status}>
@@ -76,7 +77,7 @@ const Dialogmelding = ({ melding, saksnummer }: { melding: LegeerklæringStatus;
             type="button"
             size="small"
             icon={<TimerPauseIcon title="Send purring" />}
-            onClick={() => clientPurrPåLegeerklæring(melding.dialogmeldingUuid, saksnummer)}
+            onClick={() => clientPurrPåLegeerklæring(melding.dialogmeldingUuid, behandlingsreferanse)}
           />
           {/*)*/}
         </HStack>
@@ -85,7 +86,7 @@ const Dialogmelding = ({ melding, saksnummer }: { melding: LegeerklæringStatus;
   );
 };
 
-export const Dialogmeldinger = ({ dialogmeldinger, saksnummer }: Props) => {
+export const Dialogmeldinger = ({ dialogmeldinger }: Props) => {
   if (!dialogmeldinger || dialogmeldinger.length === 0) {
     return <BodyShort size={'small'}>Det finnes ingen dialogmeldinger for denne saken</BodyShort>;
   }
@@ -104,7 +105,7 @@ export const Dialogmeldinger = ({ dialogmeldinger, saksnummer }: Props) => {
         {dialogmeldinger
           .sort((a, b) => sorterEtterNyesteDato(a.opprettet, b.opprettet))
           .map((dialogmelding) => (
-            <Dialogmelding key={dialogmelding.dialogmeldingUuid} melding={dialogmelding} saksnummer={saksnummer} />
+            <Dialogmelding key={dialogmelding.dialogmeldingUuid} melding={dialogmelding} />
           ))}
       </Table.Body>
     </Table>
