@@ -12,7 +12,6 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { validerDato } from 'lib/validation/dateValidation';
-import { Veiledning } from 'components/veiledning/Veiledning';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 
@@ -40,10 +39,10 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
     {
       begrunnelse: {
         type: 'textarea',
-        description: 'Begrunn vurderingen',
+        description: 'Vilkårsvurdering',
         label: 'Vurder §11-14 og vilkårene i §7 i forskriften',
         defaultValue: grunnlag?.studentvurdering?.begrunnelse,
-        rules: { required: 'Du må begrunne vurderingen.' },
+        rules: { required: 'Du må gjøre en vilkårsvurdering' },
       },
       harAvbruttStudie: {
         type: 'radio',
@@ -163,7 +162,6 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
             </BodyShort>
           )}
         </div>
-        <Veiledning />
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.harAvbruttStudie} horizontalRadio />
         {form.watch('harAvbruttStudie') === JaEllerNei.Ja && (

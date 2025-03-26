@@ -76,7 +76,7 @@ describe('Student', () => {
     const button = screen.getByRole('button', { name: /Bekreft/ });
     await user.click(button);
 
-    expect(await screen.findByText('Du må begrunne vurderingen.')).toBeVisible();
+    expect(await screen.findByText('Du må gjøre en vilkårsvurdering')).toBeVisible();
   });
 
   it('viser feilemdling hvis det ikke er svart på om studiet er avbrutt', async () => {
