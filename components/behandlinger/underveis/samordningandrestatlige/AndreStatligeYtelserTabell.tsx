@@ -67,7 +67,7 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
         </Table.Header>
         <Table.Body>
           {fields.map((field, index) => (
-            <Table.Row key={field.id}>
+            <Table.Row key={`${field.id}-${index}`}>
               <Table.DataCell>
                 <SelectWrapper
                   label="Ytelsestype"

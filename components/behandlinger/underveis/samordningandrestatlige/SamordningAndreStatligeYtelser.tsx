@@ -12,9 +12,10 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { SamordningAndreStatligeYtelserYtelse } from 'lib/types/types';
+import { SamordningAndreStatligeYtelserGrunnlag, SamordningAndreStatligeYtelserYtelse } from 'lib/types/types';
 
 interface Props {
+  grunnlag: SamordningAndreStatligeYtelserGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
 }
@@ -28,27 +29,36 @@ export interface AnnenStatligYtelse {
   tom?: string;
   beløp?: number;
 }
-export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon }: Props) => {
-  const [visYtelsesTabell, setVisYtelsesTabell] = useState<boolean>(false);
+export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, grunnlag }: Props) => {
   const { form, formFields } = useConfigForm<SamordningAndreStatligeYtelserFormFields>({
     begrunnelse: {
       type: 'textarea',
       label: 'Vurder om bruker har andre statlige ytelser som skal avregnes med AAP',
       rules: { required: 'Du må gjøre en vilkårsvurdering' },
+      defaultValue: grunnlag.vurdering?.begrunnelse,
     },
     vurderteSamordninger: {
       type: 'fieldArray',
+      defaultValue: (grunnlag.vurdering?.vurderingPerioder || []).map((vurdering) => ({
+        ytelse: vurdering.ytelse,
+        fom: vurdering.periode.fom,
+        tom: vurdering.periode.tom,
+        beløp: vurdering.beløp,
+      })),
     },
   });
+  const finnesGrunnlag = grunnlag.vurdering ? grunnlag.vurdering.vurderingPerioder.length > 0 : false;
+  console.log(grunnlag);
+  console.log(finnesGrunnlag);
+  const [visYtelsesTabell, setVisYtelsesTabell] = useState<boolean>(finnesGrunnlag);
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, resetStatus } = useLøsBehovOgGåTilNesteSteg(
     'SAMORDNING_ANDRE_STATLIGE_YTELSER'
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(async (data) => {
-      console.log(data);
-      return løsBehovOgGåTilNesteSteg({
+    form.handleSubmit(async (data) =>
+      løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER,
@@ -65,8 +75,8 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon }: 
           },
         },
         referanse: behandlingsreferanse,
-      });
-    })(event);
+      })
+    )(event);
   };
 
   return (

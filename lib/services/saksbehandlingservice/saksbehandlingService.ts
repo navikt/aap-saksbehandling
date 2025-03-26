@@ -35,6 +35,7 @@ import {
   RefusjonskravGrunnlag,
   SakPersoninfo,
   SaksInfo,
+  SamordningAndreStatligeYtelserGrunnlag,
   SamordningGraderingGrunnlag,
   SamordningUføreGrunnlag,
   SettPåVent,
@@ -223,6 +224,13 @@ export const hentSamordningGraderingGrunnlag = async (
 export const hentSamordningUføreGrunnlag = async (behandlingsReferanse: string): Promise<SamordningUføreGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/samordning-ufore`;
   return await fetchProxy<SamordningUføreGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentSamordningAndreStatligeYtelseGrunnlag = async (
+  behandlingsReferanse: string
+): Promise<SamordningAndreStatligeYtelserGrunnlag> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/samordning-andre-statlige-ytelser`;
+  return await fetchProxy<SamordningAndreStatligeYtelserGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBeregningstidspunktVurdering = async (
