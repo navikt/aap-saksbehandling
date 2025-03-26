@@ -24,6 +24,7 @@ export const Tilkjent = ({ grunnlag }: Props) => {
             <Table.HeaderCell>Arbeid gradering</Table.HeaderCell>
             <Table.HeaderCell>Institusjon gradering</Table.HeaderCell>
             <Table.HeaderCell>Samordning gradering</Table.HeaderCell>
+            <Table.HeaderCell>Samordning uføre</Table.HeaderCell>
             <Table.HeaderCell>Antall barn</Table.HeaderCell>
             <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
             <Table.HeaderCell>Utbetalingsdato</Table.HeaderCell>
@@ -46,6 +47,11 @@ export const Tilkjent = ({ grunnlag }: Props) => {
               </Table.DataCell>
               <Table.DataCell>
                 {!isNullOrUndefined(periode.samordningGradering) ? `${periode.samordningGradering}%` : 'Ingen data'}
+              </Table.DataCell>
+              <Table.DataCell>
+                {!isNullOrUndefined(periode.samordningUføreGradering)
+                  ? `${periode.samordningUføreGradering}%`
+                  : 'Ingen data'}
               </Table.DataCell>
               <Table.DataCell>{periode.antallBarn}</Table.DataCell>
               <Table.DataCell>{periode.barnetillegg}</Table.DataCell>
