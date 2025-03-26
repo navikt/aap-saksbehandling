@@ -75,7 +75,7 @@ export const YtelseTabell = ({ form, readOnly }: Props) => {
             <Table.HeaderCell>Periode</Table.HeaderCell>
             <Table.HeaderCell>Kilde</Table.HeaderCell>
             <Table.HeaderCell>Grad fra kilde</Table.HeaderCell>
-            <Table.HeaderCell>Utbetalingsgrad (%)</Table.HeaderCell>
+            <Table.HeaderCell>Samordningsgrad (%)</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
