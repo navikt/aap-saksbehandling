@@ -35,7 +35,7 @@ export const ForeslåVedtak = ({ behandlingVersjon }: Props) => {
             });
           }}
         >
-          Neste steg
+          Send til beslutter
         </Button>
       </div>
     </VilkårsKort>
