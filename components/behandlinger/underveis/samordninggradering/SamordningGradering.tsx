@@ -17,6 +17,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 
 import styles from './SamordningGradering.module.css';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
+import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -184,16 +185,30 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell form={form} readOnly={readOnly} />
             {visRevurderVirkningstidspunkt && (
-              <Box borderRadius={'large'} className={styles.virkningstidspunktboks} maxWidth={'90ch'}>
-                <BodyShort size={'small'} className={styles.heading}>
-                  Tidligste virkningstidspunkt etter samordning er <strong>{finnTidligsteVirkningstidspunkt()}</strong>
-                </BodyShort>
-                <VStack className={styles.innhold} padding={'space-8'} gap={'2'}>
-                  <FormField form={form} formField={formFields.maksDatoEndelig} />
-                  {form.watch('maksDatoEndelig') === 'false' && (
-                    <FormField form={form} formField={formFields.maksDato} />
-                  )}
-                </VStack>
+              <Box maxWidth={'90ch'}>
+                <Box
+                  padding={'4'}
+                  borderColor="border-info"
+                  borderWidth="1 1 0 1"
+                  borderRadius={'xlarge xlarge 0 0'}
+                  background="surface-info-subtle"
+                >
+                  <HStack gap={'2'} align={'center'}>
+                    <InformationSquareFillIcon title="a11y-title" fontSize="1.5rem" className={styles.infoIkon} />
+                    <BodyShort size={'small'}>
+                      Tidligste virkningstidspunkt etter samordning er{' '}
+                      <strong>{finnTidligsteVirkningstidspunkt()}</strong>
+                    </BodyShort>
+                  </HStack>
+                </Box>
+                <Box padding={'4'} borderColor="border-info" borderWidth="1" borderRadius={'0 0 xlarge xlarge'}>
+                  <VStack gap={'2'}>
+                    <FormField form={form} formField={formFields.maksDatoEndelig} />
+                    {form.watch('maksDatoEndelig') === 'false' && (
+                      <FormField form={form} formField={formFields.maksDato} />
+                    )}
+                  </VStack>
+                </Box>
               </Box>
             )}
           </Form>
