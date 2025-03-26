@@ -73,7 +73,7 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
       },
     },
     årsak: {
-      type: 'combobox',
+      type: 'combobox_multiple',
       label: 'Hvilke opplysninger skal revurderes?',
       options: årsakOptions,
       rules: {
