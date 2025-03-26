@@ -25,10 +25,7 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
     >
       {stegSomSkalVises.includes('FORESLÅ_VEDTAK') && (
         <StegSuspense>
-          <ForeslåVedtakMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            behandlingVersjon={behandlingVersjon}
-          />
+          <ForeslåVedtakMedDataFetching behandlingVersjon={behandlingVersjon} />
         </StegSuspense>
       )}
     </GruppeSteg>

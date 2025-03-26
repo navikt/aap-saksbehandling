@@ -1,8 +1,6 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { BehandlingResultat } from 'lib/types/types';
-import { Vilkårsoppsummering } from 'components/vilkårsoppsummering/Vilkårsoppsummering';
 import { Behovstype } from 'lib/utils/form';
 import { Button } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -12,18 +10,17 @@ import styles from './ForeslåVedtak.module.css';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
-  behandlingResultat: BehandlingResultat;
   behandlingVersjon: number;
 }
 
-export const ForeslåVedtak = ({ behandlingResultat, behandlingVersjon }: Props) => {
+export const ForeslåVedtak = ({ behandlingVersjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { status, resetStatus, løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
 
   return (
     <VilkårsKort heading="Foreslå vedtak" steg={'FORESLÅ_VEDTAK'}>
       <div className={styles.foreslåvedtak}>
-        <Vilkårsoppsummering behandlingResultat={behandlingResultat} />
+        Trykk på neste steg for å komme videre.
         <ServerSentEventStatusAlert status={status} resetStatus={resetStatus} />
         <Button
           className={'fit-content'}

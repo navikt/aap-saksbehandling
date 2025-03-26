@@ -1,13 +1,9 @@
-import { hentResultat } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak';
 
 interface Props {
-  behandlingsReferanse: string;
   behandlingVersjon: number;
 }
 
-export const ForeslåVedtakMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon }: Props) => {
-  const behandlingsResultat = await hentResultat(behandlingsReferanse);
-
-  return <ForeslåVedtak behandlingResultat={behandlingsResultat} behandlingVersjon={behandlingVersjon} />;
+export const ForeslåVedtakMedDataFetching = async ({ behandlingVersjon }: Props) => {
+  return <ForeslåVedtak behandlingVersjon={behandlingVersjon} />;
 };

@@ -22,7 +22,7 @@ export const FatteVedtak = async ({ behandlingsReferanse }: Props) => {
     >
       {stegSomSkalVises.includes('FATTE_VEDTAK') && (
         <StegSuspense>
-          <FatteVedtakMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+          <FatteVedtakMedDataFetching />
         </StegSuspense>
       )}
     </GruppeSteg>
