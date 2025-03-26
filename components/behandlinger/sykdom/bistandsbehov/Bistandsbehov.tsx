@@ -8,7 +8,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { BodyShort, Heading, Link } from '@navikt/ds-react';
+import { BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
@@ -173,22 +173,22 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         {(typeBehandling === 'Førstegangsbehandling' ||
           (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
           bistandsbehovErIkkeOppfylt && (
-            <section>
+            <VStack gap={'4'} as={'section'}>
               <Heading level={'3'} size="medium">
                 § 11-18 AAP under behandling av søknad om uføretrygd
               </Heading>
-              <FormField form={form} formField={formFields.overgangBegrunnelse} horizontalRadio />
+              <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
               <FormField form={form} formField={formFields.vurderAAPIOvergangTilUføre} horizontalRadio />
-            </section>
+            </VStack>
           )}
         {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
-          <section>
+          <VStack gap={'4'} as={'section'}>
             <Heading level={'3'} size="medium">
               § 11-17 AAP i perioden som arbeidssøker
             </Heading>
-            <FormField form={form} formField={formFields.overgangBegrunnelse} horizontalRadio />
+            <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
             <FormField form={form} formField={formFields.vurderAAPIOvergangTilArbeid} horizontalRadio />
-          </section>
+          </VStack>
         )}
       </Form>
     </VilkårsKort>
