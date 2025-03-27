@@ -16,7 +16,11 @@ export const SoningsvurderingMedDataFetching = async ({
 
   return (
     grunnlag.soningsforhold.length > 0 && (
-      <Soningsvurdering behandlingsversjon={behandlingsversjon} grunnlag={grunnlag} readOnly={readOnly} />
+      <Soningsvurdering
+        behandlingsversjon={behandlingsversjon}
+        grunnlag={grunnlag}
+        readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+      />
     )
   );
 };

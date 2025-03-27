@@ -8,5 +8,11 @@ interface Props {
 }
 export const SamordningUføreMedDatafetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentSamordningUføreGrunnlag(behandlingsreferanse);
-  return <SamordningUføre grunnlag={grunnlag} behandlingVersjon={behandlingVersjon} readOnly={readOnly} />;
+  return (
+    <SamordningUføre
+      grunnlag={grunnlag}
+      behandlingVersjon={behandlingVersjon}
+      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+    />
+  );
 };

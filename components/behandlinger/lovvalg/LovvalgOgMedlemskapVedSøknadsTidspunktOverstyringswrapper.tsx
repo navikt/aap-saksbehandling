@@ -24,6 +24,7 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
   visOverstyrKnapp,
 }: Props) => {
   const [overstyring, setOverstyring] = useState<boolean>(false);
+
   return (
     <>
       <AutomatiskVurderingAvLovvalgOgMedlemskap
@@ -34,10 +35,8 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
       />
       {children}
       {overstyring && stegSomSkalVises.length === 0 && (
-        //   TODO Hva gjør vi med gurnnlag her?
         <LovvalgOgMedlemskapVedSKnadstidspunkt
           behandlingVersjon={behandlingVersjon}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, historiskeManuelleVurderinger: [] }}
           readOnly={readOnly}
           overstyring={true}
         />

@@ -9,5 +9,11 @@ interface Props {
 
 export const AktivitetspliktMedDatafetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentAktivitetspliktGrunnlag(behandlingsreferanse);
-  return <Aktivitetsplikt grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
+  return (
+    <Aktivitetsplikt
+      grunnlag={grunnlag}
+      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={behandlingVersjon}
+    />
+  );
 };

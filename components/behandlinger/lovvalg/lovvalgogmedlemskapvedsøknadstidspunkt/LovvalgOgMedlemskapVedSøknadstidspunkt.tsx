@@ -15,7 +15,7 @@ import { FormField } from 'components/form/FormField';
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
-  grunnlag: LovvalgMedlemskapGrunnlag;
+  grunnlag?: LovvalgMedlemskapGrunnlag;
   overstyring: boolean;
 }
 
@@ -68,28 +68,28 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
         type: 'textarea',
         label: 'Vurder riktig lovvalg ved søknadstidspunkt',
         rules: { required: 'Du må gi en begrunnelse på lovvalg ved søknadstidspunkt' },
-        defaultValue: grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.begrunnelse,
+        defaultValue: grunnlag?.vurdering?.lovvalgVedSøknadsTidspunkt?.begrunnelse,
       },
       lovvalgsLand: {
         type: 'radio',
         label: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
         options: ['Norge', 'Annet land med avtale'],
         rules: { required: 'Du må velge riktig lovvalg ved søknadstidspunkt' },
-        defaultValue: mapGrunnlagTilLovvalgsland(grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand),
+        defaultValue: mapGrunnlagTilLovvalgsland(grunnlag?.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand),
       },
       annetLovvalgslandMedAvtale: {
         type: 'select',
         label: 'Velg land som vi vurderer som lovvalgsland',
         options: landMedTrygdesamarbeid,
         defaultValue: mapGrunnlagTilAnnetLovvalgslandMedAvtale(
-          grunnlag.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand
+          grunnlag?.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand
         ),
       },
       medlemskapBegrunnelse: {
         type: 'textarea',
         label: 'Vurder brukerens medlemskap på søknadstidspunktet',
         rules: { required: 'Du må begrunne medlemskap på søknadstidspunktet' },
-        defaultValue: grunnlag.vurdering?.medlemskapVedSøknadsTidspunkt?.begrunnelse
+        defaultValue: grunnlag?.vurdering?.medlemskapVedSøknadsTidspunkt?.begrunnelse
           ? grunnlag.vurdering?.medlemskapVedSøknadsTidspunkt?.begrunnelse
           : undefined,
       },
@@ -99,7 +99,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
         options: JaEllerNeiOptions,
         rules: { required: 'Du må velg om brukeren var medlem av folketrygden på søknadstidspunkt' },
         defaultValue: mapGrunnlagTilMedlemAvFolketrygdenVedSøknadstidspunkt(
-          grunnlag.vurdering?.medlemskapVedSøknadsTidspunkt?.varMedlemIFolketrygd
+          grunnlag?.vurdering?.medlemskapVedSøknadsTidspunkt?.varMedlemIFolketrygd
         ),
       },
     },
@@ -138,11 +138,14 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
   const heading = overstyring
     ? 'Overstyring av lovvalg og medlemskap ved søknadstidspunkt'
     : 'Lovvalg og medlemskap ved søknadstidspunkt';
+
+  const historiskeManuelleVurderinger = grunnlag?.historiskeManuelleVurderinger;
+
   return (
     <VilkårsKort heading={heading} steg={'VURDER_LOVVALG'}>
-      {grunnlag.historiskeManuelleVurderinger.length > 0 && (
+      {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
         <TidligereVurderingerV2
-          tidligereVurderinger={grunnlag.historiskeManuelleVurderinger.map((vurdering) => ({
+          tidligereVurderinger={historiskeManuelleVurderinger.map((vurdering) => ({
             ...vurdering,
             felter: [
               {

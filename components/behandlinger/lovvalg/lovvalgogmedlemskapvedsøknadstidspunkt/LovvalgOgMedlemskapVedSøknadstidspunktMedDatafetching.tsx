@@ -1,19 +1,17 @@
 import { LovvalgOgMedlemskapVedSKnadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
-import { hentLovvalgMedlemskapGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { LovvalgMedlemskapGrunnlag } from 'lib/types/types';
 
 interface Props {
-  behandlingsReferanse: string;
   behandlingVersjon: number;
+  grunnlag: LovvalgMedlemskapGrunnlag;
   readOnly: boolean;
 }
 
 export const LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching = async ({
-  behandlingsReferanse,
   behandlingVersjon,
+  grunnlag,
   readOnly,
 }: Props) => {
-  const grunnlag = await hentLovvalgMedlemskapGrunnlag(behandlingsReferanse);
-
   return (
     <LovvalgOgMedlemskapVedSKnadstidspunkt
       behandlingVersjon={behandlingVersjon}

@@ -34,10 +34,8 @@ export const ForutgåendemedlemskapOverstyringswrapper = ({
       />
       {children}
       {overstyring && stegSomSkalVises.length === 0 && (
-        //   TODO Hva gjør vi med gurnnlag her?
         <ManuellVurderingForutgåendeMedlemskap
           behandlingVersjon={behandlingVersjon}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, historiskeManuelleVurderinger: [] }}
           readOnly={readOnly}
           overstyring={true}
         />

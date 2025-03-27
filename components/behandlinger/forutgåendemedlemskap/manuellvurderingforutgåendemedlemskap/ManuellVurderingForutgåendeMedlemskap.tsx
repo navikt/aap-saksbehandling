@@ -13,7 +13,7 @@ import { FormField } from 'components/form/FormField';
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
-  grunnlag: ForutgåendeMedlemskapGrunnlag;
+  grunnlag?: ForutgåendeMedlemskapGrunnlag;
   overstyring: boolean;
 }
 
@@ -58,14 +58,14 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
         type: 'textarea',
         label: 'Vurder brukerens forutgående medlemskap',
         rules: { required: 'Du må gi en begrunnelse på brukerens forutgående medlemskap' },
-        defaultValue: grunnlag.vurdering?.begrunnelse,
+        defaultValue: grunnlag?.vurdering?.begrunnelse,
       },
       harForutgåendeMedlemskap: {
         type: 'radio',
         label: 'Har brukeren fem års forutgående medlemskap i folketrygden jamfør § 11-2?',
         options: JaEllerNeiOptions,
         rules: { required: 'Du må velge om bruker har fem års forutgående medlemskap' },
-        defaultValue: mapGrunnlagTilForutgående(grunnlag.vurdering?.harForutgåendeMedlemskap),
+        defaultValue: mapGrunnlagTilForutgående(grunnlag?.vurdering?.harForutgåendeMedlemskap),
       },
       unntaksvilkår: {
         type: 'radio',
@@ -85,9 +85,9 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
         ],
         rules: { required: 'Du må svare på om bruker oppfyller noen av unntaksvilkårene' },
         defaultValue: mapGrunnlagTilUnntaksvilkår(
-          grunnlag.vurdering?.harForutgåendeMedlemskap,
-          grunnlag.vurdering?.varMedlemMedNedsattArbeidsevne,
-          grunnlag.vurdering?.medlemMedUnntakAvMaksFemAar
+          grunnlag?.vurdering?.harForutgåendeMedlemskap,
+          grunnlag?.vurdering?.varMedlemMedNedsattArbeidsevne,
+          grunnlag?.vurdering?.medlemMedUnntakAvMaksFemAar
         ),
       },
     },

@@ -62,8 +62,6 @@ export const Sykdomsvurdering = ({
   søknadstidspunkt,
   typeBehandling,
 }: SykdomProps) => {
-  console.log('grunnlag', grunnlag);
-
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 

@@ -30,23 +30,26 @@ export interface AnnenStatligYtelse {
   beløp?: number;
 }
 export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, grunnlag }: Props) => {
-  const { form, formFields } = useConfigForm<SamordningAndreStatligeYtelserFormFields>({
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Vurder om bruker har andre statlige ytelser som skal avregnes med AAP',
-      rules: { required: 'Du må gjøre en vilkårsvurdering' },
-      defaultValue: grunnlag.vurdering?.begrunnelse,
+  const { form, formFields } = useConfigForm<SamordningAndreStatligeYtelserFormFields>(
+    {
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Vurder om bruker har andre statlige ytelser som skal avregnes med AAP',
+        rules: { required: 'Du må gjøre en vilkårsvurdering' },
+        defaultValue: grunnlag.vurdering?.begrunnelse,
+      },
+      vurderteSamordninger: {
+        type: 'fieldArray',
+        defaultValue: (grunnlag.vurdering?.vurderingPerioder || []).map((vurdering) => ({
+          ytelse: vurdering.ytelse,
+          fom: vurdering.periode.fom,
+          tom: vurdering.periode.tom,
+          beløp: vurdering.beløp,
+        })),
+      },
     },
-    vurderteSamordninger: {
-      type: 'fieldArray',
-      defaultValue: (grunnlag.vurdering?.vurderingPerioder || []).map((vurdering) => ({
-        ytelse: vurdering.ytelse,
-        fom: vurdering.periode.fom,
-        tom: vurdering.periode.tom,
-        beløp: vurdering.beløp,
-      })),
-    },
-  });
+    { readOnly: readOnly }
+  );
   const finnesGrunnlag = grunnlag.vurdering ? grunnlag.vurdering.vurderingPerioder.length > 0 : false;
   console.log(grunnlag);
   console.log(finnesGrunnlag);
@@ -79,12 +82,13 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
     )(event);
   };
 
+  console.log(readOnly);
   return (
     // @ts-ignore
     <VilkårsKort heading="§ 11-29 Andre statlige ytelser som skal avregnes" steg="SAMORDNING_ANDRE_STATLIGE_YTELSER">
       {!visYtelsesTabell && (
         <HStack>
-          <Button size={'small'} variant={'secondary'} onClick={() => setVisYtelsesTabell(true)}>
+          <Button size={'small'} variant={'secondary'} onClick={() => setVisYtelsesTabell(true)} disabled={readOnly}>
             Legg til statlige ytelser
           </Button>
         </HStack>

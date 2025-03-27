@@ -25,7 +25,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
           erKvalitetssikring={false}
           behandlingsReferanse={behandlingsReferanse}
           behandlingVersjon={behandlingVersjon}
-          readOnly={flyt.visning.beslutterReadOnly}
+          readOnly={flyt.visning.beslutterReadOnly || !fatteVedtakGrunnlag.harTilgangTilÅSaksbehandle}
         />
       )}
       {flyt.visning.visKvalitetssikringKort && (
@@ -34,7 +34,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
           behandlingsReferanse={behandlingsReferanse}
           erKvalitetssikring={true}
           behandlingVersjon={behandlingVersjon}
-          readOnly={flyt.visning.kvalitetssikringReadOnly}
+          readOnly={flyt.visning.kvalitetssikringReadOnly || !kvalitetssikringGrunnlag.harTilgangTilÅSaksbehandle}
         />
       )}
     </>

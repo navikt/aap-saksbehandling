@@ -13,5 +13,11 @@ export const SamordningGraderingMedDatafetching = async ({
   readOnly,
 }: Props) => {
   const grunnlag = await hentSamordningGraderingGrunnlag(behandlingsreferanse);
-  return <SamordningGradering grunnlag={grunnlag} behandlingVersjon={behandlingVersjon} readOnly={readOnly} />;
+  return (
+    <SamordningGradering
+      grunnlag={grunnlag}
+      behandlingVersjon={behandlingVersjon}
+      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+    />
+  );
 };

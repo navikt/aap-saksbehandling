@@ -13,5 +13,11 @@ export const FastsettArbeidsevneMedDataFetching = async ({
   readOnly,
 }: Props) => {
   const grunnlag = await hentFastsettArbeidsevneGrunnlag(behandlingsReferanse);
-  return <FastsettArbeidsevne grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
+  return (
+    <FastsettArbeidsevne
+      grunnlag={grunnlag}
+      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={behandlingVersjon}
+    />
+  );
 };

@@ -12,7 +12,7 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsReferanse, behandli
   return (
     <Yrkesskade
       grunnlag={yrkesskadeVurderingGrunnlag}
-      readOnly={readOnly}
+      readOnly={readOnly || !yrkesskadeVurderingGrunnlag.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       behandlingsReferanse={behandlingsReferanse}
     />

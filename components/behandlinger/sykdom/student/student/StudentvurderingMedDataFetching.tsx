@@ -10,5 +10,11 @@ interface Props {
 export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentStudentGrunnlag(behandlingsreferanse);
 
-  return <Studentvurdering grunnlag={grunnlag} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
+  return (
+    <Studentvurdering
+      grunnlag={grunnlag}
+      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={behandlingVersjon}
+    />
+  );
 };

@@ -21,7 +21,7 @@ export const BistandsbehovMedDataFetching = async ({
   return (
     <Bistandsbehov
       grunnlag={grunnlag}
-      readOnly={readOnly}
+      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       typeBehandling={typeBehandling}
       søknadstidspunkt={sak.opprettetTidspunkt}

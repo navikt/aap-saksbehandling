@@ -13,7 +13,7 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandling
   return (
     <Refusjon
       grunnlag={refusjonGrunnlag}
-      readOnly={readOnly}
+      readOnly={readOnly || !refusjonGrunnlag.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       søknadstidspunkt={sak.opprettetTidspunkt}
     />
