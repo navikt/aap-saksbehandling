@@ -79,7 +79,7 @@ export const TotaloversiktBehandlinger = () => {
             icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
             onClick={() => setListeVisning(!listeVisning)}
           >
-            {listeVisning ? 'Gridvisning' : 'Listevinsing'}
+            {listeVisning ? 'Gridvisning' : 'Listevisning'}
           </Button>
         </HStack>
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
