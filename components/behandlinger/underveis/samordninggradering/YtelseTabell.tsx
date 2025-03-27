@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Box, Label, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { SamordningGraderingYtelse } from 'lib/types/types';
 
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
@@ -34,16 +34,29 @@ export const YtelseTabell = ({ ytelser }: Props) => {
               <Table.DataCell colSpan={4}>Ingen andre ytelser funnet</Table.DataCell>
             </Table.Row>
           )}
-          {ytelser.map((ytelse) => (
-            <Table.Row key={ytelse.saksRef}>
-              <Table.DataCell textSize="small">
-                {formaterDatoForVisning(ytelse.periode.fom)} - {formaterDatoForVisning(ytelse.periode.tom)}
-              </Table.DataCell>
-              <Table.DataCell textSize="small">{ytelse.ytelseType}</Table.DataCell>
-              <Table.DataCell textSize="small">{ytelse.kilde}</Table.DataCell>
-              <Table.DataCell textSize="small">{ytelse.gradering}</Table.DataCell>
-            </Table.Row>
-          ))}
+          {ytelser.map((ytelse) => {
+            const classNames = [
+              ytelse.endringStatus === 'NY' && styles.ny,
+              ytelse.endringStatus === 'SLETTET' && styles.slettet,
+            ].join(' ');
+            return (
+              <Table.Row key={ytelse.saksRef} className={classNames}>
+                <Table.DataCell textSize="small">
+                  <HStack gap={'2'} marginInline={'2'}>
+                    {ytelse.endringStatus === 'NY' && (
+                      <BodyShort size="small" weight="semibold" className={styles.nyTag}>
+                        Ny
+                      </BodyShort>
+                    )}
+                    {formaterDatoForVisning(ytelse.periode.fom)} - {formaterDatoForVisning(ytelse.periode.tom)}
+                  </HStack>
+                </Table.DataCell>
+                <Table.DataCell textSize="small">{ytelse.ytelseType}</Table.DataCell>
+                <Table.DataCell textSize="small">{ytelse.kilde}</Table.DataCell>
+                <Table.DataCell textSize="small">{ytelse.gradering}</Table.DataCell>
+              </Table.Row>
+            );
+          })}
         </Table.Body>
       </Table>
     </Box>
