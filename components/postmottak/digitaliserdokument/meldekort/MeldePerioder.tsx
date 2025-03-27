@@ -13,6 +13,7 @@ interface Props {
 export const MeldePerioder = ({ form, readOnly }: Props) => {
   const { fields, append, remove } = useFieldArray({ name: 'pliktPerioder', control: form.control });
 
+  // TODO Legg til to uker
   function leggTilNyPeriode() {
     const tomUke: PliktDag[] = Array.from(Array(7), () => ({ dato: undefined, arbeidsTimer: 0 }));
     append({ dager: tomUke });

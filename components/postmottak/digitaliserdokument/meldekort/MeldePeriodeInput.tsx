@@ -4,7 +4,7 @@ import { add, format } from 'date-fns';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import styles from './MeldePeriodeInput.module.css';
-import { TrashFillIcon, PencilFillIcon } from '@navikt/aksel-icons';
+import { PencilFillIcon, TrashFillIcon } from '@navikt/aksel-icons';
 
 interface Props {
   form: UseFormReturn<PliktkortFormFields>;
@@ -19,6 +19,7 @@ export const MeldePeriodeInput = ({ form, dagIndex, readOnly, slettPeriode }: Pr
     name: `pliktPerioder.${dagIndex}.dager`,
     control: form.control,
   });
+
   useEffect(() => {
     if (valgtDato) {
       fields.forEach((dag, index) => {
@@ -26,10 +27,12 @@ export const MeldePeriodeInput = ({ form, dagIndex, readOnly, slettPeriode }: Pr
       });
     }
   }, [valgtDato]);
+
   const erAnnenDagEnnMandag = [(date: Date) => date.getDay() !== 1];
   const erDatoValgt = fields.every((e) => e.dato);
+
   return (
-    <VStack padding={'4'} gap={'2'} className={styles.pliktPeriodeInput}>
+    <VStack padding={'4'} className={styles.pliktPeriodeInput}>
       <HStack justify={'space-between'}>
         <Button
           icon={<PencilFillIcon />}
@@ -44,7 +47,7 @@ export const MeldePeriodeInput = ({ form, dagIndex, readOnly, slettPeriode }: Pr
           icon={<TrashFillIcon />}
           size={'small'}
           type={'button'}
-          variant={'secondary'}
+          variant={'tertiary'}
           onClick={() => slettPeriode(dagIndex)}
           disabled={readOnly}
         />
@@ -60,7 +63,7 @@ export const MeldePeriodeInput = ({ form, dagIndex, readOnly, slettPeriode }: Pr
         onClose={() => setIsVelgDatoÅpen(false)}
       />
       {erDatoValgt && (
-        <Table size={'small'}>
+        <Table size={'small'} className={styles.tabell}>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell></Table.HeaderCell>

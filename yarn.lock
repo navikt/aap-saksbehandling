@@ -1503,10 +1503,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.209":
-  version: 0.0.209
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.209::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.209%2F8f9ece07ff2f6630fd93432af17d1d583c435626"
-  checksum: 10c0/d653052c6987242a5a197fbac6c7ac542517ff70407219ba095a963a27341ed110122d19701499ad8605a795f72eb75fe7aa70f82a91f45c467d851a278f2a02
+"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.218":
+  version: 0.0.218
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.218::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.218%2F58359f3702413fa4b134faa408b5a5fe1d384879"
+  checksum: 10c0/a61b53c35051a32ee20b043ad02f03d61db7ab0935aee0cd1253f614ea0c69bf6b6093d7c20640f30809b57f6a65ebe1447402427bf53b276d0f7cff8dffa90e
   languageName: node
   linkType: hard
 
@@ -3525,7 +3525,7 @@ __metadata:
     "@navikt/aap-felles-utils": "npm:^5.1.2"
     "@navikt/aap-felles-utils-client": "npm:^5.1.2"
     "@navikt/aap-oppgave-typescript-types": "npm:^0.0.133"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.209"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.218"
     "@navikt/aap-statistikk-typescript-types": "npm:^0.1.63"
     "@navikt/aksel-icons": "npm:7.17.4"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
