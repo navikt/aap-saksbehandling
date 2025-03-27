@@ -11,7 +11,7 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
   const grunnlagene = await hentBrevGrunnlag(behandlingReferanse);
 
   const grunnlag = grunnlagene.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
-  if (!grunnlag) {
+  if (!grunnlag || !grunnlagene.harTilgangTilÅSaksbehandle) {
     return null;
   }
   const brev = grunnlag.brev;
