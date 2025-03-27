@@ -186,11 +186,14 @@ describe('Førstegangsbehandling', () => {
     });
     await velgNei(gruppeC);
     expect(
-      screen.getByRole('heading', { name: '§ 11-18 AAP under behandling av søknad om uføretrygd', level: 3 })
+      screen.getByRole('heading', {
+        name: '§ 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd',
+        level: 3,
+      })
     ).toBeVisible();
     expect(
       await screen.findByRole('group', {
-        name: 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?',
+        name: 'Har brukeren rett til AAP under behandling av krav om uføretrygd',
       })
     ).toBeVisible();
   });
@@ -354,11 +357,14 @@ describe('Revurdering', () => {
     });
     await velgNei(gruppeC);
     expect(
-      screen.getByRole('heading', { name: '§ 11-18 AAP under behandling av søknad om uføretrygd', level: 3 })
+      screen.getByRole('heading', {
+        name: '§ 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd',
+        level: 3,
+      })
     ).toBeVisible();
     expect(
       await screen.findByRole('group', {
-        name: 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?',
+        name: 'Har brukeren rett til AAP under behandling av krav om uføretrygd',
       })
     ).toBeVisible();
   });
@@ -381,13 +387,13 @@ describe('Revurdering', () => {
     });
     await velgNei(gruppeC);
 
-    expect(screen.getByRole('heading', { name: '§ 11-17 AAP i perioden som arbeidssøker', level: 3 })).toBeVisible();
     expect(
-      screen.getByRole('textbox', { name: 'Vurder om brukeren har rett på AAP i overgang til uføre eller arbeid' })
+      screen.getByRole('heading', { name: '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker', level: 3 })
     ).toBeVisible();
+    expect(screen.getAllByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveLength(2);
     expect(
       await screen.findByRole('group', {
-        name: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?',
+        name: 'Har brukeren rett til AAP i perioden som arbeidssøker',
       })
     ).toBeVisible();
   });
@@ -411,7 +417,7 @@ describe('Revurdering', () => {
     await velgNei(gruppeC);
 
     const overgangTilArbeid = screen.getByRole('group', {
-      name: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?',
+      name: 'Har brukeren rett til AAP i perioden som arbeidssøker',
     });
 
     await velgJa(overgangTilArbeid);
@@ -439,7 +445,7 @@ describe('Revurdering', () => {
     await velgNei(gruppeC);
 
     const overgangTilArbeid = screen.getByRole('group', {
-      name: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?',
+      name: 'Har brukeren rett til AAP i perioden som arbeidssøker',
     });
 
     await velgJa(overgangTilArbeid);
@@ -464,7 +470,7 @@ describe('Revurdering', () => {
     });
     await velgNei(gruppeC);
     const overgangTilUføre = screen.getByRole('group', {
-      name: 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?',
+      name: 'Har brukeren rett til AAP under behandling av krav om uføretrygd',
     });
     await velgJa(overgangTilUføre);
     expect(
@@ -489,7 +495,7 @@ describe('Revurdering', () => {
     });
     await velgNei(gruppeC);
     const overgangTilUføre = screen.getByRole('group', {
-      name: 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?',
+      name: 'Har brukeren rett til AAP under behandling av krav om uføretrygd',
     });
     await velgJa(overgangTilUføre);
     await trykkPåBekreft();

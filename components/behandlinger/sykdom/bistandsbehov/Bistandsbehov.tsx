@@ -68,13 +68,13 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       },
       overgangBegrunnelse: {
         type: 'textarea',
-        label: 'Vurder om brukeren har rett på AAP i overgang til uføre eller arbeid', // TODO ønsker å kunne tilpasse denne
+        label: 'Vilkårsvurdering',
         defaultValue: grunnlag?.vurdering?.overgangBegrunnelse || undefined,
-        rules: { required: 'Du må begrunne om bruker har rett til AAP i overgang til uføre eller arbeid' },
+        rules: { required: 'Du må gjøre en vilkårsvurdering' },
       },
       vurderAAPIOvergangTilUføre: {
         type: 'radio',
-        label: 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?',
+        label: 'Har brukeren rett til AAP under behandling av krav om uføretrygd',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilUføre),
         rules: {
@@ -85,7 +85,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       },
       vurderAAPIOvergangTilArbeid: {
         type: 'radio',
-        label: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?',
+        label: 'Har brukeren rett til AAP i perioden som arbeidssøker',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilArbeid),
         rules: {
@@ -181,8 +181,8 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
           (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
           bistandsbehovErIkkeOppfylt && (
             <VStack gap={'4'} as={'section'}>
-              <Heading level={'3'} size="medium">
-                § 11-18 AAP under behandling av søknad om uføretrygd
+              <Heading level={'3'} size="small">
+                § 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd
               </Heading>
               <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
               <FormField form={form} formField={formFields.vurderAAPIOvergangTilUføre} horizontalRadio />
@@ -195,8 +195,8 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
           )}
         {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
           <VStack gap={'4'} as={'section'}>
-            <Heading level={'3'} size="medium">
-              § 11-17 AAP i perioden som arbeidssøker
+            <Heading level={'3'} size="small">
+              § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
             </Heading>
             <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
             <FormField form={form} formField={formFields.vurderAAPIOvergangTilArbeid} horizontalRadio />
