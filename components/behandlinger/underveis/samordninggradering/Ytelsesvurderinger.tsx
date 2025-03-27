@@ -1,5 +1,5 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Table } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { SamordningGraderingFormfields } from 'components/behandlinger/underveis/samordninggradering/SamordningGradering';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { ValuePair } from 'components/form/FormField';
@@ -64,7 +64,14 @@ export const Ytelsesvurderinger = ({ form, readOnly }: Props) => {
   }
 
   return (
-    <>
+    <Box paddingBlock={'4'}>
+      <VStack gap={'2'} marginBlock={'4'}>
+        <Label size="small">Legg til perioder med samordning</Label>
+        <BodyShort size="small">
+          Legg til perioder med folketrygdytelser som skal samordnes med AAP etter § 11-27 / 11-28. Grad skal settes ut
+          fra en arbeidsevne på 37,5t.
+        </BodyShort>
+      </VStack>
       <Table className={styles.ytelsestabell}>
         <Table.Header>
           <Table.Row>
@@ -177,6 +184,6 @@ export const Ytelsesvurderinger = ({ form, readOnly }: Props) => {
           Legg til
         </Button>
       </HStack>
-    </>
+    </Box>
   );
 };
