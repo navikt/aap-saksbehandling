@@ -43,6 +43,9 @@ export const Behandlingsinfo = ({ behandling, saksnummer }: Props) => {
                           behandlingsreferanse={behandling.referanse}
                     />
                     </StegSuspense>
+                    <Label as="p" size={'small'}>
+                        Virkningstidspunkt:
+                    </Label>
                 </HGrid>
             </VStack>
         </Box>

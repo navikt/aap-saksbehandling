@@ -14,11 +14,7 @@ export const BehandlingsinfoDataMedDataFetching = async ({
     const behandlingsInfo = await hentVirkningsTidspunkt(behandlingsreferanse);
 
     return (
-        <>
             <BodyShort size={'small'}>{behandlingsInfo.virkningstidspunkt}</BodyShort>
-            <Label as="p" size={'small'}>
-                Virkningstidspunkt:
-            </Label>
-        </>
+
     )
 };
