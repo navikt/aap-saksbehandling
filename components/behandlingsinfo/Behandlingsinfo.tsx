@@ -5,6 +5,8 @@ import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatu
 
 import styles from './Behandlingsinfo.module.css';
 
+import { StegSuspense } from "../stegsuspense/StegSuspense";
+import { BehandlingsinfoDataMedDataFetching } from "./BehandlingsinfoDataMedDataFetching";
 interface Props {
   behandling: DetaljertBehandling;
   saksnummer: string;
@@ -36,13 +38,11 @@ export const Behandlingsinfo = ({ behandling, saksnummer }: Props) => {
                         Saksnummer:
                     </Label>
                     <BodyShort size={'small'}>{saksnummer}</BodyShort>
-
-                    { /*  <StegSuspense>
-
+                    <StegSuspense>
                         <BehandlingsinfoDataMedDataFetching
-                        behandlingsreferanse={behandling.referanse}
+                          behandlingsreferanse={behandling.referanse}
                     />
-                    </StegSuspense>*/}
+                    </StegSuspense>
                 </HGrid>
             </VStack>
         </Box>

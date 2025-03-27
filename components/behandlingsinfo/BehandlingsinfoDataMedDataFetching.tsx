@@ -1,7 +1,7 @@
 import {
     hentVirkningsTidspunkt,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import {BodyShort, Label} from "@navikt/ds-react";
+import { BodyShort, Label } from "@navikt/ds-react";
 
 type Props = {
     behandlingsreferanse: string;
