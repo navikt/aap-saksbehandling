@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { Enhet, Kø } from 'lib/types/types';
 import { OppgaveTabell } from 'components/oppgave/oppgavetabell/OppgaveTabell';
 import useSWR from 'swr';
@@ -9,30 +9,39 @@ import { Alert, BodyShort, Button, Heading, HStack, Label, Loader, Skeleton, Swi
 // import { hentOppgaverClient, plukkNesteOppgaveClient } from 'lib/services/client';
 import { EnhetSelect } from 'components/oppgave/enhetselect/EnhetSelect';
 import { KøSelect } from 'components/oppgave/køselect/KøSelect';
-import { byggKelvinURL } from 'lib/utils/request';
-import { Enhet, Kø } from 'lib/types/oppgaveTypes';
-import { hentOppgaverClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
-import {Kort} from "components/oppgave/kort/Kort";
+import { byggKelvinURL, queryParamsArray } from 'lib/utils/request';
+import { Enhet } from 'lib/types/oppgaveTypes';
+import { hentKøerForEnheterClient, hentOppgaverClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
+import { Kort } from 'components/oppgave/kort/Kort';
 
 interface Props {
-  køer: Kø[];
   enheter: Enhet[];
 }
 
-export const OppgaveKøMedOppgaver = ({ køer, enheter }: Props) => {
-  const [aktivKø, setAktivKø] = useState<number>(køer[0]?.id ?? 0);
+export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [aktivEnhet, setAktivEnhet] = useState<string>(enheter[0]?.enhetNr ?? '');
   const [veilederFilter, setVeilederFilter] = useState<string>('');
-  const aktivKøBeskrivelse = useMemo(() => køer.find((e) => e.id === aktivKø)?.beskrivelse, [aktivKø, køer]);
 
-  const oppgaverValgtKø = useSWR(`api/oppgave/oppgaveliste/${aktivKø}/${aktivEnhet}/${veilederFilter}`, () =>
-    hentOppgaverClient(aktivKø, [aktivEnhet], veilederFilter === 'veileder')
+  const køer = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
+    hentKøerForEnheterClient([aktivEnhet])
+  );
+
+  const [aktivKø, setAktivKø] = useState<number>();
+  useEffect(() => {
+    if (køer.data?.type === 'success' && aktivKø == null) {
+      setAktivKø(køer.data.data[0]?.id ?? 0);
+    }
+  }, [køer]);
+
+  const oppgaverValgtKø = useSWR(
+    aktivKø ? `api/oppgave/oppgaveliste/${aktivKø}/${aktivEnhet}/${veilederFilter}` : null,
+    () => hentOppgaverClient(aktivKø!, [aktivEnhet], veilederFilter === 'veileder')
   );
 
   async function plukkOgGåTilOppgave() {
     setIsLoading(true);
-    if (aktivEnhet) {
+    if (aktivEnhet && aktivKø) {
       const nesteOppgave = await plukkNesteOppgaveClient(aktivKø, aktivEnhet);
       if (nesteOppgave.type === 'success') {
         if (nesteOppgave.data) {
@@ -63,7 +72,7 @@ export const OppgaveKøMedOppgaver = ({ køer, enheter }: Props) => {
             <VStack>
               <KøSelect
                 label={'Velg kø du skal jobbe på'}
-                køer={køer}
+                køer={køer.data?.type === 'success' ? køer.data.data : []}
                 valgtKøListener={(kø) => {
                   setAktivKø(kø);
                 }}
@@ -73,7 +82,9 @@ export const OppgaveKøMedOppgaver = ({ køer, enheter }: Props) => {
               <Label as="p" size={'small'} spacing>
                 Beskrivelse av køen
               </Label>
-              <BodyShort spacing>{aktivKøBeskrivelse}</BodyShort>
+              {køer.data?.type === 'success' && (
+                <BodyShort spacing>{køer.data.data.find((e) => e.id === aktivKø)?.beskrivelse}</BodyShort>
+              )}
             </VStack>
             <VStack>
               <Label as="p" size={'small'} spacing>
