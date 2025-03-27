@@ -11,11 +11,11 @@ export const BehandlingsinfoDataMedDataFetching = async ({
                                                              behandlingsreferanse,
                                                          }: Props) => {
 
-    const virkningstidspunkt = await hentVirkningsTidspunkt(behandlingsreferanse);
+    const behandlingsInfo = await hentVirkningsTidspunkt(behandlingsreferanse);
 
     return (
         <>
-            <BodyShort size={'small'}>{virkningstidspunkt}</BodyShort>
+            <BodyShort size={'small'}>{behandlingsInfo.virkningstidspunkt}</BodyShort>
             <Label as="p" size={'small'}>
                 Virkningstidspunkt:
             </Label>
