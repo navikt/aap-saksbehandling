@@ -1,7 +1,7 @@
 'use client';
 
-import { Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
-import { useContext, useMemo } from 'react';
+import { Button, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { useContext, useMemo, useState } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import useSWR from 'swr';
 import { AlleFiltereContext } from '../allefiltereprovider/AlleFiltereProvider';
@@ -23,8 +23,11 @@ import { FordelingLukkedeBehandlingerPerDag } from 'components/produksjonsstyrin
 import { VenteÅrsaker } from 'components/produksjonsstyring/venteårsaker/VenteÅrsaker';
 import { BehandlingerPerSteggruppe } from 'components/produksjonsstyring/behandlingerpersteggruppe/BehandlingerPerSteggruppe';
 import { ÅrsakTilBehandling } from 'components/produksjonsstyring/årsaktilbehandling/ÅrsakTilBehandling';
+import styles from './TotaloversiktBehandlinger.module.css';
+import { BulletListIcon, MenuGridIcon } from '@navikt/aksel-icons';
 
 export const TotaloversiktBehandlinger = () => {
+  const [listeVisning, setListeVisning] = useState<boolean>(false);
   const alleFiltere = useContext(AlleFiltereContext);
   const behandlingstyperQuery = useMemo(
     () => statistikkQueryparams({ behandlingstyper: alleFiltere.behandlingstyper }),
@@ -67,10 +70,19 @@ export const TotaloversiktBehandlinger = () => {
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
       <VStack padding={'5'} gap={'5'}>
-        <Heading level={'2'} size={'large'}>
-          Behandlinger
-        </Heading>
-        <HStack gap={'4'}>
+        <HStack gap={'5'}>
+          <Heading level={'2'} size={'large'}>
+            Behandlinger
+          </Heading>
+          <Button
+            variant={'secondary'}
+            icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
+            onClick={() => setListeVisning(!listeVisning)}
+          >
+            {listeVisning ? 'Gridvisning' : 'Listevinsing'}
+          </Button>
+        </HStack>
+        <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {behandlingerUtvikling?.type === 'success' && (
             <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
           )}
@@ -95,7 +107,7 @@ export const TotaloversiktBehandlinger = () => {
           {årsakerTilBehandling?.type === 'success' && (
             <ÅrsakTilBehandling årsakTilBehandling={årsakerTilBehandling.data || []} />
           )}
-        </HStack>
+        </div>
       </VStack>
     </HGrid>
   );

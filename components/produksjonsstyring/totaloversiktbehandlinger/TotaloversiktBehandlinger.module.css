@@ -1,0 +1,7 @@
+.plotGrid {
+  composes: plotGrid from 'lib/styles/PlotGrid.module.css';
+}
+
+.plotList {
+  composes: plotList from 'lib/styles/PlotGrid.module.css';
+}

@@ -4,10 +4,8 @@ import { VStack } from '@navikt/ds-react';
 
 interface Props {
   children: ReactNode;
-  size?: 'small' | 'medium' | 'large';
 }
 
-export const PlotWrapper = ({ children, size }: Props) => {
-  const sizeClass = size ? styles[size] : styles.small;
-  return <VStack className={`${styles.plotWrapper} ${sizeClass}`}>{children}</VStack>;
+export const PlotWrapper = ({ children }: Props) => {
+  return <VStack className={styles.plotWrapper}>{children}</VStack>;
 };

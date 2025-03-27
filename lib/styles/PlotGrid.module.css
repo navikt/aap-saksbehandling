@@ -1,0 +1,25 @@
+.plotGrid {
+  display: grid;
+  gap: var(--a-spacing-4);
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(8, 1fr);
+  @media (min-width: 1024px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
+  }
+  @media (min-width: 1824px) {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: repeat(3, 1fr);
+  }
+  @media (min-width: 2424px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: repeat(2, 1fr);
+  }
+}
+
+.plotList {
+  display: grid;
+  gap: var(--a-spacing-4);
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(8, 1fr);
+}
