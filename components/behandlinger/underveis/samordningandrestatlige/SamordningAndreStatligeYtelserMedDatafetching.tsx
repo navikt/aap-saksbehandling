@@ -13,6 +13,10 @@ export const SamordningAndreStatligeYtelserMedDatafetching = async ({
 }: Props) => {
   const grunnlag = await hentSamordningAndreStatligeYtelseGrunnlag(behandlingsreferanse);
   return (
-    <SamordningAndreStatligeYtelser grunnlag={grunnlag} behandlingVersjon={behandlingVersjon} readOnly={readOnly} />
+    <SamordningAndreStatligeYtelser
+      grunnlag={grunnlag}
+      behandlingVersjon={behandlingVersjon}
+      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+    />
   );
 };
