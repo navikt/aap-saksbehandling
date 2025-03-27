@@ -188,7 +188,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
               <FormField form={form} formField={formFields.vurderAAPIOvergangTilUføre} horizontalRadio />
               {form.watch('vurderAAPIOvergangTilUføre') === JaEllerNei.Ja && (
                 <Alert variant="warning">
-                  Dette virker ikke enda! Sett saken på vent, og si fra til Team AAP om at du har fått en 11-18 sak
+                  Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18 sak.
                 </Alert>
               )}
             </VStack>
@@ -202,7 +202,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
             <FormField form={form} formField={formFields.vurderAAPIOvergangTilArbeid} horizontalRadio />
             {form.watch('vurderAAPIOvergangTilArbeid') === JaEllerNei.Ja && (
               <Alert variant="warning">
-                Dette virker ikke enda! Sett saken på vent, og si fra til Team AAP om at du har fått en 11-17 sak
+                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17 sak.
               </Alert>
             )}
           </VStack>
