@@ -11,8 +11,7 @@ import {
 import { Barnetillegg } from './Barnetillegg';
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 import { Student } from './Student';
-import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
-import { VStack } from '@navikt/ds-react';
+import { Button, VStack } from '@navikt/ds-react';
 import { Søknad } from 'lib/types/types';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
@@ -37,6 +36,7 @@ export interface SøknadFormFields {
 interface Props extends Submittable {
   grunnlag: DigitaliseringsGrunnlag;
   readOnly: boolean;
+  isLoading: boolean;
 }
 
 function mapTilSøknadKontrakt(data: SøknadFormFields) {
@@ -56,7 +56,7 @@ function mapTilSøknadKontrakt(data: SøknadFormFields) {
   return JSON.stringify(søknad);
 }
 
-export const DigitaliserSøknad = ({ grunnlag, readOnly, submit }: Props) => {
+export const DigitaliserSøknad = ({ grunnlag, readOnly, submit, isLoading }: Props) => {
   const søknadGrunnlag = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
@@ -71,14 +71,14 @@ export const DigitaliserSøknad = ({ grunnlag, readOnly, submit }: Props) => {
       },
       yrkesSkade: {
         type: 'radio',
-        label: 'Yrkesskade',
+        label: 'Har søker yrkesskade?',
         options: [JaNeiIkkeOppgitt.JA, JaNeiIkkeOppgitt.NEI, JaNeiIkkeOppgitt.IKKE_OPPGITT],
         defaultValue: søknadGrunnlag.yrkesskade ? stringToJaNeiIkkeOppgitt(søknadGrunnlag.yrkesskade) : undefined,
         rules: { required: 'Du må velge om bruker har oppgitt en yrkesskade' },
       },
       erStudent: {
         type: 'radio',
-        label: 'Er brukeren student?',
+        label: 'Er søkeren student?',
         options: [
           JaNeiAvbruttIkkeOppgitt.JA,
           JaNeiAvbruttIkkeOppgitt.NEI,
@@ -92,7 +92,7 @@ export const DigitaliserSøknad = ({ grunnlag, readOnly, submit }: Props) => {
       },
       studentKommeTilbake: {
         type: 'radio',
-        label: 'Skal studenten tilbake til studiet?',
+        label: 'Skal søkeren tilbake til studiet?',
         options: [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
         defaultValue: søknadGrunnlag.student?.kommeTilbake
           ? stringToJaNeiVetikke(søknadGrunnlag.student.kommeTilbake)
@@ -110,7 +110,7 @@ export const DigitaliserSøknad = ({ grunnlag, readOnly, submit }: Props) => {
   );
 
   return (
-    <VilkårsKort heading={'Digitaliser søknad'}>
+    <VilkårsKort heading={'Søknad'}>
       <form onSubmit={form.handleSubmit((data) => submit('SØKNAD', mapTilSøknadKontrakt(data), data.søknadsDato))}>
         <VStack gap={'6'}>
           <VStack gap={'3'}>
@@ -122,7 +122,9 @@ export const DigitaliserSøknad = ({ grunnlag, readOnly, submit }: Props) => {
           </div>
           <Barnetillegg form={form} readOnly={readOnly} />
           <Student form={form} formFields={formFields} />
-          <Nesteknapp>Neste</Nesteknapp>
+          <Button loading={isLoading} className={'fit-content'}>
+            Neste
+          </Button>
         </VStack>
       </form>
     </VilkårsKort>

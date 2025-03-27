@@ -1,17 +1,16 @@
 'use client';
 
 import { MeldePerioder } from './MeldePerioder';
-import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import { MeldekortV0 } from 'lib/types/types';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { Button } from '@navikt/ds-react';
 
 interface Props extends Submittable {
-  behandlingsVersjon: number;
-  behandlingsreferanse: string;
   readOnly: boolean;
+  isLoading: boolean;
 }
 export type PliktDag = {
   dato?: Date;
@@ -24,12 +23,12 @@ export interface PliktkortFormFields {
   innsendtDato?: Date;
   pliktPerioder?: PliktPeriode[];
 }
-export const DigitaliserMeldekort = ({ readOnly, submit }: Props) => {
+export const DigitaliserMeldekort = ({ readOnly, submit, isLoading }: Props) => {
   const { form, formFields } = useConfigForm<PliktkortFormFields>(
     {
       innsendtDato: {
-        type: 'date',
-        label: 'Innsendt dato',
+        type: 'date_input',
+        label: 'Dato for innsendt meldekort',
       },
       pliktPerioder: {
         type: 'fieldArray',
@@ -61,7 +60,9 @@ export const DigitaliserMeldekort = ({ readOnly, submit }: Props) => {
       <form onSubmit={form.handleSubmit((data) => submit('MELDEKORT', mapTilPliktkortKontrakt(data), null))}>
         <FormField form={form} formField={formFields.innsendtDato} />
         <MeldePerioder form={form} readOnly={readOnly} />
-        <Nesteknapp>Neste</Nesteknapp>
+        <Button loading={isLoading} className={'fit-content'}>
+          Neste
+        </Button>
       </form>
     </VilkårsKort>
   );

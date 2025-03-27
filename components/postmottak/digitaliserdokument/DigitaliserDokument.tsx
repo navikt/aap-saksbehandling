@@ -24,7 +24,7 @@ export interface Submittable {
 
 export const DigitaliserDokument = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
-  const { løsBehovOgGåTilNesteSteg, status } = useLøsBehovOgGåTilNesteSteg('DIGITALISER_DOKUMENT');
+  const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('DIGITALISER_DOKUMENT');
 
   function handleSubmit(kategori: KategoriserDokumentKategori, jsonString: string | null, søknadsdato: Date | null) {
     løsBehovOgGåTilNesteSteg({
@@ -41,7 +41,7 @@ export const DigitaliserDokument = ({ behandlingsVersjon, behandlingsreferanse, 
   }
 
   return (
-    <VStack padding={'4'} gap={'4'}>
+    <VStack gap={'4'}>
       <Kategoriser
         submit={handleSubmit}
         kategori={kategori}
@@ -49,17 +49,19 @@ export const DigitaliserDokument = ({ behandlingsVersjon, behandlingsreferanse, 
         onKategoriChange={setKategori}
         status={status}
       />
-      {kategori === 'SØKNAD' && <DigitaliserSøknad submit={handleSubmit} grunnlag={grunnlag} readOnly={readOnly} />}
+      {kategori === 'SØKNAD' && (
+        <DigitaliserSøknad submit={handleSubmit} grunnlag={grunnlag} readOnly={readOnly} isLoading={isLoading} />
+      )}
       {kategori === 'MELDEKORT' && (
-        <DigitaliserMeldekort
-          submit={handleSubmit}
-          behandlingsVersjon={behandlingsVersjon}
-          behandlingsreferanse={behandlingsreferanse}
-          readOnly={readOnly}
-        />
+        <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />
       )}
       {kategori === 'ANNET_RELEVANT_DOKUMENT' && (
-        <DigitaliserAnnetRelevantDokument submit={handleSubmit} grunnlag={grunnlag} readOnly={readOnly} />
+        <DigitaliserAnnetRelevantDokument
+          submit={handleSubmit}
+          grunnlag={grunnlag}
+          readOnly={readOnly}
+          isLoading={isLoading}
+        />
       )}
     </VStack>
   );

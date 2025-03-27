@@ -2,10 +2,9 @@
 
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 
-import { VStack } from '@navikt/ds-react';
+import { Button, VStack } from '@navikt/ds-react';
 import type { AnnetRelevantDokumentV0, ÅrsakTilBehandling } from 'lib/types/types';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
-import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
@@ -17,6 +16,7 @@ export interface AnnetRelevantDokumentFormFields {
 interface Props extends Submittable {
   grunnlag: DigitaliseringsGrunnlag;
   readOnly: boolean;
+  isLoading: boolean;
 }
 
 function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
@@ -41,7 +41,7 @@ const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
   // { value: '', label: 'Journalfør på saken uten å starte revurdering' }, venter på enum i behandlingsflyt
 ];
 
-export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit }: Props) => {
+export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, isLoading }: Props) => {
   const annetRelevantDokumentGrunnlag: AnnetRelevantDokumentV0 = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
@@ -72,7 +72,9 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit }:
       >
         <VStack gap={'6'}>
           <FormField form={form} formField={formFields.årsaker} />
-          <Nesteknapp>Send Inn</Nesteknapp>
+          <Button loading={isLoading} className={'fit-content'}>
+            Send inn
+          </Button>
         </VStack>
       </form>
     </VilkårsKort>

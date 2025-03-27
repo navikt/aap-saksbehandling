@@ -16,7 +16,9 @@ describe('DigitaliserAnnetDokument', () => {
   const user = userEvent.setup();
 
   it('at det går an å velge flere alternativer', async () => {
-    render(<DigitaliserAnnetRelevantDokument submit={() => {}} grunnlag={grunnlag} readOnly={false} />);
+    render(
+      <DigitaliserAnnetRelevantDokument submit={() => {}} grunnlag={grunnlag} readOnly={false} isLoading={false} />
+    );
     await user.click(screen.getByRole('combobox'));
     await user.click(screen.getByText(/Yrkesskade/));
     await user.click(screen.getByText(/Samordning og avregning/));
