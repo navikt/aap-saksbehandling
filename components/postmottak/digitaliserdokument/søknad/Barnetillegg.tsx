@@ -1,7 +1,7 @@
 import { Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SøknadFormFields } from './DigitaliserSøknad';
-import { TrashIcon } from '@navikt/aksel-icons';
+import { PlusCircleFillIcon, TrashIcon } from '@navikt/aksel-icons';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 
@@ -13,7 +13,7 @@ export const Barnetillegg = ({ form, readOnly }: Props) => {
   const { fields, append, remove } = useFieldArray({ control: form.control, name: 'oppgitteBarn' });
   return (
     <VStack gap={'3'}>
-      <Label size={'small'}>Barnetillegg</Label>
+      <Label size={'small'}>Har søker barn?</Label>
       {fields.length > 0 && (
         <Table size="small">
           <Table.Header>
@@ -88,7 +88,7 @@ export const Barnetillegg = ({ form, readOnly }: Props) => {
                       aria-label={'Slett'}
                       size={'small'}
                       icon={<TrashIcon title={'Slett'} />}
-                      variant={'secondary-neutral'}
+                      variant={'tertiary'}
                       type={'button'}
                       onClick={() => remove(i)}
                       disabled={readOnly}
@@ -101,8 +101,15 @@ export const Barnetillegg = ({ form, readOnly }: Props) => {
         </Table>
       )}
       <HStack>
-        <Button variant={'secondary'} disabled={readOnly} size={'small'} type={'button'} onClick={() => append({})}>
-          Legg til
+        <Button
+          variant={'secondary'}
+          icon={<PlusCircleFillIcon title={'Legg til barn'} />}
+          disabled={readOnly}
+          size={'small'}
+          type={'button'}
+          onClick={() => append({})}
+        >
+          Legg til barn
         </Button>
       </HStack>
     </VStack>
