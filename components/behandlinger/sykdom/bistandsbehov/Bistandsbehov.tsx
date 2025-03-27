@@ -8,7 +8,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
@@ -77,14 +77,21 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         label: 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilUføre),
-        rules: { required: 'Du må svare på om bruker har rett på AAP i overgang til uføre' },
+        rules: {
+          required: 'Du må svare på om bruker har rett på AAP i overgang til uføre',
+          validate: (value) =>
+            value === JaEllerNei.Ja ? 'AAP under behandling av søknad om uføretrygd er ikke støttet enda' : undefined,
+        },
       },
       vurderAAPIOvergangTilArbeid: {
         type: 'radio',
         label: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilArbeid),
-        rules: { required: 'Du må svare på om bruker har rett på AAP i overgang til arbeid' },
+        rules: {
+          required: 'Du må svare på om bruker har rett på AAP i overgang til arbeid',
+          validate: (value) => (value === JaEllerNei.Ja ? 'AAP i overgang til arbeid er ikke støttet enda' : undefined),
+        },
       },
     },
     { readOnly: readOnly, shouldUnregister: true }
@@ -179,6 +186,11 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
               </Heading>
               <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
               <FormField form={form} formField={formFields.vurderAAPIOvergangTilUføre} horizontalRadio />
+              {form.watch('vurderAAPIOvergangTilUføre') === JaEllerNei.Ja && (
+                <Alert variant="warning">
+                  Dette virker ikke enda! Sett saken på vent, og si fra til Team AAP om at du har fått en 11-18 sak
+                </Alert>
+              )}
             </VStack>
           )}
         {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
@@ -188,6 +200,11 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
             </Heading>
             <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
             <FormField form={form} formField={formFields.vurderAAPIOvergangTilArbeid} horizontalRadio />
+            {form.watch('vurderAAPIOvergangTilArbeid') === JaEllerNei.Ja && (
+              <Alert variant="warning">
+                Dette virker ikke enda! Sett saken på vent, og si fra til Team AAP om at du har fått en 11-17 sak
+              </Alert>
+            )}
           </VStack>
         )}
       </Form>

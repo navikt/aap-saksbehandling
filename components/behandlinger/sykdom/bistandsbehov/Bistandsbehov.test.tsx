@@ -302,47 +302,48 @@ describe('Førstegangsbehandling', () => {
 });
 
 describe('Revurdering', () => {
+  const grunnlagRevurdering: BistandsGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    harOppfylt11_5: true,
+    gjeldendeVedtatteVurderinger: [
+      {
+        begrunnelse: 'En begrunnelse',
+        erBehovForArbeidsrettetTiltak: true,
+        erBehovForAktivBehandling: false,
+        vurdertAv: 'Saksbehandler',
+      },
+    ],
+    historiskeVurderinger: [
+      {
+        begrunnelse: 'En begrunnelse',
+        erBehovForArbeidsrettetTiltak: true,
+        erBehovForAktivBehandling: false,
+        vurdertAv: 'Saksbehandler',
+      },
+    ],
+    gjeldendeSykdsomsvurderinger: [
+      {
+        begrunnelse: 'blabla',
+        dokumenterBruktIVurdering: [],
+        erArbeidsevnenNedsatt: true,
+        erNedsettelseIArbeidsevneAvEnVissVarighet: true,
+        erNedsettelseIArbeidsevneMerEnnHalvparten: true,
+        erSkadeSykdomEllerLyteVesentligdel: true,
+        harSkadeSykdomEllerLyte: true,
+        vurderingenGjelderFra: '2025-03-24',
+        vurdertAvIdent: 'Saksbehandler',
+        vurdertDato: '2025-03-24',
+      },
+    ],
+  };
+
   it('viser spørsmål om bruker skal vurderes for AAP i overgang til uføre hvis det svares nei på a,b og c', async () => {
-    const grunnlag: BistandsGrunnlag = {
-      harTilgangTilÅSaksbehandle: true,
-      harOppfylt11_5: true,
-      gjeldendeVedtatteVurderinger: [
-        {
-          begrunnelse: 'En begrunnelse',
-          erBehovForArbeidsrettetTiltak: true,
-          erBehovForAktivBehandling: false,
-          vurdertAv: 'Saksbehandler',
-        },
-      ],
-      historiskeVurderinger: [
-        {
-          begrunnelse: 'En begrunnelse',
-          erBehovForArbeidsrettetTiltak: true,
-          erBehovForAktivBehandling: false,
-          vurdertAv: 'Saksbehandler',
-        },
-      ],
-      gjeldendeSykdsomsvurderinger: [
-        {
-          begrunnelse: 'blabla',
-          dokumenterBruktIVurdering: [],
-          erArbeidsevnenNedsatt: true,
-          erNedsettelseIArbeidsevneAvEnVissVarighet: true,
-          erNedsettelseIArbeidsevneMerEnnHalvparten: true,
-          erSkadeSykdomEllerLyteVesentligdel: true,
-          harSkadeSykdomEllerLyte: true,
-          vurderingenGjelderFra: '2025-03-24',
-          vurdertAvIdent: 'Saksbehandler',
-          vurdertDato: '2025-03-24',
-        },
-      ],
-    };
     render(
       <Bistandsbehov
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Revurdering'}
-        grunnlag={grunnlag}
+        grunnlag={grunnlagRevurdering}
         søknadstidspunkt={søknadstidspunkt}
       />
     );
@@ -363,41 +364,7 @@ describe('Revurdering', () => {
   });
 
   it('viser spørsmål om bruker skal vurders for AAP i overgang til arbeid hvis det er avslag på både 11-5 og det svares nei på a,b og c', async () => {
-    const grunnlag: BistandsGrunnlag = {
-      harTilgangTilÅSaksbehandle: true,
-      harOppfylt11_5: false,
-      gjeldendeVedtatteVurderinger: [
-        {
-          begrunnelse: 'En begrunnelse',
-          erBehovForArbeidsrettetTiltak: true,
-          erBehovForAktivBehandling: false,
-          vurdertAv: 'Saksbehandler',
-        },
-      ],
-      historiskeVurderinger: [
-        {
-          begrunnelse: 'En begrunnelse',
-          erBehovForArbeidsrettetTiltak: true,
-          erBehovForAktivBehandling: false,
-          vurdertAv: 'Saksbehandler',
-        },
-      ],
-      gjeldendeSykdsomsvurderinger: [
-        {
-          begrunnelse: 'blabla',
-          dokumenterBruktIVurdering: [],
-          erArbeidsevnenNedsatt: false,
-          erNedsettelseIArbeidsevneAvEnVissVarighet: false,
-          erNedsettelseIArbeidsevneMerEnnHalvparten: false,
-          erSkadeSykdomEllerLyteVesentligdel: false,
-          harSkadeSykdomEllerLyte: true,
-          vurderingenGjelderFra: '2025-03-24',
-          vurdertAvIdent: 'Saksbehandler',
-          vurdertDato: '2025-03-24',
-        },
-      ],
-    };
-
+    const grunnlag = { ...grunnlagRevurdering, harOppfylt11_5: false };
     render(
       <Bistandsbehov
         readOnly={false}
@@ -423,6 +390,114 @@ describe('Revurdering', () => {
         name: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?',
       })
     ).toBeVisible();
+  });
+
+  it('dersom det svares ja på 11-17 skal det vises en melding som sier at dette ikke er klart enda', async () => {
+    const grunnlag = { ...grunnlagRevurdering, harOppfylt11_5: false };
+    render(
+      <Bistandsbehov
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Revurdering'}
+        grunnlag={grunnlag}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
+    await velgNei(finnGruppeForBokstavA());
+    await velgNei(finnGruppeForBokstavB());
+    const gruppeC = screen.getByRole('group', {
+      name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
+    });
+    await velgNei(gruppeC);
+
+    const overgangTilArbeid = screen.getByRole('group', {
+      name: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?',
+    });
+
+    await velgJa(overgangTilArbeid);
+    expect(
+      screen.getByText(
+        'Dette virker ikke enda! Sett saken på vent, og si fra til Team AAP om at du har fått en 11-17 sak'
+      )
+    ).toBeVisible();
+  });
+
+  it('viser en melding ved forsøk på å sende inn når det er svart ja på 11-17', async () => {
+    const grunnlag = { ...grunnlagRevurdering, harOppfylt11_5: false };
+    render(
+      <Bistandsbehov
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Revurdering'}
+        grunnlag={grunnlag}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
+    await velgNei(finnGruppeForBokstavA());
+    await velgNei(finnGruppeForBokstavB());
+    const gruppeC = screen.getByRole('group', {
+      name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
+    });
+    await velgNei(gruppeC);
+
+    const overgangTilArbeid = screen.getByRole('group', {
+      name: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?',
+    });
+
+    await velgJa(overgangTilArbeid);
+    await trykkPåBekreft();
+    expect(screen.getByText('AAP i overgang til arbeid er ikke støttet enda')).toBeVisible();
+  });
+
+  it('dersom det svares ja på 11-18 skal det vises en melding som sier at dette ikke er klart enda', async () => {
+    render(
+      <Bistandsbehov
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Revurdering'}
+        grunnlag={grunnlagRevurdering}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
+    await velgNei(finnGruppeForBokstavA());
+    await velgNei(finnGruppeForBokstavB());
+    const gruppeC = screen.getByRole('group', {
+      name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
+    });
+    await velgNei(gruppeC);
+    const overgangTilUføre = screen.getByRole('group', {
+      name: 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?',
+    });
+    await velgJa(overgangTilUføre);
+    expect(
+      screen.getByText(
+        'Dette virker ikke enda! Sett saken på vent, og si fra til Team AAP om at du har fått en 11-18 sak'
+      )
+    ).toBeVisible();
+  });
+
+  it('viser en feilmelding ved forsøk på å sende inn når det er svart ja på 11-18', async () => {
+    render(
+      <Bistandsbehov
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Revurdering'}
+        grunnlag={grunnlagRevurdering}
+        søknadstidspunkt={søknadstidspunkt}
+      />
+    );
+    await velgNei(finnGruppeForBokstavA());
+    await velgNei(finnGruppeForBokstavB());
+    const gruppeC = screen.getByRole('group', {
+      name: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
+    });
+    await velgNei(gruppeC);
+    const overgangTilUføre = screen.getByRole('group', {
+      name: 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?',
+    });
+    await velgJa(overgangTilUføre);
+    await trykkPåBekreft();
+    expect(screen.getByText('AAP under behandling av søknad om uføretrygd er ikke støttet enda')).toBeVisible();
   });
 });
 
