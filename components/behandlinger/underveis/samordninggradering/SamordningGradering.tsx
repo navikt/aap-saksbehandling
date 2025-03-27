@@ -18,6 +18,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import styles from './SamordningGradering.module.css';
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
+import { Ytelsesvurderinger } from 'components/behandlinger/underveis/samordninggradering/Ytelsesvurderinger';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -55,31 +56,8 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     },
   }));
 
-  const ytelserFraGrunnlag: SamordnetYtelse[] = grunnlag.ytelser.map((ytelse) => ({
-    ytelseType: ytelse.ytelseType,
-    kilde: ytelse.kilde,
-    graderingFraKilde: ytelse.gradering || undefined,
-    gradering: undefined,
-    periode: {
-      fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
-      tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
-    },
-  }));
-
-  const finnDefaultValues = () => {
-    if (ytelserFraVurderinger.length) {
-      return ytelserFraVurderinger;
-    }
-    if (ytelserFraGrunnlag.length) {
-      return ytelserFraGrunnlag;
-    }
-    return [];
-  };
-
-  const samordnedeYtelserDefaultValue = finnDefaultValues();
-
   const behandlingsreferanse = useBehandlingsReferanse();
-  const [visForm, setVisForm] = useState<boolean>(!!samordnedeYtelserDefaultValue.length);
+  const [visForm, setVisForm] = useState<boolean>(!!(grunnlag.ytelser.length > 0 || grunnlag.vurderinger.length > 0));
 
   const { form, formFields } = useConfigForm<SamordningGraderingFormfields>(
     {
@@ -115,7 +93,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
       },
       vurderteSamordninger: {
         type: 'fieldArray',
-        defaultValue: samordnedeYtelserDefaultValue || [],
+        defaultValue: ytelserFraVurderinger,
       },
     },
     { readOnly: readOnly, shouldUnregister: true }
@@ -183,7 +161,8 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             resetStatus={resetStatus}
           >
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-            <YtelseTabell form={form} readOnly={readOnly} />
+            <YtelseTabell ytelser={grunnlag.ytelser} />
+            <Ytelsesvurderinger form={form} readOnly={readOnly} />
             {visRevurderVirkningstidspunkt && (
               <Box maxWidth={'90ch'}>
                 <Box
