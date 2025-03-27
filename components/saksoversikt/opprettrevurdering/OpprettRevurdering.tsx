@@ -26,7 +26,7 @@ const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
 ];
 
 export interface ManuellRevurderingFormFields {
-  årsak: string;
+  årsaker: string[];
   beskrivelse: string;
 }
 
@@ -47,7 +47,7 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
       mottattTidspunkt: new Date().toISOString(),
       melding: {
         meldingType: 'ManuellRevurderingV0',
-        årsakerTilBehandling: [data.årsak],
+        årsakerTilBehandling: data.årsaker,
         beskrivelse: data.beskrivelse,
       } as ManuellRevurderingV0,
     };
@@ -72,7 +72,7 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
         required: 'Skriv litt om hvorfor du skal starte en revurdering',
       },
     },
-    årsak: {
+    årsaker: {
       type: 'combobox_multiple',
       label: 'Hvilke opplysninger skal revurderes?',
       options: årsakOptions,
@@ -103,7 +103,7 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
             <ExpansionCard.Content className={styles.content}>
               <VStack gap="4">
                 <div>
-                  <FormField form={form} formField={formFields.årsak} size="medium" />
+                  <FormField form={form} formField={formFields.årsaker} size="medium" />
                 </div>
                 <FormField form={form} formField={formFields.beskrivelse} size="medium" />
               </VStack>
