@@ -17,6 +17,7 @@ import {
   OppgavelisteRequest,
   OppgavelisteResponse,
 } from 'lib/types/oppgaveTypes';
+import { queryParamsArray } from '../../utils/request';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
@@ -80,7 +81,7 @@ const oppgaveMock: Oppgave[] = [
   },
 ];
 
-export const hentKøer = async (): Promise<Kø[]> => {
+export const hentKøer = async (enheter: string[]): Promise<Kø[]> => {
   if (isLocal()) {
     return [
       {
@@ -134,7 +135,8 @@ export const hentKøer = async (): Promise<Kø[]> => {
       },
     ];
   }
-  const url = `${oppgaveApiBaseURL}/filter`;
+
+  const url = `${oppgaveApiBaseURL}/filter?${queryParamsArray('enheter', enheter)}`;
   return await fetchProxy<Kø[]>(url, oppgaveApiScope, 'GET');
 };
 export const hentOppgaverForFilter = async (

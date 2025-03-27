@@ -1,5 +1,6 @@
 import {
   AvklaringsbehovReferanse,
+  Kø,
   NesteOppgaveRequestBody,
   NesteOppgaveResponse,
   Oppgave,
@@ -17,6 +18,7 @@ import {
   VenteÅrsakOgGjennomsnitt,
 } from './types/statistikkTypes';
 import { BehandlingEndringerPerDag } from 'lib/types/statistikkTypes';
+import { queryParamsArray } from './utils/request';
 
 type ClientFetch<T> =
   | { type: 'loading' }
@@ -97,6 +99,10 @@ export async function avreserverOppgaveClient(oppgave: Oppgave) {
     referanse: oppgave.behandlingRef,
   };
   return clientFetcher('/oppgave/api/oppgave/avreserver', 'POST', body);
+}
+export async function hentKøerForEnheterClient(enheter: string[]) {
+  const url = `/oppgave/api/filter?${queryParamsArray('enheter', enheter)}`;
+  return clientFetcher<Kø[]>(url, 'GET');
 }
 
 export async function oppgavesokClient(

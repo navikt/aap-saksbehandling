@@ -3,13 +3,14 @@ import { BehandlingsTyperOption } from 'lib/utils/behandlingstyper';
 import { AvklaringsbehovReferanse, FilterTidsEnhet, Oppgave } from 'lib/types/oppgaveTypes';
 import { BehandlingstyperRequestQuery } from 'lib/types/statistikkTypes';
 
-function queryParamsArray(key: string, values: (string | number)[]) {
+export function queryParamsArray(key: string, values: (string | number)[]) {
   const filtered = values.filter((value) => value !== undefined && value !== null && value !== '');
   if (!filtered.length) {
     return '';
   }
   return values.map((e) => `${key}=${e}`).join('&');
 }
+
 export type StatistikkQueryParams = {
   behandlingstyper: Array<BehandlingsTyperOption>;
   antallDager?: number;
@@ -68,6 +69,7 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
     enheter,
   };
 }
+
 function buildSaksbehandlingsURL(oppgave: Oppgave | AvklaringsbehovReferanse): string {
   // @ts-ignore
   return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
