@@ -1,31 +1,29 @@
 'use client';
 
-import { Button, HGrid, HStack } from '@navikt/ds-react';
+import { HGrid } from '@navikt/ds-react';
 import { ReactNode, useState } from 'react';
 import styles from './SplitVindu.module.css';
-import { ExpandIcon, SidebarLeftFillIcon } from '@navikt/aksel-icons';
+import { Dokumentvisning } from 'components/postmottak/dokumentvisning/Dokumentvisning';
+import { Dokument } from 'lib/types/postmottakTypes';
 
 interface Props {
-  dokumentvisning: ReactNode;
   children: ReactNode;
+  journalpostId: number;
+  dokumenter: Dokument[];
 }
-export const SplitVindu = ({ dokumentvisning, children }: Props) => {
-  const [is3070Split, setIs3070Split] = useState<boolean>(false);
+export const SplitVindu = ({ children, journalpostId, dokumenter }: Props) => {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
   return (
-    <HGrid columns={is3070Split ? '1fr 2fr' : '1fr 1fr'} gap={'4'} className={styles.splitVindu}>
-      <div>
-        <HStack justify={'end'} paddingInline={'4'}>
-          <Button
-            variant={'secondary'}
-            size={'small'}
-            icon={is3070Split ? <ExpandIcon /> : <SidebarLeftFillIcon />}
-            type={'button'}
-            onClick={() => setIs3070Split(!is3070Split)}
-          />
-        </HStack>
-        {children}
-      </div>
-      {dokumentvisning}
+    <HGrid padding={'4'} columns={isExpanded ? '1fr 2fr' : '1fr 1fr'} gap={'4'} className={styles.splitVindu}>
+      {children}
+
+      <Dokumentvisning
+        isExpanded={isExpanded}
+        setIsExpandedAction={setIsExpanded}
+        journalpostId={journalpostId}
+        dokumenter={dokumenter}
+      />
     </HGrid>
   );
 };

@@ -6,15 +6,16 @@ import { FinnSakMedDataFetching } from 'components/postmottak/finnsak/FinnSakMed
 import { OverleveringMedDataFetching } from 'components/postmottak/overlevering/OverleveringMedDataFetching';
 import { DigitaliserDokumentMedDatafetching } from 'components/postmottak/digitaliserdokument/DigitaliserDokumentMedDatafetching';
 
+import styles from './StegKolonne.module.css';
+
 interface Props {
   aktivGruppe: StegGruppe;
   behandlingsreferanse: string;
 }
 
 export const StegKolonne = ({ aktivGruppe, behandlingsreferanse }: Props) => {
-  // Det er her vi gjør datafetching og rendering av stegene
   return (
-    <div>
+    <div className={styles.stegkolonne}>
       {aktivGruppe === 'AVKLAR_TEMA' && (
         <StegSuspense>
           <AvklarTemaMedDataFetching behandlingsreferanse={behandlingsreferanse} />

@@ -10,9 +10,9 @@ import {
   hentFlyt,
   hentJournalpostInfo,
 } from 'lib/services/dokumentmottakservice/dokumentMottakService';
-import { Dokumentvisning } from 'components/postmottak/dokumentvisning/Dokumentvisning';
 import { BehandlingPVentMedDataFetching } from 'components/postmottak/behandlingpåvent/BehandlingPåVentMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
+import { VStack } from '@navikt/ds-react';
 
 interface LayoutProps {
   children: ReactNode;
@@ -21,10 +21,9 @@ interface LayoutProps {
 
 const Layout = async (props: LayoutProps) => {
   const params = await props.params;
-
   const { children } = props;
-  const behandling = await hentBehandling(params.behandlingsreferanse);
 
+  const behandling = await hentBehandling(params.behandlingsreferanse);
   if (behandling.skalForberede) {
     const forberedBehandlingResponse = await forberedBehandlingOgVentPåProsessering(params.behandlingsreferanse);
 
@@ -34,10 +33,12 @@ const Layout = async (props: LayoutProps) => {
   }
 
   const flyt = await hentFlyt(params.behandlingsreferanse);
-  const stegGrupper = flyt.flyt.map((steg) => steg);
   const journalpostInfo = await hentJournalpostInfo(params.behandlingsreferanse);
   await auditlog(journalpostInfo.journalpostId);
+
+  const stegGrupper = flyt.flyt.map((steg) => steg);
   const dokumenter = journalpostInfo.dokumenter;
+
   return (
     <div className={styles.idLayoutWrapper}>
       <DokumentInfoBanner
@@ -52,19 +53,15 @@ const Layout = async (props: LayoutProps) => {
         flytRespons={flyt}
       />
       {flyt.prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={flyt.prosessering} />}
-      {flyt.visning.visVentekort ? (
-        <SplitVindu
-          dokumentvisning={<Dokumentvisning journalpostId={journalpostInfo.journalpostId} dokumenter={dokumenter} />}
-        >
-          <BehandlingPVentMedDataFetching behandlingsreferanse={params.behandlingsreferanse} />
-        </SplitVindu>
-      ) : (
-        <SplitVindu
-          dokumentvisning={<Dokumentvisning journalpostId={journalpostInfo.journalpostId} dokumenter={dokumenter} />}
-        >
+
+      <SplitVindu journalpostId={journalpostInfo.journalpostId} dokumenter={dokumenter}>
+        <VStack gap={'4'}>
+          {flyt.visning.visVentekort && (
+            <BehandlingPVentMedDataFetching behandlingsreferanse={params.behandlingsreferanse} />
+          )}
           {children}
-        </SplitVindu>
-      )}
+        </VStack>
+      </SplitVindu>
     </div>
   );
 };

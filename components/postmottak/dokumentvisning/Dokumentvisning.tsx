@@ -1,17 +1,24 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Tabs, VStack } from '@navikt/ds-react';
+import { Button, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { Dokument } from 'lib/types/postmottakTypes';
+import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 
 interface Props {
   journalpostId: number;
   dokumenter: Dokument[];
+  setIsExpandedAction: (isExpanded: boolean) => void;
+  isExpanded: boolean;
 }
 
-export const Dokumentvisning = ({ journalpostId, dokumenter }: Props) => {
-  const [valgtDokumentIndex, setValgtDokumentIndex] = useState<number>(0);
+export const Dokumentvisning = ({ journalpostId, dokumenter, setIsExpandedAction, isExpanded }: Props) => {
+  const [valgtDokumentInfoId, setValgtDokumentInfoId] = useState<string | undefined>(
+    dokumenter && dokumenter.length > 0 ? dokumenter[0].dokumentInfoId : undefined
+  );
+
   const [dataUri, setDataUri] = useState<string>();
+
   useEffect(() => {
     const hentDokument = async (dokumentInfoId: string) => {
       fetch(`/postmottak/api/post/dokumenter/${journalpostId}/${dokumentInfoId}`, { method: 'GET' })
@@ -26,25 +33,35 @@ export const Dokumentvisning = ({ journalpostId, dokumenter }: Props) => {
           }).then((dataUri) => setDataUri(dataUri as string));
         });
     };
-    const dokumentinfoId = dokumenter[valgtDokumentIndex]?.dokumentInfoId;
-    if (dokumentinfoId) {
-      hentDokument(dokumentinfoId);
+
+    if (valgtDokumentInfoId) {
+      hentDokument(valgtDokumentInfoId);
     }
-  }, [valgtDokumentIndex]);
+  }, [valgtDokumentInfoId, journalpostId]);
+
   return (
     <VStack paddingBlock={'4'}>
-      <Tabs defaultValue="0" size="small">
-        <Tabs.List>
-          {dokumenter.map((dokument, index) => (
-            <Tabs.Tab
-              key={dokument.dokumentInfoId}
-              value={`${index}`}
-              label={`${dokument.tittel}`}
-              onClick={() => setValgtDokumentIndex(index)}
-            />
-          ))}
-        </Tabs.List>
-      </Tabs>
+      <HStack>
+        <Button
+          variant={'secondary'}
+          size={'small'}
+          icon={isExpanded ? <ExpandIcon /> : <ShrinkIcon />}
+          type={'button'}
+          onClick={() => setIsExpandedAction(!isExpanded)}
+        />
+        <Tabs defaultValue="0" size="small">
+          <Tabs.List>
+            {dokumenter.map((dokument, index) => (
+              <Tabs.Tab
+                key={dokument.dokumentInfoId}
+                value={`${index}`}
+                label={`${dokument.tittel}`}
+                onClick={() => setValgtDokumentInfoId(dokument.dokumentInfoId)}
+              />
+            ))}
+          </Tabs.List>
+        </Tabs>
+      </HStack>
       {dataUri && (
         <object data={`${dataUri}#toolbar=0`} type="application/pdf" width="100%" height="100%">
           <p>
