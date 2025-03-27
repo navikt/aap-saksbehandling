@@ -88,7 +88,7 @@ export const fetchWithRetry = async <ResponseType>(
   if (!errors) errors = [];
 
   if (retries === 0) {
-    logError(`Unable to fetch ${url}: \n${errors.join('\n')}`);
+    logError(`Unable to fetch ${url}: `, Error(errors.join('\n')));
     throw new Error(`Feil oppsto ved kall mot ${url}`);
   }
 
