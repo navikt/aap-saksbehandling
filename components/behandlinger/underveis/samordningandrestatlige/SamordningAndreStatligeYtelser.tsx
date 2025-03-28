@@ -82,11 +82,11 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
 
   return (
     // @ts-ignore
-    <VilkårsKort heading="§ 11-29 Andre statlige ytelser som skal avregnes" steg="SAMORDNING_ANDRE_STATLIGE_YTELSER">
+    <VilkårsKort heading="Andre ytelser til avregning" steg="SAMORDNING_ANDRE_STATLIGE_YTELSER">
       {!visYtelsesTabell && (
         <HStack>
           <Button size={'small'} variant={'secondary'} onClick={() => setVisYtelsesTabell(true)} disabled={readOnly}>
-            Legg til statlige ytelser
+            Legg til ytelser
           </Button>
         </HStack>
       )}
