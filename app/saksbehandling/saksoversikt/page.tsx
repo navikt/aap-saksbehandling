@@ -3,7 +3,7 @@ import { hentAlleSaker } from 'lib/services/saksbehandlingservice/saksbehandling
 import { AlleSakerListe } from 'components/saksliste/AlleSakerListe';
 
 import styles from './page.module.css';
-import { isLocal } from 'lib/utils/environment';
+import { isLocal, isProd } from 'lib/utils/environment';
 import { OpprettSak } from 'components/opprettsak/OpprettSak';
 
 const Page = async () => {
@@ -11,7 +11,7 @@ const Page = async () => {
   return (
     <main className={styles.main}>
       {isLocal() && <OpprettSak />}
-      <AlleSakerListe alleSaker={alleSaker} />
+      {!isProd() && <AlleSakerListe alleSaker={alleSaker} />}
     </main>
   );
 };
