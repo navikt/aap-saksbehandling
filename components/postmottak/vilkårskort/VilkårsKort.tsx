@@ -7,14 +7,16 @@ import styles from './VilkårsKort.module.css';
 interface Props {
   heading: string;
   children: ReactNode;
+  variant?: 'primary' | 'secondary';
   defaultOpen?: boolean;
   icon?: ReactNode;
 }
 
-export const VilkårsKort = ({ heading, children, icon, defaultOpen = true }: Props) => {
+export const VilkårsKort = ({ heading, children, icon, defaultOpen = true, variant = 'primary' }: Props) => {
+  const fargeClassname = variant === 'primary' ? styles.blå : styles.gul;
   return (
     <ExpansionCard
-      className={`${styles.vilkårsKort} ${styles.blå}`}
+      className={`${styles.vilkårsKort} ${fargeClassname}`}
       aria-label={heading}
       size={'small'}
       defaultOpen={defaultOpen}
