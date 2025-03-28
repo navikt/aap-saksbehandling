@@ -122,9 +122,11 @@ export const DigitaliserSøknad = ({ grunnlag, readOnly, submit, isLoading }: Pr
           </div>
           <Barnetillegg form={form} readOnly={readOnly} />
           <Student form={form} formFields={formFields} />
-          <Button loading={isLoading} className={'fit-content'}>
-            Neste
-          </Button>
+          {!readOnly && (
+            <Button loading={isLoading} className={'fit-content'}>
+              Neste
+            </Button>
+          )}
         </VStack>
       </form>
     </VilkårsKort>
