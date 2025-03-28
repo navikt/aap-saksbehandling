@@ -38,14 +38,14 @@ export const Behandlingsinfo = ({ behandling, saksnummer }: Props) => {
                         Saksnummer:
                     </Label>
                     <BodyShort size={'small'}>{saksnummer}</BodyShort>
+                    <Label as="p" size={'small'}>
+                        Virkningstidspunkt:
+                    </Label>
                     <StegSuspense>
                         <BehandlingsinfoDataMedDataFetching
                           behandlingsreferanse={behandling.referanse}
                     />
                     </StegSuspense>
-                    <Label as="p" size={'small'}>
-                        Virkningstidspunkt:
-                    </Label>
                 </HGrid>
             </VStack>
         </Box>

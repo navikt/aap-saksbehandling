@@ -1,7 +1,8 @@
 import {
     hentVirkningsTidspunkt,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { BodyShort, Label } from "@navikt/ds-react";
+import { BodyShort } from "@navikt/ds-react";
+import { formaterDatoForFrontend } from "../../lib/utils/date";
 
 type Props = {
     behandlingsreferanse: string;
@@ -14,7 +15,10 @@ export const BehandlingsinfoDataMedDataFetching = async ({
     const behandlingsInfo = await hentVirkningsTidspunkt(behandlingsreferanse);
 
     return (
-            <BodyShort size={'small'}>{behandlingsInfo.virkningstidspunkt}</BodyShort>
-
-    )
+        behandlingsInfo.virkningstidspunkt == null ? (
+            <BodyShort size={'small'}>Ikke bestemt</BodyShort>
+        ) : (
+            <BodyShort size={'small'}>{formaterDatoForFrontend(behandlingsInfo.virkningstidspunkt)}</BodyShort>
+        )
+    );
 };
