@@ -74,7 +74,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       },
       vurderAAPIOvergangTilUføre: {
         type: 'radio',
-        label: 'Har brukeren rett til AAP under behandling av krav om uføretrygd',
+        label: 'Har brukeren rett til AAP under behandling av krav om uføretrygd?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilUføre),
         rules: {
@@ -85,7 +85,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       },
       vurderAAPIOvergangTilArbeid: {
         type: 'radio',
-        label: 'Har brukeren rett til AAP i perioden som arbeidssøker',
+        label: 'Har brukeren rett til AAP i perioden som arbeidssøker?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilArbeid),
         rules: {
