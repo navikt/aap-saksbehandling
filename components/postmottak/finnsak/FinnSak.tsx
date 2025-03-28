@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { Behovstype } from 'lib/postmottakForm';
 import { FormEvent, FormEventHandler } from 'react';
-import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
+import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import { VStack } from '@navikt/ds-react';

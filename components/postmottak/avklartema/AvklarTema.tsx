@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/postmottakForm';
 import { FormEvent, FormEventHandler } from 'react';
-import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
+import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
 import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { postmottakEndreTemaClient, postmottakLøsBehovClient } from 'lib/postmottakClientApi';

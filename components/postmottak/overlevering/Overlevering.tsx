@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
-import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
+import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { OverleveringGrunnlag } from 'lib/types/postmottakTypes';
 import { FormEvent, FormEventHandler } from 'react';
 import { VStack } from '@navikt/ds-react';
