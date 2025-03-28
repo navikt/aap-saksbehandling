@@ -10,6 +10,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { revalidatePostMottakFlyt } from 'lib/actions/actions';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
+import { parse } from 'date-fns';
 
 interface Props {
   behandlingVersjon: number;
@@ -20,7 +21,7 @@ interface Props {
 
 interface FormFields {
   begrunnelse: string;
-  frist: Date;
+  frist: string;
   grunn: SettPåVentÅrsaker;
 }
 
@@ -45,8 +46,7 @@ export const SettBehandllingPåVentModal = ({ isOpen, onClose, behandlingsrefera
       rules: { required: 'Du må gi en begrunnelse' },
     },
     frist: {
-      type: 'date',
-      fromDate: new Date(),
+      type: 'date_input',
       label: 'Tidspunkt',
       rules: { required: 'Du må sette en frist' },
     },
@@ -78,7 +78,7 @@ export const SettBehandllingPåVentModal = ({ isOpen, onClose, behandlingsrefera
               await postmottakSettPåVentClient(behandlingsreferanse, {
                 begrunnelse: data.begrunnelse,
                 behandlingVersjon: behandlingVersjon,
-                frist: formaterDatoForBackend(data.frist),
+                frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
                 grunn: data.grunn,
               });
               await revalidatePostMottakFlyt(behandlingsreferanse);

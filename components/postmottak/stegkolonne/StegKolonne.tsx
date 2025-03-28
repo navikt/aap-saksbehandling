@@ -1,21 +1,21 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { StegGruppe } from 'lib/types/postmottakTypes';
-import { Alert, VStack } from '@navikt/ds-react';
 import { AvklarTemaMedDataFetching } from 'components/postmottak/avklartema/AvklarTemaMedDataFetching';
 import { FinnSakMedDataFetching } from 'components/postmottak/finnsak/FinnSakMedDataFetching';
 import { OverleveringMedDataFetching } from 'components/postmottak/overlevering/OverleveringMedDataFetching';
 import { DigitaliserDokumentMedDatafetching } from 'components/postmottak/digitaliserdokument/DigitaliserDokumentMedDatafetching';
-
-import styles from './StegKolonne.module.css';
+import { FullførtOppgaveModal } from 'components/postmottak/fullførtoppgavemodal/FullførtOppgaveModal';
 
 interface Props {
   aktivGruppe: StegGruppe;
   behandlingsreferanse: string;
 }
 
+// TODO Ikke gå videre til VIDERESEND, men bli værende på AVKLAR_SAK
+// TODO Ikke gå videre til IVERKSETTES, men bli værende på OVERLEVER_TIL_FAGSYSTEM
 export const StegKolonne = ({ aktivGruppe, behandlingsreferanse }: Props) => {
   return (
-    <div className={styles.stegkolonne}>
+    <>
       {aktivGruppe === 'AVKLAR_TEMA' && (
         <StegSuspense>
           <AvklarTemaMedDataFetching behandlingsreferanse={behandlingsreferanse} />
@@ -26,15 +26,9 @@ export const StegKolonne = ({ aktivGruppe, behandlingsreferanse }: Props) => {
           <FinnSakMedDataFetching behandlingsreferanse={behandlingsreferanse} />
         </StegSuspense>
       )}
-      {aktivGruppe === 'VIDERESEND' && (
-        <VStack padding={'4'} gap={'4'}>
-          <Alert variant={'success'}>Dokumentet er journalført.</Alert>
-        </VStack>
-      )}
+      {aktivGruppe === 'VIDERESEND' && <FullførtOppgaveModal successMessage={'Dokumentet er journalført'} />}
       {aktivGruppe === 'IVERKSETTES' && (
-        <VStack padding={'4'} gap={'4'}>
-          <Alert variant={'success'}>Dokumentet er kategorisert og sendt.</Alert>
-        </VStack>
+        <FullførtOppgaveModal successMessage={'Dokumentet er kategorisert og sendt.'} />
       )}
       {aktivGruppe === 'DIGITALISER' && (
         <StegSuspense>
@@ -46,6 +40,6 @@ export const StegKolonne = ({ aktivGruppe, behandlingsreferanse }: Props) => {
           <OverleveringMedDataFetching behandlingsreferanse={behandlingsreferanse} />
         </StegSuspense>
       )}
-    </div>
+    </>
   );
 };

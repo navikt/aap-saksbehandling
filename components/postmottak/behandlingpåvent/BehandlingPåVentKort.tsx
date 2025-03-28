@@ -13,7 +13,7 @@ interface Props {
 
 export const BehandlingPåVentKort = ({ informasjon }: Props) => {
   return (
-    <VilkårsKort heading={'Behandling på vent'} icon={<HourglassBottomFilledIcon />}>
+    <VilkårsKort heading={'Behandling på vent'} variant={'secondary'} icon={<HourglassBottomFilledIcon />}>
       <div className={'flex-column'}>
         {informasjon && (
           <>
