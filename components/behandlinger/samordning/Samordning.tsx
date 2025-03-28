@@ -22,11 +22,6 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.visning}
     >
       <SamordningSosialhjelpMedDatafetching behandlingsreferanse={behandlingsreferanse} />
-      <SamordningAndreStatligeYtelserMedDatafetching
-        behandlingsreferanse={behandlingsreferanse}
-        behandlingVersjon={flyt.behandlingVersjon}
-        readOnly={flyt.visning.saksbehandlerReadOnly}
-      />
       <SamordningGraderingMedDatafetching
         behandlingsreferanse={behandlingsreferanse}
         behandlingVersjon={flyt.behandlingVersjon}
@@ -39,6 +34,11 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
           readOnly={flyt.visning.saksbehandlerReadOnly}
         />
       )}
+      <SamordningAndreStatligeYtelserMedDatafetching
+        behandlingsreferanse={behandlingsreferanse}
+        behandlingVersjon={flyt.behandlingVersjon}
+        readOnly={flyt.visning.saksbehandlerReadOnly}
+      />
     </GruppeSteg>
   );
 };
