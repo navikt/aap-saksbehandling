@@ -7,8 +7,9 @@ import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/Postmo
 import { FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
 import { Button, VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField, ValuePair } from 'components/form/FormField';
+import { FormFieldRadioOptions, useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   behandlingsVersjon: number;
@@ -34,11 +35,9 @@ function mapVurderingTilValgtOption(vurdering: FinnSakGrunnlag['vurdering']) {
   }
 }
 
-export const FinnSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
+export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
   const nySakOption = grunnlag.saksinfo.length === 0 ? [{ label: 'Opprett ny sak', value: NY }] : [];
 
-  //TODO Legg på description i radio valg
-  // Dato for sak skal være i description.
   const { formFields, form } = useConfigForm<FormFields>(
     {
       knyttTilSak: {
@@ -48,7 +47,7 @@ export const FinnSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, re
         defaultValue: mapVurderingTilValgtOption(grunnlag.vurdering),
         options: [
           ...nySakOption,
-          ...grunnlag.saksinfo.map(mapSaksinfoToValuePair),
+          ...grunnlag.saksinfo.map(mapSaksinfoToOptions),
           { label: 'Journalfør på generell sak', value: GENERELL },
         ],
       },
@@ -87,9 +86,10 @@ export const FinnSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, re
   );
 };
 
-function mapSaksinfoToValuePair(saksinfo: Saksinfo): ValuePair {
+function mapSaksinfoToOptions(saksinfo: Saksinfo): FormFieldRadioOptions {
   return {
     value: saksinfo.saksnummer,
-    label: `${saksinfo.saksnummer}: ${saksinfo.periode.fom} - ${saksinfo.periode.tom}`,
+    label: saksinfo.saksnummer,
+    description: `${formaterDatoForFrontend(saksinfo.periode.fom)} - ${formaterDatoForFrontend(saksinfo.periode.tom)}`,
   };
 }

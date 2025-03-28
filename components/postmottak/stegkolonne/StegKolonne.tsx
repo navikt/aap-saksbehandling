@@ -1,7 +1,7 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { StegGruppe } from 'lib/types/postmottakTypes';
 import { AvklarTemaMedDataFetching } from 'components/postmottak/avklartema/AvklarTemaMedDataFetching';
-import { FinnSakMedDataFetching } from 'components/postmottak/finnsak/FinnSakMedDataFetching';
+import { AvklarSakMedDataFetching } from 'components/postmottak/avklarsak/AvklarSakMedDataFetching';
 import { OverleveringMedDataFetching } from 'components/postmottak/overlevering/OverleveringMedDataFetching';
 import { DigitaliserDokumentMedDatafetching } from 'components/postmottak/digitaliserdokument/DigitaliserDokumentMedDatafetching';
 import { FullførtOppgaveModal } from 'components/postmottak/fullførtoppgavemodal/FullførtOppgaveModal';
@@ -23,7 +23,7 @@ export const StegKolonne = ({ aktivGruppe, behandlingsreferanse }: Props) => {
       )}
       {aktivGruppe === 'AVKLAR_SAK' && (
         <StegSuspense>
-          <FinnSakMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+          <AvklarSakMedDataFetching behandlingsreferanse={behandlingsreferanse} />
         </StegSuspense>
       )}
       {aktivGruppe === 'VIDERESEND' && <FullførtOppgaveModal successMessage={'Dokumentet er journalført'} />}
