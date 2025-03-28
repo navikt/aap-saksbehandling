@@ -42,8 +42,7 @@ export const Behandlingsinfo = ({ behandling, saksnummer }: Props) => {
                         Virkningstidspunkt:
                     </Label>
                     <StegSuspense>
-                        <BehandlingsinfoDataMedDataFetching
-                          behandlingsreferanse={behandling.referanse}
+                        <BehandlingsinfoDataMedDataFetching behandlingsreferanse={behandling.referanse} opprettetDato = {formaterDatoForFrontend(behandling.opprettet)}
                     />
                     </StegSuspense>
                 </HGrid>

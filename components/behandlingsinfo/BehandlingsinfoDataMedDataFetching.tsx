@@ -6,17 +6,18 @@ import { formaterDatoForFrontend } from "../../lib/utils/date";
 
 type Props = {
     behandlingsreferanse: string;
+    opprettetDato: string;
 };
 
 export const BehandlingsinfoDataMedDataFetching = async ({
-                                                             behandlingsreferanse,
+                                                             behandlingsreferanse, opprettetDato
                                                          }: Props) => {
 
     const behandlingsInfo = await hentVirkningsTidspunkt(behandlingsreferanse);
 
     return (
         behandlingsInfo.virkningstidspunkt == null ? (
-            <BodyShort size={'small'}>Ikke bestemt</BodyShort>
+            <BodyShort size={'small'}>{formaterDatoForFrontend(opprettetDato)}</BodyShort>
         ) : (
             <BodyShort size={'small'}>{formaterDatoForFrontend(behandlingsInfo.virkningstidspunkt)}</BodyShort>
         )
