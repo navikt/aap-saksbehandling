@@ -8,7 +8,7 @@ const sak: SaksInfo = {
   behandlinger: [],
   ident: '',
   opprettetTidspunkt: '2019-12-19',
-  periode: { fom: '', tom: '' },
+  periode: { fom: '2019-12-19', tom: '' },
   saksnummer: '1234',
   status: 'OPPRETTET',
 };

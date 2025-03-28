@@ -15,7 +15,7 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandling
       grunnlag={refusjonGrunnlag}
       readOnly={readOnly || !refusjonGrunnlag.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
-      søknadstidspunkt={sak.opprettetTidspunkt}
+      søknadstidspunkt={sak.periode.fom}
     />
   );
 };

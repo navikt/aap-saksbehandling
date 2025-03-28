@@ -207,7 +207,7 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd, setVisStatusm
             fields={fields}
             append={append}
             remove={remove}
-            søknadstidspunkt={new Date(sak.opprettetTidspunkt)}
+            søknadstidspunkt={new Date(sak.periode.fom)}
             errorMessage={errorMessage}
           />
         </div>

@@ -24,7 +24,7 @@ export const BistandsbehovMedDataFetching = async ({
       readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       typeBehandling={typeBehandling}
-      søknadstidspunkt={sak.opprettetTidspunkt}
+      søknadstidspunkt={sak.periode.fom}
     />
   );
 };

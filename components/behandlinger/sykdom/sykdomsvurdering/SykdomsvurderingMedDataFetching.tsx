@@ -40,7 +40,7 @@ export const SykdomsvurderingMedDataFetching = async ({
       behandlingVersjon={behandlingVersjon}
       bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
       hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
-      søknadstidspunkt={sak.opprettetTidspunkt} // er dette det samme som søknadstidspunkt, eller kan det være noe annet
+      søknadstidspunkt={sak.periode.fom}
       typeBehandling={typeBehandling}
     />
   );
