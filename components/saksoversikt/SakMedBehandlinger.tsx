@@ -23,18 +23,12 @@ const formaterBehandlingType = (behandlingtype: string) => {
   }
 };
 
-const kanRevurdere = (sak: SaksInfo): boolean => {
-  const finnesAvsluttetFørstegangsbehandling =
-    !!sak.behandlinger.filter((behandling) => behandling.type === 'ae0034' && behandling.status === 'AVSLUTTET').length
-
-  const ingenBehandlingerUnderArbeid =
-    !sak.behandlinger.filter((b) => b.status !== 'AVSLUTTET').length
-
-  return finnesAvsluttetFørstegangsbehandling && ingenBehandlingerUnderArbeid
-}
-
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
+
+  const kanRevurdere = !!sak.behandlinger.filter(
+    (behandling) => behandling.type === 'ae0034' && behandling.status !== 'OPPRETTET'
+  ).length;
 
   return (
     <Page>
@@ -52,7 +46,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
                 Registrer brudd på aktivitetsplikten
               </Button>
 
-              {kanRevurdere(sak) && (
+              {kanRevurdere && (
                 <Button
                   variant="secondary"
                   size="small"
