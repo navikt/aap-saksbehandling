@@ -69,19 +69,17 @@ export const FinnSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, re
     })(event);
   };
   return (
-    <VStack padding={'4'} gap={'4'}>
-      <VilkårsKort heading={'Avklar sak'}>
-        <form onSubmit={onSubmit}>
-          <VStack gap={'6'}>
-            <ServerSentEventStatusAlert status={status} />
-            <FormField form={form} formField={formFields.knyttTilSak} />
-            <Button loading={isLoading} className={'fit-content'}>
-              Send inn
-            </Button>
-          </VStack>
-        </form>
-      </VilkårsKort>
-    </VStack>
+    <VilkårsKort heading={'Avklar sak'}>
+      <form onSubmit={onSubmit}>
+        <VStack gap={'6'}>
+          <ServerSentEventStatusAlert status={status} />
+          <FormField form={form} formField={formFields.knyttTilSak} />
+          <Button loading={isLoading} className={'fit-content'}>
+            Send inn
+          </Button>
+        </VStack>
+      </form>
+    </VilkårsKort>
   );
 };
 

@@ -67,18 +67,16 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
   };
 
   return (
-    <VStack padding={'4'} gap={'4'}>
-      <VilkårsKort heading={'Avklar tema'}>
-        <form onSubmit={onSubmit}>
-          <VStack gap={'6'}>
-            <ServerSentEventStatusAlert status={status} />
-            <FormField form={form} formField={formFields.erTemaAAP} />
-            <Button loading={isLoading} className={'fit-content'}>
-              Neste
-            </Button>
-          </VStack>
-        </form>
-      </VilkårsKort>
-    </VStack>
+    <VilkårsKort heading={'Avklar tema'}>
+      <form onSubmit={onSubmit}>
+        <VStack gap={'6'}>
+          <ServerSentEventStatusAlert status={status} />
+          <FormField form={form} formField={formFields.erTemaAAP} />
+          <Button loading={isLoading} className={'fit-content'}>
+            Neste
+          </Button>
+        </VStack>
+      </form>
+    </VilkårsKort>
   );
 };
