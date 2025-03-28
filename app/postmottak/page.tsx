@@ -1,21 +1,20 @@
-import { hentAlleBehandlinger } from 'lib/services/dokumentmottakservice/dokumentMottakService';
 import { OpprettBehandling } from 'components/postmottak/test/behandling/OpprettBehandling';
 import { Page as AkselPage } from '@navikt/ds-react';
 import { BehandlingOversikt } from 'components/postmottak/oversikt/BehandlingOversikt';
-import { isLocal } from '@navikt/aap-felles-utils';
+import { isProd, isLocal } from 'lib/utils/environment';
+import { hentAlleBehandlinger } from 'lib/services/dokumentmottakservice/dokumentMottakService';
 
 const Page = async () => {
-  const alleBehandlinger = (await hentAlleBehandlinger()).sort(
-    (a, b) => Date.parse(b.opprettet) - Date.parse(a.opprettet)
-  );
+  let alleBehandlinger: { id: string; status: string; opprettet: string; steg: string }[] = [];
+  if (!isProd()) {
+    alleBehandlinger = (await hentAlleBehandlinger()).sort((a, b) => Date.parse(b.opprettet) - Date.parse(a.opprettet));
+  }
 
   return (
     <AkselPage>
-      <BehandlingOversikt behandlinger={alleBehandlinger} />
+      {!isProd() && <BehandlingOversikt behandlinger={alleBehandlinger} />}
 
-      {isLocal() && (
-        <OpprettBehandling />
-      )}
+      {isLocal() && <OpprettBehandling />}
     </AkselPage>
   );
 };
