@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { DigitaliserSøknad } from './søknad/DigitaliserSøknad';
 import { DigitaliserMeldekort } from './meldekort/DigitaliserMeldekort';
 import { Behovstype } from 'lib/postmottakForm';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
+import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/DigitaliserAnnetRelevantDokument';
 import { VStack } from '@navikt/ds-react';
@@ -24,7 +24,7 @@ export interface Submittable {
 
 export const DigitaliserDokument = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
-  const { løsBehovOgGåTilNesteSteg, status, isLoading } = useLøsBehovOgGåTilNesteSteg('DIGITALISER_DOKUMENT');
+  const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('DIGITALISER_DOKUMENT');
 
   function handleSubmit(kategori: KategoriserDokumentKategori, jsonString: string | null, søknadsdato: Date | null) {
     løsBehovOgGåTilNesteSteg({

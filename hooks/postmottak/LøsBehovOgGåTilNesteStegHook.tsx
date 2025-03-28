@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
 
-export const useLøsBehovOgGåTilNesteSteg = (
+export const usePostmottakLøsBehovOgGåTilNesteSteg = (
   steg: StegType
 ): {
   status: ServerSentEventStatus | undefined;

@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/postmottakForm';
 import { FormEvent, FormEventHandler } from 'react';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
+import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
 import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
 import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { postmottakEndreTemaClient, postmottakLøsBehovClient } from 'lib/postmottakClientApi';
@@ -36,7 +36,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
     },
     { readOnly }
   );
-  const { løsBehovOgGåTilNesteSteg, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
+  const { løsBehovOgGåTilNesteSteg, status } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
   const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       if (data.erTemaAAP === JaEllerNei.Ja) {

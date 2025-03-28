@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { Behovstype } from 'lib/postmottakForm';
 import { FormEvent, FormEventHandler } from 'react';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
+import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
 import { FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
 import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import { VStack } from '@navikt/ds-react';
@@ -53,7 +53,7 @@ export const FinnSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, re
     },
     { readOnly }
   );
-  const { løsBehovOgGåTilNesteSteg, status } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SAK');
+  const { løsBehovOgGåTilNesteSteg, status } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_SAK');
   const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({

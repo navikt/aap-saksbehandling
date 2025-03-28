@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
+import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/LøsBehovOgGåTilNesteStegHook';
 import { OverleveringGrunnlag } from 'lib/types/postmottakTypes';
 import { FormEvent, FormEventHandler } from 'react';
 import { VStack } from '@navikt/ds-react';
@@ -36,7 +36,7 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
     },
     { readOnly }
   );
-  const { løsBehovOgGåTilNesteSteg, status } = useLøsBehovOgGåTilNesteSteg('OVERLEVER_TIL_FAGSYSTEM');
+  const { løsBehovOgGåTilNesteSteg, status } = usePostmottakLøsBehovOgGåTilNesteSteg('OVERLEVER_TIL_FAGSYSTEM');
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
