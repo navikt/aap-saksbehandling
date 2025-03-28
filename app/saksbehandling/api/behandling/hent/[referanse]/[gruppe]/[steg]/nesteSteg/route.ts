@@ -1,6 +1,7 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { BehandlingsFlytAvklaringsbehovKode, StegGruppe, StegType } from 'lib/types/types';
 import { NextRequest } from 'next/server';
+import { logInfo } from "@navikt/aap-felles-utils";
 
 const DEFAULT_TIMEOUT_IN_MS = 500;
 const RETRIES = 0;
@@ -26,7 +27,7 @@ export async function GET(
 
   const pollFlytMedTimeoutOgRetry = async (timeout: number, retries: number) => {
     setTimeout(async () => {
-      console.log({ timeout, retries });
+      logInfo(`Timeout: ${timeout}, Retries: ${retries}`);
       if (retries > 19) {
         const json: ServerSentEventData = {
           status: 'ERROR',
@@ -58,7 +59,7 @@ export async function GET(
       }
 
       if (flyt.prosessering.status === 'FERDIG') {
-        console.log('Prosessering ferdig');
+        logInfo('Prosessering ferdig');
         const aktivGruppe = flyt.vurdertGruppe != null ? flyt.vurdertGruppe : flyt.aktivGruppe;
         const aktivtSteg = flyt.vurdertSteg != null ? flyt.vurdertSteg : flyt.aktivtSteg;
 
@@ -75,7 +76,7 @@ export async function GET(
         writer.close();
         return;
       } else {
-        console.log('Prosessering jobber');
+        logInfo('Prosessering jobber');
         await pollFlytMedTimeoutOgRetry(DEFAULT_TIMEOUT_IN_MS, retries + 1);
       }
     }, timeout);

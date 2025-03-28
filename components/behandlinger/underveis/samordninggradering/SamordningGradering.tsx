@@ -104,7 +104,6 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) => {
-      console.log(data);
       return løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {

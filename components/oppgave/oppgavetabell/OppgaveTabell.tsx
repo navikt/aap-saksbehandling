@@ -97,12 +97,10 @@ export const OppgaveTabell = ({
     return 0;
   }
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
-    console.log(oppgave);
     if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0) {
       setLoadingID(oppgave.id);
       const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
       if (plukketOppgave.type === 'success') {
-        console.log('plukket oppgave:', plukketOppgave);
         router.push(byggKelvinURL(plukketOppgave.data));
       } else if (plukketOppgave.type === 'error') {
         setFeilmelding(plukketOppgave.message);

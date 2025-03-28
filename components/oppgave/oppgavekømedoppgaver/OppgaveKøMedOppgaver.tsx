@@ -45,7 +45,6 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
       const nesteOppgave = await plukkNesteOppgaveClient(aktivKø, aktivEnhet);
       if (nesteOppgave.type === 'success') {
         if (nesteOppgave.data) {
-          console.log('plukket oppgave:', nesteOppgave);
           window.location.assign(byggKelvinURL(nesteOppgave.data.avklaringsbehovReferanse));
         }
       }

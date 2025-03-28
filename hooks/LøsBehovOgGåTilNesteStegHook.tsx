@@ -79,14 +79,12 @@ export const useLøsBehovOgGåTilNesteSteg = (
       }
 
       if (eventData.status === 'ERROR') {
-        console.log('ERROR', eventData);
         setStatus(eventData.status);
         eventSource.close();
         setIsLoading(false);
       }
       if (eventData.status === 'POLLING') {
         setStatus(eventData.status);
-        console.log('POLLING', eventData);
         setIsLoading(false);
       }
     };

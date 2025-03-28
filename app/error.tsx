@@ -11,7 +11,6 @@ interface Props {
 
 //500 Page
 const Error = ({ error }: Props) => {
-  console.log(error.message);
   return (
     <div
       style={{

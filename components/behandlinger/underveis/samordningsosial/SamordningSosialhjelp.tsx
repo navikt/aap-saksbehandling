@@ -11,8 +11,6 @@ interface Props {
 export const SamordningSosialhjelp = ({ grunnlag }: Props) => {
   if (!grunnlag.gjeldendeVurdering?.harKrav) return null;
 
-  console.log('refusjon', grunnlag.gjeldendeVurdering);
-
   return (
     <VilkårsKort heading="§11-29 Refusjonskrav sosialstønad" steg="REFUSJON_KRAV" defaultOpen={true}>
       <BodyShort spacing>

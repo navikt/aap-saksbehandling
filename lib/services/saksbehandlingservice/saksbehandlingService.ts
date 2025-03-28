@@ -398,7 +398,6 @@ async function ventTilProsesseringErFerdig(
   while (forsøk < maksAntallForsøk) {
     forsøk++;
 
-    console.log('Forsøk nummer: ' + forsøk);
     const response = await hentFlyt(behandlingsreferanse);
 
     const status = response.prosessering.status;

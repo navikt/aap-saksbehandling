@@ -1,6 +1,7 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { FlytProsesseringStatus } from 'lib/types/types';
 import { NextRequest } from 'next/server';
+import { logInfo } from "@navikt/aap-felles-utils";
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;
@@ -15,7 +16,7 @@ export async function GET(__request: NextRequest, context: { params: Promise<{ r
 
   const pollFlytMedTimeoutOgRetry = async (timeout: number, retries: number) => {
     setTimeout(async () => {
-      console.log({ timeout, retries });
+      logInfo(`Timeout: ${timeout}, Retries: ${retries}`);
       if (retries > 8) {
         const json: FlytProsesseringServerSentEvent = {
           status: 'FEILET',
@@ -27,7 +28,7 @@ export async function GET(__request: NextRequest, context: { params: Promise<{ r
 
       const flyt = await hentFlyt((await context.params).referanse);
       if (flyt.prosessering.status === 'FERDIG' || flyt.prosessering.status === 'FEILET') {
-        console.log('Prosessering er ferdig!');
+        logInfo('Prosessering er ferdig!');
         const json: FlytProsesseringServerSentEvent = {
           status: flyt.prosessering.status,
         };

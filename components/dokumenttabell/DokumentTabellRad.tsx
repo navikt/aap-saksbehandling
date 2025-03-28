@@ -15,7 +15,6 @@ export const DokumentTabellRad = ({ dokument }: Props) => {
       <Table.DataCell textSize={'small'}>
         <Link
           href={`/saksbehandling/api/dokument/${dokument.journalpostId}/${dokument.dokumentId}`}
-          onClick={() => console.log('åpner dokument')}
           target="_blank"
         >
           {dokument.tittel}

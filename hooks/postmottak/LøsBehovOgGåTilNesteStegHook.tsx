@@ -43,13 +43,11 @@ export const useLøsBehovOgGåTilNesteSteg = (
         setIsLoading(false);
       }
       if (eventData.status === 'ERROR') {
-        console.log('ERROR', eventData);
         setStatus(eventData.status);
         eventSource.close();
       }
       if (eventData.status === 'POLLING') {
         setStatus(eventData.status);
-        console.log('POLLING', eventData);
       }
     };
     eventSource.onerror = (event: any) => {

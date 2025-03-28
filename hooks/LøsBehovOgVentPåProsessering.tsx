@@ -51,7 +51,6 @@ export const useLøsBehovOgVentPåProsessering = (): {
         setIsLoading(false);
       }
       if (eventData.status === 'FEILET') {
-        console.log('ERROR', eventData);
         setStatus(eventData.status);
         eventSource.close();
       }

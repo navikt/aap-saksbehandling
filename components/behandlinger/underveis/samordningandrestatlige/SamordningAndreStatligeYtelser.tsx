@@ -51,8 +51,6 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
     { readOnly: readOnly }
   );
   const finnesGrunnlag = grunnlag.vurdering ? grunnlag.vurdering.vurderingPerioder.length > 0 : false;
-  console.log(grunnlag);
-  console.log(finnesGrunnlag);
   const [visYtelsesTabell, setVisYtelsesTabell] = useState<boolean>(finnesGrunnlag);
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, resetStatus } = useLøsBehovOgGåTilNesteSteg(
@@ -82,7 +80,6 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
     )(event);
   };
 
-  console.log(readOnly);
   return (
     // @ts-ignore
     <VilkårsKort heading="§ 11-29 Andre statlige ytelser som skal avregnes" steg="SAMORDNING_ANDRE_STATLIGE_YTELSER">
