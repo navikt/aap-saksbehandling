@@ -15,7 +15,7 @@ export const SplitVindu = ({ children, journalpostId, dokumenter }: Props) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   return (
-    <HGrid padding={'4'} columns={isExpanded ? '1fr 2fr' : '1fr 1fr'} gap={'4'} className={styles.splitVindu}>
+    <HGrid columns={isExpanded ? '1fr 2fr' : '1fr 1fr'} gap={'4'} className={styles.splitVindu}>
       {children}
 
       <Dokumentvisning
