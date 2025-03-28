@@ -1,14 +1,13 @@
 'use client';
 
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
-import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/postmottakForm';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
 import { FormEvent, FormEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
 import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { postmottakEndreTemaClient, postmottakLøsBehovClient } from 'lib/postmottakClientApi';
-import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
-import { VStack } from '@navikt/ds-react';
+import { Button, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 
@@ -36,7 +35,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
     },
     { readOnly }
   );
-  const { løsBehovOgGåTilNesteSteg, status } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
+  const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
   const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       if (data.erTemaAAP === JaEllerNei.Ja) {
@@ -74,7 +73,9 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           <VStack gap={'6'}>
             <ServerSentEventStatusAlert status={status} />
             <FormField form={form} formField={formFields.erTemaAAP} />
-            <Nesteknapp>Neste</Nesteknapp>
+            <Button loading={isLoading} className={'fit-content'}>
+              Neste
+            </Button>
           </VStack>
         </form>
       </VilkårsKort>

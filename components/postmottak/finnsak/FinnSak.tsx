@@ -5,8 +5,7 @@ import { Behovstype } from 'lib/postmottakForm';
 import { FormEvent, FormEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
-import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
-import { VStack } from '@navikt/ds-react';
+import { Button, VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -53,7 +52,7 @@ export const FinnSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, re
     },
     { readOnly }
   );
-  const { løsBehovOgGåTilNesteSteg, status } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_SAK');
+  const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_SAK');
   const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
@@ -76,7 +75,9 @@ export const FinnSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, re
           <VStack gap={'6'}>
             <ServerSentEventStatusAlert status={status} />
             <FormField form={form} formField={formFields.knyttTilSak} />
-            <Nesteknapp disabled={readOnly}>Send inn</Nesteknapp>
+            <Button loading={isLoading} className={'fit-content'}>
+              Send inn
+            </Button>
           </VStack>
         </form>
       </VilkårsKort>

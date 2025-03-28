@@ -4,9 +4,8 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { OverleveringGrunnlag } from 'lib/types/postmottakTypes';
 import { FormEvent, FormEventHandler } from 'react';
-import { VStack } from '@navikt/ds-react';
+import { Button, VStack } from '@navikt/ds-react';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
-import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -36,7 +35,8 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
     },
     { readOnly }
   );
-  const { løsBehovOgGåTilNesteSteg, status } = usePostmottakLøsBehovOgGåTilNesteSteg('OVERLEVER_TIL_FAGSYSTEM');
+  const { løsBehovOgGåTilNesteSteg, status, isLoading } =
+    usePostmottakLøsBehovOgGåTilNesteSteg('OVERLEVER_TIL_FAGSYSTEM');
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -60,7 +60,9 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
           <VStack gap={'6'}>
             <ServerSentEventStatusAlert status={status} />
             <FormField form={form} formField={formFields.skalOverleveres} />
-            <Nesteknapp disabled={readOnly}>Send inn</Nesteknapp>
+            <Button disabled={readOnly} loading={isLoading} className={'fit-content'}>
+              Send inn
+            </Button>
           </VStack>
         </form>
       </VilkårsKort>
