@@ -40,6 +40,7 @@ export const SkriveBrevMedDataFetching = async ({
         referanse={brev.brevbestillingReferanse}
         grunnlag={brev.brev}
         mottaker={brev.mottaker}
+        signaturer={brev.signaturer}
         behandlingVersjon={behandlingVersjon}
       />
     </div>

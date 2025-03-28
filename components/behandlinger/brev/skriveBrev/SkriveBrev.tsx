@@ -6,7 +6,7 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev, BrevMottaker, BrevStatus } from 'lib/types/types';
+import { Brev, BrevMottaker, BrevStatus, Signatur } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 
@@ -23,6 +23,7 @@ export const SkriveBrev = ({
   mottaker,
   saksnummer,
   grunnlag,
+  signaturer,
   status,
 }: {
   referanse: string;
@@ -30,6 +31,7 @@ export const SkriveBrev = ({
   saksnummer?: string;
   behandlingVersjon: number;
   grunnlag: Brev;
+  signaturer: Signatur[];
   status: BrevStatus;
 }) => {
   const behandlingsReferanse = useBehandlingsReferanse();
@@ -97,7 +99,14 @@ export const SkriveBrev = ({
       </div>
 
       <VStack gap={'4'}>
-        <Brevbygger brevmal={brev} mottaker={mottaker} saksnummer={saksnummer} onBrevChange={onChange} logo={NavLogo} />
+        <Brevbygger
+          brevmal={brev}
+          mottaker={mottaker}
+          saksnummer={saksnummer}
+          onBrevChange={onChange}
+          logo={NavLogo}
+          signatur={signaturer}
+        />
         <Button
           disabled={status !== 'FORHÅNDSVISNING_KLAR'}
           onClick={async () => {

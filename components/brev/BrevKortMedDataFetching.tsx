@@ -28,6 +28,7 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
           mottaker={mottaker}
           behandlingVersjon={behandlingVersjon}
           referanse={brevbestillingReferanse}
+          signaturer={grunnlag.signaturer}
         />
       )}
     </VilkårsKort>
