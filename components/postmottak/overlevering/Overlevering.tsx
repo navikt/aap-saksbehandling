@@ -54,18 +54,18 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
   };
 
   return (
-    <VStack padding={'4'} gap={'4'}>
-      <VilkårsKort heading={'Send dokument'}>
-        <form onSubmit={onSubmit}>
-          <VStack gap={'6'}>
-            <ServerSentEventStatusAlert status={status} />
-            <FormField form={form} formField={formFields.skalOverleveres} />
-            <Button disabled={readOnly} loading={isLoading} className={'fit-content'}>
+    <VilkårsKort heading={'Send dokument'}>
+      <form onSubmit={onSubmit}>
+        <VStack gap={'6'}>
+          <ServerSentEventStatusAlert status={status} />
+          <FormField form={form} formField={formFields.skalOverleveres} />
+          {!readOnly && (
+            <Button loading={isLoading} className={'fit-content'}>
               Send inn
             </Button>
-          </VStack>
-        </form>
-      </VilkårsKort>
-    </VStack>
+          )}
+        </VStack>
+      </form>
+    </VilkårsKort>
   );
 };
