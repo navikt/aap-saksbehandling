@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Button, HStack, Tabs, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Tabs, Tooltip } from '@navikt/ds-react';
 import { Dokument } from 'lib/types/postmottakTypes';
 import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
+
+import styles from './Dokumentvisning.module.css';
 
 interface Props {
   journalpostId: number;
@@ -40,35 +42,44 @@ export const Dokumentvisning = ({ journalpostId, dokumenter, setIsExpandedAction
   }, [valgtDokumentInfoId, journalpostId]);
 
   return (
-    <VStack paddingBlock={'4'}>
-      <HStack>
-        <Button
-          variant={'secondary'}
-          size={'small'}
-          icon={isExpanded ? <ExpandIcon /> : <ShrinkIcon />}
-          type={'button'}
-          onClick={() => setIsExpandedAction(!isExpanded)}
-        />
-        <Tabs defaultValue="0" size="small">
+    <div className={styles.dokumentvisning}>
+      <HStack gap={'2'} align={'center'}>
+        <div className={styles.ekspanderknapp}>
+          <Button
+            variant={'tertiary'}
+            size={'small'}
+            icon={isExpanded ? <ShrinkIcon /> : <ExpandIcon />}
+            type={'button'}
+            onClick={() => setIsExpandedAction(!isExpanded)}
+          />
+        </div>
+        <Tabs defaultValue="0" size="medium">
           <Tabs.List>
             {dokumenter.map((dokument, index) => (
-              <Tabs.Tab
-                key={dokument.dokumentInfoId}
-                value={`${index}`}
-                label={`${dokument.tittel}`}
-                onClick={() => setValgtDokumentInfoId(dokument.dokumentInfoId)}
-              />
+              <Tooltip key={dokument.dokumentInfoId} content={dokument.tittel || ''}>
+                <Tabs.Tab
+                  value={`${index}`}
+                  label={
+                    <div style={{ maxWidth: '200px' }}>
+                      <BodyShort truncate>{dokument.tittel}</BodyShort>
+                    </div>
+                  }
+                  onClick={() => setValgtDokumentInfoId(dokument.dokumentInfoId)}
+                />
+              </Tooltip>
             ))}
           </Tabs.List>
         </Tabs>
       </HStack>
       {dataUri && (
-        <object data={`${dataUri}#toolbar=0`} type="application/pdf" width="100%" height="100%">
-          <p>
-            Alternative text - include a link <a href="http://africau.edu/images/default/sample.pdf">to the PDF!</a>
-          </p>
-        </object>
+        <div className={styles.pdf}>
+          <object data={`${dataUri}#toolbar=0`} type="application/pdf" width="100%" height="100%">
+            <p>
+              Alternative text - include a link <a href="http://africau.edu/images/default/sample.pdf">to the PDF!</a>
+            </p>
+          </object>
+        </div>
       )}
-    </VStack>
+    </div>
   );
 };

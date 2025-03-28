@@ -1,0 +1,14 @@
+.dokumentvisning {
+  background-color: var(--a-surface-default);
+  border-radius: var(--a-border-radius-large);
+  border: 1px solid var(--a-border-divider);
+}
+
+.ekspanderknapp {
+  margin-left: var(--a-spacing-2);
+}
+
+.pdf {
+  padding: var(--a-spacing-2);
+  height: 100%;
+}
