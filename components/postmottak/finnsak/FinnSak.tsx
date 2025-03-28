@@ -35,23 +35,27 @@ function mapVurderingTilValgtOption(vurdering: FinnSakGrunnlag['vurdering']) {
 }
 
 export const FinnSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
-  const nySakOption = grunnlag.saksinfo.length === 0 ? [{ label: 'Ny sak', value: NY }] : [];
+  const nySakOption = grunnlag.saksinfo.length === 0 ? [{ label: 'Opprett ny sak', value: NY }] : [];
+
+  //TODO Legg på description i radio valg
+  // Dato for sak skal være i description.
   const { formFields, form } = useConfigForm<FormFields>(
     {
       knyttTilSak: {
         type: 'radio',
-        label: 'Journalfør dokumentet på sak',
+        label: 'Hvor skal dokumentet jorunalføres?',
         rules: { required: 'Du må svare på hvilken sak dokumentet skal knyttes til' },
         defaultValue: mapVurderingTilValgtOption(grunnlag.vurdering),
         options: [
           ...nySakOption,
           ...grunnlag.saksinfo.map(mapSaksinfoToValuePair),
-          { label: 'Generell Sak', value: GENERELL },
+          { label: 'Journalfør på generell sak', value: GENERELL },
         ],
       },
     },
     { readOnly }
   );
+
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_SAK');
   const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
