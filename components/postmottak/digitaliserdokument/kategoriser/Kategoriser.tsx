@@ -1,13 +1,13 @@
 'use client';
 
 import { KategoriserDokumentKategori } from 'lib/types/postmottakTypes';
-import { Nesteknapp } from 'components/postmottak/nesteknapp/Nesteknapp';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { ServerSentEventStatus } from 'app/postmottak/api/post/[behandlingsreferanse]/hent/[gruppe]/[steg]/nesteSteg/route';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
+import { Button } from '@navikt/ds-react';
 
 interface Props extends Submittable {
   kategori?: KategoriserDokumentKategori;
@@ -69,7 +69,9 @@ export const Kategoriser = ({ kategori, readOnly, submit, onKategoriChange, stat
       <form onSubmit={form.handleSubmit((data) => submit(data.kategori, null, null))}>
         <ServerSentEventStatusAlert status={status} />
         <FormField form={form} formField={formFields.kategori} />
-        {kategori && !kategorierSomSkalDigitaliseres.includes(kategori) && <Nesteknapp>Neste</Nesteknapp>}
+        {kategori && !kategorierSomSkalDigitaliseres.includes(kategori) && (
+          <Button className={'fit-content'}>Neste</Button>
+        )}
       </form>
     </VilkårsKort>
   );
