@@ -12,6 +12,8 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { SamordningUføreTabell } from 'components/behandlinger/underveis/samordninguføre/SamordningUføreTabell';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { format, parse } from 'date-fns';
+import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
+import styles from 'components/behandlinger/underveis/samordninggradering/YtelseTabell.module.css';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
@@ -23,14 +25,13 @@ export interface SamordningUføreFormFields {
   vurderteSamordninger: SamordnetUførePeriode[];
 }
 type SamordnetUførePeriode = {
-  kilde?: string;
-  graderingFraKilde?: number;
   gradering?: number;
   virkningstidspunkt: string;
 };
 export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, resetStatus, status } = useLøsBehovOgGåTilNesteSteg('SAMORDNING_UFØRE');
+  grunnlag.grunnlag[0].endringStatus;
 
   function hentDefaultSamordningerFraVurderingerEllerGrunnlag(
     grunnlag: SamordningUføreGrunnlag
@@ -43,11 +44,11 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
       }));
     }
     if (grunnlag.grunnlag.length) {
-      return grunnlag.grunnlag.map((ytelse) => ({
-        kilde: ytelse.kilde,
-        graderingFraKilde: ytelse.uføregrad,
-        virkningstidspunkt: ytelse.virkningstidspunkt && format(new Date(ytelse.virkningstidspunkt), 'dd.MM.yyyy'),
-      }));
+      return grunnlag.grunnlag
+        .filter((ytelse) => ytelse.endringStatus === 'NY')
+        .map((ytelse) => ({
+          virkningstidspunkt: ytelse.virkningstidspunkt && format(new Date(ytelse.virkningstidspunkt), 'dd.MM.yyyy'),
+        }));
     }
     return [];
   }
@@ -97,6 +98,32 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
         resetStatus={resetStatus}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
+        {grunnlag?.grunnlag?.length > 0 && (
+          <VStack gap={'2'}>
+            <Label size={'small'}>Vedtak om uføretrygd</Label>
+            <BodyShort size={'small'}>Vi har funnet følgende perioder med overlapp mellom uføretrygd og Aap.</BodyShort>
+            <Table className={styles.ytelsestabell}>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Virkningstidspunkt</Table.HeaderCell>
+                  <Table.HeaderCell>Kilde</Table.HeaderCell>
+                  <Table.HeaderCell>Uføregrad</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {grunnlag.grunnlag.map((ytelse, index) => (
+                  <Table.Row key={`${index}-rad`}>
+                    <Table.DataCell textSize="small">
+                      {ytelse.virkningstidspunkt && format(new Date(ytelse.virkningstidspunkt), 'dd.MM.yyyy')}
+                    </Table.DataCell>
+                    <Table.DataCell textSize="small">{ytelse.kilde}</Table.DataCell>
+                    <Table.DataCell textSize="small">{ytelse.uføregrad}</Table.DataCell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </VStack>
+        )}
         <SamordningUføreTabell form={form} readOnly={readOnly} />
       </Form>
     </VilkårsKort>

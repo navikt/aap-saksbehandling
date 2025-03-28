@@ -1,35 +1,42 @@
 'use client';
 
-import { Label, Table } from '@navikt/ds-react';
+import { Button, HStack, Label, Table } from '@navikt/ds-react';
 import styles from 'components/behandlinger/underveis/samordninggradering/YtelseTabell.module.css';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SamordningUføreFormFields } from 'components/behandlinger/underveis/samordninguføre/SamordningUføre';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
   form: UseFormReturn<SamordningUføreFormFields>;
   readOnly: boolean;
 }
 export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
-  const { fields } = useFieldArray({ name: 'vurderteSamordninger', control: form.control });
+  const { fields, append, remove } = useFieldArray({ name: 'vurderteSamordninger', control: form.control });
+  function leggTilRad() {
+    append({
+      gradering: undefined,
+      virkningstidspunkt: '',
+    });
+  }
   return (
     <div>
       <Label size={'small'}>Vurder brukers faktiske uføregrad</Label>
-      <Table>
+      <Table className={styles.ytelsestabell}>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Kilde</Table.HeaderCell>
-            <Table.HeaderCell>Periode</Table.HeaderCell>
-            <Table.HeaderCell>Grad fra kilde</Table.HeaderCell>
+            <Table.HeaderCell>Virkningstidspunkt</Table.HeaderCell>
             <Table.HeaderCell>Uføregrad til samordning (%)</Table.HeaderCell>
+            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {fields.map((field, index) => (
             <Table.Row key={field.id}>
-              <Table.DataCell>{field.kilde}</Table.DataCell>
-              <Table.DataCell>{field.virkningstidspunkt}</Table.DataCell>
-              <Table.DataCell>{field.graderingFraKilde}</Table.DataCell>
+              <Table.DataCell>
+                <DateInputWrapper name={`vurderteSamordninger.${index}.virkningstidspunkt`} control={form.control} />
+              </Table.DataCell>
               <Table.DataCell>
                 <TextFieldWrapper
                   name={`vurderteSamordninger.${index}.gradering`}
@@ -40,7 +47,7 @@ export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
                   control={form.control}
                   readOnly={readOnly}
                   rules={{
-                    required: 'Du må velge utbetalingsgrad',
+                    required: 'Du må angi uføregrad',
                     validate: (value) => {
                       if (Number.isNaN(Number(value))) {
                         return 'Prosent må angis med siffer';
@@ -56,10 +63,32 @@ export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
                   className={styles.utbetalingsgrad}
                 />
               </Table.DataCell>
+              <Table.DataCell>
+                <Button
+                  size={'small'}
+                  icon={<TrashIcon title={'Slett'} />}
+                  variant={'tertiary'}
+                  type={'button'}
+                  onClick={() => remove(index)}
+                  disabled={readOnly}
+                />
+              </Table.DataCell>
             </Table.Row>
           ))}
         </Table.Body>
       </Table>
+      <HStack>
+        <Button
+          size={'small'}
+          type={'button'}
+          variant={'tertiary'}
+          icon={<PlusCircleIcon />}
+          onClick={leggTilRad}
+          disabled={readOnly}
+        >
+          Legg til
+        </Button>
+      </HStack>
     </div>
   );
 };
