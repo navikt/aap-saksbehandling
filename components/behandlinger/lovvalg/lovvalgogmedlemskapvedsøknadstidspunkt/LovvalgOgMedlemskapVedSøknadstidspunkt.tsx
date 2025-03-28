@@ -73,7 +73,10 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       lovvalgsLand: {
         type: 'radio',
         label: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
-        options: ['Norge', 'Annet land med avtale'],
+        options: [
+          { label: 'Norge', value: 'Norge' },
+          { label: 'Annet land med avtale', value: 'Annet land med avtale' },
+        ],
         rules: { required: 'Du må velge riktig lovvalg ved søknadstidspunkt' },
         defaultValue: mapGrunnlagTilLovvalgsland(grunnlag?.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand),
       },

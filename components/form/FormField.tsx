@@ -75,8 +75,8 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           horisontal={horizontalRadio}
           readOnly={formField.readOnly}
         >
-          {formField.options.map(mapToValuePair).map((option) => (
-            <Radio key={option.value} value={option.value}>
+          {formField.options.map((option) => (
+            <Radio key={option.value} value={option.value} description={option.description}>
               {option.label}
             </Radio>
           ))}

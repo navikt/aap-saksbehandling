@@ -4,20 +4,19 @@ export enum JaEllerNei {
   Ja = 'ja',
   Nei = 'nei',
 }
-export function stringToJaEllerNei(value: string) {
-  switch (value) {
-    case 'ja':
-      return JaEllerNei.Ja;
-    case 'nei':
-      return JaEllerNei.Nei;
-  }
-}
 
 export enum JaNeiIkkeOppgitt {
   JA = 'Ja',
   NEI = 'Nei',
   IKKE_OPPGITT = 'Ikke oppgitt',
 }
+
+export const JaNeiEllerIkkeOppgittOptions: ValuePair[] = [
+  { label: 'Ja', value: JaNeiIkkeOppgitt.JA },
+  { label: 'Nei', value: JaNeiIkkeOppgitt.NEI },
+  { label: 'Ikke oppgitt', value: JaNeiIkkeOppgitt.IKKE_OPPGITT },
+];
+
 export function stringToJaNeiIkkeOppgitt(value: string) {
   switch (value) {
     case 'Ja':
@@ -33,6 +32,13 @@ export enum JaNeiVetIkke {
   NEI = 'Nei',
   VET_IKKE = 'Vet ikke',
 }
+
+export const JaNeiEllerVetIkkeOptions: ValuePair[] = [
+  { label: 'Ja', value: JaNeiVetIkke.JA },
+  { label: 'Nei', value: JaNeiVetIkke.NEI },
+  { label: 'Vet ikke', value: JaNeiVetIkke.VET_IKKE },
+];
+
 export function stringToJaNeiVetikke(value: string) {
   switch (value) {
     case 'Ja':
@@ -49,6 +55,14 @@ export enum JaNeiAvbruttIkkeOppgitt {
   AVBRUTT = 'Avbrutt',
   IKKE_OPPGITT = 'Ikke oppgitt',
 }
+
+export const JaNeiAbruttEllerIkkeOpgittOptions: ValuePair[] = [
+  { label: 'Ja', value: JaNeiAvbruttIkkeOppgitt.JA },
+  { label: 'Nei', value: JaNeiAvbruttIkkeOppgitt.NEI },
+  { label: 'Avbrutt', value: JaNeiAvbruttIkkeOppgitt.AVBRUTT },
+  { label: 'Ikke oppgitt', value: JaNeiAvbruttIkkeOppgitt.IKKE_OPPGITT },
+];
+
 export function stringToJaNeiAvbruttIkkeOppgitt(value: string) {
   switch (value) {
     case 'Ja':
@@ -59,21 +73,6 @@ export function stringToJaNeiAvbruttIkkeOppgitt(value: string) {
       return JaNeiAvbruttIkkeOppgitt.AVBRUTT;
     case 'Ikke oppgitt':
       return JaNeiAvbruttIkkeOppgitt.IKKE_OPPGITT;
-  }
-}
-export enum JaNeiAvbrutt {
-  JA = 'Ja',
-  NEI = 'Nei',
-  AVBRUTT = 'Avbrutt',
-}
-export function stringToJaNeiAvbrutt(value: string) {
-  switch (value) {
-    case 'Ja':
-      return JaNeiAvbrutt.JA;
-    case 'Nei':
-      return JaNeiAvbrutt.NEI;
-    case 'Avbrutt':
-      return JaNeiAvbrutt.AVBRUTT;
   }
 }
 

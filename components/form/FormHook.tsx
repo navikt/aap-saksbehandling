@@ -12,7 +12,7 @@ export type FormFieldConfig<FormFieldIds extends FieldValues> =
   | FormFieldText<FormFieldIds>
   | FormFieldDate<FormFieldIds>
   | FormFieldDateInput<FormFieldIds>
-  | FormFieldWithOptions<FormFieldIds>
+  | FormFieldRadio<FormFieldIds>
   | FormFieldSelect<FormFieldIds>
   | FormFieldCheckbox<FormFieldIds>
   | FormFieldCombobox<FormFieldIds>
@@ -55,9 +55,13 @@ interface FormFieldDateInput<FormFieldIds extends FieldValues> extends BaseFormF
   defaultValue?: string;
 }
 
-interface FormFieldWithOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
+export interface FormFieldRadioOptions extends ValuePair {
+  description?: string;
+}
+
+interface FormFieldRadio<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
   type: 'radio';
-  options: string[] | ValuePair[];
+  options: FormFieldRadioOptions[];
   defaultValue?: string;
 }
 

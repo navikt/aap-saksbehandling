@@ -1,7 +1,10 @@
 'use client';
 
 import {
+  JaNeiAbruttEllerIkkeOpgittOptions,
   JaNeiAvbruttIkkeOppgitt,
+  JaNeiEllerIkkeOppgittOptions,
+  JaNeiEllerVetIkkeOptions,
   JaNeiIkkeOppgitt,
   JaNeiVetIkke,
   stringToJaNeiAvbruttIkkeOppgitt,
@@ -72,19 +75,14 @@ export const DigitaliserSøknad = ({ grunnlag, readOnly, submit, isLoading }: Pr
       yrkesSkade: {
         type: 'radio',
         label: 'Har søker yrkesskade?',
-        options: [JaNeiIkkeOppgitt.JA, JaNeiIkkeOppgitt.NEI, JaNeiIkkeOppgitt.IKKE_OPPGITT],
+        options: JaNeiEllerIkkeOppgittOptions,
         defaultValue: søknadGrunnlag.yrkesskade ? stringToJaNeiIkkeOppgitt(søknadGrunnlag.yrkesskade) : undefined,
         rules: { required: 'Du må velge om bruker har oppgitt en yrkesskade' },
       },
       erStudent: {
         type: 'radio',
         label: 'Er søkeren student?',
-        options: [
-          JaNeiAvbruttIkkeOppgitt.JA,
-          JaNeiAvbruttIkkeOppgitt.NEI,
-          JaNeiAvbruttIkkeOppgitt.AVBRUTT,
-          JaNeiAvbruttIkkeOppgitt.IKKE_OPPGITT,
-        ],
+        options: JaNeiAbruttEllerIkkeOpgittOptions,
         defaultValue: søknadGrunnlag.student?.erStudent
           ? stringToJaNeiAvbruttIkkeOppgitt(søknadGrunnlag.student.erStudent)
           : undefined,
@@ -93,7 +91,7 @@ export const DigitaliserSøknad = ({ grunnlag, readOnly, submit, isLoading }: Pr
       studentKommeTilbake: {
         type: 'radio',
         label: 'Skal søkeren tilbake til studiet?',
-        options: [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
+        options: JaNeiEllerVetIkkeOptions,
         defaultValue: søknadGrunnlag.student?.kommeTilbake
           ? stringToJaNeiVetikke(søknadGrunnlag.student.kommeTilbake)
           : undefined,

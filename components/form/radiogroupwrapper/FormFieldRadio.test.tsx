@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import React from 'react';
 import { useConfigForm } from '../FormHook';
 import { FormField } from '../FormField';
@@ -25,6 +25,11 @@ describe('Radio', () => {
     render(<FormMedRadios />);
     expect(screen.getByRole('radio', { name: /Ja/ })).toBeVisible();
     expect(screen.getByRole('radio', { name: /Nei/ })).toBeVisible();
+  });
+
+  test('at det første valget har en description', () => {
+    render(<FormMedRadios />);
+    expect(screen.getByText('Dette er en description')).toBeVisible();
   });
 
   test('at ingen radioknapper er valgt når defaultvalues ikke er satt', () => {
@@ -98,7 +103,7 @@ function FormMedRadios(props: Props) {
       defaultValue: props.defaultValue,
       rules: { required: 'Du må ta stilling til om arbeidsevnen er nedsatt med minst 50 prosent' },
       options: [
-        { label: 'Ja', value: 'true' },
+        { label: 'Ja', value: 'true', description: 'Dette er en description' },
         { label: 'Nei', value: 'false' },
       ],
     },
