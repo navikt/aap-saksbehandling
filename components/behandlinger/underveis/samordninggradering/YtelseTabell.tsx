@@ -5,6 +5,7 @@ import { SamordningGraderingYtelse } from 'lib/types/types';
 
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import styles from './YtelseTabell.module.css';
+import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
 
 interface Props {
   ytelser: SamordningGraderingYtelse[];
@@ -19,7 +20,7 @@ export const YtelseTabell = ({ ytelser }: Props) => {
           Vi har funnet følgende perioder med overlapp mellom andre folketrygdytelser og AAP
         </BodyShort>
       </VStack>
-      <Table className={styles.ytelsestabell}>
+      <TableStyled>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Periode</Table.HeaderCell>
@@ -58,7 +59,7 @@ export const YtelseTabell = ({ ytelser }: Props) => {
             );
           })}
         </Table.Body>
-      </Table>
+      </TableStyled>
     </Box>
   );
 };

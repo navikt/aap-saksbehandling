@@ -10,6 +10,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 
 import styles from './YtelseTabell.module.css';
+import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
 
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
@@ -72,7 +73,7 @@ export const Ytelsesvurderinger = ({ form, readOnly }: Props) => {
           fra en arbeidsevne på 37,5t.
         </BodyShort>
       </VStack>
-      <Table className={styles.ytelsestabell}>
+      <TableStyled>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Periode</Table.HeaderCell>
@@ -171,7 +172,7 @@ export const Ytelsesvurderinger = ({ form, readOnly }: Props) => {
             </Table.Row>
           ))}
         </Table.Body>
-      </Table>
+      </TableStyled>
       <HStack>
         <Button
           size={'small'}

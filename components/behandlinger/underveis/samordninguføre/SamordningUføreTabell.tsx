@@ -7,6 +7,7 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SamordningUføreFormFields } from 'components/behandlinger/underveis/samordninguføre/SamordningUføre';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
 
 interface Props {
   form: UseFormReturn<SamordningUføreFormFields>;
@@ -23,7 +24,7 @@ export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
   return (
     <VStack gap={'1'}>
       <Label size={'small'}>Vurder brukers faktiske uføregrad</Label>
-      <Table className={styles.ytelsestabell}>
+      <TableStyled>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Virkningstidspunkt</Table.HeaderCell>
@@ -76,7 +77,7 @@ export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
             </Table.Row>
           ))}
         </Table.Body>
-      </Table>
+      </TableStyled>
       <HStack>
         <Button
           size={'small'}

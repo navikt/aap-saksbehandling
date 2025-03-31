@@ -13,7 +13,7 @@ import { SamordningUføreTabell } from 'components/behandlinger/underveis/samord
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { format, parse } from 'date-fns';
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
-import styles from 'components/behandlinger/underveis/samordninggradering/YtelseTabell.module.css';
+import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
@@ -102,7 +102,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
           <VStack gap={'2'}>
             <Label size={'small'}>Vedtak om uføretrygd</Label>
             <BodyShort size={'small'}>Vi har funnet følgende perioder med overlapp mellom uføretrygd og Aap.</BodyShort>
-            <Table className={styles.ytelsestabell}>
+            <TableStyled>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Virkningstidspunkt</Table.HeaderCell>
@@ -121,7 +121,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
                   </Table.Row>
                 ))}
               </Table.Body>
-            </Table>
+            </TableStyled>
           </VStack>
         )}
         <SamordningUføreTabell form={form} readOnly={readOnly} />

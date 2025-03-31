@@ -11,6 +11,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { validerDato } from 'lib/validation/dateValidation';
 import { ValuePair } from 'components/form/FormField';
 import { SamordningAndreStatligeYtelserYtelse } from 'lib/types/types';
+import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
 
 interface Props {
   form: UseFormReturn<SamordningAndreStatligeYtelserFormFields>;
@@ -56,7 +57,7 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
   return (
     <VStack gap={'1'}>
       <Label size={'small'}>Legg til ytelse, periode og beløp for utbetaling</Label>
-      <Table className={styles.ytelsestabell}>
+      <TableStyled>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Ytelse</Table.HeaderCell>
@@ -150,7 +151,7 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
             </Table.Row>
           ))}
         </Table.Body>
-      </Table>
+      </TableStyled>
       <HStack>
         <Button
           size={'small'}
