@@ -42,7 +42,6 @@ export const KelvinAppHeader = ({ brukerInformasjon }: { brukerInformasjon: Bruk
           <Link href={`/oppgave/`}>Oppgaveliste</Link>
           <Link href={`/oppgave/produksjonsstyring`}>Produksjonsstyring</Link>
           {isLocal() && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
-          <Link href={`/saksbehandling/sanity`}>Sanity</Link>
         </HStack>
 
         <Spacer />
