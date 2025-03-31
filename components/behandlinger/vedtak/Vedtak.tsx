@@ -28,6 +28,7 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
           <ForeslåVedtakMedDataFetching
             behandlingVersjon={behandlingVersjon}
             behandlingsreferanse={behandlingsReferanse}
+            readonly={flyt.visning.saksbehandlerReadOnly}
           />
         </StegSuspense>
       )}

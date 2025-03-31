@@ -5,9 +5,11 @@ import { Behovstype } from 'lib/utils/form';
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
+  readonly: boolean;
 }
 
-export const ForeslåVedtakMedDataFetching = async ({ behandlingVersjon, behandlingsreferanse }: Props) => {
+export const ForeslåVedtakMedDataFetching = async ({ behandlingVersjon, behandlingsreferanse, readonly }: Props) => {
   const brukerHarTilgang = await sjekkTilgang(behandlingsreferanse, Behovstype.FORESLÅ_VEDTAK_KODE);
-  return <ForeslåVedtak behandlingVersjon={behandlingVersjon} readOnly={!brukerHarTilgang.tilgang} />;
+
+  return <ForeslåVedtak behandlingVersjon={behandlingVersjon} readOnly={readonly || !brukerHarTilgang.tilgang} />;
 };

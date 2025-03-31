@@ -22,7 +22,6 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly }: Props) => {
     <VilkårsKort heading="Foreslå vedtak" steg={'FORESLÅ_VEDTAK'}>
       <div className={styles.foreslåvedtak}>
         {!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}
-        {readOnly && <BodyShort>Du har ikke tilgang til å gå videre til neste steg.</BodyShort>}
         <ServerSentEventStatusAlert status={status} resetStatus={resetStatus} />
         {!readOnly && (
           <Button
