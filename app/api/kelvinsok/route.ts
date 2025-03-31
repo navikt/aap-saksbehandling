@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     if (isFnr) {
       sakData = await finnSakerForIdent(søketekst);
     } else if (isSaksnummer) {
-      sakData = [await hentSak(søketekst.toUpperCase())];
+      sakData = [await hentSak(søketekst)];
     }
   } catch (err) {
     logError('/api/kelvinsøk saker', err);
