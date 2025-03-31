@@ -2,7 +2,7 @@
 
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SamordningAndreStatligeYtelserFormFields } from 'components/behandlinger/underveis/samordningandrestatlige/SamordningAndreStatligeYtelser';
-import { Button, HStack, Label, Table } from '@navikt/ds-react';
+import { Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import styles from 'components/behandlinger/underveis/samordninggradering/YtelseTabell.module.css';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
@@ -54,9 +54,9 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
     });
   }
   return (
-    <>
+    <VStack gap={'1'}>
       <Label size={'small'}>Legg til ytelse, periode og beløp for utbetaling</Label>
-      <Table>
+      <Table className={styles.ytelsestabell}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Ytelse</Table.HeaderCell>
@@ -163,6 +163,6 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
           Legg til
         </Button>
       </HStack>
-    </>
+    </VStack>
   );
 };

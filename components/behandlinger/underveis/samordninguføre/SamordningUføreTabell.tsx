@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, HStack, Label, Table } from '@navikt/ds-react';
+import { Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/underveis/samordninggradering/YtelseTabell.module.css';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
@@ -21,7 +21,7 @@ export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
     });
   }
   return (
-    <div>
+    <VStack gap={'1'}>
       <Label size={'small'}>Vurder brukers faktiske uføregrad</Label>
       <Table className={styles.ytelsestabell}>
         <Table.Header>
@@ -89,6 +89,6 @@ export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
           Legg til
         </Button>
       </HStack>
-    </div>
+    </VStack>
   );
 };

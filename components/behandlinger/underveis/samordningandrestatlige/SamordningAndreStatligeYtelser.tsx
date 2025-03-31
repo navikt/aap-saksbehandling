@@ -4,7 +4,7 @@ import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { Button, HStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, VStack } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 import { AndreStatligeYtelserTabell } from 'components/behandlinger/underveis/samordningandrestatlige/AndreStatligeYtelserTabell';
 import { Behovstype } from 'lib/utils/form';
@@ -81,7 +81,6 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
   };
 
   return (
-    // @ts-ignore
     <VilkårsKort heading="Andre ytelser til avregning" steg="SAMORDNING_ANDRE_STATLIGE_YTELSER">
       {!visYtelsesTabell && (
         <HStack>
@@ -91,17 +90,24 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
         </HStack>
       )}
       {visYtelsesTabell && (
-        // @ts-ignore
-        <Form
-          steg={'SAMORDNING_ANDRE_STATLIGE_YTELSER'}
-          onSubmit={handleSubmit}
-          isLoading={isLoading}
-          status={status}
-          resetStatus={resetStatus}
-        >
-          <FormField form={form} formField={formFields.begrunnelse} />
-          <AndreStatligeYtelserTabell form={form} readOnly={readOnly} />
-        </Form>
+        <VStack gap={'3'}>
+          <HStack>
+            <Alert variant={'info'}>
+              Det gjøres foreløpig ikke noe automatisk avregning for andre ytelser som registreres. Perioder med
+              avregning må håndteres manuelt med NØS.
+            </Alert>
+          </HStack>
+          <Form
+            steg={'SAMORDNING_ANDRE_STATLIGE_YTELSER'}
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+            status={status}
+            resetStatus={resetStatus}
+          >
+            <FormField form={form} formField={formFields.begrunnelse} />
+            <AndreStatligeYtelserTabell form={form} readOnly={readOnly} />
+          </Form>
+        </VStack>
       )}
     </VilkårsKort>
   );
