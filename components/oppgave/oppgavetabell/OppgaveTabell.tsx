@@ -1,19 +1,19 @@
 'use client';
 
 import { AvklaringsbehovKode, Oppgave } from 'lib/types/types';
-import { Alert, Button, Dropdown, Heading, HStack, Loader, SortState, Table } from '@navikt/ds-react';
+import { Alert, Heading, HStack, Loader, SortState, Table } from '@navikt/ds-react';
 import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
 import { useMemo, useState } from 'react';
 import { oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
-import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import { byggKelvinURL } from 'lib/utils/request';
-import { avreserverOppgaveClient, plukkOppgaveClient } from 'lib/oppgaveClientApi';
+import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
 import { ComboboxControlled } from 'components/oppgave/comboboxcontrolled/ComboboxControlled';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { revalidateMineOppgaver } from 'lib/actions/actions';
 import { useRouter } from 'next/navigation';
+import { ButtonOppgave } from 'components/oppgave/buttonoppgave/ButtonOppgave';
+import { OppgaveDropdown } from 'components/oppgave/oppgavedropdown/OppgaveDropdown';
 
 interface Props {
   heading?: string;
@@ -30,7 +30,6 @@ interface ScopedSortState extends SortState {
 export const OppgaveTabell = ({
   oppgaver,
   heading,
-  showDropdownActions = false,
   showSortAndFilters = false,
   showBehandleKnapp = false,
   includeColumns = [],
@@ -39,8 +38,6 @@ export const OppgaveTabell = ({
   const [feilmelding, setFeilmelding] = useState<string | undefined>();
 
   const [sort, setSort] = useState<ScopedSortState | undefined>();
-
-  const [loadingID, setLoadingID] = useState<number | null>(null);
 
   const [selectedBehandlingstyper, setSelectedBehandlingstyper] = useState<ComboboxOption[]>([]);
 
@@ -66,15 +63,6 @@ export const OppgaveTabell = ({
     () => sortedOppgaver.filter((oppgave) => behandlingstypeFilter(oppgave) && avklaringsbehovFilter(oppgave)),
     [selectedBehandlingstyper, selectedAvklaringsbehov, sortedOppgaver]
   );
-  async function frigiOppgave(oppgave: Oppgave) {
-    if (oppgave.id) setLoadingID(oppgave.id);
-    try {
-      await avreserverOppgaveClient(oppgave);
-    } catch {
-      setLoadingID(null);
-    }
-    setLoadingID(null);
-  }
 
   const handleSort = (sortKey: ScopedSortState['orderBy']) => {
     setSort(
@@ -98,14 +86,12 @@ export const OppgaveTabell = ({
   }
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0) {
-      setLoadingID(oppgave.id);
       const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
       if (plukketOppgave.type === 'success') {
         router.push(byggKelvinURL(plukketOppgave.data));
       } else if (plukketOppgave.type === 'error') {
         setFeilmelding(plukketOppgave.message);
       }
-      setLoadingID(null);
     }
   }
 
@@ -195,31 +181,11 @@ export const OppgaveTabell = ({
               <Table.DataCell>{oppgave.veileder}</Table.DataCell>
               {includeColumns?.includes('reservertAv') && <Table.DataCell>{oppgave.reservertAv || ''}</Table.DataCell>}
               <Table.DataCell>
-                <HStack gap={'1'}>
+                <HStack gap={'1'} wrap={false}>
                   {showBehandleKnapp && (
-                    <Button type={'button'} size={'small'} onClick={() => plukkOgGåTilOppgave(oppgave)}>
-                      {loadingID === oppgave.id ? <Loader /> : 'Behandle'}
-                    </Button>
+                    <ButtonOppgave onClick={plukkOgGåTilOppgave} oppgave={oppgave} label={'Behandle'} />
                   )}
-                  {showDropdownActions && (
-                    <Dropdown>
-                      <Button as={Dropdown.Toggle} size="small" variant="primary">
-                        <ChevronDownIcon title="Meny" />
-                      </Button>
-                      <Dropdown.Menu>
-                        <Dropdown.Menu.GroupedList>
-                          <Dropdown.Menu.GroupedList.Item
-                            onClick={async () => {
-                              await frigiOppgave(oppgave);
-                              revalidateMineOppgaver();
-                            }}
-                          >
-                            Frigi oppgave
-                          </Dropdown.Menu.GroupedList.Item>
-                        </Dropdown.Menu.GroupedList>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  )}
+                  <OppgaveDropdown oppgave={oppgave} />
                 </HStack>
               </Table.DataCell>
             </Table.Row>
