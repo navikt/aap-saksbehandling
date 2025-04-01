@@ -1,7 +1,7 @@
 'use client';
 
 import { AvklaringsbehovKode, Oppgave } from 'lib/types/types';
-import { Alert, Heading, HStack, Loader, SortState, Table } from '@navikt/ds-react';
+import { Alert, CopyButton, Heading, HStack, Loader, SortState, Table } from '@navikt/ds-react';
 import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
 import { useMemo, useState } from 'react';
 import { oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
@@ -14,6 +14,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useRouter } from 'next/navigation';
 import { ButtonOppgave } from 'components/oppgave/buttonoppgave/ButtonOppgave';
 import { OppgaveDropdown } from 'components/oppgave/oppgavedropdown/OppgaveDropdown';
+import Link from 'next/link';
 
 interface Props {
   heading?: string;
@@ -170,8 +171,25 @@ export const OppgaveTabell = ({
           {filtrerteOppgaver.map((oppgave, i) => (
             <Table.Row key={`oppgave-${i}`}>
               <Table.DataCell>{`${oppgave.personNavn}`}</Table.DataCell>
-              <Table.DataCell>{`${oppgave.personIdent}`}</Table.DataCell>
-              <Table.DataCell>{`${oppgave.saksnummer || oppgave.journalpostId}`}</Table.DataCell>
+              <Table.DataCell>
+                {oppgave.personIdent ? (
+                  <CopyButton
+                    copyText={oppgave?.personIdent}
+                    size="small"
+                    text={oppgave?.personIdent}
+                    iconPosition="right"
+                  />
+                ) : (
+                  'Ukjent'
+                )}
+              </Table.DataCell>
+              <Table.DataCell>
+                {oppgave.saksnummer ? (
+                  <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{oppgave.saksnummer}</Link>
+                ) : (
+                  oppgave.journalpostId
+                )}
+              </Table.DataCell>
               <Table.DataCell>{mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}</Table.DataCell>
               <Table.DataCell>
                 {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}
