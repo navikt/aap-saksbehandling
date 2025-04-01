@@ -11,7 +11,7 @@ const user = userEvent.setup();
 describe('Student', () => {
   it('skal ha en overskrift', () => {
     render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
-    const heading = screen.getByText('Student - § 11-14');
+    const heading = screen.getByText('§ 11-14 Student');
     expect(heading).toBeVisible();
   });
 
