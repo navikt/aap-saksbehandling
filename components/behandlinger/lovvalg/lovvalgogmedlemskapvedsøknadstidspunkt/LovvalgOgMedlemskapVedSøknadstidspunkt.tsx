@@ -181,15 +181,15 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
         resetStatus={resetStatus}
         visBekreftKnapp={!readOnly}
       >
-        <FormField form={form} formField={formFields.lovvalgBegrunnelse} />
+        <FormField form={form} formField={formFields.lovvalgBegrunnelse} className={'begrunnelse'} />
         <FormField form={form} formField={formFields.lovvalgsLand} />
         {lovvalgsLand === 'Annet land med avtale' && (
           <FormField form={form} formField={formFields.annetLovvalgslandMedAvtale} />
         )}
         {lovvalgsLand === 'Norge' && (
           <>
-            <FormField form={form} formField={formFields.medlemskapBegrunnelse} />
-            <FormField form={form} formField={formFields.medlemAvFolkeTrygdenVedSøknadstidspunkt} />
+            <FormField form={form} formField={formFields.medlemskapBegrunnelse} className={'begrunnelse'} />
+            <FormField form={form} formField={formFields.medlemAvFolkeTrygdenVedSøknadstidspunkt} horizontalRadio />
           </>
         )}
       </Form>

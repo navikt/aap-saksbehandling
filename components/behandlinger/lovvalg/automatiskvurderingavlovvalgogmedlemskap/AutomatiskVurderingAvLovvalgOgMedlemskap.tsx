@@ -1,7 +1,7 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/alder/Alder.module.css';
 import { CheckmarkIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
@@ -24,9 +24,10 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
     <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
       <VStack gap={'7'} paddingBlock={'3'}>
         <div>
-          <Heading spacing size={'small'}>
+          <BodyShort spacing size={'small'} weight={'semibold'}>
             Indikasjoner på tilhørighet til Norge
-          </Heading>
+          </BodyShort>
+
           <TilhørigetsVurderingTabell
             resultatIkonTrue={
               <CheckmarkIcon title={'Indikerer at opplysning stemmer'} className={styles.oppfyltIcon} />
@@ -41,9 +42,9 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
           />
         </div>
         <div>
-          <Heading spacing size={'small'}>
+          <BodyShort spacing size={'small'} weight={'semibold'}>
             Indikasjoner på tilhørighet utenfor Norge
-          </Heading>
+          </BodyShort>
           <TilhørigetsVurderingTabell
             resultatIkonTrue={
               <ExclamationmarkTriangleIcon title={'Indikerer at opplysning stemmer'} className={styles.avslåttIcon} />

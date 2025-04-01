@@ -49,6 +49,8 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           referanse: behandlingsreferanse,
         });
       } else {
+        //TODO Vis modal her ?
+        // "Dokument er sendt til Gosys for jorunalføring"
         postmottakLøsBehovClient({
           behandlingVersjon: behandlingsVersjon,
           behov: {
