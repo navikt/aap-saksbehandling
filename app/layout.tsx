@@ -2,8 +2,8 @@ import '@navikt/ds-css';
 import '@navikt/aap-breveditor-css';
 import 'styles/globals.css';
 
-import { hentBrukerInformasjon } from '@navikt/aap-felles-utils';
 import { KelvinAppHeader } from 'components/kelvinappheader/KelvinAppHeader';
+import { hentBrukerInformasjon, hentRollerForBruker } from 'lib/services/azure/azureUserService';
 
 export const metadata = {
   title: 'Kelvin',
@@ -12,6 +12,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const brukerInformasjon = await hentBrukerInformasjon();
+  await hentRollerForBruker();
 
   return (
     <html lang="nb">

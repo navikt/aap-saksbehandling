@@ -3565,6 +3565,7 @@ __metadata:
     husky: "npm:^9.1.7"
     i18n-iso-countries: "npm:^7.14.0"
     is-european: "npm:^1.0.8"
+    jose: "npm:^6.0.10"
     jsdom: "npm:^26.0.0"
     json-diff: "npm:^1.0.6"
     lint-staged: "npm:^15.5.0"
@@ -8265,6 +8266,13 @@ __metadata:
   version: 5.9.2
   resolution: "jose@npm:5.9.2"
   checksum: 10c0/0727bc21777e54f9b1e690ad9461c12f5d642b40ffd4e4e3adc7169277e31d9d979c1bc667ba30627a13795dca6cfa61bc5d169bb3f91a6da1f67350d094c3e6
+  languageName: node
+  linkType: hard
+
+"jose@npm:^6.0.10":
+  version: 6.0.10
+  resolution: "jose@npm:6.0.10"
+  checksum: 10c0/d1327afd7fe6011a6648b570b8a220dd89c3d427d6fb3225825650df3249b58bf0f76494179a34a0f7ad185832fb083d6402092d3c7f880c677d0dd38cc75eae
   languageName: node
   linkType: hard
 
