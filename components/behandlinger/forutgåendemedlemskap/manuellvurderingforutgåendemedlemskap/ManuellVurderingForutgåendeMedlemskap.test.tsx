@@ -29,7 +29,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
         overstyring={true}
       />
     );
-    const heading = screen.getByText('Overstyring § 11-2 Forutgående medlemskap');
+    const heading = screen.getByText('Overstyring av § 11-2 Forutgående medlemskap');
     expect(heading).toBeVisible();
   });
 
