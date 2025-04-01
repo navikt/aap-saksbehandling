@@ -46,7 +46,7 @@ export const SendNySoknad = ({ saksid }: { saksid: string }) => {
       saksnummer: saksid,
       type: 'SØKNAD',
     };
-    await clientSendHendelse(reqBody);
+    await clientSendHendelse(saksid, reqBody);
   }
 
   return (

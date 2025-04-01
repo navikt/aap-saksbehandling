@@ -54,7 +54,7 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
 
     setIsLoading(true);
 
-    await clientSendHendelse(innsending)
+    await clientSendHendelse(sak.saksnummer, innsending)
       .then(() => {
         setTimeout(() => router.push(`/saksbehandling/sak/${sak.saksnummer}`), 2000);
       })

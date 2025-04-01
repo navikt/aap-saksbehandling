@@ -58,7 +58,7 @@ export const SendNySoknadUtenMedlemskap = ({ saksid }: { saksid: string }) => {
   };
   return (
     <div>
-      <Button onClick={() => clientSendHendelse(reqBody)}>Resend søknad uten medlemskap</Button>
+      <Button onClick={() => clientSendHendelse(saksid, reqBody)}>Resend søknad uten medlemskap</Button>
       <BodyShort size={'small'}>(Refresh siden for å se om det gikk bra)</BodyShort>
     </div>
   );
