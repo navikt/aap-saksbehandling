@@ -14,7 +14,7 @@ export const FordelingLukkedeBehandlingerPerDag = ({ fordelingLukkedeBehandlinge
     <PlotWrapper>
       <VStack align={'center'}>
         <Heading level={'3'} size={'small'}>
-          Liggetid lukkede behandlinger
+          Liggetid avsluttede behandlinger
         </Heading>
       </VStack>
       <ResponsivePlot
