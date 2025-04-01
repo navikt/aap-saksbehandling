@@ -1,7 +1,7 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { CheckmarkCircleFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
+import { CheckmarkIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
 import { AlderGrunnlag, AvslagÅrsak, VilkårUtfall } from 'lib/types/types';
@@ -42,27 +42,16 @@ export const Alder = ({ grunnlag }: Props) => {
         <TableStyled>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell scope="col">Utfall</Table.HeaderCell>
               <Table.HeaderCell scope="col">Fra og med</Table.HeaderCell>
               <Table.HeaderCell scope="col">Til og med</Table.HeaderCell>
               {inneholderPerioderMedIkkeOppfylt && <Table.HeaderCell scope="col">Avslagsårsak</Table.HeaderCell>}
+              <Table.HeaderCell scope="col">Resultat</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {grunnlag.vilkårsperioder.map((vilkårsperiode, index) => {
               return (
                 <Table.Row key={index}>
-                  <Table.DataCell textSize={'small'}>
-                    <div className={styles.utfall}>
-                      {vilkårsperiode.utfall === 'OPPFYLT' ? (
-                        <CheckmarkCircleFillIcon title="Oppfylt" className={styles.oppfyltIcon} />
-                      ) : (
-                        <XMarkOctagonFillIcon title={'Ikke oppfylt'} className={styles.avslåttIcon} />
-                      )}
-
-                      <span>{mapUtfallTilTekst(vilkårsperiode.utfall)}</span>
-                    </div>
-                  </Table.DataCell>
                   <Table.DataCell textSize={'small'}>
                     {formaterDatoForFrontend(vilkårsperiode.periode.fom)}
                   </Table.DataCell>
@@ -74,6 +63,17 @@ export const Alder = ({ grunnlag }: Props) => {
                       {vilkårsperiode.avslagsårsak ? mapAvslagÅrsakTilTekst(vilkårsperiode.avslagsårsak) : ''}
                     </Table.DataCell>
                   )}
+                  <Table.DataCell textSize={'small'}>
+                    <div className={styles.utfall}>
+                      {vilkårsperiode.utfall === 'OPPFYLT' ? (
+                        <CheckmarkIcon title="Oppfylt" className={styles.oppfyltIcon} />
+                      ) : (
+                        <ExclamationmarkTriangleIcon title={'Ikke oppfylt'} className={styles.avslåttIcon} />
+                      )}
+
+                      <span>{mapUtfallTilTekst(vilkårsperiode.utfall)}</span>
+                    </div>
+                  </Table.DataCell>
                 </Table.Row>
               );
             })}
