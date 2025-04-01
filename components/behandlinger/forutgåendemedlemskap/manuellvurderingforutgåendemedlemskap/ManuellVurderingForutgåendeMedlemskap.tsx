@@ -115,7 +115,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
       });
     })(event);
   };
-  const heading = overstyring ? 'Overstyring § 11-2 Forutgående medlemskap' : '§ 11-2 Forutgående medlemskap';
+  const heading = overstyring ? 'Overstyring av § 11-2 Forutgående medlemskap' : '§ 11-2 Forutgående medlemskap';
   return (
     <VilkårsKort heading={heading} steg={'VURDER_MEDLEMSKAP'}>
       <Form
@@ -126,9 +126,11 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
         resetStatus={resetStatus}
         visBekreftKnapp={!readOnly}
       >
-        <FormField form={form} formField={formFields.begrunnelse} />
-        <FormField form={form} formField={formFields.harForutgåendeMedlemskap} />
-        {harForutgåendeMedlemskap === JaEllerNei.Nei && <FormField form={form} formField={formFields.unntaksvilkår} />}
+        <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+        <FormField form={form} formField={formFields.harForutgåendeMedlemskap} horizontalRadio />
+        {harForutgåendeMedlemskap === JaEllerNei.Nei && (
+          <FormField form={form} formField={formFields.unntaksvilkår} className={'radio'} />
+        )}
       </Form>
     </VilkårsKort>
   );
