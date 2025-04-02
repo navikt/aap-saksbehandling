@@ -75,6 +75,7 @@ export const SkriveBrev = ({
 
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
 
+
   return (
     <div className={style.brevbygger}>
       <div className={style.topBar}>
@@ -82,7 +83,7 @@ export const SkriveBrev = ({
           {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
           {isSaving && <Loader />}
         </div>
-        <div>
+        {!readOnly &&
           <ActionMenu>
             <ActionMenu.Trigger>
               <Button variant="secondary-neutral" icon={<ChevronDownIcon aria-hidden />} iconPosition="right">
@@ -97,7 +98,7 @@ export const SkriveBrev = ({
               </ActionMenu.Group>
             </ActionMenu.Content>
           </ActionMenu>
-        </div>
+        }
       </div>
 
       <VStack gap={'4'}>
