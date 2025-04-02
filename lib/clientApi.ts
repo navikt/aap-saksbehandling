@@ -1,5 +1,6 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import {
+  BehandlingFlytOgTilstand,
   BehandlingsFlytAvklaringsbehovKode,
   BestillLegeerklæring,
   Brev,
@@ -115,6 +116,10 @@ export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
     fritekst: fritekst,
     saksnummer: saksnummer,
   });
+}
+
+export function clientHentFlyt(behandlingsreferanse: string) {
+  return clientFetch<BehandlingFlytOgTilstand>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/flyt`, 'GET');
 }
 
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
