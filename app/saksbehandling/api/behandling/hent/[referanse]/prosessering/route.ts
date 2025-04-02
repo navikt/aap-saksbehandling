@@ -1,7 +1,7 @@
+import { logInfo } from 'lib/serverutlis/logger';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { FlytProsesseringStatus } from 'lib/types/types';
 import { NextRequest } from 'next/server';
-import { logInfo } from "@navikt/aap-felles-utils";
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;

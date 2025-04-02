@@ -11,8 +11,8 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { TidligereVurderinger } from 'components/behandlinger/sykdom/bistandsbehov/TidligereVurderinger';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   behandlingVersjon: number;
@@ -167,7 +167,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         />
         {typeBehandling === 'Revurdering' && (
           <BodyShort>
-            Vurderingen gjelder fra {vurderingenGjelderFra && formaterDatoForVisning(vurderingenGjelderFra)}
+            Vurderingen gjelder fra {vurderingenGjelderFra && formaterDatoForFrontend(vurderingenGjelderFra)}
           </BodyShort>
         )}
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />

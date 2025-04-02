@@ -1,11 +1,10 @@
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { Alert, BodyShort, Button, HStack, Table } from '@navikt/ds-react';
 import { LegeerklæringStatus } from 'lib/types/types';
 import { ReactNode } from 'react';
 
 import styles from './Dialogmeldinger.module.css';
 import { ThumbDownIcon, TimerPauseIcon } from '@navikt/aksel-icons';
-import { sorterEtterNyesteDato } from 'lib/utils/date';
+import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { clientPurrPåLegeerklæring } from 'lib/clientApi';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { isBefore, subDays } from 'date-fns';
@@ -56,7 +55,7 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
         {mapStatusTilTekst(melding.status)}
       </Table.DataCell>
       <Table.DataCell textSize={'small'} className={styles.dato}>
-        {formaterDatoForVisning(melding.opprettet)}
+        {formaterDatoForFrontend(melding.opprettet)}
       </Table.DataCell>
       <Table.DataCell textSize={'small'} className={styles.behandlernavn}>
         {melding.behandlerNavn}

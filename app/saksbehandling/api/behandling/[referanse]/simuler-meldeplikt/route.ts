@@ -1,6 +1,6 @@
 import { simulerMeldeplikt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
-import { logError } from "@navikt/aap-felles-utils";
+import { logError } from 'lib/serverutlis/logger';
 
 export async function POST(req: NextRequest, props: { params: Promise<{ referanse: string }> }) {
   const params = await props.params;

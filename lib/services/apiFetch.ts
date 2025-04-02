@@ -2,10 +2,11 @@
 
 import { isLocal } from 'lib/utils/environment';
 import { requestAzureOboToken, validateToken } from '@navikt/oasis';
-import { getAccessTokenOrRedirectToLogin, logError } from '@navikt/aap-felles-utils';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { hentLocalToken } from 'lib/services/localFetch';
+import { getAccessTokenOrRedirectToLogin } from './azure/azuread';
+import { logError } from 'lib/serverutlis/logger';
 
 export type FetchResponse<RespponseType> = SuccessResponseBody<RespponseType> | ErrorResponseBody;
 

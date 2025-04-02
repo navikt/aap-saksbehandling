@@ -1,6 +1,6 @@
 import { Underveisgrunnlag } from 'components/behandlinger/underveis/underveisgrunnlag/Underveisgrunnlag';
+import { logWarning } from 'lib/serverutlis/logger';
 import { hentUnderveisGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { logWarning } from '@navikt/aap-felles-utils';
 import { UnderveisGrunnlag } from 'lib/types/types';
 
 interface Props {

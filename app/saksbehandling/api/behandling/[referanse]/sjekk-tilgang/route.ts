@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { sjekkTilgang } from 'lib/services/tilgangservice/tilgangsService';
-import { logError } from "@navikt/aap-felles-utils";
+import { logError } from 'lib/serverutlis/logger';
 
 type SjekkTilgangRequestType = { kode: string };
 

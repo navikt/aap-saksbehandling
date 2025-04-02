@@ -5,7 +5,7 @@ import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatu
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 
 import styles from './Behandlingsinfo.module.css';
-import { BrukerInformasjon } from '@navikt/aap-felles-utils';
+import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 interface Props {
   behandling: DetaljertBehandling;

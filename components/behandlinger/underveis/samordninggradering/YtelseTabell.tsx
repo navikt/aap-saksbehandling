@@ -3,9 +3,9 @@
 import { BodyShort, Box, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { SamordningGraderingYtelse } from 'lib/types/types';
 
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import styles from './YtelseTabell.module.css';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   ytelser: SamordningGraderingYtelse[];
@@ -49,7 +49,7 @@ export const YtelseTabell = ({ ytelser }: Props) => {
                         Ny
                       </BodyShort>
                     )}
-                    {formaterDatoForVisning(ytelse.periode.fom)} - {formaterDatoForVisning(ytelse.periode.tom)}
+                    {formaterDatoForFrontend(ytelse.periode.fom)} - {formaterDatoForFrontend(ytelse.periode.tom)}
                   </HStack>
                 </Table.DataCell>
                 <Table.DataCell textSize="small">{ytelse.ytelseType}</Table.DataCell>

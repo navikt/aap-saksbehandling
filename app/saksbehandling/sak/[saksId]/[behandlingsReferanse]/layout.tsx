@@ -19,9 +19,10 @@ import { StegGruppe } from 'lib/types/types';
 import { SaksbehandlingsoversiktMedDataFetching } from 'components/saksbehandlingsoversikt/SaksbehandlingsoversiktMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
-import { hentBrukerInformasjon, logWarning } from '@navikt/aap-felles-utils';
 import { IngenFlereOppgaverModalContextProvider } from 'context/IngenFlereOppgaverModalContext';
 import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
+import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { logWarning } from 'lib/serverutlis/logger';
 
 interface Props {
   children: ReactNode;

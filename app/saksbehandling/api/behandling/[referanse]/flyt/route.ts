@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { logError } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/serverutlis/logger';
 
 export async function GET(req: NextRequest, props: { params: Promise<{ referanse: string }> }) {
   const params = await props.params;
@@ -12,4 +12,4 @@ export async function GET(req: NextRequest, props: { params: Promise<{ referanse
     return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });
   }
 }
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';

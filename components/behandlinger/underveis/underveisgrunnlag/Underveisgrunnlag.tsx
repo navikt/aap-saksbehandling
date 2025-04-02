@@ -1,8 +1,8 @@
 'use client';
 
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { Table } from '@navikt/ds-react';
 import { UnderveisGrunnlag } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
@@ -11,7 +11,7 @@ type Props = {
 const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => (
   <Table.Row>
     <Table.HeaderCell>
-      {formaterDatoForVisning(periode.periode.fom)} - {formaterDatoForVisning(periode.periode.tom)}
+      {formaterDatoForFrontend(periode.periode.fom)} - {formaterDatoForFrontend(periode.periode.tom)}
     </Table.HeaderCell>
     <Table.DataCell>{periode.utfall}</Table.DataCell>
     <Table.DataCell>{periode.avslagsårsak}</Table.DataCell>
@@ -24,7 +24,7 @@ const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => (
     <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
     <Table.DataCell>{periode.brukerAvKvoter.join(' og ')}</Table.DataCell>
     <Table.DataCell>
-      {formaterDatoForVisning(periode.meldePeriode.fom)} - {formaterDatoForVisning(periode.meldePeriode.tom)}
+      {formaterDatoForFrontend(periode.meldePeriode.fom)} - {formaterDatoForFrontend(periode.meldePeriode.tom)}
     </Table.DataCell>
   </Table.Row>
 );

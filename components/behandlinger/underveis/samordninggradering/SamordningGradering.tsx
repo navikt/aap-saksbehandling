@@ -10,13 +10,12 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { addDays, format, isValid, parse } from 'date-fns';
 import { YtelseTabell } from 'components/behandlinger/underveis/samordninggradering/YtelseTabell';
 import { validerDato } from 'lib/validation/dateValidation';
 
 import styles from './SamordningGradering.module.css';
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Ytelsesvurderinger } from 'components/behandlinger/underveis/samordninggradering/Ytelsesvurderinger';
 
@@ -89,7 +88,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             gyldigDato: (v) => validerDato(v as string),
           },
         },
-        defaultValue: (grunnlag.maksDato && formaterDatoForVisning(grunnlag.maksDato)) || undefined,
+        defaultValue: (grunnlag.maksDato && formaterDatoForFrontend(grunnlag.maksDato)) || undefined,
       },
       vurderteSamordninger: {
         type: 'fieldArray',

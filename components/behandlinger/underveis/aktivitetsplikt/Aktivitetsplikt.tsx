@@ -1,6 +1,5 @@
 'use client';
 
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { BodyShort, Link, Table } from '@navikt/ds-react';
 import {
   hentBruddTekst,
@@ -99,7 +98,7 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
         <div className={styles.statusfelt}>
           <StatusIkon visOkStatusIkon={!!grunnlag.forhåndsvarselDato} />
           <span>
-            Forhåndsvarsel sendt: {grunnlag.forhåndsvarselDato && formaterDatoForVisning(grunnlag.forhåndsvarselDato)}
+            Forhåndsvarsel sendt: {grunnlag.forhåndsvarselDato && formaterDatoForFrontend(grunnlag.forhåndsvarselDato)}
           </span>
         </div>
       </section>
@@ -113,7 +112,7 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
       >
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <BodyShort>
-          Med gjeldende § 11-7 brudd vil bruker få stans i ytelsen fra {formaterDatoForVisning(finnTidligsteDato())}
+          Med gjeldende § 11-7 brudd vil bruker få stans i ytelsen fra {formaterDatoForFrontend(finnTidligsteDato())}
         </BodyShort>
       </Form>
     </VilkårsKort>
