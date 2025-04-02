@@ -117,6 +117,10 @@ export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
   });
 }
 
+export function clientHentFlyt(behandlingsreferanse: string) {
+  return clientFetch(`${BASE_URL}/api/behandling/${behandlingsreferanse}/flyt`, 'GET');
+}
+
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
   return clientFetch<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
 }
