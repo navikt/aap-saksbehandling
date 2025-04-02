@@ -32,6 +32,7 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
       visning={flyt.visning}
       behandlingReferanse={behandlingsReferanse}
       behandlingVersjon={behandlingsVersjon}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper
         automatiskVurdering={vurderingAutomatisk}

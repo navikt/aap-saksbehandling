@@ -16,6 +16,7 @@ export const AlderMedDataFetching = async ({ behandlingsReferanse }: Props) => {
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.prosessering}
       visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <Alder grunnlag={grunnlag} />
     </GruppeSteg>

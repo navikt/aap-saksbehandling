@@ -25,6 +25,7 @@ export const SkriveBrev = ({
   grunnlag,
   signaturer,
   status,
+  readOnly,
 }: {
   referanse: string;
   mottaker: BrevMottaker;
@@ -33,6 +34,7 @@ export const SkriveBrev = ({
   grunnlag: Brev;
   signaturer: Signatur[];
   status: BrevStatus;
+  readOnly: boolean;
 }) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const [brev, setBrev] = useState<Brev>(grunnlag);
@@ -80,7 +82,7 @@ export const SkriveBrev = ({
           {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
           {isSaving && <Loader />}
         </div>
-        <div>
+        {!readOnly &&
           <ActionMenu>
             <ActionMenu.Trigger>
               <Button variant="secondary-neutral" icon={<ChevronDownIcon aria-hidden />} iconPosition="right">
@@ -98,7 +100,7 @@ export const SkriveBrev = ({
               </ActionMenu.Group>
             </ActionMenu.Content>
           </ActionMenu>
-        </div>
+        }
       </div>
 
       <VStack gap={'4'}>
@@ -109,14 +111,16 @@ export const SkriveBrev = ({
           onBrevChange={onChange}
           logo={NavLogo}
           signatur={signaturer}
+          readOnly={readOnly}
         />
-        <Button
-          disabled={status !== 'FORHÅNDSVISNING_KLAR'}
-          onClick={async () => {
-            await clientMellomlagreBrev(referanse, brev);
-            const flyt = await clientHentFlyt(behandlingsReferanse);
-            if (flyt?.behandlingVersjon) {
-              løsBehovOgGåTilNesteSteg({
+
+        {!readOnly && (
+          <Button
+            disabled={status !== 'FORHÅNDSVISNING_KLAR'}
+            onClick={async () => {
+              await clientMellomlagreBrev(referanse, brev);
+              const flyt = await clientHentFlyt(behandlingsReferanse);
+            if (flyt?.behandlingVersjon) {løsBehovOgGåTilNesteSteg({
                 behandlingVersjon: flyt.behandlingVersjon,
                 behov: {
                   behovstype: Behovstype.SKRIV_BREV_KODE,
@@ -125,14 +129,14 @@ export const SkriveBrev = ({
                 },
                 referanse: behandlingsReferanse,
               });
-              await revalidateFlyt(behandlingsReferanse);
-            }
-          }}
-          className={'fit-content'}
-          loading={isLoading}
-        >
-          Send brev
-        </Button>
+              await revalidateFlyt(behandlingsReferanse);}
+            }}
+            className={'fit-content'}
+            loading={isLoading}
+          >
+            Send brev
+          </Button>
+        )}
       </VStack>
     </div>
   );

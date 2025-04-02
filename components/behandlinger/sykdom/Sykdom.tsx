@@ -29,6 +29,7 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.prosessering}
       visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {stegSomSkalVises.includes('AVKLAR_SYKDOM') && (
         <StegSuspense>

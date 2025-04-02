@@ -20,6 +20,7 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       behandlingReferanse={behandlingsreferanse}
       prosessering={flyt.prosessering}
       visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <SamordningSosialhjelpMedDatafetching behandlingsreferanse={behandlingsreferanse} />
       <SamordningGraderingMedDatafetching

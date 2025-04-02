@@ -2,8 +2,8 @@ import '@navikt/ds-css';
 import '@navikt/aap-breveditor-css';
 import 'styles/globals.css';
 
-import { hentBrukerInformasjon } from '@navikt/aap-felles-utils';
 import { KelvinAppHeader } from 'components/kelvinappheader/KelvinAppHeader';
+import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 export const metadata = {
   title: 'Kelvin',

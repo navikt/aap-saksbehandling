@@ -19,6 +19,7 @@ export const Student = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={flyt.behandlingVersjon}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {stegSomSkalVises.map((steg) => {
         if (steg === 'AVKLAR_STUDENT') {
