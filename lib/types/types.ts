@@ -266,7 +266,10 @@ export type ManuellRevurderingV0 =
     meldingType: typeof ManuellRevurderingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
-export type ÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
+export type DokumentÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
+
+export type ÅrsakTilBehandling =
+  components['schemas'][`no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO`]['årsaker'][number];
 
 // oppgave
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];

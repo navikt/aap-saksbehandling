@@ -9,6 +9,7 @@ import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
 import { useRouter } from 'next/navigation';
 import { EyeIcon } from '@navikt/aksel-icons';
+import { formaterÅrsak } from "lib/utils/årsaker";
 
 const formaterBehandlingType = (behandlingtype: string) => {
   switch (behandlingtype) {
@@ -64,6 +65,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
                 <Table.HeaderCell>Opprettet</Table.HeaderCell>
                 <Table.HeaderCell>Type</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
+                <Table.HeaderCell>Årsak</Table.HeaderCell>
                 <Table.HeaderCell align="right">Handlinger</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -76,6 +78,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
                     <Table.DataCell>{formaterDatoTidForVisning(behandling.opprettet)}</Table.DataCell>
                     <Table.DataCell>{formaterBehandlingType(behandling.type)}</Table.DataCell>
                     <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
+                    <Table.DataCell>{behandling.årsaker.map(årsak => formaterÅrsak(årsak)).join(', ')}</Table.DataCell>
 
                     <Table.DataCell>
                       <HStack gap="2" justify="end">

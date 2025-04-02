@@ -3,7 +3,7 @@
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 
 import { Button, VStack } from '@navikt/ds-react';
-import type { AnnetRelevantDokumentV0, ÅrsakTilBehandling } from 'lib/types/types';
+import { AnnetRelevantDokumentV0, DokumentÅrsakTilBehandling } from 'lib/types/types';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -22,12 +22,12 @@ interface Props extends Submittable {
 function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
   const dokument: AnnetRelevantDokumentV0 = {
     meldingType: 'AnnetRelevantDokumentV0',
-    årsakerTilBehandling: data.årsaker.map((årsak) => årsak as ÅrsakTilBehandling),
+    årsakerTilBehandling: data.årsaker.map((årsak) => årsak as DokumentÅrsakTilBehandling),
   };
   return JSON.stringify(dokument);
 }
 // TODO: Avklar hvilke årsaker som saksbehandler skal kunne sette
-const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
+const årsakOptions: ValuePair<DokumentÅrsakTilBehandling>[] = [
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
   { label: 'Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
   { value: 'LOVVALG_OG_MEDLEMSKAP', label: 'Lovvalg og medlemskap' },
