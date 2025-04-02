@@ -1,7 +1,7 @@
 'use client';
 
 import { AvklaringsbehovKode, Oppgave } from 'lib/types/types';
-import { Alert, BodyShort, CopyButton, Heading, HStack, Loader, SortState, Table } from '@navikt/ds-react';
+import { Alert, BodyShort, CopyButton, Heading, HStack, Loader, SortState, Table, Tooltip } from '@navikt/ds-react';
 import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
 import { useMemo, useState } from 'react';
 import { oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
@@ -177,8 +177,12 @@ export const OppgaveTabell = ({
                 )}
               </Table.DataCell>
               <Table.DataCell>{mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}</Table.DataCell>
-              <Table.DataCell style={{ maxWidth: '200px' }}>
-                <BodyShort>{mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}</BodyShort>
+              <Table.DataCell style={{ maxWidth: '150px' }}>
+                <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}>
+                  <BodyShort truncate>
+                    {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}
+                  </BodyShort>
+                </Tooltip>
               </Table.DataCell>
               <Table.DataCell>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
               <Table.DataCell>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
