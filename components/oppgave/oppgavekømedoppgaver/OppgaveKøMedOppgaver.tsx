@@ -140,7 +140,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
           </VStack>
         )}
         {oppgaverValgtKø?.data?.type === 'success' && oppgaverValgtKø?.data?.data?.oppgaver?.length > 0 && (
-          <OppgaveTabell oppgaver={oppgaverValgtKø?.data?.data?.oppgaver || []} showBehandleKnapp />
+          <OppgaveTabell oppgaver={oppgaverValgtKø?.data?.data?.oppgaver || []} />
         )}
       </VStack>
     </Kort>

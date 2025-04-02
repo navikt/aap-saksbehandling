@@ -12,10 +12,10 @@ import styles from './OppgaveKnapp.module.css';
 
 interface Props {
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
-  showBehandleKnapp: boolean;
+  visBehandleOgFrigiKnapp?: boolean;
   oppgave: Oppgave;
 }
-export const OppgaveKnapp = ({ oppgave, showBehandleKnapp, setFeilmelding }: Props) => {
+export const OppgaveKnapp = ({ oppgave, visBehandleOgFrigiKnapp, setFeilmelding }: Props) => {
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
   const router = useRouter();
@@ -41,8 +41,34 @@ export const OppgaveKnapp = ({ oppgave, showBehandleKnapp, setFeilmelding }: Pro
   }
 
   return (
-    <div className={styles.comboButton}>
-      {showBehandleKnapp && (
+    <>
+      {visBehandleOgFrigiKnapp === true ? (
+        <div className={styles.comboButton}>
+          <Button
+            type={'button'}
+            size={'small'}
+            variant={'secondary'}
+            onClick={() => plukkOgGåTilOppgave(oppgave)}
+            loading={isPendingBehandle}
+          >
+            Behandle
+          </Button>
+          <Dropdown>
+            <Button as={Dropdown.Toggle} size="small" variant="secondary">
+              <HStack align={'center'}>
+                {isPendingFrigi ? <Loader size={'xsmall'} /> : <ChevronDownIcon title="Meny" />}
+              </HStack>
+            </Button>
+            <Dropdown.Menu>
+              <Dropdown.Menu.GroupedList>
+                <Dropdown.Menu.GroupedList.Item onClick={() => frigiOppgave(oppgave)}>
+                  Frigi oppgave
+                </Dropdown.Menu.GroupedList.Item>
+              </Dropdown.Menu.GroupedList>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      ) : (
         <Button
           type={'button'}
           size={'small'}
@@ -53,20 +79,6 @@ export const OppgaveKnapp = ({ oppgave, showBehandleKnapp, setFeilmelding }: Pro
           Behandle
         </Button>
       )}
-      <Dropdown>
-        <Button as={Dropdown.Toggle} size="small" variant="secondary">
-          <HStack align={'center'}>
-            {isPendingFrigi ? <Loader size={'xsmall'} /> : <ChevronDownIcon title="Meny" />}
-          </HStack>
-        </Button>
-        <Dropdown.Menu>
-          <Dropdown.Menu.GroupedList>
-            <Dropdown.Menu.GroupedList.Item onClick={() => frigiOppgave(oppgave)}>
-              Frigi oppgave
-            </Dropdown.Menu.GroupedList.Item>
-          </Dropdown.Menu.GroupedList>
-        </Dropdown.Menu>
-      </Dropdown>
-    </div>
+    </>
   );
 };

@@ -15,7 +15,7 @@ import { OppgaveKnapp } from 'components/oppgave/oppgaveknapp/OppgaveKnapp';
 interface Props {
   heading?: string;
   oppgaver: Oppgave[];
-  showBehandleKnapp?: boolean;
+  visBehandleOgFrigiKnapp?: boolean;
   showDropdownActions?: boolean;
   showSortAndFilters?: boolean;
   includeColumns?: 'reservertAv'[];
@@ -28,7 +28,7 @@ export const OppgaveTabell = ({
   oppgaver,
   heading,
   showSortAndFilters = false,
-  showBehandleKnapp = false,
+  visBehandleOgFrigiKnapp = false,
   includeColumns = [],
   isLoading = false,
 }: Props) => {
@@ -184,7 +184,11 @@ export const OppgaveTabell = ({
               <Table.DataCell>{oppgave.veileder}</Table.DataCell>
               {includeColumns?.includes('reservertAv') && <Table.DataCell>{oppgave.reservertAv || ''}</Table.DataCell>}
               <Table.DataCell>
-                <OppgaveKnapp oppgave={oppgave} setFeilmelding={setFeilmelding} showBehandleKnapp={showBehandleKnapp} />
+                <OppgaveKnapp
+                  oppgave={oppgave}
+                  setFeilmelding={setFeilmelding}
+                  visBehandleOgFrigiKnapp={visBehandleOgFrigiKnapp}
+                />
               </Table.DataCell>
             </Table.Row>
           ))}
