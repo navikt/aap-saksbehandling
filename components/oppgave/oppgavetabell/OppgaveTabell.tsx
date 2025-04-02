@@ -7,14 +7,10 @@ import { useMemo, useState } from 'react';
 import { oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
-import { byggKelvinURL } from 'lib/utils/request';
-import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
 import { ComboboxControlled } from 'components/oppgave/comboboxcontrolled/ComboboxControlled';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { useRouter } from 'next/navigation';
-import { ButtonOppgave } from 'components/oppgave/buttonoppgave/ButtonOppgave';
-import { OppgaveDropdown } from 'components/oppgave/oppgavedropdown/OppgaveDropdown';
 import Link from 'next/link';
+import { OppgaveKnapp } from 'components/oppgave/oppgaveknapp/OppgaveKnapp';
 
 interface Props {
   heading?: string;
@@ -44,7 +40,6 @@ export const OppgaveTabell = ({
 
   const [selectedAvklaringsbehov, setSelectedAvklaringsbehov] = useState<ComboboxOption[]>([]);
 
-  const router = useRouter();
   const sortedOppgaver = (oppgaver || []).slice().sort((a, b) => {
     if (sort) {
       return sort.direction === 'ascending' ? comparator(b, a, sort.orderBy) : comparator(a, b, sort.orderBy);
@@ -84,16 +79,6 @@ export const OppgaveTabell = ({
       return 1;
     }
     return 0;
-  }
-  async function plukkOgGåTilOppgave(oppgave: Oppgave) {
-    if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0) {
-      const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
-      if (plukketOppgave.type === 'success') {
-        router.push(byggKelvinURL(plukketOppgave.data));
-      } else if (plukketOppgave.type === 'error') {
-        setFeilmelding(plukketOppgave.message);
-      }
-    }
   }
 
   return (
@@ -199,12 +184,7 @@ export const OppgaveTabell = ({
               <Table.DataCell>{oppgave.veileder}</Table.DataCell>
               {includeColumns?.includes('reservertAv') && <Table.DataCell>{oppgave.reservertAv || ''}</Table.DataCell>}
               <Table.DataCell>
-                <HStack gap={'1'} wrap={false}>
-                  {showBehandleKnapp && (
-                    <ButtonOppgave onClick={plukkOgGåTilOppgave} oppgave={oppgave} label={'Behandle'} />
-                  )}
-                  <OppgaveDropdown oppgave={oppgave} />
-                </HStack>
+                <OppgaveKnapp oppgave={oppgave} setFeilmelding={setFeilmelding} showBehandleKnapp={showBehandleKnapp} />
               </Table.DataCell>
             </Table.Row>
           ))}

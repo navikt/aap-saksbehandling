@@ -13,7 +13,7 @@ const grunnlagOppfylt: AlderGrunnlag = {
       },
       utfall: 'OPPFYLT',
       manuellVurdering: false,
-      versjon: "1",
+      versjon: '1',
     },
   ],
 };
@@ -29,7 +29,7 @@ const grunnlagIkkeOppfylt: AlderGrunnlag = {
       utfall: 'IKKE_OPPFYLT',
       manuellVurdering: false,
       avslagsårsak: 'BRUKER_OVER_67',
-      versjon: "1",
+      versjon: '1',
     },
   ],
 };
@@ -54,7 +54,7 @@ describe('alder', () => {
 
   it('skal vise tabell med utfall, fra og med, til og med i header', () => {
     render(<Alder grunnlag={grunnlagOppfylt} />);
-    const utfall = screen.getByRole('columnheader', { name: /utfall/i });
+    const utfall = screen.getByRole('columnheader', { name: /resultat/i });
     const fraOgMed = screen.getByRole('columnheader', { name: /fra og med/i });
     const tilOgMed = screen.getByRole('columnheader', { name: /til og med/i });
 

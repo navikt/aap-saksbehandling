@@ -11,6 +11,8 @@ import { OpprettInntekter } from 'components/opprettsak/inntekter/OpprettInntekt
 import { useOpprettSak } from 'hooks/FetchHook';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
+import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
+import { parse } from 'date-fns';
 
 interface Barn {
   fodselsdato: string;
@@ -20,6 +22,14 @@ interface Barn {
 interface Inntekt {
   år: string;
   beløp: string;
+}
+
+interface SamordningSykepenger {
+  grad: number;
+  periode: {
+    fom: string;
+    tom: string;
+  };
 }
 
 type Institusjon = 'fengsel' | 'sykehus';
@@ -34,6 +44,7 @@ export interface OpprettSakFormFields {
   institusjon?: Institusjon[];
   medlemskap?: string;
   søknadsdato: Date;
+  sykepenger?: SamordningSykepenger[];
 }
 
 export const OpprettSak = () => {
@@ -88,12 +99,15 @@ export const OpprettSak = () => {
       defaultValue: JaEllerNei.Ja,
       options: JaEllerNeiOptions,
     },
+    sykepenger: {
+      type: 'fieldArray',
+      defaultValue: [{ grad: 50, periode: { fom: '14.03.2025', tom: '31.03.2025' } }],
+    },
   });
 
   return (
     <form
       onSubmit={form.handleSubmit(async (data) => {
-        // @ts-ignore
         await opprettSak({
           ...data,
           søknadsdato: formaterDatoForBackend(data.søknadsdato),
@@ -101,16 +115,6 @@ export const OpprettSak = () => {
           yrkesskade: data.yrkesskade === JaEllerNei.Ja,
           student: data.student === JaEllerNei.Ja,
           uføre: Number(data.uføre),
-          sykepenger: [
-            {
-              // @ts-ignore
-              grad: 0,
-              periode: {
-                fom: formaterDatoForBackend(new Date()),
-                tom: formaterDatoForBackend(new Date()),
-              },
-            },
-          ],
           barn:
             data.barn?.map((barn) => {
               return {
@@ -130,6 +134,14 @@ export const OpprettSak = () => {
                 beløp: { verdi: Number(inntekt.beløp) },
               };
             }) || [],
+          sykepenger:
+            data.sykepenger?.map((samordning) => ({
+              grad: samordning.grad,
+              periode: {
+                fom: formaterDatoForBackend(parse(samordning.periode.fom, 'dd.MM.yyyy', new Date())),
+                tom: formaterDatoForBackend(parse(samordning.periode.tom, 'dd.MM.yyyy', new Date())),
+              },
+            })) || [],
         });
         await mutate('api/sak/alle');
       })}
@@ -148,6 +160,7 @@ export const OpprettSak = () => {
       <div className={'flex-column'}>
         <OpprettSakBarn form={form} />
         <OpprettInntekter form={form} />
+        <Sykepenger form={form} />
       </div>
       <Button className={'fit-content'} loading={isLoading}>
         Opprett test sak

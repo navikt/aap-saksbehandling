@@ -4,7 +4,6 @@ import { isAfter, parse } from 'date-fns';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { getHeaderForSteg, mapStegTypeTilDetaljertSteg } from 'lib/utils/steg';
 import { ErStudentStatus, SkalGjenopptaStudieStatus, StudentGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
@@ -39,7 +38,6 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
     {
       begrunnelse: {
         type: 'textarea',
-        description: 'Vilkårsvurdering',
         label: 'Vurder §11-14 og vilkårene i §7 i forskriften',
         defaultValue: grunnlag?.studentvurdering?.begrunnelse,
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
@@ -105,7 +103,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
         rules: { required: 'Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.' },
       },
     },
-    { readOnly: readOnly }
+    { readOnly: readOnly, shouldUnregister: true }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -139,7 +137,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
   };
 
   return (
-    <VilkårsKort heading={getHeaderForSteg(mapStegTypeTilDetaljertSteg('AVKLAR_STUDENT'))} steg={'AVKLAR_STUDENT'}>
+    <VilkårsKort heading={'§ 11-14 Student'} steg={'AVKLAR_STUDENT'}>
       <Form
         onSubmit={handleSubmit}
         status={status}
@@ -155,12 +153,13 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
               Er bruker student: {mapErStudentStatusTilString(grunnlag.oppgittStudent.erStudentStatus)}
             </BodyShort>
           )}
-          {grunnlag?.oppgittStudent?.skalGjenopptaStudieStatus && (
-            <BodyShort size={'small'}>
-              Planlegger å gjenoppta studie:{' '}
-              {mapSkalGjenopptaStudieStatus(grunnlag.oppgittStudent.skalGjenopptaStudieStatus)}
-            </BodyShort>
-          )}
+          {grunnlag?.oppgittStudent?.skalGjenopptaStudieStatus &&
+            grunnlag?.oppgittStudent?.skalGjenopptaStudieStatus !== 'IKKE_OPPGITT' && (
+              <BodyShort size={'small'}>
+                Planlegger å gjenoppta studie:{' '}
+                {mapSkalGjenopptaStudieStatus(grunnlag.oppgittStudent.skalGjenopptaStudieStatus)}
+              </BodyShort>
+            )}
         </div>
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <FormField form={form} formField={formFields.harAvbruttStudie} horizontalRadio />

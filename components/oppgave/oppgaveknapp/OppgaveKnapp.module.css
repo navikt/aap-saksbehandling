@@ -1,0 +1,18 @@
+.comboButton {
+  display: flex;
+  align-content: flex-start;
+}
+
+.comboButton > button:first-of-type {
+  box-shadow: none;
+  border-left: 2px solid var(--a-blue-500);
+  border-top: 2px solid var(--a-blue-500);
+  border-bottom: 2px solid var(--a-blue-500);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.comboButton > button:nth-of-type(2) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}

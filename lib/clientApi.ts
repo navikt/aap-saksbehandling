@@ -1,5 +1,6 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import {
+  BehandlingFlytOgTilstand,
   BehandlingsFlytAvklaringsbehovKode,
   BestillLegeerklæring,
   Brev,
@@ -117,6 +118,10 @@ export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
   });
 }
 
+export function clientHentFlyt(behandlingsreferanse: string) {
+  return clientFetch<BehandlingFlytOgTilstand>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/flyt`, 'GET');
+}
+
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
   return clientFetch<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
 }
@@ -152,8 +157,8 @@ export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, behandlin
   });
 }
 
-export function clientSendHendelse(body: Object) {
-  return clientFetch(`${BASE_URL}/api/hendelse/send`, 'POST', body);
+export function clientSendHendelse(saksnummer: string, body: Object) {
+  return clientFetch(`${BASE_URL}/api/hendelse/sak/${saksnummer}/send`, 'POST', body);
 }
 
 export function clientConfig() {

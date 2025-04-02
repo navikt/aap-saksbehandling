@@ -33,6 +33,8 @@ export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode): st
       return 'Bestill brev';
     case '9003':
       return 'Bestill legeerklæring';
+    case '9004':
+      return 'Opprett hendelse på sak';
     case '5010':
       return '§ 11-26 Soning';
     case '5011':

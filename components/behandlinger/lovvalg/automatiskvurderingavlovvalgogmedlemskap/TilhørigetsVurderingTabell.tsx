@@ -3,6 +3,7 @@
 import { HStack, Table } from '@navikt/ds-react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { ReactNode } from 'react';
+import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
 interface Props {
   vurdering: AutomatiskLovvalgOgMedlemskapVurdering['tilhørighetVurdering'];
   resultatIkonTrue: ReactNode;
@@ -10,7 +11,7 @@ interface Props {
 }
 export const TilhørigetsVurderingTabell = ({ vurdering, resultatIkonTrue, resultatIkonFalse }: Props) => {
   return (
-    <Table size={'small'}>
+    <TableStyled size={'small'}>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell />
@@ -23,9 +24,9 @@ export const TilhørigetsVurderingTabell = ({ vurdering, resultatIkonTrue, resul
         {vurdering.map((opplysning, index) => {
           return (
             <Table.ExpandableRow key={`${opplysning.kilde.join('-')}-${index}`} content={opplysning.fordypelse}>
-              <Table.DataCell>{opplysning.kilde.join(', ')}</Table.DataCell>
-              <Table.DataCell>{opplysning.opplysning}</Table.DataCell>
-              <Table.DataCell>
+              <Table.DataCell textSize={'small'}>{opplysning.kilde.join(', ')}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>{opplysning.opplysning}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>
                 {opplysning.resultat ? (
                   <HStack gap={'2'} align={'center'}>
                     {resultatIkonTrue}
@@ -42,6 +43,6 @@ export const TilhørigetsVurderingTabell = ({ vurdering, resultatIkonTrue, resul
           );
         })}
       </Table.Body>
-    </Table>
+    </TableStyled>
   );
 };

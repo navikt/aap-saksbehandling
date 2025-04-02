@@ -22,3 +22,7 @@
 .prosent_input > input {
   max-width: 6ch;
 }
+
+.radio {
+  max-width: 90ch;
+}

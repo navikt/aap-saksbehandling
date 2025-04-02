@@ -30,7 +30,7 @@ export function DummyMeldekort({ saksid }: { saksid: string }) {
         ],
       },
     };
-    await clientSendHendelse(reqBody);
+    await clientSendHendelse(saksid, reqBody);
   }
 
   return (

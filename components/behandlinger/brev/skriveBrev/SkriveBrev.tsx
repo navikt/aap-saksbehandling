@@ -5,7 +5,7 @@ import { ActionMenu, Button, Label, Loader, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { clientMellomlagreBrev } from 'lib/clientApi';
+import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
 import { Brev, BrevMottaker, BrevStatus, Signatur } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
@@ -15,7 +15,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import style from './SkrivBrev.module.css';
 import { revalidateFlyt } from 'lib/actions/actions';
-import { ChevronDownIcon, TrashIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
 
 export const SkriveBrev = ({
   referanse,
@@ -75,7 +75,6 @@ export const SkriveBrev = ({
 
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
 
-
   return (
     <div className={style.brevbygger}>
       <div className={style.topBar}>
@@ -92,6 +91,9 @@ export const SkriveBrev = ({
             </ActionMenu.Trigger>
             <ActionMenu.Content>
               <ActionMenu.Group label="Brev">
+                <ActionMenu.Item icon={<GlassIcon />} onSelect={() => {}}>
+                  Forhåndsvis brev
+                </ActionMenu.Item>
                 <ActionMenu.Item variant="danger" icon={<TrashIcon />} onSelect={slettBrev}>
                   Slett brev
                 </ActionMenu.Item>
@@ -117,8 +119,9 @@ export const SkriveBrev = ({
             disabled={status !== 'FORHÅNDSVISNING_KLAR'}
             onClick={async () => {
               await clientMellomlagreBrev(referanse, brev);
-              løsBehovOgGåTilNesteSteg({
-                behandlingVersjon: behandlingVersjon,
+              const flyt = await clientHentFlyt(behandlingsReferanse);
+            if (flyt?.behandlingVersjon) {løsBehovOgGåTilNesteSteg({
+                behandlingVersjon: flyt.behandlingVersjon,
                 behov: {
                   behovstype: Behovstype.SKRIV_BREV_KODE,
                   brevbestillingReferanse: referanse,
@@ -126,7 +129,7 @@ export const SkriveBrev = ({
                 },
                 referanse: behandlingsReferanse,
               });
-              await revalidateFlyt(behandlingsReferanse);
+              await revalidateFlyt(behandlingsReferanse);}
             }}
             className={'fit-content'}
             loading={isLoading}
