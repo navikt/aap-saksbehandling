@@ -34,7 +34,7 @@ export const UføreVisning = ({ grunnlag }: Props) => {
 
       <UføreInntektTabell
         inntekter={grunnlag.uføreInntekter}
-        gjennomsnittSiste3år={6}
+        gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3årUfør}
         ytterligereNedsattArbeidsevneÅr={grunnlag.ytterligereNedsattArbeidsevneÅr}
       />
 
@@ -64,7 +64,7 @@ export const UføreVisning = ({ grunnlag }: Props) => {
             </Table.Row>
             <Table.Row>
               <Table.DataCell>{`§§ 11-19 / 11-28 Inntekt siste år (${grunnlag.inntektSisteÅrUfør.år})`}</Table.DataCell>
-              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅrUfør.inntektIG)}</Table.DataCell>
+              <Table.DataCell align={'right'}>{formaterTilG(grunnlag.inntektSisteÅrUfør.justertForUføreGradiG)}</Table.DataCell>
             </Table.Row>
             <Table.Row>
               <Table.HeaderCell scope={'row'}>Fastsatt grunnlag</Table.HeaderCell>
