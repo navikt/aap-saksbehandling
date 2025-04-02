@@ -6,7 +6,7 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
-import { BehandlingFlytOgTilstand, Brev, BrevMottaker, BrevStatus, Signatur } from 'lib/types/types';
+import { Brev, BrevMottaker, BrevStatus, Signatur } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 
@@ -114,19 +114,19 @@ export const SkriveBrev = ({
           disabled={status !== 'FORHÅNDSVISNING_KLAR'}
           onClick={async () => {
             await clientMellomlagreBrev(referanse, brev);
-            // @ts-ignore
-            const flyt: BehandlingFlytOgTilstand = await clientHentFlyt(behandlingsReferanse);
-            console.log('flyt', flyt);
-            løsBehovOgGåTilNesteSteg({
-              behandlingVersjon: flyt.behandlingVersjon,
-              behov: {
-                behovstype: Behovstype.SKRIV_BREV_KODE,
-                brevbestillingReferanse: referanse,
-                handling: 'FERDIGSTILL',
-              },
-              referanse: behandlingsReferanse,
-            });
-            await revalidateFlyt(behandlingsReferanse);
+            const flyt = await clientHentFlyt(behandlingsReferanse);
+            if (flyt?.behandlingVersjon) {
+              løsBehovOgGåTilNesteSteg({
+                behandlingVersjon: flyt.behandlingVersjon,
+                behov: {
+                  behovstype: Behovstype.SKRIV_BREV_KODE,
+                  brevbestillingReferanse: referanse,
+                  handling: 'FERDIGSTILL',
+                },
+                referanse: behandlingsReferanse,
+              });
+              await revalidateFlyt(behandlingsReferanse);
+            }
           }}
           className={'fit-content'}
           loading={isLoading}
