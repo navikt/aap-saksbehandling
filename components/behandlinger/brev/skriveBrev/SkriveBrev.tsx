@@ -16,7 +16,6 @@ import { useCallback, useEffect, useState } from 'react';
 import style from './SkrivBrev.module.css';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
-import { ActionMenuDivider } from '@navikt/ds-react/esm/overlays/action-menu';
 
 export const SkriveBrev = ({
   referanse,
@@ -93,7 +92,6 @@ export const SkriveBrev = ({
                 <ActionMenu.Item icon={<GlassIcon />} onSelect={() => {}}>
                   Forhåndsvis brev
                 </ActionMenu.Item>
-                <ActionMenuDivider />
                 <ActionMenu.Item variant="danger" icon={<TrashIcon />} onSelect={slettBrev}>
                   Slett brev
                 </ActionMenu.Item>
