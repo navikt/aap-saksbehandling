@@ -7,7 +7,7 @@ import { LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from './Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
-import { isDev, isLocal } from "@navikt/aap-felles-utils";
+import { isDev, isLocal } from 'lib/utils/environment';
 
 interface BrukerInformasjon {
   navn: string;
