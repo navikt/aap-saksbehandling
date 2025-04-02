@@ -1,5 +1,5 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
-import { subYears, addYears, isValid } from 'date-fns';
+import { subYears, addYears } from 'date-fns';
 import React from 'react';
 import { Control, Controller, FieldValues, RegisterOptions, FieldPath } from 'react-hook-form';
 
@@ -8,7 +8,7 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   label?: string;
   description?: React.ReactNode;
   disableWeekend?: boolean;
-  rules?: Omit<RegisterOptions<FormFieldValues>, 'validate'>;
+  rules?: RegisterOptions<FormFieldValues>;
   control: Control<FormFieldValues>;
   fromDate?: Date;
   size?: 'small' | 'medium';
@@ -43,10 +43,7 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
     <Controller
       name={name}
       control={control}
-      rules={{
-        ...rules,
-        validate: (value) => isValid(value as string) || 'Ugyldig dato',
-      }}
+      rules={rules}
       render={({ field: { name, value, onChange }, fieldState: { error } }) => {
         return (
           <DatePicker
@@ -68,7 +65,7 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
               name={name}
               hideLabel={hideLabel}
               description={description}
-              error={error?.message}
+              error={error && error.message}
               label={label}
               readOnly={readOnly}
               {...inputProps}
