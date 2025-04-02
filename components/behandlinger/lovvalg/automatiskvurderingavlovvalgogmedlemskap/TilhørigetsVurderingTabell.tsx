@@ -3,7 +3,7 @@
 import { HStack, Table } from '@navikt/ds-react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { ReactNode } from 'react';
-import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 interface Props {
   vurdering: AutomatiskLovvalgOgMedlemskapVurdering['tilhørighetVurdering'];
   resultatIkonTrue: ReactNode;

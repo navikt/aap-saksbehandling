@@ -11,7 +11,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { validerDato } from 'lib/validation/dateValidation';
 import { ValuePair } from 'components/form/FormField';
 import { SamordningAndreStatligeYtelserYtelse } from 'lib/types/types';
-import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
   form: UseFormReturn<SamordningAndreStatligeYtelserFormFields>;

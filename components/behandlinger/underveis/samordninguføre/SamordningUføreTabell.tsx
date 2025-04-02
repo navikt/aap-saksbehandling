@@ -7,7 +7,7 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SamordningUføreFormFields } from 'components/behandlinger/underveis/samordninguføre/SamordningUføre';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
   form: UseFormReturn<SamordningUføreFormFields>;

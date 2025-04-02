@@ -10,7 +10,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 
 import styles from './YtelseTabell.module.css';
-import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;

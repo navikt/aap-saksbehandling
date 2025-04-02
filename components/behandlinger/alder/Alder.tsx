@@ -8,7 +8,7 @@ import { AlderGrunnlag, AvslagÅrsak, VilkårUtfall } from 'lib/types/types';
 
 import styles from './Alder.module.css';
 import { addYears, differenceInYears } from 'date-fns';
-import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
   grunnlag: AlderGrunnlag;

@@ -1,7 +1,7 @@
 'use client';
 
 import { Table, TableProps } from '@navikt/ds-react';
-import styles from './TableStyled.module.css';
+import styles from 'components/tablestyled/TableStyled.module.css';
 
 export const TableStyled = (props: TableProps) => {
   return (

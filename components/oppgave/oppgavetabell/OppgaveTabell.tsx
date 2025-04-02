@@ -1,7 +1,7 @@
 'use client';
 
 import { AvklaringsbehovKode, Oppgave } from 'lib/types/types';
-import { Alert, CopyButton, Heading, HStack, Loader, SortState, Table } from '@navikt/ds-react';
+import { Alert, BodyShort, CopyButton, Heading, HStack, Loader, SortState, Table } from '@navikt/ds-react';
 import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
 import { useMemo, useState } from 'react';
 import { oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
@@ -11,6 +11,7 @@ import { ComboboxControlled } from 'components/oppgave/comboboxcontrolled/Combob
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import Link from 'next/link';
 import { OppgaveKnapp } from 'components/oppgave/oppgaveknapp/OppgaveKnapp';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
   heading?: string;
@@ -94,7 +95,7 @@ export const OppgaveTabell = ({
           <Loader size={'2xlarge'} />
         </HStack>
       )}
-      <Table
+      <TableStyled
         size={'small'}
         zebraStripes
         sort={sort}
@@ -142,7 +143,7 @@ export const OppgaveTabell = ({
               Beh. opprettet
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'veileder'} sortable={showSortAndFilters}>
-              Veileder
+              Veileder i modia
             </Table.ColumnHeader>
             {includeColumns?.includes('reservertAv') && (
               <Table.ColumnHeader sortKey={'reservertAv'} sortable={showSortAndFilters}>
@@ -176,8 +177,8 @@ export const OppgaveTabell = ({
                 )}
               </Table.DataCell>
               <Table.DataCell>{mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}</Table.DataCell>
-              <Table.DataCell>
-                {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}
+              <Table.DataCell style={{ maxWidth: '200px' }}>
+                <BodyShort>{mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}</BodyShort>
               </Table.DataCell>
               <Table.DataCell>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
               <Table.DataCell>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
@@ -193,7 +194,7 @@ export const OppgaveTabell = ({
             </Table.Row>
           ))}
         </Table.Body>
-      </Table>
+      </TableStyled>
     </div>
   );
 };

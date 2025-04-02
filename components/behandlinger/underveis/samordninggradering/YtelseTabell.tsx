@@ -5,7 +5,7 @@ import { SamordningGraderingYtelse } from 'lib/types/types';
 
 import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import styles from './YtelseTabell.module.css';
-import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
   ytelser: SamordningGraderingYtelse[];

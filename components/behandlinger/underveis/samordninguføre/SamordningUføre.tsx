@@ -13,7 +13,7 @@ import { SamordningUføreTabell } from 'components/behandlinger/underveis/samord
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { format, parse } from 'date-fns';
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
-import { TableStyled } from 'components/saksbehandling/tablestyled/TableStyled';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
