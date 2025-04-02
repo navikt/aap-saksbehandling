@@ -10,24 +10,22 @@ interface Props {
 export const Brev = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
 
-  //const stegSomSkalVises = getStegSomSkalVises('BREV', flyt);
-
   return (
     <GruppeSteg
       behandlingVersjon={flyt.behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.prosessering}
       visning={flyt.visning}
-      aktivGruppe="BREV"
+      aktivGruppe={"BREV"}
+      aktivtSteg={flyt.aktivtSteg}
     >
-      {/*{stegSomSkalVises.includes('BREV') && (*/}
       <StegSuspense>
         <SkriveBrevMedDataFetching
           behandlingsReferanse={behandlingsReferanse}
           behandlingVersjon={flyt.behandlingVersjon}
+          aktivtSteg={flyt.aktivtSteg}
         />
       </StegSuspense>
-      {/*})}*/}
     </GruppeSteg>
   );
 };

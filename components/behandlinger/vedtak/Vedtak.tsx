@@ -22,6 +22,7 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
       prosessering={flyt.prosessering}
       aktivGruppe="BREV"
       visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {stegSomSkalVises.includes('FORESLÅ_VEDTAK') && (
         <StegSuspense>

@@ -19,6 +19,7 @@ export const Barnetillegg = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={flyt.behandlingVersjon}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <StegSuspense>
         <BarnetilleggVurderingMedDataFetching

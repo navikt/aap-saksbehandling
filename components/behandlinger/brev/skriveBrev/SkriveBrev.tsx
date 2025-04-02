@@ -25,6 +25,7 @@ export const SkriveBrev = ({
   grunnlag,
   signaturer,
   status,
+  readOnly,
 }: {
   referanse: string;
   mottaker: BrevMottaker;
@@ -33,6 +34,7 @@ export const SkriveBrev = ({
   grunnlag: Brev;
   signaturer: Signatur[];
   status: BrevStatus;
+  readOnly: boolean;
 }) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const [brev, setBrev] = useState<Brev>(grunnlag);
@@ -106,27 +108,31 @@ export const SkriveBrev = ({
           onBrevChange={onChange}
           logo={NavLogo}
           signatur={signaturer}
+          readOnly={readOnly}
         />
-        <Button
-          disabled={status !== 'FORHÅNDSVISNING_KLAR'}
-          onClick={async () => {
-            await clientMellomlagreBrev(referanse, brev);
-            løsBehovOgGåTilNesteSteg({
-              behandlingVersjon: behandlingVersjon,
-              behov: {
-                behovstype: Behovstype.SKRIV_BREV_KODE,
-                brevbestillingReferanse: referanse,
-                handling: 'FERDIGSTILL',
-              },
-              referanse: behandlingsReferanse,
-            });
-            await revalidateFlyt(behandlingsReferanse);
-          }}
-          className={'fit-content'}
-          loading={isLoading}
-        >
-          Send brev
-        </Button>
+
+        {!readOnly && (
+          <Button
+            disabled={status !== 'FORHÅNDSVISNING_KLAR'}
+            onClick={async () => {
+              await clientMellomlagreBrev(referanse, brev);
+              løsBehovOgGåTilNesteSteg({
+                behandlingVersjon: behandlingVersjon,
+                behov: {
+                  behovstype: Behovstype.SKRIV_BREV_KODE,
+                  brevbestillingReferanse: referanse,
+                  handling: 'FERDIGSTILL',
+                },
+                referanse: behandlingsReferanse,
+              });
+              await revalidateFlyt(behandlingsReferanse);
+            }}
+            className={'fit-content'}
+            loading={isLoading}
+          >
+            Send brev
+          </Button>
+        )}
       </VStack>
     </div>
   );

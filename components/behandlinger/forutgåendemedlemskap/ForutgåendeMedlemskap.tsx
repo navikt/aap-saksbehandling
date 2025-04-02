@@ -31,6 +31,7 @@ export const ForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) =>
       visning={flyt.visning}
       behandlingReferanse={behandlingsReferanse}
       behandlingVersjon={behandlingsVersjon}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <ForutgåendemedlemskapOverstyringswrapper
         behandlingsReferanse={behandlingsReferanse}

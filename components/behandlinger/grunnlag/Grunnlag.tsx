@@ -38,6 +38,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.prosessering}
       visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {vurderFastsettBeregningstidspunkt && (
         <StegSuspense>

@@ -21,7 +21,7 @@ export async function hentBrukerInformasjon(): Promise<BrukerInformasjon> {
   return { navn: JWTVerifyResult.payload.name as string, NAVident: JWTVerifyResult.payload.NAVident as string };
 }
 
-enum Roller {
+export enum Roller {
   BESLUTTER = 'BESLUTTER',
   LES = 'LES',
   SAKSBEHANDLER_OPPFØLGING = 'SAKSBEHANDLER_OPPFØLGING',
@@ -30,6 +30,7 @@ enum Roller {
   DRIFT = 'DRIFT',
   PRODUKSJONSSTYRING = 'PRODUKSJONSSTYRING',
 }
+
 export async function hentRollerForBruker(): Promise<Roller[]> {
   if (isLocal()) {
     return [
@@ -51,11 +52,22 @@ export async function hentRollerForBruker(): Promise<Roller[]> {
 
   const isDevelopment = isDev();
 
-  // @ts-ignore
-  return grupper.map(isDevelopment ? mapRollerFraTokenTilKelvinRollerDev : mapRollerFraTokenTilKelvinRollerProd);
+  const roller: Roller[] = [];
+
+  grupper.forEach((gruppe) => {
+    const rolle = isDevelopment
+      ? mapRollerFraTokenTilKelvinRollerDev(gruppe)
+      : mapRollerFraTokenTilKelvinRollerProd(gruppe);
+
+    if (rolle) {
+      roller.push(rolle);
+    }
+  });
+
+  return roller;
 }
 
-// UUID Hentet fra dev.yaml
+// Disse må stemme med UUID i dev.yaml
 enum RollerDev {
   BESLUTTER = 'f0f6cad5-e3c0-4308-99a2-3630ac60174a',
   LES = '96e18023-db50-45f7-b023-3251279df28d',
@@ -85,7 +97,7 @@ function mapRollerFraTokenTilKelvinRollerDev(rolle: string): Roller | undefined 
   }
 }
 
-// UUID Hentet fra prod.yaml
+// Disse må stemme med UUID i prod.yaml
 enum RollerProd {
   BESLUTTER = '5763b52f-f16a-483d-8f40-25be9de95c0a',
   LES = '963df3e5-04f7-415e-8d13-1de981603940',

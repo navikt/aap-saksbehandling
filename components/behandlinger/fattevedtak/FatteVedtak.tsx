@@ -19,6 +19,7 @@ export const FatteVedtak = async ({ behandlingsReferanse }: Props) => {
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.prosessering}
       visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {stegSomSkalVises.includes('FATTE_VEDTAK') && (
         <StegSuspense>

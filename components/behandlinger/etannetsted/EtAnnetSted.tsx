@@ -29,6 +29,7 @@ export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={flyt.behandlingVersjon}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {vurderHelseinstitusjon && (
         <StegSuspense>
