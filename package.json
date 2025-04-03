@@ -15,7 +15,7 @@
   },
   "prettier": "@navikt/aap-felles-prettier",
   "dependencies": {
-    "@grafana/faro-web-sdk": "^1.14.1",
+    "@grafana/faro-web-sdk": "^1.14.3",
     "@navikt/aap-breveditor": "^0.2.9",
     "@navikt/aap-breveditor-css": "^0.1.4",
     "@navikt/aksel-icons": "7.18.0",
