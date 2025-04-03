@@ -1,12 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-// import { Enhet, Kø } from 'lib/types/types';
 import { OppgaveTabell } from 'components/oppgave/oppgavetabell/OppgaveTabell';
 import useSWR from 'swr';
-import { Alert, BodyShort, Button, Heading, HStack, Label, Loader, Skeleton, Switch, VStack } from '@navikt/ds-react';
-// import { Kort } from 'components/kort/Kort';
-// import { hentOppgaverClient, plukkNesteOppgaveClient } from 'lib/services/client';
+import { Alert, BodyShort, Button, HStack, Label, Loader, Skeleton, Switch, VStack } from '@navikt/ds-react';
 import { EnhetSelect } from 'components/oppgave/enhetselect/EnhetSelect';
 import { KøSelect } from 'components/oppgave/køselect/KøSelect';
 import { byggKelvinURL, queryParamsArray } from 'lib/utils/request';
@@ -22,27 +19,32 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [aktivEnhet, setAktivEnhet] = useState<string>(enheter[0]?.enhetNr ?? '');
   const [veilederFilter, setVeilederFilter] = useState<string>('');
+  const [aktivKøId, setAktivKøId] = useState<number>();
 
   const køer = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
     hentKøerForEnheterClient([aktivEnhet])
   );
 
-  const [aktivKø, setAktivKø] = useState<number>();
   useEffect(() => {
-    if (køer.data?.type === 'success' && aktivKø == null) {
-      setAktivKø(køer.data.data[0]?.id ?? 0);
+    if (køer.data?.type === 'success' && aktivKøId == null) {
+      setAktivKøId(køer.data.data[0]?.id ?? 0);
+    } else if (køer.data?.type === 'success') {
+      const aktivkø = køer.data.data.find((e) => e.id === aktivKøId);
+      if (!aktivkø) {
+        setAktivKøId(køer.data.data[0]?.id ?? 0);
+      }
     }
   }, [køer]);
 
   const oppgaverValgtKø = useSWR(
-    aktivKø ? `api/oppgave/oppgaveliste/${aktivKø}/${aktivEnhet}/${veilederFilter}` : null,
-    () => hentOppgaverClient(aktivKø!, [aktivEnhet], veilederFilter === 'veileder')
+    aktivKøId ? `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet}/${veilederFilter}` : null,
+    () => hentOppgaverClient(aktivKøId!, [aktivEnhet], veilederFilter === 'veileder')
   );
 
   async function plukkOgGåTilOppgave() {
     setIsLoading(true);
-    if (aktivEnhet && aktivKø) {
-      const nesteOppgave = await plukkNesteOppgaveClient(aktivKø, aktivEnhet);
+    if (aktivEnhet && aktivKøId) {
+      const nesteOppgave = await plukkNesteOppgaveClient(aktivKøId, aktivEnhet);
       if (nesteOppgave.type === 'success') {
         if (nesteOppgave.data) {
           window.location.assign(byggKelvinURL(nesteOppgave.data.avklaringsbehovReferanse));
@@ -56,9 +58,6 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
     <Kort>
       <VStack gap={'5'}>
         <VStack gap={'4'}>
-          <Heading level="2" size="medium">
-            Oppgavekø
-          </Heading>
           <HStack gap={'6'}>
             <VStack>
               <EnhetSelect
@@ -73,7 +72,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
                 label={'Velg kø du skal jobbe på'}
                 køer={køer.data?.type === 'success' ? køer.data.data : []}
                 valgtKøListener={(kø) => {
-                  setAktivKø(kø);
+                  setAktivKøId(kø);
                 }}
               />
             </VStack>
@@ -82,7 +81,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
                 Beskrivelse av køen
               </Label>
               {køer.data?.type === 'success' && (
-                <BodyShort spacing>{køer.data.data.find((e) => e.id === aktivKø)?.beskrivelse}</BodyShort>
+                <BodyShort spacing>{køer.data.data.find((e) => e.id === aktivKøId)?.beskrivelse}</BodyShort>
               )}
             </VStack>
             <VStack>
