@@ -46,13 +46,13 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
     control,
     rules: {
       ...rules,
-      validate: (value) => (isDate(value) && isValid(value)) || 'Ugyldig dato',
+      validate: (value) => (isDate(value) && isValid(value)) || 'Dato må være i formatet "dd.MM.åååå"',
     },
   });
 
   const { datepickerProps, inputProps } = useDatepicker({
     defaultSelected: selected,
-    onDateChange: (value) => onChange(value),
+    onDateChange: (date) => onChange(date),
     toDate,
     fromDate,
     disableWeekends,
@@ -62,8 +62,6 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
     <DatePicker
       {...datepickerProps}
       id={name}
-      onChange={onChange}
-      onSelect={onChange}
       dropdownCaption
       strategy={strategy}
     >
