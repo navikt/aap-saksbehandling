@@ -148,6 +148,7 @@ export const SkriveBrev = ({
           </Button>
         )}
       </VStack>
+
       <ForhåndsvisBrevModal
         isOpen={forhåndsvisModalOpen}
         brevbestillingReferanse={referanse}
