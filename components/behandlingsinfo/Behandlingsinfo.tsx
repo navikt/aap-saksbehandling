@@ -2,31 +2,15 @@ import { BodyShort, Box, HGrid, HStack, Label, VStack } from '@navikt/ds-react';
 import { DetaljertBehandling } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
-import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 
 import styles from './Behandlingsinfo.module.css';
-import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 interface Props {
   behandling: DetaljertBehandling;
   saksnummer: string;
-  brukerInformasjon: BrukerInformasjon;
-  oppgaveReservertAv?: string | null;
-  påVent?: boolean;
 }
 
-export const Behandlingsinfo = ({ behandling, saksnummer, oppgaveReservertAv, påVent, brukerInformasjon }: Props) => {
-  const erReservertAvInnloggetBruker = brukerInformasjon.NAVident === oppgaveReservertAv;
-  const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
-    if (oppgaveReservertAv && !erReservertAvInnloggetBruker) {
-      return { status: 'RESERVERT', label: `Reservert ${oppgaveReservertAv}` };
-    } else if (påVent === true) {
-      return { status: 'PÅ_VENT', label: 'På vent' };
-    }
-  };
-
-  const oppgaveStatus = hentOppgaveStatus();
-
+export const Behandlingsinfo = ({ behandling, saksnummer }: Props) => {
   return (
     <Box
       padding="4"
@@ -41,7 +25,6 @@ export const Behandlingsinfo = ({ behandling, saksnummer, oppgaveReservertAv, p�
             {behandling.type}
           </Label>
           <Behandlingsstatus status={behandling.status} />
-          {oppgaveStatus && <OppgaveStatus oppgaveStatus={oppgaveStatus} />}
         </HStack>
 
         <HGrid columns={'1fr 1fr'} gap="1">

@@ -5,8 +5,7 @@ import { hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/s
 
 export default async function Page(props: { params: Promise<{ saksId: string }> }) {
   const params = await props.params;
-  const personInfo = await hentSakPersoninfo(params.saksId);
-  const sak = await hentSak(params.saksId);
+  const [personInfo, sak] = await Promise.all([hentSakPersoninfo(params.saksId), hentSak(params.saksId)]);
 
   return (
     <>

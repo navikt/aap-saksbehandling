@@ -80,6 +80,10 @@ const Layout = async (props: Props) => {
           sak={sak}
           behandlingVersjon={flytResponse.behandlingVersjon}
           referanse={params.behandlingsReferanse}
+          behandling={behandling}
+          oppgaveReservertAv={oppgave?.reservertAv}
+          påVent={flytResponse.visning.visVentekort}
+          brukerInformasjon={brukerInformasjon}
         />
 
         <StegGruppeIndikatorAksel flytRespons={flytResponse} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
@@ -87,13 +91,7 @@ const Layout = async (props: Props) => {
         <HGrid columns="4fr 2fr">
           <section className={styles.venstrekolonne}>{children}</section>
           <aside className={`${styles.høyrekolonne} flex-column`}>
-            <Behandlingsinfo
-              behandling={behandling}
-              saksnummer={params.saksId}
-              oppgaveReservertAv={oppgave?.reservertAv}
-              påVent={flytResponse.visning.visVentekort}
-              brukerInformasjon={brukerInformasjon}
-            />
+            <Behandlingsinfo behandling={behandling} saksnummer={params.saksId} />
             <SaksbehandlingsoversiktMedDataFetching />
             <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
           </aside>

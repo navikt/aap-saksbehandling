@@ -16,13 +16,13 @@ export const OppgaveStatus = ({ oppgaveStatus }: Props) => {
   switch (oppgaveStatus.status) {
     case 'PÅ_VENT':
       return (
-        <Tag className={styles.tag} icon={<HourglassTopFilledIcon />} variant={'warning'} size={'xsmall'}>
+        <Tag className={styles.tag} icon={<HourglassTopFilledIcon />} variant={'warning-moderate'} size={'small'}>
           {oppgaveStatus.label}
         </Tag>
       );
     case 'RESERVERT':
       return (
-        <Tag className={styles.tag} icon={<PadlockLockedFillIcon />} variant={'error'} size={'xsmall'}>
+        <Tag className={styles.tag} icon={<PadlockLockedFillIcon />} variant={'error'} size={'small'}>
           {oppgaveStatus.label}
         </Tag>
       );
