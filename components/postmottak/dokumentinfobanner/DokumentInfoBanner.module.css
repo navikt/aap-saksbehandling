@@ -1,16 +1,31 @@
-.dokumentInfoBanner {
+.dokumentinfobanner {
   background-color: #f8f9fa;
-  padding-block: var(--a-spacing-3);
-  padding-inline-start: var(--a-spacing-6);
-  padding-inline-end: var(--a-spacing-4);
+  border-bottom: 1px solid var(--a-border-divider);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--a-border-divider);
 }
 
-.left {
-  display: flex;
-  gap: var(--a-spacing-8);
+.dokumentinfo {
+  padding-left: var(--a-spacing-6);
+  padding-top: var(--a-spacing-3);
+  padding-bottom: var(--a-spacing-3);
+}
+
+.copybutton {
+  padding-left: var(--a-spacing-1);
+  color: var(--a-text-subtle);
+}
+
+.chevron {
+  color: var(--a-border-strong);
+}
+
+.meny {
+  padding: var(--a-spacing-2) var(--a-spacing-3) var(--a-spacing-2) var(--a-spacing-3);
+  border-left: 1px solid var(--a-border-divider);
+}
+
+.status {
+  padding: var(--a-spacing-3) var(--a-spacing-3) var(--a-spacing-2) var(--a-spacing-3);
 }

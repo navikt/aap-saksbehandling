@@ -43,9 +43,9 @@ const Layout = async (props: LayoutProps) => {
     <div className={styles.idLayoutWrapper}>
       <DokumentInfoBanner
         behandlingsreferanse={params.behandlingsreferanse}
-        journalpostId={journalpostInfo.journalpostId}
         behandlingsVersjon={flyt.behandlingVersjon}
         journalpostInfo={journalpostInfo}
+        påVent={flyt.visning.visVentekort}
       />
       <StegGruppeIndikatorAksel
         behandlingsreferanse={params.behandlingsreferanse}
