@@ -1,14 +1,15 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
-import { subYears, addYears } from 'date-fns';
+import { addYears, isValid, subYears } from 'date-fns';
 import React from 'react';
-import { Control, Controller, FieldValues, RegisterOptions, FieldPath } from 'react-hook-form';
+import { Control, FieldPath, FieldValues, RegisterOptions, useController } from 'react-hook-form';
+import { isDate } from 'lodash';
 
 export interface DateProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
   label?: string;
   description?: React.ReactNode;
-  disableWeekend?: boolean;
-  rules?: RegisterOptions<FormFieldValues>;
+  disableWeekends?: boolean;
+  rules?: Omit<RegisterOptions<FormFieldValues>, 'validate'>;
   control: Control<FormFieldValues>;
   fromDate?: Date;
   size?: 'small' | 'medium';
@@ -28,7 +29,7 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
   description,
   control,
   rules,
-  disableWeekend = false,
+  disableWeekends = false,
   size = 'small',
   hideLabel,
   fromDate = FRA_DATO,
@@ -37,42 +38,46 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
   readOnly,
   strategy,
 }: DateProps<FormFieldValues>) => {
-  const { datepickerProps, inputProps } = useDatepicker({ defaultSelected: selected });
+  const {
+    field: { value, onChange },
+    fieldState: { error },
+  } = useController({
+    name,
+    control,
+    rules: {
+      ...rules,
+      validate: (value) => (isDate(value) && isValid(value)) || 'Dato må være i formatet "dd.MM.åååå"',
+    },
+  });
+
+  const { datepickerProps, inputProps } = useDatepicker({
+    defaultSelected: selected,
+    onDateChange: (date) => onChange(date),
+    toDate,
+    fromDate,
+    disableWeekends,
+  });
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      rules={rules}
-      render={({ field: { name, value, onChange }, fieldState: { error } }) => {
-        return (
-          <DatePicker
-            id={name}
-            onChange={onChange}
-            onSelect={onChange}
-            {...datepickerProps}
-            disableWeekends={disableWeekend}
-            dropdownCaption
-            fromDate={fromDate}
-            toDate={toDate}
-            strategy={strategy}
-          >
-            <DatePicker.Input
-              onChange={onChange}
-              onInput={onChange}
-              size={size}
-              value={value}
-              name={name}
-              hideLabel={hideLabel}
-              description={description}
-              error={error && error.message}
-              label={label}
-              readOnly={readOnly}
-              {...inputProps}
-            />
-          </DatePicker>
-        );
-      }}
-    />
+    <DatePicker
+      {...datepickerProps}
+      id={name}
+      dropdownCaption
+      strategy={strategy}
+    >
+      <DatePicker.Input
+        onChange={onChange}
+        onInput={onChange}
+        size={size}
+        value={value}
+        name={name}
+        hideLabel={hideLabel}
+        description={description}
+        error={error?.message}
+        label={label}
+        readOnly={readOnly}
+        {...inputProps}
+      />
+    </DatePicker>
   );
 };
