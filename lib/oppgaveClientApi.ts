@@ -91,6 +91,11 @@ export async function hentOppgaverClient(filterId: number, enheter: string[], ve
     veileder,
   });
 }
+
+export async function hentMineOppgaverClient() {
+  return clientFetcher<OppgavelisteResponse>('/oppgave/api/oppgave/mine-oppgaver', 'GET');
+}
+
 export async function avreserverOppgaveClient(oppgave: Oppgave) {
   const body: AvklaringsbehovReferanse = {
     avklaringsbehovKode: oppgave.avklaringsbehovKode,
