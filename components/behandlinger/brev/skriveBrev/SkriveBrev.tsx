@@ -16,6 +16,7 @@ import { useCallback, useEffect, useState } from 'react';
 import style from './SkrivBrev.module.css';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
+import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
 
 export const SkriveBrev = ({
   referanse,
@@ -42,6 +43,8 @@ export const SkriveBrev = ({
   const [isSaving, setIsSaving] = useState(false);
 
   const debouncedBrev = useDebounce<Brev>(brev, 2000);
+
+  const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
 
   const mellomlagreBackendRequest = useCallback(async () => {
     setIsSaving(true);
@@ -82,7 +85,7 @@ export const SkriveBrev = ({
           {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
           {isSaving && <Loader />}
         </div>
-        {!readOnly &&
+        {!readOnly && (
           <ActionMenu>
             <ActionMenu.Trigger>
               <Button variant="secondary-neutral" icon={<ChevronDownIcon aria-hidden />} iconPosition="right">
@@ -91,7 +94,12 @@ export const SkriveBrev = ({
             </ActionMenu.Trigger>
             <ActionMenu.Content>
               <ActionMenu.Group label="Brev">
-                <ActionMenu.Item icon={<GlassIcon />} onSelect={() => {}}>
+                <ActionMenu.Item
+                  icon={<GlassIcon />}
+                  onSelect={() => {
+                    setForhåndsvisModalOpen(true);
+                  }}
+                >
                   Forhåndsvis brev
                 </ActionMenu.Item>
                 <ActionMenu.Item variant="danger" icon={<TrashIcon />} onSelect={slettBrev}>
@@ -100,7 +108,7 @@ export const SkriveBrev = ({
               </ActionMenu.Group>
             </ActionMenu.Content>
           </ActionMenu>
-        }
+        )}
       </div>
 
       <VStack gap={'4'}>
@@ -120,16 +128,18 @@ export const SkriveBrev = ({
             onClick={async () => {
               await clientMellomlagreBrev(referanse, brev);
               const flyt = await clientHentFlyt(behandlingsReferanse);
-            if (flyt?.behandlingVersjon) {løsBehovOgGåTilNesteSteg({
-                behandlingVersjon: flyt.behandlingVersjon,
-                behov: {
-                  behovstype: Behovstype.SKRIV_BREV_KODE,
-                  brevbestillingReferanse: referanse,
-                  handling: 'FERDIGSTILL',
-                },
-                referanse: behandlingsReferanse,
-              });
-              await revalidateFlyt(behandlingsReferanse);}
+              if (flyt?.behandlingVersjon) {
+                løsBehovOgGåTilNesteSteg({
+                  behandlingVersjon: flyt.behandlingVersjon,
+                  behov: {
+                    behovstype: Behovstype.SKRIV_BREV_KODE,
+                    brevbestillingReferanse: referanse,
+                    handling: 'FERDIGSTILL',
+                  },
+                  referanse: behandlingsReferanse,
+                });
+                await revalidateFlyt(behandlingsReferanse);
+              }
             }}
             className={'fit-content'}
             loading={isLoading}
@@ -138,6 +148,13 @@ export const SkriveBrev = ({
           </Button>
         )}
       </VStack>
+      <ForhåndsvisBrevModal
+        isOpen={forhåndsvisModalOpen}
+        brevbestillingReferanse={referanse}
+        onClose={() => {
+          setForhåndsvisModalOpen(false);
+        }}
+      />
     </div>
   );
 };

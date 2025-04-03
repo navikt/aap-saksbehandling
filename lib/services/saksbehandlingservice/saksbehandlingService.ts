@@ -377,6 +377,13 @@ export const hentRefusjonGrunnlag = async (behandlingsReferanse: string): Promis
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string): Promise<Blob | undefined> => {
+  return fetchPdf(
+    `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/forhandsvis`,
+    saksbehandlingApiScope
+  );
+};
+
 export const sendLokalHendelse = async (saksnummer: string, body: Object): Promise<void> => {
   const url = `${saksbehandlingApiBaseUrl}/api/hendelse/sak/${saksnummer}/send`;
   return await fetchProxy(url, saksbehandlingApiScope, 'POST', body);
