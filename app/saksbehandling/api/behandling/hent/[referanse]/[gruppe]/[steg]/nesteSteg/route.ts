@@ -1,7 +1,7 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { BehandlingsFlytAvklaringsbehovKode, StegGruppe, StegType } from 'lib/types/types';
 import { NextRequest } from 'next/server';
-import { logInfo } from "@navikt/aap-felles-utils";
+import { logInfo } from 'lib/serverutlis/logger';
 
 const DEFAULT_TIMEOUT_IN_MS = 500;
 const RETRIES = 0;

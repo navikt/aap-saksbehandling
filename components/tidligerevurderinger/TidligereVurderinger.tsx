@@ -3,8 +3,8 @@ import { ExpansionCard, Table } from '@navikt/ds-react';
 
 import { Sykdomsvurdering } from 'lib/types/types';
 import styles from './TidligereVurderinger.module.css';
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { format, parse, subDays } from 'date-fns';
+import {formaterDatoForFrontend} from "lib/utils/date";
 
 function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): boolean {
   if (objekt1 === objekt2) return true;
@@ -62,14 +62,14 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
       <Table.DataCell style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
         <span style={{ marginLeft: '0.25rem', textDecoration: vurderingErGjeldende ? 'none' : 'line-through' }}>
           {vurdering.vurderingenGjelderFra
-            ? formaterDatoForVisning(vurdering.vurderingenGjelderFra)
-            : formaterDatoForVisning(søknadstidspunkt)}
+            ? formaterDatoForFrontend(vurdering.vurderingenGjelderFra)
+            : formaterDatoForFrontend(søknadstidspunkt)}
           {' - '}
           {sluttdato}
         </span>
       </Table.DataCell>
       <Table.DataCell align="right">
-        ({vurdering.vurdertAvIdent}) {formaterDatoForVisning(vurdering.vurdertDato)}
+        ({vurdering.vurdertAvIdent}) {formaterDatoForFrontend(vurdering.vurdertDato)}
       </Table.DataCell>
     </Table.ExpandableRow>
   );

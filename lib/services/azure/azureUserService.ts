@@ -1,8 +1,7 @@
 import { headers } from 'next/headers';
 
 import { getAccessTokenOrRedirectToLogin, validerToken } from './azuread';
-import { isLocal } from 'lib/utils/environment';
-import { isDev } from '@navikt/aap-felles-utils';
+import { isDev, isLocal } from 'lib/utils/environment';
 
 export interface BrukerInformasjon {
   navn: string;

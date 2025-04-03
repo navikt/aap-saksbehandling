@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { render, screen } from '@testing-library/react';
 import { DetaljertBehandling } from 'lib/types/types';
-import { BrukerInformasjon } from '@navikt/aap-felles-utils';
+import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 const behandling: DetaljertBehandling = {
   type: 'Førstegangsbehandling',

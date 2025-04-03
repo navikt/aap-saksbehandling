@@ -1,4 +1,3 @@
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { render, screen } from 'lib/test/CustomRender';
 import userEvent from '@testing-library/user-event';
 import { Aktivitetsplikt } from 'components/behandlinger/underveis/aktivitetsplikt/Aktivitetsplikt';
@@ -90,7 +89,7 @@ describe('Brukers aktivitetsplikt', () => {
   test('viser når forhåndsvarsel ble sendt', () => {
     render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
     expect(
-      screen.getByText(`Forhåndsvarsel sendt: ${formaterDatoForVisning(testgrunnlag.forhåndsvarselDato!)}`)
+      screen.getByText(`Forhåndsvarsel sendt: ${formaterDatoForFrontend(testgrunnlag.forhåndsvarselDato!)}`)
     ).toBeVisible();
   });
 
@@ -103,7 +102,7 @@ describe('Brukers aktivitetsplikt', () => {
     render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
     expect(
       screen.getByText(
-        `Med gjeldende § 11-7 brudd vil bruker få stans i ytelsen fra ${formaterDatoForVisning(testgrunnlag.gjeldendeBrudd[0].periode.fom)}`
+        `Med gjeldende § 11-7 brudd vil bruker få stans i ytelsen fra ${formaterDatoForFrontend(testgrunnlag.gjeldendeBrudd[0].periode.fom)}`
       )
     ).toBeVisible();
   });

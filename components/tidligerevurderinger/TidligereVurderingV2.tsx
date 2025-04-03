@@ -1,9 +1,9 @@
 'use client';
 
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
-import { formaterDatoForVisning } from '@navikt/aap-felles-utils-client';
 import { ÅpenPeriode } from 'lib/types/types';
 import { ValuePair } from 'components/form/FormField';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   tidligereVurdering: TidligereVurdering;
@@ -38,13 +38,13 @@ export const TidligereVurderingV2 = ({ tidligereVurdering }: Props) => {
             textDecoration: tidligereVurdering.erGjeldendeVurdering ? 'none' : 'line-through',
           }}
         >
-          {formaterDatoForVisning(tidligereVurdering.periode.fom)}
+          {formaterDatoForFrontend(tidligereVurdering.periode.fom)}
           {' - '}
-          {tidligereVurdering.periode.tom && formaterDatoForVisning(tidligereVurdering.periode.tom)}
+          {tidligereVurdering.periode.tom && formaterDatoForFrontend(tidligereVurdering.periode.tom)}
         </span>
       </Table.DataCell>
       <Table.DataCell align="right">
-        ({tidligereVurdering.vurdertAvIdent}) {formaterDatoForVisning(tidligereVurdering.vurdertDato)}
+        ({tidligereVurdering.vurdertAvIdent}) {formaterDatoForFrontend(tidligereVurdering.vurdertDato)}
       </Table.DataCell>
     </Table.ExpandableRow>
   );
