@@ -1,29 +1,22 @@
 'use client';
 
 import { Select } from '@navikt/ds-react';
-
-import { useState } from 'react';
-import {Kø} from "lib/types/oppgaveTypes";
+import { Kø } from 'lib/types/oppgaveTypes';
 
 interface Props {
   køer: Kø[];
   valgtKøListener?: (kø: number) => void;
-  defaultAktivKøId?: number;
+  aktivKøId?: number;
   label?: string;
 }
-export const KøSelect = ({ køer, valgtKøListener, defaultAktivKøId, label }: Props) => {
-  const defaultId = defaultAktivKøId ? defaultAktivKøId : (køer[0]?.id ?? 0);
-  const [aktivKø, setAktivKø] = useState<number>(defaultId);
+
+export const KøSelect = ({ køer, valgtKøListener, aktivKøId, label }: Props) => {
   return (
     <Select
       label={label || ''}
       size="small"
-      value={aktivKø}
-      onChange={(event) => {
-        const køId = parseInt(event.target.value);
-        setAktivKø(køId);
-        valgtKøListener && valgtKøListener(køId);
-      }}
+      value={aktivKøId}
+      onChange={(event) => valgtKøListener?.(parseInt(event.target.value))}
     >
       {køer.map((kø) => {
         if (kø) {

@@ -9,6 +9,7 @@ import { KøSelect } from 'components/oppgave/køselect/KøSelect';
 import { byggKelvinURL, queryParamsArray } from 'lib/utils/request';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { hentKøerForEnheterClient, hentOppgaverClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
+import { hentLagretAktivKøId, lagreAktivKøId } from 'lib/utils/aktivkøid';
 import { useRouter } from 'next/navigation';
 
 interface Props {
@@ -26,14 +27,21 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
     hentKøerForEnheterClient([aktivEnhet])
   );
 
+  const oppdaterKøId = (id: number) => {
+    setAktivKøId(id);
+    lagreAktivKøId(id);
+  };
+
   useEffect(() => {
-    if (køer.data?.type === 'success' && aktivKøId == null) {
-      setAktivKøId(køer.data.data[0]?.id ?? 0);
-    } else if (køer.data?.type === 'success') {
-      const aktivkø = køer.data.data.find((e) => e.id === aktivKøId);
-      if (!aktivkø) {
-        setAktivKøId(køer.data.data[0]?.id ?? 0);
-      }
+    if (køer.data?.type !== 'success') return;
+
+    const køId = hentLagretAktivKøId();
+    const gyldigeKøer = køer.data.data.map((kø) => kø.id);
+
+    if (!køId || !gyldigeKøer.includes(køId)) {
+      oppdaterKøId(gyldigeKøer[0] ?? 0);
+    } else {
+      oppdaterKøId(køId);
     }
   }, [køer]);
 
@@ -72,11 +80,10 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
                   }}
                 />
                 <KøSelect
-                  label={'Velg kø'}
+                  label={'Velg kø du skal jobbe på'}
                   køer={køer.data?.type === 'success' ? køer.data.data : []}
-                  valgtKøListener={(kø) => {
-                    setAktivKøId(kø);
-                  }}
+                  aktivKøId={aktivKøId}
+                  valgtKøListener={oppdaterKøId}
                 />
                 <VStack justify={'end'}>
                   <Switch
