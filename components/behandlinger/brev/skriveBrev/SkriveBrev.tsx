@@ -17,6 +17,7 @@ import style from './SkrivBrev.module.css';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
 import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
+import { SlettBrevModal } from 'components/behandlinger/brev/skriveBrev/SlettBrevModal';
 
 export const SkriveBrev = ({
   referanse,
@@ -45,6 +46,7 @@ export const SkriveBrev = ({
   const debouncedBrev = useDebounce<Brev>(brev, 2000);
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
+  const [slettBrevModalOpen, setSlettBrevModalOpen] = useState(false);
 
   const mellomlagreBackendRequest = useCallback(async () => {
     setIsSaving(true);
@@ -102,7 +104,7 @@ export const SkriveBrev = ({
                 >
                   Forhåndsvis brev
                 </ActionMenu.Item>
-                <ActionMenu.Item variant="danger" icon={<TrashIcon />} onSelect={slettBrev}>
+                <ActionMenu.Item variant="danger" icon={<TrashIcon />} onSelect={() => setSlettBrevModalOpen(true)}>
                   Slett brev
                 </ActionMenu.Item>
               </ActionMenu.Group>
@@ -154,6 +156,15 @@ export const SkriveBrev = ({
         brevbestillingReferanse={referanse}
         onClose={() => {
           setForhåndsvisModalOpen(false);
+        }}
+      />
+      <SlettBrevModal
+        isOpen={slettBrevModalOpen}
+        onClose={() => {
+          setSlettBrevModalOpen(false);
+        }}
+        onDelete={() => {
+          slettBrev;
         }}
       />
     </div>
