@@ -133,10 +133,10 @@ export const OppgaveTabell = ({
       >
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader sortKey={'personNavn'} sortable={showSortAndFilters}>
+            <Table.ColumnHeader sortKey={'personNavn'} sortable={showSortAndFilters} textSize={'small'}>
               Navn
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'personIdent'} sortable={showSortAndFilters}>
+            <Table.ColumnHeader sortKey={'personIdent'} sortable={showSortAndFilters} textSize={'small'}>
               Fnr
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'saksnummer'} sortable={showSortAndFilters}>
@@ -164,12 +164,18 @@ export const OppgaveTabell = ({
         <Table.Body>
           {filtrerteOppgaver.map((oppgave, i) => (
             <Table.Row key={`oppgave-${i}`}>
-              <Table.DataCell>{`${oppgave.personNavn}`}</Table.DataCell>
-              <Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                {oppgave.saksnummer ? (
+                  <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{oppgave.personNavn}</Link>
+                ) : (
+                  oppgave.personNavn
+                )}
+              </Table.DataCell>
+              <Table.DataCell textSize={'small'}>
                 {oppgave.personIdent ? (
                   <CopyButton
                     copyText={oppgave?.personIdent}
-                    size="small"
+                    size="xsmall"
                     text={oppgave?.personIdent}
                     iconPosition="right"
                   />
@@ -177,26 +183,22 @@ export const OppgaveTabell = ({
                   'Ukjent'
                 )}
               </Table.DataCell>
-              <Table.DataCell>
-                {oppgave.saksnummer ? (
-                  <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{oppgave.saksnummer}</Link>
-                ) : (
-                  oppgave.journalpostId
-                )}
+              <Table.DataCell textSize={'small'}>{oppgave.saksnummer || oppgave.journalpostId}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}
               </Table.DataCell>
-              <Table.DataCell>{mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}</Table.DataCell>
-              <Table.DataCell style={{ maxWidth: '150px' }}>
+              <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}>
-                  <BodyShort truncate>
+                  <BodyShort truncate size={'small'}>
                     {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
-              <Table.DataCell>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
-              <Table.DataCell>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
-              <Table.DataCell>{oppgave.veileder}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>{oppgave.veileder}</Table.DataCell>
               {includeColumns?.includes('reservertAv') && <Table.DataCell>{oppgave.reservertAv || ''}</Table.DataCell>}
-              <Table.DataCell>
+              <Table.DataCell textSize={'small'}>
                 <OppgaveKnapp
                   oppgave={oppgave}
                   setFeilmelding={setFeilmelding}

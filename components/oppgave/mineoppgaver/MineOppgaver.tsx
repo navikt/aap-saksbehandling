@@ -4,7 +4,6 @@ import { OppgaveTabell } from 'components/oppgave/oppgavetabell/OppgaveTabell';
 import useSWR from 'swr';
 import { hentMineOppgaverClient } from 'lib/oppgaveClientApi';
 import { Alert, BodyShort, Skeleton, VStack } from '@navikt/ds-react';
-import { Kort } from 'components/oppgave/kort/Kort';
 
 export const MineOppgaver = () => {
   const mineOppgaver = useSWR(`api/mine-oppgaver`, () => hentMineOppgaverClient());
@@ -20,7 +19,11 @@ export const MineOppgaver = () => {
         <BodyShort>Ingen reserverte oppgaver</BodyShort>
       )}
       {mineOppgaver?.data?.type !== 'success' && mineOppgaver?.data?.type !== 'error' && (
-        <Kort>
+        <VStack gap={'7'}>
+          <VStack gap={'1'}>
+            <Skeleton variant="rectangle" width="100%" height={40} />
+            <Skeleton variant="rectangle" width="100%" height={40} />
+          </VStack>
           <VStack gap={'1'}>
             <Skeleton variant="rectangle" width="100%" height={40} />
             <Skeleton variant="rectangle" width="100%" height={40} />
@@ -28,7 +31,7 @@ export const MineOppgaver = () => {
             <Skeleton variant="rectangle" width="100%" height={40} />
             <Skeleton variant="rectangle" width="100%" height={40} />
           </VStack>
-        </Kort>
+        </VStack>
       )}
       {mineOppgaver?.data?.type === 'success' && (
         <OppgaveTabell
