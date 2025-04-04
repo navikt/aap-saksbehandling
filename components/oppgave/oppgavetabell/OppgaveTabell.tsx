@@ -1,7 +1,19 @@
 'use client';
 
 import { AvklaringsbehovKode, Oppgave } from 'lib/types/types';
-import { Alert, BodyShort, CopyButton, Heading, HStack, Loader, SortState, Table, Tooltip } from '@navikt/ds-react';
+import {
+  Alert,
+  BodyShort,
+  Box,
+  CopyButton,
+  Heading,
+  HStack,
+  Loader,
+  SortState,
+  Table,
+  Tooltip,
+  VStack,
+} from '@navikt/ds-react';
 import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
 import { useMemo, useState } from 'react';
 import { oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
@@ -83,12 +95,30 @@ export const OppgaveTabell = ({
   }
 
   return (
-    <div>
+    <VStack gap={'5'}>
       {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
       {heading && (
         <Heading size={'medium'} level={'2'} spacing>
           {heading}
         </Heading>
+      )}
+      {showSortAndFilters && (
+        <Box background="surface-subtle" padding="4" borderRadius="xlarge">
+          <HStack gap={'3'}>
+            <ComboboxControlled
+              label={'Behandlingstype'}
+              options={oppgaveBehandlingstyper}
+              selectedOptions={selectedBehandlingstyper}
+              setSelectedOptions={setSelectedBehandlingstyper}
+            />
+            <ComboboxControlled
+              label={'Avklaringsbehov'}
+              options={oppgaveAvklaringsbehov}
+              selectedOptions={selectedAvklaringsbehov}
+              setSelectedOptions={setSelectedAvklaringsbehov}
+            />
+          </HStack>
+        </Box>
       )}
       {isLoading && (
         <HStack justify={'center'}>
@@ -112,30 +142,8 @@ export const OppgaveTabell = ({
             <Table.ColumnHeader sortKey={'saksnummer'} sortable={showSortAndFilters}>
               Sak/Journal ID
             </Table.ColumnHeader>
-            <Table.HeaderCell>
-              {showSortAndFilters ? (
-                <ComboboxControlled
-                  label={'Behandlingstype'}
-                  options={oppgaveBehandlingstyper}
-                  selectedOptions={selectedBehandlingstyper}
-                  setSelectedOptions={setSelectedBehandlingstyper}
-                />
-              ) : (
-                'Behandlingstype'
-              )}
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              {showSortAndFilters ? (
-                <ComboboxControlled
-                  label={'Avklaringsbehov'}
-                  options={oppgaveAvklaringsbehov}
-                  selectedOptions={selectedAvklaringsbehov}
-                  setSelectedOptions={setSelectedAvklaringsbehov}
-                />
-              ) : (
-                'Avklaringsbehov'
-              )}
-            </Table.HeaderCell>
+            <Table.HeaderCell>Behandlingstype</Table.HeaderCell>
+            <Table.HeaderCell>Avklaringsbehov</Table.HeaderCell>
             <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={showSortAndFilters}>
               Oppg. opprettet
             </Table.ColumnHeader>
@@ -199,6 +207,6 @@ export const OppgaveTabell = ({
           ))}
         </Table.Body>
       </TableStyled>
-    </div>
+    </VStack>
   );
 };

@@ -31,15 +31,12 @@ export const MineOppgaver = () => {
         </Kort>
       )}
       {mineOppgaver?.data?.type === 'success' && (
-        <Kort>
-          <OppgaveTabell
-            heading={''}
-            oppgaver={mineOppgaver.data.data.oppgaver}
-            visBehandleOgFrigiKnapp
-            showDropdownActions
-            showSortAndFilters
-          />
-        </Kort>
+        <OppgaveTabell
+          oppgaver={mineOppgaver.data.data.oppgaver}
+          visBehandleOgFrigiKnapp
+          showDropdownActions
+          showSortAndFilters
+        />
       )}
     </>
   );
