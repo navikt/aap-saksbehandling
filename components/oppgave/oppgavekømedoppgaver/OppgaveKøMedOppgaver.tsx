@@ -96,7 +96,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
                   </Switch>
                 </VStack>
               </HStack>
-              <VStack>
+              <VStack justify={'center'}>
                 <Button size="small" onClick={() => plukkOgGåTilOppgave()} loading={isPending}>
                   Behandle neste oppgave
                 </Button>
