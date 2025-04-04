@@ -70,35 +70,32 @@ export const TotrinnsvurderingForm = ({
   return (
     <form
       onSubmit={form.handleSubmit(async (data) => {
-        const dirtyFieldNames = fields
-          .map((_, index) =>
-            Object.keys(form.formState.dirtyFields?.totrinnsvurderinger?.[index] || {}).map(
-              (field) => `totrinnsvurderinger.${index}.${field}`
-            )
-          )
-          .flat();
+        const assessedFields = data.totrinnsvurderinger.filter((vurdering) => vurdering.godkjent !== undefined);
 
-        if (dirtyFieldNames && dirtyFieldNames.length > 0) {
-          const validatedData = data.totrinnsvurderinger.filter((vurderinger, index) => {
-            return Object.keys(form.formState.dirtyFields?.totrinnsvurderinger?.[index] || {}).length > 0;
-          });
-
+        if (assessedFields && assessedFields.length > 0) {
           løsBehovOgGåTilNesteSteg({
             behandlingVersjon: behandlingVersjon,
             behov: {
               behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-              vurderinger: validatedData.map((vurdering) => {
-                return {
-                  definisjon: vurdering.definisjon,
-                  godkjent: vurdering.godkjent === 'true',
-                  grunner: vurdering.grunner?.map((grunn) => {
-                    return {
-                      årsak: grunn,
-                      årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
-                    };
-                  }),
-                  begrunnelse: vurdering.begrunnelse,
-                };
+              vurderinger: assessedFields.map((vurdering) => {
+                if (vurdering.godkjent === 'true') {
+                  return {
+                    definisjon: vurdering.definisjon,
+                    godkjent: vurdering.godkjent === 'true',
+                  };
+                } else {
+                  return {
+                    definisjon: vurdering.definisjon,
+                    godkjent: vurdering.godkjent === 'true',
+                    grunner: vurdering.grunner?.map((grunn) => {
+                      return {
+                        årsak: grunn,
+                        årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+                      };
+                    }),
+                    begrunnelse: vurdering.begrunnelse,
+                  };
+                }
               }),
             },
             referanse: behandlingsReferanse,
