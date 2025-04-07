@@ -84,6 +84,7 @@ const Layout = async (props: Props) => {
           oppgaveReservertAv={oppgave?.reservertAv}
           påVent={flytResponse.visning.visVentekort}
           brukerInformasjon={brukerInformasjon}
+          typeBehandling={flytResponse.visning.typeBehandling}
         />
 
         <StegGruppeIndikatorAksel flytRespons={flytResponse} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />

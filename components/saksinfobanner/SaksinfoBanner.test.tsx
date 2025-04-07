@@ -2,8 +2,10 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { DetaljertBehandling, SakPersoninfo, SaksInfo } from 'lib/types/types';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 const personInformasjon: SakPersoninfo = { navn: 'Peder Ås', fnr: '12345678910' };
+const user = userEvent.setup();
 
 const sak: SaksInfo = {
   ident: '12345678910',
@@ -54,7 +56,7 @@ const behandling: DetaljertBehandling = {
 };
 
 describe('SaksinfoBanner på behandling siden', () => {
-  beforeEach(() => {
+  it('skal vise navn på bruker', () => {
     render(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
@@ -62,33 +64,113 @@ describe('SaksinfoBanner på behandling siden', () => {
         behandlingVersjon={1}
         behandling={behandling}
         referanse={'123456'}
+        typeBehandling="Førstegangsbehandling"
       />
     );
-  });
-
-  it('skal vise navn på bruker', () => {
     expect(screen.getByText('Peder Ås')).toBeVisible();
   });
 
   it('skal vise ident på bruker', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandlingVersjon={1}
+        behandling={behandling}
+        referanse={'123456'}
+        typeBehandling="Førstegangsbehandling"
+      />
+    );
     expect(screen.getByText('12345678910')).toBeVisible();
   });
 
   it('skal vise saksnummer derosm bruker er på behandlingsiden', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandlingVersjon={1}
+        behandling={behandling}
+        referanse={'123456'}
+        typeBehandling="Førstegangsbehandling"
+      />
+    );
     expect(screen.getByText('Sak 12345'));
   });
 
   it('skal vise hvilken type behandling', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandlingVersjon={1}
+        behandling={behandling}
+        referanse={'123456'}
+        typeBehandling="Førstegangsbehandling"
+      />
+    );
     expect(screen.getByText('Førstegangsbehandling')).toBeVisible();
   });
 
   it('skal vise status', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandlingVersjon={1}
+        behandling={behandling}
+        referanse={'123456'}
+        typeBehandling="Førstegangsbehandling"
+      />
+    );
     expect(screen.getByText('Utredes')).toBeVisible();
   });
 
   it('skal ha en knapp for å åpne saksmeny', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandlingVersjon={1}
+        behandling={behandling}
+        referanse={'123456'}
+        typeBehandling="Førstegangsbehandling"
+      />
+    );
     const knapp = screen.getByRole('button', { name: 'Saksmeny' });
     expect(knapp).toBeVisible();
+  });
+
+  // TODO disables inntil valget skal vises
+  it.skip('menyvalg for å trekke søknad vises for førstegangsbehandling', async () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandlingVersjon={1}
+        behandling={behandling}
+        referanse={'123456'}
+        typeBehandling="Førstegangsbehandling"
+      />
+    );
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.getByRole('button', { name: 'Trekk søknad' })).toBeVisible();
+  });
+
+  it('menyvalg for å trekke søknad vises ikke for revurdering', async () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandlingVersjon={1}
+        behandling={behandling}
+        referanse={'123456'}
+        påVent={false}
+        typeBehandling="Revurdering"
+      />
+    );
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
   });
 });
 
@@ -109,7 +191,7 @@ describe('Sak status', () => {
     expect(påVentTag).toBeVisible();
   });
 
-  it('skal ikke vise en tag som viser om saken er satt på vent dersom den er det', () => {
+  it('skal ikke vise en tag som viser om saken er satt på vent dersom den ikke er det', () => {
     render(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
@@ -136,6 +218,7 @@ describe('Sak status', () => {
         oppgaveReservertAv={'navIdent'}
         referanse={'123456'}
         påVent={false}
+        typeBehandling="Førstegangsbehandling"
       />
     );
 

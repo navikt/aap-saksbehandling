@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link } from '@navikt/ds-react';
-import { DetaljertBehandling, SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
+import { DetaljertBehandling, SakPersoninfo, SaksInfo as SaksInfoType, TypeBehandling } from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
 import { ChevronDownIcon, ChevronRightIcon } from '@navikt/aksel-icons';
@@ -10,10 +10,12 @@ import styles from './SaksinfoBanner.module.css';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { TrekkSøknad } from 'components/saksinfobanner/trekksoknad/TrekkSøknad';
 
 interface Props {
   personInformasjon: SakPersoninfo;
   sak: SaksInfoType;
+  typeBehandling?: TypeBehandling;
   referanse?: string;
   behandling?: DetaljertBehandling;
   oppgaveReservertAv?: string | null;
@@ -33,6 +35,7 @@ export const SaksinfoBanner = ({
   brukerInformasjon,
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
+  const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
 
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveReservertAv;
 
@@ -98,6 +101,12 @@ export const SaksinfoBanner = ({
                   <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
                     Sett behandling på vent
                   </Dropdown.Menu.GroupedList.Item>
+                  {/*Utkommentert inntil backend er på plass*/}
+                  {/*typeBehandling && typeBehandling === 'Førstegangsbehandling' && (
+                    <Dropdown.Menu.GroupedList.Item onClick={() => settVisTrekkSøknadModal(true)}>
+                      Trekk søknad
+                    </Dropdown.Menu.GroupedList.Item>
+                  )*/}
                 </Dropdown.Menu.GroupedList>
               </Dropdown.Menu>
             </Dropdown>
@@ -108,6 +117,7 @@ export const SaksinfoBanner = ({
               isOpen={settBehandlingPåVentmodalIsOpen}
               onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}
             />
+            <TrekkSøknad isOpen={visTrekkSøknadModal} onClose={() => settVisTrekkSøknadModal(false)} />
           </div>
         </HStack>
       )}
