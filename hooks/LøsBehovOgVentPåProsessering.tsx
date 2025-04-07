@@ -31,7 +31,6 @@ export const useLøsBehovOgVentPåProsessering = (): {
       return;
     }
     listenSSE();
-    listenSSE();
   };
 
   const listenSSE = () => {
