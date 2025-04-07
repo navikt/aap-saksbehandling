@@ -17,7 +17,7 @@ import {
   SimulerMeldeplikt,
 } from './types/types';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
-import { FetchResponse } from 'lib/services/apiFetch';
+import { ApiExceptionCode, FetchResponse } from 'lib/services/apiFetch';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
 import { logError } from 'lib/serverutlis/logger';
@@ -59,26 +59,15 @@ async function clientFetchV2<ResponseBody>(
       body: body && JSON.stringify(body),
     });
 
-    const data = await res.json();
-
-    if (res.ok) {
-      return {
-        type: 'SUCCESS',
-        status: res.status,
-        responseJson: data as ResponseBody,
-      };
-    } else {
-      return {
-        type: 'ERROR',
-        status: res.status,
-        message: data.message || res.statusText,
-      };
-    }
+    return await res.json();
   } catch (e) {
     return {
       type: 'ERROR',
-      message: getErrorMessage(e),
-      status: 500,
+      apiException: {
+        status: 500,
+        message: getErrorMessage(e),
+        code: ApiExceptionCode.INTERNFEIL,
+      },
     };
   }
 }

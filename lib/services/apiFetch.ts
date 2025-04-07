@@ -3,23 +3,33 @@
 import { isLocal } from 'lib/utils/environment';
 import { requestAzureOboToken, validateToken } from '@navikt/oasis';
 import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { hentLocalToken } from 'lib/services/localFetch';
 import { getAccessTokenOrRedirectToLogin } from './azure/azuread';
 import { logError } from 'lib/serverutlis/logger';
 
+export enum ApiExceptionCode {
+  INTERNFEIL,
+  UKJENT_FEIL,
+  IKKE_FUNNET,
+  ENDEPUNKT_IKKE_FUNNET,
+  UGYLDIG_FORESPØRSEL,
+}
+
+interface ApiException {
+  status: number;
+  code: ApiExceptionCode;
+  message: String;
+  cause?: string;
+}
+
 export type FetchResponse<RespponseType> = SuccessResponseBody<RespponseType> | ErrorResponseBody;
 
-export interface BaseErrorResponseBody {
-  status: number;
-}
-
-export interface ErrorResponseBody extends BaseErrorResponseBody {
+export interface ErrorResponseBody {
   type: 'ERROR';
-  message: string;
+  apiException: ApiException;
 }
 
-interface SuccessResponseBody<ResponseType> extends BaseErrorResponseBody {
+interface SuccessResponseBody<ResponseType> {
   type: 'SUCCESS';
   responseJson: ResponseType;
 }
@@ -104,30 +114,16 @@ export const fetchWithRetry = async <ResponseType>(
     next: { revalidate: 0, tags },
   });
 
-  // Mulige statuskoder:
-  // 200
-  // 204
-  // 404
-  // 500
-
   if (response.status === 204) {
-    return { type: 'SUCCESS', responseJson: undefined as ResponseType, status: response.status };
+    return { type: 'SUCCESS', responseJson: undefined as ResponseType };
   }
 
   if (!response.ok) {
     if (response.status === 500) {
-      const responseJson = await response.json();
+      const responseJson: ApiException = await response.json();
+
       logError(`klarte ikke å hente ${url}: ${responseJson.message}`);
-      return { type: 'ERROR', message: 'Noe gikk galt.', status: response.status };
-    } else if (response.status === 401 || response.status === 403) {
-      logError(`${url}, status: ${response.status}`);
-      redirect(`/forbidden?url=${encodeURI(url)}`);
-    } else if (response.status === 404) {
-      logError(`${url}, status: ${response.status}`);
-      return { type: 'ERROR', message: 'Not found', status: response.status };
-    } else if (response.status === 409) {
-      logError(`${url}, status: ${response.status}`);
-      return { type: 'ERROR', message: 'Conflict', status: response.status };
+      return { type: 'ERROR', apiException: responseJson };
     }
 
     errors.push(`HTTP ${response.status} ${response.statusText}: ${url} (retries left ${retries})`);
@@ -137,10 +133,10 @@ export const fetchWithRetry = async <ResponseType>(
 
   const contentType = response.headers.get('content-type');
   if (contentType && contentType.includes('text')) {
-    return { type: 'SUCCESS', responseJson: response.text() as ResponseType, status: response.status };
+    return { type: 'SUCCESS', responseJson: response.text() as ResponseType };
   }
 
-  const responseJson = await response.json();
+  const responseJson: ResponseType = await response.json();
 
-  return { type: 'SUCCESS', responseJson: responseJson, status: response.status };
+  return { type: 'SUCCESS', responseJson: responseJson };
 };
