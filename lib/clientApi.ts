@@ -20,7 +20,7 @@ import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevanted
 import { FetchResponse } from 'lib/services/apiFetch';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
-import { logError } from "lib/serverutlis/logger";
+import { logError } from 'lib/serverutlis/logger';
 
 const BASE_URL = '/saksbehandling';
 
@@ -43,8 +43,7 @@ export async function clientFetch<ResponseBody>(
       logError(data.message);
       return undefined;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (e) {
+  } catch {
     throw new Error('Noe gikk galt.');
   }
 }
