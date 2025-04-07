@@ -12,9 +12,13 @@ export const AktivitetspliktMedDatafetching = async ({ saksnummer }: Props) => {
   const aktivitetspliktHendelser = await hentAktivitetspliktHendelser(saksnummer);
   const sak = await hentSak(saksnummer);
 
+  if (sak.type === 'ERROR') {
+    return <div>Kunne ikke finne sak.</div>;
+  }
+
   return (
     <div className={styles.aktivitetSkjema}>
-      <Aktivitetsplikt aktivitetspliktHendelser={aktivitetspliktHendelser.hendelser} sak={sak} />
+      <Aktivitetsplikt aktivitetspliktHendelser={aktivitetspliktHendelser.hendelser} sak={sak.data} />
     </div>
   );
 };

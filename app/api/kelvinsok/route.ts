@@ -29,7 +29,10 @@ export async function POST(req: Request) {
     if (isFnr) {
       sakData = await finnSakerForIdent(søketekst);
     } else if (isSaksnummer) {
-      sakData = [await hentSak(søketekst)];
+      const res = await hentSak(søketekst);
+      if (res.type === 'SUCCESS') {
+        sakData = [res.data];
+      }
     }
   } catch (err) {
     logError('/api/kelvinsøk saker', err);

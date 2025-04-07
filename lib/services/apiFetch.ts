@@ -7,19 +7,10 @@ import { hentLocalToken } from 'lib/services/localFetch';
 import { getAccessTokenOrRedirectToLogin } from './azure/azuread';
 import { logError } from 'lib/serverutlis/logger';
 
-export enum ApiExceptionCode {
-  INTERNFEIL,
-  UKJENT_FEIL,
-  IKKE_FUNNET,
-  ENDEPUNKT_IKKE_FUNNET,
-  UGYLDIG_FORESPØRSEL,
-}
-
 interface ApiException {
   status: number;
-  code: ApiExceptionCode;
-  message: String;
-  cause?: string;
+  message: string;
+  code?: string;
 }
 
 export type FetchResponse<RespponseType> = SuccessResponseBody<RespponseType> | ErrorResponseBody;
@@ -31,7 +22,7 @@ export interface ErrorResponseBody {
 
 interface SuccessResponseBody<ResponseType> {
   type: 'SUCCESS';
-  responseJson: ResponseType;
+  data: ResponseType;
 }
 
 const NUMBER_OF_RETRIES = 3;
@@ -115,7 +106,7 @@ export const fetchWithRetry = async <ResponseType>(
   });
 
   if (response.status === 204) {
-    return { type: 'SUCCESS', responseJson: undefined as ResponseType };
+    return { type: 'SUCCESS', data: undefined as ResponseType };
   }
 
   if (!response.ok) {
@@ -133,10 +124,10 @@ export const fetchWithRetry = async <ResponseType>(
 
   const contentType = response.headers.get('content-type');
   if (contentType && contentType.includes('text')) {
-    return { type: 'SUCCESS', responseJson: response.text() as ResponseType };
+    return { type: 'SUCCESS', data: response.text() as ResponseType };
   }
 
   const responseJson: ResponseType = await response.json();
 
-  return { type: 'SUCCESS', responseJson: responseJson };
+  return { type: 'SUCCESS', data: responseJson };
 };

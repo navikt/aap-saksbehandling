@@ -17,7 +17,7 @@ import {
   SimulerMeldeplikt,
 } from './types/types';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
-import { ApiExceptionCode, FetchResponse } from 'lib/services/apiFetch';
+import { FetchResponse } from 'lib/services/apiFetch';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
 import { logError } from 'lib/serverutlis/logger';
@@ -66,7 +66,6 @@ async function clientFetchV2<ResponseBody>(
       apiException: {
         status: 500,
         message: getErrorMessage(e),
-        code: ApiExceptionCode.INTERNFEIL,
       },
     };
   }
