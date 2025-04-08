@@ -4,7 +4,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { BodyShort, Box, Button, Detail, HStack, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -43,6 +43,7 @@ export interface SamordningGraderingFormfields {
 }
 
 export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
+  const [errorMessage, setErrorMessage] = useState<String | undefined>(undefined);
   const ytelserFraVurderinger: SamordnetYtelse[] = grunnlag.vurderinger.map((ytelse) => ({
     ytelseType: ytelse.ytelseType,
     kilde: '',
@@ -103,27 +104,32 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) => {
-      return løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
-          vurderingerForSamordning: {
-            begrunnelse: data.begrunnelse,
-            maksDatoEndelig: data.maksDatoEndelig === 'true',
-            maksDato: data.maksDato && formaterDatoForBackend(parse(data.maksDato, 'dd.MM.yyyy', new Date())),
-            vurderteSamordningerData: data.vurderteSamordninger.map((vurdertSamordning) => ({
-              manuell: vurdertSamordning.manuell,
-              gradering: vurdertSamordning.gradering,
-              periode: {
-                fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
-                tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
-              },
-              ytelseType: vurdertSamordning.ytelseType!,
-            })),
+      setErrorMessage(undefined);
+      if (grunnlag.ytelser.length > 0 && data.vurderteSamordninger.length === 0) {
+        setErrorMessage('Du må gjøre en vurdering av periodene');
+      } else {
+        return løsBehovOgGåTilNesteSteg({
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
+            vurderingerForSamordning: {
+              begrunnelse: data.begrunnelse,
+              maksDatoEndelig: data.maksDatoEndelig === 'true',
+              maksDato: data.maksDato && formaterDatoForBackend(parse(data.maksDato, 'dd.MM.yyyy', new Date())),
+              vurderteSamordningerData: data.vurderteSamordninger.map((vurdertSamordning) => ({
+                manuell: vurdertSamordning.manuell,
+                gradering: vurdertSamordning.gradering,
+                periode: {
+                  fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
+                  tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
+                },
+                ytelseType: vurdertSamordning.ytelseType!,
+              })),
+            },
           },
-        },
-        referanse: behandlingsreferanse,
-      });
+          referanse: behandlingsreferanse,
+        });
+      }
     })(event);
   };
 
@@ -188,6 +194,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
                 </Box>
               </Box>
             )}
+            {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
           </Form>
         </>
       )}

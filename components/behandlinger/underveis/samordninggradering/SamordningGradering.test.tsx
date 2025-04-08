@@ -3,7 +3,9 @@ import { SamordningGradering } from 'components/behandlinger/underveis/samordnin
 import { format, subWeeks } from 'date-fns';
 import { SamordningGraderingGrunnlag } from 'lib/types/types';
 import { describe, test, expect } from 'vitest';
+import userEvent from '@testing-library/user-event';
 
+const user = userEvent.setup();
 const grunnlagMedVurderinger: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   begrunnelse: 'En grunn',
@@ -19,6 +21,24 @@ const grunnlagMedVurderinger: SamordningGraderingGrunnlag = {
     },
   ],
   ytelser: [],
+};
+
+const grunnlagMedYtelser: SamordningGraderingGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
+  begrunnelse: 'En grunn',
+  vurderinger: [],
+  ytelser: [
+    {
+      gradering: 100,
+      periode: {
+        fom: '2025-03-01',
+        tom: '2025-03-31',
+      },
+      endringStatus: 'NY',
+      kilde: 'SP',
+      ytelseType: 'SYKEPENGER',
+    },
+  ],
 };
 
 describe('Samordning gradering', () => {
@@ -40,5 +60,11 @@ describe('Samordning gradering', () => {
   test('kan slette en rad', () => {
     render(<SamordningGradering grunnlag={grunnlagMedVurderinger} behandlingVersjon={1} readOnly={false} />);
     expect(screen.getByRole('button', { name: 'Slett' })).toBeVisible();
+  });
+
+  test('gir feilmelding dersom det er funnet ytelser fra kilder, men ikke gjort noen vurderinger', async () => {
+    render(<SamordningGradering grunnlag={grunnlagMedYtelser} behandlingVersjon={1} readOnly={false} />);
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+    expect(await screen.findByText('Du må gjøre en vurdering av periodene')).toBeVisible();
   });
 });
