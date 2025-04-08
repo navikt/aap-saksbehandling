@@ -35,13 +35,13 @@ export const YtelseTabell = ({ ytelser }: Props) => {
               <Table.DataCell colSpan={4}>Ingen andre ytelser funnet</Table.DataCell>
             </Table.Row>
           )}
-          {ytelser.map((ytelse) => {
+          {ytelser.map((ytelse, index) => {
             const classNames = [
               ytelse.endringStatus === 'NY' && styles.ny,
               ytelse.endringStatus === 'SLETTET' && styles.slettet,
             ].join(' ');
             return (
-              <Table.Row key={ytelse.saksRef} className={classNames}>
+              <Table.Row key={ytelse.saksRef ?? index} className={classNames}>
                 <Table.DataCell textSize="small">
                   <HStack gap={'2'} marginInline={'2'}>
                     {ytelse.endringStatus === 'NY' && (
