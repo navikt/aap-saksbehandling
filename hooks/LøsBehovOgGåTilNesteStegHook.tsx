@@ -82,6 +82,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
         setStatus(eventData.status);
         eventSource.close();
         setIsLoading(false);
+        router.refresh();
       }
       if (eventData.status === 'POLLING') {
         setStatus(eventData.status);
