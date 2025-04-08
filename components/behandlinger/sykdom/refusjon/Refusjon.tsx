@@ -60,7 +60,7 @@ export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readO
       },
       vurderingenGjelderTil: {
         type: 'date_input',
-        label: 'til og med (valgfritt)',
+        label: 'Til og med (valgfritt)',
         defaultValue: grunnlag.gjeldendeVurdering?.tom
           ? formaterDatoForFrontend(grunnlag.gjeldendeVurdering?.tom)
           : undefined,
