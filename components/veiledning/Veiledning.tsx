@@ -13,8 +13,10 @@ export const Veiledning = ({
   defaultOpen = true,
 }: Props) => {
   return (
-    <ReadMore header={header} defaultOpen={defaultOpen} size={'small'}>
-      {tekst}
-    </ReadMore>
+    <div style={{ maxWidth: '90ch' }}>
+      <ReadMore header={header} defaultOpen={defaultOpen} size={'small'}>
+        {tekst}
+      </ReadMore>
+    </div>
   );
 };

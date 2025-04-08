@@ -10,6 +10,7 @@ import { erProsent } from 'lib/utils/validering';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -93,11 +94,11 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
         visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-        <FormField form={form} formField={formFields.erÅrsakssammenheng} />
+        <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
         {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
           <>
             <FormField form={form} formField={formFields.relevanteSaker}>
-              <Table>
+              <TableStyled>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell textSize={'small'}>Tilknytt yrkesskade</Table.HeaderCell>
@@ -124,7 +125,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
                     ))}
                   </Table.Body>
                 )}
-              </Table>
+              </TableStyled>
             </FormField>
             <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
           </>

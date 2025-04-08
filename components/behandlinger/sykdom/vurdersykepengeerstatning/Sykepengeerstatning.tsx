@@ -110,8 +110,10 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
         visBekreftKnapp={!readOnly}
       >
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-        <FormField form={form} formField={formFields.erOppfylt} />
-        {form.watch('erOppfylt') === JaEllerNei.Ja && <FormField form={form} formField={formFields.grunn} />}
+        <FormField form={form} formField={formFields.erOppfylt} horizontalRadio />
+        {form.watch('erOppfylt') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.grunn} className={'radio'} />
+        )}
       </Form>
     </VilkårsKort>
   );
