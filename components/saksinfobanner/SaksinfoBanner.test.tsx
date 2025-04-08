@@ -47,6 +47,7 @@ const behandling: DetaljertBehandling = {
   aktivtSteg: 'AVKLAR_SYKDOM',
   avklaringsbehov: [],
   opprettet: '',
+  virkningstidspunkt: '2025-01-02',
   referanse: '123',
   skalForberede: false,
   status: 'UTREDES',

@@ -12,7 +12,7 @@ const behandling: DetaljertBehandling = {
   avklaringsbehov: [],
   referanse: '1234',
   versjon: 1,
-  virkningstidspunkt: '12.13.2024',
+  virkningstidspunkt: '13.12.2024',
   vilkår: [],
 };
 
