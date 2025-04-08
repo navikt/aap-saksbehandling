@@ -59,26 +59,14 @@ async function clientFetchV2<ResponseBody>(
       body: body && JSON.stringify(body),
     });
 
-    const data = await res.json();
-
-    if (res.ok) {
-      return {
-        type: 'SUCCESS',
-        status: res.status,
-        responseJson: data as ResponseBody,
-      };
-    } else {
-      return {
-        type: 'ERROR',
-        status: res.status,
-        message: data.message || res.statusText,
-      };
-    }
+    return await res.json();
   } catch (e) {
     return {
       type: 'ERROR',
-      message: getErrorMessage(e),
-      status: 500,
+      apiException: {
+        status: 500,
+        message: getErrorMessage(e),
+      },
     };
   }
 }

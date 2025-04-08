@@ -10,12 +10,17 @@ interface Props {
 
 export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly, saksId }: Props) => {
   const [refusjonGrunnlag, sak] = await Promise.all([hentRefusjonGrunnlag(behandlingsReferanse), hentSak(saksId)]);
+
+  if (sak.type === 'ERROR') {
+    return <div>Kunne ikke finne sak.</div>;
+  }
+
   return (
     <Refusjon
       grunnlag={refusjonGrunnlag}
       readOnly={readOnly || !refusjonGrunnlag.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
-      søknadstidspunkt={sak.periode.fom}
+      søknadstidspunkt={sak.data.periode.fom}
     />
   );
 };

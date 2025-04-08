@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import {
   AktivitetspliktGrunnlag,
   AktivitetspliktHendelser,
@@ -53,34 +52,30 @@ import {
 } from 'lib/types/types';
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { apiFetch } from 'lib/services/apiFetch';
-import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
+import { logError, logInfo } from 'lib/serverutlis/logger';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
 
-export const hentBehandling = async (behandlingsReferanse: string): Promise<DetaljertBehandling> => {
+export const hentBehandling = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}`;
-  try {
-    return await fetchProxy<DetaljertBehandling>(url, saksbehandlingApiScope, 'GET');
-  } catch (e) {
-    logWarning(`Fant ikke behandling med referanse ${behandlingsReferanse}`, JSON.stringify(e));
-    notFound();
-  }
+  return await apiFetch<DetaljertBehandling>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentSak = async (saksnummer: string): Promise<SaksInfo> => {
+export const hentSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}`;
-  try {
-    return await fetchProxy<SaksInfo>(url, saksbehandlingApiScope, 'GET');
-  } catch (e) {
-    logWarning(`Fant ikke sak med referanse ${saksnummer}`, JSON.stringify(e));
-    notFound();
-  }
+  return await apiFetch<SaksInfo>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
-  return await fetchProxy<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
+  const res = await apiFetch<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
+
+  if (res.type === 'SUCCESS') {
+    return res.data;
+  } else {
+    return { fnr: 'Ukjent', navn: 'Ukjent' };
+  }
 };
 
 export const hentBehandlingPersoninfo = async (behandlingsreferanse: string): Promise<BehandlingPersoninfo> => {

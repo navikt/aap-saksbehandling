@@ -23,6 +23,10 @@ export const SykdomsvurderingMedDataFetching = async ({
 }: Props) => {
   const [grunnlag, sak] = await Promise.all([hentSykdomsGrunnlag(behandlingsReferanse), hentSak(saksId)]);
 
+  if (sak.type === 'ERROR') {
+    return <div>Kunne ikke finne sak.</div>;
+  }
+
   const bidiagnoserDefaultOptions = await getDefaultOptions(
     finnDiagnosegrunnlag(typeBehandling, grunnlag)?.bidiagnoser,
     finnDiagnosegrunnlag(typeBehandling, grunnlag)?.kodeverk as DiagnoseSystem
@@ -40,7 +44,7 @@ export const SykdomsvurderingMedDataFetching = async ({
       behandlingVersjon={behandlingVersjon}
       bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
       hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
-      søknadstidspunkt={sak.periode.fom}
+      søknadstidspunkt={sak.data.periode.fom}
       typeBehandling={typeBehandling}
     />
   );

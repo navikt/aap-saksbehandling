@@ -10,9 +10,9 @@ export async function POST(req: NextRequest) {
     const løsbehovRes = await løsAvklaringsbehov(body);
 
     if (løsbehovRes.type === 'ERROR') {
-      logError(`/løs-behov, behovstype: ${body.behov?.behovstype}, message: ${løsbehovRes.message}`);
+      logError(`/løs-behov, behovstype: ${body.behov?.behovstype}, message: ${løsbehovRes.apiException.message}`);
     }
-    return new Response(JSON.stringify(løsbehovRes), { status: løsbehovRes.status });
+    return new Response(JSON.stringify(løsbehovRes));
   } catch (error) {
     logError(`/løs-behov ${body.behov?.behovstype}`, error);
     return new Response(JSON.stringify({ message: getErrorMessage(error) }), { status: 500 });

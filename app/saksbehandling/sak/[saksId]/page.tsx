@@ -7,13 +7,17 @@ const Page = async (props: { params: Promise<{ saksId: string }> }) => {
   const sak = await hentSak(params.saksId);
   const personInfo = await hentSakPersoninfo(params.saksId);
 
+  if (sak.type === 'ERROR') {
+    return <div>Kunne ikke finne sak.</div>;
+  }
+
   return (
     <>
-      <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
+      <SaksinfoBanner personInformasjon={personInfo} sak={sak?.data} />
 
       <br />
 
-      <SakMedBehandlinger sak={sak} />
+      <SakMedBehandlinger sak={sak?.data} />
     </>
   );
 };

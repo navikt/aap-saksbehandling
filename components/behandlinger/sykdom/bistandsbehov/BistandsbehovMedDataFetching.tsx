@@ -18,13 +18,18 @@ export const BistandsbehovMedDataFetching = async ({
   saksId,
 }: Props) => {
   const [grunnlag, sak] = await Promise.all([hentBistandsbehovGrunnlag(behandlingsReferanse), hentSak(saksId)]);
+
+  if (sak.type === 'ERROR') {
+    return <div>Kunne ikke finne sak.</div>;
+  }
+
   return (
     <Bistandsbehov
       grunnlag={grunnlag}
       readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       typeBehandling={typeBehandling}
-      søknadstidspunkt={sak.periode.fom}
+      søknadstidspunkt={sak.data.periode.fom}
     />
   );
 };

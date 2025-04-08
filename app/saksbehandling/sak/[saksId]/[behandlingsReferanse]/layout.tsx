@@ -34,8 +34,10 @@ const Layout = async (props: Props) => {
 
   const { children } = props;
 
-  let behandling = await hentBehandling(params.behandlingsReferanse);
-  if (behandling === undefined) {
+  const [behandling, sak] = await Promise.all([hentBehandling(params.behandlingsReferanse), hentSak(params.saksId)]);
+
+  if (behandling?.type === 'ERROR' || sak.type === 'ERROR') {
+    // <ErrorKomponent error={behandling.apiException}/>
     notFound();
   }
 
@@ -43,7 +45,7 @@ const Layout = async (props: Props) => {
   auditlog(params.behandlingsReferanse);
 
   // Denne må komme før resten av kallene slik at siste versjon av data er oppdatert i backend for behandlingen
-  if (behandling.skalForberede) {
+  if (behandling.data.skalForberede) {
     const forberedBehandlingResponse = await forberedBehandlingOgVentPåProsessering(params.behandlingsReferanse);
 
     if (forberedBehandlingResponse && forberedBehandlingResponse.status === 'FEILET') {
@@ -51,10 +53,9 @@ const Layout = async (props: Props) => {
     }
   }
 
-  const [personInfo, brukerInformasjon, sak, flytResponse] = await Promise.all([
+  const [personInfo, brukerInformasjon, flytResponse] = await Promise.all([
     hentSakPersoninfo(params.saksId),
     hentBrukerInformasjon(),
-    hentSak(params.saksId),
     hentFlyt(params.behandlingsReferanse),
   ]);
 
@@ -77,10 +78,10 @@ const Layout = async (props: Props) => {
         <IngenFlereOppgaverModal />
         <SaksinfoBanner
           personInformasjon={personInfo}
-          sak={sak}
+          sak={sak.data}
           behandlingVersjon={flytResponse.behandlingVersjon}
           referanse={params.behandlingsReferanse}
-          behandling={behandling}
+          behandling={behandling.data}
           oppgaveReservertAv={oppgave?.reservertAv}
           påVent={flytResponse.visning.visVentekort}
           brukerInformasjon={brukerInformasjon}
@@ -92,7 +93,7 @@ const Layout = async (props: Props) => {
         <HGrid columns="4fr 2fr">
           <section className={styles.venstrekolonne}>{children}</section>
           <aside className={`${styles.høyrekolonne} flex-column`}>
-            <Behandlingsinfo behandling={behandling} saksnummer={params.saksId} />
+            <Behandlingsinfo behandling={behandling.data} saksnummer={params.saksId} />
             <SaksbehandlingsoversiktMedDataFetching />
             <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
           </aside>

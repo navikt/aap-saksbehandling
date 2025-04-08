@@ -28,7 +28,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
     setIsLoading(true);
     const løsbehovRes = await clientLøsBehov(behov);
     if (løsbehovRes.type === 'ERROR') {
-      if (løsbehovRes.status === 409) {
+      if (løsbehovRes.apiException.status === 409) {
         setStatus('CLIENT_CONFLICT');
       } else {
         setStatus('CLIENT_ERROR');
