@@ -93,8 +93,7 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
         <VStack gap={'3'}>
           <HStack>
             <Alert variant={'info'}>
-              Det gjøres foreløpig ikke noe automatisk avregning for andre ytelser som registreres. Perioder med
-              avregning må håndteres manuelt med NØS.
+              Det er ikke støtte for refusjonskrav enda. Sett saken på vent og kontakt team AAP.
             </Alert>
           </HStack>
           <Form

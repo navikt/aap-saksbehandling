@@ -1,4 +1,4 @@
-import { BodyShort } from '@navikt/ds-react';
+import { Alert, BodyShort } from '@navikt/ds-react';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { parse } from 'date-fns';
 import { RefusjonskravGrunnlag } from 'lib/types/types';
@@ -27,6 +27,7 @@ export const SamordningSosialhjelp = ({ grunnlag }: Props) => {
           ? `til ${formaterDatoForFrontend(parse(grunnlag.gjeldendeVurdering.tom, 'yyyy-MM-dd', new Date()))}`
           : ''}
       </BodyShort>
+      <Alert variant={'info'}>Det er ikke støtte for refusjonskrav enda. Sett saken på vent og kontakt team AAP.</Alert>
     </VilkårsKort>
   );
 };
