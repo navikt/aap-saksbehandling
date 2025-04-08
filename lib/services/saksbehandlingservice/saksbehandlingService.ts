@@ -8,7 +8,6 @@ import {
   BehandlingFlytOgTilstand,
   BehandlingPersoninfo,
   BehandlingResultat,
-  BehandlingsInfo,
   BeregningsGrunnlag,
   BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
