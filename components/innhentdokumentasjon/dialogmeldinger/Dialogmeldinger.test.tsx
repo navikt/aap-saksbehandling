@@ -63,11 +63,11 @@ describe('Dialogmeldinger', () => {
     expect(screen.queryByRole('button', { name: 'Send purring' })).not.toBeInTheDocument();
   });
 
-  test('ikon for purring vises ikke hvis det er under 14 dager siden den ble bestilt', () => {
+  test('ikon for purring vises hvis det er under 21 dager siden den ble bestilt', () => {
     const dialogmelding: LegeerklæringStatus = {
       behandlerRef: '1234',
       dialogmeldingUuid: 'uuuuuid',
-      opprettet: format(subDays(new Date(), 15), 'yyyy-MM-dd'),
+      opprettet: format(subDays(new Date(), 22), 'yyyy-MM-dd'),
       personId: '12345678910',
       status: 'BESTILT',
       statusTekst: 'Hva skal det stå her?',
