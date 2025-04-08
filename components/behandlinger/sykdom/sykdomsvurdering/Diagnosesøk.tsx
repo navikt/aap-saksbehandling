@@ -24,7 +24,7 @@ export const Diagnosesøk = ({ form, formFields, readOnly, hoveddiagnoseDefaultO
   return (
     <>
       {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
-        <FormField form={form} formField={formFields.kodeverk} horizontalRadio />
+        <FormField form={form} formField={formFields.kodeverk} />
       )}
       {kodeverkValue && (
         <>

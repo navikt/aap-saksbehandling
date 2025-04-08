@@ -75,7 +75,6 @@ export const Sykdomsvurdering = ({
       begrunnelse: {
         type: 'textarea',
         label: 'Vilkårsvurdering',
-        description: 'Vekt og vurder opplysningene mot hverandre, og vurder om brukeren oppfyller vilkårene i § 11-5',
         defaultValue: sykdomsvurdering?.begrunnelse,
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
       },

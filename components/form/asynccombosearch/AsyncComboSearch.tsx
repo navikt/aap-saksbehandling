@@ -33,7 +33,7 @@ export const AsyncComboSearch = <FormValues extends FieldValues>({
   defaultOptions,
   isMulti = false,
   rules,
-  size = 'medium',
+  size = 'small',
 }: Props<FormValues>) => {
   return (
     <Controller
