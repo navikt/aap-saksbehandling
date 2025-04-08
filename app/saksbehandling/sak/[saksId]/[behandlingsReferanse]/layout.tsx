@@ -34,9 +34,9 @@ const Layout = async (props: Props) => {
 
   const { children } = props;
 
-  const [behandling, sak] = await Promise.all([hentBehandling(params.behandlingsReferanse), hentSak(params.saksId)]);
+  const behandling = await hentBehandling(params.behandlingsReferanse);
 
-  if (behandling?.type === 'ERROR' || sak.type === 'ERROR') {
+  if (behandling?.type === 'ERROR') {
     // <ErrorKomponent error={behandling.apiException}/>
     notFound();
   }
@@ -53,10 +53,11 @@ const Layout = async (props: Props) => {
     }
   }
 
-  const [personInfo, brukerInformasjon, flytResponse] = await Promise.all([
+  const [personInfo, brukerInformasjon, flytResponse, sak] = await Promise.all([
     hentSakPersoninfo(params.saksId),
     hentBrukerInformasjon(),
     hentFlyt(params.behandlingsReferanse),
+    hentSak(params.saksId),
   ]);
 
   let oppgave;
@@ -78,7 +79,7 @@ const Layout = async (props: Props) => {
         <IngenFlereOppgaverModal />
         <SaksinfoBanner
           personInformasjon={personInfo}
-          sak={sak.data}
+          sak={sak}
           behandlingVersjon={flytResponse.behandlingVersjon}
           referanse={params.behandlingsReferanse}
           behandling={behandling.data}

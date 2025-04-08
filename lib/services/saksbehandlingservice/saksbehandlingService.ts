@@ -7,7 +7,8 @@ import {
   BarnetilleggGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingPersoninfo,
-  BehandlingResultat, BehandlingsInfo,
+  BehandlingResultat,
+  BehandlingsInfo,
   BeregningsGrunnlag,
   BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
@@ -64,7 +65,13 @@ export const hentBehandling = async (behandlingsReferanse: string) => {
 
 export const hentSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}`;
-  return await apiFetch<SaksInfo>(url, saksbehandlingApiScope, 'GET');
+  const res = await apiFetch<SaksInfo>(url, saksbehandlingApiScope, 'GET');
+
+  if (res.type === 'ERROR') {
+    throw new Error('Kunne ikke hente påkrevd sak.');
+  } else {
+    return res.data;
+  }
 };
 
 export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {

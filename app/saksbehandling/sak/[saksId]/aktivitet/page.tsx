@@ -7,13 +7,9 @@ export default async function Page(props: { params: Promise<{ saksId: string }> 
   const params = await props.params;
   const [personInfo, sak] = await Promise.all([hentSakPersoninfo(params.saksId), hentSak(params.saksId)]);
 
-  if (sak.type === 'ERROR') {
-    return <div>Kunne ikke finne sak.</div>;
-  }
-
   return (
     <>
-      <SaksinfoBanner personInformasjon={personInfo} sak={sak.data} />
+      <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
       <div className={styles.aktivitetSkjema}>
         <AktivitetspliktMedDatafetching saksnummer={params.saksId} />
       </div>
