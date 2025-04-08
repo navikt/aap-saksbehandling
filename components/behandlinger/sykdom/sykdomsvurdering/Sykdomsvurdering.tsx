@@ -26,6 +26,7 @@ import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurd
 import { Diagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/Diagnosesøk';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
+import { useSakHook } from 'hooks/saksbehandling/SakHook';
 
 export interface SykdomsvurderingFormFields {
   begrunnelse: string;
@@ -64,6 +65,8 @@ export const Sykdomsvurdering = ({
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
+  const { sak: nySak } = useSakHook();
+  console.log('ny sak', nySak);
 
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
   const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';

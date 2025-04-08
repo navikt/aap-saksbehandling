@@ -7,7 +7,7 @@ import {
   BarnetilleggGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingPersoninfo,
-  BehandlingResultat,
+  BehandlingResultat, BehandlingsInfo,
   BeregningsGrunnlag,
   BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
@@ -130,6 +130,11 @@ export const hentDokument = async (journalPostId: string, dokumentInfoId: string
 export const hentMedlemskapGrunnlag = async (behandlingsReferanse: string): Promise<MedlemskapGrunnlag> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/medlemskap`;
   return await fetchProxy<MedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentVirkningsTidspunkt = async (behandlingsReferanse: string): Promise<BehandlingsInfo> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/virkningstidspunkt`;
+  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentYrkesskadeVurderingGrunnlag = async (

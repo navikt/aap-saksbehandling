@@ -4236,6 +4236,9 @@ export interface components {
       'f\u00F8dselsdato': string;
       ident: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
     };
+      'no.nav.aap.behandlingsflyt.behandling.behandlingsinfo.BehandlingsInfoDto': {
+          virkningstidspunkt: string;
+      };
     'no.nav.aap.behandlingsflyt.behandling.beregning.BeregningDTO': {
       /** @enum {string} */
       beregningstypeDTO: 'STANDARD' | 'UFØRE' | 'YRKESSKADE' | 'YRKESSKADE_UFØRE';
