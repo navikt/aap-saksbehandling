@@ -7,7 +7,7 @@ import { hentLocalToken } from 'lib/services/localFetch';
 import { getAccessTokenOrRedirectToLogin } from './azure/azuread';
 import { logError } from 'lib/serverutlis/logger';
 
-interface ApiException {
+export interface ApiException {
   status: number;
   message: string;
   code?: string;

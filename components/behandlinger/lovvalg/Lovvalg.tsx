@@ -7,6 +7,7 @@ import {
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringswrapper';
 import { LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunktMedDatafetching';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsReferanse: string;
@@ -18,13 +19,16 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
     hentAutomatiskLovvalgOgMedlemskapVurdering(behandlingsReferanse),
     hentLovvalgMedlemskapGrunnlag(behandlingsReferanse),
   ]);
+  if (vurderingAutomatisk.type === 'ERROR' || grunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[vurderingAutomatisk, grunnlag]} />;
+  }
 
   const stegSomSkalVises = getStegSomSkalVises('LOVVALG', flyt);
 
   const behandlingsVersjon = flyt.behandlingVersjon;
   const saksBehandlerReadOnly = flyt.visning.saksbehandlerReadOnly;
-  const visOverstyrKnapp = vurderingAutomatisk.kanBehandlesAutomatisk && stegSomSkalVises.length === 0;
-  const readOnly = saksBehandlerReadOnly || !grunnlag.harTilgangTilÅSaksbehandle;
+  const visOverstyrKnapp = vurderingAutomatisk.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0;
+  const readOnly = saksBehandlerReadOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
 
   return (
     <GruppeSteg
@@ -35,7 +39,7 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
       aktivtSteg={flyt.aktivtSteg}
     >
       <LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper
-        automatiskVurdering={vurderingAutomatisk}
+        automatiskVurdering={vurderingAutomatisk.data}
         stegSomSkalVises={stegSomSkalVises}
         behandlingsReferanse={behandlingsReferanse}
         behandlingVersjon={behandlingsVersjon}
@@ -44,7 +48,7 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
       >
         {stegSomSkalVises.includes('VURDER_LOVVALG') && (
           <LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching
-            grunnlag={grunnlag}
+            grunnlag={grunnlag.data}
             behandlingVersjon={behandlingsVersjon}
             readOnly={readOnly}
           />
