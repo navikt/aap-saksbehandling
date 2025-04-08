@@ -60,25 +60,7 @@ export const apiFetch = async <ResponseType>(
   return await fetchWithRetry<ResponseType>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags);
 };
 
-export const fetchPdf = async (url: string, scope: string): Promise<Blob | undefined> => {
-  const oboToken = isLocal() ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${oboToken}`,
-      Accept: 'application/pdf',
-    },
-    next: { revalidate: 0 },
-  });
-
-  if (response.ok) {
-    return response.blob();
-  } else {
-    logError(`kunne ikke lese pdf på url ${url}.`);
-  }
-};
-
-export const fetchWithRetry = async <ResponseType>(
+const fetchWithRetry = async <ResponseType>(
   url: string,
   method: string,
   oboToken: string,
