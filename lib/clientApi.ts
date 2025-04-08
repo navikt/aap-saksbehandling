@@ -122,10 +122,6 @@ export function clientHentFlyt(behandlingsreferanse: string) {
   return clientFetch<BehandlingFlytOgTilstand>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/flyt`, 'GET');
 }
 
-export function clientHentSak(saksId: string) {
-  return clientFetch<SaksInfo>(`${BASE_URL}/api/sak/hent/${saksId}`, 'GET');
-}
-
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
   return clientFetch<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
 }
