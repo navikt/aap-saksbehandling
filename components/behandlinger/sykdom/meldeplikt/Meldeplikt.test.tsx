@@ -38,18 +38,21 @@ describe('Meldeplikt', () => {
   it('har et felt for begrunnelse', async () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
     await åpneVilkårskort();
+    await klikkPåNyPeriode();
     expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
   });
 
   it('har valg for å avgjøre om bruker skal få fritak fra meldeplikt eller ikke', async () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
     await åpneVilkårskort();
+    await klikkPåNyPeriode();
     expect(screen.getByRole('group', { name: 'Skal bruker få fritak fra meldeplikt?' })).toBeVisible();
   });
 
   it('har et valg for å si at bruker skal få fritak fra meldeplikt', async () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
     await åpneVilkårskort();
+    await klikkPåNyPeriode();
     const fritakGruppe = screen.getByRole('group', { name: 'Skal bruker få fritak fra meldeplikt?' });
     expect(within(fritakGruppe).getByRole('radio', { name: 'Ja' })).toBeVisible();
   });
@@ -57,6 +60,7 @@ describe('Meldeplikt', () => {
   it('har et valg for å si at bruker ikke skal ha fritak fra meldeplikt', async () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
     await åpneVilkårskort();
+    await klikkPåNyPeriode();
     const fritakGruppe = screen.getByRole('group', { name: 'Skal bruker få fritak fra meldeplikt?' });
     expect(within(fritakGruppe).getByRole('radio', { name: 'Nei' })).toBeVisible();
   });
@@ -64,9 +68,31 @@ describe('Meldeplikt', () => {
   it('har et felt for å fylle inn en dato for når vurderingen gjelder fra', async () => {
     render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
     await åpneVilkårskort();
+    await klikkPåNyPeriode();
     expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
   });
+
+  it('skal ikke vise bekreft knapp hvis det ikke er noen vurderinger', async () => {
+    render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
+    await åpneVilkårskort();
+
+    expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
+  });
+
+  it('skal vise bekreft knapp hvis det er noen vurderinger', async () => {
+    render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
+    await åpneVilkårskort();
+    expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
+
+    await klikkPåNyPeriode();
+
+    expect(screen.getByRole('button', { name: 'Bekreft' })).toBeVisible();
+  });
 });
+
+async function klikkPåNyPeriode() {
+  await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
+}
 
 async function åpneVilkårskort() {
   const region = screen.getByRole('region', { name: '§ 11-10 tredje ledd. Unntak fra meldeplikt' });

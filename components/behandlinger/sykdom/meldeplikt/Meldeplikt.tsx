@@ -1,7 +1,7 @@
 'use client';
 
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Link, Radio } from '@navikt/ds-react';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Button, Link, Radio, VStack } from '@navikt/ds-react';
 import { Form } from 'components/form/Form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -37,11 +37,12 @@ type FritakMeldepliktFormFields = {
 };
 
 export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
-  let defaultValues: Fritaksvurderinger[] = grunnlag?.vurderinger.map((vurdering) => ({
-    begrunnelse: vurdering.begrunnelse,
-    fraDato: formaterDatoForFrontend(vurdering.fraDato),
-    harFritak: vurdering.harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
-  })) || [{ begrunnelse: '', fraDato: '', harFritak: '' }];
+  let defaultValues: Fritaksvurderinger[] =
+    grunnlag?.vurderinger.map((vurdering) => ({
+      begrunnelse: vurdering.begrunnelse,
+      fraDato: formaterDatoForFrontend(vurdering.fraDato),
+      harFritak: vurdering.harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
+    })) || [];
 
   const { form } = useConfigForm<FritakMeldepliktFormFields>({
     fritaksvurderinger: {
@@ -62,6 +63,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
   const behandlingsreferanse = useBehandlingsReferanse();
 
+  const skalViseBekreftKnapp = !readOnly && fritakMeldepliktVurderinger.length > 0;
   {
     /*
   const simulate = async () => {
@@ -110,77 +112,78 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       vilkårTilhørerNavKontor
       defaultOpen={showAsOpen}
     >
-      <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
-        Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
-      </Link>
+      <VStack gap={'4'}>
+        <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
+          Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
+        </Link>
 
-      <Form
-        onSubmit={handleSubmit}
-        status={status}
-        resetStatus={resetStatus}
-        isLoading={isLoading}
-        steg={'FRITAK_MELDEPLIKT'}
-        visBekreftKnapp={!readOnly}
-      >
-        {fritakMeldepliktVurderinger.map((vurdering, index) => (
-          <div className={`${styles.vurdering} flex-column`} key={vurdering.id}>
-            <TextAreaWrapper
-              label={'Vilkårsvurdering'}
-              control={form.control}
-              name={`fritaksvurderinger.${index}.begrunnelse`}
-              rules={{ required: 'Du må begrunne vurderingen din' }}
-              className={'begrunnelse'}
-              readOnly={readOnly}
-            />
-            <RadioGroupWrapper
-              label={'Skal bruker få fritak fra meldeplikt?'}
-              control={form.control}
-              name={`fritaksvurderinger.${index}.harFritak`}
-              rules={{ required: 'Du må svare på om bruker skal få fritak fra meldeplikt' }}
-              readOnly={readOnly}
-              horisontal
-            >
-              <Radio value={JaEllerNei.Ja}>Ja</Radio>
-              <Radio value={JaEllerNei.Nei}>Nei</Radio>
-            </RadioGroupWrapper>
-            <DateInputWrapper
-              label={'Vurderingen gjelder fra'}
-              control={form.control}
-              name={`fritaksvurderinger.${index}.fraDato`}
-              rules={{
-                required: 'Du må angi en dato vurderingen gjelder fra',
-                validate: (value) => validerDato(value as string),
-              }}
-              readOnly={readOnly}
-            />
-            {!readOnly && fritakMeldepliktVurderinger.length > 1 && (
+        <Form
+          onSubmit={handleSubmit}
+          status={status}
+          resetStatus={resetStatus}
+          isLoading={isLoading}
+          steg={'FRITAK_MELDEPLIKT'}
+          visBekreftKnapp={skalViseBekreftKnapp}
+        >
+          {fritakMeldepliktVurderinger.map((vurdering, index) => (
+            <div className={`${styles.vurdering} flex-column`} key={vurdering.id}>
+              <TextAreaWrapper
+                label={'Vilkårsvurdering'}
+                control={form.control}
+                name={`fritaksvurderinger.${index}.begrunnelse`}
+                rules={{ required: 'Du må begrunne vurderingen din' }}
+                className={'begrunnelse'}
+                readOnly={readOnly}
+              />
+              <RadioGroupWrapper
+                label={'Skal bruker få fritak fra meldeplikt?'}
+                control={form.control}
+                name={`fritaksvurderinger.${index}.harFritak`}
+                rules={{ required: 'Du må svare på om bruker skal få fritak fra meldeplikt' }}
+                readOnly={readOnly}
+                horisontal
+              >
+                <Radio value={JaEllerNei.Ja}>Ja</Radio>
+                <Radio value={JaEllerNei.Nei}>Nei</Radio>
+              </RadioGroupWrapper>
+              <DateInputWrapper
+                label={'Vurderingen gjelder fra'}
+                control={form.control}
+                name={`fritaksvurderinger.${index}.fraDato`}
+                rules={{
+                  required: 'Du må angi en dato vurderingen gjelder fra',
+                  validate: (value) => validerDato(value as string),
+                }}
+                readOnly={readOnly}
+              />
+              {!readOnly && (
+                <div>
+                  <Button
+                    onClick={() => remove(index)}
+                    type={'button'}
+                    variant={'tertiary'}
+                    icon={<TrashIcon aria-hidden />}
+                    size={'small'}
+                  >
+                    Fjern periode
+                  </Button>
+                </div>
+              )}
+            </div>
+          ))}
+          {!readOnly && (
+            <>
               <div>
                 <Button
-                  onClick={() => remove(index)}
+                  onClick={() => append({ begrunnelse: '', harFritak: '', fraDato: '' })}
                   type={'button'}
-                  variant={'tertiary'}
-                  icon={<TrashIcon aria-hidden />}
+                  variant={'secondary'}
+                  size={'small'}
                 >
-                  Fjern periode
+                  Legg til periode
                 </Button>
               </div>
-            )}
-          </div>
-        ))}
-        {!readOnly && (
-          <>
-            <div>
-              <Button
-                onClick={() => append({ begrunnelse: '', harFritak: '', fraDato: '' })}
-                type={'button'}
-                variant={'tertiary'}
-                size={'medium'}
-                icon={<PlusCircleIcon aria-hidden />}
-              >
-                Legg til ny start/slutt på periode
-              </Button>
-            </div>
-            {/*<div>
+              {/*<div>
               <Button
                 onClick={() => simulate()}
                 type={'button'}
@@ -191,9 +194,10 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
                 Simuler
               </Button>
             </div>*/}
-          </>
-        )}
-      </Form>
+            </>
+          )}
+        </Form>
+      </VStack>
     </VilkårsKort>
   );
 };

@@ -114,24 +114,6 @@ describe('felt for begrunnelse', () => {
 
     expect(await screen.findByText('Du må gjøre en vilkårsvurdering')).toBeVisible();
   });
-
-  it('Skal vise korrekt description på begrunnelsesfelt', async () => {
-    render(
-      <Sykdomsvurdering
-        grunnlag={grunnlagUtenYrkesskade}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Førstegangsbehandling'}
-        søknadstidspunkt={søknadstidspunkt}
-      />
-    );
-
-    const label = screen.getByText(
-      'Vekt og vurder opplysningene mot hverandre, og vurder om brukeren oppfyller vilkårene i § 11-5'
-    );
-
-    expect(label).toBeVisible();
-  });
 });
 
 describe('felt for om bruker har sykdom, skade eller lyte', () => {

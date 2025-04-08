@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormEvent } from 'react';
 
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 
@@ -55,11 +55,12 @@ const regnOmTilTimer = (value: string) => {
 };
 
 export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
-  const defaultValues: Arbeidsevnevurderinger[] = grunnlag?.vurderinger?.map((vurdering) => ({
-    begrunnelse: vurdering.begrunnelse,
-    arbeidsevne: vurdering.arbeidsevne.toString(),
-    fom: formaterDatoForFrontend(vurdering.fraDato),
-  })) || [{ begrunnelse: '', arbeidsevne: '', fom: '' }];
+  const defaultValues: Arbeidsevnevurderinger[] =
+    grunnlag?.vurderinger?.map((vurdering) => ({
+      begrunnelse: vurdering.begrunnelse,
+      arbeidsevne: vurdering.arbeidsevne.toString(),
+      fom: formaterDatoForFrontend(vurdering.fraDato),
+    })) || [];
 
   const { form } = useConfigForm<FastsettArbeidsevneFormFields>({
     arbeidsevnevurderinger: {
@@ -99,6 +100,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
   };
 
   const showAsOpen = !!grunnlag?.vurderinger && grunnlag.vurderinger.length >= 1;
+  const skalViseBekreftKnapp = !readOnly && arbeidsevneVurderinger.length > 0;
 
   return (
     <VilkårsKort
@@ -113,7 +115,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
         resetStatus={resetStatus}
         isLoading={isLoading}
         steg={'FASTSETT_ARBEIDSEVNE'}
-        visBekreftKnapp={!readOnly}
+        visBekreftKnapp={skalViseBekreftKnapp}
       >
         <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
           Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
@@ -160,19 +162,20 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
             <DateInputWrapper
               control={form.control}
               name={`arbeidsevnevurderinger.${index}.fom`}
-              label={'Dato vurderingen gjelder fra'}
+              label={'Vurderingen gjelder fra'}
               rules={{
                 required: 'Du må angi datoen arbeidsevnen gjelder fra',
                 validate: (value) => validerDato(value as string),
               }}
               readOnly={readOnly}
             />
-            {!readOnly && arbeidsevneVurderinger.length > 1 && (
+            {!readOnly && (
               <div>
                 <Button
                   onClick={() => remove(index)}
                   type={'button'}
                   variant={'tertiary'}
+                  size={'small'}
                   icon={<TrashIcon aria-hidden />}
                 >
                   Fjern vurdering
@@ -186,9 +189,8 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
             <Button
               onClick={() => append({ begrunnelse: '', arbeidsevne: '', fom: '' })}
               type={'button'}
-              variant={'tertiary'}
-              size={'medium'}
-              icon={<PlusCircleIcon aria-hidden />}
+              variant={'secondary'}
+              size={'small'}
             >
               Legg til ny vurdering
             </Button>
