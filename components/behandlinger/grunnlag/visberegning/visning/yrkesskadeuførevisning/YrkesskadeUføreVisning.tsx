@@ -5,7 +5,7 @@ import styles from '../Visning.module.css';
 import { InntektTabell } from 'components/inntekttabell/InntektTabell';
 import { UføreInntektTabell } from 'components/uføreinntekttabell/UføreInntektTabell';
 import { YrkesskadeBeregningTabell } from 'components/yrkesskadeberegningtabell/YrkesskadeBeregningTabell';
-import { Label, Table } from '@navikt/ds-react';
+import { BodyShort, Table } from '@navikt/ds-react';
 import { formaterTilG } from 'lib/utils/string';
 import { sorterEtterÅrIStigendeRekkefølge } from 'lib/utils/arrays';
 
@@ -38,7 +38,9 @@ export const YrkesskadeUføreVisning = ({ grunnlag }: Props) => {
       <YrkesskadeBeregningTabell grunnlag={grunnlag.yrkesskadeGrunnlag} visning="YRKESSKADE_UFØR" />
 
       <div className={'flex-column'}>
-        <Label size={'medium'}>Brukers grunnlag er satt til det gunstigste av følgende:</Label>
+        <BodyShort size={'small'} weight={'semibold'}>
+          Brukers grunnlag er satt til det gunstigste av følgende
+        </BodyShort>
         <Table size={'medium'}>
           <Table.Header>
             <Table.Row>

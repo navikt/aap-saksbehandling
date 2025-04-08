@@ -37,13 +37,13 @@ export const VisBeregning = ({ grunnlag }: Props) => {
 
 const finnHeading = (beregningsVisning: string): string => {
   if (beregningsVisning === 'YRKESSKADE') {
-    return 'Grunnlagsberegning §§ 11-19 / 11-22';
+    return '§§ 11-19 / 11-22 Grunnlagsberegning ';
   }
   if (beregningsVisning === 'UFØRE') {
-    return 'Grunnlagsberegning §§ 11-19 / 11-28';
+    return '§§ 11-19 / 11-28 Grunnlagsberegning ';
   }
   if (beregningsVisning === 'YRKESSKADE_UFØRE') {
-    return 'Grunnlagsberegning §§ 11-19 / 11-28 / 11-22';
+    return '§§ 11-19 / 11-28 / 11-22 Grunnlagsberegning';
   }
-  return 'Grunnlagsberegning § 11-19';
+  return '§ 11-19 Grunnlagsberegning';
 };
