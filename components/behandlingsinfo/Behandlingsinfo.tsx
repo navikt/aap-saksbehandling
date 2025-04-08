@@ -5,8 +5,6 @@ import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatu
 
 import styles from './Behandlingsinfo.module.css';
 
-import { StegSuspense } from "../stegsuspense/StegSuspense";
-import { BehandlingsinfoDataMedDataFetching } from "./BehandlingsinfoDataMedDataFetching";
 interface Props {
   behandling: DetaljertBehandling;
   saksnummer: string;
@@ -29,24 +27,24 @@ export const Behandlingsinfo = ({ behandling, saksnummer }: Props) => {
           <Behandlingsstatus status={behandling.status} />
         </HStack>
 
-                <HGrid columns={'1fr 1fr'} gap="1">
-                    <Label as="p" size={'small'}>
-                        Opprettet:
-                    </Label>
-                    <BodyShort size={'small'}>{formaterDatoForFrontend(behandling.opprettet)}</BodyShort>
-                    <Label as="p" size={'small'}>
-                        Saksnummer:
-                    </Label>
-                    <BodyShort size={'small'}>{saksnummer}</BodyShort>
-                    <Label as="p" size={'small'}>
-                        Virkningstidspunkt:
-                    </Label>
-                    <StegSuspense>
-                        <BehandlingsinfoDataMedDataFetching behandlingsreferanse={behandling.referanse} opprettetDato = {(behandling.opprettet)}
-                    />
-                    </StegSuspense>
-                </HGrid>
-            </VStack>
-        </Box>
-    );
+        <HGrid columns={'1fr 1fr'} gap="1">
+          <Label as="p" size={'small'}>
+            Opprettet:
+          </Label>
+          <BodyShort size={'small'}>{formaterDatoForFrontend(behandling.opprettet)}</BodyShort>
+          <Label as="p" size={'small'}>
+            Saksnummer:
+          </Label>
+          <BodyShort size={'small'}>{saksnummer}</BodyShort>
+          <Label as="p" size={'small'}>
+            Virkningstidspunkt:
+          </Label>
+          {/*<StegSuspense>*/}
+          {/*    <BehandlingsinfoDataMedDataFetching behandlingsreferanse={behandling.referanse} opprettetDato = {(behandling.opprettet)}*/}
+          {/*/>*/}
+          {/*</StegSuspense>*/}
+        </HGrid>
+      </VStack>
+    </Box>
+  );
 };
