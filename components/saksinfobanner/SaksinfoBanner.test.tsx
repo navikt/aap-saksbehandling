@@ -47,13 +47,13 @@ const behandling: DetaljertBehandling = {
   aktivtSteg: 'AVKLAR_SYKDOM',
   avklaringsbehov: [],
   opprettet: '',
-  virkningstidspunkt: '2025-01-02',
   referanse: '123',
   skalForberede: false,
   status: 'UTREDES',
   type: 'Førstegangsbehandling',
   versjon: 0,
   vilkår: [],
+  virkningstidspunkt: '2025-01-02',
 };
 
 describe('SaksinfoBanner på behandling siden', () => {

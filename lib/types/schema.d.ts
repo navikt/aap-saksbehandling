@@ -5503,8 +5503,8 @@ export interface components {
       type: string;
       /** Format: int64 */
       versjon: number;
-      virkningstidspunkt: string;
       'vilk\u00E5r': components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.Vilk\u00E5rDTO'][];
+      virkningstidspunkt: string;
     };
     'no.nav.aap.behandlingsflyt.flyt.EndringDTO': {
       begrunnelse?: string | null;

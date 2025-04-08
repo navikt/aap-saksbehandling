@@ -12,8 +12,8 @@ const behandling: DetaljertBehandling = {
   avklaringsbehov: [],
   referanse: '1234',
   versjon: 1,
-  virkningstidspunkt: '13.12.2024',
   vilkår: [],
+  virkningstidspunkt: '02.11.2025',
 };
 
 describe('Behandlingsinfo', () => {
@@ -56,7 +56,7 @@ describe('Behandlingsinfo', () => {
 
   it('Skal vise dato for virkninsgstidspunkt', () => {
     render(<Behandlingsinfo behandling={behandling} saksnummer={'ERT2E'} />);
-    expect(screen.getByText('13.12.2024')).toBeVisible();
+    expect(screen.getByText('11.02.2025')).toBeVisible();
   });
 
   it('skal ha en label for saksnummer', () => {
