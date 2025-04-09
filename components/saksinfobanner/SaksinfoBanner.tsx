@@ -56,7 +56,7 @@ export const SaksinfoBanner = ({
       <div className={styles.saksinfo}>
         <HStack gap={'2'} align="center">
           <Label size="small">
-            <Link href={`/saksbehandling/sak/${sak.saksnummer}`} title="Tilbake til K-Hub">
+            <Link href={`/saksbehandling/sak/${sak.saksnummer}`} title="Tilbake til saksoversikt">
               {personInformasjon.navn}
             </Link>
           </Label>
