@@ -78,7 +78,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
     name: 'arbeidsevnevurderinger',
   });
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -116,6 +116,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
         isLoading={isLoading}
         steg={'FASTSETT_ARBEIDSEVNE'}
         visBekreftKnapp={skalViseBekreftKnapp}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       >
         <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
           Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)

@@ -63,7 +63,8 @@ export const Sykdomsvurdering = ({
   typeBehandling,
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
   const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
@@ -279,6 +280,7 @@ export const Sykdomsvurdering = ({
         steg={'AVKLAR_SYKDOM'}
         visBekreftKnapp={!readOnly}
         knappTekst={'Bekreft'}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       >
         {grunnlag.skalVurdereYrkesskade && (
           <Alert variant={'warning'} size={'small'}>

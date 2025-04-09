@@ -60,7 +60,8 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     name: 'fritaksvurderinger',
   });
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const skalViseBekreftKnapp = !readOnly && fritakMeldepliktVurderinger.length > 0;
@@ -124,6 +125,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
           isLoading={isLoading}
           steg={'FRITAK_MELDEPLIKT'}
           visBekreftKnapp={skalViseBekreftKnapp}
+          løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         >
           {fritakMeldepliktVurderinger.map((vurdering, index) => (
             <div className={`${styles.vurdering} flex-column`} key={vurdering.id}>

@@ -51,7 +51,8 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
   overstyring,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {
@@ -122,6 +123,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
         steg={'VURDER_MEDLEMSKAP'}
         onSubmit={handleSubmit}
         isLoading={isLoading}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         status={status}
         resetStatus={resetStatus}
         visBekreftKnapp={!readOnly}

@@ -30,7 +30,8 @@ type SamordnetUførePeriode = {
 };
 export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, resetStatus, status } = useLøsBehovOgGåTilNesteSteg('SAMORDNING_UFØRE');
+  const { løsBehovOgGåTilNesteSteg, isLoading, resetStatus, status, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('SAMORDNING_UFØRE');
   grunnlag.grunnlag[0].endringStatus;
 
   function hentDefaultSamordningerFraVurderingerEllerGrunnlag(
@@ -96,6 +97,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
         status={status}
         isLoading={isLoading}
         resetStatus={resetStatus}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       >
         <FormField form={form} formField={formFields.begrunnelse} />
         {grunnlag?.grunnlag?.length > 0 && (

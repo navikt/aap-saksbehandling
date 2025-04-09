@@ -27,7 +27,8 @@ interface FormFields {
 }
 
 export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readOnly }: Props) => {
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -111,6 +112,7 @@ export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readO
         isLoading={isLoading}
         steg={'REFUSJON_KRAV'}
         visBekreftKnapp={!readOnly}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       >
         <FormField form={form} formField={formFields.harKrav} horizontalRadio />
         {form.watch('harKrav') === JaEllerNei.Ja && (

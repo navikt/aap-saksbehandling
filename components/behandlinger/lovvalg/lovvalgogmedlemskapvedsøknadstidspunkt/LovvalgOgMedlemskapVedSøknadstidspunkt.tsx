@@ -61,7 +61,8 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
   overstyring,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg } = useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
   const { form, formFields } = useConfigForm<FormFields>(
     {
       lovvalgBegrunnelse: {
@@ -180,6 +181,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
         status={status}
         resetStatus={resetStatus}
         visBekreftKnapp={!readOnly}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       >
         <FormField form={form} formField={formFields.lovvalgBegrunnelse} className={'begrunnelse'} />
         <FormField form={form} formField={formFields.lovvalgsLand} />

@@ -4,7 +4,7 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Behovstype } from 'lib/utils/form';
 import { BodyShort, Button } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
 import styles from './ForeslåVedtak.module.css';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -16,13 +16,18 @@ interface Props {
 
 export const ForeslåVedtak = ({ behandlingVersjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { status, resetStatus, løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
+  const { status, resetStatus, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
 
   return (
     <VilkårsKort heading="Foreslå vedtak" steg={'FORESLÅ_VEDTAK'}>
       <div className={styles.foreslåvedtak}>
         {!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}
-        <ServerSentEventStatusAlert status={status} resetStatus={resetStatus} />
+        <LøsBehovOgGåTilNesteStegStatusAlert
+          status={status}
+          resetStatus={resetStatus}
+          løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        />
         {!readOnly && (
           <Button
             className={'fit-content'}

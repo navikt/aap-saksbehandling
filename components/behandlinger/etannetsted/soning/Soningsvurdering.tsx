@@ -38,7 +38,7 @@ interface Vurdering {
 }
 
 export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Props) => {
-  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg } =
+  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -96,6 +96,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
         status={status}
         resetStatus={resetStatus}
         isLoading={isLoading}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         visBekreftKnapp={!readOnly}
       >
         <InstitusjonsoppholdTabell

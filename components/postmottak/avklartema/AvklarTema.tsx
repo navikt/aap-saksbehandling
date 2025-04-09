@@ -5,7 +5,7 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { FormEvent, FormEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
-import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { postmottakEndreTemaClient, postmottakLøsBehovClient } from 'lib/postmottakClientApi';
 import { Button, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
@@ -72,7 +72,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
     <VilkårsKort heading={'Avklar tema'}>
       <form onSubmit={onSubmit}>
         <VStack gap={'6'}>
-          <ServerSentEventStatusAlert status={status} />
+          <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
           <FormField form={form} formField={formFields.erTemaAAP} />
           <Button loading={isLoading} className={'fit-content'}>
             Neste

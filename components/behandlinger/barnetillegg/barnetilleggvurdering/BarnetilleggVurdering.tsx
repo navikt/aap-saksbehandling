@@ -14,7 +14,7 @@ import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/Opp
 import { FormEvent } from 'react';
 
 import styles from './BarnetilleggVurdering.module.css';
-import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
 
 interface Props {
@@ -50,7 +50,8 @@ export const BarnetilleggVurdering = ({
   readOnly,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
   const vurderteBarn: BarneTilleggVurdering[] = grunnlag.vurderteBarn.map((barn) => {
     return {
@@ -136,7 +137,11 @@ export const BarnetilleggVurdering = ({
             </div>
 
             <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit} autoComplete={'off'}>
-              <ServerSentEventStatusAlert status={status} resetStatus={resetStatus} />
+              <LøsBehovOgGåTilNesteStegStatusAlert
+                status={status}
+                resetStatus={resetStatus}
+                løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+              />
               {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
                 return (
                   <OppgitteBarnVurdering

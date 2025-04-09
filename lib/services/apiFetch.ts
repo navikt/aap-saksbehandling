@@ -73,7 +73,6 @@ const fetchWithRetry = async <ResponseType>(
 
   if (retries === 0) {
     logError(`Unable to fetch ${url}: `, Error(errors.join('\n')));
-    throw new Error(`Feil oppsto ved kall mot ${url}`);
   }
 
   const response = await fetch(url, {
@@ -92,7 +91,7 @@ const fetchWithRetry = async <ResponseType>(
   }
 
   if (!response.ok) {
-    if (response.status === 500) {
+    if (response.status >= 400) {
       const responseJson: ApiException = await response.json();
 
       logError(`klarte ikke å hente ${url}: ${responseJson.message}`);

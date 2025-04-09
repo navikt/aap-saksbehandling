@@ -7,11 +7,14 @@ import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { clientLøsBehov, clientSjekkTilgang } from 'lib/clientApi';
 import { useIngenFlereOppgaverModal } from 'hooks/IngenFlereOppgaverModalHook';
+import { ApiException } from 'lib/services/apiFetch';
 
-export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | 'CLIENT_ERROR' | 'CLIENT_CONFLICT' | undefined;
+export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | 'CLIENT_CONFLICT' | undefined;
+
 export const useLøsBehovOgGåTilNesteSteg = (
   steg: StegType
 ): {
+  løsBehovOgGåTilNesteStegError?: ApiException;
   status: LøsBehovOgGåTilNesteStegStatus;
   resetStatus: () => void;
   isLoading: boolean;
@@ -20,18 +23,22 @@ export const useLøsBehovOgGåTilNesteSteg = (
   const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
   const router = useRouter();
   const { setIsModalOpen } = useIngenFlereOppgaverModal();
+
   const [status, setStatus] = useState<LøsBehovOgGåTilNesteStegStatus>();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
 
   const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling) => {
     setIsLoading(true);
+    setStatus(undefined);
+    setError(undefined);
+
     const løsbehovRes = await clientLøsBehov(behov);
     if (løsbehovRes.type === 'ERROR') {
+      setError(løsbehovRes.apiException);
       if (løsbehovRes.apiException.status === 409) {
         setStatus('CLIENT_CONFLICT');
-      } else {
-        setStatus('CLIENT_ERROR');
       }
       setIsLoading(false);
       return;
@@ -98,5 +105,11 @@ export const useLøsBehovOgGåTilNesteSteg = (
     setStatus(undefined);
   }
 
-  return { isLoading: isLoading || isPending, status, resetStatus, løsBehovOgGåTilNesteSteg };
+  return {
+    isLoading: isLoading || isPending,
+    status,
+    resetStatus,
+    løsBehovOgGåTilNesteSteg,
+    løsBehovOgGåTilNesteStegError: error,
+  };
 };

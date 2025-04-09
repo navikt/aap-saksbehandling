@@ -9,7 +9,7 @@ import {
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useFieldArray } from 'react-hook-form';
 import { useState } from 'react';
-import { ServerSentEventStatusAlert } from 'components/serversenteventstatusalert/ServerSentEventStatusAlert';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
 
 interface Props {
@@ -34,9 +34,8 @@ export const TotrinnsvurderingForm = ({
   erKvalitetssikring,
 }: Props) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg(
-    erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
-  );
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg(erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK');
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
@@ -107,7 +106,11 @@ export const TotrinnsvurderingForm = ({
       className={'flex-column'}
       autoComplete={'off'}
     >
-      <ServerSentEventStatusAlert status={status} resetStatus={resetStatus} />
+      <LøsBehovOgGåTilNesteStegStatusAlert
+        status={status}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        resetStatus={resetStatus}
+      />
       {fields.map((field, index) => (
         <TotrinnnsvurderingFelter
           key={field.id}

@@ -35,7 +35,8 @@ interface AntattÅrligInntektVurdering {
 }
 
 export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnlag, behandlingVersjon }: Props) => {
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus } = useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
   const behandlingsReferanse = useBehandlingsReferanse();
   const defaultValue: AntattÅrligInntektVurdering[] = yrkeskadeBeregningGrunnlag.skalVurderes.map((yrkesskade) => {
     const vurdertYrkesskade = yrkeskadeBeregningGrunnlag.vurderinger.find(
@@ -85,6 +86,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
         })}
         steg={'FASTSETT_GRUNNLAG'}
         status={status}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         resetStatus={resetStatus}
         isLoading={isLoading}
         visBekreftKnapp={!readOnly}

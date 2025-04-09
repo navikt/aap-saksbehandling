@@ -4,16 +4,31 @@ import { Alert, BodyShort, Button } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { revalidateFlyt } from 'lib/actions/actions';
+import { ApiException } from 'lib/services/apiFetch';
 
 interface Props {
   status?: LøsBehovOgGåTilNesteStegStatus;
+  løsBehovOgGåTilNesteStegError?: ApiException;
   resetStatus?: () => void;
 }
 
-export const ServerSentEventStatusAlert = ({ status, resetStatus }: Props) => {
+export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, resetStatus, løsBehovOgGåTilNesteStegError }: Props) => {
   const { behandlingsReferanse, saksId } = useParams<{ behandlingsReferanse: string; saksId: string }>();
   return (
     <>
+      {løsBehovOgGåTilNesteStegError && (
+        <Alert variant="error">
+          <BodyShort spacing>{løsBehovOgGåTilNesteStegError.message}</BodyShort>
+          <BodyShort size={'small'}>
+            <b>SakId:</b>
+            {` ${saksId}`}
+          </BodyShort>
+          <BodyShort size={'small'}>
+            <b>Behandlingsreferanse:</b>
+            {` ${behandlingsReferanse}`}
+          </BodyShort>
+        </Alert>
+      )}
       {status === 'ERROR' && (
         <Alert variant="error">
           <BodyShort spacing>Det tok for lang tid å hente neste steg fra baksystemet. Kom tilbake senere.</BodyShort>
@@ -52,19 +67,6 @@ export const ServerSentEventStatusAlert = ({ status, resetStatus }: Props) => {
           >
             Oppdater
           </Button>
-        </Alert>
-      )}
-      {status === 'CLIENT_ERROR' && (
-        <Alert variant="error">
-          <BodyShort spacing>Noe gikk galt ved løsing av behov</BodyShort>
-          <BodyShort size={'small'}>
-            <b>SakId:</b>
-            {` ${saksId}`}
-          </BodyShort>
-          <BodyShort size={'small'}>
-            <b>Behandlingsreferanse:</b>
-            {` ${behandlingsReferanse}`}
-          </BodyShort>
         </Alert>
       )}
     </>
