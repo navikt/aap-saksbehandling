@@ -256,9 +256,11 @@ export async function oppgaveTekstSøk(søketekst: string) {
         journalpostId: 123,
         status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
         versjon: 0,
-        enhet: '',
+        enhet: 'Nav Løten',
+        oppfølgingsenhet: 'Nav Engerdal',
         opprettetAv: '',
         opprettetTidspunkt: '',
+        påVentÅrsak: 'På vent',
       },
       {
         reservertAv: 'DF39ZH',
@@ -270,9 +272,11 @@ export async function oppgaveTekstSøk(søketekst: string) {
         journalpostId: 234,
         status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
         versjon: 0,
-        enhet: '',
+        enhet: 'Nav Enebakk',
+        oppfølgingsenhet: 'Nav Kongsvinger',
         opprettetAv: '',
         opprettetTidspunkt: '',
+        påVentÅrsak: 'På vent',
       },
     ];
     return res;

@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     if (oppgaver) {
       oppgaveData = oppgaver.map((oppgave) => ({
         href: byggKelvinURL(oppgave),
-        label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype} ${oppgave.påVentÅrsak} - ${oppgave.enhet} - ${oppgave.oppfølgingsenhet}`,
+        label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype} - ${oppgave.påVentÅrsak} - ${oppgave.enhet} - ${oppgave.oppfølgingsenhet} - ${oppgave.status}`,
       }));
     }
   } catch (err) {
