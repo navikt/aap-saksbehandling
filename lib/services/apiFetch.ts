@@ -17,7 +17,7 @@ export type FetchResponse<RespponseType> = SuccessResponseBody<RespponseType> | 
 
 export interface ErrorResponseBody {
   type: 'ERROR';
-  status: number; // status her (da har vi en struktur som er enkel å gjenbruke hvis vi trenger det på SuccessResponseBody)
+  status: number;
   apiException: ApiException;
 }
 
