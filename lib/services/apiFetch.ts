@@ -91,16 +91,15 @@ const fetchWithRetry = async <ResponseType>(
   }
 
   if (!response.ok) {
-    if (response.status >= 400) {
-      const responseJson: ApiException = await response.json();
-
-      logError(`klarte ikke å hente ${url}: ${responseJson.message}`);
-      return { type: 'ERROR', apiException: responseJson };
+    const shouldRetry = false;
+    if (shouldRetry) {
+      errors.push(`HTTP ${response.status} ${response.statusText}: ${url} (retries left ${retries})`);
+      return await fetchWithRetry(url, method, oboToken, retries - 1, requestBody, tags, errors);
     }
 
-    errors.push(`HTTP ${response.status} ${response.statusText}: ${url} (retries left ${retries})`);
-
-    return await fetchWithRetry(url, method, oboToken, retries - 1, requestBody, tags, errors);
+    const responseJson: ApiException = await response.json();
+    logError(`klarte ikke å hente ${url}: ${responseJson.message}`);
+    return { type: 'ERROR', apiException: responseJson };
   }
 
   const contentType = response.headers.get('content-type');
