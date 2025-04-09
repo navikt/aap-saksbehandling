@@ -10,7 +10,7 @@ export interface SøkeResultat {
     label: string;
     href: string;
   }[];
-  saker?: { href: string; label: string; status: string }[];
+  saker?: { href: string; label: string; }[];
 }
 
 export async function POST(req: Request) {
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     if (oppgaver) {
       oppgaveData = oppgaver.map((oppgave) => ({
         href: byggKelvinURL(oppgave),
-        label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype}`,
+        label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype} ${oppgave.påVentÅrsak} - ${oppgave.enhet} - ${oppgave.oppfølgingsenhet}`,
       }));
     }
   } catch (err) {
@@ -53,8 +53,7 @@ export async function POST(req: Request) {
     oppgaver: oppgaveData,
     saker: sakData?.map((sak) => ({
       href: `/saksbehandling/sak/${sak.saksnummer}`,
-      label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer})`,
-      status: `${sak.status}`
+      label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer}) (${sak.status})`,
     })),
   };
 
