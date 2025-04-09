@@ -15,8 +15,8 @@ export const ApiException = ({ apiResponses }: Props) => {
         .map((feil, i) => (
           <VStack key={`feil-${i}`}>
             <BodyShort size={'small'}>{feil.status}</BodyShort>
-            <BodyShort size={'small'}>{feil.code}</BodyShort>
-            <BodyShort size={'small'}>{feil.message}</BodyShort>
+            <BodyShort size={'small'}>{feil.kelvinException.code}</BodyShort>
+            <BodyShort size={'small'}>{feil.kelvinException.message}</BodyShort>
           </VStack>
         ))}
     </Alert>

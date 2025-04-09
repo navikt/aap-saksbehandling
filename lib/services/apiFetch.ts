@@ -7,10 +7,14 @@ import { hentLocalToken } from 'lib/services/localFetch';
 import { getAccessTokenOrRedirectToLogin } from './azure/azuread';
 import { logError } from 'lib/serverutlis/logger';
 
-export interface ApiException {
-  status: number;
+interface KelvinException {
   message: string;
   code?: string;
+}
+
+export interface ApiException {
+  status: number;
+  kelvinException: KelvinException;
 }
 
 export type FetchResponse<RespponseType> = SuccessResponseBody<RespponseType> | ErrorResponseBody;
@@ -97,9 +101,9 @@ const fetchWithRetry = async <ResponseType>(
       return await fetchWithRetry(url, method, oboToken, retries - 1, requestBody, tags, errors);
     }
 
-    const responseJson: ApiException = await response.json();
+    const responseJson: KelvinException = await response.json();
     logError(`klarte ikke å hente ${url}: ${responseJson.message}`);
-    return { type: 'ERROR', apiException: responseJson };
+    return { type: 'ERROR', apiException: { status: response.status, kelvinException: responseJson } };
   }
 
   const contentType = response.headers.get('content-type');
