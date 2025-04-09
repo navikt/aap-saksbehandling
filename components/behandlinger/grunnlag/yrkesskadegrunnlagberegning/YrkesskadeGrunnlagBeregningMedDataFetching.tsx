@@ -1,5 +1,6 @@
 import { YrkesskadeGrunnlagBeregning } from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/YrkesskadeGrunnlagBeregning';
 import { hentBeregningYrkesskadeVurdering } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   readOnly: boolean;
@@ -13,11 +14,14 @@ export const YrkesskadeGrunnlagBeregningMedDataFetching = async ({
   behandlingsreferanse,
 }: Props) => {
   const yrkesskadeVurderingGrunnlag = await hentBeregningYrkesskadeVurdering(behandlingsreferanse);
+  if (yrkesskadeVurderingGrunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[yrkesskadeVurderingGrunnlag]} />;
+  }
   return (
     <YrkesskadeGrunnlagBeregning
-      yrkeskadeBeregningGrunnlag={yrkesskadeVurderingGrunnlag}
+      yrkeskadeBeregningGrunnlag={yrkesskadeVurderingGrunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !yrkesskadeVurderingGrunnlag.harTilgangTilÅSaksbehandle}
+      readOnly={readOnly || !yrkesskadeVurderingGrunnlag.data.harTilgangTilÅSaksbehandle}
     />
   );
 };

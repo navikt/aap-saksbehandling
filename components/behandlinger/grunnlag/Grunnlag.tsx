@@ -5,14 +5,20 @@ import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { VisBeregning } from 'components/behandlinger/grunnlag/visberegning/VisBeregning';
 import { YrkesskadeGrunnlagBeregningMedDataFetching } from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/YrkesskadeGrunnlagBeregningMedDataFetching';
 import { Behovstype } from 'lib/utils/form';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsReferanse: string;
 }
 
 export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsReferanse);
-  const beregningsgrunnlag = await hentBeregningsGrunnlag(behandlingsReferanse);
+  const [flyt, beregningsgrunnlag] = await Promise.all([
+    hentFlyt(behandlingsReferanse),
+    hentBeregningsGrunnlag(behandlingsReferanse),
+  ]);
+  if (beregningsgrunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[beregningsgrunnlag]} />;
+  }
 
   const grunnlagGruppe = flyt.flyt.find((gruppe) => gruppe.stegGruppe === 'GRUNNLAG');
   const avklaringsBehov = grunnlagGruppe?.steg.find((steg) => steg.avklaringsbehov);
@@ -60,7 +66,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
         </StegSuspense>
       )}
 
-      {beregningsgrunnlag && <VisBeregning grunnlag={beregningsgrunnlag} />}
+      {beregningsgrunnlag.data && <VisBeregning grunnlag={beregningsgrunnlag.data} />}
     </GruppeSteg>
   );
 };

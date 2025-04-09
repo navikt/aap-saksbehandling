@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const VisBeregning = ({ grunnlag }: Props) => {
-  const beregningsVisning = grunnlag.beregningstypeDTO;
+  const beregningsVisning = grunnlag?.beregningstypeDTO;
 
   return (
     <>
