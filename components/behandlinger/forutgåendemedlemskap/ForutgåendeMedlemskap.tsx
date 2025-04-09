@@ -7,6 +7,7 @@ import {
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { ManuellVurderingForutgåendeMedlemskapMedDatafetching } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingforutgåendemedlemskap/ManuellVurderingForutgåendeMedlemskapMedDatafetching';
 import { ForutgåendemedlemskapOverstyringswrapper } from 'components/behandlinger/forutgåendemedlemskap/ForutgåendemedlemskapOverstyringswrapper';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 interface Props {
   behandlingsReferanse: string;
 }
@@ -16,14 +17,17 @@ export const ForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) =>
     hentForutgåendeMedlemskapGrunnlag(behandlingsReferanse),
     hentForutgåendeMedlemskapsVurdering(behandlingsReferanse),
   ]);
+  if (grunnlag.type === 'ERROR' || automatiskVurdering.type === 'ERROR') {
+    return <ApiException apiResponses={[grunnlag, automatiskVurdering]} />;
+  }
 
   const stegSomSkalVises = getStegSomSkalVises('MEDLEMSKAP', flyt);
 
   const behandlingsVersjon = flyt.behandlingVersjon;
   const saksBehandlerReadOnly = flyt.visning.saksbehandlerReadOnly;
-  const visOverstyrKnapp = automatiskVurdering.kanBehandlesAutomatisk && stegSomSkalVises.length === 0;
+  const visOverstyrKnapp = automatiskVurdering.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0;
 
-  const readOnly = saksBehandlerReadOnly || !grunnlag.harTilgangTilÅSaksbehandle;
+  const readOnly = saksBehandlerReadOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
 
   return (
     <GruppeSteg
@@ -37,13 +41,13 @@ export const ForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) =>
         behandlingsReferanse={behandlingsReferanse}
         behandlingVersjon={behandlingsVersjon}
         readOnly={readOnly}
-        automatiskVurdering={automatiskVurdering}
+        automatiskVurdering={automatiskVurdering.data}
         stegSomSkalVises={stegSomSkalVises}
         visOverstyrKnapp={visOverstyrKnapp}
       >
         {stegSomSkalVises.includes('VURDER_MEDLEMSKAP') && (
           <ManuellVurderingForutgåendeMedlemskapMedDatafetching
-            grunnlag={grunnlag}
+            grunnlag={grunnlag.data}
             behandlingVersjon={behandlingsVersjon}
             readOnly={readOnly}
           />

@@ -202,11 +202,9 @@ export const hentLovvalgMedlemskapGrunnlag = async (behandlingsReferanse: string
   return await apiFetch<LovvalgMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentForutgåendeMedlemskapGrunnlag = async (
-  behandlingsReferanse: string
-): Promise<ForutgåendeMedlemskapGrunnlag> => {
+export const hentForutgåendeMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/forutgaaendemedlemskap`;
-  return await fetchProxy<ForutgåendeMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<ForutgåendeMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSamordningGraderingGrunnlag = async (
@@ -349,11 +347,9 @@ export const hentAktivitetspliktGrunnlag = async (behandlingsreferanse: string):
   return await fetchProxy(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentForutgåendeMedlemskapsVurdering = async (
-  behandlingsReferanse: string
-): Promise<AutomatiskLovvalgOgMedlemskapVurdering> => {
+export const hentForutgåendeMedlemskapsVurdering = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/lovvalgmedlemskap/forutgaaendevurdering/${behandlingsReferanse}`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<AutomatiskLovvalgOgMedlemskapVurdering>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentAutomatiskLovvalgOgMedlemskapVurdering = async (behandlingsReferanse: string) => {
