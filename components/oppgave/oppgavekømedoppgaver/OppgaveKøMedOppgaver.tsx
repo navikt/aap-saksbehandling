@@ -117,7 +117,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
                   Totalt antall oppgaver
                 </Label>
                 {oppgaverValgtKø?.data?.type === 'success' && (
-                  <BodyShort spacing>{oppgaverValgtKø?.data?.data.antallTotalt}</BodyShort>
+                  <BodyShort>{oppgaverValgtKø?.data?.data.antallTotalt}</BodyShort>
                 )}
               </VStack>
             </HStack>
