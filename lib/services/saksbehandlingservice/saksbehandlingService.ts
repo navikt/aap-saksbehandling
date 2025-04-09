@@ -326,14 +326,14 @@ export const purrPåLegeerklæring = async (requestBody: {
   return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
-export const hentUnderveisGrunnlag = async (behandlingsreferanse: string): Promise<UnderveisGrunnlag[]> => {
+export const hentUnderveisGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/underveis/${behandlingsreferanse}`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<UnderveisGrunnlag[]>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentAktivitetspliktGrunnlag = async (behandlingsreferanse: string): Promise<AktivitetspliktGrunnlag> => {
+export const hentAktivitetspliktGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/aktivitetsplikt/effektuer`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<AktivitetspliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentForutgåendeMedlemskapsVurdering = async (behandlingsReferanse: string) => {
