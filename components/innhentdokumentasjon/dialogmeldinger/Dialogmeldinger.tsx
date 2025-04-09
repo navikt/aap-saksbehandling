@@ -3,7 +3,7 @@ import { LegeerklæringStatus } from 'lib/types/types';
 import { ReactNode } from 'react';
 
 import styles from './Dialogmeldinger.module.css';
-import { ThumbDownIcon, TimerPauseIcon } from '@navikt/aksel-icons';
+import { TimerPauseIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { clientPurrPåLegeerklæring } from 'lib/clientApi';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -62,14 +62,6 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
       </Table.DataCell>
       <Table.DataCell textSize={'small'}>
         <HStack gap={'2'}>
-          {melding.status === 'OK' && (
-            <Button
-              variant="secondary"
-              type="button"
-              size="small"
-              icon={<ThumbDownIcon title="Avslå legeerklæring" />}
-            />
-          )}
           {kanSendePurring(melding.opprettet) && (
             <Button
               variant="secondary"
