@@ -7,20 +7,17 @@ import { hentLocalToken } from 'lib/services/localFetch';
 import { getAccessTokenOrRedirectToLogin } from './azure/azuread';
 import { logError } from 'lib/serverutlis/logger';
 
-interface KelvinException {
+// ApiException heter det samme i frontend og backend
+export interface ApiException {
   message: string;
   code?: string;
-}
-
-export interface ApiException {
-  status: number;
-  kelvinException: KelvinException;
 }
 
 export type FetchResponse<RespponseType> = SuccessResponseBody<RespponseType> | ErrorResponseBody;
 
 export interface ErrorResponseBody {
   type: 'ERROR';
+  status: number; // status her (da har vi en struktur som er enkel å gjenbruke hvis vi trenger det på SuccessResponseBody)
   apiException: ApiException;
 }
 
@@ -101,9 +98,9 @@ const fetchWithRetry = async <ResponseType>(
       return await fetchWithRetry(url, method, oboToken, retries - 1, requestBody, tags, errors);
     }
 
-    const responseJson: KelvinException = await response.json();
+    const responseJson: ApiException = await response.json();
     logError(`klarte ikke å hente ${url}: ${responseJson.message}`);
-    return { type: 'ERROR', apiException: { status: response.status, kelvinException: responseJson } };
+    return { type: 'ERROR', apiException: responseJson, status: response.status };
   }
 
   const contentType = response.headers.get('content-type');

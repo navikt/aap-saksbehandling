@@ -10,9 +10,7 @@ export async function POST(req: NextRequest) {
     const løsbehovRes = await løsAvklaringsbehov(body);
 
     if (løsbehovRes.type === 'ERROR') {
-      logError(
-        `/løs-behov, behovstype: ${body.behov?.behovstype}, message: ${løsbehovRes.apiException.kelvinException.message}`
-      );
+      logError(`/løs-behov, behovstype: ${body.behov?.behovstype}, message: ${løsbehovRes.apiException.message}`);
     }
     return new Response(JSON.stringify(løsbehovRes));
   } catch (error) {

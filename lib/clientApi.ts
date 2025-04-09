@@ -62,11 +62,9 @@ async function clientFetchV2<ResponseBody>(
   } catch (e) {
     return {
       type: 'ERROR',
+      status: 500,
       apiException: {
-        status: 500,
-        kelvinException: {
-          message: getErrorMessage(e),
-        },
+        message: getErrorMessage(e),
       },
     };
   }

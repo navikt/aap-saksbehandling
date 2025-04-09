@@ -297,7 +297,7 @@ export const forberedBehandlingOgVentPåProsessering = async (
   referanse: string
 ): Promise<undefined | FlytProsessering> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
-  logInfo('Forbereder behandling ' + referanse);
+  logInfo('Forbereder behandling ' + referanse + 'hihihi');
   return await fetchProxy(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 

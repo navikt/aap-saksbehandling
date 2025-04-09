@@ -23,7 +23,7 @@ export const useLøsBehovOgVentPåProsessering = (): {
   const løsBehovOgVentPåProsessering = async (behov: LøsAvklaringsbehovPåBehandling) => {
     const løsbehovRes = await clientLøsBehov(behov);
     if (løsbehovRes.type === 'ERROR') {
-      if (løsbehovRes.apiException.status === 409) {
+      if (løsbehovRes.status === 409) {
         setStatus('CLIENT_CONFLICT');
       } else {
         setStatus('CLIENT_ERROR');

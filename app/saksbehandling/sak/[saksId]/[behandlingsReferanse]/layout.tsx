@@ -47,6 +47,7 @@ const Layout = async (props: Props) => {
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(params.behandlingsReferanse);
 
+  console.log(behandling);
   // Denne må komme før resten av kallene slik at siste versjon av data er oppdatert i backend for behandlingen
   if (behandling.data.skalForberede) {
     const forberedBehandlingResponse = await forberedBehandlingOgVentPåProsessering(params.behandlingsReferanse);

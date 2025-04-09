@@ -18,7 +18,7 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, resetStatus, lø
     <>
       {løsBehovOgGåTilNesteStegError && (
         <Alert variant="error">
-          <BodyShort spacing>{løsBehovOgGåTilNesteStegError.kelvinException.message}</BodyShort>
+          <BodyShort spacing>{løsBehovOgGåTilNesteStegError.message}</BodyShort>
           <BodyShort size={'small'}>
             <b>SakId:</b>
             {` ${saksId}`}
