@@ -7,14 +7,13 @@ import {
   hentSak,
   hentSakPersoninfo,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { HGrid } from '@navikt/ds-react';
+import { HGrid, VStack } from '@navikt/ds-react';
 
 import styles from './layout.module.css';
 import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
-import { notFound } from 'next/navigation';
 import { StegGruppe } from 'lib/types/types';
 import { SaksbehandlingsoversiktMedDataFetching } from 'components/saksbehandlingsoversikt/SaksbehandlingsoversiktMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
@@ -23,6 +22,7 @@ import { IngenFlereOppgaverModalContextProvider } from 'context/IngenFlereOppgav
 import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { logWarning } from 'lib/serverutlis/logger';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   children: ReactNode;
@@ -37,8 +37,11 @@ const Layout = async (props: Props) => {
   const behandling = await hentBehandling(params.behandlingsReferanse);
 
   if (behandling?.type === 'ERROR') {
-    // <ErrorKomponent error={behandling.apiException}/>
-    notFound();
+    return (
+      <VStack padding={'4'}>
+        <ApiException apiResponses={[behandling]} />
+      </VStack>
+    );
   }
 
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
