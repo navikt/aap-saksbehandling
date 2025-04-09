@@ -80,7 +80,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
                   }}
                 />
                 <KøSelect
-                  label={'Velg kø du skal jobbe på'}
+                  label={'Velg kø'}
                   køer={køer.data?.type === 'success' ? køer.data.data : []}
                   aktivKøId={aktivKøId}
                   valgtKøListener={oppdaterKøId}
@@ -109,7 +109,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
                   Beskrivelse av køen
                 </Label>
                 {køer.data?.type === 'success' && (
-                  <BodyShort spacing>{køer.data.data.find((e) => e.id === aktivKøId)?.beskrivelse}</BodyShort>
+                  <BodyShort>{køer.data.data.find((e) => e.id === aktivKøId)?.beskrivelse}</BodyShort>
                 )}
               </VStack>
               <VStack>

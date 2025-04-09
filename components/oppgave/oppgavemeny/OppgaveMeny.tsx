@@ -9,9 +9,9 @@ import { MineOppgaver } from 'components/oppgave/mineoppgaver/MineOppgaver';
 interface Props {
   enheter: Enhet[];
 }
-type MenyValg = 'Oppgavekøer' | 'Mine reserverte';
+type MenyValg = 'Oppgavekøer' | 'Mine oppgaver';
 
-const options: MenyValg[] = ['Oppgavekøer', 'Mine reserverte'];
+const options: MenyValg[] = ['Oppgavekøer', 'Mine oppgaver'];
 export const OppgaveMeny = ({ enheter }: Props) => {
   const [selected, setSelected] = useState<MenyValg>('Oppgavekøer');
   return (
@@ -33,7 +33,7 @@ export const OppgaveMeny = ({ enheter }: Props) => {
           ))}
         </Chips>
       </HStack>
-      {selected === 'Mine reserverte' && <MineOppgaver />}
+      {selected === 'Mine oppgaver' && <MineOppgaver />}
       {selected === 'Oppgavekøer' && <OppgaveKøMedOppgaver enheter={enheter} />}
     </VStack>
   );
