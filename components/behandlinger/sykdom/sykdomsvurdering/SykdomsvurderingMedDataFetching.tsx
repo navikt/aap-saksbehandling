@@ -1,13 +1,14 @@
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { hentSak, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
-import { TypeBehandling } from 'lib/types/types';
+import { SaksInfo, TypeBehandling } from 'lib/types/types';
 import { ValuePair } from 'components/form/FormField';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
-  saksId: string;
+  sak: SaksInfo;
   behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
@@ -18,25 +19,28 @@ export const SykdomsvurderingMedDataFetching = async ({
   behandlingsReferanse,
   behandlingVersjon,
   readOnly,
-  saksId,
+  sak,
   typeBehandling,
 }: Props) => {
-  const [grunnlag, sak] = await Promise.all([hentSykdomsGrunnlag(behandlingsReferanse), hentSak(saksId)]);
+  const grunnlag = await hentSykdomsGrunnlag(behandlingsReferanse);
+  if (grunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[grunnlag]} />;
+  }
 
   const bidiagnoserDefaultOptions = await getDefaultOptions(
-    finnDiagnosegrunnlag(typeBehandling, grunnlag)?.bidiagnoser,
-    finnDiagnosegrunnlag(typeBehandling, grunnlag)?.kodeverk as DiagnoseSystem
+    finnDiagnosegrunnlag(typeBehandling, grunnlag.data)?.bidiagnoser,
+    finnDiagnosegrunnlag(typeBehandling, grunnlag.data)?.kodeverk as DiagnoseSystem
   );
 
   const hovedDiagnoseDefaultOptions = await getDefaultOptions(
-    finnDiagnosegrunnlag(typeBehandling, grunnlag)?.hoveddiagnose,
-    finnDiagnosegrunnlag(typeBehandling, grunnlag)?.kodeverk as DiagnoseSystem
+    finnDiagnosegrunnlag(typeBehandling, grunnlag.data)?.hoveddiagnose,
+    finnDiagnosegrunnlag(typeBehandling, grunnlag.data)?.kodeverk as DiagnoseSystem
   );
 
   return (
     <Sykdomsvurdering
-      grunnlag={grunnlag}
-      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+      grunnlag={grunnlag.data}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
       hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}

@@ -1,5 +1,6 @@
 import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
 import { hentUnntakMeldepliktGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsReferanse: string;
@@ -9,11 +10,14 @@ interface Props {
 
 export const MeldepliktMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentUnntakMeldepliktGrunnlag(behandlingsReferanse);
+  if (grunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[grunnlag]} />;
+  }
 
   return (
     <Meldeplikt
-      grunnlag={grunnlag}
-      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+      grunnlag={grunnlag.data}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
     />
   );

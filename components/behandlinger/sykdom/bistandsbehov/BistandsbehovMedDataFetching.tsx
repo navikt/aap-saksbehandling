@@ -1,13 +1,14 @@
-import { hentBistandsbehovGrunnlag, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBistandsbehovGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
-import { TypeBehandling } from 'lib/types/types';
+import { SaksInfo, TypeBehandling } from 'lib/types/types';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  saksId: string;
+  sak: SaksInfo;
 }
 
 export const BistandsbehovMedDataFetching = async ({
@@ -15,14 +16,17 @@ export const BistandsbehovMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
   typeBehandling,
-  saksId,
+  sak,
 }: Props) => {
-  const [grunnlag, sak] = await Promise.all([hentBistandsbehovGrunnlag(behandlingsReferanse), hentSak(saksId)]);
+  const grunnlag = await hentBistandsbehovGrunnlag(behandlingsReferanse);
+  if (grunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[grunnlag]} />;
+  }
 
   return (
     <Bistandsbehov
-      grunnlag={grunnlag}
-      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+      grunnlag={grunnlag.data}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       typeBehandling={typeBehandling}
       søknadstidspunkt={sak.periode.fom}

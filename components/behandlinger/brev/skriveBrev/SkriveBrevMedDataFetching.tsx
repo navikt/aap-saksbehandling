@@ -9,6 +9,7 @@ import {
 import styles from './SkriveBrevMedDataFetching.module.css';
 import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
 import { StegType } from 'lib/types/types';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 export const SkriveBrevMedDataFetching = async ({
   behandlingsReferanse,
@@ -26,6 +27,9 @@ export const SkriveBrevMedDataFetching = async ({
     hentRefusjonGrunnlag(behandlingsReferanse),
     hentRollerForBruker(),
   ]);
+  if (sykdomsgrunnlag.type === 'ERROR' || bistandsbehovGrunnlag.type === 'ERROR' || refusjonGrunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag]} />;
+  }
 
   const brev = brevGrunnlag.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
   const readOnlyBrev = aktivtSteg === 'BREV' && !roller.includes(Roller.BESLUTTER);
@@ -37,9 +41,9 @@ export const SkriveBrevMedDataFetching = async ({
   return (
     <div className={styles.flex}>
       <SaksopplysningerKolonne
-        sykdomsgrunnlag={sykdomsgrunnlag}
-        bistandsbehovGrunnlag={bistandsbehovGrunnlag}
-        refusjonGrunnlag={refusjonGrunnlag}
+        sykdomsgrunnlag={sykdomsgrunnlag.data}
+        bistandsbehovGrunnlag={bistandsbehovGrunnlag.data}
+        refusjonGrunnlag={refusjonGrunnlag.data}
       />
       <SkriveBrev
         status={brev.status}

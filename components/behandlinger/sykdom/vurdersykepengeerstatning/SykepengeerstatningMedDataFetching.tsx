@@ -1,5 +1,6 @@
 import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/Sykepengeerstatning';
 import { hentSykepengerErstatningGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsReferanse: string;
@@ -13,11 +14,14 @@ export const SykepengeerstatningMedDataFetching = async ({
   readOnly,
 }: Props) => {
   const grunnlag = await hentSykepengerErstatningGrunnlag(behandlingsReferanse);
+  if (grunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[grunnlag]} />;
+  }
 
   return (
     <Sykepengeerstatning
-      grunnlag={grunnlag}
-      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+      grunnlag={grunnlag.data}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
     />
   );

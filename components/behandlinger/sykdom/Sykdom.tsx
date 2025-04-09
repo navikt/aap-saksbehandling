@@ -1,6 +1,6 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentFlyt, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { BistandsbehovMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
-  const flyt = await hentFlyt(behandlingsReferanse);
+  const [flyt, sak] = await Promise.all([hentFlyt(behandlingsReferanse), hentSak(sakId)]);
 
   const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt);
 
@@ -34,7 +34,7 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
       {stegSomSkalVises.includes('AVKLAR_SYKDOM') && (
         <StegSuspense>
           <SykdomsvurderingMedDataFetching
-            saksId={sakId}
+            sak={sak}
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
@@ -67,14 +67,14 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
             typeBehandling={flyt.visning.typeBehandling}
-            saksId={sakId}
+            sak={sak}
           />
         </StegSuspense>
       )}
       {stegSomSkalVises.includes('REFUSJON_KRAV') && (
         <StegSuspense>
           <RefusjonMedDataFetching
-            saksId={sakId}
+            sak={sak}
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}

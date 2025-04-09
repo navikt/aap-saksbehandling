@@ -1,20 +1,25 @@
 import { Refusjon } from 'components/behandlinger/sykdom/refusjon/Refusjon';
-import { hentRefusjonGrunnlag, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentRefusjonGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { SaksInfo } from 'lib/types/types';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
-  saksId: string;
+  sak: SaksInfo;
 }
 
-export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly, saksId }: Props) => {
-  const [refusjonGrunnlag, sak] = await Promise.all([hentRefusjonGrunnlag(behandlingsReferanse), hentSak(saksId)]);
+export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly, sak }: Props) => {
+  const refusjonGrunnlag = await hentRefusjonGrunnlag(behandlingsReferanse);
+  if (refusjonGrunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[refusjonGrunnlag]} />;
+  }
 
   return (
     <Refusjon
-      grunnlag={refusjonGrunnlag}
-      readOnly={readOnly || !refusjonGrunnlag.harTilgangTilÅSaksbehandle}
+      grunnlag={refusjonGrunnlag.data}
+      readOnly={readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       søknadstidspunkt={sak.periode.fom}
     />
