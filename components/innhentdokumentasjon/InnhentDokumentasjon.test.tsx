@@ -28,7 +28,7 @@ describe('Innhent dokumentasjon', () => {
   test('har en knapp for å åpne skjema for å etterspørre informasjon fra lege', () => {
     fetchMock.mockResponseOnce(JSON.stringify(testdata), { status: 200 });
     render(<InnhentDokumentasjon />);
-    expect(screen.getByRole('button', { name: 'Etterspør informasjon fra lege' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Be om opplysninger fra behandler' })).toBeVisible();
   });
 
   // TODO må refaktorere denne komponenten litt

@@ -11,7 +11,7 @@ describe('InnhentDokumentasjon', () => {
   });
 
   test('har en overskrift på nivå 3 når man viser skjema', async () => {
-    expect(screen.getByRole('heading', { name: 'Etterspør informasjon fra lege' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Be om opplysninger fra behandler' })).toBeVisible();
   });
 
   test('har et felt for å søke etter behandler', async () => {

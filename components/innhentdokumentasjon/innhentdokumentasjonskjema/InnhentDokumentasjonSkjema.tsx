@@ -118,7 +118,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   return (
     <div className={'flex-column'}>
       <Heading level={'3'} size={'small'}>
-        Etterspør informasjon fra lege
+        Be om opplysninger fra behandler
       </Heading>
       <form onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
         <AsyncComboSearch

@@ -33,7 +33,7 @@ export const InnhentDokumentasjon = () => {
         <VStack gap={'4'}>
           <div>
             <Button type="button" variant={'secondary'} size={'small'} onClick={() => oppdaterVisSkjema(true)}>
-              Etterspør informasjon fra lege
+              Be om opplysninger fra behandler
             </Button>
           </div>
           {isLoading && (

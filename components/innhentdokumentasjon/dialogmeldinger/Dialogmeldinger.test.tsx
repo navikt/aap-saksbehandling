@@ -33,13 +33,13 @@ describe('Dialogmeldinger', () => {
   test('viser en tabell med oversikt over dialogmeldinger når det er funnet dialogmeldinger', () => {
     render(<Dialogmeldinger dialogmeldinger={dialogmeldinger} />);
     expect(screen.getByRole('columnheader', { name: 'Status' })).toBeVisible();
-    expect(screen.getByRole('columnheader', { name: 'Bestilt dato' })).toBeVisible();
+    expect(screen.getByRole('columnheader', { name: 'Bestilt' })).toBeVisible();
   });
 
   test('viser en rad med dato for bestilling og status på bestillingen', () => {
     render(<Dialogmeldinger dialogmeldinger={[dialogmeldinger[0]]} />);
     expect(screen.getByRole('cell', { name: '28.10.2024' })).toBeVisible();
-    expect(screen.getByText(/^Bestilt$/)).toBeVisible();
+    expect(screen.getByRole('cell', { name: /Bestilt$/ })).toBeVisible();
   });
 
   test('viser en melding om det er ikke er funnet noen dialogmeldinger når listen er tom', () => {

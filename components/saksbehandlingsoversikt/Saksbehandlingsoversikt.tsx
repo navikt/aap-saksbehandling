@@ -25,14 +25,14 @@ export const Saksbehandlingsoversikt = () => {
           <Tooltip content={'Åpne saksdokumenter'}>
             <Tabs.Tab value="saksdokumenter" label={'Saksdokumenter'} icon={<FilesIcon aria-hidden />} />
           </Tooltip>
-          <Tooltip content={'Åpne hent opplysninger'}>
-            <Tabs.Tab value="hent_opplysninger" label={'Hent opplysninger'} icon={<HddDownIcon aria-hidden />} />
+          <Tooltip content={'Åpne be om opplysninger'}>
+            <Tabs.Tab value="be_om_opplysninger" label={'Be om opplysninger'} icon={<HddDownIcon aria-hidden />} />
           </Tooltip>
         </Tabs.List>
       </Tabs>
       <div className={styles.tabContent}>
         {toggleGroupValue === 'saksdokumenter' && <Saksdokumenter />}
-        {toggleGroupValue === 'hent_opplysninger' && <InnhentDokumentasjon />}
+        {toggleGroupValue === 'be_om_opplysninger' && <InnhentDokumentasjon />}
       </div>
     </div>
   );

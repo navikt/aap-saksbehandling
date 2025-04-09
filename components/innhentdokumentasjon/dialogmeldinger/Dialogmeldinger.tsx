@@ -16,27 +16,17 @@ type Props = {
 const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null): ReactNode => {
   switch (status) {
     case 'BESTILT':
-      return (
-        <Alert size={'small'} variant="info">
-          Bestilt
-        </Alert>
-      );
     case 'SENDT':
-      return (
-        <Alert size={'small'} variant="info">
-          Sendt
-        </Alert>
-      );
     case 'OK':
       return (
         <Alert size={'small'} variant="success">
-          Mottatt
+          Bestilt
         </Alert>
       );
     case 'AVVIST':
       return (
         <Alert size={'small'} variant="error">
-          Avvist
+          Feilet
         </Alert>
       );
     default:
@@ -87,7 +77,7 @@ export const Dialogmeldinger = ({ dialogmeldinger }: Props) => {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell textSize={'small'}>Status</Table.HeaderCell>
-          <Table.HeaderCell textSize={'small'}>Bestilt dato</Table.HeaderCell>
+          <Table.HeaderCell textSize={'small'}>Bestilt</Table.HeaderCell>
           <Table.HeaderCell textSize={'small'}>Behandler</Table.HeaderCell>
           <Table.HeaderCell textSize={'small'}>Handling</Table.HeaderCell>
         </Table.Row>
