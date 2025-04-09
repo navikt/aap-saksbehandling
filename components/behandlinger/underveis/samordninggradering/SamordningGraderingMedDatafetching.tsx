@@ -1,5 +1,6 @@
 import { SamordningGradering } from 'components/behandlinger/underveis/samordninggradering/SamordningGradering';
 import { hentSamordningGraderingGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -13,11 +14,15 @@ export const SamordningGraderingMedDatafetching = async ({
   readOnly,
 }: Props) => {
   const grunnlag = await hentSamordningGraderingGrunnlag(behandlingsreferanse);
+  if (grunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[grunnlag]} />;
+  }
+
   return (
     <SamordningGradering
-      grunnlag={grunnlag}
+      grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
     />
   );
 };

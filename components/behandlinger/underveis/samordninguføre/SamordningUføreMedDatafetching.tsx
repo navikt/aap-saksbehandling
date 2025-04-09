@@ -1,5 +1,6 @@
 import { SamordningUføre } from 'components/behandlinger/underveis/samordninguføre/SamordningUføre';
 import { hentSamordningUføreGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -8,11 +9,15 @@ interface Props {
 }
 export const SamordningUføreMedDatafetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentSamordningUføreGrunnlag(behandlingsreferanse);
+  if (grunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[grunnlag]} />;
+  }
+
   return (
     <SamordningUføre
-      grunnlag={grunnlag}
+      grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
     />
   );
 };

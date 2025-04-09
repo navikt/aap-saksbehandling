@@ -1,5 +1,6 @@
 import { SamordningAndreStatligeYtelser } from 'components/behandlinger/underveis/samordningandrestatlige/SamordningAndreStatligeYtelser';
 import { hentSamordningAndreStatligeYtelseGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -12,11 +13,15 @@ export const SamordningAndreStatligeYtelserMedDatafetching = async ({
   behandlingsreferanse,
 }: Props) => {
   const grunnlag = await hentSamordningAndreStatligeYtelseGrunnlag(behandlingsreferanse);
+  if (grunnlag.type === 'ERROR') {
+    return <ApiException apiResponses={[grunnlag]} />;
+  }
+
   return (
     <SamordningAndreStatligeYtelser
-      grunnlag={grunnlag}
+      grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
     />
   );
 };
