@@ -60,32 +60,10 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     name: 'fritaksvurderinger',
   });
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const skalViseBekreftKnapp = !readOnly && fritakMeldepliktVurderinger.length > 0;
-  {
-    /*
-  const simulate = async () => {
-    const validationResult = await form.trigger(); // force validation
-    if (validationResult) {
-      const vurderinger: FritaksvurderingDto[] = form.getValues().fritaksvurderinger.map((vurdering) => ({
-        begrunnelse: vurdering.begrunnelse,
-        harFritak: vurdering.harFritak === JaEllerNei.Ja,
-        fraDato: formaterDatoForBackend(parse(vurdering.fraDato, 'dd.MM.yyyy', new Date())),
-      }));
-
-      // @ts-ignore THOMAS! HJELP!
-      const res: SimulertMeldeplikt = await simulerMeldeplikt(behandlingsreferanse, {
-        fritaksvurderinger: vurderinger,
-      });
-    } else {
-      console.log(`form is not valid ${validationResult}`);
-    }
-  };
-  */
-  }
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -105,6 +83,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
   };
 
   const showAsOpen = !!grunnlag?.vurderinger && grunnlag.vurderinger.length > 0;
+  const skalViseBekreftKnapp = !readOnly && fritakMeldepliktVurderinger.length > 0;
 
   return (
     <VilkårsKort
@@ -174,29 +153,15 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
             </div>
           ))}
           {!readOnly && (
-            <>
-              <div>
-                <Button
-                  onClick={() => append({ begrunnelse: '', harFritak: '', fraDato: '' })}
-                  type={'button'}
-                  variant={'secondary'}
-                  size={'small'}
-                >
-                  Legg til periode
-                </Button>
-              </div>
-              {/*<div>
-              <Button
-                onClick={() => simulate()}
-                type={'button'}
-                variant={'secondary'}
-                size={'medium'}
-                icon={<TestFlaskIcon aria-hidden />}
-              >
-                Simuler
-              </Button>
-            </div>*/}
-            </>
+            <Button
+              onClick={() => append({ begrunnelse: '', harFritak: '', fraDato: '' })}
+              type={'button'}
+              variant={'secondary'}
+              className={'fit-content'}
+              size={'small'}
+            >
+              Legg til periode
+            </Button>
           )}
         </Form>
       </VStack>

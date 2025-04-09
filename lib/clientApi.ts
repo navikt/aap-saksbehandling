@@ -14,7 +14,6 @@ import {
   OpprettTestcase,
   SaksInfo,
   SettPåVent,
-  SimulerMeldeplikt,
 } from './types/types';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { FetchResponse } from 'lib/services/apiFetch';
@@ -93,10 +92,6 @@ export function clientOpprettAktivitetspliktBrudd(saksnummer: string, aktivitet:
 
 export function clientOppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd2) {
   return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/aktivitetsplikt/oppdater`, 'POST', aktivitet);
-}
-
-export function clientSimulerMeldeplikt(referanse: string, vurderinger: SimulerMeldeplikt) {
-  return clientFetch(`${BASE_URL}/api/behandling/${referanse}/simuler-meldeplikt`, 'POST', vurderinger);
 }
 
 export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
