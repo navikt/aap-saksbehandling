@@ -7,6 +7,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { ArrowOrange } from 'components/icons/ArrowOrange';
 import { ArrowGreen } from 'components/icons/ArrowGreen';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface FormFields {
   dokumentnavn: string;
@@ -15,7 +16,7 @@ interface FormFields {
 
 export const Saksdokumenter = () => {
   const saksnummer = useSaksnummer();
-  const { data: dokumenter } = useSWR(`api/sak/${saksnummer}/dokumenter`, () =>
+  const { data: dokumenterPåSak } = useSWR(`api/sak/${saksnummer}/dokumenter`, () =>
     clientHentAlleDokumenterPåSak(saksnummer)
   );
 
@@ -27,9 +28,20 @@ export const Saksdokumenter = () => {
     dokumentType: {
       type: 'select',
       label: 'Vis typer',
-      options: Array.from(new Set([...[''], ...(dokumenter?.map((dokument) => dokument.variantformat) || [])])),
+      options: Array.from(
+        new Set([
+          ...[''],
+          ...((dokumenterPåSak?.type === 'SUCCESS' &&
+            dokumenterPåSak?.data?.map((dokument) => dokument.variantformat)) ||
+            []),
+        ])
+      ),
     },
   });
+
+  if (dokumenterPåSak?.type === 'ERROR') {
+    return <ApiException apiResponses={[dokumenterPåSak]} />;
+  }
 
   return (
     <VStack gap={'4'}>
@@ -55,7 +67,7 @@ export const Saksdokumenter = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {dokumenter
+          {dokumenterPåSak?.data
             ?.filter((dokument) => !form.watch('dokumentnavn') || dokument.tittel.includes(form.watch('dokumentnavn')))
             .filter((dokument) => !form.watch('dokumentType') || dokument.variantformat === form.watch('dokumentType'))
             .map((dokument) => {

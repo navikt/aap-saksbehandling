@@ -5,9 +5,5 @@ export async function GET(req: NextApiRequest, props: { params: Promise<{ saksnu
   const params = await props.params;
   const data = await hentAlleDokumenterPåSak(params.saksnummer);
 
-  if (data !== undefined) {
-    return new Response(JSON.stringify(data), { status: 200 });
-  } else {
-    return new Response(JSON.stringify({ message: 'Ingen dokumenter funnet.' }), { status: 500 });
-  }
+  return new Response(JSON.stringify(data), { status: 200 });
 }

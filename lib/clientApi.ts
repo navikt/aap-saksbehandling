@@ -112,7 +112,7 @@ export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
 }
 
 export function clientHentAlleDokumenterPåSak(saksnummer: string) {
-  return clientFetch<DokumentInfo[]>(`${BASE_URL}/api/sak/${saksnummer}/dokumenter`, 'GET');
+  return clientFetchV2<DokumentInfo[]>(`${BASE_URL}/api/sak/${saksnummer}/dokumenter`, 'GET');
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {

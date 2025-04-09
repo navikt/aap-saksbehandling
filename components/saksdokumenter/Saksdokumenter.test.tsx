@@ -4,39 +4,46 @@ import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { DokumentInfo } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
+import { FetchResponse } from 'lib/services/apiFetch';
 
-const etDokument: DokumentInfo[] = [
-  {
-    tittel: 'søknad.pdf',
-    dokumentInfoId: '123',
-    journalpostId: '456',
-    variantformat: 'ARKIV',
-    brevkode: 'arkiv',
-    datoOpprettet: '2024-12-12',
-    erUtgående: true,
-  },
-];
+const etDokument: FetchResponse<DokumentInfo[]> = {
+  type: 'SUCCESS',
+  data: [
+    {
+      tittel: 'søknad.pdf',
+      dokumentInfoId: '123',
+      journalpostId: '456',
+      variantformat: 'ARKIV',
+      brevkode: 'arkiv',
+      datoOpprettet: '2024-12-12',
+      erUtgående: true,
+    },
+  ],
+};
 
-const toDokument: DokumentInfo[] = [
-  {
-    tittel: 'søknad.pdf',
-    dokumentInfoId: '123',
-    journalpostId: '456',
-    variantformat: 'ARKIV',
-    brevkode: 'arkiv',
-    datoOpprettet: '2024-12-12',
-    erUtgående: true,
-  },
-  {
-    tittel: 'legeerklæring.pdf',
-    dokumentInfoId: '456',
-    journalpostId: '789',
-    variantformat: 'ARKIV',
-    brevkode: 'arkiv',
-    datoOpprettet: '2024-12-12',
-    erUtgående: true,
-  },
-];
+const toDokument: FetchResponse<DokumentInfo[]> = {
+  data: [
+    {
+      tittel: 'søknad.pdf',
+      dokumentInfoId: '123',
+      journalpostId: '456',
+      variantformat: 'ARKIV',
+      brevkode: 'arkiv',
+      datoOpprettet: '2024-12-12',
+      erUtgående: true,
+    },
+    {
+      tittel: 'legeerklæring.pdf',
+      dokumentInfoId: '456',
+      journalpostId: '789',
+      variantformat: 'ARKIV',
+      brevkode: 'arkiv',
+      datoOpprettet: '2024-12-12',
+      erUtgående: true,
+    },
+  ],
+  type: 'SUCCESS',
+};
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -88,6 +95,17 @@ test('skal ha en tabell med inn/ut, dokument, type og journalført i header', as
   expect(journalført).toBeVisible();
 });
 
-function mockFetchDokumenter(dokumenter: DokumentInfo[]) {
+test('Skal vise en feilmelding dersom responsen er av type error', async () => {
+  mockFetchDokumenter({
+    type: 'ERROR',
+    apiException: { kelvinException: { message: 'Uhåndtert feil i backend' }, status: 400 },
+  });
+  render(<Saksdokumenter />);
+
+  const feilmelding = await screen.findByText('Uhåndtert feil i backend');
+  expect(feilmelding).toBeVisible();
+});
+
+function mockFetchDokumenter(dokumenter: FetchResponse<DokumentInfo[]>) {
   fetchMock.mockResponseOnce(JSON.stringify(dokumenter), { status: 200 });
 }

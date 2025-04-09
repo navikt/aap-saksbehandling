@@ -116,9 +116,9 @@ export const hentAlleSaker = async (): Promise<SaksInfo[]> => {
   return await fetchProxy<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentAlleDokumenterPåSak = async (saksnummer: string): Promise<DokumentInfo[]> => {
+export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/dokumenter`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<DokumentInfo[]>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentLesetilgang = async (saksnummer: string) => {
