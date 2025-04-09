@@ -8,15 +8,15 @@ interface Props {
 }
 export const ApiException = ({ apiResponses }: Props) => {
   return (
-    <Alert variant={'error'}>
+    <Alert variant={'error'} size={'small'}>
       {apiResponses
         .filter((e) => e.type === 'ERROR')
         .map((e) => e.apiException)
         .map((feil, i) => (
           <VStack key={`feil-${i}`}>
-            <BodyShort>{feil.status}</BodyShort>
-            <BodyShort>{feil.code}</BodyShort>
-            <BodyShort>{feil.message}</BodyShort>
+            <BodyShort size={'small'}>{feil.status}</BodyShort>
+            <BodyShort size={'small'}>{feil.code}</BodyShort>
+            <BodyShort size={'small'}>{feil.message}</BodyShort>
           </VStack>
         ))}
     </Alert>
