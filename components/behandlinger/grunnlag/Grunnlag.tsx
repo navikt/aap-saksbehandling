@@ -6,6 +6,7 @@ import { VisBeregning } from 'components/behandlinger/grunnlag/visberegning/VisB
 import { YrkesskadeGrunnlagBeregningMedDataFetching } from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/YrkesskadeGrunnlagBeregningMedDataFetching';
 import { Behovstype } from 'lib/utils/form';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsReferanse: string;
@@ -16,7 +17,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
     hentFlyt(behandlingsReferanse),
     hentBeregningsGrunnlag(behandlingsReferanse),
   ]);
-  if (beregningsgrunnlag.type === 'ERROR') {
+  if (isError(beregningsgrunnlag)) {
     return <ApiException apiResponses={[beregningsgrunnlag]} />;
   }
 

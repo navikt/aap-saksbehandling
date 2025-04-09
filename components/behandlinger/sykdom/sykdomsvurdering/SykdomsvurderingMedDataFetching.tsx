@@ -6,6 +6,7 @@ import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurd
 import { SaksInfo, TypeBehandling } from 'lib/types/types';
 import { ValuePair } from 'components/form/FormField';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   sak: SaksInfo;
@@ -23,7 +24,7 @@ export const SykdomsvurderingMedDataFetching = async ({
   typeBehandling,
 }: Props) => {
   const grunnlag = await hentSykdomsGrunnlag(behandlingsReferanse);
-  if (grunnlag.type === 'ERROR') {
+  if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 

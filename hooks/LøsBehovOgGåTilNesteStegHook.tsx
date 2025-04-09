@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { clientLøsBehov, clientSjekkTilgang } from 'lib/clientApi';
 import { useIngenFlereOppgaverModal } from 'hooks/IngenFlereOppgaverModalHook';
-import { ApiException } from 'lib/services/apiFetch';
+import { ApiException } from "lib/utils/api";
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | 'CLIENT_CONFLICT' | undefined;
 

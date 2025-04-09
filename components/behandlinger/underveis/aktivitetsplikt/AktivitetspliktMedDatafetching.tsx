@@ -1,6 +1,7 @@
 import { Aktivitetsplikt } from 'components/behandlinger/underveis/aktivitetsplikt/Aktivitetsplikt';
 import { hentAktivitetspliktGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsreferanse: string;
@@ -10,7 +11,7 @@ interface Props {
 
 export const AktivitetspliktMedDatafetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentAktivitetspliktGrunnlag(behandlingsreferanse);
-  if (grunnlag.type === 'ERROR') {
+  if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 

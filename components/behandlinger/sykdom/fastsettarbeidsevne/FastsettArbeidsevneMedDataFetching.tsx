@@ -1,6 +1,7 @@
 import { FastsettArbeidsevne } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevne';
 import { hentFastsettArbeidsevneGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsReferanse: string;
@@ -14,7 +15,7 @@ export const FastsettArbeidsevneMedDataFetching = async ({
   readOnly,
 }: Props) => {
   const grunnlag = await hentFastsettArbeidsevneGrunnlag(behandlingsReferanse);
-  if (grunnlag.type === 'ERROR') {
+  if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 

@@ -2,6 +2,7 @@ import { Refusjon } from 'components/behandlinger/sykdom/refusjon/Refusjon';
 import { hentRefusjonGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { SaksInfo } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsReferanse: string;
@@ -12,7 +13,7 @@ interface Props {
 
 export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly, sak }: Props) => {
   const refusjonGrunnlag = await hentRefusjonGrunnlag(behandlingsReferanse);
-  if (refusjonGrunnlag.type === 'ERROR') {
+  if (isError(refusjonGrunnlag)) {
     return <ApiException apiResponses={[refusjonGrunnlag]} />;
   }
 
