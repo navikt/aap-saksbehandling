@@ -10,7 +10,7 @@ export interface SøkeResultat {
     label: string;
     href: string;
   }[];
-  saker?: { href: string; label: string }[];
+  saker?: { href: string; label: string; status: string }[];
 }
 
 export async function POST(req: Request) {
@@ -54,6 +54,7 @@ export async function POST(req: Request) {
     saker: sakData?.map((sak) => ({
       href: `/saksbehandling/sak/${sak.saksnummer}`,
       label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer})`,
+      status: `${sak.status}`
     })),
   };
 
