@@ -6,7 +6,7 @@ import { Button } from '@navikt/ds-react';
 import { StegType } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { ApiException } from 'lib/services/apiFetch';
+import { ApiException } from "lib/utils/api";
 
 interface Props {
   steg: StegType;
