@@ -107,7 +107,7 @@ export function clientHentFlyt(behandlingsreferanse: string) {
 }
 
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
-  return clientFetch<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
+  return clientFetchV2<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
 }
 
 export function clientHentAlleDokumenterPåSak(saksnummer: string) {

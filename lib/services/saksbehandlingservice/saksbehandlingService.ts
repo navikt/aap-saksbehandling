@@ -294,9 +294,9 @@ export const forberedBehandlingOgVentPåProsessering = async (
   return await fetchProxy(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 
-export const hentAlleDialogmeldingerPåSak = async (saksnummer: string): Promise<LegeerklæringStatus[]> => {
+export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/status/${saksnummer}`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<LegeerklæringStatus[]>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) => {

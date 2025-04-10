@@ -9,6 +9,8 @@ import { useSaksnummer } from 'hooks/BehandlingHook';
 
 import styles from './InnhentDokumentasjon.module.css';
 import { RelevanteDokumenter } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 export const InnhentDokumentasjon = () => {
   const saksnummer = useSaksnummer();
@@ -46,7 +48,11 @@ export const InnhentDokumentasjon = () => {
               Noe gikk galt under henting av dialogmeldinger
             </Alert>
           )}
-          {dialogmeldinger && <Dialogmeldinger dialogmeldinger={dialogmeldinger} />}
+          {dialogmeldinger && isError(dialogmeldinger) ? (
+            <ApiException apiResponses={[dialogmeldinger]} />
+          ) : (
+            <Dialogmeldinger dialogmeldinger={dialogmeldinger?.data} />
+          )}
         </VStack>
       )}
       {visSkjema && <InnhentDokumentasjonSkjema onCancel={skjulSkjema} onSuccess={skjulOgRefresh} />}

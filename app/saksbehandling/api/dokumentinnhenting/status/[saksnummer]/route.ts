@@ -3,6 +3,7 @@ import { hentAlleDialogmeldingerPåSak } from 'lib/services/saksbehandlingservic
 import { LegeerklæringStatus } from 'lib/types/types';
 import { isLocal } from 'lib/utils/environment';
 import { NextRequest } from 'next/server';
+import { FetchResponse, isError } from 'lib/utils/api';
 
 const testdata: LegeerklæringStatus[] = [
   {
@@ -30,14 +31,19 @@ const testdata: LegeerklæringStatus[] = [
 export async function GET(_: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
   if (isLocal()) {
-    return new Response(JSON.stringify(testdata), { status: 200 });
+    const response: FetchResponse<LegeerklæringStatus[]> = {
+      type: 'SUCCESS',
+      status: 200,
+      data: testdata,
+    };
+    return new Response(JSON.stringify(response), { status: 200 });
   }
 
-  try {
-    const data = await hentAlleDialogmeldingerPåSak(params.saksnummer);
-    return new Response(JSON.stringify(data), { status: 200 });
-  } catch (err) {
-    logError(`/dokumentinnhenting/behandleroppslag`, err);
-    return new Response(JSON.stringify({ message: 'Behandleroppslag feilet' }), { status: 500 });
+  const data = await hentAlleDialogmeldingerPåSak(params.saksnummer);
+
+  if (isError(data)) {
+    logError(`/dokumentinnhenting/behandleroppslag`, data.apiException.message);
   }
+
+  return new Response(JSON.stringify(data), { status: 200 });
 }
