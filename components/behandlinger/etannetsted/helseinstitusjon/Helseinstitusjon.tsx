@@ -91,7 +91,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
   };
 
   return (
-    <VilkårsKort heading={'Helseinstitusjon § 11-25'} steg={'DU_ER_ET_ANNET_STED'}>
+    <VilkårsKort heading={'§ 11-25 Helseinstitusjon'} steg={'DU_ER_ET_ANNET_STED'}>
       <Form
         onSubmit={handleSubmit}
         status={status}
