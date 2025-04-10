@@ -1,6 +1,7 @@
 import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/Sykepengeerstatning';
 import { hentSykepengerErstatningGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsReferanse: string;
@@ -14,7 +15,7 @@ export const SykepengeerstatningMedDataFetching = async ({
   readOnly,
 }: Props) => {
   const grunnlag = await hentSykepengerErstatningGrunnlag(behandlingsReferanse);
-  if (grunnlag.type === 'ERROR') {
+  if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 

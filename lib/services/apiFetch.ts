@@ -6,25 +6,7 @@ import { headers } from 'next/headers';
 import { hentLocalToken } from 'lib/services/localFetch';
 import { getAccessTokenOrRedirectToLogin } from './azure/azuread';
 import { logError } from 'lib/serverutlis/logger';
-
-// ApiException heter det samme i frontend og backend
-export interface ApiException {
-  message: string;
-  code?: string;
-}
-
-export type FetchResponse<RespponseType> = SuccessResponseBody<RespponseType> | ErrorResponseBody;
-
-export interface ErrorResponseBody {
-  type: 'ERROR';
-  status: number;
-  apiException: ApiException;
-}
-
-interface SuccessResponseBody<ResponseType> {
-  type: 'SUCCESS';
-  data: ResponseType;
-}
+import { ApiException, FetchResponse } from 'lib/utils/api';
 
 const NUMBER_OF_RETRIES = 3;
 
@@ -105,7 +87,7 @@ const fetchWithRetry = async <ResponseType>(
 
   const contentType = response.headers.get('content-type');
   if (contentType && contentType.includes('text')) {
-    return { type: 'SUCCESS', data: response.text() as ResponseType };
+    return { type: 'SUCCESS', data: (await response.text()) as ResponseType };
   }
 
   const responseJson: ResponseType = await response.json();

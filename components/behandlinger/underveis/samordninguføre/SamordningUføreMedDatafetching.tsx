@@ -1,6 +1,7 @@
 import { SamordningUføre } from 'components/behandlinger/underveis/samordninguføre/SamordningUføre';
 import { hentSamordningUføreGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from "lib/utils/api";
 
 interface Props {
   behandlingsreferanse: string;
@@ -9,7 +10,7 @@ interface Props {
 }
 export const SamordningUføreMedDatafetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentSamordningUføreGrunnlag(behandlingsreferanse);
-  if (grunnlag.type === 'ERROR') {
+  if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 

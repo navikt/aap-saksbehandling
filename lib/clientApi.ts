@@ -16,10 +16,10 @@ import {
   SettPåVent,
 } from './types/types';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
-import { FetchResponse } from 'lib/services/apiFetch';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
 import { logError } from 'lib/serverutlis/logger';
+import { FetchResponse } from 'lib/utils/api';
 
 const BASE_URL = '/saksbehandling';
 

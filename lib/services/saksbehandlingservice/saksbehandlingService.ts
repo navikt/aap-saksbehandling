@@ -51,6 +51,7 @@ import {
 import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import { apiFetch } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
+import { isError, isSuccess } from 'lib/utils/api';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -64,7 +65,7 @@ export const hentSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}`;
   const res = await apiFetch<SaksInfo>(url, saksbehandlingApiScope, 'GET');
 
-  if (res.type === 'ERROR') {
+  if (isError(res)) {
     throw new Error('Kunne ikke hente påkrevd sak.');
   } else {
     return res.data;
@@ -75,7 +76,7 @@ export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersonin
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
   const res = await apiFetch<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
 
-  if (res.type === 'SUCCESS') {
+  if (isSuccess(res)) {
     return res.data;
   } else {
     return { fnr: 'Ukjent', navn: 'Ukjent' };

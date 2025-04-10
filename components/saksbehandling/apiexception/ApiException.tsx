@@ -1,7 +1,7 @@
 'use client';
 
-import { FetchResponse } from 'lib/services/apiFetch';
 import { Alert, BodyShort, VStack } from '@navikt/ds-react';
+import { FetchResponse } from 'lib/utils/api';
 
 interface Props {
   apiResponses: FetchResponse<unknown>[];

@@ -8,6 +8,8 @@ import { getStegSomSkalVises } from 'lib/utils/steg';
 import { ManuellVurderingForutgåendeMedlemskapMedDatafetching } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingforutgåendemedlemskap/ManuellVurderingForutgåendeMedlemskapMedDatafetching';
 import { ForutgåendemedlemskapOverstyringswrapper } from 'components/behandlinger/forutgåendemedlemskap/ForutgåendemedlemskapOverstyringswrapper';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
+
 interface Props {
   behandlingsReferanse: string;
 }
@@ -17,7 +19,7 @@ export const ForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) =>
     hentForutgåendeMedlemskapGrunnlag(behandlingsReferanse),
     hentForutgåendeMedlemskapsVurdering(behandlingsReferanse),
   ]);
-  if (grunnlag.type === 'ERROR' || automatiskVurdering.type === 'ERROR') {
+  if (isError(grunnlag) || isError(automatiskVurdering)) {
     return <ApiException apiResponses={[grunnlag, automatiskVurdering]} />;
   }
 

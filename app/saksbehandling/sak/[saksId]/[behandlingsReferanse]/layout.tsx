@@ -23,6 +23,7 @@ import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/Inge
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { logWarning } from 'lib/serverutlis/logger';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   children: ReactNode;
@@ -36,7 +37,7 @@ const Layout = async (props: Props) => {
 
   const behandling = await hentBehandling(params.behandlingsReferanse);
 
-  if (behandling?.type === 'ERROR') {
+  if (isError(behandling)) {
     return (
       <VStack padding={'4'}>
         <ApiException apiResponses={[behandling]} />
@@ -47,7 +48,6 @@ const Layout = async (props: Props) => {
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(params.behandlingsReferanse);
 
-  console.log(behandling);
   // Denne må komme før resten av kallene slik at siste versjon av data er oppdatert i backend for behandlingen
   if (behandling.data.skalForberede) {
     const forberedBehandlingResponse = await forberedBehandlingOgVentPåProsessering(params.behandlingsReferanse);

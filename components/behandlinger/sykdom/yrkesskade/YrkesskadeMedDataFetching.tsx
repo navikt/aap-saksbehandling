@@ -1,6 +1,7 @@
 import { Yrkesskade } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
 import { hentYrkesskadeVurderingGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsReferanse: string;
@@ -10,7 +11,7 @@ interface Props {
 
 export const YrkesskadeMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
   const yrkesskadeVurderingGrunnlag = await hentYrkesskadeVurderingGrunnlag(behandlingsReferanse);
-  if (yrkesskadeVurderingGrunnlag.type === 'ERROR') {
+  if (isError(yrkesskadeVurderingGrunnlag)) {
     return <ApiException apiResponses={[yrkesskadeVurderingGrunnlag]} />;
   }
   return (

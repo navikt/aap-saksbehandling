@@ -4,7 +4,7 @@ import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { DokumentInfo } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
-import { FetchResponse } from 'lib/services/apiFetch';
+import { FetchResponse } from 'lib/utils/api';
 
 const etDokument: FetchResponse<DokumentInfo[]> = {
   type: 'SUCCESS',

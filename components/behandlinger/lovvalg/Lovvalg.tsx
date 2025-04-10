@@ -8,6 +8,7 @@ import { getStegSomSkalVises } from 'lib/utils/steg';
 import { LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringswrapper';
 import { LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunktMedDatafetching';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsReferanse: string;
@@ -19,7 +20,7 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
     hentAutomatiskLovvalgOgMedlemskapVurdering(behandlingsReferanse),
     hentLovvalgMedlemskapGrunnlag(behandlingsReferanse),
   ]);
-  if (vurderingAutomatisk.type === 'ERROR' || grunnlag.type === 'ERROR') {
+  if (isError(vurderingAutomatisk) || isError(grunnlag)) {
     return <ApiException apiResponses={[vurderingAutomatisk, grunnlag]} />;
   }
 

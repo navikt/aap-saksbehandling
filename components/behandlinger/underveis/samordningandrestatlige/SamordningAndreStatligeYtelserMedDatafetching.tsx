@@ -1,6 +1,7 @@
 import { SamordningAndreStatligeYtelser } from 'components/behandlinger/underveis/samordningandrestatlige/SamordningAndreStatligeYtelser';
 import { hentSamordningAndreStatligeYtelseGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsreferanse: string;
@@ -13,7 +14,7 @@ export const SamordningAndreStatligeYtelserMedDatafetching = async ({
   behandlingsreferanse,
 }: Props) => {
   const grunnlag = await hentSamordningAndreStatligeYtelseGrunnlag(behandlingsreferanse);
-  if (grunnlag.type === 'ERROR') {
+  if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 

@@ -2,6 +2,7 @@ import { hentBistandsbehovGrunnlag } from 'lib/services/saksbehandlingservice/sa
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { SaksInfo, TypeBehandling } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsReferanse: string;
@@ -19,7 +20,7 @@ export const BistandsbehovMedDataFetching = async ({
   sak,
 }: Props) => {
   const grunnlag = await hentBistandsbehovGrunnlag(behandlingsReferanse);
-  if (grunnlag.type === 'ERROR') {
+  if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 

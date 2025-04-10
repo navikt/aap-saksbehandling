@@ -10,6 +10,7 @@ import styles from './SkriveBrevMedDataFetching.module.css';
 import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
 import { StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 export const SkriveBrevMedDataFetching = async ({
   behandlingsReferanse,
@@ -27,7 +28,7 @@ export const SkriveBrevMedDataFetching = async ({
     hentRefusjonGrunnlag(behandlingsReferanse),
     hentRollerForBruker(),
   ]);
-  if (sykdomsgrunnlag.type === 'ERROR' || bistandsbehovGrunnlag.type === 'ERROR' || refusjonGrunnlag.type === 'ERROR') {
+  if (isError(sykdomsgrunnlag) || isError(bistandsbehovGrunnlag) || isError(refusjonGrunnlag)) {
     return <ApiException apiResponses={[sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag]} />;
   }
 
