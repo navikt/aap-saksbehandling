@@ -230,9 +230,9 @@ export const hentHelseInstitusjonsVurdering = async (behandlingsReferanse: strin
   return apiFetch<HelseinstitusjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentSoningsvurdering = async (behandlingsreferanse: string): Promise<Soningsgrunnlag> => {
+export const hentSoningsvurdering = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/institusjon/soning`;
-  return fetchProxy<Soningsgrunnlag>(url, saksbehandlingApiScope, 'GET');
+  return apiFetch<Soningsgrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentTilkjentYtelse = async (behandlingsReferanse: string) => {

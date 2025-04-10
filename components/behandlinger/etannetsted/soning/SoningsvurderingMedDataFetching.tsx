@@ -1,5 +1,7 @@
 import { Soningsvurdering } from './Soningsvurdering';
 import { hentSoningsvurdering } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsreferanse: string;
@@ -13,13 +15,16 @@ export const SoningsvurderingMedDataFetching = async ({
   readOnly,
 }: Props) => {
   const grunnlag = await hentSoningsvurdering(behandlingsreferanse);
+  if (isError(grunnlag)) {
+    return <ApiException apiResponses={[grunnlag]} />;
+  }
 
   return (
-    grunnlag.soningsforhold.length > 0 && (
+    grunnlag.data.soningsforhold.length > 0 && (
       <Soningsvurdering
         behandlingsversjon={behandlingsversjon}
-        grunnlag={grunnlag}
-        readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
+        grunnlag={grunnlag.data}
+        readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       />
     )
   );
