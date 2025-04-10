@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { clientLøsBehov, clientSjekkTilgang } from 'lib/clientApi';
 import { useIngenFlereOppgaverModal } from 'hooks/IngenFlereOppgaverModalHook';
-import { ApiException } from "lib/utils/api";
+import { ApiException, isSuccess } from 'lib/utils/api';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | 'CLIENT_CONFLICT' | undefined;
 
@@ -74,7 +74,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
             await Promise.all(
               eventData.aktivtStegBehovsKode.map((kode) => clientSjekkTilgang(params.behandlingsReferanse, kode))
             )
-          ).some((item) => item !== undefined && item.harTilgangTilNesteOppgave);
+          ).some((tilgangResponse) => isSuccess(tilgangResponse) && tilgangResponse.data.tilgang);
 
           // Brev har ingen egen definisjonskode som vi kan hente ut fra steget. Må skrives om i backend
           if (!harTilgang && eventData.aktivtSteg !== 'BREV') {

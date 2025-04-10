@@ -20,6 +20,7 @@ import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
 import { logError } from 'lib/serverutlis/logger';
 import { FetchResponse } from 'lib/utils/api';
+import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 
 const BASE_URL = '/saksbehandling';
 
@@ -148,15 +149,8 @@ export function clientConfig() {
   return clientFetch<ClientConfig>('/api/config', 'GET');
 }
 
-export async function clientSjekkTilgang(
-  behandlingsreferanse: string,
-  behovsKode: BehandlingsFlytAvklaringsbehovKode
-): Promise<{ harTilgangTilNesteOppgave: boolean } | undefined> {
-  return clientFetch<{ harTilgangTilNesteOppgave: boolean }>(
-    `${BASE_URL}/api/behandling/${behandlingsreferanse}/sjekk-tilgang`,
-    'POST',
-    {
-      kode: behovsKode,
-    }
-  );
+export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKode: BehandlingsFlytAvklaringsbehovKode) {
+  return clientFetchV2<TilgangResponse>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/sjekk-tilgang`, 'POST', {
+    kode: behovsKode,
+  });
 }
