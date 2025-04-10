@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyLong, Button, Label, Table } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Label, Table } from '@navikt/ds-react';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import {
   AktivitetspliktBrudd,
@@ -14,7 +14,7 @@ import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
 import { useSaksnummer } from 'hooks/BehandlingHook';
 import { clientOppdaterAktivitetspliktBrudd } from 'lib/clientApi';
 
-import { useFetch } from 'hooks/FetchHook';
+import { useFetchV2 } from 'hooks/FetchHook';
 
 import styles from './AktivitetspliktHendelserTabellRad.module.css';
 import { validerDato } from 'lib/validation/dateValidation';
@@ -37,7 +37,7 @@ export const AktivitetspliktHendelserTabellRad = ({ aktivitetspliktHendelse }: P
   const saksnummer = useSaksnummer();
   const [isOpen, setIsOpen] = useState(false);
 
-  const { isLoading, method: oppdaterAktivitetspliktBrudd } = useFetch(clientOppdaterAktivitetspliktBrudd);
+  const { isLoading, method: oppdaterAktivitetspliktBrudd, error } = useFetchV2(clientOppdaterAktivitetspliktBrudd);
 
   function hentOptionsForBrudd(brudd: AktivitetspliktHendelseParagraf): ValuePair<AktivitetspliktGrunn>[] {
     switch (brudd) {
@@ -110,19 +110,25 @@ export const AktivitetspliktHendelserTabellRad = ({ aktivitetspliktHendelse }: P
                 ? { fom: formaterDatoForBackend(parse(data.bidrarAktivtIgjenDato, 'dd.MM.yyyy', new Date())) }
                 : aktivitetspliktHendelse.periode;
 
-            await oppdaterAktivitetspliktBrudd(saksnummer, {
+            const res = await oppdaterAktivitetspliktBrudd(saksnummer, {
               brudd: aktivitetspliktHendelse.brudd,
               periode: periode,
               paragraf: aktivitetspliktHendelse.paragraf,
               grunn: data.grunn,
               begrunnelse: data.begrunnelse,
             });
-
-            await revalidateAktivitetspliktHendelser(saksnummer);
+            if (res.ok) {
+              await revalidateAktivitetspliktHendelser(saksnummer);
+            }
           })}
           autoComplete={'off'}
         >
           <div className={'flex-column'}>
+            {error && (
+              <Alert variant={'error'} size={'small'}>
+                {error}
+              </Alert>
+            )}
             {aktivitetspliktHendelse.begrunnelse && (
               <div>
                 <Label size={'small'}>Begrunnelse</Label>

@@ -92,7 +92,7 @@ export function clientOpprettAktivitetspliktBrudd(saksnummer: string, aktivitet:
 }
 
 export function clientOppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd2) {
-  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/aktivitetsplikt/oppdater`, 'POST', aktivitet);
+  return clientFetchV2(`${BASE_URL}/api/sak/${saksnummer}/aktivitetsplikt/oppdater`, 'POST', aktivitet);
 }
 
 export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {

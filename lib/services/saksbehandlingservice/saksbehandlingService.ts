@@ -97,12 +97,12 @@ export const oppdaterBruddPåAktivitetsplikten = async (
   aktivitet: OppdaterAktivitetspliktBrudd2
 ) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/aktivitetsplikt/oppdater`;
-  return await fetchProxy<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
+  return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
 };
 
 export const hentAktivitetspliktHendelser = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/aktivitetsplikt`;
-  return await fetchProxy<AktivitetspliktHendelser>(url, saksbehandlingApiScope, 'GET', undefined, [
+  return await apiFetch<AktivitetspliktHendelser>(url, saksbehandlingApiScope, 'GET', undefined, [
     `aktivitetsplikt/${saksnummer}`,
   ]);
 };
@@ -358,7 +358,7 @@ export const sendLokalHendelse = async (saksnummer: string, body: Object): Promi
 
 export const auditlog = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/auditlog`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'POST');
+  return await apiFetch(url, saksbehandlingApiScope, 'POST');
 };
 
 async function ventTilProsesseringErFerdig(

@@ -1,15 +1,16 @@
 import { NextRequest } from 'next/server';
 import { oppdaterBruddPåAktivitetsplikten } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError } from 'lib/serverutlis/logger';
+import { isError } from 'lib/utils/api';
 
 export async function POST(req: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
   const body = await req.json();
-  try {
-    await oppdaterBruddPåAktivitetsplikten(params.saksnummer, body);
-  } catch (err) {
-    logError(`/sak/${params.saksnummer}/aktivitetsplikt/oppdater`, err);
-    return new Response(JSON.stringify({ message: 'Oppdatering av brudd på aktivitetsplikt feilet' }), { status: 500 });
+  const res = await oppdaterBruddPåAktivitetsplikten(params.saksnummer, body);
+  if (isError(res)) {
+    logError(
+      `/sak/${params.saksnummer}/aktivitetsplikt/oppdater ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
+    );
   }
-  return new Response(JSON.stringify({}), { status: 200 });
+  return new Response(JSON.stringify(res), { status: res.status });
 }
