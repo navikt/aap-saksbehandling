@@ -76,11 +76,11 @@ export function clientSettBehandlingPåVent(referanse: string, settPåVent: Sett
 }
 
 export function clientOpprettSak(sak: OpprettTestcase) {
-  return clientFetch(`${BASE_URL}/api/test/opprett`, 'POST', sak);
+  return clientFetchV2(`${BASE_URL}/api/test/opprett`, 'POST', sak);
 }
 
 export function clientHentAlleSaker() {
-  return clientFetch<SaksInfo[]>(`${BASE_URL}/api/sak/alle`, 'GET');
+  return clientFetchV2<SaksInfo[]>(`${BASE_URL}/api/sak/alle`, 'GET');
 }
 
 export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {

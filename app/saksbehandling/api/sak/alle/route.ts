@@ -3,10 +3,7 @@ import { hentAlleSaker } from 'lib/services/saksbehandlingservice/saksbehandling
 export async function GET() {
   const data = await hentAlleSaker();
 
-  if (data !== undefined) {
-    return new Response(JSON.stringify(data), { status: 200 });
-  } else {
-    return new Response(JSON.stringify({ message: 'Ingen saker funnet.' }), { status: 500 });
-  }
+  return new Response(JSON.stringify(data), { status: 200 });
 }
-export const dynamic = "force-dynamic";
+
+export const dynamic = 'force-dynamic';

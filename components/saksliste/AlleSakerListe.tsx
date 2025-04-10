@@ -1,7 +1,6 @@
 'use client';
 
 import { clientHentAlleSaker } from 'lib/clientApi';
-import { SaksInfo } from 'lib/types/types';
 import Link from 'next/link';
 import useSWR from 'swr';
 import { Button, Table, TextField } from '@navikt/ds-react';
@@ -9,18 +8,12 @@ import { formaterDatoMedTidspunktForFrontend, sorterEtterNyesteDato } from 'lib/
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 
-interface Props {
-  alleSaker: SaksInfo[];
-}
-
-export const AlleSakerListe = ({ alleSaker }: Props) => {
+export const AlleSakerListe = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const { data, mutate, isLoading, isValidating } = useSWR('api/sak/alle', clientHentAlleSaker, {
-    fallbackData: alleSaker,
-  });
+  const { data, mutate, isLoading, isValidating } = useSWR('api/sak/alle', clientHentAlleSaker);
 
   const searchValue = searchParams.get('ident');
 
@@ -59,20 +52,21 @@ export const AlleSakerListe = ({ alleSaker }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {data
-            ?.filter((sak) => !searchValue || sak.ident.includes(searchValue))
-            ?.sort((a, b) => sorterEtterNyesteDato(a.opprettetTidspunkt, b.opprettetTidspunkt))
-            .map((sak) => (
-              <Table.Row key={sak.saksnummer}>
-                <Table.DataCell>
-                  <Link href={`/saksbehandling/sak/${sak.saksnummer}/`} prefetch={false}>
-                    {sak.saksnummer}
-                  </Link>
-                </Table.DataCell>
-                <Table.DataCell>{sak.ident}</Table.DataCell>
-                <Table.DataCell>{formaterDatoMedTidspunktForFrontend(sak.opprettetTidspunkt)}</Table.DataCell>
-              </Table.Row>
-            ))}
+          {data?.type === 'SUCCESS' &&
+            data.data
+              ?.filter((sak) => !searchValue || sak.ident.includes(searchValue))
+              ?.sort((a, b) => sorterEtterNyesteDato(a.opprettetTidspunkt, b.opprettetTidspunkt))
+              .map((sak) => (
+                <Table.Row key={sak.saksnummer}>
+                  <Table.DataCell>
+                    <Link href={`/saksbehandling/sak/${sak.saksnummer}/`} prefetch={false}>
+                      {sak.saksnummer}
+                    </Link>
+                  </Table.DataCell>
+                  <Table.DataCell>{sak.ident}</Table.DataCell>
+                  <Table.DataCell>{formaterDatoMedTidspunktForFrontend(sak.opprettetTidspunkt)}</Table.DataCell>
+                </Table.Row>
+              ))}
         </Table.Body>
       </Table>
     </div>
