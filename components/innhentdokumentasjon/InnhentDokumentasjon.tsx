@@ -5,15 +5,17 @@ import { InnhentDokumentasjonSkjema } from 'components/innhentdokumentasjon/innh
 import { clientHentAlleDialogmeldingerPåSak } from 'lib/clientApi';
 import useSWR from 'swr';
 import { Dialogmeldinger } from 'components/innhentdokumentasjon/dialogmeldinger/Dialogmeldinger';
-import { useSaksnummer } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
 
 import styles from './InnhentDokumentasjon.module.css';
 import { RelevanteDokumenter } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { revalidateFlyt } from 'lib/actions/actions';
 
 export const InnhentDokumentasjon = () => {
   const saksnummer = useSaksnummer();
+  const behandlingsReferanse = useBehandlingsReferanse();
   const {
     data: dialogmeldinger,
     isLoading,
@@ -28,6 +30,7 @@ export const InnhentDokumentasjon = () => {
   const skjulOgRefresh = () => {
     skjulSkjema();
     mutate();
+    revalidateFlyt(behandlingsReferanse);
   };
   return (
     <section>
