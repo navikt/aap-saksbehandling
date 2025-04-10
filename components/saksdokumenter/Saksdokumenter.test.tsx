@@ -8,6 +8,7 @@ import { FetchResponse } from 'lib/utils/api';
 
 const etDokument: FetchResponse<DokumentInfo[]> = {
   type: 'SUCCESS',
+  status: 200,
   data: [
     {
       tittel: 'søknad.pdf',
@@ -43,6 +44,7 @@ const toDokument: FetchResponse<DokumentInfo[]> = {
     },
   ],
   type: 'SUCCESS',
+  status: 200,
 };
 
 const fetchMocker = createFetchMock(vi);

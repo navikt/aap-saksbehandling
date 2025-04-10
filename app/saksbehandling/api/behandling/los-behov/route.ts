@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     if (isError(løsbehovRes)) {
       logError(`/løs-behov, behovstype: ${body.behov?.behovstype}, message: ${løsbehovRes.apiException.message}`);
     }
-    return new Response(JSON.stringify(løsbehovRes));
+    return new Response(JSON.stringify(løsbehovRes), { status: løsbehovRes.status });
   } catch (error) {
     logError(`/løs-behov ${body.behov?.behovstype}`, error);
     return new Response(JSON.stringify({ message: getErrorMessage(error) }), { status: 500 });

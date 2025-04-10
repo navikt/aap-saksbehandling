@@ -13,6 +13,7 @@ type ErrorResponseBody<T> = {
 
 type SuccessResponseBody<ResponseType> = {
   type: 'SUCCESS';
+  status: number;
   data: ResponseType;
 };
 

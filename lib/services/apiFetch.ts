@@ -70,7 +70,7 @@ const fetchWithRetry = async <ResponseType>(
   });
 
   if (response.status === 204) {
-    return { type: 'SUCCESS', data: undefined as ResponseType };
+    return { type: 'SUCCESS', status: response.status, data: undefined as ResponseType };
   }
 
   if (!response.ok) {
@@ -87,10 +87,10 @@ const fetchWithRetry = async <ResponseType>(
 
   const contentType = response.headers.get('content-type');
   if (contentType && contentType.includes('text')) {
-    return { type: 'SUCCESS', data: (await response.text()) as ResponseType };
+    return { type: 'SUCCESS', status: response.status, data: (await response.text()) as ResponseType };
   }
 
   const responseJson: ResponseType = await response.json();
 
-  return { type: 'SUCCESS', data: responseJson };
+  return { type: 'SUCCESS', status: response.status, data: responseJson };
 };
