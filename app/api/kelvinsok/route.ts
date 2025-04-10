@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       oppgaver.forEach((oppgave) => {
         oppgaveData.push({
           href: byggKelvinURL(oppgave),
-          label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype} - ${oppgave.påVentÅrsak}`,
+          label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype}`,
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
         oppfølgingsenhetData.push({ enhet: `${oppgave.oppfølgingsenhet}` });
