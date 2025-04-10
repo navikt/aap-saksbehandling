@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { BodyShort, Button, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { SettPåVentÅrsaker, VenteInformasjon } from 'lib/types/types';
@@ -16,7 +16,7 @@ interface Props {
 
 export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgVentPåProsessering, isLoading } = useLøsBehovOgVentPåProsessering();
+  const { løsBehovOgVentPåProsessering, isLoading, løsBehovError } = useLøsBehovOgVentPåProsessering();
 
   return (
     <SideProsessKort heading={'Behandling på vent'} icon={<HourglassBottomFilledIcon aria-hidden />}>
@@ -37,6 +37,11 @@ export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props)
             </div>
 
             <BodyShort as={'p'}>Behandlingen er på vent. Vil du åpne den igjen?</BodyShort>
+            {løsBehovError && (
+              <Alert variant={'error'} size={'small'}>
+                {løsBehovError.message}
+              </Alert>
+            )}
             {informasjon.grunn !== 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING' && (
               <Button
                 size={'medium'}

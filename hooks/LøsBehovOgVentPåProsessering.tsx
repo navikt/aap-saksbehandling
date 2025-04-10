@@ -4,6 +4,7 @@ import { FlytProsesseringStatus, LøsAvklaringsbehovPåBehandling } from 'lib/ty
 import { clientLøsBehov } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { revalidateFlyt } from 'lib/actions/actions';
+import { ApiException } from 'lib/utils/api';
 
 export type LøsBehovOgVentPåProsesseringStatus =
   | FlytProsesseringStatus
@@ -15,14 +16,21 @@ export const useLøsBehovOgVentPåProsessering = (): {
   status: LøsBehovOgVentPåProsesseringStatus;
   isLoading: boolean;
   løsBehovOgVentPåProsessering: (behov: LøsAvklaringsbehovPåBehandling) => void;
+  løsBehovError?: ApiException;
 } => {
   const params = useParams<{ behandlingsReferanse: string }>();
   const [status, setStatus] = useState<LøsBehovOgVentPåProsesseringStatus>();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<ApiException | undefined>();
 
   const løsBehovOgVentPåProsessering = async (behov: LøsAvklaringsbehovPåBehandling) => {
+    setError(undefined);
+    setIsLoading(true);
+    setStatus(undefined);
+
     const løsbehovRes = await clientLøsBehov(behov);
     if (løsbehovRes.type === 'ERROR') {
+      setError(løsbehovRes.apiException);
       if (løsbehovRes.status === 409) {
         setStatus('CLIENT_CONFLICT');
       } else {
@@ -60,5 +68,5 @@ export const useLøsBehovOgVentPåProsessering = (): {
     };
   };
 
-  return { isLoading, status, løsBehovOgVentPåProsessering };
+  return { isLoading, status, løsBehovOgVentPåProsessering, løsBehovError: error };
 };
