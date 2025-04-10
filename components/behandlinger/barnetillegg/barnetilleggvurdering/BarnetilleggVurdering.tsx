@@ -1,7 +1,7 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Button, Label } from '@navikt/ds-react';
+import { BodyShort, Button } from '@navikt/ds-react';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
 import { BarnetilleggGrunnlag, BehandlingPersoninfo } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -128,12 +128,14 @@ export const BarnetilleggVurdering = ({
   const erFolkeregistrerteBarn = grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0;
 
   return (
-    <VilkårsKort heading={'Barnetillegg § 11-20 tredje og fjerde ledd'} steg={'BARNETILLEGG'}>
+    <VilkårsKort heading={'§ 11-20 tredje og fjerde ledd barnetillegg '} steg={'BARNETILLEGG'}>
       <div className={'flex-column'}>
         {harAvklaringsbehov && (
           <div className={'flex-column'}>
             <div>
-              <Label size={'medium'}>Følgende barn er oppgitt av bruker og må vurderes</Label>
+              <BodyShort size={'small'} weight={'semibold'}>
+                Følgende barn er oppgitt av bruker og må vurderes
+              </BodyShort>
             </div>
 
             <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit} autoComplete={'off'}>
@@ -160,7 +162,9 @@ export const BarnetilleggVurdering = ({
         )}
         {erFolkeregistrerteBarn && (
           <div className={'flex-column'}>
-            <Label size={'medium'}>Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg</Label>
+            <BodyShort size={'small'} weight={'semibold'}>
+              Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg
+            </BodyShort>
             <div className={styles.registrerte_barn}>
               {grunnlag.folkeregisterbarn.map((barn, index) => (
                 <RegistrertBarn

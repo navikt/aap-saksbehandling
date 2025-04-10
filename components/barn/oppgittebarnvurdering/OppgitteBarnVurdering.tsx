@@ -1,7 +1,7 @@
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
-import { PlusCircleIcon, QuestionmarkDiamondIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading } from '@navikt/ds-react';
+import { QuestionmarkDiamondIcon, TrashIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Detail } from '@navikt/ds-react';
 import { OppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { JaEllerNei } from 'lib/utils/form';
@@ -33,19 +33,19 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
       .vurderinger.every((vurdering) => vurdering.harForeldreAnsvar !== JaEllerNei.Nei) && !readOnly;
 
   return (
-    <section className={`${styles.barnekort} flex-column`}>
+    <section className={`flex-column`}>
       <div className={styles.manueltbarnheading}>
         <div>
-          <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'3rem'} />
+          <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'2rem'} />
         </div>
         <div>
-          <Heading size={'small'}>Oppgitt fosterbarn - {ident}</Heading>
-          <BodyShort size={'medium'}>
-            {navn} ({kalkulerAlder(new Date(fødselsdato))})
+          <Detail className={styles.detailgray}>Oppgitt fosterbarn</Detail>
+          <BodyShort size={'small'}>
+            {navn}, {ident} ({kalkulerAlder(new Date(fødselsdato))})
           </BodyShort>
         </div>
       </div>
-      <div>
+      <div className={styles.vurderingwrapper}>
         {vurderinger.map((vurdering, vurderingIndex) => {
           const kanFjernePeriode = vurderingIndex !== 0;
           return (
@@ -72,19 +72,18 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
             </div>
           );
         })}
+        {kanLeggeTilNyVurdering && (
+          <Button
+            onClick={() => append({ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' })}
+            className={'fit-content'}
+            variant={'secondary'}
+            size={'small'}
+            type={'button'}
+          >
+            Legg til vurdering
+          </Button>
+        )}
       </div>
-      {kanLeggeTilNyVurdering && (
-        <Button
-          onClick={() => append({ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' })}
-          className={'fit-content'}
-          variant={'tertiary'}
-          size={'medium'}
-          icon={<PlusCircleIcon aria-hidden />}
-          type={'button'}
-        >
-          Legg til vurdering
-        </Button>
-      )}
     </section>
   );
 };

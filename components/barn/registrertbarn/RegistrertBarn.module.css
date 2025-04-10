@@ -1,5 +1,18 @@
 .barn {
+  display: flex;
+  flex-direction: row;
+  gap: var(--a-spacing-4);
+  align-items: center;
   padding-bottom: 1rem;
+}
+
+.detailgray {
+  color: var(--a-text-subtle);
+}
+
+.tekst {
+  display: flex;
+  flex-direction: column;
 }
 
 .barn:not(:last-of-type) {
