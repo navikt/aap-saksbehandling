@@ -2,16 +2,17 @@ import { bestillTestBrev } from 'lib/services/saksbehandlingservice/saksbehandli
 import { NextRequest } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { logError } from 'lib/serverutlis/logger';
+import { isError, isSuccess } from 'lib/utils/api';
 
 export async function POST(req: NextRequest) {
   const body: { behandlingReferanse: string } = await req.json();
 
-  try {
-    await bestillTestBrev(body);
-  } catch (err: unknown) {
-    logError('/test/bestill/brev/', err);
-    return new Response(JSON.stringify({ message: err?.toString() }), { status: 500 });
+  const res = await bestillTestBrev(body);
+  if (isError(res)) {
+    logError(`/test/bestill/brev ${res.status}, ${res.apiException.code}: ${res.apiException.message}`);
   }
-  revalidatePath('/saksoversikt', 'page');
-  return new Response(JSON.stringify({ message: 'Brev bestilt' }), { status: 200 });
+  if (isSuccess(res)) {
+    revalidatePath('/saksoversikt', 'page');
+  }
+  return new Response(JSON.stringify(res), { status: res.status });
 }

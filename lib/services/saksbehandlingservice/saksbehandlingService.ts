@@ -253,7 +253,7 @@ export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovP�
 
 export const mellomlagreBrev = async (brevbestillingReferanse: string, brev: Brev) => {
   const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/oppdater`;
-  return await fetchProxy<void>(url, saksbehandlingApiScope, 'PUT', brev);
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT', brev);
 };
 
 export const opprettTestSak = async (sak: OpprettTestcase) => {
@@ -263,7 +263,7 @@ export const opprettTestSak = async (sak: OpprettTestcase) => {
 
 export const bestillTestBrev = async (bestilling: { behandlingReferanse: string }) => {
   const url = `${saksbehandlingApiBaseUrl}/test/brev`;
-  return await fetchProxy<void>(url, saksbehandlingApiScope, 'POST', bestilling);
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', bestilling);
 };
 
 export const hentResultat = async (referanse: string): Promise<BehandlingResultat> => {

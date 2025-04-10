@@ -1,23 +1,23 @@
 'use client';
 
 import { Button } from '@navikt/ds-react';
+import { isSuccess } from 'lib/utils/api';
+import { clientBestillTestBrev } from 'lib/clientApi';
 
 export const BestillBrevTestKnapp = ({ behandlingReferanse }: { behandlingReferanse: string }) => {
   const bestillBrev = async () => {
-    const response = await fetch('/api/test/bestill/brev', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ behandlingReferanse }),
-    });
+    const response = await clientBestillTestBrev(behandlingReferanse);
 
-    if (response.ok) {
+    if (isSuccess(response)) {
       alert('Brev bestilt');
     } else {
       alert('Noe gikk galt');
     }
   };
 
-  return <Button size="small" variant="secondary" onClick={async () => bestillBrev()}>Bestill testbrev</Button>;
+  return (
+    <Button size="small" variant="secondary" onClick={async () => bestillBrev()}>
+      Bestill testbrev
+    </Button>
+  );
 };

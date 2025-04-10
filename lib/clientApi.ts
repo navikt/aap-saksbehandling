@@ -127,7 +127,11 @@ export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialo
 }
 
 export function clientMellomlagreBrev(brevbestillingReferanse: string, brev: Brev) {
-  return clientFetch(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater`, 'POST', brev);
+  return clientFetchV2(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater`, 'POST', brev);
+}
+
+export function clientBestillTestBrev(behandlingReferanse: string) {
+  return clientFetchV2(`${BASE_URL}/api/test/bestill/brev`, 'POST', { behandlingReferanse });
 }
 
 export function clientHentRelevanteDokumenter(saksnummer: string) {

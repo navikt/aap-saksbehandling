@@ -18,6 +18,7 @@ import { revalidateFlyt } from 'lib/actions/actions';
 import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
 import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
 import { SlettBrevModal } from 'components/behandlinger/brev/skriveBrev/SlettBrevModal';
+import { isSuccess } from 'lib/utils/api';
 
 export const SkriveBrev = ({
   referanse,
@@ -51,7 +52,7 @@ export const SkriveBrev = ({
   const mellomlagreBackendRequest = useCallback(async () => {
     setIsSaving(true);
     const res = await clientMellomlagreBrev(referanse, debouncedBrev);
-    if (res != undefined) {
+    if (isSuccess(res) && res.data != undefined) {
       setSistLagret(new Date());
     }
     setIsSaving(false);
