@@ -3,6 +3,8 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { hentBrevGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
 import { StegType } from 'lib/types/types';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingReferanse: string;
@@ -12,9 +14,12 @@ interface Props {
 
 export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingVersjon, aktivtSteg }: Props) => {
   const [grunnlagene, brukerRoller] = await Promise.all([hentBrevGrunnlag(behandlingReferanse), hentRollerForBruker()]);
+  if (isError(grunnlagene)) {
+    return <ApiException apiResponses={[grunnlagene]} />;
+  }
 
-  const grunnlag = grunnlagene.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
-  if (!grunnlag || !grunnlagene.harTilgangTilÅSaksbehandle) {
+  const grunnlag = grunnlagene.data.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
+  if (!grunnlag || !grunnlagene.data.harTilgangTilÅSaksbehandle) {
     return null;
   }
 

@@ -3,6 +3,8 @@ import {
   hentBarnetilleggGrunnlag,
   hentBehandlingPersoninfo,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 type Props = {
   behandlingsreferanse: string;
@@ -19,14 +21,17 @@ export const BarnetilleggVurderingMedDataFetching = async ({
 }: Props) => {
   const grunnlag = await hentBarnetilleggGrunnlag(behandlingsreferanse);
   const behandlingPersoninfo = await hentBehandlingPersoninfo(behandlingsreferanse);
+  if (isError(grunnlag) || isError(behandlingPersoninfo)) {
+    return <ApiException apiResponses={[grunnlag, behandlingPersoninfo]} />;
+  }
 
   return (
     <BarnetilleggVurdering
       harAvklaringsbehov={harAvklaringsbehov}
-      grunnlag={grunnlag}
+      grunnlag={grunnlag.data}
       behandlingsversjon={behandlingsversjon}
-      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
-      behandlingPersonInfo={behandlingPersoninfo}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingPersonInfo={behandlingPersoninfo.data}
     />
   );
 };

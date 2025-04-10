@@ -28,11 +28,16 @@ export const SkriveBrevMedDataFetching = async ({
     hentRefusjonGrunnlag(behandlingsReferanse),
     hentRollerForBruker(),
   ]);
-  if (isError(sykdomsgrunnlag) || isError(bistandsbehovGrunnlag) || isError(refusjonGrunnlag)) {
-    return <ApiException apiResponses={[sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag]} />;
+  if (
+    isError(sykdomsgrunnlag) ||
+    isError(bistandsbehovGrunnlag) ||
+    isError(refusjonGrunnlag) ||
+    isError(brevGrunnlag)
+  ) {
+    return <ApiException apiResponses={[sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag, brevGrunnlag]} />;
   }
 
-  const brev = brevGrunnlag.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
+  const brev = brevGrunnlag.data.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
   const readOnlyBrev = aktivtSteg === 'BREV' && !roller.includes(Roller.BESLUTTER);
 
   if (!brev?.brev) {
