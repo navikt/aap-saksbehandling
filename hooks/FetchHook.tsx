@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { clientBestillDialogmelding, clientOpprettAktivitetspliktBrudd, clientOpprettSak } from 'lib/clientApi';
 import { BestillLegeerklæring, OpprettAktivitetspliktBrudd, OpprettTestcase } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
+import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 
 export function useFetch<FunctionParameters extends any[], ResponseBody>(
   fetchFunction: (...functionParameters: FunctionParameters) => Promise<ResponseBody>
@@ -32,16 +33,52 @@ export function useFetch<FunctionParameters extends any[], ResponseBody>(
 
   return { isLoading, error, data, method };
 }
+export function useFetchV2<FunctionParameters extends any[], ResponseBody>(
+  fetchFunction: (...functionParameters: FunctionParameters) => Promise<FetchResponse<ResponseBody>>
+): {
+  method: (...functionParameters: FunctionParameters) => Promise<{ ok: boolean }>;
+  isLoading: boolean;
+  data?: ResponseBody;
+  error?: string;
+} {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>();
+  const [data, setData] = useState<ResponseBody>();
+
+  async function method(...functionParameters: FunctionParameters) {
+    setIsLoading(true);
+    let ok = true;
+
+    try {
+      const dataFromFetch = await fetchFunction(...functionParameters);
+      if (isError(dataFromFetch)) {
+        setError(`${dataFromFetch.apiException.code}: ${dataFromFetch.apiException.message}`);
+        ok = false;
+      }
+      if (isSuccess(dataFromFetch)) {
+        setData(dataFromFetch.data);
+      }
+      setIsLoading(false);
+      return { ok };
+    } catch (error) {
+      setError(getErrorMessage(error));
+      setIsLoading(false);
+      return { ok: false };
+    }
+  }
+
+  return { isLoading, error, data, method };
+}
 
 export function useAktivitetsplikt(saksnummer: string): {
-  opprettAktivitetsplikt: (aktivitet: OpprettAktivitetspliktBrudd) => Promise<void>;
+  opprettAktivitetsplikt: (aktivitet: OpprettAktivitetspliktBrudd) => Promise<{ ok: boolean }>;
   isLoading: boolean;
   error?: string;
 } {
-  const { method, error, isLoading } = useFetch(clientOpprettAktivitetspliktBrudd);
+  const { method, error, isLoading } = useFetchV2(clientOpprettAktivitetspliktBrudd);
 
   async function opprettAktivitetsPlikt(aktivitet: OpprettAktivitetspliktBrudd) {
-    await method(saksnummer, aktivitet);
+    return await method(saksnummer, aktivitet);
   }
 
   return { opprettAktivitetsplikt: opprettAktivitetsPlikt, isLoading, error };
@@ -51,7 +88,7 @@ export function useOpprettSak(): {
   opprettSak: (opprettTestCase: OpprettTestcase) => Promise<void>;
   isLoading: boolean;
 } {
-  const { method, isLoading } = useFetch(clientOpprettSak);
+  const { method, isLoading } = useFetchV2(clientOpprettSak);
 
   async function opprettSakMethod(body: OpprettTestcase) {
     await method(body);

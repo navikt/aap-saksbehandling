@@ -3,7 +3,7 @@ import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt
 import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
-import { Button, Radio } from '@navikt/ds-react';
+import { Alert, Button, Radio } from '@navikt/ds-react';
 import { AktivitetspliktDato } from 'components/aktivitetsplikt/aktivitetspliktdato/AktivitetspliktDato';
 import { Dispatch, useEffect, useState } from 'react';
 import { useAktivitetsplikt } from 'hooks/FetchHook';
@@ -56,7 +56,7 @@ const bruddOptions: ValuePair<AktivitetspliktBrudd>[] = [
 export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd, setVisStatusmelding }: Props) => {
   const saksnummer = useSaksnummer();
   const [errorMessage, setErrorMessage] = useState('');
-  const { isLoading, opprettAktivitetsplikt } = useAktivitetsplikt(saksnummer);
+  const { isLoading, opprettAktivitetsplikt, error } = useAktivitetsplikt(saksnummer);
 
   const { form, formFields } = useConfigForm<AktivitetspliktFormFields>(
     {
@@ -150,7 +150,7 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd, setVisStatusm
         } else if (harOverlappendePerioder) {
           setErrorMessage('Det finnes overlappende perioder');
         } else {
-          await opprettAktivitetsplikt({
+          const res = await opprettAktivitetsplikt({
             brudd: data.brudd,
             begrunnelse: data.begrunnelse,
             paragraf: data.paragraf,
@@ -164,11 +164,14 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd, setVisStatusm
             }),
             grunn: data.grunn ? data.grunn : undefined,
           });
-          form.reset();
-          remove();
-          setSkalRegistrereBrudd(false);
-          setVisStatusmelding(true);
-          await revalidateAktivitetspliktHendelser(saksnummer);
+
+          if (res.ok) {
+            form.reset();
+            remove();
+            setSkalRegistrereBrudd(false);
+            setVisStatusmelding(true);
+            await revalidateAktivitetspliktHendelser(saksnummer);
+          }
         }
       })}
       autoComplete={'off'}
@@ -211,6 +214,11 @@ export const AktivitetspliktForm = ({ sak, setSkalRegistrereBrudd, setVisStatusm
             errorMessage={errorMessage}
           />
         </div>
+      )}
+      {error && (
+        <Alert variant={'error'} size={'small'}>
+          {error}
+        </Alert>
       )}
       <div className={'flex-row'}>
         <Button className={'fit-content'} loading={isLoading}>
