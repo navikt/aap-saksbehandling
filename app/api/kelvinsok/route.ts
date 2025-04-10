@@ -11,6 +11,9 @@ export interface SøkeResultat {
     href: string;
   }[];
   saker?: { href: string; label: string; }[];
+  kontor?: { enhet: string; }[];
+  oppfølgingsenhet?: { enhet: string; }[];
+  behandlingsStatus?: { status: string; }[];
 }
 
 export async function POST(req: Request) {
@@ -38,13 +41,21 @@ export async function POST(req: Request) {
 
   // Oppgaver
   let oppgaveData: SøkeResultat['oppgaver'] = [];
+  let kontorData: SøkeResultat['kontor'] = [];
+  let oppfølgingsenhetData: SøkeResultat['oppfølgingsenhet'] = [];
+  let behandlingsStatusData: SøkeResultat['behandlingsStatus'] = [];
   try {
     const oppgaver = await oppgaveTekstSøk(søketekst);
     if (oppgaver) {
-      oppgaveData = oppgaver.map((oppgave) => ({
-        href: byggKelvinURL(oppgave),
-        label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype} - ${oppgave.påVentÅrsak} - ${oppgave.enhet} - ${oppgave.oppfølgingsenhet} - ${oppgave.status}`,
-      }));
+      oppgaver.forEach((oppgave) => {
+        oppgaveData.push({
+          href: byggKelvinURL(oppgave),
+          label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype} - ${oppgave.påVentÅrsak}`,
+        });
+        kontorData.push({ enhet: `${oppgave.enhet}` });
+        oppfølgingsenhetData.push({ enhet: `${oppgave.oppfølgingsenhet}` });
+        behandlingsStatusData.push({ status: `${oppgave.status}` });
+      });
     }
   } catch (err) {
     logError('/api/kelvinsøk oppgaver', err);
@@ -55,6 +66,9 @@ export async function POST(req: Request) {
       href: `/saksbehandling/sak/${sak.saksnummer}`,
       label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer}) (${sak.status})`,
     })),
+    kontor: kontorData,
+    oppfølgingsenhet: oppfølgingsenhetData,
+    behandlingsStatus: behandlingsStatusData,
   };
 
   return NextResponse.json(data, {
@@ -67,8 +81,8 @@ function buildSaksbehandlingsURL(oppgave: Oppgave): string {
 function buildPostmottakURL(oppgave: Oppgave): string {
   return `/postmottak/${oppgave?.behandlingRef}`;
 }
+
 export function byggKelvinURL(oppgave: Oppgave): string {
-  // @ts-ignore
   if (oppgave.journalpostId) {
     return buildPostmottakURL(oppgave);
   } else {

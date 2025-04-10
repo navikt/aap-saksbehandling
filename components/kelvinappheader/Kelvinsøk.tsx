@@ -10,6 +10,9 @@ export interface SøkeResultat {
     href: string;
   }[];
   saker?: { href: string; label: string }[];
+  kontor?: { enhet: string }[];
+  oppfølgingsenhet?: { enhet: string }[];
+  behandlingsStatus?: { status: string; }[];
 }
 interface Props {
   setSøkeresultat: Dispatch<SetStateAction<SøkeResultat | undefined>>;
