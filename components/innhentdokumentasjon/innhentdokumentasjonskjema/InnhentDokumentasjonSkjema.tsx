@@ -10,6 +10,7 @@ import { useBestillDialogmelding } from 'hooks/FetchHook';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
+import { isError } from 'lib/utils/api';
 
 export type Behandler = {
   type?: string;
@@ -106,11 +107,11 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     if (input.length <= 2) {
       return [];
     }
-    const resultat = await clientSøkPåBehandler(input, saksnummer);
-    if (!resultat) {
+    const response = await clientSøkPåBehandler(input, saksnummer);
+    if (isError(response)) {
       return [];
     }
-    const res = resultat.map((behandler) => ({
+    const res = response.data.map((behandler) => ({
       label: `${formaterBehandlernavn(behandler)} - ${behandler.kontor}`,
       value: `${behandler.behandlerRef}::${behandler.hprId}`,
     }));
@@ -133,7 +134,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
           size={'small'}
           defaultOptions={defaultOptions}
         />
-        <FormField form={form} formField={formFields.dokumentasjonstype} size={'medium'} />
+        <FormField form={form} formField={formFields.dokumentasjonstype} />
         <FormField form={form} formField={formFields.melding} />
         <div className={styles.rad}>
           <Button size={'small'} loading={isLoading}>

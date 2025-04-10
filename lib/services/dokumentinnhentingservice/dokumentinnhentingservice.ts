@@ -1,6 +1,7 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { fetchProxy } from 'lib/services/fetchProxy';
+import { apiFetch } from 'lib/services/apiFetch';
 
 const dokumentinnhentingApiBaseUrl = process.env.DOKUMENTINNHENTING_API_BASE_URL;
 const dokumentinnhentingApiScope = process.env.DOKUMENTINNHENTING_API_SCOPE ?? '';
@@ -12,5 +13,5 @@ export async function hentRelevanteDokumenter(saksnummer: string) {
 
 export async function hentBehandleroppslag(body: object) {
   const url = `${dokumentinnhentingApiBaseUrl}/syfo/behandleroppslag/search`;
-  return await fetchProxy<Behandler[]>(url, dokumentinnhentingApiScope, 'POST', body);
+  return await apiFetch<Behandler[]>(url, dokumentinnhentingApiScope, 'POST', body);
 }

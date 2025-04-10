@@ -3,6 +3,7 @@ import { hentBehandleroppslag } from 'lib/services/dokumentinnhentingservice/dok
 import { isLocal } from 'lib/utils/environment';
 import { NextRequest } from 'next/server';
 import { logError } from 'lib/serverutlis/logger';
+import { FetchResponse, isError } from 'lib/utils/api';
 
 const testdata: Behandler[] = [
   {
@@ -49,14 +50,19 @@ const testdata: Behandler[] = [
 
 export async function POST(req: NextRequest) {
   if (isLocal()) {
-    return new Response(JSON.stringify(testdata), { status: 200 });
+    const response: FetchResponse<Behandler[]> = {
+      type: 'SUCCESS',
+      data: testdata,
+      status: 200,
+    };
+
+    return new Response(JSON.stringify(response), { status: 200 });
   }
   const body = await req.json();
-  try {
-    const res = await hentBehandleroppslag(body);
-    return new Response(JSON.stringify(res), { status: 200 });
-  } catch (err) {
-    logError(`/dokumentinnhenting/behandleroppslag`, err);
-    return new Response(JSON.stringify({ message: 'Behandleroppslag feilet' }), { status: 500 });
+  const res = await hentBehandleroppslag(body);
+  if (isError(res)) {
+    logError(`/dokumentinnhenting/behandleroppslag`, res.apiException.message);
   }
+
+  return new Response(JSON.stringify(res), { status: 200 });
 }

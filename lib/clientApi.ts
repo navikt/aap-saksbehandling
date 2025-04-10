@@ -96,7 +96,7 @@ export function clientOppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet
 }
 
 export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
-  return clientFetch<Behandler[]>(`${BASE_URL}/api/dokumentinnhenting/behandleroppslag`, 'POST', {
+  return clientFetchV2<Behandler[]>(`${BASE_URL}/api/dokumentinnhenting/behandleroppslag`, 'POST', {
     fritekst: fritekst,
     saksnummer: saksnummer,
   });
