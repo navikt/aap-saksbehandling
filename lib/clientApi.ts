@@ -115,7 +115,7 @@ export function clientHentAlleDokumenterPåSak(saksnummer: string) {
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
-  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
+  return clientFetchV2(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
 
 export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {

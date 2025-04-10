@@ -301,7 +301,7 @@ export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
 
 export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/bestill`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
+  return await apiFetch(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
 export const forhåndsvisDialogmelding = async (
