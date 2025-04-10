@@ -58,9 +58,9 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
               </Table.DataCell>
             </Table.Row>
             <Table.Row>
-              <Table.HeaderCell scope={'row'} textSize={'small'}>
-                Fastsatt grunnlag
-              </Table.HeaderCell>
+              <Table.DataCell scope={'row'} textSize={'small'}>
+                <b>Fastsatt grunnlag</b>
+              </Table.DataCell>
               <Table.DataCell align={'right'} textSize={'small'}>
                 <b>{formaterTilG(grunnlag.grunnlag)}</b>
               </Table.DataCell>
