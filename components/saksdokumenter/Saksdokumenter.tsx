@@ -8,6 +8,7 @@ import { FormField } from 'components/form/FormField';
 import { ArrowOrange } from 'components/icons/ArrowOrange';
 import { ArrowGreen } from 'components/icons/ArrowGreen';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface FormFields {
   dokumentnavn: string;
@@ -49,7 +50,7 @@ export const Saksdokumenter = () => {
         <FormField form={form} formField={formFields.dokumentnavn} />
         <FormField form={form} formField={formFields.dokumentType} />
       </div>
-      <Table size={'small'}>
+      <TableStyled size={'small'}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell align={'left'} textSize={'small'}>
@@ -74,7 +75,7 @@ export const Saksdokumenter = () => {
               return (
                 <Table.Row key={dokument.dokumentInfoId}>
                   <Table.DataCell align={'left'}>
-                    <div style={{ display: 'flex' }}>
+                    <div style={{ display: 'flex', minWidth: '3rem' }}>
                       {dokument.erUtgående ? (
                         <ArrowOrange title={'Utgående dokument'} />
                       ) : (
@@ -96,7 +97,7 @@ export const Saksdokumenter = () => {
               );
             })}
         </Table.Body>
-      </Table>
+      </TableStyled>
     </VStack>
   );
 };
