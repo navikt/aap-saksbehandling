@@ -64,7 +64,7 @@ export async function POST(req: Request) {
     oppgaver: oppgaveData,
     saker: sakData?.map((sak) => ({
       href: `/saksbehandling/sak/${sak.saksnummer}`,
-      label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer}) (${sak.status})`,
+      label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer})`,
     })),
     kontor: kontorData,
     oppfølgingsenhet: oppfølgingsenhetData,
