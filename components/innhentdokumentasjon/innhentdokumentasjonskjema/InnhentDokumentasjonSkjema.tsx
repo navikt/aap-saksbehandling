@@ -48,6 +48,7 @@ export const formaterBehandlernavn = (behandler: Behandler): string => {
 export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [visModal, setVisModal] = useState<boolean>(false);
   const [visBestillingsfeil, setVisBestillingsfeil] = useState<boolean>(false);
+  const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
   const saksnummer = useSaksnummer();
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -109,10 +110,12 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     if (!resultat) {
       return [];
     }
-    return resultat.map((behandler) => ({
+    const res = resultat.map((behandler) => ({
       label: `${formaterBehandlernavn(behandler)} - ${behandler.kontor}`,
       value: `${behandler.behandlerRef}::${behandler.hprId}`,
     }));
+    setDefaultOptions(res);
+    return res;
   };
 
   return (
@@ -128,6 +131,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
           fetcher={behandlersøk}
           rules={{ required: 'Du må velge en behandler' }}
           size={'small'}
+          defaultOptions={defaultOptions}
         />
         <FormField form={form} formField={formFields.dokumentasjonstype} size={'medium'} />
         <FormField form={form} formField={formFields.melding} />
