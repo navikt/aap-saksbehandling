@@ -1,6 +1,6 @@
 'use client';
 
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Soningsgrunnlag } from 'lib/types/types';
 import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
@@ -89,7 +89,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
   };
 
   return (
-    <VilkårsKort heading={'Soning § 11-26'} steg={'DU_ER_ET_ANNET_STED'}>
+    <VilkårsKort heading={'§ 11-26 Soning'} steg={'DU_ER_ET_ANNET_STED'}>
       <Form
         onSubmit={handleSubmit}
         steg={'DU_ER_ET_ANNET_STED'}
@@ -124,20 +124,21 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
                 label={'Skal ytelsen stoppes på grunn av soning?'}
                 rules={{ required: 'Du må ta stilling til om ytelsen skal stoppes på grunn av soning' }}
                 readOnly={readOnly}
+                horisontal
               >
                 <Radio value={JaEllerNei.Ja}>Ja</Radio>
                 <Radio value={JaEllerNei.Nei}>Nei</Radio>
               </RadioGroupWrapper>
               {erFørsteVurdering ? (
                 <div>
-                  <Label size={'small'}>Vurderingen gjelder fra dato</Label>
+                  <Label size={'small'}>Vurderingen gjelder fra</Label>
                   <BodyShort>{field.fraDato}</BodyShort>
                 </div>
               ) : (
                 <DateInputWrapper
                   name={`soningsvurderinger.${index}.fraDato`}
                   control={form.control}
-                  label={'Vurderingen skal gjelde fra dato'}
+                  label={'Vurderingen gjelder fra'}
                   rules={{
                     required: 'Du må sette en dato for når vurderingen skal gjelde fra',
                     validate: (value) => validerDato(value as string),
@@ -163,9 +164,8 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
         {!readOnly && (
           <Button
             type={'button'}
-            icon={<PlusCircleIcon aria-hidden />}
             className={'fit-content'}
-            variant={'tertiary'}
+            variant={'secondary'}
             size={'small'}
             onClick={() => append({ begrunnelse: '', fraDato: '', skalOpphøre: '' })}
           >
