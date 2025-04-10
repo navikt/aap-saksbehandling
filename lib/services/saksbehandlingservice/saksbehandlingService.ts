@@ -107,9 +107,9 @@ export const hentAktivitetspliktHendelser = async (saksnummer: string) => {
   ]);
 };
 
-export const finnSakerForIdent = async (ident: string): Promise<SaksInfo[]> => {
+export const finnSakerForIdent = async (ident: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/finn`;
-  return await fetchProxy<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
+  return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
 };
 export const hentAlleSaker = async () => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;

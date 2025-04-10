@@ -4,6 +4,7 @@ import { SaksInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import type { Oppgave } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
+import { isSuccess } from 'lib/utils/api';
 
 export interface SøkeResultat {
   oppgaver?: {
@@ -27,7 +28,15 @@ export async function POST(req: Request) {
   // Saker
   try {
     if (isFnr) {
-      sakData = await finnSakerForIdent(søketekst);
+      const sakRes = await finnSakerForIdent(søketekst);
+
+      if (isSuccess(sakRes)) {
+        sakData = sakRes.data;
+      } else {
+        logError(
+          `/kelvinsok finnsakerforident ${sakRes.status}, ${sakRes.apiException.code}: ${sakRes.apiException.message}`
+        );
+      }
     } else if (isSaksnummer) {
       const sak = await hentSak(søketekst);
       sakData = [sak];
