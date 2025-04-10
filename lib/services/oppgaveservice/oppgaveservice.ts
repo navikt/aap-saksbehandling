@@ -260,7 +260,7 @@ export async function oppgaveTekstSøk(søketekst: string) {
         oppfølgingsenhet: 'Nav Engerdal',
         opprettetAv: '',
         opprettetTidspunkt: '',
-        påVentÅrsak: 'På vent',
+        påVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
       },
       {
         reservertAv: 'DF39ZH',
@@ -276,7 +276,7 @@ export async function oppgaveTekstSøk(søketekst: string) {
         oppfølgingsenhet: 'Nav Kongsvinger',
         opprettetAv: '',
         opprettetTidspunkt: '',
-        påVentÅrsak: 'På vent',
+        påVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
       },
     ];
     return res;
