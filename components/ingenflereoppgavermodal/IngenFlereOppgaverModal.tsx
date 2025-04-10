@@ -30,8 +30,8 @@ export const IngenFlereOppgaverModal = () => {
           <Button
             type={'button'}
             onClick={async () => {
-              setIsModalOpen(false);
               router.push('/oppgave');
+              setIsModalOpen(false);
             }}
           >
             Gå til oppgavelisten
