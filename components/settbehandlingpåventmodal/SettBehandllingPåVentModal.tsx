@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Button, Modal } from '@navikt/ds-react';
+import { Alert, Button, Modal } from '@navikt/ds-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { clientSettBehandlingPåVent } from 'lib/clientApi';
 import { revalidateFlyt } from 'lib/actions/actions';
@@ -12,6 +12,7 @@ import { SettPåVentÅrsaker } from 'lib/types/types';
 import { parse } from 'date-fns';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
+import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   referanse: string;
@@ -28,6 +29,7 @@ interface FormFields {
 
 export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>();
 
   const grunnOptions: ValuePair<SettPåVentÅrsaker>[] = [
     { label: 'Venter på medisinske opplysninger', value: 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER' },
@@ -50,7 +52,19 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
     frist: {
       type: 'date_input',
       label: 'Tidspunkt for frist',
-      rules: { required: 'Du må sette en frist' },
+      rules: {
+        required: 'Du må sette en frist',
+        validate: (value) => {
+          const valideringsresultat = validerDato(value as string);
+          if (valideringsresultat) {
+            return valideringsresultat;
+          }
+
+          if (!erDatoIFremtiden(value)) {
+            return 'Datoen kan ikke være tilbake i tid.';
+          }
+        },
+      },
     },
     grunn: {
       type: 'select',
@@ -77,15 +91,21 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
             id={'settBehandlingPåVent'}
             onSubmit={form.handleSubmit(async (data) => {
               setIsLoading(true);
-              await clientSettBehandlingPåVent(referanse, {
+              const res = await clientSettBehandlingPåVent(referanse, {
                 begrunnelse: data.begrunnelse,
                 behandlingVersjon: behandlingVersjon,
                 frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
                 grunn: data.grunn,
               });
-              await revalidateFlyt(referanse);
+
+              if (res.type === 'SUCCESS') {
+                await revalidateFlyt(referanse);
+                onClose();
+              } else {
+                setError(res.apiException.message);
+              }
+
               setIsLoading(false);
-              onClose();
             })}
             className={'flex-column'}
             autoComplete={'off'}
@@ -94,6 +114,11 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
             <FormField form={form} formField={formFields.frist} />
             <FormField form={form} formField={formFields.grunn} />
           </form>
+        )}
+        {error && (
+          <Alert variant={'error'} size={'small'}>
+            {error}
+          </Alert>
         )}
       </Modal.Body>
       <Modal.Footer>

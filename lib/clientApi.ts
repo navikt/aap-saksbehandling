@@ -72,7 +72,7 @@ async function clientFetchV2<ResponseBody>(
 }
 
 export function clientSettBehandlingPåVent(referanse: string, settPåVent: SettPåVent) {
-  return clientFetch(`${BASE_URL}/api/behandling/${referanse}/sett-paa-vent`, 'POST', settPåVent);
+  return clientFetchV2(`${BASE_URL}/api/behandling/${referanse}/sett-paa-vent`, 'POST', settPåVent);
 }
 
 export function clientOpprettSak(sak: OpprettTestcase) {
