@@ -35,8 +35,8 @@ describe('Helseinstitusjonsvurdering', () => {
     render(<Helseinstitusjon grunnlag={x} behandlingVersjon={0} readOnly={false} />);
   });
 
-  test('har overskrift Helseinstitusjon § 11-25', () => {
-    expect(screen.getByRole('heading', { name: 'Helseinstitusjon § 11-25', level: 3 })).toBeVisible();
+  test('har overskrift', () => {
+    expect(screen.getByRole('heading', { name: '§ 11-25 Helseinstitusjon', level: 3 })).toBeVisible();
   });
 
   test('viser en liste over institusjonsopphold som er oppdaget', () => {

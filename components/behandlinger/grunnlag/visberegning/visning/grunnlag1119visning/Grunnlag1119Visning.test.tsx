@@ -33,7 +33,7 @@ describe('grunnlag 11-19 visning', () => {
       expect(screen.getByRole('columnheader', { name: new RegExp(`^${header}$`) })).toBeVisible();
     });
 
-    expect(screen.getByRole('rowheader', { name: 'Fastsatt grunnlag' })).toBeVisible();
+    expect(screen.getByRole('cell', { name: 'Fastsatt grunnlag' })).toBeVisible();
   });
 
   it('rad med inntekt siste år viser årstall', () => {

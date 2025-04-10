@@ -30,7 +30,7 @@ const user = userEvent.setup();
 describe('Soningsvurdering', () => {
   it('har overskrift på nivå 3', () => {
     render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
-    expect(screen.getByRole('heading', { level: 3, name: 'Soning § 11-26' })).toBeVisible();
+    expect(screen.getByRole('heading', { level: 3, name: '§ 11-26 Soning' })).toBeVisible();
   });
 
   it('har en tekst som informerer om at bruker har soningsforhold', () => {
@@ -73,7 +73,7 @@ describe('Soningsvurdering', () => {
 
   it('dato for når vurderingen skal gjelde fra vises som ren tekst på den første vurderingen', () => {
     render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
-    expect(screen.getByText('Vurderingen gjelder fra dato')).toBeVisible();
+    expect(screen.getByText('Vurderingen gjelder fra')).toBeVisible();
     expect(screen.getAllByText('23.10.2022')[1]).toBeVisible(); // Det finnes en lik dato i tabellen også
   });
 
@@ -81,6 +81,6 @@ describe('Soningsvurdering', () => {
     render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
     const leggTilNyVurderingKnapp = screen.getByRole('button', { name: /legg til ny vurdering/i });
     await user.click(leggTilNyVurderingKnapp);
-    expect(screen.getByRole('textbox', { name: 'Vurderingen skal gjelde fra dato' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
   });
 });

@@ -56,7 +56,7 @@ describe('barnetillegg', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const overskrift = screen.getByText('Barnetillegg § 11-20 tredje og fjerde ledd');
+    const overskrift = screen.getByText('§ 11-20 tredje og fjerde ledd barnetillegg');
     expect(overskrift).toBeVisible();
   });
 
@@ -148,24 +148,7 @@ describe('barnetillegg', () => {
 describe('Oppgitte barn', () => {
   const user = userEvent.setup();
 
-  it('skal ha en heading med ident og hvilken rolle brukeren har for barnet', () => {
-    render(
-      <BarnetilleggVurdering
-        behandlingsversjon={1}
-        grunnlag={grunnlag}
-        readOnly={false}
-        harAvklaringsbehov={true}
-        behandlingPersonInfo={behandlingPersonInfo}
-      />
-    );
-
-    const heading = screen.getByRole('heading', {
-      name: /oppgitt fosterbarn - 12345678910/i,
-    });
-    expect(heading).toBeVisible();
-  });
-
-  it('skal vise navnet på barnet', () => {
+  it('skal vise navnet, identen og alder på barnet', () => {
     render(
       <BarnetilleggVurdering
         behandlingsversjon={1}
@@ -176,7 +159,7 @@ describe('Oppgitte barn', () => {
       />
     );
     const alder = kalkulerAlder(new Date(grunnlag.barnSomTrengerVurdering[0].fødselsdato));
-    const tekst = screen.getByText(`HELLO PELLO (${alder})`);
+    const tekst = screen.getByText(`HELLO PELLO, 12345678910 (${alder})`);
     expect(tekst).toBeVisible();
   });
 
