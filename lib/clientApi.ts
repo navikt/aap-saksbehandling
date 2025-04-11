@@ -150,7 +150,7 @@ export function clientSendHendelse(saksnummer: string, body: Object) {
 }
 
 export function clientConfig() {
-  return clientFetch<ClientConfig>('/api/config', 'GET');
+  return clientFetchV2<ClientConfig>('/api/config', 'GET');
 }
 
 export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKode: BehandlingsFlytAvklaringsbehovKode) {
