@@ -119,7 +119,7 @@ export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
 }
 
 export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
-  return clientFetch<ForhåndsvisDialogmeldingResponse>(
+  return clientFetchV2<ForhåndsvisDialogmeldingResponse>(
     `${BASE_URL}/api/dokumentinnhenting/forhaandsvis`,
     'POST',
     dialogmelding

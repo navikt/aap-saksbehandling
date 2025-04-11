@@ -304,11 +304,9 @@ export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) =
   return await apiFetch(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
-export const forhåndsvisDialogmelding = async (
-  requestBody: ForhåndsvisDialogmelding
-): Promise<ForhåndsvisDialogmeldingResponse> => {
+export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogmelding) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/brevpreview`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
+  return await apiFetch<ForhåndsvisDialogmeldingResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
 export const purrPåLegeerklæring = async (requestBody: {

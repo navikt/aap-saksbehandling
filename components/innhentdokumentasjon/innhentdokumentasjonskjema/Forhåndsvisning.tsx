@@ -2,6 +2,7 @@ import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
 import { clientForhåndsvisDialogmelding } from 'lib/clientApi';
 import { useRef } from 'react';
 import useSWR from 'swr';
+import { isSuccess } from 'lib/utils/api';
 
 type Props = {
   saksnummer: string;
@@ -19,7 +20,7 @@ const formaterTekst = (input: string) => {
 
 export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, visModal, onClose }: Props) => {
   const modalRef = useRef<HTMLDialogElement>(null);
-  const { data, isLoading, error } = useSWR(
+  const { data, isLoading } = useSWR(
     `forhåndsvisDialogmelding/${saksnummer}`,
     () =>
       clientForhåndsvisDialogmelding({
@@ -42,13 +43,14 @@ export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, vis
     >
       <Modal.Body>
         {isLoading && <Loader />}
-        {error && <Alert variant="error">Klarte ikke å forhåndsvise melding</Alert>}
-        {data && (
+        {!isLoading && data && isSuccess(data) ? (
           <div style={{ whiteSpace: 'pre-wrap' }}>
-            {formaterTekst(data.konstruertBrev).map((part, index) => (
+            {formaterTekst(data.data.konstruertBrev).map((part, index) => (
               <p key={index}>{part}</p>
             ))}
           </div>
+        ) : (
+          <Alert variant="error">Klarte ikke å forhåndsvise melding</Alert>
         )}
       </Modal.Body>
       <Modal.Footer>
