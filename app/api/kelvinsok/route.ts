@@ -4,7 +4,6 @@ import { SaksInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import type { Oppgave } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
-import { SøkeResultat } from "../../../components/kelvinappheader/Kelvinsøk";
 import { isSuccess } from 'lib/utils/api';
 
 export interface SøkeResultat {
