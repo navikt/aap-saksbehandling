@@ -1,4 +1,4 @@
-import { BehandlingPåVentKort } from './BehandlingPåVentKort';
+import { PostmottakBehandlingPVentKort } from 'components/postmottak/postmottakbehandlingpåvent/PostmottakBehandlingPåVentKort';
 import { hentVenteInformasjon } from 'lib/services/dokumentmottakservice/dokumentMottakService';
 
 interface Props {
@@ -6,5 +6,5 @@ interface Props {
 }
 export const BehandlingPVentMedDataFetching = async ({ behandlingsreferanse }: Props) => {
   const venteInfo = await hentVenteInformasjon(behandlingsreferanse);
-  return <BehandlingPåVentKort informasjon={venteInfo} />;
+  return <PostmottakBehandlingPVentKort informasjon={venteInfo} />;
 };

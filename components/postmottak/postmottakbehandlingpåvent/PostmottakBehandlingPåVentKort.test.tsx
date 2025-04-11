@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { BehandlingPåVentKort } from 'components/postmottak/behandlingpåvent/BehandlingPåVentKort';
+import { PostmottakBehandlingPVentKort } from 'components/postmottak/postmottakbehandlingpåvent/PostmottakBehandlingPåVentKort';
 import { Venteinformasjon } from 'lib/types/postmottakTypes';
 
 const informasjon: Venteinformasjon = {
@@ -11,7 +11,7 @@ const informasjon: Venteinformasjon = {
 
 describe('behandlingPåVentKort', () => {
   beforeEach(() => {
-    render(<BehandlingPåVentKort informasjon={informasjon} />);
+    render(<PostmottakBehandlingPVentKort informasjon={informasjon} />);
   });
 
   it('skal vise begrunnelse', () => {

@@ -10,7 +10,7 @@ import {
   hentFlyt,
   hentJournalpostInfo,
 } from 'lib/services/dokumentmottakservice/dokumentMottakService';
-import { BehandlingPVentMedDataFetching } from 'components/postmottak/behandlingpåvent/BehandlingPåVentMedDataFetching';
+import { BehandlingPVentMedDataFetching } from 'components/postmottak/postmottakbehandlingpåvent/PostmottakBehandlingPåVentMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { VStack } from '@navikt/ds-react';
 

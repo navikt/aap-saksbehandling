@@ -7,7 +7,7 @@ import { ChevronDownIcon, ChevronRightIcon, HourglassTopFilledIcon, PaperplaneIc
 import { JournalpostInfo } from 'lib/types/postmottakTypes';
 
 import styles from './DokumentInfoBanner.module.css';
-import { SettBehandllingPåVentModal } from 'components/postmottak/settbehandlingpåventmodal/SettBehandllingPåVentModal';
+import { PostmottakSettBehandllingPVentModal } from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandllingPåVentModal';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
@@ -84,7 +84,7 @@ export const DokumentInfoBanner = ({ behandlingsreferanse, behandlingsVersjon, j
             </Dropdown.Menu>
           </Dropdown>
 
-          <SettBehandllingPåVentModal
+          <PostmottakSettBehandllingPVentModal
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingsVersjon}
             isOpen={settBehandlingPåVentmodalIsOpen}

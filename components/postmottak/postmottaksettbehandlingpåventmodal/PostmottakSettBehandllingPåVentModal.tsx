@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from '@navikt/ds-react';
-import styles from './SettBehandlingPåVentModal.module.css';
+import styles from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { postmottakSettPåVentClient } from 'lib/postmottakClientApi';
 import { SettPåVentÅrsaker } from 'lib/types/postmottakTypes';
@@ -25,7 +25,12 @@ interface FormFields {
   grunn: SettPåVentÅrsaker;
 }
 
-export const SettBehandllingPåVentModal = ({ isOpen, onClose, behandlingsreferanse, behandlingVersjon }: Props) => {
+export const PostmottakSettBehandllingPVentModal = ({
+  isOpen,
+  onClose,
+  behandlingsreferanse,
+  behandlingVersjon,
+}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const grunnOptions: ValuePair<SettPåVentÅrsaker>[] = [

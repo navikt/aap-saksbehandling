@@ -11,7 +11,7 @@ interface Props {
   informasjon?: Venteinformasjon;
 }
 
-export const BehandlingPåVentKort = ({ informasjon }: Props) => {
+export const PostmottakBehandlingPVentKort = ({ informasjon }: Props) => {
   return (
     <VilkårsKort heading={'Behandling på vent'} variant={'secondary'} icon={<HourglassBottomFilledIcon />}>
       <div className={'flex-column'}>
