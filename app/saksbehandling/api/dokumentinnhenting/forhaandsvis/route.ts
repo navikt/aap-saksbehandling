@@ -10,5 +10,5 @@ export async function POST(req: NextRequest) {
   if (isError(res)) {
     logError('Forhåndsvisning av dialogmelding feilet', res.apiException.message);
   }
-  return new Response(JSON.stringify(res), { status: 200 });
+  return new Response(JSON.stringify(res), { status: res.status });
 }
