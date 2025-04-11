@@ -283,7 +283,7 @@ export const settBehandlingPåVent = async (referanse: string, requestBody: Sett
 
 export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/vente-informasjon`;
-  return await fetchProxy<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const forberedBehandlingOgVentPåProsessering = async (
