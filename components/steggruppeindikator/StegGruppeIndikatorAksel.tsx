@@ -79,6 +79,8 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Institusjonsopphold';
     case 'SAMORDNING':
       return 'Samordning';
+    case 'SØKNAD':
+      return 'Trukket søknad';
     case 'UDEFINERT':
       return 'Udefinert';
   }

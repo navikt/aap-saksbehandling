@@ -73,6 +73,8 @@ export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode): st
       return 'Refusjon';
     case '5027':
       return 'Samordning annen statlig ytelse';
+    case '5028':
+      return 'Vurder trekk av søknad';
     // Postmottak
     case '1337':
       return 'Kategoriser dokument';
