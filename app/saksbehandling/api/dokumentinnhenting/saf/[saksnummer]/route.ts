@@ -2,6 +2,7 @@ import { logError } from 'lib/serverutlis/logger';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { hentRelevanteDokumenter } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 import { isLocal } from 'lib/utils/environment';
+import { FetchResponse, isError } from 'lib/utils/api';
 
 const mockData: RelevantDokumentType[] = [
   {
@@ -27,13 +28,19 @@ const mockData: RelevantDokumentType[] = [
 export async function POST(_: Request, { params }: { params: Promise<{ saksnummer: string }> }) {
   const saksnummer = (await params).saksnummer;
   if (isLocal()) {
-    return new Response(JSON.stringify(mockData), { status: 200 });
+    const response: FetchResponse<RelevantDokumentType[]> = {
+      type: 'SUCCESS',
+      status: 200,
+      data: mockData,
+    };
+    return new Response(JSON.stringify(response), { status: 200 });
   }
-  try {
-    const res = await hentRelevanteDokumenter(saksnummer);
-    return new Response(JSON.stringify(res), { status: 200 });
-  } catch (error) {
-    logError('Feil ved henting av relevante dokumenter', error);
-    return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });
+
+  const res = await hentRelevanteDokumenter(saksnummer);
+
+  if (isError(res)) {
+    logError('Feil ved henting av relevante dokumenter', res.apiException.message);
   }
+
+  return new Response(JSON.stringify(res), { status: 200 });
 }

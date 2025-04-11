@@ -135,7 +135,7 @@ export function clientBestillTestBrev(behandlingReferanse: string) {
 }
 
 export function clientHentRelevanteDokumenter(saksnummer: string) {
-  return clientFetch<RelevantDokumentType[]>(`${BASE_URL}/api/dokumentinnhenting/saf/${saksnummer}`, 'POST');
+  return clientFetchV2<RelevantDokumentType[]>(`${BASE_URL}/api/dokumentinnhenting/saf/${saksnummer}`, 'POST');
 }
 
 export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, behandlingsreferanse: string) {

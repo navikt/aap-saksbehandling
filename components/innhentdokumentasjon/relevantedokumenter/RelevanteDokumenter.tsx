@@ -7,6 +7,7 @@ import styles from './RelevanteDokumenter.module.css';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { isError } from 'lib/utils/api';
 
 interface FormFields {
   dokumentnavn: string;
@@ -41,7 +42,12 @@ export const RelevanteDokumenter = () => {
       type: 'select',
       label: 'Vis typer',
       options: Array.from(
-        new Set([...[''], ...(relevanteDokumenter?.map((dokument) => dokument.variantformat) || [])])
+        new Set([
+          ...[''],
+          ...((relevanteDokumenter?.type === 'SUCCESS' &&
+            relevanteDokumenter.data?.map((dokument) => dokument.variantformat)) ||
+            []),
+        ])
       ),
     },
   });
@@ -54,7 +60,15 @@ export const RelevanteDokumenter = () => {
     );
   }
 
-  if (relevanteDokumenter && relevanteDokumenter?.length === 0) {
+  if (relevanteDokumenter && isError(relevanteDokumenter)) {
+    return (
+      <Alert variant={'error'} size={'small'}>
+        {relevanteDokumenter.apiException.message}
+      </Alert>
+    );
+  }
+
+  if (relevanteDokumenter && relevanteDokumenter.data.length === 0) {
     return (
       <Alert size={'small'} variant="info">
         Fant ingen relevante helseopplysninger
@@ -90,8 +104,8 @@ export const RelevanteDokumenter = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {relevanteDokumenter
-            ?.filter(
+          {relevanteDokumenter?.data
+            .filter(
               (dokument) =>
                 !form.watch('dokumentnavn') ||
                 dokument.tittel.toUpperCase().includes(form.watch('dokumentnavn').toUpperCase())
