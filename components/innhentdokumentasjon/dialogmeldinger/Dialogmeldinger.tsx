@@ -5,9 +5,9 @@ import { ReactNode } from 'react';
 import styles from './Dialogmeldinger.module.css';
 import { TimerPauseIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
-import { clientPurrPåLegeerklæring } from 'lib/clientApi';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { isBefore, subDays } from 'date-fns';
+import { usePurrPåDialogmelding } from 'hooks/FetchHook';
 
 type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
@@ -39,6 +39,7 @@ const kanSendePurring = (opprettet: string) => isBefore(new Date(opprettet), gre
 
 const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
   const behandlingsreferanse = useBehandlingsReferanse();
+  const { purrPåDialogmelding, isLoading } = usePurrPåDialogmelding();
   return (
     <Table.Row>
       <Table.DataCell textSize={'small'} className={styles.status}>
@@ -58,7 +59,8 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
               type="button"
               size="small"
               icon={<TimerPauseIcon title="Send purring" />}
-              onClick={() => clientPurrPåLegeerklæring(melding.dialogmeldingUuid, behandlingsreferanse)}
+              loading={isLoading}
+              onClick={() => purrPåDialogmelding(melding.dialogmeldingUuid, behandlingsreferanse)}
             />
           )}
         </HStack>

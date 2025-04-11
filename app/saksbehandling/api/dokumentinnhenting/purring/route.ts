@@ -2,6 +2,7 @@ import { logError } from 'lib/serverutlis/logger';
 import { purrPåLegeerklæring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isLocal } from 'lib/utils/environment';
 import { NextRequest } from 'next/server';
+import { ApiException, ErrorResponseBody, isError } from 'lib/utils/api';
 
 export async function POST(req: NextRequest) {
   if (isLocal()) {
@@ -9,10 +10,18 @@ export async function POST(req: NextRequest) {
   }
   try {
     const body = await req.json();
-    const res = purrPåLegeerklæring(body);
-    return new Response(JSON.stringify(res), { status: 200 });
+    const res = await purrPåLegeerklæring(body);
+    if (isError(res)) {
+      logError(`/dokumentinnhenting/purring ${res.status} - ${res.apiException.code}: ${res.apiException.message}`);
+    }
+    return new Response(JSON.stringify(res), { status: res.status });
   } catch (error) {
-    logError('Feil ved purring på legeklæring', error);
-    return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });
+    logError(`/dokumentinnhenting/purring`, error);
+    const err: ErrorResponseBody<ApiException> = {
+      type: 'ERROR',
+      status: 500,
+      apiException: { message: 'Nettverksfeil', code: 'INTERNFEIL' },
+    };
+    return new Response(JSON.stringify(err), { status: 500 });
   }
 }

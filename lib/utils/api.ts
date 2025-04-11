@@ -5,7 +5,7 @@ export interface ApiException {
   code?: string;
 }
 
-type ErrorResponseBody<T> = {
+export type ErrorResponseBody<T> = {
   type: 'ERROR';
   status: number;
   apiException: T;

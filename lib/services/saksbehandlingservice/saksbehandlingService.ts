@@ -309,12 +309,9 @@ export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogm
   return await apiFetch<ForhåndsvisDialogmeldingResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
-export const purrPåLegeerklæring = async (requestBody: {
-  dialogmeldingPurringUUID: string;
-  saksnummer: string;
-}): Promise<void> => {
+export const purrPåLegeerklæring = async (requestBody: { dialogmeldingPurringUUID: string; saksnummer: string }) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/purring`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'POST', requestBody);
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
 export const hentUnderveisGrunnlag = async (behandlingsreferanse: string) => {
