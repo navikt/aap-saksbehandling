@@ -13,6 +13,7 @@ import { Underveis } from 'components/behandlinger/underveis/Underveis';
 import { Lovvalg } from 'components/behandlinger/lovvalg/Lovvalg';
 import { ForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/ForutgåendeMedlemskap';
 import { Samordning } from 'components/behandlinger/samordning/Samordning';
+import { Søknad } from 'components/behandlinger/søknad/Søknad';
 
 interface Props {
   saksId: string;
@@ -23,6 +24,7 @@ interface Props {
 export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, saksId }: Props) => {
   return (
     <>
+      {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'LOVVALG' && <Lovvalg behandlingsReferanse={behandlingsReferanse} sakId={saksId} />}
       {aktivGruppe === 'ALDER' && <AlderMedDataFetching behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'STUDENT' && <Student behandlingsreferanse={behandlingsReferanse} />}

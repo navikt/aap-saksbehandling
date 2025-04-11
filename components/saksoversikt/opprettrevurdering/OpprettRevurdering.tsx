@@ -10,6 +10,7 @@ import { v4 as uuid } from 'uuid';
 import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
 import styles from './OpprettRevurdering.module.css';
+import { isProd } from 'lib/utils/environment';
 
 const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
   { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
@@ -21,6 +22,8 @@ const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
   { label: 'Samordning og avregning', value: 'SAMORDNING_OG_AVREGNING' },
   { label: 'Refusjonskrav', value: 'REFUSJONSKRAV' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
+  // TODO ikke prod-klart enda
+  //{ label: 'Søknad', value: 'SØKNAD_TRUKKET' },
   // TODO: For at denne skal fungere må det gjøres litt justering i data som sendes i melding.
   // { label: 'Utenlandsopphold før søknadstidspunkt', value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT' },
 ];
@@ -75,7 +78,7 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
     årsaker: {
       type: 'combobox_multiple',
       label: 'Hvilke opplysninger skal revurderes?',
-      options: årsakOptions,
+      options: isProd() ? årsakOptions : [...årsakOptions, { label: 'Søknad trukket', value: 'SØKNAD_TRUKKET' }],
       rules: {
         required: 'Velg opplysning som er grunnlaget for revurdering',
       },

@@ -14,7 +14,10 @@ const Layout = async (props: {
   const flytResponse = await hentFlyt(params.behandlingsReferanse);
   const ferdigeSteg = flytResponse.flyt.filter((steg) => steg.erFullført).map((steg) => steg.stegGruppe);
 
-  if (!ferdigeSteg.includes(params.aktivGruppe as StegGruppe) && flytResponse.aktivGruppe != params.aktivGruppe) {
+  if (
+    !ferdigeSteg.includes(params.aktivGruppe as StegGruppe) &&
+    flytResponse.aktivGruppe != decodeURIComponent(params.aktivGruppe)
+  ) {
     return <BodyShort>Dette steget er ikke vurdert enda.</BodyShort>;
   }
 
