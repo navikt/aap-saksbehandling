@@ -353,9 +353,9 @@ export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string):
   );
 };
 
-export const sendLokalHendelse = async (saksnummer: string, body: Object): Promise<void> => {
+export const sendLokalHendelse = async (saksnummer: string, body: Object) => {
   const url = `${saksbehandlingApiBaseUrl}/api/hendelse/sak/${saksnummer}/send`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'POST', body);
+  return await apiFetch(url, saksbehandlingApiScope, 'POST', body);
 };
 
 export const auditlog = async (behandlingsreferanse: string) => {

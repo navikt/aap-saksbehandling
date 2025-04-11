@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
+import { Alert, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
 import { ManuellRevurderingV0, SaksInfo, type ÅrsakTilBehandling } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -11,6 +11,7 @@ import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
 import styles from './OpprettRevurdering.module.css';
 import { isProd } from 'lib/utils/environment';
+import { isSuccess } from 'lib/utils/api';
 
 const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
   { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
@@ -37,6 +38,7 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>();
 
   async function sendHendelse(data: ManuellRevurderingFormFields) {
     const innsending = {
@@ -57,14 +59,14 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
 
     setIsLoading(true);
 
-    await clientSendHendelse(sak.saksnummer, innsending)
-      .then(() => {
-        setTimeout(() => router.push(`/saksbehandling/sak/${sak.saksnummer}`), 2000);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        throw new Error('En ukjent feil oppsto ved opprettelse av revurdering', err);
-      });
+    const res = await clientSendHendelse(sak.saksnummer, innsending);
+
+    if (isSuccess(res)) {
+      router.push(`/saksbehandling/sak/${sak.saksnummer}`);
+    } else {
+      setError(res.apiException.message);
+      setIsLoading(false);
+    }
   }
 
   const { form, formFields } = useConfigForm<ManuellRevurderingFormFields>({
@@ -112,6 +114,12 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
               </VStack>
             </ExpansionCard.Content>
           </ExpansionCard>
+
+          {error && (
+            <Alert variant={'error'} size={'small'}>
+              {error}
+            </Alert>
+          )}
 
           <HStack gap="4">
             <Button

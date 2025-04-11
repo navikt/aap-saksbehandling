@@ -146,7 +146,7 @@ export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, behandlin
 }
 
 export function clientSendHendelse(saksnummer: string, body: Object) {
-  return clientFetch(`${BASE_URL}/api/hendelse/sak/${saksnummer}/send`, 'POST', body);
+  return clientFetchV2(`${BASE_URL}/api/hendelse/sak/${saksnummer}/send`, 'POST', body);
 }
 
 export function clientConfig() {
