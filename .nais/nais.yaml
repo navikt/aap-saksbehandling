@@ -56,6 +56,8 @@ spec:
     - emptyDir:
         medium: Memory
       mountPath: /app/.next/cache
+  envFrom:
+    - secret: kelvin-unleash-api-token
   accessPolicy:
     outbound:
       rules:
@@ -68,3 +70,4 @@ spec:
         - application: tilgang
       external:
         - host: cdn.nav.no
+        - host: aap-unleash-api.nav.cloud.nais.io
