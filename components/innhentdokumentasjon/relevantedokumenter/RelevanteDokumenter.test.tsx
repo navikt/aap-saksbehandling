@@ -5,6 +5,7 @@ import {
 } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
+import { FetchResponse } from 'lib/utils/api';
 
 const relevanteDokumenter: RelevantDokumentType[] = [
   {
@@ -75,5 +76,11 @@ describe('Relevante dokumenter', () => {
 });
 
 function mockFetchRelevanteDokumenter(dokumenter: RelevantDokumentType[]) {
-  fetchMock.mockResponseOnce(JSON.stringify(dokumenter), { status: 200 });
+  const response: FetchResponse<RelevantDokumentType[]> = {
+    type: 'SUCCESS',
+    status: 200,
+    data: dokumenter,
+  };
+
+  fetchMock.mockResponseOnce(JSON.stringify(response), { status: 200 });
 }
