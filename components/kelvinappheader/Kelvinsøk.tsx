@@ -11,7 +11,7 @@ export interface SøkeResultat {
   }[];
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
-  oppfølgingsenhet?: { enhet: string }[];
+  oppfølgingsenhet?: { enhet?: string | null }[];
   behandlingsStatus?: { status: string; }[];
 }
 interface Props {

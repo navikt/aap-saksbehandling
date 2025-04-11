@@ -13,8 +13,8 @@ export interface SøkeResultat {
   }[];
   saker?: { href: string; label: string; }[];
   kontor?: { enhet: string; }[];
-  oppfølgingsenhet?: { enhet: string; }[];
-  behandlingsStatus?: { status: string; }[];
+  oppfølgingsenhet?: { enhet?: string | null; }[];
+  behandlingsStatus?: { status?: string; }[];
 }
 
 export async function POST(req: Request) {
@@ -57,12 +57,13 @@ export async function POST(req: Request) {
     const oppgaver = await oppgaveTekstSøk(søketekst);
     if (oppgaver) {
       oppgaver.forEach((oppgave) => {
+
         oppgaveData.push({
           href: byggKelvinURL(oppgave),
           label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype}`,
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
-        oppfølgingsenhetData.push({ enhet: `${oppgave.oppfølgingsenhet}` });
+        oppfølgingsenhetData.push({ enhet: oppgave.oppfølgingsenhet});
         behandlingsStatusData.push({ status: `${oppgave.status}` });
       });
     }
