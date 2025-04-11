@@ -42,10 +42,10 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, 
       <div>
           <Label spacing>Kontor</Label>
           <VStack gap="2">
-              {!kontor?.length ? (
+              {kontor && kontor.length === 0 ? (
                   <Detail>Fant ikke kontor</Detail>
               ) : (
-                  kontor.map((søk, index) => (
+                  kontor?.map((søk, index) => (
                       <Detail key={index}>
                           {søk.enhet}
                       </Detail>
@@ -57,10 +57,10 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, 
       <div>
           <Label spacing>Oppfølgingsenhet</Label>
           <VStack gap="2">
-              {!oppfølgingsenhet?.length ? (
+              {oppfølgingsenhet && oppfølgingsenhet.length === 0  ? (
                   <Detail>Fant ikke oppfølgingsenhet</Detail>
               ) : (
-                  oppfølgingsenhet.map((søk, index) => (
+                  oppfølgingsenhet?.map((søk, index) => (
                       <Detail key={index}>
                           {søk.enhet}
                       </Detail>
