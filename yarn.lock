@@ -1501,10 +1501,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-statistikk-typescript-types@npm:^0.1.90":
-  version: 0.1.90
-  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.90::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.90%2F34aa3c9d555ec0a6ecab10d8deee0ae737a5ebd8"
-  checksum: 10c0/7dd3b326e82b9bdd32b753d693437521c03b0e0869b54631c2413e83fd0692bd32b20e8dea8a6c3215f9fd227a6b32dbcad9ddd1d61c0230326041e902b44178
+"@navikt/aap-statistikk-typescript-types@npm:^0.1.93":
+  version: 0.1.93
+  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.93::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.93%2F6c3e0b3b1118c6e1da5e2b5da151cba7c61a5f4f"
+  checksum: 10c0/dce553710df920485333fb6187aafdd3f5b198a4c329612cd9c574d5dee14666ecff8f824cc8c73d59af646b347edc8b6013dffe4555e4fe8c745ded21ff26bc
   languageName: node
   linkType: hard
 
@@ -3470,7 +3470,7 @@ __metadata:
     "@navikt/aap-felles-prettier": "npm:^5.1.3"
     "@navikt/aap-oppgave-typescript-types": "npm:^0.0.164"
     "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.235"
-    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.90"
+    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.93"
     "@navikt/aksel-icons": "npm:7.19.1"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
     "@navikt/ds-css": "npm:7.19.1"
