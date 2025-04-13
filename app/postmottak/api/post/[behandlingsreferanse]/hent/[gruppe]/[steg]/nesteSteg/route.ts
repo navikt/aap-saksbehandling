@@ -1,4 +1,4 @@
-import { hentFlyt } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { hentFlyt } from 'lib/services/postmottakservice/postmottakservice';
 import { StegGruppe, StegType } from 'lib/types/postmottakTypes';
 import { NextRequest } from 'next/server';
 import { logInfo, logWarning } from 'lib/serverutlis/logger';

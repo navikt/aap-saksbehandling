@@ -1,5 +1,5 @@
 import { AvklarTema } from './AvklarTema';
-import { hentAvklarTemaGrunnlag, hentFlyt } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { hentAvklarTemaGrunnlag, hentFlyt } from 'lib/services/postmottakservice/postmottakservice';
 
 interface Props {
   behandlingsreferanse: string;

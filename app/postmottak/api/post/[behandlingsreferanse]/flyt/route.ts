@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { hentFlyt } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { hentFlyt } from 'lib/services/postmottakservice/postmottakservice';
 import { logError } from 'lib/serverutlis/logger';
 
 export async function GET(req: NextRequest, props: { params: Promise<{ behandlingsreferanse: string }> }) {

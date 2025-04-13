@@ -1,4 +1,4 @@
-import { hentDigitaliseringGrunnlag, hentFlyt } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { hentDigitaliseringGrunnlag, hentFlyt } from 'lib/services/postmottakservice/postmottakservice';
 import { DigitaliserDokument } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 
 interface Props {

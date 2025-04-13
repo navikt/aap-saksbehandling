@@ -1,4 +1,4 @@
-import { settPåVent } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { settPåVent } from 'lib/services/postmottakservice/postmottakservice';
 import { NextRequest } from 'next/server';
 import { SettPåVentRequest } from 'lib/types/postmottakTypes';
 import { logError } from 'lib/serverutlis/logger';

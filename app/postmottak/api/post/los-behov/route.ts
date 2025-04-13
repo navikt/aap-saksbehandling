@@ -1,4 +1,4 @@
-import { løsAvklaringsbehov } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { løsAvklaringsbehov } from 'lib/services/postmottakservice/postmottakservice';
 import { NextRequest } from 'next/server';
 import { logError } from 'lib/serverutlis/logger';
 

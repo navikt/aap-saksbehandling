@@ -1,5 +1,5 @@
 import { AvklarSak } from 'components/postmottak/avklarsak/AvklarSak';
-import { hentFinnSakGrunnlag, hentFlyt } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { hentFinnSakGrunnlag, hentFlyt } from 'lib/services/postmottakservice/postmottakservice';
 interface Props {
   behandlingsreferanse: string;
 }

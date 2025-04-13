@@ -1,4 +1,4 @@
-import { hentFlyt, hentOverleveringGrunnlag } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { hentFlyt, hentOverleveringGrunnlag } from 'lib/services/postmottakservice/postmottakservice';
 import { Overlevering } from './Overlevering';
 
 interface Props {

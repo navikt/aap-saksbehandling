@@ -1,4 +1,4 @@
-import { opprettBehandlingForJournalpost } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { opprettBehandlingForJournalpost } from 'lib/services/postmottakservice/postmottakservice';
 import { NextRequest } from 'next/server';
 import { logError } from 'lib/serverutlis/logger';
 

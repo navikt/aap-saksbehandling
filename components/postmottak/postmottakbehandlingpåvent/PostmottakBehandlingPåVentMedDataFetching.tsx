@@ -1,5 +1,5 @@
 import { PostmottakBehandlingPVentKort } from 'components/postmottak/postmottakbehandlingpåvent/PostmottakBehandlingPåVentKort';
-import { hentVenteInformasjon } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { hentVenteInformasjon } from 'lib/services/postmottakservice/postmottakservice';
 
 interface Props {
   behandlingsreferanse: string;

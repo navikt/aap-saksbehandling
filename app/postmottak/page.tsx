@@ -2,7 +2,7 @@ import { OpprettBehandling } from 'components/postmottak/test/behandling/Opprett
 import { Page as AkselPage } from '@navikt/ds-react';
 import { BehandlingOversikt } from 'components/postmottak/oversikt/BehandlingOversikt';
 import { isProd, isLocal } from 'lib/utils/environment';
-import { hentAlleBehandlinger } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { hentAlleBehandlinger } from 'lib/services/postmottakservice/postmottakservice';
 
 const Page = async () => {
   let alleBehandlinger: { id: string; status: string; opprettet: string; steg: string }[] = [];

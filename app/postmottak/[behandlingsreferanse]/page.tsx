@@ -1,4 +1,4 @@
-import { hentFlyt } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { hentFlyt } from 'lib/services/postmottakservice/postmottakservice';
 import { notFound, redirect } from 'next/navigation';
 
 interface PageProps {
