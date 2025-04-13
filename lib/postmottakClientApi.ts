@@ -25,3 +25,9 @@ export function postmottakEndreTemaClient(behandlingsreferanse: string): Promise
     {}
   ).then((resp) => resp?.redirectUrl);
 }
+
+export function postmottakHentDokumentClient(journalpostId: number, dokumentInfoId: string): Promise<Blob> {
+  return fetch(`/postmottak/api/post/dokumenter/${journalpostId}/${dokumentInfoId}`, { method: 'GET' }).then((res) =>
+    res.blob()
+  );
+}

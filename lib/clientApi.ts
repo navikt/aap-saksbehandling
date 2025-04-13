@@ -48,7 +48,7 @@ export async function clientFetch<ResponseBody>(
   }
 }
 
-async function clientFetchV2<ResponseBody>(
+export async function clientFetchV2<ResponseBody>(
   url: string,
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
   body?: object
