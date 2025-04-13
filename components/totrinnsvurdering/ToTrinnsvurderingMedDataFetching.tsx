@@ -17,30 +17,32 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
     hentKvalitetssikringGrunnlag(behandlingsReferanse),
     hentFlyt(behandlingsReferanse),
   ]);
-  const behandlingVersjon = flyt.behandlingVersjon;
 
-  if (isError(fatteVedtakGrunnlag) || isError(kvalitetssikringGrunnlag)) {
-    return <ApiException apiResponses={[fatteVedtakGrunnlag, kvalitetssikringGrunnlag]} />;
+  if (isError(fatteVedtakGrunnlag) || isError(kvalitetssikringGrunnlag) || isError(flyt)) {
+    return <ApiException apiResponses={[fatteVedtakGrunnlag, kvalitetssikringGrunnlag, flyt]} />;
   }
+  const behandlingVersjon = flyt.data.behandlingVersjon;
 
   return (
     <>
-      {flyt.visning.visBeslutterKort && (
+      {flyt.data.visning.visBeslutterKort && (
         <ToTrinnsvurdering
           grunnlag={fatteVedtakGrunnlag.data}
           erKvalitetssikring={false}
           behandlingsReferanse={behandlingsReferanse}
           behandlingVersjon={behandlingVersjon}
-          readOnly={flyt.visning.beslutterReadOnly || !fatteVedtakGrunnlag.data.harTilgangTilÅSaksbehandle}
+          readOnly={flyt.data.visning.beslutterReadOnly || !fatteVedtakGrunnlag.data.harTilgangTilÅSaksbehandle}
         />
       )}
-      {flyt.visning.visKvalitetssikringKort && (
+      {flyt.data.visning.visKvalitetssikringKort && (
         <ToTrinnsvurdering
           grunnlag={kvalitetssikringGrunnlag.data}
           behandlingsReferanse={behandlingsReferanse}
           erKvalitetssikring={true}
           behandlingVersjon={behandlingVersjon}
-          readOnly={flyt.visning.kvalitetssikringReadOnly || !kvalitetssikringGrunnlag.data.harTilgangTilÅSaksbehandle}
+          readOnly={
+            flyt.data.visning.kvalitetssikringReadOnly || !kvalitetssikringGrunnlag.data.harTilgangTilÅSaksbehandle
+          }
         />
       )}
     </>

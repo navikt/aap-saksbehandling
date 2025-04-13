@@ -131,9 +131,9 @@ export const SkriveBrev = ({
             onClick={async () => {
               await clientMellomlagreBrev(referanse, brev);
               const flyt = await clientHentFlyt(behandlingsReferanse);
-              if (flyt?.behandlingVersjon) {
+              if (flyt.type === 'SUCCESS' && flyt.data.behandlingVersjon) {
                 løsBehovOgGåTilNesteSteg({
-                  behandlingVersjon: flyt.behandlingVersjon,
+                  behandlingVersjon: flyt.data.behandlingVersjon,
                   behov: {
                     behovstype: Behovstype.SKRIV_BREV_KODE,
                     brevbestillingReferanse: referanse,

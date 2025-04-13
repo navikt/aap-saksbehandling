@@ -1,7 +1,8 @@
-import { logInfo } from 'lib/serverutlis/logger';
+import { logError, logInfo } from 'lib/serverutlis/logger';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { FlytProsesseringStatus } from 'lib/types/types';
 import { NextRequest } from 'next/server';
+import { ServerSentEventData } from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;
@@ -27,10 +28,23 @@ export async function GET(__request: NextRequest, context: { params: Promise<{ r
       }
 
       const flyt = await hentFlyt((await context.params).referanse);
-      if (flyt.prosessering.status === 'FERDIG' || flyt.prosessering.status === 'FEILET') {
+
+      if (flyt.type === 'ERROR') {
+        const errorString = `prosessering hentFlyt ${flyt.status} - ${flyt.apiException.code}: ${flyt.apiException.message}`;
+        logError(errorString);
+        const json: ServerSentEventData = {
+          status: 'ERROR',
+          errormessage: errorString,
+        };
+        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        writer.close();
+        return;
+      }
+
+      if (flyt.data.prosessering.status === 'FERDIG' || flyt.data.prosessering.status === 'FEILET') {
         logInfo('Prosessering er ferdig!');
         const json: FlytProsesseringServerSentEvent = {
-          status: flyt.prosessering.status,
+          status: flyt.data.prosessering.status,
         };
 
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);

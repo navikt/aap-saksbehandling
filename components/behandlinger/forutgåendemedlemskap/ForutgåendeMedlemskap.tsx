@@ -19,25 +19,25 @@ export const ForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) =>
     hentForutgåendeMedlemskapGrunnlag(behandlingsReferanse),
     hentForutgåendeMedlemskapsVurdering(behandlingsReferanse),
   ]);
-  if (isError(grunnlag) || isError(automatiskVurdering)) {
-    return <ApiException apiResponses={[grunnlag, automatiskVurdering]} />;
+  if (isError(grunnlag) || isError(automatiskVurdering) || isError(flyt)) {
+    return <ApiException apiResponses={[grunnlag, automatiskVurdering, flyt]} />;
   }
 
-  const stegSomSkalVises = getStegSomSkalVises('MEDLEMSKAP', flyt);
+  const stegSomSkalVises = getStegSomSkalVises('MEDLEMSKAP', flyt.data);
 
-  const behandlingsVersjon = flyt.behandlingVersjon;
-  const saksBehandlerReadOnly = flyt.visning.saksbehandlerReadOnly;
+  const behandlingsVersjon = flyt.data.behandlingVersjon;
+  const saksBehandlerReadOnly = flyt.data.visning.saksbehandlerReadOnly;
   const visOverstyrKnapp = automatiskVurdering.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0;
 
   const readOnly = saksBehandlerReadOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
 
   return (
     <GruppeSteg
-      prosessering={flyt.prosessering}
-      visning={flyt.visning}
+      prosessering={flyt.data.prosessering}
+      visning={flyt.data.visning}
       behandlingReferanse={behandlingsReferanse}
       behandlingVersjon={behandlingsVersjon}
-      aktivtSteg={flyt.aktivtSteg}
+      aktivtSteg={flyt.data.aktivtSteg}
     >
       <ForutgåendemedlemskapOverstyringswrapper
         behandlingsReferanse={behandlingsReferanse}

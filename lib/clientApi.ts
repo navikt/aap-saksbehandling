@@ -103,7 +103,7 @@ export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
 }
 
 export function clientHentFlyt(behandlingsreferanse: string) {
-  return clientFetch<BehandlingFlytOgTilstand>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/flyt`, 'GET');
+  return clientFetchV2<BehandlingFlytOgTilstand>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/flyt`, 'GET');
 }
 
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {

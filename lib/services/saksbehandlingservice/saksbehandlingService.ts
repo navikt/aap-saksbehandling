@@ -246,9 +246,9 @@ export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
   return await apiFetch<TrukketSøknadGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentFlyt = async (behandlingsReferanse: string): Promise<BehandlingFlytOgTilstand> => {
+export const hentFlyt = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
-  return await fetchProxy<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
+  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
     `flyt/${behandlingsReferanse}`,
   ]);
 };
@@ -375,8 +375,15 @@ async function ventTilProsesseringErFerdig(
     forsøk++;
 
     const response = await hentFlyt(behandlingsreferanse);
+    if (response.type === 'ERROR') {
+      logError(
+        `ventTilProssesering hentFlyt ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
+      );
+      prosessering = { status: 'FEILET', ventendeOppgaver: [] };
+      break;
+    }
 
-    const status = response.prosessering.status;
+    const status = response.data.prosessering.status;
 
     if (status === 'FERDIG') {
       prosessering = undefined;
@@ -384,8 +391,8 @@ async function ventTilProsesseringErFerdig(
     }
 
     if (status === 'FEILET') {
-      logError('Prosessering feilet pga' + JSON.stringify(response.prosessering.ventendeOppgaver));
-      prosessering = response.prosessering;
+      logError('Prosessering feilet pga' + JSON.stringify(response.data.prosessering.ventendeOppgaver));
+      prosessering = response.data.prosessering;
       break;
     }
 

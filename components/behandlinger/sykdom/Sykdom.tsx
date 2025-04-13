@@ -9,6 +9,8 @@ import { FastsettArbeidsevneMedDataFetching } from 'components/behandlinger/sykd
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { YrkesskadeMedDataFetching } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedDataFetching';
 import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon/RefusjonMedDataFetching';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsReferanse: string;
@@ -17,19 +19,22 @@ interface Props {
 
 export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
   const [flyt, sak] = await Promise.all([hentFlyt(behandlingsReferanse), hentSak(sakId)]);
+  if (isError(flyt)) {
+    return <ApiException apiResponses={[flyt]} />;
+  }
 
-  const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt);
+  const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt.data);
 
-  const saksBehandlerReadOnly = flyt.visning.saksbehandlerReadOnly;
-  const behandlingVersjon = flyt.behandlingVersjon;
+  const saksBehandlerReadOnly = flyt.data.visning.saksbehandlerReadOnly;
+  const behandlingVersjon = flyt.data.behandlingVersjon;
 
   return (
     <GruppeSteg
       behandlingVersjon={behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
-      prosessering={flyt.prosessering}
-      visning={flyt.visning}
-      aktivtSteg={flyt.aktivtSteg}
+      prosessering={flyt.data.prosessering}
+      visning={flyt.data.visning}
+      aktivtSteg={flyt.data.aktivtSteg}
     >
       {stegSomSkalVises.includes('AVKLAR_SYKDOM') && (
         <StegSuspense>
@@ -38,7 +43,7 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
-            typeBehandling={flyt.visning.typeBehandling}
+            typeBehandling={flyt.data.visning.typeBehandling}
           />
         </StegSuspense>
       )}
@@ -66,7 +71,7 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
-            typeBehandling={flyt.visning.typeBehandling}
+            typeBehandling={flyt.data.visning.typeBehandling}
             sak={sak}
           />
         </StegSuspense>

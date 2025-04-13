@@ -63,6 +63,13 @@ const Layout = async (props: Props) => {
     hentFlyt(params.behandlingsReferanse),
     hentSak(params.saksId),
   ]);
+  if (isError(flytResponse)) {
+    return (
+      <VStack padding={'4'}>
+        <ApiException apiResponses={[flytResponse]} />
+      </VStack>
+    );
+  }
 
   let oppgave;
 
@@ -73,7 +80,7 @@ const Layout = async (props: Props) => {
     logWarning('henting av oppgave for behandling feilet', err);
   }
 
-  const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.flyt
+  const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.data.flyt
     .filter((steg) => steg.skalVises)
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
 
@@ -84,16 +91,16 @@ const Layout = async (props: Props) => {
         <SaksinfoBanner
           personInformasjon={personInfo}
           sak={sak}
-          behandlingVersjon={flytResponse.behandlingVersjon}
+          behandlingVersjon={flytResponse.data.behandlingVersjon}
           referanse={params.behandlingsReferanse}
           behandling={behandling.data}
           oppgaveReservertAv={oppgave?.reservertAv}
-          påVent={flytResponse.visning.visVentekort}
+          påVent={flytResponse.data.visning.visVentekort}
           brukerInformasjon={brukerInformasjon}
-          typeBehandling={flytResponse.visning.typeBehandling}
+          typeBehandling={flytResponse.data.visning.typeBehandling}
         />
 
-        <StegGruppeIndikatorAksel flytRespons={flytResponse} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
+        <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
 
         <HGrid columns="4fr 2fr">
           <section className={styles.venstrekolonne}>{children}</section>
