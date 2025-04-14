@@ -2,6 +2,7 @@ import { hentFlyt } from 'lib/services/postmottakservice/postmottakservice';
 import { StegGruppe, StegType } from 'lib/types/postmottakTypes';
 import { NextRequest } from 'next/server';
 import { logInfo, logWarning } from 'lib/serverutlis/logger';
+import { isError } from 'lib/utils/api';
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;
@@ -45,10 +46,20 @@ export async function GET(
       }
 
       const flyt = await hentFlyt((await context.params).behandlingsreferanse);
-      const aktivGruppe = flyt.aktivGruppe;
-      const aktivtSteg = flyt.aktivtSteg;
+      if (isError(flyt)) {
+        const json: ServerSentEventData = {
+          status: 'ERROR',
+          errormessage: `${flyt.apiException.code}: ${flyt.apiException.message}`,
+        };
 
-      if (flyt.prosessering.status === 'FEILET') {
+        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        writer.close();
+        return;
+      }
+      const aktivGruppe = flyt.data.aktivGruppe;
+      const aktivtSteg = flyt.data.aktivtSteg;
+
+      if (flyt.data.prosessering.status === 'FEILET') {
         const json: ServerSentEventData = {
           status: 'ERROR',
           errormessage: `Prosessering feilet i backend`,
@@ -59,13 +70,13 @@ export async function GET(
         return;
       }
 
-      if (flyt.prosessering.status === 'FERDIG') {
+      if (flyt.data.prosessering.status === 'FERDIG') {
         logInfo(`prosessering ferdig på ${retries} forsøk`);
 
         // TODO: Tar bort vurdertGruppe og vurdertSteg foreløpig til vi finner ut av hva de skal brukes til
         const json: ServerSentEventData = {
-          aktivGruppe: flyt.aktivGruppe,
-          aktivtSteg: flyt.aktivtSteg,
+          aktivGruppe: flyt.data.aktivGruppe,
+          aktivtSteg: flyt.data.aktivtSteg,
           skalBytteGruppe: aktivGruppe !== (await context.params).gruppe,
           skalBytteSteg: aktivtSteg !== (await context.params).steg,
           status: 'DONE',

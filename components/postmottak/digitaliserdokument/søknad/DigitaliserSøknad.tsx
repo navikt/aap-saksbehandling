@@ -20,6 +20,10 @@ import type { Submittable } from 'components/postmottak/digitaliserdokument/Digi
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { isBefore, parse, startOfDay } from 'date-fns';
+import { validerDato } from 'lib/validation/dateValidation';
+import { FormEvent } from 'react';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 export type Barn = {
   fnr?: string;
@@ -38,6 +42,7 @@ export interface SøknadFormFields {
 
 interface Props extends Submittable {
   grunnlag: DigitaliseringsGrunnlag;
+  registrertDato?: string | null;
   readOnly: boolean;
   isLoading: boolean;
 }
@@ -59,7 +64,7 @@ function mapTilSøknadKontrakt(data: SøknadFormFields) {
   return JSON.stringify(søknad);
 }
 
-export const DigitaliserSøknad = ({ grunnlag, readOnly, submit, isLoading }: Props) => {
+export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit, isLoading }: Props) => {
   const søknadGrunnlag = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
@@ -67,10 +72,24 @@ export const DigitaliserSøknad = ({ grunnlag, readOnly, submit, isLoading }: Pr
   const { form, formFields } = useConfigForm<SøknadFormFields>(
     {
       søknadsDato: {
-        type: 'date',
+        type: 'date_input',
         label: 'Søknadsdato',
-        defaultValue: søknadsdato ? new Date(søknadsdato) : undefined,
-        rules: { required: 'Du må oppgi søknadsdato' },
+        defaultValue: søknadsdato === null ? '' : søknadsdato,
+        rules: {
+          validate: (value) => {
+            const valideringsresultat = validerDato(value as string);
+            if (valideringsresultat) {
+              return valideringsresultat;
+            }
+
+            const søknadsDato = startOfDay(parse(value as string, 'dd.MM.yyyy', new Date()));
+            const registrertDate = registrertDato ? startOfDay(new Date(registrertDato)) : null;
+
+            if (registrertDate && isBefore(registrertDate, søknadsDato)) {
+              return `Søknadsdato kan ikke være etter registrert dato`;
+            }
+          },
+        },
       },
       yrkesSkade: {
         type: 'radio',
@@ -107,9 +126,14 @@ export const DigitaliserSøknad = ({ grunnlag, readOnly, submit, isLoading }: Pr
     { readOnly }
   );
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) =>
+      submit('SØKNAD', mapTilSøknadKontrakt(data), parseDatoFraDatePicker(data.søknadsDato)!)
+    )(event);
+  };
   return (
     <VilkårsKort heading={'Søknad'}>
-      <form onSubmit={form.handleSubmit((data) => submit('SØKNAD', mapTilSøknadKontrakt(data), data.søknadsDato))}>
+      <form onSubmit={handleSubmit}>
         <VStack gap={'6'}>
           <VStack gap={'3'}>
             {grunnlag.erPapir && <p>Papirsøknader skal justeres for postgang</p>}

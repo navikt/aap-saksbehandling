@@ -14,6 +14,7 @@ import { VStack } from '@navikt/ds-react';
 interface Props {
   behandlingsVersjon: number;
   behandlingsreferanse: string;
+  registrertDato?: string | null;
   grunnlag: DigitaliseringsGrunnlag;
   readOnly: boolean;
 }
@@ -22,7 +23,13 @@ export interface Submittable {
   submit: (kategori: KategoriserDokumentKategori, jsonString: string | null, søknadsdato: Date | null) => void;
 }
 
-export const DigitaliserDokument = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
+export const DigitaliserDokument = ({
+  behandlingsVersjon,
+  behandlingsreferanse,
+  grunnlag,
+  readOnly,
+  registrertDato,
+}: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('DIGITALISER_DOKUMENT');
 
@@ -50,7 +57,13 @@ export const DigitaliserDokument = ({ behandlingsVersjon, behandlingsreferanse, 
         status={status}
       />
       {kategori === 'SØKNAD' && (
-        <DigitaliserSøknad submit={handleSubmit} grunnlag={grunnlag} readOnly={readOnly} isLoading={isLoading} />
+        <DigitaliserSøknad
+          submit={handleSubmit}
+          grunnlag={grunnlag}
+          registrertDato={registrertDato}
+          readOnly={readOnly}
+          isLoading={isLoading}
+        />
       )}
       {kategori === 'MELDEKORT' && (
         <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />

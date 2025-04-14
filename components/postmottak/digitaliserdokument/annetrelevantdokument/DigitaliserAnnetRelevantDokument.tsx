@@ -8,6 +8,7 @@ import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
+import { FormEvent } from 'react';
 
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];
@@ -63,13 +64,14 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
     { readOnly }
   );
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => submit('ANNET_RELEVANT_DOKUMENT', mapTilAnnetRelevantDokumentKontrakt(data), null))(
+      event
+    );
+  };
   return (
     <VilkårsKort heading={'Annet relevant dokument'}>
-      <form
-        onSubmit={form.handleSubmit((data) =>
-          submit('ANNET_RELEVANT_DOKUMENT', mapTilAnnetRelevantDokumentKontrakt(data), null)
-        )}
-      >
+      <form onSubmit={handleSubmit}>
         <VStack gap={'6'}>
           <FormField form={form} formField={formFields.årsaker} />
           <Button loading={isLoading} className={'fit-content'}>

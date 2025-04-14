@@ -22,9 +22,9 @@ export const hentBehandling = async (behandlingsReferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsReferanse}`;
   return await apiFetch<DetaljertBehandlingDto>(url, dokumentMottakApiScope, 'GET');
 };
-export const hentFlyt = async (behandlingsreferanse: string): Promise<BehandlingFlytOgTilstand> => {
+export const hentFlyt = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/flyt`;
-  return await fetchProxy<BehandlingFlytOgTilstand>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<BehandlingFlytOgTilstand>(url, dokumentMottakApiScope, 'GET');
 };
 
 export const hentAvklarTemaGrunnlag = async (behandlingsreferanse: string) => {
@@ -90,7 +90,7 @@ export const forberedBehandlingOgVentPåProsessering = async (
 ): Promise<undefined | FlytProsessering> => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${referanse}/forbered`;
   logInfo(`Forbereder behandling: ${referanse}`);
-  return await fetchProxy(url, dokumentMottakApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
+  return await apiFetch(url, dokumentMottakApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 
 export const auditlog = async (journalpostId: number) => {
@@ -117,8 +117,15 @@ async function ventTilProsesseringErFerdig(
 
     logInfo(`ventTilProsesseringErFerdig, orsøk nummer: ${forsøk}`);
     const response = await hentFlyt(behandlingsreferanse);
+    if (response.type === 'ERROR') {
+      logError(
+        `ventTilProsseseringErFerdig hentFlyt ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
+      );
+      prosessering = { status: 'FEILET', ventendeOppgaver: [] };
+      break;
+    }
 
-    const status = response.prosessering.status;
+    const status = response.data.prosessering.status;
 
     if (status === 'FERDIG') {
       prosessering = undefined;
@@ -126,8 +133,8 @@ async function ventTilProsesseringErFerdig(
     }
 
     if (status === 'FEILET') {
-      logError(`Prosessering feilet: ${JSON.stringify(response.prosessering.ventendeOppgaver)}`);
-      prosessering = response.prosessering;
+      logError(`Prosessering feilet: ${JSON.stringify(response.data.prosessering.ventendeOppgaver)}`);
+      prosessering = response.data.prosessering;
       break;
     }
 

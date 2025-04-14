@@ -38,36 +38,38 @@ const Layout = async (props: LayoutProps) => {
     }
   }
 
-  const [flyt, journalpostInfo] = await Promise.all([
+  const [flytResponse, journalpostInfo] = await Promise.all([
     hentFlyt(params.behandlingsreferanse),
     hentJournalpostInfo(params.behandlingsreferanse),
   ]);
-  if (isError(journalpostInfo)) {
-    return <ApiException apiResponses={[journalpostInfo]} />;
+  if (isError(flytResponse) || isError(journalpostInfo)) {
+    return <ApiException apiResponses={[journalpostInfo, flytResponse]} />;
   }
   auditlog(journalpostInfo.data.journalpostId);
 
-  const stegGrupper = flyt.flyt.map((steg) => steg);
+  const stegGrupper = flytResponse.data.flyt.map((steg) => steg);
   const dokumenter = journalpostInfo.data.dokumenter;
 
   return (
     <div className={styles.idLayoutWrapper}>
       <DokumentInfoBanner
         behandlingsreferanse={params.behandlingsreferanse}
-        behandlingsVersjon={flyt.behandlingVersjon}
+        behandlingsVersjon={flytResponse.data.behandlingVersjon}
         journalpostInfo={journalpostInfo.data}
-        påVent={flyt.visning.visVentekort}
+        påVent={flytResponse.data.visning.visVentekort}
       />
       <StegGruppeIndikatorAksel
         behandlingsreferanse={params.behandlingsreferanse}
         stegGrupper={stegGrupper}
-        flytRespons={flyt}
+        flytRespons={flytResponse.data}
       />
-      {flyt.prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={flyt.prosessering} />}
+      {flytResponse.data.prosessering.status === 'FEILET' && (
+        <FlytProsesseringAlert flytProsessering={flytResponse.data.prosessering} />
+      )}
 
       <SplitVindu journalpostId={journalpostInfo.data.journalpostId} dokumenter={dokumenter}>
         <VStack gap={'4'}>
-          {flyt.visning.visVentekort && (
+          {flytResponse.data.visning.visVentekort && (
             <BehandlingPVentMedDataFetching behandlingsreferanse={params.behandlingsreferanse} />
           )}
           {children}

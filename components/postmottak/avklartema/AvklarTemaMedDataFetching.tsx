@@ -7,16 +7,18 @@ interface Props {
   behandlingsreferanse: string;
 }
 export const AvklarTemaMedDataFetching = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  const isReadOnly: boolean = !!flyt.visning.readOnly;
-  const grunnlag = await hentAvklarTemaGrunnlag(behandlingsreferanse);
-  if (isError(grunnlag)) {
-    return <ApiException apiResponses={[grunnlag]} />;
+  const [flyt, grunnlag] = await Promise.all([
+    hentFlyt(behandlingsreferanse),
+    hentAvklarTemaGrunnlag(behandlingsreferanse),
+  ]);
+  if (isError(flyt) || isError(grunnlag)) {
+    return <ApiException apiResponses={[flyt, grunnlag]} />;
   }
 
+  const isReadOnly: boolean = !!flyt.data.visning.readOnly;
   return (
     <AvklarTema
-      behandlingsVersjon={flyt.behandlingVersjon}
+      behandlingsVersjon={flyt.data.behandlingVersjon}
       behandlingsreferanse={behandlingsreferanse}
       grunnlag={grunnlag.data}
       readOnly={isReadOnly}
