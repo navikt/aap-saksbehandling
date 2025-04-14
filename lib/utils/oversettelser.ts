@@ -2,92 +2,54 @@ import { SettPåVentÅrsaker } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype, OppgaveStatus } from 'lib/types/oppgaveTypes';
 
-export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode): string {
-  switch (kode) {
-    //Behandlingsflyt
-    case '5001':
-      return '§ 11-14 Student';
-    case '5003':
-      return '§ 11-5 Nedsatt arbeidsevne';
-    case '5004':
-      return '§ 11-23 Arbeidsevne som ikke er utnyttet';
-    case '5005':
-      return '§ 11-10 Fritak fra meldeplikt';
-    case '5006':
-      return '§ 11-6 Behov for bistand';
-    case '5007':
-      return '§ 11-13 Sykepengeerstatning';
-    case '5008':
-      return '§ 11-19 Beregningstidspunkt';
-    case '5009':
-      return '§ 11-20 Barnetillegg';
-    case '5098':
-      return 'Foreslå vedtak';
-    case '5099':
-      return 'Beslutte sak';
-    case '5097':
-      return 'Kvalitetssikre sak';
-    case '9001':
-      return 'Manuelt satt på vent';
-    case '9002':
-      return 'Bestill brev';
-    case '9003':
-      return 'Bestill legeerklæring';
-    case '9004':
-      return 'Opprett hendelse på sak';
-    case '5010':
-      return '§ 11-26 Soning';
-    case '5011':
-      return '§ 11-25 Helseinstitusjon';
-    case '5012':
-      return 'Avklar samordning gradering';
-    case '5013':
-      return '§ 11-22 Yrkesskade';
-    case '5014':
-      return 'Fastsett yrkesskadebeløp';
-    case '5015':
-      return '§ 11-17 AAP som arbeidssøker';
-    case '5016':
-      return 'Forhåndsvarsel aktivitetsplikt';
-    case '5017':
-      return 'Lovvalg og medlemskap';
-    case '5019':
-      return 'Venter på utenlandsoverføring';
-    case '5020':
-      return '§ 11-2 Forutgående medlemskap';
-    case '5050':
-      return 'Skriv brev';
-    case '5018':
-      return 'Venter på uttalelse fra bruker på forhåndsvarsel';
-    case '5021':
-      return 'Overstyr lovvalg og medlemskap';
-    case '5022':
-      return 'Overstyr § 11-2 Forutgående medlemskap';
-    case '5023':
-      return 'Venter på klageimplementasjon';
-    case '5024':
-      return 'Avklar samordning uføre';
-    case '5025':
-      return 'Samordning vent på virkningstidspunkt';
-    case '5026':
-      return 'Refusjon';
-    case '5027':
-      return 'Samordning annen statlig ytelse';
-    case '5028':
-      return 'Vurder trekk av søknad';
-    // Postmottak
-    case '1337':
-      return 'Kategoriser dokument';
-    case '1338':
-      return 'Digitaliser dokument';
-    case '1339':
-      return 'Avklar tema';
-    case '1340':
-      return 'Avklar saksnummer';
-    case '1341':
-      return 'Endre tema';
-  }
-  exhaustiveCheck(kode);
+const behovskodeMap = {
+  // Behandlingsflyt
+  '5001': '§ 11-14 Student',
+  '5003': '§ 11-5 Nedsatt arbeidsevne',
+  '5004': '§ 11-23 Arbeidsevne som ikke er utnyttet',
+  '5005': '§ 11-10 Fritak fra meldeplikt',
+  '5006': '§ 11-6 Behov for bistand',
+  '5007': '§ 11-13 Sykepengeerstatning',
+  '5008': '§ 11-19 Beregningstidspunkt',
+  '5009': '§ 11-20 Barnetillegg',
+  '5010': '§ 11-26 Soning',
+  '5011': '§ 11-25 Helseinstitusjon',
+  '5012': 'Avklar samordning gradering',
+  '5013': '§ 11-22 Yrkesskade',
+  '5014': 'Fastsett yrkesskadebeløp',
+  '5015': '§ 11-17 AAP som arbeidssøker',
+  '5016': 'Forhåndsvarsel aktivitetsplikt',
+  '5017': 'Lovvalg og medlemskap',
+  '5018': 'Venter på uttalelse fra bruker på forhåndsvarsel',
+  '5019': 'Venter på utenlandsoverføring',
+  '5020': '§ 11-2 Forutgående medlemskap',
+  '5021': 'Overstyr lovvalg og medlemskap',
+  '5022': 'Overstyr § 11-2 Forutgående medlemskap',
+  '5023': 'Venter på klageimplementasjon',
+  '5024': 'Avklar samordning uføre',
+  '5025': 'Samordning vent på virkningstidspunkt',
+  '5026': 'Refusjon',
+  '5027': 'Samordning annen statlig ytelse',
+  '5028': 'Vurder trekk av søknad',
+  '5050': 'Skriv brev',
+  '5097': 'Kvalitetssikre sak',
+  '5098': 'Foreslå vedtak',
+  '5099': 'Beslutte sak',
+  '9001': 'Manuelt satt på vent',
+  '9002': 'Bestill brev',
+  '9003': 'Bestill legeerklæring',
+  '9004': 'Opprett hendelse på sak',
+
+  // Postmottak
+  '1337': 'Kategoriser dokument',
+  '1338': 'Digitaliser dokument',
+  '1339': 'Avklar tema',
+  '1340': 'Avklar saksnummer',
+  '1341': 'Endre tema',
+} as const;
+
+export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | string): string {
+  return behovskodeMap[kode as OppgaveAvklaringsbehovKode] ?? 'Ukjent behovstype';
 }
 
 export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker): string {
@@ -191,3 +153,5 @@ export function mapTilOppgaveStatusTekst(status: OppgaveStatus) {
       return 'Opprettet';
   }
 }
+
+

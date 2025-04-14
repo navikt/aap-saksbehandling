@@ -2,9 +2,10 @@ import { NextResponse } from 'next/server';
 import { finnSakerForIdent, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { SaksInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
-import type { Oppgave } from 'lib/types/oppgaveTypes';
+import { Oppgave } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
 import { isSuccess } from 'lib/utils/api';
+import {mapBehovskodeTilBehovstype} from "../../../lib/utils/oversettelser";
 
 export interface SøkeResultat {
   oppgaver?: {
@@ -60,7 +61,7 @@ export async function POST(req: Request) {
 
         oppgaveData.push({
           href: byggKelvinURL(oppgave),
-          label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype}`,
+          label: `${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)} - ${oppgave.behandlingstype}`,
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
         oppfølgingsenhetData.push({ enhet: oppgave.oppfølgingsenhet});
