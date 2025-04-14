@@ -11,7 +11,7 @@ export function postmottakOpprettBehandlingClient(journalpostId: number) {
 }
 
 export function postmottakSettPåVentClient(behandlingsreferanse: string, body: SettPåVentRequest) {
-  return clientFetch(`/postmottak/api/post/${behandlingsreferanse}/sett-pa-vent/`, 'POST', body);
+  return clientFetchV2(`/postmottak/api/post/${behandlingsreferanse}/sett-pa-vent/`, 'POST', body);
 }
 
 export function postmottakLøsBehovClient(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {

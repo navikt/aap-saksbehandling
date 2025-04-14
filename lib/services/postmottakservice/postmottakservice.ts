@@ -52,15 +52,15 @@ export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovP�
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/løs-behov`;
   return await apiFetch<void>(url, dokumentMottakApiScope, 'POST', avklaringsBehov);
 };
-export const settPåVent = async (behandlingsreferanse: string, body: SettPåVentRequest): Promise<unknown> => {
+export const settPåVent = async (behandlingsreferanse: string, body: SettPåVentRequest) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/sett-på-vent`;
-  return await fetchProxy<unknown>(url, dokumentMottakApiScope, 'POST', body, [
+  return await apiFetch<unknown>(url, dokumentMottakApiScope, 'POST', body, [
     `postmottak/flyt/${behandlingsreferanse}`,
   ]);
 };
-export const hentVenteInformasjon = async (behandlingsreferanse: string): Promise<Venteinformasjon> => {
+export const hentVenteInformasjon = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/vente-informasjon`;
-  return await fetchProxy<Venteinformasjon>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<Venteinformasjon>(url, dokumentMottakApiScope, 'GET');
 };
 export const hentDokumentFraDokumentInfoId = async (
   journalpostId: number,

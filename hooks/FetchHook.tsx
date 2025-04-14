@@ -8,6 +8,8 @@ import {
 import { BestillLegeerklæring, OpprettAktivitetspliktBrudd, OpprettTestcase } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
+import { postmottakSettPåVentClient } from 'lib/postmottakClientApi';
+import { SettPåVentRequest } from 'lib/types/postmottakTypes';
 
 export function useFetch<FunctionParameters extends any[], ResponseBody>(
   fetchFunction: (...functionParameters: FunctionParameters) => Promise<ResponseBody>
@@ -128,4 +130,17 @@ export function usePurrPåDialogmelding(): {
   }
 
   return { purrPåDialogmelding: purr, isLoading, error };
+}
+export function usePostmottakSettPåVent(): {
+  postmottakSettPåVent: (behandlingsreferanse: string, body: SettPåVentRequest) => Promise<{ ok: boolean }>;
+  isLoading: boolean;
+  error?: string;
+} {
+  const { method, isLoading, error } = useFetchV2(postmottakSettPåVentClient);
+
+  async function settPåVent(behandlingsreferanse: string, body: SettPåVentRequest) {
+    return await method(behandlingsreferanse, body);
+  }
+
+  return { postmottakSettPåVent: settPåVent, isLoading, error };
 }

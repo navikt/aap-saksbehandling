@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Button, Modal } from '@navikt/ds-react';
+import React, { useEffect, useTransition } from 'react';
+import { Alert, Button, Modal } from '@navikt/ds-react';
 import styles from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
-import { postmottakSettPåVentClient } from 'lib/postmottakClientApi';
 import { SettPåVentÅrsaker } from 'lib/types/postmottakTypes';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { revalidatePostMottakFlyt } from 'lib/actions/actions';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { parse } from 'date-fns';
+import { usePostmottakSettPåVent } from 'hooks/FetchHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -31,7 +31,8 @@ export const PostmottakSettBehandllingPVentModal = ({
   behandlingsreferanse,
   behandlingVersjon,
 }: Props) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const { postmottakSettPåVent, error } = usePostmottakSettPåVent();
 
   const grunnOptions: ValuePair<SettPåVentÅrsaker>[] = [
     { label: 'Venter på medisinske opplysninger', value: 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER' },
@@ -75,20 +76,23 @@ export const PostmottakSettBehandllingPVentModal = ({
       className={styles.settBehandlingPåVentModal}
     >
       <Modal.Body>
+        {error && <Alert variant={'error'}>{error}</Alert>}
         {isOpen && (
           <form
             id={'settBehandlingPåVent'}
             onSubmit={form.handleSubmit(async (data) => {
-              setIsLoading(true);
-              await postmottakSettPåVentClient(behandlingsreferanse, {
-                begrunnelse: data.begrunnelse,
-                behandlingVersjon: behandlingVersjon,
-                frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
-                grunn: data.grunn,
+              startTransition(async () => {
+                const res = await postmottakSettPåVent(behandlingsreferanse, {
+                  begrunnelse: data.begrunnelse,
+                  behandlingVersjon: behandlingVersjon,
+                  frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
+                  grunn: data.grunn,
+                });
+                if (res.ok) {
+                  await revalidatePostMottakFlyt(behandlingsreferanse);
+                  onClose();
+                }
               });
-              await revalidatePostMottakFlyt(behandlingsreferanse);
-              setIsLoading(false);
-              onClose();
             })}
             className={styles.settBehandlingPåVentModalForm}
           >
@@ -99,7 +103,7 @@ export const PostmottakSettBehandllingPVentModal = ({
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button form={'settBehandlingPåVent'} loading={isLoading}>
+        <Button form={'settBehandlingPåVent'} loading={isPending}>
           Sett på vent
         </Button>
         <Button variant={'secondary'} onClick={onClose}>
