@@ -29,7 +29,7 @@ export function customRender(ui: ReactElement) {
   );
 }
 
-export function customRenderWithSøknadstidspunkt(ui: ReactElement, søknadstidspunkt?: string) {
+export function customRenderWithSøknadstidspunkt(ui: ReactElement, søknadstidspunkt: string) {
   render(
     <IngenFlereOppgaverModalContextProvider>
       <SakContextProvider
@@ -37,7 +37,7 @@ export function customRenderWithSøknadstidspunkt(ui: ReactElement, søknadstids
           saksnummer: '12345',
           ident: '12345678910',
           opprettetTidspunkt: today,
-          periode: { fom: søknadstidspunkt || today, tom: tomorrow },
+          periode: { fom: søknadstidspunkt, tom: tomorrow },
         }}
       >
         {ui}
