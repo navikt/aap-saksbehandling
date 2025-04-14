@@ -101,13 +101,7 @@ export const auditlog = async (journalpostId: number) => {
 // TODO: Fjern denne - testendepunkt
 export const opprettBehandlingForJournalpost = async (body: { journalpostId: number }) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling`;
-  return await fetchProxy<{ referanse: number }>(url, dokumentMottakApiScope, 'POST', body);
-};
-
-// TODO: Fjern denne - testendepunkt
-export const rekjørFeiledeJobber = async () => {
-  const url = `${dokumentMottakApiBaseUrl}/drift/api/jobb/rekjorAlleFeilede`;
-  return await fetchProxy(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<{ referanse: number }>(url, dokumentMottakApiScope, 'POST', body);
 };
 
 async function ventTilProsesseringErFerdig(

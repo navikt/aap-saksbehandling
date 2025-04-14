@@ -5,7 +5,7 @@ import { LøsAvklaringsbehovPåBehandling, SettPåVentRequest } from 'lib/types/
 
 // TODO: Test-endepunkt - skal fjernes
 export function postmottakOpprettBehandlingClient(journalpostId: number) {
-  return clientFetch<{ referanse: number }>('/postmottak/api/test/behandling/opprett/', 'POST', {
+  return clientFetchV2<{ referanse: number }>('/postmottak/api/test/behandling/opprett/', 'POST', {
     referanse: journalpostId,
   });
 }
