@@ -12,11 +12,11 @@ import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'l
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
+import { useSak } from 'hooks/SakHook';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
-  søknadstidspunkt: string;
   grunnlag: RefusjonskravGrunnlag;
 }
 
@@ -26,9 +26,10 @@ interface FormFields {
   vurderingenGjelderTil?: string;
 }
 
-export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readOnly }: Props) => {
+export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
+  const { sak } = useSak();
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -45,12 +46,12 @@ export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readO
         label: 'Refusjon fra',
         defaultValue: grunnlag.gjeldendeVurdering?.fom
           ? formaterDatoForFrontend(grunnlag.gjeldendeVurdering?.fom)
-          : formaterDatoForFrontend(søknadstidspunkt),
+          : formaterDatoForFrontend(sak.periode.fom),
         rules: {
           validate: {
             gyldigDato: (v?) => validerDato(v as string),
             kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
-              const soknadstidspunkt = startOfDay(new Date(søknadstidspunkt));
+              const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
               const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
               if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
                 return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
@@ -69,7 +70,7 @@ export const Refusjon = ({ behandlingVersjon, søknadstidspunkt, grunnlag, readO
           validate: {
             gyldigDato: (v?) => (v ? validerDato(v as string) : true),
             kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
-              const soknadstidspunkt = startOfDay(new Date(søknadstidspunkt));
+              const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
               const vurderingenGjelderTil = stringToDate(v as string, 'dd.MM.yyyy');
               if (vurderingenGjelderTil && isBefore(startOfDay(vurderingenGjelderTil), soknadstidspunkt)) {
                 return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';

@@ -12,7 +12,6 @@ import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsReferanse: string;
-  sakId: string;
 }
 export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
   const [flyt, vurderingAutomatisk, grunnlag] = await Promise.all([

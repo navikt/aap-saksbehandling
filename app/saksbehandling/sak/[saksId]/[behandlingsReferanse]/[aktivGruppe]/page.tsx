@@ -9,7 +9,6 @@ const Page = async (props: {
 
   return (
     <OppgaveKolonne
-      saksId={params.saksId}
       behandlingsReferanse={params.behandlingsReferanse ?? ''}
       aktivGruppe={decodeURI(params.aktivGruppe) as StegGruppe}
     />

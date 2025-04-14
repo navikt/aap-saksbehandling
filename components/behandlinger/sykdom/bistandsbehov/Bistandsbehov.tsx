@@ -13,12 +13,12 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { TidligereVurderinger } from 'components/behandlinger/sykdom/bistandsbehov/TidligereVurderinger';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { useSak } from 'hooks/SakHook';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  søknadstidspunkt: string;
   grunnlag?: BistandsGrunnlag;
 }
 
@@ -32,8 +32,9 @@ interface FormFields {
   vurderAAPIOvergangTilArbeid?: string;
 }
 
-export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling, søknadstidspunkt }: Props) => {
+export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
+  const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
@@ -146,7 +147,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
           <TidligereVurderinger
             historiskeVurderinger={grunnlag?.historiskeVurderinger.toReversed() ?? []}
             gjeldendeVurderinger={grunnlag?.gjeldendeVedtatteVurderinger ?? []}
-            søknadstidspunkt={søknadstidspunkt}
+            søknadstidspunkt={sak.periode.fom}
           />
         )}
         <Veiledning

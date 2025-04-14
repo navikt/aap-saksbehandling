@@ -24,6 +24,7 @@ import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { logWarning } from 'lib/serverutlis/logger';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { SakContextProvider } from 'context/SakContext';
 
 interface Props {
   children: ReactNode;
@@ -85,33 +86,42 @@ const Layout = async (props: Props) => {
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
 
   return (
-    <IngenFlereOppgaverModalContextProvider>
-      <div className={styles.behandling}>
-        <IngenFlereOppgaverModal />
-        <SaksinfoBanner
-          personInformasjon={personInfo}
-          sak={sak}
-          behandlingVersjon={flytResponse.data.behandlingVersjon}
-          referanse={params.behandlingsReferanse}
-          behandling={behandling.data}
-          oppgaveReservertAv={oppgave?.reservertAv}
-          påVent={flytResponse.data.visning.visVentekort}
-          brukerInformasjon={brukerInformasjon}
-          typeBehandling={flytResponse.data.visning.typeBehandling}
-        />
+    <SakContextProvider
+      sak={{
+        saksnummer: sak.saksnummer,
+        periode: sak.periode,
+        ident: sak.ident,
+        opprettetTidspunkt: sak.opprettetTidspunkt,
+      }}
+    >
+      <IngenFlereOppgaverModalContextProvider>
+        <div className={styles.behandling}>
+          <IngenFlereOppgaverModal />
+          <SaksinfoBanner
+            personInformasjon={personInfo}
+            behandlingVersjon={flytResponse.data.behandlingVersjon}
+            referanse={params.behandlingsReferanse}
+            behandling={behandling.data}
+            sak={sak}
+            oppgaveReservertAv={oppgave?.reservertAv}
+            påVent={flytResponse.data.visning.visVentekort}
+            brukerInformasjon={brukerInformasjon}
+            typeBehandling={flytResponse.data.visning.typeBehandling}
+          />
 
-        <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
+          <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
 
-        <HGrid columns="4fr 2fr">
-          <section className={styles.venstrekolonne}>{children}</section>
-          <aside className={`${styles.høyrekolonne} flex-column`}>
-            <Behandlingsinfo behandling={behandling.data} saksnummer={params.saksId} />
-            <SaksbehandlingsoversiktMedDataFetching />
-            <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
-          </aside>
-        </HGrid>
-      </div>
-    </IngenFlereOppgaverModalContextProvider>
+          <HGrid columns="4fr 2fr">
+            <section className={styles.venstrekolonne}>{children}</section>
+            <aside className={`${styles.høyrekolonne} flex-column`}>
+              <Behandlingsinfo behandling={behandling.data} saksnummer={params.saksId} />
+              <SaksbehandlingsoversiktMedDataFetching />
+              <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
+            </aside>
+          </HGrid>
+        </div>
+      </IngenFlereOppgaverModalContextProvider>
+    </SakContextProvider>
   );
 };
 

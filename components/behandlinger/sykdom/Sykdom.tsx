@@ -1,6 +1,6 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
-import { hentFlyt, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { BistandsbehovMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
@@ -14,11 +14,10 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 
 interface Props {
   behandlingsReferanse: string;
-  sakId: string;
 }
 
-export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
-  const [flyt, sak] = await Promise.all([hentFlyt(behandlingsReferanse), hentSak(sakId)]);
+export const Sykdom = async ({ behandlingsReferanse }: Props) => {
+  const flyt = await hentFlyt(behandlingsReferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
@@ -39,7 +38,6 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
       {stegSomSkalVises.includes('AVKLAR_SYKDOM') && (
         <StegSuspense>
           <SykdomsvurderingMedDataFetching
-            sak={sak}
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
@@ -72,14 +70,12 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
             typeBehandling={flyt.data.visning.typeBehandling}
-            sak={sak}
           />
         </StegSuspense>
       )}
       {stegSomSkalVises.includes('REFUSJON_KRAV') && (
         <StegSuspense>
           <RefusjonMedDataFetching
-            sak={sak}
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}

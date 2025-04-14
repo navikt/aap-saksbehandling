@@ -1,6 +1,6 @@
 import { hentBistandsbehovGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
-import { SaksInfo, TypeBehandling } from 'lib/types/types';
+import { TypeBehandling } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 
@@ -9,7 +9,6 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  sak: SaksInfo;
 }
 
 export const BistandsbehovMedDataFetching = async ({
@@ -17,7 +16,6 @@ export const BistandsbehovMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
   typeBehandling,
-  sak,
 }: Props) => {
   const grunnlag = await hentBistandsbehovGrunnlag(behandlingsReferanse);
   if (isError(grunnlag)) {
@@ -30,7 +28,6 @@ export const BistandsbehovMedDataFetching = async ({
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       typeBehandling={typeBehandling}
-      søknadstidspunkt={sak.periode.fom}
     />
   );
 };

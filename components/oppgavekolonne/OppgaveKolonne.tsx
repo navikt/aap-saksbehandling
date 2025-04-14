@@ -16,19 +16,18 @@ import { Samordning } from 'components/behandlinger/samordning/Samordning';
 import { Søknad } from 'components/behandlinger/søknad/Søknad';
 
 interface Props {
-  saksId: string;
   behandlingsReferanse: string;
   aktivGruppe: StegGruppe;
 }
 
-export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, saksId }: Props) => {
+export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Props) => {
   return (
     <>
       {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'LOVVALG' && <Lovvalg behandlingsReferanse={behandlingsReferanse} sakId={saksId} />}
+      {aktivGruppe === 'LOVVALG' && <Lovvalg behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'ALDER' && <AlderMedDataFetching behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'STUDENT' && <Student behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} sakId={saksId} />}
+      {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'MEDLEMSKAP' && <ForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsReferanse} />}
