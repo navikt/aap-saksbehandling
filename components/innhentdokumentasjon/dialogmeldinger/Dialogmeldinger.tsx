@@ -34,7 +34,7 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null
   }
 };
 
-const grenseForPurring = subDays(new Date(), 14);
+const grenseForPurring = subDays(new Date(), 21);
 const kanSendePurring = (opprettet: string) => isBefore(new Date(opprettet), grenseForPurring);
 
 const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
