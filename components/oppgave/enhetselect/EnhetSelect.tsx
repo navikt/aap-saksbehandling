@@ -2,14 +2,14 @@
 
 import { Select } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { useState } from 'react';
 
 interface Props {
   enheter: Enhet[];
-  valgtEnhetListener?: (enhet: string) => void;
+  aktivEnhet: string;
+  valgtEnhetListener: (enhet: string) => void;
 }
-export const EnhetSelect = ({ enheter, valgtEnhetListener }: Props) => {
-  const [aktivEnhet, setAktivEnhet] = useState<string | undefined>(enheter[0]?.enhetNr);
+
+export const EnhetSelect = ({ enheter, aktivEnhet, valgtEnhetListener }: Props) => {
   return (
     <Select
       label="Velg enhet"
@@ -18,8 +18,7 @@ export const EnhetSelect = ({ enheter, valgtEnhetListener }: Props) => {
       onChange={(event) => {
         const enhet = event.target.value;
         if (enhet) {
-          setAktivEnhet(enhet);
-          valgtEnhetListener && valgtEnhetListener(enhet);
+          valgtEnhetListener(enhet);
         }
       }}
     >
