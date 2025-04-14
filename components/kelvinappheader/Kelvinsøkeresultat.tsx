@@ -2,7 +2,7 @@
 
 import { Detail, HStack, Label, Link, VStack } from '@navikt/ds-react';
 import type { SøkeResultat } from './Kelvinsøk';
-
+import styles from './Kelvinsøkeresultat.module.css';
 interface Props {
   søkeresultat: SøkeResultat;
 }
@@ -16,7 +16,7 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, 
           <Detail>Fant ingen saker</Detail>
         ) : (
           saker.map((søk, index) => (
-            <Link key={`sak-resultat-${index}`} href={søk.href}>
+            <Link className={styles.link} key={`sak-resultat-${index}`} href={søk.href}>
               {søk.label}
             </Link>
           ))
@@ -31,7 +31,7 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, 
           <Detail>Fant ingen oppgaver</Detail>
         ) : (
           oppgaver.map((søk, index) => (
-            <Link key={`oppgave-resultat-${index}`} href={søk.href}>
+            <Link className={styles.link} key={`oppgave-resultat-${index}`} href={søk.href}>
               {søk.label}
             </Link>
           ))
