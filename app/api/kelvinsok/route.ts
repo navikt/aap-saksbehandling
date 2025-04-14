@@ -5,7 +5,7 @@ import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
 import { isSuccess } from 'lib/utils/api';
-import {mapBehovskodeTilBehovstype} from "../../../lib/utils/oversettelser";
+import { mapBehovskodeTilBehovstype } from "../../../lib/utils/oversettelser";
 
 export interface SøkeResultat {
   oppgaver?: {
