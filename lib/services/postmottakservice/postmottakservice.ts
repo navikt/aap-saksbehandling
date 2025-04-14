@@ -43,9 +43,9 @@ export const hentDigitaliseringGrunnlag = async (behandlingsreferanse: string) =
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/digitalisering`;
   return await apiFetch<DigitaliseringsGrunnlag>(url, dokumentMottakApiScope, 'GET');
 };
-export const hentJournalpostInfo = async (behandlingsreferanse: string): Promise<JournalpostInfo> => {
+export const hentJournalpostInfo = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/dokumenter/${behandlingsreferanse}/info`;
-  return fetchProxy<JournalpostInfo>(url, dokumentMottakApiScope, 'GET');
+  return apiFetch<JournalpostInfo>(url, dokumentMottakApiScope, 'GET');
 };
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {
