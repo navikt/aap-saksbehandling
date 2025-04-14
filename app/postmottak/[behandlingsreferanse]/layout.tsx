@@ -13,6 +13,8 @@ import {
 import { BehandlingPVentMedDataFetching } from 'components/postmottak/postmottakbehandlingpåvent/PostmottakBehandlingPåVentMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { VStack } from '@navikt/ds-react';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface LayoutProps {
   children: ReactNode;
@@ -24,7 +26,11 @@ const Layout = async (props: LayoutProps) => {
   const { children } = props;
 
   const behandling = await hentBehandling(params.behandlingsreferanse);
-  if (behandling.skalForberede) {
+  if (isError(behandling)) {
+    return <ApiException apiResponses={[behandling]} />;
+  }
+
+  if (behandling.data.skalForberede) {
     const forberedBehandlingResponse = await forberedBehandlingOgVentPåProsessering(params.behandlingsreferanse);
 
     if (forberedBehandlingResponse && forberedBehandlingResponse.status === 'FEILET') {

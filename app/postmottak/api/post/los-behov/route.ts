@@ -1,16 +1,23 @@
 import { løsAvklaringsbehov } from 'lib/services/postmottakservice/postmottakservice';
 import { NextRequest } from 'next/server';
 import { logError } from 'lib/serverutlis/logger';
+import { isError } from 'lib/utils/api';
+import { getErrorMessage } from 'lib/utils/errorUtil';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
   try {
-    await løsAvklaringsbehov(body);
+    const løsbehovRes = await løsAvklaringsbehov(body);
 
-    return new Response(JSON.stringify({ message: 'Behov løst' }), { status: 200 });
+    if (isError(løsbehovRes)) {
+      logError(
+        `/postmottak/løs-behov, behovstype: ${body.behov?.behovstype}, message: ${løsbehovRes.apiException.message}`
+      );
+    }
+    return new Response(JSON.stringify(løsbehovRes), { status: løsbehovRes.status });
   } catch (error) {
-    logError('/api/post/løs-behov', error);
-    return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });
+    logError(`/løs-behov ${body.behov?.behovstype}`, error);
+    return new Response(JSON.stringify({ message: getErrorMessage(error) }), { status: 500 });
   }
 }

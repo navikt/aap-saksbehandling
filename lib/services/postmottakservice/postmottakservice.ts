@@ -12,41 +12,36 @@ import {
   SettPåVentRequest,
   Venteinformasjon,
 } from 'lib/types/postmottakTypes';
-import { notFound } from 'next/navigation';
-import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
+import { logError, logInfo } from 'lib/serverutlis/logger';
+import { apiFetch } from 'lib/services/apiFetch';
 
 const dokumentMottakApiBaseUrl = process.env.DOKUMENTMOTTAK_API_BASE_URL;
 const dokumentMottakApiScope = process.env.DOKUMENTMOTTAK_API_SCOPE ?? '';
 
-export const hentBehandling = async (behandlingsReferanse: string): Promise<DetaljertBehandlingDto> => {
+export const hentBehandling = async (behandlingsReferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsReferanse}`;
-  try {
-    return await fetchProxy<DetaljertBehandlingDto>(url, dokumentMottakApiScope, 'GET');
-  } catch (e) {
-    logWarning(`Fant ikke behandling med referanse ${behandlingsReferanse}`, JSON.stringify(e));
-    notFound();
-  }
+  return await apiFetch<DetaljertBehandlingDto>(url, dokumentMottakApiScope, 'GET');
 };
 export const hentFlyt = async (behandlingsreferanse: string): Promise<BehandlingFlytOgTilstand> => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/flyt`;
   return await fetchProxy<BehandlingFlytOgTilstand>(url, dokumentMottakApiScope, 'GET');
 };
 
-export const hentAvklarTemaGrunnlag = async (behandlingsreferanse: string): Promise<AvklarTemaGrunnlag> => {
+export const hentAvklarTemaGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/avklarTemaVurdering`;
-  return await fetchProxy<AvklarTemaGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<AvklarTemaGrunnlag>(url, dokumentMottakApiScope, 'GET');
 };
-export const hentFinnSakGrunnlag = async (behandlingsreferanse: string): Promise<FinnSakGrunnlag> => {
+export const hentFinnSakGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/finnSak`;
-  return await fetchProxy<FinnSakGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<FinnSakGrunnlag>(url, dokumentMottakApiScope, 'GET');
 };
-export const hentOverleveringGrunnlag = async (behandlingsreferanse: string): Promise<OverleveringGrunnlag> => {
+export const hentOverleveringGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/overlevering`;
-  return await fetchProxy<OverleveringGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<OverleveringGrunnlag>(url, dokumentMottakApiScope, 'GET');
 };
-export const hentDigitaliseringGrunnlag = async (behandlingsreferanse: string): Promise<DigitaliseringsGrunnlag> => {
+export const hentDigitaliseringGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/digitalisering`;
-  return await fetchProxy<DigitaliseringsGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<DigitaliseringsGrunnlag>(url, dokumentMottakApiScope, 'GET');
 };
 export const hentJournalpostInfo = async (behandlingsreferanse: string): Promise<JournalpostInfo> => {
   const url = `${dokumentMottakApiBaseUrl}/api/dokumenter/${behandlingsreferanse}/info`;
@@ -55,7 +50,7 @@ export const hentJournalpostInfo = async (behandlingsreferanse: string): Promise
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/løs-behov`;
-  return await fetchProxy<void>(url, dokumentMottakApiScope, 'POST', avklaringsBehov);
+  return await apiFetch<void>(url, dokumentMottakApiScope, 'POST', avklaringsBehov);
 };
 export const settPåVent = async (behandlingsreferanse: string, body: SettPåVentRequest): Promise<unknown> => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/sett-på-vent`;
@@ -100,7 +95,7 @@ export const forberedBehandlingOgVentPåProsessering = async (
 
 export const auditlog = async (journalpostId: number) => {
   const url = `${dokumentMottakApiBaseUrl}/api/journalpost/${journalpostId}/auditlog`;
-  return await fetchProxy(url, dokumentMottakApiScope, 'POST');
+  return await apiFetch(url, dokumentMottakApiScope, 'POST');
 };
 
 // TODO: Fjern denne - testendepunkt

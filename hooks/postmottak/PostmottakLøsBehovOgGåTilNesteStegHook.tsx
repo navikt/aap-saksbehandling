@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import {
   ServerSentEventData,
   ServerSentEventStatus,
@@ -6,25 +6,37 @@ import {
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
+import { ApiException } from 'lib/utils/api';
 
 export const usePostmottakLøsBehovOgGåTilNesteSteg = (
   steg: StegType
 ): {
   status: ServerSentEventStatus | undefined;
+  resetStatus: () => void;
   isLoading: boolean;
   løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling) => void;
+  løsBehovOgGåTilNesteStegError?: ApiException;
 } => {
   const params = useParams<{ aktivGruppe: string; behandlingsreferanse: string }>();
   const router = useRouter();
   const [status, setStatus] = useState<ServerSentEventStatus | undefined>();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<ApiException | undefined>();
+  const [isPending, startTransition] = useTransition();
 
   const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling) => {
-    await postmottakLøsBehovClient(behov);
+    setIsLoading(true);
+    setStatus(undefined);
+    setError(undefined);
+    const løsbehovRes = await postmottakLøsBehovClient(behov);
+    if (løsbehovRes.type === 'ERROR') {
+      setError(løsbehovRes.apiException);
+      setIsLoading(false);
+      return;
+    }
     listenSSE();
   };
   const listenSSE = () => {
-    setIsLoading(true);
     const eventSource = new EventSource(
       `/postmottak/api/post/${params.behandlingsreferanse}/hent/${params.aktivGruppe}/${steg}/nesteSteg/`,
       {
@@ -39,7 +51,9 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
           // TODO: Legge tilbake igjen hash for aktivt-steg hvis vi tar i bruk dette?
           router.push(`/postmottak/${params.behandlingsreferanse}/${eventData.aktivGruppe}/`);
         }
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
         setIsLoading(false);
       }
       if (eventData.status === 'ERROR') {
@@ -55,5 +69,15 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
     };
   };
 
-  return { isLoading, status, løsBehovOgGåTilNesteSteg };
+  function resetStatus() {
+    setStatus(undefined);
+  }
+
+  return {
+    isLoading: isLoading || isPending,
+    status,
+    resetStatus,
+    løsBehovOgGåTilNesteSteg,
+    løsBehovOgGåTilNesteStegError: error,
+  };
 };

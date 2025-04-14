@@ -1,6 +1,6 @@
 // Postmottak
 
-import { clientFetch } from 'lib/clientApi';
+import { clientFetch, clientFetchV2 } from 'lib/clientApi';
 import { LøsAvklaringsbehovPåBehandling, SettPåVentRequest } from 'lib/types/postmottakTypes';
 
 // TODO: Test-endepunkt - skal fjernes
@@ -15,7 +15,7 @@ export function postmottakSettPåVentClient(behandlingsreferanse: string, body: 
 }
 
 export function postmottakLøsBehovClient(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
-  return clientFetch('/postmottak/api/post/los-behov/', 'POST', avklaringsBehov);
+  return clientFetchV2<void>('/postmottak/api/post/los-behov/', 'POST', avklaringsBehov);
 }
 
 export function postmottakEndreTemaClient(behandlingsreferanse: string): Promise<string | undefined> {
