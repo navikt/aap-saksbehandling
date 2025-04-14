@@ -79,7 +79,7 @@ export const endreTema = async (behandlingsreferanse: string) => {
 
 export const hentAlleBehandlinger = async () => {
   const url = `${dokumentMottakApiBaseUrl}/test/hentAlleBehandlinger`;
-  return await fetchProxy<[{ id: string; status: string; opprettet: string; steg: string }]>(
+  return await apiFetch<[{ id: string; status: string; opprettet: string; steg: string }]>(
     url,
     dokumentMottakApiScope,
     'GET'
