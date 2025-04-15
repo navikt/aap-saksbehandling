@@ -27,7 +27,6 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Prop
       {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'LOVVALG' && <Lovvalg behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'RETTIGHETSPERIODE' && <Rettighetsperiode behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'LOVVALG' && <Lovvalg behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'ALDER' && <AlderMedDataFetching behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'STUDENT' && <Student behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
