@@ -48,6 +48,8 @@ export const formaterÅrsak = (årsak: ÅrsakTilBehandling) => {
       return 'Utenlandsopphold for soknadstidspunkt';
     case 'SØKNAD_TRUKKET':
       return 'Trukket søknad';
+    case 'VURDER_RETTIGHETSPERIODE':
+      return 'Virkningstidspunkt';
     default:
       return årsak;
   }
