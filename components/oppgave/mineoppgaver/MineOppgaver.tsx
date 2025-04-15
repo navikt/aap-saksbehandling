@@ -4,21 +4,22 @@ import { OppgaveTabell } from 'components/oppgave/oppgavetabell/OppgaveTabell';
 import useSWR from 'swr';
 import { hentMineOppgaverClient } from 'lib/oppgaveClientApi';
 import { Alert, BodyShort, Skeleton, VStack } from '@navikt/ds-react';
+import { isError, isSuccess } from 'lib/utils/api';
 
 export const MineOppgaver = () => {
-  const mineOppgaver = useSWR(`api/mine-oppgaver`, () => hentMineOppgaverClient());
+  const { data: mineOppgaver } = useSWR(`api/mine-oppgaver`, () => hentMineOppgaverClient());
   return (
     <>
-      {mineOppgaver?.data?.type === 'error' && (
+      {isError(mineOppgaver) && (
         <Alert
           variant={'error'}
           title={'Feil'}
-        >{`Status ${mineOppgaver?.data?.status}, msg: ${mineOppgaver?.data?.message}`}</Alert>
+        >{`Status ${mineOppgaver.status}, msg: ${mineOppgaver.apiException.message}`}</Alert>
       )}
-      {mineOppgaver?.data?.type === 'success' && !mineOppgaver?.data?.data?.oppgaver?.length && (
+      {isSuccess(mineOppgaver) && !mineOppgaver.data?.oppgaver?.length && (
         <BodyShort>Ingen reserverte oppgaver</BodyShort>
       )}
-      {mineOppgaver?.data?.type !== 'success' && mineOppgaver?.data?.type !== 'error' && (
+      {!isSuccess(mineOppgaver) && isError(mineOppgaver) && (
         <VStack gap={'7'}>
           <VStack gap={'1'}>
             <Skeleton variant="rectangle" width="100%" height={40} />
@@ -33,9 +34,9 @@ export const MineOppgaver = () => {
           </VStack>
         </VStack>
       )}
-      {mineOppgaver?.data?.type === 'success' && (
+      {isSuccess(mineOppgaver) && (
         <OppgaveTabell
-          oppgaver={mineOppgaver.data.data.oppgaver}
+          oppgaver={mineOppgaver.data.oppgaver}
           visBehandleOgFrigiKnapp
           showDropdownActions
           showSortAndFilters

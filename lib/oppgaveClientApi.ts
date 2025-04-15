@@ -19,6 +19,7 @@ import {
 } from './types/statistikkTypes';
 import { BehandlingEndringerPerDag } from 'lib/types/statistikkTypes';
 import { queryParamsArray } from './utils/request';
+import { clientFetchV2 } from 'lib/clientApi';
 
 type ClientFetch<T> =
   | { type: 'loading' }
@@ -85,7 +86,7 @@ export async function årsakTilBehandlingClient(url: string) {
 
 // oppgave
 export async function hentOppgaverClient(filterId: number, enheter: string[], veileder: boolean) {
-  return clientFetcher<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', {
+  return clientFetchV2<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', {
     filterId,
     enheter,
     veileder,
@@ -93,7 +94,7 @@ export async function hentOppgaverClient(filterId: number, enheter: string[], ve
 }
 
 export async function hentMineOppgaverClient() {
-  return clientFetcher<OppgavelisteResponse>('/oppgave/api/oppgave/mine-oppgaver', 'GET');
+  return clientFetchV2<OppgavelisteResponse>('/oppgave/api/oppgave/mine-oppgaver', 'GET');
 }
 
 export async function avreserverOppgaveClient(oppgave: Oppgave) {
@@ -107,7 +108,7 @@ export async function avreserverOppgaveClient(oppgave: Oppgave) {
 }
 export async function hentKøerForEnheterClient(enheter: string[]) {
   const url = `/oppgave/api/filter?${queryParamsArray('enheter', enheter)}`;
-  return clientFetcher<Kø[]>(url, 'GET');
+  return clientFetchV2<Kø[]>(url, 'GET');
 }
 
 export async function oppgavesokClient(

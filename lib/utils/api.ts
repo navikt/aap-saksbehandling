@@ -17,6 +17,8 @@ type SuccessResponseBody<ResponseType> = {
   data: ResponseType;
 };
 
-export const isError = (res: FetchResponse<unknown>): res is ErrorResponseBody<ApiException> => res.type === 'ERROR';
+export const isError = (res?: FetchResponse<unknown>): res is ErrorResponseBody<ApiException> =>
+  (res && res.type === 'ERROR')!!;
 
-export const isSuccess = <T>(res: FetchResponse<T>): res is SuccessResponseBody<T> => res.type === 'SUCCESS';
+export const isSuccess = <T>(res?: FetchResponse<T>): res is SuccessResponseBody<T> =>
+  (res && res.type === 'SUCCESS')!!;

@@ -18,6 +18,7 @@ import {
   OppgavelisteResponse,
 } from 'lib/types/oppgaveTypes';
 import { queryParamsArray } from '../../utils/request';
+import { apiFetch } from 'lib/services/apiFetch';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
@@ -81,128 +82,38 @@ const oppgaveMock: Oppgave[] = [
   },
 ];
 
-export const hentKøer = async (enheter: string[]): Promise<Kø[]> => {
-  if (isLocal()) {
-    return [
-      {
-        id: 1,
-        navn: 'Alle oppgaver',
-        beskrivelse: 'Alle oppgaver',
-        avklaringsbehovKoder: [],
-        behandlingstyper: [],
-        enheter: [],
-        opprettetAv: 'dsfaslkjf',
-        opprettetTidspunkt: '2024-10-21T09:16:08',
-        endretAv: null,
-        endretTidspunkt: null,
-      },
-      {
-        id: 2,
-        navn: 'Alle oppgaver førstegangsbehandling',
-        beskrivelse: 'Alle oppgaver førstegangsbehandling',
-        avklaringsbehovKoder: [],
-        // @ts-ignore
-        behandlingstyper: ['FØRSTEGANGSBEHANDLING'],
-        enheter: [],
-        opprettetAv: 'fkslfjg',
-        opprettetTidspunkt: '2024-10-21T09:23:53',
-        endretAv: null,
-        endretTidspunkt: null,
-      },
-      {
-        id: 4,
-        navn: 'Kvalitetssikringsoppgaver',
-        beskrivelse: 'Kvalitetssikringsoppgaver',
-        avklaringsbehovKoder: ['5097'],
-        behandlingstyper: [],
-        enheter: [],
-        opprettetAv: 'yyiidd99',
-        opprettetTidspunkt: '2024-12-02T12:31:46.444',
-        endretAv: null,
-        endretTidspunkt: null,
-      },
-      {
-        id: 3,
-        navn: 'Fatte vedtak-steget',
-        beskrivelse: 'Fatte vedtak-steget',
-        avklaringsbehovKoder: ['5097'],
-        behandlingstyper: [],
-        enheter: [],
-        opprettetAv: 'klhsgd',
-        opprettetTidspunkt: '2024-12-02T12:17:37.515',
-        endretAv: 'kflsag',
-        endretTidspunkt: '2024-12-02T12:32:22.442',
-      },
-    ];
-  }
-
+export const hentKøer = async (enheter: string[]) => {
   const url = `${oppgaveApiBaseURL}/filter?${queryParamsArray('enheter', enheter)}`;
-  return await fetchProxy<Kø[]>(url, oppgaveApiScope, 'GET');
+  return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET');
 };
-export const hentOppgaverForFilter = async (
-  filterId: number,
-  enheter: string[],
-  veileder: boolean
-): Promise<OppgavelisteResponse> => {
+
+export const hentOppgaverForFilter = async (filterId: number, enheter: string[], veileder: boolean) => {
   const payload: OppgavelisteRequest = {
     filterId,
     enheter,
     maxAntall: 10,
     veileder,
   };
-  if (isLocal()) {
-    return {
-      antallTotalt: 34,
-      oppgaver: oppgaveMock,
-    };
-  }
   const url = `${oppgaveApiBaseURL}/oppgaveliste`;
-  return await fetchProxy<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', payload);
+  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', payload);
 };
+
+//TODO: ubrukt? ser ingen steder som kaller route
 export async function hentAntallOppgaver(behandlingstype?: string) {
-  if (isLocal())
-    return {
-      '5001': 6,
-      '5003': 51,
-      '5006': 10,
-      '5007': 2,
-      '5008': 1,
-      '5009': 3,
-      '5010': 2,
-      '5011': 4,
-      '5097': 1,
-      '5098': 29,
-      '5099': 5,
-    };
   const url = `${oppgaveApiBaseURL}/produksjonsstyring/antall-oppgaver`;
-  return await fetchProxy<Record<string, number>>(url, oppgaveApiScope, 'POST', {
+  return await apiFetch<Record<string, number>>(url, oppgaveApiScope, 'POST', {
     behandlingstype: behandlingstype || null,
   });
 }
 
-export const hentMineOppgaver = async (): Promise<OppgavelisteResponse> => {
-  if (isLocal()) {
-    return {
-      antallTotalt: 12,
-      oppgaver: oppgaveMock,
-    };
-  }
+export const hentMineOppgaver = async () => {
   const url = `${oppgaveApiBaseURL}/mine-oppgaver`;
-  return await fetchProxy<OppgavelisteResponse>(url, oppgaveApiScope, 'GET', undefined, [
-    'oppgaveservice/mine-oppgaver',
-  ]);
+  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET', undefined, ['oppgaveservice/mine-oppgaver']);
 };
 
 export async function hentEnheter() {
-  if (isLocal()) {
-    return [
-      { enhetNr: 'FKSH', navn: 'Enhet en' },
-      { enhetNr: 'AHFG', navn: 'Enhet to' },
-      { enhetNr: 'HDMM', navn: 'Enhet tre' },
-    ];
-  }
   const url = `${oppgaveApiBaseURL}/enheter`;
-  return await fetchProxy<Array<Enhet>>(url, oppgaveApiScope, 'GET');
+  return await apiFetch<Array<Enhet>>(url, oppgaveApiScope, 'GET');
 }
 export async function oppgaveSøk(
   avklaringsbehovKoder: OppgaveAvklaringsbehovKode[],

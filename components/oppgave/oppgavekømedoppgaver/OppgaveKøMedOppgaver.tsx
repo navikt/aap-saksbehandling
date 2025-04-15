@@ -12,6 +12,7 @@ import { hentKøerForEnheterClient, hentOppgaverClient, plukkNesteOppgaveClient 
 import { hentLagretAktivKøId, lagreAktivKøId } from 'lib/utils/aktivkøid';
 import { useRouter } from 'next/navigation';
 import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
+import { isError, isSuccess } from 'lib/utils/api';
 
 interface Props {
   enheter: Enhet[];
@@ -24,7 +25,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
   const [veilederFilter, setVeilederFilter] = useState<string>('');
   const [aktivKøId, setAktivKøId] = useState<number>();
 
-  const køer = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
+  const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
     hentKøerForEnheterClient([aktivEnhet])
   );
 
@@ -39,10 +40,11 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
   };
 
   useEffect(() => {
-    if (køer.data?.type !== 'success') return;
-
+    if (!køer || (køer && isError(køer))) {
+      return;
+    }
     const køId = hentLagretAktivKøId();
-    const gyldigeKøer = køer.data.data.map((kø) => kø.id);
+    const gyldigeKøer = køer.data.map((kø) => kø.id);
 
     if (!køId || !gyldigeKøer.includes(køId)) {
       oppdaterKøId(gyldigeKøer[0] ?? 0);
@@ -51,7 +53,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
     }
   }, [køer]);
 
-  const oppgaverValgtKø = useSWR(
+  const { data: oppgaverValgtKø } = useSWR(
     aktivKøId ? `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet}/${veilederFilter}` : null,
     () => hentOppgaverClient(aktivKøId!, [aktivEnhet], veilederFilter === 'veileder')
   );
@@ -82,7 +84,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
                 <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
                 <KøSelect
                   label={'Velg kø'}
-                  køer={køer.data?.type === 'success' ? køer.data.data : []}
+                  køer={isSuccess(køer) ? køer.data : []}
                   aktivKøId={aktivKøId}
                   valgtKøListener={oppdaterKøId}
                 />
@@ -109,32 +111,28 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
                 <Label as="p" size={'small'}>
                   Beskrivelse av køen
                 </Label>
-                {køer.data?.type === 'success' && (
-                  <BodyShort>{køer.data.data.find((e) => e.id === aktivKøId)?.beskrivelse}</BodyShort>
-                )}
+                {isSuccess(køer) && <BodyShort>{køer.data.find((e) => e.id === aktivKøId)?.beskrivelse}</BodyShort>}
               </VStack>
               <VStack>
                 <Label as="p" size={'small'}>
                   Totalt antall oppgaver
                 </Label>
-                {oppgaverValgtKø?.data?.type === 'success' && (
-                  <BodyShort>{oppgaverValgtKø?.data?.data.antallTotalt}</BodyShort>
-                )}
+                {isSuccess(oppgaverValgtKø) && <BodyShort>{oppgaverValgtKø.data.antallTotalt}</BodyShort>}
               </VStack>
             </HStack>
           </VStack>
         </Box>
       </VStack>
-      {oppgaverValgtKø?.data?.type === 'error' && (
+      {isError(oppgaverValgtKø) && (
         <Alert
           variant={'error'}
           title={'Feil'}
-        >{`Status ${oppgaverValgtKø?.data?.status}, msg: ${oppgaverValgtKø?.data?.message}`}</Alert>
+        >{`Status ${oppgaverValgtKø.status}, msg: ${oppgaverValgtKø.apiException.message}`}</Alert>
       )}
-      {oppgaverValgtKø?.data?.type === 'success' && !oppgaverValgtKø?.data?.data?.oppgaver?.length && (
+      {isSuccess(oppgaverValgtKø) && !oppgaverValgtKø?.data.oppgaver.length && (
         <BodyShort>Ingen oppgaver i valgt kø for valgt enhet</BodyShort>
       )}
-      {oppgaverValgtKø?.data?.type !== 'success' && oppgaverValgtKø?.data?.type !== 'error' && (
+      {!isSuccess(oppgaverValgtKø) && !isError(oppgaverValgtKø) && (
         <VStack gap={'1'}>
           <Skeleton variant="rectangle" width="100%" height={40} />
           <Skeleton variant="rectangle" width="100%" height={40} />
@@ -143,8 +141,8 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
           <Skeleton variant="rectangle" width="100%" height={40} />
         </VStack>
       )}
-      {oppgaverValgtKø?.data?.type === 'success' && oppgaverValgtKø?.data?.data?.oppgaver?.length > 0 && (
-        <OppgaveTabell oppgaver={oppgaverValgtKø?.data?.data?.oppgaver || []} />
+      {isSuccess(oppgaverValgtKø) && oppgaverValgtKø.data.oppgaver.length > 0 && (
+        <OppgaveTabell oppgaver={oppgaverValgtKø.data?.oppgaver || []} />
       )}
     </VStack>
   );
