@@ -1,4 +1,3 @@
-import { fetchPdf } from 'lib/services/fetchProxy';
 import {
   AvklarTemaGrunnlag,
   BehandlingFlytOgTilstand,
@@ -13,7 +12,7 @@ import {
   Venteinformasjon,
 } from 'lib/types/postmottakTypes';
 import { logError, logInfo } from 'lib/serverutlis/logger';
-import { apiFetch } from 'lib/services/apiFetch';
+import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
 
 const dokumentMottakApiBaseUrl = process.env.DOKUMENTMOTTAK_API_BASE_URL;
 const dokumentMottakApiScope = process.env.DOKUMENTMOTTAK_API_SCOPE ?? '';
@@ -66,7 +65,7 @@ export const hentDokumentFraDokumentInfoId = async (
   journalpostId: number,
   dokumentInfoId: string
 ): Promise<Blob | undefined> => {
-  return fetchPdf(
+  return apiFetchPdf(
     `${dokumentMottakApiBaseUrl}/api/dokumenter/${journalpostId}/${dokumentInfoId}`,
     dokumentMottakApiScope
   );
