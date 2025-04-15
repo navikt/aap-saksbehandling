@@ -5593,6 +5593,7 @@ export interface components {
       /** @enum {string|null} */
       vurdertGruppe?:
         | 'START_BEHANDLING'
+        | 'RETTIGHETSPERIODE'
         | 'SØKNAD'
         | 'ALDER'
         | 'LOVVALG'
@@ -5617,6 +5618,7 @@ export interface components {
       vurdertSteg?:
         | 'START_BEHANDLING'
         | 'SØKNAD'
+        | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_ALDER'
         | 'VURDER_LOVVALG'
         | 'VURDER_MEDLEMSKAP'
@@ -5745,6 +5747,7 @@ export interface components {
       /** @enum {string} */
       stegGruppe:
         | 'START_BEHANDLING'
+        | 'RETTIGHETSPERIODE'
         | 'SØKNAD'
         | 'ALDER'
         | 'LOVVALG'
@@ -5771,6 +5774,7 @@ export interface components {
       stegType:
         | 'START_BEHANDLING'
         | 'SØKNAD'
+        | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_ALDER'
         | 'VURDER_LOVVALG'
         | 'VURDER_MEDLEMSKAP'
@@ -6103,6 +6107,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'SØKNAD_TRUKKET'
+        | 'VURDER_RETTIGHETSPERIODE'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ArbeidIPeriodeV0': {
@@ -6293,6 +6298,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'FASTSATT_PERIODE_PASSERT'
+        | 'VURDER_RETTIGHETSPERIODE'
       )[];
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnBehandlingForIdentDTO': {
