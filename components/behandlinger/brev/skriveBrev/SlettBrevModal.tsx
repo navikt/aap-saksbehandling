@@ -18,7 +18,7 @@ export const SlettBrevModal = ({ isOpen, onClose, onDelete }: Props) => {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onClose}>Lukk</Button>
-        <Button variant="danger" icon={<TrashIcon />} onSelect={onDelete}>
+        <Button variant="danger" icon={<TrashIcon />} onClick={onDelete}>
           Slett brev
         </Button>
       </Modal.Footer>

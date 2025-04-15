@@ -77,6 +77,7 @@ export const SkriveBrev = ({
       referanse: behandlingsReferanse,
     });
     await revalidateFlyt(behandlingsReferanse);
+    setSlettBrevModalOpen(false);
   };
 
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
@@ -165,7 +166,7 @@ export const SkriveBrev = ({
           setSlettBrevModalOpen(false);
         }}
         onDelete={() => {
-          slettBrev;
+          slettBrev();
         }}
       />
     </div>
