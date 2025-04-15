@@ -8,7 +8,7 @@ import {
 import { BestillLegeerklæring, OpprettAktivitetspliktBrudd, OpprettTestcase } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
-import { postmottakSettPåVentClient } from 'lib/postmottakClientApi';
+import { postmottakEndreTemaClient, postmottakSettPåVentClient } from 'lib/postmottakClientApi';
 import { SettPåVentRequest } from 'lib/types/postmottakTypes';
 
 export function useFetch<FunctionParameters extends any[], ResponseBody>(
@@ -54,6 +54,7 @@ export function useFetchV2<FunctionParameters extends any[], ResponseBody>(
 
   async function method(...functionParameters: FunctionParameters) {
     setIsLoading(true);
+    setError('');
     let ok = true;
 
     try {
@@ -131,6 +132,7 @@ export function usePurrPåDialogmelding(): {
 
   return { purrPåDialogmelding: purr, isLoading, error };
 }
+
 export function usePostmottakSettPåVent(): {
   postmottakSettPåVent: (behandlingsreferanse: string, body: SettPåVentRequest) => Promise<{ ok: boolean }>;
   isLoading: boolean;
@@ -143,4 +145,19 @@ export function usePostmottakSettPåVent(): {
   }
 
   return { postmottakSettPåVent: settPåVent, isLoading, error };
+}
+
+export function usePostmottakEndreTema(): {
+  postmottakEndreTema: (behandlingsreferanse: string) => Promise<{ ok: boolean }>;
+  isLoading: boolean;
+  error?: string;
+  data?: { redirectUrl: string };
+} {
+  const { method, isLoading, error, data } = useFetchV2(postmottakEndreTemaClient);
+
+  async function endreTema(behandlingsreferanse: string) {
+    return await method(behandlingsreferanse);
+  }
+
+  return { postmottakEndreTema: endreTema, isLoading, error, data };
 }

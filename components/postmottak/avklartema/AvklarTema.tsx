@@ -2,14 +2,16 @@
 
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
-import { FormEvent, FormEventHandler } from 'react';
+import { FormEvent, FormEventHandler, useState } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { postmottakEndreTemaClient, postmottakLøsBehovClient } from 'lib/postmottakClientApi';
-import { Button, VStack } from '@navikt/ds-react';
+import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
+import { Alert, BodyShort, Button, Modal, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { usePostmottakEndreTema } from 'hooks/FetchHook';
+import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 
 interface Props {
   behandlingsVersjon: number;
@@ -36,6 +38,9 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
     { readOnly }
   );
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
+  const { postmottakEndreTema, error, isLoading: endreTemaIsLoading, data } = usePostmottakEndreTema();
+  const [visModal, setVisModal] = useState<boolean>(grunnlag?.vurdering?.skalTilAap === false || false);
+
   const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       if (data.erTemaAAP === JaEllerNei.Ja) {
@@ -60,9 +65,11 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           // @ts-ignore
           referanse: behandlingsreferanse,
         }).then(() =>
-          postmottakEndreTemaClient(behandlingsreferanse).then(
-            (redirectUrl) => redirectUrl && window.location.replace(redirectUrl)
-          )
+          postmottakEndreTema(behandlingsreferanse).then((res) => {
+            if (res.ok) {
+              setVisModal(true);
+            }
+          })
         );
       }
     })(event);
@@ -70,11 +77,48 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
 
   return (
     <VilkårsKort heading={'Avklar tema'}>
+      <Modal
+        open={visModal}
+        header={{
+          heading: 'Dokumentet er sendt til gosys for journalføring',
+          icon: <CheckmarkCircleIcon fontSize={'inherit'} />,
+        }}
+        onClose={() => {
+          setVisModal(false);
+        }}
+        onBeforeClose={() => {
+          setVisModal(false);
+          return true;
+        }}
+      >
+        <Modal.Body>
+          <BodyShort spacing>Gå til Gosys for å journalføre dokumentet.</BodyShort>
+          <Modal.Footer>
+            <Button
+              type={'button'}
+              onClick={() => {
+                if (data?.redirectUrl) {
+                  window.location.replace(data.redirectUrl);
+                  setVisModal(false);
+                }
+              }}
+            >
+              Gå til Gosys
+            </Button>
+          </Modal.Footer>
+        </Modal.Body>
+      </Modal>
       <form onSubmit={onSubmit}>
         <VStack gap={'6'}>
           <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
           <FormField form={form} formField={formFields.erTemaAAP} />
-          <Button loading={isLoading} className={'fit-content'}>
+          {error && (
+            <Alert size={'small'} variant={'error'} title={''}>
+              <BodyShort size={'small'}>Noe gikk galt ved endring av tema</BodyShort>
+              {error}
+            </Alert>
+          )}
+          <Button loading={isLoading || endreTemaIsLoading} className={'fit-content'}>
             Neste
           </Button>
         </VStack>

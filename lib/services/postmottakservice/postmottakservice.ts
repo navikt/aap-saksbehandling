@@ -1,4 +1,4 @@
-import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
+import { fetchPdf } from 'lib/services/fetchProxy';
 import {
   AvklarTemaGrunnlag,
   BehandlingFlytOgTilstand,
@@ -74,7 +74,7 @@ export const hentDokumentFraDokumentInfoId = async (
 
 export const endreTema = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/endre-tema`;
-  return await fetchProxy<{ redirectUrl: string }>(url, dokumentMottakApiScope, 'POST');
+  return await apiFetch<{ redirectUrl: string }>(url, dokumentMottakApiScope, 'POST');
 };
 
 export const hentAlleBehandlinger = async () => {
