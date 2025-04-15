@@ -31,6 +31,7 @@ const behovskodeMap = {
   '5026': 'Refusjon',
   '5027': 'Samordning annen statlig ytelse',
   '5028': 'Vurder trekk av søknad',
+  '5029': 'Vurder virkningstidspunkt',
   '5050': 'Skriv brev',
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',
@@ -122,6 +123,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Digitaliser';
     case 'OVERLEVER_TIL_FAGSYSTEM':
       return 'Send til fagsystem';
+    case 'RETTIGHETSPERIODE':
+      return 'Virkningstidspunkt';
     default:
       return `${steggruppe}`;
   }
@@ -153,5 +156,3 @@ export function mapTilOppgaveStatusTekst(status: OppgaveStatus) {
       return 'Opprettet';
   }
 }
-
-
