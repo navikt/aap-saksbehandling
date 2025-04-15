@@ -11,6 +11,7 @@ import { Enhet } from 'lib/types/oppgaveTypes';
 import { hentKøerForEnheterClient, hentOppgaverClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
 import { hentLagretAktivKøId, lagreAktivKøId } from 'lib/utils/aktivkøid';
 import { useRouter } from 'next/navigation';
+import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
 
 interface Props {
   enheter: Enhet[];
@@ -19,7 +20,7 @@ interface Props {
 export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [aktivEnhet, setAktivEnhet] = useState<string>(enheter[0]?.enhetNr ?? '');
+  const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [veilederFilter, setVeilederFilter] = useState<string>('');
   const [aktivKøId, setAktivKøId] = useState<number>();
 
@@ -30,6 +31,11 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
   const oppdaterKøId = (id: number) => {
     setAktivKøId(id);
     lagreAktivKøId(id);
+  };
+
+  const oppdaterEnhet = (enhetsnr: string) => {
+    setAktivEnhet(enhetsnr);
+    lagreAktivEnhet(enhetsnr);
   };
 
   useEffect(() => {
@@ -73,12 +79,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
           <VStack gap={'5'}>
             <HStack justify={'space-between'}>
               <HStack gap={'4'}>
-                <EnhetSelect
-                  enheter={enheter}
-                  valgtEnhetListener={(enhet) => {
-                    setAktivEnhet(enhet);
-                  }}
-                />
+                <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
                 <KøSelect
                   label={'Velg kø'}
                   køer={køer.data?.type === 'success' ? køer.data.data : []}

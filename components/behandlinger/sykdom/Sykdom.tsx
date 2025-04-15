@@ -1,6 +1,6 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
-import { hentFlyt, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { BistandsbehovMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
@@ -9,36 +9,39 @@ import { FastsettArbeidsevneMedDataFetching } from 'components/behandlinger/sykd
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { YrkesskadeMedDataFetching } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedDataFetching';
 import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon/RefusjonMedDataFetching';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsReferanse: string;
-  sakId: string;
 }
 
-export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
-  const [flyt, sak] = await Promise.all([hentFlyt(behandlingsReferanse), hentSak(sakId)]);
+export const Sykdom = async ({ behandlingsReferanse }: Props) => {
+  const flyt = await hentFlyt(behandlingsReferanse);
+  if (isError(flyt)) {
+    return <ApiException apiResponses={[flyt]} />;
+  }
 
-  const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt);
+  const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt.data);
 
-  const saksBehandlerReadOnly = flyt.visning.saksbehandlerReadOnly;
-  const behandlingVersjon = flyt.behandlingVersjon;
+  const saksBehandlerReadOnly = flyt.data.visning.saksbehandlerReadOnly;
+  const behandlingVersjon = flyt.data.behandlingVersjon;
 
   return (
     <GruppeSteg
       behandlingVersjon={behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
-      prosessering={flyt.prosessering}
-      visning={flyt.visning}
-      aktivtSteg={flyt.aktivtSteg}
+      prosessering={flyt.data.prosessering}
+      visning={flyt.data.visning}
+      aktivtSteg={flyt.data.aktivtSteg}
     >
       {stegSomSkalVises.includes('AVKLAR_SYKDOM') && (
         <StegSuspense>
           <SykdomsvurderingMedDataFetching
-            sak={sak}
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
-            typeBehandling={flyt.visning.typeBehandling}
+            typeBehandling={flyt.data.visning.typeBehandling}
           />
         </StegSuspense>
       )}
@@ -66,15 +69,13 @@ export const Sykdom = async ({ behandlingsReferanse, sakId }: Props) => {
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
-            typeBehandling={flyt.visning.typeBehandling}
-            sak={sak}
+            typeBehandling={flyt.data.visning.typeBehandling}
           />
         </StegSuspense>
       )}
       {stegSomSkalVises.includes('REFUSJON_KRAV') && (
         <StegSuspense>
           <RefusjonMedDataFetching
-            sak={sak}
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}

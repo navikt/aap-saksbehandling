@@ -14,7 +14,11 @@ export const OpprettBehandling = () => {
     setIsLoading(true);
     try {
       const res = await postmottakOpprettBehandlingClient(journalpostId);
-      setMessage(`Behandlingsnummer: ${res?.referanse}`);
+      if (res.type === 'SUCCESS') {
+        setMessage(`Behandlingsnummer: ${res.data.referanse}`);
+      } else {
+        setMessage('Noe gikk galt');
+      }
     } catch {
       setMessage('Noe gikk galt');
       setIsLoading(false);

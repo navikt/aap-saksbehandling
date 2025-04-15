@@ -48,7 +48,7 @@ export async function clientFetch<ResponseBody>(
   }
 }
 
-async function clientFetchV2<ResponseBody>(
+export async function clientFetchV2<ResponseBody>(
   url: string,
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
   body?: object
@@ -103,7 +103,7 @@ export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
 }
 
 export function clientHentFlyt(behandlingsreferanse: string) {
-  return clientFetch<BehandlingFlytOgTilstand>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/flyt`, 'GET');
+  return clientFetchV2<BehandlingFlytOgTilstand>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/flyt`, 'GET');
 }
 
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
@@ -146,11 +146,11 @@ export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, behandlin
 }
 
 export function clientSendHendelse(saksnummer: string, body: Object) {
-  return clientFetch(`${BASE_URL}/api/hendelse/sak/${saksnummer}/send`, 'POST', body);
+  return clientFetchV2(`${BASE_URL}/api/hendelse/sak/${saksnummer}/send`, 'POST', body);
 }
 
 export function clientConfig() {
-  return clientFetch<ClientConfig>('/api/config', 'GET');
+  return clientFetchV2<ClientConfig>('/api/config', 'GET');
 }
 
 export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKode: BehandlingsFlytAvklaringsbehovKode) {

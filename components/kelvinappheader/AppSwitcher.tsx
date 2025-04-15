@@ -5,12 +5,13 @@ import { Dropdown, InternalHeader } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { clientConfig } from 'lib/clientApi';
 import { ClientConfig } from 'lib/types/clientConfig';
+import { isSuccess } from 'lib/utils/api';
 
 export const AppSwitcher = () => {
   const [config, setConfig] = useState<ClientConfig>();
 
   useEffect(() => {
-    clientConfig().then((config) => setConfig(config));
+    clientConfig().then((config) => isSuccess(config) && setConfig(config.data));
   }, []);
 
   return (

@@ -3,13 +3,12 @@ import { hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbeha
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
-import { SaksInfo, TypeBehandling } from 'lib/types/types';
+import { TypeBehandling } from 'lib/types/types';
 import { ValuePair } from 'components/form/FormField';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 
 interface Props {
-  sak: SaksInfo;
   behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
@@ -20,7 +19,6 @@ export const SykdomsvurderingMedDataFetching = async ({
   behandlingsReferanse,
   behandlingVersjon,
   readOnly,
-  sak,
   typeBehandling,
 }: Props) => {
   const grunnlag = await hentSykdomsGrunnlag(behandlingsReferanse);
@@ -45,7 +43,6 @@ export const SykdomsvurderingMedDataFetching = async ({
       behandlingVersjon={behandlingVersjon}
       bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
       hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
-      søknadstidspunkt={sak.periode.fom}
       typeBehandling={typeBehandling}
     />
   );

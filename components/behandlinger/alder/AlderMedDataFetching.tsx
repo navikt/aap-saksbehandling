@@ -11,17 +11,17 @@ interface Props {
 export const AlderMedDataFetching = async ({ behandlingsReferanse }: Props) => {
   const grunnlag = await hentAlderGrunnlag(behandlingsReferanse);
   const flyt = await hentFlyt(behandlingsReferanse);
-  if (isError(grunnlag)) {
-    return <ApiException apiResponses={[grunnlag]} />;
+  if (isError(grunnlag) || isError(flyt)) {
+    return <ApiException apiResponses={[grunnlag, flyt]} />;
   }
 
   return (
     <GruppeSteg
-      behandlingVersjon={flyt.behandlingVersjon}
+      behandlingVersjon={flyt.data.behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
-      prosessering={flyt.prosessering}
-      visning={flyt.visning}
-      aktivtSteg={flyt.aktivtSteg}
+      prosessering={flyt.data.prosessering}
+      visning={flyt.data.visning}
+      aktivtSteg={flyt.data.aktivtSteg}
     >
       <Alder grunnlag={grunnlag.data} />
     </GruppeSteg>

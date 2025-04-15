@@ -26,6 +26,7 @@ import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurd
 import { Diagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/Diagnosesøk';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
+import { useSak } from 'hooks/SakHook';
 
 export interface SykdomsvurderingFormFields {
   begrunnelse: string;
@@ -48,7 +49,6 @@ interface SykdomProps {
   grunnlag: SykdomsGrunnlag;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  søknadstidspunkt: string;
   bidiagnoserDeafultOptions?: ValuePair[];
   hoveddiagnoseDefaultOptions?: ValuePair[];
 }
@@ -59,10 +59,10 @@ export const Sykdomsvurdering = ({
   readOnly,
   bidiagnoserDeafultOptions,
   hoveddiagnoseDefaultOptions,
-  søknadstidspunkt,
   typeBehandling,
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
+  const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
@@ -90,7 +90,7 @@ export const Sykdomsvurdering = ({
           validate: {
             gyldigDato: (v) => validerDato(v as string),
             kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
-              const soknadstidspunkt = startOfDay(new Date(søknadstidspunkt));
+              const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
               const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
               if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
                 return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
@@ -255,9 +255,9 @@ export const Sykdomsvurdering = ({
     if (!gjelderFra) {
       return false;
     }
-    const søknadsdato = startOfDay(new Date(søknadstidspunkt));
+    const søknadsdato = startOfDay(new Date(sak.periode.fom));
     return søknadsdato.getTime() === startOfDay(gjelderFra).getTime();
-  }, [behandlingErRevurdering, søknadstidspunkt, vurderingenGjelderFra]);
+  }, [behandlingErRevurdering, sak, vurderingenGjelderFra]);
 
   return (
     <VilkårsKort
@@ -269,7 +269,7 @@ export const Sykdomsvurdering = ({
         <TidligereVurderinger
           historiskeVurderinger={grunnlag.historikkSykdomsvurderinger.toReversed()}
           gjeldendeVurderinger={grunnlag.gjeldendeVedtatteSykdomsvurderinger}
-          søknadstidspunkt={søknadstidspunkt}
+          søknadstidspunkt={sak.periode.fom}
         />
       )}
       <Form

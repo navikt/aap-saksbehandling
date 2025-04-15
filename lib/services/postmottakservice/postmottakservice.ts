@@ -1,4 +1,3 @@
-import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
 import {
   AvklarTemaGrunnlag,
   BehandlingFlytOgTilstand,
@@ -12,66 +11,61 @@ import {
   SettPåVentRequest,
   Venteinformasjon,
 } from 'lib/types/postmottakTypes';
-import { notFound } from 'next/navigation';
-import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
+import { logError, logInfo } from 'lib/serverutlis/logger';
+import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
 
 const dokumentMottakApiBaseUrl = process.env.DOKUMENTMOTTAK_API_BASE_URL;
 const dokumentMottakApiScope = process.env.DOKUMENTMOTTAK_API_SCOPE ?? '';
 
-export const hentBehandling = async (behandlingsReferanse: string): Promise<DetaljertBehandlingDto> => {
+export const hentBehandling = async (behandlingsReferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsReferanse}`;
-  try {
-    return await fetchProxy<DetaljertBehandlingDto>(url, dokumentMottakApiScope, 'GET');
-  } catch (e) {
-    logWarning(`Fant ikke behandling med referanse ${behandlingsReferanse}`, JSON.stringify(e));
-    notFound();
-  }
+  return await apiFetch<DetaljertBehandlingDto>(url, dokumentMottakApiScope, 'GET');
 };
-export const hentFlyt = async (behandlingsreferanse: string): Promise<BehandlingFlytOgTilstand> => {
+export const hentFlyt = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/flyt`;
-  return await fetchProxy<BehandlingFlytOgTilstand>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<BehandlingFlytOgTilstand>(url, dokumentMottakApiScope, 'GET');
 };
 
-export const hentAvklarTemaGrunnlag = async (behandlingsreferanse: string): Promise<AvklarTemaGrunnlag> => {
+export const hentAvklarTemaGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/avklarTemaVurdering`;
-  return await fetchProxy<AvklarTemaGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<AvklarTemaGrunnlag>(url, dokumentMottakApiScope, 'GET');
 };
-export const hentFinnSakGrunnlag = async (behandlingsreferanse: string): Promise<FinnSakGrunnlag> => {
+export const hentFinnSakGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/finnSak`;
-  return await fetchProxy<FinnSakGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<FinnSakGrunnlag>(url, dokumentMottakApiScope, 'GET');
 };
-export const hentOverleveringGrunnlag = async (behandlingsreferanse: string): Promise<OverleveringGrunnlag> => {
+export const hentOverleveringGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/overlevering`;
-  return await fetchProxy<OverleveringGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<OverleveringGrunnlag>(url, dokumentMottakApiScope, 'GET');
 };
-export const hentDigitaliseringGrunnlag = async (behandlingsreferanse: string): Promise<DigitaliseringsGrunnlag> => {
+export const hentDigitaliseringGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/digitalisering`;
-  return await fetchProxy<DigitaliseringsGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<DigitaliseringsGrunnlag>(url, dokumentMottakApiScope, 'GET');
 };
-export const hentJournalpostInfo = async (behandlingsreferanse: string): Promise<JournalpostInfo> => {
+export const hentJournalpostInfo = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/dokumenter/${behandlingsreferanse}/info`;
-  return fetchProxy<JournalpostInfo>(url, dokumentMottakApiScope, 'GET');
+  return apiFetch<JournalpostInfo>(url, dokumentMottakApiScope, 'GET');
 };
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/løs-behov`;
-  return await fetchProxy<void>(url, dokumentMottakApiScope, 'POST', avklaringsBehov);
+  return await apiFetch<void>(url, dokumentMottakApiScope, 'POST', avklaringsBehov);
 };
-export const settPåVent = async (behandlingsreferanse: string, body: SettPåVentRequest): Promise<unknown> => {
+export const settPåVent = async (behandlingsreferanse: string, body: SettPåVentRequest) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/sett-på-vent`;
-  return await fetchProxy<unknown>(url, dokumentMottakApiScope, 'POST', body, [
+  return await apiFetch<unknown>(url, dokumentMottakApiScope, 'POST', body, [
     `postmottak/flyt/${behandlingsreferanse}`,
   ]);
 };
-export const hentVenteInformasjon = async (behandlingsreferanse: string): Promise<Venteinformasjon> => {
+export const hentVenteInformasjon = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/vente-informasjon`;
-  return await fetchProxy<Venteinformasjon>(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<Venteinformasjon>(url, dokumentMottakApiScope, 'GET');
 };
 export const hentDokumentFraDokumentInfoId = async (
   journalpostId: number,
   dokumentInfoId: string
 ): Promise<Blob | undefined> => {
-  return fetchPdf(
+  return apiFetchPdf(
     `${dokumentMottakApiBaseUrl}/api/dokumenter/${journalpostId}/${dokumentInfoId}`,
     dokumentMottakApiScope
   );
@@ -79,12 +73,12 @@ export const hentDokumentFraDokumentInfoId = async (
 
 export const endreTema = async (behandlingsreferanse: string) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/endre-tema`;
-  return await fetchProxy<{ redirectUrl: string }>(url, dokumentMottakApiScope, 'POST');
+  return await apiFetch<{ redirectUrl: string }>(url, dokumentMottakApiScope, 'POST');
 };
 
 export const hentAlleBehandlinger = async () => {
   const url = `${dokumentMottakApiBaseUrl}/test/hentAlleBehandlinger`;
-  return await fetchProxy<[{ id: string; status: string; opprettet: string; steg: string }]>(
+  return await apiFetch<[{ id: string; status: string; opprettet: string; steg: string }]>(
     url,
     dokumentMottakApiScope,
     'GET'
@@ -95,24 +89,18 @@ export const forberedBehandlingOgVentPåProsessering = async (
 ): Promise<undefined | FlytProsessering> => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling/${referanse}/forbered`;
   logInfo(`Forbereder behandling: ${referanse}`);
-  return await fetchProxy(url, dokumentMottakApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
+  return await apiFetch(url, dokumentMottakApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 
 export const auditlog = async (journalpostId: number) => {
   const url = `${dokumentMottakApiBaseUrl}/api/journalpost/${journalpostId}/auditlog`;
-  return await fetchProxy(url, dokumentMottakApiScope, 'POST');
+  return await apiFetch(url, dokumentMottakApiScope, 'POST');
 };
 
 // TODO: Fjern denne - testendepunkt
 export const opprettBehandlingForJournalpost = async (body: { journalpostId: number }) => {
   const url = `${dokumentMottakApiBaseUrl}/api/behandling`;
-  return await fetchProxy<{ referanse: number }>(url, dokumentMottakApiScope, 'POST', body);
-};
-
-// TODO: Fjern denne - testendepunkt
-export const rekjørFeiledeJobber = async () => {
-  const url = `${dokumentMottakApiBaseUrl}/drift/api/jobb/rekjorAlleFeilede`;
-  return await fetchProxy(url, dokumentMottakApiScope, 'GET');
+  return await apiFetch<{ referanse: number }>(url, dokumentMottakApiScope, 'POST', body);
 };
 
 async function ventTilProsesseringErFerdig(
@@ -128,8 +116,15 @@ async function ventTilProsesseringErFerdig(
 
     logInfo(`ventTilProsesseringErFerdig, orsøk nummer: ${forsøk}`);
     const response = await hentFlyt(behandlingsreferanse);
+    if (response.type === 'ERROR') {
+      logError(
+        `ventTilProsseseringErFerdig hentFlyt ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
+      );
+      prosessering = { status: 'FEILET', ventendeOppgaver: [] };
+      break;
+    }
 
-    const status = response.prosessering.status;
+    const status = response.data.prosessering.status;
 
     if (status === 'FERDIG') {
       prosessering = undefined;
@@ -137,8 +132,8 @@ async function ventTilProsesseringErFerdig(
     }
 
     if (status === 'FEILET') {
-      logError(`Prosessering feilet: ${JSON.stringify(response.prosessering.ventendeOppgaver)}`);
-      prosessering = response.prosessering;
+      logError(`Prosessering feilet: ${JSON.stringify(response.data.prosessering.ventendeOppgaver)}`);
+      prosessering = response.data.prosessering;
       break;
     }
 

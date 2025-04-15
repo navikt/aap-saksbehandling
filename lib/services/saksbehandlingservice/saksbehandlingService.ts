@@ -42,6 +42,7 @@ import {
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
+  TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
@@ -239,9 +240,15 @@ export const hentTilkjentYtelse = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent/${behandlingsReferanse}`;
   return await apiFetch<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
-export const hentFlyt = async (behandlingsReferanse: string): Promise<BehandlingFlytOgTilstand> => {
+
+export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/trukket-søknad`;
+  return await apiFetch<TrukketSøknadGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentFlyt = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
-  return await fetchProxy<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
+  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
     `flyt/${behandlingsReferanse}`,
   ]);
 };
@@ -346,9 +353,9 @@ export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string):
   );
 };
 
-export const sendLokalHendelse = async (saksnummer: string, body: Object): Promise<void> => {
+export const sendLokalHendelse = async (saksnummer: string, body: Object) => {
   const url = `${saksbehandlingApiBaseUrl}/api/hendelse/sak/${saksnummer}/send`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'POST', body);
+  return await apiFetch(url, saksbehandlingApiScope, 'POST', body);
 };
 
 export const auditlog = async (behandlingsreferanse: string) => {
@@ -368,8 +375,15 @@ async function ventTilProsesseringErFerdig(
     forsøk++;
 
     const response = await hentFlyt(behandlingsreferanse);
+    if (response.type === 'ERROR') {
+      logError(
+        `ventTilProssesering hentFlyt ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
+      );
+      prosessering = { status: 'FEILET', ventendeOppgaver: [] };
+      break;
+    }
 
-    const status = response.prosessering.status;
+    const status = response.data.prosessering.status;
 
     if (status === 'FERDIG') {
       prosessering = undefined;
@@ -377,8 +391,8 @@ async function ventTilProsesseringErFerdig(
     }
 
     if (status === 'FEILET') {
-      logError('Prosessering feilet pga' + JSON.stringify(response.prosessering.ventendeOppgaver));
-      prosessering = response.prosessering;
+      logError('Prosessering feilet pga' + JSON.stringify(response.data.prosessering.ventendeOppgaver));
+      prosessering = response.data.prosessering;
       break;
     }
 

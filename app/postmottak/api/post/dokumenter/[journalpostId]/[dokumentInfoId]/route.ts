@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { hentDokumentFraDokumentInfoId } from 'lib/services/dokumentmottakservice/dokumentMottakService';
+import { hentDokumentFraDokumentInfoId } from 'lib/services/postmottakservice/postmottakservice';
 import { logError } from 'lib/serverutlis/logger';
 
 export async function GET(

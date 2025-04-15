@@ -14,21 +14,23 @@ import { Lovvalg } from 'components/behandlinger/lovvalg/Lovvalg';
 import { ForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/ForutgåendeMedlemskap';
 import { Samordning } from 'components/behandlinger/samordning/Samordning';
 import { Rettighetsperiode } from '../behandlinger/rettighetsperiode/Rettighetsperiode';
+import { Søknad } from 'components/behandlinger/søknad/Søknad';
 
 interface Props {
-  saksId: string;
   behandlingsReferanse: string;
   aktivGruppe: StegGruppe;
 }
 
-export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, saksId }: Props) => {
+export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Props) => {
   return (
     <>
+      {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'LOVVALG' && <Lovvalg behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'RETTIGHETSPERIODE' && <Rettighetsperiode behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'LOVVALG' && <Lovvalg behandlingsReferanse={behandlingsReferanse} sakId={saksId} />}
       {aktivGruppe === 'ALDER' && <AlderMedDataFetching behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'STUDENT' && <Student behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} sakId={saksId} />}
+      {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'MEDLEMSKAP' && <ForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsReferanse} />}

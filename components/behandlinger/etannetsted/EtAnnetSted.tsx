@@ -4,14 +4,20 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { HelseinstitusjonMedDataFetching } from 'components/behandlinger/etannetsted/helseinstitusjon/HelseinstitusjonMedDataFetching';
 import { SoningsvurderingMedDataFetching } from './soning/SoningsvurderingMedDataFetching';
 import { Behovstype } from 'lib/utils/form';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
 }
 
 export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  const etAnnetStedGruppe = flyt.flyt.find((gruppe) => gruppe.stegGruppe === 'ET_ANNET_STED');
+  const flytResponse = await hentFlyt(behandlingsreferanse);
+  if (isError(flytResponse)) {
+    return <ApiException apiResponses={[flytResponse]} />;
+  }
+
+  const etAnnetStedGruppe = flytResponse.data.flyt.find((gruppe) => gruppe.stegGruppe === 'ET_ANNET_STED');
   const avklaringsBehov = etAnnetStedGruppe?.steg.find((steg) => steg.avklaringsbehov);
 
   /*
@@ -25,18 +31,18 @@ export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
 
   return (
     <GruppeSteg
-      prosessering={flyt.prosessering}
-      visning={flyt.visning}
+      prosessering={flytResponse.data.prosessering}
+      visning={flytResponse.data.visning}
       behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flyt.behandlingVersjon}
-      aktivtSteg={flyt.aktivtSteg}
+      behandlingVersjon={flytResponse.data.behandlingVersjon}
+      aktivtSteg={flytResponse.data.aktivtSteg}
     >
       {vurderHelseinstitusjon && (
         <StegSuspense>
           <HelseinstitusjonMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
-            readOnly={flyt.visning.saksbehandlerReadOnly}
-            behandlingVersjon={flyt.behandlingVersjon}
+            readOnly={flytResponse.data.visning.saksbehandlerReadOnly}
+            behandlingVersjon={flytResponse.data.behandlingVersjon}
           />
         </StegSuspense>
       )}
@@ -44,8 +50,8 @@ export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
         <StegSuspense>
           <SoningsvurderingMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
-            behandlingsversjon={flyt.behandlingVersjon}
-            readOnly={flyt.visning.saksbehandlerReadOnly}
+            behandlingsversjon={flytResponse.data.behandlingVersjon}
+            readOnly={flytResponse.data.visning.saksbehandlerReadOnly}
           />
         </StegSuspense>
       )}

@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { clientLøsBehov, clientSjekkTilgang } from 'lib/clientApi';
 import { useIngenFlereOppgaverModal } from 'hooks/IngenFlereOppgaverModalHook';
-import { ApiException, isSuccess } from 'lib/utils/api';
+import { ApiException, isSuccess, isError } from 'lib/utils/api';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | 'CLIENT_CONFLICT' | undefined;
 
@@ -35,7 +35,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
     setError(undefined);
 
     const løsbehovRes = await clientLøsBehov(behov);
-    if (løsbehovRes.type === 'ERROR') {
+    if (isError(løsbehovRes)) {
       setError(løsbehovRes.apiException);
       if (løsbehovRes.status === 409) {
         setStatus('CLIENT_CONFLICT');

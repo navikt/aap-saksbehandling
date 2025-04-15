@@ -1,7 +1,7 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { BehandlingsFlytAvklaringsbehovKode, StegGruppe, StegType } from 'lib/types/types';
 import { NextRequest } from 'next/server';
-import { logInfo } from 'lib/serverutlis/logger';
+import { logError, logInfo } from 'lib/serverutlis/logger';
 
 const DEFAULT_TIMEOUT_IN_MS = 500;
 const RETRIES = 0;
@@ -46,8 +46,19 @@ export async function GET(
       }
 
       const flyt = await hentFlyt((await context.params).referanse);
+      if (flyt.type === 'ERROR') {
+        const errorString = `neste-steg hentFlyt ${flyt.status} - ${flyt.apiException.code}: ${flyt.apiException.message}`;
+        logError(errorString);
+        const json: ServerSentEventData = {
+          status: 'ERROR',
+          errormessage: errorString,
+        };
+        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        writer.close();
+        return;
+      }
 
-      if (flyt.prosessering.status === 'FEILET') {
+      if (flyt.data.prosessering.status === 'FEILET') {
         const json: ServerSentEventData = {
           status: 'ERROR',
           errormessage: `Prosessering feilet i backend`,
@@ -58,17 +69,17 @@ export async function GET(
         return;
       }
 
-      if (flyt.prosessering.status === 'FERDIG') {
+      if (flyt.data.prosessering.status === 'FERDIG') {
         logInfo('Prosessering ferdig');
-        const aktivGruppe = flyt.vurdertGruppe != null ? flyt.vurdertGruppe : flyt.aktivGruppe;
-        const aktivtSteg = flyt.vurdertSteg != null ? flyt.vurdertSteg : flyt.aktivtSteg;
+        const aktivGruppe = flyt.data.vurdertGruppe != null ? flyt.data.vurdertGruppe : flyt.data.aktivGruppe;
+        const aktivtSteg = flyt.data.vurdertSteg != null ? flyt.data.vurdertSteg : flyt.data.aktivtSteg;
 
         const json: ServerSentEventData = {
           aktivGruppe,
           aktivtSteg,
           skalBytteGruppe: aktivGruppe !== (await context.params).gruppe,
           skalBytteSteg: aktivtSteg !== (await context.params).steg,
-          aktivtStegBehovsKode: flyt.aktivtStegDefinisjon.map((definisjon) => definisjon.kode),
+          aktivtStegBehovsKode: flyt.data.aktivtStegDefinisjon.map((definisjon) => definisjon.kode),
           status: 'DONE',
         };
 

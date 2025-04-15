@@ -1,15 +1,16 @@
 import { NextRequest } from 'next/server';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError } from 'lib/serverutlis/logger';
+import { isError } from 'lib/utils/api';
 
 export async function GET(req: NextRequest, props: { params: Promise<{ referanse: string }> }) {
   const params = await props.params;
-  try {
-    const data = await hentFlyt(params.referanse);
-    return new Response(JSON.stringify(data), { status: 200 });
-  } catch (error) {
-    logError('error i route', error);
-    return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });
+  const res = await hentFlyt(params.referanse);
+  if (isError(res)) {
+    logError(
+      `api/behandling/${params.referanse}/flyt ${res.status} - ${res.apiException.code}: ${res.apiException.code}`
+    );
   }
+  return new Response(JSON.stringify(res), { status: res.status });
 }
 export const dynamic = 'force-dynamic';

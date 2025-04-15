@@ -17,16 +17,16 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
     hentFlyt(behandlingsReferanse),
     hentBeregningsGrunnlag(behandlingsReferanse),
   ]);
-  if (isError(beregningsgrunnlag)) {
-    return <ApiException apiResponses={[beregningsgrunnlag]} />;
+  if (isError(beregningsgrunnlag) || isError(flyt)) {
+    return <ApiException apiResponses={[beregningsgrunnlag, flyt]} />;
   }
 
-  const grunnlagGruppe = flyt.flyt.find((gruppe) => gruppe.stegGruppe === 'GRUNNLAG');
+  const grunnlagGruppe = flyt.data.flyt.find((gruppe) => gruppe.stegGruppe === 'GRUNNLAG');
   const avklaringsBehov = grunnlagGruppe?.steg.find((steg) => steg.avklaringsbehov);
 
-  const readOnly = flyt.visning.saksbehandlerReadOnly;
+  const readOnly = flyt.data.visning.saksbehandlerReadOnly;
 
-  const behandlingVersjon = flyt.behandlingVersjon;
+  const behandlingVersjon = flyt.data.behandlingVersjon;
 
   /*
    TODO 09.08.2024 - hacky løsning for å midlertidig kunne vise soning og opphold på helseinstitusjon
@@ -43,9 +43,9 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
     <GruppeSteg
       behandlingVersjon={behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
-      prosessering={flyt.prosessering}
-      visning={flyt.visning}
-      aktivtSteg={flyt.aktivtSteg}
+      prosessering={flyt.data.prosessering}
+      visning={flyt.data.visning}
+      aktivtSteg={flyt.data.aktivtSteg}
     >
       {vurderFastsettBeregningstidspunkt && (
         <StegSuspense>

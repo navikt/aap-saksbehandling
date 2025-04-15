@@ -7,6 +7,7 @@ import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { Button } from '@navikt/ds-react';
+import { FormEvent } from 'react';
 
 interface Props extends Submittable {
   readOnly: boolean;
@@ -55,9 +56,12 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading }: Props) => 
     return JSON.stringify(meldekort);
   }
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => submit('MELDEKORT', mapTilPliktkortKontrakt(data), null))(event);
+  };
   return (
     <VilkårsKort heading={'Meldekort'}>
-      <form onSubmit={form.handleSubmit((data) => submit('MELDEKORT', mapTilPliktkortKontrakt(data), null))}>
+      <form onSubmit={handleSubmit}>
         <FormField form={form} formField={formFields.innsendtDato} />
         <MeldePerioder form={form} readOnly={readOnly} />
         <Button loading={isLoading} className={'fit-content'}>

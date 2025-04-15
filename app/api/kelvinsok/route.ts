@@ -2,16 +2,20 @@ import { NextResponse } from 'next/server';
 import { finnSakerForIdent, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { SaksInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
-import type { Oppgave } from 'lib/types/oppgaveTypes';
+import { Oppgave } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
 import { isSuccess } from 'lib/utils/api';
+import { mapBehovskodeTilBehovstype } from "../../../lib/utils/oversettelser";
 
 export interface SøkeResultat {
   oppgaver?: {
     label: string;
     href: string;
   }[];
-  saker?: { href: string; label: string }[];
+  saker?: { href: string; label: string; }[];
+  kontor?: { enhet: string; }[];
+  oppfølgingsenhet?: { enhet?: string | null; }[];
+  behandlingsStatus?: { status?: string; }[];
 }
 
 export async function POST(req: Request) {
@@ -47,13 +51,22 @@ export async function POST(req: Request) {
 
   // Oppgaver
   let oppgaveData: SøkeResultat['oppgaver'] = [];
+  let kontorData: SøkeResultat['kontor'] = [];
+  let oppfølgingsenhetData: SøkeResultat['oppfølgingsenhet'] = [];
+  let behandlingsStatusData: SøkeResultat['behandlingsStatus'] = [];
   try {
     const oppgaver = await oppgaveTekstSøk(søketekst);
     if (oppgaver) {
-      oppgaveData = oppgaver.map((oppgave) => ({
-        href: byggKelvinURL(oppgave),
-        label: `${oppgave.avklaringsbehovKode} - ${oppgave.behandlingstype}`,
-      }));
+      oppgaver.forEach((oppgave) => {
+
+        oppgaveData.push({
+          href: byggKelvinURL(oppgave),
+          label: `${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)} - ${oppgave.behandlingstype}`,
+        });
+        kontorData.push({ enhet: `${oppgave.enhet}` });
+        oppfølgingsenhetData.push({ enhet: oppgave.oppfølgingsenhet});
+        behandlingsStatusData.push({ status: `${oppgave.status}` });
+      });
     }
   } catch (err) {
     logError('/api/kelvinsøk oppgaver', err);
@@ -64,6 +77,9 @@ export async function POST(req: Request) {
       href: `/saksbehandling/sak/${sak.saksnummer}`,
       label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer})`,
     })),
+    kontor: kontorData,
+    oppfølgingsenhet: oppfølgingsenhetData,
+    behandlingsStatus: behandlingsStatusData,
   };
 
   return NextResponse.json(data, {
@@ -76,8 +92,8 @@ function buildSaksbehandlingsURL(oppgave: Oppgave): string {
 function buildPostmottakURL(oppgave: Oppgave): string {
   return `/postmottak/${oppgave?.behandlingRef}`;
 }
+
 export function byggKelvinURL(oppgave: Oppgave): string {
-  // @ts-ignore
   if (oppgave.journalpostId) {
     return buildPostmottakURL(oppgave);
   } else {

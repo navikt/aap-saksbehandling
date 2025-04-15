@@ -67,6 +67,9 @@ export type SamordningAndreStatligeYtelserGrunnlag =
 export type SamordningAndreStatligeYtelserYtelse =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingPeriodeDto']['ytelse'];
 
+export type TrukketSøknadGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadGrunnlagDto'];
+
 // Behandling
 export type DetaljertBehandling = components['schemas']['no.nav.aap.behandlingsflyt.flyt.DetaljertBehandlingDTO'];
 export type BehandlingFlytOgTilstand =
