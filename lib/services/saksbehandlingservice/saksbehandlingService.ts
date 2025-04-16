@@ -386,7 +386,6 @@ async function ventTilProsesseringErFerdig(
     const status = response.data.prosessering.status;
 
     if (status === 'FERDIG') {
-      console.log('Nå er prosesseringen ferdig!');
       prosessering = response.data.prosessering;
       break;
     }
