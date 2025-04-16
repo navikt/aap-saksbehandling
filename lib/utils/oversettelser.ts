@@ -31,7 +31,7 @@ const behovskodeMap = {
   '5026': 'Refusjon',
   '5027': 'Samordning annen statlig ytelse',
   '5028': 'Vurder trekk av søknad',
-  '5029': 'Vurder virkningstidspunkt',
+  '5029': 'Vurder starttidspunkt',
   '5050': 'Skriv brev',
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',
@@ -124,7 +124,7 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
     case 'OVERLEVER_TIL_FAGSYSTEM':
       return 'Send til fagsystem';
     case 'RETTIGHETSPERIODE':
-      return 'Virkningstidspunkt';
+      return 'Starttidspunkt';
     default:
       return `${steggruppe}`;
   }
