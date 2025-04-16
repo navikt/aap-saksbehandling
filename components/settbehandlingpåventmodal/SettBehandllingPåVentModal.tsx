@@ -13,10 +13,10 @@ import { parse } from 'date-fns';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
+import { useFlyt } from 'hooks/FlytHook';
 
 interface Props {
   referanse: string;
-  behandlingVersjon: number;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -27,9 +27,10 @@ interface FormFields {
   grunn: SettPåVentÅrsaker;
 }
 
-export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOpen, onClose }: Props) => {
+export const SettBehandllingPåVentModal = ({ referanse, isOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
+  const { flyt } = useFlyt();
 
   const grunnOptions: ValuePair<SettPåVentÅrsaker>[] = [
     { label: 'Venter på medisinske opplysninger', value: 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER' },
@@ -76,6 +77,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
 
   useEffect(() => {
     form.reset();
+    setError(undefined);
   }, [isOpen, form]);
 
   return (
@@ -91,9 +93,14 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
             id={'settBehandlingPåVent'}
             onSubmit={form.handleSubmit(async (data) => {
               setIsLoading(true);
+              if (!flyt?.behandlingVersjon) {
+                setError('Behandlingsversjon finnes ikke');
+                return;
+              }
+
               const res = await clientSettBehandlingPåVent(referanse, {
                 begrunnelse: data.begrunnelse,
-                behandlingVersjon: behandlingVersjon,
+                behandlingVersjon: flyt.behandlingVersjon,
                 frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
                 grunn: data.grunn,
               });

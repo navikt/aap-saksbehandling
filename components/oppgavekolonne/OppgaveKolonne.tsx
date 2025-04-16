@@ -19,11 +19,12 @@ import { Søknad } from 'components/behandlinger/søknad/Søknad';
 interface Props {
   behandlingsReferanse: string;
   aktivGruppe: StegGruppe;
+  className: string;
 }
 
-export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Props) => {
+export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
   return (
-    <>
+    <section className={className}>
       {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'LOVVALG' && <Lovvalg behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'RETTIGHETSPERIODE' && <Rettighetsperiode behandlingsReferanse={behandlingsReferanse} />}
@@ -42,6 +43,6 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe }: Prop
       {aktivGruppe === 'FATTE_VEDTAK' && <FatteVedtak behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'IVERKSETT_VEDTAK' && <div>Behandling avsluttet</div>}
       {aktivGruppe === 'BREV' && <Brev behandlingsReferanse={behandlingsReferanse} />}
-    </>
+    </section>
   );
 };
