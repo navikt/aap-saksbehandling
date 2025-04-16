@@ -125,6 +125,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Send til fagsystem';
     case 'RETTIGHETSPERIODE':
       return 'Virkningstidspunkt';
+    case 'SAMORDING':
+      return 'Samordning;';
     default:
       return `${steggruppe}`;
   }
