@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { NesteOppgaveRequestBody } from 'lib/types/oppgaveTypes';
 import { velgNesteOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
+import { isError } from 'lib/utils/api';
 
 export async function POST(req: NextRequest) {
   const data: NesteOppgaveRequestBody = await req
@@ -12,8 +13,11 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const result = await velgNesteOppgave(data);
-    return new Response(JSON.stringify(result), { status: 200 });
+    const res = await velgNesteOppgave(data);
+    if (isError(res)) {
+      logError(`/api/oppgave/neste`, res.apiException);
+    }
+    return new Response(JSON.stringify(res), { status: res.status });
   } catch (error) {
     logError(`/api/oppgave/neste`, error);
     return new Response(JSON.stringify({ message: JSON.stringify(error), status: 500 }), { status: 500 });

@@ -10,10 +10,6 @@ export async function revalidateAktivitetspliktHendelser(saksnummer: string) {
   revalidateTag(`aktivitetsplikt/${saksnummer}`);
 }
 
-export async function revalidateMineOppgaver() {
-  revalidateTag(`oppgaveservice/mine-oppgaver`);
-}
-
 export async function revalidatePostMottakFlyt(behandlingReferanse: string) {
   revalidateTag(`postmottak/flyt/${behandlingReferanse}`);
 }
