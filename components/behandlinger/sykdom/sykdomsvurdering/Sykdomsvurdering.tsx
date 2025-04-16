@@ -63,7 +63,7 @@ export const Sykdomsvurdering = ({
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
@@ -275,7 +275,6 @@ export const Sykdomsvurdering = ({
       <Form
         onSubmit={handleSubmit}
         status={status}
-        resetStatus={resetStatus}
         isLoading={isLoading}
         steg={'AVKLAR_SYKDOM'}
         visBekreftKnapp={!readOnly}

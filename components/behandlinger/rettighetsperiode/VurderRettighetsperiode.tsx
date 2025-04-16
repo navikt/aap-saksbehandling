@@ -8,8 +8,8 @@ import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
-import { validerDato } from '../../../lib/validation/dateValidation';
-import { formaterDatoForBackend, formaterDatoForFrontend } from '../../../lib/utils/date';
+import { validerDato } from 'lib/validation/dateValidation';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
 interface Props {
@@ -26,7 +26,7 @@ interface FormFields {
 export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   console.log(grunnlag);
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_RETTIGHETSPERIODE');
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -72,7 +72,6 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
       <Form
         onSubmit={handleSubmit}
         status={status}
-        resetStatus={resetStatus}
         isLoading={isLoading}
         steg={'VURDER_RETTIGHETSPERIODE'}
         visBekreftKnapp={!readOnly}

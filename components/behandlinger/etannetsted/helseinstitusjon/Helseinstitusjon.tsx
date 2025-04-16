@@ -36,7 +36,7 @@ interface Vurdering {
 
 export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
 
   const defaultValue: Vurdering[] = grunnlag.vurderinger.flatMap((item) => {
@@ -95,7 +95,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
       <Form
         onSubmit={handleSubmit}
         status={status}
-        resetStatus={resetStatus}
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         isLoading={isLoading}
         steg={'AVKLAR_STUDENT'}

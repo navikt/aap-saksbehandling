@@ -34,8 +34,9 @@ export const TotrinnsvurderingForm = ({
   erKvalitetssikring,
 }: Props) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg(erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
+    erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
+  );
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
@@ -109,7 +110,6 @@ export const TotrinnsvurderingForm = ({
       <LøsBehovOgGåTilNesteStegStatusAlert
         status={status}
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-        resetStatus={resetStatus}
       />
       {fields.map((field, index) => (
         <TotrinnnsvurderingFelter

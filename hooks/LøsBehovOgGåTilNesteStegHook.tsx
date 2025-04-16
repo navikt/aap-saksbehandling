@@ -10,14 +10,13 @@ import { useIngenFlereOppgaverModal } from 'hooks/IngenFlereOppgaverModalHook';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useFlyt } from './FlytHook';
 
-export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | 'CLIENT_CONFLICT' | undefined;
+export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
 export const useLøsBehovOgGåTilNesteSteg = (
   steg: StegType
 ): {
   løsBehovOgGåTilNesteStegError?: ApiException;
   status: LøsBehovOgGåTilNesteStegStatus;
-  resetStatus: () => void;
   isLoading: boolean;
   løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling) => void;
 } => {
@@ -39,9 +38,6 @@ export const useLøsBehovOgGåTilNesteSteg = (
     const løsbehovRes = await clientLøsBehov(behov);
     if (isError(løsbehovRes)) {
       setError(løsbehovRes.apiException);
-      if (løsbehovRes.status === 409) {
-        setStatus('CLIENT_CONFLICT');
-      }
       setIsLoading(false);
       return;
     }
@@ -104,14 +100,9 @@ export const useLøsBehovOgGåTilNesteSteg = (
     };
   };
 
-  function resetStatus() {
-    setStatus(undefined);
-  }
-
   return {
     isLoading: isLoading || isPending,
     status,
-    resetStatus,
     løsBehovOgGåTilNesteSteg,
     løsBehovOgGåTilNesteStegError: error,
   };

@@ -32,7 +32,7 @@ interface FormFields {
 export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const saksnummer = useSaksnummer();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('EFFEKTUER_11_7');
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -106,7 +106,6 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
       <Form
         onSubmit={handleSubmit}
         status={status}
-        resetStatus={resetStatus}
         isLoading={isLoading}
         steg={'EFFEKTUER_11_7'}
         visBekreftKnapp={true} // OIST ignorerer flagg fra backend midlertidig
