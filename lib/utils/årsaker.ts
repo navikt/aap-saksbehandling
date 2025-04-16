@@ -49,7 +49,7 @@ export const formaterÅrsak = (årsak: ÅrsakTilBehandling) => {
     case 'SØKNAD_TRUKKET':
       return 'Trukket søknad';
     case 'VURDER_RETTIGHETSPERIODE':
-      return 'Virkningstidspunkt';
+      return 'Starttidspunkt';
     default:
       return årsak;
   }

@@ -90,7 +90,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5050':
       return 'Skriv brev';
     case '5029':
-      return 'Virkningstidspunkt';
+      return 'Starttidspunkt';
   }
 }
 

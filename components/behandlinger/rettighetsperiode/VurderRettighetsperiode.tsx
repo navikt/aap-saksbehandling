@@ -8,6 +8,9 @@ import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
+import { validerDato } from '../../../lib/validation/dateValidation';
+import { formaterDatoForBackend, formaterDatoForFrontend } from '../../../lib/utils/date';
+import { parse } from 'date-fns';
 
 interface Props {
   readOnly: boolean;
@@ -30,12 +33,19 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
       begrunnelse: {
         type: 'textarea',
         label: 'Begrunnelse',
-        rules: { required: 'Du må begrunne hvorfor virkningstidspunktet skal endres' },
+        rules: { required: 'Du må begrunne hvorfor starttidspunktet for saken skal endres' },
+        defaultValue: grunnlag.begrunnelse || '',
       },
       startDato: {
-        type: 'date',
-        label: 'Ny startdato',
-        rules: { required: 'Må fylles inn' },
+        type: 'date_input',
+        label: 'Sett ny startdato for saken',
+        rules: {
+          required: 'Du må sette en dato for behandlingen',
+          validate: {
+            gyldigDato: (v) => validerDato(v as string),
+          },
+        },
+        defaultValue: (grunnlag.startDato && formaterDatoForFrontend(grunnlag.startDato)) || undefined,
       },
     },
     { readOnly: readOnly }
@@ -49,7 +59,7 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
           behovstype: Behovstype.VURDER_RETTIGHETSPERIODE,
           rettighetsperiodeVurdering: {
             begrunnelse: data.begrunnelse,
-            startDato: data.startDato,
+            startDato: formaterDatoForBackend(parse(data.startDato, 'dd.MM.yyyy', new Date())),
           },
         },
         referanse: behandlingsReferanse,
@@ -58,7 +68,7 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
   };
 
   return (
-    <VilkårsKort heading={'Virkningstidspunkt'} steg={'VURDER_RETTIGHETSPERIODE'}>
+    <VilkårsKort heading={'Starttidspunkt'} steg={'VURDER_RETTIGHETSPERIODE'}>
       <Form
         onSubmit={handleSubmit}
         status={status}
@@ -68,7 +78,7 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
         visBekreftKnapp={!readOnly}
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       >
-        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
         <FormField form={form} formField={formFields.startDato} />
       </Form>
     </VilkårsKort>
