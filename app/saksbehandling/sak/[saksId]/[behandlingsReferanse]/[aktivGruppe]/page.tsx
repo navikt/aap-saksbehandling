@@ -18,7 +18,7 @@ import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { SaksbehandlingsoversiktMedDataFetching } from 'components/saksbehandlingsoversikt/SaksbehandlingsoversiktMedDataFetching';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
 
-import styles from 'app/saksbehandling/sak/[saksId]/[behandlingsReferanse]/[aktivGruppe]/page.module.css';
+import styles from './page.module.css';
 
 const Page = async (props: {
   params: Promise<{ behandlingsReferanse: string; aktivGruppe: StegGruppe; saksId: string }>;
