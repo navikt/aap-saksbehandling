@@ -23,22 +23,34 @@ import { FordelingLukkedeBehandlingerPerDag } from 'components/produksjonsstyrin
 import { VenteÅrsaker } from 'components/produksjonsstyring/venteårsaker/VenteÅrsaker';
 import { BehandlingerPerSteggruppe } from '../behandlingerpersteggruppe/BehandlingerPerSteggruppe';
 import { ÅrsakTilBehandling } from 'components/produksjonsstyring/årsaktilbehandling/ÅrsakTilBehandling';
-import { ValgteEnheterContext } from 'components/oppgave/valgteenheterprovider/ValgteEnheterProvider';
 import styles from './MinEnhet.module.css';
 import { BulletListIcon, MenuGridIcon } from '@navikt/aksel-icons';
+import { Enhet } from 'lib/types/oppgaveTypes';
+import { EnhetSelect } from 'components/oppgave/enhetselect/EnhetSelect';
+import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
 
-export const MinEnhet = () => {
+interface Props {
+  enheter: Array<Enhet>;
+}
+
+export const MinEnhet = ({ enheter }: Props) => {
   const [listeVisning, setListeVisning] = useState<boolean>(false);
-  const valgteEnheter = useContext(ValgteEnheterContext);
+  const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const alleFiltere = useContext(AlleFiltereContext);
+
   const behandlingstyperQuery = useMemo(
     () =>
       statistikkQueryparams({
         behandlingstyper: alleFiltere.behandlingstyper,
-        enheter: valgteEnheter,
+        ...(aktivEnhet ? { enheter: [aktivEnhet] } : {}),
       }),
-    [alleFiltere, valgteEnheter]
+    [alleFiltere, aktivEnhet]
   );
+
+  const oppdaterEnhet = (enhetsnr: string) => {
+    setAktivEnhet(enhetsnr);
+    lagreAktivEnhet(enhetsnr);
+  };
 
   const antallÅpneBehandlinger = useSWR(
     `/oppgave/api/statistikk/apne-behandlinger?${behandlingstyperQuery}`,
@@ -72,6 +84,7 @@ export const MinEnhet = () => {
     `/oppgave/api/statistikk/behandlinger/arsak-til-behandling?${behandlingstyperQuery}`,
     årsakTilBehandlingClient
   ).data;
+
   return (
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
@@ -87,6 +100,9 @@ export const MinEnhet = () => {
           >
             {listeVisning ? 'Gridvisning' : 'Listevisning'}
           </Button>
+        </HStack>
+        <HStack>
+          <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
         </HStack>
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {behandlingerUtvikling?.type === 'success' && (

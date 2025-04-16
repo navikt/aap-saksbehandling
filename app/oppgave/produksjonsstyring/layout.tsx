@@ -1,6 +1,4 @@
-import { ValgteEnheterProvider } from 'components/oppgave/valgteenheterprovider/ValgteEnheterProvider';
 import styles from './layout.module.css';
-import { ProduksjonsstyringsHeader } from 'components/produksjonsstyring/produksjonsstyringsheader/ProduksjonsstyringsHeader';
 import { hentEnheter } from 'lib/services/oppgaveservice/oppgaveservice';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -16,12 +14,5 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     return <ApiException apiResponses={[enheter]} />;
   }
 
-  return (
-    <div className={styles.body}>
-      <ValgteEnheterProvider>
-        <ProduksjonsstyringsHeader enheter={enheter.data} />
-        {children}
-      </ValgteEnheterProvider>
-    </div>
-  );
+  return <div className={styles.body}>{children}</div>;
 }
