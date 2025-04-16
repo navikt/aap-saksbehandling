@@ -1,3 +1,8 @@
 .link {
   font-size: var(--a-font-size-small);
 }
+
+.linkName {
+  font-size: var(--a-font-size-small);
+  color: var(--a-text-action);
+}

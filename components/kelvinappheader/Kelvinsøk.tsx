@@ -3,16 +3,19 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Search } from '@navikt/ds-react';
 import styles from './KelvinAppHeader.module.css';
+import { Behandlingsstatus } from "../../lib/types/types";
 
 export interface SøkeResultat {
   oppgaver?: {
     label: string;
     href: string;
+    status: string;
+    kontor: string;
   }[];
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
-  oppfølgingsenhet?: { enhet?: string | null }[];
-  behandlingsStatus?: { status: string; }[];
+  person?: { href: string; label: string }[];
+  behandlingsStatus?: { status: Behandlingsstatus; }[];
 }
 interface Props {
   setSøkeresultat: Dispatch<SetStateAction<SøkeResultat | undefined>>;

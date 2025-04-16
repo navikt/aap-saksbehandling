@@ -1,24 +1,36 @@
 import { NextResponse } from 'next/server';
 import { finnSakerForIdent, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { SaksInfo } from 'lib/types/types';
+import {
+  Behandlingsstatus,
+  SaksInfo,
+} from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
 import { isSuccess } from 'lib/utils/api';
 import { mapBehovskodeTilBehovstype } from "../../../lib/utils/oversettelser";
+import { capitalize } from "lodash";
+import { BrukerInformasjon } from "../../../lib/services/azure/azureUserService";
 
 export interface SøkeResultat {
   oppgaver?: {
     label: string;
     href: string;
+    status: string;
+    kontor: string;
   }[];
   saker?: { href: string; label: string; }[];
   kontor?: { enhet: string; }[];
-  oppfølgingsenhet?: { enhet?: string | null; }[];
-  behandlingsStatus?: { status?: string; }[];
+  person?: { href: string; label: string }[];
+  behandlingsStatus?: { status?: Behandlingsstatus; }[];
 }
 
-export async function POST(req: Request) {
+interface Props {
+  brukerInformasjon?: BrukerInformasjon;
+}
+
+
+export async function POST(req: Request, brukerinformasjon: Props) {
   const body: { søketekst: string } = await req.json();
   if (!body.søketekst) {
     return new Response(JSON.stringify({ message: 'søketekst mangler' }), { status: 400 });
@@ -52,19 +64,30 @@ export async function POST(req: Request) {
   // Oppgaver
   let oppgaveData: SøkeResultat['oppgaver'] = [];
   let kontorData: SøkeResultat['kontor'] = [];
-  let oppfølgingsenhetData: SøkeResultat['oppfølgingsenhet'] = [];
+  let personData: SøkeResultat['person'] = [];
   let behandlingsStatusData: SøkeResultat['behandlingsStatus'] = [];
   try {
     const oppgaver = await oppgaveTekstSøk(søketekst);
     if (oppgaver) {
-      oppgaver.forEach((oppgave) => {
 
+      oppgaver.forEach((oppgave) => {
+        const isReservert = Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon.brukerInformasjon?.NAVident;
+        const isPåVent = oppgave.påVentÅrsak != null;
         oppgaveData.push({
           href: byggKelvinURL(oppgave),
-          label: `${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)} - ${oppgave.behandlingstype}`,
+          label: `${capitalize(oppgave.behandlingstype)} - ${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}`,
+          status: isReservert
+              ? 'RESERVERT'
+              : isPåVent
+                  ? 'PÅ_VENT'
+                  : '',
+          kontor: `${oppgave.enhet}`
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
-        oppfølgingsenhetData.push({ enhet: oppgave.oppfølgingsenhet});
+        personData.push({
+          href: byggKelvinURL(oppgave),
+          label: `${oppgave.personNavn}`,
+        });
         behandlingsStatusData.push({ status: `${oppgave.status}` });
       });
     }
@@ -75,10 +98,10 @@ export async function POST(req: Request) {
     oppgaver: oppgaveData,
     saker: sakData?.map((sak) => ({
       href: `/saksbehandling/sak/${sak.saksnummer}`,
-      label: `${sak.periode.fom} - ${sak.periode.tom}  (${sak.saksnummer})`,
+      label: `${sak.saksnummer} (${sak.periode.fom})`,
     })),
     kontor: kontorData,
-    oppfølgingsenhet: oppfølgingsenhetData,
+    person: personData,
     behandlingsStatus: behandlingsStatusData,
   };
 

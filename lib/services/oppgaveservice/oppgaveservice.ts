@@ -168,9 +168,9 @@ export async function oppgaveTekstSøk(søketekst: string) {
         status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
         versjon: 0,
         enhet: 'Nav Løten',
-        oppfølgingsenhet: null,
         opprettetAv: '',
         opprettetTidspunkt: '',
+        personNavn: 'Søker søkersen',
         påVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
       },
       {
@@ -184,9 +184,9 @@ export async function oppgaveTekstSøk(søketekst: string) {
         status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
         versjon: 0,
         enhet: 'Nav Enebakk',
-        oppfølgingsenhet: null,
         opprettetAv: '',
         opprettetTidspunkt: '',
+        personNavn: 'Søker søkersen',
         påVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
       },
     ];
