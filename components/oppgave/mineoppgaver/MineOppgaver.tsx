@@ -7,7 +7,7 @@ import { Alert, BodyShort, Skeleton, VStack } from '@navikt/ds-react';
 import { isError, isSuccess } from 'lib/utils/api';
 
 export const MineOppgaver = () => {
-  const { data: mineOppgaver } = useSWR(`api/mine-oppgaver`, () => hentMineOppgaverClient());
+  const { data: mineOppgaver, mutate } = useSWR(`api/mine-oppgaver`, () => hentMineOppgaverClient());
   return (
     <>
       {isError(mineOppgaver) && (
@@ -19,7 +19,7 @@ export const MineOppgaver = () => {
       {isSuccess(mineOppgaver) && !mineOppgaver.data?.oppgaver?.length && (
         <BodyShort>Ingen reserverte oppgaver</BodyShort>
       )}
-      {!isSuccess(mineOppgaver) && isError(mineOppgaver) && (
+      {!isSuccess(mineOppgaver) && !isError(mineOppgaver) && (
         <VStack gap={'7'}>
           <VStack gap={'1'}>
             <Skeleton variant="rectangle" width="100%" height={40} />
@@ -40,6 +40,7 @@ export const MineOppgaver = () => {
           visBehandleOgFrigiKnapp
           showDropdownActions
           showSortAndFilters
+          revalidateFunction={mutate}
         />
       )}
     </>

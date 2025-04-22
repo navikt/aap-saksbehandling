@@ -6,24 +6,32 @@ import { Dispatch, SetStateAction, useTransition } from 'react';
 import { avreserverOppgaveClient, plukkOppgaveClient } from 'lib/oppgaveClientApi';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
-import { revalidateMineOppgaver } from 'lib/actions/actions';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import styles from './OppgaveKnapp.module.css';
+import { isSuccess } from 'lib/utils/api';
 
 interface Props {
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
   visBehandleOgFrigiKnapp?: boolean;
   oppgave: Oppgave;
+  revalidateFunction?: () => void;
 }
-export const OppgaveKnapp = ({ oppgave, visBehandleOgFrigiKnapp, setFeilmelding }: Props) => {
+export const OppgaveKnapp = ({ oppgave, visBehandleOgFrigiKnapp, setFeilmelding, revalidateFunction }: Props) => {
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
   const router = useRouter();
 
   async function frigiOppgave(oppgave: Oppgave) {
     startTransitionFrigi(async () => {
-      await avreserverOppgaveClient(oppgave);
-      revalidateMineOppgaver();
+      const res = await avreserverOppgaveClient(oppgave);
+
+      if (isSuccess(res)) {
+        if (revalidateFunction) {
+          revalidateFunction();
+        }
+      } else {
+        setFeilmelding(`Feil ved avreservering av oppgave: ${res.apiException.message}`);
+      }
     });
   }
 
@@ -31,10 +39,10 @@ export const OppgaveKnapp = ({ oppgave, visBehandleOgFrigiKnapp, setFeilmelding 
     startTransitionBehandle(async () => {
       if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0) {
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
-        if (plukketOppgave.type === 'success') {
+        if (isSuccess(plukketOppgave)) {
           router.push(byggKelvinURL(plukketOppgave.data));
-        } else if (plukketOppgave.type === 'error') {
-          setFeilmelding(plukketOppgave.message);
+        } else {
+          setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);
         }
       }
     });

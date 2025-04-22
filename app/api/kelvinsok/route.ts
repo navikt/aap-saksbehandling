@@ -5,17 +5,17 @@ import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
 import { isSuccess } from 'lib/utils/api';
-import { mapBehovskodeTilBehovstype } from "../../../lib/utils/oversettelser";
+import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 
 export interface SøkeResultat {
   oppgaver?: {
     label: string;
     href: string;
   }[];
-  saker?: { href: string; label: string; }[];
-  kontor?: { enhet: string; }[];
-  oppfølgingsenhet?: { enhet?: string | null; }[];
-  behandlingsStatus?: { status?: string; }[];
+  saker?: { href: string; label: string }[];
+  kontor?: { enhet: string }[];
+  oppfølgingsenhet?: { enhet?: string | null }[];
+  behandlingsStatus?: { status?: string }[];
 }
 
 export async function POST(req: Request) {
@@ -55,16 +55,15 @@ export async function POST(req: Request) {
   let oppfølgingsenhetData: SøkeResultat['oppfølgingsenhet'] = [];
   let behandlingsStatusData: SøkeResultat['behandlingsStatus'] = [];
   try {
-    const oppgaver = await oppgaveTekstSøk(søketekst);
-    if (oppgaver) {
-      oppgaver.forEach((oppgave) => {
-
+    const oppgavesøkRes = await oppgaveTekstSøk(søketekst);
+    if (isSuccess(oppgavesøkRes)) {
+      oppgavesøkRes.data.forEach((oppgave) => {
         oppgaveData.push({
           href: byggKelvinURL(oppgave),
           label: `${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)} - ${oppgave.behandlingstype}`,
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
-        oppfølgingsenhetData.push({ enhet: oppgave.oppfølgingsenhet});
+        oppfølgingsenhetData.push({ enhet: oppgave.oppfølgingsenhet });
         behandlingsStatusData.push({ status: `${oppgave.status}` });
       });
     }

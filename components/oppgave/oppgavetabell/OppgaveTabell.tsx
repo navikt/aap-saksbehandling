@@ -33,6 +33,7 @@ interface Props {
   showSortAndFilters?: boolean;
   includeColumns?: 'reservertAv'[];
   isLoading?: boolean;
+  revalidateFunction?: () => void;
 }
 interface ScopedSortState extends SortState {
   orderBy: keyof Oppgave;
@@ -44,6 +45,7 @@ export const OppgaveTabell = ({
   visBehandleOgFrigiKnapp = false,
   includeColumns = [],
   isLoading = false,
+  revalidateFunction,
 }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string | undefined>();
 
@@ -203,6 +205,7 @@ export const OppgaveTabell = ({
                   oppgave={oppgave}
                   setFeilmelding={setFeilmelding}
                   visBehandleOgFrigiKnapp={visBehandleOgFrigiKnapp}
+                  revalidateFunction={revalidateFunction}
                 />
               </Table.DataCell>
             </Table.Row>

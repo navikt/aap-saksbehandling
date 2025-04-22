@@ -61,11 +61,9 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
   async function plukkOgGåTilOppgave() {
     startTransition(async () => {
       if (aktivEnhet && aktivKøId) {
-        const nesteOppgave = await plukkNesteOppgaveClient(aktivKøId, aktivEnhet);
-        if (nesteOppgave.type === 'success') {
-          if (nesteOppgave.data) {
-            router.push(byggKelvinURL(nesteOppgave.data.avklaringsbehovReferanse));
-          }
+        const nesteOppgaveRes = await plukkNesteOppgaveClient(aktivKøId, aktivEnhet);
+        if (isSuccess(nesteOppgaveRes)) {
+          router.push(byggKelvinURL(nesteOppgaveRes.data.avklaringsbehovReferanse));
         }
       }
     });

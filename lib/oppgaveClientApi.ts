@@ -104,7 +104,7 @@ export async function avreserverOppgaveClient(oppgave: Oppgave) {
     saksnummer: oppgave.saksnummer,
     referanse: oppgave.behandlingRef,
   };
-  return clientFetcher('/oppgave/api/oppgave/avreserver', 'POST', body);
+  return clientFetchV2('/oppgave/api/oppgave/avreserver', 'POST', body);
 }
 export async function hentKøerForEnheterClient(enheter: string[]) {
   const url = `/oppgave/api/filter?${queryParamsArray('enheter', enheter)}`;
@@ -142,9 +142,9 @@ export async function oppgavesokClient(
 
 export async function plukkNesteOppgaveClient(filterId: number, aktivEnhet: string) {
   const payload: NesteOppgaveRequestBody = { filterId, enheter: [aktivEnhet || ''] };
-  return await clientFetcher<NesteOppgaveResponse>('/oppgave/api/oppgave/neste', 'POST', payload);
+  return await clientFetchV2<NesteOppgaveResponse>('/oppgave/api/oppgave/neste', 'POST', payload);
 }
 export async function plukkOppgaveClient(oppgaveId: number, versjon: number) {
   const payload: PlukkOppgaveDto = { oppgaveId, versjon };
-  return await clientFetcher<Oppgave>('/oppgave/api/oppgave/plukk-oppgave', 'POST', payload);
+  return await clientFetchV2<Oppgave>('/oppgave/api/oppgave/plukk-oppgave', 'POST', payload);
 }
