@@ -5,26 +5,28 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FormEvent } from 'react';
-import { Behovstype } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Form } from 'components/form/Form';
 import { validerDato } from '../../../lib/validation/dateValidation';
 import { formaterDatoForBackend, formaterDatoForFrontend } from '../../../lib/utils/date';
 import { parse } from 'date-fns';
+import { RettighetsperiodeGrunnlag } from '../../../lib/types/types';
 
 interface Props {
   readOnly: boolean;
   behandlingVersjon: number;
-  grunnlag: any;
+  grunnlag?: RettighetsperiodeGrunnlag;
 }
 
 interface FormFields {
   begrunnelse: string;
   startDato: string;
+  harRettUtoverSøknadsdato: string;
+  harKravPåRenter: string;
 }
 
 export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
-  console.log(grunnlag);
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_RETTIGHETSPERIODE');
@@ -34,7 +36,21 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
         type: 'textarea',
         label: 'Begrunnelse',
         rules: { required: 'Du må begrunne hvorfor starttidspunktet for saken skal endres' },
-        defaultValue: grunnlag.begrunnelse || '',
+        defaultValue: grunnlag?.vurdering?.begrunnelse || '',
+      },
+      harRettUtoverSøknadsdato: {
+        type: 'radio',
+        label: 'Har brukeren rett på AAP fra en annen dato enn søknadsdatoen?',
+        rules: { required: 'Du må ta stilling til om brukeren har rett på AAP fra en annen dato enn søknadsdatoen' },
+        options: JaEllerNeiOptions,
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harRettUtoverSøknadsdato),
+      },
+      harKravPåRenter: {
+        type: 'radio',
+        label: 'Har brukeren krav på renter etter § 22-17?',
+        rules: { required: 'Du må ta stilling til om brukeren har rett på renter' },
+        options: JaEllerNeiOptions,
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harKravPåRenter),
       },
       startDato: {
         type: 'date_input',
@@ -45,7 +61,8 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
             gyldigDato: (v) => validerDato(v as string),
           },
         },
-        defaultValue: (grunnlag.startDato && formaterDatoForFrontend(grunnlag.startDato)) || undefined,
+        defaultValue:
+          (grunnlag?.vurdering?.startDato && formaterDatoForFrontend(grunnlag.vurdering?.startDato)) || undefined,
       },
     },
     { readOnly: readOnly }
@@ -59,7 +76,13 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
           behovstype: Behovstype.VURDER_RETTIGHETSPERIODE,
           rettighetsperiodeVurdering: {
             begrunnelse: data.begrunnelse,
-            startDato: formaterDatoForBackend(parse(data.startDato, 'dd.MM.yyyy', new Date())),
+            startDato:
+              data.harRettUtoverSøknadsdato === JaEllerNei.Ja
+                ? formaterDatoForBackend(parse(data.startDato, 'dd.MM.yyyy', new Date()))
+                : null,
+            harRettUtoverSøknadsdato: data.harRettUtoverSøknadsdato === JaEllerNei.Ja,
+            harKravPåRenter:
+              data.harRettUtoverSøknadsdato === JaEllerNei.Ja ? data.harKravPåRenter === JaEllerNei.Ja : null,
           },
         },
         referanse: behandlingsReferanse,
@@ -79,7 +102,13 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       >
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-        <FormField form={form} formField={formFields.startDato} />
+        <FormField form={form} formField={formFields.harRettUtoverSøknadsdato} />
+        {form.watch('harRettUtoverSøknadsdato') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.startDato} />
+        )}
+        {form.watch('harRettUtoverSøknadsdato') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.harKravPåRenter} />
+        )}
       </Form>
     </VilkårsKort>
   );

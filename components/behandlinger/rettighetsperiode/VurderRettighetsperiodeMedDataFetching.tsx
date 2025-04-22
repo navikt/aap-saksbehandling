@@ -1,6 +1,7 @@
-import { FetchResponse, isError } from 'lib/utils/api';
+import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { VurderRettighetsperiode } from './VurderRettighetsperiode';
+import { hentRettighetsperiodeGrunnlag } from '../../../lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -8,18 +9,12 @@ interface Props {
   behandlingVersjon: number;
 }
 
-export const VurderRettighetsperiodeMedDataFetching = ({
+export const VurderRettighetsperiodeMedDataFetching = async ({
   readOnly,
   behandlingVersjon,
   behandlingsreferanse,
 }: Props) => {
-  console.log('Rettighetsperiode med behandlingsreferanse', behandlingsreferanse);
-  // TODO: await hentRettighetsperiodeGrunnlag(behandlingsreferanse);
-  const rettighetsperiodeGrunnlag: FetchResponse<any> = {
-    data: { begrunnelse: '', dato: '' },
-    type: 'SUCCESS',
-    status: 200,
-  };
+  const rettighetsperiodeGrunnlag = await hentRettighetsperiodeGrunnlag(behandlingsreferanse);
   if (isError(rettighetsperiodeGrunnlag)) {
     return <ApiException apiResponses={[rettighetsperiodeGrunnlag]} />;
   }
