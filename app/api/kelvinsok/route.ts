@@ -14,7 +14,6 @@ export interface SøkeResultat {
     label: string;
     href: string;
     status: string;
-    kontor: string;
   }[];
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
@@ -76,7 +75,6 @@ export async function POST(req: Request, brukerinformasjon: Props) {
               : isPåVent
                   ? 'PÅ_VENT'
                   : '',
-          kontor: `${oppgave.enhet}`
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
         personData.push({
@@ -112,6 +110,7 @@ function buildPostmottakURL(oppgave: Oppgave): string {
 }
 
 export function byggKelvinURL(oppgave: Oppgave): string {
+  console.log("Oppg " + oppgave)
   if (oppgave.journalpostId) {
     return buildPostmottakURL(oppgave);
   } else {

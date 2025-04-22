@@ -10,7 +10,6 @@ export interface SøkeResultat {
     label: string;
     href: string;
     status: string;
-    kontor: string;
   }[];
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
