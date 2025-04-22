@@ -15,14 +15,14 @@ import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { logWarning } from 'lib/serverutlis/logger';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError } from 'lib/utils/api';
+import { isError, isSuccess } from 'lib/utils/api';
 
 import styles from './layout.module.css';
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
-import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
 import { IngenFlereOppgaverModalContextProvider } from 'context/IngenFlereOppgaverModalContext';
 import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
+import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
 
 interface Props {
   children: ReactNode;
@@ -64,11 +64,11 @@ const Layout = async (props: Props) => {
 
   let oppgave;
 
-  try {
-    const oppgaver = await oppgaveTekstSøk(personInfo.fnr);
-    oppgave = oppgaver.find((oppgave) => oppgave.behandlingRef === params.behandlingsReferanse);
-  } catch (err: unknown) {
-    logWarning('henting av oppgave for behandling feilet', err);
+  const oppgavesøkRes = await oppgaveTekstSøk(personInfo.fnr);
+  if (isSuccess(oppgavesøkRes)) {
+    oppgave = oppgavesøkRes.data.find((oppgave) => oppgave.behandlingRef === params.behandlingsReferanse);
+  } else {
+    logWarning('henting av oppgave for behandling feilet', oppgavesøkRes.apiException);
   }
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.data.flyt
