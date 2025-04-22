@@ -74,7 +74,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
               ? 'RESERVERT'
               : isPåVent
                   ? 'PÅ_VENT'
-                  : '',
+                  : 'ÅPEN',
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
         personData.push({
@@ -110,7 +110,6 @@ function buildPostmottakURL(oppgave: Oppgave): string {
 }
 
 export function byggKelvinURL(oppgave: Oppgave): string {
-  console.log("Oppg " + oppgave)
   if (oppgave.journalpostId) {
     return buildPostmottakURL(oppgave);
   } else {

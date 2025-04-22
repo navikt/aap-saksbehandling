@@ -62,9 +62,14 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, 
               {!oppgaver?.length ? (
                   <Detail>Fant ingen oppgaver</Detail>
               ) : (
-                  oppgaver.map((søk, index) => (
-                      <OppgaveStatus key={`oppgave-status-${index}`} oppgaveStatus={mapStatus(søk.status)} />
-                  ))
+                  oppgaver.map((søk, index) => {
+                      const mapped = mapStatus(søk.status);
+                      if (!mapped) return null;
+                      return (
+                          <OppgaveStatus key={`oppgave-status-${index}`} oppgaveStatus={mapped}
+                          />
+                      );
+                  })
               )}
           </VStack>
       </div>
@@ -99,10 +104,11 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, 
   </HStack>
 );
 
-function mapStatus(status: string): OppgaveStatusType {
+function mapStatus(status: string): OppgaveStatusType | null {
     if (status === 'PÅ_VENT') {
         return { status: 'PÅ_VENT', label: 'På vent' };
-    } else {
+    } else if (status === 'RESERVERT') {
         return { status: 'RESERVERT', label: 'Reservert' };
     }
+    return null;
 }
