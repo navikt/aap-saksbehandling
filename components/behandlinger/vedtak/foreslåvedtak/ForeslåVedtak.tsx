@@ -16,7 +16,7 @@ interface Props {
 
 export const ForeslåVedtak = ({ behandlingVersjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
+  const { status, resetStatus, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
 
   return (
@@ -25,6 +25,7 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly }: Props) => {
         {!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}
         <LøsBehovOgGåTilNesteStegStatusAlert
           status={status}
+          resetStatus={resetStatus}
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
         {!readOnly && (

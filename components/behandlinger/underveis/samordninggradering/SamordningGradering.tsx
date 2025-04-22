@@ -99,7 +99,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     { readOnly: readOnly, shouldUnregister: true }
   );
 
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, resetStatus, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_GRADERING');
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -162,6 +162,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             isLoading={isLoading}
             status={status}
             visBekreftKnapp={!readOnly}
+            resetStatus={resetStatus}
             løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
           >
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />

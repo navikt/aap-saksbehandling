@@ -23,7 +23,7 @@ interface FormFields {
 export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   console.log(grunnlag);
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SØKNAD');
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -54,6 +54,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon }: Props) =
       <Form
         onSubmit={handleSubmit}
         status={status}
+        resetStatus={resetStatus}
         isLoading={isLoading}
         steg={'SØKNAD'}
         visBekreftKnapp={!readOnly}
