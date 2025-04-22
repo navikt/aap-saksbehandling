@@ -12,6 +12,8 @@ import {
 } from 'lib/types/oppgaveTypes';
 import { queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
+import { isLocal } from 'lib/utils/environment';
+import { FetchResponse } from 'lib/utils/api';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
@@ -73,7 +75,32 @@ export async function plukkOppgave(oppgaveId: number, versjon: number) {
   const url = `${oppgaveApiBaseURL}/plukk-oppgave`;
   return await apiFetch<Oppgave>(url, oppgaveApiScope, 'POST', { oppgaveId, versjon });
 }
+
 export async function oppgaveTekstSøk(søketekst: string) {
+  if (isLocal()) {
+    const oppgaver: Oppgave[] = [
+      {
+        avklaringsbehovKode: '',
+        behandlingOpprettet: '',
+        //@ts-ignore Fiks type i backend
+        behandlingstype: 'DOKUMENT_H\u00C5NDTERING',
+        enhet: '',
+        opprettetAv: '',
+        opprettetTidspunkt: '',
+        //@ts-ignore Fiks type i backend
+        status: 'OPPRETTET',
+        versjon: 0,
+      },
+    ];
+
+    const mockData: FetchResponse<Oppgave[]> = {
+      type: 'SUCCESS',
+      status: 200,
+      data: oppgaver,
+    };
+
+    return mockData;
+  }
   const url = `${oppgaveApiBaseURL}/sok`;
   return await apiFetch<Array<Oppgave>>(url, oppgaveApiScope, 'POST', { søketekst });
 }
