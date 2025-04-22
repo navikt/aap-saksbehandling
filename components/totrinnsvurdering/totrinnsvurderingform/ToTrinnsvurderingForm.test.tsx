@@ -28,7 +28,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 
@@ -47,7 +46,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 
@@ -66,7 +64,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 
@@ -82,7 +79,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 
@@ -101,7 +97,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 
@@ -129,7 +124,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 
@@ -148,7 +142,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 
@@ -170,7 +163,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 
@@ -192,7 +184,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 
@@ -217,7 +208,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 
@@ -248,7 +238,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 
@@ -277,7 +266,6 @@ describe('totrinnsvurderingform', () => {
         link={link}
         readOnly={false}
         behandlingsReferanse={'456'}
-        behandlingVersjon={0}
       />
     );
 

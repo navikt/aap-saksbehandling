@@ -6,17 +6,12 @@ import {
   hentSak,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
-import { BodyShort, HGrid, VStack } from '@navikt/ds-react';
+import { BodyShort, VStack } from '@navikt/ds-react';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { StegGruppe } from 'lib/types/types';
 import { SakContextProvider } from 'context/SakContext';
-import { IngenFlereOppgaverModalContextProvider } from 'context/IngenFlereOppgaverModalContext';
-import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
 import { OppgaveKolonne } from 'components/oppgavekolonne/OppgaveKolonne';
-import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
-import { SaksbehandlingsoversiktMedDataFetching } from 'components/saksbehandlingsoversikt/SaksbehandlingsoversiktMedDataFetching';
-import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
 
 import styles from './page.module.css';
 
@@ -72,27 +67,15 @@ const Page = async (props: {
         opprettetTidspunkt: sak.opprettetTidspunkt,
       }}
     >
-      <IngenFlereOppgaverModalContextProvider>
-        <IngenFlereOppgaverModal />
-
-        <HGrid columns="4fr 2fr">
-          {stegIkkeVurdertEnda ? (
-            <BodyShort>Dette steget er ikke vurdert enda.</BodyShort>
-          ) : (
-            <OppgaveKolonne
-              className={styles.venstrekolonne}
-              behandlingsReferanse={params.behandlingsReferanse}
-              aktivGruppe={params.aktivGruppe}
-            />
-          )}
-
-          <aside className={`${styles.høyrekolonne} flex-column`}>
-            <Behandlingsinfo behandling={behandling.data} saksnummer={params.saksId} />
-            <SaksbehandlingsoversiktMedDataFetching />
-            <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
-          </aside>
-        </HGrid>
-      </IngenFlereOppgaverModalContextProvider>
+      {stegIkkeVurdertEnda ? (
+        <BodyShort>Dette steget er ikke vurdert enda.</BodyShort>
+      ) : (
+        <OppgaveKolonne
+          className={styles.venstrekolonne}
+          behandlingsReferanse={params.behandlingsReferanse}
+          aktivGruppe={params.aktivGruppe}
+        />
+      )}
     </SakContextProvider>
   );
 };

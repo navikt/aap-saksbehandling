@@ -6,7 +6,7 @@ import {
   hentSak,
   hentSakPersoninfo,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { VStack } from '@navikt/ds-react';
+import { HGrid, VStack } from '@navikt/ds-react';
 
 import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
@@ -18,6 +18,11 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 
 import styles from './layout.module.css';
+import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
+import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
+import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
+import { IngenFlereOppgaverModalContextProvider } from 'context/IngenFlereOppgaverModalContext';
+import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
 
 interface Props {
   children: ReactNode;
@@ -71,22 +76,33 @@ const Layout = async (props: Props) => {
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
 
   return (
-    <div className={styles.behandling}>
-      <SaksinfoBanner
-        personInformasjon={personInfo}
-        referanse={params.behandlingsReferanse}
-        behandling={behandling.data}
-        sak={sak}
-        oppgaveReservertAv={oppgave?.reservertAv}
-        påVent={flytResponse.data.visning.visVentekort}
-        brukerInformasjon={brukerInformasjon}
-        typeBehandling={flytResponse.data.visning.typeBehandling}
-      />
+    <IngenFlereOppgaverModalContextProvider>
+      <div className={styles.behandling}>
+        <IngenFlereOppgaverModal />
 
-      <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
+        <SaksinfoBanner
+          personInformasjon={personInfo}
+          referanse={params.behandlingsReferanse}
+          behandling={behandling.data}
+          sak={sak}
+          oppgaveReservertAv={oppgave?.reservertAv}
+          påVent={flytResponse.data.visning.visVentekort}
+          brukerInformasjon={brukerInformasjon}
+          typeBehandling={flytResponse.data.visning.typeBehandling}
+        />
 
-      {children}
-    </div>
+        <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
+
+        <HGrid columns="4fr 2fr" padding={'4'} gap={'4'}>
+          {children}
+          <aside className={`flex-column`}>
+            <Behandlingsinfo behandling={behandling.data} saksnummer={params.saksId} />
+            <Saksbehandlingsoversikt />
+            <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
+          </aside>
+        </HGrid>
+      </div>
+    </IngenFlereOppgaverModalContextProvider>
   );
 };
 

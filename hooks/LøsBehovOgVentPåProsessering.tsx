@@ -5,6 +5,7 @@ import { clientLøsBehov } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { ApiException } from 'lib/utils/api';
+import { useFlyt } from 'hooks/FlytHook';
 
 export type LøsBehovOgVentPåProsesseringStatus =
   | FlytProsesseringStatus
@@ -22,6 +23,7 @@ export const useLøsBehovOgVentPåProsessering = (): {
   const [status, setStatus] = useState<LøsBehovOgVentPåProsesseringStatus>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ApiException | undefined>();
+  const { refetchFlytClient } = useFlyt();
 
   const løsBehovOgVentPåProsessering = async (behov: LøsAvklaringsbehovPåBehandling) => {
     setError(undefined);
@@ -56,6 +58,7 @@ export const useLøsBehovOgVentPåProsessering = (): {
       if (eventData.status === 'FERDIG') {
         eventSource.close();
         await revalidateFlyt(params.behandlingsReferanse);
+        refetchFlytClient();
         setIsLoading(false);
       }
       if (eventData.status === 'FEILET') {
