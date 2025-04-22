@@ -87,5 +87,7 @@ function mapÅrsakerTilString(årsak: SettPåVentÅrsaker): string {
       return 'Venter på klageimplementasjon';
     case 'VENTER_PÅ_SVAR_PÅ_FORHÅNDSVARSEL':
       return 'Venter på svar på forhåndsvarsel';
+    case 'VENTER_PÅ_FUNKSJONALITET':
+      return 'Venter på manglende funksjonalitet';
   }
 }
