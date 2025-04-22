@@ -9,11 +9,13 @@ import { MineOppgaver } from 'components/oppgave/mineoppgaver/MineOppgaver';
 interface Props {
   enheter: Enhet[];
 }
-type MenyValg = 'Oppgavekøer' | 'Mine oppgaver';
+type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver';
 
-const options: MenyValg[] = ['Oppgavekøer', 'Mine oppgaver'];
+const options: MenyValg[] = ['Ledige oppgaver', 'Mine oppgaver'];
+
 export const OppgaveMeny = ({ enheter }: Props) => {
-  const [selected, setSelected] = useState<MenyValg>('Oppgavekøer');
+  const [selected, setSelected] = useState<MenyValg>('Ledige oppgaver');
+
   return (
     <VStack gap={'8'} padding={'8'}>
       <HStack gap={'4'} align={'center'}>
@@ -34,7 +36,7 @@ export const OppgaveMeny = ({ enheter }: Props) => {
         </Chips>
       </HStack>
       {selected === 'Mine oppgaver' && <MineOppgaver />}
-      {selected === 'Oppgavekøer' && <OppgaveKøMedOppgaver enheter={enheter} />}
+      {selected === 'Ledige oppgaver' && <OppgaveKøMedOppgaver enheter={enheter} />}
     </VStack>
   );
 };
