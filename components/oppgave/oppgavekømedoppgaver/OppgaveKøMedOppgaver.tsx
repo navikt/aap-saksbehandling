@@ -140,7 +140,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
         </VStack>
       )}
       {isSuccess(oppgaverValgtKø) && oppgaverValgtKø.data.oppgaver.length > 0 && (
-        <OppgaveTabell oppgaver={oppgaverValgtKø.data?.oppgaver || []} />
+        <OppgaveTabell oppgaver={oppgaverValgtKø.data?.oppgaver || []} showSortAndFiltersInTable />
       )}
     </VStack>
   );

@@ -39,7 +39,8 @@ export const MineOppgaver = () => {
           oppgaver={mineOppgaver.data.oppgaver}
           visBehandleOgFrigiKnapp
           showDropdownActions
-          showSortAndFilters
+          showSortAndFiltersInTable
+          showSortingComboboxes
           revalidateFunction={mutate}
         />
       )}

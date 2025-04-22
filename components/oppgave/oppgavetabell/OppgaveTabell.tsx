@@ -30,7 +30,8 @@ interface Props {
   oppgaver: Oppgave[];
   visBehandleOgFrigiKnapp?: boolean;
   showDropdownActions?: boolean;
-  showSortAndFilters?: boolean;
+  showSortAndFiltersInTable?: boolean;
+  showSortingComboboxes?: boolean;
   includeColumns?: 'reservertAv'[];
   isLoading?: boolean;
   revalidateFunction?: () => void;
@@ -41,7 +42,8 @@ interface ScopedSortState extends SortState {
 export const OppgaveTabell = ({
   oppgaver,
   heading,
-  showSortAndFilters = false,
+  showSortingComboboxes = false,
+  showSortAndFiltersInTable = false,
   visBehandleOgFrigiKnapp = false,
   includeColumns = [],
   isLoading = false,
@@ -104,7 +106,7 @@ export const OppgaveTabell = ({
           {heading}
         </Heading>
       )}
-      {showSortAndFilters && (
+      {showSortingComboboxes && (
         <Box background="surface-subtle" padding="4" borderRadius="xlarge">
           <HStack gap={'3'}>
             <ComboboxControlled
@@ -135,28 +137,25 @@ export const OppgaveTabell = ({
       >
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader sortKey={'personNavn'} sortable={showSortAndFilters} textSize={'small'}>
+            <Table.ColumnHeader sortKey={'personNavn'} sortable={showSortAndFiltersInTable} textSize={'small'}>
               Navn
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'personIdent'} sortable={showSortAndFilters} textSize={'small'}>
+            <Table.ColumnHeader sortKey={'personIdent'} sortable={showSortAndFiltersInTable} textSize={'small'}>
               Fnr
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'saksnummer'} sortable={showSortAndFilters}>
+            <Table.ColumnHeader sortKey={'saksnummer'} sortable={showSortAndFiltersInTable}>
               Sak/Journal ID
             </Table.ColumnHeader>
             <Table.HeaderCell>Behandlingstype</Table.HeaderCell>
-            <Table.HeaderCell>Avklaringsbehov</Table.HeaderCell>
-            <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={showSortAndFilters}>
-              Oppg. opprettet
-            </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={showSortAndFilters}>
+            <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={showSortAndFiltersInTable}>
               Beh. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'veileder'} sortable={showSortAndFilters}>
-              Veileder i modia
+            <Table.HeaderCell>Oppgave</Table.HeaderCell>
+            <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={showSortAndFiltersInTable}>
+              Oppg. opprettet
             </Table.ColumnHeader>
             {includeColumns?.includes('reservertAv') && (
-              <Table.ColumnHeader sortKey={'reservertAv'} sortable={showSortAndFilters}>
+              <Table.ColumnHeader sortKey={'reservertAv'} sortable={showSortAndFiltersInTable}>
                 Reservert av
               </Table.ColumnHeader>
             )}
@@ -189,6 +188,7 @@ export const OppgaveTabell = ({
               <Table.DataCell textSize={'small'}>
                 {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}
               </Table.DataCell>
+              <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}>
                   <BodyShort truncate size={'small'}>
@@ -197,8 +197,6 @@ export const OppgaveTabell = ({
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
-              <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
-              <Table.DataCell textSize={'small'}>{oppgave.veileder}</Table.DataCell>
               {includeColumns?.includes('reservertAv') && <Table.DataCell>{oppgave.reservertAv || ''}</Table.DataCell>}
               <Table.DataCell textSize={'small'}>
                 <OppgaveKnapp
