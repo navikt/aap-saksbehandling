@@ -21,7 +21,6 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
   if (isError(fatteVedtakGrunnlag) || isError(kvalitetssikringGrunnlag) || isError(flyt)) {
     return <ApiException apiResponses={[fatteVedtakGrunnlag, kvalitetssikringGrunnlag, flyt]} />;
   }
-  const behandlingVersjon = flyt.data.behandlingVersjon;
 
   return (
     <>
@@ -30,7 +29,6 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
           grunnlag={fatteVedtakGrunnlag.data}
           erKvalitetssikring={false}
           behandlingsReferanse={behandlingsReferanse}
-          behandlingVersjon={behandlingVersjon}
           readOnly={flyt.data.visning.beslutterReadOnly || !fatteVedtakGrunnlag.data.harTilgangTilÅSaksbehandle}
         />
       )}
@@ -39,7 +37,6 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
           grunnlag={kvalitetssikringGrunnlag.data}
           behandlingsReferanse={behandlingsReferanse}
           erKvalitetssikring={true}
-          behandlingVersjon={behandlingVersjon}
           readOnly={
             flyt.data.visning.kvalitetssikringReadOnly || !kvalitetssikringGrunnlag.data.harTilgangTilÅSaksbehandle
           }

@@ -7,7 +7,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { clientLøsBehov, clientSjekkTilgang } from 'lib/clientApi';
 import { useIngenFlereOppgaverModal } from 'hooks/IngenFlereOppgaverModalHook';
-import { ApiException, isSuccess, isError } from 'lib/utils/api';
+import { ApiException, isError, isSuccess } from 'lib/utils/api';
+import { useFlyt } from './FlytHook';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | 'CLIENT_CONFLICT' | undefined;
 
@@ -22,6 +23,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
 } => {
   const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
   const router = useRouter();
+  const { refetchFlytClient } = useFlyt();
   const { setIsModalOpen } = useIngenFlereOppgaverModal();
 
   const [status, setStatus] = useState<LøsBehovOgGåTilNesteStegStatus>();
@@ -66,6 +68,7 @@ export const useLøsBehovOgGåTilNesteSteg = (
 
         startTransition(() => {
           router.refresh();
+          refetchFlytClient();
         });
 
         if (eventData.skalBytteSteg && eventData.aktivtStegBehovsKode) {

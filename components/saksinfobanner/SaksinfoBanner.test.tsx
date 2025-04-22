@@ -18,7 +18,7 @@ const sak: SaksInfo = {
 
 describe('Saksinfobanner på sak siden', () => {
   beforeEach(() => {
-    render(<SaksinfoBanner personInformasjon={personInformasjon} sak={sak} behandlingVersjon={1} />);
+    render(<SaksinfoBanner personInformasjon={personInformasjon} sak={sak} />);
   });
 
   it('skal vise navn på bruker', () => {
@@ -62,7 +62,6 @@ describe('SaksinfoBanner på behandling siden', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         referanse={'123456'}
         typeBehandling="Førstegangsbehandling"
@@ -76,7 +75,6 @@ describe('SaksinfoBanner på behandling siden', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         referanse={'123456'}
         typeBehandling="Førstegangsbehandling"
@@ -90,7 +88,6 @@ describe('SaksinfoBanner på behandling siden', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         referanse={'123456'}
         typeBehandling="Førstegangsbehandling"
@@ -104,7 +101,6 @@ describe('SaksinfoBanner på behandling siden', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         referanse={'123456'}
         typeBehandling="Førstegangsbehandling"
@@ -118,7 +114,6 @@ describe('SaksinfoBanner på behandling siden', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         referanse={'123456'}
         typeBehandling="Førstegangsbehandling"
@@ -132,7 +127,6 @@ describe('SaksinfoBanner på behandling siden', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         referanse={'123456'}
         typeBehandling="Førstegangsbehandling"
@@ -148,7 +142,6 @@ describe('SaksinfoBanner på behandling siden', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         referanse={'123456'}
         typeBehandling="Førstegangsbehandling"
@@ -163,7 +156,6 @@ describe('SaksinfoBanner på behandling siden', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         referanse={'123456'}
         påVent={false}
@@ -181,7 +173,6 @@ describe('Sak status', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         referanse={'123456'}
         påVent={true}
@@ -197,7 +188,6 @@ describe('Sak status', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         referanse={'123456'}
         påVent={false}
@@ -213,7 +203,6 @@ describe('Sak status', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'nayBruker' }}
         oppgaveReservertAv={'navIdent'}
@@ -232,7 +221,6 @@ describe('Sak status', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
         oppgaveReservertAv={'navIdent'}
@@ -250,7 +238,6 @@ describe('Sak status', () => {
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
-        behandlingVersjon={1}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
         referanse={'123456'}

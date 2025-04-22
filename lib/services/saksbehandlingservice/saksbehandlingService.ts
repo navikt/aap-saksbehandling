@@ -386,7 +386,7 @@ async function ventTilProsesseringErFerdig(
     const status = response.data.prosessering.status;
 
     if (status === 'FERDIG') {
-      prosessering = undefined;
+      prosessering = response.data.prosessering;
       break;
     }
 

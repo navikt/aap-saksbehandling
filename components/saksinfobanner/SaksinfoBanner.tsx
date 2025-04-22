@@ -21,13 +21,11 @@ interface Props {
   oppgaveReservertAv?: string | null;
   påVent?: boolean;
   brukerInformasjon?: BrukerInformasjon;
-  behandlingVersjon?: number;
 }
 
 export const SaksinfoBanner = ({
   personInformasjon,
   sak,
-  behandlingVersjon,
   referanse,
   behandling,
   oppgaveReservertAv,
@@ -81,7 +79,7 @@ export const SaksinfoBanner = ({
         </HStack>
       </div>
 
-      {erPåBehandlingSiden && behandlingVersjon && (
+      {erPåBehandlingSiden && (
         <HStack>
           <div className={styles.oppgavestatus}>{oppgaveStatus && <OppgaveStatus oppgaveStatus={oppgaveStatus} />}</div>
           <div className={styles.saksmeny}>
@@ -113,7 +111,6 @@ export const SaksinfoBanner = ({
 
             <SettBehandllingPåVentModal
               referanse={referanse}
-              behandlingVersjon={behandlingVersjon}
               isOpen={settBehandlingPåVentmodalIsOpen}
               onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}
             />

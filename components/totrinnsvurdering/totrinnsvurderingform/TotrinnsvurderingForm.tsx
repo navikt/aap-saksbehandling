@@ -11,6 +11,7 @@ import { useFieldArray } from 'react-hook-form';
 import { useState } from 'react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
+import { useFlyt } from 'hooks/FlytHook';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -18,7 +19,6 @@ interface Props {
   erKvalitetssikring: boolean;
   readOnly: boolean;
   behandlingsReferanse: string;
-  behandlingVersjon: number;
 }
 
 export interface FormFieldsToTrinnsVurdering {
@@ -30,12 +30,13 @@ export const TotrinnsvurderingForm = ({
   link,
   readOnly,
   behandlingsReferanse,
-  behandlingVersjon,
   erKvalitetssikring,
 }: Props) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg(erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
+    erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
+  );
+  const { flyt } = useFlyt();
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
@@ -69,11 +70,17 @@ export const TotrinnsvurderingForm = ({
   return (
     <form
       onSubmit={form.handleSubmit(async (data) => {
+        setErrorMessage('');
         const assessedFields = data.totrinnsvurderinger.filter((vurdering) => vurdering.godkjent !== undefined);
+
+        if (!flyt?.behandlingVersjon) {
+          setErrorMessage('Kunne ikke finne behandlingversjon');
+          return;
+        }
 
         if (assessedFields && assessedFields.length > 0) {
           løsBehovOgGåTilNesteSteg({
-            behandlingVersjon: behandlingVersjon,
+            behandlingVersjon: flyt.behandlingVersjon,
             behov: {
               behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
               vurderinger: assessedFields.map((vurdering) => {
@@ -109,7 +116,6 @@ export const TotrinnsvurderingForm = ({
       <LøsBehovOgGåTilNesteStegStatusAlert
         status={status}
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-        resetStatus={resetStatus}
       />
       {fields.map((field, index) => (
         <TotrinnnsvurderingFelter

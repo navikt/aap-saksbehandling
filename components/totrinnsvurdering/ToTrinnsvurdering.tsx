@@ -20,7 +20,6 @@ interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
   erKvalitetssikring: boolean;
   behandlingsReferanse: string;
-  behandlingVersjon: number;
   readOnly: boolean;
 }
 
@@ -32,13 +31,7 @@ export interface ToTrinnsVurderingFormFields {
   definisjon: AvklaringsbehovKode;
 }
 
-export const ToTrinnsvurdering = ({
-  grunnlag,
-  behandlingsReferanse,
-  readOnly,
-  behandlingVersjon,
-  erKvalitetssikring,
-}: Props) => {
+export const ToTrinnsvurdering = ({ grunnlag, behandlingsReferanse, readOnly, erKvalitetssikring }: Props) => {
   const params = useParams();
 
   const [toggleGroupValue, setToggleGroupValue] = useState<string>(readOnly ? 'historikk' : 'totrinnsvurdering');
@@ -80,7 +73,6 @@ export const ToTrinnsvurdering = ({
           erKvalitetssikring={erKvalitetssikring}
           readOnly={readOnly}
           behandlingsReferanse={behandlingsReferanse}
-          behandlingVersjon={behandlingVersjon}
         />
       </div>
     </div>
