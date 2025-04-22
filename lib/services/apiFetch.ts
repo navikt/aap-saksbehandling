@@ -81,7 +81,7 @@ const fetchWithRetry = async <ResponseType>(
     }
 
     const responseJson: ApiException = await response.json();
-    logError(`klarte ikke å hente ${url}: ${responseJson.message}`);
+    logError(`klarte ikke å hente ${url}: ${responseJson.message} med status ${response.status}`);
     return { type: 'ERROR', apiException: responseJson, status: response.status };
   }
 

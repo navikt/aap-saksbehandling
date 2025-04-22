@@ -102,7 +102,7 @@ export const fetchWithRetry = async <ResponseBody>(
     const statusString = `Status: ${response.status}, statusText: ${response.statusText}`;
     if (response.status === 500) {
       const responseJson = await response.json();
-      logError(`klarte ikke å hente ${url}: ${responseJson.message}`);
+      logError(`klarte ikke å hente ${url}: ${responseJson.message} med status ${response.status}`);
       throw new Error(statusString);
     } else if (response.status === 401) {
       logError(`${url}, status: ${response.status}`);
