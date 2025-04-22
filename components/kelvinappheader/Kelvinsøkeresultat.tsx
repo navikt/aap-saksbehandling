@@ -1,14 +1,31 @@
 'use client';
 
 import { Detail, HStack, Label, Link, VStack } from '@navikt/ds-react';
+import { Behandlingsstatus } from "../behandlingsstatus/Behandlingsstatus";
+import { OppgaveStatus, OppgaveStatusType } from "../oppgavestatus/OppgaveStatus";
 import type { SøkeResultat } from './Kelvinsøk';
 import styles from './Kelvinsøkeresultat.module.css';
 interface Props {
   søkeresultat: SøkeResultat;
 }
 
-export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, oppfølgingsenhet, behandlingsStatus } }: Props) => (
+export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus } }: Props) => (
   <HStack gap={'8'}>
+      <div>
+          <Label spacing>Bruker</Label>
+          <VStack gap="2">
+              {!person?.length ? (
+                  <Detail>Fant ikke navn på person</Detail>
+              ) : (
+                  person.map((søk, index) => (
+                      <Link className={styles.linkName} key={`sak-resultat-${index}`} href={søk.href}>
+                          {søk.label}
+                      </Link>
+                  ))
+              )}
+          </VStack>
+      </div>
+
     <div>
       <Label spacing>Saker</Label>
       <VStack gap="2">
@@ -40,6 +57,19 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, 
     </div>
 
       <div>
+          <Label spacing>Status</Label>
+          <VStack gap="2">
+              {!oppgaver?.length ? (
+                  <Detail>Fant ingen oppgaver</Detail>
+              ) : (
+                  oppgaver.map((søk, index) => (
+                      <OppgaveStatus key={`oppgave-status-${index}`} oppgaveStatus={mapStatus(søk.status)} />
+                  ))
+              )}
+          </VStack>
+      </div>
+
+      <div>
           <Label spacing>Kontor</Label>
           <VStack gap="2">
               {!kontor?.length ? (
@@ -49,23 +79,8 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, 
                       <Detail key={index}>
                           {søk.enhet}
                       </Detail>
-                  ))
-              )}
-          </VStack>
-      </div>
-
-      <div>
-          <Label spacing>Oppfølgingsenhet</Label>
-          <VStack gap="2">
-              {oppfølgingsenhet?.map((søk, index) =>
-                  søk.enhet == null ? (
-                      <Detail key={index}>
-                          Ingen oppfølgingsenhet funnet
-                      </Detail>
-                  ) : <Detail key={index}>
-                         {søk.enhet}
-                      </Detail>
-              )}
+                  )
+          ))}
           </VStack>
       </div>
 
@@ -76,12 +91,18 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, 
                   <Detail>Fant ikke status</Detail>
               ) : (
                   behandlingsStatus.map((søk, index) => (
-                      <Detail key={index}>
-                          {søk.status}
-                      </Detail>
+                      <Behandlingsstatus key={index} status={søk.status} />
                   ))
               )}
           </VStack>
       </div>
   </HStack>
 );
+
+function mapStatus(status: string): OppgaveStatusType {
+    if (status === 'PÅ_VENT') {
+        return { status: 'PÅ_VENT', label: 'På vent' };
+    } else {
+        return { status: 'RESERVERT', label: 'Reservert' };
+    }
+}
