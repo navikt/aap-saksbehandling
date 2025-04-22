@@ -31,6 +31,7 @@ import {
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
   RefusjonskravGrunnlag,
+  RettighetsperiodeGrunnlag,
   SakPersoninfo,
   SaksInfo,
   SamordningAndreStatligeYtelserGrunnlag,
@@ -244,6 +245,11 @@ export const hentTilkjentYtelse = async (behandlingsReferanse: string) => {
 export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/trukket-søknad`;
   return await apiFetch<TrukketSøknadGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentRettighetsperiodeGrunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/rettighetsperiode`;
+  return await apiFetch<RettighetsperiodeGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFlyt = async (behandlingsReferanse: string) => {
