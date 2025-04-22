@@ -62,7 +62,7 @@ export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker): string {
     case 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER':
       return 'Venter på medisinske opplysninger';
     case 'VENTER_PÅ_VURDERING_AV_ROL':
-      return 'Venter på vurdering av rol';
+      return 'Venter på vurdering fra rådgivende overlege';
     case 'VENTER_PÅ_SVAR_FRA_BRUKER':
       return 'Venter på svar fra bruker';
     case 'VENTER_PÅ_MASKINELL_AVKLARING':

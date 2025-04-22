@@ -41,6 +41,7 @@ export const SettBehandllingPåVentModal = ({ referanse, behandlingVersjon, isOp
     },
     { label: 'Venter på svar fra bruker', value: 'VENTER_PÅ_SVAR_FRA_BRUKER' },
     { label: 'Venter på svar på forhåndsvarsel', value: 'VENTER_PÅ_SVAR_PÅ_FORHÅNDSVARSEL' },
+    { label: 'Venter på manglende funksjonalitet', value: 'VENTER_PÅ_FUNKSJONALITET' },
   ];
 
   const { form, formFields } = useConfigForm<FormFields>({
