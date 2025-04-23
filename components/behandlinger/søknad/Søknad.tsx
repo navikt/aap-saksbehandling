@@ -3,6 +3,7 @@ import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
 interface Props {
   behandlingsReferanse: string;
@@ -22,11 +23,13 @@ export const Søknad = async ({ behandlingsReferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      <TrekkSøknadMedDatafetching
-        behandlingsreferanse={behandlingsReferanse}
-        readOnly={flyt.data.visning.saksbehandlerReadOnly}
-        behandlingVersjon={flyt.data.behandlingVersjon}
-      />
+      <StegSuspense>
+        <TrekkSøknadMedDatafetching
+          behandlingsreferanse={behandlingsReferanse}
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+        />
+      </StegSuspense>
     </GruppeSteg>
   );
 };
