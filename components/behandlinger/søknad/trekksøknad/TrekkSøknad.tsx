@@ -20,8 +20,7 @@ interface FormFields {
   begrunnelse: string;
 }
 
-export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
-  console.log(grunnlag);
+export const TrekkSøknad = ({ readOnly, behandlingVersjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SØKNAD');
@@ -60,7 +59,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon }: Props) =
         visBekreftKnapp={!readOnly}
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       >
-        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       </Form>
     </VilkårsKort>
   );

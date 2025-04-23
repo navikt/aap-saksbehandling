@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { TrekkSøknad } from 'components/saksinfobanner/trekksoknad/TrekkSøknad';
+import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
 
 describe('Trekk søknad', () => {
-  beforeEach(() => render(<TrekkSøknad isOpen={true} onClose={vi.fn} />));
+  beforeEach(() => render(<TrekkSøknadModal saksnummer={'1'} isOpen={true} onClose={vi.fn} />));
   it('har en overskrift', () => {
-    expect(screen.getByRole('heading', { name: 'Trekk søknad' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Er du sikker på at du vil trekke søknaden?' })).toBeVisible();
   });
 
   it('har en knapp for å bekrefte at søknaden skal trekkes', () => {

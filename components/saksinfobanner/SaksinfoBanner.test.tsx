@@ -136,7 +136,7 @@ describe('SaksinfoBanner på behandling siden', () => {
     expect(knapp).toBeVisible();
   });
 
-  // TODO disables inntil valget skal vises
+  // Hopper over testen enn så lenge da det ikke er klart for prod
   it.skip('menyvalg for å trekke søknad vises for førstegangsbehandling', async () => {
     render(
       <SaksinfoBanner

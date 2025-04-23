@@ -10,7 +10,7 @@ import styles from './SaksinfoBanner.module.css';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
-import { TrekkSøknad } from 'components/saksinfobanner/trekksoknad/TrekkSøknad';
+import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -95,11 +95,9 @@ export const SaksinfoBanner = ({
               </Button>
               <Dropdown.Menu>
                 <Dropdown.Menu.GroupedList>
-                  <Dropdown.Menu.GroupedList.Heading>Saksmeny</Dropdown.Menu.GroupedList.Heading>
                   <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
                     Sett behandling på vent
                   </Dropdown.Menu.GroupedList.Item>
-                  {/*Utkommentert inntil backend er på plass*/}
                   {/*typeBehandling && typeBehandling === 'Førstegangsbehandling' && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisTrekkSøknadModal(true)}>
                       Trekk søknad
@@ -114,7 +112,11 @@ export const SaksinfoBanner = ({
               isOpen={settBehandlingPåVentmodalIsOpen}
               onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}
             />
-            <TrekkSøknad isOpen={visTrekkSøknadModal} onClose={() => settVisTrekkSøknadModal(false)} />
+            <TrekkSøknadModal
+              isOpen={visTrekkSøknadModal}
+              onClose={() => settVisTrekkSøknadModal(false)}
+              saksnummer={sak.saksnummer}
+            />
           </div>
         </HStack>
       )}
