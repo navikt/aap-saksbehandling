@@ -1,9 +1,9 @@
 import { Alert, BodyShort, Button, HStack, Table } from '@navikt/ds-react';
 import { LegeerklæringStatus } from 'lib/types/types';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
 import styles from './Dialogmeldinger.module.css';
-import { TimerPauseIcon } from '@navikt/aksel-icons';
+import { TimerPauseFillIcon, TimerPauseIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { isBefore, subDays } from 'date-fns';
@@ -37,7 +37,17 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null
 const grenseForPurring = subDays(new Date(), 21);
 const kanSendePurring = (opprettet: string) => isBefore(new Date(opprettet), grenseForPurring);
 
+
 const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
+    const [purringSent, setPurringSent] = useState(false);
+
+    const handlePurringClick = async () => {
+        if (!purringSent) {
+            setPurringSent(true);
+            await purrPåDialogmelding(melding.dialogmeldingUuid, behandlingsreferanse);
+        }
+    };
+
   const behandlingsreferanse = useBehandlingsReferanse();
   const { purrPåDialogmelding, isLoading } = usePurrPåDialogmelding();
   return (
@@ -58,9 +68,15 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
               variant="secondary"
               type="button"
               size="small"
-              icon={<TimerPauseIcon title="Send purring" />}
+              icon={
+                  purringSent ? (
+                      <TimerPauseFillIcon title="Purring sendt" />
+                  ) : (
+                      <TimerPauseIcon title="Send purring" />
+                  )
+              }
               loading={isLoading}
-              onClick={() => purrPåDialogmelding(melding.dialogmeldingUuid, behandlingsreferanse)}
+              onClick={handlePurringClick}
             />
           )}
         </HStack>
