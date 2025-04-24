@@ -303,7 +303,7 @@ export const forberedBehandlingOgVentPåProsessering = async (
   referanse: string
 ): Promise<undefined | FlytProsessering> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
-  logInfo('Forbereder behandling ' + referanse + 'hihihi');
+  logInfo('Forbereder behandling ' + referanse);
   return await fetchProxy(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 
@@ -392,6 +392,7 @@ async function ventTilProsesseringErFerdig(
     const status = response.data.prosessering.status;
 
     if (status === 'FERDIG') {
+      console.log('Prosessering er ferdig!');
       prosessering = response.data.prosessering;
       break;
     }
