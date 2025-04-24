@@ -12,6 +12,7 @@ interface Props {
   behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  erAktivtSteg: boolean;
   typeBehandling: TypeBehandling;
 }
 
@@ -19,6 +20,7 @@ export const SykdomsvurderingMedDataFetching = async ({
   behandlingsReferanse,
   behandlingVersjon,
   readOnly,
+  erAktivtSteg,
   typeBehandling,
 }: Props) => {
   const grunnlag = await hentSykdomsGrunnlag(behandlingsReferanse);
@@ -44,6 +46,7 @@ export const SykdomsvurderingMedDataFetching = async ({
       bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
       hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
       typeBehandling={typeBehandling}
+      erAktivtSteg={erAktivtSteg}
     />
   );
 };

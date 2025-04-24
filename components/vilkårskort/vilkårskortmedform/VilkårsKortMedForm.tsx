@@ -43,7 +43,6 @@ export const VilkårsKortMedForm = ({
   løsBehovOgGåTilNesteStegError,
   knappTekst = 'Bekreft',
   defaultOpen = true,
-  erAktivtSteg,
   vilkårTilhørerNavKontor = false,
   readOnly,
   vurdertAvAnsatt,
@@ -55,7 +54,8 @@ export const VilkårsKortMedForm = ({
   return (
     <ExpansionCard
       aria-label={heading}
-      className={erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}
+      // className={erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort} TODO Kommenter inn denne når vi har byttet ut alle Form komponenter med denne
+      className={classNameBasertPåEnhet}
       size={'small'}
       defaultOpen={defaultOpen}
       id={steg}
