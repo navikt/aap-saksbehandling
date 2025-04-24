@@ -12,6 +12,7 @@ import { validerDato } from '../../../lib/validation/dateValidation';
 import { formaterDatoForBackend, formaterDatoForFrontend } from '../../../lib/utils/date';
 import { parse } from 'date-fns';
 import { RettighetsperiodeGrunnlag } from '../../../lib/types/types';
+import { BodyShort, VStack } from '@navikt/ds-react';
 
 interface Props {
   readOnly: boolean;
@@ -101,13 +102,19 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
         visBekreftKnapp={!readOnly}
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       >
+        <VStack gap={'1'}>
+          <BodyShort size={'small'} weight={'semibold'}>
+            Søknadsdato
+          </BodyShort>
+          <BodyShort size={'small'}>{grunnlag?.søknadsdato && formaterDatoForFrontend(grunnlag.søknadsdato)}</BodyShort>
+        </VStack>
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-        <FormField form={form} formField={formFields.harRettUtoverSøknadsdato} />
+        <FormField form={form} formField={formFields.harRettUtoverSøknadsdato} horizontalRadio />
         {form.watch('harRettUtoverSøknadsdato') === JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.startDato} />
         )}
         {form.watch('harRettUtoverSøknadsdato') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.harKravPåRenter} />
+          <FormField form={form} formField={formFields.harKravPåRenter} horizontalRadio />
         )}
       </Form>
     </VilkårsKort>
