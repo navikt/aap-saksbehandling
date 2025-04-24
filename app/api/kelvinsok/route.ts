@@ -43,10 +43,6 @@ export async function POST(req: Request, brukerinformasjon: Props) {
 
       if (isSuccess(sakRes)) {
         sakData = sakRes.data;
-      } else {
-        logError(
-          `/kelvinsok finnsakerforident ${sakRes.status}, ${sakRes.apiException.code}: ${sakRes.apiException.message}`
-        );
       }
     } else if (isSaksnummer) {
       const sak = await hentSak(søketekst);
