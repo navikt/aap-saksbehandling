@@ -16,6 +16,15 @@ const sak: SaksInfo = {
   periode: { fom: '12 mai', tom: '27 mai' },
 };
 
+const avsluttetSak: SaksInfo = {
+  ident: '12345678910',
+  behandlinger: [],
+  opprettetTidspunkt: '12. mai',
+  saksnummer: '12345',
+  status: 'AVSLUTTET',
+  periode: { fom: '12 mai', tom: '27 mai' },
+};
+
 describe('Saksinfobanner på sak siden', () => {
   beforeEach(() => {
     render(<SaksinfoBanner personInformasjon={personInformasjon} sak={sak} />);
@@ -50,6 +59,19 @@ const behandling: DetaljertBehandling = {
   referanse: '123',
   skalForberede: false,
   status: 'UTREDES',
+  type: 'Førstegangsbehandling',
+  versjon: 0,
+  vilkår: [],
+  virkningstidspunkt: '2025-01-02',
+};
+
+const avsluttetBehandling: DetaljertBehandling = {
+  aktivtSteg: 'AVKLAR_SYKDOM',
+  avklaringsbehov: [],
+  opprettet: '',
+  referanse: '123',
+  skalForberede: false,
+  status: 'AVSLUTTET',
   type: 'Førstegangsbehandling',
   versjon: 0,
   vilkår: [],
@@ -145,10 +167,41 @@ describe('SaksinfoBanner på behandling siden', () => {
         behandling={behandling}
         referanse={'123456'}
         typeBehandling="Førstegangsbehandling"
+        brukerKanSaksbehandle={true}
       />
     );
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.getByRole('button', { name: 'Trekk søknad' })).toBeVisible();
+  });
+
+  it('menyvalg for å trekke søknad vises ikke hvis bruker ikke har saksbehandlertilgang', async () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={behandling}
+        referanse={'123456'}
+        typeBehandling="Førstegangsbehandling"
+        brukerKanSaksbehandle={false}
+      />
+    );
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
+  });
+
+  it('menyvalg for å trekke søknad vises ikke for en avsluttet førstegangsbehandling', async () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={avsluttetSak}
+        behandling={avsluttetBehandling}
+        referanse={'123456'}
+        typeBehandling="Førstegangsbehandling"
+        brukerKanSaksbehandle={true}
+      />
+    );
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
   });
 
   it('menyvalg for å trekke søknad vises ikke for revurdering', async () => {

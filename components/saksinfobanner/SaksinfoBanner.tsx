@@ -21,6 +21,7 @@ interface Props {
   oppgaveReservertAv?: string | null;
   påVent?: boolean;
   brukerInformasjon?: BrukerInformasjon;
+  brukerKanSaksbehandle?: boolean;
 }
 
 export const SaksinfoBanner = ({
@@ -34,8 +35,14 @@ export const SaksinfoBanner = ({
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
-
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveReservertAv;
+
+  /*
+  const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
+  const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
+  const visValgForÅTrekkeSøknad =
+    brukerKanSaksbehandle && behandlingErFørstegangsbehandling && behandlingErIkkeAvsluttet;
+    */
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (oppgaveReservertAv && !erReservertAvInnloggetBruker) {
@@ -98,7 +105,7 @@ export const SaksinfoBanner = ({
                   <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
                     Sett behandling på vent
                   </Dropdown.Menu.GroupedList.Item>
-                  {/*typeBehandling && typeBehandling === 'Førstegangsbehandling' && (
+                  {/*visValgForÅTrekkeSøknad && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisTrekkSøknadModal(true)}>
                       Trekk søknad
                     </Dropdown.Menu.GroupedList.Item>
