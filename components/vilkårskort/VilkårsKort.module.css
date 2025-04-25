@@ -23,12 +23,8 @@
 }
 
 .header,
-.content,
-.header:hover,
-.content:hover {
+.content {
   border: none;
-  /* Nødvendig for å unngå merkelig radius i header ved hover */
-  border-top-left-radius: 0;
   box-shadow: none;
 }
 
