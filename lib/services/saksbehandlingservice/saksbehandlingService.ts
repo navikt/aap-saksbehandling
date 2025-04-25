@@ -398,7 +398,7 @@ async function ventTilProsesseringErFerdig(
     }
 
     if (status === 'FEILET') {
-      logError('Prosessering feilet pga' + JSON.stringify(response.data.prosessering.ventendeOppgaver));
+      logError('Prosessering av flyt feilet!', Error(JSON.stringify(response.data.prosessering.ventendeOppgaver)));
       prosessering = response.data.prosessering;
       break;
     }
