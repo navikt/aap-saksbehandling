@@ -31,6 +31,8 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
   const visOverstyrKnapp = vurderingAutomatisk.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0;
   const readOnly = saksBehandlerReadOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
 
+  const vurderLovvalgErAktivtSteg = flyt.data.aktivtSteg === 'VURDER_LOVVALG';
+
   return (
     <GruppeSteg
       prosessering={flyt.data.prosessering}
@@ -46,9 +48,11 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
         behandlingVersjon={behandlingsVersjon}
         readOnly={readOnly}
         visOverstyrKnapp={visOverstyrKnapp}
+        erAktivtSteg={vurderLovvalgErAktivtSteg}
       >
         {stegSomSkalVises.includes('VURDER_LOVVALG') && (
           <LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching
+            erAktivtSteg={vurderLovvalgErAktivtSteg}
             grunnlag={grunnlag.data}
             behandlingVersjon={behandlingsVersjon}
             readOnly={readOnly}

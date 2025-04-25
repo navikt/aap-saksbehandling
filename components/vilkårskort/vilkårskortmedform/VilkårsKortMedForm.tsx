@@ -23,7 +23,7 @@ interface Props {
   løsBehovOgGåTilNesteStegError?: ApiException;
   knappTekst?: string;
   defaultOpen?: boolean;
-  vilkårTilhørerNavKontor?: boolean;
+  vilkårTilhørerNavKontor: boolean;
   vurdertAvAnsatt?: VurdertAvAnsatt;
 }
 
@@ -41,9 +41,9 @@ export const VilkårsKortMedForm = ({
   status,
   resetStatus,
   løsBehovOgGåTilNesteStegError,
+  vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
   defaultOpen = true,
-  vilkårTilhørerNavKontor = false,
   readOnly,
   vurdertAvAnsatt,
 }: Props) => {

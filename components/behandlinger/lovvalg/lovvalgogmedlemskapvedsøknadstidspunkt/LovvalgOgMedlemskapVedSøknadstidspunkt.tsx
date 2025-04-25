@@ -1,7 +1,5 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { landMedTrygdesamarbeid } from 'lib/utils/countries';
 import { Behovstype, getJaNeiEllerIkkeBesvart, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
@@ -11,12 +9,14 @@ import { LovvalgEØSLand, LovvalgMedlemskapGrunnlag } from 'lib/types/types';
 import { TidligereVurderingerV2 } from 'components/tidligerevurderinger/TidligereVurderingerV2';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   grunnlag?: LovvalgMedlemskapGrunnlag;
   overstyring: boolean;
+  erAktivtSteg: boolean;
 }
 
 interface FormFields {
@@ -58,6 +58,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
   grunnlag,
   readOnly,
   behandlingVersjon,
+  erAktivtSteg,
   overstyring,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
@@ -145,8 +146,25 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
 
   const historiskeManuelleVurderinger = grunnlag?.historiskeManuelleVurderinger;
 
+  const vurdertAvAnsatt =
+    grunnlag?.vurdering?.vurdertAv && grunnlag.vurdering?.vurdertDato
+      ? { ident: grunnlag.vurdering.vurdertAv, dato: grunnlag.vurdering.vurdertDato }
+      : undefined;
+
   return (
-    <VilkårsKort heading={heading} steg={'VURDER_LOVVALG'}>
+    <VilkårsKortMedForm
+      heading={heading}
+      steg={'VURDER_LOVVALG'}
+      onSubmit={handleSubmit}
+      readOnly={readOnly}
+      isLoading={isLoading}
+      erAktivtSteg={erAktivtSteg}
+      status={status}
+      resetStatus={resetStatus}
+      vurdertAvAnsatt={vurdertAvAnsatt}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vilkårTilhørerNavKontor={false}
+    >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
         <TidligereVurderingerV2
           tidligereVurderinger={historiskeManuelleVurderinger.map((vurdering) => ({
@@ -174,27 +192,18 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
           }))}
         />
       )}
-      <Form
-        steg={'VURDER_LOVVALG'}
-        onSubmit={handleSubmit}
-        isLoading={isLoading}
-        status={status}
-        resetStatus={resetStatus}
-        visBekreftKnapp={!readOnly}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
-        <FormField form={form} formField={formFields.lovvalgBegrunnelse} className={'begrunnelse'} />
-        <FormField form={form} formField={formFields.lovvalgsLand} />
-        {lovvalgsLand === 'Annet land med avtale' && (
-          <FormField form={form} formField={formFields.annetLovvalgslandMedAvtale} />
-        )}
-        {lovvalgsLand === 'Norge' && (
-          <>
-            <FormField form={form} formField={formFields.medlemskapBegrunnelse} className={'begrunnelse'} />
-            <FormField form={form} formField={formFields.medlemAvFolkeTrygdenVedSøknadstidspunkt} horizontalRadio />
-          </>
-        )}
-      </Form>
-    </VilkårsKort>
+
+      <FormField form={form} formField={formFields.lovvalgBegrunnelse} className={'begrunnelse'} />
+      <FormField form={form} formField={formFields.lovvalgsLand} />
+      {lovvalgsLand === 'Annet land med avtale' && (
+        <FormField form={form} formField={formFields.annetLovvalgslandMedAvtale} />
+      )}
+      {lovvalgsLand === 'Norge' && (
+        <>
+          <FormField form={form} formField={formFields.medlemskapBegrunnelse} className={'begrunnelse'} />
+          <FormField form={form} formField={formFields.medlemAvFolkeTrygdenVedSøknadstidspunkt} horizontalRadio />
+        </>
+      )}
+    </VilkårsKortMedForm>
   );
 };
