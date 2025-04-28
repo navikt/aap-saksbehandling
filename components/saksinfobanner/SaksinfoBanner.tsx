@@ -11,6 +11,8 @@ import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatu
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
+import { VurderRettighetsperiodeModal } from './rettighetsperiodemodal/VurderRettighetsperiodeModal';
+import { isProd } from '../../lib/utils/environment';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -35,6 +37,7 @@ export const SaksinfoBanner = ({
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
+  const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveReservertAv;
 
   /*
@@ -110,6 +113,11 @@ export const SaksinfoBanner = ({
                       Trekk søknad
                     </Dropdown.Menu.GroupedList.Item>
                   )*/}
+                  {!isProd() && (
+                    <Dropdown.Menu.GroupedList.Item onClick={() => settVisVurderRettighetsperiodeModal(true)}>
+                      Overstyr starttidspunkt
+                    </Dropdown.Menu.GroupedList.Item>
+                  )}
                 </Dropdown.Menu.GroupedList>
               </Dropdown.Menu>
             </Dropdown>
@@ -122,6 +130,11 @@ export const SaksinfoBanner = ({
             <TrekkSøknadModal
               isOpen={visTrekkSøknadModal}
               onClose={() => settVisTrekkSøknadModal(false)}
+              saksnummer={sak.saksnummer}
+            />
+            <VurderRettighetsperiodeModal
+              isOpen={visVurderRettighetsperiodeModal}
+              onClose={() => settVisVurderRettighetsperiodeModal(false)}
               saksnummer={sak.saksnummer}
             />
           </div>
