@@ -7,7 +7,6 @@ import {
   BarnetilleggGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingPersoninfo,
-  BehandlingResultat,
   BeregningsGrunnlag,
   BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
@@ -49,8 +48,7 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
-import { fetchPdf, fetchProxy } from 'lib/services/fetchProxy';
-import { apiFetch } from 'lib/services/apiFetch';
+import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
 
@@ -123,14 +121,9 @@ export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
   return await apiFetch<DokumentInfo[]>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentLesetilgang = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/lesetilgang`;
-  return await fetchProxy(url, saksbehandlingApiScope, 'GET');
-};
-
 export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/dokument/${journalPostId}/${dokumentInfoId}`;
-  return await fetchPdf(url, saksbehandlingApiScope);
+  return await apiFetchPdf(url, saksbehandlingApiScope);
 };
 
 export const hentYrkesskadeVurderingGrunnlag = async (behandlingsReferanse: string) => {
@@ -279,11 +272,6 @@ export const bestillTestBrev = async (bestilling: { behandlingReferanse: string 
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', bestilling);
 };
 
-export const hentResultat = async (referanse: string): Promise<BehandlingResultat> => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/resultat`;
-  return await fetchProxy<BehandlingResultat>(url, saksbehandlingApiScope, 'GET');
-};
-
 export const hentBeregningsGrunnlag = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/beregning/grunnlag/${referanse}`;
   return await apiFetch<BeregningsGrunnlag>(url, saksbehandlingApiScope, 'GET');
@@ -304,7 +292,7 @@ export const forberedBehandlingOgVentPåProsessering = async (
 ): Promise<undefined | FlytProsessering> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
   logInfo('Forbereder behandling ' + referanse);
-  return await fetchProxy(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
+  return await apiFetch(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 
 export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
@@ -353,7 +341,7 @@ export const hentRefusjonGrunnlag = async (behandlingsReferanse: string) => {
 };
 
 export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string): Promise<Blob | undefined> => {
-  return fetchPdf(
+  return apiFetchPdf(
     `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/forhandsvis`,
     saksbehandlingApiScope
   );
