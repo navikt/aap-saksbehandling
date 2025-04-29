@@ -26,6 +26,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { useRequiredFlyt } from 'hooks/FlytHook';
 
 export interface SykdomsvurderingFormFields {
   begrunnelse: string;
@@ -64,6 +65,8 @@ export const Sykdomsvurdering = ({
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
+  const { flyt } = useRequiredFlyt();
+  console.log('flyt client', flyt);
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
