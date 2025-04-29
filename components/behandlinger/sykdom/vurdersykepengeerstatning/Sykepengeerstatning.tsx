@@ -1,14 +1,13 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { Form } from 'components/form/Form';
 import { SykepengeerstatningGrunnlag, SykepengeerstatningVurderingGrunn } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -100,22 +99,23 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
   };
 
   return (
-    <VilkårsKort heading={'§ 11-13 AAP som sykepengeerstatning'} steg="VURDER_SYKEPENGEERSTATNING">
-      <Form
-        onSubmit={handleSubmit}
-        status={status}
-        resetStatus={resetStatus}
-        isLoading={isLoading}
-        steg={'VURDER_SYKEPENGEERSTATNING'}
-        visBekreftKnapp={!readOnly}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
-        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-        <FormField form={form} formField={formFields.erOppfylt} horizontalRadio />
-        {form.watch('erOppfylt') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.grunn} className={'radio'} />
-        )}
-      </Form>
-    </VilkårsKort>
+    <VilkårsKortMedForm
+      heading={'§ 11-13 AAP som sykepengeerstatning'}
+      steg="VURDER_SYKEPENGEERSTATNING"
+      onSubmit={handleSubmit}
+      status={status}
+      resetStatus={resetStatus}
+      isLoading={isLoading}
+      visBekreftKnapp={!readOnly}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vilkårTilhørerNavKontor={false}
+      erAktivtSteg={true}
+    >
+      <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+      <FormField form={form} formField={formFields.erOppfylt} horizontalRadio />
+      {form.watch('erOppfylt') === JaEllerNei.Ja && (
+        <FormField form={form} formField={formFields.grunn} className={'radio'} />
+      )}
+    </VilkårsKortMedForm>
   );
 };

@@ -1,8 +1,6 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
-import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyShort, Box, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
@@ -18,6 +16,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import styles from './SamordningGradering.module.css';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Ytelsesvurderinger } from 'components/behandlinger/underveis/samordninggradering/Ytelsesvurderinger';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -153,51 +152,52 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
   };
 
   return (
-    <VilkårsKort heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser" steg="SAMORDNING_GRADERING">
+    <VilkårsKortMedForm
+      heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser"
+      steg="SAMORDNING_GRADERING"
+      onSubmit={handleSubmit}
+      isLoading={isLoading}
+      status={status}
+      visBekreftKnapp={!readOnly}
+      resetStatus={resetStatus}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vilkårTilhørerNavKontor={false}
+      erAktivtSteg={true}
+    >
       {visForm && (
-        <>
-          <Form
-            steg={'SAMORDNING_GRADERING'}
-            onSubmit={handleSubmit}
-            isLoading={isLoading}
-            status={status}
-            visBekreftKnapp={!readOnly}
-            resetStatus={resetStatus}
-            løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-          >
-            <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-            <YtelseTabell ytelser={grunnlag.ytelser} />
-            <Ytelsesvurderinger form={form} readOnly={readOnly} />
-            {visRevurderVirkningstidspunkt && (
-              <Box maxWidth={'90ch'}>
-                <Box
-                  padding={'4'}
-                  borderColor="border-info"
-                  borderWidth="1 1 0 1"
-                  borderRadius={'xlarge xlarge 0 0'}
-                  background="surface-info-subtle"
-                >
-                  <HStack gap={'2'} align={'center'}>
-                    <InformationSquareFillIcon title="a11y-title" fontSize="1.5rem" className={styles.infoIkon} />
-                    <BodyShort size={'small'}>
-                      Tidligste virkningstidspunkt etter samordning er{' '}
-                      <strong>{finnTidligsteVirkningstidspunkt()}</strong>
-                    </BodyShort>
-                  </HStack>
-                </Box>
-                <Box padding={'4'} borderColor="border-info" borderWidth="1" borderRadius={'0 0 xlarge xlarge'}>
-                  <VStack gap={'2'}>
-                    <FormField form={form} formField={formFields.maksDatoEndelig} />
-                    {form.watch('maksDatoEndelig') === 'false' && (
-                      <FormField form={form} formField={formFields.maksDato} />
-                    )}
-                  </VStack>
-                </Box>
+        <VStack gap={'4'}>
+          <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+          <YtelseTabell ytelser={grunnlag.ytelser} />
+          <Ytelsesvurderinger form={form} readOnly={readOnly} />
+          {visRevurderVirkningstidspunkt && (
+            <Box maxWidth={'90ch'}>
+              <Box
+                padding={'4'}
+                borderColor="border-info"
+                borderWidth="1 1 0 1"
+                borderRadius={'xlarge xlarge 0 0'}
+                background="surface-info-subtle"
+              >
+                <HStack gap={'2'} align={'center'}>
+                  <InformationSquareFillIcon title="a11y-title" fontSize="1.5rem" className={styles.infoIkon} />
+                  <BodyShort size={'small'}>
+                    Tidligste virkningstidspunkt etter samordning er{' '}
+                    <strong>{finnTidligsteVirkningstidspunkt()}</strong>
+                  </BodyShort>
+                </HStack>
               </Box>
-            )}
-            {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
-          </Form>
-        </>
+              <Box padding={'4'} borderColor="border-info" borderWidth="1" borderRadius={'0 0 xlarge xlarge'}>
+                <VStack gap={'2'}>
+                  <FormField form={form} formField={formFields.maksDatoEndelig} />
+                  {form.watch('maksDatoEndelig') === 'false' && (
+                    <FormField form={form} formField={formFields.maksDato} />
+                  )}
+                </VStack>
+              </Box>
+            </Box>
+          )}
+          {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
+        </VStack>
       )}
       {!visForm && grunnlag.ytelser.length === 0 && grunnlag.vurderinger.length === 0 && (
         <VStack gap={'2'}>
@@ -215,6 +215,6 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
           </HStack>
         </VStack>
       )}
-    </VilkårsKort>
+    </VilkårsKortMedForm>
   );
 };

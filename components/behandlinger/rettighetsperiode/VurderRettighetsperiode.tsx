@@ -6,13 +6,12 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FormEvent } from 'react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Form } from 'components/form/Form';
-import { validerDato } from '../../../lib/validation/dateValidation';
-import { formaterDatoForBackend, formaterDatoForFrontend } from '../../../lib/utils/date';
+import { validerDato } from 'lib/validation/dateValidation';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { RettighetsperiodeGrunnlag } from '../../../lib/types/types';
+import { RettighetsperiodeGrunnlag } from 'lib/types/types';
 import { BodyShort, VStack } from '@navikt/ds-react';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   readOnly: boolean;
@@ -92,31 +91,32 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
   };
 
   return (
-    <VilkårsKort heading={'Starttidspunkt'} steg={'VURDER_RETTIGHETSPERIODE'}>
-      <Form
-        onSubmit={handleSubmit}
-        status={status}
-        resetStatus={resetStatus}
-        isLoading={isLoading}
-        steg={'VURDER_RETTIGHETSPERIODE'}
-        visBekreftKnapp={!readOnly}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
-        <VStack gap={'1'}>
-          <BodyShort size={'small'} weight={'semibold'}>
-            Søknadsdato
-          </BodyShort>
-          <BodyShort size={'small'}>{grunnlag?.søknadsdato && formaterDatoForFrontend(grunnlag.søknadsdato)}</BodyShort>
-        </VStack>
-        <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-        <FormField form={form} formField={formFields.harRettUtoverSøknadsdato} horizontalRadio />
-        {form.watch('harRettUtoverSøknadsdato') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.startDato} />
-        )}
-        {form.watch('harRettUtoverSøknadsdato') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.harKravPåRenter} horizontalRadio />
-        )}
-      </Form>
-    </VilkårsKort>
+    <VilkårsKortMedForm
+      heading={'Starttidspunkt'}
+      steg={'VURDER_RETTIGHETSPERIODE'}
+      onSubmit={handleSubmit}
+      status={status}
+      resetStatus={resetStatus}
+      isLoading={isLoading}
+      visBekreftKnapp={!readOnly}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vilkårTilhørerNavKontor={false}
+      erAktivtSteg={true}
+    >
+      <VStack gap={'1'}>
+        <BodyShort size={'small'} weight={'semibold'}>
+          Søknadsdato
+        </BodyShort>
+        <BodyShort size={'small'}>{grunnlag?.søknadsdato && formaterDatoForFrontend(grunnlag.søknadsdato)}</BodyShort>
+      </VStack>
+      <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+      <FormField form={form} formField={formFields.harRettUtoverSøknadsdato} horizontalRadio />
+      {form.watch('harRettUtoverSøknadsdato') === JaEllerNei.Ja && (
+        <FormField form={form} formField={formFields.startDato} />
+      )}
+      {form.watch('harRettUtoverSøknadsdato') === JaEllerNei.Ja && (
+        <FormField form={form} formField={formFields.harKravPåRenter} horizontalRadio />
+      )}
+    </VilkårsKortMedForm>
   );
 };

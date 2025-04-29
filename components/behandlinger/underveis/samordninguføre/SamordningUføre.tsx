@@ -1,9 +1,7 @@
 'use client';
 
 import { SamordningUføreGrunnlag } from 'lib/types/types';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
-import { Form } from 'components/form/Form';
 import { FormField } from 'components/form/FormField';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
@@ -14,6 +12,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { format, parse } from 'date-fns';
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
@@ -90,44 +89,46 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
     )(event);
   }
   return (
-    <VilkårsKort heading="Samordning med delvis uføre" steg="SAMORDNING_UFØRE">
-      <Form
-        steg={'SAMORDNING_UFØRE'}
-        onSubmit={handleSubmit}
-        status={status}
-        isLoading={isLoading}
-        resetStatus={resetStatus}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
-        <FormField form={form} formField={formFields.begrunnelse} />
-        {grunnlag?.grunnlag?.length > 0 && (
-          <VStack gap={'2'}>
-            <Label size={'small'}>Vedtak om uføretrygd</Label>
-            <BodyShort size={'small'}>Vi har funnet følgende perioder med overlapp mellom uføretrygd og Aap.</BodyShort>
-            <TableStyled>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Virkningstidspunkt</Table.HeaderCell>
-                  <Table.HeaderCell>Kilde</Table.HeaderCell>
-                  <Table.HeaderCell>Uføregrad</Table.HeaderCell>
+    <VilkårsKortMedForm
+      heading="Samordning med delvis uføre"
+      steg="SAMORDNING_UFØRE"
+      onSubmit={handleSubmit}
+      status={status}
+      isLoading={isLoading}
+      resetStatus={resetStatus}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vilkårTilhørerNavKontor={false}
+      visBekreftKnapp={!readOnly}
+      erAktivtSteg={true}
+    >
+      <FormField form={form} formField={formFields.begrunnelse} />
+      {grunnlag?.grunnlag?.length > 0 && (
+        <VStack gap={'2'}>
+          <Label size={'small'}>Vedtak om uføretrygd</Label>
+          <BodyShort size={'small'}>Vi har funnet følgende perioder med overlapp mellom uføretrygd og Aap.</BodyShort>
+          <TableStyled>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Virkningstidspunkt</Table.HeaderCell>
+                <Table.HeaderCell>Kilde</Table.HeaderCell>
+                <Table.HeaderCell>Uføregrad</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {grunnlag.grunnlag.map((ytelse, index) => (
+                <Table.Row key={`${index}-rad`}>
+                  <Table.DataCell textSize="small">
+                    {ytelse.virkningstidspunkt && format(new Date(ytelse.virkningstidspunkt), 'dd.MM.yyyy')}
+                  </Table.DataCell>
+                  <Table.DataCell textSize="small">{ytelse.kilde}</Table.DataCell>
+                  <Table.DataCell textSize="small">{ytelse.uføregrad}</Table.DataCell>
                 </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {grunnlag.grunnlag.map((ytelse, index) => (
-                  <Table.Row key={`${index}-rad`}>
-                    <Table.DataCell textSize="small">
-                      {ytelse.virkningstidspunkt && format(new Date(ytelse.virkningstidspunkt), 'dd.MM.yyyy')}
-                    </Table.DataCell>
-                    <Table.DataCell textSize="small">{ytelse.kilde}</Table.DataCell>
-                    <Table.DataCell textSize="small">{ytelse.uføregrad}</Table.DataCell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </TableStyled>
-          </VStack>
-        )}
-        <SamordningUføreTabell form={form} readOnly={readOnly} />
-      </Form>
-    </VilkårsKort>
+              ))}
+            </Table.Body>
+          </TableStyled>
+        </VStack>
+      )}
+      <SamordningUføreTabell form={form} readOnly={readOnly} />
+    </VilkårsKortMedForm>
   );
 };
