@@ -28,6 +28,7 @@ import { BulletListIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { EnhetSelect } from 'components/oppgave/enhetselect/EnhetSelect';
 import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
+import { isSuccess } from 'lib/utils/api';
 
 interface Props {
   enheter: Array<Enhet>;
@@ -52,30 +53,29 @@ export const MinEnhet = ({ enheter }: Props) => {
     lagreAktivEnhet(enhetsnr);
   };
 
-  const antallÅpneBehandlinger = useSWR(
+  const { data: antallÅpneBehandlinger } = useSWR(
     `/oppgave/api/statistikk/apne-behandlinger?${behandlingstyperQuery}`,
     antallÅpneBehandlingerPerBehandlingstypeClient
-  ).data;
-  const behandlingerUtvikling = useSWR(
+  );
+  const { data: behandlingerUtvikling } = useSWR(
     `/oppgave/api/statistikk/behandlinger/utvikling?antallDager=${0}&${behandlingstyperQuery}`,
     behandlingerUtviklingClient
-  ).data;
-  const fordelingÅpneBehandlinger = useSWR(
+  );
+  const { data: fordelingÅpneBehandlinger } = useSWR(
     `/oppgave/api/statistikk/behandlinger/fordeling-apne-behandlinger?${behandlingstyperQuery}`,
     fordelingÅpneBehandlingerClient
-  ).data;
-  const fordelingLukkedeBehandlinger = useSWR(
+  );
+  const { data: fordelingLukkedeBehandlinger } = useSWR(
     `/oppgave/api/statistikk/behandlinger/fordeling-lukkede-behandlinger?${behandlingstyperQuery}`,
     fordelingLukkedeBehandlingerClient
-  ).data;
-  const venteÅrsaker = useSWR(
+  );
+  const { data: venteÅrsaker } = useSWR(
     `/oppgave/api/statistikk/behandlinger/pa-vent?${behandlingstyperQuery}`,
     venteÅrsakerClient
-  ).data;
-  const antallPåVent =
-    venteÅrsaker && venteÅrsaker.type === 'success'
-      ? venteÅrsaker.data?.map((årsak) => årsak.antall).reduce((acc, curr) => acc + curr, 0)
-      : undefined;
+  );
+  const antallPåVent = isSuccess(venteÅrsaker)
+    ? venteÅrsaker.data?.map((årsak) => årsak.antall).reduce((acc, curr) => acc + curr, 0)
+    : undefined;
   const behandlingerPerSteggruppe = useSWR(
     `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
     behandlingerPerSteggruppeClient
@@ -105,28 +105,28 @@ export const MinEnhet = ({ enheter }: Props) => {
           <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
         </HStack>
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
-          {behandlingerUtvikling?.type === 'success' && (
+          {isSuccess(behandlingerUtvikling) && (
             <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
           )}
-          {antallÅpneBehandlinger?.type === 'success' && (
+          {isSuccess(antallÅpneBehandlinger) && (
             <ApneBehandlinger antallPåVent={antallPåVent} åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
           )}
-          {antallÅpneBehandlinger?.type === 'success' && (
+          {isSuccess(antallÅpneBehandlinger) && (
             <TypeBehandlinger åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
           )}
-          {fordelingÅpneBehandlinger?.type === 'success' && (
+          {isSuccess(fordelingÅpneBehandlinger) && (
             <FordelingÅpneBehandlingerPerDag fordelingÅpneBehandlingerPerDag={fordelingÅpneBehandlinger.data || []} />
           )}
-          {fordelingLukkedeBehandlinger?.type === 'success' && (
+          {isSuccess(fordelingLukkedeBehandlinger) && (
             <FordelingLukkedeBehandlingerPerDag
               fordelingLukkedeBehandlinger={fordelingLukkedeBehandlinger.data || []}
             />
           )}
-          {venteÅrsaker?.type === 'success' && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
-          {behandlingerPerSteggruppe?.type === 'success' && (
+          {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
+          {isSuccess(behandlingerPerSteggruppe) && (
             <BehandlingerPerSteggruppe data={behandlingerPerSteggruppe.data || []} />
           )}
-          {årsakerTilBehandling?.type === 'success' && (
+          {isSuccess(årsakerTilBehandling) && (
             <ÅrsakTilBehandling årsakTilBehandling={årsakerTilBehandling.data || []} />
           )}
         </div>
