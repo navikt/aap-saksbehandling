@@ -8,8 +8,6 @@ import {
   JaEllerNei,
   JaEllerNeiOptions,
 } from 'lib/utils/form';
-import { Form } from 'components/form/Form';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent, useCallback, useEffect } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -27,6 +25,7 @@ import { Diagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/Di
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { useSak } from 'hooks/SakHook';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 export interface SykdomsvurderingFormFields {
   begrunnelse: string;
@@ -47,6 +46,7 @@ export interface SykdomsvurderingFormFields {
 interface SykdomProps {
   behandlingVersjon: number;
   grunnlag: SykdomsGrunnlag;
+  erAktivtSteg: boolean;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
   bidiagnoserDeafultOptions?: ValuePair[];
@@ -57,6 +57,7 @@ export const Sykdomsvurdering = ({
   grunnlag,
   behandlingVersjon,
   readOnly,
+  erAktivtSteg,
   bidiagnoserDeafultOptions,
   hoveddiagnoseDefaultOptions,
   typeBehandling,
@@ -259,11 +260,25 @@ export const Sykdomsvurdering = ({
     return søknadsdato.getTime() === startOfDay(gjelderFra).getTime();
   }, [behandlingErRevurdering, sak, vurderingenGjelderFra]);
 
+  const vurdertAvAnsatt =
+    grunnlag.sykdomsvurdering?.vurdertAvIdent && grunnlag.sykdomsvurdering.vurdertDato
+      ? { ident: grunnlag.sykdomsvurdering.vurdertAvIdent, dato: grunnlag.sykdomsvurdering.vurdertDato }
+      : undefined;
+
   return (
-    <VilkårsKort
+    <VilkårsKortMedForm
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
       steg="AVKLAR_SYKDOM"
       vilkårTilhørerNavKontor={true}
+      onSubmit={handleSubmit}
+      erAktivtSteg={erAktivtSteg}
+      status={status}
+      isLoading={isLoading}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      readOnly={readOnly}
+      vurdertAvAnsatt={vurdertAvAnsatt}
+      knappTekst={'Bekreft'}
+      resetStatus={resetStatus}
     >
       {behandlingErRevurdering && (
         <TidligereVurderinger
@@ -272,57 +287,46 @@ export const Sykdomsvurdering = ({
           søknadstidspunkt={sak.periode.fom}
         />
       )}
-      <Form
-        onSubmit={handleSubmit}
-        status={status}
-        resetStatus={resetStatus}
-        isLoading={isLoading}
-        steg={'AVKLAR_SYKDOM'}
-        visBekreftKnapp={!readOnly}
-        knappTekst={'Bekreft'}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
-        {grunnlag.skalVurdereYrkesskade && (
-          <Alert variant={'warning'} size={'small'}>
-            Det har blitt funnet én eller flere yrkesskader på brukeren
-          </Alert>
-        )}
-        <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-5" target="_blank">
-          Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
-        </Link>
-        <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-        {behandlingErRevurdering && <FormField form={form} formField={formFields.vurderingenGjelderFra} />}
-        {(behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()) && (
-          <Førstegangsbehandling
-            form={form}
-            formFields={formFields}
-            skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-            diagnosesøker={
-              <Diagnosesøk
-                form={form}
-                formFields={formFields}
-                readOnly={readOnly}
-                hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
-              />
-            }
-          />
-        )}
-        {behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling() && (
-          <Revurdering
-            form={form}
-            formFields={formFields}
-            skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-            diagnosesøker={
-              <Diagnosesøk
-                form={form}
-                formFields={formFields}
-                readOnly={readOnly}
-                hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
-              />
-            }
-          />
-        )}
-      </Form>
-    </VilkårsKort>
+      {grunnlag.skalVurdereYrkesskade && (
+        <Alert variant={'warning'} size={'small'}>
+          Det har blitt funnet én eller flere yrkesskader på brukeren
+        </Alert>
+      )}
+      <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-5" target="_blank">
+        Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
+      </Link>
+      <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+      {behandlingErRevurdering && <FormField form={form} formField={formFields.vurderingenGjelderFra} />}
+      {(behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()) && (
+        <Førstegangsbehandling
+          form={form}
+          formFields={formFields}
+          skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+          diagnosesøker={
+            <Diagnosesøk
+              form={form}
+              formFields={formFields}
+              readOnly={readOnly}
+              hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
+            />
+          }
+        />
+      )}
+      {behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling() && (
+        <Revurdering
+          form={form}
+          formFields={formFields}
+          skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+          diagnosesøker={
+            <Diagnosesøk
+              form={form}
+              formFields={formFields}
+              readOnly={readOnly}
+              hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
+            />
+          }
+        />
+      )}
+    </VilkårsKortMedForm>
   );
 };

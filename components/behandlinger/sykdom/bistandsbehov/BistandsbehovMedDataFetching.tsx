@@ -9,6 +9,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
+  erAktivtSteg: boolean;
 }
 
 export const BistandsbehovMedDataFetching = async ({
@@ -16,6 +17,7 @@ export const BistandsbehovMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
   typeBehandling,
+  erAktivtSteg,
 }: Props) => {
   const grunnlag = await hentBistandsbehovGrunnlag(behandlingsReferanse);
   if (isError(grunnlag)) {
@@ -25,6 +27,7 @@ export const BistandsbehovMedDataFetching = async ({
   return (
     <Bistandsbehov
       grunnlag={grunnlag.data}
+      erAktivtSteg={erAktivtSteg}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       typeBehandling={typeBehandling}

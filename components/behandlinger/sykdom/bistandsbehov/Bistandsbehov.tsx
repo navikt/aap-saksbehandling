@@ -1,7 +1,5 @@
 'use client';
 
-import { Form } from 'components/form/Form';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { BistandsGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
@@ -14,12 +12,14 @@ import { FormField } from 'components/form/FormField';
 import { TidligereVurderinger } from 'components/behandlinger/sykdom/bistandsbehov/TidligereVurderinger';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useSak } from 'hooks/SakHook';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
+  erAktivtSteg: boolean;
 }
 
 interface FormFields {
@@ -32,7 +32,7 @@ interface FormFields {
   vurderAAPIOvergangTilArbeid?: string;
 }
 
-export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
+export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling, erAktivtSteg }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
@@ -128,88 +128,90 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
 
+  const vurdertAvAnsatt =
+    grunnlag?.vurdering?.vurdertAv && grunnlag.vurdering.vurdertDato
+      ? { ident: grunnlag.vurdering.vurdertAv, dato: grunnlag.vurdering.vurdertDato }
+      : undefined;
+
   return (
-    <VilkårsKort
-      heading="§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid"
-      steg="VURDER_BISTANDSBEHOV"
+    <VilkårsKortMedForm
+      heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
+      steg={'VURDER_BISTANDSBEHOV'}
+      onSubmit={handleSubmit}
+      readOnly={readOnly}
+      isLoading={isLoading}
+      erAktivtSteg={erAktivtSteg}
+      status={status}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
+      vurdertAvAnsatt={vurdertAvAnsatt}
+      resetStatus={resetStatus}
     >
-      <Form
-        steg="VURDER_BISTANDSBEHOV"
-        onSubmit={handleSubmit}
-        isLoading={isLoading}
-        status={status}
-        resetStatus={resetStatus}
-        visBekreftKnapp={!readOnly}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
-        {typeBehandling === 'Revurdering' && (
-          <TidligereVurderinger
-            historiskeVurderinger={grunnlag?.historiskeVurderinger.toReversed() ?? []}
-            gjeldendeVurderinger={grunnlag?.gjeldendeVedtatteVurderinger ?? []}
-            søknadstidspunkt={sak.periode.fom}
-          />
-        )}
-        <Veiledning
-          defaultOpen={false}
-          tekst={
-            <div>
-              Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
-              bruker oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a
-              (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
-              vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
-              svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
-              <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-6">
-                Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6
-              </Link>
-              <span> </span>
-              <Link href="https://lovdata.no"> (lovdata.no)</Link>
-            </div>
-          }
+      {typeBehandling === 'Revurdering' && (
+        <TidligereVurderinger
+          historiskeVurderinger={grunnlag?.historiskeVurderinger.toReversed() ?? []}
+          gjeldendeVurderinger={grunnlag?.gjeldendeVedtatteVurderinger ?? []}
+          søknadstidspunkt={sak.periode.fom}
         />
-        {typeBehandling === 'Revurdering' && (
-          <BodyShort>
-            Vurderingen gjelder fra {vurderingenGjelderFra && formaterDatoForFrontend(vurderingenGjelderFra)}
-          </BodyShort>
+      )}
+      <Veiledning
+        defaultOpen={false}
+        tekst={
+          <div>
+            Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at bruker
+            oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a (aktiv
+            behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge vilkårene,
+            er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du svarer nei
+            på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
+            <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-6">
+              Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6
+            </Link>
+            <span> </span>
+            <Link href="https://lovdata.no"> (lovdata.no)</Link>
+          </div>
+        }
+      />
+      {typeBehandling === 'Revurdering' && (
+        <BodyShort>
+          Vurderingen gjelder fra {vurderingenGjelderFra && formaterDatoForFrontend(vurderingenGjelderFra)}
+        </BodyShort>
+      )}
+      <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+      <FormField form={form} formField={formFields.erBehovForAktivBehandling} horizontalRadio />
+      <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} horizontalRadio />
+      {form.watch('erBehovForAktivBehandling') !== JaEllerNei.Ja &&
+        form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
         )}
-        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-        <FormField form={form} formField={formFields.erBehovForAktivBehandling} horizontalRadio />
-        <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} horizontalRadio />
-        {form.watch('erBehovForAktivBehandling') !== JaEllerNei.Ja &&
-          form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
-            <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
-          )}
-        {(typeBehandling === 'Førstegangsbehandling' ||
-          (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
-          bistandsbehovErIkkeOppfylt && (
-            <VStack gap={'4'} as={'section'}>
-              <Heading level={'3'} size="small">
-                § 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd
-              </Heading>
-              <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-              <FormField form={form} formField={formFields.vurderAAPIOvergangTilUføre} horizontalRadio />
-              {form.watch('vurderAAPIOvergangTilUføre') === JaEllerNei.Ja && (
-                <Alert variant="warning">
-                  Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18 sak.
-                </Alert>
-              )}
-            </VStack>
-          )}
-        {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
+      {(typeBehandling === 'Førstegangsbehandling' || (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
+        bistandsbehovErIkkeOppfylt && (
           <VStack gap={'4'} as={'section'}>
             <Heading level={'3'} size="small">
-              § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
+              § 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd
             </Heading>
             <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-            <FormField form={form} formField={formFields.vurderAAPIOvergangTilArbeid} horizontalRadio />
-            {form.watch('vurderAAPIOvergangTilArbeid') === JaEllerNei.Ja && (
+            <FormField form={form} formField={formFields.vurderAAPIOvergangTilUføre} horizontalRadio />
+            {form.watch('vurderAAPIOvergangTilUføre') === JaEllerNei.Ja && (
               <Alert variant="warning">
-                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17 sak.
+                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18 sak.
               </Alert>
             )}
           </VStack>
         )}
-      </Form>
-    </VilkårsKort>
+      {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
+        <VStack gap={'4'} as={'section'}>
+          <Heading level={'3'} size="small">
+            § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
+          </Heading>
+          <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
+          <FormField form={form} formField={formFields.vurderAAPIOvergangTilArbeid} horizontalRadio />
+          {form.watch('vurderAAPIOvergangTilArbeid') === JaEllerNei.Ja && (
+            <Alert variant="warning">
+              Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17 sak.
+            </Alert>
+          )}
+        </VStack>
+      )}
+    </VilkårsKortMedForm>
   );
 };

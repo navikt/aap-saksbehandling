@@ -12,7 +12,7 @@ import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGru
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { StegGruppe } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
-import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { hentBrukerInformasjon, hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
 import { logWarning } from 'lib/serverutlis/logger';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError, isSuccess } from 'lib/utils/api';
@@ -47,11 +47,12 @@ const Layout = async (props: Props) => {
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(params.behandlingsReferanse);
 
-  const [personInfo, brukerInformasjon, flytResponse, sak] = await Promise.all([
+  const [personInfo, brukerInformasjon, flytResponse, sak, roller] = await Promise.all([
     hentSakPersoninfo(params.saksId),
     hentBrukerInformasjon(),
     hentFlyt(params.behandlingsReferanse),
     hentSak(params.saksId),
+    hentRollerForBruker(),
   ]);
 
   if (isError(flytResponse)) {
@@ -61,6 +62,10 @@ const Layout = async (props: Props) => {
       </VStack>
     );
   }
+
+  const brukerKanSaksbehandle = roller.some((rolle) =>
+    [Roller.SAKSBEHANDLER_OPPFØLGING, Roller.SAKSBEHANDLER_NASJONAL].includes(rolle)
+  );
 
   let oppgave;
 
@@ -89,6 +94,7 @@ const Layout = async (props: Props) => {
           påVent={flytResponse.data.visning.visVentekort}
           brukerInformasjon={brukerInformasjon}
           typeBehandling={flytResponse.data.visning.typeBehandling}
+          brukerKanSaksbehandle={brukerKanSaksbehandle}
         />
 
         <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />

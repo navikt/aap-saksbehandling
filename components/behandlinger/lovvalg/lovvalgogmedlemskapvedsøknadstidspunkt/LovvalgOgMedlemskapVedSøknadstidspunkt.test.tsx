@@ -10,6 +10,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal ha en overskrift', () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}
@@ -23,6 +24,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal ha riktig overskrift ved overstyring', () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}
@@ -36,6 +38,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal ha felt for begrunnelse', () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}
@@ -49,6 +52,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal ha felt for lovvalg', () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}
@@ -64,6 +68,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('skjuler felt for lovvalgsland hvis lovvalg ikke er Annet land med avtale', async () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}
@@ -84,6 +89,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('viser felt for lovvalgsland hvis lovvalg er Annet land med avtale', async () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}
@@ -105,6 +111,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}
@@ -119,6 +126,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal vise feilmelding dersom feltet om lovvalg ikke er besvart', async () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}
@@ -133,6 +141,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('viser felt medlemskapbegrunnelse og vurdering hvis Norge er valgt', async () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}
@@ -156,6 +165,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('skjuler felt for medlemskapsbegrunnelse hvis lovvalgsland er Annet land med avtale', async () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}
@@ -178,6 +188,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}
@@ -196,6 +207,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal vise feilmelding dersom feltet om medlemskap ikke er besvart', async () => {
     render(
       <LovvalgOgMedlemskapVedSKnadstidspunkt
+        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlag}

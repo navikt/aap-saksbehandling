@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
@@ -8,15 +8,18 @@ import { SettPåVentÅrsaker, VenteInformasjon } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgVentPåProsessering } from 'hooks/LøsBehovOgVentPåProsessering';
+import { useFlyt } from 'hooks/FlytHook';
 
 interface Props {
   behandlingVersjon: number;
   informasjon?: VenteInformasjon;
 }
 
-export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props) => {
+export const BehandlingPåVentKort = ({ informasjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
+  const { flyt } = useFlyt();
   const { løsBehovOgVentPåProsessering, isLoading, løsBehovError } = useLøsBehovOgVentPåProsessering();
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   return (
     <SideProsessKort heading={'Behandling på vent'} icon={<HourglassBottomFilledIcon aria-hidden />}>
@@ -42,13 +45,25 @@ export const BehandlingPåVentKort = ({ behandlingVersjon, informasjon }: Props)
                 {løsBehovError.message}
               </Alert>
             )}
+
+            {errorMessage && (
+              <Alert variant={'error'} size={'small'}>
+                {errorMessage}
+              </Alert>
+            )}
             {informasjon.grunn !== 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING' && (
               <Button
                 size={'medium'}
                 loading={isLoading}
                 onClick={async () => {
+                  setErrorMessage(undefined);
+                  if (!flyt?.behandlingVersjon) {
+                    setErrorMessage('Mangler behandlingsversjon');
+                    return;
+                  }
+
                   løsBehovOgVentPåProsessering({
-                    behandlingVersjon: behandlingVersjon,
+                    behandlingVersjon: flyt.behandlingVersjon,
                     behov: {
                       behovstype: informasjon?.definisjon.kode,
                     },

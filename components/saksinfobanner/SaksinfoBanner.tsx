@@ -11,6 +11,8 @@ import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatu
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
+import { VurderRettighetsperiodeModal } from './rettighetsperiodemodal/VurderRettighetsperiodeModal';
+import { isProd } from '../../lib/utils/environment';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -21,6 +23,7 @@ interface Props {
   oppgaveReservertAv?: string | null;
   påVent?: boolean;
   brukerInformasjon?: BrukerInformasjon;
+  brukerKanSaksbehandle?: boolean;
 }
 
 export const SaksinfoBanner = ({
@@ -34,8 +37,15 @@ export const SaksinfoBanner = ({
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
-
+  const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveReservertAv;
+
+  /*
+  const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
+  const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
+  const visValgForÅTrekkeSøknad =
+    brukerKanSaksbehandle && behandlingErFørstegangsbehandling && behandlingErIkkeAvsluttet;
+    */
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (oppgaveReservertAv && !erReservertAvInnloggetBruker) {
@@ -98,11 +108,16 @@ export const SaksinfoBanner = ({
                   <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
                     Sett behandling på vent
                   </Dropdown.Menu.GroupedList.Item>
-                  {/*typeBehandling && typeBehandling === 'Førstegangsbehandling' && (
+                  {/*visValgForÅTrekkeSøknad && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisTrekkSøknadModal(true)}>
                       Trekk søknad
                     </Dropdown.Menu.GroupedList.Item>
                   )*/}
+                  {!isProd() && (
+                    <Dropdown.Menu.GroupedList.Item onClick={() => settVisVurderRettighetsperiodeModal(true)}>
+                      Overstyr starttidspunkt
+                    </Dropdown.Menu.GroupedList.Item>
+                  )}
                 </Dropdown.Menu.GroupedList>
               </Dropdown.Menu>
             </Dropdown>
@@ -115,6 +130,11 @@ export const SaksinfoBanner = ({
             <TrekkSøknadModal
               isOpen={visTrekkSøknadModal}
               onClose={() => settVisTrekkSøknadModal(false)}
+              saksnummer={sak.saksnummer}
+            />
+            <VurderRettighetsperiodeModal
+              isOpen={visVurderRettighetsperiodeModal}
+              onClose={() => settVisVurderRettighetsperiodeModal(false)}
               saksnummer={sak.saksnummer}
             />
           </div>

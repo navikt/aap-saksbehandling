@@ -42,6 +42,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
             typeBehandling={flyt.data.visning.typeBehandling}
+            erAktivtSteg={flyt.data.aktivtSteg === 'AVKLAR_SYKDOM'}
           />
         </StegSuspense>
       )}
@@ -70,6 +71,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
             typeBehandling={flyt.data.visning.typeBehandling}
+            erAktivtSteg={flyt.data.aktivtSteg === 'VURDER_BISTANDSBEHOV'}
           />
         </StegSuspense>
       )}

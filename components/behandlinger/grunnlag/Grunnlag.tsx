@@ -28,9 +28,6 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
 
   const behandlingVersjon = flyt.data.behandlingVersjon;
 
-  /*
-   TODO 09.08.2024 - hacky løsning for å midlertidig kunne vise soning og opphold på helseinstitusjon
-   */
   const vurderFastsettBeregningstidspunkt =
     avklaringsBehov?.avklaringsbehov.find((b) => b.definisjon.kode === Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE) !=
     null;

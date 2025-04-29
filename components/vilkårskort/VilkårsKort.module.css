@@ -14,17 +14,17 @@
   border-left: 0.5rem solid var(--a-surface-alt-1-moderate);
 }
 
+.vilkårsKort {
+  border: 1px solid var(--a-border-divider);
+}
+
 :is(.vilkårsKortNAV, .vilkårsKortNAY):last-of-type {
   margin-bottom: var(--a-spacing-18);
 }
 
 .header,
-.content,
-.header:hover,
-.content:hover {
+.content {
   border: none;
-  /* Nødvendig for å unngå merkelig radius i header ved hover */
-  border-top-left-radius: 0;
   box-shadow: none;
 }
 
