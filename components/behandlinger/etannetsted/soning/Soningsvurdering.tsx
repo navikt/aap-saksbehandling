@@ -1,11 +1,9 @@
 'use client';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Soningsgrunnlag } from 'lib/types/types';
 import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { FormEvent } from 'react';
@@ -20,6 +18,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   grunnlag: Soningsgrunnlag;
@@ -38,7 +37,7 @@ interface Vurdering {
 }
 
 export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Props) => {
-  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
+  const { isLoading, status, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -89,90 +88,90 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
   };
 
   return (
-    <VilkårsKort heading={'§ 11-26 Soning'} steg={'DU_ER_ET_ANNET_STED'}>
-      <Form
-        onSubmit={handleSubmit}
-        steg={'DU_ER_ET_ANNET_STED'}
-        status={status}
-        resetStatus={resetStatus}
-        isLoading={isLoading}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-        visBekreftKnapp={!readOnly}
-      >
-        <InstitusjonsoppholdTabell
-          label="Bruker har følgende soningsforhold"
-          beskrivelse="Under opphold i fengsel har ikke bruker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP"
-          instutisjonsopphold={grunnlag.soningsforhold}
-        />
-        {fields.map((field, index) => {
-          const erFørsteVurdering = index === 0;
-          return (
-            <div key={field.id} className={styles.vurdering}>
-              <TextAreaWrapper
-                name={`soningsvurderinger.${index}.begrunnelse`}
+    <VilkårsKortMedForm
+      heading={'§ 11-26 Soning'}
+      steg={'DU_ER_ET_ANNET_STED'}
+      onSubmit={handleSubmit}
+      status={status}
+      isLoading={isLoading}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      visBekreftKnapp={!readOnly}
+      vilkårTilhørerNavKontor={false}
+      erAktivtSteg={true}
+    >
+      <InstitusjonsoppholdTabell
+        label="Bruker har følgende soningsforhold"
+        beskrivelse="Under opphold i fengsel har ikke bruker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP"
+        instutisjonsopphold={grunnlag.soningsforhold}
+      />
+      {fields.map((field, index) => {
+        const erFørsteVurdering = index === 0;
+        return (
+          <div key={field.id} className={styles.vurdering}>
+            <TextAreaWrapper
+              name={`soningsvurderinger.${index}.begrunnelse`}
+              control={form.control}
+              label={
+                'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning'
+              }
+              rules={{ required: 'Du må gi en begrunnelse' }}
+              className={'begrunnelse'}
+              readOnly={readOnly}
+            />
+            <RadioGroupWrapper
+              name={`soningsvurderinger.${index}.skalOpphøre`}
+              control={form.control}
+              label={'Skal ytelsen stoppes på grunn av soning?'}
+              rules={{ required: 'Du må ta stilling til om ytelsen skal stoppes på grunn av soning' }}
+              readOnly={readOnly}
+              horisontal
+            >
+              <Radio value={JaEllerNei.Ja}>Ja</Radio>
+              <Radio value={JaEllerNei.Nei}>Nei</Radio>
+            </RadioGroupWrapper>
+            {erFørsteVurdering ? (
+              <div>
+                <Label size={'small'}>Vurderingen gjelder fra</Label>
+                <BodyShort>{field.fraDato}</BodyShort>
+              </div>
+            ) : (
+              <DateInputWrapper
+                name={`soningsvurderinger.${index}.fraDato`}
                 control={form.control}
-                label={
-                  'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning'
-                }
-                rules={{ required: 'Du må gi en begrunnelse' }}
-                className={'begrunnelse'}
+                label={'Vurderingen gjelder fra'}
+                rules={{
+                  required: 'Du må sette en dato for når vurderingen skal gjelde fra',
+                  validate: (value) => validerDato(value as string),
+                }}
                 readOnly={readOnly}
               />
-              <RadioGroupWrapper
-                name={`soningsvurderinger.${index}.skalOpphøre`}
-                control={form.control}
-                label={'Skal ytelsen stoppes på grunn av soning?'}
-                rules={{ required: 'Du må ta stilling til om ytelsen skal stoppes på grunn av soning' }}
-                readOnly={readOnly}
-                horisontal
+            )}
+            {!erFørsteVurdering && !readOnly && (
+              <Button
+                type={'button'}
+                icon={<TrashIcon aria-hidden />}
+                className={'fit-content'}
+                variant={'tertiary'}
+                size={'small'}
+                onClick={() => remove(index)}
               >
-                <Radio value={JaEllerNei.Ja}>Ja</Radio>
-                <Radio value={JaEllerNei.Nei}>Nei</Radio>
-              </RadioGroupWrapper>
-              {erFørsteVurdering ? (
-                <div>
-                  <Label size={'small'}>Vurderingen gjelder fra</Label>
-                  <BodyShort>{field.fraDato}</BodyShort>
-                </div>
-              ) : (
-                <DateInputWrapper
-                  name={`soningsvurderinger.${index}.fraDato`}
-                  control={form.control}
-                  label={'Vurderingen gjelder fra'}
-                  rules={{
-                    required: 'Du må sette en dato for når vurderingen skal gjelde fra',
-                    validate: (value) => validerDato(value as string),
-                  }}
-                  readOnly={readOnly}
-                />
-              )}
-              {!erFørsteVurdering && !readOnly && (
-                <Button
-                  type={'button'}
-                  icon={<TrashIcon aria-hidden />}
-                  className={'fit-content'}
-                  variant={'tertiary'}
-                  size={'small'}
-                  onClick={() => remove(index)}
-                >
-                  Fjern vurdering
-                </Button>
-              )}
-            </div>
-          );
-        })}
-        {!readOnly && (
-          <Button
-            type={'button'}
-            className={'fit-content'}
-            variant={'secondary'}
-            size={'small'}
-            onClick={() => append({ begrunnelse: '', fraDato: '', skalOpphøre: '' })}
-          >
-            Legg til ny vurdering
-          </Button>
-        )}
-      </Form>
-    </VilkårsKort>
+                Fjern vurdering
+              </Button>
+            )}
+          </div>
+        );
+      })}
+      {!readOnly && (
+        <Button
+          type={'button'}
+          className={'fit-content'}
+          variant={'secondary'}
+          size={'small'}
+          onClick={() => append({ begrunnelse: '', fraDato: '', skalOpphøre: '' })}
+        >
+          Legg til ny vurdering
+        </Button>
+      )}
+    </VilkårsKortMedForm>
   );
 };

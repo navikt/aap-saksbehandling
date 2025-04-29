@@ -1,9 +1,7 @@
 'use client';
 
-import { Form } from 'components/form/Form';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { isBefore, parse, startOfDay } from 'date-fns';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -13,6 +11,7 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { validerDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 import { useSak } from 'hooks/SakHook';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -27,7 +26,7 @@ interface FormFields {
 }
 
 export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
   const { sak } = useSak();
   const behandlingsreferanse = useBehandlingsReferanse();
@@ -105,24 +104,24 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   };
 
   return (
-    <VilkårsKort heading={'Refusjonskrav sosialstønad'} steg="REFUSJON_KRAV" vilkårTilhørerNavKontor={true}>
-      <Form
-        onSubmit={handleSubmit}
-        status={status}
-        resetStatus={resetStatus}
-        isLoading={isLoading}
-        steg={'REFUSJON_KRAV'}
-        visBekreftKnapp={!readOnly}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
-        <FormField form={form} formField={formFields.harKrav} horizontalRadio />
-        {form.watch('harKrav') === JaEllerNei.Ja && (
-          <>
-            <FormField form={form} formField={formFields.vurderingenGjelderFra} />
-            <FormField form={form} formField={formFields.vurderingenGjelderTil} />
-          </>
-        )}
-      </Form>
-    </VilkårsKort>
+    <VilkårsKortMedForm
+      heading={'Refusjonskrav sosialstønad'}
+      steg="REFUSJON_KRAV"
+      vilkårTilhørerNavKontor={true}
+      onSubmit={handleSubmit}
+      status={status}
+      isLoading={isLoading}
+      visBekreftKnapp={!readOnly}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      erAktivtSteg={true}
+    >
+      <FormField form={form} formField={formFields.harKrav} horizontalRadio />
+      {form.watch('harKrav') === JaEllerNei.Ja && (
+        <>
+          <FormField form={form} formField={formFields.vurderingenGjelderFra} />
+          <FormField form={form} formField={formFields.vurderingenGjelderTil} />
+        </>
+      )}
+    </VilkårsKortMedForm>
   );
 };

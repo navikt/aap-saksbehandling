@@ -1,18 +1,16 @@
 'use client';
 
-import { Alert, BodyShort, Button } from '@navikt/ds-react';
+import { Alert, BodyShort } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { revalidateFlyt } from 'lib/actions/actions';
-import { ApiException } from "lib/utils/api";
+import { ApiException } from 'lib/utils/api';
 
 interface Props {
   status?: LøsBehovOgGåTilNesteStegStatus;
   løsBehovOgGåTilNesteStegError?: ApiException;
-  resetStatus?: () => void;
 }
 
-export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, resetStatus, løsBehovOgGåTilNesteStegError }: Props) => {
+export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTilNesteStegError }: Props) => {
   const { behandlingsReferanse, saksId } = useParams<{ behandlingsReferanse: string; saksId: string }>();
   return (
     <>
@@ -53,20 +51,6 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, resetStatus, lø
             <b>Behandlingsreferanse:</b>
             {` ${behandlingsReferanse}`}
           </BodyShort>
-        </Alert>
-      )}
-      {status === 'CLIENT_CONFLICT' && (
-        <Alert variant="error">
-          <BodyShort spacing>Det ser ut til at noe har endret seg i behandlingen siden sist vi sjekket.</BodyShort>
-          <Button
-            type={'button'}
-            onClick={async () => {
-              await revalidateFlyt(behandlingsReferanse);
-              resetStatus && resetStatus();
-            }}
-          >
-            Oppdater
-          </Button>
         </Alert>
       )}
     </>

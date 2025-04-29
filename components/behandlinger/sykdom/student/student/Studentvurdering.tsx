@@ -1,8 +1,6 @@
 'use client';
 
 import { isAfter, parse } from 'date-fns';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Form } from 'components/form/Form';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { ErStudentStatus, SkalGjenopptaStudieStatus, StudentGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -13,6 +11,7 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -32,7 +31,7 @@ interface FormFields {
 
 export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -138,50 +137,50 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
   };
 
   return (
-    <VilkårsKort heading={'§ 11-14 Student'} steg={'AVKLAR_STUDENT'}>
-      <Form
-        onSubmit={handleSubmit}
-        status={status}
-        resetStatus={resetStatus}
-        isLoading={isLoading}
-        steg={'AVKLAR_STUDENT'}
-        visBekreftKnapp={!readOnly}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <Label size={'small'}>Relevant informasjon fra søknaden</Label>
-          {grunnlag?.oppgittStudent?.erStudentStatus && (
+    <VilkårsKortMedForm
+      heading={'§ 11-14 Student'}
+      steg={'AVKLAR_STUDENT'}
+      onSubmit={handleSubmit}
+      status={status}
+      isLoading={isLoading}
+      visBekreftKnapp={!readOnly}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      erAktivtSteg={true}
+      vilkårTilhørerNavKontor={false}
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <Label size={'small'}>Relevant informasjon fra søknaden</Label>
+        {grunnlag?.oppgittStudent?.erStudentStatus && (
+          <BodyShort size={'small'}>
+            Er bruker student: {mapErStudentStatusTilString(grunnlag.oppgittStudent.erStudentStatus)}
+          </BodyShort>
+        )}
+        {grunnlag?.oppgittStudent?.skalGjenopptaStudieStatus &&
+          grunnlag?.oppgittStudent?.skalGjenopptaStudieStatus !== 'IKKE_OPPGITT' && (
             <BodyShort size={'small'}>
-              Er bruker student: {mapErStudentStatusTilString(grunnlag.oppgittStudent.erStudentStatus)}
+              Planlegger å gjenoppta studie:{' '}
+              {mapSkalGjenopptaStudieStatus(grunnlag.oppgittStudent.skalGjenopptaStudieStatus)}
             </BodyShort>
           )}
-          {grunnlag?.oppgittStudent?.skalGjenopptaStudieStatus &&
-            grunnlag?.oppgittStudent?.skalGjenopptaStudieStatus !== 'IKKE_OPPGITT' && (
-              <BodyShort size={'small'}>
-                Planlegger å gjenoppta studie:{' '}
-                {mapSkalGjenopptaStudieStatus(grunnlag.oppgittStudent.skalGjenopptaStudieStatus)}
-              </BodyShort>
-            )}
-        </div>
-        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-        <FormField form={form} formField={formFields.harAvbruttStudie} horizontalRadio />
-        {form.watch('harAvbruttStudie') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.godkjentStudieAvLånekassen} horizontalRadio />
-        )}
-        {form.watch('godkjentStudieAvLånekassen') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.avbruttPgaSykdomEllerSkade} horizontalRadio />
-        )}
-        {form.watch('avbruttPgaSykdomEllerSkade') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.harBehovForBehandling} horizontalRadio />
-        )}
-        {form.watch('harBehovForBehandling') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.avbruddMerEnn6Måneder} horizontalRadio />
-        )}
-        {form.watch('avbruddMerEnn6Måneder') === JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.avbruttDato} />
-        )}
-      </Form>
-    </VilkårsKort>
+      </div>
+      <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+      <FormField form={form} formField={formFields.harAvbruttStudie} horizontalRadio />
+      {form.watch('harAvbruttStudie') === JaEllerNei.Ja && (
+        <FormField form={form} formField={formFields.godkjentStudieAvLånekassen} horizontalRadio />
+      )}
+      {form.watch('godkjentStudieAvLånekassen') === JaEllerNei.Ja && (
+        <FormField form={form} formField={formFields.avbruttPgaSykdomEllerSkade} horizontalRadio />
+      )}
+      {form.watch('avbruttPgaSykdomEllerSkade') === JaEllerNei.Ja && (
+        <FormField form={form} formField={formFields.harBehovForBehandling} horizontalRadio />
+      )}
+      {form.watch('harBehovForBehandling') === JaEllerNei.Ja && (
+        <FormField form={form} formField={formFields.avbruddMerEnn6Måneder} horizontalRadio />
+      )}
+      {form.watch('avbruddMerEnn6Måneder') === JaEllerNei.Ja && (
+        <FormField form={form} formField={formFields.avbruttDato} />
+      )}
+    </VilkårsKortMedForm>
   );
 };
 

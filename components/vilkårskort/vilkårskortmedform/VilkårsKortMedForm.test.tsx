@@ -12,40 +12,40 @@ describe('Vilkårskort med form', () => {
   });
 
   it('skal vise innhold', () => {
-    renderComponent();
+    renderComponent(true);
     const innhold = screen.getByText('Dette er innhold');
     expect(innhold).toBeVisible();
   });
 
-  it('skal vise en knapp for å bekrefte innesending av skjema dersom det ikke er readOnly', () => {
-    renderComponent();
+  it('skal vise en knapp for å bekrefte innesending av skjema dersom visBekreftKnapp er true', () => {
+    renderComponent(true);
     const button = screen.getByRole('button', { name: 'Bekreft' });
     expect(button).toBeVisible();
   });
 
-  it('skal ikke vise bekreft knapp dersom det er readOnly', async () => {
-    renderComponent(true);
+  it('skal ikke vise bekreft knapp visBekreftKnapp er false', async () => {
+    renderComponent(false);
 
     const bekreftButton = screen.queryByRole('button', { name: 'Bekreft' });
     expect(bekreftButton).not.toBeInTheDocument();
   });
 
   it('skal vise informasjon om hvem som har gjort en vurdering', () => {
-    renderComponent();
+    renderComponent(true);
 
     const tekst = screen.getByText('Vurdert av Lokalsaksbehandler (Nav kontor), 25.04.2025');
     expect(tekst).toBeVisible();
   });
 
   it('skal vise feilmelding dersom det finnes', () => {
-    renderComponent(false, { message: 'Dette er en feil fra backend gjennom løs behov', code: 'UKJENT' });
+    renderComponent(true, { message: 'Dette er en feil fra backend gjennom løs behov', code: 'UKJENT' });
 
     const errorMessage = screen.getByText('Dette er en feil fra backend gjennom løs behov');
     expect(errorMessage).toBeVisible();
   });
 });
 
-function renderComponent(readOnly?: boolean, error?: ApiException) {
+function renderComponent(skalViseBekreftKnapp?: boolean, error?: ApiException) {
   render(
     <VilkårsKortMedForm
       heading={'Dette er en overskrift'}
@@ -54,7 +54,7 @@ function renderComponent(readOnly?: boolean, error?: ApiException) {
       isLoading={false}
       status={'DONE'}
       erAktivtSteg={true}
-      readOnly={!!readOnly}
+      visBekreftKnapp={!!skalViseBekreftKnapp}
       vilkårTilhørerNavKontor={true}
       løsBehovOgGåTilNesteStegError={error}
       vurdertAvAnsatt={{ ident: 'Lokalsaksbehandler', dato: '2025-04-25' }}

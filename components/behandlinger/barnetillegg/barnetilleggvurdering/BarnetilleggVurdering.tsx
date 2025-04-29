@@ -50,7 +50,7 @@ export const BarnetilleggVurdering = ({
   readOnly,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
   const vurderteBarn: BarneTilleggVurdering[] = grunnlag.vurderteBarn.map((barn) => {
@@ -141,7 +141,6 @@ export const BarnetilleggVurdering = ({
             <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit} autoComplete={'off'}>
               <LøsBehovOgGåTilNesteStegStatusAlert
                 status={status}
-                resetStatus={resetStatus}
                 løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
               />
               {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {

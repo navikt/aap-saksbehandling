@@ -1,10 +1,8 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormEvent } from 'react';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 
 import { useFieldArray } from 'react-hook-form';
@@ -23,6 +21,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   grunnlag?: ArbeidsevneGrunnlag;
@@ -78,7 +77,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
     name: 'arbeidsevnevurderinger',
   });
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -103,101 +102,97 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
   const skalViseBekreftKnapp = !readOnly && arbeidsevneVurderinger.length > 0;
 
   return (
-    <VilkårsKort
+    <VilkårsKortMedForm
       heading={'§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet'}
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
       defaultOpen={showAsOpen}
+      onSubmit={handleSubmit}
+      status={status}
+      isLoading={isLoading}
+      visBekreftKnapp={skalViseBekreftKnapp}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      erAktivtSteg={true}
     >
-      <Form
-        onSubmit={handleSubmit}
-        status={status}
-        resetStatus={resetStatus}
-        isLoading={isLoading}
-        steg={'FASTSETT_ARBEIDSEVNE'}
-        visBekreftKnapp={skalViseBekreftKnapp}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
-        <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
-          Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
-        </Link>
-        {arbeidsevneVurderinger.map((vurdering, index) => (
-          <div key={vurdering.id} className={`${styles.vurdering} flex-column`}>
-            <TextAreaWrapper
-              label={'Vilkårsvurdering'}
-              description={
-                'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett på full ytelse.'
-              }
-              control={form.control}
-              name={`arbeidsevnevurderinger.${index}.begrunnelse`}
-              rules={{ required: 'Du må begrunne vurderingen din' }}
-              className={'begrunnelse'}
-              readOnly={readOnly}
-            />
-            <div className={styles.rad}>
-              <div>
-                <TextFieldWrapper
-                  control={form.control}
-                  name={`arbeidsevnevurderinger.${index}.arbeidsevne`}
-                  type={'text'}
-                  label={'Oppgi arbeidsevnen som ikke er utnyttet i prosent'}
-                  rules={{
-                    required: 'Du må angi hvor stor arbeidsevne bruker har',
-                    validate: (value) => {
-                      const valueAsNumber = Number(value);
-                      if (isNaN(valueAsNumber)) {
-                        return 'Prosent må være et tall';
-                      } else if (!erProsent(valueAsNumber)) {
-                        return 'Prosent kan bare være mellom 0 og 100';
-                      }
-                    },
-                  }}
-                  readOnly={readOnly}
-                  className="prosent_input"
-                />
-                <div className={styles.timekolonne}>
-                  {regnOmTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`))}
-                </div>
+      <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
+        Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
+      </Link>
+      {arbeidsevneVurderinger.map((vurdering, index) => (
+        <div key={vurdering.id} className={`${styles.vurdering} flex-column`}>
+          <TextAreaWrapper
+            label={'Vilkårsvurdering'}
+            description={
+              'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett på full ytelse.'
+            }
+            control={form.control}
+            name={`arbeidsevnevurderinger.${index}.begrunnelse`}
+            rules={{ required: 'Du må begrunne vurderingen din' }}
+            className={'begrunnelse'}
+            readOnly={readOnly}
+          />
+          <div className={styles.rad}>
+            <div>
+              <TextFieldWrapper
+                control={form.control}
+                name={`arbeidsevnevurderinger.${index}.arbeidsevne`}
+                type={'text'}
+                label={'Oppgi arbeidsevnen som ikke er utnyttet i prosent'}
+                rules={{
+                  required: 'Du må angi hvor stor arbeidsevne bruker har',
+                  validate: (value) => {
+                    const valueAsNumber = Number(value);
+                    if (isNaN(valueAsNumber)) {
+                      return 'Prosent må være et tall';
+                    } else if (!erProsent(valueAsNumber)) {
+                      return 'Prosent kan bare være mellom 0 og 100';
+                    }
+                  },
+                }}
+                readOnly={readOnly}
+                className="prosent_input"
+              />
+              <div className={styles.timekolonne}>
+                {regnOmTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`))}
               </div>
             </div>
-            <DateInputWrapper
-              control={form.control}
-              name={`arbeidsevnevurderinger.${index}.fom`}
-              label={'Vurderingen gjelder fra'}
-              rules={{
-                required: 'Du må angi datoen arbeidsevnen gjelder fra',
-                validate: (value) => validerDato(value as string),
-              }}
-              readOnly={readOnly}
-            />
-            {!readOnly && (
-              <div>
-                <Button
-                  onClick={() => remove(index)}
-                  type={'button'}
-                  variant={'tertiary'}
-                  size={'small'}
-                  icon={<TrashIcon aria-hidden />}
-                >
-                  Fjern vurdering
-                </Button>
-              </div>
-            )}
           </div>
-        ))}
-        {!readOnly && (
-          <div>
-            <Button
-              onClick={() => append({ begrunnelse: '', arbeidsevne: '', fom: '' })}
-              type={'button'}
-              variant={'secondary'}
-              size={'small'}
-            >
-              Legg til ny vurdering
-            </Button>
-          </div>
-        )}
-      </Form>
-    </VilkårsKort>
+          <DateInputWrapper
+            control={form.control}
+            name={`arbeidsevnevurderinger.${index}.fom`}
+            label={'Vurderingen gjelder fra'}
+            rules={{
+              required: 'Du må angi datoen arbeidsevnen gjelder fra',
+              validate: (value) => validerDato(value as string),
+            }}
+            readOnly={readOnly}
+          />
+          {!readOnly && (
+            <div>
+              <Button
+                onClick={() => remove(index)}
+                type={'button'}
+                variant={'tertiary'}
+                size={'small'}
+                icon={<TrashIcon aria-hidden />}
+              >
+                Fjern vurdering
+              </Button>
+            </div>
+          )}
+        </div>
+      ))}
+      {!readOnly && (
+        <div>
+          <Button
+            onClick={() => append({ begrunnelse: '', arbeidsevne: '', fom: '' })}
+            type={'button'}
+            variant={'secondary'}
+            size={'small'}
+          >
+            Legg til ny vurdering
+          </Button>
+        </div>
+      )}
+    </VilkårsKortMedForm>
   );
 };

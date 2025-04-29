@@ -1,12 +1,10 @@
 'use client';
 
-import { BodyShort, Link, Table } from '@navikt/ds-react';
+import { BodyShort, Link, Table, VStack } from '@navikt/ds-react';
 import {
   hentBruddTekst,
   hentGrunnTekst,
 } from 'components/aktivitetsplikt/aktivitetsplikthendelser/aktivitetsplikthendelsertabell/aktivitetsplikthendelsertabellrad/AktivitetspliktHendelserTabellRad';
-import { Form } from 'components/form/Form';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { AktivitetspliktGrunnlag, AktivitetspliktPeriode } from 'lib/types/types';
@@ -18,6 +16,7 @@ import styles from './Aktivitetsplikt.module.css';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   grunnlag?: AktivitetspliktGrunnlag;
@@ -32,7 +31,7 @@ interface FormFields {
 export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const saksnummer = useSaksnummer();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('EFFEKTUER_11_7');
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -67,10 +66,16 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
     grunnlag.gjeldendeBrudd.map((brudd) => brudd.periode.fom).sort(sorterEtterNyesteDato)[0];
 
   return (
-    <VilkårsKort
+    <VilkårsKortMedForm
       steg={'EFFEKTUER_11_7'}
       heading={'§ 11-7 Bidrar ikke til egen avklaring / behandling'}
       vilkårTilhørerNavKontor
+      onSubmit={handleSubmit}
+      status={status}
+      isLoading={isLoading}
+      visBekreftKnapp={true} // OIST ignorerer flagg fra backend midlertidig
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      erAktivtSteg={true}
     >
       <Table size={'small'} className={styles.bruddTabell}>
         <Table.Header>
@@ -103,21 +108,13 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
           </span>
         </div>
       </section>
-      <Form
-        onSubmit={handleSubmit}
-        status={status}
-        resetStatus={resetStatus}
-        isLoading={isLoading}
-        steg={'EFFEKTUER_11_7'}
-        visBekreftKnapp={true} // OIST ignorerer flagg fra backend midlertidig
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
+      <VStack gap={'4'}>
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <BodyShort>
           Med gjeldende § 11-7 brudd vil bruker få stans i ytelsen fra {formaterDatoForFrontend(finnTidligsteDato())}
         </BodyShort>
-      </Form>
-    </VilkårsKort>
+      </VStack>
+    </VilkårsKortMedForm>
   );
 };
 

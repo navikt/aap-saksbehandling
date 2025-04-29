@@ -24,9 +24,7 @@ const Page = async (props: { params: Promise<{ saksId: string; behandlingsRefera
       `/saksbehandling/sak/${params.saksId}/${behandling.data.referanse}/${flyt.data.vurdertGruppe}/#${flyt.data.vurdertSteg}`
     );
   } else {
-    redirect(
-      `/saksbehandling/sak/${params.saksId}/${behandling.data.referanse}/${flyt.data.aktivGruppe}/#${flyt.data.aktivtSteg}`
-    );
+    redirect(`/saksbehandling/sak/${params.saksId}/${behandling.data.referanse}/${flyt.data.aktivGruppe}`);
   }
 };
 

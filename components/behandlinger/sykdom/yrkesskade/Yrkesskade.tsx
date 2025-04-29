@@ -1,16 +1,15 @@
 'use client';
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { Checkbox, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { erProsent } from 'lib/utils/validering';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -27,7 +26,7 @@ interface FormFields {
 }
 
 export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, readOnly }: Props) => {
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_YRKESSKADE');
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -71,68 +70,68 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
   );
 
   return (
-    <VilkårsKort heading={'§ 11-22 AAP ved yrkesskade'} steg={'VURDER_YRKESSKADE'} vilkårTilhørerNavKontor={false}>
-      <Form
-        steg={'VURDER_YRKESSKADE'}
-        onSubmit={form.handleSubmit((data) => {
-          løsBehovOgGåTilNesteSteg({
-            behov: {
-              behovstype: Behovstype.YRKESSKADE_KODE,
-              yrkesskadesvurdering: {
-                begrunnelse: data.begrunnelse,
-                erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
-                andelAvNedsettelsen: data?.andelAvNedsettelsen,
-                relevanteSaker: data.relevanteSaker || [],
-              },
+    <VilkårsKortMedForm
+      heading={'§ 11-22 AAP ved yrkesskade'}
+      steg={'VURDER_YRKESSKADE'}
+      vilkårTilhørerNavKontor={false}
+      onSubmit={form.handleSubmit((data) => {
+        løsBehovOgGåTilNesteSteg({
+          behov: {
+            behovstype: Behovstype.YRKESSKADE_KODE,
+            yrkesskadesvurdering: {
+              begrunnelse: data.begrunnelse,
+              erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
+              andelAvNedsettelsen: data?.andelAvNedsettelsen,
+              relevanteSaker: data.relevanteSaker || [],
             },
-            behandlingVersjon: behandlingVersjon,
-            referanse: behandlingsReferanse,
-          });
-        })}
-        isLoading={isLoading}
-        status={status}
-        resetStatus={resetStatus}
-        visBekreftKnapp={!readOnly}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
-        <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-        <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
-        {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
-          <>
-            <FormField form={form} formField={formFields.relevanteSaker}>
-              <TableStyled>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell textSize={'small'}>Tilknytt yrkesskade</Table.HeaderCell>
-                    <Table.HeaderCell textSize={'small'}>Skadenummer</Table.HeaderCell>
-                    <Table.HeaderCell textSize={'small'}>Kilde</Table.HeaderCell>
-                    <Table.HeaderCell textSize={'small'}>Skadedato</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                {grunnlag.opplysninger.innhentedeYrkesskader.length > 0 && (
-                  <Table.Body>
-                    {grunnlag.opplysninger.innhentedeYrkesskader.map((yrkesskade) => (
-                      <Table.Row key={yrkesskade.ref}>
-                        <Table.DataCell textSize={'small'}>
-                          <Checkbox size={'small'} hideLabel value={yrkesskade.ref}>
-                            Tilknytt yrkesskade til vurdering
-                          </Checkbox>
-                        </Table.DataCell>
-                        <Table.DataCell textSize={'small'}>{yrkesskade.ref}</Table.DataCell>
-                        <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
-                        <Table.DataCell textSize={'small'}>
-                          {formaterDatoForFrontend(yrkesskade.skadedato)}
-                        </Table.DataCell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                )}
-              </TableStyled>
-            </FormField>
-            <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
-          </>
-        )}
-      </Form>
-    </VilkårsKort>
+          },
+          behandlingVersjon: behandlingVersjon,
+          referanse: behandlingsReferanse,
+        });
+      })}
+      isLoading={isLoading}
+      status={status}
+      visBekreftKnapp={!readOnly}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      erAktivtSteg={true}
+    >
+      <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+      <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
+      {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
+        <>
+          <FormField form={form} formField={formFields.relevanteSaker}>
+            <TableStyled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell textSize={'small'}>Tilknytt yrkesskade</Table.HeaderCell>
+                  <Table.HeaderCell textSize={'small'}>Skadenummer</Table.HeaderCell>
+                  <Table.HeaderCell textSize={'small'}>Kilde</Table.HeaderCell>
+                  <Table.HeaderCell textSize={'small'}>Skadedato</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              {grunnlag.opplysninger.innhentedeYrkesskader.length > 0 && (
+                <Table.Body>
+                  {grunnlag.opplysninger.innhentedeYrkesskader.map((yrkesskade) => (
+                    <Table.Row key={yrkesskade.ref}>
+                      <Table.DataCell textSize={'small'}>
+                        <Checkbox size={'small'} hideLabel value={yrkesskade.ref}>
+                          Tilknytt yrkesskade til vurdering
+                        </Checkbox>
+                      </Table.DataCell>
+                      <Table.DataCell textSize={'small'}>{yrkesskade.ref}</Table.DataCell>
+                      <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
+                      <Table.DataCell textSize={'small'}>
+                        {formaterDatoForFrontend(yrkesskade.skadedato)}
+                      </Table.DataCell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              )}
+            </TableStyled>
+          </FormField>
+          <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
+        </>
+      )}
+    </VilkårsKortMedForm>
   );
 };

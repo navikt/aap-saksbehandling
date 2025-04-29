@@ -15,11 +15,10 @@ interface Props {
   steg: StegType;
   children: ReactNode;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  readOnly: boolean;
   isLoading: boolean;
   erAktivtSteg: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
-  resetStatus?: () => void;
+  visBekreftKnapp: boolean;
   løsBehovOgGåTilNesteStegError?: ApiException;
   knappTekst?: string;
   defaultOpen?: boolean;
@@ -39,17 +38,14 @@ export const VilkårsKortMedForm = ({
   onSubmit,
   isLoading,
   status,
-  resetStatus,
   løsBehovOgGåTilNesteStegError,
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
   defaultOpen = true,
-  readOnly,
+  visBekreftKnapp,
   vurdertAvAnsatt,
 }: Props) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
-
-  const visBekreftKnapp = !readOnly;
 
   return (
     <ExpansionCard
@@ -72,7 +68,6 @@ export const VilkårsKortMedForm = ({
             <LøsBehovOgGåTilNesteStegStatusAlert
               løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
               status={status}
-              resetStatus={resetStatus}
             />
             <HStack justify={'space-between'} align={'end'}>
               <div>{visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}</div>

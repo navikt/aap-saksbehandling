@@ -1,7 +1,5 @@
 'use client';
 
-import { Form } from 'components/form/Form';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { Alert, Button, HStack, VStack } from '@navikt/ds-react';
@@ -13,6 +11,7 @@ import { parse } from 'date-fns';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { SamordningAndreStatligeYtelserGrunnlag, SamordningAndreStatligeYtelserYtelse } from 'lib/types/types';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   grunnlag: SamordningAndreStatligeYtelserGrunnlag;
@@ -53,8 +52,9 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
   const finnesGrunnlag = grunnlag.vurdering ? grunnlag.vurdering.vurderingPerioder.length > 0 : false;
   const [visYtelsesTabell, setVisYtelsesTabell] = useState<boolean>(finnesGrunnlag);
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, resetStatus, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('SAMORDNING_ANDRE_STATLIGE_YTELSER');
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
+    'SAMORDNING_ANDRE_STATLIGE_YTELSER'
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
@@ -80,7 +80,17 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
   };
 
   return (
-    <VilkårsKort heading="Andre ytelser til avregning" steg="SAMORDNING_ANDRE_STATLIGE_YTELSER">
+    <VilkårsKortMedForm
+      heading="Andre ytelser til avregning"
+      steg="SAMORDNING_ANDRE_STATLIGE_YTELSER"
+      onSubmit={handleSubmit}
+      isLoading={isLoading}
+      status={status}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      erAktivtSteg={true}
+      visBekreftKnapp={!readOnly}
+      vilkårTilhørerNavKontor={false}
+    >
       {!visYtelsesTabell && (
         <HStack>
           <Button size={'small'} variant={'secondary'} onClick={() => setVisYtelsesTabell(true)} disabled={readOnly}>
@@ -95,19 +105,10 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
               Det er ikke støtte for refusjonskrav enda. Sett saken på vent og kontakt team AAP.
             </Alert>
           </HStack>
-          <Form
-            steg={'SAMORDNING_ANDRE_STATLIGE_YTELSER'}
-            onSubmit={handleSubmit}
-            isLoading={isLoading}
-            status={status}
-            resetStatus={resetStatus}
-            løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-          >
-            <FormField form={form} formField={formFields.begrunnelse} />
-            <AndreStatligeYtelserTabell form={form} readOnly={readOnly} />
-          </Form>
+          <FormField form={form} formField={formFields.begrunnelse} />
+          <AndreStatligeYtelserTabell form={form} readOnly={readOnly} />
         </VStack>
       )}
-    </VilkårsKort>
+    </VilkårsKortMedForm>
   );
 };

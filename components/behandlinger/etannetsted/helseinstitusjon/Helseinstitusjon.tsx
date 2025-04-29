@@ -1,8 +1,6 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { BodyShort, Label } from '@navikt/ds-react';
-import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
 import { HelseinstitusjonGrunnlag, Periode } from 'lib/types/types';
@@ -15,6 +13,7 @@ import styles from './Helseinstitusjon.module.css';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -36,7 +35,7 @@ interface Vurdering {
 
 export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
 
   const defaultValue: Vurdering[] = grunnlag.vurderinger.flatMap((item) => {
@@ -91,35 +90,35 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
   };
 
   return (
-    <VilkårsKort heading={'§ 11-25 Helseinstitusjon'} steg={'DU_ER_ET_ANNET_STED'}>
-      <Form
-        onSubmit={handleSubmit}
-        status={status}
-        resetStatus={resetStatus}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-        isLoading={isLoading}
-        steg={'AVKLAR_STUDENT'}
-        visBekreftKnapp={!readOnly}
-      >
-        <InstitusjonsoppholdTabell
-          label={'Bruker har følgende institusjonsopphold på helseinstitusjon'}
-          beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP ytelse'}
-          instutisjonsopphold={grunnlag.opphold}
-        />
-        {fields.map((field, index) => {
-          return (
-            <div key={field.id} className={styles.vurdering}>
-              <div>
-                <Label size={'medium'}>Periode</Label>
-                <BodyShort>
-                  {formaterDatoForFrontend(field.periode.fom)} - {formaterDatoForFrontend(field.periode.tom)}
-                </BodyShort>
-              </div>
-              <Helseinstitusjonsvurdering form={form} helseinstitusjonoppholdIndex={index} readonly={readOnly} />
+    <VilkårsKortMedForm
+      heading={'§ 11-25 Helseinstitusjon'}
+      steg={'DU_ER_ET_ANNET_STED'}
+      onSubmit={handleSubmit}
+      status={status}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={isLoading}
+      visBekreftKnapp={!readOnly}
+      vilkårTilhørerNavKontor={false}
+      erAktivtSteg={true}
+    >
+      <InstitusjonsoppholdTabell
+        label={'Bruker har følgende institusjonsopphold på helseinstitusjon'}
+        beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP ytelse'}
+        instutisjonsopphold={grunnlag.opphold}
+      />
+      {fields.map((field, index) => {
+        return (
+          <div key={field.id} className={styles.vurdering}>
+            <div>
+              <Label size={'medium'}>Periode</Label>
+              <BodyShort>
+                {formaterDatoForFrontend(field.periode.fom)} - {formaterDatoForFrontend(field.periode.tom)}
+              </BodyShort>
             </div>
-          );
-        })}
-      </Form>
-    </VilkårsKort>
+            <Helseinstitusjonsvurdering form={form} helseinstitusjonoppholdIndex={index} readonly={readOnly} />
+          </div>
+        );
+      })}
+    </VilkårsKortMedForm>
   );
 };

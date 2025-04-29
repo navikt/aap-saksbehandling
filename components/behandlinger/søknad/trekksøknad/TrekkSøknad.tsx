@@ -1,14 +1,13 @@
 'use client';
 
-import { Form } from 'components/form/Form';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { TrukketSøknadGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   grunnlag: TrukketSøknadGrunnlag;
@@ -22,7 +21,7 @@ interface FormFields {
 
 export const TrekkSøknad = ({ readOnly, behandlingVersjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SØKNAD');
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -49,18 +48,18 @@ export const TrekkSøknad = ({ readOnly, behandlingVersjon }: Props) => {
   };
 
   return (
-    <VilkårsKort heading={'Trekk søknad'} steg={'SØKNAD'}>
-      <Form
-        onSubmit={handleSubmit}
-        status={status}
-        resetStatus={resetStatus}
-        isLoading={isLoading}
-        steg={'SØKNAD'}
-        visBekreftKnapp={!readOnly}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      >
-        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-      </Form>
-    </VilkårsKort>
+    <VilkårsKortMedForm
+      heading={'Trekk søknad'}
+      steg={'SØKNAD'}
+      onSubmit={handleSubmit}
+      status={status}
+      isLoading={isLoading}
+      visBekreftKnapp={!readOnly}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      erAktivtSteg={true}
+      vilkårTilhørerNavKontor={false}
+    >
+      <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+    </VilkårsKortMedForm>
   );
 };

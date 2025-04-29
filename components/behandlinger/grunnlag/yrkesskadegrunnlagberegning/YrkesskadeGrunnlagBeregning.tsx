@@ -2,7 +2,6 @@
 
 import { useFieldArray } from 'react-hook-form';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { YrkesskadeTabell } from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/yrkesskadetabell/YrkesskadeTabell';
 import { BodyShort, Label } from '@navikt/ds-react';
@@ -11,10 +10,10 @@ import styles from './YrkesskadeGrunnlagBeregning.module.css';
 import { YrkeskadeBeregningGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -35,7 +34,7 @@ interface AntattÅrligInntektVurdering {
 }
 
 export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnlag, behandlingVersjon }: Props) => {
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
   const behandlingsReferanse = useBehandlingsReferanse();
   const defaultValue: AntattÅrligInntektVurdering[] = yrkeskadeBeregningGrunnlag.skalVurderes.map((yrkesskade) => {
@@ -64,69 +63,69 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
   const { fields } = useFieldArray({ control: form.control, name: 'vurderinger' });
 
   return (
-    <VilkårsKort heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}>
-      <Form
-        onSubmit={form.handleSubmit((data) => {
-          løsBehovOgGåTilNesteSteg({
-            behov: {
-              behovstype: Behovstype.FASTSETT_YRKESSKADEINNTEKT,
-              yrkesskadeInntektVurdering: {
-                vurderinger: data.vurderinger.map((vurdering) => {
-                  return {
-                    begrunnelse: vurdering.begrunnelse,
-                    antattÅrligInntekt: { verdi: Number(vurdering.inntekt) },
-                    referanse: vurdering.ref,
-                  };
-                }),
-              },
+    <VilkårsKortMedForm
+      heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
+      steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
+      onSubmit={form.handleSubmit((data) => {
+        løsBehovOgGåTilNesteSteg({
+          behov: {
+            behovstype: Behovstype.FASTSETT_YRKESSKADEINNTEKT,
+            yrkesskadeInntektVurdering: {
+              vurderinger: data.vurderinger.map((vurdering) => {
+                return {
+                  begrunnelse: vurdering.begrunnelse,
+                  antattÅrligInntekt: { verdi: Number(vurdering.inntekt) },
+                  referanse: vurdering.ref,
+                };
+              }),
             },
-            referanse: behandlingsReferanse,
-            behandlingVersjon: behandlingVersjon,
-          });
+          },
+          referanse: behandlingsReferanse,
+          behandlingVersjon: behandlingVersjon,
+        });
+      })}
+      status={status}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={isLoading}
+      visBekreftKnapp={!readOnly}
+      erAktivtSteg={true}
+      vilkårTilhørerNavKontor={false}
+    >
+      <YrkesskadeTabell
+        yrkesskader={yrkeskadeBeregningGrunnlag.skalVurderes.map((vurdering) => {
+          return { kilde: 'YRK', ref: vurdering.referanse, skadedato: vurdering.skadeDato };
         })}
-        steg={'FASTSETT_GRUNNLAG'}
-        status={status}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-        resetStatus={resetStatus}
-        isLoading={isLoading}
-        visBekreftKnapp={!readOnly}
-      >
-        <YrkesskadeTabell
-          yrkesskader={yrkeskadeBeregningGrunnlag.skalVurderes.map((vurdering) => {
-            return { kilde: 'YRK', ref: vurdering.referanse, skadedato: vurdering.skadeDato };
-          })}
-        />
-        {fields.map((field, index) => {
-          const grunnlag = Number(form.watch(`vurderinger.${index}.inntekt`)) / field.gverdi;
+      />
+      {fields.map((field, index) => {
+        const grunnlag = Number(form.watch(`vurderinger.${index}.inntekt`)) / field.gverdi;
 
-          return (
-            <div key={field.id} className={'flex-column'}>
-              <TextAreaWrapper
-                name={`vurderinger.${index}.begrunnelse`}
-                control={form.control}
-                label={`Begrunnelse for anslått årlig arbeidsinntekt for skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}
-                readOnly={readOnly}
-                className={'begrunnelse'}
-              />
-              <div className={styles.inntektfelt}>
-                <Label size="small">{`Anslått årlig arbeidsinntekt på skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}</Label>
-                <div className={styles.inntektwrapper}>
-                  <TextFieldWrapper
-                    label={`Anslått årlig arbeidsinntekt på skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}
-                    hideLabel
-                    name={`vurderinger.${index}.inntekt`}
-                    control={form.control}
-                    type={'number'}
-                    className={styles.input}
-                    readOnly={readOnly}
-                  />
-                  <BodyShort>{grunnlag.toFixed(2)} G</BodyShort>
-                </div>
+        return (
+          <div key={field.id} className={'flex-column'}>
+            <TextAreaWrapper
+              name={`vurderinger.${index}.begrunnelse`}
+              control={form.control}
+              label={`Begrunnelse for anslått årlig arbeidsinntekt for skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}
+              readOnly={readOnly}
+              className={'begrunnelse'}
+            />
+            <div className={styles.inntektfelt}>
+              <Label size="small">{`Anslått årlig arbeidsinntekt på skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}</Label>
+              <div className={styles.inntektwrapper}>
+                <TextFieldWrapper
+                  label={`Anslått årlig arbeidsinntekt på skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}
+                  hideLabel
+                  name={`vurderinger.${index}.inntekt`}
+                  control={form.control}
+                  type={'number'}
+                  className={styles.input}
+                  readOnly={readOnly}
+                />
+                <BodyShort>{grunnlag.toFixed(2)} G</BodyShort>
               </div>
             </div>
-          );
-        })}
-      </Form>
-    </VilkårsKort>
+          </div>
+        );
+      })}
+    </VilkårsKortMedForm>
   );
 };

@@ -67,7 +67,7 @@ export const Sykdomsvurdering = ({
   const { sak } = useSak();
   const { flyt } = useRequiredFlyt();
   console.log('flyt client', flyt);
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
@@ -278,10 +278,9 @@ export const Sykdomsvurdering = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      readOnly={readOnly}
+      visBekreftKnapp={!readOnly}
       vurdertAvAnsatt={vurdertAvAnsatt}
       knappTekst={'Bekreft'}
-      resetStatus={resetStatus}
     >
       {behandlingErRevurdering && (
         <TidligereVurderinger

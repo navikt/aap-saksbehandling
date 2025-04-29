@@ -103,12 +103,14 @@ const Layout = async (props: Props) => {
             brukerInformasjon={brukerInformasjon}
             typeBehandling={flytResponse.data.visning.typeBehandling}
             brukerKanSaksbehandle={brukerKanSaksbehandle}
+            flyt={flytResponse.data.flyt}
           />
 
           <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
 
           <HGrid columns="4fr 2fr" padding={'4'} gap={'4'}>
-            {children}
+            {/*Vi må ha children inne i en div for å unngå layoutshift*/}
+            <div style={{ width: '100%' }}>{children}</div>
             <aside className={`flex-column`}>
               <Behandlingsinfo behandling={behandling.data} saksnummer={params.saksId} />
               <Saksbehandlingsoversikt />

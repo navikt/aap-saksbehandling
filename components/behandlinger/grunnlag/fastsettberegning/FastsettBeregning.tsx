@@ -1,6 +1,5 @@
 'use client';
 
-import { Form } from 'components/form/Form';
 import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { BeregningTidspunktGrunnlag } from 'lib/types/types';
@@ -11,9 +10,9 @@ import { isBefore, parse } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import styles from './FastsettBeregning.module.css';
 import { Heading } from '@navikt/ds-react';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -30,7 +29,7 @@ interface FormFields {
 
 export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, status, resetStatus, isLoading, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -112,31 +111,31 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
     : '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5';
 
   return (
-    <VilkårsKort heading={heading} steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}>
-      <Form
-        steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
-        onSubmit={handleSubmit}
-        isLoading={isLoading}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-        status={status}
-        resetStatus={resetStatus}
-        visBekreftKnapp={!readOnly}
-      >
-        <FormField form={form} formField={formFields.nedsattArbeidsevneDatobegrunnelse} className="begrunnelse" />
-        <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
+    <VilkårsKortMedForm
+      heading={heading}
+      steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
+      onSubmit={handleSubmit}
+      isLoading={isLoading}
+      vilkårTilhørerNavKontor={false}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={status}
+      visBekreftKnapp={!readOnly}
+      erAktivtSteg={true}
+    >
+      <FormField form={form} formField={formFields.nedsattArbeidsevneDatobegrunnelse} className="begrunnelse" />
+      <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
 
-        {grunnlag?.skalVurdereYtterligere && (
-          <div className={styles.ytterligerenedsattfelter}>
-            <Heading size={'small'}>Tidspunkt arbeidsevne ble ytterligere nedsatt § 11-28</Heading>
-            <FormField
-              form={form}
-              formField={formFields.ytterligereNedsattArbeidsevneDatobegrunnelse}
-              className={'begrunnelse'}
-            />
-            <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
-          </div>
-        )}
-      </Form>
-    </VilkårsKort>
+      {grunnlag?.skalVurdereYtterligere && (
+        <div className={styles.ytterligerenedsattfelter}>
+          <Heading size={'small'}>Tidspunkt arbeidsevne ble ytterligere nedsatt § 11-28</Heading>
+          <FormField
+            form={form}
+            formField={formFields.ytterligereNedsattArbeidsevneDatobegrunnelse}
+            className={'begrunnelse'}
+          />
+          <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
+        </div>
+      )}
+    </VilkårsKortMedForm>
   );
 };

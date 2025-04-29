@@ -1,7 +1,5 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Form } from 'components/form/Form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
@@ -9,6 +7,7 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { ForutgåendeMedlemskapGrunnlag } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -51,7 +50,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
   overstyring,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { isLoading, status, resetStatus, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
+  const { isLoading, status, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -118,22 +117,22 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
   };
   const heading = overstyring ? 'Overstyring av § 11-2 Forutgående medlemskap' : '§ 11-2 Forutgående medlemskap';
   return (
-    <VilkårsKort heading={heading} steg={'VURDER_MEDLEMSKAP'}>
-      <Form
-        steg={'VURDER_MEDLEMSKAP'}
-        onSubmit={handleSubmit}
-        isLoading={isLoading}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-        status={status}
-        resetStatus={resetStatus}
-        visBekreftKnapp={!readOnly}
-      >
-        <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-        <FormField form={form} formField={formFields.harForutgåendeMedlemskap} horizontalRadio />
-        {harForutgåendeMedlemskap === JaEllerNei.Nei && (
-          <FormField form={form} formField={formFields.unntaksvilkår} className={'radio'} />
-        )}
-      </Form>
-    </VilkårsKort>
+    <VilkårsKortMedForm
+      heading={heading}
+      steg={'VURDER_MEDLEMSKAP'}
+      onSubmit={handleSubmit}
+      isLoading={isLoading}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={status}
+      visBekreftKnapp={!readOnly}
+      vilkårTilhørerNavKontor={false}
+      erAktivtSteg={true}
+    >
+      <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+      <FormField form={form} formField={formFields.harForutgåendeMedlemskap} horizontalRadio />
+      {harForutgåendeMedlemskap === JaEllerNei.Nei && (
+        <FormField form={form} formField={formFields.unntaksvilkår} className={'radio'} />
+      )}
+    </VilkårsKortMedForm>
   );
 };
