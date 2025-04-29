@@ -15,10 +15,10 @@ interface Props {
   steg: StegType;
   children: ReactNode;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  readOnly: boolean;
   isLoading: boolean;
   erAktivtSteg: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
+  visBekreftKnapp: boolean;
   resetStatus?: () => void;
   løsBehovOgGåTilNesteStegError?: ApiException;
   knappTekst?: string;
@@ -44,12 +44,10 @@ export const VilkårsKortMedForm = ({
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
   defaultOpen = true,
-  readOnly,
+  visBekreftKnapp,
   vurdertAvAnsatt,
 }: Props) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
-
-  const visBekreftKnapp = !readOnly;
 
   return (
     <ExpansionCard
