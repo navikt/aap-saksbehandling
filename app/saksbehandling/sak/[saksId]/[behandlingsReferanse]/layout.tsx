@@ -95,6 +95,7 @@ const Layout = async (props: Props) => {
           brukerInformasjon={brukerInformasjon}
           typeBehandling={flytResponse.data.visning.typeBehandling}
           brukerKanSaksbehandle={brukerKanSaksbehandle}
+          flyt={flytResponse.data.flyt}
         />
 
         <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />

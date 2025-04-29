@@ -1,7 +1,13 @@
 'use client';
 
 import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link } from '@navikt/ds-react';
-import { DetaljertBehandling, SakPersoninfo, SaksInfo as SaksInfoType, TypeBehandling } from 'lib/types/types';
+import {
+  DetaljertBehandling,
+  FlytGruppe,
+  SakPersoninfo,
+  SaksInfo as SaksInfoType,
+  TypeBehandling,
+} from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
 import { ChevronDownIcon, ChevronRightIcon } from '@navikt/aksel-icons';
@@ -24,6 +30,7 @@ interface Props {
   påVent?: boolean;
   brukerInformasjon?: BrukerInformasjon;
   brukerKanSaksbehandle?: boolean;
+  flyt?: FlytGruppe[];
 }
 
 export const SaksinfoBanner = ({
@@ -34,18 +41,30 @@ export const SaksinfoBanner = ({
   oppgaveReservertAv,
   påVent,
   brukerInformasjon,
+  typeBehandling,
+  brukerKanSaksbehandle,
+  flyt,
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
   const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveReservertAv;
 
-  /*
+  const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
+  const behandlerEnSøknadSomSkalTrekkes = søknadStegGruppe && søknadStegGruppe.skalVises;
+
+  // fattigmanns featuretoggle. Skal ikke gjøres tilgjengelige i prod før backend er klar
+  const isDev = window.location.href.includes('intern.dev') || window.location.href.includes('ansatt.dev');
+  const isLocalhost = window.location.href.includes('http://localhost');
+
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
   const visValgForÅTrekkeSøknad =
-    brukerKanSaksbehandle && behandlingErFørstegangsbehandling && behandlingErIkkeAvsluttet;
-    */
+    (isDev || isLocalhost) &&
+    !behandlerEnSøknadSomSkalTrekkes &&
+    brukerKanSaksbehandle &&
+    behandlingErFørstegangsbehandling &&
+    behandlingErIkkeAvsluttet;
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (oppgaveReservertAv && !erReservertAvInnloggetBruker) {
@@ -58,7 +77,6 @@ export const SaksinfoBanner = ({
   const oppgaveStatus = hentOppgaveStatus();
 
   const erPåBehandlingSiden = referanse !== undefined;
-
   return (
     <div className={styles.saksinfobanner}>
       <div className={styles.saksinfo}>
@@ -108,11 +126,11 @@ export const SaksinfoBanner = ({
                   <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
                     Sett behandling på vent
                   </Dropdown.Menu.GroupedList.Item>
-                  {/*visValgForÅTrekkeSøknad && (
+                  {visValgForÅTrekkeSøknad && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisTrekkSøknadModal(true)}>
                       Trekk søknad
                     </Dropdown.Menu.GroupedList.Item>
-                  )*/}
+                  )}
                   {!isProd() && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisVurderRettighetsperiodeModal(true)}>
                       Overstyr starttidspunkt
