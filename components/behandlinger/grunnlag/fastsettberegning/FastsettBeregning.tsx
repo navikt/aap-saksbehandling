@@ -29,7 +29,7 @@ interface FormFields {
 
 export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, status, resetStatus, isLoading, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -119,7 +119,6 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
       vilkårTilhørerNavKontor={false}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
-      resetStatus={resetStatus}
       visBekreftKnapp={!readOnly}
       erAktivtSteg={true}
     >

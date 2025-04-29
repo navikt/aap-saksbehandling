@@ -61,7 +61,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
 
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -92,7 +92,6 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       defaultOpen={showAsOpen}
       onSubmit={handleSubmit}
       status={status}
-      resetStatus={resetStatus}
       isLoading={isLoading}
       visBekreftKnapp={skalViseBekreftKnapp}
       erAktivtSteg={true}

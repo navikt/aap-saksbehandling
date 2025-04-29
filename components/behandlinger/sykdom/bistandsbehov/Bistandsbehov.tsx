@@ -35,7 +35,7 @@ interface FormFields {
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling, erAktivtSteg }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -145,7 +145,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={vurdertAvAnsatt}
-      resetStatus={resetStatus}
     >
       {typeBehandling === 'Revurdering' && (
         <TidligereVurderinger

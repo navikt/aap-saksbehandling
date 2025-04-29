@@ -28,7 +28,7 @@ interface FormFields {
 
 export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_RETTIGHETSPERIODE');
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -96,7 +96,6 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
       steg={'VURDER_RETTIGHETSPERIODE'}
       onSubmit={handleSubmit}
       status={status}
-      resetStatus={resetStatus}
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}

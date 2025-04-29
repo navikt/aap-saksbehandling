@@ -29,7 +29,7 @@ type SamordnetUførePeriode = {
 };
 export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, resetStatus, status, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_UFØRE');
   grunnlag.grunnlag[0].endringStatus;
 
@@ -95,7 +95,6 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      resetStatus={resetStatus}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       visBekreftKnapp={!readOnly}

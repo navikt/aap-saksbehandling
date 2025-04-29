@@ -19,7 +19,6 @@ interface Props {
   erAktivtSteg: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
   visBekreftKnapp: boolean;
-  resetStatus?: () => void;
   løsBehovOgGåTilNesteStegError?: ApiException;
   knappTekst?: string;
   defaultOpen?: boolean;
@@ -39,7 +38,6 @@ export const VilkårsKortMedForm = ({
   onSubmit,
   isLoading,
   status,
-  resetStatus,
   løsBehovOgGåTilNesteStegError,
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
@@ -70,7 +68,6 @@ export const VilkårsKortMedForm = ({
             <LøsBehovOgGåTilNesteStegStatusAlert
               løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
               status={status}
-              resetStatus={resetStatus}
             />
             <HStack justify={'space-between'} align={'end'}>
               <div>{visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}</div>

@@ -23,7 +23,7 @@ interface FormFields {
 
 export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, status, resetStatus, isLoading, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
 
   const grunnOptions: ValuePair<NonNullable<SykepengeerstatningVurderingGrunn>>[] = [
@@ -104,7 +104,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
       steg="VURDER_SYKEPENGEERSTATNING"
       onSubmit={handleSubmit}
       status={status}
-      resetStatus={resetStatus}
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}

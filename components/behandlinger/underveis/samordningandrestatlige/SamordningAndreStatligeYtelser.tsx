@@ -52,8 +52,9 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
   const finnesGrunnlag = grunnlag.vurdering ? grunnlag.vurdering.vurderingPerioder.length > 0 : false;
   const [visYtelsesTabell, setVisYtelsesTabell] = useState<boolean>(finnesGrunnlag);
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, resetStatus, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('SAMORDNING_ANDRE_STATLIGE_YTELSER');
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
+    'SAMORDNING_ANDRE_STATLIGE_YTELSER'
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
@@ -85,7 +86,6 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
       onSubmit={handleSubmit}
       isLoading={isLoading}
       status={status}
-      resetStatus={resetStatus}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       erAktivtSteg={true}
       visBekreftKnapp={!readOnly}

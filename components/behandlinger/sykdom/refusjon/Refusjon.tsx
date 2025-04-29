@@ -26,7 +26,7 @@ interface FormFields {
 }
 
 export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
   const { sak } = useSak();
   const behandlingsreferanse = useBehandlingsReferanse();
@@ -110,7 +110,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
       status={status}
-      resetStatus={resetStatus}
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}

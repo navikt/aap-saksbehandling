@@ -31,7 +31,7 @@ interface FormFields {
 
 export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -142,7 +142,6 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
       steg={'AVKLAR_STUDENT'}
       onSubmit={handleSubmit}
       status={status}
-      resetStatus={resetStatus}
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}

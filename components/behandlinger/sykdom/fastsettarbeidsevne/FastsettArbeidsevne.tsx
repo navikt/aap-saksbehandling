@@ -77,7 +77,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
     name: 'arbeidsevnevurderinger',
   });
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -109,7 +109,6 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
       defaultOpen={showAsOpen}
       onSubmit={handleSubmit}
       status={status}
-      resetStatus={resetStatus}
       isLoading={isLoading}
       visBekreftKnapp={skalViseBekreftKnapp}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}

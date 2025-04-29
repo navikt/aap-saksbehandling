@@ -64,7 +64,7 @@ export const Sykdomsvurdering = ({
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, resetStatus, løsBehovOgGåTilNesteStegError } =
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
@@ -278,7 +278,6 @@ export const Sykdomsvurdering = ({
       visBekreftKnapp={!readOnly}
       vurdertAvAnsatt={vurdertAvAnsatt}
       knappTekst={'Bekreft'}
-      resetStatus={resetStatus}
     >
       {behandlingErRevurdering && (
         <TidligereVurderinger
