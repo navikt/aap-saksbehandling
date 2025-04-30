@@ -112,7 +112,7 @@ const Layout = async (props: Props) => {
             {/*Vi må ha children inne i en div for å unngå layoutshift*/}
             <div style={{ width: '100%' }}>{children}</div>
             <aside className={`flex-column`}>
-              <Behandlingsinfo behandling={behandling.data} saksnummer={params.saksId} />
+              <Behandlingsinfo behandling={behandling.data} sak={sak} />
               <Saksbehandlingsoversikt />
               <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
             </aside>

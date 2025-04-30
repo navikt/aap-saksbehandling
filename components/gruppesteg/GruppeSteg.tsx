@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { BehandlingPåVentKortMedDataFetching } from 'components/sideprosesser/BehandlingPåVentKortMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
-import { FlytProsessering, FlytVisning, StegGruppe, StegType } from 'lib/types/types';
+import { FlytProsessering, FlytVisning, StegType } from 'lib/types/types';
 import { BrevKortMedDataFetching } from 'components/brev/BrevKortMedDataFetching';
 
 interface Props {
@@ -11,7 +11,6 @@ interface Props {
   behandlingVersjon: number;
   children: ReactNode;
   aktivtSteg: StegType;
-  aktivGruppe?: StegGruppe;
 }
 
 export const GruppeSteg = ({
@@ -19,7 +18,6 @@ export const GruppeSteg = ({
   visning,
   behandlingReferanse,
   behandlingVersjon,
-  aktivGruppe,
   aktivtSteg,
   prosessering,
 }: Props) => {
@@ -32,7 +30,7 @@ export const GruppeSteg = ({
           behandlingVersjon={behandlingVersjon}
         />
       )}
-      {visning.visBrevkort && aktivGruppe !== 'BREV' && (
+      {visning.visBrevkort && aktivtSteg !== 'BREV' && (
         <BrevKortMedDataFetching
           behandlingReferanse={behandlingReferanse}
           behandlingVersjon={behandlingVersjon}

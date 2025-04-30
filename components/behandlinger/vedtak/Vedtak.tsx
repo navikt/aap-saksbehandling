@@ -25,7 +25,6 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
       behandlingVersjon={behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.data.prosessering}
-      aktivGruppe="BREV"
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >

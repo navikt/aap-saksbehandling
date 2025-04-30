@@ -21,7 +21,6 @@ export const Brev = async ({ behandlingsReferanse }: Props) => {
       behandlingReferanse={behandlingsReferanse}
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
-      aktivGruppe={'BREV'}
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>

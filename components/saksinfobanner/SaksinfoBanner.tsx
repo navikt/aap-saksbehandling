@@ -18,7 +18,7 @@ import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/Oppga
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
 import { VurderRettighetsperiodeModal } from './rettighetsperiodemodal/VurderRettighetsperiodeModal';
-import { isProd } from '../../lib/utils/environment';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -53,14 +53,10 @@ export const SaksinfoBanner = ({
   const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
   const behandlerEnSøknadSomSkalTrekkes = søknadStegGruppe && søknadStegGruppe.skalVises;
 
-  // fattigmanns featuretoggle. Skal ikke gjøres tilgjengelige i prod før backend er klar
-  const isDev = window.location.href.includes('intern.dev') || window.location.href.includes('ansatt.dev');
-  const isLocalhost = window.location.href.includes('http://localhost');
-
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
   const visValgForÅTrekkeSøknad =
-    (isDev || isLocalhost) &&
+    !isProd() &&
     !behandlerEnSøknadSomSkalTrekkes &&
     brukerKanSaksbehandle &&
     behandlingErFørstegangsbehandling &&
