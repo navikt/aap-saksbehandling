@@ -1,5 +1,5 @@
 import { BodyShort, Box, HGrid, HStack, Label, VStack } from '@navikt/ds-react';
-import { DetaljertBehandling } from 'lib/types/types';
+import { DetaljertBehandling, SaksInfo } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 
@@ -7,10 +7,10 @@ import styles from './Behandlingsinfo.module.css';
 
 interface Props {
   behandling: DetaljertBehandling;
-  saksnummer: string;
+  sak: SaksInfo;
 }
 
-export const Behandlingsinfo = ({ behandling, saksnummer }: Props) => {
+export const Behandlingsinfo = ({ behandling, sak }: Props) => {
   return (
     <Box
       padding="4"
@@ -35,13 +35,13 @@ export const Behandlingsinfo = ({ behandling, saksnummer }: Props) => {
           <Label as="p" size={'small'}>
             Saksnummer:
           </Label>
-          <BodyShort size={'small'}>{saksnummer}</BodyShort>
+          <BodyShort size={'small'}>{sak.saksnummer}</BodyShort>
           <Label as="p" size={'small'}>
-            Virkningstidspunkt:
+            Virkningstidspunkt{behandling.virkningstidspunkt == null && ' (foreløpig)'}:
           </Label>
           <BodyShort size={'small'}>
             {behandling.virkningstidspunkt == null
-              ? formaterDatoForFrontend(behandling.opprettet)
+              ? formaterDatoForFrontend(sak.periode.fom)
               : formaterDatoForFrontend(behandling.virkningstidspunkt)}
           </BodyShort>
         </HGrid>

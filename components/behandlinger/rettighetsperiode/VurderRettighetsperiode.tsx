@@ -7,11 +7,11 @@ import { FormField } from 'components/form/FormField';
 import { FormEvent } from 'react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { parse } from 'date-fns';
 import { RettighetsperiodeGrunnlag } from 'lib/types/types';
-import { BodyShort, VStack } from '@navikt/ds-react';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { addYears, isBefore, parse, startOfDay } from 'date-fns';
+import { Alert, BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 
 interface Props {
   readOnly: boolean;
@@ -59,6 +59,16 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
           required: 'Du må sette en dato for behandlingen',
           validate: {
             gyldigDato: (v) => validerDato(v as string),
+            maksTreAarFoerSoeknadstidspunkt: (v) => {
+              let søknadsdato = grunnlag?.søknadsdato;
+              if (søknadsdato) {
+                const treÅrFørSøknadstidspunkt = addYears(startOfDay(new Date(søknadsdato)), -3);
+                const nyStartDato = stringToDate(v as string, 'dd.MM.yyyy');
+                if (nyStartDato && isBefore(startOfDay(nyStartDato), treÅrFørSøknadstidspunkt)) {
+                  return 'Kan ikke flytte startdato til mer enn 3 år før søknadstidspunktet';
+                }
+              }
+            },
           },
         },
         defaultValue:
@@ -115,6 +125,13 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
       )}
       {form.watch('harRettUtoverSøknadsdato') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.harKravPåRenter} horizontalRadio />
+      )}
+      {form.watch('harKravPåRenter') === JaEllerNei.Ja && (
+        <HStack>
+          <Alert variant={'warning'} size={'small'}>
+            Det er ikke støtte for utbetaling av renter i Kelvin. Kontakt brukerstøtte for å finne en løsning.
+          </Alert>
+        </HStack>
       )}
     </VilkårsKortMedForm>
   );
