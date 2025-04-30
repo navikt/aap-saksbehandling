@@ -13,7 +13,7 @@ export type ErrorResponseBody<T> = {
 
 type SuccessResponseBody<ResponseType> = {
   type: 'SUCCESS';
-  status: number;
+  status?: number;
   data: ResponseType;
 };
 
