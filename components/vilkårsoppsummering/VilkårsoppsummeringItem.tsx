@@ -86,8 +86,6 @@ function mapVilkårTypeTilVilkårNavn(steg: VilkårType): string {
       return 'Medlemskap';
     case 'GRUNNLAGET':
       return 'Grunnlaget';
-    case 'SYKEPENGEERSTATNING':
-      return 'Sykepengeerstatning';
     case 'LOVVALG':
       return 'Lovvalg';
     default:
