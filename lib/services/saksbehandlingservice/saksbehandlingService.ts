@@ -287,12 +287,10 @@ export const hentBehandlingPåVentInformasjon = async (referanse: string) => {
   return await apiFetch<VenteInformasjon>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const forberedBehandlingOgVentPåProsessering = async (
-  referanse: string
-): Promise<undefined | FlytProsessering> => {
+export const forberedBehanlding = async (referanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${referanse}/forbered`;
   logInfo('Forbereder behandling ' + referanse);
-  return await apiFetch(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
+  return await apiFetch(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
@@ -357,7 +355,7 @@ export const auditlog = async (behandlingsreferanse: string) => {
   return await apiFetch(url, saksbehandlingApiScope, 'POST');
 };
 
-async function ventTilProsesseringErFerdig(
+export async function ventTilProsesseringErFerdig(
   behandlingsreferanse: string,
   maksAntallForsøk: number = 10,
   interval: number = 1000

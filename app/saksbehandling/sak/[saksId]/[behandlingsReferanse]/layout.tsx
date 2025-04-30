@@ -5,6 +5,7 @@ import {
   hentFlyt,
   hentSak,
   hentSakPersoninfo,
+  ventTilProsesseringErFerdig,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { HGrid, VStack } from '@navikt/ds-react';
 
@@ -24,6 +25,7 @@ import { IngenFlereOppgaverModalContextProvider } from 'context/IngenFlereOppgav
 import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
 import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
 import { SWRConfig } from 'swr';
+import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 
 interface Props {
   children: ReactNode;
@@ -47,6 +49,11 @@ const Layout = async (props: Props) => {
 
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(params.behandlingsReferanse);
+
+  const prosessering = await ventTilProsesseringErFerdig(params.behandlingsReferanse);
+  if (prosessering && prosessering.status === 'FEILET') {
+    return <FlytProsesseringAlert flytProsessering={prosessering} />;
+  }
 
   const [personInfo, brukerInformasjon, flytResponse, sak, roller] = await Promise.all([
     hentSakPersoninfo(params.saksId),
