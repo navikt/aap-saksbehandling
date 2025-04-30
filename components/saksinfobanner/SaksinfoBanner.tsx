@@ -106,7 +106,7 @@ export const SaksinfoBanner = ({
       {erPåBehandlingSiden && (
         <HStack>
           <div className={styles.oppgavestatus}>
-            {sak.resultatForFørstegangsbehandling === 'TRUKKET' && (
+            {sak.søknadErTrukket && (
               <Tag variant="neutral-moderate" icon={<XMarkOctagonIcon />} size={'small'}>
                 Trukket
               </Tag>
