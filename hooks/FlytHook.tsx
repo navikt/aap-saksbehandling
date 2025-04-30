@@ -26,3 +26,26 @@ export function useFlyt(): {
     refetchFlytClient: mutate,
   };
 }
+
+export function useRequiredFlyt(): { flyt: BehandlingFlytOgTilstand; refetchFlytClient: () => void } {
+  const params = useParams<{ behandlingsReferanse: string }>();
+
+  if (!params.behandlingsReferanse) {
+    throw Error('useFlyt kan bare brukes på behandlingssiden.');
+  }
+
+  const { data: flyt, mutate } = useSWR(
+    `api/flyt/${params.behandlingsReferanse}`,
+    () => clientHentFlyt(params.behandlingsReferanse),
+    {
+      revalidateOnFocus: true,
+      shouldRetryOnError: true,
+    }
+  );
+
+  if (flyt?.type === 'ERROR' || !flyt) {
+    throw new Error('Kunne ikke finne påkrevd flyt');
+  }
+
+  return { flyt: flyt.data, refetchFlytClient: mutate };
+}
