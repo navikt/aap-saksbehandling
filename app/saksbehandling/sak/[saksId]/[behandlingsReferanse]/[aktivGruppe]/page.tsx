@@ -1,10 +1,9 @@
 import {
   auditlog,
-  forberedBehanlding,
+  forberedBehandlingOgVentPåProsessering,
   hentBehandling,
   hentFlyt,
   hentSak,
-  ventTilProsesseringErFerdig,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { BodyShort, VStack } from '@navikt/ds-react';
@@ -36,12 +35,11 @@ const Page = async (props: {
 
   // Denne må komme før resten av kallene slik at siste versjon av data er oppdatert i backend for behandlingen
   if (behandling.data.skalForberede) {
-    await forberedBehanlding(params.behandlingsReferanse);
-  }
+    const forberedBehandlingResponse = await forberedBehandlingOgVentPåProsessering(params.behandlingsReferanse);
 
-  const prosessering = await ventTilProsesseringErFerdig(params.behandlingsReferanse);
-  if (prosessering && prosessering.status === 'FEILET') {
-    return <FlytProsesseringAlert flytProsessering={prosessering} />;
+    if (forberedBehandlingResponse && forberedBehandlingResponse.status === 'FEILET') {
+      return <FlytProsesseringAlert flytProsessering={forberedBehandlingResponse} />;
+    }
   }
 
   const [flytResponse, sak] = await Promise.all([hentFlyt(params.behandlingsReferanse), hentSak(params.saksId)]);
