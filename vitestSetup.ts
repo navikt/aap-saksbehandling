@@ -1,8 +1,50 @@
 import { afterEach, beforeAll, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
+import { FetchResponse } from 'lib/utils/api';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
+
+const flytResponse: FetchResponse<BehandlingFlytOgTilstand> = {
+  type: 'SUCCESS',
+  status: 200,
+  data: {
+    behandlingVersjon: 5,
+    aktivGruppe: 'START_BEHANDLING',
+    aktivtSteg: 'START_BEHANDLING',
+    aktivtStegDefinisjon: [],
+    flyt: [],
+    prosessering: {
+      status: 'FERDIG',
+      ventendeOppgaver: [],
+    },
+    visning: {
+      beslutterReadOnly: false,
+      kvalitetssikringReadOnly: false,
+      saksbehandlerReadOnly: false,
+      typeBehandling: 'Førstegangsbehandling',
+      visBeslutterKort: false,
+      visBrevkort: false,
+      visKvalitetssikringKort: false,
+      visVentekort: false,
+    },
+  },
+};
 
 beforeAll(() => {
+  vi.mock('swr', () => ({
+    default: vi.fn((key) => {
+      if (key?.startsWith('api/flyt')) {
+        return {
+          data: flytResponse,
+          error: undefined,
+          mutate: vi.fn(),
+        };
+      }
+
+      return { data: undefined, error: undefined, mutate: vi.fn() };
+    }),
+  }));
+
   vi.mock('next/navigation', () => ({
     useParams: vi
       .fn()

@@ -1,11 +1,9 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { Behovstype } from 'lib/utils/form';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
-import { BehandlingFlytOgTilstand, FatteVedtakGrunnlag } from 'lib/types/types';
+import { FatteVedtakGrunnlag } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
-import createFetchMock from 'vitest-fetch-mock';
-import { FetchResponse } from 'lib/utils/api';
 
 const grunnlag: FatteVedtakGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
@@ -19,18 +17,10 @@ const grunnlag: FatteVedtakGrunnlag = {
 
 const link = `/sak/123/456`;
 
-const fetchMock = createFetchMock(vi);
-fetchMock.enableMocks();
-
 describe('totrinnsvurderingform', () => {
   const user = userEvent.setup();
 
-  beforeEach(() => {
-    fetchMock.mockReset();
-  });
-
   it('skal ha en overskrift som er en lenke til vilkårsvurderingen', () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -49,7 +39,6 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal ha en radio group hvor beslutter kan godkjenne eller avslå vurderingen til saksbehandler/veileder', () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -68,7 +57,6 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal ha en knapp for å sende inn totrinnsvurderingene', () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -84,7 +72,6 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal dukke opp felt for begrunnelse dersom vurderingen har blitt avslått', async () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -103,7 +90,6 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal dukke opp felt for å velge grunner for avslag dersom vurderingen har blitt avslått', async () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -131,7 +117,6 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal ha riktige vlag i feltet for å velge grunner', async () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -150,7 +135,6 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal dukke opp feilmelding hvis begrunnelse ikke har blitt besvart ved innsending', async () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -172,7 +156,6 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal dukke opp feilmelding hvis ingen grunn har blitt valgt ved innsending', async () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -194,7 +177,6 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -219,7 +201,6 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal dukke opp error på fritekst felt for å skrive inn en grunn dersom ANNET er valgt og det ikke er besvart', async () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -250,7 +231,6 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('gir feilmelding hvis man velger en grunn for så å fjerne den igjen', async () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -279,7 +259,6 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal vise en feilmelding dersom det ikke har blitt gjort noen totrinnsvurdering og man prøver å send inn vurderingene', async () => {
-    mockFetchFlyt();
     render(
       <TotrinnsvurderingForm
         grunnlag={grunnlag}
@@ -298,33 +277,3 @@ describe('totrinnsvurderingform', () => {
     expect(screen.getByText('Du må gjøre minst én vurdering.')).toBeInTheDocument();
   });
 });
-
-function mockFetchFlyt() {
-  const response: FetchResponse<BehandlingFlytOgTilstand> = {
-    type: 'SUCCESS',
-    status: 200,
-    data: {
-      behandlingVersjon: 5,
-      aktivGruppe: 'START_BEHANDLING',
-      aktivtSteg: 'START_BEHANDLING',
-      aktivtStegDefinisjon: [],
-      flyt: [],
-      prosessering: {
-        status: 'FERDIG',
-        ventendeOppgaver: [],
-      },
-      visning: {
-        beslutterReadOnly: false,
-        kvalitetssikringReadOnly: false,
-        saksbehandlerReadOnly: false,
-        typeBehandling: 'Førstegangsbehandling',
-        visBeslutterKort: false,
-        visBrevkort: false,
-        visKvalitetssikringKort: false,
-        visVentekort: false,
-      },
-    },
-  };
-
-  fetchMock.mockResponse(JSON.stringify(response), { status: 200 });
-}

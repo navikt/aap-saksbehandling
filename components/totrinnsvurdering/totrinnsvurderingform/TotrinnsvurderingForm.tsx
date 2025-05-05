@@ -11,7 +11,7 @@ import { useFieldArray } from 'react-hook-form';
 import { useState } from 'react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
-import { useFlyt } from 'hooks/FlytHook';
+import { useRequiredFlyt } from 'hooks/FlytHook';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -36,7 +36,7 @@ export const TotrinnsvurderingForm = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
-  const { flyt } = useFlyt();
+  const { flyt } = useRequiredFlyt();
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
@@ -72,8 +72,7 @@ export const TotrinnsvurderingForm = ({
       onSubmit={form.handleSubmit(async (data) => {
         setErrorMessage('');
         const assessedFields = data.totrinnsvurderinger.filter((vurdering) => vurdering.godkjent !== undefined);
-
-        if (!flyt?.behandlingVersjon) {
+        if (!flyt.behandlingVersjon) {
           setErrorMessage('Kunne ikke finne behandlingversjon');
           return;
         }

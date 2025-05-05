@@ -6,6 +6,7 @@ import {
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
+import { mockSWRImplementation } from 'lib/utils/test';
 
 const relevanteDokumenter: RelevantDokumentType[] = [
   {
@@ -82,5 +83,7 @@ function mockFetchRelevanteDokumenter(dokumenter: RelevantDokumentType[]) {
     data: dokumenter,
   };
 
-  fetchMock.mockResponseOnce(JSON.stringify(response), { status: 200 });
+  mockSWRImplementation({
+    '/api/dokumentinnhenting/saf/123': response,
+  });
 }

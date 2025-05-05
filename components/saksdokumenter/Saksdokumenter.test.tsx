@@ -1,26 +1,10 @@
-import { afterEach, expect, test, vi } from 'vitest';
+import { expect, test } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { DokumentInfo } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
-import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
-
-const etDokument: FetchResponse<DokumentInfo[]> = {
-  type: 'SUCCESS',
-  status: 200,
-  data: [
-    {
-      tittel: 'søknad.pdf',
-      dokumentInfoId: '123',
-      journalpostId: '456',
-      variantformat: 'ARKIV',
-      brevkode: 'arkiv',
-      datoOpprettet: '2024-12-12',
-      erUtgående: true,
-    },
-  ],
-};
+import { mockSWRImplementation } from 'lib/utils/test';
 
 const toDokument: FetchResponse<DokumentInfo[]> = {
   data: [
@@ -47,18 +31,12 @@ const toDokument: FetchResponse<DokumentInfo[]> = {
   status: 200,
 };
 
-const fetchMocker = createFetchMock(vi);
-fetchMocker.enableMocks();
-
-afterEach(() => {
-  fetchMocker.resetMocks();
-});
-
 const user = userEvent.setup();
 
 test('skal være mulig å søke etter et dokument', async () => {
-  fetchMocker.resetMocks();
-  mockFetchDokumenter(toDokument);
+  mockSWRImplementation({
+    'api/sak/123/dokumenter': toDokument,
+  });
   render(<Saksdokumenter />);
   expect(await screen.findByRole('link', { name: /søknad\.pdf/i })).toBeVisible();
   expect(await screen.findByRole('link', { name: /legeerklæring\.pdf/i })).toBeVisible();
@@ -72,19 +50,16 @@ test('skal være mulig å søke etter et dokument', async () => {
 });
 
 test('skal ha et felt for å kunne søke etter tittel på dokument', async () => {
-  mockFetchDokumenter(etDokument);
   render(<Saksdokumenter />);
   expect(await screen.findByRole('textbox', { name: /søk i dokumenter/i })).toBeVisible();
 });
 
 test('skal ha et felt for å kunne søke type', async () => {
-  mockFetchDokumenter(etDokument);
   render(<Saksdokumenter />);
   expect(await screen.findByRole('combobox', { name: /vis typer/i })).toBeVisible();
 });
 
 test('skal ha en tabell med inn/ut, dokument, type og journalført i header', async () => {
-  mockFetchDokumenter(etDokument);
   render(<Saksdokumenter />);
   const innUt = await screen.findByRole('columnheader', { name: /inn \/ ut/i });
   const dokument = await screen.findByRole('columnheader', { name: /dokument/i });
@@ -97,18 +72,13 @@ test('skal ha en tabell med inn/ut, dokument, type og journalført i header', as
   expect(journalført).toBeVisible();
 });
 
-test.skip('Skal vise en feilmelding dersom responsen er av type error', async () => {
-  mockFetchDokumenter({
-    type: 'ERROR',
-    apiException: { message: 'Uhåndtert feil i backend' },
-    status: 400,
+test('Skal vise en feilmelding dersom responsen er av type error', async () => {
+  mockSWRImplementation({
+    'api/sak/123/dokumenter': { type: 'ERROR', apiException: { message: 'Uhåndtert feil i backend' }, status: 400 },
   });
+
   render(<Saksdokumenter />);
 
   const feilmelding = await screen.findByText('Uhåndtert feil i backend');
   expect(feilmelding).toBeVisible();
 });
-
-function mockFetchDokumenter(dokumenter: FetchResponse<DokumentInfo[]>) {
-  fetchMock.mockResponseOnce(JSON.stringify(dokumenter), { status: 200 });
-}
