@@ -1,25 +1,25 @@
 // Postmottak
 
-import { clientFetchV2 } from 'lib/clientApi';
+import { clientFetch } from 'lib/clientApi';
 import { LøsAvklaringsbehovPåBehandling, SettPåVentRequest } from 'lib/types/postmottakTypes';
 
 // TODO: Test-endepunkt - skal fjernes
 export function postmottakOpprettBehandlingClient(journalpostId: number) {
-  return clientFetchV2<{ referanse: number }>('/postmottak/api/test/behandling/opprett/', 'POST', {
+  return clientFetch<{ referanse: number }>('/postmottak/api/test/behandling/opprett/', 'POST', {
     referanse: journalpostId,
   });
 }
 
 export function postmottakSettPåVentClient(behandlingsreferanse: string, body: SettPåVentRequest) {
-  return clientFetchV2(`/postmottak/api/post/${behandlingsreferanse}/sett-pa-vent/`, 'POST', body);
+  return clientFetch(`/postmottak/api/post/${behandlingsreferanse}/sett-pa-vent/`, 'POST', body);
 }
 
 export function postmottakLøsBehovClient(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
-  return clientFetchV2<void>('/postmottak/api/post/los-behov/', 'POST', avklaringsBehov);
+  return clientFetch<void>('/postmottak/api/post/los-behov/', 'POST', avklaringsBehov);
 }
 
 export function postmottakEndreTemaClient(behandlingsreferanse: string) {
-  return clientFetchV2<{ redirectUrl: string }>(`/postmottak/api/post/${behandlingsreferanse}/endre-tema`, 'POST', {});
+  return clientFetch<{ redirectUrl: string }>(`/postmottak/api/post/${behandlingsreferanse}/endre-tema`, 'POST', {});
 }
 
 export function postmottakHentDokumentClient(journalpostId: number, dokumentInfoId: string): Promise<Blob> {
