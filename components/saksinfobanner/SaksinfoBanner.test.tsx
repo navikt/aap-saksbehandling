@@ -301,4 +301,33 @@ describe('Sak status', () => {
     const reservertTag = screen.queryByText('Reservert navIdent');
     expect(reservertTag).not.toBeInTheDocument();
   });
+
+  it('viser ikke trukket-tag for en søknad som ikke er trukket', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={behandling}
+        brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
+        referanse={'123456'}
+        påVent={false}
+      />
+    );
+    expect(screen.queryByText('Trukket')).not.toBeInTheDocument();
+  });
+
+  it('viser at en søknad er trukket', () => {
+    const trukketSøknad = { ...sak, søknadErTrukket: true };
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={trukketSøknad}
+        behandling={behandling}
+        brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
+        referanse={'123456'}
+        påVent={false}
+      />
+    );
+    expect(screen.getByText('Trukket')).toBeVisible();
+  });
 });
