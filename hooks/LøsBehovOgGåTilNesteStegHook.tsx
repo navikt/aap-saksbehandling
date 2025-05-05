@@ -5,24 +5,22 @@ import {
 } from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
-import { clientLøsBehov, clientSjekkTilgang } from 'lib/clientApi';
+import { clientHentFlyt, clientLøsBehov, clientSjekkTilgang } from 'lib/clientApi';
 import { useIngenFlereOppgaverModal } from 'hooks/IngenFlereOppgaverModalHook';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
-import { useFlyt } from './FlytHook';
+import { useRequiredFlyt } from './FlytHook';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
-export const useLøsBehovOgGåTilNesteSteg = (
-  steg: StegType
-): {
+export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   løsBehovOgGåTilNesteStegError?: ApiException;
   status: LøsBehovOgGåTilNesteStegStatus;
   isLoading: boolean;
   løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling) => void;
-} => {
+} {
   const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
   const router = useRouter();
-  const { refetchFlytClient } = useFlyt();
+  const { refetchFlytClient } = useRequiredFlyt();
   const { setIsModalOpen } = useIngenFlereOppgaverModal();
 
   const [status, setStatus] = useState<LøsBehovOgGåTilNesteStegStatus>();
@@ -37,9 +35,27 @@ export const useLøsBehovOgGåTilNesteSteg = (
 
     const løsbehovRes = await clientLøsBehov(behov);
     if (isError(løsbehovRes)) {
-      setError(løsbehovRes.apiException);
-      setIsLoading(false);
-      return;
+      if (løsbehovRes.status === 409) {
+        // Henter siste versjon av flyt for å bruke siste behandlingversjon
+        const flytResponse = await clientHentFlyt(params.behandlingsReferanse);
+
+        if (isSuccess(flytResponse)) {
+          const clientLøsBehovEtterConflict = await clientLøsBehov({
+            ...behov,
+            behandlingVersjon: flytResponse.data.behandlingVersjon,
+          });
+
+          if (isError(clientLøsBehovEtterConflict)) {
+            setError(clientLøsBehovEtterConflict.apiException);
+            setIsLoading(false);
+            return;
+          }
+        }
+      } else {
+        setError(løsbehovRes.apiException);
+        setIsLoading(false);
+        return;
+      }
     }
     listenSSE();
   };
@@ -106,4 +122,4 @@ export const useLøsBehovOgGåTilNesteSteg = (
     løsBehovOgGåTilNesteSteg,
     løsBehovOgGåTilNesteStegError: error,
   };
-};
+}

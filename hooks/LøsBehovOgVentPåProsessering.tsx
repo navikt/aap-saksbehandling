@@ -1,24 +1,20 @@
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { FlytProsesseringStatus, LøsAvklaringsbehovPåBehandling } from 'lib/types/types';
-import { clientLøsBehov } from 'lib/clientApi';
+import { clientHentFlyt, clientLøsBehov } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { revalidateFlyt } from 'lib/actions/actions';
-import { ApiException } from 'lib/utils/api';
+import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useFlyt } from 'hooks/FlytHook';
 
-export type LøsBehovOgVentPåProsesseringStatus =
-  | FlytProsesseringStatus
-  | 'CLIENT_ERROR'
-  | 'CLIENT_CONFLICT'
-  | undefined;
+export type LøsBehovOgVentPåProsesseringStatus = FlytProsesseringStatus | undefined;
 
-export const useLøsBehovOgVentPåProsessering = (): {
+export function useLøsBehovOgVentPåProsessering(): {
   status: LøsBehovOgVentPåProsesseringStatus;
   isLoading: boolean;
   løsBehovOgVentPåProsessering: (behov: LøsAvklaringsbehovPåBehandling) => void;
   løsBehovError?: ApiException;
-} => {
+} {
   const params = useParams<{ behandlingsReferanse: string }>();
   const [status, setStatus] = useState<LøsBehovOgVentPåProsesseringStatus>();
   const [isLoading, setIsLoading] = useState(false);
@@ -31,15 +27,28 @@ export const useLøsBehovOgVentPåProsessering = (): {
     setStatus(undefined);
 
     const løsbehovRes = await clientLøsBehov(behov);
-    if (løsbehovRes.type === 'ERROR') {
-      setError(løsbehovRes.apiException);
+    if (isError(løsbehovRes)) {
       if (løsbehovRes.status === 409) {
-        setStatus('CLIENT_CONFLICT');
+        // Henter siste versjon av flyt for å bruke siste behandlingversjon
+        const flytResponse = await clientHentFlyt(params.behandlingsReferanse);
+
+        if (isSuccess(flytResponse)) {
+          const clientLøsBehovEtterConflict = await clientLøsBehov({
+            ...behov,
+            behandlingVersjon: flytResponse.data.behandlingVersjon,
+          });
+
+          if (isError(clientLøsBehovEtterConflict)) {
+            setError(clientLøsBehovEtterConflict.apiException);
+            setIsLoading(false);
+            return;
+          }
+        }
       } else {
-        setStatus('CLIENT_ERROR');
+        setError(løsbehovRes.apiException);
+        setIsLoading(false);
+        return;
       }
-      setIsLoading(false);
-      return;
     }
     listenSSE();
   };
@@ -72,4 +81,4 @@ export const useLøsBehovOgVentPåProsessering = (): {
   };
 
   return { isLoading, status, løsBehovOgVentPåProsessering, løsBehovError: error };
-};
+}
