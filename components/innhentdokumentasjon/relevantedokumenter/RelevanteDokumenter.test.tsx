@@ -6,7 +6,7 @@ import {
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
-import { mockSWRImplementation } from 'lib/utils/test';
+import { mockSWRImplementation } from 'lib/test/testUtil';
 
 const relevanteDokumenter: RelevantDokumentType[] = [
   {

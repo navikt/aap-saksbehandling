@@ -4,7 +4,7 @@ import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { DokumentInfo } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import { FetchResponse } from 'lib/utils/api';
-import { mockSWRImplementation } from 'lib/utils/test';
+import { mockSWRImplementation } from 'lib/test/testUtil';
 
 const toDokument: FetchResponse<DokumentInfo[]> = {
   data: [
