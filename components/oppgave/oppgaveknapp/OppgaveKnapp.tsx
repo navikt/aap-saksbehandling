@@ -1,12 +1,12 @@
 'use client';
 
-import { Button, Dropdown, HStack, Loader } from '@navikt/ds-react';
+import { ActionMenu, Button, Dropdown, HStack, Loader } from '@navikt/ds-react';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { avreserverOppgaveClient, plukkOppgaveClient } from 'lib/oppgaveClientApi';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
-import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import styles from './OppgaveKnapp.module.css';
 import { isSuccess } from 'lib/utils/api';
 
@@ -77,15 +77,24 @@ export const OppgaveKnapp = ({ oppgave, visBehandleOgFrigiKnapp, setFeilmelding,
           </Dropdown>
         </div>
       ) : (
-        <Button
-          type={'button'}
-          size={'small'}
-          variant={'secondary'}
-          onClick={() => plukkOgGåTilOppgave(oppgave)}
-          loading={isPendingBehandle}
-        >
-          Behandle
-        </Button>
+        <>
+          {!isPendingBehandle ? (
+            <ActionMenu>
+              <ActionMenu.Trigger>
+                <Button
+                  variant={'tertiary-neutral'}
+                  icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />}
+                  size={'small'}
+                />
+              </ActionMenu.Trigger>
+              <ActionMenu.Content>
+                <ActionMenu.Item onSelect={() => plukkOgGåTilOppgave(oppgave)}>Behandle</ActionMenu.Item>
+              </ActionMenu.Content>
+            </ActionMenu>
+          ) : (
+            <Loader />
+          )}
+        </>
       )}
     </>
   );
