@@ -5,6 +5,7 @@ import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService
 import { StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { Behovstype } from '../../lib/utils/form';
 
 interface Props {
   behandlingReferanse: string;
@@ -30,6 +31,11 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
 
   const readOnly = aktivtSteg === 'BREV' && !brukerRoller.includes(Roller.BESLUTTER);
 
+  const behovstype =
+    grunnlag.avklaringsbehovKode === Behovstype.SKRIV_VEDTAKSBREV_KODE
+      ? Behovstype.SKRIV_VEDTAKSBREV_KODE
+      : Behovstype.SKRIV_BREV_KODE;
+
   return (
     <VilkårsKort heading={'Skriv brev'} steg="BREV" defaultOpen={true}>
       {brev && (
@@ -39,6 +45,7 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
           mottaker={mottaker}
           behandlingVersjon={behandlingVersjon}
           referanse={brevbestillingReferanse}
+          behovstype={behovstype}
           signaturer={grunnlag.signaturer}
           readOnly={readOnly}
         />
