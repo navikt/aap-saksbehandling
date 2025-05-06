@@ -83,6 +83,8 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Trekk søknad';
     case 'RETTIGHETSPERIODE':
       return 'Starttidspunkt';
+    case 'FORMKRAV':
+      return 'Formkrav';
     case 'UDEFINERT':
       return 'Udefinert';
   }

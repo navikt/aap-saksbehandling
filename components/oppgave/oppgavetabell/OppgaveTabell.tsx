@@ -144,7 +144,7 @@ export const OppgaveTabell = ({
               Fnr
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'saksnummer'} sortable={showSortAndFiltersInTable}>
-              Sak/Journal ID
+              ID
             </Table.ColumnHeader>
             <Table.HeaderCell>Behandlingstype</Table.HeaderCell>
             <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={showSortAndFiltersInTable}>

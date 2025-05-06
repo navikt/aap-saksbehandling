@@ -1,6 +1,6 @@
 'use client';
 
-import { Chips, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { OppgaveKøMedOppgaver } from 'components/oppgave/oppgavekømedoppgaver/OppgaveKøMedOppgaver';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
@@ -22,18 +22,13 @@ export const OppgaveMeny = ({ enheter }: Props) => {
         <Heading level={'1'} size={'large'}>
           Oppgaver
         </Heading>
-        <Chips>
-          {options.map((option) => (
-            <Chips.Toggle
-              key={option}
-              checkmark={false}
-              selected={selected === option}
-              onClick={() => setSelected(option)}
-            >
-              {option}
-            </Chips.Toggle>
-          ))}
-        </Chips>
+        <Tabs value={selected} onChange={(value) => setSelected(value as MenyValg)}>
+          <Tabs.List>
+            {options.map((option) => (
+              <Tabs.Tab key={option} value={option} label={option} />
+            ))}
+          </Tabs.List>
+        </Tabs>
       </HStack>
       {selected === 'Mine oppgaver' && <MineOppgaver />}
       {selected === 'Ledige oppgaver' && <OppgaveKøMedOppgaver enheter={enheter} />}
