@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const res = await hentOppgaverForFilter(data.filterId, data.enheter, data.veileder);
+    const res = await hentOppgaverForFilter(data.filterId, data.enheter, data.veileder, data.maxAntallOppgaver);
     if (isError(res)) {
       logError(`/api/oppgave/oppgaveliste`, res.apiException);
     }

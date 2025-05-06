@@ -23,11 +23,16 @@ export const hentKøer = async (enheter: string[]) => {
   return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET');
 };
 
-export const hentOppgaverForFilter = async (filterId: number, enheter: string[], veileder: boolean) => {
+export const hentOppgaverForFilter = async (
+  filterId: number,
+  enheter: string[],
+  veileder: boolean,
+  maxAntall: number
+) => {
   const payload: OppgavelisteRequest = {
     filterId,
     enheter,
-    maxAntall: 10,
+    maxAntall,
     veileder,
   };
   const url = `${oppgaveApiBaseURL}/oppgaveliste`;

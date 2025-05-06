@@ -49,11 +49,19 @@ export async function årsakTilBehandlingClient(url: string) {
 }
 
 // oppgave
-export async function hentOppgaverClient(filterId: number, enheter: string[], veileder: boolean) {
+export async function hentOppgaverClient(
+  filterId: number,
+  enheter: string[],
+  veileder: boolean,
+  offset: number,
+  limit: number
+) {
   return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', {
     filterId,
     enheter,
     veileder,
+    offset,
+    limit,
   });
 }
 
