@@ -11,6 +11,7 @@ import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService
 import { StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
 
 export const SkriveBrevMedDataFetching = async ({
   behandlingsReferanse,
@@ -44,6 +45,11 @@ export const SkriveBrevMedDataFetching = async ({
     return null;
   }
 
+  const behovstype =
+    brev.avklaringsbehovKode === Behovstype.SKRIV_VEDTAKSBREV_KODE
+      ? Behovstype.SKRIV_VEDTAKSBREV_KODE
+      : Behovstype.SKRIV_BREV_KODE;
+  
   return (
     <div className={styles.flex}>
       <SaksopplysningerKolonne
@@ -54,6 +60,7 @@ export const SkriveBrevMedDataFetching = async ({
       <SkriveBrev
         status={brev.status}
         referanse={brev.brevbestillingReferanse}
+        behovstype={behovstype}
         grunnlag={brev.brev}
         mottaker={brev.mottaker}
         readOnly={readOnlyBrev}

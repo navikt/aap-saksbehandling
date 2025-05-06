@@ -22,6 +22,7 @@ import { isSuccess } from 'lib/utils/api';
 
 export const SkriveBrev = ({
   referanse,
+  behovstype,
   behandlingVersjon,
   mottaker,
   saksnummer,
@@ -31,6 +32,7 @@ export const SkriveBrev = ({
   readOnly,
 }: {
   referanse: string;
+  behovstype: Behovstype;
   mottaker: BrevMottaker;
   saksnummer?: string;
   behandlingVersjon: number;
@@ -70,7 +72,7 @@ export const SkriveBrev = ({
     løsBehovOgGåTilNesteSteg({
       behandlingVersjon: behandlingVersjon,
       behov: {
-        behovstype: Behovstype.SKRIV_BREV_KODE,
+        behovstype: behovstype,
         brevbestillingReferanse: referanse,
         handling: 'AVBRYT',
       },
@@ -136,7 +138,7 @@ export const SkriveBrev = ({
                 løsBehovOgGåTilNesteSteg({
                   behandlingVersjon: flyt.data.behandlingVersjon,
                   behov: {
-                    behovstype: Behovstype.SKRIV_BREV_KODE,
+                    behovstype: behovstype,
                     brevbestillingReferanse: referanse,
                     handling: 'FERDIGSTILL',
                   },
