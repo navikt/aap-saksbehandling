@@ -5,7 +5,7 @@ import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService
 import { StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
-import { Behovstype } from '../../lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingReferanse: string;

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import createFetchMock from 'vitest-fetch-mock';
-import { Behovstype } from '../../../../lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
