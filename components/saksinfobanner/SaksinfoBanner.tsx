@@ -62,6 +62,9 @@ export const SaksinfoBanner = ({
     behandlingErFørstegangsbehandling &&
     behandlingErIkkeAvsluttet;
 
+  const visValgForÅOverstyreStarttidspunkt =
+    brukerKanSaksbehandle && behandlingErFørstegangsbehandling && behandlingErIkkeAvsluttet;
+
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (oppgaveReservertAv && !erReservertAvInnloggetBruker) {
       return { status: 'RESERVERT', label: `Reservert ${oppgaveReservertAv}` };
@@ -134,7 +137,7 @@ export const SaksinfoBanner = ({
                       Trekk søknad
                     </Dropdown.Menu.GroupedList.Item>
                   )}
-                  {!isProd() && (
+                  {visValgForÅOverstyreStarttidspunkt && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisVurderRettighetsperiodeModal(true)}>
                       Overstyr starttidspunkt
                     </Dropdown.Menu.GroupedList.Item>
