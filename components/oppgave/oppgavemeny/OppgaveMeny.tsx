@@ -17,7 +17,7 @@ export const OppgaveMeny = ({ enheter }: Props) => {
   const [selected, setSelected] = useState<MenyValg>('Ledige oppgaver');
 
   return (
-    <VStack gap={'8'} padding={'8'}>
+    <VStack gap={'8'} padding={'8'} maxWidth={'1680px'} marginInline={'auto'} marginBlock={'0'}>
       <HStack gap={'4'} align={'center'}>
         <Heading level={'1'} size={'large'}>
           Oppgaver
