@@ -26,7 +26,7 @@
     "@portabletext/react": "^3.2.1",
     "@testing-library/user-event": "14.6.1",
     "@unleash/nextjs": "^1.6.2",
-    "@vercel/otel": "^1.11.0",
+    "@vercel/otel": "^1.12.0",
     "date-fns": "^4.1.0",
     "fuse.js": "^7.1.0",
     "i18n-iso-countries": "^7.14.0",
