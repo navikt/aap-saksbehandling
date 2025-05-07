@@ -24,6 +24,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import Link from 'next/link';
 import { OppgaveKnapp } from 'components/oppgave/oppgaveknapp/OppgaveKnapp';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
 
 interface Props {
   heading?: string;
@@ -167,9 +168,11 @@ export const OppgaveTabell = ({
             <Table.Row key={`oppgave-${i}`}>
               <Table.DataCell textSize={'small'}>
                 {oppgave.saksnummer ? (
-                  <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{oppgave.personNavn}</Link>
+                  <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
+                    {storForbokstavIHvertOrd(oppgave.personNavn)}
+                  </Link>
                 ) : (
-                  oppgave.personNavn
+                  <span>{storForbokstavIHvertOrd(oppgave.personNavn)}</span>
                 )}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>

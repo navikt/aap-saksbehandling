@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formaterTilG, formaterTilProsent, storForbokstav } from 'lib/utils/string';
+import { formaterTilG, formaterTilProsent, storForbokstav, storForbokstavIHvertOrd } from 'lib/utils/string';
 
 describe('storForbokstav', () => {
   it('skal returnere en string med stor forbokstav dersom value er bare uppercase', () => {
@@ -8,6 +8,16 @@ describe('storForbokstav', () => {
 
   it('skal returnere en string med stor forbokstav dersom value er bare lowercase', () => {
     expect(storForbokstav('hello pello')).toBe('Hello pello');
+  });
+});
+
+describe('storForbokstavIHvertOrd', () => {
+  it('skal returnere en string med stor forbokstav på hvert ord dersom value er bare uppercase', () => {
+    expect(storForbokstavIHvertOrd('HELLO PELLO')).toBe('Hello Pello');
+  });
+
+  it('skal returnere en string med stor forbokstav på hvert ord dersom value er bare lowercase', () => {
+    expect(storForbokstavIHvertOrd('hello pello')).toBe('Hello Pello');
   });
 });
 
