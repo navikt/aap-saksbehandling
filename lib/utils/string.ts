@@ -9,9 +9,9 @@ export function formaterTilNok(sum: number): string {
 }
 
 export function formaterTilG(sum: number): string {
-  const formatedSum = sum.toFixed(2);
-  if (formatedSum.endsWith('.00')) {
-    return `${formatedSum.slice(0, -3)} G`;
+  const formatedSum = sum.toFixed(3);
+  if (formatedSum.endsWith('.000')) {
+    return `${formatedSum.slice(0, -4)} G`;
   }
   return `${formatedSum} G`;
 }
