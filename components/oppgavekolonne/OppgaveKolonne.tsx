@@ -15,6 +15,7 @@ import { ForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedl
 import { Samordning } from 'components/behandlinger/samordning/Samordning';
 import { Rettighetsperiode } from '../behandlinger/rettighetsperiode/Rettighetsperiode';
 import { Søknad } from 'components/behandlinger/søknad/Søknad';
+import { Formkrav } from '../behandlinger/klage/formkrav/Formkrav';
 
 interface Props {
   behandlingsReferanse: string;
@@ -43,6 +44,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'FATTE_VEDTAK' && <FatteVedtak behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'IVERKSETT_VEDTAK' && <div>Behandling avsluttet</div>}
       {aktivGruppe === 'BREV' && <Brev behandlingsReferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'FORMKRAV' && <Formkrav behandlingsreferanse={behandlingsReferanse} />}
     </section>
   );
 };

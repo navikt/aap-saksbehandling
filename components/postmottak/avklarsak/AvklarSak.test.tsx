@@ -17,6 +17,6 @@ describe('Avklar sak', () => {
 
   it('Har et valg for å knytte dokumentet til sak', () => {
     render(<AvklarSak behandlingsVersjon={1} behandlingsreferanse={'123'} grunnlag={grunnlag} readOnly={false} />);
-    expect(screen.getByRole('group', { name: 'Hvor skal dokumentet jorunalføres?' })).toBeVisible();
+    expect(screen.getByRole('group', { name: 'Hvor skal dokumentet journalføres?' })).toBeVisible();
   });
 });

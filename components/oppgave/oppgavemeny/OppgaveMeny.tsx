@@ -14,7 +14,7 @@ type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver';
 const options: MenyValg[] = ['Ledige oppgaver', 'Mine oppgaver'];
 
 export const OppgaveMeny = ({ enheter }: Props) => {
-  const [selected, setSelected] = useState<MenyValg>('Ledige oppgaver');
+  const [selected, setSelected] = useState<MenyValg>('Mine oppgaver');
 
   return (
     <VStack gap={'8'} padding={'8'} maxWidth={'1680px'} marginInline={'auto'} marginBlock={'0'}>

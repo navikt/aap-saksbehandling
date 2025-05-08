@@ -24,6 +24,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import Link from 'next/link';
 import { OppgaveKnapp } from 'components/oppgave/oppgaveknapp/OppgaveKnapp';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
 
 interface Props {
   heading?: string;
@@ -150,6 +151,9 @@ export const OppgaveTabell = ({
             <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={showSortAndFiltersInTable}>
               Beh. opprettet
             </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'årsak'} sortable={showSortAndFiltersInTable}>
+              Årsak
+            </Table.ColumnHeader>
             <Table.HeaderCell>Oppgave</Table.HeaderCell>
             <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={showSortAndFiltersInTable}>
               Oppg. opprettet
@@ -167,9 +171,11 @@ export const OppgaveTabell = ({
             <Table.Row key={`oppgave-${i}`}>
               <Table.DataCell textSize={'small'}>
                 {oppgave.saksnummer ? (
-                  <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{oppgave.personNavn}</Link>
+                  <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
+                    {storForbokstavIHvertOrd(oppgave.personNavn)}
+                  </Link>
                 ) : (
-                  oppgave.personNavn
+                  <span>{storForbokstavIHvertOrd(oppgave.personNavn)}</span>
                 )}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
@@ -189,6 +195,13 @@ export const OppgaveTabell = ({
                 {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
+              <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
+                <Tooltip content={oppgave.årsakerTilBehandling.join(', ')}>
+                  <BodyShort truncate size={'small'}>
+                    {oppgave.årsakerTilBehandling.join(', ')}
+                  </BodyShort>
+                </Tooltip>
+              </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}>
                   <BodyShort truncate size={'small'}>

@@ -37,6 +37,7 @@ const behovskodeMap = {
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',
   '5099': 'Beslutte sak',
+  '6000': 'Formkrav',
   '9001': 'Manuelt satt på vent',
   '9002': 'Bestill brev',
   '9003': 'Bestill legeerklæring',
@@ -130,6 +131,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Starttidspunkt';
     case 'SAMORDNING':
       return 'Samordning';
+    case 'FORMKRAV':
+      return 'Formkrav';
     default:
       return `${steggruppe}`;
   }

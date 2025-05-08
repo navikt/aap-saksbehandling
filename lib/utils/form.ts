@@ -30,6 +30,7 @@ export enum Behovstype {
   MANUELL_OVERSTYRING_MEDLEMSKAP = '5022',
   REFUSJON_KRAV_KODE = '5026',
   VURDER_RETTIGHETSPERIODE = '5029',
+  VURDER_FORMKRAV = '6000',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -94,6 +95,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Skriv brev';
     case '5029':
       return 'Starttidspunkt';
+    case '6000':
+      return 'Vurder formkrav';
   }
 }
 

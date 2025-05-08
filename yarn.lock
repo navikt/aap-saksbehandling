@@ -1047,6 +1047,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@floating-ui/react-dom@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "@floating-ui/react-dom@npm:2.1.2"
+  dependencies:
+    "@floating-ui/dom": "npm:^1.0.0"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/e855131c74e68cab505f7f44f92cd4e2efab1c125796db3116c54c0859323adae4bf697bf292ee83ac77b9335a41ad67852193d7aeace90aa2e1c4a640cafa60
+  languageName: node
+  linkType: hard
+
 "@floating-ui/react@npm:0.25.4":
   version: 0.25.4
   resolution: "@floating-ui/react@npm:0.25.4"
@@ -1058,6 +1070,20 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   checksum: 10c0/5255444a28d6bd35de0e3723619da36a1676d3c9234c71bdb8f3f0f5e952abf7502ff18c272b36e797f17c71addcaaeb3ce0d87bf8a70fdb06b445ac3a322246
+  languageName: node
+  linkType: hard
+
+"@floating-ui/react@npm:0.27.8":
+  version: 0.27.8
+  resolution: "@floating-ui/react@npm:0.27.8"
+  dependencies:
+    "@floating-ui/react-dom": "npm:^2.1.2"
+    "@floating-ui/utils": "npm:^0.2.9"
+    tabbable: "npm:^6.0.0"
+  peerDependencies:
+    react: ">=17.0.0"
+    react-dom: ">=17.0.0"
+  checksum: 10c0/901317ca85ed0b80231edc1ded1f67e685cd736ed52949b3b7ce2fa4bb52635a5676b035996e6d98f675f60891869b312beb1a2572001758d0ee2cce0efb1a77
   languageName: node
   linkType: hard
 
@@ -1082,24 +1108,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-core@npm:^1.18.0":
-  version: 1.18.0
-  resolution: "@grafana/faro-core@npm:1.18.0"
-  dependencies:
-    "@opentelemetry/api": "npm:^1.9.0"
-    "@opentelemetry/otlp-transformer": "npm:^0.200.0"
-  checksum: 10c0/cba9b6a1e1a321754b6f91260aaa60bd529a62b17e30e3a5bf3f93d937cb1f2ae02a52492fd653bc39137a4018a1ff4bf3164ffd25371a60577d5e1fb45fc096
+"@floating-ui/utils@npm:^0.2.9":
+  version: 0.2.9
+  resolution: "@floating-ui/utils@npm:0.2.9"
+  checksum: 10c0/48bbed10f91cb7863a796cc0d0e917c78d11aeb89f98d03fc38d79e7eb792224a79f538ed8a2d5d5584511d4ca6354ef35f1712659fd569868e342df4398ad6f
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:^1.18.0":
-  version: 1.18.0
-  resolution: "@grafana/faro-web-sdk@npm:1.18.0"
+"@grafana/faro-core@npm:^1.18.1":
+  version: 1.18.1
+  resolution: "@grafana/faro-core@npm:1.18.1"
   dependencies:
-    "@grafana/faro-core": "npm:^1.18.0"
+    "@opentelemetry/api": "npm:^1.9.0"
+    "@opentelemetry/otlp-transformer": "npm:^0.200.0"
+  checksum: 10c0/0fd3eeba7f33bfac7cdb6be8a0de52c831994c78388b3a5510ad6feded3bbd86390336ff8b4119e22c9827092a34338ad0eb7fd750ae7950dede8269268555fa
+  languageName: node
+  linkType: hard
+
+"@grafana/faro-web-sdk@npm:^1.18.1":
+  version: 1.18.1
+  resolution: "@grafana/faro-web-sdk@npm:1.18.1"
+  dependencies:
+    "@grafana/faro-core": "npm:^1.18.1"
     ua-parser-js: "npm:^1.0.32"
     web-vitals: "npm:^4.0.1"
-  checksum: 10c0/2e16a28d905fd7454abd85b06cf227bed0bd9ac485556e929fd37172782aa6dceff4975fdc5641f3c472b3bc31c9a30e147cfd88dd73c8588d243e0f23b2e1c2
+  checksum: 10c0/c54357bfdaae21b77fade72f9440d76fd4064ff30dd918368f30ed943c03e87008d0d95a7f3d63ae830ecf52ebd6d37c7f97281c04deb8124badf6cfe0e80483
   languageName: node
   linkType: hard
 
@@ -1534,31 +1567,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:^0.0.180":
-  version: 0.0.180
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.180::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.180%2F7ba97398ed7cacbf81248ba205d0669cc132c916"
-  checksum: 10c0/9620f75d47848d3327ae36cc33dc5b8f9cce4bba9db8339cb5454f759e791eb61b134eb8362bf3859c5802378453e4c59c0b1220462c49b9f8ecb9cebea522aa
+"@navikt/aap-oppgave-typescript-types@npm:^0.0.189":
+  version: 0.0.189
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.189::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.189%2Fee012caef8e6a9fb04dbaf931d61b5f4ef2973ec"
+  checksum: 10c0/a1a1e89173460b2a2b81cd9694006b9b52ebec370f341e5560e7cbfc20e3c291e9ddfcf61c0e8440fcffe47633f6969e7165890e5487280bb4700b372ab347a4
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.247":
-  version: 0.0.247
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.247::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.247%2Fafc421237754ef68c9f8f31938f3a0ddf90e6fab"
-  checksum: 10c0/d9c630ee868b4e1c451237cfe49abfc38341b960cb43c0dd0d8eafb3f396d45c2b16bf368e1bccc506f6f6ca2ef0175ebac58c2a152a38acfc9eb3e6cd0a522d
+"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.248":
+  version: 0.0.248
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.248::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.248%2F6626290f65b4dd71b8ae47b07b324f2677cd279a"
+  checksum: 10c0/cbef07293d98a58dad5036a0e9a5a76b73e81993dfb3b33ae8a2baeb4680185274a64c45dc1543b467cf76de2f63043efad2f12850d884bb38d4d00a37c52f2c
   languageName: node
   linkType: hard
 
-"@navikt/aap-statistikk-typescript-types@npm:^0.1.120":
-  version: 0.1.120
-  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.120::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.120%2Ffbbd4a4a262b259e0fb2759f042fd2ef99d710e8"
-  checksum: 10c0/a546b31746efef75ea2c2340aa1e8321cf9f85ae6cee4ee52fd636063a5491d0d4a7de08d9ca298a78701dd601a9d1456da27fe04f2c0ae286f2fd890a310176
+"@navikt/aap-statistikk-typescript-types@npm:^0.1.122":
+  version: 0.1.122
+  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.122::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.122%2F9457aff07c691b21c407e25f3f8287ab631b516e"
+  checksum: 10c0/969588856ad067b43983ae61548e01cbdd4d541510afc31cca8f3bb615aec860288637ba5ed1644dbbc14206c97f79034b2a8da8f60791e6857c418e05a0d359
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:7.21.0, @navikt/aksel-icons@npm:^7.21.0":
-  version: 7.21.0
-  resolution: "@navikt/aksel-icons@npm:7.21.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.21.0%2F9cfc7982634a0f4f6c304ca015e4403057e2f04e"
-  checksum: 10c0/33a9b4e4769e3ae2c13fbb62ff8097fd1c6f55297a4d456b2e462826b0072b83909f54496825c9ad8a049ab67008efccfbb385230d5d71115b92e2312fe0d10c
+"@navikt/aksel-icons@npm:7.21.1, @navikt/aksel-icons@npm:^7.21.1":
+  version: 7.21.1
+  resolution: "@navikt/aksel-icons@npm:7.21.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.21.1%2F545c686cd6c4517cde034e2ea81fb4ee0accc7bd"
+  checksum: 10c0/a9df7b13d8f5c4569547935215ccc9a2300b185c21e1f8abc4bc4c2f8389d6ddd9a76d675c9769920d6c74c5e3a04c6eb316195177cc42d7eae3d4d37994758c
   languageName: node
   linkType: hard
 
@@ -1576,10 +1609,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:7.21.0":
-  version: 7.21.0
-  resolution: "@navikt/ds-css@npm:7.21.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.21.0%2Fa83ba7f943f8da6e7aea70c699bd079f3027413c"
-  checksum: 10c0/fd44bde6a7c1fa52ec086569af61c4afad0b9e03c60e0ad1e74a2617eb3d0051d40608eeea3504e5f008acb925c0498e6c79393334bd89f695d328b3fd445125
+"@navikt/ds-css@npm:7.21.1":
+  version: 7.21.1
+  resolution: "@navikt/ds-css@npm:7.21.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.21.1%2F09969c230f742cd8af47f793d638be0000676b3d"
+  checksum: 10c0/05fd05311ef507ab1da1f1b5e8a7805b1e773a30954996c470bb323e505b36831f364d77df5e10b00cbd12f0b2f1637102777ce93ee19fc09d7fcce7dff38e6f
   languageName: node
   linkType: hard
 
@@ -1590,21 +1623,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:7.21.0":
-  version: 7.21.0
-  resolution: "@navikt/ds-react@npm:7.21.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.21.0%2F5b7ee015384297033e7ee09ee2d204e517f20a31"
+"@navikt/ds-react@npm:7.21.1":
+  version: 7.21.1
+  resolution: "@navikt/ds-react@npm:7.21.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.21.1%2F7388b4026118d513474af64cf27257a90f481fec"
   dependencies:
-    "@floating-ui/react": "npm:0.25.4"
+    "@floating-ui/react": "npm:0.27.8"
     "@floating-ui/react-dom": "npm:^2.0.9"
-    "@navikt/aksel-icons": "npm:^7.21.0"
-    "@navikt/ds-tokens": "npm:^7.21.0"
+    "@navikt/aksel-icons": "npm:^7.21.1"
+    "@navikt/ds-tokens": "npm:^7.21.1"
     clsx: "npm:^2.1.0"
     date-fns: "npm:^4.0.0"
     react-day-picker: "npm:9.6.1"
   peerDependencies:
     "@types/react": ">=17.0.30"
     react: ">=17.0.0 || >19.0.0-rc"
-  checksum: 10c0/6624623314c3842b001a1293d43d9cf60e686a086ed81c1305eb9090c6f3fe0c4f1f33377a48bc0423c395beb640b9f57a2a15761af029c4df8a1169a6179f77
+  checksum: 10c0/31a09b4803f7500b282eeb2f0c951554ac97b46d618ada113fcffcf11f673e17fd388d2a6e2c695fe12ad17d79458782c2bb12df530f9c095821fd3d6e19427c
   languageName: node
   linkType: hard
 
@@ -1626,10 +1659,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^7.21.0":
-  version: 7.21.0
-  resolution: "@navikt/ds-tokens@npm:7.21.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.21.0%2F406f2638550015ec493249f6ca09df67a91e8c7d"
-  checksum: 10c0/9ddbad0732a0b537158aa5029d0b32ed492d3076e7e8c34c43263452d47c6fcec504b3551c3332fae387c12622a1bcd8afdb8084b1a1cc94ec005353fba2fdfc
+"@navikt/ds-tokens@npm:^7.21.1":
+  version: 7.21.1
+  resolution: "@navikt/ds-tokens@npm:7.21.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.21.1%2Fca947d05a69efb44c4b146c8341852352915ec43"
+  checksum: 10c0/deece5063a3c2e9b90af8f9ad534bf6258ae6fb967eff8e65a6c899a8dfae6aa090558adcfbe4386186c1081d98f4579cc03f6873ca14951e79f2a9202a26c67
   languageName: node
   linkType: hard
 
@@ -1674,10 +1707,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.3.1":
-  version: 15.3.1
-  resolution: "@next/env@npm:15.3.1"
-  checksum: 10c0/edf65ad9d2bb7ccbc784beacf111a6500f79589743e2292a5c505e504ee711aa121cc0ac164b912ab5ea4734ce82f084133d291650de6d589b6ef208f98b4505
+"@next/env@npm:15.3.2":
+  version: 15.3.2
+  resolution: "@next/env@npm:15.3.2"
+  checksum: 10c0/bebc8acbe2fdaadc8cc9ae6dbf4fe1a2e183e1bc417742213ae6d246f8be9416b2af8e703e2faa1792c167245ea1918547c62cf7be88c35429f3494e71e4b429
   languageName: node
   linkType: hard
 
@@ -1690,58 +1723,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-arm64@npm:15.3.1":
-  version: 15.3.1
-  resolution: "@next/swc-darwin-arm64@npm:15.3.1"
+"@next/swc-darwin-arm64@npm:15.3.2":
+  version: 15.3.2
+  resolution: "@next/swc-darwin-arm64@npm:15.3.2"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-x64@npm:15.3.1":
-  version: 15.3.1
-  resolution: "@next/swc-darwin-x64@npm:15.3.1"
+"@next/swc-darwin-x64@npm:15.3.2":
+  version: 15.3.2
+  resolution: "@next/swc-darwin-x64@npm:15.3.2"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-gnu@npm:15.3.1":
-  version: 15.3.1
-  resolution: "@next/swc-linux-arm64-gnu@npm:15.3.1"
+"@next/swc-linux-arm64-gnu@npm:15.3.2":
+  version: 15.3.2
+  resolution: "@next/swc-linux-arm64-gnu@npm:15.3.2"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-musl@npm:15.3.1":
-  version: 15.3.1
-  resolution: "@next/swc-linux-arm64-musl@npm:15.3.1"
+"@next/swc-linux-arm64-musl@npm:15.3.2":
+  version: 15.3.2
+  resolution: "@next/swc-linux-arm64-musl@npm:15.3.2"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-gnu@npm:15.3.1":
-  version: 15.3.1
-  resolution: "@next/swc-linux-x64-gnu@npm:15.3.1"
+"@next/swc-linux-x64-gnu@npm:15.3.2":
+  version: 15.3.2
+  resolution: "@next/swc-linux-x64-gnu@npm:15.3.2"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-musl@npm:15.3.1":
-  version: 15.3.1
-  resolution: "@next/swc-linux-x64-musl@npm:15.3.1"
+"@next/swc-linux-x64-musl@npm:15.3.2":
+  version: 15.3.2
+  resolution: "@next/swc-linux-x64-musl@npm:15.3.2"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-win32-arm64-msvc@npm:15.3.1":
-  version: 15.3.1
-  resolution: "@next/swc-win32-arm64-msvc@npm:15.3.1"
+"@next/swc-win32-arm64-msvc@npm:15.3.2":
+  version: 15.3.2
+  resolution: "@next/swc-win32-arm64-msvc@npm:15.3.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-win32-x64-msvc@npm:15.3.1":
-  version: 15.3.1
-  resolution: "@next/swc-win32-x64-msvc@npm:15.3.1"
+"@next/swc-win32-x64-msvc@npm:15.3.2":
+  version: 15.3.2
+  resolution: "@next/swc-win32-x64-msvc@npm:15.3.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -3368,9 +3401,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/otel@npm:^1.11.0":
-  version: 1.11.0
-  resolution: "@vercel/otel@npm:1.11.0"
+"@vercel/otel@npm:^1.12.0":
+  version: 1.12.0
+  resolution: "@vercel/otel@npm:1.12.0"
   peerDependencies:
     "@opentelemetry/api": ^1.7.0
     "@opentelemetry/api-logs": "*"
@@ -3379,7 +3412,7 @@ __metadata:
     "@opentelemetry/sdk-logs": "*"
     "@opentelemetry/sdk-metrics": ^1.19.0
     "@opentelemetry/sdk-trace-base": ^1.19.0
-  checksum: 10c0/ffb75b9a71ad897519265bfc313a27ec4c2ff3da98bbf80463a5aeac83c23c4b60a9f427d112e1771f7e90ad6da4e84d0d789e8ea668755226b0ded15a8f08bf
+  checksum: 10c0/37ad87c02c22e32b0c8b5573564923853824a8842858c7e7ac66ecb4695ed78f0fb023125420505d861181cce65671da0a214f81faee3ae14a58b3f3699edf63
   languageName: node
   linkType: hard
 
@@ -3511,17 +3544,17 @@ __metadata:
   dependencies:
     "@eslint/eslintrc": "npm:^3.3.1"
     "@eslint/js": "npm:^9.26.0"
-    "@grafana/faro-web-sdk": "npm:^1.18.0"
+    "@grafana/faro-web-sdk": "npm:^1.18.1"
     "@navikt/aap-breveditor": "npm:^0.3.1"
     "@navikt/aap-breveditor-css": "npm:^0.2.0"
     "@navikt/aap-felles-prettier": "npm:^5.1.3"
-    "@navikt/aap-oppgave-typescript-types": "npm:^0.0.180"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.247"
-    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.120"
-    "@navikt/aksel-icons": "npm:7.21.0"
+    "@navikt/aap-oppgave-typescript-types": "npm:^0.0.189"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.248"
+    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.122"
+    "@navikt/aksel-icons": "npm:7.21.1"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
-    "@navikt/ds-css": "npm:7.21.0"
-    "@navikt/ds-react": "npm:7.21.0"
+    "@navikt/ds-css": "npm:7.21.1"
+    "@navikt/ds-react": "npm:7.21.1"
     "@navikt/eslint-config-aap": "npm:^5.0.3"
     "@navikt/oasis": "npm:^3.8.0"
     "@portabletext/react": "npm:^3.2.1"
@@ -3540,7 +3573,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^8.24.0"
     "@typescript-eslint/parser": "npm:^8.24.0"
     "@unleash/nextjs": "npm:^1.6.2"
-    "@vercel/otel": "npm:^1.11.0"
+    "@vercel/otel": "npm:^1.12.0"
     "@vitejs/plugin-react": "npm:^4.4.1"
     "@vitest/coverage-v8": "npm:^3.1.3"
     date-fns: "npm:^4.1.0"
@@ -3560,9 +3593,9 @@ __metadata:
     jose: "npm:^6.0.11"
     jsdom: "npm:^26.1.0"
     json-diff: "npm:^1.0.6"
-    lint-staged: "npm:^15.5.1"
+    lint-staged: "npm:^15.5.2"
     lodash: "npm:^4.17.21"
-    next: "npm:15.3.1"
+    next: "npm:15.3.2"
     node-loader: "npm:^2.1.0"
     openapi-typescript: "npm:7.7.1"
     pino: "npm:^9.6.0"
@@ -3571,7 +3604,7 @@ __metadata:
     prettier: "npm:^3.5.1"
     react: "npm:19.1.0"
     react-dom: "npm:19.1.0"
-    react-hook-form: "npm:7.56.1"
+    react-hook-form: "npm:7.56.3"
     react-plotly.js: "npm:^2.6.0"
     react-select: "npm:^5.10.1"
     recharts: "npm:^2.15.3"
@@ -8438,9 +8471,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^15.5.1":
-  version: 15.5.1
-  resolution: "lint-staged@npm:15.5.1"
+"lint-staged@npm:^15.5.2":
+  version: 15.5.2
+  resolution: "lint-staged@npm:15.5.2"
   dependencies:
     chalk: "npm:^5.4.1"
     commander: "npm:^13.1.0"
@@ -8454,7 +8487,7 @@ __metadata:
     yaml: "npm:^2.7.0"
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 10c0/86deddb08bf10428f2eb96c02326a9ee403360729225f0b12afb0c0f13c287a75daa01e179d86f64e3432576446d8643d204a47417296f9ef0aa56f1340ff2af
+  checksum: 10c0/618386254600ada3af3672486a9d082250108245e7c0863d9dfe0a21e7764e3b2eb6416b0f8970e548f4e9d368637331598b27df5a1306925feabbaf16a667e1
   languageName: node
   linkType: hard
 
@@ -9049,19 +9082,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:15.3.1":
-  version: 15.3.1
-  resolution: "next@npm:15.3.1"
+"next@npm:15.3.2":
+  version: 15.3.2
+  resolution: "next@npm:15.3.2"
   dependencies:
-    "@next/env": "npm:15.3.1"
-    "@next/swc-darwin-arm64": "npm:15.3.1"
-    "@next/swc-darwin-x64": "npm:15.3.1"
-    "@next/swc-linux-arm64-gnu": "npm:15.3.1"
-    "@next/swc-linux-arm64-musl": "npm:15.3.1"
-    "@next/swc-linux-x64-gnu": "npm:15.3.1"
-    "@next/swc-linux-x64-musl": "npm:15.3.1"
-    "@next/swc-win32-arm64-msvc": "npm:15.3.1"
-    "@next/swc-win32-x64-msvc": "npm:15.3.1"
+    "@next/env": "npm:15.3.2"
+    "@next/swc-darwin-arm64": "npm:15.3.2"
+    "@next/swc-darwin-x64": "npm:15.3.2"
+    "@next/swc-linux-arm64-gnu": "npm:15.3.2"
+    "@next/swc-linux-arm64-musl": "npm:15.3.2"
+    "@next/swc-linux-x64-gnu": "npm:15.3.2"
+    "@next/swc-linux-x64-musl": "npm:15.3.2"
+    "@next/swc-win32-arm64-msvc": "npm:15.3.2"
+    "@next/swc-win32-x64-msvc": "npm:15.3.2"
     "@swc/counter": "npm:0.1.3"
     "@swc/helpers": "npm:0.5.15"
     busboy: "npm:1.6.0"
@@ -9106,7 +9139,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 10c0/a4cfd0af69fec3006ac9d3520f0d09ee265ee47a577d0cb444805680803ce17e9a3b575dc1dfe2a9939a77da3d5b0f3e28b316e2781289232a187967775534d0
+  checksum: 10c0/81bc21e7853cd19ba0dbfedda8a0221819a12286146f43752cb6ecaeed7a8e5f1f3027bdd89e70ee1fd793d2be0f7e181f1944d2ffe8ee0aefef4c312aed4e27
   languageName: node
   linkType: hard
 
@@ -10385,12 +10418,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.56.1":
-  version: 7.56.1
-  resolution: "react-hook-form@npm:7.56.1"
+"react-hook-form@npm:7.56.3":
+  version: 7.56.3
+  resolution: "react-hook-form@npm:7.56.3"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 10c0/26eafd54bf47167628e34c2f22ea27ea7bdd5b4231a56af5be31ccedfb2a721708b308026ea4a17f2fb15c7b5fff83c0feb4acc7aa07bd6faa8506e917810cab
+  checksum: 10c0/9467b027fd030d93ba3c8de85853d381ca92ba70bfdb9d0569a63dae44c1459082f5863a4ceb8690789a7185a588516182904db4c72546119c966bf25316d591
   languageName: node
   linkType: hard
 
@@ -11905,7 +11938,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tabbable@npm:^6.0.1":
+"tabbable@npm:^6.0.0, tabbable@npm:^6.0.1":
   version: 6.2.0
   resolution: "tabbable@npm:6.2.0"
   checksum: 10c0/ced8b38f05f2de62cd46836d77c2646c42b8c9713f5bd265daf0e78ff5ac73d3ba48a7ca45f348bafeef29b23da7187c72250742d37627883ef89cbd7fa76898
