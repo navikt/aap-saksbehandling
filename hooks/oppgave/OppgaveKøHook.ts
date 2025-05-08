@@ -1,4 +1,4 @@
-import { Oppgave } from 'lib/types/oppgaveTypes';
+import { Oppgave, Paging } from 'lib/types/oppgaveTypes';
 import useSWRInfinite from 'swr/infinite';
 import { hentOppgaverClient } from 'lib/oppgaveClientApi';
 
@@ -21,9 +21,9 @@ export function useOppgaveKø(
 
     if (aktivKøId) {
       if (visKunOppgaverSomBrukerErVeilederPå) {
-        return `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet}/veileder/?offset=${pageIndex * PAGE_SIZE}&limit=${PAGE_SIZE}`;
+        return `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet}/veileder/?side=${pageIndex}`;
       }
-      return `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet}/?offset=${pageIndex * PAGE_SIZE}&limit=${PAGE_SIZE}`;
+      return `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet}/?side=${pageIndex}`;
     } else {
       return null;
     }
@@ -39,10 +39,14 @@ export function useOppgaveKø(
     getKey,
     (key) => {
       const url = new URL(key, window.location.origin);
-      const offset = Number(url.searchParams.get('offset'));
-      const limit = Number(url.searchParams.get('limit'));
+      const side = Number(url.searchParams.get('side'));
 
-      return hentOppgaverClient(aktivKøId!, aktivEnhet, visKunOppgaverSomBrukerErVeilederPå, offset, limit);
+      const paging: Paging = {
+        antallPerSide: PAGE_SIZE,
+        side: side + 1,
+      };
+
+      return hentOppgaverClient(aktivKøId!, aktivEnhet, visKunOppgaverSomBrukerErVeilederPå, 100, paging);
     },
     { revalidateOnFocus: false }
   );
@@ -57,8 +61,8 @@ export function useOppgaveKø(
     })
     .flat();
 
-  const antallOppgaver = oppgaverFlatMap && oppgaverFlatMap[0].antallOppgaver;
+  const antallOppgaver = oppgaverFlatMap?.reduce((acc, oppgave) => acc + oppgave.antallOppgaver, 0) || 0;
   const oppgaver = oppgaverFlatMap?.map((oppgave) => oppgave.oppgaver).flat();
 
-  return { antallOppgaver: antallOppgaver || 0, oppgaver: oppgaver || [], size, setSize, isLoading, isValidating };
+  return { antallOppgaver, oppgaver: oppgaver || [], size, setSize, isLoading, isValidating };
 }
