@@ -5,7 +5,7 @@ import { requestAzureOboToken, validateToken } from '@navikt/oasis';
 import { headers } from 'next/headers';
 import { hentLocalToken } from 'lib/services/localFetch';
 import { getAccessTokenOrRedirectToLogin } from './azure/azuread';
-import { logError } from 'lib/serverutlis/logger';
+import { logError, logWarning } from 'lib/serverutlis/logger';
 import { ApiException, FetchResponse } from 'lib/utils/api';
 
 const NUMBER_OF_RETRIES = 3;
@@ -81,7 +81,12 @@ const fetchWithRetry = async <ResponseType>(
     }
 
     const responseJson: ApiException = await response.json();
-    logError(`klarte ikke å hente ${url}: ${responseJson.message} med status ${response.status}`);
+    const feilmelding = `klarte ikke å hente ${url}: ${responseJson.message} med status ${response.status}`;
+    if (response.status >= 500) {
+      logError(feilmelding);
+    } else {
+      logWarning(feilmelding);
+    }
     return { type: 'ERROR', apiException: responseJson, status: response.status };
   }
 
