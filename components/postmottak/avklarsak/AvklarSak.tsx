@@ -42,7 +42,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
     {
       knyttTilSak: {
         type: 'radio',
-        label: 'Hvor skal dokumentet jorunalføres?',
+        label: 'Hvor skal dokumentet journalføres?',
         rules: { required: 'Du må svare på hvilken sak dokumentet skal knyttes til' },
         defaultValue: mapVurderingTilValgtOption(grunnlag.vurdering),
         options: [
