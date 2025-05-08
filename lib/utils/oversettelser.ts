@@ -37,6 +37,7 @@ const behovskodeMap = {
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',
   '5099': 'Beslutte sak',
+  '5999': 'Fastsett påklaget behandling ',
   '6000': 'Formkrav',
   '9001': 'Manuelt satt på vent',
   '9002': 'Bestill brev',
@@ -49,7 +50,7 @@ const behovskodeMap = {
   '1339': 'Avklar tema',
   '1340': 'Avklar saksnummer',
   '1341': 'Endre tema',
-} as const;
+} as const satisfies Record<OppgaveAvklaringsbehovKode, string>;
 
 export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | string): string {
   return behovskodeMap[kode as OppgaveAvklaringsbehovKode] ?? 'Ukjent behovstype';
