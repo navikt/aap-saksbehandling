@@ -134,19 +134,21 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
         </VStack>
       )}
       {oppgaver && oppgaver.length > 0 && <OppgaveTabell oppgaver={oppgaver} showSortAndFiltersInTable />}
-      <HStack justify={'center'}>
-        <Button
-          onClick={async () => {
-            await setSize(size + 1);
-          }}
-          variant={'secondary'}
-          className={'fit-content'}
-          size={'small'}
-          loading={isValidating}
-        >
-          Last inn flere
-        </Button>
-      </HStack>
+      {oppgaver.length > 0 && (
+        <HStack justify={'center'}>
+          <Button
+            onClick={async () => {
+              await setSize(size + 1);
+            }}
+            variant={'secondary'}
+            className={'fit-content'}
+            size={'small'}
+            loading={isValidating}
+          >
+            Last inn flere
+          </Button>
+        </HStack>
+      )}
     </VStack>
   );
 };
