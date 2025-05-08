@@ -19,6 +19,7 @@ import {
   FlytProsessering,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
+  FormkravGrunnlag,
   ForutgåendeMedlemskapGrunnlag,
   FritakMeldepliktGrunnlag,
   HelseinstitusjonGrunnlag,
@@ -243,6 +244,11 @@ export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
 export const hentRettighetsperiodeGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/rettighetsperiode`;
   return await apiFetch<RettighetsperiodeGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentFormkravGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/formkrav`;
+  return await apiFetch<FormkravGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFlyt = async (behandlingsReferanse: string) => {
