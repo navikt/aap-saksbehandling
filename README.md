@@ -41,6 +41,7 @@ følge guiden her https://aap-sysdoc.ansatt.nav.no/funksjonalitet/Behandlingsfly
 OBS: Du må kopiere `.env-template` til `.env.local` for å kunne kjøre lokalt.
 
 ```
+yarn install
 yarn dev
 ```
 
