@@ -1,6 +1,6 @@
 'use client';
 
-import { AvklaringsbehovKode, Oppgave } from 'lib/types/types';
+import { AvklaringsbehovKode, Oppgave, ÅrsakTilBehandling } from 'lib/types/types';
 import {
   Alert,
   BodyShort,
@@ -25,6 +25,7 @@ import Link from 'next/link';
 import { OppgaveKnapp } from 'components/oppgave/oppgaveknapp/OppgaveKnapp';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { formaterÅrsak } from 'lib/utils/årsaker';
 
 interface Props {
   heading?: string;
@@ -198,7 +199,7 @@ export const OppgaveTabell = ({
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip content={oppgave.årsakerTilBehandling.join(', ')}>
                   <BodyShort truncate size={'small'}>
-                    {oppgave.årsakerTilBehandling.join(', ')}
+                    {oppgave.årsakerTilBehandling.map((årsak) => formaterÅrsak(årsak as ÅrsakTilBehandling)).join(', ')}
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
