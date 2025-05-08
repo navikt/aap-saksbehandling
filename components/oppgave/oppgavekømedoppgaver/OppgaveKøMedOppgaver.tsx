@@ -3,16 +3,17 @@
 import { useEffect, useState, useTransition } from 'react';
 import { OppgaveTabell } from 'components/oppgave/oppgavetabell/OppgaveTabell';
 import useSWR from 'swr';
-import { Alert, BodyShort, Box, Button, HStack, Label, Skeleton, Switch, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, Label, Skeleton, Switch, VStack } from '@navikt/ds-react';
 import { EnhetSelect } from 'components/oppgave/enhetselect/EnhetSelect';
 import { KøSelect } from 'components/oppgave/køselect/KøSelect';
 import { byggKelvinURL, queryParamsArray } from 'lib/utils/request';
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { hentKøerForEnheterClient, hentOppgaverClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
+import { hentKøerForEnheterClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
 import { hentLagretAktivKøId, lagreAktivKøId } from 'lib/utils/aktivkøid';
 import { useRouter } from 'next/navigation';
 import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
 import { isError, isSuccess } from 'lib/utils/api';
+import { useOppgave } from 'hooks/oppgave/OppgaveHook';
 
 interface Props {
   enheter: Enhet[];
@@ -24,6 +25,12 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [veilederFilter, setVeilederFilter] = useState<string>('');
   const [aktivKøId, setAktivKøId] = useState<number>();
+
+  const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating } = useOppgave(
+    [aktivEnhet],
+    veilederFilter === 'veileder',
+    aktivKøId
+  );
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
     hentKøerForEnheterClient([aktivEnhet])
@@ -52,11 +59,6 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
       oppdaterKøId(køId);
     }
   }, [køer]);
-
-  const { data: oppgaverValgtKø } = useSWR(
-    aktivKøId ? `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet}/${veilederFilter}` : null,
-    () => hentOppgaverClient(aktivKøId!, [aktivEnhet], veilederFilter === 'veileder')
-  );
 
   async function plukkOgGåTilOppgave() {
     startTransition(async () => {
@@ -115,22 +117,14 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
                 <Label as="p" size={'small'}>
                   Totalt antall oppgaver
                 </Label>
-                {isSuccess(oppgaverValgtKø) && <BodyShort>{oppgaverValgtKø.data.antallTotalt}</BodyShort>}
+                <BodyShort>{antallOppgaver}</BodyShort>
               </VStack>
             </HStack>
           </VStack>
         </Box>
       </VStack>
-      {isError(oppgaverValgtKø) && (
-        <Alert
-          variant={'error'}
-          title={'Feil'}
-        >{`Status ${oppgaverValgtKø.status}, msg: ${oppgaverValgtKø.apiException.message}`}</Alert>
-      )}
-      {isSuccess(oppgaverValgtKø) && !oppgaverValgtKø?.data.oppgaver.length && (
-        <BodyShort>Ingen oppgaver i valgt kø for valgt enhet</BodyShort>
-      )}
-      {!isSuccess(oppgaverValgtKø) && !isError(oppgaverValgtKø) && (
+      {!oppgaver?.length && <BodyShort>Ingen oppgaver i valgt kø for valgt enhet</BodyShort>}
+      {isLoading && (
         <VStack gap={'1'}>
           <Skeleton variant="rectangle" width="100%" height={40} />
           <Skeleton variant="rectangle" width="100%" height={40} />
@@ -139,9 +133,20 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
           <Skeleton variant="rectangle" width="100%" height={40} />
         </VStack>
       )}
-      {isSuccess(oppgaverValgtKø) && oppgaverValgtKø.data.oppgaver.length > 0 && (
-        <OppgaveTabell oppgaver={oppgaverValgtKø.data?.oppgaver || []} showSortAndFiltersInTable />
-      )}
+      {oppgaver && oppgaver.length > 0 && <OppgaveTabell oppgaver={oppgaver} showSortAndFiltersInTable />}
+      <HStack justify={'center'}>
+        <Button
+          onClick={async () => {
+            await setSize(size + 1);
+          }}
+          variant={'secondary'}
+          className={'fit-content'}
+          size={'small'}
+          loading={isValidating}
+        >
+          Last inn flere
+        </Button>
+      </HStack>
     </VStack>
   );
 };

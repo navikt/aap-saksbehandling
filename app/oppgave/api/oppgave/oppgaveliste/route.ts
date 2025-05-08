@@ -11,10 +11,12 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ message: 'enheter mangler', status: 400 }), { status: 400 });
   } else if (data.veileder === undefined || data.veileder === null) {
     return new Response(JSON.stringify({ message: 'veileder mangler', status: 400 }), { status: 400 });
+  } else if (data.paging === undefined) {
+    return new Response(JSON.stringify({ message: 'Paging mangler', status: 400 }), { status: 400 });
   }
 
   try {
-    const res = await hentOppgaverForFilter(data.filterId, data.enheter, data.veileder);
+    const res = await hentOppgaverForFilter(data.filterId, data.enheter, data.veileder, data.maxAntall, data.paging);
     if (isError(res)) {
       logError(`/api/oppgave/oppgaveliste`, res.apiException);
     }

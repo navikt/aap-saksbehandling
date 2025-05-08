@@ -9,6 +9,7 @@ import {
   OppgaveBehandlingstype,
   OppgavelisteRequest,
   OppgavelisteResponse,
+  Paging,
 } from 'lib/types/oppgaveTypes';
 import { queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
@@ -23,12 +24,19 @@ export const hentKøer = async (enheter: string[]) => {
   return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET');
 };
 
-export const hentOppgaverForFilter = async (filterId: number, enheter: string[], veileder: boolean) => {
+export const hentOppgaverForFilter = async (
+  filterId: number,
+  enheter: string[],
+  veileder: boolean,
+  maxAntall: number,
+  paging?: Paging
+) => {
   const payload: OppgavelisteRequest = {
     filterId,
     enheter,
-    maxAntall: 10,
+    maxAntall,
     veileder,
+    paging,
   };
   const url = `${oppgaveApiBaseURL}/oppgaveliste`;
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', payload);

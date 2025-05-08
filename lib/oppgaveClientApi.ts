@@ -5,6 +5,7 @@ import {
   NesteOppgaveResponse,
   Oppgave,
   OppgavelisteResponse,
+  Paging,
   PlukkOppgaveDto,
 } from './types/oppgaveTypes';
 import {
@@ -49,11 +50,19 @@ export async function årsakTilBehandlingClient(url: string) {
 }
 
 // oppgave
-export async function hentOppgaverClient(filterId: number, enheter: string[], veileder: boolean) {
+export async function hentOppgaverClient(
+  filterId: number,
+  enheter: string[],
+  veileder: boolean,
+  maxAntall: number,
+  paging: Paging
+) {
   return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', {
     filterId,
     enheter,
     veileder,
+    maxAntall,
+    paging,
   });
 }
 
