@@ -13,7 +13,7 @@ import { hentLagretAktivKøId, lagreAktivKøId } from 'lib/utils/aktivkøid';
 import { useRouter } from 'next/navigation';
 import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
 import { isError, isSuccess } from 'lib/utils/api';
-import { useOppgaveKø } from 'hooks/oppgave/OppgaveKøHook';
+import { useOppgave } from 'hooks/oppgave/OppgaveHook';
 
 interface Props {
   enheter: Enhet[];
@@ -26,7 +26,7 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
   const [veilederFilter, setVeilederFilter] = useState<string>('');
   const [aktivKøId, setAktivKøId] = useState<number>();
 
-  const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating } = useOppgaveKø(
+  const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating } = useOppgave(
     [aktivEnhet],
     veilederFilter === 'veileder',
     aktivKøId

@@ -4,7 +4,7 @@ import { hentOppgaverClient } from 'lib/oppgaveClientApi';
 
 const PAGE_SIZE = 25;
 
-export function useOppgaveKø(
+export function useOppgave(
   aktivEnhet: Array<string>,
   visKunOppgaverSomBrukerErVeilederPå: boolean,
   aktivKøId?: number
@@ -35,21 +35,17 @@ export function useOppgaveKø(
     setSize,
     isLoading,
     isValidating,
-  } = useSWRInfinite(
-    getKey,
-    (key) => {
-      const url = new URL(key, window.location.origin);
-      const side = Number(url.searchParams.get('side'));
+  } = useSWRInfinite(getKey, (key) => {
+    const url = new URL(key, window.location.origin);
+    const side = Number(url.searchParams.get('side'));
 
-      const paging: Paging = {
-        antallPerSide: PAGE_SIZE,
-        side: side + 1,
-      };
+    const paging: Paging = {
+      antallPerSide: PAGE_SIZE,
+      side: side + 1,
+    };
 
-      return hentOppgaverClient(aktivKøId!, aktivEnhet, visKunOppgaverSomBrukerErVeilederPå, 100, paging);
-    },
-    { revalidateOnFocus: false }
-  );
+    return hentOppgaverClient(aktivKøId!, aktivEnhet, visKunOppgaverSomBrukerErVeilederPå, 25, paging);
+  });
 
   const oppgaverFlatMap = oppgaverValgtKø
     ?.filter((res) => res.type === 'SUCCESS')
