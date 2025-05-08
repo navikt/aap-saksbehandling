@@ -45,6 +45,7 @@ import {
   TilkjentYtelseGrunnlag,
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
+  UtbetalingOgSimuleringGrunnlag,
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
@@ -255,6 +256,13 @@ export const hentFlyt = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
   return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
     `flyt/${behandlingsReferanse}`,
+  ]);
+};
+
+export const hentUtbetalingOgSimuleringGrunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/utbetaling/simulering`;
+  return await apiFetch<UtbetalingOgSimuleringGrunnlag>(url, saksbehandlingApiScope, 'GET', undefined, [
+    `utbetalingogsimulering/${behandlingsreferanse}`,
   ]);
 };
 

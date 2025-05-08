@@ -16,6 +16,7 @@ import { Samordning } from 'components/behandlinger/samordning/Samordning';
 import { Rettighetsperiode } from '../behandlinger/rettighetsperiode/Rettighetsperiode';
 import { Søknad } from 'components/behandlinger/søknad/Søknad';
 import { Formkrav } from '../behandlinger/klage/formkrav/Formkrav';
+import { Simulering } from 'components/behandlinger/simulering/Simulering';
 
 interface Props {
   behandlingsReferanse: string;
@@ -39,7 +40,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'ET_ANNET_STED' && <EtAnnetSted behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'BARNETILLEGG' && <Barnetillegg behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'TILKJENT_YTELSE' && <TilkjentYtelse behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'SIMULERING' && <div>SIMULERING</div>}
+      {aktivGruppe === 'SIMULERING' && <Simulering behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'VEDTAK' && <Vedtak behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'FATTE_VEDTAK' && <FatteVedtak behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'IVERKSETT_VEDTAK' && <div>Behandling avsluttet</div>}

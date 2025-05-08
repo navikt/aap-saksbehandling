@@ -74,6 +74,10 @@ export type RettighetsperiodeGrunnlag =
 export type FormkravGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.formkrav.flate.FormkravGrunnlagDto'];
 
+export type UtbetalingOgSimuleringGrunnlag =
+  components['schemas']['no.nav.aap.utbetal.simulering.UtbetalingOgSimuleringDto'];
+export type SimulertUtbetaling = components['schemas']['no.nav.aap.utbetal.simulering.SimulertUtbetalingDto'];
+
 // Behandling
 export type DetaljertBehandling = components['schemas']['no.nav.aap.behandlingsflyt.flyt.DetaljertBehandlingDTO'];
 export type BehandlingFlytOgTilstand =
