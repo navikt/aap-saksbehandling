@@ -151,6 +151,9 @@ export const OppgaveTabell = ({
             <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={showSortAndFiltersInTable}>
               Beh. opprettet
             </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'årsak'} sortable={showSortAndFiltersInTable}>
+              Årsak
+            </Table.ColumnHeader>
             <Table.HeaderCell>Oppgave</Table.HeaderCell>
             <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={showSortAndFiltersInTable}>
               Oppg. opprettet
@@ -192,6 +195,13 @@ export const OppgaveTabell = ({
                 {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
+              <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
+                <Tooltip content={oppgave.årsakerTilBehandling.join(', ')}>
+                  <BodyShort truncate size={'small'}>
+                    {oppgave.årsakerTilBehandling.join(', ')}
+                  </BodyShort>
+                </Tooltip>
+              </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}>
                   <BodyShort truncate size={'small'}>
