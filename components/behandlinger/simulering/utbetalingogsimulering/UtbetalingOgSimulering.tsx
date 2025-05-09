@@ -1,3 +1,5 @@
+'use client';
+
 import { Alert, Label, Table } from '@navikt/ds-react';
 import { SimulertUtbetaling, UtbetalingOgSimuleringGrunnlag } from 'lib/types/types';
 
@@ -33,7 +35,6 @@ const Utbetalingstabell = ({ utbetalinger }: { utbetalinger: SimulertUtbetaling[
 };
 
 export const UtbetalingOgSimulering = ({ grunnlag }: Props) => {
-  console.log(grunnlag);
   if (!grunnlag.length) {
     return <Alert variant={'info'}>Fikk tomt svar fra backend</Alert>;
   }
@@ -45,7 +46,7 @@ export const UtbetalingOgSimulering = ({ grunnlag }: Props) => {
             <Label>
               {simuleringsperiode.fom} - {simuleringsperiode.tom}
             </Label>
-            <Utbetalingstabell utbetalinger={simuleringsperiode.utbetalinger} />;
+            <Utbetalingstabell utbetalinger={simuleringsperiode.utbetalinger} />
           </section>
         ))
       )}

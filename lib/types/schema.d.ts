@@ -3073,13 +3073,10 @@ export interface paths {
     trace?: never;
   };
 }
-
 export type webhooks = Record<string, never>;
-
 export interface components {
   schemas: {
     'java.time.Year': Record<string, never>;
-    'kotlin.UInt': Record<string, never>;
     'no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto': {
       'bel\u00F8p': components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
       /** Format: int32 */
@@ -3138,7 +3135,7 @@ export interface components {
       avIdent: string;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       tidspunkt: string;
     };
@@ -5044,7 +5041,7 @@ export interface components {
       harFritak: boolean;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       vurderingsTidspunkt: string;
     };
@@ -5159,12 +5156,12 @@ export interface components {
       mottaker: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       oppdatert: string;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       opprettet: string;
       signaturer: components['schemas']['no.nav.aap.brev.kontrakt.Signatur'][];
@@ -5614,12 +5611,12 @@ export interface components {
       bySted?: string | null;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       gyldigFraOgMed?: string | null;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       gyldigTilOgMed?: string | null;
       landkode?: string | null;
@@ -5739,7 +5736,7 @@ export interface components {
       fritekst: string;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       opprettet: string;
       personId: string;
@@ -5906,7 +5903,7 @@ export interface components {
       fraDato: string;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       vurderingsTidspunkt: string;
     };
@@ -6477,7 +6474,7 @@ export interface components {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       opprettet: string;
       /** Format: uuid */
@@ -6509,7 +6506,7 @@ export interface components {
         | 'AVBRUTT';
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       tidsstempel: string;
     };
@@ -6922,7 +6919,7 @@ export interface components {
       melding?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Melding'];
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       mottattTidspunkt: string;
       referanse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.InnsendingReferanse'];
@@ -7043,7 +7040,7 @@ export interface components {
       brevkode?: string | null;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       datoOpprettet: string;
       dokumentInfoId: string;
@@ -7056,7 +7053,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       opprettet: string;
       /** Format: uuid */
@@ -7127,7 +7124,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -7140,7 +7137,7 @@ export interface components {
       ident: string;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -7245,12 +7242,12 @@ export interface components {
       navn: string;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       opprettetTidspunkt?: string | null;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       'planlagtKj\u00F8retidspunkt': string;
       /** @enum {string} */
@@ -7291,20 +7288,22 @@ export interface components {
       perioder: components['schemas']['no.nav.aap.utbetaling.UtbetalingsperiodeDto'][];
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       utbetalingBekreftet?: string | null;
       /**
        * Format: date-time
-       * @example 2025-05-09T08:38:59.830125
+       * @example 2025-05-09T10:47:00.069676
        */
       utbetalingOversendt: string;
       /** @enum {string} */
       utbetalingStatus: 'OPPRETTET' | 'SENDT' | 'BEKREFTET' | 'FEILET' | 'INGEN_PERIODER';
     };
     'no.nav.aap.utbetaling.UtbetalingsperiodeDto': {
-      'bel\u00F8p': components['schemas']['kotlin.UInt'];
-      fastsattDagsats: components['schemas']['kotlin.UInt'];
+      /** Format: int32 */
+      'bel\u00F8p': number;
+      /** Format: int32 */
+      fastsattDagsats: number;
       /**
        * Format: date
        * @example 2025-05-09
@@ -7333,6 +7332,5 @@ export interface components {
   headers: never;
   pathItems: never;
 }
-
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;
