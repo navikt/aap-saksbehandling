@@ -34,7 +34,16 @@ export const Kelvinsøk = ({ setSøkeresultat }: Props) => {
     } catch (error) {
       console.error(error);
     }
-    setSøkeresultat(søkedata);
+    const cleanedSøkedata: SøkeResultat = {
+      ...søkedata,
+      person: søkedata.person?.map((p) => ({
+        ...p,
+        label: (!p.label || p.label === 'undefined') ? '' : p.label,
+      })),
+    };
+
+    setSøkeresultat(cleanedSøkedata);
+
     setIsLoading(false);
   }
 
