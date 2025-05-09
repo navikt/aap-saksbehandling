@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
@@ -26,11 +26,13 @@ import { OppgaveKnapp } from 'components/oppgaveliste/oppgaveknapp/OppgaveKnapp'
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { formaterÅrsak } from 'lib/utils/årsaker';
+import { PåVentBoks } from '../påventinfoboks/PåVentInfoboks';
 
 interface Props {
   heading?: string;
   oppgaver: Oppgave[];
   visBehandleOgFrigiKnapp?: boolean;
+  visPåVentInformasjon: boolean;
   showDropdownActions?: boolean;
   showSortAndFiltersInTable?: boolean;
   showSortingComboboxes?: boolean;
@@ -47,6 +49,7 @@ export const OppgaveTabell = ({
   showSortingComboboxes = false,
   showSortAndFiltersInTable = false,
   visBehandleOgFrigiKnapp = false,
+  visPåVentInformasjon,
   includeColumns = [],
   isLoading = false,
   revalidateFunction,
@@ -65,18 +68,26 @@ export const OppgaveTabell = ({
     }
     return 1;
   });
-  const behandlingstypeFilter = (oppgave: Oppgave) => {
-    return selectedBehandlingstyper.length > 0
-      ? selectedBehandlingstyper.find((option) => option.value === oppgave.behandlingstype)
-      : true;
-  };
-  const avklaringsbehovFilter = (oppgave: Oppgave) =>
-    selectedAvklaringsbehov.length > 0
-      ? selectedAvklaringsbehov.find((option) => option.value === oppgave.avklaringsbehovKode)
-      : true;
+  const behandlingstypeFilter = useCallback(
+    (oppgave: Oppgave) => {
+      return selectedBehandlingstyper.length > 0
+        ? selectedBehandlingstyper.find((option) => option.value === oppgave.behandlingstype)
+        : true;
+    },
+    [selectedBehandlingstyper]
+  );
+
+  const avklaringsbehovFilter = useCallback(
+    (oppgave: Oppgave) =>
+      selectedAvklaringsbehov.length > 0
+        ? selectedAvklaringsbehov.find((option) => option.value === oppgave.avklaringsbehovKode)
+        : true,
+    [selectedAvklaringsbehov]
+  );
+
   const filtrerteOppgaver = useMemo(
     () => sortedOppgaver.filter((oppgave) => behandlingstypeFilter(oppgave) && avklaringsbehovFilter(oppgave)),
-    [selectedBehandlingstyper, selectedAvklaringsbehov, sortedOppgaver]
+    [sortedOppgaver, avklaringsbehovFilter, behandlingstypeFilter]
   );
 
   const handleSort = (sortKey: ScopedSortState['orderBy']) => {
@@ -164,6 +175,7 @@ export const OppgaveTabell = ({
                 Reservert av
               </Table.ColumnHeader>
             )}
+            {visPåVentInformasjon ? <Table.HeaderCell></Table.HeaderCell> : undefined}
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -216,6 +228,11 @@ export const OppgaveTabell = ({
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
               {includeColumns?.includes('reservertAv') && <Table.DataCell>{oppgave.reservertAv || ''}</Table.DataCell>}
+              {visPåVentInformasjon ? (
+                <Table.DataCell textSize={'small'}>
+                  {oppgave.påVentTil ? <PåVentBoks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} /> : null}
+                </Table.DataCell>
+              ) : undefined}
               <Table.DataCell textSize={'small'}>
                 <OppgaveKnapp
                   oppgave={oppgave}
