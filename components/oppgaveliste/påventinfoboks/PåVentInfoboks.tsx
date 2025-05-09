@@ -6,7 +6,7 @@ import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
 import { useRef, useState } from 'react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { HourglassTopFilledIcon } from '@navikt/aksel-icons';
-import styles from './PåVentInfoboks.module.css';
+import styles from './PåVentInfoboks.module.css';
 
 interface Props {
   frist: string;
