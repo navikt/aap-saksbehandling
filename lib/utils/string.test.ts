@@ -16,7 +16,7 @@ describe('formaterTilG', () => {
     expect(formaterTilG(2)).toBe('2 G');
   });
 
-  it('skal returnere en string med korrekt formatering med 4.39', () => {
+  it('skal returnere en string med korrekt formatering med 4.395', () => {
     expect(formaterTilG(4.3949)).toBe('4.395 G');
   });
 
@@ -24,7 +24,7 @@ describe('formaterTilG', () => {
     expect(formaterTilG(6)).toBe('6 G');
   });
 
-  it('skal returnere en string med korrekt formatering med 4.10', () => {
+  it('skal returnere en string med korrekt formatering med 4.100', () => {
     expect(formaterTilG(4.1)).toBe('4.100 G');
   });
 });
