@@ -13,7 +13,7 @@ interface Props {
   årsak?: string | null;
 }
 
-export function PåVentBoks({ frist, årsak }: Props) {
+export const PåVentBoks = ({ frist, årsak }: Props) => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
 
@@ -60,4 +60,4 @@ export function PåVentBoks({ frist, årsak }: Props) {
       </Popover>
     </>
   );
-}
+};
