@@ -26,7 +26,7 @@ import { OppgaveKnapp } from 'components/oppgaveliste/oppgaveknapp/OppgaveKnapp'
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { formaterÅrsak } from 'lib/utils/årsaker';
-import { PåVentBoks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
+import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 
 interface Props {
   heading?: string;
@@ -228,11 +228,11 @@ export const OppgaveTabell = ({
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
               {includeColumns?.includes('reservertAv') && <Table.DataCell>{oppgave.reservertAv || ''}</Table.DataCell>}
-              {visPåVentInformasjon ? (
+              {visPåVentInformasjon && (
                 <Table.DataCell textSize={'small'}>
-                  {oppgave.påVentTil ? <PåVentBoks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} /> : null}
+                  {oppgave.påVentTil && <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} />}
                 </Table.DataCell>
-              ) : undefined}
+              )}
               <Table.DataCell textSize={'small'}>
                 <OppgaveKnapp
                   oppgave={oppgave}

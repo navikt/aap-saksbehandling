@@ -13,7 +13,7 @@ interface Props {
   årsak?: string | null;
 }
 
-export const PåVentBoks = ({ frist, årsak }: Props) => {
+export const PåVentInfoboks = ({ frist, årsak }: Props) => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
 
