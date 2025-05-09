@@ -24,13 +24,7 @@ export const hentKøer = async (enheter: string[]) => {
   return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET');
 };
 
-export const hentOppgaverForFilter = async (
-  filterId: number,
-  enheter: string[],
-  veileder: boolean,
-  paging?: Paging
-) => {
-  // @ts-ignore
+export const hentOppgaverForFilter = async (filterId: number, enheter: string[], veileder: boolean, paging: Paging) => {
   const payload: OppgavelisteRequest = {
     filterId,
     enheter,
