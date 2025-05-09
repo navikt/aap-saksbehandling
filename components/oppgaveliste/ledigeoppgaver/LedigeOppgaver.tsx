@@ -71,7 +71,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     });
   }
 
-  const køerhehe = isSuccess(køer) ? køer.data : undefined;
+  const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;
 
   return (
     <VStack gap={'5'}>
@@ -80,7 +80,12 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           <HStack justify={'space-between'} align={'end'}>
             <HStack gap={'4'}>
               <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
-              <KøSelect label={'Velg kø'} køer={køerhehe || []} aktivKøId={aktivKøId} valgtKøListener={oppdaterKøId} />
+              <KøSelect
+                label={'Velg kø'}
+                køer={oppgaveKøer || []}
+                aktivKøId={aktivKøId}
+                valgtKøListener={oppdaterKøId}
+              />
               <VStack justify={'end'}>
                 <Switch
                   value="veileder"
@@ -104,7 +109,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
               <Label as="p" size={'small'}>
                 Beskrivelse av køen
               </Label>
-              <BodyShort>{køerhehe?.find((e) => e.id === aktivKøId)?.beskrivelse}</BodyShort>
+              <BodyShort>{oppgaveKøer?.find((e) => e.id === aktivKøId)?.beskrivelse}</BodyShort>
             </VStack>
             <VStack>
               <Label as="p" size={'small'}>
