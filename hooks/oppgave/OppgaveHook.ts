@@ -4,7 +4,7 @@ import { hentOppgaverClient } from 'lib/oppgaveClientApi';
 
 const PAGE_SIZE = 25;
 
-export function useOppgave(
+export function useLedigeOppgaver(
   aktivEnhet: Array<string>,
   visKunOppgaverSomBrukerErVeilederPå: boolean,
   aktivKøId?: number
@@ -44,7 +44,7 @@ export function useOppgave(
       side: side + 1,
     };
 
-    return hentOppgaverClient(aktivKøId!, aktivEnhet, visKunOppgaverSomBrukerErVeilederPå, 25, paging);
+    return hentOppgaverClient(aktivKøId!, aktivEnhet, visKunOppgaverSomBrukerErVeilederPå, paging);
   });
 
   const oppgaverFlatMap = oppgaverValgtKø

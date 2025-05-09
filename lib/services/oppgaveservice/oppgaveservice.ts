@@ -28,13 +28,12 @@ export const hentOppgaverForFilter = async (
   filterId: number,
   enheter: string[],
   veileder: boolean,
-  maxAntall: number,
   paging?: Paging
 ) => {
+  // @ts-ignore
   const payload: OppgavelisteRequest = {
     filterId,
     enheter,
-    maxAntall,
     veileder,
     paging,
   };
