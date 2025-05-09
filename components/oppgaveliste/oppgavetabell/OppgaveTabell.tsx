@@ -197,7 +197,11 @@ export const OppgaveTabell = ({
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                <Tooltip content={oppgave.årsakerTilBehandling.join(', ')}>
+                <Tooltip
+                  content={oppgave.årsakerTilBehandling
+                    .map((årsak) => formaterÅrsak(årsak as ÅrsakTilBehandling))
+                    .join(', ')}
+                >
                   <BodyShort truncate size={'small'}>
                     {oppgave.årsakerTilBehandling.map((årsak) => formaterÅrsak(årsak as ÅrsakTilBehandling)).join(', ')}
                   </BodyShort>
