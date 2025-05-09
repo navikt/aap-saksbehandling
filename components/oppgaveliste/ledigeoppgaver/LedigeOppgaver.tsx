@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState, useTransition } from 'react';
-import { OppgaveTabell } from 'components/oppgave/oppgavetabell/OppgaveTabell';
+import { OppgaveTabell } from 'components/oppgaveliste/oppgavetabell/OppgaveTabell';
 import useSWR from 'swr';
 import { BodyShort, Box, Button, HStack, Label, Skeleton, Switch, VStack } from '@navikt/ds-react';
-import { EnhetSelect } from 'components/oppgave/enhetselect/EnhetSelect';
-import { KøSelect } from 'components/oppgave/køselect/KøSelect';
+import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
+import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { byggKelvinURL, queryParamsArray } from 'lib/utils/request';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { hentKøerForEnheterClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
@@ -19,7 +19,7 @@ interface Props {
   enheter: Enhet[];
 }
 
-export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
+export const LedigeOppgaver = ({ enheter }: Props) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
@@ -71,58 +71,50 @@ export const OppgaveKøMedOppgaver = ({ enheter }: Props) => {
     });
   }
 
+  const køerhehe = isSuccess(køer) ? køer.data : undefined;
+
   return (
     <VStack gap={'5'}>
-      <VStack gap={'4'}>
-        <HStack justify={'space-between'}>
-          <VStack justify={'center'}></VStack>
-        </HStack>
-        <Box background="surface-subtle" padding="4" borderRadius="xlarge">
-          <VStack gap={'5'}>
-            <HStack justify={'space-between'}>
-              <HStack gap={'4'}>
-                <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
-                <KøSelect
-                  label={'Velg kø'}
-                  køer={isSuccess(køer) ? køer.data : []}
-                  aktivKøId={aktivKøId}
-                  valgtKøListener={oppdaterKøId}
-                />
-                <VStack justify={'end'}>
-                  <Switch
-                    value="veileder"
-                    checked={veilederFilter === 'veileder'}
-                    onChange={(e) => setVeilederFilter((x) => (x ? '' : e.target.value))}
-                    size={'small'}
-                  >
-                    Vis kun oppgaver jeg er veileder på
-                  </Switch>
-                </VStack>
-              </HStack>
-              <VStack justify={'center'}>
-                <Button size="small" onClick={() => plukkOgGåTilOppgave()} loading={isPending}>
-                  Behandle neste oppgave
-                </Button>
-              </VStack>
-            </HStack>
-            <HStack style={{ borderBottom: '1px solid #071A3636' }}></HStack>
+      <Box background="surface-subtle" padding="4" borderRadius="xlarge">
+        <VStack gap={'5'}>
+          <HStack justify={'space-between'}>
             <HStack gap={'4'}>
-              <VStack>
-                <Label as="p" size={'small'}>
-                  Beskrivelse av køen
-                </Label>
-                {isSuccess(køer) && <BodyShort>{køer.data.find((e) => e.id === aktivKøId)?.beskrivelse}</BodyShort>}
-              </VStack>
-              <VStack>
-                <Label as="p" size={'small'}>
-                  Totalt antall oppgaver
-                </Label>
-                <BodyShort>{antallOppgaver}</BodyShort>
+              <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
+              <KøSelect label={'Velg kø'} køer={køerhehe || []} aktivKøId={aktivKøId} valgtKøListener={oppdaterKøId} />
+              <VStack justify={'end'}>
+                <Switch
+                  value="veileder"
+                  checked={veilederFilter === 'veileder'}
+                  onChange={(e) => setVeilederFilter((x) => (x ? '' : e.target.value))}
+                  size={'small'}
+                >
+                  Vis kun oppgaver jeg er veileder på
+                </Switch>
               </VStack>
             </HStack>
-          </VStack>
-        </Box>
-      </VStack>
+            <VStack justify={'center'}>
+              <Button size="small" onClick={() => plukkOgGåTilOppgave()} loading={isPending}>
+                Behandle neste oppgave
+              </Button>
+            </VStack>
+          </HStack>
+          <HStack style={{ borderBottom: '1px solid #071A3636' }}></HStack>
+          <HStack gap={'4'}>
+            <VStack>
+              <Label as="p" size={'small'}>
+                Beskrivelse av køen
+              </Label>
+              <BodyShort>{køerhehe?.find((e) => e.id === aktivKøId)?.beskrivelse}</BodyShort>
+            </VStack>
+            <VStack>
+              <Label as="p" size={'small'}>
+                Totalt antall oppgaver
+              </Label>
+              <BodyShort>{antallOppgaver}</BodyShort>
+            </VStack>
+          </HStack>
+        </VStack>
+      </Box>
       {!oppgaver?.length && <BodyShort>Ingen oppgaver i valgt kø for valgt enhet</BodyShort>}
       {isLoading && (
         <VStack gap={'1'}>

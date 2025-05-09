@@ -1,6 +1,6 @@
 'use client';
 
-import { OppgaveTabell } from 'components/oppgave/oppgavetabell/OppgaveTabell';
+import { OppgaveTabell } from 'components/oppgaveliste/oppgavetabell/OppgaveTabell';
 import useSWR from 'swr';
 import { hentMineOppgaverClient } from 'lib/oppgaveClientApi';
 import { Alert, BodyShort, Skeleton, VStack } from '@navikt/ds-react';

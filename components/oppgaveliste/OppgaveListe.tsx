@@ -1,19 +1,20 @@
 'use client';
 
-import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
-import { OppgaveKøMedOppgaver } from 'components/oppgave/oppgavekømedoppgaver/OppgaveKøMedOppgaver';
-import { Enhet } from 'lib/types/oppgaveTypes';
+import { MineOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
 import { useState } from 'react';
-import { MineOppgaver } from 'components/oppgave/mineoppgaver/MineOppgaver';
+import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
+import { Enhet } from 'lib/types/oppgaveTypes';
 
 interface Props {
   enheter: Enhet[];
 }
+
 type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver';
 
 const options: MenyValg[] = ['Ledige oppgaver', 'Mine oppgaver'];
 
-export const OppgaveMeny = ({ enheter }: Props) => {
+export const OppgaveListe = ({ enheter }: Props) => {
   const [selected, setSelected] = useState<MenyValg>('Mine oppgaver');
 
   return (
@@ -30,8 +31,9 @@ export const OppgaveMeny = ({ enheter }: Props) => {
           </Tabs.List>
         </Tabs>
       </HStack>
+
       {selected === 'Mine oppgaver' && <MineOppgaver />}
-      {selected === 'Ledige oppgaver' && <OppgaveKøMedOppgaver enheter={enheter} />}
+      {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
     </VStack>
   );
 };

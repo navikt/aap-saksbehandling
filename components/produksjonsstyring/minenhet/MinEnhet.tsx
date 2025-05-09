@@ -26,7 +26,7 @@ import { ÅrsakTilBehandling } from 'components/produksjonsstyring/årsaktilbeha
 import styles from './MinEnhet.module.css';
 import { BulletListIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { EnhetSelect } from 'components/oppgave/enhetselect/EnhetSelect';
+import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
 import { isSuccess } from 'lib/utils/api';
 
