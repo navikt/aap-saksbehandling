@@ -77,7 +77,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     <VStack gap={'5'}>
       <Box background="surface-subtle" padding="4" borderRadius="xlarge">
         <VStack gap={'5'}>
-          <HStack justify={'space-between'}>
+          <HStack justify={'space-between'} align={'end'}>
             <HStack gap={'4'}>
               <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
               <KøSelect label={'Velg kø'} køer={køerhehe || []} aktivKøId={aktivKøId} valgtKøListener={oppdaterKøId} />
