@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '../../../../lib/test/CustomRender';
+import { render, screen } from '../../../../../lib/test/CustomRender';
 import { FormkravVurdering } from './FormkravVurdering';
 
 describe('Klage', () => {

@@ -1,13 +1,13 @@
 'use client';
 
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from '../../../../lib/utils/form';
-import { useConfigForm } from '../../../form/FormHook';
-import { useLøsBehovOgGåTilNesteSteg } from '../../../../hooks/LøsBehovOgGåTilNesteStegHook';
-import { VilkårsKortMedForm } from '../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from '../../../../../lib/utils/form';
+import { useConfigForm } from '../../../../form/FormHook';
+import { useLøsBehovOgGåTilNesteSteg } from '../../../../../hooks/LøsBehovOgGåTilNesteStegHook';
+import { VilkårsKortMedForm } from '../../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormEvent } from 'react';
-import { FormField } from '../../../form/FormField';
-import { FormkravGrunnlag, TypeBehandling } from '../../../../lib/types/types';
-import { useBehandlingsReferanse } from '../../../../hooks/BehandlingHook';
+import { FormField } from '../../../../form/FormField';
+import { FormkravGrunnlag, TypeBehandling } from '../../../../../lib/types/types';
+import { useBehandlingsReferanse } from '../../../../../hooks/BehandlingHook';
 
 interface Props {
   grunnlag?: FormkravGrunnlag;

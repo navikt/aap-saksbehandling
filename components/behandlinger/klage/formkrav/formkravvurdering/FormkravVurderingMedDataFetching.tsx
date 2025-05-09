@@ -1,8 +1,8 @@
-import { isError } from '../../../../lib/utils/api';
-import { ApiException } from '../../../saksbehandling/apiexception/ApiException';
+import { isError } from '../../../../../lib/utils/api';
+import { ApiException } from '../../../../saksbehandling/apiexception/ApiException';
 import { FormkravVurdering } from './FormkravVurdering';
-import { TypeBehandling } from '../../../../lib/types/types';
-import { hentFormkravGrunnlag } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
+import { TypeBehandling } from '../../../../../lib/types/types';
+import { hentFormkravGrunnlag } from '../../../../../lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
   behandlingsreferanse: string;
