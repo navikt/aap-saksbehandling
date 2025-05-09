@@ -261,7 +261,7 @@ export const hentFlyt = async (behandlingsReferanse: string) => {
 
 export const hentUtbetalingOgSimuleringGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/utbetaling/simulering`;
-  return await apiFetch<UtbetalingOgSimuleringGrunnlag>(url, saksbehandlingApiScope, 'GET', undefined, [
+  return await apiFetch<UtbetalingOgSimuleringGrunnlag[]>(url, saksbehandlingApiScope, 'GET', undefined, [
     `utbetalingogsimulering/${behandlingsreferanse}`,
   ]);
 };

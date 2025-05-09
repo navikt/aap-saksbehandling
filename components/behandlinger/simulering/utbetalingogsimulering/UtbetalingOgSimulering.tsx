@@ -1,8 +1,8 @@
-import { Label, Table } from '@navikt/ds-react';
+import { Alert, Label, Table } from '@navikt/ds-react';
 import { SimulertUtbetaling, UtbetalingOgSimuleringGrunnlag } from 'lib/types/types';
 
 interface Props {
-  grunnlag: UtbetalingOgSimuleringGrunnlag;
+  grunnlag: UtbetalingOgSimuleringGrunnlag[];
 }
 
 const Utbetalingstabell = ({ utbetalinger }: { utbetalinger: SimulertUtbetaling[] }) => {
@@ -34,16 +34,21 @@ const Utbetalingstabell = ({ utbetalinger }: { utbetalinger: SimulertUtbetaling[
 
 export const UtbetalingOgSimulering = ({ grunnlag }: Props) => {
   console.log(grunnlag);
+  if (!grunnlag.length) {
+    return <Alert variant={'info'}>Fikk tomt svar fra backend</Alert>;
+  }
   return (
     <div>
-      {grunnlag.simuleringDto.perioder.map((simuleringsperiode, index) => (
-        <section key={index}>
-          <Label>
-            {simuleringsperiode.fom} - {simuleringsperiode.tom}
-          </Label>
-          <Utbetalingstabell utbetalinger={simuleringsperiode.utbetalinger} />;
-        </section>
-      ))}
+      {grunnlag.map((simulering) =>
+        simulering.simuleringDto.perioder.map((simuleringsperiode, index) => (
+          <section key={index}>
+            <Label>
+              {simuleringsperiode.fom} - {simuleringsperiode.tom}
+            </Label>
+            <Utbetalingstabell utbetalinger={simuleringsperiode.utbetalinger} />;
+          </section>
+        ))
+      )}
     </div>
   );
 };
