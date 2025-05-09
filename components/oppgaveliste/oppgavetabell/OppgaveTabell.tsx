@@ -26,7 +26,7 @@ import { OppgaveKnapp } from 'components/oppgaveliste/oppgaveknapp/OppgaveKnapp'
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { formaterÅrsak } from 'lib/utils/årsaker';
-import { PåVentBoks } from '../påventinfoboks/PåVentInfoboks';
+import { PåVentBoks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 
 interface Props {
   heading?: string;
