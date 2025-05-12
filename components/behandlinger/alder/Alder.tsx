@@ -103,12 +103,6 @@ function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak): string {
       return 'Brukeren er over 67 år.';
     case 'BRUKER_UNDER_18':
       return 'Brukeren er under 18 år.';
-    case 'IKKE_NOK_REDUSERT_ARBEIDSEVNE':
-      return 'Ikke nok redusert arbeidsevne.';
-    case 'MANGLENDE_DOKUMENTASJON':
-      return 'Manglende dokumentasjon';
-    case 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL':
-      return 'Ikke sykdom, skade, lyte er vesentlig del';
     default:
       throw new Error('Kunne ikke finne påkrevd årsak.');
   }
