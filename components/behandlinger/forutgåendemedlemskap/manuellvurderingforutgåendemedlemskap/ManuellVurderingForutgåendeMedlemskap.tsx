@@ -116,6 +116,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
     })(event);
   };
   const heading = overstyring ? 'Overstyring av § 11-2 Forutgående medlemskap' : '§ 11-2 Forutgående medlemskap';
+
   return (
     <VilkårsKortMedForm
       heading={heading}
@@ -127,6 +128,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
       visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       erAktivtSteg={true}
+      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
       <FormField form={form} formField={formFields.harForutgåendeMedlemskap} horizontalRadio />
