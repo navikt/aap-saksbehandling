@@ -2,43 +2,79 @@
 
 import { Behovstype } from '../../../../../lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from '../../../../../hooks/LøsBehovOgGåTilNesteStegHook';
-import { VilkårsKort } from '../../../../vilkårskort/VilkårsKort';
 import { useBehandlingsReferanse } from '../../../../../hooks/BehandlingHook';
-import { TypeBehandling } from '../../../../../lib/types/types';
-import { Button } from '@navikt/ds-react';
+import { PåklagetBehandlingGrunnlag, TypeBehandling } from '../../../../../lib/types/types';
+import { useConfigForm } from '../../../../form/FormHook';
+import { VilkårsKortMedForm } from '../../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { FormEvent } from 'react';
+import { FormField } from '../../../../form/FormField';
 
 interface Props {
   behandlingVersjon: number;
   erAktivtSteg: boolean;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
+  grunnlag?: PåklagetBehandlingGrunnlag;
 }
 
-export const PåklagetBehandling = ({ behandlingVersjon }: Props) => {
+interface FormFields {
+  påklagetBehandling: string;
+}
+
+export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erAktivtSteg }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('PÅKLAGET_BEHANDLING');
+  const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
+    useLøsBehovOgGåTilNesteSteg('PÅKLAGET_BEHANDLING');
 
-  // TODO: Denne skal erstattes med form for å velge behandling
+  const { form, formFields } = useConfigForm<FormFields>(
+    {
+      påklagetBehandling: {
+        type: 'select',
+        label: 'Velg behandlingen det klages på',
+        rules: { required: 'Du må velge behandlingen det klages på' },
+        options: [{ label: 'Annet', value: 'Annet' }, ...mapGrunnlagTilValg(grunnlag)],
+      },
+    },
+    { readOnly: readOnly }
+  );
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      console.log('data', data);
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          // TODO: Send med løsning
+          behovstype: Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
+        },
+        referanse: behandlingsreferanse,
+      });
+    })(event);
+  };
 
   return (
-    <VilkårsKort heading={'Påklaget behandling'} steg={'PÅKLAGET_BEHANDLING'} vilkårTilhørerNavKontor={false}>
-      <p>Her kommer det mer</p>
-      <Button
-        className={'fit-content'}
-        loading={isLoading}
-        onClick={async () => {
-          løsBehovOgGåTilNesteSteg({
-            behandlingVersjon: behandlingVersjon,
-            behov: {
-              behovstype: Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
-            },
-            referanse: behandlingsreferanse,
-          });
-        }}
-      >
-        Fortsett
-      </Button>
-    </VilkårsKort>
+    <VilkårsKortMedForm
+      heading={'Påklaget behandling'}
+      steg={'PÅKLAGET_BEHANDLING'}
+      onSubmit={handleSubmit}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      visBekreftKnapp={!readOnly}
+      erAktivtSteg={erAktivtSteg}
+      vilkårTilhørerNavKontor={false}
+      isLoading={isLoading}
+      status={status}
+    >
+      <FormField form={form} formField={formFields.påklagetBehandling} />
+    </VilkårsKortMedForm>
   );
 };
+
+function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
+  return (
+    grunnlag?.behandlinger.map((behandling) => ({
+      value: behandling.referanse,
+      label: `Vedtakstidspunkt: ${behandling.vedtakstidspunkt}`,
+    })) ?? []
+  );
+}

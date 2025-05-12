@@ -1,5 +1,8 @@
 import { TypeBehandling } from '../../../../../lib/types/types';
 import { PåklagetBehandling } from './PåklagetBehandling';
+import { isError } from '../../../../../lib/utils/api';
+import { ApiException } from '../../../../saksbehandling/apiexception/ApiException';
+import { hentPåklagetBehandlingGrunnlag } from '../../../../../lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -14,8 +17,13 @@ export const PåklagetBehandlingMedDataFetching = async ({
   readOnly,
   typeBehandling,
   erAktivtSteg,
+  behandlingsreferanse,
 }: Props) => {
-  // TODO: Hent grunnlag
+  const grunnlag = await hentPåklagetBehandlingGrunnlag(behandlingsreferanse);
+
+  if (isError(grunnlag)) {
+    return <ApiException apiResponses={[grunnlag]} />;
+  }
 
   return (
     <PåklagetBehandling
@@ -23,6 +31,7 @@ export const PåklagetBehandlingMedDataFetching = async ({
       readOnly={readOnly}
       typeBehandling={typeBehandling}
       erAktivtSteg={erAktivtSteg}
+      grunnlag={grunnlag.data}
     />
   );
 };
