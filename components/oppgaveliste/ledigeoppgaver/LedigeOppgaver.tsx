@@ -87,7 +87,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
                 <Switch
                   value="veileder"
                   checked={veilederFilter === 'veileder'}
-                  onChange={(e) => setVeilederFilter((x) => (x ? '' : e.target.value))}
+                  onChange={(e) => setVeilederFilter((prevState) => (prevState ? '' : e.target.value))}
                   size={'small'}
                 >
                   Vis kun oppgaver jeg er veileder på
