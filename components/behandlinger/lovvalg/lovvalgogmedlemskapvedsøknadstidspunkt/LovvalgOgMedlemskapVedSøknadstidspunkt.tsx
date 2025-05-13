@@ -155,7 +155,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       isLoading={isLoading}
       erAktivtSteg={erAktivtSteg}
       status={status}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAvResponse}
+      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
     >
