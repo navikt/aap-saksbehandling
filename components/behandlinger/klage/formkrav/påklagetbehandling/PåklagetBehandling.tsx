@@ -3,7 +3,11 @@
 import { Behovstype } from '../../../../../lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from '../../../../../hooks/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from '../../../../../hooks/BehandlingHook';
-import { PåklagetBehandlingGrunnlag, TypeBehandling } from '../../../../../lib/types/types';
+import {
+  PåklagetBehandlingGrunnlag,
+  PåklagetBehandlingVurderingLøsning,
+  TypeBehandling,
+} from '../../../../../lib/types/types';
 import { useConfigForm } from '../../../../form/FormHook';
 import { VilkårsKortMedForm } from '../../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormEvent } from 'react';
@@ -21,6 +25,8 @@ interface FormFields {
   påklagetBehandling: string;
 }
 
+const ARENA_VEDTAK = 'arenavedtak';
+
 export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erAktivtSteg }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -33,7 +39,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erA
         type: 'select',
         label: 'Velg behandlingen det klages på',
         rules: { required: 'Du må velge behandlingen det klages på' },
-        options: [{ label: 'Annet', value: 'Annet' }, ...mapGrunnlagTilValg(grunnlag)],
+        options: [...mapGrunnlagTilValg(grunnlag), { label: 'Arenavedtak', value: ARENA_VEDTAK }],
       },
     },
     { readOnly: readOnly }
@@ -41,12 +47,12 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erA
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      console.log('data', data);
+      console.log(data);
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
-          // TODO: Send med løsning
           behovstype: Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
+          påklagetBehandlingVurdering: mapValgTilTilDto(data.påklagetBehandling),
         },
         referanse: behandlingsreferanse,
       });
@@ -77,4 +83,13 @@ function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
       label: `Vedtakstidspunkt: ${behandling.vedtakstidspunkt}`,
     })) ?? []
   );
+}
+
+function mapValgTilTilDto(valgtBehandling: string): PåklagetBehandlingVurderingLøsning {
+  switch (valgtBehandling) {
+    case ARENA_VEDTAK:
+      return { påklagetVedtakType: 'ARENA_VEDTAK' };
+    default:
+      return { påklagetVedtakType: 'KELVIN_BEHANDLING', påklagetBehandling: valgtBehandling };
+  }
 }
