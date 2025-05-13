@@ -4,30 +4,34 @@ import { hentOppgaverClient } from 'lib/oppgaveClientApi';
 
 const PAGE_SIZE = 25;
 
-export function useLedigeOppgaver(
-  aktivEnhet: Array<string>,
-  visKunOppgaverSomBrukerErVeilederPå: boolean,
-  aktivKøId?: number
-): {
+type UseOppgaverOptions = {
+  aktivEnhet: string[];
+  visKunOppgaverSomBrukerErVeilederPå?: boolean;
+  aktivKøId?: number;
+  kunLedigeOppgaver?: boolean;
+};
+
+export function useOppgaver({
+  aktivEnhet,
+  visKunOppgaverSomBrukerErVeilederPå = false,
+  aktivKøId,
+  kunLedigeOppgaver = true,
+}: UseOppgaverOptions): {
   kanLasteInnFlereOppgaver: boolean;
   antallOppgaver: number;
   oppgaver: Oppgave[];
   size: number;
-  setSize: Function;
+  setSize: (size: number | ((_size: number) => number)) => void;
   isLoading: boolean;
   isValidating: boolean;
 } {
   const getKey = (pageIndex: number, previousPageData: any) => {
     if (previousPageData && previousPageData.length === 0) return null;
+    if (!aktivKøId) return null;
 
-    if (aktivKøId) {
-      if (visKunOppgaverSomBrukerErVeilederPå) {
-        return `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet}/veileder/?side=${pageIndex}`;
-      }
-      return `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet}/?side=${pageIndex}`;
-    } else {
-      return null;
-    }
+    const base = `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet.join(',')}`;
+    const suffix = visKunOppgaverSomBrukerErVeilederPå ? '/veileder/' : '/';
+    return `${base}${suffix}?side=${pageIndex}`;
   };
 
   const {
@@ -47,7 +51,7 @@ export function useLedigeOppgaver(
         side: side + 1,
       };
 
-      return hentOppgaverClient(aktivKøId!, aktivEnhet, visKunOppgaverSomBrukerErVeilederPå, paging);
+      return hentOppgaverClient(aktivKøId!, aktivEnhet, visKunOppgaverSomBrukerErVeilederPå, paging, kunLedigeOppgaver);
     },
     { revalidateOnFocus: false }
   );
@@ -62,11 +66,8 @@ export function useLedigeOppgaver(
       })) ?? [];
 
   const antallOppgaver = oppgaverFlatMap.reduce((acc, { antallOppgaver }) => acc + antallOppgaver, 0);
-
   const oppgaver = oppgaverFlatMap.flatMap(({ oppgaver }) => oppgaver);
-
   const sisteKallMotOppgave = oppgaverFlatMap.at(-1);
-
   const kanLasteInnFlereOppgaver = (sisteKallMotOppgave?.antallGjenståendeOppgaver ?? 0) > 0;
 
   return {
@@ -78,4 +79,25 @@ export function useLedigeOppgaver(
     isValidating,
     kanLasteInnFlereOppgaver,
   };
+}
+
+export function useLedigeOppgaver(
+  aktivEnhet: string[],
+  visKunOppgaverSomBrukerErVeilederPå: boolean,
+  aktivKøId?: number
+) {
+  return useOppgaver({
+    aktivEnhet,
+    visKunOppgaverSomBrukerErVeilederPå,
+    aktivKøId,
+  });
+}
+
+export function useAlleOppgaverForEnhet(aktivEnhet: string[], aktivKøId?: number) {
+  return useOppgaver({
+    aktivEnhet,
+    aktivKøId,
+    visKunOppgaverSomBrukerErVeilederPå: false,
+    kunLedigeOppgaver: false,
+  });
 }

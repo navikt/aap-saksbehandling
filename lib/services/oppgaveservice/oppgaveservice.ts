@@ -24,12 +24,19 @@ export const hentKøer = async (enheter: string[]) => {
   return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET');
 };
 
-export const hentOppgaverForFilter = async (filterId: number, enheter: string[], veileder: boolean, paging: Paging) => {
+export const hentOppgaverForFilter = async (
+  filterId: number,
+  enheter: string[],
+  veileder: boolean,
+  paging: Paging,
+  kunLedigeOppgaver?: boolean
+) => {
   const payload: OppgavelisteRequest = {
     filterId,
     enheter,
     veileder,
     paging,
+    kunLedigeOppgaver,
   };
   const url = `${oppgaveApiBaseURL}/oppgaveliste`;
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', payload);
