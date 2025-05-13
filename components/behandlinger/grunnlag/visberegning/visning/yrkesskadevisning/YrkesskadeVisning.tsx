@@ -2,18 +2,20 @@ import { InntektTabell } from 'components/inntekttabell/InntektTabell';
 import { BodyShort, Table } from '@navikt/ds-react';
 
 import { formaterTilG } from 'lib/utils/string';
-import { YrkesskadeGrunnlag } from 'lib/types/types';
+import { GjeldendeGrunnbeløp, YrkesskadeGrunnlag } from 'lib/types/types';
 
 import styles from '../Visning.module.css';
 import { YrkesskadeBeregningTabell } from 'components/yrkesskadeberegningtabell/YrkesskadeBeregningTabell';
 import { sorterEtterÅrIStigendeRekkefølge } from 'lib/utils/arrays';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { formaterBeregnetGrunnlag } from 'lib/utils/grunnlagsberegning';
 
 interface Props {
   grunnlag?: YrkesskadeGrunnlag;
+  gjeldendeGrunnbeløp: GjeldendeGrunnbeløp;
 }
 
-export const YrkesskadeVisning = ({ grunnlag }: Props) => {
+export const YrkesskadeVisning = ({ grunnlag, gjeldendeGrunnbeløp }: Props) => {
   if (!grunnlag) {
     throw new Error('Kunne ikke finne påkrevd grunnlag for yrkesskade');
   }
@@ -72,6 +74,7 @@ export const YrkesskadeVisning = ({ grunnlag }: Props) => {
                 <b>Fastsatt grunnlag</b>
               </Table.DataCell>
               <Table.DataCell align={'right'} textSize={'small'}>
+                ({formaterBeregnetGrunnlag(grunnlag.grunnlag, gjeldendeGrunnbeløp)}){' '}
                 <b>{formaterTilG(grunnlag.grunnlag)}</b>
               </Table.DataCell>
             </Table.Row>
