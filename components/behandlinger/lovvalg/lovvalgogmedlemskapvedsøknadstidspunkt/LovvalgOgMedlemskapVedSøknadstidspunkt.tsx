@@ -146,11 +146,6 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
 
   const historiskeManuelleVurderinger = grunnlag?.historiskeManuelleVurderinger;
 
-  const vurdertAvAnsatt =
-    grunnlag?.vurdering?.vurdertAv && grunnlag.vurdering?.vurdertDato
-      ? { ident: grunnlag.vurdering.vurdertAv, dato: grunnlag.vurdering.vurdertDato }
-      : undefined;
-
   return (
     <VilkårsKortMedForm
       heading={heading}
@@ -160,7 +155,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       isLoading={isLoading}
       erAktivtSteg={erAktivtSteg}
       status={status}
-      vurdertAvAnsatt={vurdertAvAnsatt}
+      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAvResponse}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
     >
