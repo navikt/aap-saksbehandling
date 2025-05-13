@@ -13,18 +13,12 @@ export const SamordningTjenestePensjonMedDataFetching = async ({ behandlingVersj
 
   const grunnlag: SamordningTjenestePensjonGrunnlag = {
     harTilgangTilÅSaksbehandle: false,
-    tjenestepensjonForhold: [
+    tjenestepensjonYtelser: [
       {
-        ytelser: [
-          {
-            ytelseId: 1,
-            innmeldtYtelseFom: 'hei',
-            ytelseIverksattFom: '2020-01-01',
-            ytelseIverksattTom: '2020-02-02',
-            ytelseType: 'ALDER',
-          },
-        ],
+        ytelse: 'ALDER',
         ordning: { navn: 'Thomas', tpNr: '1234', orgNr: '1235' },
+        ytelseIverksattFom: '2020-01-01',
+        ytelseIverksattTom: '2020-02-02',
       },
     ],
   };

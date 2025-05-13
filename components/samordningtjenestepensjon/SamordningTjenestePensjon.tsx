@@ -78,35 +78,31 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
         <BodyShort>Disse kan føre til refusjonskrav på etterbetaling.</BodyShort>
       </VStack>
 
-      {grunnlag.tjenestepensjonForhold.map((tp, index) => {
-        return (
-          <TableStyled key={index}>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
-                <Table.HeaderCell scope="col">Ordning</Table.HeaderCell>
-                <Table.HeaderCell scope="col">Ytelse</Table.HeaderCell>
+      <TableStyled>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
+            <Table.HeaderCell scope="col">Ordning</Table.HeaderCell>
+            <Table.HeaderCell scope="col">Ytelse</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {grunnlag.tjenestepensjonYtelser.map((tjenestepensjonYtelse, index) => {
+            return (
+              <Table.Row key={index}>
+                <Table.DataCell
+                  textSize={'small'}
+                >{`${formaterDatoForFrontend(tjenestepensjonYtelse.ytelseIverksattFom)} - ${tjenestepensjonYtelse.ytelseIverksattTom && formaterDatoForFrontend(tjenestepensjonYtelse.ytelseIverksattTom)}`}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{tjenestepensjonYtelse.ordning.navn}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{tjenestepensjonYtelse.ytelse}</Table.DataCell>
               </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {tp.ytelser.map((ytelse, index) => {
-                return (
-                  <Table.Row key={index}>
-                    <Table.DataCell
-                      textSize={'small'}
-                    >{`${formaterDatoForFrontend(ytelse.ytelseIverksattFom)} - ${ytelse.ytelseIverksattTom && formaterDatoForFrontend(ytelse.ytelseIverksattTom)}`}</Table.DataCell>
-                    <Table.DataCell textSize={'small'}>{tp.ordning.navn}</Table.DataCell>
-                    <Table.DataCell textSize={'small'}>{ytelse.ytelseType}</Table.DataCell>
-                  </Table.Row>
-                );
-              })}
-            </Table.Body>
-          </TableStyled>
-        );
-      })}
+            );
+          })}
+        </Table.Body>
+      </TableStyled>
 
       <FormField form={form} formField={formFields.vurdering} />
-      <FormField form={form} formField={formFields.skalEtterbetalingHoldesIgjen} />
+      <FormField form={form} formField={formFields.skalEtterbetalingHoldesIgjen} horizontalRadio />
     </VilkårsKortMedForm>
   );
 };
