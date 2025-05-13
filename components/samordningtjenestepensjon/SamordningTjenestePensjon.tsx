@@ -46,13 +46,15 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(() =>
+    form.handleSubmit((data) =>
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.SAMORDNING_REFUSJONS_KRAV,
           //@ts-ignore under utvikling
-          refusjonkravVurdering: {},
+          refusjonkravVurdering: {
+            harKrav: data.skalEtterbetalingHoldesIgjen === JaEllerNei.Ja,
+          },
         },
         referanse: behandlingsReferanse,
       })
