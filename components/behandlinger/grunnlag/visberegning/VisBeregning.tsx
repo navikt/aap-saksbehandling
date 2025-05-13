@@ -24,11 +24,23 @@ export const VisBeregning = ({ grunnlag }: Props) => {
         steg={'VIS_BEREGNING'}
         icon={<SackKronerIcon title="beregning-ikon" fontSize={'inherit'} aria-hidden />}
       >
-        {beregningsVisning === 'STANDARD' && <Grunnlag1119Visning grunnlag={grunnlag.grunnlag11_19} />}
-        {beregningsVisning === 'UFØRE' && <UføreVisning grunnlag={grunnlag.grunnlagUføre} />}
-        {beregningsVisning === 'YRKESSKADE' && <YrkesskadeVisning grunnlag={grunnlag.grunnlagYrkesskade} />}
+        {beregningsVisning === 'STANDARD' && (
+          <Grunnlag1119Visning grunnlag={grunnlag.grunnlag11_19} gjeldendeGrunnbeløp={grunnlag.gjeldendeGrunnbeløp} />
+        )}
+        {beregningsVisning === 'UFØRE' && (
+          <UføreVisning grunnlag={grunnlag.grunnlagUføre} gjeldendeGrunnbeløp={grunnlag.gjeldendeGrunnbeløp} />
+        )}
+        {beregningsVisning === 'YRKESSKADE' && (
+          <YrkesskadeVisning
+            grunnlag={grunnlag.grunnlagYrkesskade}
+            gjeldendeGrunnbeløp={grunnlag.gjeldendeGrunnbeløp}
+          />
+        )}
         {beregningsVisning === 'YRKESSKADE_UFØRE' && (
-          <YrkesskadeUføreVisning grunnlag={grunnlag.grunnlagYrkesskadeUføre} />
+          <YrkesskadeUføreVisning
+            grunnlag={grunnlag.grunnlagYrkesskadeUføre}
+            gjeldendeGrunnbeløp={grunnlag.gjeldendeGrunnbeløp}
+          />
         )}
       </VilkårsKort>
     </>

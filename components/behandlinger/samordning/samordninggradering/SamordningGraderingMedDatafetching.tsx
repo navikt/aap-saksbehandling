@@ -1,7 +1,7 @@
-import { SamordningGradering } from 'components/behandlinger/underveis/samordninggradering/SamordningGradering';
+import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import { hentSamordningGraderingGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError } from "lib/utils/api";
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsreferanse: string;

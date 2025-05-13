@@ -1,5 +1,5 @@
 import { render, screen } from 'lib/test/CustomRender';
-import { SamordningGradering } from 'components/behandlinger/underveis/samordninggradering/SamordningGradering';
+import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import { format, subWeeks } from 'date-fns';
 import { SamordningGraderingGrunnlag } from 'lib/types/types';
 import { describe, test, expect } from 'vitest';

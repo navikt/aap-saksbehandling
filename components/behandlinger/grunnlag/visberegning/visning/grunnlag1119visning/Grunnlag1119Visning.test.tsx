@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Grunnlag1119Visning } from 'components/behandlinger/grunnlag/visberegning/visning/grunnlag1119visning/Grunnlag1119Visning';
-import { Grunnlag1119 } from 'lib/types/types';
+import { GjeldendeGrunnbeløp, Grunnlag1119 } from 'lib/types/types';
 
 const grunnlag: Grunnlag1119 = {
   gjennomsnittligInntektSiste3år: 6,
@@ -11,9 +11,14 @@ const grunnlag: Grunnlag1119 = {
   nedsattArbeidsevneÅr: '2024',
 };
 
+const gjeldendeGrunnbeløp: GjeldendeGrunnbeløp = {
+  dato: '2025-01-02',
+  grunnbeløp: 124000,
+};
+
 describe('grunnlag 11-19 visning', () => {
   it('skal ha en tabell med pensjonsgivende inntekt for de siste 3 årene', () => {
-    render(<Grunnlag1119Visning grunnlag={grunnlag} />);
+    render(<Grunnlag1119Visning grunnlag={grunnlag} gjeldendeGrunnbeløp={gjeldendeGrunnbeløp} />);
     const tabellOverskrift = screen.getByText('Grunnlagsberegning § 11-19');
     expect(tabellOverskrift).toBeVisible();
 
@@ -24,7 +29,7 @@ describe('grunnlag 11-19 visning', () => {
   });
 
   it('skal ha en tabell som viser en oppsummering og det faktiske grunnlaget', () => {
-    render(<Grunnlag1119Visning grunnlag={grunnlag} />);
+    render(<Grunnlag1119Visning grunnlag={grunnlag} gjeldendeGrunnbeløp={gjeldendeGrunnbeløp} />);
     const tabellOverskrift = screen.getByText('Brukers grunnlag er satt til det gunstigste av følgende:');
     expect(tabellOverskrift).toBeVisible();
 
@@ -37,7 +42,7 @@ describe('grunnlag 11-19 visning', () => {
   });
 
   it('rad med inntekt siste år viser årstall', () => {
-    render(<Grunnlag1119Visning grunnlag={grunnlag} />);
+    render(<Grunnlag1119Visning grunnlag={grunnlag} gjeldendeGrunnbeløp={gjeldendeGrunnbeløp} />);
     expect(
       screen.getByRole('cell', { name: `§ 11-19 Inntekt siste år (${grunnlag.inntektSisteÅr.år})` })
     ).toBeVisible();

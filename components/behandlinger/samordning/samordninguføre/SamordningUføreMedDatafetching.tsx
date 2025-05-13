@@ -1,7 +1,7 @@
-import { SamordningUføre } from 'components/behandlinger/underveis/samordninguføre/SamordningUføre';
+import { SamordningUføre } from 'components/behandlinger/samordning/samordninguføre/SamordningUføre';
 import { hentSamordningUføreGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError } from "lib/utils/api";
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingsreferanse: string;
