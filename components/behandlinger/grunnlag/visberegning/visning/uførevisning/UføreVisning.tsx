@@ -1,16 +1,18 @@
 import React from 'react';
-import { UføreGrunnlag } from 'lib/types/types';
+import { GjeldendeGrunnbeløp, UføreGrunnlag } from 'lib/types/types';
 import { InntektTabell } from 'components/inntekttabell/InntektTabell';
 import { BodyShort, Table } from '@navikt/ds-react';
 import { formaterTilG } from 'lib/utils/string';
 import { UføreInntektTabell } from 'components/uføreinntekttabell/UføreInntektTabell';
 import { sorterEtterÅrIStigendeRekkefølge } from 'lib/utils/arrays';
+import { formaterBeregnetGrunnlag } from 'lib/utils/grunnlagsberegning';
 
 interface Props {
   grunnlag?: UføreGrunnlag;
+  gjeldendeGrunnbeløp: GjeldendeGrunnbeløp;
 }
 
-export const UføreVisning = ({ grunnlag }: Props) => {
+export const UføreVisning = ({ grunnlag, gjeldendeGrunnbeløp }: Props) => {
   if (!grunnlag) {
     throw new Error('Kunne ikke finne påkrevd grunnlag for uføre');
   }
@@ -89,6 +91,7 @@ export const UføreVisning = ({ grunnlag }: Props) => {
                 Fastsatt grunnlag
               </Table.HeaderCell>
               <Table.DataCell align={'right'} textSize={'small'}>
+                ({formaterBeregnetGrunnlag(grunnlag.grunnlag, gjeldendeGrunnbeløp)}){' '}
                 <b>{formaterTilG(grunnlag.grunnlag)}</b>
               </Table.DataCell>
             </Table.Row>
