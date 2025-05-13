@@ -3,6 +3,7 @@
 import { ExpansionCard } from '@navikt/ds-react';
 import { ReactNode } from 'react';
 import styles from './SideProsessKort.module.css';
+import './SideProsesskort.css';
 
 interface Props {
   heading: string;
@@ -13,7 +14,13 @@ interface Props {
 
 export const SideProsessKort = ({ heading, children, icon, defaultOpen = true }: Props) => {
   return (
-    <ExpansionCard aria-label={heading} className={styles.sideProsessKort} size={'small'} defaultOpen={defaultOpen}>
+    <ExpansionCard
+      aria-label={heading}
+      className={`${styles.sideProsessKort}`}
+      size={'small'}
+      defaultOpen={defaultOpen}
+      id={'sideProsesskort'}
+    >
       <ExpansionCard.Header className={styles.header}>
         <div className={styles.title}>
           {icon && <div>{icon}</div>}

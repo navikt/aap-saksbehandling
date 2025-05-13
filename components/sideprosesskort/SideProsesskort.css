@@ -1,0 +1,5 @@
+/* Hakcy løsning for å omgå problemer med import-rekkefølge etter bundling */
+[id='sideProsesskort'] {
+  border: 1px solid var(--a-border-divider);
+  border-left: 0.5rem solid var(--a-surface-warning-subtle);
+}
