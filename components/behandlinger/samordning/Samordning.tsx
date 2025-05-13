@@ -7,6 +7,7 @@ import { SamordningGraderingMedDatafetching } from 'components/behandlinger/unde
 import { SamordningUføreMedDatafetching } from 'components/behandlinger/underveis/samordninguføre/SamordningUføreMedDatafetching';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { SamordningTjenestePensjonMedDataFetching } from 'components/samordningtjenestepensjon/SamordningTjenestePensjonMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -18,6 +19,9 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
     return <ApiException apiResponses={[flyt]} />;
   }
   const stegSomSkalVises = getStegSomSkalVises('SAMORDNING', flyt.data);
+
+  console.log('stegSomSkalVises', stegSomSkalVises);
+  console.log('flyt', flyt);
 
   return (
     <GruppeSteg
@@ -42,6 +46,10 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       )}
       <SamordningAndreStatligeYtelserMedDatafetching
         behandlingsreferanse={behandlingsreferanse}
+        behandlingVersjon={flyt.data.behandlingVersjon}
+        readOnly={flyt.data.visning.saksbehandlerReadOnly}
+      />
+      <SamordningTjenestePensjonMedDataFetching
         behandlingVersjon={flyt.data.behandlingVersjon}
         readOnly={flyt.data.visning.saksbehandlerReadOnly}
       />

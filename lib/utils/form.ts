@@ -33,6 +33,7 @@ export enum Behovstype {
   VURDER_RETTIGHETSPERIODE = '5029',
   FASTSETT_PÅKLAGET_BEHANDLING = '5999',
   VURDER_FORMKRAV = '6000',
+  SAMORDNING_REFUSJONS_KRAV = '5056',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -103,6 +104,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Fastsett påklaget behandling';
     case '6000':
       return 'Vurder formkrav';
+    case '5056':
+      return 'Refusjonskrav samordning';
   }
 }
 
