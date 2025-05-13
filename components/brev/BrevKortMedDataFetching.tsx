@@ -2,7 +2,7 @@ import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { hentBrevGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
-import { StegType } from 'lib/types/types';
+import { AvklaringsbehovKode, StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
@@ -31,10 +31,7 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
 
   const readOnly = aktivtSteg === 'BREV' && !brukerRoller.includes(Roller.BESLUTTER);
 
-  const behovstype =
-    grunnlag.avklaringsbehovKode === Behovstype.SKRIV_VEDTAKSBREV_KODE
-      ? Behovstype.SKRIV_VEDTAKSBREV_KODE
-      : Behovstype.SKRIV_BREV_KODE;
+  const behovstype = skrivBrevBehovstype(grunnlag.avklaringsbehovKode)
 
   return (
     <VilkårsKort heading={'Skriv brev'} steg="BREV" defaultOpen={true}>
@@ -53,3 +50,14 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
     </VilkårsKort>
   );
 };
+
+export function skrivBrevBehovstype(avklaringsbehovKode: AvklaringsbehovKode): Behovstype {
+  switch (avklaringsbehovKode) {
+    case Behovstype.SKRIV_VEDTAKSBREV_KODE:
+      return Behovstype.SKRIV_VEDTAKSBREV_KODE;
+    case Behovstype.SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE:
+      return Behovstype.SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE;
+    default:
+      return Behovstype.SKRIV_BREV_KODE;
+  }
+}
