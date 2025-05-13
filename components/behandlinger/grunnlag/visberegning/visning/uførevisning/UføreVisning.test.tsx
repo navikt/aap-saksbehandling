@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { UføreVisning } from 'components/behandlinger/grunnlag/visberegning/visning/uførevisning/UføreVisning';
-import { UføreGrunnlag } from 'lib/types/types';
+import { GjeldendeGrunnbeløp, UføreGrunnlag } from 'lib/types/types';
 
 const grunnlag: UføreGrunnlag = {
   nedsattArbeidsevneÅr: '2023',
@@ -45,9 +45,14 @@ const grunnlag: UføreGrunnlag = {
   ],
 };
 
+const gjeldendeGrunnbeløp: GjeldendeGrunnbeløp = {
+  dato: '2025-01-02',
+  grunnbeløp: 124000,
+};
+
 describe('UføreVisning', () => {
   it('rad for inntekt siste år viser årstall', () => {
-    render(<UføreVisning grunnlag={grunnlag} />);
+    render(<UføreVisning grunnlag={grunnlag} gjeldendeGrunnbeløp={gjeldendeGrunnbeløp} />);
     expect(
       screen.getByRole('cell', { name: `§ 11-19 Inntekt siste år (${grunnlag.inntektSisteÅr.år})` })
     ).toBeVisible();
