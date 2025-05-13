@@ -1,6 +1,6 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
-import { SamordningGraderingFormfields } from 'components/behandlinger/underveis/samordninggradering/SamordningGradering';
+import { SamordningGraderingFormfields } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { ValuePair } from 'components/form/FormField';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
@@ -9,7 +9,7 @@ import { SamordningYtelsestype } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 
-import styles from './YtelseTabell.module.css';
+import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {

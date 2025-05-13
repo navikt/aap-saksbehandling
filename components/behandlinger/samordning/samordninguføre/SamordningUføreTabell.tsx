@@ -1,10 +1,10 @@
 'use client';
 
 import { Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
-import styles from 'components/behandlinger/underveis/samordninggradering/YtelseTabell.module.css';
+import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { SamordningUføreFormFields } from 'components/behandlinger/underveis/samordninguføre/SamordningUføre';
+import { SamordningUføreFormFields } from 'components/behandlinger/samordning/samordninguføre/SamordningUføre';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TableStyled } from 'components/tablestyled/TableStyled';

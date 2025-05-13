@@ -1,10 +1,10 @@
 'use client';
 
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { SamordningAndreStatligeYtelserFormFields } from 'components/behandlinger/underveis/samordningandrestatlige/SamordningAndreStatligeYtelser';
+import { SamordningAndreStatligeYtelserFormFields } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelser';
 import { Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
-import styles from 'components/behandlinger/underveis/samordninggradering/YtelseTabell.module.css';
+import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';

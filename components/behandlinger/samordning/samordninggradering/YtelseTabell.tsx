@@ -3,7 +3,7 @@
 import { BodyShort, Box, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { SamordningGraderingYtelse } from 'lib/types/types';
 
-import styles from './YtelseTabell.module.css';
+import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
