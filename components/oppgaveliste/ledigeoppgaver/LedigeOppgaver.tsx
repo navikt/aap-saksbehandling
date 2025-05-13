@@ -14,7 +14,6 @@ import { useRouter } from 'next/navigation';
 import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
-import { isDev } from 'lib/utils/environment';
 
 interface Props {
   enheter: Enhet[];
@@ -27,11 +26,8 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   const [veilederFilter, setVeilederFilter] = useState<string>('');
   const [aktivKøId, setAktivKøId] = useState<number>();
 
-  const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating } = useLedigeOppgaver(
-    [aktivEnhet],
-    veilederFilter === 'veileder',
-    aktivKøId
-  );
+  const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver } =
+    useLedigeOppgaver([aktivEnhet], veilederFilter === 'veileder', aktivKøId);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
     hentKøerForEnheterClient([aktivEnhet])
@@ -134,7 +130,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
       {oppgaver && oppgaver.length > 0 && (
         <OppgaveTabell oppgaver={oppgaver} showSortAndFiltersInTable visPåVentInformasjon={false} />
       )}
-      {isDev() && oppgaver.length > 0 && (
+      {kanLasteInnFlereOppgaver && (
         <HStack justify={'center'}>
           <Button
             onClick={async () => {

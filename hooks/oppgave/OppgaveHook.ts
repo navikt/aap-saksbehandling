@@ -42,7 +42,6 @@ export function useLedigeOppgaver(
       const url = new URL(key, window.location.origin);
       const side = Number(url.searchParams.get('side'));
 
-      console.log('size', size);
       const paging: Paging = {
         antallPerSide: PAGE_SIZE,
         side: side + 1,
@@ -53,22 +52,30 @@ export function useLedigeOppgaver(
     { revalidateOnFocus: false }
   );
 
-  const oppgaverFlatMap = oppgaverValgtKø
-    ?.filter((res) => res.type === 'SUCCESS')
-    .map((oppgaver) => {
-      return {
-        antallOppgaver: oppgaver.data.antallTotalt,
-        oppgaver: oppgaver.data.oppgaver,
-        antallGjenståendeOppgaver: oppgaver.data.antallGjenstaaende,
-      };
-    })
-    .flat();
+  const oppgaverFlatMap =
+    oppgaverValgtKø
+      ?.filter((res) => res.type === 'SUCCESS')
+      .map((res) => ({
+        antallOppgaver: res.data.antallTotalt,
+        oppgaver: res.data.oppgaver,
+        antallGjenståendeOppgaver: res.data.antallGjenstaaende,
+      })) ?? [];
 
-  const antallOppgaver = oppgaverFlatMap?.reduce((acc, oppgave) => acc + oppgave.antallOppgaver, 0) || 0;
-  const oppgaver = oppgaverFlatMap?.map((oppgave) => oppgave.oppgaver).flat();
-  // TODO Denne kommer
-  // const sisteKallMotOppgave = oppgaverFlatMap?.at(-1);
-  // const kanLasteInnFlereOppgaver = sisteKallMotOppgave !== null && sisteKallMotOppgave?.antallGjenståendeOppgaver! > 0;
-  const kanLasteInnFlereOppgaver = true;
-  return { antallOppgaver, oppgaver: oppgaver || [], size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver };
+  const antallOppgaver = oppgaverFlatMap.reduce((acc, { antallOppgaver }) => acc + antallOppgaver, 0);
+
+  const oppgaver = oppgaverFlatMap.flatMap(({ oppgaver }) => oppgaver);
+
+  const sisteKallMotOppgave = oppgaverFlatMap.at(-1);
+
+  const kanLasteInnFlereOppgaver = (sisteKallMotOppgave?.antallGjenståendeOppgaver ?? 0) > 0;
+
+  return {
+    antallOppgaver,
+    oppgaver: oppgaver || [],
+    size,
+    setSize,
+    isLoading,
+    isValidating,
+    kanLasteInnFlereOppgaver,
+  };
 }
