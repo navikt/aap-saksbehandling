@@ -3,7 +3,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Search } from '@navikt/ds-react';
 import styles from './KelvinAppHeader.module.css';
-import { Behandlingsstatus } from "../../lib/types/types";
+import { Behandlingsstatus } from '../../lib/types/types';
 
 export interface SøkeResultat {
   oppgaver?: {
@@ -14,7 +14,7 @@ export interface SøkeResultat {
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
   person?: { href: string; label: string }[];
-  behandlingsStatus?: { status: Behandlingsstatus; }[];
+  behandlingsStatus?: { status: Behandlingsstatus }[];
 }
 interface Props {
   setSøkeresultat: Dispatch<SetStateAction<SøkeResultat | undefined>>;
@@ -38,7 +38,7 @@ export const Kelvinsøk = ({ setSøkeresultat }: Props) => {
       ...søkedata,
       person: søkedata.person?.map((p) => ({
         ...p,
-        label: (!p.label || p.label === 'undefined') ? '' : p.label,
+        label: !p.label || p.label === 'undefined' ? '' : p.label,
       })),
     };
 

@@ -34,6 +34,7 @@ const behovskodeMap = {
   '5029': 'Vurder starttidspunkt',
   '5050': 'Skriv brev',
   '5051': 'Skriv brev',
+  '5052': 'Skriv brev',
   '5056': 'Samordning refusjonskrav',
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',

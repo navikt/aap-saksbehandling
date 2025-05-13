@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
+import { isDev } from 'lib/utils/environment';
 
 interface Props {
   enheter: Enhet[];
@@ -133,7 +134,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
       {oppgaver && oppgaver.length > 0 && (
         <OppgaveTabell oppgaver={oppgaver} showSortAndFiltersInTable visPåVentInformasjon={false} />
       )}
-      {oppgaver.length > 0 && (
+      {isDev() && oppgaver.length > 0 && (
         <HStack justify={'center'}>
           <Button
             onClick={async () => {

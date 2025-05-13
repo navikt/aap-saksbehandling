@@ -6,7 +6,7 @@ import styles from './OpprettSak.module.css';
 import { mutate } from 'swr';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
-import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { getTrueFalseEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { OpprettInntekter } from 'components/opprettsak/inntekter/OpprettInntekter';
 import { useOpprettSak } from 'hooks/FetchHook';
 import { FormField } from 'components/form/FormField';
@@ -36,15 +36,16 @@ type Institusjon = 'fengsel' | 'sykehus';
 
 export interface OpprettSakFormFields {
   fødselsdato: Date;
-  yrkesskade: string;
-  student: string;
+  yrkesskade: JaEllerNei;
+  student: JaEllerNei;
   uføre: string;
   barn?: Barn[];
   inntekter?: Inntekt[];
   institusjon?: Institusjon[];
-  medlemskap?: string;
+  medlemskap?: JaEllerNei;
   søknadsdato: Date;
   sykepenger?: SamordningSykepenger[];
+  tjenestePensjon?: JaEllerNei;
 }
 
 export const OpprettSak = () => {
@@ -103,6 +104,12 @@ export const OpprettSak = () => {
       type: 'fieldArray',
       defaultValue: [{ grad: 50, periode: { fom: '14.03.2025', tom: '31.03.2025' } }],
     },
+    tjenestePensjon: {
+      type: 'radio',
+      label: 'Tjenestepensjon?',
+      options: JaEllerNeiOptions,
+      defaultValue: JaEllerNei.Nei,
+    },
   });
 
   return (
@@ -142,6 +149,7 @@ export const OpprettSak = () => {
                 tom: formaterDatoForBackend(parse(samordning.periode.tom, 'dd.MM.yyyy', new Date())),
               },
             })) || [],
+          tjenestePensjon: getTrueFalseEllerUndefined(data.tjenestePensjon),
         });
         await mutate('api/sak/alle');
       })}
@@ -154,6 +162,7 @@ export const OpprettSak = () => {
         <FormField form={form} formField={formFields.yrkesskade} />
         <FormField form={form} formField={formFields.student} />
         <FormField form={form} formField={formFields.medlemskap} />
+        <FormField form={form} formField={formFields.tjenestePensjon} />
         <FormField form={form} formField={formFields.institusjon} />
         <FormField form={form} formField={formFields.uføre} />
       </div>
