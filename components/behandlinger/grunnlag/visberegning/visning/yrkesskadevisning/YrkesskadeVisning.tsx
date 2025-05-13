@@ -15,7 +15,7 @@ interface Props {
   gjeldendeGrunnbeløp: GjeldendeGrunnbeløp;
 }
 
-export const YrkesskadeVisning = async ({ grunnlag, gjeldendeGrunnbeløp }: Props) => {
+export const YrkesskadeVisning = ({ grunnlag, gjeldendeGrunnbeløp }: Props) => {
   if (!grunnlag) {
     throw new Error('Kunne ikke finne påkrevd grunnlag for yrkesskade');
   }
