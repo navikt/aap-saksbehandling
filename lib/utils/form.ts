@@ -26,6 +26,7 @@ export enum Behovstype {
   KVALITETSSIKRING_KODE = '5097',
   SKRIV_BREV_KODE = '5050',
   SKRIV_VEDTAKSBREV_KODE = '5051',
+  SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE = '5052',
   AVKLAR_FORUTGÅENDE_MEDLEMSKAP = '5020',
   MANUELL_OVERSTYRING_MEDLEMSKAP = '5022',
   REFUSJON_KRAV_KODE = '5026',
@@ -93,6 +94,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5050':
       return 'Skriv brev';
     case '5051':
+      return 'Skriv brev';
+    case '5052':
       return 'Skriv brev';
     case '5029':
       return 'Starttidspunkt';
