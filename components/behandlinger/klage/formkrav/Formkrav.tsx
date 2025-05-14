@@ -7,6 +7,7 @@ import { GruppeSteg } from '../../../gruppesteg/GruppeSteg';
 import { StegSuspense } from '../../../stegsuspense/StegSuspense';
 import { FormkravVurderingMedDataFetching } from './formkravvurdering/FormkravVurderingMedDataFetching';
 import { PåklagetBehandlingMedDataFetching } from './påklagetbehandling/PåklagetBehandlingMedDataFetching';
+import { BehandlendeEnhetMedDataFetching } from './behandlendeenhet/BehandlendeEnhetMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -46,6 +47,17 @@ export const Formkrav = async ({ behandlingsreferanse }: Props) => {
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.data.visning.saksbehandlerReadOnly}
             erAktivtSteg={flyt.data.aktivtSteg == 'FORMKRAV'}
+            typeBehandling={flyt.data.visning.typeBehandling as TypeBehandling}
+          />
+        </StegSuspense>
+      )}
+      {stegSomSkalVises.includes('BEHANDLENDE_ENHET') && (
+        <StegSuspense>
+          <BehandlendeEnhetMedDataFetching
+            behandlingsreferanse={behandlingsreferanse}
+            behandlingVersjon={behandlingVersjon}
+            readOnly={flyt.data.visning.saksbehandlerReadOnly}
+            erAktivtSteg={flyt.data.aktivtSteg == 'BEHANDLENDE_ENHET'}
             typeBehandling={flyt.data.visning.typeBehandling as TypeBehandling}
           />
         </StegSuspense>

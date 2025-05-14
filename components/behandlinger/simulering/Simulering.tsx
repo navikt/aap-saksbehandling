@@ -1,10 +1,11 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { UtbetalingOgSimuleringMedDataFetching } from './utbetalingogsimulering/UtbetalingOgSimuleringMedDataFetching';
 import { isProd } from 'lib/utils/environment';
+import { Alert } from '@navikt/ds-react';
 
 interface Props {
   behandlingsReferanse: string;
@@ -15,11 +16,11 @@ export const Simulering = async ({ behandlingsReferanse }: Props) => {
   if (isProd()) {
     return <div>Simulering</div>;
   }
-
-  const flyt = await hentFlyt(behandlingsReferanse);
-  if (isError(flyt)) {
+  const [flyt, behandling] = await Promise.all([hentFlyt(behandlingsReferanse), hentBehandling(behandlingsReferanse)]);
+  if (isError(flyt) || isError(behandling)) {
     return <ApiException apiResponses={[flyt]} />;
   }
+
   return (
     <GruppeSteg
       behandlingVersjon={flyt.data.behandlingVersjon}
@@ -29,7 +30,13 @@ export const Simulering = async ({ behandlingsReferanse }: Props) => {
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>
-        <UtbetalingOgSimuleringMedDataFetching behandlingsreferanse={behandlingsReferanse} />
+        {behandling.data.status === 'UTREDES' || behandling.data.status === 'OPPRETTET' ? (
+          <UtbetalingOgSimuleringMedDataFetching behandlingsreferanse={behandlingsReferanse} />
+        ) : (
+          <Alert variant={'info'}>
+            Simulering kan kun vises etter steget Tilkjent ytelse, og før det er fattet et vedtak.
+          </Alert>
+        )}
       </StegSuspense>
     </GruppeSteg>
   );

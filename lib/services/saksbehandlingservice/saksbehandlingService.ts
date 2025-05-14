@@ -5,6 +5,7 @@ import {
   ArbeidsevneGrunnlag,
   AutomatiskLovvalgOgMedlemskapVurdering,
   BarnetilleggGrunnlag,
+  BehandlendeEnhetGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingPersoninfo,
   BeregningsGrunnlag,
@@ -256,6 +257,11 @@ export const hentFormkravGrunnlag = async (behandlingsReferanse: string) => {
 export const hentPåklagetBehandlingGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/påklaget-behandling`;
   return await apiFetch<PåklagetBehandlingGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentBehandlendeEnhetGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/behandlende-enhet`;
+  return await apiFetch<BehandlendeEnhetGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFlyt = async (behandlingsReferanse: string) => {

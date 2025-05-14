@@ -41,6 +41,9 @@ const behovskodeMap = {
   '5099': 'Beslutte sak',
   '5999': 'Fastsett påklaget behandling',
   '6000': 'Formkrav',
+  '6001': 'Fastsett behanadlende enhet',
+  '6002': 'Vurder klage - Nav-kontor',
+  '6003': 'Vurder klage - NAY',
   '9001': 'Manuelt satt på vent',
   '9002': 'Bestill brev',
   '9003': 'Bestill legeerklæring',
@@ -136,6 +139,10 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Samordning';
     case 'FORMKRAV':
       return 'Formkrav';
+    case 'KLAGEBEHANDLING_KONTOR':
+      return 'Klagebehandling - Nav-kontor';
+    case 'KLAGEBEHANDLING_NAY':
+      return 'Klagebehandling - Nay';
     default:
       return `${steggruppe}`;
   }
