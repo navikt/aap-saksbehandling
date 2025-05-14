@@ -41,6 +41,7 @@ const behovskodeMap = {
   '5099': 'Beslutte sak',
   '5999': 'Fastsett påklaget behandling',
   '6000': 'Formkrav',
+  '6001': 'Fastsett behanadlende enhet',
   '9001': 'Manuelt satt på vent',
   '9002': 'Bestill brev',
   '9003': 'Bestill legeerklæring',

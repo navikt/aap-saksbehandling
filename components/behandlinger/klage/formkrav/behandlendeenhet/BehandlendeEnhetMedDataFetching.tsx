@@ -1,9 +1,6 @@
 import { BehandlendeEnhet } from './BehandlendeEnhet';
 import { TypeBehandling } from '../../../../../lib/types/types';
-import {
-  hentBehandlendeEnhetGrunnlag,
-  hentPåklagetBehandlingGrunnlag,
-} from '../../../../../lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBehandlendeEnhetGrunnlag } from '../../../../../lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from '../../../../../lib/utils/api';
 import { ApiException } from '../../../../saksbehandling/apiexception/ApiException';
 
