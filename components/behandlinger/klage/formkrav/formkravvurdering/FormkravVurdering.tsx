@@ -20,6 +20,7 @@ interface Props {
 interface FormFields {
   erBrukerPart: JaEllerNei;
   erFristOverholdt: JaEllerNei;
+  likevelBehandles: JaEllerNei;
   erKonkret: JaEllerNei;
   erSignert: JaEllerNei;
   begrunnelse: string;
@@ -35,24 +36,34 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
     {
       erBrukerPart: {
         type: 'radio',
-        label: 'Er bruker part?',
-        rules: { required: 'Du må svare på om bruker er part' },
+        label: 'Er klager part i saken?',
+        rules: { required: 'Du må svare på om klager er part' },
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBrukerPart),
-        options: JaEllerNeiOptions,
-      },
-      erFristOverholdt: {
-        type: 'radio',
-        label: 'Er fristen overholdt?',
-        rules: { required: 'Du må svare på om fristen er overholdt' },
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erFristOverholdt),
         options: JaEllerNeiOptions,
       },
       erKonkret: {
         type: 'radio',
-        label: 'Er klagen konkret?',
-        rules: { required: 'Du må svare på om klagen er konkret' },
+        label: 'Klages det på konkrete elementer i vedtaket?',
+        rules: { required: 'Du må svare på om det klages på konkrete elementer i vedtaket' },
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erKonkret),
         options: JaEllerNeiOptions,
+      },
+      erFristOverholdt: {
+        type: 'radio',
+        label: 'Er klagefristen overholdt?',
+        rules: { required: 'Du må svare på om fristen er overholdt' },
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erFristOverholdt),
+        options: JaEllerNeiOptions,
+      },
+      likevelBehandles: {
+        type: 'radio',
+        label: 'Skal klagen likevel behandles?',
+        rules: { required: 'Du må svare på om fristen er overholdt' },
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erFristOverholdt),
+        options: [
+          { label: 'Ja, det er særlig grunner, eller bruker kan ikke klandres for forsinkelsen', value: JaEllerNei.Ja },
+          { label: 'Nei', value: JaEllerNei.Nei },
+        ],
       },
       erSignert: {
         type: 'radio',
@@ -63,13 +74,16 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
       },
       begrunnelse: {
         type: 'textarea',
-        label: 'Begrunnelse for vurdering av formkrav',
-        rules: { required: 'Du må skrive en begrunnelse' },
+        label: 'Vurdering',
+        description: 'Vurder om formkrav til klage er oppfylt',
+        rules: { required: 'Du må skrive en vurdering' },
         defaultValue: grunnlag?.vurdering?.begrunnelse,
       },
     },
     { readOnly }
   );
+
+  const fristErIkkeOverholdt = form.watch('erFristOverholdt') === JaEllerNei.Nei;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -102,11 +116,12 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       erAktivtSteg={true}
     >
-      <FormField form={form} formField={formFields.erBrukerPart} />
-      <FormField form={form} formField={formFields.erFristOverholdt} />
-      <FormField form={form} formField={formFields.erKonkret} />
-      <FormField form={form} formField={formFields.erSignert} />
       <FormField form={form} formField={formFields.begrunnelse} />
+      <FormField form={form} formField={formFields.erBrukerPart} horizontalRadio />
+      <FormField form={form} formField={formFields.erFristOverholdt} horizontalRadio />
+      {fristErIkkeOverholdt && <FormField form={form} formField={formFields.likevelBehandles} />}
+      <FormField form={form} formField={formFields.erKonkret} horizontalRadio />
+      <FormField form={form} formField={formFields.erSignert} horizontalRadio />
     </VilkårsKortMedForm>
   );
 };
