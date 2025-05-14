@@ -29,17 +29,20 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
     'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
   );
 
+  console.log(grunnlag);
   const { form, formFields } = useConfigForm<FormFields>(
     {
       vurdering: {
         type: 'textarea',
         label: 'Vurdering',
         description: 'Vurder om etterbetaling for perioden skal holdes igjen i påvente av refusjonskrav.',
+        rules: { required: 'Du må gi en begrunnelse.' },
       },
       skalEtterbetalingHoldesIgjen: {
         type: 'radio',
         options: JaEllerNeiOptions,
         label: 'Skal etterbetaling holdes igjen for perioden?',
+        rules: { required: 'Du må svare på om etterbetalingen skal holdes igjen.' },
       },
     },
     { readOnly }

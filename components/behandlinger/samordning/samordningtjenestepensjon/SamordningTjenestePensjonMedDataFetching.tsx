@@ -1,12 +1,20 @@
-import { SamordningTjenestePensjon } from 'components/samordningtjenestepensjon/SamordningTjenestePensjon';
+import { SamordningTjenestePensjon } from 'components/behandlinger/samordning/samordningtjenestepensjon/SamordningTjenestePensjon';
+import { hentSamordningTjenestePensjonGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
 
 interface Props {
   behandlingVersjon: number;
+  behandlingreferanse: string;
   readOnly: boolean;
 }
-export const SamordningTjenestePensjonMedDataFetching = async ({ behandlingVersjon, readOnly }: Props) => {
-  // const grunnlag = await hentSamordningTjenestePensjonGrunnlag(behandlingsreferanse);
+export const SamordningTjenestePensjonMedDataFetching = async ({
+  behandlingVersjon,
+  readOnly,
+  behandlingreferanse,
+}: Props) => {
+  // const grunnlag = await hentSamordningTjenestePensjonGrunnlag(behandlingreferanse);
   // if (isError(grunnlag)) {
   //   return <ApiException apiResponses={[grunnlag]} />;
   // }
@@ -27,8 +35,8 @@ export const SamordningTjenestePensjonMedDataFetching = async ({ behandlingVersj
     <SamordningTjenestePensjon
       grunnlag={grunnlag}
       behandlingVersjon={behandlingVersjon}
-      // readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       readOnly={readOnly}
+      // readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
     />
   );
 };
