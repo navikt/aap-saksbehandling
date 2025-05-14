@@ -85,6 +85,10 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Starttidspunkt';
     case 'FORMKRAV':
       return 'Formkrav';
+    case 'KLAGEBEHANDLING_KONTOR':
+      return 'Behandle klage - Nav-kontor';
+    case 'KLAGEBEHANDLING_NAY':
+      return 'Behandle klage - NAY';
     case 'UDEFINERT':
       return 'Udefinert';
   }

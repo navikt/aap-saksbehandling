@@ -5,6 +5,7 @@ import { useLøsBehovOgGåTilNesteSteg } from '../../../../../hooks/LøsBehovOgG
 import { useBehandlingsReferanse } from '../../../../../hooks/BehandlingHook';
 import {
   PåklagetBehandlingGrunnlag,
+  PåklagetBehandlingVurdering,
   PåklagetBehandlingVurderingLøsning,
   TypeBehandling,
 } from '../../../../../lib/types/types';
@@ -36,10 +37,11 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erA
   const { form, formFields } = useConfigForm<FormFields>(
     {
       påklagetBehandling: {
-        type: 'select',
+        type: 'combobox',
         label: 'Velg behandlingen det klages på',
         rules: { required: 'Du må velge behandlingen det klages på' },
         options: [...mapGrunnlagTilValg(grunnlag), { label: 'Arenavedtak', value: ARENA_VEDTAK }],
+        defaultValue: mapDtoTilValgalternativ(grunnlag?.gjeldendeVurdering),
       },
     },
     { readOnly: readOnly }
@@ -91,5 +93,17 @@ function mapValgTilTilDto(valgtBehandling: string): PåklagetBehandlingVurdering
       return { påklagetVedtakType: 'ARENA_VEDTAK' };
     default:
       return { påklagetVedtakType: 'KELVIN_BEHANDLING', påklagetBehandling: valgtBehandling };
+  }
+}
+
+function mapDtoTilValgalternativ(valgtVurdering?: PåklagetBehandlingVurdering): string {
+  if (valgtVurdering == null) {
+    return '';
+  }
+  switch (valgtVurdering.påklagetVedtakType) {
+    case 'ARENA_VEDTAK':
+      return ARENA_VEDTAK;
+    case 'KELVIN_BEHANDLING':
+      return valgtVurdering.påklagetBehandling ?? '';
   }
 }

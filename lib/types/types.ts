@@ -80,6 +80,10 @@ export type PåklagetBehandlingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.påklagetbehandling.flate.PåklagetBehandlingGrunnlagDto'];
 export type PåklagetBehandlingVurderingLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.påklagetbehandling.flate.PåklagetBehandlingVurderingLøsningDto'];
+export type PåklagetBehandlingVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.flate.P\u00E5klagetBehandlingVurderingDto'];
+export type BehandlendeEnhetGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.behandlendeenhet.flate.BehandlendeEnhetGrunnlagDto'];
 
 export type UtbetalingOgSimuleringGrunnlag =
   components['schemas']['no.nav.aap.utbetal.simulering.UtbetalingOgSimuleringDto'];
