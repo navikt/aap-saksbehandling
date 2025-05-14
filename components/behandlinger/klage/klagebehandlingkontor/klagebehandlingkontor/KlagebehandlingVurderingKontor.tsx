@@ -1,11 +1,10 @@
 'use client';
 
-import { useConfigForm } from '../../../../form/FormHook';
-import { useLøsBehovOgGåTilNesteSteg } from '../../../../../hooks/LøsBehovOgGåTilNesteStegHook';
-import { VilkårsKortMedForm } from '../../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { FormEvent } from 'react';
-import { FormField } from '../../../../form/FormField';
-import { TypeBehandling } from '../../../../../lib/types/types';
+import { useConfigForm } from 'components/form/FormHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { FormField } from 'components/form/FormField';
+import { TypeBehandling } from 'lib/types/types';
 
 interface Props {
   behandlingVersjon: number;
@@ -23,8 +22,7 @@ interface FormFields {
 }
 
 export const KlagebehandlingVurderingKontor = ({ readOnly }: Props) => {
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_KONTOR');
+  const { status, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_KONTOR');
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -74,8 +72,8 @@ export const KlagebehandlingVurderingKontor = ({ readOnly }: Props) => {
     { readOnly }
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    console.log('TODO');
+  const handleSubmit = () => {
+    // TODO Implement
   };
 
   return (
