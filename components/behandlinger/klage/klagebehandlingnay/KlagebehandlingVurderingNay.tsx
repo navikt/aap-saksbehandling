@@ -53,7 +53,7 @@ export const KlagebehandlingVurderingNay = ({ readOnly }: Props) => {
       vilkårSomSkalOmgjøres: {
         type: 'combobox_multiple',
         label: 'Hvilke vilkår skal omgjøres?',
-        description: 'Velg alle vilkår som skal omgjøres',
+        description: 'Velg alle påklagde vilkår som skal omgjøres',
         options: [
           { label: 'Test-vilkår', value: 'test-vilkår' },
           { label: 'Test-vilkår2', value: 'test-vilkår2' },

@@ -16,7 +16,7 @@ export const KlagebehandlingNay = async ({ behandlingsreferanse }: Props) => {
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
-  const stegSomSkalVises = getStegSomSkalVises('KLAGEBEHANDLING_KONTOR', flyt.data);
+  const stegSomSkalVises = getStegSomSkalVises('KLAGEBEHANDLING_NAY', flyt.data);
   const behandlingVersjon = flyt.data.behandlingVersjon;
 
   return (
