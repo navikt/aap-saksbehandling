@@ -32,7 +32,6 @@ interface Props {
   heading?: string;
   oppgaver: Oppgave[];
   visBehandleOgFrigiKnapp?: boolean;
-  visPåVentInformasjon: boolean;
   showDropdownActions?: boolean;
   showSortAndFiltersInTable?: boolean;
   showSortingComboboxes?: boolean;
@@ -49,7 +48,6 @@ export const OppgaveTabell = ({
   showSortingComboboxes = false,
   showSortAndFiltersInTable = false,
   visBehandleOgFrigiKnapp = false,
-  visPåVentInformasjon,
   includeColumns = [],
   isLoading = false,
   revalidateFunction,
@@ -175,7 +173,7 @@ export const OppgaveTabell = ({
                 Reservert av
               </Table.ColumnHeader>
             )}
-            {visPåVentInformasjon ? <Table.HeaderCell></Table.HeaderCell> : undefined}
+            <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -228,11 +226,11 @@ export const OppgaveTabell = ({
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
               {includeColumns?.includes('reservertAv') && <Table.DataCell>{oppgave.reservertAv || ''}</Table.DataCell>}
-              {visPåVentInformasjon && (
-                <Table.DataCell textSize={'small'}>
-                  {oppgave.påVentTil && <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} />}
-                </Table.DataCell>
-              )}
+
+              <Table.DataCell textSize={'small'}>
+                {oppgave.påVentTil && <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} />}
+              </Table.DataCell>
+
               <Table.DataCell textSize={'small'}>
                 <OppgaveKnapp
                   oppgave={oppgave}

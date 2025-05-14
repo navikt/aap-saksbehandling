@@ -43,14 +43,14 @@ export const PåVentInfoboks = ({ frist, årsak }: Props) => {
               På vent
             </BodyShort>
           </Tag>
-          <VStack gap={'1'}>
+          <VStack gap={'0'}>
             <Detail textColor="subtle">Frist</Detail>
             <div>
               {formaterDatoForFrontend(frist)} ({forskjellIDager.toFixed(0)} dager igjen)
             </div>
           </VStack>
           {årsak ? (
-            <VStack gap={'1'}>
+            <VStack gap={'0'}>
               <Detail textColor="subtle">Årsak</Detail>
 
               <div>{mapTilVenteÅrsakTekst(årsak as SettPåVentÅrsaker)}</div>

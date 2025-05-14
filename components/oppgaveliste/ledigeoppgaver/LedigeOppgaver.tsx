@@ -127,9 +127,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           <Skeleton variant="rectangle" width="100%" height={40} />
         </VStack>
       )}
-      {oppgaver && oppgaver.length > 0 && (
-        <OppgaveTabell oppgaver={oppgaver} showSortAndFiltersInTable visPåVentInformasjon={false} />
-      )}
+      {oppgaver && oppgaver.length > 0 && <OppgaveTabell oppgaver={oppgaver} showSortAndFiltersInTable />}
       {kanLasteInnFlereOppgaver && (
         <HStack justify={'center'}>
           <Button
