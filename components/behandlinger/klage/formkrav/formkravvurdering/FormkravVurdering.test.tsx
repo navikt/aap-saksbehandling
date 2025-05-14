@@ -19,7 +19,7 @@ describe('Klage', () => {
         typeBehandling={'Førstegangsbehandling'}
       />
     );
-    const begrunnelse = screen.getByRole('textbox', { name: 'Begrunnelse for vurdering av formkrav' });
+    const begrunnelse = screen.getByRole('textbox', { name: 'Vurdering' });
     expect(begrunnelse).toBeVisible();
   });
 });
