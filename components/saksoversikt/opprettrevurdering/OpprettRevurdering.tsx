@@ -24,14 +24,12 @@ const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
   { label: 'Refusjonskrav', value: 'REFUSJONSKRAV' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
   // TODO ikke prod-klart enda
-  //{ label: 'Søknad', value: 'SØKNAD_TRUKKET' },
   //{ label: 'Starttidspunkt', value: 'VURDER_RETTIGHETSPERIODE' },
   // TODO: For at denne skal fungere må det gjøres litt justering i data som sendes i melding.
   // { label: 'Utenlandsopphold før søknadstidspunkt', value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT' },
 ];
 
 const årsakOptionsDev: ValuePair<ÅrsakTilBehandling>[] = [
-  { label: 'Søknad trukket', value: 'SØKNAD_TRUKKET' },
   { label: 'Starttidspunkt', value: 'VURDER_RETTIGHETSPERIODE' },
 ];
 
