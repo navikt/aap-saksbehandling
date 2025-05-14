@@ -7,6 +7,7 @@ const PAGE_SIZE = 25;
 type UseOppgaverOptions = {
   aktivEnhet: string[];
   visKunOppgaverSomBrukerErVeilederPå?: boolean;
+  type: 'LEDIGE_OPPGAVER' | 'ALLE_OPPGAVER';
   aktivKøId?: number;
   kunLedigeOppgaver?: boolean;
 };
@@ -16,6 +17,7 @@ export function useOppgaver({
   visKunOppgaverSomBrukerErVeilederPå = false,
   aktivKøId,
   kunLedigeOppgaver = true,
+  type,
 }: UseOppgaverOptions): {
   kanLasteInnFlereOppgaver: boolean;
   antallOppgaver: number;
@@ -31,7 +33,8 @@ export function useOppgaver({
 
     const base = `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet.join(',')}`;
     const suffix = visKunOppgaverSomBrukerErVeilederPå ? '/veileder/' : '/';
-    return `${base}${suffix}?side=${pageIndex}`;
+    const typeSuffix = `/${type}`;
+    return `${base}${suffix}${typeSuffix}?side=${pageIndex}`;
   };
 
   const {
@@ -89,6 +92,7 @@ export function useLedigeOppgaver(
   return useOppgaver({
     aktivEnhet,
     visKunOppgaverSomBrukerErVeilederPå,
+    type: 'LEDIGE_OPPGAVER',
     aktivKøId,
   });
 }
@@ -99,5 +103,6 @@ export function useAlleOppgaverForEnhet(aktivEnhet: string[], aktivKøId?: numbe
     aktivKøId,
     visKunOppgaverSomBrukerErVeilederPå: false,
     kunLedigeOppgaver: false,
+    type: 'ALLE_OPPGAVER',
   });
 }
