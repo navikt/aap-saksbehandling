@@ -49,20 +49,19 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     lagreAktivKøId(id);
   };
 
-  const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver } =
-    useAlleOppgaverForEnhet([aktivEnhet], aktivKøId);
+  const { oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver } = useAlleOppgaverForEnhet(
+    [aktivEnhet],
+    aktivKøId
+  );
 
   const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;
 
   return (
     <VStack gap={'4'}>
       <Box background="surface-subtle" padding="4" borderRadius="xlarge">
-        <HStack justify={'space-between'} align={'end'}>
-          <HStack gap={'2'}>
-            <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
-            <KøSelect label={'Velg kø'} køer={oppgaveKøer || []} aktivKøId={aktivKøId} valgtKøListener={oppdaterKøId} />
-          </HStack>
-          <BodyShort size={'small'}>Antall oppgaver for enheten i listen: {antallOppgaver}</BodyShort>
+        <HStack gap={'2'}>
+          <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
+          <KøSelect label={'Velg kø'} køer={oppgaveKøer || []} aktivKøId={aktivKøId} valgtKøListener={oppdaterKøId} />
         </HStack>
       </Box>
       {isLoading && (
@@ -80,7 +79,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
         <HStack justify={'center'}>
           <Button
             onClick={async () => {
-              await setSize(size + 1);
+              setSize(size + 1);
             }}
             variant={'secondary'}
             className={'fit-content'}

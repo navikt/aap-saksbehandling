@@ -9,6 +9,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { formaterÅrsak } from 'lib/utils/årsaker';
 import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
+import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -55,7 +56,6 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
                 'Ukjent'
               )}
             </Table.DataCell>
-            <Table.DataCell textSize={'small'}>{oppgave.saksnummer || oppgave.journalpostId}</Table.DataCell>
             <Table.DataCell textSize={'small'}>
               {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}
             </Table.DataCell>
@@ -79,11 +79,13 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
               </Tooltip>
             </Table.DataCell>
             <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
-            <Table.DataCell>{oppgave.reservertAv || ''}</Table.DataCell>
+            <Table.DataCell textSize={'small'}>{oppgave.reservertAv || 'Ledig'}</Table.DataCell>
             <Table.DataCell textSize={'small'}>
               {oppgave.påVentTil && <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} />}
             </Table.DataCell>
-            <Table.DataCell textSize={'small'}>Her kommer meny</Table.DataCell>
+            <Table.DataCell textSize={'small'}>
+              <AlleOppgaverActionMenu oppgave={oppgave} />
+            </Table.DataCell>
           </Table.Row>
         ))}
       </Table.Body>
