@@ -228,7 +228,13 @@ export const OppgaveTabell = ({
               {includeColumns?.includes('reservertAv') && <Table.DataCell>{oppgave.reservertAv || ''}</Table.DataCell>}
 
               <Table.DataCell textSize={'small'}>
-                {oppgave.påVentTil && <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} />}
+                {oppgave.påVentTil && (
+                  <PåVentInfoboks
+                    frist={oppgave.påVentTil}
+                    årsak={oppgave.påVentÅrsak}
+                    begrunnelse={oppgave.venteBegrunnelse}
+                  />
+                )}
               </Table.DataCell>
 
               <Table.DataCell textSize={'small'}>

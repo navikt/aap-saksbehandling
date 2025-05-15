@@ -81,7 +81,13 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
             <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
             <Table.DataCell textSize={'small'}>{oppgave.reservertAv || 'Ledig'}</Table.DataCell>
             <Table.DataCell textSize={'small'}>
-              {oppgave.påVentTil && <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} />}
+              {oppgave.påVentTil && (
+                <PåVentInfoboks
+                  frist={oppgave.påVentTil}
+                  årsak={oppgave.påVentÅrsak}
+                  begrunnelse={oppgave.venteBegrunnelse}
+                />
+              )}
             </Table.DataCell>
             <Table.DataCell textSize={'small'}>
               <AlleOppgaverActionMenu oppgave={oppgave} />

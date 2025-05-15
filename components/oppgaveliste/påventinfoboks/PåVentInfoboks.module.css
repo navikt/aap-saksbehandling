@@ -17,12 +17,14 @@
 }
 
 .knapp:focus-visible {
-    background-color: var(--a-surface-warning-moderate);
-    --a-shadow-focus: 0 0 0 3px var(--a-orange-400);
+  background-color: var(--a-surface-warning-moderate);
+  --a-shadow-focus: 0 0 0 3px var(--a-orange-400);
 }
 
 .boks > * {
   padding-left: var(--a-spacing-3);
   padding-right: var(--a-spacing-3);
   padding-bottom: 0.5rem;
+  min-width: 400px;
+  max-width: 600px;
 }
