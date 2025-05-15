@@ -1,9 +1,8 @@
-import React from 'react';
-import { GruppeSteg } from '../../gruppesteg/GruppeSteg';
-import { hentFlyt } from '../../../lib/services/saksbehandlingservice/saksbehandlingService';
-import { VurderRettighetsperiodeMedDataFetching } from './VurderRettighetsperiodeMedDataFetching';
-import { isError } from '../../../lib/utils/api';
-import { ApiException } from '../../saksbehandling/apiexception/ApiException';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { VurderRettighetsperiodeMedDataFetching } from 'components/behandlinger/rettighetsperiode/VurderRettighetsperiodeMedDataFetching';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsReferanse: string;
