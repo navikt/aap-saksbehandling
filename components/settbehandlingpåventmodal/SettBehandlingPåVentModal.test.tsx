@@ -26,3 +26,20 @@ describe('settBehandlingPåVentModal', () => {
     expect(årsakFelt).toBeVisible();
   });
 });
+
+describe('settBehandlingPåVentModal viser infoboks om reservert oppgave', () => {
+  const expectedText =
+    'Behandlingen er ikke reservert noen saksbehandler. Ved å sette den på vent vil den reserveres deg.';
+
+  it('skal vise infoboks med informasjon om at oppgaven reserveres saksbehandler', () => {
+    render(<SettBehandllingPåVentModal referanse={'123'} reservert={false} isOpen={true} onClose={vi.fn} />);
+    const infoboks = screen.getByText(expectedText);
+    expect(infoboks).toBeVisible();
+  });
+
+  it('skal ikke vise infoboks med informasjon om at oppgaven reserveres saksbehandler', () => {
+    render(<SettBehandllingPåVentModal referanse={'123'} reservert={true} isOpen={true} onClose={vi.fn} />);
+    const infoboks = screen.queryByText(expectedText);
+    expect(infoboks).toBeNull();
+  });
+});
