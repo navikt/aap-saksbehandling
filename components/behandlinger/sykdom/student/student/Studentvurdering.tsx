@@ -147,6 +147,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       erAktivtSteg={true}
       vilkårTilhørerNavKontor={false}
+      vurdertAvAnsatt={grunnlag?.studentvurdering?.vurdertAv}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         <Label size={'small'}>Relevant informasjon fra søknaden</Label>
