@@ -48,7 +48,7 @@ function renderSkrivBrev(readOnly: boolean) {
       behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
       mottaker={{ ident: 'hei', navn: 'Iren Panikk' }}
       behandlingVersjon={1}
-      grunnlag={{ overskrift: 'Brev', tekstbolker: [], journalpostTittel: 'hello pello' }}
+      grunnlag={{ overskrift: 'Brev', kanOverstyreBrevtittel: false, tekstbolker: [], journalpostTittel: 'hello pello' }}
       signaturer={[]}
       status={'FORHÅNDSVISNING_KLAR'}
       readOnly={readOnly}

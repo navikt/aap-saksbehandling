@@ -5389,7 +5389,8 @@ export interface components {
             journalpostTittel?: string | null;
             kanSendesAutomatisk?: boolean | null;
             overskrift?: string | null;
-            tekstbolker: components["schemas"]["no.nav.aap.brev.kontrakt.Tekstbolk"][];
+            kanOverstyreBrevtittel?: boolean
+      tekstbolker: components["schemas"]["no.nav.aap.brev.kontrakt.Tekstbolk"][];
         };
         "no.nav.aap.brev.kontrakt.Innhold": {
             blokker: components["schemas"]["no.nav.aap.brev.kontrakt.Blokk"][];
