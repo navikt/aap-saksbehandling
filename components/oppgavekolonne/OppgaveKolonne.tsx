@@ -17,6 +17,8 @@ import { Rettighetsperiode } from '../behandlinger/rettighetsperiode/Rettighetsp
 import { Søknad } from 'components/behandlinger/søknad/Søknad';
 import { Formkrav } from '../behandlinger/klage/formkrav/Formkrav';
 import { Simulering } from 'components/behandlinger/simulering/Simulering';
+import { KlagebehandlingKontor } from '../behandlinger/klage/klagebehandlingkontor/KlagebehandlingKontor';
+import { KlagebehandlingNay } from '../behandlinger/klage/klagebehandlingnay/KlagebehandlingNay';
 
 interface Props {
   behandlingsReferanse: string;
@@ -46,6 +48,10 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'IVERKSETT_VEDTAK' && <div>Behandling avsluttet</div>}
       {aktivGruppe === 'BREV' && <Brev behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'FORMKRAV' && <Formkrav behandlingsreferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'KLAGEBEHANDLING_KONTOR' && (
+        <KlagebehandlingKontor behandlingsreferanse={behandlingsReferanse} />
+      )}
+      {aktivGruppe === 'KLAGEBEHANDLING_NAY' && <KlagebehandlingNay behandlingsreferanse={behandlingsReferanse} />}
     </section>
   );
 };

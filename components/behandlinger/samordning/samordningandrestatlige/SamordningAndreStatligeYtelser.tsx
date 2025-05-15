@@ -4,7 +4,7 @@ import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { Alert, Button, HStack, VStack } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
-import { AndreStatligeYtelserTabell } from 'components/behandlinger/underveis/samordningandrestatlige/AndreStatligeYtelserTabell';
+import { AndreStatligeYtelserTabell } from 'components/behandlinger/samordning/samordningandrestatlige/AndreStatligeYtelserTabell';
 import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';

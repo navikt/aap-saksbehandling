@@ -1,10 +1,10 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { SamordningSosialhjelpMedDatafetching } from 'components/behandlinger/underveis/samordningsosial/SamordningSosialhjelpMedDatafetching';
-import { SamordningAndreStatligeYtelserMedDatafetching } from 'components/behandlinger/underveis/samordningandrestatlige/SamordningAndreStatligeYtelserMedDatafetching';
-import { SamordningGraderingMedDatafetching } from 'components/behandlinger/underveis/samordninggradering/SamordningGraderingMedDatafetching';
-import { SamordningUføreMedDatafetching } from 'components/behandlinger/underveis/samordninguføre/SamordningUføreMedDatafetching';
+import { SamordningSosialhjelpMedDatafetching } from 'components/behandlinger/samordning/samordningsosial/SamordningSosialhjelpMedDatafetching';
+import { SamordningAndreStatligeYtelserMedDatafetching } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelserMedDatafetching';
+import { SamordningGraderingMedDatafetching } from 'components/behandlinger/samordning/samordninggradering/SamordningGraderingMedDatafetching';
+import { SamordningUføreMedDatafetching } from 'components/behandlinger/samordning/samordninguføre/SamordningUføreMedDatafetching';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 

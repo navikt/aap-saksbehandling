@@ -13,7 +13,7 @@
 }
 
 .knapp:hover {
-  background-color: var(--a-orange-200);
+  background-color: var(--a-orange-400);
 }
 
 .boks > * {

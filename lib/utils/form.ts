@@ -26,12 +26,16 @@ export enum Behovstype {
   KVALITETSSIKRING_KODE = '5097',
   SKRIV_BREV_KODE = '5050',
   SKRIV_VEDTAKSBREV_KODE = '5051',
+  SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE = '5052',
   AVKLAR_FORUTGÅENDE_MEDLEMSKAP = '5020',
   MANUELL_OVERSTYRING_MEDLEMSKAP = '5022',
   REFUSJON_KRAV_KODE = '5026',
   VURDER_RETTIGHETSPERIODE = '5029',
   FASTSETT_PÅKLAGET_BEHANDLING = '5999',
   VURDER_FORMKRAV = '6000',
+  FASTSETT_BEHANDLENDE_ENHET = '6001',
+  VURDER_KLAGE_KONTOR = '6002',
+  VURDER_KLAGE_NAY = '6003',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -94,12 +98,20 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Skriv brev';
     case '5051':
       return 'Skriv brev';
+    case '5052':
+      return 'Skriv brev';
     case '5029':
       return 'Starttidspunkt';
     case '5999':
       return 'Fastsett påklaget behandling';
     case '6000':
       return 'Vurder formkrav';
+    case '6001':
+      return 'Fastsett behandlende enhet';
+    case '6002':
+      return 'Vurder klage - Nav-kontor';
+    case '6003':
+      return 'Vurder klage - Nay';
   }
 }
 

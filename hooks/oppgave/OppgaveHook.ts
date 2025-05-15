@@ -4,30 +4,37 @@ import { hentOppgaverClient } from 'lib/oppgaveClientApi';
 
 const PAGE_SIZE = 25;
 
-export function useLedigeOppgaver(
-  aktivEnhet: Array<string>,
-  visKunOppgaverSomBrukerErVeilederPå: boolean,
-  aktivKøId?: number
-): {
+type UseOppgaverOptions = {
+  aktivEnhet: string[];
+  visKunOppgaverSomBrukerErVeilederPå?: boolean;
+  type: 'LEDIGE_OPPGAVER' | 'ALLE_OPPGAVER';
+  aktivKøId?: number;
+  kunLedigeOppgaver?: boolean;
+};
+
+export function useOppgaver({
+  aktivEnhet,
+  visKunOppgaverSomBrukerErVeilederPå = false,
+  aktivKøId,
+  kunLedigeOppgaver = true,
+  type,
+}: UseOppgaverOptions): {
   kanLasteInnFlereOppgaver: boolean;
   antallOppgaver: number;
   oppgaver: Oppgave[];
   size: number;
-  setSize: Function;
+  setSize: (size: number | ((_size: number) => number)) => void;
   isLoading: boolean;
   isValidating: boolean;
 } {
   const getKey = (pageIndex: number, previousPageData: any) => {
     if (previousPageData && previousPageData.length === 0) return null;
+    if (!aktivKøId) return null;
 
-    if (aktivKøId) {
-      if (visKunOppgaverSomBrukerErVeilederPå) {
-        return `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet}/veileder/?side=${pageIndex}`;
-      }
-      return `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet}/?side=${pageIndex}`;
-    } else {
-      return null;
-    }
+    const base = `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet.join(',')}`;
+    const suffix = visKunOppgaverSomBrukerErVeilederPå ? '/veileder/' : '/';
+    const typeSuffix = `/${type}`;
+    return `${base}${suffix}${typeSuffix}?side=${pageIndex}`;
   };
 
   const {
@@ -42,33 +49,60 @@ export function useLedigeOppgaver(
       const url = new URL(key, window.location.origin);
       const side = Number(url.searchParams.get('side'));
 
-      console.log('size', size);
       const paging: Paging = {
         antallPerSide: PAGE_SIZE,
         side: side + 1,
       };
 
-      return hentOppgaverClient(aktivKøId!, aktivEnhet, visKunOppgaverSomBrukerErVeilederPå, paging);
+      return hentOppgaverClient(aktivKøId!, aktivEnhet, visKunOppgaverSomBrukerErVeilederPå, paging, kunLedigeOppgaver);
     },
     { revalidateOnFocus: false }
   );
 
-  const oppgaverFlatMap = oppgaverValgtKø
-    ?.filter((res) => res.type === 'SUCCESS')
-    .map((oppgaver) => {
-      return {
-        antallOppgaver: oppgaver.data.antallTotalt,
-        oppgaver: oppgaver.data.oppgaver,
-        antallGjenståendeOppgaver: oppgaver.data.antallGjenstaaende,
-      };
-    })
-    .flat();
+  const oppgaverFlatMap =
+    oppgaverValgtKø
+      ?.filter((res) => res.type === 'SUCCESS')
+      .map((res) => ({
+        antallOppgaver: res.data.antallTotalt,
+        oppgaver: res.data.oppgaver,
+        antallGjenståendeOppgaver: res.data.antallGjenstaaende,
+      })) ?? [];
 
-  const antallOppgaver = oppgaverFlatMap?.reduce((acc, oppgave) => acc + oppgave.antallOppgaver, 0) || 0;
-  const oppgaver = oppgaverFlatMap?.map((oppgave) => oppgave.oppgaver).flat();
-  // TODO Denne kommer
-  // const sisteKallMotOppgave = oppgaverFlatMap?.at(-1);
-  // const kanLasteInnFlereOppgaver = sisteKallMotOppgave !== null && sisteKallMotOppgave?.antallGjenståendeOppgaver! > 0;
-  const kanLasteInnFlereOppgaver = true;
-  return { antallOppgaver, oppgaver: oppgaver || [], size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver };
+  const antallOppgaver = oppgaverFlatMap.reduce((acc, { antallOppgaver }) => acc + antallOppgaver, 0);
+  const oppgaver = oppgaverFlatMap.flatMap(({ oppgaver }) => oppgaver);
+  const sisteKallMotOppgave = oppgaverFlatMap.at(-1);
+  const kanLasteInnFlereOppgaver = (sisteKallMotOppgave?.antallGjenståendeOppgaver ?? 0) > 0;
+
+  return {
+    antallOppgaver,
+    oppgaver: oppgaver || [],
+    size,
+    setSize,
+    isLoading,
+    isValidating,
+    kanLasteInnFlereOppgaver,
+  };
+}
+
+export function useLedigeOppgaver(
+  aktivEnhet: string[],
+  visKunOppgaverSomBrukerErVeilederPå: boolean,
+  aktivKøId?: number
+) {
+  return useOppgaver({
+    aktivEnhet,
+    visKunOppgaverSomBrukerErVeilederPå,
+    type: 'LEDIGE_OPPGAVER',
+    aktivKøId,
+  });
+}
+
+export function useAlleOppgaverForEnhet(aktivEnhet: string[], aktivKøId?: number) {
+  return useOppgaver({
+    aktivEnhet,
+    aktivKøId,
+    visKunOppgaverSomBrukerErVeilederPå: false,
+    kunLedigeOppgaver: false,
+    type: 'ALLE_OPPGAVER',
+  });
 }

@@ -7,7 +7,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { SamordningUføreTabell } from 'components/behandlinger/underveis/samordninguføre/SamordningUføreTabell';
+import { SamordningUføreTabell } from 'components/behandlinger/samordning/samordninguføre/SamordningUføreTabell';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { format, parse } from 'date-fns';
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';

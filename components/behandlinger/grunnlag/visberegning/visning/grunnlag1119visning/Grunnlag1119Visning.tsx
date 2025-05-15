@@ -2,16 +2,18 @@ import { InntektTabell } from 'components/inntekttabell/InntektTabell';
 import { BodyShort, Table } from '@navikt/ds-react';
 
 import styles from '../Visning.module.css';
-import { Grunnlag1119 } from 'lib/types/types';
+import { GjeldendeGrunnbeløp, Grunnlag1119 } from 'lib/types/types';
 import { formaterTilG } from 'lib/utils/string';
 import { sorterEtterÅrIStigendeRekkefølge } from 'lib/utils/arrays';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { formaterBeregnetGrunnlag } from 'lib/utils/grunnlagsberegning';
 
 interface Props {
   grunnlag?: Grunnlag1119;
+  gjeldendeGrunnbeløp: GjeldendeGrunnbeløp;
 }
 
-export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
+export const Grunnlag1119Visning = ({ grunnlag, gjeldendeGrunnbeløp }: Props) => {
   if (!grunnlag) {
     throw new Error('Kunne ikke finne påkrevd grunnlag for 11-19');
   }
@@ -62,6 +64,7 @@ export const Grunnlag1119Visning = ({ grunnlag }: Props) => {
                 <b>Fastsatt grunnlag</b>
               </Table.DataCell>
               <Table.DataCell align={'right'} textSize={'small'}>
+                ({formaterBeregnetGrunnlag(grunnlag.grunnlag, gjeldendeGrunnbeløp)}){' '}
                 <b>{formaterTilG(grunnlag.grunnlag)}</b>
               </Table.DataCell>
             </Table.Row>

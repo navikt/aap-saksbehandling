@@ -22,7 +22,7 @@ export const VurderRettighetsperiodeMedDataFetching = async ({
   return (
     <VurderRettighetsperiode
       grunnlag={rettighetsperiodeGrunnlag.data}
-      readOnly={readOnly}
+      readOnly={readOnly || !rettighetsperiodeGrunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
     />
   );

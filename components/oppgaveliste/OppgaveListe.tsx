@@ -5,14 +5,15 @@ import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOpp
 import { useState } from 'react';
 import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
+import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
 
 interface Props {
   enheter: Enhet[];
 }
 
-type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver';
+type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver' | 'Alle oppgaver';
 
-const options: MenyValg[] = ['Ledige oppgaver', 'Mine oppgaver'];
+const options: MenyValg[] = ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver'];
 
 export const OppgaveListe = ({ enheter }: Props) => {
   const [selected, setSelected] = useState<MenyValg>('Mine oppgaver');
@@ -34,6 +35,7 @@ export const OppgaveListe = ({ enheter }: Props) => {
 
       {selected === 'Mine oppgaver' && <MineOppgaver />}
       {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
+      {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
     </VStack>
   );
 };

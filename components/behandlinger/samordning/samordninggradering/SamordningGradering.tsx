@@ -10,12 +10,12 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { addDays, format, isValid, parse } from 'date-fns';
-import { YtelseTabell } from 'components/behandlinger/underveis/samordninggradering/YtelseTabell';
+import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
 import { validerDato } from 'lib/validation/dateValidation';
 
-import styles from './SamordningGradering.module.css';
+import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
-import { Ytelsesvurderinger } from 'components/behandlinger/underveis/samordninggradering/Ytelsesvurderinger';
+import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
