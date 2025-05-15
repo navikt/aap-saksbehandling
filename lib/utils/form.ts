@@ -36,6 +36,7 @@ export enum Behovstype {
   FASTSETT_BEHANDLENDE_ENHET = '6001',
   VURDER_KLAGE_KONTOR = '6002',
   VURDER_KLAGE_NAY = '6003',
+  SAMORDNING_REFUSJONS_KRAV = '5056',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -112,6 +113,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Vurder klage - Nav-kontor';
     case '6003':
       return 'Vurder klage - Nay';
+    case '5056':
+      return 'Samordning refusjon krav';
   }
 }
 

@@ -7,6 +7,7 @@ import { SamordningGraderingMedDatafetching } from 'components/behandlinger/samo
 import { SamordningUføreMedDatafetching } from 'components/behandlinger/samordning/samordninguføre/SamordningUføreMedDatafetching';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { SamordningTjenestePensjonMedDataFetching } from 'components/behandlinger/samordning/samordningtjenestepensjon/SamordningTjenestePensjonMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -45,6 +46,13 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
         behandlingVersjon={flyt.data.behandlingVersjon}
         readOnly={flyt.data.visning.saksbehandlerReadOnly}
       />
+      {stegSomSkalVises.includes('SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV') && (
+        <SamordningTjenestePensjonMedDataFetching
+          behandlingreferanse={behandlingsreferanse}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+        />
+      )}
     </GruppeSteg>
   );
 };

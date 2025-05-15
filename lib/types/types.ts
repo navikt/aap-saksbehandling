@@ -53,6 +53,9 @@ export type BrevStatus =
 export type BrevMottaker =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
 export type Signatur = components['schemas']['no.nav.aap.brev.kontrakt.Signatur'];
+
+export type SamordningTjenestePensjonGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.TjenestepensjonGrunnlagDTO'];
 export type SamordningGraderingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingGrunnlagDTO'];
 export type SamordningGraderingYtelse =
