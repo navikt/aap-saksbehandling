@@ -41,7 +41,6 @@ export const MineOppgaver = () => {
           showDropdownActions
           showSortAndFiltersInTable
           showSortingComboboxes
-          visPåVentInformasjon
           revalidateFunction={mutate}
         />
       )}

@@ -11,15 +11,18 @@ import styles from './PåVentInfoboks.module.css';
 interface Props {
   frist: string;
   årsak?: string | null;
+  begrunnelse?: string | null;
 }
 
-export const PåVentInfoboks = ({ frist, årsak }: Props) => {
+export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
 
   const forskjellIMillisekunder = new Date(frist).getTime() - new Date().getTime();
 
-  const forskjellIDager = forskjellIMillisekunder / (1000 * 60 * 60 * 24);
+  const forskjellIDager = (forskjellIMillisekunder / (1000 * 60 * 60 * 24)).toFixed(0);
+  const dagTekst = forskjellIDager == '1' ? 'dag' : 'dager';
+
   return (
     <>
       <Button
@@ -37,23 +40,29 @@ export const PåVentInfoboks = ({ frist, årsak }: Props) => {
         placement={'bottom-end'}
         offset={8}
       >
-        <VStack width={'400px'} gap={'2'} className={styles.boks}>
+        <VStack gap={'2'} className={styles.boks}>
           <Tag icon={<HourglassTopFilledIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
             <BodyShort size={'small'} weight={'semibold'}>
               På vent
             </BodyShort>
           </Tag>
-          <VStack gap={'1'}>
+          <VStack gap={'0'}>
             <Detail textColor="subtle">Frist</Detail>
             <div>
-              {formaterDatoForFrontend(frist)} ({forskjellIDager.toFixed(0)} dager igjen)
+              {formaterDatoForFrontend(frist)} ({forskjellIDager} {dagTekst} igjen)
             </div>
           </VStack>
           {årsak ? (
-            <VStack gap={'1'}>
+            <VStack gap={'0'}>
               <Detail textColor="subtle">Årsak</Detail>
 
               <div>{mapTilVenteÅrsakTekst(årsak as SettPåVentÅrsaker)}</div>
+            </VStack>
+          ) : undefined}
+          {begrunnelse ? (
+            <VStack gap={'0'}>
+              <Detail textColor="subtle">Begrunnelse</Detail>
+              <div>{begrunnelse}</div>
             </VStack>
           ) : undefined}
         </VStack>
