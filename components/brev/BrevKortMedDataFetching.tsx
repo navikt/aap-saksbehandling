@@ -31,7 +31,7 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
 
   const readOnly = aktivtSteg === 'BREV' && !brukerRoller.includes(Roller.BESLUTTER);
 
-  const behovstype = skrivBrevBehovstype(grunnlag.avklaringsbehovKode)
+  const behovstype = skrivBrevBehovstype(grunnlag.avklaringsbehovKode);
 
   return (
     <VilkårsKort heading={'Skriv brev'} steg="BREV" defaultOpen={true}>
