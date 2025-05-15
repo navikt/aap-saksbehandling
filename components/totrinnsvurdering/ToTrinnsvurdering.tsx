@@ -99,6 +99,8 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return '/ET_ANNET_STED';
     case Behovstype.AVKLAR_HELSEINSTITUSJON:
       return '/ET_ANNET_STED';
+    case Behovstype.VURDER_KLAGE_KONTOR:
+      return 'KLAGEBEHANDLING_KONTOR';
     default:
       return 'SYKDOM';
   }
