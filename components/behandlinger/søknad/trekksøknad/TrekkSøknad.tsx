@@ -5,7 +5,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { TrukketSøknadGrunnlag } from 'lib/types/types';
-import { Behovstype } from 'lib/utils/form';
+import {Behovstype, getStringEllerUndefined} from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
@@ -19,19 +19,25 @@ interface FormFields {
   begrunnelse: string;
 }
 
-export const TrekkSøknad = ({ readOnly, behandlingVersjon }: Props) => {
+export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('SØKNAD');
+      useLøsBehovOgGåTilNesteSteg('SØKNAD');
+  const vurderingerString = grunnlag?.vurderinger
+      ?.map(
+          (vurdering) => `${vurdering.begrunnelse}`
+      )
+      .join(', ') || '';
   const { form, formFields } = useConfigForm<FormFields>(
-    {
-      begrunnelse: {
-        type: 'textarea',
-        label: 'Begrunnelse',
-        rules: { required: 'Du må begrunne hvorfor søknaden skal trekkes' },
+      {
+        begrunnelse: {
+          type: 'textarea',
+          label: 'Begrunnelse',
+          defaultValue: vurderingerString,
+          rules: { required: 'Du må begrunne hvorfor søknaden skal trekkes' },
+        },
       },
-    },
-    { readOnly: readOnly }
+      { readOnly: readOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -48,18 +54,18 @@ export const TrekkSøknad = ({ readOnly, behandlingVersjon }: Props) => {
   };
 
   return (
-    <VilkårsKortMedForm
-      heading={'Trekk søknad'}
-      steg={'SØKNAD'}
-      onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
-      vilkårTilhørerNavKontor={false}
-    >
-      <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-    </VilkårsKortMedForm>
+      <VilkårsKortMedForm
+        heading={'Trekk søknad'}
+        steg={'SØKNAD'}
+        onSubmit={handleSubmit}
+        status={status}
+        isLoading={isLoading}
+        visBekreftKnapp={!readOnly}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        erAktivtSteg={true}
+        vilkårTilhørerNavKontor={false}
+      >
+        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+      </VilkårsKortMedForm>
   );
 };
