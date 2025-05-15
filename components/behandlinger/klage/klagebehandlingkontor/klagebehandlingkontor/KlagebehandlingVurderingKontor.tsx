@@ -4,7 +4,11 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormField } from 'components/form/FormField';
-import { TypeBehandling } from 'lib/types/types';
+import { Hjemmel, KlageInnstilling, TypeBehandling } from 'lib/types/types';
+import { hjemmelalternativer } from 'lib/utils/hjemmel';
+import { FormEvent } from 'react';
+import { Behovstype } from 'lib/utils/form';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -17,12 +21,15 @@ interface FormFields {
   vurdering: string;
   notat: string;
   innstilling: KlageInnstilling;
-  vilkårSomSkalOmgjøres: string[];
-  vilkårSomSkalOpprettholdes: string[];
+  vilkårSomSkalOmgjøres: Hjemmel;
+  vilkårSomSkalOpprettholdes: Hjemmel;
 }
 
-export const KlagebehandlingVurderingKontor = ({ readOnly }: Props) => {
-  const { status, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_KONTOR');
+export const KlagebehandlingVurderingKontor = ({ behandlingVersjon, readOnly }: Props) => {
+  const behandlingsreferanse = useBehandlingsReferanse();
+
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_KONTOR');
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -42,38 +49,47 @@ export const KlagebehandlingVurderingKontor = ({ readOnly }: Props) => {
         label: 'Hva er innstillingen til klagen på Nav-kontorets vilkår?',
         rules: { required: 'Du må ta stilling til hvorvidt klagen skal omgjøres, delvis omgjøres eller opprettholdes' },
         options: [
-          { value: 'Opprettholdes', label: 'Vedtak opprettholdes' },
+          { value: 'OPPRETTHOLD', label: 'Vedtak opprettholdes' },
           {
-            value: 'Omgjøres',
+            value: 'OMGJØR',
             label: 'Vedtak omgjøres',
           },
-          { value: 'OmgjøresDelvis', label: 'Delvis omgjøring' },
+          { value: 'DELVIS_OMGJØR', label: 'Delvis omgjøring' },
         ],
       },
       vilkårSomSkalOmgjøres: {
         type: 'combobox_multiple',
         label: 'Hvilke vilkår skal omgjøres?',
         description: 'Velg alle påklagde vilkår som skal omgjøres',
-        options: [
-          { label: 'Test-vilkår', value: 'test-vilkår' },
-          { label: 'Test-vilkår2', value: 'test-vilkår2' },
-        ],
+        options: hjemmelalternativer,
       },
       vilkårSomSkalOpprettholdes: {
         type: 'combobox_multiple',
         label: 'Hvilke vilkår skal opprettholdes?',
         description: 'Velg alle påklagde vilkår som blir opprettholdt',
-        options: [
-          { label: 'Test-vilkår', value: 'test-vilkår' },
-          { label: 'Test-vilkår2', value: 'test-vilkår2' },
-        ],
+        options: hjemmelalternativer,
       },
     },
     { readOnly }
   );
 
-  const handleSubmit = () => {
-    // TODO Implement
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: Behovstype.VURDER_KLAGE_KONTOR,
+          klagevurderingKontor: {
+            begrunnelse: data.vurdering,
+            notat: data.notat,
+            innstilling: data.innstilling,
+            vilkårSomOmgjøres: data.vilkårSomSkalOmgjøres ?? [],
+            vilkårSomOpprettholdes: data.vilkårSomSkalOpprettholdes ?? [],
+          },
+        },
+        referanse: behandlingsreferanse,
+      });
+    })(event);
   };
 
   return (
@@ -96,5 +112,3 @@ export const KlagebehandlingVurderingKontor = ({ readOnly }: Props) => {
     </VilkårsKortMedForm>
   );
 };
-
-type KlageInnstilling = 'Omgjøres' | 'Opprettholdes' | 'OmgjøresDelvis';
