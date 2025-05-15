@@ -5,7 +5,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { TrukketSøknadGrunnlag } from 'lib/types/types';
-import {Behovstype, getStringEllerUndefined} from 'lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
