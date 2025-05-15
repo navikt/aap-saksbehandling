@@ -22,22 +22,18 @@ interface FormFields {
 export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-      useLøsBehovOgGåTilNesteSteg('SØKNAD');
-  const vurderingerString = grunnlag?.vurderinger
-      ?.map(
-          (vurdering) => `${vurdering.begrunnelse}`
-      )
-      .join(', ') || '';
+    useLøsBehovOgGåTilNesteSteg('SØKNAD');
+  const vurderingerString = grunnlag?.vurderinger?.map((vurdering) => `${vurdering.begrunnelse}`).join(', ') || '';
   const { form, formFields } = useConfigForm<FormFields>(
-      {
-        begrunnelse: {
-          type: 'textarea',
-          label: 'Begrunnelse',
-          defaultValue: vurderingerString,
-          rules: { required: 'Du må begrunne hvorfor søknaden skal trekkes' },
-        },
+    {
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Begrunnelse',
+        defaultValue: vurderingerString,
+        rules: { required: 'Du må begrunne hvorfor søknaden skal trekkes' },
       },
-      { readOnly: readOnly }
+    },
+    { readOnly: readOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -54,18 +50,18 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon }: Props) =
   };
 
   return (
-      <VilkårsKortMedForm
-        heading={'Trekk søknad'}
-        steg={'SØKNAD'}
-        onSubmit={handleSubmit}
-        status={status}
-        isLoading={isLoading}
-        visBekreftKnapp={!readOnly}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-        erAktivtSteg={true}
-        vilkårTilhørerNavKontor={false}
-      >
-        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-      </VilkårsKortMedForm>
+    <VilkårsKortMedForm
+      heading={'Trekk søknad'}
+      steg={'SØKNAD'}
+      onSubmit={handleSubmit}
+      status={status}
+      isLoading={isLoading}
+      visBekreftKnapp={!readOnly}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      erAktivtSteg={true}
+      vilkårTilhørerNavKontor={false}
+    >
+      <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+    </VilkårsKortMedForm>
   );
 };
