@@ -5,7 +5,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { TrukketSøknadGrunnlag } from 'lib/types/types';
-import { Behovstype } from 'lib/utils/form';
+import {Behovstype, getStringEllerUndefined} from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
@@ -50,18 +50,18 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon }: Props) =
   };
 
   return (
-    <VilkårsKortMedForm
-      heading={'Trekk søknad'}
-      steg={'SØKNAD'}
-      onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
-      vilkårTilhørerNavKontor={false}
-    >
-      <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-    </VilkårsKortMedForm>
+      <VilkårsKortMedForm
+        heading={'Trekk søknad'}
+        steg={'SØKNAD'}
+        onSubmit={handleSubmit}
+        status={status}
+        isLoading={isLoading}
+        visBekreftKnapp={!readOnly}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        erAktivtSteg={true}
+        vilkårTilhørerNavKontor={false}
+      >
+        <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+      </VilkårsKortMedForm>
   );
 };
