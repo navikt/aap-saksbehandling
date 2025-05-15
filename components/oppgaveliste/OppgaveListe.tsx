@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
-import { isDev } from 'lib/utils/environment';
 
 interface Props {
   enheter: Enhet[];
@@ -14,9 +13,7 @@ interface Props {
 
 type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver' | 'Alle oppgaver';
 
-const options: MenyValg[] = isDev()
-  ? ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver']
-  : ['Ledige oppgaver', 'Mine oppgaver'];
+const options: MenyValg[] = ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver'];
 
 export const OppgaveListe = ({ enheter }: Props) => {
   const [selected, setSelected] = useState<MenyValg>('Mine oppgaver');
@@ -38,7 +35,7 @@ export const OppgaveListe = ({ enheter }: Props) => {
 
       {selected === 'Mine oppgaver' && <MineOppgaver />}
       {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
-      {isDev() && selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
+      {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
     </VStack>
   );
 };

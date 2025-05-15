@@ -1,10 +1,10 @@
 'use client';
 
-import { useConfigForm } from '../../../form/FormHook';
-import { useLøsBehovOgGåTilNesteSteg } from '../../../../hooks/LøsBehovOgGåTilNesteStegHook';
-import { VilkårsKortMedForm } from '../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { FormField } from '../../../form/FormField';
-import { TypeBehandling } from '../../../../lib/types/types';
+import { useConfigForm } from 'components/form/FormHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { FormField } from 'components/form/FormField';
+import { TypeBehandling } from 'lib/types/types';
 
 interface Props {
   behandlingVersjon: number;
@@ -53,7 +53,7 @@ export const KlagebehandlingVurderingNay = ({ readOnly }: Props) => {
       vilkårSomSkalOmgjøres: {
         type: 'combobox_multiple',
         label: 'Hvilke vilkår skal omgjøres?',
-        description: 'Velg alle vilkår som skal omgjøres',
+        description: 'Velg alle påklagde vilkår som skal omgjøres',
         options: [
           { label: 'Test-vilkår', value: 'test-vilkår' },
           { label: 'Test-vilkår2', value: 'test-vilkår2' },
@@ -73,7 +73,7 @@ export const KlagebehandlingVurderingNay = ({ readOnly }: Props) => {
   );
 
   const handleSubmit = () => {
-    console.log('TODO');
+    // TODO Implement
   };
 
   return (

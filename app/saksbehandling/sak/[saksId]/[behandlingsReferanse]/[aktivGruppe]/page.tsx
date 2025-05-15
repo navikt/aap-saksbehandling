@@ -55,7 +55,7 @@ const Page = async (props: {
   const ferdigeSteg = flytResponse.data.flyt.filter((steg) => steg.erFullført).map((steg) => steg.stegGruppe);
 
   const stegIkkeVurdertEnda =
-    !ferdigeSteg.includes(params.aktivGruppe) &&
+    !ferdigeSteg.includes(decodeURIComponent(params.aktivGruppe) as StegGruppe) &&
     flytResponse.data.aktivGruppe != decodeURIComponent(params.aktivGruppe);
 
   return (
