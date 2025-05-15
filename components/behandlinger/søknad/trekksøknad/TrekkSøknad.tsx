@@ -19,15 +19,17 @@ interface FormFields {
   begrunnelse: string;
 }
 
-export const TrekkSøknad = ({ readOnly, behandlingVersjon }: Props) => {
+export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SØKNAD');
+  const vurderingerString = grunnlag?.vurderinger?.map((vurdering) => `${vurdering.begrunnelse}`).join(', ') || '';
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
         label: 'Begrunnelse',
+        defaultValue: vurderingerString,
         rules: { required: 'Du må begrunne hvorfor søknaden skal trekkes' },
       },
     },
