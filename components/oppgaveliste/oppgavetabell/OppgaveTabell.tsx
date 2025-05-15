@@ -121,7 +121,7 @@ export const OppgaveTabell = ({
       )}
       {showSortingComboboxes && (
         <Box background="surface-subtle" padding="4" borderRadius="xlarge">
-          <HStack gap={'3'}>
+          <HStack gap={'4'}>
             <ComboboxControlled
               label={'Behandlingstype'}
               options={oppgaveBehandlingstyper}
