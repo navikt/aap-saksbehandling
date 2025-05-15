@@ -20,9 +20,6 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
   }
   const stegSomSkalVises = getStegSomSkalVises('SAMORDNING', flyt.data);
 
-  console.log('stegSomSkalVises', stegSomSkalVises);
-  console.log('flyt', flyt);
-
   return (
     <GruppeSteg
       behandlingVersjon={flyt.data.behandlingVersjon}
@@ -49,11 +46,13 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
         behandlingVersjon={flyt.data.behandlingVersjon}
         readOnly={flyt.data.visning.saksbehandlerReadOnly}
       />
-      <SamordningTjenestePensjonMedDataFetching
-        behandlingreferanse={behandlingsreferanse}
-        behandlingVersjon={flyt.data.behandlingVersjon}
-        readOnly={flyt.data.visning.saksbehandlerReadOnly}
-      />
+      {stegSomSkalVises.includes('SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV') && (
+        <SamordningTjenestePensjonMedDataFetching
+          behandlingreferanse={behandlingsreferanse}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+        />
+      )}
     </GruppeSteg>
   );
 };

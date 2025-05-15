@@ -19,7 +19,7 @@ interface Props {
 }
 
 interface FormFields {
-  vurdering: string;
+  begrunnelse: string;
   skalEtterbetalingHoldesIgjen: JaEllerNei;
 }
 
@@ -29,10 +29,9 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
     'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
   );
 
-  console.log(grunnlag);
   const { form, formFields } = useConfigForm<FormFields>(
     {
-      vurdering: {
+      begrunnelse: {
         type: 'textarea',
         label: 'Vurdering',
         description: 'Vurder om etterbetaling for perioden skal holdes igjen i påvente av refusjonskrav.',
@@ -54,8 +53,8 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.SAMORDNING_REFUSJONS_KRAV,
-          //@ts-ignore under utvikling
-          refusjonkravVurdering: {
+          samordningRefusjonskrav: {
+            begrunnelse: data.begrunnelse,
             harKrav: data.skalEtterbetalingHoldesIgjen === JaEllerNei.Ja,
           },
         },
@@ -106,7 +105,7 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
         </Table.Body>
       </TableStyled>
 
-      <FormField form={form} formField={formFields.vurdering} />
+      <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.skalEtterbetalingHoldesIgjen} horizontalRadio />
     </VilkårsKortMedForm>
   );
