@@ -1,5 +1,5 @@
-import dynamic from 'next/dynamic';
 import { PlotParams } from 'react-plotly.js';
+import dynamic from "next/dynamic";
 
 interface ResponsivePlotProps {
   data: PlotParams['data'];
@@ -7,6 +7,7 @@ interface ResponsivePlotProps {
 }
 
 const DynamicPlotly = dynamic(() => import('react-plotly.js'), { ssr: false });
+
 export const ResponsivePlot = ({ data, layout }: ResponsivePlotProps) => {
   return (
     <DynamicPlotly
