@@ -13,7 +13,7 @@ export function storForbokstav(value: string): string {
 }
 
 export function formaterTilNok(sum: number): string {
-  return `${sum.toLocaleString(`nb-NO`)} kr`;
+  return `${sum.toLocaleString(`nb-NO`, {style: "currency", currency: "NOK"})}`;
 }
 
 export function formaterTilG(sum: number): string {
