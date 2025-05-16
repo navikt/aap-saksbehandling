@@ -122,7 +122,7 @@ export const SettBehandllingPåVentModal = ({ referanse, reservert, isOpen, onCl
             {!reservert && (
               <Box marginBlock={'0 2'}>
                 <Alert variant={'info'} size={'small'}>
-                  Behandlingen er ikke reservert noen saksbehandler. Ved å sette den på vent vil den reserveres deg.
+                  Behandlingen er ikke reservert. Når du setter den på vent, blir den reservert deg.
                 </Alert>
               </Box>
             )}
