@@ -148,6 +148,7 @@ export const SaksinfoBanner = ({
 
             <SettBehandllingPåVentModal
               referanse={referanse}
+              reservert={!!oppgaveReservertAv}
               isOpen={settBehandlingPåVentmodalIsOpen}
               onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}
             />

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Modal } from '@navikt/ds-react';
+import { Alert, Box, Button, Modal } from '@navikt/ds-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { clientSettBehandlingPåVent } from 'lib/clientApi';
 import { revalidateFlyt } from 'lib/actions/actions';
@@ -17,6 +17,7 @@ import { useFlyt } from 'hooks/FlytHook';
 
 interface Props {
   referanse: string;
+  reservert: boolean;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -27,7 +28,7 @@ interface FormFields {
   grunn: SettPåVentÅrsaker;
 }
 
-export const SettBehandllingPåVentModal = ({ referanse, isOpen, onClose }: Props) => {
+export const SettBehandllingPåVentModal = ({ referanse, reservert, isOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const { flyt } = useFlyt();
@@ -118,6 +119,13 @@ export const SettBehandllingPåVentModal = ({ referanse, isOpen, onClose }: Prop
             className={'flex-column'}
             autoComplete={'off'}
           >
+            {!reservert && (
+              <Box marginBlock={'0 2'}>
+                <Alert variant={'info'} size={'small'}>
+                  Behandlingen er ikke reservert. Når du setter den på vent, blir den reservert deg.
+                </Alert>
+              </Box>
+            )}
             <FormField form={form} formField={formFields.begrunnelse} />
             <FormField form={form} formField={formFields.frist} />
             <FormField form={form} formField={formFields.grunn} />
