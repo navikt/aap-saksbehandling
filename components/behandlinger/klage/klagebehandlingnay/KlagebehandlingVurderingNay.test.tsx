@@ -20,6 +20,17 @@ describe('Klage - vurdering nay', () => {
   it('Skal ha felt for vurdering', () => {
     render(
       <KlagebehandlingVurderingNay
+        grunnlag={{
+          vurdering: {
+            begrunnelse: 'Min begrunnelse',
+            notat: 'Test notat',
+            innstilling: 'OMGJØR',
+            vilkårSomOmgjøres: ['FOLKETRYGDLOVEN_11_5'],
+            vilkårSomOpprettholdes: [],
+            vurdertAv: 'Ine',
+            opprettet: '2023-10-01T12:00:00Z',
+          },
+        }}
         erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
@@ -28,5 +39,6 @@ describe('Klage - vurdering nay', () => {
     );
     const begrunnelse = screen.getByRole('textbox', { name: 'Vurder klage' });
     expect(begrunnelse).toBeVisible();
+    expect(begrunnelse).toHaveValue('Min begrunnelse');
   });
 });
