@@ -7,6 +7,7 @@ import { YrkesskadeGrunnlagBeregningMedDataFetching } from 'components/behandlin
 import { Behovstype } from 'lib/utils/form';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -36,6 +37,8 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
     avklaringsBehov?.avklaringsbehov.find((behov) => behov.definisjon.kode === Behovstype.FASTSETT_YRKESSKADEINNTEKT) !=
     null;
 
+  console.log(flyt);
+  console.log(avklaringsBehov);
   return (
     <GruppeSteg
       behandlingVersjon={behandlingVersjon}
@@ -54,6 +57,13 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
         </StegSuspense>
       )}
 
+      <StegSuspense>
+        <FastsettManuellInntektMedDataFetching
+          behandlingsreferanse={behandlingsReferanse}
+          behandlingversjon={behandlingVersjon}
+        />
+      </StegSuspense>
+
       {vurderYrkesskadeGrunnlagsberegning && (
         <StegSuspense>
           <YrkesskadeGrunnlagBeregningMedDataFetching
@@ -64,7 +74,11 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
         </StegSuspense>
       )}
 
-      {beregningsgrunnlag.data && <VisBeregning grunnlag={beregningsgrunnlag.data} />}
+      {beregningsgrunnlag.data && (
+        <StegSuspense>
+          <VisBeregning grunnlag={beregningsgrunnlag.data} />
+        </StegSuspense>
+      )}
     </GruppeSteg>
   );
 };

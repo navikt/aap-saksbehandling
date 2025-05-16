@@ -44,6 +44,7 @@ const behovskodeMap = {
   '6001': 'Fastsett behanadlende enhet',
   '6002': 'Vurder klage - Nav-kontor',
   '6003': 'Vurder klage - NAY',
+  '7001': 'Fastsett manuell inntekt',
   '9001': 'Manuelt satt på vent',
   '9002': 'Bestill brev',
   '9003': 'Bestill legeerklæring',
