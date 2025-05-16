@@ -103,7 +103,13 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
               </Tooltip>
             </Table.DataCell>
             <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
-            <Table.DataCell textSize={'small'}>{oppgave.reservertAv || 'Ledig'}</Table.DataCell>
+            <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
+              <Tooltip content={oppgave.reservertAv || 'Ledig'}>
+                <BodyShort truncate size={'small'}>
+                  {oppgave.reservertAv || 'Ledig'}
+                </BodyShort>
+              </Tooltip>
+            </Table.DataCell>
             <Table.DataCell textSize={'small'}>
               {oppgave.påVentTil && (
                 <PåVentInfoboks
