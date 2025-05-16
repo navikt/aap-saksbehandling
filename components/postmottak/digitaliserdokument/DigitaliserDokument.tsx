@@ -10,6 +10,7 @@ import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/Postmo
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/DigitaliserAnnetRelevantDokument';
 import { VStack } from '@navikt/ds-react';
+import { DigitaliserKlage } from 'components/postmottak/digitaliserdokument/klage/DigitaliserKlage';
 
 interface Props {
   behandlingsVersjon: number;
@@ -67,6 +68,14 @@ export const DigitaliserDokument = ({
       )}
       {kategori === 'MELDEKORT' && (
         <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />
+      )}
+      {kategori === 'KLAGE' && (
+        <DigitaliserKlage
+          submit={handleSubmit}
+          readOnly={readOnly}
+          isLoading={isLoading}
+          registrertDato={registrertDato}
+        />
       )}
       {kategori === 'ANNET_RELEVANT_DOKUMENT' && (
         <DigitaliserAnnetRelevantDokument

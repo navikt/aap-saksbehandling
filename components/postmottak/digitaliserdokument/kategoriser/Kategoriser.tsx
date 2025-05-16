@@ -46,6 +46,7 @@ const kategorier: ValuePair<KategoriserDokumentKategori>[] = [
 const kategorierSomSkalDigitaliseres: KategoriserDokumentKategori[] = [
   'SØKNAD',
   'MELDEKORT',
+  'KLAGE',
   'ANNET_RELEVANT_DOKUMENT',
 ];
 

@@ -285,6 +285,12 @@ export type MeldekortV0 =
     meldingType: typeof MeldekortV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
+export const KlageV0 = 'KlageV0';
+export type KlageV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof KlageV0}`] & {
+    meldingType: typeof KlageV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
 export const AnnetRelevantDokumentV0 = 'AnnetRelevantDokumentV0';
 export type AnnetRelevantDokumentV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof AnnetRelevantDokumentV0}`] & {
