@@ -39,9 +39,11 @@ interface Props {
   isLoading?: boolean;
   revalidateFunction?: () => void;
 }
-interface ScopedSortState extends SortState {
+
+export interface ScopedSortState extends SortState {
   orderBy: keyof Oppgave;
 }
+
 export const OppgaveTabell = ({
   oppgaver,
   heading,
@@ -66,6 +68,7 @@ export const OppgaveTabell = ({
     }
     return 1;
   });
+
   const behandlingstypeFilter = useCallback(
     (oppgave: Oppgave) => {
       return selectedBehandlingstyper.length > 0
