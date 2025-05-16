@@ -10,6 +10,7 @@ interface Props {
 
 export const FastsettManuellInntektMedDataFetching = async ({ behandlingversjon, behandlingsreferanse }: Props) => {
   const grunnlag = await hentManuellInntektGrunnlag(behandlingsreferanse);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }

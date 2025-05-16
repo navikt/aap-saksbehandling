@@ -30,11 +30,13 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag }: Props) 
       type: 'textarea',
       label: 'Begrunn inntekt for siste beregningsår',
       rules: { required: 'Du må gi en begrunnelse.' },
+      defaultValue: grunnlag.vurdering?.begrunnelse,
     },
     inntekt: {
-      type: 'text',
+      type: 'number',
       label: 'Oppgi inntekt',
       rules: { required: 'Du må oppgi inntekt for det siste året.' },
+      defaultValue: grunnlag.vurdering?.belop.toString() || '',
     },
   });
 
@@ -54,6 +56,10 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag }: Props) 
     })(event);
   }
 
+  const inntektStr = form.watch('inntekt');
+  const inntekt = inntektStr && inntektStr !== '' ? Number(inntektStr) : 0;
+  const inntektIgVerdi = grunnlag.gverdi ? inntekt / grunnlag.gverdi : 0;
+
   return (
     <VilkårsKortMedForm
       heading={'Pensjonsgivende inntekt mangler (§ 11-19)'}
@@ -72,7 +78,7 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag }: Props) 
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
       <HStack gap={'2'} align={'end'}>
         <FormField form={form} formField={formFields.inntekt} className={'begrunnelse'} />
-        <BodyShort size={'small'}>0,00 G</BodyShort>
+        <BodyShort>{inntektIgVerdi.toFixed(2)} G</BodyShort>
       </HStack>
     </VilkårsKortMedForm>
   );

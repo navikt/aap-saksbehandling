@@ -8,6 +8,7 @@ import { Behovstype } from 'lib/utils/form';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
+import { getStegSomSkalVises } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
@@ -29,6 +30,8 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
 
   const behandlingVersjon = flyt.data.behandlingVersjon;
 
+  const stegSomSkalVises = getStegSomSkalVises('GRUNNLAG', flyt.data);
+
   const vurderFastsettBeregningstidspunkt =
     avklaringsBehov?.avklaringsbehov.find((b) => b.definisjon.kode === Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE) !=
     null;
@@ -37,8 +40,6 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
     avklaringsBehov?.avklaringsbehov.find((behov) => behov.definisjon.kode === Behovstype.FASTSETT_YRKESSKADEINNTEKT) !=
     null;
 
-  console.log(flyt);
-  console.log(avklaringsBehov);
   return (
     <GruppeSteg
       behandlingVersjon={behandlingVersjon}
@@ -57,19 +58,21 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
         </StegSuspense>
       )}
 
-      <StegSuspense>
-        <FastsettManuellInntektMedDataFetching
-          behandlingsreferanse={behandlingsReferanse}
-          behandlingversjon={behandlingVersjon}
-        />
-      </StegSuspense>
-
       {vurderYrkesskadeGrunnlagsberegning && (
         <StegSuspense>
           <YrkesskadeGrunnlagBeregningMedDataFetching
             readOnly={readOnly}
             behandlingVersjon={behandlingVersjon}
             behandlingsreferanse={behandlingsReferanse}
+          />
+        </StegSuspense>
+      )}
+
+      {stegSomSkalVises.includes('MANGLENDE_LIGNING') && (
+        <StegSuspense>
+          <FastsettManuellInntektMedDataFetching
+            behandlingsreferanse={behandlingsReferanse}
+            behandlingversjon={behandlingVersjon}
           />
         </StegSuspense>
       )}

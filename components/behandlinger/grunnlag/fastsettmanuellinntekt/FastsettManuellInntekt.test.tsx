@@ -7,12 +7,9 @@ import { ManuellInntektGrunnlag } from 'lib/types/types';
 describe('Fastsett manuell inntekt', () => {
   const user = userEvent.setup();
   const grunnlag: ManuellInntektGrunnlag = {
-    ar: 2020,
-    begrunnelse: '',
-    belop: 0,
-    gVerdi: 0,
-    tidspunkt: '',
-    vurdertAv: '',
+    ar: 0,
+    gverdi: 0,
+    harTilgangTilÅSaksbehandle: true,
   };
 
   it('skal ha en alert', () => {
