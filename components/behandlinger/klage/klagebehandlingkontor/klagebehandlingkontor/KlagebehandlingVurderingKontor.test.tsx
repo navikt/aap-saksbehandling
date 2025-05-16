@@ -24,9 +24,21 @@ describe('Klage - vurdering kontor', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Klage'}
+        grunnlag={{
+          vurdering: {
+            begrunnelse: 'Min begrunnelse',
+            notat: 'Test notat',
+            innstilling: 'OMGJØR',
+            vilkårSomOmgjøres: ['FOLKETRYGDLOVEN_11_5'],
+            vilkårSomOpprettholdes: [],
+            vurdertAv: 'Ine',
+            opprettet: '2023-10-01T12:00:00Z',
+          },
+        }}
       />
     );
     const begrunnelse = screen.getByRole('textbox', { name: 'Vurder klage' });
     expect(begrunnelse).toBeVisible();
+    expect(begrunnelse).toHaveValue('Min begrunnelse');
   });
 });

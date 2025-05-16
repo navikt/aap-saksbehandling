@@ -8,9 +8,11 @@ import { FormField } from 'components/form/FormField';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { ManuellInntektGrunnlag } from 'lib/types/types';
 
 interface Props {
   behandlingsversjon: number;
+  grunnlag: ManuellInntektGrunnlag;
 }
 
 interface FormFields {
@@ -18,15 +20,7 @@ interface FormFields {
   inntekt: string;
 }
 
-/**
- * Hva mangler?
- *
- * Grunnlag for steget med vurdering og gjeldende G verdi.
- * Det opprettes ikke et avklaringsbehov for steget.
- * år og vurdertAv trenger vi ikke å sende med i løsBehov
- */
-
-export const FastsettManuellInntekt = ({ behandlingsversjon }: Props) => {
+export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('MANGLENDE_LIGNING');
@@ -53,8 +47,6 @@ export const FastsettManuellInntekt = ({ behandlingsversjon }: Props) => {
           manuellVurderingForManglendeInntekt: {
             begrunnelse: data.begrunnelse,
             belop: Number(data.inntekt),
-            år: 2025, // TODO Denne trenger ikke frontend å sende ned
-            vurdertAv: 'kåre', // TODO Denne trenger ikke frontend å sende ned
           },
         },
         referanse: behandlingsReferanse,

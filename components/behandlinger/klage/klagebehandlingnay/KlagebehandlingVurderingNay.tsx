@@ -4,8 +4,8 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormField } from 'components/form/FormField';
-import { Hjemmel, KlageInnstilling, TypeBehandling } from 'lib/types/types';
-import { FormEvent } from 'react';
+import { Hjemmel, KlagebehandlingNayGrunnlag, KlageInnstilling, TypeBehandling } from 'lib/types/types';
+import { FormEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { hjemmelalternativer } from 'lib/utils/hjemmel';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -15,6 +15,7 @@ interface Props {
   erAktivtSteg: boolean;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
+  grunnlag?: KlagebehandlingNayGrunnlag;
 }
 
 interface FormFields {
@@ -25,7 +26,7 @@ interface FormFields {
   vilkårSomSkalOpprettholdes: Hjemmel;
 }
 
-export const KlagebehandlingVurderingNay = ({ erAktivtSteg, behandlingVersjon, readOnly }: Props) => {
+export const KlagebehandlingVurderingNay = ({ erAktivtSteg, behandlingVersjon, readOnly, grunnlag }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_NAY');
@@ -37,11 +38,13 @@ export const KlagebehandlingVurderingNay = ({ erAktivtSteg, behandlingVersjon, r
         label: 'Vurder klage',
         description: 'Vurderingen vises i brev til bruker',
         rules: { required: 'Du må vurdere klagen' },
+        defaultValue: grunnlag?.vurdering?.begrunnelse,
       },
       notat: {
         type: 'textarea',
         label: 'Internt notat',
         description: 'Notatet er kun synlig i Kelvin',
+        defaultValue: grunnlag?.vurdering?.notat ?? undefined,
       },
       innstilling: {
         type: 'radio',
@@ -53,24 +56,39 @@ export const KlagebehandlingVurderingNay = ({ erAktivtSteg, behandlingVersjon, r
             value: 'OMGJØR',
             label: 'Vedtak omgjøres',
           },
-          { value: 'DELVIS_OPPRETTHOLD', label: 'Delvis omgjøring' },
+          { value: 'DELVIS_OMGJØR', label: 'Delvis omgjøring' },
         ],
+        defaultValue: grunnlag?.vurdering?.innstilling,
       },
       vilkårSomSkalOmgjøres: {
         type: 'combobox_multiple',
         label: 'Hvilke vilkår skal omgjøres?',
         description: 'Velg alle påklagde vilkår som skal omgjøres',
         options: hjemmelalternativer,
+        defaultValue: grunnlag?.vurdering?.vilkårSomOmgjøres,
+        rules: { required: 'Du velge hvilke påklagde vilkår som skal omgjøres' },
       },
       vilkårSomSkalOpprettholdes: {
         type: 'combobox_multiple',
         label: 'Hvilke vilkår skal opprettholdes?',
         description: 'Velg alle påklagde vilkår som blir opprettholdt',
         options: hjemmelalternativer,
+        defaultValue: grunnlag?.vurdering?.vilkårSomOpprettholdes,
+        rules: { required: 'Du velge hvilke påklagde vilkår som skal opprettholdes' },
       },
     },
     { readOnly }
   );
+
+  const innstilling = form.watch('innstilling');
+
+  useEffect(() => {
+    if (innstilling === 'OMGJØR') {
+      form.setValue('vilkårSomSkalOpprettholdes', []);
+    } else if (innstilling === 'OPPRETTHOLD') {
+      form.setValue('vilkårSomSkalOmgjøres', []);
+    }
+  }, [form, innstilling]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -105,8 +123,12 @@ export const KlagebehandlingVurderingNay = ({ erAktivtSteg, behandlingVersjon, r
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />
       <FormField form={form} formField={formFields.innstilling} />
-      <FormField form={form} formField={formFields.vilkårSomSkalOmgjøres} />
-      <FormField form={form} formField={formFields.vilkårSomSkalOpprettholdes} />
+      {['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling) && (
+        <FormField form={form} formField={formFields.vilkårSomSkalOmgjøres} />
+      )}
+      {['OPPRETTHOLD', 'DELVIS_OMGJØR'].includes(innstilling) && (
+        <FormField form={form} formField={formFields.vilkårSomSkalOpprettholdes} />
+      )}
     </VilkårsKortMedForm>
   );
 };

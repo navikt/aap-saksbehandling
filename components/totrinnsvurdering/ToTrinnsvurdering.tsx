@@ -101,6 +101,8 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return '/ET_ANNET_STED';
     case Behovstype.VURDER_KLAGE_KONTOR:
       return 'KLAGEBEHANDLING_KONTOR';
+    case Behovstype.VURDER_KLAGE_NAY:
+      return 'KLAGEBEHANDLING_NAY';
     default:
       return 'SYKDOM';
   }

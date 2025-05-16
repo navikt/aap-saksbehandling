@@ -84,6 +84,10 @@ export type PåklagetBehandlingVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.flate.P\u00E5klagetBehandlingVurderingDto'];
 export type BehandlendeEnhetGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.behandlendeenhet.flate.BehandlendeEnhetGrunnlagDto'];
+export type KlagebehandlingKontorGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.kontor.flate.KlagebehandlingKontorGrunnlagDto'];
+export type KlagebehandlingNayGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.nay.flate.KlagebehandlingNayGrunnlagDto'];
 export type Hjemmel =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.kontor.flate.KlagevurderingKontorLøsningDto']['vilkårSomOmgjøres'];
 export type KlageInnstilling =
@@ -234,6 +238,8 @@ export type LegeerklæringStatus =
 export type YrkesskadeVurderingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.YrkesskadeVurderingGrunnlagDto'];
 
+export type ManuellInntektGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagResponse'];
 export type RegistrerYrkesskade =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.RegistrertYrkesskade'];
 
@@ -279,6 +285,12 @@ export const MeldekortV0 = 'MeldekortV0';
 export type MeldekortV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof MeldekortV0}`] & {
     meldingType: typeof MeldekortV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
+export const KlageV0 = 'KlageV0';
+export type KlageV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof KlageV0}`] & {
+    meldingType: typeof KlageV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
 export const AnnetRelevantDokumentV0 = 'AnnetRelevantDokumentV0';
