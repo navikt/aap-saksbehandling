@@ -27,14 +27,17 @@ import styles from './MinEnhet.module.css';
 import { BulletListIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
-import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
+
 import { isSuccess } from 'lib/utils/api';
+import { useLagreAktivEnhet } from 'lib/utils/aktivEnhet';
 
 interface Props {
   enheter: Array<Enhet>;
 }
 
 export const MinEnhet = ({ enheter }: Props) => {
+  const { hentLagretAktivEnhet, lagreAktivEnhet } = useLagreAktivEnhet();
+
   const [listeVisning, setListeVisning] = useState<boolean>(false);
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const alleFiltere = useContext(AlleFiltereContext);
