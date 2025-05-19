@@ -12,7 +12,7 @@ import { isError, isSuccess } from 'lib/utils/api';
 import useSWR from 'swr';
 import { queryParamsArray } from 'lib/utils/request';
 import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
-import { hentLagretAktivKøId, lagreAktivKøId } from 'lib/utils/aktivkøid';
+import { useLagreAktivKøId } from 'lib/utils/aktivkøid';
 
 interface Props {
   enheter: Enhet[];
@@ -21,6 +21,8 @@ interface Props {
 export const AlleOppgaver = ({ enheter }: Props) => {
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [aktivKøId, setAktivKøId] = useState<number>();
+
+  const { hentLagretAktivKøId, lagreAktivKøId } = useLagreAktivKøId();
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
     hentKøerForEnheterClient([aktivEnhet])

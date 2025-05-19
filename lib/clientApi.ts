@@ -20,6 +20,7 @@ import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
+import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 const BASE_URL = '/saksbehandling';
 
@@ -132,4 +133,8 @@ export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKod
   return clientFetch<TilgangResponse>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/sjekk-tilgang`, 'POST', {
     kode: behovsKode,
   });
+}
+
+export async function clientHentBrukerInformasjon() {
+  return clientFetch<BrukerInformasjon>('/api/bruker', 'GET');
 }

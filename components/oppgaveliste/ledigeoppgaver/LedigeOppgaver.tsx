@@ -9,7 +9,7 @@ import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { byggKelvinURL, queryParamsArray } from 'lib/utils/request';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { hentKøerForEnheterClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
-import { hentLagretAktivKøId, lagreAktivKøId } from 'lib/utils/aktivkøid';
+import { useLagreAktivKøId } from 'lib/utils/aktivkøid';
 import { useRouter } from 'next/navigation';
 import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
 import { isError, isSuccess } from 'lib/utils/api';
@@ -25,6 +25,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [veilederFilter, setVeilederFilter] = useState<string>('');
   const [aktivKøId, setAktivKøId] = useState<number>();
+  const { hentLagretAktivKøId, lagreAktivKøId } = useLagreAktivKøId();
 
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver } =
     useLedigeOppgaver([aktivEnhet], veilederFilter === 'veileder', aktivKøId);
