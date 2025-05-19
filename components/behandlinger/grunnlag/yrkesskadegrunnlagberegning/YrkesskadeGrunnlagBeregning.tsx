@@ -117,7 +117,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
                   name={`vurderinger.${index}.inntekt`}
                   control={form.control}
                   type={'number'}
-                  className={styles.input}
+                  className={'inntekt_input'}
                   readOnly={readOnly}
                 />
                 <BodyShort>{grunnlag.toFixed(2)} G</BodyShort>

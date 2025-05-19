@@ -30,6 +30,7 @@ import {
   LegeerklæringStatus,
   LovvalgMedlemskapGrunnlag,
   LøsAvklaringsbehovPåBehandling,
+  ManuellInntektGrunnlag,
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
@@ -235,6 +236,11 @@ export const hentBeregningYrkesskadeVurdering = async (behandlingsReferanse: str
 export const hentHelseInstitusjonsVurdering = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/institusjon/helse`;
   return apiFetch<HelseinstitusjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentManuellInntektGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregning/manuellinntekt`;
+  return apiFetch<ManuellInntektGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSoningsvurdering = async (behandlingsreferanse: string) => {

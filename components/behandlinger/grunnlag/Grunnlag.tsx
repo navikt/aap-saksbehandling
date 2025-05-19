@@ -7,6 +7,8 @@ import { YrkesskadeGrunnlagBeregningMedDataFetching } from 'components/behandlin
 import { Behovstype } from 'lib/utils/form';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
+import { getStegSomSkalVises } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
@@ -27,6 +29,8 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
   const readOnly = flyt.data.visning.saksbehandlerReadOnly;
 
   const behandlingVersjon = flyt.data.behandlingVersjon;
+
+  const stegSomSkalVises = getStegSomSkalVises('GRUNNLAG', flyt.data);
 
   const vurderFastsettBeregningstidspunkt =
     avklaringsBehov?.avklaringsbehov.find((b) => b.definisjon.kode === Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE) !=
@@ -64,7 +68,20 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
         </StegSuspense>
       )}
 
-      {beregningsgrunnlag.data && <VisBeregning grunnlag={beregningsgrunnlag.data} />}
+      {stegSomSkalVises.includes('MANGLENDE_LIGNING') && (
+        <StegSuspense>
+          <FastsettManuellInntektMedDataFetching
+            behandlingsreferanse={behandlingsReferanse}
+            behandlingversjon={behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
+
+      {beregningsgrunnlag.data && (
+        <StegSuspense>
+          <VisBeregning grunnlag={beregningsgrunnlag.data} />
+        </StegSuspense>
+      )}
     </GruppeSteg>
   );
 };

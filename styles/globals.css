@@ -23,6 +23,10 @@
   max-width: 6ch;
 }
 
+.inntekt_input {
+  max-width: 20ch;
+}
+
 .radio {
   max-width: 90ch;
 }
