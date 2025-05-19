@@ -5,7 +5,7 @@ import { components as oppgave } from '@navikt/aap-oppgave-typescript-types';
 export type DokumentInfo =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.adapters.SafListDokument'];
 export type MedlemskapGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.medlemskap.flate.MedlemskapGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.medlemskap.MedlemskapGrunnlagDto'];
 export type StudentGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.flate.StudentGrunnlagResponse'];
 export type SykdomsGrunnlag =
