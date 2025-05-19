@@ -9,7 +9,7 @@
     "test:watch": "vitest --watch",
     "start": "next start",
     "lint": "next lint",
-    "gentypes": "openapi-typescript http://localhost:8080/openapi.json -o lib/types/schema.d.ts",
+    "gentypes": "openapi-typescript http://localhost:8080/openapi.json -o lib/types/schema.d.ts && prettier --write lib/types/schema.d.ts",
     "prepare": "husky install",
     "run-prettier": "prettier --write ."
   },
