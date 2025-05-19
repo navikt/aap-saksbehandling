@@ -50,6 +50,7 @@ import {
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
+  TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
   UtbetalingOgSimuleringGrunnlag,
@@ -272,6 +273,11 @@ export const hentFormkravGrunnlag = async (behandlingsReferanse: string) => {
 export const hentPåklagetBehandlingGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/påklaget-behandling`;
   return await apiFetch<PåklagetBehandlingGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentTrekkKlageGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/trekk-klage`;
+  return await apiFetch<TrekkKlageGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBehandlendeEnhetGrunnlag = async (behandlingsReferanse: string) => {

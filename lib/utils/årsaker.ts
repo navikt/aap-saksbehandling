@@ -50,8 +50,8 @@ export const formaterÅrsak = (årsak: ÅrsakTilBehandling) => {
       return 'Trukket søknad';
     case 'VURDER_RETTIGHETSPERIODE':
       return 'Starttidspunkt';
-    case 'REVURDER_MANUELL_INNTEKT':
-      return 'Manuell inntekt';
+    case 'KLAGE_TRUKKET':
+      return 'Klage trukket';
     default:
       return årsak;
   }
