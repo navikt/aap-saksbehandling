@@ -72,6 +72,7 @@ const Page = async (props: {
       ) : (
         <OppgaveKolonne
           className={styles.venstrekolonne}
+          saksnummer={sak.saksnummer}
           behandlingsReferanse={params.behandlingsReferanse}
           aktivGruppe={decodeURIComponent(params.aktivGruppe) as StegGruppe}
         />

@@ -89,6 +89,8 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Behandle klage - Nav-kontor';
     case 'KLAGEBEHANDLING_NAY':
       return 'Behandle klage - NAY';
+    case 'OMGJØRING':
+      return 'Omgjøring';
     case 'UDEFINERT':
       return 'Udefinert';
   }

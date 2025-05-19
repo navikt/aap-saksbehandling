@@ -70,7 +70,6 @@ describe('Fastsett manuell inntekt vurdering', () => {
         dato: '2020-05-01',
         ident: 'Lokalsaksbehandler',
       },
-      tidspunkt: 'hei',
       belop: 500000,
     },
   };

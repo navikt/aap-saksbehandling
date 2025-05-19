@@ -19,14 +19,16 @@ import { Formkrav } from '../behandlinger/klage/formkrav/Formkrav';
 import { Simulering } from 'components/behandlinger/simulering/Simulering';
 import { KlagebehandlingKontor } from '../behandlinger/klage/klagebehandlingkontor/KlagebehandlingKontor';
 import { KlagebehandlingNay } from '../behandlinger/klage/klagebehandlingnay/KlagebehandlingNay';
+import { Omgjøring } from 'components/behandlinger/klage/omgjøring/Omgjøring';
 
 interface Props {
+  saksnummer: string;
   behandlingsReferanse: string;
   aktivGruppe: StegGruppe;
   className: string;
 }
 
-export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
+export const OppgaveKolonne = async ({ saksnummer, behandlingsReferanse, aktivGruppe, className }: Props) => {
   return (
     <section className={className}>
       {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
@@ -52,6 +54,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
         <KlagebehandlingKontor behandlingsreferanse={behandlingsReferanse} />
       )}
       {aktivGruppe === 'KLAGEBEHANDLING_NAY' && <KlagebehandlingNay behandlingsreferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'OMGJØRING' && <Omgjøring saksnummer={saksnummer} behandlingsreferanse={behandlingsReferanse} />}
     </section>
   );
 };

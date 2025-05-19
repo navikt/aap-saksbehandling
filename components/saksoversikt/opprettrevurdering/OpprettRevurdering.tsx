@@ -38,7 +38,17 @@ export interface ManuellRevurderingFormFields {
   beskrivelse: string;
 }
 
-export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
+export const OpprettRevurdering = ({
+  sak,
+  defaultÅrsaker,
+  defaultBegrunnelse,
+  redirect = false,
+}: {
+  sak: SaksInfo;
+  defaultÅrsaker?: string[];
+  defaultBegrunnelse?: string;
+  redirect?: boolean;
+}) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -66,11 +76,11 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
     const res = await clientSendHendelse(sak.saksnummer, innsending);
 
     if (isSuccess(res)) {
-      router.push(`/saksbehandling/sak/${sak.saksnummer}`);
+      redirect && router.push(`/saksbehandling/sak/${sak.saksnummer}`);
     } else {
       setError(res.apiException.message);
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }
 
   const { form, formFields } = useConfigForm<ManuellRevurderingFormFields>({
@@ -80,11 +90,13 @@ export const OpprettRevurdering = ({ sak }: { sak: SaksInfo }) => {
       rules: {
         required: 'Skriv litt om hvorfor du skal starte en revurdering',
       },
+      defaultValue: defaultBegrunnelse ?? '',
     },
     årsaker: {
       type: 'combobox_multiple',
       label: 'Hvilke opplysninger skal revurderes?',
       options: isProd() ? årsakOptions : [...årsakOptions, ...årsakOptionsDev],
+      defaultValue: defaultÅrsaker,
       rules: {
         required: 'Velg opplysning som er grunnlaget for revurdering',
       },

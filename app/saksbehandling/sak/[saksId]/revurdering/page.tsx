@@ -13,7 +13,7 @@ export default async function Page(props: { params: Promise<{ saksId: string }> 
       <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
 
       <Box marginBlock="8">
-        <OpprettRevurdering sak={sak} />
+        <OpprettRevurdering sak={sak} redirect={true} />
       </Box>
     </AkselPage>
   );
