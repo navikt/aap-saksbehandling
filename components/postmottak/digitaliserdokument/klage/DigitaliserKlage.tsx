@@ -8,6 +8,7 @@ import { Button } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { KlageV0 } from 'lib/types/types';
+import { parse } from 'date-fns';
 
 interface Props extends Submittable {
   readOnly: boolean;
@@ -15,7 +16,7 @@ interface Props extends Submittable {
   registrertDato?: string | null;
 }
 export interface KlageFormFields {
-  kravMottatt: Date;
+  kravMottatt: string;
 }
 export const DigitaliserKlage = ({ readOnly, submit, isLoading, registrertDato }: Props) => {
   const { form, formFields } = useConfigForm<KlageFormFields>(
@@ -33,7 +34,7 @@ export const DigitaliserKlage = ({ readOnly, submit, isLoading, registrertDato }
   function mapTilKlageKontrakt(data: KlageFormFields) {
     const klageJournalføring: KlageV0 = {
       meldingType: 'KlageV0',
-      kravMottatt: formaterDatoForBackend(data.kravMottatt),
+      kravMottatt: formaterDatoForBackend(parse(data.kravMottatt, 'dd.MM.yyyy', new Date())),
     };
     return JSON.stringify(klageJournalføring);
   }
