@@ -71,13 +71,14 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag }: Props) 
       status={status}
       visBekreftKnapp={true}
       vilkårTilhørerNavKontor={false}
+      vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
     >
       <Alert variant={'warning'} size={'small'}>
         Du må oppgi pensjonsgivende inntekt for siste beregningsår, fordi ingen inntekt er registrert.{' '}
       </Alert>
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
       <HStack gap={'2'} align={'end'}>
-        <FormField form={form} formField={formFields.inntekt} className={'begrunnelse'} />
+        <FormField form={form} formField={formFields.inntekt} className={'inntekt_input'} />
         <BodyShort>{inntektIgVerdi.toFixed(2)} G</BodyShort>
       </HStack>
     </VilkårsKortMedForm>

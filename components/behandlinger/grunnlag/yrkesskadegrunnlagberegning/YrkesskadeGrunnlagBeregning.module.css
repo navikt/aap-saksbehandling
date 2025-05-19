@@ -1,7 +1,3 @@
-.input {
-  max-width: 20ch;
-}
-
 .inntektfelt {
   display: flex;
   flex-direction: column;
