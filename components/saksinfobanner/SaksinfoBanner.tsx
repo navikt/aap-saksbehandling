@@ -19,6 +19,7 @@ import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
 import { VurderRettighetsperiodeModal } from './rettighetsperiodemodal/VurderRettighetsperiodeModal';
 import { isProd } from 'lib/utils/environment';
+import { TrekkKlageModal } from './trekkklagemodal/TrekkKlageModal';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -47,11 +48,15 @@ export const SaksinfoBanner = ({
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
+  const [visTrekkKlageModal, settVisTrekkKlageModal] = useState(false);
   const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveReservertAv;
 
   const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
   const behandlerEnSøknadSomSkalTrekkes = søknadStegGruppe && søknadStegGruppe.skalVises;
+
+  const trekkKlageSteg = flyt && flyt.find((f) => f.stegGruppe === 'TREKK_KLAGE');
+  const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
 
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
@@ -61,6 +66,13 @@ export const SaksinfoBanner = ({
     brukerKanSaksbehandle &&
     behandlingErFørstegangsbehandling &&
     behandlingErIkkeAvsluttet;
+
+  const visValgForÅTrekkeKlage =
+    !isProd() &&
+    brukerKanSaksbehandle &&
+    !harAlleredeValgtTrekkKlage &&
+    behandlingErIkkeAvsluttet &&
+    behandling?.type === 'Klage';
 
   const visValgForÅOverstyreStarttidspunkt =
     brukerKanSaksbehandle && behandlingErFørstegangsbehandling && behandlingErIkkeAvsluttet;
@@ -132,6 +144,11 @@ export const SaksinfoBanner = ({
                       Trekk søknad
                     </Dropdown.Menu.GroupedList.Item>
                   )}
+                  {visValgForÅTrekkeKlage && (
+                    <Dropdown.Menu.GroupedList.Item onClick={() => settVisTrekkKlageModal(true)}>
+                      Trekk klage
+                    </Dropdown.Menu.GroupedList.Item>
+                  )}
                   {visValgForÅOverstyreStarttidspunkt && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisVurderRettighetsperiodeModal(true)}>
                       Overstyr starttidspunkt
@@ -151,6 +168,12 @@ export const SaksinfoBanner = ({
               isOpen={visTrekkSøknadModal}
               onClose={() => settVisTrekkSøknadModal(false)}
               saksnummer={sak.saksnummer}
+            />
+            <TrekkKlageModal
+              isOpen={visTrekkKlageModal}
+              onClose={() => settVisTrekkKlageModal(false)}
+              saksnummer={sak.saksnummer}
+              behandlingReferanse={behandling?.referanse!}
             />
             <VurderRettighetsperiodeModal
               isOpen={visVurderRettighetsperiodeModal}

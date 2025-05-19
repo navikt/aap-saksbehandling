@@ -17,6 +17,7 @@ import { Rettighetsperiode } from '../behandlinger/rettighetsperiode/Rettighetsp
 import { Søknad } from 'components/behandlinger/søknad/Søknad';
 import { Formkrav } from '../behandlinger/klage/formkrav/Formkrav';
 import { Simulering } from 'components/behandlinger/simulering/Simulering';
+import { TrekkKlage } from 'components/behandlinger/klage/trekkklage/TrekkKlage';
 import { KlagebehandlingKontor } from '../behandlinger/klage/klagebehandlingkontor/KlagebehandlingKontor';
 import { KlagebehandlingNay } from '../behandlinger/klage/klagebehandlingnay/KlagebehandlingNay';
 import { Omgjøring } from 'components/behandlinger/klage/omgjøring/Omgjøring';
@@ -57,6 +58,7 @@ export const OppgaveKolonne = async ({ saksnummer, behandlingsReferanse, aktivGr
       {aktivGruppe === 'KLAGEBEHANDLING_NAY' && <KlagebehandlingNay behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'OMGJØRING' && <Omgjøring saksnummer={saksnummer} behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'OPPRETTHOLDELSE' && <Opprettholdelse behandlingsreferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'TREKK_KLAGE' && <TrekkKlage behandlingsreferanse={behandlingsReferanse} />}
     </section>
   );
 };
