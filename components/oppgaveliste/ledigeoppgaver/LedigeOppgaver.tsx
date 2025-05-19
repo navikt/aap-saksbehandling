@@ -11,7 +11,7 @@ import { Enhet } from 'lib/types/oppgaveTypes';
 import { hentKøerForEnheterClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
 import { useLagreAktivKøId } from 'lib/utils/aktivkøid';
 import { useRouter } from 'next/navigation';
-import { hentLagretAktivEnhet, lagreAktivEnhet } from 'lib/utils/aktivEnhet';
+import { useLagreAktivEnhet } from 'lib/utils/aktivEnhet';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
 
@@ -20,6 +20,8 @@ interface Props {
 }
 
 export const LedigeOppgaver = ({ enheter }: Props) => {
+  const { lagreAktivEnhet, hentLagretAktivEnhet } = useLagreAktivEnhet();
+
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');

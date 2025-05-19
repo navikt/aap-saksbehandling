@@ -3,7 +3,7 @@
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 import { useEffect, useState } from 'react';
-import { hentLagretAktivEnhet } from 'lib/utils/aktivEnhet';
+import { useLagreAktivEnhet } from 'lib/utils/aktivEnhet';
 import { BodyShort, Box, Button, HStack, Skeleton, VStack } from '@navikt/ds-react';
 import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/AlleOppgaverTabell';
 import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
@@ -19,10 +19,11 @@ interface Props {
 }
 
 export const AlleOppgaver = ({ enheter }: Props) => {
+  const { hentLagretAktivEnhet, lagreAktivEnhet } = useLagreAktivEnhet();
+  const { hentLagretAktivKøId, lagreAktivKøId } = useLagreAktivKøId();
+
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [aktivKøId, setAktivKøId] = useState<number>();
-
-  const { hentLagretAktivKøId, lagreAktivKøId } = useLagreAktivKøId();
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
     hentKøerForEnheterClient([aktivEnhet])
@@ -44,6 +45,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
 
   const oppdaterEnhet = (enhetsnr: string) => {
     setAktivEnhet(enhetsnr);
+    lagreAktivEnhet(enhetsnr);
   };
 
   const oppdaterKøId = (id: number) => {
