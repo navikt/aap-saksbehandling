@@ -44,6 +44,10 @@ export interface ScopedSortState extends SortState {
   orderBy: keyof Oppgave;
 }
 
+const oppgaveStatus = { VENT: (oppgave: Oppgave) => !!oppgave.påVentTil } as const;
+
+const oppgaveStatuser: ComboboxOption[] = [{ label: 'På vent', value: 'VENT' }];
+
 export const OppgaveTabell = ({
   oppgaver,
   heading,
@@ -61,6 +65,8 @@ export const OppgaveTabell = ({
   const [selectedBehandlingstyper, setSelectedBehandlingstyper] = useState<ComboboxOption[]>([]);
 
   const [selectedAvklaringsbehov, setSelectedAvklaringsbehov] = useState<ComboboxOption[]>([]);
+
+  const [selectedStatus, setSelectedStatus] = useState<ComboboxOption[]>([]);
 
   const sortedOppgaver = (oppgaver || []).slice().sort((a, b) => {
     if (sort) {
@@ -86,9 +92,20 @@ export const OppgaveTabell = ({
     [selectedAvklaringsbehov]
   );
 
+  const statusFilter = useCallback(
+    (oppgave: Oppgave) =>
+      selectedStatus.length > 0
+        ? selectedStatus.find((option) => oppgaveStatus[option.value as keyof typeof oppgaveStatus](oppgave))
+        : true,
+    [selectedStatus]
+  );
+
   const filtrerteOppgaver = useMemo(
-    () => sortedOppgaver.filter((oppgave) => behandlingstypeFilter(oppgave) && avklaringsbehovFilter(oppgave)),
-    [sortedOppgaver, avklaringsbehovFilter, behandlingstypeFilter]
+    () =>
+      sortedOppgaver.filter(
+        (oppgave) => behandlingstypeFilter(oppgave) && avklaringsbehovFilter(oppgave) && statusFilter(oppgave)
+      ),
+    [sortedOppgaver, avklaringsbehovFilter, behandlingstypeFilter, statusFilter]
   );
 
   const handleSort = (sortKey: ScopedSortState['orderBy']) => {
@@ -134,6 +151,12 @@ export const OppgaveTabell = ({
               options={oppgaveAvklaringsbehov}
               selectedOptions={selectedAvklaringsbehov}
               setSelectedOptions={setSelectedAvklaringsbehov}
+            />
+            <ComboboxControlled
+              label={'Status'}
+              options={oppgaveStatuser}
+              selectedOptions={selectedStatus}
+              setSelectedOptions={setSelectedStatus}
             />
           </HStack>
         </Box>
