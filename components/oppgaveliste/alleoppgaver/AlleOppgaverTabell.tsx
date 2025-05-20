@@ -9,8 +9,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterÅrsak } from 'lib/utils/årsaker';
 import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
-import { ScopedSortState } from 'components/oppgaveliste/oppgavetabell/OppgaveTabell';
-import { useSortertListe } from 'hooks/oppgave/SorteringHook';
+import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -24,7 +23,7 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
       size={'small'}
       zebraStripes
       sort={sort}
-      onSortChange={(sortKey) => håndterSortering(sortKey as ScopedSortState['orderBy'])}
+      onSortChange={(sortKey) => håndterSortering(sortKey as ScopedSortState<Oppgave>['orderBy'])}
     >
       <Table.Header>
         <Table.Row>

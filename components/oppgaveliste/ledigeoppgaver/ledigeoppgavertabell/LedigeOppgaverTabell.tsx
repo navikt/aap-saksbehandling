@@ -1,4 +1,4 @@
-import { ActionMenu, Alert, BodyShort, Button, CopyButton, Loader, Table, Tooltip } from '@navikt/ds-react';
+import { Alert, BodyShort, CopyButton, Table, Tooltip } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
@@ -7,15 +7,10 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterÅrsak } from 'lib/utils/årsaker';
 import { AvklaringsbehovKode, ÅrsakTilBehandling } from 'lib/types/types';
 import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
-import { ScopedSortState } from 'components/oppgaveliste/oppgavetabell/OppgaveTabell';
 import { Oppgave } from 'lib/types/oppgaveTypes';
-import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { useState, useTransition } from 'react';
-import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
-import { isSuccess } from 'lib/utils/api';
-import { byggKelvinURL } from 'lib/utils/request';
-import { useRouter } from 'next/navigation';
-import { useSortertListe } from 'hooks/oppgave/SorteringHook';
+import { useState } from 'react';
+import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
+import { LedigeOppgaverMeny } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavermeny/LedigeOppgaverMeny';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -23,23 +18,7 @@ interface Props {
 
 export const LedigeOppgaverTabell = ({ oppgaver }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string>();
-  const [isPendingBehandle, startTransitionBehandle] = useTransition();
-
-  const router = useRouter();
   const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
-
-  async function plukkOgGåTilOppgave(oppgave: Oppgave) {
-    startTransitionBehandle(async () => {
-      if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0) {
-        const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
-        if (isSuccess(plukketOppgave)) {
-          router.push(byggKelvinURL(plukketOppgave.data));
-        } else {
-          setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);
-        }
-      }
-    });
-  }
 
   return (
     <>
@@ -48,7 +27,7 @@ export const LedigeOppgaverTabell = ({ oppgaver }: Props) => {
         size={'small'}
         zebraStripes
         sort={sort}
-        onSortChange={(sortKey) => håndterSortering(sortKey as ScopedSortState['orderBy'])}
+        onSortChange={(sortKey) => håndterSortering(sortKey as ScopedSortState<Oppgave>['orderBy'])}
       >
         <Table.Header>
           <Table.Row>
@@ -136,22 +115,7 @@ export const LedigeOppgaverTabell = ({ oppgaver }: Props) => {
               </Table.DataCell>
 
               <Table.DataCell textSize={'small'}>
-                {!isPendingBehandle ? (
-                  <ActionMenu>
-                    <ActionMenu.Trigger>
-                      <Button
-                        variant={'tertiary-neutral'}
-                        icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />}
-                        size={'small'}
-                      />
-                    </ActionMenu.Trigger>
-                    <ActionMenu.Content>
-                      <ActionMenu.Item onSelect={() => plukkOgGåTilOppgave(oppgave)}>Behandle</ActionMenu.Item>
-                    </ActionMenu.Content>
-                  </ActionMenu>
-                ) : (
-                  <Loader />
-                )}
+                <LedigeOppgaverMeny oppgave={oppgave} setFeilmelding={setFeilmelding} />
               </Table.DataCell>
             </Table.Row>
           ))}
