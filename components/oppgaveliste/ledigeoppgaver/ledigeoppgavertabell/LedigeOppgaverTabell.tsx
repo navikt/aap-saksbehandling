@@ -15,44 +15,18 @@ import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
+import { useSortertListe } from 'components/oppgaveliste/utils/thomas';
 
 interface Props {
   oppgaver: Oppgave[];
 }
 
 export const LedigeOppgaverTabell = ({ oppgaver }: Props) => {
-  const [sort, setSort] = useState<ScopedSortState | undefined>();
-  const [isPendingBehandle, startTransitionBehandle] = useTransition();
-  const router = useRouter();
   const [feilmelding, setFeilmelding] = useState<string>();
+  const [isPendingBehandle, startTransitionBehandle] = useTransition();
 
-  const sortedOppgaver = (oppgaver || []).slice().sort((a, b) => {
-    if (sort) {
-      return sort.direction === 'ascending' ? comparator(b, a, sort.orderBy) : comparator(a, b, sort.orderBy);
-    }
-    return 1;
-  });
-
-  function comparator<T>(a: T, b: T, orderBy: keyof T): number {
-    if (b[orderBy] == null || b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  }
-
-  const handleSort = (sortKey: ScopedSortState['orderBy']) => {
-    setSort(
-      sort && sortKey === sort.orderBy && sort.direction === 'descending'
-        ? undefined
-        : {
-            orderBy: sortKey,
-            direction: sort && sortKey === sort.orderBy && sort.direction === 'ascending' ? 'descending' : 'ascending',
-          }
-    );
-  };
+  const router = useRouter();
+  const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
 
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {
@@ -74,7 +48,7 @@ export const LedigeOppgaverTabell = ({ oppgaver }: Props) => {
         size={'small'}
         zebraStripes
         sort={sort}
-        onSortChange={(sortKey) => handleSort(sortKey as ScopedSortState['orderBy'])}
+        onSortChange={(sortKey) => håndterSortering(sortKey as ScopedSortState['orderBy'])}
       >
         <Table.Header>
           <Table.Row>
@@ -103,7 +77,7 @@ export const LedigeOppgaverTabell = ({ oppgaver }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {sortedOppgaver.map((oppgave, i) => (
+          {sortertListe.map((oppgave, i) => (
             <Table.Row key={`oppgave-${i}`}>
               <Table.DataCell textSize={'small'}>
                 {oppgave.saksnummer ? (
