@@ -26,6 +26,7 @@ import {
   HelseinstitusjonGrunnlag,
   KlagebehandlingKontorGrunnlag,
   KlagebehandlingNayGrunnlag,
+  Klageresultat,
   KvalitetssikringGrunnlag,
   LegeerklæringStatus,
   LovvalgMedlemskapGrunnlag,
@@ -286,6 +287,11 @@ export const hentKlagebehandlingKontorGrunnlag = async (behandlingsReferanse: st
 export const hentKlagebehandlingNayGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/klagebehandling-nay`;
   return await apiFetch<KlagebehandlingNayGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentKlageresultat = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/resultat`;
+  return await apiFetch<Klageresultat>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFlyt = async (behandlingsReferanse: string) => {
