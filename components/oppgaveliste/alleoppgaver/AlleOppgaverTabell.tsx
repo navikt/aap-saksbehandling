@@ -10,7 +10,7 @@ import { formaterÅrsak } from 'lib/utils/årsaker';
 import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 import { ScopedSortState } from 'components/oppgaveliste/oppgavetabell/OppgaveTabell';
-import { useSortertListe } from 'components/oppgaveliste/utils/thomas';
+import { useSortertListe } from 'hooks/oppgave/SorteringHook';
 
 interface Props {
   oppgaver: Oppgave[];

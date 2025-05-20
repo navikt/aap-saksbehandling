@@ -15,7 +15,7 @@ import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
-import { useSortertListe } from 'components/oppgaveliste/utils/thomas';
+import { useSortertListe } from 'hooks/oppgave/SorteringHook';
 
 interface Props {
   oppgaver: Oppgave[];
