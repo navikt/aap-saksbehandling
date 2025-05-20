@@ -1,7 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, Button, Dropdown, Heading, HStack, InternalHeader, Link, Spacer, VStack } from '@navikt/ds-react';
+import {
+  BodyShort,
+  Box,
+  Button,
+  Dropdown,
+  Heading,
+  HStack,
+  InternalHeader,
+  Link,
+  Spacer,
+  VStack,
+} from '@navikt/ds-react';
 import { Kelvinsøk, SøkeResultat } from './Kelvinsøk';
 import { LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from './Kelvinsøkeresultat';
@@ -19,8 +30,8 @@ const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjo
     <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
     <Dropdown.Menu>
       <Dropdown.Menu.List>
-        <Dropdown.Menu.List.Item>
-          <Link href={'/oauth2/logout'}>Logg ut</Link>
+        <Dropdown.Menu.List.Item as={Link} href={'/oauth2/logout'}>
+          <BodyShort>Logg ut</BodyShort>
           <Spacer />
           <LeaveIcon aria-hidden fontSize="1.5rem" />
         </Dropdown.Menu.List.Item>
