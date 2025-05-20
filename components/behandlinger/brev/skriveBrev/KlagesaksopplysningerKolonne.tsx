@@ -1,16 +1,7 @@
 import { SaksopplysningerKort } from 'components/behandlinger/brev/skriveBrev/SaksopplysningerKort';
 import styles from './SaksopplysningerKolonne.module.css';
 import { Label } from '@navikt/ds-react';
-import {
-  BistandsGrunnlag,
-  FormkravGrunnlag,
-  KlagebehandlingKontorGrunnlag,
-  KlagebehandlingNayGrunnlag,
-  RefusjonskravGrunnlag,
-  SykdomsGrunnlag,
-} from 'lib/types/types';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import { parse } from 'date-fns';
+import { FormkravGrunnlag, KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag } from 'lib/types/types';
 
 interface Props {
   formkravGrunnlag: FormkravGrunnlag;
