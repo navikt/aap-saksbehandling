@@ -4,6 +4,10 @@ Frontendapplikasjon for ny saksbehandlingsløsning på AAP
 
 ## Bygge og kjøre app lokalt
 
+### Husky
+
+For at linting ved commit skal skje må du kjøre `yarn husky` etter å ha klonet repoet
+
 ### Github package registry
 
 Vi bruker Github sitt package registry for npm-pakker, siden flere av Nav sine pakker kun blir publisert her.
