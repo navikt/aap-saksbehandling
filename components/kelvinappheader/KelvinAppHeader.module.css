@@ -1,6 +1,5 @@
 .kelvinAppHeaderMenuItems,
 .kelvinAppHeaderSearchResult,
-.kelvinAppHeaderSearchResult p,
 .kelvinAppHeaderSearchResult label,
 .kelvinAppHeaderSearchResult .navds-heading {
   color: var(--a-white);
@@ -10,6 +9,7 @@
 
 .kelvinAppHeaderSearchResult {
   border-top: 1px solid var(--a-gray-50);
+  padding-bottom: var(--a-spacing-3);
 }
 
 .kelvinOppgavesokForm {
