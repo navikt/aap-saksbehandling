@@ -91,7 +91,7 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
                 />
               )}
             </Table.DataCell>
-            <Table.DataCell textSize={'small'}>
+            <Table.DataCell textSize={'small'} align={'right'}>
               <AlleOppgaverActionMenu oppgave={oppgave} />
             </Table.DataCell>
           </Table.Row>

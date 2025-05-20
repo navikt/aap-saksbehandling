@@ -114,7 +114,7 @@ export const LedigeOppgaverTabell = ({ oppgaver }: Props) => {
                 )}
               </Table.DataCell>
 
-              <Table.DataCell textSize={'small'}>
+              <Table.DataCell textSize={'small'} align={'right'}>
                 <LedigeOppgaverMeny oppgave={oppgave} setFeilmelding={setFeilmelding} />
               </Table.DataCell>
             </Table.Row>

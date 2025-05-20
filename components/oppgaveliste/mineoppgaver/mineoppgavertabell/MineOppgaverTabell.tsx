@@ -116,7 +116,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
                 )}
               </Table.DataCell>
 
-              <Table.DataCell textSize={'small'}>
+              <Table.DataCell textSize={'small'} align={'right'}>
                 <MineOppgaverMeny
                   oppgave={oppgave}
                   setFeilmelding={setFeilmelding}
