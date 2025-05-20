@@ -1,10 +1,10 @@
 import { Tag } from '@navikt/ds-react';
-import { HourglassTopFilledIcon, PadlockLockedFillIcon } from '@navikt/aksel-icons';
+import { HourglassTopFilledIcon, PadlockLockedFillIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 
 import styles from './OppgaveStatus.module.css';
 
 export interface OppgaveStatusType {
-  status: 'PÅ_VENT' | 'RESERVERT';
+  status: 'PÅ_VENT' | 'RESERVERT' | 'TRUKKET';
   label: string;
 }
 
@@ -24,6 +24,12 @@ export const OppgaveStatus = ({ oppgaveStatus }: Props) => {
       return (
         <Tag className={styles.tag} icon={<PadlockLockedFillIcon />} variant={'error'} size={'small'}>
           {oppgaveStatus.label}
+        </Tag>
+      );
+    case 'TRUKKET':
+      return (
+        <Tag variant={'neutral-moderate'} icon={<XMarkOctagonIcon />} size={'small'}>
+          Trukket
         </Tag>
       );
   }

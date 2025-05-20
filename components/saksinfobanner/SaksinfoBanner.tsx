@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link, Tag } from '@navikt/ds-react';
+import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link } from '@navikt/ds-react';
 import {
   DetaljertBehandling,
   FlytGruppe,
@@ -10,7 +10,7 @@ import {
 } from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
-import { ChevronDownIcon, ChevronRightIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 
 import styles from './SaksinfoBanner.module.css';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
@@ -70,6 +70,8 @@ export const SaksinfoBanner = ({
       return { status: 'RESERVERT', label: `Reservert ${oppgaveReservertAv}` };
     } else if (påVent === true) {
       return { status: 'PÅ_VENT', label: 'På vent' };
+    } else if (sak.søknadErTrukket) {
+      return { status: 'TRUKKET', label: 'Trukket' };
     }
   };
 
@@ -108,13 +110,6 @@ export const SaksinfoBanner = ({
 
       {erPåBehandlingSiden && (
         <HStack>
-          <div className={styles.oppgavestatus}>
-            {sak.søknadErTrukket && (
-              <Tag variant={'neutral-moderate'} icon={<XMarkOctagonIcon />} size={'small'}>
-                Trukket
-              </Tag>
-            )}
-          </div>
           <div className={styles.oppgavestatus}>{oppgaveStatus && <OppgaveStatus oppgaveStatus={oppgaveStatus} />}</div>
           <div className={styles.saksmeny}>
             <Dropdown>
