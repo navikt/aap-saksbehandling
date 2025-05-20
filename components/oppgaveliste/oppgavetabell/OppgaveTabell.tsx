@@ -27,6 +27,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { formaterÅrsak } from 'lib/utils/årsaker';
 import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
+import { LegeerklæringInfoboks } from 'components/oppgaveliste/legeerklæring/LegeerklæringInfoboks';
 
 interface Props {
   heading?: string;
@@ -254,13 +255,19 @@ export const OppgaveTabell = ({
               {includeColumns?.includes('reservertAv') && <Table.DataCell>{oppgave.reservertAv || ''}</Table.DataCell>}
 
               <Table.DataCell textSize={'small'}>
-                {oppgave.påVentTil && (
-                  <PåVentInfoboks
-                    frist={oppgave.påVentTil}
-                    årsak={oppgave.påVentÅrsak}
-                    begrunnelse={oppgave.venteBegrunnelse}
-                  />
-                )}
+                <HStack gap={'1'}>
+                  {oppgave.påVentTil && (
+                    <PåVentInfoboks
+                      frist={oppgave.påVentTil}
+                      årsak={oppgave.påVentÅrsak}
+                      begrunnelse={oppgave.venteBegrunnelse}
+                    />
+                  )}
+
+                  {oppgave.årsakerTilBehandling.some((element) =>
+                    ['MOTTATT_LEGEERKLÆRING', 'MOTTATT_AVVIST_LEGEERKLÆRING'].includes(element)
+                  ) && <LegeerklæringInfoboks />}
+                </HStack>
               </Table.DataCell>
 
               <Table.DataCell textSize={'small'}>

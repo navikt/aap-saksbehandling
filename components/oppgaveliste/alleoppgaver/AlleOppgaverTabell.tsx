@@ -1,7 +1,7 @@
 'use client';
 
 import { AvklaringsbehovKode, Oppgave, ÅrsakTilBehandling } from 'lib/types/types';
-import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
+import { BodyShort, HStack, Table, Tooltip } from '@navikt/ds-react';
 import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVent
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 import { useState } from 'react';
 import { ScopedSortState } from 'components/oppgaveliste/oppgavetabell/OppgaveTabell';
+import { LegeerklæringInfoboks } from 'components/oppgaveliste/legeerklæring/LegeerklæringInfoboks';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -111,13 +112,19 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
               </Tooltip>
             </Table.DataCell>
             <Table.DataCell textSize={'small'}>
-              {oppgave.påVentTil && (
-                <PåVentInfoboks
-                  frist={oppgave.påVentTil}
-                  årsak={oppgave.påVentÅrsak}
-                  begrunnelse={oppgave.venteBegrunnelse}
-                />
-              )}
+              <HStack gap={'1'}>
+                {oppgave.påVentTil && (
+                  <PåVentInfoboks
+                    frist={oppgave.påVentTil}
+                    årsak={oppgave.påVentÅrsak}
+                    begrunnelse={oppgave.venteBegrunnelse}
+                  />
+                )}
+
+                {oppgave.årsakerTilBehandling.some((element) =>
+                  ['MOTTATT_LEGEERKLÆRING', 'MOTTATT_AVVIST_LEGEERKLÆRING'].includes(element)
+                ) && <LegeerklæringInfoboks />}
+              </HStack>
             </Table.DataCell>
             <Table.DataCell textSize={'small'}>
               <AlleOppgaverActionMenu oppgave={oppgave} />
