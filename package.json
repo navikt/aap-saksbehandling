@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "gentypes": "openapi-typescript http://localhost:8080/openapi.json -o lib/types/schema.d.ts && prettier --write lib/types/schema.d.ts",
-    "prepare": "husky install",
+    "prepare": "husky",
     "run-prettier": "prettier --write ."
   },
   "prettier": "@navikt/aap-felles-prettier",
