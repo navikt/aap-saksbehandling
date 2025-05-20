@@ -89,9 +89,17 @@ export type KlagebehandlingKontorGrunnlag =
 export type KlagebehandlingNayGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.nay.flate.KlagebehandlingNayGrunnlagDto'];
 export type Hjemmel =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.kontor.flate.KlagevurderingKontorLøsningDto']['vilkårSomOmgjøres'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.kontor.flate.KlagevurderingKontorLøsningDto']['vilkårSomOmgjøres'][number];
 export type KlageInnstilling =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.kontor.flate.KlagevurderingKontorLøsningDto']['innstilling'];
+export type Klageresultat = components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.KlageResultat'];
+export type KlageAvslått = components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.Avsl\u00E5tt'];
+export type KlageOmgjøres = components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.Omgjøres'];
+export type KlageDelvisOmgjøres =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.DelvisOmgjøres'];
+export type KlageUfullstendigVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.Ufullstendig'];
+export type KlageOpprettholdes = components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.Opprettholdes'];
 export type UtbetalingOgSimuleringGrunnlag =
   components['schemas']['no.nav.aap.utbetal.simulering.UtbetalingOgSimuleringDto'];
 export type SimulertUtbetaling = components['schemas']['no.nav.aap.utbetal.simulering.SimulertUtbetalingDto'];

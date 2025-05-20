@@ -22,8 +22,8 @@ interface FormFields {
   vurdering: string;
   notat: string;
   innstilling: KlageInnstilling;
-  vilkårSomSkalOmgjøres: Hjemmel;
-  vilkårSomSkalOpprettholdes: Hjemmel;
+  vilkårSomSkalOmgjøres: Hjemmel[];
+  vilkårSomSkalOpprettholdes: Hjemmel[];
 }
 
 export const KlagebehandlingVurderingKontor = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
