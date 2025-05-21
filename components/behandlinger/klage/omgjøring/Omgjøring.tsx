@@ -1,11 +1,11 @@
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentFlyt, hentKlageresultat } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { getStegSomSkalVises } from 'lib/utils/steg';
 import { isError } from 'lib/utils/api';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { OmgjøringMedDataFetching } from 'components/behandlinger/klage/omgjøring/OmgjøringMedDataFetching';
-import { TypeBehandling } from 'lib/types/types';
+import { hjemmelMap } from 'lib/utils/hjemmel';
+import { Klageresultat } from 'lib/types/types';
+import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 
 interface Props {
   saksnummer: string;
@@ -17,29 +17,33 @@ export const Omgjøring = async ({ saksnummer, behandlingsreferanse }: Props) =>
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
-  const stegSomSkalVises = getStegSomSkalVises('OMGJØRING', flyt.data);
   const behandlingVersjon = flyt.data.behandlingVersjon;
+  const klageresultat = await hentKlageresultat(behandlingsreferanse);
+  if (isError(klageresultat)) {
+    return <ApiException apiResponses={[klageresultat]} />;
+  }
 
   return (
     <GruppeSteg
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
       behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flyt.data.behandlingVersjon}
+      behandlingVersjon={behandlingVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {stegSomSkalVises.includes('OMGJØRING') && (
-        <StegSuspense>
-          <OmgjøringMedDataFetching
-            saksnummer={saksnummer}
-            behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            erAktivtSteg={flyt.data.aktivtSteg == 'KLAGEBEHANDLING_NAY'}
-            typeBehandling={flyt.data.visning.typeBehandling as TypeBehandling}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <VilkårsKort steg={'OMGJØRING'} heading={'Omgjøring'}>
+          <p>Det er blitt opprettet en revurdering for følgende vilkår:</p>
+          <p>{vilkårSomSkalOmgjøres(klageresultat.data)}</p>
+        </VilkårsKort>
+      </StegSuspense>
     </GruppeSteg>
   );
+
+  function vilkårSomSkalOmgjøres(klageResultat: Klageresultat) {
+    if ('vilkårSomSkalOmgjøres' in klageResultat) {
+      return klageResultat.vilkårSomSkalOmgjøres.map((v) => hjemmelMap[v]).join(', ');
+    }
+    return [];
+  }
 };

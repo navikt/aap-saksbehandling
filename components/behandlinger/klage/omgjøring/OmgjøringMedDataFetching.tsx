@@ -4,6 +4,7 @@ import { OmgjøringVurdering } from 'components/behandlinger/klage/omgjøring/Om
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 
+// TODO: Slett dersom vi lander på helautomatisk revurdering for klage
 export const OmgjøringMedDataFetching = async ({
   saksnummer,
   behandlingsreferanse,
