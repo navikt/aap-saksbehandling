@@ -107,6 +107,7 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
               label={`Begrunnelse for anslått årlig arbeidsinntekt for skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}
               readOnly={readOnly}
               className={'begrunnelse'}
+              rules={{ required: 'Du må oppgi en begrunnelse for anslått arbeidsinntekt.' }}
             />
             <div className={styles.inntektfelt}>
               <Label size="small">{`Anslått årlig arbeidsinntekt på skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}</Label>
@@ -119,6 +120,10 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
                   type={'number'}
                   className={'inntekt_input'}
                   readOnly={readOnly}
+                  rules={{
+                    required: 'Du må oppgi anslått årlig arbeidsinntekt på skadetidspunkt.',
+                    min: { value: 0, message: 'Inntekt kan ikke være negativ.' },
+                  }}
                 />
                 <BodyShort>{grunnlag.toFixed(2)} G</BodyShort>
               </div>
