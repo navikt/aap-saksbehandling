@@ -33,7 +33,7 @@ const Utbetalingstabell = ({ utbetalinger }: { utbetalinger: SimulertUtbetaling[
 
 export const UtbetalingOgSimulering = ({ grunnlag }: Props) => {
   if (!grunnlag.length) {
-    return <Alert variant={'info'}>Fikk tomt svar fra backend</Alert>;
+    return <Alert variant={'info'}>Ingenting å vise.</Alert>;
   }
   return (
     <div>
