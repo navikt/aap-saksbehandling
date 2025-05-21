@@ -12,7 +12,7 @@ export const LegeerklæringInfoboks = () => {
   return (
     <>
       <Button
-        icon={<FirstAidKitIcon />}
+        icon={<FirstAidKitIcon title={'mottat svar fra behandler ikon'} />}
         className={styles.knapp}
         onClick={() => setVis(!vis)}
         ref={buttonRef}

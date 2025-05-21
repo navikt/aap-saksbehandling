@@ -7,9 +7,9 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import Link from 'next/link';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterÅrsak } from 'lib/utils/årsaker';
-import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
+import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -83,13 +83,7 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
               </Tooltip>
             </Table.DataCell>
             <Table.DataCell textSize={'small'}>
-              {oppgave.påVentTil && (
-                <PåVentInfoboks
-                  frist={oppgave.påVentTil}
-                  årsak={oppgave.påVentÅrsak}
-                  begrunnelse={oppgave.venteBegrunnelse}
-                />
-              )}
+              <OppgaveInformasjon oppgave={oppgave} />
             </Table.DataCell>
             <Table.DataCell textSize={'small'} align={'right'}>
               <AlleOppgaverActionMenu oppgave={oppgave} />

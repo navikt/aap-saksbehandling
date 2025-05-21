@@ -26,7 +26,7 @@ export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
   return (
     <>
       <Button
-        icon={<HourglassTopFilledIcon />}
+        icon={<HourglassTopFilledIcon title={'på vent ikon'} />}
         className={styles.knapp}
         onClick={() => setVis(!vis)}
         ref={buttonRef}
