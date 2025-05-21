@@ -1,0 +1,11 @@
+.godkjent {
+  background-color: var(--a-green-50);
+}
+
+.avslått {
+  background-color: var(--a-orange-50);
+}
+
+.rad {
+  height: 40px;
+}
