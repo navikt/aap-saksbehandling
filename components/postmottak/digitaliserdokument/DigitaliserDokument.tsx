@@ -72,6 +72,7 @@ export const DigitaliserDokument = ({
       {kategori === 'KLAGE' && (
         <DigitaliserKlage
           submit={handleSubmit}
+          grunnlag={grunnlag}
           readOnly={readOnly}
           isLoading={isLoading}
           registrertDato={registrertDato}

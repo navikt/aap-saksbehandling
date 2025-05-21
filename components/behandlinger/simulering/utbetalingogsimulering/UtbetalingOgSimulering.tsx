@@ -15,6 +15,7 @@ const Utbetalingstabell = ({ utbetalinger }: { utbetalinger: SimulertUtbetaling[
         <Table.HeaderCell>Fagsystem</Table.HeaderCell>
         <Table.HeaderCell>Nytt beløp</Table.HeaderCell>
         <Table.HeaderCell>Tidligere utbetalt</Table.HeaderCell>
+        <Table.HeaderCell>Differanse</Table.HeaderCell>
         <Table.HeaderCell>Utbetales til</Table.HeaderCell>
       </Table.Header>
       <Table.Body>
@@ -23,6 +24,7 @@ const Utbetalingstabell = ({ utbetalinger }: { utbetalinger: SimulertUtbetaling[
             <Table.DataCell>{utbetaling.fagsystem}</Table.DataCell>
             <Table.DataCell>{utbetaling.nyttBeløp}</Table.DataCell>
             <Table.DataCell>{utbetaling.tidligereUtbetalt}</Table.DataCell>
+            <Table.DataCell>{utbetaling.nyttBeløp - utbetaling.tidligereUtbetalt}</Table.DataCell>
             <Table.DataCell>{utbetaling.utbetalesTil}</Table.DataCell>
           </Table.Row>
         ))}
@@ -33,7 +35,7 @@ const Utbetalingstabell = ({ utbetalinger }: { utbetalinger: SimulertUtbetaling[
 
 export const UtbetalingOgSimulering = ({ grunnlag }: Props) => {
   if (!grunnlag.length) {
-    return <Alert variant={'info'}>Fikk tomt svar fra backend</Alert>;
+    return <Alert variant={'info'}>Ingenting å vise.</Alert>;
   }
   return (
     <div>
