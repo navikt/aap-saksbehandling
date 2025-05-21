@@ -8,9 +8,9 @@ import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'l
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterÅrsak } from 'lib/utils/årsaker';
 import { AvklaringsbehovKode, ÅrsakTilBehandling } from 'lib/types/types';
-import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
+import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -107,13 +107,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
 
               <Table.DataCell textSize={'small'}>
-                {oppgave.påVentTil && (
-                  <PåVentInfoboks
-                    frist={oppgave.påVentTil}
-                    årsak={oppgave.påVentÅrsak}
-                    begrunnelse={oppgave.venteBegrunnelse}
-                  />
-                )}
+                <OppgaveInformasjon oppgave={oppgave} />
               </Table.DataCell>
 
               <Table.DataCell textSize={'small'} align={'right'}>

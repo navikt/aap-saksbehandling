@@ -6,11 +6,11 @@ import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'l
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterÅrsak } from 'lib/utils/årsaker';
 import { AvklaringsbehovKode, ÅrsakTilBehandling } from 'lib/types/types';
-import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { LedigeOppgaverMeny } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavermeny/LedigeOppgaverMeny';
+import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -105,13 +105,7 @@ export const LedigeOppgaverTabell = ({ oppgaver }: Props) => {
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
 
               <Table.DataCell textSize={'small'}>
-                {oppgave.påVentTil && (
-                  <PåVentInfoboks
-                    frist={oppgave.påVentTil}
-                    årsak={oppgave.påVentÅrsak}
-                    begrunnelse={oppgave.venteBegrunnelse}
-                  />
-                )}
+                <OppgaveInformasjon oppgave={oppgave} />
               </Table.DataCell>
 
               <Table.DataCell textSize={'small'} align={'right'}>
