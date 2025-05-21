@@ -12,7 +12,7 @@ interface Props {
   behandlingsreferanse: string;
 }
 
-export const Omgjøring = async ({ saksnummer, behandlingsreferanse }: Props) => {
+export const Omgjøring = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
