@@ -81,6 +81,8 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     })(event);
   };
 
+  const sisteFritakVurdertAv = grunnlag?.vurderinger?.[grunnlag.vurderinger.length - 1]?.vurdertAv;
+
   const showAsOpen = !!grunnlag?.vurderinger && grunnlag.vurderinger.length > 0;
   const skalViseBekreftKnapp = !readOnly && fritakMeldepliktVurderinger.length > 0;
 
@@ -96,6 +98,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       visBekreftKnapp={skalViseBekreftKnapp}
       erAktivtSteg={true}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vurdertAvAnsatt={sisteFritakVurdertAv}
     >
       <VStack gap={'4'}>
         <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
