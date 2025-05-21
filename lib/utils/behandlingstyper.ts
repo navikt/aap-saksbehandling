@@ -1,8 +1,8 @@
 import { exhaustiveCheck } from 'lib/utils/typescript';
-// import { BehandlingstyperRequestQuery } from 'lib/types/types';
 import { NoNavAapOppgaveOppgaveDtoBehandlingstype } from '@navikt/aap-oppgave-typescript-types';
 import { PathsBehandlingstidLukkedeSisteDagerAntallDagerGetParametersQueryBehandlingstyper } from '@navikt/aap-statistikk-typescript-types';
-import {BehandlingstyperRequestQuery} from "lib/types/statistikkTypes";
+import { BehandlingstyperRequestQuery } from 'lib/types/statistikkTypes';
+import { ValuePair } from 'components/form/FormField';
 
 export const oppgaveBehandlingstyper = Object.keys(
   NoNavAapOppgaveOppgaveDtoBehandlingstype as unknown as keyof (typeof NoNavAapOppgaveOppgaveDtoBehandlingstype)[]
@@ -49,3 +49,5 @@ const behandlingsTypeAlternativerFraEnum = Object.keys(
   });
 export type BehandlingsTyperOption = BehandlingstyperRequestQuery;
 export const behandlingsTyperOptions: BehandlingsTyperOption[] = behandlingsTypeAlternativerFraEnum;
+
+export const OppgaveStatuser: ValuePair[] = [{ label: 'På vent', value: 'VENT' }];
