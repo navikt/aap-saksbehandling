@@ -1,8 +1,12 @@
+.detail {
+  color: var(--a-gray-300);
+}
+
 .link {
   font-size: var(--a-font-size-small);
 }
 
 .linkName {
   font-size: var(--a-font-size-small);
-  color: var(--a-text-action);
+  color: var(--a-text-on-inverted);
 }

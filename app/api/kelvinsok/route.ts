@@ -6,8 +6,9 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
 import { isSuccess } from 'lib/utils/api';
 import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
-import { capitalize } from "lodash";
-import { BrukerInformasjon } from "../../../lib/services/azure/azureUserService";
+import { capitalize } from 'lodash';
+import { BrukerInformasjon } from '../../../lib/services/azure/azureUserService';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 export interface SøkeResultat {
   oppgaver?: {
@@ -18,7 +19,7 @@ export interface SøkeResultat {
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
   person?: { href: string; label: string }[];
-  behandlingsStatus?: { status?: Behandlingsstatus; }[];
+  behandlingsStatus?: { status?: Behandlingsstatus }[];
 }
 
 interface Props {
@@ -61,16 +62,13 @@ export async function POST(req: Request, brukerinformasjon: Props) {
     const oppgavesøkRes = await oppgaveTekstSøk(søketekst);
     if (isSuccess(oppgavesøkRes)) {
       oppgavesøkRes.data.forEach((oppgave) => {
-        const isReservert = Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon.brukerInformasjon?.NAVident;
+        const isReservert =
+          Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon.brukerInformasjon?.NAVident;
         const isPåVent = oppgave.påVentÅrsak != null;
         oppgaveData.push({
           href: byggKelvinURL(oppgave),
           label: `${capitalize(oppgave.behandlingstype)} - ${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}`,
-          status: isReservert
-              ? 'RESERVERT'
-              : isPåVent
-                  ? 'PÅ_VENT'
-                  : 'ÅPEN',
+          status: isReservert ? 'RESERVERT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
         personData.push({
@@ -87,7 +85,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
     oppgaver: oppgaveData,
     saker: sakData?.map((sak) => ({
       href: `/saksbehandling/sak/${sak.saksnummer}`,
-      label: `${sak.saksnummer} (${sak.periode.fom})`,
+      label: `${sak.saksnummer} (${formaterDatoForFrontend(sak.periode.fom)})`,
     })),
     kontor: kontorData,
     person: personData,

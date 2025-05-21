@@ -25,6 +25,7 @@ describe('Meldeplikt', () => {
           begrunnelse: 'Grunn',
           fraDato: '2024-08-10',
           harFritak: true,
+          vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' },
           vurderingsTidspunkt: '2024-08-10',
         },
       ],

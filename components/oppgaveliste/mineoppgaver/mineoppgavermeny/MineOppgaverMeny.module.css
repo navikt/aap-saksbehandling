@@ -1,6 +1,6 @@
 .comboButton {
   display: flex;
-  align-content: flex-start;
+  justify-content: flex-end;
 }
 
 .comboButton > button:first-of-type {

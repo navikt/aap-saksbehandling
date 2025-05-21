@@ -1,97 +1,110 @@
 'use client';
 
-import { Detail, HStack, Label, Link, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 import type { SøkeResultat } from './Kelvinsøk';
+
 import styles from './Kelvinsøkeresultat.module.css';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
+
 interface Props {
   søkeresultat: SøkeResultat;
 }
 
 export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus } }: Props) => (
   <HStack gap={'8'}>
-    <div>
-      <Label spacing>Bruker</Label>
+    <VStack gap={'1'}>
+      <Detail className={styles.detail}>Bruker</Detail>
       <VStack gap="2">
         {!person?.length ? (
-          <Detail>Fant ikke navn på person</Detail>
+          <BodyShort size={'small'}>Fant ikke navn på person</BodyShort>
         ) : (
           person.map((søk, index) => (
             <Link className={styles.linkName} key={`sak-resultat-${index}`} href={søk.href}>
-              {søk.label}
+              <BodyShort size={'small'}>{storForbokstavIHvertOrd(søk.label)}</BodyShort>
             </Link>
           ))
         )}
       </VStack>
-    </div>
+    </VStack>
 
-    <div>
-      <Label spacing>Saker</Label>
+    <VStack gap={'1'}>
+      <Detail className={styles.detail}>Saker</Detail>
       <VStack gap="2">
         {!saker?.length ? (
-          <Detail>Fant ingen saker</Detail>
+          <BodyShort size={'small'}>Fant ingen saker</BodyShort>
         ) : (
           saker.map((søk, index) => (
             <Link className={styles.link} key={`sak-resultat-${index}`} href={søk.href}>
-              {søk.label}
+              <BodyShort size={'small'}>{søk.label}</BodyShort>
             </Link>
           ))
         )}
       </VStack>
-    </div>
+    </VStack>
 
-    <div>
-      <Label spacing>Oppgaver</Label>
+    <VStack gap="1">
+      <Detail className={styles.detail}>Oppgaver</Detail>
       <VStack gap="2">
         {!oppgaver?.length ? (
-          <Detail>Fant ingen oppgaver</Detail>
-        ) : (
-          oppgaver.map((søk, index) => (
-            <Link className={styles.link} key={`oppgave-resultat-${index}`} href={søk.href}>
-              {søk.label}
-            </Link>
-          ))
-        )}
-      </VStack>
-    </div>
-
-    <div>
-      <Label spacing>Status</Label>
-      <VStack gap="2">
-        {!oppgaver?.length ? (
-          <Detail>Fant ingen oppgaver</Detail>
+          <BodyShort size={'small'}>Fant ingen oppgaver</BodyShort>
         ) : (
           oppgaver.map((søk, index) => {
-            const mapped = mapStatus(søk.status);
-            if (!mapped) return null;
-            return <OppgaveStatus key={`oppgave-status-${index}`} oppgaveStatus={mapped} />;
+            const oppgaveStatus = mapStatus(søk.status);
+
+            return (
+              <HStack gap={'2'} key={index}>
+                <Link className={styles.link} key={`oppgave-resultat-${index}`} href={søk.href}>
+                  <BodyShort size={'small'}>{søk.label}</BodyShort>
+                </Link>
+                {oppgaveStatus && <OppgaveStatus size={'xsmall'} oppgaveStatus={oppgaveStatus} showLabel={false} />}
+              </HStack>
+            );
           })
         )}
       </VStack>
-    </div>
+    </VStack>
 
-    <div>
-      <Label spacing>Kontor</Label>
+    {/*<div>*/}
+    {/*  <Detail className={styles.detail} spacing>*/}
+    {/*    Status*/}
+    {/*  </Detail>*/}
+    {/*  <VStack gap="2">*/}
+    {/*    {!oppgaver?.length ? (*/}
+    {/*      <BodyShort size={'small'}>Fant ingen oppgaver</BodyShort>*/}
+    {/*    ) : (*/}
+    {/*      oppgaver.map((søk, index) => {*/}
+
+    {/*    )}*/}
+    {/*  </VStack>*/}
+    {/*</div>*/}
+
+    <VStack gap={'1'}>
+      <Detail className={styles.detail}>Kontor</Detail>
       <VStack gap="2">
         {!kontor?.length ? (
-          <Detail>Fant ikke kontor</Detail>
+          <BodyShort size={'small'}>Fant ikke kontor</BodyShort>
         ) : (
-          kontor.map((søk, index) => <Detail key={index}>{søk.enhet}</Detail>)
+          kontor.map((søk, index) => (
+            <BodyShort size={'small'} key={index}>
+              {søk.enhet}
+            </BodyShort>
+          ))
         )}
       </VStack>
-    </div>
+    </VStack>
 
-    <div>
-      <Label spacing>Status</Label>
+    <VStack gap={'1'}>
+      <Detail className={styles.detail}>Status</Detail>
       <VStack gap="2">
         {!behandlingsStatus?.length ? (
-          <Detail>Fant ikke status</Detail>
+          <BodyShort size={'small'}>Fant ikke status</BodyShort>
         ) : (
           behandlingsStatus.map((søk, index) => <Behandlingsstatus key={index} status={søk.status} />)
         )}
       </VStack>
-    </div>
+    </VStack>
   </HStack>
 );
 

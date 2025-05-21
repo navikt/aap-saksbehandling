@@ -9,23 +9,46 @@ import { FormEvent } from 'react';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { KlageV0 } from 'lib/types/types';
 import { parse } from 'date-fns';
+import { getJaNeiEllerUndefined, JaEllerNeiOptions } from 'lib/utils/form';
+import { JaEllerNei } from 'lib/postmottakForm';
+import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 
 interface Props extends Submittable {
   readOnly: boolean;
   isLoading: boolean;
+  grunnlag: DigitaliseringsGrunnlag;
   registrertDato?: string | null;
 }
 export interface KlageFormFields {
   kravMottatt: string;
+  skalOppretteNyBehandling: JaEllerNei;
 }
-export const DigitaliserKlage = ({ readOnly, submit, isLoading, registrertDato }: Props) => {
+export const DigitaliserKlage = ({ readOnly, submit, grunnlag, isLoading, registrertDato }: Props) => {
+  const vurdering: KlageV0 | null = grunnlag.vurdering?.strukturertDokumentJson
+    ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
+    : null;
+
+  const registrertDatoForInput = vurdering?.kravMottatt
+    ? formaterDatoForFrontend(vurdering.kravMottatt)
+    : registrertDato && !readOnly
+      ? formaterDatoForFrontend(registrertDato)
+      : undefined;
   const { form, formFields } = useConfigForm<KlageFormFields>(
     {
       kravMottatt: {
         type: 'date_input',
         label: 'Dato for mottatt klage',
-        defaultValue: registrertDato ? formaterDatoForFrontend(registrertDato) : undefined,
+        defaultValue: registrertDatoForInput,
         rules: { required: 'Kravdato for klage må settes' },
+      },
+      skalOppretteNyBehandling: {
+        type: 'radio',
+        label: 'Opprett ny klagebehandling i Kelvin',
+        description:
+          'Dersom dokumentet som journalføres skal knyttes til en eksisterende klagebehandling så kan du velge "Nei" her.',
+        rules: { required: 'Du må ta stilling til om det skal opprettes en ny klagebehandling' },
+        defaultValue: getJaNeiEllerUndefined(vurdering?.skalOppretteNyBehandling),
+        options: JaEllerNeiOptions,
       },
     },
     { readOnly }
@@ -35,6 +58,7 @@ export const DigitaliserKlage = ({ readOnly, submit, isLoading, registrertDato }
     const klageJournalføring: KlageV0 = {
       meldingType: 'KlageV0',
       kravMottatt: formaterDatoForBackend(parse(data.kravMottatt, 'dd.MM.yyyy', new Date())),
+      skalOppretteNyBehandling: data.skalOppretteNyBehandling === JaEllerNei.Ja,
     };
     return JSON.stringify(klageJournalføring);
   }
@@ -46,6 +70,7 @@ export const DigitaliserKlage = ({ readOnly, submit, isLoading, registrertDato }
     <VilkårsKort heading={'Klage'}>
       <form onSubmit={handleSubmit}>
         <FormField form={form} formField={formFields.kravMottatt} />
+        <FormField form={form} formField={formFields.skalOppretteNyBehandling} horizontalRadio />
         <Button loading={isLoading} className={'fit-content'}>
           Neste
         </Button>

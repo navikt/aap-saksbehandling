@@ -1,7 +1,7 @@
 'use client';
 
 import { AvklaringsbehovKode, Oppgave, ÅrsakTilBehandling } from 'lib/types/types';
-import { BodyShort, HStack, Table, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
 import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import Link from 'next/link';
@@ -9,50 +9,21 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterÅrsak } from 'lib/utils/årsaker';
 import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
-import { useState } from 'react';
-import { ScopedSortState } from 'components/oppgaveliste/oppgavetabell/OppgaveTabell';
-import { LegeerklæringInfoboks } from 'components/oppgaveliste/legeerklæring/LegeerklæringInfoboks';
+import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 
 interface Props {
   oppgaver: Oppgave[];
 }
 
 export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
-  const [sort, setSort] = useState<ScopedSortState | undefined>();
-
-  const sorterteOppgaver = (oppgaver || []).slice().sort((a, b) => {
-    if (sort) {
-      return sort.direction === 'ascending' ? comparator(b, a, sort.orderBy) : comparator(a, b, sort.orderBy);
-    }
-    return 1;
-  });
-
-  function comparator<T>(a: T, b: T, orderBy: keyof T): number {
-    if (b[orderBy] == null || b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  }
-
-  const handleSort = (sortKey: ScopedSortState['orderBy']) => {
-    setSort(
-      sort && sortKey === sort.orderBy && sort.direction === 'descending'
-        ? undefined
-        : {
-            orderBy: sortKey,
-            direction: sort && sortKey === sort.orderBy && sort.direction === 'ascending' ? 'descending' : 'ascending',
-          }
-    );
-  };
+  const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
 
   return (
     <TableStyled
       size={'small'}
       zebraStripes
-      onSortChange={(sortKey) => handleSort(sortKey as ScopedSortState['orderBy'])}
+      sort={sort}
+      onSortChange={(sortKey) => håndterSortering(sortKey as ScopedSortState<Oppgave>['orderBy'])}
     >
       <Table.Header>
         <Table.Row>
@@ -72,7 +43,7 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {sorterteOppgaver.map((oppgave, i) => (
+        {sortertListe.map((oppgave, i) => (
           <Table.Row key={`oppgave-${i}`}>
             <Table.DataCell textSize={'small'}>
               {oppgave.saksnummer ? (
@@ -112,21 +83,15 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
               </Tooltip>
             </Table.DataCell>
             <Table.DataCell textSize={'small'}>
-              <HStack gap={'1'}>
-                {oppgave.påVentTil && (
-                  <PåVentInfoboks
-                    frist={oppgave.påVentTil}
-                    årsak={oppgave.påVentÅrsak}
-                    begrunnelse={oppgave.venteBegrunnelse}
-                  />
-                )}
-
-                {oppgave.årsakerTilBehandling.some((element) =>
-                  ['MOTTATT_LEGEERKLÆRING', 'MOTTATT_AVVIST_LEGEERKLÆRING'].includes(element)
-                ) && <LegeerklæringInfoboks />}
-              </HStack>
+              {oppgave.påVentTil && (
+                <PåVentInfoboks
+                  frist={oppgave.påVentTil}
+                  årsak={oppgave.påVentÅrsak}
+                  begrunnelse={oppgave.venteBegrunnelse}
+                />
+              )}
             </Table.DataCell>
-            <Table.DataCell textSize={'small'}>
+            <Table.DataCell textSize={'small'} align={'right'}>
               <AlleOppgaverActionMenu oppgave={oppgave} />
             </Table.DataCell>
           </Table.Row>

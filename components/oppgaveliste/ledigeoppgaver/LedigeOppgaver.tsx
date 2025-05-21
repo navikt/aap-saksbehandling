@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useTransition } from 'react';
-import { OppgaveTabell } from 'components/oppgaveliste/oppgavetabell/OppgaveTabell';
 import useSWR from 'swr';
 import { BodyShort, Box, Button, HStack, Label, Skeleton, Switch, VStack } from '@navikt/ds-react';
 import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
@@ -14,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { useLagreAktivEnhet } from 'lib/utils/aktivEnhet';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
+import { LedigeOppgaverTabell } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavertabell/LedigeOppgaverTabell';
 
 interface Props {
   enheter: Enhet[];
@@ -130,7 +130,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           <Skeleton variant="rectangle" width="100%" height={40} />
         </VStack>
       )}
-      {oppgaver && oppgaver.length > 0 && <OppgaveTabell oppgaver={oppgaver} showSortAndFiltersInTable />}
+      {oppgaver && oppgaver.length > 0 && <LedigeOppgaverTabell oppgaver={oppgaver} />}
       {kanLasteInnFlereOppgaver && (
         <HStack justify={'center'}>
           <Button

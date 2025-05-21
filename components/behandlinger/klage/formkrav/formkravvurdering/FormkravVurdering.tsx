@@ -4,7 +4,7 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { useConfigForm } from '../../../../form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from '../../../../../hooks/LøsBehovOgGåTilNesteStegHook';
 import { VilkårsKortMedForm } from '../../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { FormField } from '../../../../form/FormField';
 import { FormkravGrunnlag, TypeBehandling } from '../../../../../lib/types/types';
 import { useBehandlingsReferanse } from '../../../../../hooks/BehandlingHook';
@@ -20,7 +20,7 @@ interface Props {
 interface FormFields {
   erBrukerPart: JaEllerNei;
   erFristOverholdt: JaEllerNei;
-  likevelBehandles: JaEllerNei;
+  likevelBehandles?: JaEllerNei;
   erKonkret: JaEllerNei;
   erSignert: JaEllerNei;
   begrunnelse: string;
@@ -59,7 +59,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
         type: 'radio',
         label: 'Skal klagen likevel behandles?',
         rules: { required: 'Du må svare på om fristen er overholdt' },
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erFristOverholdt),
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.likevelBehandles),
         options: [
           { label: 'Ja, det er særlig grunner, eller bruker kan ikke klandres for forsinkelsen', value: JaEllerNei.Ja },
           { label: 'Nei', value: JaEllerNei.Nei },
@@ -85,6 +85,12 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
 
   const fristErIkkeOverholdt = form.watch('erFristOverholdt') === JaEllerNei.Nei;
 
+  useEffect(() => {
+    if (!fristErIkkeOverholdt) {
+      form.setValue('likevelBehandles', undefined);
+    }
+  }, [form, fristErIkkeOverholdt]);
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
@@ -94,6 +100,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
           formkravVurdering: {
             erBrukerPart: data.erBrukerPart === JaEllerNei.Ja,
             erFristOverholdt: data.erFristOverholdt === JaEllerNei.Ja,
+            likevelBehandles: data.likevelBehandles ? data.likevelBehandles === JaEllerNei.Ja : undefined,
             erKonkret: data.erKonkret === JaEllerNei.Ja,
             erSignert: data.erSignert === JaEllerNei.Ja,
             begrunnelse: data.begrunnelse,

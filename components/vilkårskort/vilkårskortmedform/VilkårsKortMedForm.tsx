@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { StegType } from 'lib/types/types';
+import { StegType, VurdertAvAnsatt } from 'lib/types/types';
 import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
@@ -24,11 +24,6 @@ interface Props {
   defaultOpen?: boolean;
   vilkårTilhørerNavKontor: boolean;
   vurdertAvAnsatt?: VurdertAvAnsatt;
-}
-
-interface VurdertAvAnsatt {
-  ident: string;
-  dato: string;
 }
 
 export const VilkårsKortMedForm = ({
@@ -74,7 +69,7 @@ export const VilkårsKortMedForm = ({
 
               {vurdertAvAnsatt && (
                 <Detail>
-                  {`Vurdert av ${vurdertAvAnsatt.ident} ${vilkårTilhørerNavKontor ? '(Nav kontor)' : '(Nay)'}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
+                  {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)} (${utledEnhetsnavn(vurdertAvAnsatt, vilkårTilhørerNavKontor)}), ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
                 </Detail>
               )}
             </HStack>
@@ -84,3 +79,15 @@ export const VilkårsKortMedForm = ({
     </ExpansionCard>
   );
 };
+
+function utledVurdertAv(vurdertAvAnsatt: VurdertAvAnsatt): string {
+  return vurdertAvAnsatt.ansattnavn ? vurdertAvAnsatt.ansattnavn : vurdertAvAnsatt.ident;
+}
+
+function utledEnhetsnavn(vurdertAvAnsatt: VurdertAvAnsatt, vilkårTilhøreNavKontor: boolean): string {
+  if (!vurdertAvAnsatt.enhetsnavn) {
+    return vilkårTilhøreNavKontor ? 'Nav kontor' : 'Nay';
+  } else {
+    return vurdertAvAnsatt.enhetsnavn;
+  }
+}
