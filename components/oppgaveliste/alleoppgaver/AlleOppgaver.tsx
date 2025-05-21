@@ -77,12 +77,8 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           <Skeleton variant="rectangle" width="100%" height={40} />
         </VStack>
       )}
-
-      {!isLoading && oppgaver && oppgaver.length > 0 ? (
-        <AlleOppgaverTabell oppgaver={oppgaver} />
-      ) : (
-        <BodyShort>Ingen oppgaver for enhet {aktivEnhet}</BodyShort>
-      )}
+      {!oppgaver?.length && <BodyShort>Ingen oppgaver for enhet {aktivEnhet}</BodyShort>}
+      {oppgaver && oppgaver.length > 0 && <AlleOppgaverTabell oppgaver={oppgaver} />}
       {kanLasteInnFlereOppgaver && (
         <HStack justify={'center'}>
           <Button

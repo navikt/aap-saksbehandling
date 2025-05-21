@@ -47,6 +47,6 @@ describe('OppgaveInformasjon', () => {
       />
     );
     expect(screen.getByRole('img', { name: 'mottat svar fra behandler ikon' })).toBeVisible();
-    expect(screen.getByRole('img', { name: 'mottat svar fra behandler ikon' })).toBeVisible();
+    expect(screen.getByRole('img', { name: 'på vent ikon' })).toBeVisible();
   });
 });
