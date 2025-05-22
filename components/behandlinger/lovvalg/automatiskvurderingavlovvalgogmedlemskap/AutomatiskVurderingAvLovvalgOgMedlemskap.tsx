@@ -32,7 +32,7 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
             oppfyllerOpplysningeneKraveneTekst={'Tilsier opplysningene at brukeren oppfyller kravene til medlemskap?'}
             oppfyllerOpplysningeneKravene={vurdering.tilhørighetVurdering
               .filter((e) => e.indikasjon === 'I_NORGE')
-              .every((x) => x.resultat)}
+              .some((x) => x.resultat)}
           />
         </div>
         <div>
@@ -44,7 +44,7 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
             oppfyllerOpplysningeneKraveneTekst={'Tilsier opplysningene at brukeren har tilhørighet til Norge?'}
             oppfyllerOpplysningeneKravene={vurdering.tilhørighetVurdering
               .filter((e) => e.indikasjon === 'UTENFOR_NORGE')
-              .every((x) => x.resultat)}
+              .every((x) => !x.resultat)}
           />
         </div>
         {!vurdering.kanBehandlesAutomatisk && (
