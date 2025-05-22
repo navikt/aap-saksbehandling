@@ -1,11 +1,12 @@
 'use client';
 
 import { BodyShort, HStack, Table } from '@navikt/ds-react';
-import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
+import { AutomatiskLovvalgOgMedlemskapVurdering, tilhørighetVurdering } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { CheckmarkCircleIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 
 import styles from './TilhørighetsVurderingTabell.module.css';
+import { OpplysningerContent } from 'components/behandlinger/lovvalg/opplysningercontent/OpplysningerContent';
 
 interface Props {
   vurdering: AutomatiskLovvalgOgMedlemskapVurdering['tilhørighetVurdering'];
@@ -31,19 +32,30 @@ export const TilhørigetsVurderingTabell = ({
       </Table.Header>
       <Table.Body>
         {vurdering.map((opplysning, index) => {
-          return (
-            <Table.ExpandableRow key={`${opplysning.kilde.join('-')}-${index}`} content={opplysning.fordypelse}>
-              <Table.DataCell textSize={'small'}>
-                {opplysning.kilde.map((kilde) => mapKildeTilTekst(kilde)).join(', ')}
+          const erUtvidbar = harMinstEttGrunnlag(opplysning);
+          const radInnhold = (
+            <>
+              <Table.DataCell textSize="small">{opplysning.kilde.map(mapKildeTilTekst).join(', ')}</Table.DataCell>
+              <Table.DataCell textSize="small">Her må vi få inn periode</Table.DataCell>
+              <Table.DataCell textSize="small">{opplysning.opplysning}</Table.DataCell>
+              <Table.DataCell textSize="small">
+                <BodyShort size="small">{opplysning.resultat ? 'Ja' : 'Nei'}</BodyShort>
               </Table.DataCell>
-              <Table.DataCell textSize={'small'}>Her må vi få inn periode</Table.DataCell>
-              <Table.DataCell textSize={'small'}>{opplysning.opplysning}</Table.DataCell>
-              <Table.DataCell textSize={'small'}>
-                <BodyShort size={'small'}>{opplysning.resultat ? 'Ja' : 'Nei'}</BodyShort>
-              </Table.DataCell>
+            </>
+          );
+
+          return erUtvidbar ? (
+            <Table.ExpandableRow key={index} content={<OpplysningerContent opplysning={opplysning} />}>
+              {radInnhold}
             </Table.ExpandableRow>
+          ) : (
+            <Table.Row key={index}>
+              <Table.DataCell></Table.DataCell>
+              {radInnhold}
+            </Table.Row>
           );
         })}
+
         <Table.Row className={`${styles.rad} ${oppfyllerOpplysningeneKravene ? styles.godkjent : styles.avslått}`}>
           <Table.DataCell></Table.DataCell>
           <Table.DataCell>
@@ -94,4 +106,16 @@ function mapKildeTilTekst(kilde: Kilde): string {
     default:
       return kilde;
   }
+}
+
+function harMinstEttGrunnlag(vurdering: tilhørighetVurdering) {
+  return [
+    vurdering.arbeidInntektINorgeGrunnlag,
+    vurdering.mottarSykepengerGrunnlag,
+    vurdering.oppgittJobbetIUtlandGrunnlag,
+    vurdering.oppgittUtenlandsOppholdGrunnlag,
+    vurdering.manglerStatsborgerskapGrunnlag,
+    vurdering.utenlandsAddresserGrunnlag,
+    vurdering.vedtakImedlGrunnlag,
+  ].some((grunnlag) => grunnlag !== null);
 }
