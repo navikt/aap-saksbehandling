@@ -61,23 +61,21 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
 
   if (opplysning.oppgittJobbetIUtlandGrunnlag) {
     const oppgittJobbetIUtlandGrunnlag = opplysning.oppgittJobbetIUtlandGrunnlag;
-    console.log(oppgittJobbetIUtlandGrunnlag);
+
     return (
       <VStack gap={'2'}>
         {oppgittJobbetIUtlandGrunnlag.map((jobb, index) => {
           return (
             <VStack gap={'1'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
               <BodyShort size={'small'}>{jobb.land}</BodyShort>
-              <BodyShort size={'small'}>
-                {/*@ts-ignore // TODO Få riktig type fra bakcend*/}
-                {formaterDatoForFrontend(jobb.fraDato)} - {formaterDatoForFrontend(jobb.tilDato)}
-              </BodyShort>
+              <BodyShort size={'small'}>{formaterPeriode(jobb.fraDato, jobb.tilDato)}</BodyShort>
             </VStack>
           );
         })}
       </VStack>
     );
   }
+
   // TODO Hvorfor er denne boolsk?
   if (opplysning.oppgittUtenlandsOppholdGrunnlag) {
     return <VStack gap={'2'}>Hva skal vises her?</VStack>;
@@ -85,6 +83,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
 
   if (opplysning.manglerStatsborgerskapGrunnlag) {
     const manglerStatsborgerskapGrunnlag = opplysning.manglerStatsborgerskapGrunnlag;
+
     return (
       <VStack gap={'2'}>
         {manglerStatsborgerskapGrunnlag.map((manglerStatsborgerskap, index) => {
@@ -92,10 +91,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
             <VStack gap={'1'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
               <BodyShort size={'small'}>{manglerStatsborgerskap.land}</BodyShort>
               <BodyShort size={'small'}>
-                {/*@ts-ignore // TODO Få riktig type fra bakcend*/}
-                {formaterDatoForFrontend(manglerStatsborgerskap.gyldigFraOgMed)} -{' '}
-                {/*@ts-ignore // TODO Få riktig type fra bakcend*/}
-                {formaterDatoForFrontend(manglerStatsborgerskap.gyldigTilOgMed)}
+                {formaterPeriode(manglerStatsborgerskap.gyldigFraOgMed, manglerStatsborgerskap.gyldigTilOgMed)}
               </BodyShort>
             </VStack>
           );
@@ -105,6 +101,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
   }
   if (opplysning.utenlandsAddresserGrunnlag) {
     const utenlandsAddresserGrunnlag = opplysning.utenlandsAddresserGrunnlag;
+
     return (
       <VStack gap={'2'}>
         {utenlandsAddresserGrunnlag.map((utenlandsAdresse, index) => {
@@ -115,10 +112,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
               </BodyShort>
               <BodyShort size={'small'}>{utenlandsAdresse.bySted}</BodyShort>
               <BodyShort size={'small'}>
-                {/*@ts-ignore // TODO Få riktig type fra bakcend*/}
-                {formaterDatoForFrontend(utenlandsAdresse.gyldigFraOgMed)} -{' '}
-                {/*@ts-ignore // TODO Få riktig type fra bakcend*/}
-                {formaterDatoForFrontend(utenlandsAdresse.gyldigTilOgMed)}
+                {formaterPeriode(utenlandsAdresse.gyldigFraOgMed, utenlandsAdresse.gyldigTilOgMed)}
               </BodyShort>
             </VStack>
           );
@@ -126,7 +120,18 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
       </VStack>
     );
   }
+
   if (opplysning.vedtakImedlGrunnlag) {
     return <div>{JSON.stringify(opplysning.vedtakImedlGrunnlag)}</div>;
   }
 };
+
+function formaterPeriode(dato1?: string | null, dato2?: string | null): string {
+  if (dato1 && !dato2) {
+    return `${formaterDatoForFrontend(dato1)} - `;
+  } else if (dato1 && dato2) {
+    return `${formaterDatoForFrontend(dato1)} - ${formaterDatoForFrontend(dato2)}`;
+  } else {
+    return '';
+  }
+}
