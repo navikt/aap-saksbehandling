@@ -25,7 +25,6 @@ export const TilhørigetsVurderingTabell = ({
         <Table.Row>
           <Table.HeaderCell />
           <Table.HeaderCell scope="col">Kilde</Table.HeaderCell>
-          <Table.HeaderCell scope="col">Vurdert periode</Table.HeaderCell>
           <Table.HeaderCell scope="col">Opplysning</Table.HeaderCell>
           <Table.HeaderCell scope="col">Resultat</Table.HeaderCell>
         </Table.Row>
@@ -36,7 +35,6 @@ export const TilhørigetsVurderingTabell = ({
           const radInnhold = (
             <>
               <Table.DataCell textSize="small">{opplysning.kilde.map(mapKildeTilTekst).join(', ')}</Table.DataCell>
-              <Table.DataCell textSize="small">Her må vi få inn periode</Table.DataCell>
               <Table.DataCell textSize="small">{opplysning.opplysning}</Table.DataCell>
               <Table.DataCell textSize="small">
                 <BodyShort size="small">{opplysning.resultat ? 'Ja' : 'Nei'}</BodyShort>
@@ -63,7 +61,6 @@ export const TilhørigetsVurderingTabell = ({
               {oppfyllerOpplysningeneKraveneTekst}
             </BodyShort>
           </Table.DataCell>
-          <Table.DataCell></Table.DataCell>
           <Table.DataCell></Table.DataCell>
           <Table.DataCell>
             <HStack gap={'1'} align={'center'}>
