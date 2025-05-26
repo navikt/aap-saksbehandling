@@ -164,7 +164,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
       erAktivtSteg={true}
     >
       {visForm && (
-        <VStack gap={'4'}>
+        <VStack gap={'6'}>
           <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
           <YtelseTabell ytelser={grunnlag.ytelser} />
           <Ytelsesvurderinger form={form} readOnly={readOnly} />
