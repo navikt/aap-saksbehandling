@@ -13,6 +13,8 @@ import { useConfigForm } from '../../../../form/FormHook';
 import { VilkårsKortMedForm } from '../../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormEvent } from 'react';
 import { FormField } from '../../../../form/FormField';
+import { BodyShort, VStack } from '@navikt/ds-react';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   behandlingVersjon: number;
@@ -73,6 +75,15 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erA
       isLoading={isLoading}
       status={status}
     >
+      <VStack gap={'1'}>
+        <BodyShort size={'small'} weight={'semibold'}>
+          Krav mottatt
+        </BodyShort>
+        <BodyShort size={'small'}>
+          {grunnlag?.kravMottatt ? formaterDatoForFrontend(grunnlag.kravMottatt) : 'Mangler krav mottatt dato'}
+        </BodyShort>
+      </VStack>
+
       <FormField form={form} formField={formFields.påklagetBehandling} />
     </VilkårsKortMedForm>
   );
