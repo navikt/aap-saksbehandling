@@ -31,6 +31,10 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
     (behandling) => behandling.type === 'ae0034' && behandling.status !== 'OPPRETTET'
   ).length;
 
+  const kanRegistrerebrudd = !!sak.behandlinger.filter(
+    (behandling) => behandling.type === 'ae0034' && !behandling.årsaker.includes('SØKNAD_TRUKKET')
+  ).length;
+
   return (
     <Page>
       <Page.Block width="xl">
@@ -39,13 +43,15 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             <Heading size="large">Sak {sak.saksnummer}</Heading>
 
             <HStack gap="4">
-              <Button
-                variant="secondary"
-                size="small"
-                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
-              >
-                Registrer brudd på aktivitetsplikten
-              </Button>
+              {kanRegistrerebrudd && (
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
+                >
+                  Registrer brudd på aktivitetsplikten
+                </Button>
+              )}
 
               {kanRevurdere && (
                 <Button
