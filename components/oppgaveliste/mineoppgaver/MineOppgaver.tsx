@@ -11,6 +11,7 @@ import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { FormField } from 'components/form/FormField';
 import { useCallback } from 'react';
 import { Oppgave } from 'lib/types/oppgaveTypes';
+import { Filtrering } from 'components/oppgaveliste/filtrering/Filtrering';
 
 interface FormFields {
   behandlingstype: string[];
@@ -85,6 +86,7 @@ export const MineOppgaver = () => {
 
   return (
     <>
+      <Filtrering />
       {isLoading && (
         <VStack gap={'7'}>
           <VStack gap={'1'}>
