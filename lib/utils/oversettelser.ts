@@ -147,6 +147,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Klagebehandling - Nay';
     case 'OMGJØRING':
       return 'Omgjøring';
+    case 'OPPRETTHOLDELSE':
+      return 'Opprettholdelse';
     default:
       return `${steggruppe}`;
   }
