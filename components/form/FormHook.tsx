@@ -29,15 +29,41 @@ interface BaseFormField<FormFieldIds extends FieldValues> {
   rules?: RegisterOptions<FormFieldIds>;
 }
 
-interface FormFieldArray<FormFieldId extends keyof FormFieldIds, FormFieldIds extends FieldValues>
-  extends BaseFormField<FormFieldIds> {
-  type: 'fieldArray';
-  defaultValue?: FormFieldIds[FormFieldId];
-}
-
 interface FormFieldText<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
   type: 'text' | 'number' | 'textarea';
   defaultValue?: string;
+}
+
+interface FormFieldSelect<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
+  type: 'select';
+  options: Array<string | ValuePair>;
+  defaultValue?: string;
+}
+
+interface FormFieldRadio<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
+  type: 'radio';
+  options: Array<FormFieldRadioOptions>;
+  defaultValue?: string;
+}
+
+interface FormFieldRadioWithNestedOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
+  type: 'radio_nested';
+  defaultValue?: string;
+}
+
+export interface FormFieldRadioOptions extends ValuePair {
+  description?: string;
+}
+
+interface FormFieldCheckbox<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
+  type: 'checkbox';
+  options: Array<string | ValuePair>;
+  defaultValue?: Array<string>;
+}
+
+interface FormFieldCheckboxWithNestedOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
+  type: 'checkbox_nested';
+  defaultValue?: Array<string>;
 }
 
 interface FormFieldDate<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
@@ -54,53 +80,27 @@ interface FormFieldDateInput<FormFieldIds extends FieldValues> extends BaseFormF
   defaultValue?: string;
 }
 
-export interface FormFieldRadioOptions extends ValuePair {
-  description?: string;
-}
-
-interface FormFieldRadio<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
-  type: 'radio';
-  options: FormFieldRadioOptions[];
-  defaultValue?: string;
-}
-
 interface FormFieldCombobox<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
   type: 'combobox';
-  options: string[] | ValuePair[];
+  options: Array<string | ValuePair>;
   defaultValue?: string;
 }
 
 interface FormFieldMultipleCombobox<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
   type: 'combobox_multiple';
-  options: string[] | ValuePair[];
+  options: Array<string | ValuePair>;
   defaultValue?: string[];
 }
 
 interface FormFieldAsyncCombobox<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
   type: 'async_combobox';
-  defaultValue?: ValuePair | ValuePair[];
+  defaultValue?: ValuePair | Array<ValuePair>;
 }
 
-interface FormFieldCheckbox<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
-  type: 'checkbox';
-  options: Array<string | ValuePair>;
-  defaultValue?: Array<string>;
-}
-
-interface FormFieldSelect<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
-  type: 'select';
-  options: Array<string | ValuePair>;
-  defaultValue?: string;
-}
-
-interface FormFieldRadioWithNestedOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
-  type: 'radio_nested';
-  defaultValue?: string;
-}
-
-interface FormFieldCheckboxWithNestedOptions<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
-  type: 'checkbox_nested';
-  defaultValue?: string[];
+interface FormFieldArray<FormFieldId extends keyof FormFieldIds, FormFieldIds extends FieldValues>
+  extends BaseFormField<FormFieldIds> {
+  type: 'fieldArray';
+  defaultValue?: FormFieldIds[FormFieldId];
 }
 
 export type FormFields<FormFieldId extends FieldPath<FormFieldIds>, FormFieldIds extends FieldValues> = Record<
