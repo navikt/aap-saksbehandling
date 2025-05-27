@@ -27,7 +27,6 @@ interface BaseFormField<FormFieldIds extends FieldValues> {
   description?: string;
   hideLabel?: boolean;
   rules?: RegisterOptions<FormFieldIds>;
-  readOnly?: boolean;
 }
 
 interface FormFieldArray<FormFieldId extends keyof FormFieldIds, FormFieldIds extends FieldValues>
@@ -110,10 +109,11 @@ export type FormFields<FormFieldId extends FieldPath<FormFieldIds>, FormFieldIds
 >;
 
 export type FormFieldType<FormFieldIds extends FieldValues> = FormFieldConfig<FormFieldIds> &
-  FormFieldName<FormFieldIds>;
+  FormFieldExtension<FormFieldIds>;
 
-interface FormFieldName<FormFieldIds extends FieldValues> {
+interface FormFieldExtension<FormFieldIds extends FieldValues> {
   name: FieldPath<FormFieldIds>;
+  readOnly?: boolean;
 }
 
 type ReactFormHookConfiguration<FormFieldIds extends FieldValues> = Omit<
