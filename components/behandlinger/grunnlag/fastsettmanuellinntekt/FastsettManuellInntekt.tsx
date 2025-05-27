@@ -74,7 +74,7 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag }: Props) 
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
     >
       <Alert variant={'warning'} size={'small'}>
-        Du må oppgi pensjonsgivende inntekt for siste beregningsår, fordi ingen inntekt er registrert.{' '}
+        Du må oppgi pensjonsgivende inntekt for siste beregningsår, fordi ingen inntekt er registrert. Om bruker ikke har hatt inntekt for gitt år, legg inn 0.{' '}
       </Alert>
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
       <HStack gap={'2'} align={'end'}>
