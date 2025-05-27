@@ -86,7 +86,6 @@ export const MineOppgaver = () => {
 
   return (
     <>
-      <Filtrering />
       {isLoading && (
         <VStack gap={'7'}>
           <VStack gap={'1'}>
@@ -109,6 +108,7 @@ export const MineOppgaver = () => {
           <FormField form={form} formField={formFields.status} />
         </HStack>
       </Box>
+      <Filtrering />
       {filtrerteOppgaver && filtrerteOppgaver.length > 0 ? (
         <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
       ) : (
