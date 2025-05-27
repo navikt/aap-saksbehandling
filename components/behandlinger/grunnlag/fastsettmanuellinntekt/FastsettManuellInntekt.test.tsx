@@ -4,15 +4,16 @@ import { render, screen } from 'lib/test/CustomRender';
 import { FastsettManuellInntekt } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntekt';
 import { ManuellInntektGrunnlag } from 'lib/types/types';
 
+const grunnlag: ManuellInntektGrunnlag = {
+  ar: 0,
+  gverdi: 100000,
+  harTilgangTilÅSaksbehandle: true,
+};
+
 describe('Fastsett manuell inntekt', () => {
   const user = userEvent.setup();
-  const grunnlag: ManuellInntektGrunnlag = {
-    ar: 0,
-    gverdi: 100000,
-    harTilgangTilÅSaksbehandle: true,
-  };
 
-  beforeEach(() => render(<FastsettManuellInntekt behandlingsversjon={1} grunnlag={grunnlag} />));
+  beforeEach(() => render(<FastsettManuellInntekt behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />));
 
   it('skal ha en alert', () => {
     const alert = screen.getByText(
@@ -74,7 +75,9 @@ describe('Fastsett manuell inntekt vurdering', () => {
     },
   };
 
-  beforeEach(() => render(<FastsettManuellInntekt behandlingsversjon={1} grunnlag={grunnlagMedVurdering} />));
+  beforeEach(() =>
+    render(<FastsettManuellInntekt behandlingsversjon={1} grunnlag={grunnlagMedVurdering} readOnly={false} />)
+  );
 
   it('skal vise hvem som har gjort vurderingen dersom det har blitt gjort en vurdering', () => {
     const vurdertAvTekst = screen.getByText('Vurdert av Lokalsaksbehandler (Nay), 01.05.2020');
@@ -87,5 +90,20 @@ describe('Fastsett manuell inntekt vurdering', () => {
 
     const inntektFelt = screen.getByRole('spinbutton', { name: 'Oppgi inntekt' });
     expect(inntektFelt).toHaveValue(500000);
+  });
+});
+
+describe('Fastsett manuell inntekt readOnly', () => {
+  it('Skal ikke vise bekreft knapp dersom readOnly er true', () => {
+    render(<FastsettManuellInntekt behandlingsversjon={1} grunnlag={grunnlag} readOnly={true} />);
+    screen.logTestingPlaygroundURL();
+    const bekreftKnapp = screen.queryByRole('button', { name: 'Bekreft' });
+    expect(bekreftKnapp).not.toBeInTheDocument();
+  });
+
+  it('Skal vise bekreft knapp dersom readOnly er false', () => {
+    render(<FastsettManuellInntekt behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    expect(bekreftKnapp).toBeVisible();
   });
 });

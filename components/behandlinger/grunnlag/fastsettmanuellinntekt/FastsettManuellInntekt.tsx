@@ -13,6 +13,7 @@ import { ManuellInntektGrunnlag } from 'lib/types/types';
 interface Props {
   behandlingsversjon: number;
   grunnlag: ManuellInntektGrunnlag;
+  readOnly: boolean;
 }
 
 interface FormFields {
@@ -20,25 +21,28 @@ interface FormFields {
   inntekt: string;
 }
 
-export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag }: Props) => {
+export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('MANGLENDE_LIGNING');
 
-  const { form, formFields } = useConfigForm<FormFields>({
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Begrunn inntekt for siste beregningsår',
-      rules: { required: 'Du må gi en begrunnelse.' },
-      defaultValue: grunnlag.vurdering?.begrunnelse,
+  const { form, formFields } = useConfigForm<FormFields>(
+    {
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Begrunn inntekt for siste beregningsår',
+        rules: { required: 'Du må gi en begrunnelse.' },
+        defaultValue: grunnlag.vurdering?.begrunnelse,
+      },
+      inntekt: {
+        type: 'number',
+        label: 'Oppgi inntekt',
+        rules: { required: 'Du må oppgi inntekt for det siste året.' },
+        defaultValue: grunnlag.vurdering?.belop.toString() || '',
+      },
     },
-    inntekt: {
-      type: 'number',
-      label: 'Oppgi inntekt',
-      rules: { required: 'Du må oppgi inntekt for det siste året.' },
-      defaultValue: grunnlag.vurdering?.belop.toString() || '',
-    },
-  });
+    { readOnly }
+  );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     form.handleSubmit((data) => {
@@ -69,12 +73,13 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag }: Props) 
       erAktivtSteg={true}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
-      visBekreftKnapp={true}
+      visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
     >
       <Alert variant={'warning'} size={'small'}>
-        Du må oppgi pensjonsgivende inntekt for siste beregningsår, fordi ingen inntekt er registrert. Om bruker ikke har hatt inntekt for gitt år, legg inn 0.{' '}
+        Du må oppgi pensjonsgivende inntekt for siste beregningsår, fordi ingen inntekt er registrert. Om bruker ikke
+        har hatt inntekt for gitt år, legg inn 0.{' '}
       </Alert>
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
       <HStack gap={'2'} align={'end'}>
