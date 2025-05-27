@@ -21,7 +21,7 @@ export const Filtrering = () => {
   const [visFilter, setVisFilter] = useState(false);
 
   return (
-    <Box borderRadius={'xlarge'} paddingBlock={'2'} paddingInline={'3'}>
+    <div className={styles.filtrering}>
       <VStack>
         <HStack justify={'space-between'} align={'end'} className={styles.filtreringTop}>
           <Button
@@ -33,13 +33,11 @@ export const Filtrering = () => {
           >
             {visFilter ? 'Lukk filter' : 'Filtrer listen'}
           </Button>
-
           <Detail>Totalt 9 oppgaver</Detail>
         </HStack>
-        <Box background={'surface-subtle'} paddingBlock={'2'} paddingInline={'3'}>
-          her kommer det noe mer
-        </Box>
+
+        {visFilter && <div>her kommer det noe mer</div>}
       </VStack>
-    </Box>
+    </div>
   );
 };

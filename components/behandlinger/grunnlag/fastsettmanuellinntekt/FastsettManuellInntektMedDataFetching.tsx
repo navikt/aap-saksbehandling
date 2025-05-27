@@ -15,6 +15,5 @@ export const FastsettManuellInntektMedDataFetching = async ({ behandlingversjon,
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-
   return <FastsettManuellInntekt behandlingsversjon={behandlingversjon} grunnlag={grunnlag.data} />;
 };
