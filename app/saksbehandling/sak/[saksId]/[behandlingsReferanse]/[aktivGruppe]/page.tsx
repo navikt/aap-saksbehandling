@@ -71,7 +71,7 @@ const Page = async (props: {
         <BodyShort>Dette steget er ikke vurdert enda.</BodyShort>
       ) : (
         <OppgaveKolonne
-          className={styles.venstrekolonne}
+          className={styles.oppgavekolonne}
           saksnummer={sak.saksnummer}
           behandlingsReferanse={params.behandlingsReferanse}
           aktivGruppe={decodeURIComponent(params.aktivGruppe) as StegGruppe}
