@@ -18,6 +18,7 @@ import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/Oppga
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
 import { VurderRettighetsperiodeModal } from './rettighetsperiodemodal/VurderRettighetsperiodeModal';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -55,6 +56,7 @@ export const SaksinfoBanner = ({
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
   const visValgForÅTrekkeSøknad =
+    !isProd() &&
     !behandlerEnSøknadSomSkalTrekkes &&
     brukerKanSaksbehandle &&
     behandlingErFørstegangsbehandling &&
