@@ -23,6 +23,7 @@ const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
   { label: 'Samordning og avregning', value: 'SAMORDNING_OG_AVREGNING' },
   { label: 'Refusjonskrav', value: 'REFUSJONSKRAV' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
+  { label: 'Manuell inntekt', value: "REVURDER_MANUELL_INNTEKT" }
   // TODO ikke prod-klart enda
   //{ label: 'Starttidspunkt', value: 'VURDER_RETTIGHETSPERIODE' },
   // TODO: For at denne skal fungere må det gjøres litt justering i data som sendes i melding.
