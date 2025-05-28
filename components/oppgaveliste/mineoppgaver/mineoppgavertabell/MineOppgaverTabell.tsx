@@ -1,6 +1,6 @@
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
-import { Alert, BodyShort, CopyButton, Table, Tooltip, VStack } from '@navikt/ds-react';
+import {Alert, BodyShort, CopyButton, Table, Tooltip, VStack} from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
@@ -11,7 +11,7 @@ import { AvklaringsbehovKode, ÅrsakTilBehandling } from 'lib/types/types';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
-
+import {ManglerTilgangModal} from "components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal";
 interface Props {
   oppgaver: Oppgave[];
   revalidateFunction: () => void;
@@ -20,9 +20,15 @@ interface Props {
 export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string | undefined>();
   const { sort, håndterSortering, sortertListe } = useSortertListe(oppgaver);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   return (
     <VStack gap={'5'}>
+      <ManglerTilgangModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        revalidateFunction={revalidateFunction}/>
       {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
       <TableStyled
         size={'small'}
@@ -115,6 +121,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
                   oppgave={oppgave}
                   setFeilmelding={setFeilmelding}
                   revalidateFunction={revalidateFunction}
+                  setÅpenModal={setIsModalOpen}
                 />
               </Table.DataCell>
             </Table.Row>
