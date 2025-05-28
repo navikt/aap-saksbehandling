@@ -114,6 +114,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       erAktivtSteg={true}
+      vurdertAvAnsatt={grunnlag.gjeldendeVurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.harKrav} horizontalRadio />
       {form.watch('harKrav') === JaEllerNei.Ja && (

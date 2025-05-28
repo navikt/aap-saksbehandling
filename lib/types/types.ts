@@ -22,7 +22,7 @@ export type FritakMeldepliktGrunnlag =
 export type ArbeidsevneGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.ArbeidsevneGrunnlagDto'];
 export type RefusjonskravGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagResponse'];
 
 export type BeregningTidspunktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningTidspunktAvklaringDto'];

@@ -6,7 +6,7 @@ import { BodyShort, Table, VStack } from '@navikt/ds-react';
 import { SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useConfigForm } from 'components/form/FormHook';
-import { Behovstype, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormField } from 'components/form/FormField';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { FormEvent } from 'react';
@@ -35,12 +35,14 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
         type: 'textarea',
         label: 'Vurdering',
         description: 'Vurder om etterbetaling for perioden skal holdes igjen i påvente av refusjonskrav.',
+        defaultValue: grunnlag.tjenestepensjonRefusjonskravVurdering?.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse.' },
       },
       skalEtterbetalingHoldesIgjen: {
         type: 'radio',
         options: JaEllerNeiOptions,
         label: 'Skal etterbetaling holdes igjen for perioden?',
+        defaultValue: getJaNeiEllerUndefined(grunnlag.tjenestepensjonRefusjonskravVurdering?.harKrav),
         rules: { required: 'Du må svare på om etterbetalingen skal holdes igjen.' },
       },
     },

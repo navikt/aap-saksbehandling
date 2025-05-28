@@ -1,9 +1,13 @@
 import { BehandlingFlytOgTilstand, StegGruppe, StegType } from 'lib/types/types';
 
-export const getStegSomSkalVises = (gruppe: StegGruppe, flyt: BehandlingFlytOgTilstand): Array<StegType> => {
-  const grupper = flyt.flyt.find((flyt2) => flyt2.stegGruppe === gruppe);
+export const getStegSomSkalVises = (
+  aktivStegGruppe: StegGruppe,
+  behandlingFlytOgTilstand: BehandlingFlytOgTilstand
+): Array<StegType> => {
+  const stegGruppe = behandlingFlytOgTilstand.flyt.find((gruppe) => gruppe.stegGruppe === aktivStegGruppe);
+
   return (
-    grupper?.steg
+    stegGruppe?.steg
       .filter((steg) => steg.avklaringsbehov && steg.avklaringsbehov.length > 0)
       .filter((steg) => steg.avklaringsbehov.every((avklaringsbehov) => avklaringsbehov.status !== 'AVBRUTT'))
       .map((steg) => steg.stegType) ?? []

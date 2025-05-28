@@ -55,7 +55,7 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
     });
   }
   return (
-    <VStack gap={'1'}>
+    <VStack gap={'2'}>
       <Label size={'small'}>Legg til ytelse, periode og beløp for utbetaling</Label>
       <TableStyled>
         <Table.Header>

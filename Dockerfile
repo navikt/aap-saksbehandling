@@ -14,7 +14,7 @@ RUN set -eux; \
 	locale-gen; \
 	locale -a | grep 'nb_NO.utf8'
 
-FROM gcr.io/distroless/nodejs22-debian12@sha256:ee4a35606ca4f0d4d9d376cb18a3e330dd84ebebf30215cd29e867b2bcd12132
+FROM gcr.io/distroless/nodejs22-debian12@sha256:d028bfd3111bb0e2a75ef5e2232fa91cb826f9121a66a2242962b1c52398a237
 
 COPY --from=locale /usr/lib/locale /usr/lib/locale
 ENV LANG='nb_NO.UTF-8' LC_ALL='nb_NO.UTF-8' TZ="Europe/Oslo"

@@ -41,6 +41,7 @@ export const StegGruppeIndikatorAksel = ({ flytRespons, stegGrupperSomSkalVises 
     </div>
   );
 };
+
 function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
   switch (steg) {
     case 'BREV':
@@ -91,7 +92,11 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Behandle klage - NAY';
     case 'OMGJØRING':
       return 'Omgjøring';
+    case 'OPPRETTHOLDELSE':
+      return 'Opprettholdelse';
     case 'UDEFINERT':
       return 'Udefinert';
+    default:
+      return steg;
   }
 }

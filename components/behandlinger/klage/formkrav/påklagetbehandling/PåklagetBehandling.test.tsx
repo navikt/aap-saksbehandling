@@ -4,6 +4,7 @@ import { PåklagetBehandling } from './PåklagetBehandling';
 import { PåklagetBehandlingGrunnlag } from '../../../../../lib/types/types';
 
 const grunnlag: PåklagetBehandlingGrunnlag = {
+  kravMottatt: '2025-05-19',
   behandlinger: [
     {
       referanse: 'uuid-1',
@@ -30,6 +31,8 @@ describe('Klage', () => {
 
     const heading = screen.getByText('Påklaget behandling');
     expect(heading).toBeVisible();
+    expect(screen.getByText('Krav mottatt')).toBeVisible();
+    expect(screen.getByText('Mangler krav mottatt dato')).toBeVisible();
   });
 
   it('Skal vise select med behandlinger', () => {
@@ -46,5 +49,7 @@ describe('Klage', () => {
     const select = screen.getByRole('combobox');
     expect(select).toBeVisible();
     expect(screen.getByRole('option', { name: /Vedtakstidspunkt: 2024-02-02T00:00:00Z/ })).toBeInTheDocument();
+    expect(screen.getByText('Krav mottatt')).toBeVisible();
+    expect(screen.getByText('19.05.2025')).toBeVisible();
   });
 });

@@ -49,8 +49,7 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
     },
     { readOnly: readOnly }
   );
-  const finnesGrunnlag = grunnlag.vurdering ? grunnlag.vurdering.vurderingPerioder.length > 0 : false;
-  const [visYtelsesTabell, setVisYtelsesTabell] = useState<boolean>(finnesGrunnlag);
+  const [visYtelsesTabell, setVisYtelsesTabell] = useState<boolean>(grunnlag.vurdering !== null);
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     'SAMORDNING_ANDRE_STATLIGE_YTELSER'
@@ -79,6 +78,8 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
     )(event);
   };
 
+  const skalViseBekreftKnapp = !readOnly && visYtelsesTabell;
+
   return (
     <VilkårsKortMedForm
       heading="Andre ytelser til avregning"
@@ -88,7 +89,7 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       erAktivtSteg={true}
-      visBekreftKnapp={!readOnly}
+      visBekreftKnapp={skalViseBekreftKnapp}
       vilkårTilhørerNavKontor={false}
     >
       {!visYtelsesTabell && (
@@ -99,13 +100,11 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
         </HStack>
       )}
       {visYtelsesTabell && (
-        <VStack gap={'3'}>
-          <HStack>
-            <Alert variant={'info'}>
-              Det er ikke støtte for refusjonskrav enda. Sett saken på vent og kontakt team AAP.
-            </Alert>
-          </HStack>
-          <FormField form={form} formField={formFields.begrunnelse} />
+        <VStack gap={'6'}>
+          <Alert variant={'info'} size={'small'} className={'fit-content'}>
+            Det er ikke støtte for refusjonskrav enda. Sett saken på vent og kontakt team AAP.
+          </Alert>
+          <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
           <AndreStatligeYtelserTabell form={form} readOnly={readOnly} />
         </VStack>
       )}
