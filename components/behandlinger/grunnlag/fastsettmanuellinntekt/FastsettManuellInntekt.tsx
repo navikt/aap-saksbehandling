@@ -37,7 +37,10 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
       inntekt: {
         type: 'number',
         label: 'Oppgi inntekt',
-        rules: { required: 'Du må oppgi inntekt for det siste året.' },
+        rules: {
+          required: 'Du må oppgi inntekt for det siste året.',
+          min: { value: 0, message: 'Inntekt kan ikke være negativ.' },
+        },
         defaultValue: grunnlag.vurdering?.belop.toString() || '',
       },
     },
