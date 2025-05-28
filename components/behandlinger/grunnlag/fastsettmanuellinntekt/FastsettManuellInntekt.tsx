@@ -30,7 +30,7 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Begrunn inntekt for siste beregningsår',
+        label: `Begrunn inntekt for siste beregningsår (${grunnlag.ar})`,
         rules: { required: 'Du må gi en begrunnelse.' },
         defaultValue: grunnlag.vurdering?.begrunnelse,
       },

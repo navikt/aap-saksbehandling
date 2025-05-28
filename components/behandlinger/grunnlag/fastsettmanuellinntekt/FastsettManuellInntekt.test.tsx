@@ -23,7 +23,7 @@ describe('Fastsett manuell inntekt', () => {
   });
 
   it('skal ha et felt for begrunnelse', () => {
-    const felt = screen.getByRole('textbox', { name: 'Begrunn inntekt for siste beregningsår' });
+    const felt = screen.getByRole('textbox', { name: `Begrunn inntekt for siste beregningsår (${grunnlag.ar})`});
     expect(felt).toBeVisible();
   });
 
@@ -85,7 +85,7 @@ describe('Fastsett manuell inntekt vurdering', () => {
   });
 
   it('feltene skal ha default value dersom vurdering har blitt gjort', () => {
-    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Begrunn inntekt for siste beregningsår' });
+    const begrunnelseFelt = screen.getByRole('textbox', { name: `Begrunn inntekt for siste beregningsår (${grunnlag.ar})` });
     expect(begrunnelseFelt).toHaveValue('Dette er en begrunnelse');
 
     const inntektFelt = screen.getByRole('spinbutton', { name: 'Oppgi inntekt' });
