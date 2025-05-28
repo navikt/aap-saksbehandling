@@ -28,7 +28,10 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
 
   const kanRevurdere = !!sak.behandlinger.filter(
-    (behandling) => behandling.type === 'ae0034' && behandling.status !== 'OPPRETTET'
+    (behandling) =>
+      behandling.type === 'ae0034' &&
+      behandling.status !== 'OPPRETTET' &&
+      !behandling.årsaker.includes('SØKNAD_TRUKKET')
   ).length;
 
   const kanRegistrerebrudd = !!sak.behandlinger.filter(
