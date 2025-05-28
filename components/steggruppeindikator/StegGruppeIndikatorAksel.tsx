@@ -96,5 +96,7 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Opprettholdelse';
     case 'UDEFINERT':
       return 'Udefinert';
+    default:
+      return steg;
   }
 }
