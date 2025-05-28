@@ -28,7 +28,14 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
 
   const kanRevurdere = !!sak.behandlinger.filter(
-    (behandling) => behandling.type === 'ae0034' && behandling.status !== 'OPPRETTET'
+    (behandling) =>
+      behandling.type === 'ae0034' &&
+      behandling.status !== 'OPPRETTET' &&
+      !behandling.årsaker.includes('SØKNAD_TRUKKET')
+  ).length;
+
+  const kanRegistrerebrudd = !!sak.behandlinger.filter(
+    (behandling) => behandling.type === 'ae0034' && !behandling.årsaker.includes('SØKNAD_TRUKKET')
   ).length;
 
   return (
@@ -39,13 +46,15 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             <Heading size="large">Sak {sak.saksnummer}</Heading>
 
             <HStack gap="4">
-              <Button
-                variant="secondary"
-                size="small"
-                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
-              >
-                Registrer brudd på aktivitetsplikten
-              </Button>
+              {kanRegistrerebrudd && (
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
+                >
+                  Registrer brudd på aktivitetsplikten
+                </Button>
+              )}
 
               {kanRevurdere && (
                 <Button
