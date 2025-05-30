@@ -3,7 +3,7 @@
 import { BodyShort, HStack, Table } from '@navikt/ds-react';
 import { AutomatiskLovvalgOgMedlemskapVurdering, tilhørighetVurdering } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { CheckmarkCircleIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 import styles from './TilhørighetsVurderingTabell.module.css';
 import { OpplysningerContent } from 'components/behandlinger/lovvalg/opplysningercontent/OpplysningerContent';
@@ -66,14 +66,14 @@ export const TilhørigetsVurderingTabell = ({
             <HStack gap={'1'} align={'center'}>
               {oppfyllerOpplysningeneKravene ? (
                 <>
-                  <CheckmarkCircleIcon color={'green'} />
+                  <CheckmarkCircleFillIcon color={'green'} />
                   <BodyShort size={'small'} weight={'semibold'}>
                     Ja
                   </BodyShort>
                 </>
               ) : (
                 <>
-                  <ExclamationmarkTriangleIcon color={'orange'} />
+                  <ExclamationmarkTriangleFillIcon color={'orange'} />
                   <BodyShort size={'small'} weight={'semibold'}>
                     Nei
                   </BodyShort>
