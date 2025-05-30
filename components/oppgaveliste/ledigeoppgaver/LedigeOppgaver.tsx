@@ -29,7 +29,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   const [aktivKøId, setAktivKøId] = useState<number>();
   const { hentLagretAktivKøId, lagreAktivKøId } = useLagreAktivKøId();
 
-  const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver } =
+  const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
     useLedigeOppgaver([aktivEnhet], veilederFilter === 'veileder', aktivKøId);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
@@ -130,7 +130,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           <Skeleton variant="rectangle" width="100%" height={40} />
         </VStack>
       )}
-      {oppgaver && oppgaver.length > 0 && <LedigeOppgaverTabell oppgaver={oppgaver} />}
+      {oppgaver && oppgaver.length > 0 && <LedigeOppgaverTabell oppgaver={oppgaver} revalidateFunction={mutate} />}
       {kanLasteInnFlereOppgaver && (
         <HStack justify={'center'}>
           <Button

@@ -12,10 +12,11 @@ import styles from './MineOppgaverMeny.module.css';
 interface Props {
   oppgave: Oppgave;
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
+  setÅpenModal: Dispatch<SetStateAction<boolean>>
   revalidateFunction: () => void;
 }
 
-export const MineOppgaverMeny = ({ oppgave, setFeilmelding, revalidateFunction }: Props) => {
+export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, revalidateFunction}: Props) => {
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
 
@@ -29,6 +30,8 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, revalidateFunction }
         if (revalidateFunction) {
           revalidateFunction();
         }
+      } else if (res.status == 401) {
+          setÅpenModal(true)
       } else {
         setFeilmelding(`Feil ved avreservering av oppgave: ${res.apiException.message}`);
       }
@@ -41,6 +44,8 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, revalidateFunction }
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
         if (isSuccess(plukketOppgave)) {
           router.push(byggKelvinURL(plukketOppgave.data));
+        } else if (plukketOppgave.status == 401) {
+          setÅpenModal(true)
         } else {
           setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);
         }
