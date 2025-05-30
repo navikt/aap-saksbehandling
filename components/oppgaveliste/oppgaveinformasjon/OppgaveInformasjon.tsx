@@ -2,6 +2,7 @@ import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVent
 import { LegeerklæringInfoboks } from 'components/oppgaveliste/legeerklæring/LegeerklæringInfoboks';
 import { HStack } from '@navikt/ds-react';
 import { Oppgave } from 'lib/types/oppgaveTypes';
+import { Returboks } from '../returboks/Returboks';
 
 interface Props {
   oppgave: Oppgave;
@@ -18,6 +19,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
         <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} begrunnelse={oppgave.venteBegrunnelse} />
       )}
       {mottatSvarFraBehandler && <LegeerklæringInfoboks />}
+      {oppgave.returStatus && <Returboks oppgave={oppgave} />}
     </HStack>
   );
 };

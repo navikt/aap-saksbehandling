@@ -28,12 +28,12 @@ describe('OppgaveInformasjon', () => {
 
   it('Skal vise ikon for mottat svar fra behandler dersom årsakTilBehandling er MOTTATT_LEGEERKLÆRING', () => {
     render(<OppgaveInformasjon oppgave={{ ...oppgave, årsakerTilBehandling: ['MOTTATT_LEGEERKLÆRING'] }} />);
-    expect(screen.getByRole('img', { name: 'mottat svar fra behandler ikon' })).toBeVisible();
+    expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
   });
 
   it('Skal vise ikon for mottat svar fra behandler dersom årsakTilBehandling er MOTTATT_AVVIST_LEGEERKLÆRING', () => {
     render(<OppgaveInformasjon oppgave={{ ...oppgave, årsakerTilBehandling: ['MOTTATT_AVVIST_LEGEERKLÆRING'] }} />);
-    expect(screen.getByRole('img', { name: 'mottat svar fra behandler ikon' })).toBeVisible();
+    expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
   });
 
   it('Skal vise både på vent ikon og mottat svar fra behandler ikon dersom saken er på vent og mottat svar', () => {
@@ -46,7 +46,7 @@ describe('OppgaveInformasjon', () => {
         }}
       />
     );
-    expect(screen.getByRole('img', { name: 'mottat svar fra behandler ikon' })).toBeVisible();
+    expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
     expect(screen.getByRole('img', { name: 'på vent ikon' })).toBeVisible();
   });
 });
