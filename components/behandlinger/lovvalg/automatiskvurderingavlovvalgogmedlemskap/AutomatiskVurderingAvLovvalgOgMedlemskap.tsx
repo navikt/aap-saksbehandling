@@ -22,6 +22,13 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
   return (
     <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
       <VStack gap={'7'} paddingBlock={'3'}>
+        {!vurdering.kanBehandlesAutomatisk && (
+          <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'} className={'fit-content'}>
+            Opplysningene tilsier at det kan være utenlandsk lovvalg eller manglende medlemskap. Lovvalg og medlemskap
+            må vurderes manuelt.
+          </Alert>
+        )}
+
         <div>
           <BodyShort spacing size={'small'} weight={'semibold'}>
             Indikasjoner på tilhørighet til Norge
@@ -47,12 +54,7 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
               .every((x) => !x.resultat)}
           />
         </div>
-        {!vurdering.kanBehandlesAutomatisk && (
-          <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'}>
-            Opplysningene tilsier at det kan være utenlandsk lovvalg eller manglende medlemskap. Lovvalg og medlemskap
-            må vurderes manuelt.
-          </Alert>
-        )}
+
         {visOverstyrKnapp && (
           <HStack>
             {visOverstyringsBehov ? (

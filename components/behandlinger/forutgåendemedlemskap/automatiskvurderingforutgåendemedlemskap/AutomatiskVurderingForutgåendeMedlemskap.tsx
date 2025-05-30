@@ -21,6 +21,12 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({
   return (
     <VilkårsKort heading={'Automatisk vurdering av forutgående medlemskap'} steg={'VURDER_MEDLEMSKAP'}>
       <VStack gap={'5'}>
+        {!vurdering.kanBehandlesAutomatisk && (
+          <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'} className={'fit-content'}>
+            Opplysningene tilsier at det kan være tilhørighet utenfor Norge. Forutgående medlemskap må vurderes manuelt.
+          </Alert>
+        )}
+
         <div>
           <BodyShort spacing weight={'semibold'} size={'small'}>
             Indikasjoner på tilhørighet til Norge
@@ -45,11 +51,6 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({
               .every((x) => !x.resultat)}
           />
         </div>
-        {!vurdering.kanBehandlesAutomatisk && (
-          <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'}>
-            Opplysningene tilsier at det kan være tilhørighet utenfor Norge. Forutgående medlemskap må vurderes manuelt.
-          </Alert>
-        )}
         {visOverstyrKnapp && (
           <HStack>
             {visOverstyringsBehov ? (
