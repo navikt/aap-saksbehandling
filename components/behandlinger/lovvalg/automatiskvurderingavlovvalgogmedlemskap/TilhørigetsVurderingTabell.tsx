@@ -34,9 +34,13 @@ export const TilhørigetsVurderingTabell = ({
           const erUtvidbar = harMinstEttGrunnlag(opplysning);
           const radInnhold = (
             <>
-              <Table.DataCell textSize="small">{opplysning.kilde.map(mapKildeTilTekst).join(', ')}</Table.DataCell>
-              <Table.DataCell textSize="small">{opplysning.opplysning}</Table.DataCell>
-              <Table.DataCell textSize="small">
+              <Table.DataCell textSize="small" width={200}>
+                {opplysning.kilde.map(mapKildeTilTekst).join(', ')}
+              </Table.DataCell>
+              <Table.DataCell textSize="small" width={750}>
+                {opplysning.opplysning}
+              </Table.DataCell>
+              <Table.DataCell textSize="small" width={'auto'}>
                 <BodyShort size="small">{opplysning.resultat ? 'Ja' : 'Nei'}</BodyShort>
               </Table.DataCell>
             </>
@@ -56,12 +60,11 @@ export const TilhørigetsVurderingTabell = ({
 
         <Table.Row className={`${styles.rad} ${oppfyllerOpplysningeneKravene ? styles.godkjent : styles.avslått}`}>
           <Table.DataCell></Table.DataCell>
-          <Table.DataCell>
+          <Table.DataCell colSpan={2}>
             <BodyShort size={'small'} weight={'semibold'}>
               {oppfyllerOpplysningeneKraveneTekst}
             </BodyShort>
           </Table.DataCell>
-          <Table.DataCell></Table.DataCell>
           <Table.DataCell>
             <HStack gap={'1'} align={'center'}>
               {oppfyllerOpplysningeneKravene ? (
