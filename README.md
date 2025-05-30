@@ -26,7 +26,7 @@ Hvor github_pat er din personal access token laget på github (settings -> devel
 1. Hent secret med [aap-cli/get-secret.sh](https://github.com/navikt/aap-cli): \
    `get-secret`
 2. Kopier innhold fra: \
-   `.env.dev-gcp` _og_ `.env-template-dev` inn i `.env.local`
+   `.env.dev-gcp` _og_ `.env-template-dev` inn i `.env.local` (kan gjøres med `cat .env.dev-gcp >> .env.local` og `cat .env-template-dev >> .env.local`)
 3. Start wonderwall med \
    `docker-compose up -d`
 4. Kjør opp frontend med: \
