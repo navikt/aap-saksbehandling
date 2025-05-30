@@ -1,6 +1,5 @@
 import { tilhørighetVurdering } from 'lib/types/types';
-import { TableStyled } from 'components/tablestyled/TableStyled';
-import { BodyShort, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterTilNok } from 'lib/utils/string';
 
@@ -11,32 +10,36 @@ interface Props {
 export const OpplysningerContent = ({ opplysning }: Props) => {
   if (opplysning.arbeidInntektINorgeGrunnlag) {
     const arbeidInntektINorgeGrunnlag = opplysning.arbeidInntektINorgeGrunnlag;
-    return (
-      <TableStyled>
-        <Table.Header>
-          <Table.ColumnHeader>Periode</Table.ColumnHeader>
-          <Table.ColumnHeader>Arbeidsgiver</Table.ColumnHeader>
-          <Table.ColumnHeader>Arbeidsforhold</Table.ColumnHeader>
-          <Table.ColumnHeader>Stillingsprosent</Table.ColumnHeader>
-          <Table.ColumnHeader>Inntekt</Table.ColumnHeader>
-        </Table.Header>
 
-        <Table.Body>
-          {arbeidInntektINorgeGrunnlag.map((inntekt, index) => {
-            return (
-              <Table.Row key={index}>
-                <Table.DataCell>
+    return (
+      <HStack gap={'2'}>
+        {arbeidInntektINorgeGrunnlag.map((inntekt, index) => {
+          return (
+            <VStack gap={'2'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
+              <HStack gap={'1'}>
+                <BodyShort size={'small'} weight={'semibold'}>
+                  Periode:
+                </BodyShort>
+                <BodyShort size={'small'}>
                   {formaterDatoForFrontend(inntekt.periode.fom)} - {formaterDatoForFrontend(inntekt.periode.tom)}
-                </Table.DataCell>
-                <Table.DataCell>{inntekt.identifikator}</Table.DataCell>
-                <Table.DataCell></Table.DataCell>
-                <Table.DataCell></Table.DataCell>
-                <Table.DataCell>{formaterTilNok(inntekt.beloep)}</Table.DataCell>
-              </Table.Row>
-            );
-          })}
-        </Table.Body>
-      </TableStyled>
+                </BodyShort>
+              </HStack>
+              <HStack gap={'1'}>
+                <BodyShort size={'small'} weight={'semibold'}>
+                  VirksomhetId:
+                </BodyShort>
+                <BodyShort size={'small'}>{inntekt.virksomhetId}</BodyShort>
+              </HStack>
+              <HStack gap={'1'}>
+                <BodyShort size={'small'} weight={'semibold'}>
+                  Beløp:
+                </BodyShort>
+                <BodyShort size={'small'}>{formaterTilNok(inntekt.beloep)}</BodyShort>
+              </HStack>
+            </VStack>
+          );
+        })}
+      </HStack>
     );
   }
 
@@ -47,7 +50,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
       <VStack gap={'2'}>
         {mottarSykepengerGrunnlag.map((sykepenger, index) => {
           return (
-            <VStack gap={'1'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
+            <VStack gap={'2'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
               <BodyShort size={'small'}>{sykepenger.inntektType}</BodyShort>
               <BodyShort size={'small'}>
                 {formaterDatoForFrontend(sykepenger.periode.fom)} - {formaterDatoForFrontend(sykepenger.periode.tom)}
