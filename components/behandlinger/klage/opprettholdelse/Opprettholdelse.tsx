@@ -4,7 +4,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hjemmelMap } from 'lib/utils/hjemmel';
-import { Klageresultat } from 'lib/types/types';
+import { BehandlingFlytOgTilstand, Klageresultat } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 
 interface Props {
@@ -32,12 +32,25 @@ export const Opprettholdelse = async ({ behandlingsreferanse }: Props) => {
     >
       <StegSuspense>
         <VilkårsKort steg={'OPPRETTHOLDELSE'} heading={'Opprettholdelse'}>
-          <p>Klagen er sendt til Nav Klageinstans. Følgende vilkår skal opprettholdes:</p>
+          <p>{utledTekst(flyt.data)}</p>
+          <p>Følgende vilkår skal opprettholdes:</p>
           <p>{vilkårSomSkalOpprettholdes(klageresultat.data)}</p>
         </VilkårsKort>
       </StegSuspense>
     </GruppeSteg>
   );
+
+  function utledTekst(flyt: BehandlingFlytOgTilstand) {
+    if (flyt.aktivtSteg === 'OPPRETTHOLDELSE') {
+      if (flyt.prosessering.status === 'JOBBER') {
+        return 'Sender klagen til Nav Klageinstans...';
+      } else {
+        return '';
+      }
+    } else {
+      return 'Klagen er sendt til Nav Klageinstans.';
+    }
+  }
 
   function vilkårSomSkalOpprettholdes(klageResultat: Klageresultat) {
     if ('vilkårSomSkalOpprettholdes' in klageResultat) {

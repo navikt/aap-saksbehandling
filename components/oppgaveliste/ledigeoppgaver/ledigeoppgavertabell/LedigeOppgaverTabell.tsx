@@ -11,17 +11,25 @@ import { useState } from 'react';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { LedigeOppgaverMeny } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavermeny/LedigeOppgaverMeny';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
+import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
 
 interface Props {
   oppgaver: Oppgave[];
+  revalidateFunction: () => void;
 }
 
-export const LedigeOppgaverTabell = ({ oppgaver }: Props) => {
+export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string>();
   const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
+      <ManglerTilgangModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        revalidateFunction={revalidateFunction}
+      />
       {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
       <TableStyled
         size={'small'}
@@ -109,7 +117,7 @@ export const LedigeOppgaverTabell = ({ oppgaver }: Props) => {
               </Table.DataCell>
 
               <Table.DataCell textSize={'small'} align={'right'}>
-                <LedigeOppgaverMeny oppgave={oppgave} setFeilmelding={setFeilmelding} />
+                <LedigeOppgaverMeny oppgave={oppgave} setFeilmelding={setFeilmelding} setÅpenModal={setIsModalOpen} />
               </Table.DataCell>
             </Table.Row>
           ))}

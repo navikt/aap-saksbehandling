@@ -10,9 +10,10 @@ import { useRouter } from 'next/navigation';
 interface Props {
   oppgave: Oppgave;
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
+  setÅpenModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding }: Props) => {
+export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal }: Props) => {
   const router = useRouter();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
 
@@ -23,7 +24,11 @@ export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding }: Props) => {
         if (isSuccess(plukketOppgave)) {
           router.push(byggKelvinURL(plukketOppgave.data));
         } else {
-          setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);
+          if (plukketOppgave.status == 401) {
+            setÅpenModal(true);
+          } else {
+            setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);
+          }
         }
       }
     });

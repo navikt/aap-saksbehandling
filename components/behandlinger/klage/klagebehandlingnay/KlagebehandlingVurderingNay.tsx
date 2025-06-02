@@ -48,7 +48,7 @@ export const KlagebehandlingVurderingNay = ({ erAktivtSteg, behandlingVersjon, r
       },
       innstilling: {
         type: 'radio',
-        label: 'Hva er innstillingen til klagen?',
+        label: 'Hva er innstillingen på vilkårene NAY vurderer?',
         rules: { required: 'Du må ta stilling til hvorvidt klagen skal omgjøres, delvis omgjøres eller opprettholdes' },
         options: [
           { value: 'OPPRETTHOLD', label: 'Vedtak opprettholdes' },
@@ -63,14 +63,14 @@ export const KlagebehandlingVurderingNay = ({ erAktivtSteg, behandlingVersjon, r
       vilkårSomSkalOmgjøres: {
         type: 'combobox_multiple',
         label: 'Hvilke vilkår skal omgjøres?',
-        description: 'Velg alle påklagde vilkår som skal omgjøres',
+        description: 'Velg alle påklagde vilkår som skal omgjøres som følge av klagen',
         options: hjemmelalternativer,
         defaultValue: grunnlag?.vurdering?.vilkårSomOmgjøres,
         rules: { required: 'Du velge hvilke påklagde vilkår som skal omgjøres' },
       },
       vilkårSomSkalOpprettholdes: {
         type: 'combobox_multiple',
-        label: 'Hvilke vilkår skal opprettholdes?',
+        label: 'Hvilke vilkår er blitt vurdert til å opprettholdes?',
         description: 'Velg alle påklagde vilkår som blir opprettholdt',
         options: hjemmelalternativer,
         defaultValue: grunnlag?.vurdering?.vilkårSomOpprettholdes,

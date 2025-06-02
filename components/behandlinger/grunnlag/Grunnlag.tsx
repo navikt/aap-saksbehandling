@@ -73,6 +73,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           <FastsettManuellInntektMedDataFetching
             behandlingsreferanse={behandlingsReferanse}
             behandlingversjon={behandlingVersjon}
+            readOnly={readOnly}
           />
         </StegSuspense>
       )}

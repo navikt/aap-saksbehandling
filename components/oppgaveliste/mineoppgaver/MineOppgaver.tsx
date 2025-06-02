@@ -32,12 +32,12 @@ export const MineOppgaver = () => {
     },
     avklaringsbehov: {
       type: 'combobox_multiple',
-      label: 'Behandlingstype',
+      label: 'Oppgave',
       options: oppgaveAvklaringsbehov,
     },
     status: {
       type: 'combobox_multiple',
-      label: 'Behandlingstype',
+      label: 'Status',
       options: OppgaveStatuser,
     },
   });

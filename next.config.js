@@ -19,7 +19,9 @@ const nextConfig = {
 
   images: {
     formats: ['image/webp'],
-  }
+  },
+
+  serverExternalPackages: ['pino'],
 };
 
 module.exports = nextConfig;
