@@ -45,6 +45,7 @@ const behovskodeMap = {
   '6002': 'Vurder klage - Nav-kontor',
   '6003': 'Vurder klage - NAY',
   '6004': 'Opprett revurdering ved omgjøring',
+  '6005': 'Skriv forhåndsvarsel klage',
   '6010': 'Vurder trekk av klage',
   '7001': 'Fastsett manuell inntekt',
   '9001': 'Manuelt satt på vent',
