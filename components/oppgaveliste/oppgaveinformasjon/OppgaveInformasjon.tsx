@@ -19,7 +19,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
         <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} begrunnelse={oppgave.venteBegrunnelse} />
       )}
       {mottatSvarFraBehandler && <LegeerklæringInfoboks />}
-      {oppgave.returStatus && <Returboks oppgave={oppgave} />}
+      {oppgave.returInformasjon && <Returboks oppgave={oppgave} />}
     </HStack>
   );
 };

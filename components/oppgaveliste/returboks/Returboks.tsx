@@ -1,12 +1,16 @@
 'use client';
 
 import { Oppgave, ReturStatus } from 'lib/types/types';
-import { BodyShort, Button, Popover, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import styles from './Returboks.module.css';
 import { exhaustiveCheck } from 'lib/utils/typescript';
-import { NoNavAapOppgaveOppgaveDtoReturStatus } from '@navikt/aap-oppgave-typescript-types';
+import {
+  NoNavAapOppgaveReturInformasjonRsaker,
+  NoNavAapOppgaveReturInformasjonStatus,
+} from '@navikt/aap-oppgave-typescript-types';
+import { mapGrunnTilString } from 'lib/utils/oversettelser';
 
 interface Props {
   oppgave: Oppgave;
@@ -14,23 +18,45 @@ interface Props {
 
 function returStatusTilTekst(status: ReturStatus): string {
   switch (status) {
-    case NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_BESLUTTER:
+    case NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_BESLUTTER:
       return 'Retur fra beslutter';
-    case NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_KVALITETSSIKRER:
+    case NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_KVALITETSSIKRER:
       return 'Retur fra kvalitetssikrer';
     default:
       exhaustiveCheck(status);
   }
 }
 
-export const Returboks = ({ oppgave }: Props) => {
+function årsakerTilString(årsaker: NoNavAapOppgaveReturInformasjonRsaker[]): string {
+  if (årsaker.length === 0) {
+    return 'Ingen årsaker.';
+  }
+
+  return (
+    årsaker
+      ?.map((årsak, idx) => {
+        const grunn = mapGrunnTilString(årsak);
+        if (idx == 0) {
+          return grunn;
+        } else {
+          return grunn[0].toLocaleLowerCase() + grunn.slice(1);
+        }
+      })
+      ?.join(', ') + '.'
+  );
+}
+
+export const Returboks = ({ oppgave: { returInformasjon: maybeReturInformasjon } }: Props) => {
+  const returInformasjon = maybeReturInformasjon!!;
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
+
+  const årsakTekst = returInformasjon.årsaker.length <= 1 ? 'Årsak' : 'Årsaker';
 
   return (
     <>
       <Button
-        icon={<ArrowsSquarepathIcon title={'På vent'} />}
+        icon={<ArrowsSquarepathIcon title={'Returnert fra kvalitetssikrer'} />}
         className={styles.knapp}
         onClick={() => setVis(!vis)}
         ref={buttonRef}
@@ -47,9 +73,19 @@ export const Returboks = ({ oppgave }: Props) => {
         <VStack gap={'2'} className={styles.boks}>
           <Tag icon={<ArrowsSquarepathIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
             <BodyShort size={'small'} weight={'semibold'}>
-              {returStatusTilTekst(oppgave.returStatus!!)}
+              {returStatusTilTekst(returInformasjon.status)}
             </BodyShort>
           </Tag>
+          <VStack gap={'0'}>
+            <Detail textColor="subtle">{årsakTekst}</Detail>
+
+            <div>{årsakerTilString(returInformasjon.årsaker)} </div>
+          </VStack>
+          <VStack gap={'0'}>
+            <Detail textColor="subtle">Begrunnelse</Detail>
+
+            <div>{returInformasjon?.begrunnelse}</div>
+          </VStack>
         </VStack>
       </Popover>
     </>

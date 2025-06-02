@@ -321,6 +321,6 @@ export type ÅrsakTilBehandling =
 // oppgave
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
 
-export type ReturStatus = NonNullable<Oppgave['returStatus']>;
+export type ReturStatus = NonNullable<Oppgave['returInformasjon']>['status'];
 
 export type Behandlingsstatus = DetaljertBehandling['status'];

@@ -23,7 +23,7 @@ const oppgave: Oppgave = {
 describe('OppgaveInformasjon', () => {
   it('Skal vise på vent ikon dersom oppgave er på vent', () => {
     render(<OppgaveInformasjon oppgave={{ ...oppgave, påVentTil: addDays(new Date(), 1).toDateString() }} />);
-    expect(screen.getByRole('img', { name: 'på vent ikon' })).toBeVisible();
+    expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
   });
 
   it('Skal vise ikon for mottat svar fra behandler dersom årsakTilBehandling er MOTTATT_LEGEERKLÆRING', () => {
@@ -47,6 +47,6 @@ describe('OppgaveInformasjon', () => {
       />
     );
     expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
-    expect(screen.getByRole('img', { name: 'på vent ikon' })).toBeVisible();
+    expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
   });
 });

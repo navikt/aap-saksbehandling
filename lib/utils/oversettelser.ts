@@ -181,3 +181,16 @@ export function mapTilOppgaveStatusTekst(status: OppgaveStatus) {
       return 'Opprettet';
   }
 }
+
+export function mapGrunnTilString(grunn: string): string {
+  switch (grunn) {
+    case 'FEIL_LOVANVENDELSE':
+      return 'Feil lovanvendelse';
+    case 'MANGELFULL_BEGRUNNELSE':
+      return 'Mangelfull begrunnelse';
+    case 'MANGLENDE_UTREDNING':
+      return 'Manglende utredning';
+    default:
+      return grunn;
+  }
+}

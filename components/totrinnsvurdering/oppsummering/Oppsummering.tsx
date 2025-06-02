@@ -5,6 +5,7 @@ import { behovstypeTilVilkårskortLink } from 'components/totrinnsvurdering/ToTr
 import Link from 'next/link';
 
 import styles from './Oppsummering.module.css';
+import { mapGrunnTilString } from 'lib/utils/oversettelser';
 
 interface Props {
   vurderinger: ToTrinnsVurdering[];
@@ -52,16 +53,3 @@ export const Oppsummering = ({ vurderinger, link, erKvalitetssikrer }: Props) =>
     </div>
   );
 };
-
-function mapGrunnTilString(grunn: string): string {
-  switch (grunn) {
-    case 'FEIL_LOVANVENDELSE':
-      return 'Feil lovanvendelse';
-    case 'MANGELFULL_BEGRUNNELSE':
-      return 'Mangelfull begrunnelse';
-    case 'MANGLENDE_UTREDNING':
-      return 'Manglende utredning';
-    default:
-      return grunn;
-  }
-}
