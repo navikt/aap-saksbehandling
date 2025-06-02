@@ -11,6 +11,7 @@ import {
   NoNavAapOppgaveReturInformasjonStatus,
 } from '@navikt/aap-oppgave-typescript-types';
 import { mapGrunnTilString } from 'lib/utils/oversettelser';
+import { storForbokstav } from 'lib/utils/string';
 
 interface Props {
   oppgave: Oppgave;
@@ -39,7 +40,7 @@ function årsakerTilString(årsaker: NoNavAapOppgaveReturInformasjonRsaker[]): s
         if (idx == 0) {
           return grunn;
         } else {
-          return grunn[0].toLocaleLowerCase() + grunn.slice(1);
+          return storForbokstav(grunn);
         }
       })
       ?.join(', ') + '.'

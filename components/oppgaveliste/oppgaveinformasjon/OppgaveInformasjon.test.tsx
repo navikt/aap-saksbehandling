@@ -3,10 +3,13 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
+  NoNavAapOppgaveReturInformasjonRsaker,
+  NoNavAapOppgaveReturInformasjonStatus,
 } from '@navikt/aap-oppgave-typescript-types';
 import { addDays } from 'date-fns';
 import { render, screen } from '@testing-library/react';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
+import userEvent from '@testing-library/user-event';
 
 const oppgave: Oppgave = {
   avklaringsbehovKode: '',
@@ -19,6 +22,8 @@ const oppgave: Oppgave = {
   versjon: 0,
   årsakerTilBehandling: [],
 };
+
+const user = userEvent.setup();
 
 describe('OppgaveInformasjon', () => {
   it('Skal vise på vent ikon dersom oppgave er på vent', () => {
@@ -48,5 +53,29 @@ describe('OppgaveInformasjon', () => {
     );
     expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
     expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
+  });
+
+  it('skal vise ikon for returinformasjon om oppgaven er returnert', () => {
+    render(
+      <OppgaveInformasjon
+        oppgave={{
+          ...oppgave,
+          returInformasjon: {
+            status: NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_BESLUTTER,
+            begrunnelse: 'Hei',
+            årsaker: [NoNavAapOppgaveReturInformasjonRsaker.FEIL_LOVANVENDELSE],
+            endretAv: 'Foffern',
+          },
+        }}
+      />
+    );
+
+    const icon = screen.getByRole('img', { name: 'Returnert fra kvalitetssikrer' });
+    expect(icon).toBeVisible();
+
+    user.click(icon);
+
+    const tekst = screen.getByText('Retur fra beslutter');
+    expect(tekst).toBeVisible();
   });
 });
