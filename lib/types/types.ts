@@ -100,6 +100,8 @@ export type KlageDelvisOmgjøres =
 export type KlageUfullstendigVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.Ufullstendig'];
 export type KlageOpprettholdes = components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.Opprettholdes'];
+export type TrekkKlageGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.trekk.TrekkKlageGrunnlagDto'];
 export type UtbetalingOgSimuleringGrunnlag =
   components['schemas']['no.nav.aap.utbetal.simulering.UtbetalingOgSimuleringDto'];
 export type SimulertUtbetaling = components['schemas']['no.nav.aap.utbetal.simulering.SimulertUtbetalingDto'];
@@ -266,6 +268,9 @@ export type AktivitetspliktGrunnlag =
 export type AutomatiskLovvalgOgMedlemskapVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering'];
 
+export type tilhørighetVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.Tilh\u00F8righetVurdering'];
+
 export type LovvalgMedlemskapGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.LovvalgMedlemskapGrunnlagResponse'];
 
@@ -310,6 +315,12 @@ export type ManuellRevurderingV0 =
     meldingType: typeof ManuellRevurderingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
+export const NyÅrsakTilBehandlingV0 = 'NyÅrsakTilBehandlingV0';
+export type NyÅrsakTilBehandlingV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof NyÅrsakTilBehandlingV0}`] & {
+    meldingType: typeof NyÅrsakTilBehandlingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
 export type DokumentÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
 
 export type ÅrsakTilBehandling =
@@ -317,5 +328,7 @@ export type ÅrsakTilBehandling =
 
 // oppgave
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
+
+export type ReturStatus = NonNullable<Oppgave['returInformasjon']>['status'];
 
 export type Behandlingsstatus = DetaljertBehandling['status'];

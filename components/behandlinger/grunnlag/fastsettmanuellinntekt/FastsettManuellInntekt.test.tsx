@@ -23,7 +23,7 @@ describe('Fastsett manuell inntekt', () => {
   });
 
   it('skal ha et felt for begrunnelse', () => {
-    const felt = screen.getByRole('textbox', { name: `Begrunn inntekt for siste beregningsår (${grunnlag.ar})`});
+    const felt = screen.getByRole('textbox', { name: `Begrunn inntekt for siste beregningsår (${grunnlag.ar})` });
     expect(felt).toBeVisible();
   });
 
@@ -45,6 +45,18 @@ describe('Fastsett manuell inntekt', () => {
     await user.click(bekreftKnapp);
 
     const feilmelding = screen.getByText('Du må oppgi inntekt for det siste året.');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('skal gi en feilmelding på felt for å oppgi inntekt er negativ', async () => {
+    const felt = screen.getByRole('spinbutton', { name: 'Oppgi inntekt' });
+
+    await user.type(felt, '-100');
+
+    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    await user.click(bekreftKnapp);
+
+    const feilmelding = screen.getByText('Inntekt kan ikke være negativ.');
     expect(feilmelding).toBeVisible();
   });
 
@@ -85,7 +97,9 @@ describe('Fastsett manuell inntekt vurdering', () => {
   });
 
   it('feltene skal ha default value dersom vurdering har blitt gjort', () => {
-    const begrunnelseFelt = screen.getByRole('textbox', { name: `Begrunn inntekt for siste beregningsår (${grunnlag.ar})` });
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: `Begrunn inntekt for siste beregningsår (${grunnlag.ar})`,
+    });
     expect(begrunnelseFelt).toHaveValue('Dette er en begrunnelse');
 
     const inntektFelt = screen.getByRole('spinbutton', { name: 'Oppgi inntekt' });

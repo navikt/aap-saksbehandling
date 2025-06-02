@@ -38,6 +38,7 @@ export enum Behovstype {
   VURDER_KLAGE_NAY = '6003',
   OPPRETT_REVURDERING_VED_OMJØRING = '6004',
   KLAGE_OPPSUMMERING = '6006',
+  TREKK_KLAGE_KODE = '6010',
   SAMORDNING_REFUSJONS_KRAV = '5056',
   FASTSETT_MANUELL_INNTEKT = '7001',
 }
@@ -118,6 +119,10 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Vurder klage - Nay';
     case '6004':
       return 'Opprett revurdering ved omgjøring';
+    case '6010':
+      return 'Trekk klage';
+    case '6006':
+      return 'Oppsummering klagebehandlingen';
     case '5056':
       return 'Samordning refusjon krav';
     case '7001':

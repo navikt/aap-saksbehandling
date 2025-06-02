@@ -45,6 +45,8 @@ const behovskodeMap = {
   '6002': 'Vurder klage - Nav-kontor',
   '6003': 'Vurder klage - NAY',
   '6004': 'Opprett revurdering ved omgjøring',
+  '6005': 'Skriv forhåndsvarsel klage',
+  '6010': 'Vurder trekk av klage',
   '7001': 'Fastsett manuell inntekt',
   '9001': 'Manuelt satt på vent',
   '9002': 'Bestill brev',
@@ -178,5 +180,18 @@ export function mapTilOppgaveStatusTekst(status: OppgaveStatus) {
       return 'Avsluttet';
     case 'OPPRETTET':
       return 'Opprettet';
+  }
+}
+
+export function mapGrunnTilString(grunn: string): string {
+  switch (grunn) {
+    case 'FEIL_LOVANVENDELSE':
+      return 'Feil lovanvendelse';
+    case 'MANGELFULL_BEGRUNNELSE':
+      return 'Mangelfull begrunnelse';
+    case 'MANGLENDE_UTREDNING':
+      return 'Manglende utredning';
+    default:
+      return grunn;
   }
 }

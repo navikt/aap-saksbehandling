@@ -44,7 +44,6 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
         behandlingVersjon: behandlingsVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_OVERLEVERING,
-          // @ts-ignore
           skalOverleveres: data.skalOverleveres === JaEllerNei.Ja,
         },
         // @ts-ignore

@@ -23,7 +23,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon }: Props) =
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SØKNAD');
-  const vurderingerString = grunnlag?.vurderinger?.map((vurdering) => `${vurdering.begrunnelse}`).join(', ') || '';
+  const vurderingerString = grunnlag?.vurderinger?.at(-1)?.begrunnelse;
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {

@@ -50,4 +50,8 @@ const behandlingsTypeAlternativerFraEnum = Object.keys(
 export type BehandlingsTyperOption = BehandlingstyperRequestQuery;
 export const behandlingsTyperOptions: BehandlingsTyperOption[] = behandlingsTypeAlternativerFraEnum;
 
-export const OppgaveStatuser: ValuePair[] = [{ label: 'På vent', value: 'VENT' }];
+export const OppgaveStatuser: ValuePair[] = [
+  { label: 'På vent', value: 'VENT' },
+  { label: 'Retur fra kvalitetssikrer', value: 'RETUR_KVALITETSSIKRER' },
+  { label: 'Retur fra beslutter', value: 'RETUR_BESLUTTER' },
+];
