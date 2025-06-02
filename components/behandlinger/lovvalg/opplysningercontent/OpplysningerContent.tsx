@@ -79,9 +79,21 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
     );
   }
 
-  // TODO Hvorfor er denne boolsk?
   if (opplysning.oppgittUtenlandsOppholdGrunnlag) {
-    return <VStack gap={'2'}>Hva skal vises her?</VStack>;
+    const oppgittUtenlandsOppholdGrunnlag = opplysning.oppgittUtenlandsOppholdGrunnlag;
+
+    return (
+        <VStack gap={'2'}>
+          {oppgittUtenlandsOppholdGrunnlag.map((opphold, index) => {
+            return (
+                <VStack gap={'1'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
+                  <BodyShort size={'small'}>{opphold.land}</BodyShort>
+                  <BodyShort size={'small'}>{formaterPeriode(opphold.fraDato, opphold.tilDato)}</BodyShort>
+                </VStack>
+            );
+          })}
+        </VStack>
+    );
   }
 
   if (opplysning.manglerStatsborgerskapGrunnlag) {
