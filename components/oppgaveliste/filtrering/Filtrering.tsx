@@ -63,7 +63,7 @@ export const Filtrering = () => {
         >
           {visFilter ? 'Lukk filter' : 'Filtrer listen'}
         </Button>
-        <Detail>Totalt 9 oppgaver</Detail>
+        <Detail>Viser 25 av totalt 50 oppgaver</Detail>
       </HStack>
 
       {visFilter && (
