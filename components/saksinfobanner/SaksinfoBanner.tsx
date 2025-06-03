@@ -168,6 +168,7 @@ export const SaksinfoBanner = ({
               isOpen={visTrekkSøknadModal}
               onClose={() => settVisTrekkSøknadModal(false)}
               saksnummer={sak.saksnummer}
+              behandlingReferanse={behandling?.referanse!}
             />
             <TrekkKlageModal
               isOpen={visTrekkKlageModal}
