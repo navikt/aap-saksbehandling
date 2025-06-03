@@ -51,16 +51,17 @@ describe('Klage - oppsummering', () => {
         grunnlagNay={grunnlagNay}
       />
     );
-    const innstilling = screen.getByRole('radio', { name: 'Delvis omgjøring' });
+    const innstilling = screen.getByText('Delvis omgjøring');
     expect(innstilling).toBeVisible();
-    expect(innstilling).toBeChecked();
 
-    const omgjøres = screen.getByRole('combobox', { name: 'Skrivebeskyttet Hvilke vilkår skal omgjøres?' });
+    const omgjøres = screen.getByText('$ 11-2');
     expect(omgjøres).toBeVisible();
 
-    const opprettholdes = screen.getByRole('combobox', {
-      name: 'Skrivebeskyttet Hvilke vilkår er blitt vurdert til å opprettholdes?',
-    });
-    expect(opprettholdes).toBeVisible();
+    const opprettholdes_11_5 = screen.getByText('$ 11-5');
+    expect(opprettholdes_11_5).toBeVisible();
+    const opprettholdes_11_20 = screen.getByText('$ 11-20');
+    expect(opprettholdes_11_20).toBeVisible();
+    const opprettholdes_11_19 = screen.getByText('$ 11-19');
+    expect(opprettholdes_11_19).toBeVisible();
   });
 });

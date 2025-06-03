@@ -1,20 +1,14 @@
 'use client';
 
-import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { FormField } from 'components/form/FormField';
-import {
-  Hjemmel,
-  KlagebehandlingKontorGrunnlag,
-  KlagebehandlingNayGrunnlag,
-  KlageInnstilling,
-  TypeBehandling,
-} from 'lib/types/types';
-import { FormEvent } from 'react';
+import { KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
-import { hjemmelalternativer } from 'lib/utils/hjemmel';
+import { hjemmelMap } from 'lib/utils/hjemmel';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { BodyShort, Detail, VStack } from '@navikt/ds-react';
+import { mapInnstillingTilTekst } from 'lib/utils/oversettelser';
+import styles from './KlagebehandlingOppsummering.module.css';
 
 interface Props {
   behandlingVersjon: number;
@@ -23,12 +17,6 @@ interface Props {
   readOnly: boolean;
   grunnlagNay: KlagebehandlingNayGrunnlag;
   grunnlagKontor: KlagebehandlingKontorGrunnlag;
-}
-
-interface FormFields {
-  innstilling: KlageInnstilling;
-  vilkårSomSkalOmgjøres: Hjemmel[];
-  vilkårSomSkalOpprettholdes: Hjemmel[];
 }
 
 const utledInnstilling = (
@@ -82,52 +70,14 @@ export const KlagebehandlingOppsummering = ({
   const vilkårSomOmgjøres = utledVilkårSomOmgjøres(grunnlagKontor, grunnlagNay);
   const vilkårSomOpprettholdes = utledVilkårSomOpprettholdes(grunnlagKontor, grunnlagNay);
 
-  const { formFields, form } = useConfigForm<FormFields>(
-    {
-      innstilling: {
-        type: 'radio',
-        label: 'Hva er innstillingen til klagen fra NAY og Nav-kontor?',
-        options: [
-          { value: 'OPPRETTHOLD', label: 'Vedtak opprettholdes' },
-          {
-            value: 'OMGJØR',
-            label: 'Vedtak omgjøres',
-          },
-          { value: 'DELVIS_OMGJØR', label: 'Delvis omgjøring' },
-        ],
+  const handleSubmit = () => {
+    løsBehovOgGåTilNesteSteg({
+      behandlingVersjon: behandlingVersjon,
+      behov: {
+        behovstype: Behovstype.KLAGE_OPPSUMMERING,
       },
-      vilkårSomSkalOmgjøres: {
-        type: 'combobox_multiple',
-        label: 'Hvilke vilkår skal omgjøres?',
-        description: 'Alle påklagde vilkår som skal omgjøres som følge av klagen',
-        options: hjemmelalternativer,
-      },
-      vilkårSomSkalOpprettholdes: {
-        type: 'combobox_multiple',
-        label: 'Hvilke vilkår er blitt vurdert til å opprettholdes?',
-        description: 'Alle påklagde vilkår som blir opprettholdt',
-        options: hjemmelalternativer,
-      },
-    },
-    { readOnly: true }
-  );
-
-  if (utledetInnstilling) {
-    form.setValue('innstilling', utledetInnstilling);
-  }
-  form.setValue('vilkårSomSkalOmgjøres', vilkårSomOmgjøres);
-  form.setValue('vilkårSomSkalOpprettholdes', vilkårSomOpprettholdes);
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(() => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.KLAGE_OPPSUMMERING,
-        },
-        referanse: behandlingsreferanse,
-      });
-    })(event);
+      referanse: behandlingsreferanse,
+    });
   };
   return (
     <VilkårsKortMedForm
@@ -142,9 +92,44 @@ export const KlagebehandlingOppsummering = ({
       erAktivtSteg={erAktivtSteg}
       knappTekst={'Bekreft og send til beslutter'}
     >
-      <FormField form={form} formField={formFields.innstilling} />
-      {vilkårSomOmgjøres.length > 0 && <FormField form={form} formField={formFields.vilkårSomSkalOmgjøres} />}
-      {vilkårSomOpprettholdes.length > 0 && <FormField form={form} formField={formFields.vilkårSomSkalOpprettholdes} />}
+      <VStack gap={'1'}>
+        <BodyShort size={'small'} weight={'semibold'}>
+          Hva er innstillingen til klagen fra NAY og Nav-kontor?
+        </BodyShort>
+        <BodyShort size={'small'}>{utledetInnstilling && mapInnstillingTilTekst(utledetInnstilling)}</BodyShort>
+      </VStack>
+
+      {vilkårSomOmgjøres.length > 0 && (
+        <VStack gap={'1'}>
+          <BodyShort size={'small'} weight={'semibold'}>
+            Hvilke vilkår skal omgjøres?
+          </BodyShort>
+          <Detail className={styles.detailgray}>Alle påklagde vilkår som skal omgjøres som følge av klagen</Detail>
+          {vilkårSomOmgjøres.map((vilkår, index) => {
+            return (
+              <BodyShort key={vilkår + index} size={'small'}>
+                {hjemmelMap[vilkår]}
+              </BodyShort>
+            );
+          })}
+        </VStack>
+      )}
+
+      {vilkårSomOpprettholdes.length > 0 && (
+        <VStack gap={'1'}>
+          <BodyShort size={'small'} weight={'semibold'}>
+            Hvilke vilkår er blitt vurdert til å opprettholdes?{' '}
+          </BodyShort>
+          <Detail className={styles.detailgray}>Alle påklagde vilkår som blir opprettholdt</Detail>
+          {vilkårSomOpprettholdes.map((vilkår, index) => {
+            return (
+              <BodyShort key={vilkår + index} size={'small'}>
+                {hjemmelMap[vilkår]}
+              </BodyShort>
+            );
+          })}
+        </VStack>
+      )}
     </VilkårsKortMedForm>
   );
 };

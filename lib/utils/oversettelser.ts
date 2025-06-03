@@ -196,3 +196,14 @@ export function mapGrunnTilString(grunn: string): string {
       return grunn;
   }
 }
+
+export function mapInnstillingTilTekst(grunn: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR'): string {
+  switch (grunn) {
+    case 'OPPRETTHOLD':
+      return 'Vedtak opprettholdes';
+    case 'OMGJØR':
+      return 'Vedtak omgjøres';
+    case 'DELVIS_OMGJØR':
+      return 'Delvis omgjøring';
+  }
+}
