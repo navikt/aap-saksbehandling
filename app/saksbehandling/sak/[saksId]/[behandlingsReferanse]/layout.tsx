@@ -78,7 +78,7 @@ const Layout = async (props: Props) => {
     logWarning('henting av oppgave for behandling feilet', oppgavesøkRes.apiException);
   }
 
-  let adressebeskyttelser = utledAdressebeskyttelse(oppgave);
+  const adressebeskyttelser = utledAdressebeskyttelse(oppgave);
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.data.flyt
     .filter((steg) => steg.skalVises)
