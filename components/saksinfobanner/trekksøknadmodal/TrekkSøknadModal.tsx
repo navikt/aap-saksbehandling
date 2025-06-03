@@ -1,8 +1,7 @@
 import { Alert, BodyLong, Button, Modal } from '@navikt/ds-react';
-import { v4 as uuid } from 'uuid';
 
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { ManuellRevurderingV0 } from 'lib/types/types';
+import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 
 import { useSendHendelseOgVentPåProsessering } from 'hooks/SendHendelseOgVentPåProsessering';
 
@@ -12,9 +11,10 @@ interface Props {
   saksnummer: string;
   isOpen: boolean;
   onClose: () => void;
+  behandlingReferanse: string;
 }
 
-export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose }: Props) => {
+export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingReferanse }: Props) => {
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   return (
@@ -45,17 +45,16 @@ export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose }: Props) => {
               {
                 saksnummer: saksnummer,
                 referanse: {
-                  type: 'REVURDERING_ID',
-                  verdi: uuid(),
+                  type: 'BEHANDLING_REFERANSE',
+                  verdi: behandlingReferanse,
                 },
-                type: 'MANUELL_REVURDERING',
+                type: 'NY_ÅRSAK_TIL_BEHANDLING',
                 kanal: 'DIGITAL',
                 mottattTidspunkt: new Date().toISOString(),
                 melding: {
-                  meldingType: 'ManuellRevurderingV0',
+                  meldingType: 'NyÅrsakTilBehandlingV0',
                   årsakerTilBehandling: ['SØKNAD_TRUKKET'],
-                  beskrivelse: 'Trekk søknad',
-                } as ManuellRevurderingV0,
+                } as NyÅrsakTilBehandlingV0,
               },
               onClose
             );
