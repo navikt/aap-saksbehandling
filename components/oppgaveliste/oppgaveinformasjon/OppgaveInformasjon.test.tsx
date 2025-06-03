@@ -78,4 +78,18 @@ describe('OppgaveInformasjon', () => {
     const tekst = screen.getByText('Retur fra beslutter');
     expect(tekst).toBeVisible();
   });
+
+  it('skal vise ikon for adressebeskyttelse hvis bruker er kode 7', () => {
+    render(
+        <OppgaveInformasjon oppgave={{...oppgave, harFortroligAdresse: true}} />
+    );
+    expect(screen.getByRole('img', { name: 'Adressebeskyttelse Ikon' })).toBeVisible();
+  });
+
+  it('skal ikke vise ikon for adressebeskyttelse hvis bruker ikke er kode 7', () => {
+    render(
+        <OppgaveInformasjon oppgave={{...oppgave, harFortroligAdresse: false}} />
+    );
+    expect(screen.queryByRole('img', { name: 'Adressebeskyttelse Ikon' })).not.toBeInTheDocument();
+  });
 });
