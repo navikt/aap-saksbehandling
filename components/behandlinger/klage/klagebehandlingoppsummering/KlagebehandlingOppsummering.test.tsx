@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen, render } from '../../../../lib/test/CustomRender';
 import { KlagebehandlingOppsummering } from 'components/behandlinger/klage/klagebehandlingoppsummering/KlagebehandlingOppsummering';
 import { KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag } from 'lib/types/types';
 
@@ -51,10 +51,16 @@ describe('Klage - oppsummering', () => {
         grunnlagNay={grunnlagNay}
       />
     );
-    const innstilling = screen.getByRole('radio', { name: 'Hva er innstillingen til klagen fra NAY og Nav-kontor?' });
+    const innstilling = screen.getByRole('radio', { name: 'Delvis omgjøring' });
     expect(innstilling).toBeVisible();
-    expect(innstilling).toHaveValue('Delvis omgjør');
+    expect(innstilling).toBeChecked();
 
-    // expect(screen.getByRole('combobox', { name: 'Ytelsestype' })).toBeVisible();
+    const omgjøres = screen.getByRole('combobox', { name: 'Skrivebeskyttet Hvilke vilkår skal omgjøres?' });
+    expect(omgjøres).toBeVisible();
+
+    const opprettholdes = screen.getByRole('combobox', {
+      name: 'Skrivebeskyttet Hvilke vilkår er blitt vurdert til å opprettholdes?',
+    });
+    expect(opprettholdes).toBeVisible();
   });
 });
