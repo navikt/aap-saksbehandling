@@ -112,10 +112,6 @@ export const TotrinnsvurderingForm = ({
       className={'flex-column'}
       autoComplete={'off'}
     >
-      <LøsBehovOgGåTilNesteStegStatusAlert
-        status={status}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      />
       {fields.map((field, index) => (
         <TotrinnnsvurderingFelter
           key={field.id}
@@ -128,6 +124,10 @@ export const TotrinnsvurderingForm = ({
         />
       ))}
       {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
+      <LøsBehovOgGåTilNesteStegStatusAlert
+        status={status}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      />
       {!readOnly && (
         <Button size={'medium'} className={'fit-content'} loading={isLoading}>
           Bekreft
