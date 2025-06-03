@@ -20,6 +20,8 @@ import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/T
 import { VurderRettighetsperiodeModal } from './rettighetsperiodemodal/VurderRettighetsperiodeModal';
 import { isProd } from 'lib/utils/environment';
 import { TrekkKlageModal } from './trekkklagemodal/TrekkKlageModal';
+import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
+import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -32,6 +34,7 @@ interface Props {
   brukerInformasjon?: BrukerInformasjon;
   brukerKanSaksbehandle?: boolean;
   flyt?: FlytGruppe[];
+  adressebeskyttelser?: Adressebeskyttelsesgrad[];
 }
 
 export const SaksinfoBanner = ({
@@ -45,6 +48,7 @@ export const SaksinfoBanner = ({
   typeBehandling,
   brukerKanSaksbehandle,
   flyt,
+  adressebeskyttelser,
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
@@ -122,6 +126,11 @@ export const SaksinfoBanner = ({
 
       {erPåBehandlingSiden && (
         <HStack>
+          {adressebeskyttelser?.map((adressebeskyttelse) => (
+            <div key={adressebeskyttelse} className={styles.oppgavestatus}>
+              <AdressebeskyttelseStatus adressebeskyttelsesGrad={adressebeskyttelse} />
+            </div>
+          ))}
           <div className={styles.oppgavestatus}>{oppgaveStatus && <OppgaveStatus oppgaveStatus={oppgaveStatus} />}</div>
           <div className={styles.saksmeny}>
             <Dropdown>

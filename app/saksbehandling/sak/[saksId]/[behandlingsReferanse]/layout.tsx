@@ -24,6 +24,7 @@ import { IngenFlereOppgaverModalContextProvider } from 'context/IngenFlereOppgav
 import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
 import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
 import { SWRConfig } from 'swr';
+import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 
 interface Props {
   children: ReactNode;
@@ -77,6 +78,8 @@ const Layout = async (props: Props) => {
     logWarning('henting av oppgave for behandling feilet', oppgavesøkRes.apiException);
   }
 
+  let adressebeskyttelser = utledAdressebeskyttelse(oppgave);
+
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.data.flyt
     .filter((steg) => steg.skalVises)
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
@@ -104,6 +107,7 @@ const Layout = async (props: Props) => {
             typeBehandling={flytResponse.data.visning.typeBehandling}
             brukerKanSaksbehandle={brukerKanSaksbehandle}
             flyt={flytResponse.data.flyt}
+            adressebeskyttelser={adressebeskyttelser}
           />
 
           <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
