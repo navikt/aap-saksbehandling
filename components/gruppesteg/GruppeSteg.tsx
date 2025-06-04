@@ -3,6 +3,7 @@ import { BehandlingPåVentKortMedDataFetching } from 'components/sideprosesser/B
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { FlytProsessering, FlytVisning, StegType } from 'lib/types/types';
 import { BrevKortMedDataFetching } from 'components/brev/BrevKortMedDataFetching';
+import { Alert } from '@navikt/ds-react';
 
 interface Props {
   prosessering: FlytProsessering;
@@ -23,6 +24,16 @@ export const GruppeSteg = ({
 }: Props) => {
   return (
     <div className={'flex-column'}>
+      {visning.brukerHarBesluttet && (
+        <Alert size={'small'} variant={'info'}>
+          Som aktiv beslutter i denne behandlingen kan du ikke gjøre vilkårsvurderinger i denne behandlingen.
+        </Alert>
+      )}
+      {visning.brukerHarKvlaitetsikret && (
+        <Alert size={'small'} variant={'info'}>
+          Du har gjort kvalitetssikring og kan ikke gjøre vilkårsvurderinger i denne behandlingen.
+        </Alert>
+      )}
       {prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={prosessering} />}
       {visning.visVentekort && (
         <BehandlingPåVentKortMedDataFetching
