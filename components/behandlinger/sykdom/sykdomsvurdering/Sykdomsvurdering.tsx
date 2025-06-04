@@ -271,7 +271,7 @@ export const Sykdomsvurdering = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       visBekreftKnapp={!readOnly}
-      vurdertAvAnsatt={grunnlag?.sykdomsvurdering?.vurdertAv}
+      vurdertAvAnsatt={sykdomsvurdering?.vurdertAv}
       knappTekst={'Bekreft'}
     >
       {behandlingErRevurdering && (
