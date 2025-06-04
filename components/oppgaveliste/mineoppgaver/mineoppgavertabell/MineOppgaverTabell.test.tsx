@@ -19,7 +19,6 @@ const oppgaver: Oppgave[] = [
     journalpostId: null,
     enhet: '0417',
     oppfølgingsenhet: null,
-    veileder: null,
     behandlingOpprettet: '2025-04-24T12:39:29.235',
     avklaringsbehovKode: '5003',
     status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
