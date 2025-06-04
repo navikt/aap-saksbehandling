@@ -46,6 +46,7 @@ const behovskodeMap = {
   '6003': 'Vurder klage - NAY',
   '6004': 'Opprett revurdering ved omgjøring',
   '6005': 'Skriv forhåndsvarsel klage',
+  '6006': 'Oppsummering klagebehandlingen',
   '6010': 'Vurder trekk av klage',
   '7001': 'Fastsett manuell inntekt',
   '9001': 'Manuelt satt på vent',
@@ -193,5 +194,16 @@ export function mapGrunnTilString(grunn: string): string {
       return 'Manglende utredning';
     default:
       return grunn;
+  }
+}
+
+export function mapInnstillingTilTekst(grunn: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR'): string {
+  switch (grunn) {
+    case 'OPPRETTHOLD':
+      return 'Vedtak opprettholdes';
+    case 'OMGJØR':
+      return 'Vedtak omgjøres';
+    case 'DELVIS_OMGJØR':
+      return 'Delvis omgjøring';
   }
 }
