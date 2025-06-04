@@ -14,11 +14,11 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { Kelvinsøk, SøkeResultat } from './Kelvinsøk';
-import { LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { ArrowRightLeftIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from './Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
-import { isDev, isLocal } from 'lib/utils/environment';
+import { isDev, isLocal, isProd } from 'lib/utils/environment';
 
 interface BrukerInformasjon {
   navn: string;
@@ -30,6 +30,18 @@ const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjo
     <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
     <Dropdown.Menu>
       <Dropdown.Menu.List>
+        {!isProd() && (
+          <>
+            <Dropdown.Menu.List.Item as={Link} href={'/oauth2/login?prompt=select_account'}>
+              <BodyShort>Bytt bruker</BodyShort>
+              <Spacer />
+              <ArrowRightLeftIcon aria-hidden fontSize="1.5rem" />
+            </Dropdown.Menu.List.Item>
+
+            <Dropdown.Menu.Divider />
+          </>
+        )}
+
         <Dropdown.Menu.List.Item as={Link} href={'/oauth2/logout'}>
           <BodyShort>Logg ut</BodyShort>
           <Spacer />
