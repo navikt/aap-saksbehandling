@@ -133,73 +133,75 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         <Radio value={JaEllerNei.Ja}>Ja</Radio>
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
-      {fields.map((field, index) => {
-        const erFørsterefusjon = index === 0;
-        return (
-          <div key={field.id}>
-            <DateInputWrapper
-              name={`refusjoner.${index}.fom`}
-              control={form.control}
-              label={'Refusjonen gjelder fra'}
-              rules={{
-                required: 'Du må sette en dato for når refusjonen skal gjelde fra',
-                validate: {
-                  gyldigDato: (value) => validerDato(value as string),
-                  kanIkkeVaereFoerSoeknadstidspunkt: (value) => {
-                    const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
-                    const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
-                    if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
-                      return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
-                    }
-                    return true;
+
+      {form.watch('harKrav') === JaEllerNei.Ja &&
+        fields.map((field, index) => {
+          const erFørsterefusjon = index === 0;
+          return (
+            <div key={field.id}>
+              <DateInputWrapper
+                name={`refusjoner.${index}.fom`}
+                control={form.control}
+                label={'Refusjonen gjelder fra'}
+                rules={{
+                  required: 'Du må sette en dato for når refusjonen skal gjelde fra',
+                  validate: {
+                    gyldigDato: (value) => validerDato(value as string),
+                    kanIkkeVaereFoerSoeknadstidspunkt: (value) => {
+                      const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
+                      const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
+                      if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
+                        return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
+                      }
+                      return true;
+                    },
                   },
-                },
-              }}
-              readOnly={readOnly}
-            />
-            <DateInputWrapper
-              name={`refusjoner.${index}.tom`}
-              control={form.control}
-              label={'Refusjonen gjelder til'}
-              rules={{
-                required: 'Du må sette en dato for når refusjonen skal gjelde til',
-                validate: {
-                  gyldigDato: (value) => validerDato(value as string),
-                  kanIkkeVaereFoerSoeknadstidspunkt: (value) => {
-                    const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
-                    const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
-                    if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
-                      return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
-                    }
-                    return true;
+                }}
+                readOnly={readOnly}
+              />
+              <DateInputWrapper
+                name={`refusjoner.${index}.tom`}
+                control={form.control}
+                label={'Refusjonen gjelder til'}
+                rules={{
+                  required: 'Du må sette en dato for når refusjonen skal gjelde til',
+                  validate: {
+                    gyldigDato: (value) => validerDato(value as string),
+                    kanIkkeVaereFoerSoeknadstidspunkt: (value) => {
+                      const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
+                      const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
+                      if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
+                        return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
+                      }
+                      return true;
+                    },
                   },
-                },
-              }}
-              readOnly={readOnly}
-            />
-            <TextAreaWrapper
-              name={`refusjoner.${index}.navKontor`}
-              control={form.control}
-              label={'Nav-kontor'}
-              rules={{ required: 'Du må oppgi et Nav-kontor' }}
-              className={'begrunnelse'}
-              readOnly={readOnly}
-            />
-            {!erFørsterefusjon && !readOnly && (
-              <Button
-                type={'button'}
-                icon={<TrashIcon aria-hidden />}
-                className={'fit-content'}
-                variant={'tertiary'}
-                size={'small'}
-                onClick={() => remove(index)}
-              >
-                Fjern Nav-kontor
-              </Button>
-            )}
-          </div>
-        );
-      })}
+                }}
+                readOnly={readOnly}
+              />
+              <TextAreaWrapper
+                name={`refusjoner.${index}.navKontor`}
+                control={form.control}
+                label={'Nav-kontor'}
+                rules={{ required: 'Du må oppgi et Nav-kontor' }}
+                className={'begrunnelse'}
+                readOnly={readOnly}
+              />
+              {!erFørsterefusjon && !readOnly && (
+                <Button
+                  type={'button'}
+                  icon={<TrashIcon aria-hidden />}
+                  className={'fit-content'}
+                  variant={'tertiary'}
+                  size={'small'}
+                  onClick={() => remove(index)}
+                >
+                  Fjern Nav-kontor
+                </Button>
+              )}
+            </div>
+          );
+        })}
       {!readOnly && (
         <Button
           type={'button'}
