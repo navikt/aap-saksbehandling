@@ -50,6 +50,17 @@ describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
     const feilmelding = screen.getByText('Du må skrive en begrunnelse for når bruker fikk nedsatt arbeidsevne');
     expect(feilmelding).toBeVisible();
   });
+
+  it('skal vise feilmelding hvis satt frem i tid', async () => {
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+
+    const nedsattDato = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
+    await user.type(nedsattDato, '01.01.9999');
+
+    await velgBekreft();
+    const feilmelding = screen.getByText('Du kan ikke registrere tidspunkt frem i tid.');
+    expect(feilmelding).toBeVisible();
+  });
 });
 
 describe('Felt for å sette dato for nedsatt arbeidsevne', () => {
