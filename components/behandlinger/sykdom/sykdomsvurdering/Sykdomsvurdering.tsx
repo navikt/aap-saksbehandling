@@ -260,11 +260,6 @@ export const Sykdomsvurdering = ({
     return søknadsdato.getTime() === startOfDay(gjelderFra).getTime();
   }, [behandlingErRevurdering, sak, vurderingenGjelderFra]);
 
-  const vurdertAvAnsatt =
-    grunnlag.sykdomsvurdering?.vurdertAvIdent && grunnlag.sykdomsvurdering.vurdertDato
-      ? { ident: grunnlag.sykdomsvurdering.vurdertAvIdent, dato: grunnlag.sykdomsvurdering.vurdertDato }
-      : undefined;
-
   return (
     <VilkårsKortMedForm
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
@@ -276,7 +271,7 @@ export const Sykdomsvurdering = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       visBekreftKnapp={!readOnly}
-      vurdertAvAnsatt={vurdertAvAnsatt}
+      vurdertAvAnsatt={grunnlag?.sykdomsvurdering?.vurdertAv}
       knappTekst={'Bekreft'}
     >
       {behandlingErRevurdering && (
