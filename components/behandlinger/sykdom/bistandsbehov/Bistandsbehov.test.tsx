@@ -295,7 +295,7 @@ describe('Revurdering', () => {
         begrunnelse: 'En begrunnelse',
         erBehovForArbeidsrettetTiltak: true,
         erBehovForAktivBehandling: false,
-        vurdertAv: 'Saksbehandler',
+        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
       },
     ],
     historiskeVurderinger: [
@@ -303,7 +303,7 @@ describe('Revurdering', () => {
         begrunnelse: 'En begrunnelse',
         erBehovForArbeidsrettetTiltak: true,
         erBehovForAktivBehandling: false,
-        vurdertAv: 'Saksbehandler',
+        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
       },
     ],
     gjeldendeSykdsomsvurderinger: [
@@ -316,8 +316,7 @@ describe('Revurdering', () => {
         erSkadeSykdomEllerLyteVesentligdel: true,
         harSkadeSykdomEllerLyte: true,
         vurderingenGjelderFra: '2025-03-24',
-        vurdertAvIdent: 'Saksbehandler',
-        vurdertDato: '2025-03-24',
+        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
       },
     ],
   };
