@@ -79,8 +79,8 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
                   name={`vurderteSamordninger.${index}.ytelse`}
                   rules={{ required: 'Du må velge en ytelsetype' }}
                 >
-                  {ytelsesoptions.map((ytelse) => (
-                    <option value={ytelse.value} key={ytelse.value}>
+                  {ytelsesoptions.map((ytelse, index) => (
+                    <option value={ytelse.value} key={index}>
                       {ytelse.label}
                     </option>
                   ))}
