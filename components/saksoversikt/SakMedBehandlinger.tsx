@@ -46,6 +46,13 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             <Heading size="large">Sak {sak.saksnummer}</Heading>
 
             <HStack gap="4">
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/klage`)}
+              >
+                Opprett klage
+              </Button>
               {kanRegistrerebrudd && (
                 <Button
                   variant="secondary"
