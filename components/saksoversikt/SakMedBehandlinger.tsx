@@ -65,6 +65,13 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
                   Opprett revurdering
                 </Button>
               )}
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/klage`)}
+              >
+                Opprett klage
+              </Button>
             </HStack>
           </HStack>
 
