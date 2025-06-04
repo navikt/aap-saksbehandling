@@ -128,11 +128,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
 
-  const vurdertAvAnsatt =
-    grunnlag?.vurdering?.vurdertAv && grunnlag.vurdering.vurdertDato
-      ? { ident: grunnlag.vurdering.vurdertAv, dato: grunnlag.vurdering.vurdertDato }
-      : undefined;
-
   return (
     <VilkårsKortMedForm
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
@@ -144,7 +139,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      vurdertAvAnsatt={vurdertAvAnsatt}
+      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       {typeBehandling === 'Revurdering' && (
         <TidligereVurderinger
