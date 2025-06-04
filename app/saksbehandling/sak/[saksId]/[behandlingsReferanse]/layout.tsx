@@ -84,6 +84,8 @@ const Layout = async (props: Props) => {
     .filter((steg) => steg.skalVises)
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
 
+  const visTotrinnsvurdering =
+    flytResponse.data.visning.visBeslutterKort || flytResponse.data.visning.visKvalitetssikringKort;
   return (
     <SWRConfig
       value={{
@@ -118,7 +120,9 @@ const Layout = async (props: Props) => {
             <aside className={`flex-column`}>
               <Behandlingsinfo behandling={behandling.data} sak={sak} />
               <Saksbehandlingsoversikt />
-              <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
+              {visTotrinnsvurdering && (
+                <ToTrinnsvurderingMedDataFetching behandlingsReferanse={params.behandlingsReferanse} />
+              )}
             </aside>
           </HGrid>
         </div>
