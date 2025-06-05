@@ -5,6 +5,7 @@ import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingServi
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
 interface Props {
   behandlingsreferanse: string;
@@ -26,13 +27,17 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
       aktivtSteg={flyt.data.aktivtSteg}
     >
       {stegSomSkalVises.includes('EFFEKTUER_11_7') && (
-        <AktivitetspliktMedDatafetching
-          behandlingsreferanse={behandlingsreferanse}
-          behandlingVersjon={flyt.data.behandlingVersjon}
-          readOnly={flyt.data.visning.saksbehandlerReadOnly}
-        />
+        <StegSuspense>
+          <AktivitetspliktMedDatafetching
+            behandlingsreferanse={behandlingsreferanse}
+            behandlingVersjon={flyt.data.behandlingVersjon}
+            readOnly={flyt.data.visning.saksbehandlerReadOnly}
+          />
+        </StegSuspense>
       )}
-      <UnderveisgrunnlagMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+      <StegSuspense>
+        <UnderveisgrunnlagMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+      </StegSuspense>
     </GruppeSteg>
   );
 };

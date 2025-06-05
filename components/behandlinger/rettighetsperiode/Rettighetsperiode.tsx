@@ -3,6 +3,7 @@ import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingServi
 import { VurderRettighetsperiodeMedDataFetching } from 'components/behandlinger/rettighetsperiode/VurderRettighetsperiodeMedDataFetching';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
 interface Props {
   behandlingsReferanse: string;
@@ -22,11 +23,13 @@ export const Rettighetsperiode = async ({ behandlingsReferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      <VurderRettighetsperiodeMedDataFetching
-        behandlingsreferanse={behandlingsReferanse}
-        readOnly={flyt.data.visning.saksbehandlerReadOnly}
-        behandlingVersjon={flyt.data.behandlingVersjon}
-      />
+      <StegSuspense>
+        <VurderRettighetsperiodeMedDataFetching
+          behandlingsreferanse={behandlingsReferanse}
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+        />
+      </StegSuspense>
     </GruppeSteg>
   );
 };
