@@ -24,7 +24,7 @@ export function erDatoFoerDato(inputDato: string, referanseDato: string): boolea
 }
 
 export function erDatoIFremtiden(value: string): boolean {
-  return isFuture(parse(value as string, 'dd.MM.yyyy', new Date()));
+  return value == undefined ? false : isFuture(parse(value as string, 'dd.MM.yyyy', new Date()));
 }
 
 export function validerÅrstall(val: string | string[]) {

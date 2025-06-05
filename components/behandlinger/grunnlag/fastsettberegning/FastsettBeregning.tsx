@@ -7,7 +7,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { isBefore, parse } from 'date-fns';
-import { validerDato } from 'lib/validation/dateValidation';
+import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import styles from './FastsettBeregning.module.css';
 import { Heading } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
@@ -49,8 +49,12 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
         rules: {
           validate: (value) => {
             const valideringsresultat = validerDato(value as string);
+            const datoErFremITid = erDatoIFremtiden(value as string);
+
             if (valideringsresultat) {
               return valideringsresultat;
+            } else if (datoErFremITid) {
+              return 'Du kan ikke registrere tidspunkt frem i tid.';
             }
           },
         },
