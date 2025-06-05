@@ -102,6 +102,9 @@ export type KlageUfullstendigVurdering =
 export type KlageOpprettholdes = components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.Opprettholdes'];
 export type TrekkKlageGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.trekk.TrekkKlageGrunnlagDto'];
+export type EffektuerAvvistPåFormkravGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistpåformkrav.EffektuerAvvistPåFormkravGrunnlagDto'];
+
 export type UtbetalingOgSimuleringGrunnlag =
   components['schemas']['no.nav.aap.utbetal.simulering.UtbetalingOgSimuleringDto'];
 export type SimulertUtbetaling = components['schemas']['no.nav.aap.utbetal.simulering.SimulertUtbetalingDto'];

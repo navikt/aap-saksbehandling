@@ -16,6 +16,7 @@ import {
   BrevGrunnlag,
   DetaljertBehandling,
   DokumentInfo,
+  EffektuerAvvistPåFormkravGrunnlag,
   FatteVedtakGrunnlag,
   FlytProsessering,
   ForhåndsvisDialogmelding,
@@ -298,6 +299,11 @@ export const hentKlagebehandlingNayGrunnlag = async (behandlingsReferanse: strin
 export const hentKlageresultat = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/resultat`;
   return await apiFetch<Klageresultat>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentEffektuerAvvistPåFormkravGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/effektuer-avvist-på-formkrav`;
+  return await apiFetch<EffektuerAvvistPåFormkravGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFlyt = async (behandlingsReferanse: string) => {
