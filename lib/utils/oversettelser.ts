@@ -44,9 +44,10 @@ const behovskodeMap = {
   '6001': 'Fastsett behanadlende enhet',
   '6002': 'Vurder klage - Nav-kontor',
   '6003': 'Vurder klage - NAY',
-  '6004': 'Opprett revurdering ved omgjøring',
+  '6004': 'Effektuer avvist på formkrav',
   '6005': 'Skriv forhåndsvarsel klage',
   '6006': 'Oppsummering klagebehandlingen',
+  '6007': 'Venter på uttalelse fra bruker på klage forhåndsvarsel',
   '6010': 'Vurder trekk av klage',
   '7001': 'Fastsett manuell inntekt',
   '9001': 'Manuelt satt på vent',
@@ -152,6 +153,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Omgjøring';
     case 'OPPRETTHOLDELSE':
       return 'Opprettholdelse';
+    case 'KLAGE_AVVIST_PÅ_FORMKRAV':
+      return 'Forhåndsvarsel - avvist på formkrav';
     default:
       return `${steggruppe}`;
   }

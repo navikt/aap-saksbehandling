@@ -22,6 +22,7 @@ import { KlagebehandlingKontor } from '../behandlinger/klage/klagebehandlingkont
 import { KlagebehandlingNay } from '../behandlinger/klage/klagebehandlingnay/KlagebehandlingNay';
 import { Omgjøring } from 'components/behandlinger/klage/omgjøring/Omgjøring';
 import { Opprettholdelse } from 'components/behandlinger/klage/opprettholdelse/Opprettholdelse';
+import { KlageAvvistPåFormkrav } from 'components/behandlinger/klage/effektuerklageavvistpåformkrav/KlageAvvistPåFormkrav';
 
 interface Props {
   saksnummer: string;
@@ -59,6 +60,9 @@ export const OppgaveKolonne = async ({ saksnummer, behandlingsReferanse, aktivGr
       {aktivGruppe === 'OMGJØRING' && <Omgjøring saksnummer={saksnummer} behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'OPPRETTHOLDELSE' && <Opprettholdelse behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'TREKK_KLAGE' && <TrekkKlage behandlingsreferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'KLAGE_AVVIST_PÅ_FORMKRAV' && (
+        <KlageAvvistPåFormkrav behandlingsreferanse={behandlingsReferanse} />
+      )}
     </section>
   );
 };
