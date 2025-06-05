@@ -7652,17 +7652,13 @@ export interface components {
       harFritak: boolean;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.refusjonkrav.RefusjonkravVurderingDto': {
-      /**
-       * Format: date
-       * @example 2025-06-05
-       */
-      fom?: string | null;
       harKrav: boolean;
-      /**
-       * Format: date
-       * @example 2025-06-05
-       */
-      tom?: string | null;
+      refusjoner: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.RefusjonsKravDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.refusjonkrav.RefusjonkravDto': {
+      navKontor: string;
+      fraDato?: string | null;
+      tilDato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.rettighetsperiode.RettighetsperiodeVurderingDTO': {
       begrunnelse: string;
