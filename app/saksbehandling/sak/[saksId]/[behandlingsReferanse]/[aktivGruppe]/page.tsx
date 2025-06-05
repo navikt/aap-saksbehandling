@@ -1,19 +1,10 @@
-import {
-  auditlog,
-  forberedBehandlingOgVentPåProsessering,
-  hentBehandling,
-  hentFlyt,
-  hentSak,
-} from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from 'lib/utils/api';
-import { BodyShort, VStack } from '@navikt/ds-react';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { StegGruppe } from 'lib/types/types';
-import { SakContextProvider } from 'context/SakContext';
-import { OppgaveKolonne } from 'components/oppgavekolonne/OppgaveKolonne';
-
-import styles from './page.module.css';
+import { auditlog, hentBehandling } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isError } from 'lib/utils/api';
+import { Suspense } from 'react';
+import { Spinner } from 'components/felles/Spinner';
+import { ForberedBehandling } from 'components/behandling/ForberedBehandling';
+import { BehandlingPage } from 'components/behandling/BehandlingPage';
 
 const Page = async (props: {
   params: Promise<{ behandlingsReferanse: string; aktivGruppe: StegGruppe; saksId: string }>;
@@ -23,61 +14,29 @@ const Page = async (props: {
   const behandling = await hentBehandling(params.behandlingsReferanse);
 
   if (isError(behandling)) {
-    return (
-      <VStack padding={'4'}>
-        <ApiException apiResponses={[behandling]} />
-      </VStack>
-    );
+    return <div>Feil i henting av behandling</div>;
   }
 
-  // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(params.behandlingsReferanse);
 
-  // Denne må komme før resten av kallene slik at siste versjon av data er oppdatert i backend for behandlingen
-  if (behandling.data.skalForberede) {
-    const forberedBehandlingResponse = await forberedBehandlingOgVentPåProsessering(params.behandlingsReferanse);
+  console.log('behandling.data.skalForberede', behandling.data.skalForberede);
 
-    if (forberedBehandlingResponse && forberedBehandlingResponse.status === 'FEILET') {
-      return <FlytProsesseringAlert flytProsessering={forberedBehandlingResponse} />;
-    }
-  }
-
-  const [flytResponse, sak] = await Promise.all([hentFlyt(params.behandlingsReferanse), hentSak(params.saksId)]);
-
-  if (isError(flytResponse)) {
-    return (
-      <VStack padding={'4'}>
-        <ApiException apiResponses={[flytResponse]} />
-      </VStack>
-    );
-  }
-
-  const ferdigeSteg = flytResponse.data.flyt.filter((steg) => steg.erFullført).map((steg) => steg.stegGruppe);
-
-  const stegIkkeVurdertEnda =
-    !ferdigeSteg.includes(decodeURIComponent(params.aktivGruppe) as StegGruppe) &&
-    flytResponse.data.aktivGruppe != decodeURIComponent(params.aktivGruppe);
-  return (
-    <SakContextProvider
-      sak={{
-        saksnummer: sak.saksnummer,
-        periode: sak.periode,
-        ident: sak.ident,
-        opprettetTidspunkt: sak.opprettetTidspunkt,
-        virkningsTidspunkt: behandling.data.virkningstidspunkt,
-      }}
-    >
-      {stegIkkeVurdertEnda ? (
-        <BodyShort>Dette steget er ikke vurdert enda.</BodyShort>
-      ) : (
-        <OppgaveKolonne
-          className={styles.oppgavekolonne}
-          saksnummer={sak.saksnummer}
-          behandlingsReferanse={params.behandlingsReferanse}
-          aktivGruppe={decodeURIComponent(params.aktivGruppe) as StegGruppe}
-        />
-      )}
-    </SakContextProvider>
+  return behandling.data.skalForberede ? (
+    <Suspense fallback={<Spinner size={'xlarge'} label={'Forbereder behandling..'} />}>
+      <ForberedBehandling
+        behandlingsReferanse={params.behandlingsReferanse}
+        behandling={behandling.data}
+        aktivGruppe={params.aktivGruppe}
+        saksId={params.saksId}
+      />
+    </Suspense>
+  ) : (
+    <BehandlingPage
+      behandling={behandling.data}
+      behandlingsReferanse={params.behandlingsReferanse}
+      aktivGruppe={params.aktivGruppe as StegGruppe}
+      saksId={params.saksId}
+    />
   );
 };
 
