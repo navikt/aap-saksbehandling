@@ -3,17 +3,14 @@ import { forberedBehandlingOgVentPåProsessering } from 'lib/services/saksbehand
 import { DetaljertBehandling, StegGruppe } from 'lib/types/types';
 import { BehandlingPage } from 'components/behandling/BehandlingPage';
 
-export const ForberedBehandling = async ({
-  behandlingsReferanse,
-  behandling,
-  aktivGruppe,
-  saksId,
-}: {
+interface Props {
   behandlingsReferanse: string;
   behandling: DetaljertBehandling;
   aktivGruppe: string;
   saksId: string;
-}) => {
+}
+
+export const ForberedBehandling = async ({ behandlingsReferanse, behandling, aktivGruppe, saksId }: Props) => {
   const result = await forberedBehandlingOgVentPåProsessering(behandlingsReferanse);
 
   if (result?.status === 'FEILET') {
