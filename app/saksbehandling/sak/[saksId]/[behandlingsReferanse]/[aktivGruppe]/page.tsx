@@ -57,7 +57,6 @@ const Page = async (props: {
   const stegIkkeVurdertEnda =
     !ferdigeSteg.includes(decodeURIComponent(params.aktivGruppe) as StegGruppe) &&
     flytResponse.data.aktivGruppe != decodeURIComponent(params.aktivGruppe);
-
   return (
     <SakContextProvider
       sak={{
@@ -65,6 +64,7 @@ const Page = async (props: {
         periode: sak.periode,
         ident: sak.ident,
         opprettetTidspunkt: sak.opprettetTidspunkt,
+        virkningsTidspunkt: behandling.data.virkningstidspunkt,
       }}
     >
       {stegIkkeVurdertEnda ? (

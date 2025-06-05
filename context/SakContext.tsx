@@ -13,6 +13,7 @@ export interface Sak {
   opprettetTidspunkt: string;
   ident: string;
   periode: { fom: string; tom: string };
+  virkningsTidspunkt: string | null | undefined;
 }
 
 interface Props {

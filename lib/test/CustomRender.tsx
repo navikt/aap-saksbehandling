@@ -21,6 +21,7 @@ export function customRender(ui: ReactElement) {
           ident: '12345678910',
           opprettetTidspunkt: today,
           periode: { fom: today, tom: tomorrow },
+          virkningsTidspunkt: today,
         }}
       >
         {ui}
@@ -38,6 +39,7 @@ export function customRenderWithSøknadstidspunkt(ui: ReactElement, søknadstids
           ident: '12345678910',
           opprettetTidspunkt: today,
           periode: { fom: søknadstidspunkt, tom: tomorrow },
+          virkningsTidspunkt: today,
         }}
       >
         {ui}

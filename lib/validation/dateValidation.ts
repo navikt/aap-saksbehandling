@@ -18,8 +18,7 @@ export function validerDato(value?: string) {
 
 export function erDatoFoerDato(inputDato: string, referanseDato: string): boolean {
   return (
-    new Date(parse(inputDato as string, 'dd.MM.yyyy', new Date())) <
-    new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()))
+    new Date(parse(inputDato, 'dd.MM.yyyy', new Date())) < new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()))
   );
 }
 
