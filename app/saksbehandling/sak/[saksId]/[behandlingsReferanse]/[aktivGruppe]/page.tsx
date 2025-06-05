@@ -19,8 +19,6 @@ const Page = async (props: {
 
   auditlog(params.behandlingsReferanse);
 
-  console.log('behandling.data.skalForberede', behandling.data.skalForberede);
-
   return behandling.data.skalForberede ? (
     <Suspense fallback={<Spinner size={'xlarge'} label={'Forbereder behandling..'} />}>
       <ForberedBehandling
