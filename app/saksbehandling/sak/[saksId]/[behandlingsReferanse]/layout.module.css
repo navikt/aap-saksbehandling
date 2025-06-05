@@ -2,3 +2,10 @@
   background-color: #f8f9fa;
   min-height: 100vh;
 }
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  height: 100vh;
+}
