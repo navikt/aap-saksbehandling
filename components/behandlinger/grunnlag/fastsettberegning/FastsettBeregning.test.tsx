@@ -3,6 +3,7 @@ import { render, screen } from 'lib/test/CustomRender';
 import { FastsettBeregning } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregning';
 import { userEvent } from '@testing-library/user-event';
 import { BeregningTidspunktGrunnlag } from 'lib/types/types';
+import { addDays, format } from 'date-fns';
 
 const grunnlag: BeregningTidspunktGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
@@ -55,7 +56,9 @@ describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
 
     const nedsattDato = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
-    await user.type(nedsattDato, '01.01.9999');
+
+    const imorgen = format(addDays(Date.now(), 1), 'dd.MM.yyyy');
+    await user.type(nedsattDato, imorgen);
 
     await velgBekreft();
     const feilmelding = screen.getByText('Du kan ikke registrere tidspunkt frem i tid.');
