@@ -35,7 +35,7 @@ const user = userEvent.setup();
 
 test('skal være mulig å søke etter et dokument', async () => {
   mockSWRImplementation({
-    'api/sak/123/dokumenter': toDokument,
+    'api/dokumenter/sak/123': toDokument,
   });
   render(<Saksdokumenter />);
   expect(await screen.findByRole('link', { name: /søknad\.pdf/i })).toBeVisible();
@@ -74,7 +74,7 @@ test('skal ha en tabell med inn/ut, dokument, type og journalført i header', as
 
 test('Skal vise en feilmelding dersom responsen er av type error', async () => {
   mockSWRImplementation({
-    'api/sak/123/dokumenter': { type: 'ERROR', apiException: { message: 'Uhåndtert feil i backend' }, status: 400 },
+    'api/dokumenter/sak/123': { type: 'ERROR', apiException: { message: 'Uhåndtert feil i backend' }, status: 400 },
   });
 
   render(<Saksdokumenter />);

@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Heading, HStack, Page, Table, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { isLocal } from 'lib/utils/environment';
 import { BestillBrevTestKnapp } from 'components/behandlinger/brev/BestillBrevTestKnapp';
 import { SaksInfo } from 'lib/types/types';
@@ -39,89 +39,85 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   ).length;
 
   return (
-    <Page>
-      <Page.Block width="xl">
-        <VStack gap="8">
-          <HStack justify="space-between">
-            <Heading size="large">Sak {sak.saksnummer}</Heading>
+    <VStack gap="8">
+      <HStack justify="space-between">
+        <Heading size="large">Sak {sak.saksnummer}</Heading>
 
-            <HStack gap="4">
-              <Button
-                variant="secondary"
-                size="small"
-                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/klage`)}
-              >
-                Opprett klage
-              </Button>
-              {kanRegistrerebrudd && (
-                <Button
-                  variant="secondary"
-                  size="small"
-                  onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
-                >
-                  Registrer brudd på aktivitetsplikten
-                </Button>
-              )}
+        <HStack gap="4">
+          <Button
+            variant="secondary"
+            size="small"
+            onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/klage`)}
+          >
+            Opprett klage
+          </Button>
+          {kanRegistrerebrudd && (
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
+            >
+              Registrer brudd på aktivitetsplikten
+            </Button>
+          )}
 
-              {kanRevurdere && (
-                <Button
-                  variant="secondary"
-                  size="small"
-                  onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
-                >
-                  Opprett revurdering
-                </Button>
-              )}
-            </HStack>
-          </HStack>
+          {kanRevurdere && (
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
+            >
+              Opprett revurdering
+            </Button>
+          )}
+        </HStack>
+      </HStack>
 
-          <Table>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Opprettet</Table.HeaderCell>
-                <Table.HeaderCell>Type</Table.HeaderCell>
-                <Table.HeaderCell>Status</Table.HeaderCell>
-                <Table.HeaderCell>Årsak</Table.HeaderCell>
-                <Table.HeaderCell align="right">Handlinger</Table.HeaderCell>
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Opprettet</Table.HeaderCell>
+            <Table.HeaderCell>Type</Table.HeaderCell>
+            <Table.HeaderCell>Status</Table.HeaderCell>
+            <Table.HeaderCell>Årsak</Table.HeaderCell>
+            <Table.HeaderCell align="right">Handlinger</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          {sak?.behandlinger?.map((behandling) => {
+            const behandlingErÅpen = behandling.status === 'OPPRETTET' || behandling.status === 'UTREDES';
+            return (
+              <Table.Row key={behandling.referanse}>
+                <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
+                <Table.DataCell>{formaterBehandlingType(behandling.type)}</Table.DataCell>
+                <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
+                <Table.DataCell>
+                  {behandling.årsaker.map((årsak) => formaterÅrsak(årsak)).join(', ')}
+                </Table.DataCell>
+
+                <Table.DataCell>
+                  <HStack gap="2" justify="end">
+                    {isLocal() && <BestillBrevTestKnapp behandlingReferanse={behandling.referanse} />}
+
+                    <Button
+                      as="a"
+                      href={`/saksbehandling/sak/${sak.saksnummer}/${behandling.referanse}`}
+                      size="small"
+                      icon={!behandlingErÅpen && <EyeIcon />}
+                      variant={behandlingErÅpen ? 'primary' : 'secondary'}
+                    >
+                      {behandlingErÅpen ? 'Åpne' : 'Vis'}
+                    </Button>
+                  </HStack>
+                </Table.DataCell>
               </Table.Row>
-            </Table.Header>
+            );
+          })}
+        </Table.Body>
+      </Table>
 
-            <Table.Body>
-              {sak?.behandlinger?.map((behandling) => {
-                const behandlingErÅpen = behandling.status === 'OPPRETTET' || behandling.status === 'UTREDES';
-                return (
-                  <Table.Row key={behandling.referanse}>
-                    <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
-                    <Table.DataCell>{formaterBehandlingType(behandling.type)}</Table.DataCell>
-                    <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
-                    <Table.DataCell>
-                      {behandling.årsaker.map((årsak) => formaterÅrsak(årsak)).join(', ')}
-                    </Table.DataCell>
-
-                    <Table.DataCell>
-                      <HStack gap="2" justify="end">
-                        {isLocal() && <BestillBrevTestKnapp behandlingReferanse={behandling.referanse} />}
-
-                        <Button
-                          as="a"
-                          href={`/saksbehandling/sak/${sak.saksnummer}/${behandling.referanse}`}
-                          size="small"
-                          icon={!behandlingErÅpen && <EyeIcon />}
-                          variant={behandlingErÅpen ? 'primary' : 'secondary'}
-                        >
-                          {behandlingErÅpen ? 'Åpne' : 'Vis'}
-                        </Button>
-                      </HStack>
-                    </Table.DataCell>
-                  </Table.Row>
-                );
-              })}
-            </Table.Body>
-          </Table>
-
-          {isLocal() && <SakDevTools saksId={sak.saksnummer} />}
-        </VStack>
-      </Page.Block>
-    </Page>
+      {isLocal() && <SakDevTools saksId={sak.saksnummer} />}
+    </VStack>
   );
 };
