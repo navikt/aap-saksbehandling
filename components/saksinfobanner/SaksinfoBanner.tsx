@@ -65,7 +65,6 @@ export const SaksinfoBanner = ({
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
   const visValgForÅTrekkeSøknad =
-    !isProd() &&
     !behandlerEnSøknadSomSkalTrekkes &&
     brukerKanSaksbehandle &&
     behandlingErFørstegangsbehandling &&
