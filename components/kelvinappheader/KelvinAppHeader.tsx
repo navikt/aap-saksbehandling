@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   BodyShort,
   Box,
@@ -14,35 +14,19 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { Kelvinsøk, SøkeResultat } from './Kelvinsøk';
-import { ArrowRightLeftIcon, CheckmarkCircleFillIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { ArrowRightLeftIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from './Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
 import { isDev, isLocal, isProd } from 'lib/utils/environment';
-import { useRouter } from 'next/navigation';
+import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
 
 interface BrukerInformasjon {
   navn: string;
   NAVident?: string;
 }
 
-type Brukere = 'VEILEDER' | 'KVALITETSSIKRER' | 'SAKSBEHANDLER' | 'BESLUTTER';
-
 const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => {
-  const router = useRouter();
-  const [bruker, setBruker] = useState<string | null>();
-
-  const switchUser = (bruker: Brukere) => {
-    document.cookie = `bruker=${bruker}; path=/; max-age=86400000`; // 1 dag
-    setBruker(bruker);
-    router.refresh();
-  };
-
-  useEffect(() => {
-    const cookieValue = getCookie('bruker');
-    setBruker(cookieValue);
-  }, [setBruker]);
-
   return (
     <Dropdown>
       <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
@@ -66,35 +50,7 @@ const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjo
           </Dropdown.Menu.List.Item>
         </Dropdown.Menu.GroupedList>
         <Dropdown.Menu.Divider />
-        {isLocal() && (
-          <Dropdown.Menu.GroupedList>
-            <Dropdown.Menu.GroupedList.Heading>Lokal backend</Dropdown.Menu.GroupedList.Heading>
-            <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('SAKSBEHANDLER')}>
-              <HStack gap={'1'} align={'center'}>
-                <BodyShort>Saksbehandler</BodyShort>
-                {bruker === 'SAKSBEHANDLER' && <CheckmarkCircleFillIcon color={'green'} />}
-              </HStack>
-            </Dropdown.Menu.GroupedList.Item>
-            <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('KVALITETSSIKRER')}>
-              <HStack gap={'1'} align={'center'}>
-                <BodyShort>Kvalitetssikrer</BodyShort>
-                {bruker === 'KVALITETSSIKRER' && <CheckmarkCircleFillIcon color={'green'} />}
-              </HStack>
-            </Dropdown.Menu.GroupedList.Item>
-            <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('VEILEDER')}>
-              <HStack gap={'1'} align={'center'}>
-                <BodyShort>Veileder</BodyShort>
-                {bruker === 'VEILEDER' && <CheckmarkCircleFillIcon color={'green'} />}
-              </HStack>
-            </Dropdown.Menu.GroupedList.Item>
-            <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('BESLUTTER')}>
-              <HStack gap={'1'} align={'center'}>
-                <BodyShort>Beslutter</BodyShort>
-                {bruker === 'BESLUTTER' && <CheckmarkCircleFillIcon color={'green'} />}
-              </HStack>
-            </Dropdown.Menu.GroupedList.Item>
-          </Dropdown.Menu.GroupedList>
-        )}
+        {isLocal() && <LokalBrukerBytte />}
       </Dropdown.Menu>
     </Dropdown>
   );
@@ -144,10 +100,3 @@ export const KelvinAppHeader = ({ brukerInformasjon }: { brukerInformasjon: Bruk
     </>
   );
 };
-
-function getCookie(name: string) {
-  const cookies = document.cookie.split('; ');
-  console.log(cookies);
-  const cookie = cookies.find((coockie) => coockie.startsWith(name + '='));
-  return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
-}
