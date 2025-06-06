@@ -1,6 +1,6 @@
 import { tilhørighetVurdering } from 'lib/types/types';
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
-import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
+import { formaterPeriode, sorterEtterNyesteDato } from 'lib/utils/date';
 import { formaterTilNok } from 'lib/utils/string';
 import { getLandNavn } from 'lib/utils/countries';
 
@@ -162,22 +162,14 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
   }
 };
 
-function formaterPeriode(dato1?: string | null, dato2?: string | null): string {
-  if (dato1 && !dato2) {
-    return `${formaterDatoForFrontend(dato1)} - `;
-  } else if (dato1 && dato2) {
-    return `${formaterDatoForFrontend(dato1)} - ${formaterDatoForFrontend(dato2)}`;
-  } else {
-    return '';
-  }
-}
-
-function LabelValue({ label, value }: { label: string; value: string }) {
+function LabelValue({ label, value }: { label?: string; value: string }) {
   return (
     <HStack gap={'1'}>
-      <BodyShort size={'small'} weight={'semibold'}>
-        {label}
-      </BodyShort>
+      {label && (
+        <BodyShort size={'small'} weight={'semibold'}>
+          {label}
+        </BodyShort>
+      )}
       <BodyShort size={'small'}>{value}</BodyShort>
     </HStack>
   );

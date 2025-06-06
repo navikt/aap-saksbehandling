@@ -42,3 +42,13 @@ export const parseDatoFraDatePicker = (value?: string | Date): Date | undefined 
   }
   return stringToDate(value, 'dd.MM.yyyy');
 };
+
+export function formaterPeriode(dato1?: string | null, dato2?: string | null): string {
+  if (dato1 && !dato2) {
+    return `${formaterDatoForFrontend(dato1)} - `;
+  } else if (dato1 && dato2) {
+    return `${formaterDatoForFrontend(dato1)} - ${formaterDatoForFrontend(dato2)}`;
+  } else {
+    return '';
+  }
+}
