@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   BodyShort,
   Box,
@@ -30,20 +30,18 @@ type Brukere = 'VEILEDER' | 'KVALITETSSIKRER' | 'SAKSBEHANDLER' | 'BESLUTTER';
 
 const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => {
   const router = useRouter();
+  const [bruker, setBruker] = useState<string | null>();
 
   const switchUser = (bruker: Brukere) => {
     document.cookie = `bruker=${bruker}; path=/; max-age=86400000`; // 1 dag
+    setBruker(bruker);
     router.refresh();
   };
 
-  function getCookie(name: string) {
-    const cookies = document.cookie.split('; ');
-    console.log(cookies);
-    const cookie = cookies.find((coockie) => coockie.startsWith(name + '='));
-    return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
-  }
-
-  const bruker = typeof window !== 'undefined' && typeof document !== 'undefined' ? getCookie('bruker') : undefined;
+  useEffect(() => {
+    const cookieValue = getCookie('bruker');
+    setBruker(cookieValue);
+  }, [setBruker]);
 
   return (
     <Dropdown>
@@ -146,3 +144,10 @@ export const KelvinAppHeader = ({ brukerInformasjon }: { brukerInformasjon: Bruk
     </>
   );
 };
+
+function getCookie(name: string) {
+  const cookies = document.cookie.split('; ');
+  console.log(cookies);
+  const cookie = cookies.find((coockie) => coockie.startsWith(name + '='));
+  return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
+}
