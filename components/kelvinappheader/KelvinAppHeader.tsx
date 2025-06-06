@@ -49,8 +49,13 @@ const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjo
             <LeaveIcon aria-hidden fontSize="1.5rem" />
           </Dropdown.Menu.List.Item>
         </Dropdown.Menu.GroupedList>
-        <Dropdown.Menu.Divider />
-        {isLocal() && <LokalBrukerBytte />}
+
+        {isLocal() && (
+          <>
+            <Dropdown.Menu.Divider />
+            <LokalBrukerBytte />
+          </>
+        )}
       </Dropdown.Menu>
     </Dropdown>
   );
