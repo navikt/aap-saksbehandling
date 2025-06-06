@@ -62,6 +62,7 @@ import {
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
+import { Enhet } from '../../types/oppgaveTypes';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -406,6 +407,11 @@ export const hentAutomatiskLovvalgOgMedlemskapVurdering = async (behandlingsRefe
 export const hentRefusjonGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/refusjon`;
   return await apiFetch<RefusjonskravGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentNavEnheter = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/navenheter`;
+  return await apiFetch<Enhet>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string): Promise<Blob | undefined> => {

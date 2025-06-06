@@ -199,20 +199,20 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
                   Fjern Nav-kontor
                 </Button>
               )}
+              {!readOnly && (
+                <Button
+                  type={'button'}
+                  className={'fit-content'}
+                  variant={'secondary'}
+                  size={'small'}
+                  onClick={() => append({ navKontor: '', fom: '', tom: '' })}
+                >
+                  Legg til nytt Nav-kontor
+                </Button>
+              )}
             </div>
           );
         })}
-      {!readOnly && (
-        <Button
-          type={'button'}
-          className={'fit-content'}
-          variant={'secondary'}
-          size={'small'}
-          onClick={() => append({ navKontor: '', fom: '', tom: '' })}
-        >
-          Legg til nytt Nav-kontor
-        </Button>
-      )}
     </VilkårsKortMedForm>
   );
 };
