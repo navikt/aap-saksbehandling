@@ -4,12 +4,14 @@ import { EffektuerAvvistPåFormkravGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { Behovstype, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { getJaNeiEllerUndefined } from 'lib/postmottakForm';
 import { BodyShort, VStack } from '@navikt/ds-react';
 import { FormField } from 'components/form/FormField';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { FormEvent } from 'react';
 
 interface Props {
   grunnlag?: EffektuerAvvistPåFormkravGrunnlag;
@@ -21,9 +23,9 @@ interface FormFields {
   skalEndeligAvvises: JaEllerNei;
 }
 
-export const EffektuerAvvistPåFormkrav = ({ grunnlag, readOnly }: Props) => {
-  //const behandlingsreferanse = useBehandlingsReferanse();
-  const { isLoading, status, løsBehovOgGåTilNesteStegError } =
+export const EffektuerAvvistPåFormkrav = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
+  const behandlingsreferanse = useBehandlingsReferanse();
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('EFFEKTUER_AVVIST_PÅ_FORMKRAV');
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -40,18 +42,17 @@ export const EffektuerAvvistPåFormkrav = ({ grunnlag, readOnly }: Props) => {
 
   const endeligAvvisesValg = form.watch('skalEndeligAvvises');
 
-  const handleSubmit = () => {
-    // TODO: Implementer løser
-    // form.handleSubmit((data) => {
-    //   løsBehovOgGåTilNesteSteg({
-    //     behandlingVersjon: behandlingVersjon,
-    //     behov: {
-    //       behovstype: Behovstype.EFFEKTUER_AVVIST_PÅ_FORMKRAV_KODE,
-    //       effektuerAvvistPåFormkravVurdering: { skalEndeligAvvises: data.skalEndeligAvvises == JaEllerNei.Ja },
-    //     },
-    //     referanse: behandlingsreferanse,
-    //   });
-    // })(event);
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: Behovstype.EFFEKTUER_AVVIST_PÅ_FORMKRAV_KODE,
+          effektuerAvvistPåFormkravVurdering: { skalEndeligAvvises: data.skalEndeligAvvises == JaEllerNei.Ja },
+        },
+        referanse: behandlingsreferanse,
+      });
+    })(event);
   };
 
   if (!grunnlag) {
