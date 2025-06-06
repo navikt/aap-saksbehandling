@@ -9,3 +9,7 @@
 .rad {
   height: 40px;
 }
+
+.opplysning {
+  margin-bottom: var(--a-spacing-4);
+}

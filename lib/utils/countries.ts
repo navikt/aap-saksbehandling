@@ -12,7 +12,12 @@ const eeaCountries: ValuePair[] = countryList
     label: countries.getName(country.alpha3, 'no', { select: 'official' }) || '',
   }));
 
-const filteredEeaCountries = eeaCountries.filter(country => country.value !== 'NOR');
+const alpha3Countries: ValuePair[] = countryList.map((country) => ({
+  value: country.alpha3,
+  label: countries.getName(country.alpha3, 'no', { select: 'official' }) || '',
+}));
+
+const filteredEeaCountries = eeaCountries.filter((country) => country.value !== 'NOR');
 
 export const landMedTrygdesamarbeid: ValuePair[] = [
   { value: '', label: '' },
@@ -21,3 +26,7 @@ export const landMedTrygdesamarbeid: ValuePair[] = [
   { value: 'AUS', label: countries.getName('AUS', 'no', { select: 'official' }) || '' },
   { value: 'GBR', label: countries.getName('GBR', 'no', { select: 'official' }) || '' },
 ];
+
+export function getLandNavn(landkode: string) {
+  return alpha3Countries.find((country) => country.value === landkode);
+}
