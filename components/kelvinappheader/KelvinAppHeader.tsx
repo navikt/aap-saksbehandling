@@ -19,38 +19,42 @@ import { Kelvinsøkeresultat } from './Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
 import { isDev, isLocal, isProd } from 'lib/utils/environment';
+import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
 
 interface BrukerInformasjon {
   navn: string;
   NAVident?: string;
 }
 
-const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => (
-  <Dropdown>
-    <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
-    <Dropdown.Menu>
-      <Dropdown.Menu.List>
-        {!isProd() && (
-          <>
-            <Dropdown.Menu.List.Item as={Link} href={'/oauth2/login?prompt=select_account'}>
-              <BodyShort>Bytt bruker</BodyShort>
-              <Spacer />
-              <ArrowRightLeftIcon aria-hidden fontSize="1.5rem" />
-            </Dropdown.Menu.List.Item>
+const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => {
+  return (
+    <Dropdown>
+      <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
+      <Dropdown.Menu>
+        <Dropdown.Menu.GroupedList>
+          {!isProd() && (
+            <>
+              <Dropdown.Menu.List.Item as={Link} href={'/oauth2/login?prompt=select_account'}>
+                <BodyShort>Bytt bruker</BodyShort>
+                <Spacer />
+                <ArrowRightLeftIcon aria-hidden fontSize="1.5rem" />
+              </Dropdown.Menu.List.Item>
+              <Dropdown.Menu.Divider />
+            </>
+          )}
 
-            <Dropdown.Menu.Divider />
-          </>
-        )}
-
-        <Dropdown.Menu.List.Item as={Link} href={'/oauth2/logout'}>
-          <BodyShort>Logg ut</BodyShort>
-          <Spacer />
-          <LeaveIcon aria-hidden fontSize="1.5rem" />
-        </Dropdown.Menu.List.Item>
-      </Dropdown.Menu.List>
-    </Dropdown.Menu>
-  </Dropdown>
-);
+          <Dropdown.Menu.List.Item as={Link} href={'/oauth2/logout'}>
+            <BodyShort>Logg ut</BodyShort>
+            <Spacer />
+            <LeaveIcon aria-hidden fontSize="1.5rem" />
+          </Dropdown.Menu.List.Item>
+        </Dropdown.Menu.GroupedList>
+        <Dropdown.Menu.Divider />
+        {isLocal() && <LokalBrukerBytte />}
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
 
 export const KelvinAppHeader = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => {
   const [søkeresultat, setSøkeresultat] = useState<SøkeResultat | undefined>(undefined);
