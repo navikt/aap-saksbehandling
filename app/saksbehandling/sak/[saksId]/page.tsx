@@ -1,6 +1,6 @@
 import { hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { SakMedBehandlinger } from 'components/saksoversikt/SakMedBehandlinger';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
+import { SakOversiktContainer } from 'components/saksoversikt/SakOversiktContainer';
 
 const Page = async (props: { params: Promise<{ saksId: string }> }) => {
   const params = await props.params;
@@ -13,7 +13,7 @@ const Page = async (props: { params: Promise<{ saksId: string }> }) => {
 
       <br />
 
-      <SakMedBehandlinger sak={sak} />
+      <SakOversiktContainer sak={sak} />
     </>
   );
 };
