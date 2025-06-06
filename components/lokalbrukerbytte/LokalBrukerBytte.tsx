@@ -23,10 +23,10 @@ export const LokalBrukerBytte = () => {
   return (
     <Dropdown.Menu.GroupedList>
       <Dropdown.Menu.GroupedList.Heading>Bytte av roller for lokal backend</Dropdown.Menu.GroupedList.Heading>
-      <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('SAKSBEHANDLER')}>
+      <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('VEILEDER')}>
         <HStack gap={'1'} align={'center'}>
-          <BodyShort>Saksbehandler</BodyShort>
-          {bruker === 'SAKSBEHANDLER' && <CheckmarkCircleFillIcon color={'green'} />}
+          <BodyShort>Veileder</BodyShort>
+          {bruker === 'VEILEDER' && <CheckmarkCircleFillIcon color={'green'} />}
         </HStack>
       </Dropdown.Menu.GroupedList.Item>
       <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('KVALITETSSIKRER')}>
@@ -35,10 +35,10 @@ export const LokalBrukerBytte = () => {
           {bruker === 'KVALITETSSIKRER' && <CheckmarkCircleFillIcon color={'green'} />}
         </HStack>
       </Dropdown.Menu.GroupedList.Item>
-      <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('VEILEDER')}>
+      <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('SAKSBEHANDLER')}>
         <HStack gap={'1'} align={'center'}>
-          <BodyShort>Veileder</BodyShort>
-          {bruker === 'VEILEDER' && <CheckmarkCircleFillIcon color={'green'} />}
+          <BodyShort>Saksbehandler</BodyShort>
+          {bruker === 'SAKSBEHANDLER' && <CheckmarkCircleFillIcon color={'green'} />}
         </HStack>
       </Dropdown.Menu.GroupedList.Item>
       <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('BESLUTTER')}>
@@ -53,7 +53,6 @@ export const LokalBrukerBytte = () => {
 
 function getCookie(name: string) {
   const cookies = document.cookie.split('; ');
-  console.log(cookies);
   const cookie = cookies.find((coockie) => coockie.startsWith(name + '='));
   return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
 }
