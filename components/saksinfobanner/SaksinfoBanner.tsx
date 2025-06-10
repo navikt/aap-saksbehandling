@@ -189,6 +189,7 @@ export const SaksinfoBanner = ({
               behandlingReferanse={behandling?.referanse!}
               onClose={() => settVisVurderRettighetsperiodeModal(false)}
               saksnummer={sak.saksnummer}
+              behandling={behandling}
             />
           </div>
         </HStack>
