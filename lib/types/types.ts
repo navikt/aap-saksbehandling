@@ -267,6 +267,8 @@ export type ForhåndsvisDialogmeldingResponse =
 export type UnderveisGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];
 
+export type UnderveisAvslagsÅrsak = NonNullable<UnderveisGrunnlag['avslagsårsak']>;
+
 export type AktivitetspliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.bruddaktivitetsplikt.Effektuer11_7Dto'];
 
