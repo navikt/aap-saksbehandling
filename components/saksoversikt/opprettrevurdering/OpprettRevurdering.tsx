@@ -10,7 +10,6 @@ import { v4 as uuid } from 'uuid';
 import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
 import styles from './OpprettRevurdering.module.css';
-import { isProd } from 'lib/utils/environment';
 import { isSuccess } from 'lib/utils/api';
 
 const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
@@ -23,15 +22,9 @@ const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
   { label: 'Samordning og avregning', value: 'SAMORDNING_OG_AVREGNING' },
   { label: 'Refusjonskrav', value: 'REFUSJONSKRAV' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
-  { label: 'Manuell inntekt', value: "REVURDER_MANUELL_INNTEKT" }
-  // TODO ikke prod-klart enda
-  //{ label: 'Starttidspunkt', value: 'VURDER_RETTIGHETSPERIODE' },
+  { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
   // TODO: For at denne skal fungere må det gjøres litt justering i data som sendes i melding.
   // { label: 'Utenlandsopphold før søknadstidspunkt', value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT' },
-];
-
-const årsakOptionsDev: ValuePair<ÅrsakTilBehandling>[] = [
-  { label: 'Starttidspunkt', value: 'VURDER_RETTIGHETSPERIODE' },
 ];
 
 export interface ManuellRevurderingFormFields {
@@ -96,7 +89,7 @@ export const OpprettRevurdering = ({
     årsaker: {
       type: 'combobox_multiple',
       label: 'Hvilke opplysninger skal revurderes?',
-      options: isProd() ? årsakOptions : [...årsakOptions, ...årsakOptionsDev],
+      options: årsakOptions,
       defaultValue: defaultÅrsaker,
       rules: {
         required: 'Velg opplysning som er grunnlaget for revurdering',
