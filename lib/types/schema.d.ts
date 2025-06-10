@@ -1065,7 +1065,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerGrunnlagResponse'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerGrunnlagDto'];
           };
         };
       };
@@ -2048,6 +2048,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/behandling/{referanse}/navenheter': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.NavEnheterResponse'][];
           };
         };
       };
@@ -4288,7 +4326,7 @@ export interface components {
         | '6007'
         | '6010'
         | '7001';
-      sykepengeerstatningVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerVurderingDto'];
+      sykepengeerstatningVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.SykepengerVurdering'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarYrkesskadeL\u00F8sning': {
       /** @enum {string} */
@@ -6256,6 +6294,10 @@ export interface components {
       vurderingsTidspunkt: string;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.NavEnheterResponse': {
+      enhetsnummer: string;
+      navn: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagResponse': {
       gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse'];
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -6270,6 +6312,7 @@ export interface components {
        */
       fom?: string | null;
       harKrav: boolean;
+      navKontor?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -6333,23 +6376,9 @@ export interface components {
       opplysninger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.InnhentetSykdomsOpplysninger'];
       yrkesskadeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.YrkesskadevurderingDto'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerGrunnlagResponse': {
+    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse': {
-      begrunnelse: string;
-      dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
-      /** @enum {string|null} */
-      grunn?:
-        | 'ANNEN_SYKDOM_INNEN_SEKS_MND'
-        | 'SAMME_SYKDOM_INNEN_ETT_AAR'
-        | 'SYKEPENGER_IGJEN_ARBEIDSUFOR'
-        | 'SYKEPENGER_FORTSATT_ARBEIDSUFOR'
-        | 'FORELDREPENGER_INNEN_SEKS_MND'
-        | null;
-      'harRettP\u00E5': boolean;
-      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.SykepengerVurdering'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagResponse': {
       /** Format: int32 */
@@ -7349,7 +7378,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-05T07:09:27.011200Z
+       * @example 2025-06-10T13:28:49.712472Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7442,7 +7471,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-05T07:09:27.011200Z
+       * @example 2025-06-10T13:28:49.712472Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7839,21 +7868,18 @@ export interface components {
       harFritak: boolean;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.refusjonkrav.RefusjonkravVurderingDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom?: string | null;
       harKrav: boolean;
-      refusjoner: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.RefusjonsKravDto'][];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.refusjonkrav.RefusjonkravDto': {
-      navKontor: string;
+      navKontor?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
-      fraDato?: string | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tilDato?: string | null;
+      tom?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.rettighetsperiode.RettighetsperiodeVurderingDTO': {
       begrunnelse: string;
@@ -7961,6 +7987,19 @@ export interface components {
       oppgittStudent?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent'];
       studentvurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurderingResponse'];
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.SykepengerVurdering': {
+      begrunnelse: string;
+      dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
+      /** @enum {string|null} */
+      grunn?:
+        | 'ANNEN_SYKDOM_INNEN_SEKS_MND'
+        | 'SAMME_SYKDOM_INNEN_ETT_AAR'
+        | 'SYKEPENGER_IGJEN_ARBEIDSUFOR'
+        | 'SYKEPENGER_FORTSATT_ARBEIDSUFOR'
+        | 'FORELDREPENGER_INNEN_SEKS_MND'
+        | null;
+      'harRettP\u00E5': boolean;
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.YrkesskadevurderingDto': {
       /** Format: int32 */
       andelAvNedsettelsen?: number | null;
@@ -7999,19 +8038,6 @@ export interface components {
        */
       vurderingenGjelderFra?: string | null;
       yrkesskadeBegrunnelse?: string | null;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerVurderingDto': {
-      begrunnelse: string;
-      dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
-      /** @enum {string|null} */
-      grunn?:
-        | 'ANNEN_SYKDOM_INNEN_SEKS_MND'
-        | 'SAMME_SYKDOM_INNEN_ETT_AAR'
-        | 'SYKEPENGER_IGJEN_ARBEIDSUFOR'
-        | 'SYKEPENGER_FORTSATT_ARBEIDSUFOR'
-        | 'FORELDREPENGER_INNEN_SEKS_MND'
-        | null;
-      'harRettP\u00E5': boolean;
     };
     'no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO': {
       definisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
