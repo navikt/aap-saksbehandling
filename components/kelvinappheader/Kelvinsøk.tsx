@@ -10,6 +10,7 @@ export interface SøkeResultat {
     label: string;
     href: string;
     status: string;
+    harAdressebeskyttelse: boolean;
   }[];
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
@@ -38,7 +39,7 @@ export const Kelvinsøk = ({ setSøkeresultat }: Props) => {
       ...søkedata,
       person: søkedata.person?.map((p) => ({
         ...p,
-        label: !p.label || p.label === 'undefined' ? '' : p.label,
+        label: !p.label || p.label === 'null' ? '' : p.label,
       })),
     };
 

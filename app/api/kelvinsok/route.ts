@@ -9,12 +9,14 @@ import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 import { capitalize } from 'lodash';
 import { BrukerInformasjon } from '../../../lib/services/azure/azureUserService';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 
 export interface SøkeResultat {
   oppgaver?: {
     label: string;
     href: string;
     status: string;
+    harAdressebeskyttelse: boolean;
   }[];
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
@@ -69,6 +71,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
           href: byggKelvinURL(oppgave),
           label: `${capitalize(oppgave.behandlingstype)} - ${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}`,
           status: isReservert ? 'RESERVERT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
+          harAdressebeskyttelse: utledAdressebeskyttelse(oppgave).length != 0,
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
         personData.push({
