@@ -24,7 +24,8 @@ import {
   FormkravGrunnlag,
   ForutgåendeMedlemskapGrunnlag,
   FritakMeldepliktGrunnlag,
-  HelseinstitusjonGrunnlag, Journalpost,
+  HelseinstitusjonGrunnlag,
+  Journalpost,
   KlagebehandlingKontorGrunnlag,
   KlagebehandlingNayGrunnlag,
   Klageresultat,
@@ -462,6 +463,10 @@ async function ventTilProsesseringErFerdig(
       logError('Prosessering av flyt feilet!', Error(JSON.stringify(response.data.prosessering.ventendeOppgaver)));
       prosessering = response.data.prosessering;
       break;
+    }
+
+    if (status === 'JOBBER') {
+      prosessering = response.data.prosessering;
     }
 
     if (forsøk < maksAntallForsøk) {

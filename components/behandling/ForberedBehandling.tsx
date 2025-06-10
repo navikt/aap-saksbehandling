@@ -2,6 +2,7 @@ import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytPros
 import { forberedBehandlingOgVentPåProsessering } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { DetaljertBehandling, StegGruppe } from 'lib/types/types';
 import { BehandlingPage } from 'components/behandling/BehandlingPage';
+import { logInfo } from 'lib/serverutlis/logger';
 
 interface Props {
   behandlingsReferanse: string;
@@ -15,6 +16,14 @@ export const ForberedBehandling = async ({ behandlingsReferanse, behandling, akt
 
   if (result?.status === 'FEILET') {
     return <FlytProsesseringAlert flytProsessering={result} />;
+  }
+
+  if (result?.status === 'JOBBER') {
+    logInfo(
+      `forberedBehandlingOgVentPåProsessering endte med status ${result?.status}. Vurder å øke antall forsøk / øke timeout`
+    );
+
+    // TODO bør vi vise en "Forsøk på nytt"-knapp i stedet når disse tilfellene oppstår? Nå vil behandlingssiden vises i readonly modus
   }
 
   return (
