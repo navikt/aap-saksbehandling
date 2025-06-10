@@ -1,4 +1,4 @@
-import { SettPåVentÅrsaker } from 'lib/types/types';
+import { AvslagÅrsak, SettPåVentÅrsaker, VilkårUtfall } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype, OppgaveStatus } from 'lib/types/oppgaveTypes';
 
@@ -208,5 +208,33 @@ export function mapInnstillingTilTekst(grunn: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVI
       return 'Vedtak omgjøres';
     case 'DELVIS_OMGJØR':
       return 'Delvis omgjøring';
+  }
+}
+
+export function mapUtfallTilTekst(utfall: VilkårUtfall): string {
+  switch (utfall) {
+    case 'OPPFYLT':
+      return 'Oppfylt';
+    case 'IKKE_OPPFYLT':
+      return 'Ikke oppfylt';
+    case 'IKKE_RELEVANT':
+      return 'Ikke relevant';
+    case 'IKKE_VURDERT':
+      return 'Ikke vurdert';
+  }
+}
+
+export function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak | null | undefined): string | undefined | null {
+  switch (årsak) {
+    case 'BRUKER_UNDER_18':
+      return 'Bruker under 18 år';
+    case 'BRUKER_OVER_67':
+      return 'Bruker over 67 år';
+    case 'MANGLENDE_DOKUMENTASJON':
+      return 'Manglende dokumentasjon';
+    case 'IKKE_SYKDOM_AV_VISS_VARIGHET':
+      return 'Ikke sykdom av viss varighet';
+    default:
+      return årsak;
   }
 }
