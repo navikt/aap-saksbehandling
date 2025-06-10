@@ -1,8 +1,7 @@
 import { Alert, BodyLong, Button, Modal } from '@navikt/ds-react';
-import { v4 as uuid } from 'uuid';
 
 import { CalendarIcon } from '@navikt/aksel-icons';
-import { ManuellRevurderingV0 } from 'lib/types/types';
+import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 
 import { useSendHendelseOgVentPåProsessering } from 'hooks/SendHendelseOgVentPåProsessering';
 
@@ -10,11 +9,12 @@ import styles from './VurderRettighetsperiodeModal.module.css';
 
 interface Props {
   saksnummer: string;
+  behandlingReferanse: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const VurderRettighetsperiodeModal = ({ saksnummer, isOpen, onClose }: Props) => {
+export const VurderRettighetsperiodeModal = ({ saksnummer, behandlingReferanse, isOpen, onClose }: Props) => {
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   return (
@@ -45,17 +45,16 @@ export const VurderRettighetsperiodeModal = ({ saksnummer, isOpen, onClose }: Pr
               {
                 saksnummer: saksnummer,
                 referanse: {
-                  type: 'REVURDERING_ID',
-                  verdi: uuid(),
+                  type: 'BEHANDLING_REFERANSE',
+                  verdi: behandlingReferanse,
                 },
-                type: 'MANUELL_REVURDERING',
+                type: 'NY_ÅRSAK_TIL_BEHANDLING',
                 kanal: 'DIGITAL',
                 mottattTidspunkt: new Date().toISOString(),
                 melding: {
-                  meldingType: 'ManuellRevurderingV0',
+                  meldingType: 'NyÅrsakTilBehandlingV0',
                   årsakerTilBehandling: ['VURDER_RETTIGHETSPERIODE'],
-                  beskrivelse: 'Vurder rettighetsperiode',
-                } as ManuellRevurderingV0,
+                } as NyÅrsakTilBehandlingV0,
               },
               onClose
             );

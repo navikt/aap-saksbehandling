@@ -186,6 +186,7 @@ export const SaksinfoBanner = ({
             />
             <VurderRettighetsperiodeModal
               isOpen={visVurderRettighetsperiodeModal}
+              behandlingReferanse={behandling?.referanse!}
               onClose={() => settVisVurderRettighetsperiodeModal(false)}
               saksnummer={sak.saksnummer}
             />
