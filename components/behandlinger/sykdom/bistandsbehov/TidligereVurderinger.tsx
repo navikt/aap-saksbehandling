@@ -86,7 +86,7 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
         </span>
       </Table.DataCell>
       <Table.DataCell align="right">
-        ({vurdering.vurdertAv}) {vurdering.vurdertDato && formaterDatoForFrontend(vurdering.vurdertDato)}
+        ({vurdering.vurdertAv.ident}) {vurdering.vurdertAv.dato && formaterDatoForFrontend(vurdering.vurdertAv.dato)}
       </Table.DataCell>
     </Table.ExpandableRow>
   );

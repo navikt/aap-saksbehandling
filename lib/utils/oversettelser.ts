@@ -1,4 +1,4 @@
-import { SettPåVentÅrsaker } from 'lib/types/types';
+import { AvslagÅrsak, SettPåVentÅrsaker, VilkårUtfall } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype, OppgaveStatus } from 'lib/types/oppgaveTypes';
 
@@ -44,7 +44,10 @@ const behovskodeMap = {
   '6001': 'Fastsett behanadlende enhet',
   '6002': 'Vurder klage - Nav-kontor',
   '6003': 'Vurder klage - NAY',
-  '6004': 'Opprett revurdering ved omgjøring',
+  '6004': 'Effektuer avvist på formkrav',
+  '6005': 'Skriv forhåndsvarsel klage',
+  '6006': 'Oppsummering klagebehandlingen',
+  '6007': 'Venter på uttalelse fra bruker på klage forhåndsvarsel',
   '6010': 'Vurder trekk av klage',
   '7001': 'Fastsett manuell inntekt',
   '9001': 'Manuelt satt på vent',
@@ -150,6 +153,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Omgjøring';
     case 'OPPRETTHOLDELSE':
       return 'Opprettholdelse';
+    case 'KLAGE_AVVIST_PÅ_FORMKRAV':
+      return 'Forhåndsvarsel - avvist på formkrav';
     default:
       return `${steggruppe}`;
   }
@@ -179,5 +184,57 @@ export function mapTilOppgaveStatusTekst(status: OppgaveStatus) {
       return 'Avsluttet';
     case 'OPPRETTET':
       return 'Opprettet';
+  }
+}
+
+export function mapGrunnTilString(grunn: string): string {
+  switch (grunn) {
+    case 'FEIL_LOVANVENDELSE':
+      return 'Feil lovanvendelse';
+    case 'MANGELFULL_BEGRUNNELSE':
+      return 'Mangelfull begrunnelse';
+    case 'MANGLENDE_UTREDNING':
+      return 'Manglende utredning';
+    default:
+      return grunn;
+  }
+}
+
+export function mapInnstillingTilTekst(grunn: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR'): string {
+  switch (grunn) {
+    case 'OPPRETTHOLD':
+      return 'Vedtak opprettholdes';
+    case 'OMGJØR':
+      return 'Vedtak omgjøres';
+    case 'DELVIS_OMGJØR':
+      return 'Delvis omgjøring';
+  }
+}
+
+export function mapUtfallTilTekst(utfall: VilkårUtfall): string {
+  switch (utfall) {
+    case 'OPPFYLT':
+      return 'Oppfylt';
+    case 'IKKE_OPPFYLT':
+      return 'Ikke oppfylt';
+    case 'IKKE_RELEVANT':
+      return 'Ikke relevant';
+    case 'IKKE_VURDERT':
+      return 'Ikke vurdert';
+  }
+}
+
+export function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak | null | undefined): string | undefined | null {
+  switch (årsak) {
+    case 'BRUKER_UNDER_18':
+      return 'Bruker under 18 år';
+    case 'BRUKER_OVER_67':
+      return 'Bruker over 67 år';
+    case 'MANGLENDE_DOKUMENTASJON':
+      return 'Manglende dokumentasjon';
+    case 'IKKE_SYKDOM_AV_VISS_VARIGHET':
+      return 'Ikke sykdom av viss varighet';
+    default:
+      return årsak;
   }
 }

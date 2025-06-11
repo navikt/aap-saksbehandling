@@ -20,13 +20,13 @@ export async function hentBrukerInformasjon(): Promise<BrukerInformasjon> {
 }
 
 export enum Roller {
-  BESLUTTER = 'BESLUTTER',
-  LES = 'LES',
-  SAKSBEHANDLER_OPPFØLGING = 'SAKSBEHANDLER_OPPFØLGING',
-  KVALITETSSIKRER = 'KVALITETSSIKRER',
-  SAKSBEHANDLER_NASJONAL = 'SAKSBEHANDLER_NASJONAL',
-  DRIFT = 'DRIFT',
-  PRODUKSJONSSTYRING = 'PRODUKSJONSSTYRING',
+  BESLUTTER = 'Beslutter',
+  LES = 'Les',
+  SAKSBEHANDLER_OPPFØLGING = 'Veileder',
+  KVALITETSSIKRER = 'Kvalitetssikrer',
+  SAKSBEHANDLER_NASJONAL = 'Saksbehandler',
+  DRIFT = 'Drift',
+  PRODUKSJONSSTYRING = 'Produksjonsstyring',
 }
 
 export async function hentRollerForBruker(): Promise<Roller[]> {

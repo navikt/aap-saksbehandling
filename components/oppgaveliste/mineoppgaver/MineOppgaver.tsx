@@ -12,6 +12,7 @@ import { FormField } from 'components/form/FormField';
 import { useCallback } from 'react';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { Filtrering } from 'components/oppgaveliste/filtrering/Filtrering';
+import { NoNavAapOppgaveOppgaveDtoReturStatus } from '@navikt/aap-oppgave-typescript-types';
 
 interface FormFields {
   behandlingstype: string[];
@@ -19,7 +20,13 @@ interface FormFields {
   status: string[];
 }
 
-const oppgaveStatus = { VENT: (oppgave: Oppgave) => !!oppgave.påVentTil } as const;
+const oppgaveStatus = {
+  VENT: (oppgave: Oppgave) => !!oppgave.påVentTil,
+  RETUR_KVALITETSSIKRER: (oppgave: Oppgave) =>
+    oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_KVALITETSSIKRER,
+  RETUR_BESLUTTER: (oppgave: Oppgave) =>
+    oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_BESLUTTER,
+} as const;
 
 export const MineOppgaver = () => {
   const { data: mineOppgaver, mutate, isLoading } = useSWR(`api/mine-oppgaver`, () => hentMineOppgaverClient());

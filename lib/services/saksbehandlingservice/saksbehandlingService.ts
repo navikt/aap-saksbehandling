@@ -16,6 +16,7 @@ import {
   BrevGrunnlag,
   DetaljertBehandling,
   DokumentInfo,
+  EffektuerAvvistPåFormkravGrunnlag,
   FatteVedtakGrunnlag,
   FlytProsessering,
   ForhåndsvisDialogmelding,
@@ -24,6 +25,7 @@ import {
   ForutgåendeMedlemskapGrunnlag,
   FritakMeldepliktGrunnlag,
   HelseinstitusjonGrunnlag,
+  Journalpost,
   KlagebehandlingKontorGrunnlag,
   KlagebehandlingNayGrunnlag,
   Klageresultat,
@@ -50,6 +52,7 @@ import {
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
+  TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
   UtbetalingOgSimuleringGrunnlag,
@@ -126,12 +129,17 @@ export const hentAlleSaker = async () => {
 };
 
 export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/dokumenter`;
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumenter/sak/${saksnummer}`;
   return await apiFetch<DokumentInfo[]>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentAlleDokumenterPåBruker = async (brukerId: any) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumenter/bruker`;
+  return await apiFetch<Journalpost[]>(url, saksbehandlingApiScope, 'POST', brukerId);
+};
+
 export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/dokument/${journalPostId}/${dokumentInfoId}`;
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumenter/${journalPostId}/${dokumentInfoId}`;
   return await apiFetchPdf(url, saksbehandlingApiScope);
 };
 
@@ -274,6 +282,11 @@ export const hentPåklagetBehandlingGrunnlag = async (behandlingsReferanse: stri
   return await apiFetch<PåklagetBehandlingGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentTrekkKlageGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/trekk-klage`;
+  return await apiFetch<TrekkKlageGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentBehandlendeEnhetGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/behandlende-enhet`;
   return await apiFetch<BehandlendeEnhetGrunnlag>(url, saksbehandlingApiScope, 'GET');
@@ -292,6 +305,11 @@ export const hentKlagebehandlingNayGrunnlag = async (behandlingsReferanse: strin
 export const hentKlageresultat = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/resultat`;
   return await apiFetch<Klageresultat>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentEffektuerAvvistPåFormkravGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/effektuer-avvist-på-formkrav`;
+  return await apiFetch<EffektuerAvvistPåFormkravGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFlyt = async (behandlingsReferanse: string) => {
@@ -445,6 +463,10 @@ async function ventTilProsesseringErFerdig(
       logError('Prosessering av flyt feilet!', Error(JSON.stringify(response.data.prosessering.ventendeOppgaver)));
       prosessering = response.data.prosessering;
       break;
+    }
+
+    if (status === 'JOBBER') {
+      prosessering = response.data.prosessering;
     }
 
     if (forsøk < maksAntallForsøk) {

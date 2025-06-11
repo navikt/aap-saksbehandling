@@ -1,7 +1,10 @@
 import { logError } from 'lib/serverutlis/logger';
+import { cookies } from 'next/headers';
 
 export async function hentLocalToken(scope: string) {
-  let url = 'http://localhost:8081/token';
+  const ident = await cookies().then((cookies) => cookies.get('bruker'));
+
+  let url = `http://localhost:8081/token/${ident?.value}`;
   if (scope === process.env.DOKUMENTMOTTAK_API_SCOPE) {
     url = 'http://localhost:8071/token';
   } else if (scope === process.env.STATISTIKK_API_SCOPE) {

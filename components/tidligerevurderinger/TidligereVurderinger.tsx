@@ -4,7 +4,7 @@ import { ExpansionCard, Table } from '@navikt/ds-react';
 import { Sykdomsvurdering } from 'lib/types/types';
 import styles from './TidligereVurderinger.module.css';
 import { format, parse, subDays } from 'date-fns';
-import {formaterDatoForFrontend} from "lib/utils/date";
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): boolean {
   if (objekt1 === objekt2) return true;
@@ -69,7 +69,8 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
         </span>
       </Table.DataCell>
       <Table.DataCell align="right">
-        ({vurdering.vurdertAvIdent}) {formaterDatoForFrontend(vurdering.vurdertDato)}
+        ({vurdering.vurdertAv.ansattnavn ?? vurdering.vurdertAv.ident}){' '}
+        {formaterDatoForFrontend(vurdering.vurdertAv.dato)}
       </Table.DataCell>
     </Table.ExpandableRow>
   );

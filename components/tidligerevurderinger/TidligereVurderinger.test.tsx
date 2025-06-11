@@ -15,8 +15,7 @@ const historiskVurdering: Sykdomsvurdering = {
   harSkadeSykdomEllerLyte: true,
   dokumenterBruktIVurdering: [],
   begrunnelse: 'En begrunnelse',
-  vurdertAvIdent: 'IDENT',
-  vurdertDato: '2025-02-01',
+  vurdertAv: { ident: 'IDENT', dato: '2025-02-01' },
 };
 
 const gjeldendeVurdering: Sykdomsvurdering = {
@@ -27,8 +26,7 @@ const gjeldendeVurdering: Sykdomsvurdering = {
   harSkadeSykdomEllerLyte: true,
   dokumenterBruktIVurdering: [],
   begrunnelse: 'En annen begrunnelse',
-  vurdertAvIdent: '10DENT',
-  vurdertDato: '2025-02-01',
+  vurdertAv: { ident: '10DENT', dato: '2025-02-01' },
 };
 
 const søknadstidspunkt = format(new Date(), 'yyyy-MM-dd');
@@ -62,8 +60,7 @@ describe('Tidligere vurderinger', () => {
         harSkadeSykdomEllerLyte: true,
         dokumenterBruktIVurdering: [],
         begrunnelse: 'En begrunnelse',
-        vurdertAvIdent: 'IDENT',
-        vurdertDato: format(fireUkerSiden, 'yyyy-MM-dd'),
+        vurdertAv: { ident: 'IDENT', dato: format(fireUkerSiden, 'yyyy-MM-dd') },
         vurderingenGjelderFra: format(fireUkerSiden, 'yyyy-MM-dd'),
       },
       {
@@ -74,8 +71,7 @@ describe('Tidligere vurderinger', () => {
         harSkadeSykdomEllerLyte: true,
         dokumenterBruktIVurdering: [],
         begrunnelse: 'En begrunnelse',
-        vurdertAvIdent: 'IDENT',
-        vurdertDato: format(seksUkerSiden, 'yyyy-MM-dd'),
+        vurdertAv: { ident: 'IDENT', dato: format(seksUkerSiden, 'yyyy-MM-dd') },
       },
     ];
     render(
@@ -113,8 +109,7 @@ describe('Tidligere vurderinger', () => {
         harSkadeSykdomEllerLyte: true,
         dokumenterBruktIVurdering: [],
         begrunnelse: 'En begrunnelse',
-        vurdertAvIdent: 'IDENT',
-        vurdertDato: format(fireUkerSiden, 'yyyy-MM-dd'),
+        vurdertAv: { ident: 'IDENT', dato: format(fireUkerSiden, 'yyyy-MM-dd') },
         vurderingenGjelderFra: format(fireUkerSiden, 'yyyy-MM-dd'),
       },
       {
@@ -125,8 +120,7 @@ describe('Tidligere vurderinger', () => {
         harSkadeSykdomEllerLyte: true,
         dokumenterBruktIVurdering: [],
         begrunnelse: 'En begrunnelse',
-        vurdertAvIdent: 'IDENT',
-        vurdertDato: format(seksUkerSiden, 'yyyy-MM-dd'),
+        vurdertAv: { ident: 'IDENT', dato: format(seksUkerSiden, 'yyyy-MM-dd') },
       },
     ];
     render(
@@ -160,10 +154,10 @@ describe('Tidligere vurdering', () => {
     const forventetDatoForStart = format(søknadstidspunkt, 'dd.MM.yyyy');
     expect(screen.getByRole('cell', { name: `${forventetDatoForStart} -` })).toBeVisible();
     const forventetDatoforVurdering = format(
-      parse(historiskVurdering.vurdertDato, 'yyyy-MM-dd', new Date()),
+      parse(historiskVurdering.vurdertAv.dato, 'yyyy-MM-dd', new Date()),
       'dd.MM.yyyy'
     );
-    const forventetTekst = `(${historiskVurdering.vurdertAvIdent}) ${forventetDatoforVurdering}`;
+    const forventetTekst = `(${historiskVurdering.vurdertAv.ident}) ${forventetDatoforVurdering}`;
     expect(screen.getByText(forventetTekst)).toBeVisible();
   });
 

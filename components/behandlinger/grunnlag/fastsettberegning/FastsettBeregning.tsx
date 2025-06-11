@@ -7,12 +7,13 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { isBefore, parse } from 'date-fns';
-import { validerDato } from 'lib/validation/dateValidation';
+import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import styles from './FastsettBeregning.module.css';
-import { Heading } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { useSak } from '../../../../hooks/SakHook';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -29,6 +30,8 @@ interface FormFields {
 
 export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
+  const { sak } = useSak();
+
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
@@ -49,8 +52,12 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
         rules: {
           validate: (value) => {
             const valideringsresultat = validerDato(value as string);
+            const datoErFremITid = erDatoIFremtiden(value as string);
+
             if (valideringsresultat) {
               return valideringsresultat;
+            } else if (datoErFremITid) {
+              return 'Du kan ikke registrere tidspunkt frem i tid.';
             }
           },
         },
@@ -110,6 +117,12 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
     ? '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5 og § 11-28'
     : '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5';
 
+  const erBeregningsTidspunktEtterVirkningsTidspunkt =
+    sak.virkningsTidspunkt !== null &&
+    sak.virkningsTidspunkt &&
+    form.watch('nedsattArbeidsevneDato') &&
+    erDatoFoerDato(formaterDatoForFrontend(sak.virkningsTidspunkt), form.watch('nedsattArbeidsevneDato'));
+
   return (
     <VilkårsKortMedForm
       heading={heading}
@@ -135,6 +148,11 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
           />
           <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
         </div>
+      )}
+      {erBeregningsTidspunktEtterVirkningsTidspunkt && (
+        <Alert variant={'warning'} size={'small'}>
+          Sjekk om beregningstidspunkt skal være datert etter tidspunkt for foreløpig virkningstidspunkt
+        </Alert>
       )}
     </VilkårsKortMedForm>
   );

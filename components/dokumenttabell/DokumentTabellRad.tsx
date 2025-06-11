@@ -13,10 +13,7 @@ export const DokumentTabellRad = ({ dokument }: Props) => {
   return (
     <Table.Row key={`${dokument.journalpostId}-${dokument.dokumentId}`}>
       <Table.DataCell textSize={'small'}>
-        <Link
-          href={`/saksbehandling/api/dokument/${dokument.journalpostId}/${dokument.dokumentId}`}
-          target="_blank"
-        >
+        <Link href={`/saksbehandling/api/dokumenter/${dokument.journalpostId}/${dokument.dokumentId}`} target="_blank">
           {dokument.tittel}
         </Link>
       </Table.DataCell>

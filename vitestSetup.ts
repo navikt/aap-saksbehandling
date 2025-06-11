@@ -21,6 +21,8 @@ const flytResponse: FetchResponse<BehandlingFlytOgTilstand> = {
       beslutterReadOnly: false,
       kvalitetssikringReadOnly: false,
       saksbehandlerReadOnly: false,
+      brukerHarBesluttet: false,
+      brukerHarKvalitetssikret: false,
       typeBehandling: 'Førstegangsbehandling',
       visBeslutterKort: false,
       visBrevkort: false,

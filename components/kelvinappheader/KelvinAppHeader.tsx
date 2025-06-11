@@ -14,33 +14,69 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { Kelvinsøk, SøkeResultat } from './Kelvinsøk';
-import { LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { ArrowRightLeftIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from './Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
-import { isDev, isLocal } from 'lib/utils/environment';
+import { isDev, isLocal, isProd } from 'lib/utils/environment';
+import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
+import { Roller } from 'lib/services/azure/azureUserService';
 
 interface BrukerInformasjon {
   navn: string;
   NAVident?: string;
 }
 
-const Brukermeny = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => (
-  <Dropdown>
-    <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
-    <Dropdown.Menu>
-      <Dropdown.Menu.List>
-        <Dropdown.Menu.List.Item as={Link} href={'/oauth2/logout'}>
-          <BodyShort>Logg ut</BodyShort>
-          <Spacer />
-          <LeaveIcon aria-hidden fontSize="1.5rem" />
-        </Dropdown.Menu.List.Item>
-      </Dropdown.Menu.List>
-    </Dropdown.Menu>
-  </Dropdown>
-);
+const Brukermeny = ({ brukerInformasjon, roller }: { brukerInformasjon: BrukerInformasjon; roller?: Roller[] }) => {
+  return (
+    <Dropdown>
+      <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
+      <Dropdown.Menu>
+        <Dropdown.Menu.GroupedList>
+          {isDev() && (
+            <>
+              <Dropdown.Menu.GroupedList.Heading>
+                Roller: {roller?.map((rolle) => rolle).join(', ')}
+              </Dropdown.Menu.GroupedList.Heading>
+              <Dropdown.Menu.Divider />
+            </>
+          )}
 
-export const KelvinAppHeader = ({ brukerInformasjon }: { brukerInformasjon: BrukerInformasjon }) => {
+          {!isProd() && (
+            <>
+              <Dropdown.Menu.List.Item as={Link} href={'/oauth2/login?prompt=select_account'}>
+                <BodyShort>Bytt bruker</BodyShort>
+                <Spacer />
+                <ArrowRightLeftIcon aria-hidden fontSize="1.5rem" />
+              </Dropdown.Menu.List.Item>
+            </>
+          )}
+
+          <Dropdown.Menu.List.Item as={Link} href={'/oauth2/logout'}>
+            <BodyShort>Logg ut</BodyShort>
+            <Spacer />
+            <LeaveIcon aria-hidden fontSize="1.5rem" />
+          </Dropdown.Menu.List.Item>
+        </Dropdown.Menu.GroupedList>
+
+        {isLocal() && (
+          <>
+            <Dropdown.Menu.Divider />
+            <LokalBrukerBytte />
+          </>
+        )}
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
+
+export const KelvinAppHeader = ({
+  brukerInformasjon,
+  roller,
+}: {
+  brukerInformasjon: BrukerInformasjon;
+  roller?: Roller[];
+}) => {
   const [søkeresultat, setSøkeresultat] = useState<SøkeResultat | undefined>(undefined);
 
   return (
@@ -57,7 +93,7 @@ export const KelvinAppHeader = ({ brukerInformasjon }: { brukerInformasjon: Bruk
 
         <Spacer />
         {(isLocal() || isDev()) && <AppSwitcher />}
-        <Brukermeny brukerInformasjon={brukerInformasjon} />
+        <Brukermeny brukerInformasjon={brukerInformasjon} roller={roller} />
       </InternalHeader>
 
       {søkeresultat && (

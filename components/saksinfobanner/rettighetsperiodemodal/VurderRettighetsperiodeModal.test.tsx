@@ -3,7 +3,9 @@ import { render, screen } from '@testing-library/react';
 import { VurderRettighetsperiodeModal } from './VurderRettighetsperiodeModal';
 
 describe('Vurder rettighetsperiode', () => {
-  beforeEach(() => render(<VurderRettighetsperiodeModal saksnummer={'1'} isOpen={true} onClose={vi.fn} />));
+  beforeEach(() =>
+    render(<VurderRettighetsperiodeModal behandlingReferanse={'213'} saksnummer={'1'} isOpen={true} onClose={vi.fn} />)
+  );
   it('har en overskrift', () => {
     expect(screen.getByRole('heading', { name: 'Endre starttidspunkt' })).toBeVisible();
   });

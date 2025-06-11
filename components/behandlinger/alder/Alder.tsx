@@ -4,11 +4,12 @@ import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { CheckmarkIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
-import { AlderGrunnlag, AvslagÅrsak, VilkårUtfall } from 'lib/types/types';
+import { AlderGrunnlag, AvslagÅrsak } from 'lib/types/types';
 
 import styles from './Alder.module.css';
 import { addYears, differenceInYears } from 'date-fns';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
 
 interface Props {
   grunnlag: AlderGrunnlag;
@@ -83,19 +84,6 @@ export const Alder = ({ grunnlag }: Props) => {
     </VilkårsKort>
   );
 };
-
-function mapUtfallTilTekst(utfall: VilkårUtfall): string {
-  switch (utfall) {
-    case 'OPPFYLT':
-      return 'Oppfylt';
-    case 'IKKE_OPPFYLT':
-      return 'Ikke oppfylt';
-    case 'IKKE_RELEVANT':
-      return 'Ikke relevant';
-    case 'IKKE_VURDERT':
-      return 'Ikke vurdert';
-  }
-}
 
 function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak): string {
   switch (årsak) {

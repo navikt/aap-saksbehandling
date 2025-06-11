@@ -18,7 +18,6 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
   visOverstyrKnapp,
   visOverstyringsBehov,
 }: Props) => {
-  console.log(vurdering);
   return (
     <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
       <VStack gap={'7'} paddingBlock={'3'}>

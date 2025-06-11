@@ -57,6 +57,8 @@ export function skrivBrevBehovstype(avklaringsbehovKode: AvklaringsbehovKode): B
       return Behovstype.SKRIV_VEDTAKSBREV_KODE;
     case Behovstype.SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE:
       return Behovstype.SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE;
+    case Behovstype.SKRIV_FORHÅNDSVARSEL_KLAGE_FORMKRAV_BREV_KODE:
+      return Behovstype.SKRIV_FORHÅNDSVARSEL_KLAGE_FORMKRAV_BREV_KODE;
     default:
       return Behovstype.SKRIV_BREV_KODE;
   }

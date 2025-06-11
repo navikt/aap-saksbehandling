@@ -86,6 +86,8 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Starttidspunkt';
     case 'FORMKRAV':
       return 'Formkrav';
+    case 'TREKK_KLAGE':
+      return 'Trekk klage';
     case 'KLAGEBEHANDLING_KONTOR':
       return 'Behandle klage - Nav-kontor';
     case 'KLAGEBEHANDLING_NAY':
@@ -94,6 +96,8 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Omgjøring';
     case 'OPPRETTHOLDELSE':
       return 'Opprettholdelse';
+    case 'KLAGE_AVVIST_PÅ_FORMKRAV':
+      return 'Forhåndsvarsel - avvist på formkrav';
     case 'UDEFINERT':
       return 'Udefinert';
     default:

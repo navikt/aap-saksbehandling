@@ -11,6 +11,10 @@ const vurdering: AutomatiskLovvalgOgMedlemskapVurdering = {
       kilde: ['SØKNAD'],
       opplysning: 'opplysning',
       resultat: true,
+      vurdertPeriode: {
+        fom: '2020-01-01',
+        tom: '2021-01-01',
+      },
     },
   ],
 };

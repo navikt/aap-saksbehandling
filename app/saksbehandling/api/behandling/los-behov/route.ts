@@ -1,7 +1,7 @@
 import { løsAvklaringsbehov } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
 import { getErrorMessage } from 'lib/utils/errorUtil';
-import { logError } from 'lib/serverutlis/logger';
+import { logError, logWarning } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
 
 export async function POST(req: NextRequest) {
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     }
     return new Response(JSON.stringify(løsbehovRes), { status: løsbehovRes.status });
   } catch (error) {
-    logError(`/løs-behov ${body.behov?.behovstype}`, error);
+    logWarning(`/løs-behov ${body.behov?.behovstype}`, error);
     return new Response(JSON.stringify({ message: getErrorMessage(error) }), { status: 500 });
   }
 }

@@ -3,6 +3,7 @@ import { render, screen } from 'lib/test/CustomRender';
 import { FastsettBeregning } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregning';
 import { userEvent } from '@testing-library/user-event';
 import { BeregningTidspunktGrunnlag } from 'lib/types/types';
+import { addDays, format, subDays } from 'date-fns';
 
 const grunnlag: BeregningTidspunktGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
@@ -35,6 +36,32 @@ describe('Generelt', () => {
     const heading = screen.getByText('Tidspunkt arbeidsevne ble ytterligere nedsatt § 11-28');
     expect(heading).toBeVisible();
   });
+
+  it('skal vise alert dersom beregningstidspunkt er etter virkningstidspunkt', async () => {
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    const felt = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
+
+    const imorgen = format(addDays(Date.now(), 1), 'dd.MM.yyyy');
+    await user.type(felt, imorgen);
+
+    const alert = screen.getByText(
+      'Sjekk om beregningstidspunkt skal være datert etter tidspunkt for foreløpig virkningstidspunkt'
+    );
+    expect(alert).toBeVisible();
+  });
+
+  it('skal ikke vise alert dersom beregningstidspunkt er før virkningstidspunkt', async () => {
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+    const felt = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
+
+    const igår = format(subDays(Date(), 1), 'dd.MM.yyyy');
+    await user.type(felt, igår);
+
+    const alert = screen.queryByText(
+      'Sjekk om beregningstidspunkt skal være datert etter tidspunkt for foreløpig virkningstidspunkt'
+    );
+    expect(alert).not.toBeInTheDocument();
+  });
 });
 
 describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
@@ -48,6 +75,19 @@ describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
     await velgBekreft();
     const feilmelding = screen.getByText('Du må skrive en begrunnelse for når bruker fikk nedsatt arbeidsevne');
+    expect(feilmelding).toBeVisible();
+  });
+
+  it('skal vise feilmelding hvis satt frem i tid', async () => {
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlag} />);
+
+    const nedsattDato = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
+
+    const imorgen = format(addDays(Date.now(), 1), 'dd.MM.yyyy');
+    await user.type(nedsattDato, imorgen);
+
+    await velgBekreft();
+    const feilmelding = screen.getByText('Du kan ikke registrere tidspunkt frem i tid.');
     expect(feilmelding).toBeVisible();
   });
 });
