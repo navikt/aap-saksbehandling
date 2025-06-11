@@ -1,20 +1,13 @@
 'use client';
 
-import { Behovstype } from '../../../../../lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from '../../../../../hooks/LøsBehovOgGåTilNesteStegHook';
-import { useBehandlingsReferanse } from '../../../../../hooks/BehandlingHook';
-import {
-  PåklagetBehandlingGrunnlag,
-  PåklagetBehandlingVurdering,
-  PåklagetBehandlingVurderingLøsning,
-  TypeBehandling,
-} from '../../../../../lib/types/types';
-import { useConfigForm } from '../../../../form/FormHook';
-import { VilkårsKortMedForm } from '../../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { FormEvent } from 'react';
-import { FormField } from '../../../../form/FormField';
-import { BodyShort, VStack } from '@navikt/ds-react';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { PåklagetBehandlingGrunnlag, TypeBehandling } from 'lib/types/types';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VelgPåklagetVedtakRadioTable } from 'components/behandlinger/klage/formkrav/påklagetbehandling/VelgPåklagetVedtakRadioTable';
+import { Controller, useForm } from 'react-hook-form';
+import { Behovstype } from 'lib/utils/form';
+import { formaterÅrsak } from 'lib/utils/årsaker';
 
 interface Props {
   behandlingVersjon: number;
@@ -24,11 +17,9 @@ interface Props {
   grunnlag?: PåklagetBehandlingGrunnlag;
 }
 
-interface FormFields {
-  påklagetBehandling: string;
+interface FormSchema {
+  vedtak: string | null | undefined;
 }
-
-const ARENA_VEDTAK = 'arenavedtak';
 
 export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erAktivtSteg }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
@@ -36,37 +27,31 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erA
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('PÅKLAGET_BEHANDLING');
 
-  const { form, formFields } = useConfigForm<FormFields>(
-    {
-      påklagetBehandling: {
-        type: 'combobox',
-        label: 'Velg behandlingen det klages på',
-        rules: { required: 'Du må velge behandlingen det klages på' },
-        options: [...mapGrunnlagTilValg(grunnlag), { label: 'Arenavedtak', value: ARENA_VEDTAK }],
-        defaultValue: mapDtoTilValgalternativ(grunnlag?.gjeldendeVurdering),
-      },
+  const { control, handleSubmit } = useForm<FormSchema>({
+    defaultValues: {
+      vedtak: grunnlag?.gjeldendeVurdering?.påklagetBehandling,
     },
-    { readOnly: readOnly }
-  );
+  });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
-          påklagetBehandlingVurdering: mapValgTilTilDto(data.påklagetBehandling),
+  const onSubmit = (data: FormSchema) => {
+    løsBehovOgGåTilNesteSteg({
+      behandlingVersjon: behandlingVersjon,
+      referanse: behandlingsreferanse,
+      behov: {
+        behovstype: Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
+        påklagetBehandlingVurdering: {
+          påklagetVedtakType: 'KELVIN_BEHANDLING',
+          påklagetBehandling: data.vedtak,
         },
-        referanse: behandlingsreferanse,
-      });
-    })(event);
+      },
+    });
   };
 
   return (
     <VilkårsKortMedForm
-      heading={'Påklaget behandling'}
+      heading={'Klage på vedtak'}
       steg={'PÅKLAGET_BEHANDLING'}
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       visBekreftKnapp={!readOnly}
       erAktivtSteg={erAktivtSteg}
@@ -74,16 +59,18 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erA
       isLoading={isLoading}
       status={status}
     >
-      <VStack gap={'1'}>
-        <BodyShort size={'small'} weight={'semibold'}>
-          Krav mottatt
-        </BodyShort>
-        <BodyShort size={'small'}>
-          {grunnlag?.kravMottatt ? formaterDatoForFrontend(grunnlag.kravMottatt) : 'Mangler krav mottatt dato'}
-        </BodyShort>
-      </VStack>
-
-      <FormField form={form} formField={formFields.påklagetBehandling} />
+      <Controller
+        name="vedtak"
+        control={control}
+        rules={{ required: 'Du må velge hvilket vedtak klagen gjelder' }}
+        render={({ field, fieldState }) => (
+          <VelgPåklagetVedtakRadioTable
+            options={mapGrunnlagTilValg(grunnlag)}
+            error={fieldState.invalid ? fieldState.error?.message : undefined}
+            {...field}
+          />
+        )}
+      />
     </VilkårsKortMedForm>
   );
 };
@@ -91,29 +78,11 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erA
 function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
   return (
     grunnlag?.behandlinger.map((behandling) => ({
+      saksnummer: behandling.saksnummer,
       value: behandling.referanse,
-      label: `Vedtakstidspunkt: ${behandling.vedtakstidspunkt}`,
+      vedtaksdato: new Date(behandling.vedtakstidspunkt),
+      behandlingstype: behandling.typeBehandling,
+      årsakTilBehandling: behandling.årsaker.map(formaterÅrsak),
     })) ?? []
   );
-}
-
-function mapValgTilTilDto(valgtBehandling: string): PåklagetBehandlingVurderingLøsning {
-  switch (valgtBehandling) {
-    case ARENA_VEDTAK:
-      return { påklagetVedtakType: 'ARENA_VEDTAK' };
-    default:
-      return { påklagetVedtakType: 'KELVIN_BEHANDLING', påklagetBehandling: valgtBehandling };
-  }
-}
-
-function mapDtoTilValgalternativ(valgtVurdering?: PåklagetBehandlingVurdering): string {
-  if (valgtVurdering == null) {
-    return '';
-  }
-  switch (valgtVurdering.påklagetVedtakType) {
-    case 'ARENA_VEDTAK':
-      return ARENA_VEDTAK;
-    case 'KELVIN_BEHANDLING':
-      return valgtVurdering.påklagetBehandling ?? '';
-  }
 }
