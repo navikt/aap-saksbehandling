@@ -24,12 +24,12 @@ export const GruppeSteg = ({
 }: Props) => {
   return (
     <div className={'flex-column'}>
-      {visning.brukerHarBesluttet && (
+      {visning.brukerHarBesluttet && aktivtSteg !== 'BREV' && (
         <Alert size={'small'} variant={'info'}>
           Som aktiv beslutter i denne behandlingen kan du ikke gjøre vilkårsvurderinger i denne behandlingen.
         </Alert>
       )}
-      {visning.brukerHarKvalitetssikret && (
+      {visning.brukerHarKvalitetssikret && aktivtSteg !== 'BREV' && (
         <Alert size={'small'} variant={'info'}>
           Du har gjort kvalitetssikring og kan ikke gjøre vilkårsvurderinger i denne behandlingen.
         </Alert>
