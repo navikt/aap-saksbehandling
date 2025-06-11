@@ -35,8 +35,8 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({
             vurdering={vurdering.tilhørighetVurdering.filter((e) => e.indikasjon === 'I_NORGE')}
             oppfyllerOpplysningeneKraveneTekst={'Tilsier opplysningene at brukeren oppfyller kravene til medlemskap?'}
             oppfyllerOpplysningeneKravene={vurdering.tilhørighetVurdering
-              .filter((e) => e.indikasjon === 'I_NORGE')
-              .some((x) => x.resultat)}
+              .filter((vurdering) => vurdering.indikasjon === 'I_NORGE')
+              .some((vurdering) => vurdering.resultat)}
           />
         </div>
         <div>
@@ -47,8 +47,8 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({
             vurdering={vurdering.tilhørighetVurdering.filter((e) => e.indikasjon === 'UTENFOR_NORGE')}
             oppfyllerOpplysningeneKraveneTekst={'Tilsier opplysningene at brukeren har tilhørighet til Norge?'}
             oppfyllerOpplysningeneKravene={vurdering.tilhørighetVurdering
-              .filter((e) => e.indikasjon === 'UTENFOR_NORGE')
-              .every((x) => !x.resultat)}
+              .filter((vurdering) => vurdering.indikasjon === 'UTENFOR_NORGE')
+              .every((vurdering) => !vurdering.resultat)}
           />
         </div>
         {visOverstyrKnapp && (

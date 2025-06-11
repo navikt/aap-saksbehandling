@@ -65,7 +65,6 @@ export const SaksinfoBanner = ({
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
   const visValgForÅTrekkeSøknad =
-    !isProd() &&
     !behandlerEnSøknadSomSkalTrekkes &&
     brukerKanSaksbehandle &&
     behandlingErFørstegangsbehandling &&
@@ -187,8 +186,10 @@ export const SaksinfoBanner = ({
             />
             <VurderRettighetsperiodeModal
               isOpen={visVurderRettighetsperiodeModal}
+              behandlingReferanse={behandling?.referanse!}
               onClose={() => settVisVurderRettighetsperiodeModal(false)}
               saksnummer={sak.saksnummer}
+              behandling={behandling}
             />
           </div>
         </HStack>

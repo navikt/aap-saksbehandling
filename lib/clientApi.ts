@@ -7,6 +7,7 @@ import {
   DokumentInfo,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
+  Journalpost,
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   OppdaterAktivitetspliktBrudd2,
@@ -87,7 +88,11 @@ export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
 }
 
 export function clientHentAlleDokumenterPåSak(saksnummer: string) {
-  return clientFetch<DokumentInfo[]>(`${BASE_URL}/api/sak/${saksnummer}/dokumenter`, 'GET');
+  return clientFetch<DokumentInfo[]>(`${BASE_URL}/api/dokumenter/sak/${saksnummer}`, 'GET');
+}
+
+export function clientHentAlleDokumenterPåBruker(personIdent: string) {
+  return clientFetch<Journalpost[]>(`${BASE_URL}/api/dokumenter/bruker`, 'POST', { personIdent });
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {

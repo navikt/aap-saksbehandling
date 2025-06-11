@@ -47,7 +47,14 @@ export const TilhørigetsVurderingTabell = ({
           );
 
           return erUtvidbar ? (
-            <Table.ExpandableRow key={index} content={<OpplysningerContent opplysning={opplysning} />}>
+            <Table.ExpandableRow
+              key={index}
+              content={
+                <div className={styles.opplysning}>
+                  <OpplysningerContent opplysning={opplysning} />
+                </div>
+              }
+            >
               {radInnhold}
             </Table.ExpandableRow>
           ) : (
@@ -117,5 +124,5 @@ function harMinstEttGrunnlag(vurdering: tilhørighetVurdering) {
     vurdering.manglerStatsborgerskapGrunnlag,
     vurdering.utenlandsAddresserGrunnlag,
     vurdering.vedtakImedlGrunnlag,
-  ].some((grunnlag) => grunnlag !== null);
+  ].some((grunnlag) => grunnlag !== null && grunnlag && grunnlag?.length > 0);
 }

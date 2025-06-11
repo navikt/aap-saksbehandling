@@ -96,6 +96,8 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Omgjøring';
     case 'OPPRETTHOLDELSE':
       return 'Opprettholdelse';
+    case 'KLAGE_AVVIST_PÅ_FORMKRAV':
+      return 'Forhåndsvarsel - avvist på formkrav';
     case 'UDEFINERT':
       return 'Udefinert';
     default:

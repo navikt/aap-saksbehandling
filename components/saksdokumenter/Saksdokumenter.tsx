@@ -17,7 +17,7 @@ interface FormFields {
 
 export const Saksdokumenter = () => {
   const saksnummer = useSaksnummer();
-  const { data: dokumenterPåSak } = useSWR(`api/sak/${saksnummer}/dokumenter`, () =>
+  const { data: dokumenterPåSak } = useSWR(`api/dokumenter/sak/${saksnummer}`, () =>
     clientHentAlleDokumenterPåSak(saksnummer)
   );
 
@@ -85,7 +85,7 @@ export const Saksdokumenter = () => {
                   </Table.DataCell>
                   <Table.DataCell align={'left'}>
                     <Link
-                      href={`/saksbehandling/api/dokument/${dokument.journalpostId}/${dokument.dokumentInfoId}`}
+                      href={`/saksbehandling/api/dokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}`}
                       target="_blank"
                     >
                       {dokument.tittel}

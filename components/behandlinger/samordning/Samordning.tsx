@@ -8,6 +8,7 @@ import { SamordningUføreMedDatafetching } from 'components/behandlinger/samordn
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SamordningTjenestePensjonMedDataFetching } from 'components/behandlinger/samordning/samordningtjenestepensjon/SamordningTjenestePensjonMedDataFetching';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
 interface Props {
   behandlingsreferanse: string;
@@ -28,30 +29,44 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      <SamordningSosialhjelpMedDatafetching behandlingsreferanse={behandlingsreferanse} />
-      <SamordningGraderingMedDatafetching
-        behandlingsreferanse={behandlingsreferanse}
-        behandlingVersjon={flyt.data.behandlingVersjon}
-        readOnly={flyt.data.visning.saksbehandlerReadOnly}
-      />
-      {stegSomSkalVises.includes('SAMORDNING_UFØRE') && (
-        <SamordningUføreMedDatafetching
+      <StegSuspense>
+        <SamordningSosialhjelpMedDatafetching behandlingsreferanse={behandlingsreferanse} />
+      </StegSuspense>
+
+      <StegSuspense>
+        <SamordningGraderingMedDatafetching
           behandlingsreferanse={behandlingsreferanse}
           behandlingVersjon={flyt.data.behandlingVersjon}
           readOnly={flyt.data.visning.saksbehandlerReadOnly}
         />
+      </StegSuspense>
+
+      {stegSomSkalVises.includes('SAMORDNING_UFØRE') && (
+        <StegSuspense>
+          <SamordningUføreMedDatafetching
+            behandlingsreferanse={behandlingsreferanse}
+            behandlingVersjon={flyt.data.behandlingVersjon}
+            readOnly={flyt.data.visning.saksbehandlerReadOnly}
+          />
+        </StegSuspense>
       )}
-      <SamordningAndreStatligeYtelserMedDatafetching
-        behandlingsreferanse={behandlingsreferanse}
-        behandlingVersjon={flyt.data.behandlingVersjon}
-        readOnly={flyt.data.visning.saksbehandlerReadOnly}
-      />
-      {stegSomSkalVises.includes('SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV') && (
-        <SamordningTjenestePensjonMedDataFetching
-          behandlingreferanse={behandlingsreferanse}
+
+      <StegSuspense>
+        <SamordningAndreStatligeYtelserMedDatafetching
+          behandlingsreferanse={behandlingsreferanse}
           behandlingVersjon={flyt.data.behandlingVersjon}
           readOnly={flyt.data.visning.saksbehandlerReadOnly}
         />
+      </StegSuspense>
+
+      {stegSomSkalVises.includes('SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV') && (
+        <StegSuspense>
+          <SamordningTjenestePensjonMedDataFetching
+            behandlingreferanse={behandlingsreferanse}
+            behandlingVersjon={flyt.data.behandlingVersjon}
+            readOnly={flyt.data.visning.saksbehandlerReadOnly}
+          />
+        </StegSuspense>
       )}
     </GruppeSteg>
   );

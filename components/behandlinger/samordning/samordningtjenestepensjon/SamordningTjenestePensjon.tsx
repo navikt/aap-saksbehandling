@@ -8,7 +8,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useConfigForm } from 'components/form/FormHook';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormField } from 'components/form/FormField';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterPeriode } from 'lib/utils/date';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
@@ -96,9 +96,9 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
           {grunnlag.tjenestepensjonYtelser.map((tjenestepensjonYtelse, index) => {
             return (
               <Table.Row key={index}>
-                <Table.DataCell
-                  textSize={'small'}
-                >{`${formaterDatoForFrontend(tjenestepensjonYtelse.ytelseIverksattFom)} - ${tjenestepensjonYtelse.ytelseIverksattTom && formaterDatoForFrontend(tjenestepensjonYtelse.ytelseIverksattTom)}`}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {formaterPeriode(tjenestepensjonYtelse.ytelseIverksattFom, tjenestepensjonYtelse.ytelseIverksattTom)}
+                </Table.DataCell>
                 <Table.DataCell textSize={'small'}>{tjenestepensjonYtelse.ordning.navn}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>{tjenestepensjonYtelse.ytelse}</Table.DataCell>
               </Table.Row>
