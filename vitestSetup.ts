@@ -22,7 +22,7 @@ const flytResponse: FetchResponse<BehandlingFlytOgTilstand> = {
       kvalitetssikringReadOnly: false,
       saksbehandlerReadOnly: false,
       brukerHarBesluttet: false,
-      brukerHarKvlaitetsikret: false,
+      brukerHarKvalitetssikret: false,
       typeBehandling: 'Førstegangsbehandling',
       visBeslutterKort: false,
       visBrevkort: false,

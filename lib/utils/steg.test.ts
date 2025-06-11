@@ -86,7 +86,7 @@ const flyt: BehandlingFlytOgTilstand = {
     saksbehandlerReadOnly: false,
     beslutterReadOnly: false,
     visBeslutterKort: false,
-    brukerHarKvlaitetsikret: false,
+    brukerHarKvalitetssikret: false,
     brukerHarBesluttet: false,
     visVentekort: false,
     visBrevkort: false,

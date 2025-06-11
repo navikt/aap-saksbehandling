@@ -29,7 +29,7 @@ export const GruppeSteg = ({
           Som aktiv beslutter i denne behandlingen kan du ikke gjøre vilkårsvurderinger i denne behandlingen.
         </Alert>
       )}
-      {visning.brukerHarKvlaitetsikret && (
+      {visning.brukerHarKvalitetssikret && (
         <Alert size={'small'} variant={'info'}>
           Du har gjort kvalitetssikring og kan ikke gjøre vilkårsvurderinger i denne behandlingen.
         </Alert>
