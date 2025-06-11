@@ -13,6 +13,8 @@ const grunnlag: PåklagetBehandlingGrunnlag = {
       status: 'AVSLUTTET',
       vedtakstidspunkt: '2024-02-02T00:00:00Z',
       virkningstidspunkt: null,
+      årsaker: ['FRITAK_MELDEPLIKT'],
+      saksnummer: '1234',
     },
   ],
 };
