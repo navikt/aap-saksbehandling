@@ -94,6 +94,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       erAktivtSteg={true}
+      vurdertAvAnsatt={grunnlag.yrkesskadeVurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
