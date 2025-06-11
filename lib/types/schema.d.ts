@@ -7482,7 +7482,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-12T06:39:23.281742Z
+       * @example 2025-06-12T07:29:16.351761Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7575,7 +7575,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-12T06:39:23.281742Z
+       * @example 2025-06-12T07:29:16.351761Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
