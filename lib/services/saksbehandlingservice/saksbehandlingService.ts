@@ -433,7 +433,7 @@ export const auditlog = async (behandlingsreferanse: string) => {
 
 async function ventTilProsesseringErFerdig(
   behandlingsreferanse: string,
-  maksAntallForsøk: number = 10,
+  maksAntallForsøk: number = 15,
   interval: number = 1000
 ): Promise<undefined | FlytProsessering> {
   let forsøk = 0;
@@ -454,7 +454,7 @@ async function ventTilProsesseringErFerdig(
     const status = response.data.prosessering.status;
 
     if (status === 'FERDIG') {
-      console.log('Prosessering er ferdig!');
+      logInfo(`Prosessering er ferdig! Brukte ${forsøk} forsøk.`);
       prosessering = response.data.prosessering;
       break;
     }
