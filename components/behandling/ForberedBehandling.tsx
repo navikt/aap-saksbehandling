@@ -20,7 +20,7 @@ export const ForberedBehandling = async ({ behandlingsReferanse, behandling, akt
 
   if (result?.status === 'JOBBER') {
     logInfo(
-      `forberedBehandlingOgVentPåProsessering endte med status ${result?.status}. Vurder å øke antall forsøk / øke timeout`
+      `forberedBehandlingOgVentPåProsessering endte med status ${result?.status} i behandling ${behandlingsReferanse}. Vurder å øke antall forsøk / øke timeout`
     );
 
     // TODO bør vi vise en "Forsøk på nytt"-knapp i stedet når disse tilfellene oppstår? Nå vil behandlingssiden vises i readonly modus
