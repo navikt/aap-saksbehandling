@@ -474,5 +474,9 @@ async function ventTilProsesseringErFerdig(
     }
   }
 
+  if (prosessering?.status === 'JOBBER') {
+    logInfo(`Brukte ${forsøk} forsøk og endte i status ${prosessering.status}`);
+  }
+
   return prosessering;
 }
