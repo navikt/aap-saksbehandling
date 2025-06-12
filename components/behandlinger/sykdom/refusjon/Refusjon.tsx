@@ -45,12 +45,8 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const defaultRefusjonValue: Refusjon[] = [
     {
       navKontor: '',
-      fom: grunnlag.gjeldendeVurdering?.fom
-        ? formaterDatoForFrontend(grunnlag.gjeldendeVurdering?.fom)
-        : formaterDatoForFrontend(sak.periode.fom),
-      tom: grunnlag.gjeldendeVurdering?.tom
-        ? formaterDatoForFrontend(grunnlag.gjeldendeVurdering?.tom)
-        : formaterDatoForFrontend(sak.periode.tom),
+      fom: formaterDatoForFrontend(sak.periode.fom),
+      tom: formaterDatoForFrontend(sak.periode.tom),
     },
   ];
 
@@ -58,7 +54,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
     harKrav: {
       type: 'radio',
       label: 'Har noen Nav-kontor refusjonskrav for sosialhjelp?',
-      defaultValue: getJaNeiEllerUndefined(grunnlag.gjeldendeVurdering?.harKrav),
+      defaultValue: getJaNeiEllerUndefined(),
       rules: { required: 'Du må svare på om Nav-kontoret har refusjonskrav' },
       options: JaEllerNeiOptions,
     },
@@ -202,7 +198,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
             </div>
           );
         })}
-      {!readOnly && (
+      {form.watch('harKrav') === JaEllerNei.Ja && !readOnly && (
         <Button
           type={'button'}
           className={'fit-content'}
