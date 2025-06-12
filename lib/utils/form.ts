@@ -115,9 +115,9 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '6001':
       return 'Fastsett behandlende enhet';
     case '6002':
-      return 'Vurder klage - Nav-kontor';
+      return 'Vurder klage';
     case '6003':
-      return 'Vurder klage - Nay';
+      return 'Behandle klage';
     case '6004':
       return 'Effektuer avvist på formkrav';
     case '6010':
