@@ -89,9 +89,9 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
     case 'TREKK_KLAGE':
       return 'Trekk klage';
     case 'KLAGEBEHANDLING_KONTOR':
-      return 'Behandle klage - Nav-kontor';
+      return 'Vurder klage';
     case 'KLAGEBEHANDLING_NAY':
-      return 'Behandle klage - NAY';
+      return 'Behandle klage';
     case 'OMGJØRING':
       return 'Omgjøring';
     case 'OPPRETTHOLDELSE':

@@ -112,7 +112,7 @@ export const KlagebehandlingVurderingKontor = ({ grunnlag, behandlingVersjon, re
 
   return (
     <VilkårsKortMedForm
-      heading={'Behandle klage - Nav-kontor'}
+      heading={'Vurder klage'}
       steg={'KLAGEBEHANDLING_KONTOR'}
       onSubmit={handleSubmit}
       vilkårTilhørerNavKontor={true}

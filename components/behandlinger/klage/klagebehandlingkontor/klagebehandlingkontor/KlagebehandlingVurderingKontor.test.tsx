@@ -13,8 +13,9 @@ describe('Klage - vurdering kontor', () => {
       />
     );
 
-    const heading = screen.getByText('Behandle klage - Nav-kontor');
+    const heading = screen.getByTestId('vilkår-heading');
     expect(heading).toBeVisible();
+    expect(heading).toHaveTextContent('Vurder klage');
   });
 
   it('Skal ha felt for vurdering', () => {

@@ -53,7 +53,9 @@ export const VilkårsKortMedForm = ({
     >
       <ExpansionCard.Header className={styles.header}>
         <div className={styles.title}>
-          <ExpansionCard.Title size={'small'}>{heading}</ExpansionCard.Title>
+          <ExpansionCard.Title size={'small'} data-testid="vilkår-heading">
+            {heading}
+          </ExpansionCard.Title>
         </div>
       </ExpansionCard.Header>
       <ExpansionCard.Content className={styles.content}>
