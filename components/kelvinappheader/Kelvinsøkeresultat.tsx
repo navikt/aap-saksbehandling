@@ -23,7 +23,7 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, 
   if (manglerTilgang && adressebeskyttelse) {
     return (
       <HStack gap={'8'}>
-        <BodyShort>Du har ikke tilgang til brukere som har adressebeskyttelse.</BodyShort>
+        <BodyShort>Du har ikke tilgang til denne brukeren.</BodyShort>
       </HStack>
     );
   }
