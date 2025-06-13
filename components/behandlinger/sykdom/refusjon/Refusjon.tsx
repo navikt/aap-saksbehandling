@@ -69,16 +69,12 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       løsBehovOgGåTilNesteSteg({
         behov: {
           behovstype: Behovstype.REFUSJON_KRAV_KODE,
-          refusjonkravVurdering: {
+          refusjonkravVurdering: data.refusjoner.map((refusjon) => ({
             harKrav: data.harKrav === JaEllerNei.Ja,
-            refusjoner: data.refusjoner.map((refusjon) => {
-              return {
-                navKontor: refusjon.navKontor,
-                fraDato: formaterDatoForBackend(parse(refusjon.fom!, 'dd.MM.yyyy', new Date())),
-                tilDato: formaterDatoForBackend(parse(refusjon.tom!, 'dd.MM.yyyy', new Date())),
-              };
-            }),
-          },
+            navKontor: refusjon.navKontor,
+            fraDato: formaterDatoForBackend(parse(refusjon.fom!, 'dd.MM.yyyy', new Date())),
+            tilDato: formaterDatoForBackend(parse(refusjon.tom!, 'dd.MM.yyyy', new Date())),
+          })),
         },
         behandlingVersjon: behandlingVersjon,
         referanse: behandlingsreferanse,
@@ -116,7 +112,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       erAktivtSteg={true}
-      vurdertAvAnsatt={grunnlag.gjeldendeVurdering?.vurdertAv}
+      vurdertAvAnsatt={grunnlag.gjeldendeVurderinger?.[0]?.vurdertAv}
     >
       <RadioGroupWrapper
         name={`harKrav`}
