@@ -5,6 +5,8 @@ import { SakMedBehandlinger } from 'components/saksoversikt/SakMedBehandlinger';
 import { SaksInfo } from 'lib/types/types';
 import { FileTextIcon, PersonIcon } from '@navikt/aksel-icons';
 import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/DokumentOversikt';
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
@@ -12,10 +14,20 @@ enum Tab {
 }
 
 export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
+  const router = useRouter()
+  const searchParams = useSearchParams();
+
+  const [tab, setTab] = useState(searchParams.get('t') || Tab.OVERSIKT);
+
+  const changeActiveTab = (newTab: Tab) => {
+    setTab(newTab);
+    router.replace(`?t=${newTab}`)
+  };
+
   return (
     <Page>
       <Page.Block width="2xl">
-        <Tabs defaultValue={Tab.OVERSIKT}>
+        <Tabs defaultValue={tab} onChange={(value) => changeActiveTab(value as Tab)}>
           <Tabs.List>
             <Tabs.Tab label="Oversikt" value={Tab.OVERSIKT} icon={<PersonIcon />} />
             <Tabs.Tab label="Dokumenter" value={Tab.DOKUMENTER} icon={<FileTextIcon />} />
