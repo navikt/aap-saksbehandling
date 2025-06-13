@@ -43,6 +43,19 @@ export const apiFetch = async <ResponseType>(
   return await fetchWithRetry<ResponseType>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags);
 };
 
+export const apiFetchNoMemoization = async <ResponseType>(
+  url: string,
+  scope: string,
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET',
+  requestBody?: object,
+  tags?: string[]
+): Promise<FetchResponse<ResponseType>> => {
+  const oboToken = isLocal() ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
+  // Brukes for å gi signal om og unngå bruk av request memoization. Se https://nextjs.org/docs/app/deep-dive/caching#request-memoization
+  const abortSignal = new AbortController().signal;
+  return await fetchWithRetry<ResponseType>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags, abortSignal);
+};
+
 const fetchWithRetry = async <ResponseType>(
   url: string,
   method: string,
@@ -50,6 +63,7 @@ const fetchWithRetry = async <ResponseType>(
   retries: number,
   requestBody?: object,
   tags?: string[],
+  signal?: AbortSignal,
   errors?: string[]
 ): Promise<FetchResponse<ResponseType>> => {
   if (!errors) errors = [];
@@ -67,6 +81,7 @@ const fetchWithRetry = async <ResponseType>(
       'Content-Type': 'application/json',
     },
     next: { revalidate: 0, tags },
+    signal: signal,
   });
 
   if (response.status === 204) {
@@ -77,7 +92,7 @@ const fetchWithRetry = async <ResponseType>(
     const shouldRetry = false;
     if (shouldRetry) {
       errors.push(`HTTP ${response.status} ${response.statusText}: ${url} (retries left ${retries})`);
-      return await fetchWithRetry(url, method, oboToken, retries - 1, requestBody, tags, errors);
+      return await fetchWithRetry(url, method, oboToken, retries - 1, requestBody, tags, signal, errors);
     }
 
     const responseJson: ApiException = await response.json();

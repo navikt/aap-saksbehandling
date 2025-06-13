@@ -58,7 +58,7 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
-import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
+import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
 
@@ -296,10 +296,14 @@ export const hentEffektuerAvvistPåFormkravGrunnlag = async (behandlingsReferans
 };
 
 export const hentFlyt = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt?_ts=${new Date()}`;
-  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
-    `flyt/${behandlingsReferanse}`,
-  ]);
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
+  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined);
+};
+
+// Requestene skal ikke caches ved polling
+export const hentFlytUtenRequestMemoization = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
+  return await apiFetchNoMemoization<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentUtbetalingOgSimuleringGrunnlag = async (behandlingsreferanse: string) => {
@@ -425,7 +429,7 @@ async function ventTilProsesseringErFerdig(
   while (forsøk < maksAntallForsøk) {
     forsøk++;
 
-    const response = await hentFlyt(behandlingsreferanse);
+    const response = await hentFlytUtenRequestMemoization(behandlingsreferanse);
     if (response.type === 'ERROR') {
       logError(
         `ventTilProssesering hentFlyt ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
