@@ -30,8 +30,8 @@ interface FormFields {
 }
 
 interface Refusjon {
-  navKontor: string;
   fom?: string;
+  navKontor?: string;
   tom?: string;
 }
 
@@ -69,11 +69,11 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       løsBehovOgGåTilNesteSteg({
         behov: {
           behovstype: Behovstype.REFUSJON_KRAV_KODE,
-          refusjonkravVurdering: data.refusjoner.map((refusjon) => ({
+          refusjonkravVurderinger: data.refusjoner.map((refusjon) => ({
             harKrav: data.harKrav === JaEllerNei.Ja,
-            navKontor: refusjon.navKontor,
-            fraDato: formaterDatoForBackend(parse(refusjon.fom!, 'dd.MM.yyyy', new Date())),
-            tilDato: formaterDatoForBackend(parse(refusjon.tom!, 'dd.MM.yyyy', new Date())),
+            navKontor: refusjon.navKontor ?? null,
+            fom: refusjon.fom ? formaterDatoForBackend(parse(refusjon.fom, 'dd.MM.yyyy', new Date())) : null,
+            tom: refusjon.tom ? formaterDatoForBackend(parse(refusjon.tom, 'dd.MM.yyyy', new Date())) : null,
           })),
         },
         behandlingVersjon: behandlingVersjon,
@@ -130,7 +130,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         fields.map((field, index) => {
           const erFørsterefusjon = index === 0;
           return (
-            <div key={field.id}>
+            <div key={field.id} style={{ display: 'flex', gap: '1.0rem', flexDirection: 'row', flexWrap: 'wrap' }}>
               <DateInputWrapper
                 name={`refusjoner.${index}.fom`}
                 control={form.control}
@@ -176,7 +176,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
                 control={form.control}
                 label={'Nav-kontor'}
                 rules={{ required: 'Du må oppgi et Nav-kontor' }}
-                className={'begrunnelse'}
                 readOnly={readOnly}
               />
               {!erFørsterefusjon && !readOnly && (

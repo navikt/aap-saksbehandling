@@ -5371,7 +5371,7 @@ export interface components {
         | '6007'
         | '6010'
         | '7001';
-      refusjonkravVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.refusjonkrav.RefusjonkravVurderingDto'];
+      refusjonkravVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.refusjonkrav.RefusjonkravVurderingDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SamordningVentPaVirkningstidspunktL\u00F8sning': {
       /** @enum {string} */
@@ -7527,7 +7527,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-12T12:15:16.543042Z
+       * @example 2025-06-13T10:47:50.720934Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7620,7 +7620,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-12T12:15:16.543042Z
+       * @example 2025-06-13T10:47:50.720934Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
