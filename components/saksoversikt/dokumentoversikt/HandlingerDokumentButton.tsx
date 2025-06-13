@@ -34,9 +34,15 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
               <>
                 <ActionMenu.Divider />
 
-                <ActionMenu.Item variant="danger" onSelect={() => setFeilregistrerOpen(true)}>
-                  {journalpost.journalstatus === 'FEILREGISTRERT' ? 'Opphev feilregistrering' : 'Feilregistrer sakstilknytning'}
-                </ActionMenu.Item>
+                {journalpost.journalstatus === 'FEILREGISTRERT' ? (
+                  <ActionMenu.Item onSelect={() => setFeilregistrerOpen(true)}>
+                    Opphev feilregistrering
+                  </ActionMenu.Item>
+                ) : (
+                  <ActionMenu.Item variant="danger" onSelect={() => setFeilregistrerOpen(true)}>
+                    Feilregistrer sakstilknytning
+                  </ActionMenu.Item>
+                )}
               </>
             )}
           </ActionMenu.Group>
