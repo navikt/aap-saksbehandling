@@ -296,7 +296,7 @@ export const hentEffektuerAvvistPåFormkravGrunnlag = async (behandlingsReferans
 };
 
 export const hentFlyt = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt?_ts=${new Date()}`;
   return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
     `flyt/${behandlingsReferanse}`,
   ]);
