@@ -2,13 +2,13 @@ import { Link, Table, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import useSWR from 'swr';
 import { useSaksnummer } from 'hooks/BehandlingHook';
-import { clientHentAlleDokumenterPåSak } from 'lib/clientApi';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { ArrowOrange } from 'components/icons/ArrowOrange';
 import { ArrowGreen } from 'components/icons/ArrowGreen';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { clientHentAlleDokumenterPåSak } from 'lib/dokumentClientApi';
 
 interface FormFields {
   dokumentnavn: string;

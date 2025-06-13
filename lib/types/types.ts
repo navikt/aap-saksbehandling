@@ -2,7 +2,10 @@ import { components } from './schema';
 import { components as oppgave } from '@navikt/aap-oppgave-typescript-types';
 
 // Grunnlag
-export type Journalpost = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.adapters.Journalpost'];
+export type Journalpost =
+  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.adapters.Journalpost'];
+export type Journalstatus =
+  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.adapters.Journalpost']['journalstatus'];
 export type DokumentInfo =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.adapters.SafListDokument'];
 export type MedlemskapGrunnlag =

@@ -1,11 +1,14 @@
 import styles from './DokumentOversikt.module.css';
-import { Heading, Table, VStack } from '@navikt/ds-react';
+import { Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import useSWR from 'swr';
-import { clientHentAlleDokumenterPåBruker } from 'lib/clientApi';
 import { Spinner } from 'components/felles/Spinner';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { ÅpneDokumentButton } from 'components/saksoversikt/dokumentoversikt/ÅpneDokumentButton';
+import { HandlingerDokumentButton } from 'components/saksoversikt/dokumentoversikt/HandlingerDokumentButton';
+import { SaksInfo } from 'lib/types/types';
+import { clientHentAlleDokumenterPåBruker } from 'lib/dokumentClientApi';
+import { erFerdigstilt } from 'lib/utils/journalpost';
 
 const formaterJournalpostType = (type: string) => {
   switch (type) {
@@ -49,9 +52,9 @@ const formaterStatus = (status: string) => {
   }
 };
 
-export const DokumentOversikt = ({ bruker }: { bruker: string }) => {
+export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
   const { data, isLoading } = useSWR(`/saksbehandling/api/dokumenter/bruker`, () =>
-    clientHentAlleDokumenterPåBruker(bruker)
+    clientHentAlleDokumenterPåBruker(sak.ident)
   );
 
   if (isLoading) {
@@ -99,8 +102,15 @@ export const DokumentOversikt = ({ bruker }: { bruker: string }) => {
                   {journalpost.journalstatus && formaterStatus(journalpost.journalstatus)}
                 </Table.DataCell>
                 <Table.DataCell>{journalpost.sak?.fagsakId}</Table.DataCell>
-                <Table.DataCell align="right">
-                  <ÅpneDokumentButton journalpost={journalpost} />
+                <Table.DataCell>
+                  <HStack gap="2" wrap={false} justify="end">
+                    {/* TODO: Fjerne sjekk når vi har støtte for redigering av journalpost */}
+                    {erFerdigstilt(journalpost.journalstatus) && (
+                      <HandlingerDokumentButton sak={sak} journalpost={journalpost} />
+                    )}
+
+                    <ÅpneDokumentButton journalpost={journalpost} />
+                  </HStack>
                 </Table.DataCell>
               </Table.Row>
             ))}
