@@ -27,7 +27,7 @@ export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
             </Tabs.Panel>
 
             <Tabs.Panel value={Tab.DOKUMENTER}>
-              <DokumentOversikt bruker={sak.ident} />
+              <DokumentOversikt sak={sak} />
             </Tabs.Panel>
           </Box>
         </Tabs>
