@@ -15,7 +15,6 @@ import {
   Brev,
   BrevGrunnlag,
   DetaljertBehandling,
-  DokumentInfo,
   EffektuerAvvistPåFormkravGrunnlag,
   FatteVedtakGrunnlag,
   FlytProsessering,
@@ -25,7 +24,6 @@ import {
   ForutgåendeMedlemskapGrunnlag,
   FritakMeldepliktGrunnlag,
   HelseinstitusjonGrunnlag,
-  Journalpost,
   KlagebehandlingKontorGrunnlag,
   KlagebehandlingNayGrunnlag,
   Klageresultat,
@@ -126,21 +124,6 @@ export const finnSakerForIdent = async (ident: string) => {
 export const hentAlleSaker = async () => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumenter/sak/${saksnummer}`;
-  return await apiFetch<DokumentInfo[]>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentAlleDokumenterPåBruker = async (brukerId: any) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumenter/bruker`;
-  return await apiFetch<Journalpost[]>(url, saksbehandlingApiScope, 'POST', brukerId);
-};
-
-export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumenter/${journalPostId}/${dokumentInfoId}`;
-  return await apiFetchPdf(url, saksbehandlingApiScope);
 };
 
 export const hentYrkesskadeVurderingGrunnlag = async (behandlingsReferanse: string) => {

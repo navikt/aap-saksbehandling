@@ -1,5 +1,5 @@
-import { hentDokument } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextApiRequest } from 'next';
+import { hentDokument } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 
 export async function GET(
   req: NextApiRequest,

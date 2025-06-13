@@ -1,6 +1,6 @@
 import { logError } from 'lib/serverutlis/logger';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
-import { hentRelevanteDokumenter } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
+import { hentHelsedokumenterPåSak } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 import { isLocal } from 'lib/utils/environment';
 import { FetchResponse, isError } from 'lib/utils/api';
 
@@ -36,7 +36,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ saksnumme
     return new Response(JSON.stringify(response), { status: 200 });
   }
 
-  const res = await hentRelevanteDokumenter(saksnummer);
+  const res = await hentHelsedokumenterPåSak(saksnummer);
 
   if (isError(res)) {
     logError('Feil ved henting av relevante dokumenter', res.apiException.message);

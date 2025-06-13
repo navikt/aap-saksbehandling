@@ -29,7 +29,7 @@ export interface RelevantDokumentType {
 
 export const RelevanteDokumenter = () => {
   const saksnummer = useSaksnummer();
-  const { data: relevanteDokumenter, isLoading } = useSWR(`/api/dokumentinnhenting/saf/${saksnummer}`, () =>
+  const { data: relevanteDokumenter, isLoading } = useSWR(`/api/dokumenter/sak/${saksnummer}/helsedokumenter`, () =>
     clientHentRelevanteDokumenter(saksnummer)
   );
 

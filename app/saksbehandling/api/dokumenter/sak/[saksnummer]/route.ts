@@ -1,4 +1,4 @@
-import { hentAlleDokumenterPåSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentAlleDokumenterPåSak } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 import { NextApiRequest } from 'next';
 
 export async function GET(req: NextApiRequest, props: { params: Promise<{ saksnummer: string }> }) {

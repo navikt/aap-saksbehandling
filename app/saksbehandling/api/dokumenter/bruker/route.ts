@@ -1,5 +1,5 @@
-import { hentAlleDokumenterPåBruker } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest } from 'next/server';
+import { hentAlleDokumenterPåBruker } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

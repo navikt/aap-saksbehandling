@@ -84,6 +84,6 @@ function mockFetchRelevanteDokumenter(dokumenter: RelevantDokumentType[]) {
   };
 
   mockSWRImplementation({
-    '/api/dokumentinnhenting/saf/123': response,
+    '/api/dokumenter/sak/123/helsedokumenter': response,
   });
 }
