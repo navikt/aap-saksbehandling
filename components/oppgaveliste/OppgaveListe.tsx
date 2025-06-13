@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
+import { isDev } from 'lib/utils/environment';
+import { MineOppgaver2 } from 'components/oppgaveliste/mineoppgaver/MineOppgaver2';
 
 interface Props {
   enheter: Enhet[];
@@ -33,7 +35,8 @@ export const OppgaveListe = ({ enheter }: Props) => {
         </Tabs>
       </HStack>
 
-      {selected === 'Mine oppgaver' && <MineOppgaver />}
+      {selected === 'Mine oppgaver' && !isDev() && <MineOppgaver />}
+      {selected === 'Mine oppgaver' && isDev() && <MineOppgaver2 />}
       {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
       {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
     </VStack>

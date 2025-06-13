@@ -5,65 +5,39 @@ import { BodyShort, Box, Button, Detail, HStack, VStack } from '@navikt/ds-react
 import styles from './Filtrering.module.css';
 import { useState } from 'react';
 import { FilterIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { useConfigForm } from 'components/form/FormHook';
+import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { FieldPath, UseFormReturn } from 'react-hook-form';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver2';
 
-interface FormFields {
-  behandlingstype: string[];
-  behandlingOpprettetFom: string;
-  behandlingOpprettettom: string;
-  årsak: string[];
-  oppgave: string[];
-  status: string;
+interface Props {
+  form: UseFormReturn<FormFieldsFilter>;
+  formFields: FormFields<FieldPath<FormFieldsFilter>, FormFieldsFilter>;
+  antallOppgaverTotalt?: number;
+  antallOppgaverIFilter?: number;
 }
 
-export const Filtrering = () => {
+export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppgaverTotalt }: Props) => {
   const [visFilter, setVisFilter] = useState(false);
-
-  const { form, formFields } = useConfigForm<FormFields>({
-    behandlingstype: {
-      type: 'checkbox',
-      label: 'Behandlingstype',
-      options: ['Option 1', 'Option 2', 'Option 3'],
-    },
-    behandlingOpprettetFom: {
-      type: 'date',
-      label: 'Opprettet fra',
-    },
-    behandlingOpprettettom: {
-      type: 'date',
-      label: 'Opprettet til',
-    },
-    årsak: {
-      type: 'combobox_multiple',
-      label: 'Årsak',
-      options: ['Option 1', 'Option 2', 'Option 3'],
-    },
-    oppgave: {
-      type: 'combobox_multiple',
-      label: 'Oppgave',
-      options: ['Option 1', 'Option 2', 'Option 3'],
-    },
-    status: {
-      type: 'checkbox',
-      label: 'Status',
-      options: ['Option 1', 'Option 2', 'Option 3'],
-    },
-  });
 
   return (
     <div className={styles.wrapper}>
       <HStack justify={'space-between'} align={'end'} className={styles.filtreringTop}>
-        <Button
-          icon={visFilter ? <XMarkIcon /> : <FilterIcon />}
-          iconPosition={'right'}
-          variant={'secondary'}
-          size={'small'}
-          onClick={() => setVisFilter(!visFilter)}
-        >
-          {visFilter ? 'Lukk filter' : 'Filtrer listen'}
-        </Button>
-        <Detail>Viser 25 av totalt 50 oppgaver</Detail>
+        <HStack gap={'2'} align={'center'}>
+          <Button
+            icon={visFilter ? <XMarkIcon /> : <FilterIcon />}
+            iconPosition={'right'}
+            variant={'secondary'}
+            size={'small'}
+            onClick={() => setVisFilter(!visFilter)}
+          >
+            {visFilter ? 'Lukk filter' : 'Filtrer listen'}
+          </Button>
+          <div></div>
+        </HStack>
+        <Detail>
+          Viser {antallOppgaverIFilter} av totalt {antallOppgaverTotalt} oppgaver
+        </Detail>
       </HStack>
 
       {visFilter && (
@@ -94,7 +68,13 @@ export const Filtrering = () => {
             </HStack>
             <HStack gap={'2'}>
               <Button size={'small'}>Bruk filter</Button>
-              <Button size={'small'} variant={'tertiary'}>
+              <Button
+                size={'small'}
+                variant={'tertiary'}
+                onClick={() => {
+                  form.reset();
+                }}
+              >
                 Nullstill
               </Button>
             </HStack>
