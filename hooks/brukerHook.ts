@@ -7,7 +7,7 @@ export function useInnloggetBruker() {
   const brukerContext = useContext(InnloggetBrukerContext);
 
   if (!brukerContext) {
-    throw new Error('useInnloggetBruker må brukes et sted.');
+    throw new Error('useInnloggetBruker må brukes i oppgavelisten.');
   }
 
   return brukerContext;
