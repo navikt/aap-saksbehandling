@@ -11,6 +11,7 @@ export interface KnyttTilAnnenSakRequest {
   };
   fagsakId: string;
   fagsaksystem: string;
+  tema?: string | null
 }
 
 export interface KnyttTilAnnenSakResponse {
@@ -41,6 +42,7 @@ export const KnyttTilSak = ({
       },
       fagsakId: sak.saksnummer,
       fagsaksystem: 'KELVIN',
+      tema: journalpost.tema
     });
 
     if (isSuccess(result)) {
