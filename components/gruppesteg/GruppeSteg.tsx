@@ -22,14 +22,19 @@ export const GruppeSteg = ({
   aktivtSteg,
   prosessering,
 }: Props) => {
+  const skalViseAlertForGjennomførtKvalitetssikring =
+    aktivtSteg !== 'KVALITETSSIKRING' && aktivtSteg !== 'BREV' && visning.brukerHarKvalitetssikret;
+
+  const skalViseAlertForGjennomførtBesluttet = visning.brukerHarBesluttet && aktivtSteg !== 'BREV';
+
   return (
     <div className={'flex-column'}>
-      {visning.brukerHarBesluttet && aktivtSteg !== 'BREV' && (
+      {skalViseAlertForGjennomførtBesluttet && (
         <Alert size={'small'} variant={'info'}>
           Som aktiv beslutter i denne behandlingen kan du ikke gjøre vilkårsvurderinger i denne behandlingen.
         </Alert>
       )}
-      {visning.brukerHarKvalitetssikret && aktivtSteg !== 'BREV' && (
+      {skalViseAlertForGjennomførtKvalitetssikring && (
         <Alert size={'small'} variant={'info'}>
           Du har gjort kvalitetssikring og kan ikke gjøre vilkårsvurderinger i denne behandlingen.
         </Alert>
