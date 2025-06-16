@@ -134,6 +134,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
       status={status}
       visBekreftKnapp={!readOnly}
       erAktivtSteg={true}
+      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.nedsattArbeidsevneDatobegrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
