@@ -26,7 +26,7 @@ const Error = ({ error }: Props) => {
       </Heading>
       <VStack align={'start'} gap={'4'}>
         <BodyShort>{error.message}</BodyShort>
-        <BodyShort>Gi denne identifikatoren til en frontend-utvikler: {error?.digest}</BodyShort>
+        <BodyShort>{error?.digest}</BodyShort>
         <Image src={ErrorBilde} alt="404" width={500} height={500} />
       </VStack>
     </div>
