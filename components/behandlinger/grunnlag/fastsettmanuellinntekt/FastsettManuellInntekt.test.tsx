@@ -110,7 +110,6 @@ describe('Fastsett manuell inntekt vurdering', () => {
 describe('Fastsett manuell inntekt readOnly', () => {
   it('Skal ikke vise bekreft knapp dersom readOnly er true', () => {
     render(<FastsettManuellInntekt behandlingsversjon={1} grunnlag={grunnlag} readOnly={true} />);
-    screen.logTestingPlaygroundURL();
     const bekreftKnapp = screen.queryByRole('button', { name: 'Bekreft' });
     expect(bekreftKnapp).not.toBeInTheDocument();
   });
