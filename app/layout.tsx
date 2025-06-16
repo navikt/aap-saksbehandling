@@ -4,6 +4,7 @@ import 'styles/globals.css';
 
 import { KelvinAppHeader } from 'components/kelvinappheader/KelvinAppHeader';
 import { hentBrukerInformasjon, hentRollerForBruker } from 'lib/services/azure/azureUserService';
+import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 
 export const metadata = {
   title: 'Kelvin',
@@ -17,8 +18,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="nb">
       <body>
-        <KelvinAppHeader brukerInformasjon={brukerInformasjon} roller={roller} />
-        {children}
+        <InnloggetBrukerContextProvider bruker={brukerInformasjon}>
+          <KelvinAppHeader brukerInformasjon={brukerInformasjon} roller={roller} />
+          {children}
+        </InnloggetBrukerContextProvider>
       </body>
     </html>
   );
