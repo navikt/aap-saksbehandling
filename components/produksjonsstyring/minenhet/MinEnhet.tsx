@@ -29,7 +29,7 @@ import { Enhet } from 'lib/types/oppgaveTypes';
 import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 
 import { isSuccess } from 'lib/utils/api';
-import { useLagreAktivEnhet } from 'lib/utils/aktivEnhet';
+import { useLagreAktivEnhet } from 'hooks/oppgave/aktivEnhetHook';
 
 interface Props {
   enheter: Array<Enhet>;

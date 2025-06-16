@@ -8,9 +8,9 @@ import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { byggKelvinURL, queryParamsArray } from 'lib/utils/request';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { hentKøerForEnheterClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
-import { useLagreAktivKøId } from 'lib/utils/aktivkøid';
+import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
 import { useRouter } from 'next/navigation';
-import { useLagreAktivEnhet } from 'lib/utils/aktivEnhet';
+import { useLagreAktivEnhet } from 'hooks/oppgave/aktivEnhetHook';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
 import { LedigeOppgaverTabell } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavertabell/LedigeOppgaverTabell';
@@ -27,7 +27,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [veilederFilter, setVeilederFilter] = useState<string>('');
   const [aktivKøId, setAktivKøId] = useState<number>();
-  const { hentLagretAktivKøId, lagreAktivKøId } = useLagreAktivKøId();
+  const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
 
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
     useLedigeOppgaver([aktivEnhet], veilederFilter === 'veileder', aktivKøId);
@@ -50,7 +50,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     if (!køer || (køer && isError(køer))) {
       return;
     }
-    const køId = hentLagretAktivKøId();
+    const køId = hentLagretAktivKø();
     const gyldigeKøer = køer.data.map((kø) => kø.id);
 
     if (!køId || !gyldigeKøer.includes(køId)) {

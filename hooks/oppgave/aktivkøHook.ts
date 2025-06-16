@@ -12,9 +12,9 @@ interface LagretAktivKøId {
   user: string;
 }
 
-export function useLagreAktivKøId(): {
+export function useLagreAktivKø(): {
   lagreAktivKøId: (id: number) => void;
-  hentLagretAktivKøId: () => number | undefined;
+  hentLagretAktivKø: () => number | undefined;
 } {
   const bruker = useInnloggetBruker();
 
@@ -29,7 +29,7 @@ export function useLagreAktivKøId(): {
     );
   };
 
-  const hentLagretAktivKøId = (): number | undefined => {
+  const hentLagretAktivKø = (): number | undefined => {
     try {
       const obj = JSON.parse(localStorage[KEY]) as LagretAktivKøId;
       if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
@@ -43,5 +43,5 @@ export function useLagreAktivKøId(): {
     }
   };
 
-  return { lagreAktivKøId, hentLagretAktivKøId };
+  return { lagreAktivKøId, hentLagretAktivKø: hentLagretAktivKø };
 }
