@@ -18,6 +18,7 @@ export interface SøkeResultat {
     status: string;
     harAdressebeskyttelse: boolean;
   }[];
+  harTilgang: boolean;
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
   person?: { href: string; label: string }[];
@@ -60,10 +61,12 @@ export async function POST(req: Request, brukerinformasjon: Props) {
   let kontorData: SøkeResultat['kontor'] = [];
   let personData: SøkeResultat['person'] = [];
   let behandlingsStatusData: SøkeResultat['behandlingsStatus'] = [];
+  let harTilgang: boolean = false;
   try {
     const oppgavesøkRes = await oppgaveTekstSøk(søketekst);
     if (isSuccess(oppgavesøkRes)) {
-      oppgavesøkRes.data.forEach((oppgave) => {
+      harTilgang = oppgavesøkRes.data.harTilgang
+      oppgavesøkRes.data.oppgaver.forEach((oppgave) => {
         const isReservert =
           Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon.brukerInformasjon?.NAVident;
         const isPåVent = oppgave.påVentÅrsak != null;
@@ -90,6 +93,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
       href: `/saksbehandling/sak/${sak.saksnummer}`,
       label: `${sak.saksnummer} (${formaterDatoForFrontend(sak.periode.fom)})`,
     })),
+    harTilgang: harTilgang,
     kontor: kontorData,
     person: personData,
     behandlingsStatus: behandlingsStatusData,

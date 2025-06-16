@@ -2,8 +2,8 @@
 
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Search } from '@navikt/ds-react';
-import styles from './KelvinAppHeader.module.css';
-import { Behandlingsstatus } from '../../lib/types/types';
+import styles from 'components/kelvinappheader/KelvinAppHeader.module.css';
+import { Behandlingsstatus } from 'lib/types/types';
 
 export interface SøkeResultat {
   oppgaver?: {
@@ -12,6 +12,7 @@ export interface SøkeResultat {
     status: string;
     harAdressebeskyttelse: boolean;
   }[];
+  harTilgang: boolean;
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
   person?: { href: string; label: string }[];
@@ -26,7 +27,7 @@ export const Kelvinsøk = ({ setSøkeresultat }: Props) => {
 
   async function utførSøk(søketekst: string) {
     setIsLoading(true);
-    let søkedata: SøkeResultat = {};
+    let søkedata: SøkeResultat = {} as SøkeResultat;
     try {
       søkedata = await fetch(`/api/kelvinsok`, {
         method: 'POST',

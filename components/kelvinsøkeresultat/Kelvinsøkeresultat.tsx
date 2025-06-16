@@ -3,9 +3,9 @@
 import { BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
-import type { SøkeResultat } from './Kelvinsøk';
+import type { SøkeResultat } from 'components/kelvinsøkeresultat/Kelvinsøk';
 
-import styles from './Kelvinsøkeresultat.module.css';
+import styles from 'components/kelvinsøkeresultat/Kelvinsøkeresultat.module.css';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
@@ -14,13 +14,10 @@ interface Props {
   søkeresultat: SøkeResultat;
 }
 
-export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus } }: Props) => {
-  // Oppgave returnerer 'null' som label for person hvis tilgang er avslått
-  // Hvis vi endrer på det, må sjekken på manglerTilgang endres
-  const manglerTilgang = person?.some((søk) => søk.label == '');
+export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang } }: Props) => {
   const adressebeskyttelse = oppgaver?.some((oppgave) => oppgave.harAdressebeskyttelse);
 
-  if (manglerTilgang && adressebeskyttelse) {
+  if (!harTilgang && adressebeskyttelse) {
     return (
       <HStack gap={'8'}>
         <BodyShort>Du har ikke tilgang til denne brukeren.</BodyShort>
