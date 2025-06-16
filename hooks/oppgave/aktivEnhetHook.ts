@@ -1,5 +1,5 @@
 import { dagerTilMillisekunder } from 'lib/utils/time';
-import { useInnloggetBruker } from 'hooks/brukerHook';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 const KEY = 'AKTIV_ENHET_KEY';
 const MAKS_LEVETID = dagerTilMillisekunder(1);
