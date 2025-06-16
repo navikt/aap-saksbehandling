@@ -92,6 +92,14 @@ export const MineOppgaver = () => {
 
   return (
     <>
+      <Box background="surface-subtle" padding="4" borderRadius="xlarge">
+        <HStack gap={'4'}>
+          <FormField form={form} formField={formFields.behandlingstype} />
+          <FormField form={form} formField={formFields.avklaringsbehov} />
+          <FormField form={form} formField={formFields.status} />
+        </HStack>
+      </Box>
+
       {isLoading && (
         <VStack gap={'7'}>
           <VStack gap={'1'}>
@@ -107,17 +115,13 @@ export const MineOppgaver = () => {
           </VStack>
         </VStack>
       )}
-      <Box background="surface-subtle" padding="4" borderRadius="xlarge">
-        <HStack gap={'4'}>
-          <FormField form={form} formField={formFields.behandlingstype} />
-          <FormField form={form} formField={formFields.avklaringsbehov} />
-          <FormField form={form} formField={formFields.status} />
-        </HStack>
-      </Box>
-      {filtrerteOppgaver && filtrerteOppgaver.length > 0 ? (
-        <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
-      ) : (
+
+      {!isLoading && filtrerteOppgaver && filtrerteOppgaver.length === 0 && (
         <BodyShort>Ingen reserverte oppgaver.</BodyShort>
+      )}
+
+      {filtrerteOppgaver && filtrerteOppgaver.length > 0 && (
+        <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
       )}
     </>
   );

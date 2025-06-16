@@ -68,6 +68,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           <KøSelect label={'Velg kø'} køer={oppgaveKøer || []} aktivKøId={aktivKøId} valgtKøListener={oppdaterKøId} />
         </HStack>
       </Box>
+
       {isLoading && (
         <VStack gap={'1'}>
           <Skeleton variant="rectangle" width="100%" height={40} />
@@ -77,8 +78,11 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           <Skeleton variant="rectangle" width="100%" height={40} />
         </VStack>
       )}
-      {!oppgaver?.length && <BodyShort>Ingen oppgaver for enhet {aktivEnhet}</BodyShort>}
+
+      {!isLoading && oppgaver && oppgaver.length === 0 && <BodyShort>Ingen oppgaver for enhet {aktivEnhet}</BodyShort>}
+
       {oppgaver && oppgaver.length > 0 && <AlleOppgaverTabell oppgaver={oppgaver} />}
+
       {kanLasteInnFlereOppgaver && (
         <HStack justify={'center'}>
           <Button

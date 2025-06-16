@@ -120,7 +120,6 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           </HStack>
         </VStack>
       </Box>
-      {!oppgaver?.length && <BodyShort>Ingen oppgaver i valgt kø for valgt enhet</BodyShort>}
       {isLoading && (
         <VStack gap={'1'}>
           <Skeleton variant="rectangle" width="100%" height={40} />
@@ -130,7 +129,11 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           <Skeleton variant="rectangle" width="100%" height={40} />
         </VStack>
       )}
+
+      {!isLoading && !oppgaver?.length && <BodyShort>Ingen oppgaver i valgt kø for valgt enhet</BodyShort>}
+
       {oppgaver && oppgaver.length > 0 && <LedigeOppgaverTabell oppgaver={oppgaver} revalidateFunction={mutate} />}
+
       {kanLasteInnFlereOppgaver && (
         <HStack justify={'center'}>
           <Button
