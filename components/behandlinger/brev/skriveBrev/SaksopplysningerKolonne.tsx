@@ -14,7 +14,7 @@ interface Props {
 export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag }: Props) => {
   const gjeldendeSykdomsvurdering = sykdomsgrunnlag.sykdomsvurderinger[sykdomsgrunnlag.sykdomsvurderinger.length - 1];
   const gjeldendeBistandsbehov = bistandsbehovGrunnlag.vurdering;
-  const refusjonVurdering = refusjonGrunnlag.gjeldendeVurdering;
+  const refusjonVurderinger = refusjonGrunnlag.gjeldendeVurderinger;
 
   return (
     <div className={styles.kolonne}>
@@ -31,8 +31,9 @@ export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag
           begrunnelse={gjeldendeBistandsbehov.begrunnelse}
         />
       )}
-      {refusjonVurdering?.harKrav && (
+      {refusjonVurderinger?.map((refusjonVurdering, index) => (
         <SaksopplysningerKort
+          key={index}
           tittel="Refusjonskrav"
           begrunnelse={`Det er refusjonskrav mot sosialhjelp. Refusjonskravet gjelder fra 
                   ${
@@ -46,7 +47,7 @@ export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag
                       : ''
                   }`}
         />
-      )}
+      ))}
     </div>
   );
 };

@@ -62,6 +62,7 @@ import {
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
+import { Enhet } from '../../types/oppgaveTypes';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -125,6 +126,12 @@ export const finnSakerForIdent = async (ident: string) => {
 export const hentAlleSaker = async () => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentAlleNavEnheter = async (input: string, behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/navenheter`;
+  console.log(`${saksbehandlingApiBaseUrl}`);
+  return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentAlleDokumenterPåSak = async (saksnummer: string) => {

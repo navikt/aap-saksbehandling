@@ -8,15 +8,20 @@ import { RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { Button, Radio } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { useFieldArray } from 'react-hook-form';
-import { TextAreaWrapper } from '../../../form/textareawrapper/TextAreaWrapper';
 import { RadioGroupWrapper } from '../../../form/radiogroupwrapper/RadioGroupWrapper';
 import { DateInputWrapper } from '../../../form/dateinputwrapper/DateInputWrapper';
+import { isError } from 'lib/utils/api';
+import { ValuePair } from '../../../form/FormField';
+import { AsyncComboSearch } from '../../../form/asynccombosearch/AsyncComboSearch';
+import { hentAlleNavEnheter } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
+import { isLocal } from '../../../../lib/utils/environment';
+import { Enhet } from '../../../../lib/types/oppgaveTypes';
 
 interface Props {
   behandlingVersjon: number;
@@ -31,8 +36,13 @@ interface FormFields {
 
 interface Refusjon {
   fom?: string;
-  navKontor?: string;
+  navKontor?: NavKontor;
   tom?: string;
+}
+
+interface NavKontor {
+  label: string;
+  value: string;
 }
 
 export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
@@ -40,11 +50,12 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
     useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
 
   const { sak } = useSak();
+  const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const defaultRefusjonValue: Refusjon[] = [
     {
-      navKontor: '',
+      navKontor: { label: '', value: '' },
       fom: formaterDatoForFrontend(sak.periode.fom),
       tom: formaterDatoForFrontend(sak.periode.tom),
     },
@@ -71,7 +82,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           behovstype: Behovstype.REFUSJON_KRAV_KODE,
           refusjonkravVurderinger: data.refusjoner.map((refusjon) => ({
             harKrav: data.harKrav === JaEllerNei.Ja,
-            navKontor: refusjon.navKontor ?? null,
+            navKontor: refusjon.navKontor?.value ?? null,
             fom: refusjon.fom ? formaterDatoForBackend(parse(refusjon.fom, 'dd.MM.yyyy', new Date())) : null,
             tom: refusjon.tom ? formaterDatoForBackend(parse(refusjon.tom, 'dd.MM.yyyy', new Date())) : null,
           })),
@@ -82,22 +93,47 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
     })(event);
   };
 
-  /*const kontorSøk = async (input: string) => {
-      if (input.length <= 2) {
-        return [];
-      }
-      const response = await kontorSøk(input);
-      if (isError(response)) {
-        return [];
-      }
+  const testdata: Enhet[] = [
+    {
+      navn: 'Nav Løten',
+      enhetNr: '0415',
+    },
+    {
+      navn: 'Nav Asker',
+      enhetNr: '0220',
+    },
+    {
+      navn: 'Nav Grorud',
+      enhetNr: '0328',
+    },
+  ];
 
-      const res = response.data.map((kontor) => ({
-        label: `${kontor.navn} - ${kontor.nr}`,
-        value: `${kontor.navn} - ${kontor.nr}`,
+  const kontorSøk = async (input: string) => {
+    if (isLocal()) {
+      const res: ValuePair[] = testdata.map((kontor) => ({
+        label: `${kontor.navn} - ${kontor.enhetNr}`,
+        value: `${kontor.navn} - ${kontor.enhetNr}`,
       }));
+
       setDefaultOptions(res);
       return res;
-    };*/
+    }
+
+    if (input.length <= 2) {
+      return [];
+    }
+    const response = await hentAlleNavEnheter(input, behandlingsreferanse);
+    if (isError(response)) {
+      return [];
+    }
+
+    const res = response.data.map((kontor) => ({
+      label: `${kontor.navn} - ${kontor.enhetNr}`,
+      value: `${kontor.enhetNr}`,
+    }));
+    setDefaultOptions(res);
+    return res;
+  };
 
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'refusjoner' });
 
@@ -171,12 +207,14 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
                 }}
                 readOnly={readOnly}
               />
-              <TextAreaWrapper
+              <AsyncComboSearch
+                label={'Velg Nav-kontor'}
+                form={form}
                 name={`refusjoner.${index}.navKontor`}
-                control={form.control}
-                label={'Nav-kontor'}
-                rules={{ required: 'Du må oppgi et Nav-kontor' }}
-                readOnly={readOnly}
+                fetcher={kontorSøk}
+                rules={{ required: 'Du må velge et nav-kontor' }}
+                size={'small'}
+                defaultOptions={defaultOptions}
               />
               {!erFørsterefusjon && !readOnly && (
                 <Button
@@ -199,7 +237,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           className={'fit-content'}
           variant={'secondary'}
           size={'small'}
-          onClick={() => append({ navKontor: '', fom: '', tom: '' })}
+          onClick={() => append({ navKontor: { label: '', value: '' }, fom: '', tom: '' })}
         >
           Legg til nytt Nav-kontor
         </Button>
