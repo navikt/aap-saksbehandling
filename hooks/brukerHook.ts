@@ -1,15 +1,14 @@
 'use client';
 
-import useSWR from 'swr';
-import { clientHentBrukerInformasjon } from 'lib/clientApi';
-import { isSuccess } from 'lib/utils/api';
+import { useContext } from 'react';
+import { InnloggetBrukerContext } from 'context/InnloggetBrukerContext';
 
-export function useNavIdent() {
-  const { data } = useSWR('api/bruker', clientHentBrukerInformasjon);
+export function useInnloggetBruker() {
+  const brukerContext = useContext(InnloggetBrukerContext);
 
-  if (isSuccess(data)) {
-    return data.data.NAVident;
-  } else {
-    return 'Ukjent';
+  if (!brukerContext) {
+    throw new Error('useInnloggetBruker må brukes i oppgavelisten.');
   }
+
+  return brukerContext;
 }
