@@ -41,8 +41,8 @@ interface Refusjon {
 }
 
 interface NavKontor {
-  label: string;
-  value: string;
+  enhetsNavn: string;
+  enhetsNr: string;
 }
 
 export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
@@ -55,7 +55,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
 
   const defaultRefusjonValue: Refusjon[] = [
     {
-      navKontor: { label: '', value: '' },
+      navKontor: { enhetsNavn: '', enhetsNr: '' },
       fom: formaterDatoForFrontend(sak.periode.fom),
       tom: formaterDatoForFrontend(sak.periode.tom),
     },
@@ -82,7 +82,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           behovstype: Behovstype.REFUSJON_KRAV_KODE,
           refusjonkravVurderinger: data.refusjoner.map((refusjon) => ({
             harKrav: data.harKrav === JaEllerNei.Ja,
-            navKontor: refusjon.navKontor?.value ?? null,
+            navKontor: refusjon.navKontor?.enhetsNr ?? null,
             fom: refusjon.fom ? formaterDatoForBackend(parse(refusjon.fom, 'dd.MM.yyyy', new Date())) : null,
             tom: refusjon.tom ? formaterDatoForBackend(parse(refusjon.tom, 'dd.MM.yyyy', new Date())) : null,
           })),
@@ -237,7 +237,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           className={'fit-content'}
           variant={'secondary'}
           size={'small'}
-          onClick={() => append({ navKontor: { label: '', value: '' }, fom: '', tom: '' })}
+          onClick={() => append({ navKontor: { enhetsNavn: '', enhetsNr: '' }, fom: '', tom: '' })}
         >
           Legg til nytt Nav-kontor
         </Button>
