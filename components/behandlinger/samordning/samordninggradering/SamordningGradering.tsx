@@ -113,7 +113,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
             vurderingerForSamordning: {
               begrunnelse: data.begrunnelse,
-              maksDatoEndelig: data.maksDatoEndelig === 'true',
+              maksDatoEndelig: data.maksDatoEndelig !== 'false',
               maksDato: data.maksDato && formaterDatoForBackend(parse(data.maksDato, 'dd.MM.yyyy', new Date())),
               vurderteSamordningerData: data.vurderteSamordninger.map((vurdertSamordning) => ({
                 manuell: vurdertSamordning.manuell,
