@@ -1,5 +1,5 @@
 import { dagerTilMillisekunder } from 'lib/utils/time';
-import { useNavIdent } from 'hooks/brukerHook';
+import { useInnloggetBruker } from 'hooks/brukerHook';
 
 const KEY = 'AKTIV_ENHET_KEY';
 const MAKS_LEVETID = dagerTilMillisekunder(1);
@@ -14,12 +14,12 @@ export function useLagreAktivEnhet(): {
   lagreAktivEnhet: (value: string) => void;
   hentLagretAktivEnhet: () => string | undefined;
 } {
-  const navIdent = useNavIdent();
+  const bruker = useInnloggetBruker();
 
   const lagreAktivEnhet = (value: string) => {
     localStorage.setItem(
       KEY,
-      JSON.stringify({ value, timestamp: new Date().getTime(), user: navIdent } as LagretValgtEnhet)
+      JSON.stringify({ value, timestamp: new Date().getTime(), user: bruker.NAVident } as LagretValgtEnhet)
     );
   };
 
@@ -27,7 +27,7 @@ export function useLagreAktivEnhet(): {
     try {
       const obj = JSON.parse(localStorage[KEY]) as LagretValgtEnhet;
 
-      if (obj.user === navIdent && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
+      if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
         return obj.value;
       } else {
         localStorage.removeItem(KEY);
