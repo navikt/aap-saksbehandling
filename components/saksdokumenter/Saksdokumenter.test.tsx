@@ -1,17 +1,18 @@
 import { expect, test } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
-import { DokumentInfo } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import { FetchResponse } from 'lib/utils/api';
 import { mockSWRImplementation } from 'lib/test/testUtil';
+import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 
-const toDokument: FetchResponse<DokumentInfo[]> = {
+const toDokument: FetchResponse<RelevantDokumentType[]> = {
   data: [
     {
       tittel: 'søknad.pdf',
       dokumentInfoId: '123',
       journalpostId: '456',
+      tema: 'AAP',
       variantformat: 'ARKIV',
       brevkode: 'arkiv',
       datoOpprettet: '2024-12-12',
@@ -21,6 +22,7 @@ const toDokument: FetchResponse<DokumentInfo[]> = {
       tittel: 'legeerklæring.pdf',
       dokumentInfoId: '456',
       journalpostId: '789',
+      tema: 'AAP',
       variantformat: 'ARKIV',
       brevkode: 'arkiv',
       datoOpprettet: '2024-12-12',
