@@ -14,7 +14,7 @@ import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { AsyncComboSearch } from '../../../form/asynccombosearch/AsyncComboSearch';
 import { Enhet } from '../../../../lib/types/oppgaveTypes';
-import { isLocal } from '../../../../lib/utils/environment';
+import { isLocal, isProd } from '../../../../lib/utils/environment';
 import { hentAlleNavEnheter } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from '../../../../lib/utils/api';
 
@@ -176,15 +176,17 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           <FormField form={form} formField={formFields.vurderingenGjelderTil} />
         </>
       )}
-      <AsyncComboSearch
-        label={'Velg Nav-kontor'}
-        form={form}
-        name={`navKontor`}
-        fetcher={kontorSøk}
-        rules={{ required: 'Du må velge et nav-kontor' }}
-        size={'small'}
-        defaultOptions={defaultOptions}
-      />
+      {!isProd() && (
+        <AsyncComboSearch
+          label={'Velg Nav-kontor (test, lagres ikke)'}
+          form={form}
+          name={`navKontor`}
+          fetcher={kontorSøk}
+          rules={{ required: 'Du må velge et nav-kontor' }}
+          size={'small'}
+          defaultOptions={defaultOptions}
+        />
+      )}
     </VilkårsKortMedForm>
   );
 };
