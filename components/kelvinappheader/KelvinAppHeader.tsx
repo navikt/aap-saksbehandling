@@ -13,14 +13,15 @@ import {
   Spacer,
   VStack,
 } from '@navikt/ds-react';
-import { Kelvinsøk, SøkeResultat } from './Kelvinsøk';
+import { Kelvinsøk } from 'components/kelvinsøkeresultat/Kelvinsøk';
 import { ArrowRightLeftIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Kelvinsøkeresultat } from './Kelvinsøkeresultat';
+import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
 import { isDev, isLocal, isProd } from 'lib/utils/environment';
 import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
 import { Roller } from 'lib/services/azure/azureUserService';
+import { SøkeResultat } from 'app/api/kelvinsok/route';
 
 interface BrukerInformasjon {
   navn: string;

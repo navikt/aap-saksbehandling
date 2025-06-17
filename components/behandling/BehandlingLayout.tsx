@@ -69,7 +69,7 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
 
   const oppgavesøkRes = await oppgaveTekstSøk(personInfo.fnr);
   if (isSuccess(oppgavesøkRes)) {
-    oppgave = oppgavesøkRes.data.find((oppgave) => oppgave.behandlingRef === behandlingsReferanse);
+    oppgave = oppgavesøkRes.data.oppgaver.find((oppgave) => oppgave.behandlingRef === behandlingsReferanse);
   } else {
     logWarning('henting av oppgave for behandling feilet', oppgavesøkRes.apiException);
   }

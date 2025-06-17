@@ -4,7 +4,7 @@ import { Tag } from '@navikt/ds-react';
 import styles from './Behandlingsstatus.module.css';
 
 interface Props {
-  status: Status;
+  status?: Status;
 }
 
 export const Behandlingsstatus = ({ status }: Props) => {
