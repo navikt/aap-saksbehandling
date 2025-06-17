@@ -12,7 +12,6 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
   behandlingVersjon: number;
-  erAktivtSteg: boolean;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
   grunnlag?: KlagebehandlingNayGrunnlag;
@@ -26,7 +25,7 @@ interface FormFields {
   vilkårSomSkalOpprettholdes: Hjemmel[];
 }
 
-export const KlagebehandlingVurderingNay = ({ erAktivtSteg, behandlingVersjon, readOnly, grunnlag }: Props) => {
+export const KlagebehandlingVurderingNay = ({ behandlingVersjon, readOnly, grunnlag }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_NAY');
@@ -118,7 +117,6 @@ export const KlagebehandlingVurderingNay = ({ erAktivtSteg, behandlingVersjon, r
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={erAktivtSteg}
     >
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />

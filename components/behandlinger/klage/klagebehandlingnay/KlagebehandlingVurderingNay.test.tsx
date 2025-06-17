@@ -1,17 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { KlagebehandlingVurderingNay } from './KlagebehandlingVurderingNay';
-import { screen, render } from '../../../../lib/test/CustomRender';
+import { render, screen } from '../../../../lib/test/CustomRender';
 
 describe('Klage - vurdering nay', () => {
   it('Skal ha en overskrift', () => {
-    render(
-      <KlagebehandlingVurderingNay
-        erAktivtSteg={true}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Klage'}
-      />
-    );
+    render(<KlagebehandlingVurderingNay readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
 
     const heading = screen.getByText('Behandle klage');
     expect(heading).toBeVisible();
@@ -31,7 +24,6 @@ describe('Klage - vurdering nay', () => {
             opprettet: '2023-10-01T12:00:00Z',
           },
         }}
-        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Klage'}

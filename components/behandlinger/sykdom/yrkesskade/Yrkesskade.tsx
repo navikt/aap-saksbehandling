@@ -93,7 +93,6 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
       status={status}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
       vurdertAvAnsatt={grunnlag.yrkesskadeVurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />

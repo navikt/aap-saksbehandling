@@ -108,7 +108,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      erAktivtSteg={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />

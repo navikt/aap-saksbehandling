@@ -12,7 +12,6 @@ import styles from './KlagebehandlingOppsummering.module.css';
 
 interface Props {
   behandlingVersjon: number;
-  erAktivtSteg: boolean;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
   grunnlagNay: KlagebehandlingNayGrunnlag;
@@ -55,13 +54,7 @@ const utledVilkårSomOmgjøres = (
   return [...kontorVilkårOmgjøres, ...nayVilkårOmgjøres];
 };
 
-export const KlagebehandlingOppsummering = ({
-  erAktivtSteg,
-  behandlingVersjon,
-  readOnly,
-  grunnlagNay,
-  grunnlagKontor,
-}: Props) => {
+export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunnlagNay, grunnlagKontor }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_OPPSUMMERING');
@@ -89,7 +82,6 @@ export const KlagebehandlingOppsummering = ({
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={erAktivtSteg}
       knappTekst={'Bekreft og send til beslutter'}
     >
       <VStack gap={'1'}>

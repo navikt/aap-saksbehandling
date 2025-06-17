@@ -12,7 +12,6 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
   behandlingVersjon: number;
-  erAktivtSteg: boolean;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
   grunnlag?: KlagebehandlingKontorGrunnlag;
@@ -120,7 +119,6 @@ export const KlagebehandlingVurderingKontor = ({ grunnlag, behandlingVersjon, re
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
     >
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />

@@ -16,7 +16,6 @@ interface Props {
   readOnly: boolean;
   grunnlag?: LovvalgMedlemskapGrunnlag;
   overstyring: boolean;
-  erAktivtSteg: boolean;
 }
 
 interface FormFields {
@@ -58,7 +57,6 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
   grunnlag,
   readOnly,
   behandlingVersjon,
-  erAktivtSteg,
   overstyring,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
@@ -153,7 +151,6 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       onSubmit={handleSubmit}
       visBekreftKnapp={!readOnly}
       isLoading={isLoading}
-      erAktivtSteg={erAktivtSteg}
       status={status}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}

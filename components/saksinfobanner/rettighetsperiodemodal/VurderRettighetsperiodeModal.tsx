@@ -26,7 +26,7 @@ export const VurderRettighetsperiodeModal = ({
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
   const router = useRouter();
   const harAlleredeAvklaringsbehovForVurderingAvRettighetsperiode = behandling?.avklaringsbehov?.some(
-    (it) => it.definisjon.kode === Behovstype.VURDER_RETTIGHETSPERIODE
+    (it) => it.definisjon.kode === Behovstype.VURDER_RETTIGHETSPERIODE && it.status === 'AVSLUTTET'
   );
 
   const onBekreft = async () => {

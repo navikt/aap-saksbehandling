@@ -1,13 +1,13 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Behovstype } from 'lib/utils/form';
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
 import styles from './ForeslåVedtak.module.css';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -20,31 +20,32 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly }: Props) => {
     useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
 
   return (
-    <VilkårsKort heading="Foreslå vedtak" steg={'FORESLÅ_VEDTAK'}>
+    <VilkårsKortMedForm
+      heading="Foreslå vedtak"
+      steg={'FORESLÅ_VEDTAK'}
+      vilkårTilhørerNavKontor={false}
+      status={status}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={isLoading}
+      visBekreftKnapp={!readOnly}
+      onSubmit={async () => {
+        løsBehovOgGåTilNesteSteg({
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.FORESLÅ_VEDTAK_KODE,
+          },
+          referanse: behandlingsReferanse,
+        });
+      }}
+      knappTekst={'Send til beslutter'}
+    >
       <div className={styles.foreslåvedtak}>
         {!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}
         <LøsBehovOgGåTilNesteStegStatusAlert
           status={status}
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
-        {!readOnly && (
-          <Button
-            className={'fit-content'}
-            loading={isLoading}
-            onClick={async () => {
-              løsBehovOgGåTilNesteSteg({
-                behandlingVersjon: behandlingVersjon,
-                behov: {
-                  behovstype: Behovstype.FORESLÅ_VEDTAK_KODE,
-                },
-                referanse: behandlingsReferanse,
-              });
-            }}
-          >
-            Send til beslutter
-          </Button>
-        )}
       </div>
-    </VilkårsKort>
+    </VilkårsKortMedForm>
   );
 };

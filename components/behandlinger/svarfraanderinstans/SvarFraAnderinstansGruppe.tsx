@@ -1,23 +1,21 @@
+import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { TypeBehandling } from 'lib/types/types';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { KlagebehandlingVurderingKontorMedDataFetching } from './klagebehandlingkontor/KlagebehandlingVurderingKontorMedDataFetching';
+import { SvarFraAnderinstansMedDatafetching } from 'components/behandlinger/svarfraanderinstans/SvarFraAnderinstansMedDatafetching';
 
 interface Props {
   behandlingsreferanse: string;
 }
 
-export const KlagebehandlingKontor = async ({ behandlingsreferanse }: Props) => {
+export const SvarFraAnderinstansGruppe = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
-  const stegSomSkalVises = getStegSomSkalVises('KLAGEBEHANDLING_KONTOR', flyt.data);
-  const behandlingVersjon = flyt.data.behandlingVersjon;
+  const stegSomSkalVises = getStegSomSkalVises('SVAR_FRA_ANDREINSTANS', flyt.data);
 
   return (
     <GruppeSteg
@@ -27,13 +25,12 @@ export const KlagebehandlingKontor = async ({ behandlingsreferanse }: Props) => 
       behandlingVersjon={flyt.data.behandlingVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {stegSomSkalVises.includes('KLAGEBEHANDLING_KONTOR') && (
+      {stegSomSkalVises.includes('SVAR_FRA_ANDREINSTANS') && (
         <StegSuspense>
-          <KlagebehandlingVurderingKontorMedDataFetching
+          <SvarFraAnderinstansMedDatafetching
             behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={behandlingVersjon}
             readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            typeBehandling={flyt.data.visning.typeBehandling as TypeBehandling}
+            behandlingVersjon={flyt.data.behandlingVersjon}
           />
         </StegSuspense>
       )}

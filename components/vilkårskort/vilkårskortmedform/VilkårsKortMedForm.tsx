@@ -17,7 +17,6 @@ interface Props {
   children: ReactNode;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
-  erAktivtSteg: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
   visBekreftKnapp: boolean;
   løsBehovOgGåTilNesteStegError?: ApiException;

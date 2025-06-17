@@ -33,7 +33,6 @@ export const TrekkKlage = async ({ behandlingsreferanse }: Props) => {
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            erAktivtSteg={flyt.data.aktivtSteg == 'TREKK_KLAGE'}
             typeBehandling={flyt.data.visning.typeBehandling as TypeBehandling}
           />
         </StegSuspense>

@@ -31,30 +31,14 @@ const grunnlag: PåklagetBehandlingGrunnlag = {
 
 describe('Klage', () => {
   it('Skal ha en overskrift', () => {
-    render(
-      <PåklagetBehandling
-        grunnlag={undefined}
-        erAktivtSteg={true}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Klage'}
-      />
-    );
+    render(<PåklagetBehandling grunnlag={undefined} readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
 
     const heading = screen.getByText('Klage på vedtak');
     expect(heading).toBeVisible();
   });
 
   it('Skal ha 1 valg per behandling', () => {
-    render(
-      <PåklagetBehandling
-        grunnlag={grunnlag}
-        erAktivtSteg={true}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Klage'}
-      />
-    );
+    render(<PåklagetBehandling grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
 
     const radios = screen.getAllByRole('radio');
     const radioValues = radios.map((r) => r.getAttribute('value'));

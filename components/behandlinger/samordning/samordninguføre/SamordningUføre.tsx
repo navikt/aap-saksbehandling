@@ -98,7 +98,6 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       visBekreftKnapp={!readOnly}
-      erAktivtSteg={true}
     >
       <FormField form={form} formField={formFields.begrunnelse} />
       {grunnlag?.grunnlag?.length > 0 && (

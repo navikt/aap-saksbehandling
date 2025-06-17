@@ -112,7 +112,6 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
       isLoading={isLoading}
       visBekreftKnapp={skalViseBekreftKnapp}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
     >
       <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
         Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)

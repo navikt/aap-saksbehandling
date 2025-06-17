@@ -1,10 +1,10 @@
-import { isError } from '../../../../lib/utils/api';
-import { ApiException } from '../../../saksbehandling/apiexception/ApiException';
-import { hentFlyt } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
-import { TypeBehandling } from '../../../../lib/types/types';
-import { getStegSomSkalVises } from '../../../../lib/utils/steg';
-import { GruppeSteg } from '../../../gruppesteg/GruppeSteg';
-import { StegSuspense } from '../../../stegsuspense/StegSuspense';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { TypeBehandling } from 'lib/types/types';
+import { getStegSomSkalVises } from 'lib/utils/steg';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { FormkravVurderingMedDataFetching } from './formkravvurdering/FormkravVurderingMedDataFetching';
 import { PåklagetBehandlingMedDataFetching } from './påklagetbehandling/PåklagetBehandlingMedDataFetching';
 import { BehandlendeEnhetMedDataFetching } from './behandlendeenhet/BehandlendeEnhetMedDataFetching';
@@ -35,7 +35,6 @@ export const Formkrav = async ({ behandlingsreferanse }: Props) => {
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            erAktivtSteg={flyt.data.aktivtSteg == 'PÅKLAGET_BEHANDLING'}
             typeBehandling={flyt.data.visning.typeBehandling as TypeBehandling}
           />
         </StegSuspense>
@@ -46,7 +45,6 @@ export const Formkrav = async ({ behandlingsreferanse }: Props) => {
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            erAktivtSteg={flyt.data.aktivtSteg == 'FORMKRAV'}
             typeBehandling={flyt.data.visning.typeBehandling as TypeBehandling}
           />
         </StegSuspense>
@@ -57,7 +55,6 @@ export const Formkrav = async ({ behandlingsreferanse }: Props) => {
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            erAktivtSteg={flyt.data.aktivtSteg == 'BEHANDLENDE_ENHET'}
             typeBehandling={flyt.data.visning.typeBehandling as TypeBehandling}
           />
         </StegSuspense>

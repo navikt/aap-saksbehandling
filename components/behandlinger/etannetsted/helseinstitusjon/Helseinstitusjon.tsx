@@ -99,7 +99,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
-      erAktivtSteg={true}
     >
       <InstitusjonsoppholdTabell
         label={'Bruker har følgende institusjonsopphold på helseinstitusjon'}

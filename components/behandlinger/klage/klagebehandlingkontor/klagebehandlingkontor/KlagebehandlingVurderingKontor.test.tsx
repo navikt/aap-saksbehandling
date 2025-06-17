@@ -4,14 +4,7 @@ import { KlagebehandlingVurderingKontor } from './KlagebehandlingVurderingKontor
 
 describe('Klage - vurdering kontor', () => {
   it('Skal ha en overskrift', () => {
-    render(
-      <KlagebehandlingVurderingKontor
-        erAktivtSteg={true}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Klage'}
-      />
-    );
+    render(<KlagebehandlingVurderingKontor readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
 
     const heading = screen.getByTestId('vilkår-heading');
     expect(heading).toBeVisible();
@@ -21,7 +14,6 @@ describe('Klage - vurdering kontor', () => {
   it('Skal ha felt for vurdering', () => {
     render(
       <KlagebehandlingVurderingKontor
-        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Klage'}

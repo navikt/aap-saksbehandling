@@ -47,6 +47,7 @@ import {
   SettPåVent,
   Soningsgrunnlag,
   StudentGrunnlag,
+  SvarFraAndreinstansGrunnlag,
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
@@ -293,6 +294,11 @@ export const hentKlageresultat = async (behandlingsReferanse: string) => {
 export const hentEffektuerAvvistPåFormkravGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/effektuer-avvist-på-formkrav`;
   return await apiFetch<EffektuerAvvistPåFormkravGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentSvarFraAndreinstansGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/svar-fra-andreinstans/${behandlingsReferanse}/grunnlag/svar-fra-andreinstans`;
+  return await apiFetch<SvarFraAndreinstansGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFlyt = async (behandlingsReferanse: string) => {

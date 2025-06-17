@@ -96,7 +96,6 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       status={status}
       isLoading={isLoading}
       visBekreftKnapp={skalViseBekreftKnapp}
-      erAktivtSteg={true}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={sisteFritakVurdertAv}
     >

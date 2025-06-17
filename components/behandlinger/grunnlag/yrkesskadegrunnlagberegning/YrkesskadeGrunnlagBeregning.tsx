@@ -88,7 +88,6 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
-      erAktivtSteg={true}
       vilkårTilhørerNavKontor={false}
     >
       <YrkesskadeTabell

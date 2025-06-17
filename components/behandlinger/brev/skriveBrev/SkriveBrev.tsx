@@ -17,7 +17,7 @@ import style from './SkrivBrev.module.css';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
 import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
-import { SlettBrevModal } from 'components/behandlinger/brev/skriveBrev/SlettBrevModal';
+import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { isSuccess } from 'lib/utils/api';
 
 export const SkriveBrev = ({
@@ -49,7 +49,7 @@ export const SkriveBrev = ({
   const debouncedBrev = useDebounce<Brev>(brev, 2000);
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
-  const [slettBrevModalOpen, setSlettBrevModalOpen] = useState(false);
+  const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
 
   const mellomlagreBackendRequest = useCallback(async () => {
     setIsSaving(true);
@@ -79,7 +79,7 @@ export const SkriveBrev = ({
       referanse: behandlingsReferanse,
     });
     await revalidateFlyt(behandlingsReferanse);
-    setSlettBrevModalOpen(false);
+    settIkkeSendBrevModalOpen(false);
   };
 
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
@@ -108,8 +108,8 @@ export const SkriveBrev = ({
                 >
                   Forhåndsvis brev
                 </ActionMenu.Item>
-                <ActionMenu.Item variant="danger" icon={<TrashIcon />} onSelect={() => setSlettBrevModalOpen(true)}>
-                  Slett brev
+                <ActionMenu.Item variant="danger" icon={<TrashIcon />} onSelect={() => settIkkeSendBrevModalOpen(true)}>
+                  Ikke send brev
                 </ActionMenu.Item>
               </ActionMenu.Group>
             </ActionMenu.Content>
@@ -162,10 +162,10 @@ export const SkriveBrev = ({
           setForhåndsvisModalOpen(false);
         }}
       />
-      <SlettBrevModal
-        isOpen={slettBrevModalOpen}
+      <IkkeSendBrevModal
+        isOpen={ikkeSendBrevModalOpen}
         onClose={() => {
-          setSlettBrevModalOpen(false);
+          settIkkeSendBrevModalOpen(false);
         }}
         onDelete={() => {
           slettBrev();

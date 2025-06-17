@@ -13,7 +13,6 @@ export const OmgjøringMedDataFetching = async ({
   behandlingsreferanse: string;
   behandlingVersjon: number;
   typeBehandling: TypeBehandling;
-  erAktivtSteg: boolean;
   readOnly: boolean;
 }) => {
   const klageresultat = await hentKlageresultat(behandlingsreferanse);

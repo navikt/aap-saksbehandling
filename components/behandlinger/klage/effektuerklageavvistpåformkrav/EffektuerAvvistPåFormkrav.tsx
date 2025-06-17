@@ -71,7 +71,6 @@ export const EffektuerAvvistPåFormkrav = ({ grunnlag, behandlingVersjon, readOn
       isLoading={isLoading}
       visBekreftKnapp={skalViseBekreftKnapp} // OIST ignorerer flagg fra backend midlertidig
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
     >
       <VStack gap={'4'}>
         <BodyShort>

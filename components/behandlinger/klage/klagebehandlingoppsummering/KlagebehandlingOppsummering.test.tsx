@@ -27,7 +27,6 @@ describe('Klage - oppsummering', () => {
   it('Skal ha en overskrift', () => {
     render(
       <KlagebehandlingOppsummering
-        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Klage'}
@@ -43,7 +42,6 @@ describe('Klage - oppsummering', () => {
   it('Skal kombinere vilkår for opprettholdelse og omgjøring', () => {
     render(
       <KlagebehandlingOppsummering
-        erAktivtSteg={true}
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Klage'}

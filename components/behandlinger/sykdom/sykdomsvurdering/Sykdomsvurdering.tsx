@@ -46,7 +46,6 @@ export interface SykdomsvurderingFormFields {
 interface SykdomProps {
   behandlingVersjon: number;
   grunnlag: SykdomsGrunnlag;
-  erAktivtSteg: boolean;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
   bidiagnoserDeafultOptions?: ValuePair[];
@@ -57,7 +56,6 @@ export const Sykdomsvurdering = ({
   grunnlag,
   behandlingVersjon,
   readOnly,
-  erAktivtSteg,
   bidiagnoserDeafultOptions,
   hoveddiagnoseDefaultOptions,
   typeBehandling,
@@ -266,7 +264,6 @@ export const Sykdomsvurdering = ({
       steg="AVKLAR_SYKDOM"
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
-      erAktivtSteg={erAktivtSteg}
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}

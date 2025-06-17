@@ -1,18 +1,17 @@
 'use client';
 
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from '../../../../../lib/utils/form';
-import { useConfigForm } from '../../../../form/FormHook';
-import { useLøsBehovOgGåTilNesteSteg } from '../../../../../hooks/LøsBehovOgGåTilNesteStegHook';
-import { VilkårsKortMedForm } from '../../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { useConfigForm } from 'components/form/FormHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormEvent, useEffect } from 'react';
-import { FormField } from '../../../../form/FormField';
-import { FormkravGrunnlag, TypeBehandling } from '../../../../../lib/types/types';
-import { useBehandlingsReferanse } from '../../../../../hooks/BehandlingHook';
+import { FormField } from 'components/form/FormField';
+import { FormkravGrunnlag, TypeBehandling } from 'lib/types/types';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
   grunnlag?: FormkravGrunnlag;
   behandlingVersjon: number;
-  erAktivtSteg: boolean;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
 }
@@ -121,7 +120,6 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
     >
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erBrukerPart} horizontalRadio />
