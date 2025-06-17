@@ -80,14 +80,14 @@ export const TilhørigetsVurderingTabell = ({
             <HStack gap={'1'} align={'center'}>
               {oppfyllerOpplysningeneKravene ? (
                 <>
-                  <CheckmarkCircleFillIcon color={'green'} />
+                  <CheckmarkCircleFillIcon className={styles.godkjentIcon} title={'Suksess'} />
                   <BodyShort size={'small'} weight={'semibold'}>
                     Ja
                   </BodyShort>
                 </>
               ) : (
                 <>
-                  <ExclamationmarkTriangleFillIcon color={'orange'} />
+                  <ExclamationmarkTriangleFillIcon className={styles.avslåttIcon} title={'Advarsel'} />
                   <BodyShort size={'small'} weight={'semibold'}>
                     Nei
                   </BodyShort>

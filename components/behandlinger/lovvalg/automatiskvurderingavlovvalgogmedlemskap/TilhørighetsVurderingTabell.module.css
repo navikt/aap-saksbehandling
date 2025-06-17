@@ -6,6 +6,14 @@
   background-color: var(--a-orange-50);
 }
 
+.godkjentIcon {
+  color: var(--a-icon-success);
+}
+
+.avslåttIcon {
+  color: var(--a-icon-warning);
+}
+
 .rad {
   height: 40px;
 }
