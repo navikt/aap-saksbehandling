@@ -22,6 +22,8 @@ export const oppgaveBehandlingstyper = Object.keys(
         return { label: 'Dokumenthåndtering', value: 'DOKUMENTHÅNDTERING' };
       case 'JOURNALF_RING':
         return { label: 'Journalføring', value: 'JOURNALFØRING' };
+      case 'SVAR_FRA_ANDREINSTANS':
+        return { label: 'Svar fra andreinstans', value: 'SVAR_FRA_ANDREINSTANS' };
     }
     exhaustiveCheck(key);
   });
@@ -44,6 +46,8 @@ const behandlingsTypeAlternativerFraEnum = Object.keys(
         return 'Dokumenthåndtering';
       case 'Journalf_ring':
         return 'Journalføring';
+      case 'SvarFraAndreinstans':
+        return 'SvarFraAndreinstans';
     }
     exhaustiveCheck(key);
   });
