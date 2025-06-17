@@ -9,6 +9,7 @@ import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggå
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/VilkårsKort.module.css';
+import { useRequiredFlyt } from 'hooks/FlytHook';
 
 interface Props {
   heading: string;
@@ -41,12 +42,13 @@ export const VilkårsKortMedForm = ({
   vurdertAvAnsatt,
 }: Props) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
+  const { flyt } = useRequiredFlyt();
+  const erAktivtSteg = flyt.aktivtSteg === steg;
 
   return (
     <ExpansionCard
       aria-label={heading}
-      // className={erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort} TODO Kommenter inn denne når vi har byttet ut alle Form komponenter med denne
-      className={classNameBasertPåEnhet}
+      className={erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}
       size={'small'}
       defaultOpen={defaultOpen}
       id={steg}
