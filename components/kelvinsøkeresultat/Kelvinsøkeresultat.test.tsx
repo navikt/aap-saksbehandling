@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøkeresultat';
-import { SøkeResultat } from 'components/kelvinsøkeresultat/Kelvinsøk';
+import {SøkeResultat} from "app/api/kelvinsok/route";
 
 const søkeresultat: SøkeResultat = {
   harTilgang: false,

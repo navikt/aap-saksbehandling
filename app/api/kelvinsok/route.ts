@@ -7,7 +7,7 @@ import { logError } from 'lib/serverutlis/logger';
 import { isSuccess } from 'lib/utils/api';
 import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 import { capitalize } from 'lodash';
-import { BrukerInformasjon } from '../../../lib/services/azure/azureUserService';
+import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 

@@ -3,18 +3,20 @@
 import { BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
-import type { SøkeResultat } from 'components/kelvinsøkeresultat/Kelvinsøk';
 
 import styles from 'components/kelvinsøkeresultat/Kelvinsøkeresultat.module.css';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
+import { SøkeResultat } from 'app/api/kelvinsok/route';
 
 interface Props {
   søkeresultat: SøkeResultat;
 }
 
-export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang } }: Props) => {
+export const Kelvinsøkeresultat = ({
+  søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang },
+}: Props) => {
   const adressebeskyttelse = oppgaver?.some((oppgave) => oppgave.harAdressebeskyttelse);
 
   if (!harTilgang && adressebeskyttelse) {
@@ -85,20 +87,6 @@ export const Kelvinsøkeresultat = ({ søkeresultat: { oppgaver, saker, kontor, 
           )}
         </VStack>
       </VStack>
-
-      {/*<div>*/}
-      {/*  <Detail className={styles.detail} spacing>*/}
-      {/*    Status*/}
-      {/*  </Detail>*/}
-      {/*  <VStack gap="2">*/}
-      {/*    {!oppgaver?.length ? (*/}
-      {/*      <BodyShort size={'small'}>Fant ingen oppgaver</BodyShort>*/}
-      {/*    ) : (*/}
-      {/*      oppgaver.map((søk, index) => {*/}
-
-      {/*    )}*/}
-      {/*  </VStack>*/}
-      {/*</div>*/}
 
       <VStack gap={'1'}>
         <Detail className={styles.detail}>Kontor</Detail>
