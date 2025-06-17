@@ -7549,7 +7549,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-17T06:02:33.590932Z
+       * @example 2025-06-17T07:47:45.908095Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7642,7 +7642,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-17T06:02:33.590932Z
+       * @example 2025-06-17T07:47:45.908095Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8283,7 +8283,8 @@ export interface components {
         | 'OMGJØRING'
         | 'TREKK_KLAGE'
         | 'OPPRETTHOLDELSE'
-        | 'KLAGE_AVVIST_PÅ_FORMKRAV';
+        | 'KLAGE_AVVIST_PÅ_FORMKRAV'
+        | 'SVAR_FRA_ANDREINSTANS';
       /** @enum {string} */
       aktivtSteg:
         | 'START_BEHANDLING'
@@ -8373,6 +8374,7 @@ export interface components {
         | 'TREKK_KLAGE'
         | 'OPPRETTHOLDELSE'
         | 'KLAGE_AVVIST_PÅ_FORMKRAV'
+        | 'SVAR_FRA_ANDREINSTANS'
         | null;
       /** @enum {string|null} */
       vurdertSteg?:
@@ -8563,7 +8565,8 @@ export interface components {
         | 'OMGJØRING'
         | 'TREKK_KLAGE'
         | 'OPPRETTHOLDELSE'
-        | 'KLAGE_AVVIST_PÅ_FORMKRAV';
+        | 'KLAGE_AVVIST_PÅ_FORMKRAV'
+        | 'SVAR_FRA_ANDREINSTANS';
     };
     'no.nav.aap.behandlingsflyt.flyt.FlytSteg': {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];

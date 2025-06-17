@@ -52,6 +52,8 @@ export const formaterÅrsak = (årsak: ÅrsakTilBehandling) => {
       return 'Starttidspunkt';
     case 'KLAGE_TRUKKET':
       return 'Klage trukket';
+    case 'MOTTATT_KABAL_HENDELSE':
+      return 'Mottatt svar fra Nav Klageinstans';
     default:
       return årsak;
   }

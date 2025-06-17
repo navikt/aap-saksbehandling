@@ -18,6 +18,8 @@ const formaterBehandlingType = (behandlingtype: string) => {
       return 'Revurdering';
     case 'ae0058':
       return 'Klage';
+    case 'svar-fra-andreinstans':
+      return 'Svar fra Nav Klageinstans';
     default:
       return `Ukjent behandlingtype (${behandlingtype})`;
   }
@@ -104,7 +106,12 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
         </Table.Body>
       </Table>
 
-      {isLocal() && <SakDevTools saksId={sak.saksnummer} />}
+      {isLocal() && (
+        <SakDevTools
+          saksnummer={sak.saksnummer}
+          behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.type }))}
+        />
+      )}
     </VStack>
   );
 };

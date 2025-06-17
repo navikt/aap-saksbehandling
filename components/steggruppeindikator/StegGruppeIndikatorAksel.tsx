@@ -98,6 +98,8 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Opprettholdelse';
     case 'KLAGE_AVVIST_PÅ_FORMKRAV':
       return 'Forhåndsvarsel - avvist på formkrav';
+    case 'SVAR_FRA_ANDREINSTANS':
+      return 'Håndter svar fra Nav Klageinstans';
     case 'UDEFINERT':
       return 'Udefinert';
     default:
