@@ -27,7 +27,11 @@ export const SvarFraAnderinstansGruppe = async ({ behandlingsreferanse }: Props)
     >
       {stegSomSkalVises.includes('SVAR_FRA_ANDREINSTANS') && (
         <StegSuspense>
-          <SvarFraAnderinstansMedDatafetching />
+          <SvarFraAnderinstansMedDatafetching
+            behandlingsreferanse={behandlingsreferanse}
+            readOnly={flyt.data.visning.saksbehandlerReadOnly}
+            behandlingVersjon={flyt.data.behandlingVersjon}
+          />
         </StegSuspense>
       )}
     </GruppeSteg>

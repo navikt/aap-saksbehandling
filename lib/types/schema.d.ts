@@ -2402,6 +2402,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/svar-fra-andreinstans/{referanse}/grunnlag/svar-fra-andreinstans': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAnderinstansGrunnlagDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/brev': {
     parameters: {
       query?: never;
@@ -7063,6 +7101,36 @@ export interface components {
       startDato?: string | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAnderinstansGrunnlagDto': {
+      svarFraAndreinstans: components['schemas']['no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto': {
+      feilregistrertBegrunnelse?: string | null;
+      /** @enum {string} */
+      type:
+        | 'KLAGEBEHANDLING_AVSLUTTET'
+        | 'ANKEBEHANDLING_OPPRETTET'
+        | 'ANKEBEHANDLING_AVSLUTTET'
+        | 'ANKE_I_TRYGDERETTENBEHANDLING_OPPRETTET'
+        | 'BEHANDLING_FEILREGISTRERT'
+        | 'BEHANDLING_ETTER_TRYGDERETTEN_OPPHEVET_AVSLUTTET'
+        | 'OMGJOERINGSKRAVBEHANDLING_AVSLUTTET';
+      /** @enum {string|null} */
+      utfall?:
+        | 'TRUKKET'
+        | 'RETUR'
+        | 'OPPHEVET'
+        | 'MEDHOLD'
+        | 'DELVIS_MEDHOLD'
+        | 'STADFESTELSE'
+        | 'UGUNST'
+        | 'AVVIST'
+        | 'HEVET'
+        | 'INNSTILLING_STADFESTELSE'
+        | 'INNSTILLING_AVVIST'
+        | 'MEDHOLD_ETTER_FVL_35'
+        | null;
+    };
     'no.nav.aap.behandlingsflyt.behandling.s\u00F8knad.TrukketS\u00F8knadGrunnlagDto': {
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.s\u00F8knad.TrukketS\u00F8knadVurderingDto'][];
     };
@@ -7549,7 +7617,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-17T07:47:45.908095Z
+       * @example 2025-06-17T09:02:14.742511Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7642,7 +7710,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-17T07:47:45.908095Z
+       * @example 2025-06-17T09:02:14.742511Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
