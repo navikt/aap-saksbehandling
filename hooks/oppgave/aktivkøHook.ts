@@ -1,7 +1,7 @@
 'use client';
 
 import { dagerTilMillisekunder } from 'lib/utils/time';
-import { useNavIdent } from 'hooks/brukerHook';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 const KEY = 'AKTIV_KØ_ID_KEY';
 const MAKS_LEVETID = dagerTilMillisekunder(1);
@@ -12,11 +12,11 @@ interface LagretAktivKøId {
   user: string;
 }
 
-export function useLagreAktivKøId(): {
+export function useLagreAktivKø(): {
   lagreAktivKøId: (id: number) => void;
-  hentLagretAktivKøId: () => number | undefined;
+  hentLagretAktivKø: () => number | undefined;
 } {
-  const navIdent = useNavIdent();
+  const bruker = useInnloggetBruker();
 
   const lagreAktivKøId = (id: number) => {
     localStorage.setItem(
@@ -24,15 +24,15 @@ export function useLagreAktivKøId(): {
       JSON.stringify({
         id,
         timestamp: new Date().getTime(),
-        user: navIdent,
+        user: bruker.NAVident,
       } as LagretAktivKøId)
     );
   };
 
-  const hentLagretAktivKøId = (): number | undefined => {
+  const hentLagretAktivKø = (): number | undefined => {
     try {
       const obj = JSON.parse(localStorage[KEY]) as LagretAktivKøId;
-      if (obj.user === navIdent && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
+      if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
         return isNaN(obj.id) ? undefined : Number(obj.id);
       } else {
         localStorage.removeItem(KEY);
@@ -43,5 +43,5 @@ export function useLagreAktivKøId(): {
     }
   };
 
-  return { lagreAktivKøId, hentLagretAktivKøId };
+  return { lagreAktivKøId, hentLagretAktivKø: hentLagretAktivKø };
 }

@@ -15,7 +15,6 @@ import {
   Brev,
   BrevGrunnlag,
   DetaljertBehandling,
-  DokumentInfo,
   EffektuerAvvistPåFormkravGrunnlag,
   FatteVedtakGrunnlag,
   FlytProsessering,
@@ -25,7 +24,6 @@ import {
   ForutgåendeMedlemskapGrunnlag,
   FritakMeldepliktGrunnlag,
   HelseinstitusjonGrunnlag,
-  Journalpost,
   KlagebehandlingKontorGrunnlag,
   KlagebehandlingNayGrunnlag,
   Klageresultat,
@@ -60,7 +58,7 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
-import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
+import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
 
@@ -126,21 +124,6 @@ export const finnSakerForIdent = async (ident: string) => {
 export const hentAlleSaker = async () => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumenter/sak/${saksnummer}`;
-  return await apiFetch<DokumentInfo[]>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentAlleDokumenterPåBruker = async (brukerId: any) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumenter/bruker`;
-  return await apiFetch<Journalpost[]>(url, saksbehandlingApiScope, 'POST', brukerId);
-};
-
-export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumenter/${journalPostId}/${dokumentInfoId}`;
-  return await apiFetchPdf(url, saksbehandlingApiScope);
 };
 
 export const hentYrkesskadeVurderingGrunnlag = async (behandlingsReferanse: string) => {
@@ -314,9 +297,13 @@ export const hentEffektuerAvvistPåFormkravGrunnlag = async (behandlingsReferans
 
 export const hentFlyt = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
-  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
-    `flyt/${behandlingsReferanse}`,
-  ]);
+  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined);
+};
+
+// Requestene skal ikke caches ved polling
+export const hentFlytUtenRequestMemoization = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
+  return await apiFetchNoMemoization<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentUtbetalingOgSimuleringGrunnlag = async (behandlingsreferanse: string) => {
@@ -433,7 +420,7 @@ export const auditlog = async (behandlingsreferanse: string) => {
 
 async function ventTilProsesseringErFerdig(
   behandlingsreferanse: string,
-  maksAntallForsøk: number = 10,
+  maksAntallForsøk: number = 15,
   interval: number = 1000
 ): Promise<undefined | FlytProsessering> {
   let forsøk = 0;
@@ -442,7 +429,7 @@ async function ventTilProsesseringErFerdig(
   while (forsøk < maksAntallForsøk) {
     forsøk++;
 
-    const response = await hentFlyt(behandlingsreferanse);
+    const response = await hentFlytUtenRequestMemoization(behandlingsreferanse);
     if (response.type === 'ERROR') {
       logError(
         `ventTilProssesering hentFlyt ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
@@ -454,7 +441,7 @@ async function ventTilProsesseringErFerdig(
     const status = response.data.prosessering.status;
 
     if (status === 'FERDIG') {
-      console.log('Prosessering er ferdig!');
+      logInfo(`Prosessering er ferdig! Brukte ${forsøk} forsøk.`);
       prosessering = response.data.prosessering;
       break;
     }
@@ -472,6 +459,10 @@ async function ventTilProsesseringErFerdig(
     if (forsøk < maksAntallForsøk) {
       await new Promise((resolve) => setTimeout(resolve, interval * 1.3));
     }
+  }
+
+  if (prosessering?.status === 'JOBBER') {
+    logInfo(`Brukte ${forsøk} forsøk og endte i status ${prosessering.status}`);
   }
 
   return prosessering;

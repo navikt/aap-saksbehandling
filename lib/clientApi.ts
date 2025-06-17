@@ -4,10 +4,8 @@ import {
   BehandlingsFlytAvklaringsbehovKode,
   BestillLegeerklæring,
   Brev,
-  DokumentInfo,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
-  Journalpost,
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   OppdaterAktivitetspliktBrudd2,
@@ -16,7 +14,6 @@ import {
   SaksInfo,
   SettPåVent,
 } from './types/types';
-import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
 import { FetchResponse } from 'lib/utils/api';
@@ -87,14 +84,6 @@ export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
   return clientFetch<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
 }
 
-export function clientHentAlleDokumenterPåSak(saksnummer: string) {
-  return clientFetch<DokumentInfo[]>(`${BASE_URL}/api/dokumenter/sak/${saksnummer}`, 'GET');
-}
-
-export function clientHentAlleDokumenterPåBruker(personIdent: string) {
-  return clientFetch<Journalpost[]>(`${BASE_URL}/api/dokumenter/bruker`, 'POST', { personIdent });
-}
-
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
@@ -113,10 +102,6 @@ export function clientMellomlagreBrev(brevbestillingReferanse: string, brev: Bre
 
 export function clientBestillTestBrev(behandlingReferanse: string) {
   return clientFetch(`${BASE_URL}/api/test/bestill/brev`, 'POST', { behandlingReferanse });
-}
-
-export function clientHentRelevanteDokumenter(saksnummer: string) {
-  return clientFetch<RelevantDokumentType[]>(`${BASE_URL}/api/dokumentinnhenting/saf/${saksnummer}`, 'POST');
 }
 
 export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, behandlingsreferanse: string) {

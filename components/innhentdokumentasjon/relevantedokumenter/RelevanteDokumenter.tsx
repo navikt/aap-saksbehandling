@@ -1,6 +1,5 @@
 import { Alert, BodyShort, Checkbox, Heading, Loader, Table } from '@navikt/ds-react';
 import { useSaksnummer } from 'hooks/BehandlingHook';
-import { clientHentRelevanteDokumenter } from 'lib/clientApi';
 import useSWR from 'swr';
 
 import styles from './RelevanteDokumenter.module.css';
@@ -8,6 +7,7 @@ import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { isError } from 'lib/utils/api';
+import { clientHentRelevanteDokumenter } from 'lib/dokumentClientApi';
 
 interface FormFields {
   dokumentnavn: string;
@@ -29,7 +29,7 @@ export interface RelevantDokumentType {
 
 export const RelevanteDokumenter = () => {
   const saksnummer = useSaksnummer();
-  const { data: relevanteDokumenter, isLoading } = useSWR(`/api/dokumentinnhenting/saf/${saksnummer}`, () =>
+  const { data: relevanteDokumenter, isLoading } = useSWR(`/api/dokumenter/sak/${saksnummer}/helsedokumenter`, () =>
     clientHentRelevanteDokumenter(saksnummer)
   );
 

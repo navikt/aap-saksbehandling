@@ -3,7 +3,7 @@
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 import { useEffect, useState } from 'react';
-import { useLagreAktivEnhet } from 'lib/utils/aktivEnhet';
+import { useLagreAktivEnhet } from 'hooks/oppgave/aktivEnhetHook';
 import { BodyShort, Box, Button, HStack, Skeleton, VStack } from '@navikt/ds-react';
 import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/AlleOppgaverTabell';
 import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
@@ -12,7 +12,7 @@ import { isError, isSuccess } from 'lib/utils/api';
 import useSWR from 'swr';
 import { queryParamsArray } from 'lib/utils/request';
 import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
-import { useLagreAktivKøId } from 'lib/utils/aktivkøid';
+import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
 
 interface Props {
   enheter: Enhet[];
@@ -20,7 +20,7 @@ interface Props {
 
 export const AlleOppgaver = ({ enheter }: Props) => {
   const { hentLagretAktivEnhet, lagreAktivEnhet } = useLagreAktivEnhet();
-  const { hentLagretAktivKøId, lagreAktivKøId } = useLagreAktivKøId();
+  const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
 
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [aktivKøId, setAktivKøId] = useState<number>();
@@ -33,7 +33,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     if (!køer || (køer && isError(køer))) {
       return;
     }
-    const køId = hentLagretAktivKøId();
+    const køId = hentLagretAktivKø();
     const gyldigeKøer = køer.data.map((kø) => kø.id);
 
     if (!køId || !gyldigeKøer.includes(køId)) {
@@ -68,6 +68,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           <KøSelect label={'Velg kø'} køer={oppgaveKøer || []} aktivKøId={aktivKøId} valgtKøListener={oppdaterKøId} />
         </HStack>
       </Box>
+
       {isLoading && (
         <VStack gap={'1'}>
           <Skeleton variant="rectangle" width="100%" height={40} />
@@ -77,8 +78,11 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           <Skeleton variant="rectangle" width="100%" height={40} />
         </VStack>
       )}
-      {!oppgaver?.length && <BodyShort>Ingen oppgaver for enhet {aktivEnhet}</BodyShort>}
+
+      {!isLoading && oppgaver && oppgaver.length === 0 && <BodyShort>Ingen oppgaver for enhet {aktivEnhet}</BodyShort>}
+
       {oppgaver && oppgaver.length > 0 && <AlleOppgaverTabell oppgaver={oppgaver} />}
+
       {kanLasteInnFlereOppgaver && (
         <HStack justify={'center'}>
           <Button

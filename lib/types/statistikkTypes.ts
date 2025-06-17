@@ -1,10 +1,6 @@
 import { components, paths } from '@navikt/aap-statistikk-typescript-types';
 
 // statistikk
-export type BehandlingstidPerDagDTO =
-  components['schemas']['no.nav.aap.statistikk.api.`ProduksjonsstyringApiKt$hentBehandlingstidPerDag$BehandlingstidPerDagDTO`'];
-export type BehandlingPerAvklaringsbehov =
-  components['schemas']['no.nav.aap.statistikk.produksjonsstyring.BehandlingPerAvklaringsbehov'];
 export type BehandlingEndringerPerDag =
   components['schemas']['no.nav.aap.statistikk.api.`ProduksjonsstyringApiKt$hentBehandlingstidPerDag$BehandlinEndringerPerDag`'];
 export type AntallÅpneOgGjennomsnitt =

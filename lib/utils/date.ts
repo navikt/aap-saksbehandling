@@ -16,10 +16,6 @@ export function formaterDatoMedTidspunktForFrontend(dato: Date | string): string
   return format(dato, DATO_FORMATER.ddMMyyyy_HHmm, { locale: nb });
 }
 
-export function formaterDatoMedTidspunktSekunderForFrontend(dato: Date | string): string {
-  return format(dato, DATO_FORMATER.ddMMyyyy_HHmmss, { locale: nb });
-}
-
 export const formaterDatoForBackend = (dato: Date) => {
   return format(dato, 'yyyy-MM-dd');
 };
