@@ -1331,7 +1331,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningTidspunktAvklaringDto'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningTidspunktAvklaringResponse'];
           };
         };
       };
@@ -4919,7 +4919,7 @@ export interface components {
         | '6008'
         | '6010'
         | '7001';
-      beregningVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.BeregningstidspunktVurdering'];
+      beregningVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.BeregningstidspunktVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettP\u00E5klagetBehandlingL\u00F8sning': {
       /** @enum {string} */
@@ -6541,15 +6541,30 @@ export interface components {
       belop: number;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningTidspunktAvklaringDto': {
+    'no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningTidspunktAvklaringResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       skalVurdereYtterligere: boolean;
-      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.BeregningstidspunktVurdering'];
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningstidspunktVurderingResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningYrkesskadeAvklaringDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       skalVurderes: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.YrkesskadeTilVurdering'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.YrkesskadeBel\u00F8pVurdering'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningstidspunktVurderingResponse': {
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      nedsattArbeidsevneDato: string;
+      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      ytterligereNedsattArbeidsevneDato?: string | null;
+      ytterligereNedsattBegrunnelse?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.YrkesskadeTilVurdering': {
       'grunnbel\u00F8p': components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
@@ -7239,7 +7254,8 @@ export interface components {
       vedtakImedlGrunnlag?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VedtakIMEDLGrunnlag'][]
         | null;
-      vurdertPeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string} */
+      vurdertPeriode: 'INNEVÆRENDE_OG_FORRIGE_MND' | 'SØKNADSTIDSPUNKT' | 'SISTE_5_ÅR';
     };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.UtenlandsAdresseGrunnlag': {
       adresseNavn?: string | null;
@@ -7533,7 +7549,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-16T11:57:19.240055Z
+       * @example 2025-06-17T06:02:33.590932Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7626,7 +7642,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-16T11:57:19.240055Z
+       * @example 2025-06-17T06:02:33.590932Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7928,10 +7944,8 @@ export interface components {
       id?: number | null;
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.YrkesskadeBel\u00F8pVurdering'][];
     };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.BeregningstidspunktVurdering': {
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.BeregningstidspunktVurderingDto': {
       begrunnelse: string;
-      /** Format: int64 */
-      id?: number | null;
       /**
        * Format: date
        * @example 2025-04-01
