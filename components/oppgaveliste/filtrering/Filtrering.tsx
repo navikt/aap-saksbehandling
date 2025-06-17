@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Box, Button, Detail, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Detail, HGrid, HStack, VStack } from '@navikt/ds-react';
 
 import styles from './Filtrering.module.css';
 import { useState } from 'react';
@@ -43,7 +43,7 @@ export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppg
       {visFilter && (
         <div className={styles.filtreringwrapper}>
           <div className={styles.filtrering}>
-            <HStack gap={'4'}>
+            <HGrid columns={{ sm: 1, md: 2, lg: 5 }} gap={'2'}>
               <BoxWrapper>
                 <FormField form={form} formField={formFields.behandlingstype} />
               </BoxWrapper>
@@ -65,9 +65,8 @@ export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppg
               <BoxWrapper>
                 <FormField form={form} formField={formFields.status} />
               </BoxWrapper>
-            </HStack>
+            </HGrid>
             <HStack gap={'2'}>
-              <Button size={'small'}>Bruk filter</Button>
               <Button
                 size={'small'}
                 variant={'tertiary'}
