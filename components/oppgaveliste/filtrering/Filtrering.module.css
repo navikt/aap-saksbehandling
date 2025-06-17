@@ -1,9 +1,6 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--a-border-divider);
-  border-top-left-radius: var(--a-border-radius-large);
-  border-top-right-radius: var(--a-border-radius-large);
 }
 
 .filtreringTop {
@@ -13,6 +10,7 @@
 
 .filtreringwrapper {
   background-color: var(--a-bg-subtle);
+  border-bottom: 1px solid var(--a-border-divider);
 }
 
 .filtrering {

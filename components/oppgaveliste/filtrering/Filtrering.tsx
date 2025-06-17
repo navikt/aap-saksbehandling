@@ -22,7 +22,7 @@ export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppg
 
   return (
     <div className={styles.wrapper}>
-      <HStack justify={'space-between'} align={'end'} className={styles.filtreringTop}>
+      <HStack justify={'space-between'} align={'center'} className={styles.filtreringTop}>
         <HStack gap={'2'} align={'center'}>
           <Button
             icon={visFilter ? <XMarkIcon /> : <FilterIcon />}
@@ -44,10 +44,10 @@ export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppg
         <div className={styles.filtreringwrapper}>
           <div className={styles.filtrering}>
             <HStack gap={'4'}>
-              <MyBeautifulFormFieldWrapper>
+              <BoxWrapper>
                 <FormField form={form} formField={formFields.behandlingstype} />
-              </MyBeautifulFormFieldWrapper>
-              <MyBeautifulFormFieldWrapper>
+              </BoxWrapper>
+              <BoxWrapper>
                 <VStack gap={'4'}>
                   <BodyShort size={'small'} weight={'semibold'}>
                     Behandling opprettet
@@ -55,16 +55,16 @@ export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppg
                   <FormField form={form} formField={formFields.behandlingOpprettetFom} />
                   <FormField form={form} formField={formFields.behandlingOpprettettom} />
                 </VStack>
-              </MyBeautifulFormFieldWrapper>
-              <MyBeautifulFormFieldWrapper>
+              </BoxWrapper>
+              <BoxWrapper>
                 <FormField form={form} formField={formFields.årsak} />
-              </MyBeautifulFormFieldWrapper>
-              <MyBeautifulFormFieldWrapper>
+              </BoxWrapper>
+              <BoxWrapper>
                 <FormField form={form} formField={formFields.oppgave} />
-              </MyBeautifulFormFieldWrapper>
-              <MyBeautifulFormFieldWrapper>
+              </BoxWrapper>
+              <BoxWrapper>
                 <FormField form={form} formField={formFields.status} />
-              </MyBeautifulFormFieldWrapper>
+              </BoxWrapper>
             </HStack>
             <HStack gap={'2'}>
               <Button size={'small'}>Bruk filter</Button>
@@ -85,7 +85,7 @@ export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppg
   );
 };
 
-function MyBeautifulFormFieldWrapper({ children }: { children: React.ReactNode }) {
+function BoxWrapper({ children }: { children: React.ReactNode }) {
   return (
     <Box
       height={'fit-content'}
