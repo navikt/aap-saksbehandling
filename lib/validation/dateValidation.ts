@@ -1,4 +1,4 @@
-import { getYear, isFuture, parse } from 'date-fns';
+import { getYear, isFuture, isValid, parse } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 export function validerDato(value?: string) {
@@ -17,9 +17,18 @@ export function validerDato(value?: string) {
 }
 
 export function erDatoFoerDato(inputDato: string, referanseDato: string): boolean {
-  return (
-    new Date(parse(inputDato, 'dd.MM.yyyy', new Date())) < new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()))
-  );
+  const parsedInputDato = new Date(parse(inputDato, 'dd.MM.yyyy', new Date()));
+  const parsedReferanseDato = new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()));
+
+  if (!isValid(parsedInputDato)) {
+    throw new Error('input dato er ikke gyldig');
+  }
+
+  if (!isValid(parsedReferanseDato)) {
+    throw new Error('referanse dato er ikke gyldig');
+  }
+
+  return parsedInputDato < parsedReferanseDato;
 }
 
 export function erDatoIFremtiden(value: string): boolean {
