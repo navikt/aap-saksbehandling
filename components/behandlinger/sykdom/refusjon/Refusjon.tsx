@@ -1,6 +1,6 @@
 'use client';
 
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { isBefore, parse, startOfDay } from 'date-fns';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -9,9 +9,14 @@ import { RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { AsyncComboSearch } from '../../../form/asynccombosearch/AsyncComboSearch';
+import { Enhet } from '../../../../lib/types/oppgaveTypes';
+import { isLocal } from '../../../../lib/utils/environment';
+import { hentAlleNavEnheter } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
+import { isError } from '../../../../lib/utils/api';
 
 interface Props {
   behandlingVersjon: number;
@@ -23,12 +28,14 @@ interface FormFields {
   harKrav: string;
   vurderingenGjelderFra: string;
   vurderingenGjelderTil?: string;
+  navKontor?: string;
 }
 
 export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
   const { sak } = useSak();
+  const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -39,6 +46,11 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         defaultValue: getJaNeiEllerUndefined(grunnlag.gjeldendeVurdering?.harKrav),
         rules: { required: 'Du må svare på om Nav-kontoret har refusjonskrav' },
         options: JaEllerNeiOptions,
+      },
+      navKontor: {
+        type: 'textarea',
+        label: 'Har Nav-kontoret refusjonskrav?',
+        defaultValue: '',
       },
       vurderingenGjelderFra: {
         type: 'date_input',
@@ -103,6 +115,48 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
     })(event);
   };
 
+  const testdata: Enhet[] = [
+    {
+      navn: 'Nav Løten',
+      enhetNr: '0415',
+    },
+    {
+      navn: 'Nav Asker',
+      enhetNr: '0220',
+    },
+    {
+      navn: 'Nav Grorud',
+      enhetNr: '0328',
+    },
+  ];
+
+  const kontorSøk = async (input: string) => {
+    if (isLocal()) {
+      const res: ValuePair[] = testdata.map((kontor) => ({
+        label: `${kontor.navn} - ${kontor.enhetNr}`,
+        value: `${kontor.navn} - ${kontor.enhetNr}`,
+      }));
+
+      setDefaultOptions(res);
+      return res;
+    }
+
+    if (input.length <= 2) {
+      return [];
+    }
+    const response = await hentAlleNavEnheter(input, behandlingsreferanse);
+    if (isError(response)) {
+      return [];
+    }
+
+    const res = response.data.map((kontor) => ({
+      label: `${kontor.navn} - ${kontor.enhetNr}`,
+      value: `${kontor.enhetNr}`,
+    }));
+    setDefaultOptions(res);
+    return res;
+  };
+
   return (
     <VilkårsKortMedForm
       heading={'Refusjonskrav sosialstønad'}
@@ -122,6 +176,15 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           <FormField form={form} formField={formFields.vurderingenGjelderTil} />
         </>
       )}
+      <AsyncComboSearch
+        label={'Velg Nav-kontor'}
+        form={form}
+        name={`navKontor`}
+        fetcher={kontorSøk}
+        rules={{ required: 'Du må velge et nav-kontor' }}
+        size={'small'}
+        defaultOptions={defaultOptions}
+      />
     </VilkårsKortMedForm>
   );
 };
