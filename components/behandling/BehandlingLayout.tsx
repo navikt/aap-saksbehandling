@@ -23,6 +23,7 @@ import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logWarning } from 'lib/serverutlis/logger';
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 import { StegGruppe } from 'lib/types/types';
+import { SakContextProvider } from 'context/SakContext';
 
 interface Props {
   saksId: string;
@@ -110,13 +111,25 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
           <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
 
           <HGrid columns="4fr 2fr" padding={'4'} gap={'4'} maxWidth={'1680px'} marginInline={'auto'} marginBlock={'0'}>
-            {/*Vi må ha children inne i en div for å unngå layoutshift*/}
-            <div style={{ width: '100%' }}>{children}</div>
-            <aside className={`flex-column`}>
-              <Behandlingsinfo behandling={behandling.data} sak={sak} />
-              <Saksbehandlingsoversikt />
-              {visTotrinnsvurdering && <ToTrinnsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} />}
-            </aside>
+            <SakContextProvider
+              sak={{
+                ident: sak.ident,
+                opprettetTidspunkt: sak.opprettetTidspunkt,
+                periode: sak.periode,
+                saksnummer: sak.saksnummer,
+                virkningsTidspunkt: behandling.data.virkningstidspunkt,
+              }}
+            >
+              {/*Vi må ha children inne i en div for å unngå layoutshift*/}
+              <div style={{ width: '100%' }}>{children}</div>
+              <aside className={`flex-column`}>
+                <Behandlingsinfo behandling={behandling.data} sak={sak} />
+                <Saksbehandlingsoversikt />
+                {visTotrinnsvurdering && (
+                  <ToTrinnsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+                )}
+              </aside>
+            </SakContextProvider>
           </HGrid>
         </div>
       </IngenFlereOppgaverModalContextProvider>

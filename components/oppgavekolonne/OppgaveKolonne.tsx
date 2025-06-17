@@ -27,13 +27,12 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SvarFraAnderinstansGruppe } from 'components/behandlinger/svarfraanderinstans/SvarFraAnderinstansGruppe';
 
 interface Props {
-  saksnummer: string;
   behandlingsReferanse: string;
   aktivGruppe: StegGruppe;
   className: string;
 }
 
-export const OppgaveKolonne = async ({ saksnummer, behandlingsReferanse, aktivGruppe, className }: Props) => {
+export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
   return (
     <section className={className}>
       {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
@@ -71,7 +70,7 @@ export const OppgaveKolonne = async ({ saksnummer, behandlingsReferanse, aktivGr
         <KlagebehandlingKontor behandlingsreferanse={behandlingsReferanse} />
       )}
       {aktivGruppe === 'KLAGEBEHANDLING_NAY' && <KlagebehandlingNay behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'OMGJØRING' && <Omgjøring saksnummer={saksnummer} behandlingsreferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'OMGJØRING' && <Omgjøring behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'OPPRETTHOLDELSE' && <Opprettholdelse behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'TREKK_KLAGE' && <TrekkKlage behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'KLAGE_AVVIST_PÅ_FORMKRAV' && (

@@ -8,7 +8,6 @@ import { Klageresultat } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 
 interface Props {
-  saksnummer: string;
   behandlingsreferanse: string;
 }
 
