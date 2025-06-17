@@ -175,6 +175,8 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Revurdering';
     case 'TILBAKEKREVING':
       return 'Tilbakekreving';
+    case 'SVAR_FRA_ANDREINSTANS':
+      return 'Svar fra andreinstans';
   }
   exhaustiveCheck(behandlingsType);
 }
