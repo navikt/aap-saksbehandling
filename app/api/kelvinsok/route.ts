@@ -7,15 +7,18 @@ import { logError } from 'lib/serverutlis/logger';
 import { isSuccess } from 'lib/utils/api';
 import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 import { capitalize } from 'lodash';
-import { BrukerInformasjon } from '../../../lib/services/azure/azureUserService';
+import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 
 export interface SøkeResultat {
   oppgaver?: {
     label: string;
     href: string;
     status: string;
+    harAdressebeskyttelse: boolean;
   }[];
+  harTilgang: boolean;
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
   person?: { href: string; label: string }[];
@@ -58,10 +61,12 @@ export async function POST(req: Request, brukerinformasjon: Props) {
   let kontorData: SøkeResultat['kontor'] = [];
   let personData: SøkeResultat['person'] = [];
   let behandlingsStatusData: SøkeResultat['behandlingsStatus'] = [];
+  let harTilgang: boolean = false;
   try {
     const oppgavesøkRes = await oppgaveTekstSøk(søketekst);
     if (isSuccess(oppgavesøkRes)) {
-      oppgavesøkRes.data.forEach((oppgave) => {
+      harTilgang = oppgavesøkRes.data.harTilgang
+      oppgavesøkRes.data.oppgaver.forEach((oppgave) => {
         const isReservert =
           Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon.brukerInformasjon?.NAVident;
         const isPåVent = oppgave.påVentÅrsak != null;
@@ -69,6 +74,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
           href: byggKelvinURL(oppgave),
           label: `${capitalize(oppgave.behandlingstype)} - ${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}`,
           status: isReservert ? 'RESERVERT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
+          harAdressebeskyttelse: utledAdressebeskyttelse(oppgave).length != 0,
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
         personData.push({
@@ -87,6 +93,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
       href: `/saksbehandling/sak/${sak.saksnummer}`,
       label: `${sak.saksnummer} (${formaterDatoForFrontend(sak.periode.fom)})`,
     })),
+    harTilgang: harTilgang,
     kontor: kontorData,
     person: personData,
     behandlingsStatus: behandlingsStatusData,

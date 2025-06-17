@@ -21,6 +21,7 @@ export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.
 export type NesteOppgaveResponse = oppgave['schemas']['no.nav.aap.oppgave.plukk.NesteOppgaveDto'];
 export type NesteOppgaveRequestBody = oppgave['schemas']['no.nav.aap.oppgave.plukk.FinnNesteOppgaveDto'];
 export type PlukkOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.plukk.PlukkOppgaveDto'];
+export type SøkResponse = oppgave['schemas']['no.nav.aap.oppgave.SøkResponse']
 
 // typer fra enums
 export type OppgaveBehandlingstype = `${NoNavAapOppgaveOppgaveDtoBehandlingstype}`;

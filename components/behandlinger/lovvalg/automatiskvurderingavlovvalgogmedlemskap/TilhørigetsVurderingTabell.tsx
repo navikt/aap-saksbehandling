@@ -25,6 +25,7 @@ export const TilhørigetsVurderingTabell = ({
         <Table.Row>
           <Table.HeaderCell />
           <Table.HeaderCell scope="col">Kilde</Table.HeaderCell>
+          <Table.HeaderCell scope="col">Vurdert Periode</Table.HeaderCell>
           <Table.HeaderCell scope="col">Opplysning</Table.HeaderCell>
           <Table.HeaderCell scope="col">Resultat</Table.HeaderCell>
         </Table.Row>
@@ -36,6 +37,9 @@ export const TilhørigetsVurderingTabell = ({
             <>
               <Table.DataCell textSize="small" width={200}>
                 {opplysning.kilde.map(mapKildeTilTekst).join(', ')}
+              </Table.DataCell>
+              <Table.DataCell textSize="small" width={300}>
+                {opplysning.vurdertPeriode}
               </Table.DataCell>
               <Table.DataCell textSize="small" width={750}>
                 {opplysning.opplysning}
@@ -59,7 +63,7 @@ export const TilhørigetsVurderingTabell = ({
             </Table.ExpandableRow>
           ) : (
             <Table.Row key={index} className={styles.rad}>
-              <Table.DataCell></Table.DataCell>
+              <Table.DataCell style={{ minWidth: '48px' }}></Table.DataCell>
               {radInnhold}
             </Table.Row>
           );
@@ -67,7 +71,7 @@ export const TilhørigetsVurderingTabell = ({
 
         <Table.Row className={`${styles.rad} ${oppfyllerOpplysningeneKravene ? styles.godkjent : styles.avslått}`}>
           <Table.DataCell></Table.DataCell>
-          <Table.DataCell colSpan={2}>
+          <Table.DataCell colSpan={3}>
             <BodyShort size={'small'} weight={'semibold'}>
               {oppfyllerOpplysningeneKraveneTekst}
             </BodyShort>
@@ -76,14 +80,14 @@ export const TilhørigetsVurderingTabell = ({
             <HStack gap={'1'} align={'center'}>
               {oppfyllerOpplysningeneKravene ? (
                 <>
-                  <CheckmarkCircleFillIcon color={'green'} />
+                  <CheckmarkCircleFillIcon className={styles.godkjentIcon} title={'Suksess'} />
                   <BodyShort size={'small'} weight={'semibold'}>
                     Ja
                   </BodyShort>
                 </>
               ) : (
                 <>
-                  <ExclamationmarkTriangleFillIcon color={'orange'} />
+                  <ExclamationmarkTriangleFillIcon className={styles.avslåttIcon} title={'Advarsel'} />
                   <BodyShort size={'small'} weight={'semibold'}>
                     Nei
                   </BodyShort>

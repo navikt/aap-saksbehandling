@@ -4,6 +4,8 @@ import { formaterPeriode, sorterEtterNyesteDato } from 'lib/utils/date';
 import { formaterTilNok } from 'lib/utils/string';
 import { getLandNavn } from 'lib/utils/countries';
 
+import styles from './OpplysningerContent.module.css';
+
 interface Props {
   opplysning: tilhørighetVurdering;
 }
@@ -13,26 +15,25 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
     const arbeidInntektINorgeGrunnlag = opplysning.arbeidInntektINorgeGrunnlag;
 
     return (
-      <HStack gap={'2'}>
-        {arbeidInntektINorgeGrunnlag
-          .sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom))
-          .map((inntekt, index) => {
-            return (
-              <VStack gap={'2'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
-                <LabelValue label={'Periode:'} value={formaterPeriode(inntekt.periode.fom, inntekt.periode.tom)} />
-                <LabelValue
-                  label={'Virksomhet:'}
-                  value={
-                    inntekt.virksomhetNavn
-                      ? `${inntekt.virksomhetNavn} (${inntekt.virksomhetId})`
-                      : inntekt.virksomhetId
-                  }
-                />
-                <LabelValue label={'Beløp:'} value={formaterTilNok(inntekt.beloep)} />
-              </VStack>
-            );
-          })}
-      </HStack>
+      <ul className={styles.inntektListe}>
+        <VStack gap={'1'}>
+          {arbeidInntektINorgeGrunnlag
+            .sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom))
+            .map((inntekt, index) => {
+              return (
+                <li key={index} className={styles.inntektListeElement}>
+                  <BodyShort size={'small'}>
+                    <b>{formaterPeriode(inntekt.periode.fom, inntekt.periode.tom)}:</b>{' '}
+                    {inntekt.virksomhetNavn
+                      ? `${inntekt.virksomhetNavn} (org.nr: ${inntekt.virksomhetId})`
+                      : `org.nr: ${inntekt.virksomhetId}`}
+                    , inntekt {formaterTilNok(inntekt.beloep)}
+                  </BodyShort>
+                </li>
+              );
+            })}
+        </VStack>
+      </ul>
     );
   }
 
@@ -45,7 +46,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
           .sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom))
           .map((sykepenger, index) => {
             return (
-              <VStack gap={'2'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
+              <VStack gap={'2'} key={index} className={styles.sideDivider}>
                 <LabelValue
                   label={'Periode: '}
                   value={formaterPeriode(sykepenger.periode.fom, sykepenger.periode.tom)}
@@ -65,7 +66,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
       <VStack gap={'2'}>
         {oppgittJobbetIUtlandGrunnlag.map((jobb, index) => {
           return (
-            <VStack gap={'1'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
+            <VStack gap={'1'} key={index} className={styles.sideDivider}>
               {jobb.land && <LabelValue label={'Land:'} value={jobb.land} />}
               <LabelValue label={'Periode:'} value={formaterPeriode(jobb.fraDato, jobb.tilDato)} />
             </VStack>
@@ -82,7 +83,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
       <VStack gap={'2'}>
         {oppgittUtenlandsOppholdGrunnlag.map((opphold, index) => {
           return (
-            <VStack gap={'1'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
+            <VStack gap={'1'} key={index} className={styles.sideDivider}>
               {opphold.land && <LabelValue label={'Land'} value={opphold.land} />}
               <LabelValue label={'Periode:'} value={formaterPeriode(opphold.fraDato, opphold.tilDato)} />
             </VStack>
@@ -100,7 +101,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
         {manglerStatsborgerskapGrunnlag.map((manglerStatsborgerskap, index) => {
           const landNavn = getLandNavn(manglerStatsborgerskap.land);
           return (
-            <VStack gap={'1'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
+            <VStack gap={'1'} key={index} className={styles.sideDivider}>
               <LabelValue
                 label={landNavn ? 'Land/landkode:' : 'Landkode:'}
                 value={landNavn ? `${landNavn.label}, ${manglerStatsborgerskap.land}` : manglerStatsborgerskap.land}
@@ -124,7 +125,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
       <VStack gap={'2'}>
         {utenlandsAddresserGrunnlag.map((utenlandsAdresse, index) => {
           return (
-            <VStack gap={'1'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
+            <VStack gap={'1'} key={index} className={styles.sideDivider}>
               <LabelValue
                 label={'Adresse:'}
                 value={`${utenlandsAdresse.adresseNavn} ${utenlandsAdresse.landkode} ${utenlandsAdresse.postkode}`}
@@ -149,7 +150,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
           .sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom))
           .map((vedtak, index) => {
             return (
-              <VStack gap={'1'} key={index} style={{ paddingLeft: '1rem', borderLeft: '1px solid gray' }}>
+              <VStack gap={'1'} key={index} className={styles.sideDivider}>
                 <LabelValue label={'Periode:'} value={formaterPeriode(vedtak.periode.fom, vedtak.periode.tom)} />
                 <LabelValue label={'Grunnlagskode:'} value={vedtak.grunnlag} />
                 {vedtak.lovvalgsland && <LabelValue label={'Lovvalgsland:'} value={vedtak.lovvalgsland} />}

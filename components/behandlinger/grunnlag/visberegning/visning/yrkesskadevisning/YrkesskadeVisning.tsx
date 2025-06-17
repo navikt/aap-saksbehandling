@@ -35,7 +35,7 @@ export const YrkesskadeVisning = ({ grunnlag, gjeldendeGrunnbeløp }: Props) => 
       <YrkesskadeBeregningTabell grunnlag={grunnlag} visning="YRKESSKADE" />
       <div className={'flex-column'}>
         <BodyShort size={'small'} weight={'semibold'}>
-          Brukers grunnlag er satt til det gunstigste av følgende
+          Brukers grunnlag er satt til det mest gunstig av følgende
         </BodyShort>
         <TableStyled size={'medium'}>
           <Table.Header>

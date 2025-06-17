@@ -9,7 +9,7 @@ import {
   OppgaveBehandlingstype,
   OppgavelisteRequest,
   OppgavelisteResponse,
-  Paging,
+  Paging, SøkResponse,
 } from 'lib/types/oppgaveTypes';
 import { queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
@@ -101,14 +101,17 @@ export async function oppgaveTekstSøk(søketekst: string) {
       },
     ];
 
-    const mockData: FetchResponse<Oppgave[]> = {
+    const mockData: FetchResponse<SøkResponse> = {
       type: 'SUCCESS',
       status: 200,
-      data: oppgaver,
+      data: {
+        oppgaver: oppgaver,
+        harTilgang: true
+      },
     };
 
     return mockData;
   }
-  const url = `${oppgaveApiBaseURL}/sok`;
-  return await apiFetch<Array<Oppgave>>(url, oppgaveApiScope, 'POST', { søketekst });
+  const url = `${oppgaveApiBaseURL}/sok/v2`;
+  return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
 }

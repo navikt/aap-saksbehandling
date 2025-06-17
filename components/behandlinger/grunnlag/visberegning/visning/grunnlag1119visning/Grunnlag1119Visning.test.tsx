@@ -30,7 +30,7 @@ describe('grunnlag 11-19 visning', () => {
 
   it('skal ha en tabell som viser en oppsummering og det faktiske grunnlaget', () => {
     render(<Grunnlag1119Visning grunnlag={grunnlag} gjeldendeGrunnbeløp={gjeldendeGrunnbeløp} />);
-    const tabellOverskrift = screen.getByText('Brukers grunnlag er satt til det gunstigste av følgende:');
+    const tabellOverskrift = screen.getByText('Brukers grunnlag er satt til det mest gunstig av følgende:');
     expect(tabellOverskrift).toBeVisible();
 
     const headers = ['Beskrivelse', 'Grunnlag'];

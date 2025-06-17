@@ -14,7 +14,13 @@ interface Props {
 
 export const VilkårsKort = ({ heading, steg, children, defaultOpen = true }: Props) => {
   return (
-    <ExpansionCard aria-label={heading} size={'small'} defaultOpen={defaultOpen} id={steg}>
+    <ExpansionCard
+      aria-label={heading}
+      size={'small'}
+      defaultOpen={defaultOpen}
+      id={steg}
+      className={styles.vilkårsKort}
+    >
       <ExpansionCard.Header className={styles.header}>
         <div className={styles.title}>
           <ExpansionCard.Title size={'small'}>{heading}</ExpansionCard.Title>
