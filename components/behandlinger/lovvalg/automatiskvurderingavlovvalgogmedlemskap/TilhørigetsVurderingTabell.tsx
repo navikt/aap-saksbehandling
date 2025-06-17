@@ -63,7 +63,7 @@ export const TilhørigetsVurderingTabell = ({
             </Table.ExpandableRow>
           ) : (
             <Table.Row key={index} className={styles.rad}>
-              <Table.DataCell></Table.DataCell>
+              <Table.DataCell style={{ minWidth: '48px' }}></Table.DataCell>
               {radInnhold}
             </Table.Row>
           );
