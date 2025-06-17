@@ -7,19 +7,18 @@ interface Props {
   onClose: () => void;
 }
 
-export const SlettBrevModal = ({ isOpen, onClose, onDelete }: Props) => {
+export const IkkeSendBrevModal = ({ isOpen, onClose, onDelete }: Props) => {
   return (
-    <Modal open={isOpen} onClose={onClose} header={{ heading: 'Slett brev' }}>
+    <Modal open={isOpen} onClose={onClose} header={{ heading: 'Ikke send brev' }}>
       <Modal.Body>
         <BodyShort spacing>
-          Denne handlingen vil permanent slette brevet fra behandlingen. Skal kun brukes i tilfeller hvor det ikke er
-          behov for å sende brev til bruker.
+          Denne handlingen skal kun brukes i tilfeller hvor det ikke er behov for å sende brev til bruker.
         </BodyShort>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onClose}>Lukk</Button>
         <Button variant="danger" icon={<TrashIcon />} onClick={onDelete}>
-          Slett brev
+          Ikke send brev
         </Button>
       </Modal.Footer>
     </Modal>
