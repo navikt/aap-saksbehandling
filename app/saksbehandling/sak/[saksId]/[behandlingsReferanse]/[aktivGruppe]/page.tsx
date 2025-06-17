@@ -21,20 +21,10 @@ const Page = async (props: {
 
   return behandling.data.skalForberede ? (
     <Suspense fallback={<Spinner size={'xlarge'} label={'Forbereder behandling..'} />}>
-      <ForberedBehandling
-        behandlingsReferanse={params.behandlingsReferanse}
-        behandling={behandling.data}
-        aktivGruppe={params.aktivGruppe}
-        saksId={params.saksId}
-      />
+      <ForberedBehandling behandlingsReferanse={params.behandlingsReferanse} aktivGruppe={params.aktivGruppe} />
     </Suspense>
   ) : (
-    <BehandlingPage
-      behandling={behandling.data}
-      behandlingsReferanse={params.behandlingsReferanse}
-      aktivGruppe={params.aktivGruppe as StegGruppe}
-      saksId={params.saksId}
-    />
+    <BehandlingPage behandlingsReferanse={params.behandlingsReferanse} aktivGruppe={params.aktivGruppe as StegGruppe} />
   );
 };
 
