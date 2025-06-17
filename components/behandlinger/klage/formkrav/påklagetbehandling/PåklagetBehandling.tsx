@@ -11,7 +11,6 @@ import { formaterÅrsak } from 'lib/utils/årsaker';
 
 interface Props {
   behandlingVersjon: number;
-  erAktivtSteg: boolean;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
   grunnlag?: PåklagetBehandlingGrunnlag;
@@ -21,7 +20,7 @@ interface FormSchema {
   vedtak: string | null | undefined;
 }
 
-export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erAktivtSteg }: Props) => {
+export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
@@ -54,7 +53,6 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, erA
       onSubmit={handleSubmit(onSubmit)}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       visBekreftKnapp={!readOnly}
-      erAktivtSteg={erAktivtSteg}
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}

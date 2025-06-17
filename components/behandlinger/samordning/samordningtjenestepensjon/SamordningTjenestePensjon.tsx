@@ -72,8 +72,7 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      erAktivtSteg={true}
-      steg={'VURDER_BISTANDSBEHOV'}
+      steg={'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'}
       visBekreftKnapp={!readOnly}
       onSubmit={handleSubmit}
     >

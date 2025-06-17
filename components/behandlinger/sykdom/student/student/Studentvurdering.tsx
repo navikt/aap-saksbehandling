@@ -145,7 +145,6 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly }: Prop
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.studentvurdering?.vurdertAv}
     >

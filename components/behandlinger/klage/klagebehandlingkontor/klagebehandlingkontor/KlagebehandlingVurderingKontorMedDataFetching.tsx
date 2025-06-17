@@ -9,7 +9,6 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  erAktivtSteg: boolean;
 }
 
 export const KlagebehandlingVurderingKontorMedDataFetching = async ({
@@ -17,7 +16,6 @@ export const KlagebehandlingVurderingKontorMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
   typeBehandling,
-  erAktivtSteg,
 }: Props) => {
   const grunnlag = await hentKlagebehandlingKontorGrunnlag(behandlingsreferanse);
   if (isError(grunnlag)) {
@@ -29,7 +27,6 @@ export const KlagebehandlingVurderingKontorMedDataFetching = async ({
       behandlingVersjon={behandlingVersjon}
       readOnly={readOnly}
       typeBehandling={typeBehandling}
-      erAktivtSteg={erAktivtSteg}
     />
   );
 };

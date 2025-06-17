@@ -127,7 +127,6 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
       status={status}
       visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
-      erAktivtSteg={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />

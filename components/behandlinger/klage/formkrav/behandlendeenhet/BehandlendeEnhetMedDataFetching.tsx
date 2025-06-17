@@ -1,20 +1,18 @@
 import { BehandlendeEnhet } from './BehandlendeEnhet';
-import { TypeBehandling } from '../../../../../lib/types/types';
-import { hentBehandlendeEnhetGrunnlag } from '../../../../../lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from '../../../../../lib/utils/api';
-import { ApiException } from '../../../../saksbehandling/apiexception/ApiException';
+import { TypeBehandling } from 'lib/types/types';
+import { hentBehandlendeEnhetGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 export const BehandlendeEnhetMedDataFetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   typeBehandling,
-  erAktivtSteg,
   readOnly,
 }: {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   typeBehandling: TypeBehandling;
-  erAktivtSteg: boolean;
   readOnly: boolean;
 }) => {
   const grunnlag = await hentBehandlendeEnhetGrunnlag(behandlingsreferanse);
@@ -27,7 +25,6 @@ export const BehandlendeEnhetMedDataFetching = async ({
     <BehandlendeEnhet
       grunnlag={grunnlag.data}
       typeBehandling={typeBehandling}
-      erAktivtSteg={erAktivtSteg}
       behandlingVersjon={behandlingVersjon}
       readOnly={readOnly}
     />

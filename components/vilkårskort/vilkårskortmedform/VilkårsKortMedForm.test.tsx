@@ -53,7 +53,6 @@ function renderComponent(skalViseBekreftKnapp?: boolean, error?: ApiException) {
       onSubmit={vitest.fn()}
       isLoading={false}
       status={'DONE'}
-      erAktivtSteg={true}
       visBekreftKnapp={!!skalViseBekreftKnapp}
       vilkårTilhørerNavKontor={true}
       løsBehovOgGåTilNesteStegError={error}

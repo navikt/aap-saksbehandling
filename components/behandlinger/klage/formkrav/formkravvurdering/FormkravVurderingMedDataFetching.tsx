@@ -1,15 +1,14 @@
-import { isError } from '../../../../../lib/utils/api';
-import { ApiException } from '../../../../saksbehandling/apiexception/ApiException';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { FormkravVurdering } from './FormkravVurdering';
-import { TypeBehandling } from '../../../../../lib/types/types';
-import { hentFormkravGrunnlag } from '../../../../../lib/services/saksbehandlingservice/saksbehandlingService';
+import { TypeBehandling } from 'lib/types/types';
+import { hentFormkravGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  erAktivtSteg: boolean;
 }
 
 export const FormkravVurderingMedDataFetching = async ({
@@ -17,7 +16,6 @@ export const FormkravVurderingMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
   typeBehandling,
-  erAktivtSteg,
 }: Props) => {
   const grunnlag = await hentFormkravGrunnlag(behandlingsreferanse);
 
@@ -31,7 +29,6 @@ export const FormkravVurderingMedDataFetching = async ({
       behandlingVersjon={behandlingVersjon}
       readOnly={readOnly}
       typeBehandling={typeBehandling}
-      erAktivtSteg={erAktivtSteg}
     />
   );
 };

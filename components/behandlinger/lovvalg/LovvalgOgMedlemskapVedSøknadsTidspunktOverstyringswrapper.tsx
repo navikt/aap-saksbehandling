@@ -11,7 +11,6 @@ interface Props {
   readOnly: boolean;
   automatiskVurdering: AutomatiskLovvalgOgMedlemskapVurdering;
   stegSomSkalVises: Array<StegType>;
-  erAktivtSteg: boolean;
   visOverstyrKnapp?: boolean;
   children: ReactNode;
 }
@@ -21,7 +20,6 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
   automatiskVurdering,
   stegSomSkalVises,
   behandlingVersjon,
-  erAktivtSteg,
   readOnly,
   visOverstyrKnapp,
 }: Props) => {
@@ -40,7 +38,6 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
         <LovvalgOgMedlemskapVedSKnadstidspunkt
           behandlingVersjon={behandlingVersjon}
           readOnly={readOnly}
-          erAktivtSteg={erAktivtSteg}
           overstyring={true}
         />
       )}

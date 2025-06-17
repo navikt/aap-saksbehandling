@@ -9,14 +9,12 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  erAktivtSteg: boolean;
 }
 
 export const TrekkKlageVurderingMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
   typeBehandling,
-  erAktivtSteg,
   behandlingsreferanse,
 }: Props) => {
   const grunnlag = await hentTrekkKlageGrunnlag(behandlingsreferanse);
@@ -30,7 +28,6 @@ export const TrekkKlageVurderingMedDataFetching = async ({
       behandlingVersjon={behandlingVersjon}
       readOnly={readOnly}
       typeBehandling={typeBehandling}
-      erAktivtSteg={erAktivtSteg}
       grunnlag={grunnlag.data}
     />
   );

@@ -110,7 +110,6 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      erAktivtSteg={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <VStack gap={'1'}>

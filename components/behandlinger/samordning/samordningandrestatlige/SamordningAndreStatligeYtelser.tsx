@@ -88,7 +88,6 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
       isLoading={isLoading}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
       visBekreftKnapp={skalViseBekreftKnapp}
       vilkårTilhørerNavKontor={false}
     >

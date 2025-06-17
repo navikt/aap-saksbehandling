@@ -97,7 +97,6 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
-      erAktivtSteg={true}
     >
       <InstitusjonsoppholdTabell
         label="Bruker har følgende soningsforhold"

@@ -13,7 +13,7 @@ import { Alert, Heading } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { useSak } from '../../../../hooks/SakHook';
+import { useSak } from 'hooks/SakHook';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -133,7 +133,6 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
       visBekreftKnapp={!readOnly}
-      erAktivtSteg={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.nedsattArbeidsevneDatobegrunnelse} className="begrunnelse" />

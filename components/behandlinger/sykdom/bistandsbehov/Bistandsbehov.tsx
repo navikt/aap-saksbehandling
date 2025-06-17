@@ -19,7 +19,6 @@ interface Props {
   readOnly: boolean;
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
-  erAktivtSteg: boolean;
 }
 
 interface FormFields {
@@ -32,7 +31,7 @@ interface FormFields {
   vurderAAPIOvergangTilArbeid?: string;
 }
 
-export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling, erAktivtSteg }: Props) => {
+export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -135,7 +134,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       onSubmit={handleSubmit}
       visBekreftKnapp={!readOnly}
       isLoading={isLoading}
-      erAktivtSteg={erAktivtSteg}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}

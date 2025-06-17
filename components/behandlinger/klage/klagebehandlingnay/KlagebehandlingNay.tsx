@@ -34,7 +34,6 @@ export const KlagebehandlingNay = async ({ behandlingsreferanse }: Props) => {
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            erAktivtSteg={flyt.data.aktivtSteg == 'KLAGEBEHANDLING_NAY'}
             typeBehandling={flyt.data.visning.typeBehandling as TypeBehandling}
           />
         </StegSuspense>
@@ -45,7 +44,6 @@ export const KlagebehandlingNay = async ({ behandlingsreferanse }: Props) => {
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            erAktivtSteg={flyt.data.aktivtSteg == 'KLAGEBEHANDLING_OPPSUMMERING'}
             typeBehandling={flyt.data.visning.typeBehandling as TypeBehandling}
           />
         </StegSuspense>

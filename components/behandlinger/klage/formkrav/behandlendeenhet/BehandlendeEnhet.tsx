@@ -1,18 +1,17 @@
 'use client';
 
-import { BehandlendeEnhetGrunnlag, TypeBehandling } from '../../../../../lib/types/types';
-import { useBehandlingsReferanse } from '../../../../../hooks/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from '../../../../../hooks/LøsBehovOgGåTilNesteStegHook';
-import { useConfigForm } from '../../../../form/FormHook';
+import { BehandlendeEnhetGrunnlag, TypeBehandling } from 'lib/types/types';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
-import { VilkårsKortMedForm } from '../../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { FormField } from '../../../../form/FormField';
-import { Behovstype } from '../../../../../lib/utils/form';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { FormField } from 'components/form/FormField';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   grunnlag?: BehandlendeEnhetGrunnlag;
   behandlingVersjon: number;
-  erAktivtSteg: boolean;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
 }
@@ -67,7 +66,6 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly }: Prop
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
     >
       <FormField form={form} formField={formFields.hvemSkalBehandle} />
     </VilkårsKortMedForm>

@@ -58,7 +58,6 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon }: Props) =
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
       vilkårTilhørerNavKontor={false}
     >
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />

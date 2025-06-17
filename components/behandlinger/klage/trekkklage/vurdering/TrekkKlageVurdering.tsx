@@ -11,7 +11,6 @@ import { FormField } from 'components/form/FormField';
 
 interface Props {
   behandlingVersjon: number;
-  erAktivtSteg: boolean;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
   grunnlag?: TrekkKlageGrunnlag;
@@ -23,7 +22,7 @@ interface FormFields {
   hvorforTrekkes?: 'TRUKKET_AV_BRUKER' | 'FEILREGISTRERING';
 }
 
-export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, erAktivtSteg, grunnlag }: Props) => {
+export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
@@ -84,7 +83,6 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, erAktivtSteg,
       onSubmit={handleSubmit}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       visBekreftKnapp={!readOnly}
-      erAktivtSteg={erAktivtSteg}
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}

@@ -75,7 +75,6 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
       isLoading={isLoading}
       visBekreftKnapp={true} // OIST ignorerer flagg fra backend midlertidig
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
     >
       <Table size={'small'} className={styles.bruddTabell}>
         <Table.Header>

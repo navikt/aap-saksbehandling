@@ -73,7 +73,6 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
       steg={'MANGLENDE_LIGNING'}
       onSubmit={handleSubmit}
       isLoading={isLoading}
-      erAktivtSteg={true}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
       visBekreftKnapp={!readOnly}
