@@ -1,25 +1,5 @@
-.vilkårsKortNAY {
-  --ac-expansioncard-border-radius: var(--a-border-radius-large);
-  --ac-expansioncard-border-hover-color: none;
-
-  border: 1px solid var(--a-border-divider);
-  border-left: 0.5rem solid var(--a-surface-alt-3);
-}
-
-.vilkårsKortNAV {
-  --ac-expansioncard-border-radius: var(--a-border-radius-large);
-  --ac-expansioncard-border-hover-color: none;
-
-  border: 1px solid var(--a-border-divider);
-  border-left: 0.5rem solid var(--a-surface-alt-1-moderate);
-}
-
 .vilkårsKort {
   border: 1px solid var(--a-border-divider);
-}
-
-:is(.vilkårsKortNAV, .vilkårsKortNAY):last-of-type {
-  margin-bottom: var(--a-spacing-18);
 }
 
 .header,
