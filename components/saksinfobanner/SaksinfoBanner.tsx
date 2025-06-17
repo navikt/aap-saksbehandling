@@ -22,7 +22,7 @@ import { isProd } from 'lib/utils/environment';
 import { TrekkKlageModal } from './trekkklagemodal/TrekkKlageModal';
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
-import { storForbokstav } from 'lib/utils/string';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -100,7 +100,7 @@ export const SaksinfoBanner = ({
         <HStack gap={'2'} align="center">
           <Label size="small">
             <Link href={`/saksbehandling/sak/${sak.saksnummer}`} title="Tilbake til saksoversikt">
-              {storForbokstav(personInformasjon.navn)}
+              {storForbokstavIHvertOrd(personInformasjon.navn)}
             </Link>
           </Label>
 

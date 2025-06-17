@@ -10,7 +10,7 @@ import styles from './DokumentInfoBanner.module.css';
 import { PostmottakSettBehandllingPVentModal } from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandllingPåVentModal';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
-import { storForbokstav } from 'lib/utils/string';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
 
 interface Props {
   behandlingsreferanse: string;
@@ -26,7 +26,7 @@ export const DokumentInfoBanner = ({ behandlingsreferanse, behandlingsVersjon, j
     <div className={styles.dokumentinfobanner}>
       <div className={styles.dokumentinfo}>
         <HStack gap={'2'} align="center">
-          <BodyShort size="small">{storForbokstav(journalpostInfo.søker?.navn || '')}</BodyShort>
+          <BodyShort size="small">{storForbokstavIHvertOrd(journalpostInfo.søker?.navn)}</BodyShort>
 
           <CopyButton
             copyText={journalpostInfo.søker?.ident!}
@@ -41,7 +41,7 @@ export const DokumentInfoBanner = ({ behandlingsreferanse, behandlingsVersjon, j
             <Tooltip content={'Avsender'}>
               <HStack gap={'2'}>
                 <PaperplaneIcon title={'avsender'} />
-                <BodyShort size={'small'}>{journalpostInfo.avsender?.navn}</BodyShort>
+                <BodyShort size={'small'}>{storForbokstavIHvertOrd(journalpostInfo.avsender?.navn)}</BodyShort>
               </HStack>
             </Tooltip>
           </div>
