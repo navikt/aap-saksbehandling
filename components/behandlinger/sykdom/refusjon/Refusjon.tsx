@@ -12,11 +12,11 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { FormEvent, useState } from 'react';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { AsyncComboSearch } from '../../../form/asynccombosearch/AsyncComboSearch';
-import { Enhet } from '../../../../lib/types/oppgaveTypes';
-import { isLocal, isProd } from '../../../../lib/utils/environment';
-import { hentAlleNavEnheter } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from '../../../../lib/utils/api';
+import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
+import { Enhet } from 'lib/types/oppgaveTypes';
+import { isLocal } from 'lib/utils/environment';
+import { hentAlleNavEnheter } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   behandlingVersjon: number;
@@ -176,7 +176,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           <FormField form={form} formField={formFields.vurderingenGjelderTil} />
         </>
       )}
-      {!isProd() && (
+      {isLocal() && (
         <AsyncComboSearch
           label={'Velg Nav-kontor (test, lagres ikke)'}
           form={form}
