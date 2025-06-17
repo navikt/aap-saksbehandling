@@ -129,7 +129,7 @@ export const hentAlleSaker = async () => {
 };
 
 export const hentAlleNavEnheter = async (input: string, behandlingsReferanse: string) => {
-  const url = `https://kelvin.ansatt.dev.nav.no/saksbehandling/api/behandling/${behandlingsReferanse}/navenheter`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/navenheter`;
   console.log(`${saksbehandlingApiBaseUrl}`);
   return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'GET');
 };
