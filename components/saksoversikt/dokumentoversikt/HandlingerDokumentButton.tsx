@@ -2,11 +2,12 @@
 
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { Journalpost, SaksInfo } from 'lib/types/types';
+import { SaksInfo } from 'lib/types/types';
 import { useState } from 'react';
 import { erFerdigstilt } from 'lib/utils/journalpost';
 import { FeilregistrerJournalpostModal } from 'components/saksoversikt/dokumentoversikt/FeilregistrerJournalpost';
 import { KnyttTilSak } from 'components/saksoversikt/dokumentoversikt/KnyttTilSak';
+import { Journalpost } from 'lib/types/journalpost';
 
 export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; journalpost: Journalpost }) => {
   const [knyttTilSakOpen, setKnyttTilSakOpen] = useState(false);

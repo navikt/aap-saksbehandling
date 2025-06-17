@@ -1,8 +1,9 @@
-import { Journalpost, SaksInfo } from 'lib/types/types';
+import { SaksInfo } from 'lib/types/types';
 import { Alert, BodyShort, Button, Modal } from '@navikt/ds-react';
 import { useState } from 'react';
 import { isError, isSuccess } from 'lib/utils/api';
 import { clientKnyttTilAnnenSak } from 'lib/dokumentClientApi';
+import { Journalpost } from 'lib/types/journalpost';
 
 export interface KnyttTilAnnenSakRequest {
   bruker: {

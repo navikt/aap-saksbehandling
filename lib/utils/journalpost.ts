@@ -1,4 +1,4 @@
-import { Journalstatus } from 'lib/types/types';
+import { Journalstatus } from 'lib/types/journalpost';
 
 export const erFerdigstilt = (status: Journalstatus) => {
   switch (status) {

@@ -1,8 +1,8 @@
-import { Journalpost } from 'lib/types/types';
 import { Alert, BodyShort, Button, Modal, Table } from '@navikt/ds-react';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useState } from 'react';
 import { feilregistrerSakstilknytning, opphevFeilregistrertSakstilknytning } from 'lib/dokumentClientApi';
+import { Journalpost } from 'lib/types/journalpost';
 
 export const FeilregistrerJournalpostModal = ({
   journalpost,

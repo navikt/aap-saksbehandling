@@ -1,18 +1,18 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
-import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
-import { DokumentInfo, Journalpost } from 'lib/types/types';
 import {
   KnyttTilAnnenSakRequest,
   KnyttTilAnnenSakResponse,
 } from 'components/saksoversikt/dokumentoversikt/KnyttTilSak';
+import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
+import { Journalpost } from 'lib/types/journalpost';
 
 const dokumentinnhentingApiBaseUrl = process.env.DOKUMENTINNHENTING_API_BASE_URL;
 const dokumentinnhentingApiScope = process.env.DOKUMENTINNHENTING_API_SCOPE ?? '';
 
 export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/sak/${saksnummer}`;
-  return await apiFetch<DokumentInfo[]>(url, dokumentinnhentingApiScope, 'GET');
+  return await apiFetch<RelevantDokumentType[]>(url, dokumentinnhentingApiScope, 'GET');
 };
 
 export async function hentHelsedokumenterPåSak(saksnummer: string) {

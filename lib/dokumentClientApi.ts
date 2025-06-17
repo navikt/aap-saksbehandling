@@ -1,12 +1,12 @@
-import { DokumentInfo, Journalpost } from './types/types';
 import { KnyttTilAnnenSakRequest } from 'components/saksoversikt/dokumentoversikt/KnyttTilSak';
 import { clientFetch } from 'lib/clientApi';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
+import { Journalpost } from 'lib/types/journalpost';
 
 const BASE_URL = '/saksbehandling';
 
 export function clientHentAlleDokumenterPåSak(saksnummer: string) {
-  return clientFetch<DokumentInfo[]>(`${BASE_URL}/api/dokumenter/sak/${saksnummer}`, 'GET');
+  return clientFetch<RelevantDokumentType[]>(`${BASE_URL}/api/dokumenter/sak/${saksnummer}`, 'GET');
 }
 
 export function clientHentAlleDokumenterPåBruker(personIdent: string) {

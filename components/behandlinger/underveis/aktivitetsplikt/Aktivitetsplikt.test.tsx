@@ -8,15 +8,6 @@ import { describe, expect, test } from 'vitest';
 const testgrunnlag: AktivitetspliktGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   forhåndsvarselDato: '2025-01-02',
-  forhåndsvarselSvar: {
-    mottattDato: '2025-01-12',
-    journalpostId: {
-      identifikator: 'asdfjkl',
-    },
-    dokumentInfoId: {
-      dokumentInfoId: 'dokument-id',
-    },
-  },
   gjeldendeBrudd: [
     {
       begrunnelse: 'Hadde influensa. Sykemelding fra lege.',
