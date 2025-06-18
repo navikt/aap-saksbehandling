@@ -130,7 +130,7 @@ export const hentAlleSaker = async () => {
 };
 
 export const hentAlleNavEnheter = async (behandlingsReferanse: string, input: NavEnhetRequest) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/navenheter`;
+  const url = `${saksbehandlingApiBaseUrl}/api/navenhet/${behandlingsReferanse}/finn`;
   return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'POST', input);
 };
 

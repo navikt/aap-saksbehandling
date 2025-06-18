@@ -99,11 +99,7 @@ export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialo
 }
 
 export function clientHentAlleNavenheter(behandlingReferanse: string, input: NavEnhetRequest) {
-  return clientFetch<NavEnheterResponse[]>(
-    `${BASE_URL}/api/behandling/${behandlingReferanse}/navenheter`,
-    'POST',
-    input
-  );
+  return clientFetch<NavEnheterResponse[]>(`${BASE_URL}/api/navenhet/${behandlingReferanse}/finn`, 'POST', input);
 }
 
 export function clientMellomlagreBrev(brevbestillingReferanse: string, brev: Brev) {

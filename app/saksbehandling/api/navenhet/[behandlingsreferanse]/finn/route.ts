@@ -10,7 +10,7 @@ export async function POST(req: Request, props: { params: Promise<{ behandlingsr
   const navEnheterResponse = await hentAlleNavEnheter(params.behandlingsreferanse, body);
   if (isError(navEnheterResponse)) {
     logError(
-      `/api/behandling/${params.behandlingsreferanse}/navenheter/ ${navEnheterResponse.status}, ${navEnheterResponse.apiException.code}: ${navEnheterResponse.apiException.message}`
+      `/api/navenhet/${params.behandlingsreferanse}/finn/ ${navEnheterResponse.status}, ${navEnheterResponse.apiException.code}: ${navEnheterResponse.apiException.message}`
     );
   }
   return new Response(JSON.stringify(navEnheterResponse), { status: navEnheterResponse.status });

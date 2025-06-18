@@ -14,7 +14,7 @@ import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { isDev, isLocal } from 'lib/utils/environment';
+import { isLocal, isProd } from 'lib/utils/environment';
 import { isError } from 'lib/utils/api';
 import { clientHentAlleNavenheter } from 'lib/clientApi';
 
@@ -176,7 +176,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           <FormField form={form} formField={formFields.vurderingenGjelderTil} />
         </>
       )}
-      {isDev() && (
+      {!isProd() && (
         <AsyncComboSearch
           label={'Velg Nav-kontor (test, lagres ikke)'}
           form={form}
