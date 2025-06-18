@@ -103,13 +103,13 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
                 </Table.DataCell>
                 <Table.DataCell>{journalpost.sak?.fagsakId}</Table.DataCell>
                 <Table.DataCell>
-                  <HStack gap="2" wrap={false} justify="end">
+                  <HStack gap="2" wrap={false} >
+                    <ÅpneDokumentButton journalpost={journalpost} />
                     {/* TODO: Fjerne sjekk når vi har støtte for redigering av journalpost */}
                     {erFerdigstilt(journalpost.journalstatus) && (
                       <HandlingerDokumentButton sak={sak} journalpost={journalpost} />
                     )}
 
-                    <ÅpneDokumentButton journalpost={journalpost} />
                   </HStack>
                 </Table.DataCell>
               </Table.Row>
