@@ -27,9 +27,10 @@ export const ForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) =>
 
   const behandlingsVersjon = flyt.data.behandlingVersjon;
   const saksBehandlerReadOnly = flyt.data.visning.saksbehandlerReadOnly;
-  const visOverstyrKnapp = automatiskVurdering.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0;
 
   const readOnly = saksBehandlerReadOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const visOverstyrKnapp =
+    automatiskVurdering.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0 && !readOnly;
 
   return (
     <GruppeSteg
