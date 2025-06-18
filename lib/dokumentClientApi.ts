@@ -31,6 +31,9 @@ export function opphevFeilregistrertSakstilknytning(journalpostId: string) {
   );
 }
 
-export function clientHentRelevanteDokumenter(saksnummer: string) {
-  return clientFetch<RelevantDokumentType[]>(`${BASE_URL}/api/dokumenter/sak/${saksnummer}/helsedokumenter`, 'GET');
+export function clientHentRelevanteDokumenter(saksnummer: string, personIdent: string) {
+  return clientFetch<RelevantDokumentType[]>(`${BASE_URL}/api/dokumenter/bruker/helsedokumenter`, 'POST', {
+    saksnummer,
+    personIdent,
+  });
 }

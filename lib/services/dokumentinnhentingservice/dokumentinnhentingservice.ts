@@ -15,15 +15,15 @@ export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
   return await apiFetch<RelevantDokumentType[]>(url, dokumentinnhentingApiScope, 'GET');
 };
 
-export async function hentHelsedokumenterPåSak(saksnummer: string) {
-  const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/sak/${saksnummer}/helsedokumenter`;
-  return await apiFetch<RelevantDokumentType[]>(url, dokumentinnhentingApiScope, 'GET');
-}
-
 export const hentAlleDokumenterPåBruker = async (brukerId: any) => {
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/bruker`;
   return await apiFetch<Journalpost[]>(url, dokumentinnhentingApiScope, 'POST', brukerId);
 };
+
+export async function hentHelsedokumenterPåBruker(request: any) {
+  const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/bruker/helsedokumenter`;
+  return await apiFetch<RelevantDokumentType[]>(url, dokumentinnhentingApiScope, 'POST', request);
+}
 
 export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/${journalPostId}/${dokumentInfoId}`;

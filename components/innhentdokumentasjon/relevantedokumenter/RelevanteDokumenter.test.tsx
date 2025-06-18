@@ -23,6 +23,13 @@ const relevanteDokumenter: RelevantDokumentType[] = [
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 
+// noinspection JSUnusedGlobalSymbols
+vi.mock('hooks/SakHook', () => ({
+  useSak: () => ({
+    sak: { saksnummer: '123', ident: '456' }
+  })
+}));
+
 describe('Relevante dokumenter', () => {
   beforeEach(() => {
     fetchMock.mockReset();
@@ -50,23 +57,17 @@ describe('Relevante dokumenter', () => {
     expect(screen.getByRole('textbox', { name: 'Søk i helseopplysninger' })).toBeVisible();
   });
 
-  test('har et felt for å kunne filtrere dokumentlisten på typer', () => {
+  test('har et felt for å kunne filtrere dokumentlisten på tema', () => {
     mockFetchRelevanteDokumenter(relevanteDokumenter);
     render(<RelevanteDokumenter />);
-    expect(screen.getByRole('combobox', { name: 'Vis typer' })).toBeVisible();
+    expect(screen.getByRole('combobox', { name: 'Tema' })).toBeVisible();
   });
 
   test('har en tabell for alle dokumenter som er funnet', () => {
     mockFetchRelevanteDokumenter(relevanteDokumenter);
     render(<RelevanteDokumenter />);
     expect(screen.getByRole('columnheader', { name: 'Dokument' })).toBeVisible();
-    expect(screen.getByRole('columnheader', { name: 'Type' })).toBeVisible();
-  });
-
-  test('tabellen kan sorteres på type', () => {
-    mockFetchRelevanteDokumenter(relevanteDokumenter);
-    render(<RelevanteDokumenter />);
-    expect(screen.getByRole('button', { name: 'Type' })).toBeVisible();
+    expect(screen.getByRole('columnheader', { name: 'Tema' })).toBeVisible();
   });
 
   test('viser en rad pr dokument', () => {
@@ -84,6 +85,6 @@ function mockFetchRelevanteDokumenter(dokumenter: RelevantDokumentType[]) {
   };
 
   mockSWRImplementation({
-    '/api/dokumenter/sak/123/helsedokumenter': response,
+    '/api/dokumenter/bruker/helsedokumenter': response,
   });
 }
