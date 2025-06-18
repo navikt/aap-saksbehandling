@@ -14,9 +14,9 @@ import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { isLocal } from 'lib/utils/environment';
-import { hentAlleNavEnheter } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isDev, isLocal } from 'lib/utils/environment';
 import { isError } from 'lib/utils/api';
+import { clientHentAlleNavenheter } from 'lib/clientApi';
 
 interface Props {
   behandlingVersjon: number;
@@ -144,14 +144,14 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
     if (input.length <= 2) {
       return [];
     }
-    const response = await hentAlleNavEnheter(input, behandlingsreferanse);
+    const response = await clientHentAlleNavenheter(behandlingsreferanse, { navn: input });
     if (isError(response)) {
       return [];
     }
 
     const res = response.data.map((kontor) => ({
-      label: `${kontor.navn} - ${kontor.enhetNr}`,
-      value: `${kontor.enhetNr}`,
+      label: `${kontor.navn} - ${kontor.navn}`,
+      value: `${kontor.enhetsnummer}`,
     }));
     setDefaultOptions(res);
     return res;
@@ -176,7 +176,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           <FormField form={form} formField={formFields.vurderingenGjelderTil} />
         </>
       )}
-      {isLocal() && (
+      {isDev() && (
         <AsyncComboSearch
           label={'Velg Nav-kontor (test, lagres ikke)'}
           form={form}

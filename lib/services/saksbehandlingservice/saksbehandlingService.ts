@@ -32,6 +32,7 @@ import {
   LovvalgMedlemskapGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   ManuellInntektGrunnlag,
+  NavEnhetRequest,
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
@@ -128,9 +129,9 @@ export const hentAlleSaker = async () => {
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentAlleNavEnheter = async (input: string, behandlingsReferanse: string) => {
+export const hentAlleNavEnheter = async (behandlingsReferanse: string, input: NavEnhetRequest) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/navenheter`;
-  return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'POST', input);
 };
 
 export const hentYrkesskadeVurderingGrunnlag = async (behandlingsReferanse: string) => {
