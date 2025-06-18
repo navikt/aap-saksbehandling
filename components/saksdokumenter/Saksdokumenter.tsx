@@ -9,10 +9,10 @@ import { ArrowGreen } from 'components/icons/ArrowGreen';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { clientHentAlleDokumenterPåSak } from 'lib/dokumentClientApi';
+import { isError } from 'lib/utils/api';
 
 interface FormFields {
   dokumentnavn: string;
-  dokumentType: string;
 }
 
 export const Saksdokumenter = () => {
@@ -26,21 +26,9 @@ export const Saksdokumenter = () => {
       type: 'text',
       label: 'Søk i dokumenter',
     },
-    dokumentType: {
-      type: 'select',
-      label: 'Vis typer',
-      options: Array.from(
-        new Set([
-          ...[''],
-          ...((dokumenterPåSak?.type === 'SUCCESS' &&
-            dokumenterPåSak?.data?.map((dokument) => dokument.variantformat)) ||
-            []),
-        ])
-      ),
-    },
   });
 
-  if (dokumenterPåSak?.type === 'ERROR') {
+  if (isError(dokumenterPåSak)) {
     return <ApiException apiResponses={[dokumenterPåSak]} />;
   }
 
@@ -48,7 +36,6 @@ export const Saksdokumenter = () => {
     <VStack gap={'4'}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <FormField form={form} formField={formFields.dokumentnavn} />
-        <FormField form={form} formField={formFields.dokumentType} />
       </div>
       <TableStyled size={'small'}>
         <Table.Header>
@@ -60,7 +47,7 @@ export const Saksdokumenter = () => {
               Dokument
             </Table.HeaderCell>
             <Table.HeaderCell align={'left'} textSize={'small'}>
-              Type
+              Brevkode
             </Table.HeaderCell>
             <Table.HeaderCell align={'left'} textSize={'small'}>
               Journalført
@@ -70,7 +57,6 @@ export const Saksdokumenter = () => {
         <Table.Body>
           {dokumenterPåSak?.data
             ?.filter((dokument) => !form.watch('dokumentnavn') || dokument.tittel.includes(form.watch('dokumentnavn')))
-            .filter((dokument) => !form.watch('dokumentType') || dokument.variantformat === form.watch('dokumentType'))
             .map((dokument) => {
               return (
                 <Table.Row key={dokument.dokumentInfoId}>

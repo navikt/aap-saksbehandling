@@ -3,7 +3,7 @@ import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevanted
 import {
   KnyttTilAnnenSakRequest,
   KnyttTilAnnenSakResponse,
-} from 'components/saksoversikt/dokumentoversikt/KnyttTilSak';
+} from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
 import { Journalpost } from 'lib/types/journalpost';
 

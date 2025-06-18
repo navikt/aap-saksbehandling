@@ -56,21 +56,16 @@ test('skal ha et felt for å kunne søke etter tittel på dokument', async () =>
   expect(await screen.findByRole('textbox', { name: /søk i dokumenter/i })).toBeVisible();
 });
 
-test('skal ha et felt for å kunne søke type', async () => {
-  render(<Saksdokumenter />);
-  expect(await screen.findByRole('combobox', { name: /vis typer/i })).toBeVisible();
-});
-
 test('skal ha en tabell med inn/ut, dokument, type og journalført i header', async () => {
   render(<Saksdokumenter />);
   const innUt = await screen.findByRole('columnheader', { name: /inn \/ ut/i });
   const dokument = await screen.findByRole('columnheader', { name: /dokument/i });
-  const type = await screen.findByRole('columnheader', { name: /type/i });
+  const brevkode = await screen.findByRole('columnheader', { name: /brevkode/i });
   const journalført = await screen.findByRole('columnheader', { name: /journalført/i });
 
   expect(innUt).toBeVisible();
   expect(dokument).toBeVisible();
-  expect(type).toBeVisible();
+  expect(brevkode).toBeVisible();
   expect(journalført).toBeVisible();
 });
 

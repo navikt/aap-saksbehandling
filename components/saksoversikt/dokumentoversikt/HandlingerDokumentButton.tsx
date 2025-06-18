@@ -6,7 +6,7 @@ import { SaksInfo } from 'lib/types/types';
 import { useState } from 'react';
 import { erFerdigstilt } from 'lib/utils/journalpost';
 import { FeilregistrerJournalpostModal } from 'components/saksoversikt/dokumentoversikt/FeilregistrerJournalpost';
-import { KnyttTilSak } from 'components/saksoversikt/dokumentoversikt/KnyttTilSak';
+import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
 import { Journalpost } from 'lib/types/journalpost';
 
 export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; journalpost: Journalpost }) => {
@@ -36,9 +36,7 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
                 <ActionMenu.Divider />
 
                 {journalpost.journalstatus === 'FEILREGISTRERT' ? (
-                  <ActionMenu.Item onSelect={() => setFeilregistrerOpen(true)}>
-                    Opphev feilregistrering
-                  </ActionMenu.Item>
+                  <ActionMenu.Item onSelect={() => setFeilregistrerOpen(true)}>Opphev feilregistrering</ActionMenu.Item>
                 ) : (
                   <ActionMenu.Item variant="danger" onSelect={() => setFeilregistrerOpen(true)}>
                     Feilregistrer sakstilknytning
@@ -50,11 +48,14 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
         </ActionMenu.Content>
       </ActionMenu>
 
-      <KnyttTilSak
-        journalpost={journalpost}
-        sak={sak}
+      <KnyttTilSakModal
+        journalpostId={journalpost.journalpostId}
+        tema={journalpost.tema!!}
+        saksnummer={sak.saksnummer}
+        brukerIdent={sak.ident}
         isOpen={knyttTilSakOpen}
         onClose={() => setKnyttTilSakOpen(false)}
+        onSuccess={() => window.location.reload()}
       />
 
       <FeilregistrerJournalpostModal

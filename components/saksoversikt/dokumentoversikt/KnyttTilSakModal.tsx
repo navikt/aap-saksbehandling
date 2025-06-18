@@ -1,9 +1,7 @@
-import { SaksInfo } from 'lib/types/types';
 import { Alert, BodyShort, Button, Modal } from '@navikt/ds-react';
 import { useState } from 'react';
 import { isError, isSuccess } from 'lib/utils/api';
 import { clientKnyttTilAnnenSak } from 'lib/dokumentClientApi';
-import { Journalpost } from 'lib/types/journalpost';
 
 export interface KnyttTilAnnenSakRequest {
   bruker: {
@@ -12,23 +10,29 @@ export interface KnyttTilAnnenSakRequest {
   };
   fagsakId: string;
   fagsaksystem: string;
-  tema?: string | null
+  tema?: string | null;
 }
 
 export interface KnyttTilAnnenSakResponse {
   nyJournalpostId: string;
 }
 
-export const KnyttTilSak = ({
-  journalpost,
-  sak,
+export const KnyttTilSakModal = ({
+  journalpostId,
+  tema,
+  saksnummer,
+  brukerIdent,
   isOpen,
   onClose,
+  onSuccess,
 }: {
-  journalpost: Journalpost;
-  sak: SaksInfo;
+  journalpostId: string;
+  tema: string;
+  saksnummer: string;
+  brukerIdent: string;
   isOpen: boolean;
   onClose: () => void;
+  onSuccess: () => void;
 }) => {
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -36,28 +40,28 @@ export const KnyttTilSak = ({
   const knyttTilAktivSak = async () => {
     setIsLoading(true);
 
-    const result = await clientKnyttTilAnnenSak(journalpost.journalpostId, {
+    const result = await clientKnyttTilAnnenSak(journalpostId, {
       bruker: {
-        id: sak.ident,
+        id: brukerIdent,
         idType: 'FNR',
       },
-      fagsakId: sak.saksnummer,
+      fagsakId: saksnummer,
       fagsaksystem: 'KELVIN',
-      tema: journalpost.tema
+      tema,
     });
 
     if (isSuccess(result)) {
-      window.location.reload();
+      onSuccess();
     } else if (isError(result)) {
       setError('En ukjent feil oppsto');
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
   return (
     <Modal open={isOpen} header={{ heading: 'Knytt til sak' }} onClose={onClose}>
       <Modal.Body>
-        <BodyShort spacing>Er du sikker på at du vil knytte journalposten til sak {sak.saksnummer}?</BodyShort>
+        <BodyShort spacing>Er du sikker på at du vil knytte journalposten til sak {saksnummer}?</BodyShort>
       </Modal.Body>
 
       {error && <Alert variant="error">{error}</Alert>}

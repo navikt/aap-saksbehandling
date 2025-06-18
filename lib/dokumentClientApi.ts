@@ -1,4 +1,4 @@
-import { KnyttTilAnnenSakRequest } from 'components/saksoversikt/dokumentoversikt/KnyttTilSak';
+import { KnyttTilAnnenSakRequest } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
 import { clientFetch } from 'lib/clientApi';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { Journalpost } from 'lib/types/journalpost';
