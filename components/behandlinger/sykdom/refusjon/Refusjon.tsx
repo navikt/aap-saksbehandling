@@ -150,8 +150,8 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
     }
 
     const res = response.data.map((kontor) => ({
-      label: `${kontor.navn} - ${kontor.navn}`,
-      value: `${kontor.enhetsnummer}`,
+      label: `${kontor.enhetsnummer} - ${kontor.navn}`,
+      value: `${kontor.enhetsnummer} - ${kontor.navn}`,
     }));
     setDefaultOptions(res);
     return res;
