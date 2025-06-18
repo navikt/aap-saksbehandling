@@ -91,6 +91,8 @@ export type EffektuerAvvistPåFormkravGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistpåformkrav.EffektuerAvvistPåFormkravGrunnlagDto'];
 export type SvarFraAndreinstansGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansGrunnlagDto'];
+export type SvarKonsekvens =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.HåndterSvarFraAndreinstansLøsningDto']['konsekvens'];
 export type KabalUtfall = SvarFraAndreinstansGrunnlag['svarFraAndreinstans']['utfall'];
 export type KabalSvarType = SvarFraAndreinstansGrunnlag['svarFraAndreinstans']['type'];
 export type UtbetalingOgSimuleringGrunnlag =

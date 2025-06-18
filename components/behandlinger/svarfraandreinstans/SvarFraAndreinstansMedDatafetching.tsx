@@ -1,7 +1,7 @@
 import { hentSvarFraAndreinstansGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { SvarFraAndreinstans } from 'components/behandlinger/svarfraanderinstans/SvarFraAndreinstans';
+import { SvarFraAndreinstans } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstans';
 
 interface Props {
   behandlingsreferanse: string;
@@ -9,7 +9,7 @@ interface Props {
   readOnly: boolean;
 }
 
-export const SvarFraAnderinstansMedDatafetching = async ({
+export const SvarFraAndreinstansMedDatafetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   readOnly,

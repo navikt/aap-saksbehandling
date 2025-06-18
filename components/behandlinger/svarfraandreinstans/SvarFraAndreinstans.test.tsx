@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
-import { SvarFraAndreinstans } from 'components/behandlinger/svarfraanderinstans/SvarFraAndreinstans';
+import { SvarFraAndreinstans } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstans';
 
 describe('Svar fra andreinstans', () => {
   it('Skal ha en overskrift', () => {
     render(<SvarFraAndreinstans readOnly={false} behandlingVersjon={0} />);
 
-    const heading = screen.getByText('Håndter svar fra Nav Klageinstans');
+    const heading = screen.getByText('Vurder konsekvens av svar fra Nav Klageinstans');
     expect(heading).toBeVisible();
   });
 

@@ -24,7 +24,7 @@ import { Omgjøring } from 'components/behandlinger/klage/omgjøring/Omgjøring'
 import { Opprettholdelse } from 'components/behandlinger/klage/opprettholdelse/Opprettholdelse';
 import { KlageAvvistPåFormkrav } from 'components/behandlinger/klage/effektuerklageavvistpåformkrav/KlageAvvistPåFormkrav';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { SvarFraAnderinstansGruppe } from 'components/behandlinger/svarfraanderinstans/SvarFraAnderinstansGruppe';
+import { SvarFraAndreinstansGruppe } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstansGruppe';
 
 interface Props {
   behandlingsReferanse: string;
@@ -77,7 +77,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
         <KlageAvvistPåFormkrav behandlingsreferanse={behandlingsReferanse} />
       )}
       {aktivGruppe === 'SVAR_FRA_ANDREINSTANS' && (
-        <SvarFraAnderinstansGruppe behandlingsreferanse={behandlingsReferanse} />
+        <SvarFraAndreinstansGruppe behandlingsreferanse={behandlingsReferanse} />
       )}
     </section>
   );

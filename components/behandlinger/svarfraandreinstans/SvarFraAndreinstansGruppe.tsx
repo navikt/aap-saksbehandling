@@ -4,13 +4,13 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { SvarFraAnderinstansMedDatafetching } from 'components/behandlinger/svarfraanderinstans/SvarFraAnderinstansMedDatafetching';
+import { SvarFraAndreinstansMedDatafetching } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstansMedDatafetching';
 
 interface Props {
   behandlingsreferanse: string;
 }
 
-export const SvarFraAnderinstansGruppe = async ({ behandlingsreferanse }: Props) => {
+export const SvarFraAndreinstansGruppe = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
@@ -27,7 +27,7 @@ export const SvarFraAnderinstansGruppe = async ({ behandlingsreferanse }: Props)
     >
       {stegSomSkalVises.includes('SVAR_FRA_ANDREINSTANS') && (
         <StegSuspense>
-          <SvarFraAnderinstansMedDatafetching
+          <SvarFraAndreinstansMedDatafetching
             behandlingsreferanse={behandlingsreferanse}
             readOnly={flyt.data.visning.saksbehandlerReadOnly}
             behandlingVersjon={flyt.data.behandlingVersjon}

@@ -156,6 +156,10 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Opprettholdelse';
     case 'KLAGE_AVVIST_PÅ_FORMKRAV':
       return 'Forhåndsvarsel - avvist på formkrav';
+    case 'SVAR_FRA_ANDREINSTANS':
+      return 'Håndter svar fra Nav Klageinstans';
+    case 'IVERKSETT_KONSEKVENS':
+      return 'Iverksett konsekvens';
     default:
       return `${steggruppe}`;
   }

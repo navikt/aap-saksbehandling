@@ -100,6 +100,8 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Forhåndsvarsel - avvist på formkrav';
     case 'SVAR_FRA_ANDREINSTANS':
       return 'Håndter svar fra Nav Klageinstans';
+    case 'IVERKSETT_KONSEKVENS':
+      return 'Iverksett konsekvens';
     case 'UDEFINERT':
       return 'Udefinert';
     default:
