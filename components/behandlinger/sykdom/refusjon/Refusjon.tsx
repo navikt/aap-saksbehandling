@@ -182,7 +182,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
           form={form}
           name={`navKontor`}
           fetcher={kontorSøk}
-          rules={{ required: 'Du må velge et nav-kontor' }}
           size={'small'}
           defaultOptions={defaultOptions}
         />
