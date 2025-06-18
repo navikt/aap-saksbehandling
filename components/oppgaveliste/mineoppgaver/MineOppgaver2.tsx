@@ -6,7 +6,7 @@ import { Alert, BodyShort, Skeleton, VStack } from '@navikt/ds-react';
 import { isError } from 'lib/utils/api';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 import { useConfigForm } from 'components/form/FormHook';
-import { behandlingsTyperOptions, oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
+import { behandlingsTyperOptions, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { useCallback } from 'react';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { Filtrering } from 'components/oppgaveliste/filtrering/Filtrering';
@@ -16,6 +16,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useWatch } from 'react-hook-form';
 
 import styles from './MineOppgaver2.module.css';
+import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 
 export interface FormFieldsFilter {
   behandlingstyper: string[];
@@ -59,7 +60,7 @@ export const MineOppgaver2 = () => {
     avklaringsbehov: {
       type: 'combobox_multiple',
       label: 'Oppgave',
-      options: oppgaveBehandlingstyper,
+      options: oppgaveAvklaringsbehov,
     },
     statuser: {
       type: 'checkbox',
