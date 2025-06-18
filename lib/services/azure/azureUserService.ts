@@ -99,7 +99,7 @@ function mapRollerFraTokenTilKelvinRollerDev(rolle: string): Roller | undefined 
 enum RollerProd {
   BESLUTTER = '5763b52f-f16a-483d-8f40-25be9de95c0a',
   LES = '963df3e5-04f7-415e-8d13-1de981603940',
-  SAKSBEHANDLER_OPPFØLGING = '963df3e5-04f7-415e-8d13-1de981603940',
+  SAKSBEHANDLER_OPPFØLGING = 'dc8b0182-1449-445a-833c-1a4620b7c2be',
   KVALITETSSIKRER = 'a6bf143f-fee9-41ab-a487-f54503a28de6',
   SAKSBEHANDLER_NASJONAL = '3a65f41a-b3f3-4b1c-830a-df20ff020980',
   DRIFT = 'ff9a228b-4aab-47bd-8aee-598d80f0fb4b',
