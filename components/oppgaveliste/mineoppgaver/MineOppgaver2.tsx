@@ -6,26 +6,24 @@ import { Alert, BodyShort, Skeleton, VStack } from '@navikt/ds-react';
 import { isError } from 'lib/utils/api';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 import { useConfigForm } from 'components/form/FormHook';
-import { OppgaveStatuser } from 'lib/utils/behandlingstyper';
+import { behandlingsTyperOptions, oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { useCallback } from 'react';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { Filtrering } from 'components/oppgaveliste/filtrering/Filtrering';
 import { NoNavAapOppgaveOppgaveDtoReturStatus } from '@navikt/aap-oppgave-typescript-types';
-import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
-import { formaterÅrsak } from 'lib/utils/årsaker';
-import { ÅrsakTilBehandling } from 'lib/types/types';
 import { erDatoFoerDato } from 'lib/validation/dateValidation';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { useWatch } from 'react-hook-form';
 
 import styles from './MineOppgaver2.module.css';
 
 export interface FormFieldsFilter {
-  behandlingstype: string[];
+  behandlingstyper: string[];
   behandlingOpprettetFom: Date;
-  behandlingOpprettettom: Date;
-  årsak: string[];
-  oppgave: string[];
-  status: string[];
+  behandlingOpprettetTom: Date;
+  årsaker: string[];
+  avklaringsbehov: string[];
+  statuser: string[];
 }
 
 const oppgaveStatus = {
@@ -39,116 +37,100 @@ const oppgaveStatus = {
 export const MineOppgaver2 = () => {
   const { data: mineOppgaver, mutate, isLoading } = useSWR('api/mine-oppgaver', () => hentMineOppgaverClient());
 
-  console.log(mineOppgaver);
-  const oppgaver = (mineOppgaver?.type === 'SUCCESS' && mineOppgaver.data.oppgaver.flat()) || [];
-
-  const behandlingstypeOption = [...new Set(oppgaver.map((oppgave) => oppgave.behandlingstype))];
-  const årsakOption = [...new Set(oppgaver.flatMap((oppgave) => oppgave.årsakerTilBehandling))];
-  const oppgaveOption = [...new Set(oppgaver.map((oppgave) => oppgave.avklaringsbehovKode))];
-
   const { form, formFields } = useConfigForm<FormFieldsFilter>({
-    behandlingstype: {
+    behandlingstyper: {
       type: 'checkbox',
       label: 'Behandlingstype',
-      options: behandlingstypeOption.map((option) => {
-        return { label: mapTilOppgaveBehandlingstypeTekst(option), value: option };
-      }),
+      options: behandlingsTyperOptions,
     },
     behandlingOpprettetFom: {
       type: 'date',
       label: 'Opprettet fra',
     },
-    behandlingOpprettettom: {
+    behandlingOpprettetTom: {
       type: 'date',
       label: 'Opprettet til',
     },
-    årsak: {
+    årsaker: {
       type: 'combobox_multiple',
       label: 'Årsak',
-      options: årsakOption.map((option) => {
-        return { label: formaterÅrsak(option as ÅrsakTilBehandling), value: option };
-      }),
+      options: ['hello pello'],
     },
-    oppgave: {
+    avklaringsbehov: {
       type: 'combobox_multiple',
       label: 'Oppgave',
-      options: oppgaveOption.map((option) => {
-        return { label: mapBehovskodeTilBehovstype(option), value: option };
-      }),
+      options: oppgaveBehandlingstyper,
     },
-    status: {
+    statuser: {
       type: 'checkbox',
       label: 'Status',
       options: OppgaveStatuser,
     },
   });
 
-  const behandlingstyper = form.watch('behandlingstype');
-  const behandlingOpprettetFra = form.watch('behandlingOpprettetFom');
-  const behandlingOpprettetTil = form.watch('behandlingOpprettettom');
-  const årsaker = form.watch('årsak');
-  const oppgaveOptions = form.watch('oppgave');
-  const status = form.watch('status');
+  const { behandlingstyper, avklaringsbehov, behandlingOpprettetFom, behandlingOpprettetTom, statuser, årsaker } =
+    useWatch({
+      control: form.control,
+    });
 
-  const behandlingOpprettTilFilter = useCallback(
+  const behandlingOpprettetFilter = useCallback(
     (oppgave: Oppgave) => {
-      return behandlingOpprettetTil
-        ? erDatoFoerDato(
-            formaterDatoForFrontend(oppgave.behandlingOpprettet),
-            formaterDatoForFrontend(behandlingOpprettetTil.toDateString())
-          )
-        : true;
+      const dato = formaterDatoForFrontend(oppgave.behandlingOpprettet);
+
+      if (behandlingOpprettetFom && !erDatoFoerDato(formaterDatoForFrontend(behandlingOpprettetFom), dato)) {
+        return false;
+      }
+
+      if (behandlingOpprettetTom && !erDatoFoerDato(dato, formaterDatoForFrontend(behandlingOpprettetTom))) {
+        return false;
+      }
+
+      return true;
     },
-    [behandlingOpprettetTil]
+    [behandlingOpprettetTom, behandlingOpprettetFom]
   );
 
-  const behandlingOpprettetFraFilter = useCallback(
+  const avklaringsbehovFilter = useCallback(
     (oppgave: Oppgave) => {
-      return behandlingOpprettetFra
-        ? erDatoFoerDato(
-            formaterDatoForFrontend(behandlingOpprettetFra.toDateString()),
-            formaterDatoForFrontend(oppgave.behandlingOpprettet)
-          )
-        : true;
-    },
-    [behandlingOpprettetFra]
-  );
+      if (!avklaringsbehov || avklaringsbehov.length === 0) {
+        return true;
+      }
 
-  const oppgaveFilter = useCallback(
-    (oppgave: Oppgave) => {
-      return oppgaveOptions && oppgaveOptions.length > 0
-        ? oppgaveOptions.find(
-            (avklaringsBehovKodeForOppgave) => oppgave.avklaringsbehovKode === avklaringsBehovKodeForOppgave
-          )
-        : true;
+      return avklaringsbehov.includes(oppgave.avklaringsbehovKode);
     },
-    [oppgaveOptions]
+    [avklaringsbehov]
   );
 
   const årsakerFilter = useCallback(
     (oppgave: Oppgave) => {
-      return årsaker && årsaker.length > 0
-        ? årsaker.find((option) => oppgave.årsakerTilBehandling.includes(option))
-        : true;
+      if (!årsaker || årsaker.length === 0) {
+        return true;
+      }
+
+      return oppgave.årsakerTilBehandling.some((årsak) => årsaker.includes(årsak));
     },
     [årsaker]
   );
 
   const behandlingstypeFilter = useCallback(
     (oppgave: Oppgave) => {
-      return behandlingstyper && behandlingstyper.length > 0
-        ? behandlingstyper.find((option) => option === oppgave.behandlingstype)
-        : true;
+      if (!behandlingstyper || behandlingstyper.length === 0) {
+        return true;
+      }
+
+      return behandlingstyper.includes(oppgave.behandlingstype);
     },
     [behandlingstyper]
   );
 
   const statusFilter = useCallback(
-    (oppgave: Oppgave) =>
-      status && status.length > 0
-        ? status.find((option) => oppgaveStatus[option as keyof typeof oppgaveStatus](oppgave))
-        : true,
-    [status]
+    (oppgave: Oppgave) => {
+      if (!statuser || statuser.length === 0) {
+        return true;
+      }
+      return statuser.find((option) => oppgaveStatus[option as keyof typeof oppgaveStatus](oppgave));
+    },
+    [statuser]
   );
 
   if (isError(mineOppgaver)) {
@@ -160,15 +142,16 @@ export const MineOppgaver2 = () => {
     );
   }
 
-  const filtrerteOppgaver = mineOppgaver?.data.oppgaver.filter(
-    (oppgave) =>
-      behandlingstypeFilter(oppgave) &&
-      statusFilter(oppgave) &&
-      årsakerFilter(oppgave) &&
-      oppgaveFilter(oppgave) &&
-      behandlingOpprettetFraFilter(oppgave) &&
-      behandlingOpprettTilFilter(oppgave)
-  );
+  const filtrerteOppgaver = mineOppgaver?.data.oppgaver
+    .flat()
+    .filter(
+      (oppgave) =>
+        behandlingstypeFilter(oppgave) &&
+        statusFilter(oppgave) &&
+        årsakerFilter(oppgave) &&
+        avklaringsbehovFilter(oppgave) &&
+        behandlingOpprettetFilter(oppgave)
+    );
 
   return (
     <>
@@ -197,11 +180,9 @@ export const MineOppgaver2 = () => {
           />
         )}
         {filtrerteOppgaver && filtrerteOppgaver.length > 0 ? (
-          <VStack gap={'4'}>
-            <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
-          </VStack>
+          <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
         ) : (
-          <BodyShort>Ingen reserverte oppgaver.</BodyShort>
+          <BodyShort className={styles.ingenreserverteoppgaver}>Ingen reserverte oppgaver.</BodyShort>
         )}
       </div>
     </>

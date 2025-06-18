@@ -43,9 +43,9 @@ export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppg
       {visFilter && (
         <div className={styles.filtreringwrapper}>
           <div className={styles.filtrering}>
-            <HGrid columns={{ sm: 1, md: 2, lg: 5 }} gap={'2'}>
+            <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={'2'}>
               <BoxWrapper>
-                <FormField form={form} formField={formFields.behandlingstype} />
+                <FormField form={form} formField={formFields.behandlingstyper} />
               </BoxWrapper>
               <BoxWrapper>
                 <VStack gap={'4'}>
@@ -53,17 +53,17 @@ export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppg
                     Behandling opprettet
                   </BodyShort>
                   <FormField form={form} formField={formFields.behandlingOpprettetFom} />
-                  <FormField form={form} formField={formFields.behandlingOpprettettom} />
+                  <FormField form={form} formField={formFields.behandlingOpprettetTom} />
                 </VStack>
               </BoxWrapper>
               <BoxWrapper>
-                <FormField form={form} formField={formFields.årsak} />
+                <FormField form={form} formField={formFields.årsaker} />
               </BoxWrapper>
               <BoxWrapper>
-                <FormField form={form} formField={formFields.oppgave} />
+                <FormField form={form} formField={formFields.avklaringsbehov} />
               </BoxWrapper>
               <BoxWrapper>
-                <FormField form={form} formField={formFields.status} />
+                <FormField form={form} formField={formFields.statuser} />
               </BoxWrapper>
             </HGrid>
             <HStack gap={'2'}>
