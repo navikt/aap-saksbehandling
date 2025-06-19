@@ -112,6 +112,6 @@ export async function oppgaveTekstSøk(søketekst: string) {
 
     return mockData;
   }
-  const url = `${oppgaveApiBaseURL}/sok/v2`;
+  const url = `${oppgaveApiBaseURL}/sok`;
   return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
 }
