@@ -43,7 +43,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       harKrav: {
         type: 'radio',
         label: 'Har Nav-kontoret refusjonskrav?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag.gjeldendeVurdering?.harKrav),
+        defaultValue: getJaNeiEllerUndefined(grunnlag.gjeldendeVurderinger?.[0]?.harKrav),
         rules: { required: 'Du må svare på om Nav-kontoret har refusjonskrav' },
         options: JaEllerNeiOptions,
       },
@@ -55,8 +55,8 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       vurderingenGjelderFra: {
         type: 'date_input',
         label: 'Refusjon fra',
-        defaultValue: grunnlag.gjeldendeVurdering?.fom
-          ? formaterDatoForFrontend(grunnlag.gjeldendeVurdering?.fom)
+        defaultValue: grunnlag.gjeldendeVurderinger?.[0]?.fom
+          ? formaterDatoForFrontend(grunnlag.gjeldendeVurderinger?.[0]?.fom)
           : formaterDatoForFrontend(sak.periode.fom),
         rules: {
           validate: {
@@ -74,8 +74,8 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       vurderingenGjelderTil: {
         type: 'date_input',
         label: 'Til og med (valgfritt)',
-        defaultValue: grunnlag.gjeldendeVurdering?.tom
-          ? formaterDatoForFrontend(grunnlag.gjeldendeVurdering?.tom)
+        defaultValue: grunnlag.gjeldendeVurderinger?.[0]?.tom
+          ? formaterDatoForFrontend(grunnlag.gjeldendeVurderinger?.[0]?.tom)
           : undefined,
         rules: {
           validate: {
@@ -100,15 +100,17 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.REFUSJON_KRAV_KODE,
-          refusjonkravVurdering: {
-            harKrav: data.harKrav === JaEllerNei.Ja,
-            fom: data.vurderingenGjelderFra
-              ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
-              : null,
-            tom: data.vurderingenGjelderTil
-              ? formaterDatoForBackend(parse(data.vurderingenGjelderTil, 'dd.MM.yyyy', new Date()))
-              : null,
-          },
+          refusjonkravVurderinger: [
+            {
+              harKrav: data.harKrav === JaEllerNei.Ja,
+              fom: data.vurderingenGjelderFra
+                ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
+                : null,
+              tom: data.vurderingenGjelderTil
+                ? formaterDatoForBackend(parse(data.vurderingenGjelderTil, 'dd.MM.yyyy', new Date()))
+                : null,
+            },
+          ],
         },
         referanse: behandlingsreferanse,
       });
@@ -167,7 +169,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={grunnlag.gjeldendeVurdering?.vurdertAv}
+      vurdertAvAnsatt={grunnlag.gjeldendeVurderinger?.[0]?.vurdertAv}
     >
       <FormField form={form} formField={formFields.harKrav} horizontalRadio />
       {form.watch('harKrav') === JaEllerNei.Ja && (
