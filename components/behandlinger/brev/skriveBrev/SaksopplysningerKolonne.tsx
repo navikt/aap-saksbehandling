@@ -14,7 +14,7 @@ interface Props {
 export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag }: Props) => {
   const gjeldendeSykdomsvurdering = sykdomsgrunnlag.sykdomsvurderinger[sykdomsgrunnlag.sykdomsvurderinger.length - 1];
   const gjeldendeBistandsbehov = bistandsbehovGrunnlag.vurdering;
-  const refusjonVurdering = refusjonGrunnlag.gjeldendeVurdering;
+  const refusjonVurdering = refusjonGrunnlag.gjeldendeVurderinger?.[0];
 
   return (
     <div className={styles.kolonne}>
