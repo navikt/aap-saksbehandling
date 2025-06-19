@@ -873,7 +873,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.flate.StudentGrunnlagResponse'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse'];
           };
         };
       };
@@ -1982,7 +1982,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/behandling/{referanse}/navenheter': {
+  '/api/navenhet/{referanse}/finn': {
     parameters: {
       query?: never;
       header?: never;
@@ -7022,6 +7022,27 @@ export interface components {
       startDato?: string | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      oppgittStudent?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent'];
+      studentvurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse': {
+      'avbruddMerEnn6M\u00E5neder'?: boolean | null;
+      avbruttPgaSykdomEllerSkade?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      avbruttStudieDato?: string | null;
+      begrunnelse: string;
+      'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
+      harAvbruttStudie: boolean;
+      harBehovForBehandling?: boolean | null;
+      /** Format: int64 */
+      id?: number | null;
+      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto': {
       feilregistrertBegrunnelse?: string | null;
       /** @enum {string} */
@@ -7562,7 +7583,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-18T06:14:43.420535Z
+       * @example 2025-06-19T06:51:12.430804Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7655,7 +7676,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-18T06:14:43.420535Z
+       * @example 2025-06-19T06:51:12.430804Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8170,35 +8191,6 @@ export interface components {
       harBehovForBehandling?: boolean | null;
       /** Format: int64 */
       id?: number | null;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurderingResponse': {
-      'avbruddMerEnn6M\u00E5neder'?: boolean | null;
-      avbruttPgaSykdomEllerSkade?: boolean | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      avbruttStudieDato?: string | null;
-      begrunnelse: string;
-      'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
-      harAvbruttStudie: boolean;
-      harBehovForBehandling?: boolean | null;
-      /** Format: int64 */
-      id?: number | null;
-      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.VurdertAvResponse'];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.VurdertAvResponse': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      dato: string;
-      ident: string;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.flate.StudentGrunnlagResponse': {
-      'harTilgangTil\u00C5Saksbehandle': boolean;
-      oppgittStudent?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent'];
-      studentvurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurderingResponse'];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.YrkesskadevurderingDto': {
       /** Format: int32 */
