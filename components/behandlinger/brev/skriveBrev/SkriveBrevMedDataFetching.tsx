@@ -7,7 +7,6 @@ import {
   hentSykdomsGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import styles from './SkriveBrevMedDataFetching.module.css';
-import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
 import { StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
@@ -22,12 +21,11 @@ export const SkriveBrevMedDataFetching = async ({
   behandlingVersjon: number;
   aktivtSteg: StegType;
 }) => {
-  const [brevGrunnlag, sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag, roller] = await Promise.all([
+  const [brevGrunnlag, sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag] = await Promise.all([
     hentBrevGrunnlag(behandlingsReferanse),
     hentSykdomsGrunnlag(behandlingsReferanse),
     hentBistandsbehovGrunnlag(behandlingsReferanse),
     hentRefusjonGrunnlag(behandlingsReferanse),
-    hentRollerForBruker(),
   ]);
   if (
     isError(sykdomsgrunnlag) ||
@@ -39,11 +37,12 @@ export const SkriveBrevMedDataFetching = async ({
   }
 
   const brev = brevGrunnlag.data.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
-  const readOnlyBrev = aktivtSteg === 'BREV' && !roller.includes(Roller.BESLUTTER);
 
   if (!brev?.brev) {
     return null;
   }
+
+  const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
 
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
 

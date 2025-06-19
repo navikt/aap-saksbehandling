@@ -6552,7 +6552,6 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag': {
       brevGrunnlag: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev'][];
-      'harTilgangTil\u00C5Saksbehandle': boolean;
     };
     'no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev': {
       /** @enum {string} */
@@ -6623,6 +6622,7 @@ export interface components {
         | 'KLAGE_OPPRETTHOLDELSE'
         | 'KLAGE_TRUKKET'
         | 'FORHÅNDSVARSEL_KLAGE_FORMKRAV';
+      'harTilgangTil\u00C5SendeBrev': boolean;
       mottaker: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
       /**
        * Format: date-time
@@ -7589,7 +7589,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-19T11:50:30.910889Z
+       * @example 2025-06-19T13:14:16.896871Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7682,7 +7682,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-19T11:50:30.910889Z
+       * @example 2025-06-19T13:14:16.896871Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
