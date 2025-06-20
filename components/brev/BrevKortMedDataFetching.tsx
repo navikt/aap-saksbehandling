@@ -32,7 +32,6 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
   const status = grunnlag.status;
 
   const readOnly = aktivtSteg === 'BREV' && !grunnlag.harTilgangTilÅSendeBrev;
-  console.log(grunnlag);
   const behovstype = skrivBrevBehovstype(grunnlag.avklaringsbehovKode);
 
   return (
