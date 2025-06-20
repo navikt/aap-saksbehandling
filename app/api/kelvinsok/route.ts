@@ -116,7 +116,7 @@ function formaterOppgave(oppgave: Oppgave) {
   const formatertBehandlingstype =
     oppgave.behandlingstype == 'DOKUMENT_HÅNDTERING'
       ? 'Dokumenthåndtering'
-      : capitalize(oppgave.behandlingstype).replace('_', ' ');
+      : capitalize(oppgave.behandlingstype).replaceAll('_', ' ');
 
   return `${formatertBehandlingstype} - ${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}`;
 }
