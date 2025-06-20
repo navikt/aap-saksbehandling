@@ -79,7 +79,7 @@ enum Variantformat {
   ORIGINAL = 'ORIGINAL',
 }
 
-enum Journalposttype {
+export enum Journalposttype {
   I = 'I',
   U = 'U',
   N = 'N',

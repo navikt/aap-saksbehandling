@@ -51,6 +51,7 @@ export const KnyttTilSakModal = ({
     });
 
     if (isSuccess(result)) {
+      setIsLoading(false)
       onSuccess();
     } else if (isError(result)) {
       setError('En ukjent feil oppsto');
@@ -70,7 +71,7 @@ export const KnyttTilSakModal = ({
         <Button type={'button'} onClick={knyttTilAktivSak} loading={isLoading}>
           Ja, knytt til sak
         </Button>
-        <Button variant="secondary" disabled={isLoading}>
+        <Button variant="secondary" disabled={isLoading} onClick={onClose}>
           Nei, avbryt
         </Button>
       </Modal.Footer>

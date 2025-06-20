@@ -9,8 +9,8 @@ export function clientHentAlleDokumenterPåSak(saksnummer: string) {
   return clientFetch<RelevantDokumentType[]>(`${BASE_URL}/api/dokumenter/sak/${saksnummer}`, 'GET');
 }
 
-export function clientHentAlleDokumenterPåBruker(personIdent: string) {
-  return clientFetch<Journalpost[]>(`${BASE_URL}/api/dokumenter/bruker`, 'POST', { personIdent });
+export function clientHentAlleDokumenterPåBruker(request: object) {
+  return clientFetch<Journalpost[]>(`${BASE_URL}/api/dokumenter/bruker`, 'POST', request);
 }
 
 export function clientKnyttTilAnnenSak(journalpostId: string, request: KnyttTilAnnenSakRequest) {
