@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const SamordningSosialhjelp = ({ grunnlag }: Props) => {
-  if (!grunnlag.gjeldendeVurderinger?.[0]?.harKrav) return null;
+  if (!grunnlag.gjeldendeVurdering?.harKrav) return null;
 
   return (
     <VilkårsKort heading="§11-29 Refusjonskrav sosialstønad" steg="REFUSJON_KRAV" defaultOpen={true}>
@@ -20,11 +20,11 @@ export const SamordningSosialhjelp = ({ grunnlag }: Props) => {
 
       <BodyShort spacing>
         Refusjonskravet gjelder fra{' '}
-        {grunnlag.gjeldendeVurderinger?.[0].fom
-          ? formaterDatoForFrontend(parse(grunnlag.gjeldendeVurderinger?.[0].fom, 'yyyy-MM-dd', new Date()))
+        {grunnlag.gjeldendeVurdering.fom
+          ? formaterDatoForFrontend(parse(grunnlag.gjeldendeVurdering.fom, 'yyyy-MM-dd', new Date()))
           : '-'}{' '}
-        {grunnlag.gjeldendeVurderinger?.[0].tom
-          ? `til ${formaterDatoForFrontend(parse(grunnlag.gjeldendeVurderinger?.[0].tom, 'yyyy-MM-dd', new Date()))}`
+        {grunnlag.gjeldendeVurdering.tom
+          ? `til ${formaterDatoForFrontend(parse(grunnlag.gjeldendeVurdering.tom, 'yyyy-MM-dd', new Date()))}`
           : ''}
       </BodyShort>
       <Alert variant={'info'}>Det er ikke støtte for refusjonskrav enda. Sett saken på vent og kontakt team AAP.</Alert>

@@ -43,7 +43,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       harKrav: {
         type: 'radio',
         label: 'Har Nav-kontoret refusjonskrav?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag.gjeldendeVurderinger?.[0]?.harKrav),
+        defaultValue: getJaNeiEllerUndefined(grunnlag.gjeldendeVurdering?.harKrav),
         rules: { required: 'Du må svare på om Nav-kontoret har refusjonskrav' },
         options: JaEllerNeiOptions,
       },
@@ -55,8 +55,8 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       vurderingenGjelderFra: {
         type: 'date_input',
         label: 'Refusjon fra',
-        defaultValue: grunnlag.gjeldendeVurderinger?.[0]?.fom
-          ? formaterDatoForFrontend(grunnlag.gjeldendeVurderinger?.[0]?.fom)
+        defaultValue: grunnlag.gjeldendeVurdering?.fom
+          ? formaterDatoForFrontend(grunnlag.gjeldendeVurdering?.fom)
           : formaterDatoForFrontend(sak.periode.fom),
         rules: {
           validate: {
@@ -74,8 +74,8 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       vurderingenGjelderTil: {
         type: 'date_input',
         label: 'Til og med (valgfritt)',
-        defaultValue: grunnlag.gjeldendeVurderinger?.[0]?.tom
-          ? formaterDatoForFrontend(grunnlag.gjeldendeVurderinger?.[0]?.tom)
+        defaultValue: grunnlag.gjeldendeVurdering?.tom
+          ? formaterDatoForFrontend(grunnlag.gjeldendeVurdering?.tom)
           : undefined,
         rules: {
           validate: {
@@ -169,7 +169,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={grunnlag.gjeldendeVurderinger?.[0]?.vurdertAv}
+      vurdertAvAnsatt={grunnlag.gjeldendeVurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.harKrav} horizontalRadio />
       {form.watch('harKrav') === JaEllerNei.Ja && (
