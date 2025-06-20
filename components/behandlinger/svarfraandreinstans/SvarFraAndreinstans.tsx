@@ -46,9 +46,9 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon }: P
         label: 'Hva er resulatet av klageinstansens behandling?',
         rules: { required: 'Du må ta stilling til konsekvensen behandlingen' },
         options: [
-          { value: 'INGENTING', label: 'Ingen konsekvens' },
-          { value: 'BEHANDLE_PÅ_NYTT', label: 'Klagen skal behandles på nytt' },
-          { value: 'OMGJØRING', label: 'Omgjør vedtak' },
+          { value: 'OMGJØRING', label: 'Vedtak omgjøres helt / delvis' },
+          { value: 'INGENTING', label: 'Vedtak opprettholdes / ingen endring' },
+          { value: 'BEHANDLE_PÅ_NYTT', label: 'Klage må vurderes på nytt' },
         ],
         defaultValue: grunnlag?.gjeldendeVurdering?.konsekvens,
       },
