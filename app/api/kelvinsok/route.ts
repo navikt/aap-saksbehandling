@@ -65,14 +65,14 @@ export async function POST(req: Request, brukerinformasjon: Props) {
   try {
     const oppgavesøkRes = await oppgaveTekstSøk(søketekst);
     if (isSuccess(oppgavesøkRes)) {
-      harTilgang = oppgavesøkRes.data.harTilgang
+      harTilgang = oppgavesøkRes.data.harTilgang;
       oppgavesøkRes.data.oppgaver.forEach((oppgave) => {
         const isReservert =
           Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon.brukerInformasjon?.NAVident;
         const isPåVent = oppgave.påVentÅrsak != null;
         oppgaveData.push({
           href: byggKelvinURL(oppgave),
-          label: `${capitalize(oppgave.behandlingstype)} - ${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}`,
+          label: `${formaterOppgave(oppgave)}`,
           status: isReservert ? 'RESERVERT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
           harAdressebeskyttelse: utledAdressebeskyttelse(oppgave).length != 0,
         });
@@ -103,11 +103,22 @@ export async function POST(req: Request, brukerinformasjon: Props) {
     status: 200,
   });
 }
+
 function buildSaksbehandlingsURL(oppgave: Oppgave): string {
   return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef}`;
 }
+
 function buildPostmottakURL(oppgave: Oppgave): string {
   return `/postmottak/${oppgave?.behandlingRef}`;
+}
+
+function formaterOppgave(oppgave: Oppgave) {
+  const formatertBehandlingstype =
+    oppgave.behandlingstype == 'DOKUMENT_HÅNDTERING'
+      ? 'Dokumenthåndtering'
+      : capitalize(oppgave.behandlingstype).replace('_', ' ');
+
+  return `${formatertBehandlingstype} - ${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}`;
 }
 
 export function byggKelvinURL(oppgave: Oppgave): string {
