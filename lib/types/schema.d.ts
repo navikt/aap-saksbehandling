@@ -7589,7 +7589,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-19T13:14:16.896871Z
+       * @example 2025-06-20T09:22:05.832797Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7682,7 +7682,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-19T13:14:16.896871Z
+       * @example 2025-06-20T09:22:05.832797Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
