@@ -7,7 +7,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { validerDato } from 'lib/validation/dateValidation';
+import { validerDato, validerNullableDato } from 'lib/validation/dateValidation';
 import { FormEvent, useState } from 'react';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
@@ -19,9 +19,9 @@ import { DateInputWrapper } from '../../../form/dateinputwrapper/DateInputWrappe
 import { isError } from 'lib/utils/api';
 import { ValuePair } from '../../../form/FormField';
 import { AsyncComboSearch } from '../../../form/asynccombosearch/AsyncComboSearch';
-import { hentAlleNavEnheter } from '../../../../lib/services/saksbehandlingservice/saksbehandlingService';
-import { isLocal } from '../../../../lib/utils/environment';
-import { Enhet } from '../../../../lib/types/oppgaveTypes';
+import { hentAlleNavEnheter } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isLocal } from 'lib/utils/environment';
+import { Enhet } from 'lib/types/oppgaveTypes';
 
 interface Props {
   behandlingVersjon: number;
@@ -172,9 +172,8 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
                 control={form.control}
                 label={'Refusjonen gjelder fra'}
                 rules={{
-                  required: 'Du må sette en dato for når refusjonen skal gjelde fra',
                   validate: {
-                    gyldigDato: (value) => validerDato(value as string),
+                    gyldigDato: (value) => validerNullableDato(value as string),
                     kanIkkeVaereFoerSoeknadstidspunkt: (value) => {
                       const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
                       const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
@@ -192,9 +191,8 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
                 control={form.control}
                 label={'Refusjonen gjelder til'}
                 rules={{
-                  required: 'Du må sette en dato for når refusjonen skal gjelde til',
                   validate: {
-                    gyldigDato: (value) => validerDato(value as string),
+                    gyldigDato: (value) => validerNullableDato(value as string),
                     kanIkkeVaereFoerSoeknadstidspunkt: (value) => {
                       const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
                       const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
