@@ -1,18 +1,20 @@
 'use client';
 
-import { useState } from 'react';
-import { Behovstype } from 'lib/utils/form';
-import { useParams } from 'next/navigation';
-import { Historikk } from 'components/totrinnsvurdering/historikk/Historikk';
-import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsummering';
+import {useState} from 'react';
+import {Behovstype} from 'lib/utils/form';
+import {useParams} from 'next/navigation';
+import {Historikk} from 'components/totrinnsvurdering/historikk/Historikk';
+import {Oppsummering} from 'components/totrinnsvurdering/oppsummering/Oppsummering';
 import {
   AvklaringsbehovKode,
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
   ToTrinnsVurderingGrunn,
 } from 'lib/types/types';
-import { ToTrinnsvurderingToggleGroup } from 'components/totrinnsvurdering/totrinnsvurderingtogglegroup/ToTrinnsvurderingToggleGroup';
-import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
+import {
+  ToTrinnsvurderingToggleGroup
+} from 'components/totrinnsvurdering/totrinnsvurderingtogglegroup/ToTrinnsvurderingToggleGroup';
+import {TotrinnsvurderingForm} from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
 
@@ -103,6 +105,22 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'KLAGEBEHANDLING_KONTOR';
     case Behovstype.VURDER_KLAGE_NAY:
       return 'KLAGEBEHANDLING_NAY';
+    case Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP:
+      return '/MEDLEMSKAP';
+    case Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP:
+      return '/LOVVALG';
+    case Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER:
+      return '/SAMORDNING';
+    case Behovstype.AVKLAR_SAMORDNING_GRADERING:
+      return '/SAMORDNING';
+    case Behovstype.SAMORDNING_REFUSJONS_KRAV:
+      return '/SAMORDNING';
+    case Behovstype.AVKLAR_SAMORDNING_UFORE:
+      return '/SAMORDNING';
+    case Behovstype.FASTSETT_MANUELL_INNTEKT:
+      return '/GRUNNLAG';
+    case Behovstype.VURDER_RETTIGHETSPERIODE:
+      return '/RETTIGHETSPERIODE';
     default:
       return 'SYKDOM';
   }
