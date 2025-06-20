@@ -6852,6 +6852,11 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingGrunnlagDTO': {
       begrunnelse?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fristNyRevurdering?: string | null;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       /**
        * Format: date
@@ -7589,7 +7594,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-20T09:22:05.832797Z
+       * @example 2025-06-20T10:45:22.408467Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7682,7 +7687,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-20T09:22:05.832797Z
+       * @example 2025-06-20T10:45:22.408467Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8148,6 +8153,11 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.VurderingerForSamordning': {
       begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fristNyRevurdering?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
