@@ -31,7 +31,7 @@ interface FormFields {
   navKontor?: string;
 }
 
-export const RefusjonFlereNavKontor = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+export const RefusjonUtenFlereNavKontor = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
   const { sak } = useSak();
