@@ -6,11 +6,32 @@ import {
 } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
 import { Journalpost } from 'lib/types/journalpost';
+import { isLocal } from 'lib/utils/environment';
+import { FetchResponse } from 'lib/utils/api';
 
 const dokumentinnhentingApiBaseUrl = process.env.DOKUMENTINNHENTING_API_BASE_URL;
 const dokumentinnhentingApiScope = process.env.DOKUMENTINNHENTING_API_SCOPE ?? '';
 
 export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
+  if (isLocal()) {
+    const response: FetchResponse<RelevantDokumentType[]> = {
+      type: 'SUCCESS',
+      data: [
+        {
+          tema: 'AAP',
+          dokumentInfoId: '987654321',
+          journalpostId: '123456789',
+          brevkode: 'NAV 11-13.05',
+          tittel: 'Søknad om Arbeidsavklaringspenger',
+          erUtgående: false,
+          datoOpprettet: '2025-03-25T14:25:09',
+          variantformat: 'ARKIV',
+        },
+      ],
+    };
+
+    return response;
+  }
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/sak/${saksnummer}`;
   return await apiFetch<RelevantDokumentType[]>(url, dokumentinnhentingApiScope, 'GET');
 };
