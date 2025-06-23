@@ -42,7 +42,7 @@
     "react-hook-form": "7.58.1",
     "react-plotly.js": "^2.6.0",
     "react-select": "^5.10.1",
-    "recharts": "^2.15.3",
+    "recharts": "^2.15.4",
     "swr": "^2.3.3",
     "uuid": "^11.1.0"
   },
