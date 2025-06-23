@@ -100,15 +100,17 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.REFUSJON_KRAV_KODE,
-          refusjonkravVurdering: {
-            harKrav: data.harKrav === JaEllerNei.Ja,
-            fom: data.vurderingenGjelderFra
-              ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
-              : null,
-            tom: data.vurderingenGjelderTil
-              ? formaterDatoForBackend(parse(data.vurderingenGjelderTil, 'dd.MM.yyyy', new Date()))
-              : null,
-          },
+          refusjonkravVurderinger: [
+            {
+              harKrav: data.harKrav === JaEllerNei.Ja,
+              fom: data.vurderingenGjelderFra
+                ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
+                : null,
+              tom: data.vurderingenGjelderTil
+                ? formaterDatoForBackend(parse(data.vurderingenGjelderTil, 'dd.MM.yyyy', new Date()))
+                : null,
+            },
+          ],
         },
         referanse: behandlingsreferanse,
       });
