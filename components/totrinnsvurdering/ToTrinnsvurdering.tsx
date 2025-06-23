@@ -96,31 +96,31 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
     case Behovstype.VURDER_SYKEPENGEERSTATNING_KODE:
       return 'SYKDOM/#VURDER_SYKEPENGEERSTATNING';
     case Behovstype.AVKLAR_BARNETILLEGG_KODE:
-      return '/BARNETILLEGG/#BARNETILLEGG';
+      return 'BARNETILLEGG/#BARNETILLEGG';
     case Behovstype.AVKLAR_SONINGSFORRHOLD:
-      return '/ET_ANNET_STED';
+      return 'ET_ANNET_STED';
     case Behovstype.AVKLAR_HELSEINSTITUSJON:
-      return '/ET_ANNET_STED';
+      return 'ET_ANNET_STED';
     case Behovstype.VURDER_KLAGE_KONTOR:
       return 'KLAGEBEHANDLING_KONTOR';
     case Behovstype.VURDER_KLAGE_NAY:
       return 'KLAGEBEHANDLING_NAY';
     case Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP:
-      return '/MEDLEMSKAP';
+      return 'MEDLEMSKAP';
     case Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP:
-      return '/LOVVALG';
+      return 'LOVVALG';
     case Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER:
-      return '/SAMORDNING';
+      return 'SAMORDNING';
     case Behovstype.AVKLAR_SAMORDNING_GRADERING:
-      return '/SAMORDNING';
+      return 'SAMORDNING';
     case Behovstype.SAMORDNING_REFUSJONS_KRAV:
-      return '/SAMORDNING';
+      return 'SAMORDNING';
     case Behovstype.AVKLAR_SAMORDNING_UFORE:
-      return '/SAMORDNING';
+      return 'SAMORDNING';
     case Behovstype.FASTSETT_MANUELL_INNTEKT:
-      return '/GRUNNLAG';
+      return 'GRUNNLAG';
     case Behovstype.VURDER_RETTIGHETSPERIODE:
-      return '/RETTIGHETSPERIODE';
+      return 'RETTIGHETSPERIODE';
     default:
       return 'SYKDOM';
   }
