@@ -2,6 +2,7 @@ import { Refusjon } from 'components/behandlinger/sykdom/refusjon/Refusjon';
 import { hentRefusjonGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   behandlingsReferanse: string;
@@ -15,11 +16,21 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandling
     return <ApiException apiResponses={[refusjonGrunnlag]} />;
   }
 
-  return (
-    <Refusjon
-      grunnlag={refusjonGrunnlag.data}
-      readOnly={readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
-    />
-  );
+  if (isProd()) {
+    return (
+      <Refusjon
+        grunnlag={refusjonGrunnlag.data}
+        readOnly={readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
+        behandlingVersjon={behandlingVersjon}
+      />
+    );
+  } else {
+    return (
+      <Refusjon
+        grunnlag={refusjonGrunnlag.data}
+        readOnly={readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
+        behandlingVersjon={behandlingVersjon}
+      />
+    );
+  }
 };
