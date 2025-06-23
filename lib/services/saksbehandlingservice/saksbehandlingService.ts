@@ -64,7 +64,7 @@ import {
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
-import { Enhet } from '../../types/oppgaveTypes';
+import { Enhet } from 'lib/types/oppgaveTypes';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
