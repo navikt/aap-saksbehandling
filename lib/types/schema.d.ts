@@ -6861,16 +6861,12 @@ export interface components {
        */
       fristNyRevurdering?: string | null;
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      maksDato?: string | null;
       maksDatoEndelig?: boolean | null;
       tpYtelser?:
         | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.tjenestepensjon.TjenestePensjonForhold'][]
         | null;
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningVurderingDTO'][];
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       ytelser: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseDTO'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.TjenestepensjonGrunnlagDTO': {
@@ -7597,7 +7593,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-20T10:45:22.408467Z
+       * @example 2025-06-23T12:15:25.748864Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7690,7 +7686,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-20T10:45:22.408467Z
+       * @example 2025-06-23T12:15:25.748864Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8161,11 +8157,6 @@ export interface components {
        * @example 2025-04-01
        */
       fristNyRevurdering?: string | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      maksDato?: string | null;
       maksDatoEndelig?: boolean | null;
       vurderteSamordningerData: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.SamordningVurderingData'][];
     };
