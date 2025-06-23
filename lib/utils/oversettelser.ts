@@ -49,6 +49,7 @@ const behovskodeMap = {
   '6006': 'Oppsummering klagebehandlingen',
   '6007': 'Venter på uttalelse fra bruker på klage forhåndsvarsel',
   '6008': 'Håndter svar fra Kabal',
+  '6009': 'Fastsett fullmektig/verge',
   '6010': 'Vurder trekk av klage',
   '7001': 'Fastsett manuell inntekt',
   '9001': 'Manuelt satt på vent',

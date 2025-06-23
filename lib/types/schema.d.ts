@@ -2100,6 +2100,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/klage/{referanse}/grunnlag/fullmektig': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigGrunnlagDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/klage/{referanse}/grunnlag/formkrav': {
     parameters: {
       query?: never;
@@ -3461,6 +3499,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       godkjent?: boolean | null;
@@ -3520,6 +3559,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       vurderingerForBarnetillegg: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingerForBarnetillegg'];
@@ -3576,6 +3616,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       bistandsVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.flate.BistandVurderingL\u00F8sningDto'];
@@ -3632,6 +3673,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       'manuellVurderingForForutg\u00E5endeMedlemskap': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.ManuellVurderingForForutg\u00E5endeMedlemskapDto'];
@@ -3688,6 +3730,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       helseinstitusjonVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonVurderingerDto'];
@@ -3744,6 +3787,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       manuellVurderingForLovvalgMedlemskap: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.ManuellVurderingForLovvalgMedlemskapDto'];
@@ -3800,6 +3844,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       manuellVurderingForManglendeInntekt: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.ManuellInntektVurderingDto'];
@@ -3856,6 +3901,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       'manuellVurderingForForutg\u00E5endeMedlemskap': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.ManuellVurderingForForutg\u00E5endeMedlemskapDto'];
@@ -3912,6 +3958,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       manuellVurderingForLovvalgMedlemskap: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.ManuellVurderingForLovvalgMedlemskapDto'];
@@ -3968,6 +4015,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       samordningAndreStatligeYtelserVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingDto'];
@@ -4024,6 +4072,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       vurderingerForSamordning: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.VurderingerForSamordning'];
@@ -4080,6 +4129,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       'samordningUf\u00F8reVurdering': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.uf\u00F8revurdering.SamordningUf\u00F8reVurderingDto'];
@@ -4136,6 +4186,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       soningsvurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsvurderingerDto'];
@@ -4192,6 +4243,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       studentvurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurderingDTO'];
@@ -4248,6 +4300,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       sykdomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningDto'][];
@@ -4304,6 +4357,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       sykepengeerstatningVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerVurderingDto'];
@@ -4360,6 +4414,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       yrkesskadesvurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.YrkesskadevurderingDto'];
@@ -4388,6 +4443,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettArbeidsevneL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettBehandlendeEnhetL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettBeregningstidspunktL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettFullmektigL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettP\u00E5klagetBehandlingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettYrkesskadeInntektL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FatteVedtakL\u00F8sning']
@@ -4465,6 +4521,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -4520,6 +4577,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       oppdatertStatusForBestilling: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.L\u00F8sBrevbestillingDto'];
@@ -4577,6 +4635,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -4632,6 +4691,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       'effektuerAvvistP\u00E5FormkravVurdering': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.effektueravvistp\u00E5formkrav.flate.EffektuerAvvistP\u00E5FormkravL\u00F8sningDto'];
@@ -4689,6 +4749,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -4745,6 +4806,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -4800,9 +4862,67 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       beregningVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.BeregningstidspunktVurderingDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettFullmektigL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '5029'
+        | '5001'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5020'
+        | '5024'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5025'
+        | '5027'
+        | '5028'
+        | '5019'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5026'
+        | '5999'
+        | '5056'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001';
+      fullmektigVurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FullmektigL\u00F8sningDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettP\u00E5klagetBehandlingL\u00F8sning': {
       /** @enum {string} */
@@ -4856,6 +4976,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       'p\u00E5klagetBehandlingVurdering': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.flate.P\u00E5klagetBehandlingVurderingL\u00F8sningDto'];
@@ -4912,6 +5033,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       yrkesskadeInntektVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.BeregningYrkeskaderBel\u00F8pVurderingDTO'];
@@ -4968,6 +5090,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
@@ -5024,6 +5147,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -5079,9 +5203,15 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       fritaksvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritaksvurderingDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FullmektigL\u00F8sningDto': {
+      fullmektigIdent?: string | null;
+      fullmektigNavnOgAdresse?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.NavnOgAdresse'];
+      harFullmektig: boolean;
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.H\u00E5ndterSvarFraAndreinstansL\u00F8sning': {
       /** @enum {string} */
@@ -5135,6 +5265,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       svarFraAndreinstansVurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.H\u00E5ndterSvarFraAndreinstansL\u00F8sningDto'];
@@ -5214,6 +5345,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
@@ -5270,6 +5402,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -5325,6 +5458,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       refusjonkravVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.refusjonkrav.RefusjonkravVurderingDto'][];
@@ -5381,6 +5515,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -5436,6 +5571,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -5491,6 +5627,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       /** Format: uuid */
@@ -5550,6 +5687,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       /** Format: uuid */
@@ -5609,6 +5747,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       /** Format: uuid */
@@ -5668,6 +5807,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       /** Format: uuid */
@@ -5727,6 +5867,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       samordningRefusjonskrav: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.refusjonskrav.TjenestepensjonRefusjonskravVurdering'];
@@ -5783,6 +5924,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       vurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.trekkklage.flate.TrekkKlageVurderingDto'];
@@ -5840,6 +5982,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -5895,6 +6038,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -5950,6 +6094,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -6005,6 +6150,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
     };
@@ -6060,6 +6206,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       formkravVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.formkrav.flate.FormkravVurderingL\u00F8sningDto'];
@@ -6116,6 +6263,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       klagevurderingKontor: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.kontor.flate.KlagevurderingKontorL\u00F8sningDto'];
@@ -6172,6 +6320,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       klagevurderingNay: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.nay.flate.KlagevurderingNayL\u00F8sningDto'];
@@ -6228,6 +6377,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       rettighetsperiodeVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.rettighetsperiode.RettighetsperiodeVurderingDTO'];
@@ -6608,6 +6758,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       brev?: components['schemas']['no.nav.aap.brev.kontrakt.Brev'];
@@ -6919,6 +7070,20 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistp\u00E5formkrav.EffektuerAvvistP\u00E5FormkravVurderingDto': {
       skalEndeligAvvises: boolean;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigGrunnlagDto': {
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigVurderingDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigVurderingDto': {
+      fullmektigIdent?: string | null;
+      fullmektigNavnOgAdresse?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.NavnOgAdresse'];
+      harFullmektig: boolean;
+      /**
+       * Format: date-time
+       * @example 2025-06-23T13:20:17.047161Z
+       */
+      opprettet: string;
+      vurdertAv: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.trekk.TrekkKlageGrunnlagDto': {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.trekkklage.flate.TrekkKlageVurderingDto'];
@@ -7583,6 +7748,18 @@ export interface components {
       erSignert: boolean;
       likevelBehandles?: boolean | null;
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.Adresse': {
+      adresselinje1: string;
+      adresselinje2?: string | null;
+      adresselinje3?: string | null;
+      landkode: string;
+      postnummer: string;
+      poststed: string;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.NavnOgAdresse': {
+      adresse: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.Adresse'];
+      navn: string;
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.kontor.flate.KlagebehandlingKontorGrunnlagDto': {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.kontor.flate.KlagevurderingKontorDto'];
     };
@@ -7593,7 +7770,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-23T12:15:25.748864Z
+       * @example 2025-06-23T13:20:17.047161Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -7686,7 +7863,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-23T12:15:25.748864Z
+       * @example 2025-06-23T13:20:17.047161Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8342,6 +8519,7 @@ export interface components {
         | 'OPPRETT_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
+        | 'FULLMEKTIG'
         | 'FORMKRAV'
         | 'BEHANDLENDE_ENHET'
         | 'KLAGEBEHANDLING_KONTOR'
@@ -8435,6 +8613,7 @@ export interface components {
         | 'OPPRETT_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
+        | 'FULLMEKTIG'
         | 'FORMKRAV'
         | 'BEHANDLENDE_ENHET'
         | 'KLAGEBEHANDLING_KONTOR'
@@ -8500,6 +8679,7 @@ export interface components {
         | 'OPPRETT_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
+        | 'FULLMEKTIG'
         | 'FORMKRAV'
         | 'BEHANDLENDE_ENHET'
         | 'KLAGEBEHANDLING_KONTOR'
@@ -8632,6 +8812,7 @@ export interface components {
         | 'OPPRETT_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
+        | 'FULLMEKTIG'
         | 'FORMKRAV'
         | 'BEHANDLENDE_ENHET'
         | 'KLAGEBEHANDLING_KONTOR'
@@ -8814,6 +8995,7 @@ export interface components {
         | '6006'
         | '6007'
         | '6008'
+        | '6009'
         | '6010'
         | '7001';
       kreverToTrinn: boolean;
@@ -8868,6 +9050,7 @@ export interface components {
         | 'OPPRETT_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
+        | 'FULLMEKTIG'
         | 'FORMKRAV'
         | 'BEHANDLENDE_ENHET'
         | 'KLAGEBEHANDLING_KONTOR'

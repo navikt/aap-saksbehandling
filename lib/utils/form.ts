@@ -40,6 +40,7 @@ export enum Behovstype {
   SKRIV_FORHÅNDSVARSEL_KLAGE_FORMKRAV_BREV_KODE = '6005',
   KLAGE_OPPSUMMERING = '6006',
   HÅNDTER_SVAR_FRA_ANDREINSTANS = '6008',
+  FASTSETT_FULLMEKTIG = '6009',
   TREKK_KLAGE_KODE = '6010',
   SAMORDNING_REFUSJONS_KRAV = '5056',
   FASTSETT_MANUELL_INNTEKT = '7001',
@@ -127,6 +128,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Oppsummering klagebehandlingen';
     case '6008':
       return 'Vurder konsekvens av svar fra Nav Klaginstans';
+    case '6009':
+      return 'Fastsett fullmektig/verge';
     case '6010':
       return 'Trekk klage';
     case '5056':
