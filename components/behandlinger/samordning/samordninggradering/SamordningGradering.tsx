@@ -164,6 +164,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
+      vurdertAvAnsatt={grunnlag.vurdertAv}
     >
       {visForm && (
         <VStack gap={'6'}>
