@@ -29,6 +29,17 @@ interface Props {
   brukerInformasjon?: BrukerInformasjon;
 }
 
+/**
+ * Enkel formatering for å gjøre søket til saksbehandler "case-insensitive"
+ * Burde på sikt bli håndtert i backend, men det fordrer en større opprydding i typer tilknyttet Saksnummer
+ **/
+const formaterSaksnummer = (saksnummer: string) => {
+  return saksnummer
+    .toUpperCase()
+    .replace('O', 'o')
+    .replace('I', 'i')
+}
+
 export async function POST(req: Request, brukerinformasjon: Props) {
   const body: { søketekst: string } = await req.json();
   if (!body.søketekst) {
@@ -49,7 +60,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
         sakData = sakRes.data;
       }
     } else if (isSaksnummer) {
-      const sak = await hentSak(søketekst);
+      const sak = await hentSak(formaterSaksnummer(søketekst));
       sakData = [sak];
     }
   } catch (err) {
