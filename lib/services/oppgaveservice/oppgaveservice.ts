@@ -9,7 +9,8 @@ import {
   OppgaveBehandlingstype,
   OppgavelisteRequest,
   OppgavelisteResponse,
-  Paging, SøkResponse,
+  Paging,
+  SøkResponse,
 } from 'lib/types/oppgaveTypes';
 import { queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
@@ -105,8 +106,9 @@ export async function oppgaveTekstSøk(søketekst: string) {
       type: 'SUCCESS',
       status: 200,
       data: {
+        harAdressebeskyttelse: false,
         oppgaver: oppgaver,
-        harTilgang: true
+        harTilgang: true,
       },
     };
 
