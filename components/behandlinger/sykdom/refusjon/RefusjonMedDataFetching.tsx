@@ -3,6 +3,7 @@ import { hentRefusjonGrunnlag } from 'lib/services/saksbehandlingservice/saksbeh
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { isProd } from 'lib/utils/environment';
+import { RefusjonFlereNavKontor } from 'components/behandlinger/sykdom/refusjon/RefusjonUtenFlereNavKontor';
 
 interface Props {
   behandlingsReferanse: string;
@@ -18,7 +19,7 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandling
 
   if (isProd()) {
     return (
-      <Refusjon
+      <RefusjonFlereNavKontor
         grunnlag={refusjonGrunnlag.data}
         readOnly={readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
         behandlingVersjon={behandlingVersjon}
