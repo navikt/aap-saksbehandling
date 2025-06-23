@@ -122,7 +122,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
     if (input.length <= 2) {
       return [];
     }
-    const response = await clientHentAlleNavenheter(behandlingsreferanse, input);
+    const response = await clientHentAlleNavenheter(behandlingsreferanse, { navn: input });
     if (isError(response)) {
       return [];
     }
@@ -147,7 +147,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      erAktivtSteg={true}
       vurdertAvAnsatt={grunnlag.gjeldendeVurderinger?.[0]?.vurdertAv}
     >
       <RadioGroupWrapper
