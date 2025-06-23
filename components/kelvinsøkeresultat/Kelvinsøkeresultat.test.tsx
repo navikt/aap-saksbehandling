@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøkeresultat';
-import {SøkeResultat} from "app/api/kelvinsok/route";
+import { SøkeResultat } from 'app/api/kelvinsok/route';
 
 const søkeresultat: SøkeResultat = {
   harTilgang: false,
+  harAdressebeskyttelse: true,
   oppgaver: [
     {
-      harAdressebeskyttelse: true,
       label: '',
       href: '',
       status: '',
@@ -33,9 +33,9 @@ describe('Kelvinsøkeresultat', () => {
       <Kelvinsøkeresultat
         søkeresultat={{
           harTilgang: false,
+          harAdressebeskyttelse: false,
           oppgaver: [
             {
-              harAdressebeskyttelse: false,
               label: '',
               href: '',
               status: '',

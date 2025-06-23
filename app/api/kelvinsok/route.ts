@@ -9,16 +9,15 @@ import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 import { capitalize } from 'lodash';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 
 export interface SøkeResultat {
   oppgaver?: {
     label: string;
     href: string;
     status: string;
-    harAdressebeskyttelse: boolean;
   }[];
   harTilgang: boolean;
+  harAdressebeskyttelse: boolean;
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
   person?: { href: string; label: string }[];
@@ -34,11 +33,8 @@ interface Props {
  * Burde på sikt bli håndtert i backend, men det fordrer en større opprydding i typer tilknyttet Saksnummer
  **/
 const formaterSaksnummer = (saksnummer: string) => {
-  return saksnummer
-    .toUpperCase()
-    .replace('O', 'o')
-    .replace('I', 'i')
-}
+  return saksnummer.toUpperCase().replace('O', 'o').replace('I', 'i');
+};
 
 export async function POST(req: Request, brukerinformasjon: Props) {
   const body: { søketekst: string } = await req.json();
@@ -73,10 +69,12 @@ export async function POST(req: Request, brukerinformasjon: Props) {
   let personData: SøkeResultat['person'] = [];
   let behandlingsStatusData: SøkeResultat['behandlingsStatus'] = [];
   let harTilgang: boolean = false;
+  let harAdressebeskyttelse: boolean = true;
   try {
     const oppgavesøkRes = await oppgaveTekstSøk(søketekst);
     if (isSuccess(oppgavesøkRes)) {
       harTilgang = oppgavesøkRes.data.harTilgang;
+      harAdressebeskyttelse = oppgavesøkRes.data.harAdressebeskyttelse;
       oppgavesøkRes.data.oppgaver.forEach((oppgave) => {
         const isReservert =
           Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon.brukerInformasjon?.NAVident;
@@ -85,7 +83,6 @@ export async function POST(req: Request, brukerinformasjon: Props) {
           href: byggKelvinURL(oppgave),
           label: `${formaterOppgave(oppgave)}`,
           status: isReservert ? 'RESERVERT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
-          harAdressebeskyttelse: utledAdressebeskyttelse(oppgave).length != 0,
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
         personData.push({
@@ -105,6 +102,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
       label: `${sak.saksnummer} (${formaterDatoForFrontend(sak.periode.fom)})`,
     })),
     harTilgang: harTilgang,
+    harAdressebeskyttelse: harAdressebeskyttelse,
     kontor: kontorData,
     person: personData,
     behandlingsStatus: behandlingsStatusData,
