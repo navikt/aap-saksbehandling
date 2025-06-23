@@ -7,7 +7,7 @@ import { FormField } from 'components/form/FormField';
 import { Hjemmel, KlagebehandlingNayGrunnlag, KlageInnstilling, TypeBehandling } from 'lib/types/types';
 import { FormEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
-import { hjemmelalternativer } from 'lib/utils/hjemmel';
+import { hjemmelalternativer, getValgteHjemlerSomIkkeErImplementert, hjemmelMap } from 'lib/utils/hjemmel';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 
 interface Props {
@@ -65,7 +65,17 @@ export const KlagebehandlingVurderingNay = ({ behandlingVersjon, readOnly, grunn
         description: 'Velg alle påklagde vilkår som skal omgjøres som følge av klagen',
         options: hjemmelalternativer,
         defaultValue: grunnlag?.vurdering?.vilkårSomOmgjøres,
-        rules: { required: 'Du velge hvilke påklagde vilkår som skal omgjøres' },
+        rules: {
+          required: 'Du velge hvilke påklagde vilkår som skal omgjøres',
+          validate: (value) => {
+            const ikkeImplementerteHjemler = getValgteHjemlerSomIkkeErImplementert(value);
+            if (ikkeImplementerteHjemler.length > 0) {
+              const hjemmelnavn = ikkeImplementerteHjemler.map((hjemmel) => hjemmelMap[hjemmel]).join(', ');
+              return `Det er ikke mulig å opprette revurdering på ${hjemmelnavn} enda. Sett klagen på vent og ta kontakt med team AAP.`;
+            }
+            return true;
+          },
+        },
       },
       vilkårSomSkalOpprettholdes: {
         type: 'combobox_multiple',
