@@ -16,6 +16,7 @@ type FormFieldRadioTableProps = {
   error?: string;
   value: string | null | undefined;
   onChange: (e: ChangeEvent) => void;
+  readOnly: boolean;
 };
 
 function getSortValue(sortField: string, option: RadioOption): string {
@@ -31,7 +32,14 @@ function getSortValue(sortField: string, option: RadioOption): string {
   }
 }
 
-export const VelgPåklagetVedtakRadioTable = ({ options, value, onChange, error, ref }: FormFieldRadioTableProps) => {
+export const VelgPåklagetVedtakRadioTable = ({
+  options,
+  value,
+  onChange,
+  error,
+  ref,
+  readOnly,
+}: FormFieldRadioTableProps) => {
   const [sort, setSort] = useState<SortState | undefined>({ orderBy: 'vedtaksdato', direction: 'descending' });
 
   const handleSort = (sortKey: string) => {
@@ -66,6 +74,7 @@ export const VelgPåklagetVedtakRadioTable = ({ options, value, onChange, error,
         hideLegend={true}
         value={value ?? ''}
         onChange={onChange}
+        readOnly={readOnly}
       >
         <Heading level="2" size="xsmall" spacing={true}>
           Velg hvilket vedtak klagen gjelder

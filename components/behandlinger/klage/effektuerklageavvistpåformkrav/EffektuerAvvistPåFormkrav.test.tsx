@@ -6,11 +6,13 @@ import { EffektuerAvvistPåFormkrav } from 'components/behandlinger/klage/effekt
 import { EffektuerAvvistPåFormkravGrunnlag } from 'lib/types/types';
 
 const førVarselGrunnlag: EffektuerAvvistPåFormkravGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   varsel: undefined,
   vurdering: undefined,
 };
 
 const etterVarselGrunnlag: EffektuerAvvistPåFormkravGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
   varsel: {
     brevFerdigstilt: '2025-05-01',
     frist: '2025-05-15',

@@ -65,6 +65,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly }: P
           <VelgPåklagetVedtakRadioTable
             options={mapGrunnlagTilValg(grunnlag)}
             error={fieldState.invalid ? fieldState.error?.message : undefined}
+            readOnly={readOnly}
             {...field}
           />
         )}

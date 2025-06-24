@@ -7068,6 +7068,7 @@ export interface components {
       ytelseIverksattTom?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistp\u00E5formkrav.EffektuerAvvistP\u00E5FormkravGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
       varsel?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistp\u00E5formkrav.EffektuerAvvistP\u00E5FormkravVarselDto'];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistp\u00E5formkrav.EffektuerAvvistP\u00E5FormkravVurderingDto'];
     };
@@ -7095,7 +7096,7 @@ export interface components {
       harFullmektig: boolean;
       /**
        * Format: date-time
-       * @example 2025-06-24T04:56:47.675069Z
+       * @example 2025-06-24T09:39:16.238672Z
        */
       opprettet: string;
       vurdertAv: string;
@@ -7860,7 +7861,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-24T04:56:47.675069Z
+       * @example 2025-06-24T09:39:16.238672Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8013,7 +8014,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-24T04:56:47.675069Z
+       * @example 2025-06-24T09:39:16.238672Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8213,6 +8214,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.flate.P\u00E5klagetBehandlingGrunnlagDto': {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.flate.BehandlingMedVedtakDto'][];
       gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.flate.P\u00E5klagetBehandlingVurderingDto'];
+      'harTilgangTil\u00C5Saksbehandle': boolean;
       /**
        * Format: date
        * @example 2025-04-01

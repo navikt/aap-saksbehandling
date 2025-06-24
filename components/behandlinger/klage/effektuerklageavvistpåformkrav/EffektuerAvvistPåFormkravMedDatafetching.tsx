@@ -20,6 +20,10 @@ export const EffektuerAvvistPåFormkravMedDatafetching = async ({
   }
 
   return (
-    <EffektuerAvvistPåFormkrav grunnlag={grunnlag.data} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />
+    <EffektuerAvvistPåFormkrav
+      grunnlag={grunnlag.data}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={behandlingVersjon}
+    />
   );
 };
