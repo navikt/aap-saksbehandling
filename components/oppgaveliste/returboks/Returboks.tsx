@@ -57,7 +57,7 @@ export const Returboks = ({ oppgave: { returInformasjon: maybeReturInformasjon }
   return (
     <>
       <Button
-        icon={<ArrowsSquarepathIcon title={'Returnert fra kvalitetssikrer'} />}
+        icon={<ArrowsSquarepathIcon title={returStatusTilTekst(returInformasjon.status)} />}
         className={styles.knapp}
         onClick={() => setVis(!vis)}
         ref={buttonRef}

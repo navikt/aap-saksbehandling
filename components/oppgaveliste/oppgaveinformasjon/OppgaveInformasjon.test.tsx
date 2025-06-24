@@ -70,12 +70,12 @@ describe('OppgaveInformasjon', () => {
       />
     );
 
-    const icon = screen.getByRole('img', { name: 'Returnert fra kvalitetssikrer' });
+    const icon = screen.getByRole('img', { name: 'Retur fra beslutter' });
     expect(icon).toBeVisible();
 
     user.click(icon);
 
-    const tekst = screen.getByText('Retur fra beslutter');
+    const tekst = screen.getByText('Begrunnelse');
     expect(tekst).toBeVisible();
   });
 
