@@ -36,14 +36,12 @@ export const KlagebehandlingVurderingKontor = ({ grunnlag, behandlingVersjon, re
       vurdering: {
         type: 'textarea',
         label: 'Vurder klage',
-        description: 'Vurderingen vises i brev til bruker',
         rules: { required: 'Du må vurdere klagen' },
         defaultValue: grunnlag?.vurdering?.begrunnelse,
       },
       notat: {
         type: 'textarea',
         label: 'Internt notat',
-        description: 'Notatet er kun synlig i Kelvin',
         defaultValue: grunnlag?.vurdering?.notat ?? undefined,
       },
       innstilling: {
