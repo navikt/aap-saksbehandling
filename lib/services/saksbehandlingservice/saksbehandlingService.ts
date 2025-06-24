@@ -23,6 +23,7 @@ import {
   FormkravGrunnlag,
   ForutgåendeMedlemskapGrunnlag,
   FritakMeldepliktGrunnlag,
+  FullmektigGrunnlag,
   HelseinstitusjonGrunnlag,
   KlagebehandlingKontorGrunnlag,
   KlagebehandlingNayGrunnlag,
@@ -266,6 +267,11 @@ export const hentRettighetsperiodeGrunnlag = async (behandlingsreferanse: string
 export const hentFormkravGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/formkrav`;
   return await apiFetch<FormkravGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentFullmektigGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/fullmektig`;
+  return await apiFetch<FullmektigGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentPåklagetBehandlingGrunnlag = async (behandlingsReferanse: string) => {

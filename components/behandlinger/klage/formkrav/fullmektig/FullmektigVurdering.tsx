@@ -1,0 +1,191 @@
+'use client';
+
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { useConfigForm } from 'components/form/FormHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { FormEvent } from 'react';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { FullmektigGrunnlag, TypeBehandling } from 'lib/types/types';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+
+interface Props {
+  grunnlag?: FullmektigGrunnlag;
+  behandlingVersjon: number;
+  typeBehandling: TypeBehandling;
+  readOnly: boolean;
+}
+
+interface FormFields {
+  harFullmektig: JaEllerNei;
+  idType: 'ident' | 'navnOgAdresse';
+  fullmektigIdent: string;
+  navn: string;
+  adresselinje1: string;
+  adresselinje2?: string;
+  adresselinje3?: string;
+  postnummer: string;
+  poststed: string;
+  land: string;
+}
+
+export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+  const behandlingsreferanse = useBehandlingsReferanse();
+
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('FULLMEKTIG');
+
+  const { formFields, form } = useConfigForm<FormFields>(
+    {
+      harFullmektig: {
+        type: 'radio',
+        label: 'Finnes det fullmektig eller verge i klagesaken?',
+        rules: { required: 'Du må svare' },
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harFullmektig),
+        options: JaEllerNeiOptions,
+      },
+      idType: {
+        type: 'radio',
+        label: 'Hvordan skal verge/fullmektig identifiseres?',
+        rules: { required: 'Du må velge idtype' },
+        defaultValue: grunnlag?.vurdering?.fullmektigIdent
+          ? 'ident'
+          : grunnlag?.vurdering?.fullmektigNavnOgAdresse
+            ? 'navnOgAdresse'
+            : undefined,
+        options: idTypeOptions(),
+      },
+      fullmektigIdent: {
+        type: 'text',
+        label: 'Org.nr/fnr for fullmektig/verge',
+        rules: { required: 'Du må skrive ident' },
+        defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+      },
+      navn: {
+        type: 'text',
+        label: 'Navn på fullmektig/verge',
+        rules: { required: 'Du må skrive inn navn' },
+        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.navn ?? undefined,
+      },
+      adresselinje1: {
+        type: 'text',
+        label: 'Adresselinje 1',
+        rules: { required: 'Du må skrive inn addresselinje 1' },
+        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje1 ?? undefined,
+      },
+      adresselinje2: {
+        type: 'text',
+        label: 'Adresselinje 2',
+        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje2 ?? undefined,
+      },
+      adresselinje3: {
+        type: 'text',
+        label: 'Adresselinje 3',
+        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje3 ?? undefined,
+      },
+      postnummer: {
+        type: 'text',
+        label: 'Postnummer',
+        rules: { required: 'Du må skrive inn postnummer' },
+        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.postnummer ?? undefined,
+      },
+      poststed: {
+        type: 'text',
+        label: 'Poststed',
+        rules: { required: 'Du må skrive inn poststed' },
+        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.poststed ?? undefined,
+      },
+      land: {
+        type: 'combobox',
+        label: 'Land',
+        rules: { required: 'Du må velge land' },
+        options: tempLandOptions(),
+        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.landkode ?? undefined,
+      },
+    },
+    { readOnly }
+  );
+
+  const harFullmektig = form.watch('harFullmektig') === JaEllerNei.Ja;
+  const idType = form.watch('idType');
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      const harFullmektig = data.harFullmektig === JaEllerNei.Ja;
+      const idType = data.idType;
+      const navnOgAdresse =
+        harFullmektig && idType === 'navnOgAdresse'
+          ? {
+              navn: data.navn,
+              adresse: {
+                adresselinje1: data.adresselinje1,
+                adresselinje2: data.adresselinje2,
+                adresselinje3: data.adresselinje3,
+                postnummer: data.postnummer,
+                poststed: data.poststed,
+                landkode: data.land,
+              },
+            }
+          : undefined;
+
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: Behovstype.FASTSETT_FULLMEKTIG,
+          fullmektigVurdering: {
+            harFullmektig: harFullmektig,
+            fullmektigIdent: harFullmektig && idType === 'ident' ? data.fullmektigIdent : undefined,
+            fullmektigNavnOgAdresse: navnOgAdresse,
+          },
+        },
+        referanse: behandlingsreferanse,
+      });
+    })(event);
+  };
+
+  return (
+    <VilkårsKortMedForm
+      heading={'Fullmektig/verge'}
+      steg={'FULLMEKTIG'}
+      onSubmit={handleSubmit}
+      vilkårTilhørerNavKontor={false}
+      status={status}
+      isLoading={isLoading}
+      visBekreftKnapp={!readOnly}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+    >
+      <FormField form={form} formField={formFields.harFullmektig} horizontalRadio />
+      {harFullmektig && <FormField form={form} formField={formFields.idType} horizontalRadio />}
+      {harFullmektig && idType === 'ident' && <FormField form={form} formField={formFields.fullmektigIdent} />}
+      {harFullmektig && idType === 'navnOgAdresse' && (
+        <>
+          <FormField form={form} formField={formFields.navn} />
+          <FormField form={form} formField={formFields.adresselinje1} />
+          <FormField form={form} formField={formFields.adresselinje2} />
+          <FormField form={form} formField={formFields.adresselinje3} />
+          <FormField form={form} formField={formFields.postnummer} />
+          <FormField form={form} formField={formFields.poststed} />
+          <FormField form={form} formField={formFields.land} />
+        </>
+      )}
+    </VilkårsKortMedForm>
+  );
+
+  function idTypeOptions(): ValuePair[] {
+    return [
+      {
+        label: 'ID-nummer',
+        value: 'ident',
+      },
+      { label: 'Navn og adresse', value: 'navnOgAdresse' },
+    ];
+  }
+
+  // TODO: Bruk faktiske koder - se lovvalg og medlemskap
+  function tempLandOptions(): ValuePair[] {
+    return [
+      { label: 'Norge', value: 'NO' },
+      { label: 'Sverige', value: 'SE' },
+    ];
+  }
+};
