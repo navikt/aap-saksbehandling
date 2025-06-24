@@ -50,7 +50,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
     useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
 
   const { sak } = useSak();
-  const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const defaultRefusjonValue: Refusjon[] = [
@@ -115,7 +114,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         value: `${kontor.navn} - ${kontor.enhetNr}`,
       }));
 
-      setDefaultOptions(res);
       return res;
     }
 
@@ -131,7 +129,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       label: `${kontor.navn} - ${kontor.enhetsnummer}`,
       value: `${kontor.enhetsnummer}`,
     }));
-    //setDefaultOptions(res);
     return res;
   };
 
@@ -217,16 +214,9 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
                   validate: {
                     valgtKontor: (value) => {
                       if (!value) return 'Du må velge et Nav-kontor';
-
-                      if (typeof value === 'string') {
-                        return value.trim() ? true : 'Du må velge et Nav-kontor';
-                      }
-
                       if (typeof value === 'object' && 'value' in value) {
                         return value.value?.trim() ? true : 'Du må velge et Nav-kontor';
                       }
-
-                      return 'Du må velge et Nav-kontor';
                     },
                   },
                 }}
