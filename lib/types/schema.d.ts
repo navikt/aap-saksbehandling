@@ -7096,7 +7096,7 @@ export interface components {
       harFullmektig: boolean;
       /**
        * Format: date-time
-       * @example 2025-06-24T09:39:16.238672Z
+       * @example 2025-06-24T13:44:00.410369Z
        */
       opprettet: string;
       vurdertAv: string;
@@ -7861,7 +7861,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-24T09:39:16.238672Z
+       * @example 2025-06-24T13:44:00.410369Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8014,7 +8014,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-24T09:39:16.238672Z
+       * @example 2025-06-24T13:44:00.410369Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8915,7 +8915,13 @@ export interface components {
       skalForberede: boolean;
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'IVERKSETTES' | 'AVSLUTTET';
-      type: string;
+      /** @enum {string} */
+      type: 'Førstegangsbehandling' | 'Revurdering' | 'Tilbakekreving' | 'Klage' | 'SvarFraAndreinstans';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtaksdato?: string | null;
       /** Format: int64 */
       versjon: number;
       'vilk\u00E5r': components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.Vilk\u00E5rDTO'][];

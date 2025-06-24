@@ -11,6 +11,9 @@ interface Props {
 }
 
 export const Behandlingsinfo = ({ behandling, sak }: Props) => {
+  const vedtaksdato = behandling.vedtaksdato;
+  const erFørstegangsbehandlingEllerRevurdering =
+    behandling.type === 'Førstegangsbehandling' || behandling.type === 'Revurdering';
   return (
     <Box
       padding="4"
@@ -36,14 +39,26 @@ export const Behandlingsinfo = ({ behandling, sak }: Props) => {
             Saksnummer:
           </Label>
           <BodyShort size={'small'}>{sak.saksnummer}</BodyShort>
-          <Label as="p" size={'small'}>
-            Virkningstidspunkt{behandling.virkningstidspunkt == null && ' (foreløpig)'}:
-          </Label>
-          <BodyShort size={'small'}>
-            {behandling.virkningstidspunkt == null
-              ? formaterDatoForFrontend(sak.periode.fom)
-              : formaterDatoForFrontend(behandling.virkningstidspunkt)}
-          </BodyShort>
+          {erFørstegangsbehandlingEllerRevurdering && (
+            <>
+              <Label as="p" size={'small'}>
+                Virkningstidspunkt{behandling.virkningstidspunkt == null && ' (foreløpig)'}:
+              </Label>
+              <BodyShort size={'small'}>
+                {behandling.virkningstidspunkt == null
+                  ? formaterDatoForFrontend(sak.periode.fom)
+                  : formaterDatoForFrontend(behandling.virkningstidspunkt)}
+              </BodyShort>
+            </>
+          )}
+          {vedtaksdato && (
+            <>
+              <Label as="p" size={'small'}>
+                Vedtaksdato:
+              </Label>
+              <BodyShort size={'small'}>{formaterDatoForFrontend(vedtaksdato)}</BodyShort>
+            </>
+          )}
         </HGrid>
       </VStack>
     </Box>
