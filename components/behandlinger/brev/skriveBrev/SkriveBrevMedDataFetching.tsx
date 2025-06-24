@@ -11,6 +11,8 @@ import { StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
+import { erFeatureAktivert } from '../../../../lib/services/unleash/unleashService';
+import { FeatureToggle } from '../../../../lib/services/unleash/featureToggle';
 
 export const SkriveBrevMedDataFetching = async ({
   behandlingsReferanse,
@@ -43,7 +45,6 @@ export const SkriveBrevMedDataFetching = async ({
   }
 
   const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
-
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
 
   return (

@@ -13,6 +13,8 @@ import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
 import styles from 'components/behandlinger/brev/skriveBrev/SkriveBrevMedDataFetching.module.css';
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { KlagesaksopplysningerKolonne } from 'components/behandlinger/brev/skriveBrev/KlagesaksopplysningerKolonne';
+import { erFeatureAktivert } from '../../../../lib/services/unleash/unleashService';
+import { FeatureToggle } from '../../../../lib/services/unleash/featureToggle';
 
 export const SkriveKlageBrevMedDataFetching = async ({
   behandlingsReferanse,

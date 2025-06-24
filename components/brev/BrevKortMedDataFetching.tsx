@@ -5,6 +5,8 @@ import { AvklaringsbehovKode, StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { erFeatureAktivert } from '../../lib/services/unleash/unleashService';
+import { FeatureToggle } from '../../lib/services/unleash/featureToggle';
 
 interface Props {
   behandlingReferanse: string;
@@ -30,7 +32,6 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
   const mottaker = grunnlag.mottaker;
   const brevbestillingReferanse = grunnlag.brevbestillingReferanse;
   const status = grunnlag.status;
-
   const readOnly = aktivtSteg === 'BREV' && !grunnlag.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(grunnlag.avklaringsbehovKode);
 
