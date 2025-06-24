@@ -27,7 +27,7 @@ export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
   FOLKETRYGDLOVEN_11_20: '§ 11-20',
   FOLKETRYGDLOVEN_11_22: '§ 11-22',
   FOLKETRYGDLOVEN_11_23_UUTNYTTET_ARB_EVNE: '§ 11-23 2. ledd',
-  FOLKETRYGDLOVEN_11_23_OVERGNG_ARB: '§ 11-23 - Overgang til arbeid',
+  FOLKETRYGDLOVEN_11_23_OVERGNG_ARB: '11-23 Nær ved å komme i fullt arbeid',
   FOLKETRYGDLOVEN_11_24: '§ 11-24',
   FOLKETRYGDLOVEN_11_25: '§ 11-25',
   FOLKETRYGDLOVEN_11_26: '§ 11-26',
