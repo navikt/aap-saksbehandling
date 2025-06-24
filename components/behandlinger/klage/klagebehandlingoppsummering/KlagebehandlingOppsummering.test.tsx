@@ -52,14 +52,14 @@ describe('Klage - oppsummering', () => {
     const innstilling = screen.getByText('Delvis omgjøring');
     expect(innstilling).toBeVisible();
 
-    const omgjøres = screen.getByText('$ 11-2');
+    const omgjøres = screen.getByText('§ 11-2');
     expect(omgjøres).toBeVisible();
 
-    const opprettholdes_11_5 = screen.getByText('$ 11-5');
+    const opprettholdes_11_5 = screen.getByText('§ 11-5');
     expect(opprettholdes_11_5).toBeVisible();
-    const opprettholdes_11_20 = screen.getByText('$ 11-20');
+    const opprettholdes_11_20 = screen.getByText('§ 11-20');
     expect(opprettholdes_11_20).toBeVisible();
-    const opprettholdes_11_19 = screen.getByText('$ 11-19');
+    const opprettholdes_11_19 = screen.getByText('§ 11-19');
     expect(opprettholdes_11_19).toBeVisible();
   });
 });
