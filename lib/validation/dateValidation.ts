@@ -20,7 +20,6 @@ export function validerNullableDato(value?: string) {
   if (!value) {
     return;
   }
-
   if (!new RegExp(/^\d{2}\.\d{2}\.\d{4}$/).test(value)) {
     return 'Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå';
   }

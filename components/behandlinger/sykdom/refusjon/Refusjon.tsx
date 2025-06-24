@@ -131,7 +131,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
       label: `${kontor.navn} - ${kontor.enhetsnummer}`,
       value: `${kontor.enhetsnummer}`,
     }));
-    setDefaultOptions(res);
+    //setDefaultOptions(res);
     return res;
   };
 
@@ -192,11 +192,15 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
                 rules={{
                   validate: {
                     gyldigDato: (value) => validerNullableDato(value as string),
-                    kanIkkeVaereFoerSoeknadstidspunkt: (value) => {
-                      const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
-                      const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
-                      if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
-                        return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
+                    kanIkkeVaereFoerFraDato: (value) => {
+                      const fomValue = form.getValues(`refusjoner.${index}.fom`);
+                      if (!fomValue) {
+                        return true;
+                      }
+                      const fomDate = startOfDay(parse(fomValue, 'dd.MM.yyyy', new Date()));
+                      const vurderingGjelderTil = stringToDate(value as string, 'dd.MM.yyyy');
+                      if (vurderingGjelderTil && isBefore(startOfDay(vurderingGjelderTil), fomDate)) {
+                        return 'Tildato kan ikke være før fradato';
                       }
                       return true;
                     },
@@ -209,9 +213,26 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
                 form={form}
                 name={`refusjoner.${index}.navKontor`}
                 fetcher={kontorSøk}
-                rules={{ required: 'Du må velge et nav-kontor' }}
+                rules={{
+                  validate: {
+                    valgtKontor: (value) => {
+                      if (!value) return 'Du må velge et Nav-kontor';
+
+                      if (typeof value === 'string') {
+                        return value.trim() ? true : 'Du må velge et Nav-kontor';
+                      }
+
+                      if (typeof value === 'object' && 'value' in value) {
+                        return value.value?.trim() ? true : 'Du må velge et Nav-kontor';
+                      }
+
+                      return 'Du må velge et Nav-kontor';
+                    },
+                  },
+                }}
                 size={'small'}
-                defaultOptions={defaultOptions}
+                defaultOptions={[]}
+                readOnly={readOnly}
               />
               {!erFørsterefusjon && !readOnly && (
                 <Button
