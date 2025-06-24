@@ -6944,6 +6944,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO': {
       begrunnelse: string;
       vurderingPerioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingPeriodeDTO'][];
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingPeriodeDTO': {
       /** Format: int32 */
@@ -7096,7 +7097,7 @@ export interface components {
       harFullmektig: boolean;
       /**
        * Format: date-time
-       * @example 2025-06-24T13:44:00.410369Z
+       * @example 2025-06-25T07:22:42.691305Z
        */
       opprettet: string;
       vurdertAv: string;
@@ -7861,7 +7862,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-24T13:44:00.410369Z
+       * @example 2025-06-25T07:22:42.691305Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8014,7 +8015,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-24T13:44:00.410369Z
+       * @example 2025-06-25T07:22:42.691305Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
