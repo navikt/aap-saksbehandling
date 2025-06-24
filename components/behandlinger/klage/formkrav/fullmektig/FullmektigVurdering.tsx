@@ -8,6 +8,7 @@ import { FormEvent } from 'react';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { FullmektigGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { landMedTrygdesamarbeid } from 'lib/utils/countries';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -75,12 +76,12 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       },
       adresselinje2: {
         type: 'text',
-        label: 'Adresselinje 2',
+        label: 'Adresselinje 2 (valgfritt)',
         defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje2 ?? undefined,
       },
       adresselinje3: {
         type: 'text',
-        label: 'Adresselinje 3',
+        label: 'Adresselinje 3 (valgfritt)',
         defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje3 ?? undefined,
       },
       postnummer: {
@@ -99,7 +100,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
         type: 'combobox',
         label: 'Land',
         rules: { required: 'Du må velge land' },
-        options: tempLandOptions(),
+        options: landMedTrygdesamarbeid,
         defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.landkode ?? undefined,
       },
     },
@@ -178,14 +179,6 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
         value: 'ident',
       },
       { label: 'Navn og adresse', value: 'navnOgAdresse' },
-    ];
-  }
-
-  // TODO: Bruk faktiske koder - se lovvalg og medlemskap
-  function tempLandOptions(): ValuePair[] {
-    return [
-      { label: 'Norge', value: 'NO' },
-      { label: 'Sverige', value: 'SE' },
     ];
   }
 };
