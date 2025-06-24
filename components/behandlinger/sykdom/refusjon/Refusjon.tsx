@@ -8,7 +8,7 @@ import { RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerNullableDato } from 'lib/validation/dateValidation';
-import { FormEventya } from 'react';
+import { FormEvent } from 'react';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { Button, Radio } from '@navikt/ds-react';
