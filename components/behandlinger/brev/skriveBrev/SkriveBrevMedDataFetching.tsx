@@ -43,7 +43,6 @@ export const SkriveBrevMedDataFetching = async ({
   }
 
   const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
-
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
 
   return (
