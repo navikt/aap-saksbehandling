@@ -16,6 +16,20 @@ export function validerDato(value?: string) {
   }
 }
 
+export function validerNullableDato(value?: string) {
+  if (!value) {
+    return;
+  }
+  if (!new RegExp(/^\d{2}\.\d{2}\.\d{4}$/).test(value)) {
+    return 'Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå';
+  }
+
+  const inputDato = parseDatoFraDatePicker(value);
+  if (!inputDato) {
+    return 'Datoen er ikke gyldig';
+  }
+}
+
 export function erDatoFoerDato(inputDato: string, referanseDato: string): boolean {
   return (
     new Date(parse(inputDato, 'dd.MM.yyyy', new Date())) < new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()))

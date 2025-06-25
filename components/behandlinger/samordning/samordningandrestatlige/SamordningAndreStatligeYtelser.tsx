@@ -90,6 +90,7 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       visBekreftKnapp={skalViseBekreftKnapp}
       vilkårTilhørerNavKontor={false}
+      vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
     >
       {!visYtelsesTabell && (
         <HStack>

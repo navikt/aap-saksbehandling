@@ -6613,6 +6613,7 @@ export interface components {
        */
       fom?: string | null;
       harKrav: boolean;
+      navKontor?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -6982,6 +6983,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO': {
       begrunnelse: string;
       vurderingPerioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingPeriodeDTO'][];
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingPeriodeDTO': {
       /** Format: int32 */
@@ -7134,7 +7136,7 @@ export interface components {
       harFullmektig: boolean;
       /**
        * Format: date-time
-       * @example 2025-06-25T07:23:04.602375Z
+       * @example 2025-06-25T08:43:45.135951Z
        */
       opprettet: string;
       vurdertAv: string;
@@ -7951,7 +7953,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T07:23:04.602375Z
+       * @example 2025-06-25T08:43:45.135951Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8104,7 +8106,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T07:23:04.602375Z
+       * @example 2025-06-25T08:43:45.135951Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8597,6 +8599,7 @@ export interface components {
        */
       fom?: string | null;
       harKrav: boolean;
+      navKontor?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
