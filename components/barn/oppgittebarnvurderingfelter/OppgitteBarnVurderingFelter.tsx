@@ -4,10 +4,11 @@ import { JaEllerNei } from 'lib/utils/form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { UseFormReturn } from 'react-hook-form';
 
-import { validerDato } from 'lib/validation/dateValidation';
+import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { formaterDatoForFrontend } from '../../../lib/utils/date';
 
 interface Props {
   ident: string;
@@ -15,9 +16,18 @@ interface Props {
   vurderingIndex: number;
   readOnly: boolean;
   form: UseFormReturn<BarnetilleggFormFields>;
+  rettighetsPeriodeFom: string;
+  fødselsdato: string;
 }
 
-export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurderingIndex, form }: Props) => {
+export const OppgitteBarnVurderingFelter = ({
+  readOnly,
+  barneTilleggIndex,
+  vurderingIndex,
+  form,
+  rettighetsPeriodeFom,
+  fødselsdato,
+}: Props) => {
   const harForeldreAnsvar = form.watch(
     `barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`
   );
@@ -60,6 +70,17 @@ export const OppgitteBarnVurderingFelter = ({ readOnly, barneTilleggIndex, vurde
           rules={{
             validate: {
               validerDato: (value) => validerDato(value as string),
+              validerIkkeFørDato: (value) => {
+                const erFørVirkingstidspunkt = erDatoFoerDato(
+                  value as string,
+                  formaterDatoForFrontend(rettighetsPeriodeFom)
+                );
+                const erFørFødselsdato = erDatoFoerDato(value as string, formaterDatoForFrontend(fødselsdato));
+
+                return erFørVirkingstidspunkt || erFørFødselsdato
+                  ? `Dato kan ikke være før virkningstidspunktet (${rettighetsPeriodeFom}) eller fødselsdato (${fødselsdato})`
+                  : true;
+              },
             },
           }}
         />

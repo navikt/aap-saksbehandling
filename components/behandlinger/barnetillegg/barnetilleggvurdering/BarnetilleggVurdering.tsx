@@ -101,11 +101,11 @@ export const BarnetilleggVurdering = ({
             vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
               return {
                 ident: vurderteBarn.ident,
-                vurderinger: vurderteBarn.vurderinger.map((vurdering, index) => {
+                vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
                   return {
                     begrunnelse: vurdering.begrunnelse,
                     harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
-                    fraDato: getFraDato(index, vurdering.fraDato),
+                    fraDato: getFraDato(vurdering.fraDato),
                   };
                 }),
               };
@@ -117,8 +117,8 @@ export const BarnetilleggVurdering = ({
     })(event);
   }
 
-  function getFraDato(index: number, value?: string): string {
-    if (value && index !== 0) {
+  function getFraDato(value?: string): string {
+    if (value) {
       return formaterDatoForBackend(parse(value, DATO_FORMATER.ddMMyyyy, new Date()));
     } else {
       return grunnlag.søknadstidspunkt;
@@ -153,6 +153,7 @@ export const BarnetilleggVurdering = ({
                     fødselsdato={vurdering.fødselsdato}
                     navn={behandlingPersonInfo?.info[vurdering.ident] || 'Ukjent'}
                     readOnly={readOnly}
+                    rettighetsPeriodeFom={grunnlag.søknadstidspunkt}
                   />
                 );
               })}
