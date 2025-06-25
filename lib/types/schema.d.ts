@@ -6575,6 +6575,7 @@ export interface components {
        */
       fom?: string | null;
       harKrav: boolean;
+      navKontor?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -7097,7 +7098,7 @@ export interface components {
       harFullmektig: boolean;
       /**
        * Format: date-time
-       * @example 2025-06-25T07:22:42.691305Z
+       * @example 2025-06-25T10:00:01.539387Z
        */
       opprettet: string;
       vurdertAv: string;
@@ -7845,8 +7846,8 @@ export interface components {
       adresselinje2?: string | null;
       adresselinje3?: string | null;
       landkode: string;
-      postnummer: string;
-      poststed: string;
+      postnummer?: string | null;
+      poststed?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.NavnOgAdresse': {
       adresse: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.Adresse'];
@@ -7862,7 +7863,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T07:22:42.691305Z
+       * @example 2025-06-25T10:00:01.539387Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8015,7 +8016,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T07:22:42.691305Z
+       * @example 2025-06-25T10:00:01.539387Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8508,6 +8509,7 @@ export interface components {
        */
       fom?: string | null;
       harKrav: boolean;
+      navKontor?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
