@@ -116,17 +116,3 @@ export const Tilkjent2 = ({ grunnlag }: Props) => {
     </VilkårsKort>
   );
 };
-//
-// function formaterProsent(verdi?: number | null) {
-//   let prosentVerdi = 0;
-//   if (verdi === 0) {
-//     return `${prosentVerdi} %`;
-//   }
-//   if (verdi === null || !verdi) {
-//     return '';
-//   }
-//
-//   prosentVerdi = 100 - verdi;
-//
-//   return `${prosentVerdi} %`;
-// }

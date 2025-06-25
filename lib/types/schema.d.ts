@@ -7136,7 +7136,7 @@ export interface components {
       harFullmektig: boolean;
       /**
        * Format: date-time
-       * @example 2025-06-25T08:43:45.135951Z
+       * @example 2025-06-25T08:53:40.756081Z
        */
       opprettet: string;
       vurdertAv: string;
@@ -7386,6 +7386,7 @@ export interface components {
       /** @enum {string|null} */
       meldekortStatus?: 'IKKE_LEVERT' | 'LEVERT_ETTER_FRIST' | 'OVERFØRT_TIL_ØKONOMI' | null;
       meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      sisteLeverteMeldekort?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.arbeid.Meldekort'];
       vurdertePerioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.VurdertPeriode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriodeDTO': {
@@ -7720,6 +7721,19 @@ export interface components {
       utfall: 'IKKE_VURDERT' | 'IKKE_RELEVANT' | 'OPPFYLT' | 'IKKE_OPPFYLT';
       versjon: string;
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.arbeid.ArbeidIPeriode': {
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      timerArbeid: components['schemas']['no.nav.aap.komponenter.verdityper.TimerArbeid'];
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.arbeid.Meldekort': {
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      mottattTidspunkt: string;
+      timerArbeidPerPeriode: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.arbeid.ArbeidIPeriode'][];
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.BrevResponse': {
       konstruertBrev: string;
     };
@@ -7953,7 +7967,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T08:43:45.135951Z
+       * @example 2025-06-25T08:53:40.756081Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8106,7 +8120,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T08:43:45.135951Z
+       * @example 2025-06-25T08:53:40.756081Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -9974,6 +9988,9 @@ export interface components {
     'no.nav.aap.komponenter.verdityper.Dagsatser': {
       /** Format: int32 */
       antall: number;
+    };
+    'no.nav.aap.komponenter.verdityper.TimerArbeid': {
+      antallTimer: number;
     };
     'no.nav.aap.motor.api.JobbInfoDto': {
       /** Format: int32 */
