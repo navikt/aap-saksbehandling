@@ -1152,6 +1152,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/tilkjentV2/{referanse}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/trukket-s\u00F8knad': {
     parameters: {
       query?: never;
@@ -7096,7 +7134,7 @@ export interface components {
       harFullmektig: boolean;
       /**
        * Format: date-time
-       * @example 2025-06-24T13:44:00.410369Z
+       * @example 2025-06-25T07:23:04.602375Z
        */
       opprettet: string;
       vurdertAv: string;
@@ -7317,8 +7355,36 @@ export interface components {
        */
       vurdertDato: string;
     };
+    'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.Felter': {
+      /** Format: int32 */
+      arbeidGradering?: number | null;
+      barneTilleggsats: number;
+      dagsats: number;
+      /** Format: double */
+      effektivDagsats: number;
+      /** Format: int32 */
+      institusjonGradering?: number | null;
+      /** Format: int32 */
+      samordningGradering?: number | null;
+      /** Format: int32 */
+      totalReduksjon?: number | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto': {
+      perioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelseDto': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriodeDTO'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto': {
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      levertMeldekortDato?: string | null;
+      /** @enum {string|null} */
+      meldekortStatus?: 'IKKE_LEVERT' | 'LEVERT_ETTER_FRIST' | 'OVERFØRT_TIL_ØKONOMI' | null;
+      meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      vurdertePerioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.VurdertPeriode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriodeDTO': {
       /** Format: int32 */
@@ -7356,6 +7422,19 @@ export interface components {
        * @example 2025-04-01
        */
       utbetalingsdato: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.VurdertPeriode': {
+      felter: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.Felter'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fraOgMed: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tilOgMed: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.trekkklage.flate.TrekkKlageVurderingDto': {
       begrunnelse: string;
@@ -7400,6 +7479,17 @@ export interface components {
       brukerAvKvoter: ('ORDINÆR' | 'STUDENT' | 'ETABLERINGSFASE' | 'UTVIKLINGSFASE' | 'SYKEPENGEERSTATNING')[];
       gradering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.GraderingDto'];
       meldePeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string|null} */
+      meldepliktStatus?:
+        | 'FØR_VEDTAK'
+        | 'FØRSTE_MELDEPERIODE_MED_RETT'
+        | 'UTEN_RETT'
+        | 'FRITAK'
+        | 'MELDT_SEG'
+        | 'IKKE_MELDT_SEG'
+        | 'FREMTIDIG_IKKE_OPPFYLT'
+        | 'FREMTIDIG_OPPFYLT'
+        | null;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string|null} */
       rettighetsType?:
@@ -7861,7 +7951,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-24T13:44:00.410369Z
+       * @example 2025-06-25T07:23:04.602375Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8014,7 +8104,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-24T13:44:00.410369Z
+       * @example 2025-06-25T07:23:04.602375Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (

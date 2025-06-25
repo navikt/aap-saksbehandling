@@ -53,6 +53,7 @@ import {
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
+  TilkjentYtelseGrunnlagV2,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
@@ -64,7 +65,7 @@ import {
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
-import { Enhet } from '../../types/oppgaveTypes';
+import { Enhet } from 'lib/types/oppgaveTypes';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -252,6 +253,11 @@ export const hentSoningsvurdering = async (behandlingsreferanse: string) => {
 export const hentTilkjentYtelse = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent/${behandlingsReferanse}`;
   return await apiFetch<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentTilkjentYtelseV2 = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjentV2/${behandlingsReferanse}`;
+  return await apiFetch<TilkjentYtelseGrunnlagV2>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentTrukketSøknad = async (behandlingsreferanse: string) => {

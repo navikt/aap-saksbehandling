@@ -20,9 +20,6 @@ export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
   const etAnnetStedGruppe = flytResponse.data.flyt.find((gruppe) => gruppe.stegGruppe === 'ET_ANNET_STED');
   const avklaringsBehov = etAnnetStedGruppe?.steg.find((steg) => steg.avklaringsbehov);
 
-  /*
-   TODO 09.08.2024 - hacky løsning for å midlertidig kunne vise soning og opphold på helseinstitusjon
-   */
   const vurderHelseinstitusjon =
     avklaringsBehov?.avklaringsbehov.find((b) => b.definisjon.kode === Behovstype.AVKLAR_HELSEINSTITUSJON) != null;
   const vurderSoning =
