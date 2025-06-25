@@ -7137,7 +7137,7 @@ export interface components {
       harFullmektig: boolean;
       /**
        * Format: date-time
-       * @example 2025-06-25T12:43:10.804530Z
+       * @example 2025-06-25T20:43:09.905084Z
        */
       opprettet: string;
       vurdertAv: string;
@@ -7429,16 +7429,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.VurdertPeriode': {
       felter: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.Felter'];
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fraOgMed: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tilOgMed: string;
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
     };
     'no.nav.aap.behandlingsflyt.behandling.trekkklage.flate.TrekkKlageVurderingDto': {
       begrunnelse: string;
@@ -7957,7 +7948,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T12:43:10.804530Z
+       * @example 2025-06-25T20:43:09.905084Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8110,7 +8101,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T12:43:10.804530Z
+       * @example 2025-06-25T20:43:09.905084Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (

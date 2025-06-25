@@ -15,7 +15,6 @@ interface Props {
 }
 
 export const Tilkjent2 = ({ grunnlag }: Props) => {
-  console.log('grunnlag', grunnlag);
   return (
     <VilkårsKort heading="Tilkjent ytelse" steg="BEREGN_TILKJENT_YTELSE">
       <TableStyled size="medium">
@@ -36,79 +35,48 @@ export const Tilkjent2 = ({ grunnlag }: Props) => {
         <Table.Body>
           {grunnlag.perioder.map((periode, periodeIndex) => {
             return periode.vurdertePerioder.map((vurdertPeriode, vurdertPeriodeIndex) => {
-              const skalHaSkillelinje =
-                periode.vurdertePerioder.length === vurdertPeriodeIndex + 1 ? '' : styles.tablerowwithoutborder;
+              const skilleLinjeClassName =
+                periode.vurdertePerioder.length === vurdertPeriodeIndex + 1 || periode.vurdertePerioder.length === 1
+                  ? ''
+                  : styles.tablerowwithoutborder;
 
-              const skilleLinjeFørsteradClassname =
-                periode.vurdertePerioder.length === 1 ? '' : styles.tablerowwithoutborder;
+              const bakgrunnClassName = periodeIndex % 2 ? styles.tablerowwithzebra : '';
 
-              const skalHaBakgrunn = periodeIndex % 2 ? styles.tablerowwithzebra : '';
-
-              if (vurdertPeriodeIndex === 0) {
-                return (
-                  <Table.Row key={vurdertPeriodeIndex} className={`${skilleLinjeFørsteradClassname} ${skalHaBakgrunn}`}>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterPeriode(periode.meldeperiode.fom, periode.meldeperiode.tom)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterPeriode(vurdertPeriode.fraOgMed, vurdertPeriode.tilOgMed)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>{formaterTilNok(vurdertPeriode.felter.dagsats)}</Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilNok(vurdertPeriode.felter.barneTilleggsats)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilProsent(vurdertPeriode.felter.samordningGradering)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilProsent(vurdertPeriode.felter.institusjonGradering)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilProsent(vurdertPeriode.felter.totalReduksjon)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilNok(vurdertPeriode.felter.effektivDagsats)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {periode.levertMeldekortDato
+              return (
+                <Table.Row key={vurdertPeriodeIndex} className={`${skilleLinjeClassName} ${bakgrunnClassName}`}>
+                  <Table.DataCell textSize={'small'}>
+                    {vurdertPeriodeIndex === 0 && formaterPeriode(periode.meldeperiode.fom, periode.meldeperiode.tom)}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'}>
+                    {formaterPeriode(vurdertPeriode.periode.fom, vurdertPeriode.periode.tom)}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'}>{formaterTilNok(vurdertPeriode.felter.dagsats)}</Table.DataCell>
+                  <Table.DataCell textSize={'small'}>
+                    {formaterTilNok(vurdertPeriode.felter.barneTilleggsats)}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'}>
+                    {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'}>
+                    {formaterTilProsent(vurdertPeriode.felter.samordningGradering)}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'}>
+                    {formaterTilProsent(vurdertPeriode.felter.institusjonGradering)}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'}>
+                    {formaterTilProsent(vurdertPeriode.felter.totalReduksjon)}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'}>
+                    {formaterTilNok(vurdertPeriode.felter.effektivDagsats)}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'}>
+                    {vurdertPeriodeIndex === 0 &&
+                      (periode.levertMeldekortDato
                         ? formaterDatoForFrontend(periode.levertMeldekortDato)
-                        : 'Ikke levert'}
-                    </Table.DataCell>
-                  </Table.Row>
-                );
-              } else {
-                return (
-                  <Table.Row key={vurdertPeriodeIndex} className={`${skalHaSkillelinje} ${skalHaBakgrunn}`}>
-                    <Table.DataCell></Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterPeriode(vurdertPeriode.fraOgMed, vurdertPeriode.tilOgMed)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>{formaterTilNok(vurdertPeriode.felter.dagsats)}</Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilNok(vurdertPeriode.felter.barneTilleggsats)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilProsent(vurdertPeriode.felter.samordningGradering)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilProsent(vurdertPeriode.felter.institusjonGradering)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilProsent(vurdertPeriode.felter.totalReduksjon)}
-                    </Table.DataCell>
-                    <Table.DataCell textSize={'small'}>
-                      {formaterTilNok(vurdertPeriode.felter.effektivDagsats)}
-                    </Table.DataCell>
-                    <Table.DataCell></Table.DataCell>
-                  </Table.Row>
-                );
-              }
+                        : 'Ikke levert')}
+                  </Table.DataCell>
+                </Table.Row>
+              );
             });
           })}
         </Table.Body>
