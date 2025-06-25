@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--a-spacing-2);
-  max-width: 90ch;
+  min-width: 40ch;
+  max-width: 60ch;
+  flex: 1 1 auto;
 }
 
 .labelwrapper {
