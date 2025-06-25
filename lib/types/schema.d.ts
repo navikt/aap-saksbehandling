@@ -7137,7 +7137,7 @@ export interface components {
       harFullmektig: boolean;
       /**
        * Format: date-time
-       * @example 2025-06-25T12:21:00.320052Z
+       * @example 2025-06-25T12:43:10.804530Z
        */
       opprettet: string;
       vurdertAv: string;
@@ -7483,17 +7483,6 @@ export interface components {
       brukerAvKvoter: ('ORDINÆR' | 'STUDENT' | 'ETABLERINGSFASE' | 'UTVIKLINGSFASE' | 'SYKEPENGEERSTATNING')[];
       gradering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.GraderingDto'];
       meldePeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      /** @enum {string|null} */
-      meldepliktStatus?:
-        | 'FØR_VEDTAK'
-        | 'FØRSTE_MELDEPERIODE_MED_RETT'
-        | 'UTEN_RETT'
-        | 'FRITAK'
-        | 'MELDT_SEG'
-        | 'IKKE_MELDT_SEG'
-        | 'FREMTIDIG_IKKE_OPPFYLT'
-        | 'FREMTIDIG_OPPFYLT'
-        | null;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string|null} */
       rettighetsType?:
@@ -7968,7 +7957,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T12:21:00.320052Z
+       * @example 2025-06-25T12:43:10.804530Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8121,7 +8110,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T12:21:00.320052Z
+       * @example 2025-06-25T12:43:10.804530Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
