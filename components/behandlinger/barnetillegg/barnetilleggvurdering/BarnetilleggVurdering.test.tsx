@@ -147,6 +147,30 @@ describe('barnetillegg', () => {
 
 describe('Oppgitte barn', () => {
   const user = userEvent.setup();
+  it('skal vise feilmelding dersom oppgitt tidspunkt er før virkningstidspunkt', async () => {
+    render(
+      <BarnetilleggVurdering
+        behandlingsversjon={1}
+        grunnlag={grunnlag}
+        readOnly={false}
+        harAvklaringsbehov={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+
+    await svarJaPåOmDetSkalBeregnesBarnetillegg();
+    const datofelt = screen.getByRole('textbox', {
+      name: 'Oppgi dato for når barnetillegget skal gis fra',
+    });
+    await user.type(datofelt, '01.01.2000');
+    await klikkPåBekreft();
+    const fødselsdato = grunnlag.barnSomTrengerVurdering[0].fødselsdato;
+
+    const feilmelding = screen.getByText(
+      `Dato kan ikke være før virkningstidspunktet (${grunnlag.søknadstidspunkt}) eller fødselsdato (${fødselsdato})`
+    );
+    expect(feilmelding).toBeVisible();
+  });
 
   it('skal vise navnet, identen og alder på barnet', () => {
     render(
