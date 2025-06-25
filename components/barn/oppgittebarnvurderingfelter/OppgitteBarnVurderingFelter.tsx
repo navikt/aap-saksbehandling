@@ -8,7 +8,7 @@ import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { formaterDatoForFrontend } from '../../../lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   ident: string;
