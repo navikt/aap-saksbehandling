@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Button, HGrid, VStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import useSWR from 'swr';
@@ -70,18 +70,14 @@ export const TotaloversiktBehandlinger = () => {
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
       <VStack padding={'5'} gap={'5'}>
-        <HStack gap={'5'}>
-          <Heading level={'2'} size={'large'}>
-            Behandlinger
-          </Heading>
-          <Button
-            variant={'secondary'}
-            icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
-            onClick={() => setListeVisning(!listeVisning)}
-          >
-            {listeVisning ? 'Gridvisning' : 'Listevisning'}
-          </Button>
-        </HStack>
+        <Button
+          variant={'secondary'}
+          icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
+          className={'fit-content'}
+          onClick={() => setListeVisning(!listeVisning)}
+        >
+          {listeVisning ? 'Gridvisning' : 'Listevisning'}
+        </Button>
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {isSuccess(behandlingerUtvikling) && (
             <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />

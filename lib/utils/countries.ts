@@ -1,5 +1,6 @@
 import { ValuePair } from 'components/form/FormField';
 import countries from 'i18n-iso-countries';
+
 const { eeaMember } = require('is-european');
 countries.registerLocale(require('i18n-iso-countries/langs/no.json'));
 
@@ -25,6 +26,11 @@ export const landMedTrygdesamarbeid: ValuePair[] = [
   { value: 'CHE', label: countries.getName('CHE', 'no', { select: 'official' }) || '' },
   { value: 'AUS', label: countries.getName('AUS', 'no', { select: 'official' }) || '' },
   { value: 'GBR', label: countries.getName('GBR', 'no', { select: 'official' }) || '' },
+];
+
+export const landMedTrygdesamarbeidInklNorge: ValuePair[] = [
+  ...landMedTrygdesamarbeid,
+  { value: 'NOR', label: countries.getName('NOR', 'no', { select: 'official' }) || '' },
 ];
 
 export function getLandNavn(landkode: string) {

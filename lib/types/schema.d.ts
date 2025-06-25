@@ -7007,6 +7007,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUf\u00F8reVurderingDTO': {
       begrunnelse: string;
       vurderingPerioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUf\u00F8reVurderingPeriodeDTO'][];
+      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUf\u00F8reVurderingGrunnlagDTO': {
       grunnlag: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUf\u00F8reGrunnlagDTO'][];
@@ -7136,7 +7137,7 @@ export interface components {
       harFullmektig: boolean;
       /**
        * Format: date-time
-       * @example 2025-06-25T08:53:40.756081Z
+       * @example 2025-06-25T12:21:00.320052Z
        */
       opprettet: string;
       vurdertAv: string;
@@ -7950,8 +7951,8 @@ export interface components {
       adresselinje2?: string | null;
       adresselinje3?: string | null;
       landkode: string;
-      postnummer: string;
-      poststed: string;
+      postnummer?: string | null;
+      poststed?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.NavnOgAdresse': {
       adresse: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.Adresse'];
@@ -7967,7 +7968,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T08:53:40.756081Z
+       * @example 2025-06-25T12:21:00.320052Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8120,7 +8121,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T08:53:40.756081Z
+       * @example 2025-06-25T12:21:00.320052Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (

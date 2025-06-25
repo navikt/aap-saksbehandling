@@ -8,7 +8,7 @@ import { FormEvent } from 'react';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { FullmektigGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { landMedTrygdesamarbeid } from 'lib/utils/countries';
+import { landMedTrygdesamarbeidInklNorge } from 'lib/utils/countries';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -100,7 +100,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
         type: 'combobox',
         label: 'Land',
         rules: { required: 'Du må velge land' },
-        options: landMedTrygdesamarbeid,
+        options: landMedTrygdesamarbeidInklNorge,
         defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.landkode ?? undefined,
       },
     },
@@ -109,11 +109,13 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
 
   const harFullmektig = form.watch('harFullmektig') === JaEllerNei.Ja;
   const idType = form.watch('idType');
+  const land = form.watch('land');
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       const harFullmektig = data.harFullmektig === JaEllerNei.Ja;
       const idType = data.idType;
+      const erNorskAdresse = erNorge(data.land);
       const navnOgAdresse =
         harFullmektig && idType === 'navnOgAdresse'
           ? {
@@ -122,8 +124,10 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
                 adresselinje1: data.adresselinje1,
                 adresselinje2: data.adresselinje2,
                 adresselinje3: data.adresselinje3,
-                postnummer: data.postnummer,
-                poststed: data.poststed,
+                ...(erNorskAdresse && {
+                  postnummer: data.postnummer,
+                  poststed: data.poststed,
+                }),
                 landkode: data.land,
               },
             }
@@ -160,13 +164,17 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       {harFullmektig && idType === 'ident' && <FormField form={form} formField={formFields.fullmektigIdent} />}
       {harFullmektig && idType === 'navnOgAdresse' && (
         <>
+          <FormField form={form} formField={formFields.land} />
           <FormField form={form} formField={formFields.navn} />
           <FormField form={form} formField={formFields.adresselinje1} />
           <FormField form={form} formField={formFields.adresselinje2} />
           <FormField form={form} formField={formFields.adresselinje3} />
-          <FormField form={form} formField={formFields.postnummer} />
-          <FormField form={form} formField={formFields.poststed} />
-          <FormField form={form} formField={formFields.land} />
+          {erNorge(land) && (
+            <>
+              <FormField form={form} formField={formFields.postnummer} />
+              <FormField form={form} formField={formFields.poststed} />
+            </>
+          )}
         </>
       )}
     </VilkårsKortMedForm>
@@ -180,5 +188,9 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       },
       { label: 'Navn og adresse', value: 'navnOgAdresse' },
     ];
+  }
+
+  function erNorge(land: string): boolean {
+    return land === 'NOR';
   }
 };

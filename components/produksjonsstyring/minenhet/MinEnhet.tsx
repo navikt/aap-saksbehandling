@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import useSWR from 'swr';
@@ -92,18 +92,14 @@ export const MinEnhet = ({ enheter }: Props) => {
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
       <VStack padding={'5'} gap={'5'}>
-        <HStack gap={'5'}>
-          <Heading level={'2'} size={'large'}>
-            Min enhet
-          </Heading>
-          <Button
-            variant={'secondary'}
-            icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
-            onClick={() => setListeVisning(!listeVisning)}
-          >
-            {listeVisning ? 'Gridvisning' : 'Listevisning'}
-          </Button>
-        </HStack>
+        <Button
+          variant={'secondary'}
+          className={'fit-content'}
+          icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
+          onClick={() => setListeVisning(!listeVisning)}
+        >
+          {listeVisning ? 'Gridvisning' : 'Listevisning'}
+        </Button>
         <HStack>
           <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
         </HStack>
