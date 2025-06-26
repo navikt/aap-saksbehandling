@@ -4,8 +4,6 @@ import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isLocal } from 'lib/utils/environment';
-import { TilkjentMedDatafetchingV2 } from 'components/behandlinger/tilkjentytelse/tilkjent/TilkjentMedDataFetchingV2';
 
 interface Props {
   behandlingsReferanse: string;
@@ -25,11 +23,7 @@ export const TilkjentYtelse = async ({ behandlingsReferanse }: Props) => {
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>
-        {isLocal() ? (
-          <TilkjentMedDatafetchingV2 behandlingsReferanse={behandlingsReferanse} readOnly={false} />
-        ) : (
-          <TilkjentMedDatafetching behandlingsReferanse={behandlingsReferanse} readOnly={false} />
-        )}
+        <TilkjentMedDatafetching behandlingsReferanse={behandlingsReferanse} readOnly={false} />
       </StegSuspense>
     </GruppeSteg>
   );

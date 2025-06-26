@@ -7137,7 +7137,7 @@ export interface components {
       harFullmektig: boolean;
       /**
        * Format: date-time
-       * @example 2025-06-25T20:43:09.905084Z
+       * @example 2025-06-25T21:07:59.220507Z
        */
       opprettet: string;
       vurdertAv: string;
@@ -7948,7 +7948,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T20:43:09.905084Z
+       * @example 2025-06-25T21:07:59.220507Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
@@ -8101,7 +8101,7 @@ export interface components {
       notat?: string | null;
       /**
        * Format: date-time
-       * @example 2025-06-25T20:43:09.905084Z
+       * @example 2025-06-25T21:07:59.220507Z
        */
       opprettet: string;
       'vilk\u00E5rSomOmgj\u00F8res': (
