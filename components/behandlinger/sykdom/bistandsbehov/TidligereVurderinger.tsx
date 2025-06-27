@@ -45,10 +45,10 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
           a: Har brukeren behov for aktiv behandling?: {mapTilJaEllerNei(vurdering.erBehovForAktivBehandling)}
         </span>
         <span>
-          b: Har brukerer behov for arbeidsrettet tiltak?: {mapTilJaEllerNei(vurdering.erBehovForArbeidsrettetTiltak)}
+          b: Har brukeren behov for arbeidsrettet tiltak?: {mapTilJaEllerNei(vurdering.erBehovForArbeidsrettetTiltak)}
         </span>
         <span>
-          c: Kan brukerer anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?{' '}
+          c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?{' '}
           {mapTilJaEllerNei(vurdering.erBehovForAnnenOppfølging ?? undefined)}
         </span>
       </div>
