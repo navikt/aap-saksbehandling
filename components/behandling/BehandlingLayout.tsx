@@ -13,6 +13,7 @@ import {
   auditlog,
   hentBehandling,
   hentFlyt,
+  hentKabalKlageresultat,
   hentSak,
   hentSakPersoninfo,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
@@ -24,6 +25,7 @@ import { logWarning } from 'lib/serverutlis/logger';
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 import { StegGruppe } from 'lib/types/types';
 import { SakContextProvider } from 'context/SakContext';
+import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 
 interface Props {
   saksId: string;
@@ -45,12 +47,13 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsReferanse);
 
-  const [personInfo, brukerInformasjon, flytResponse, sak, roller] = await Promise.all([
+  const [personInfo, brukerInformasjon, flytResponse, sak, roller, kabalKlageResultat] = await Promise.all([
     hentSakPersoninfo(saksId),
     hentBrukerInformasjon(),
     hentFlyt(behandlingsReferanse),
     hentSak(saksId),
     hentRollerForBruker(),
+    hentKabalKlageresultat(behandlingsReferanse),
   ]);
 
   if (isError(flytResponse)) {
@@ -124,6 +127,7 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
               <div style={{ width: '100%' }}>{children}</div>
               <aside className={`flex-column`}>
                 <Behandlingsinfo behandling={behandling.data} sak={sak} />
+                <KlageBehandlingInfo kabalKlageResultat={kabalKlageResultat} />
                 <Saksbehandlingsoversikt />
                 {visTotrinnsvurdering && (
                   <ToTrinnsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} />
