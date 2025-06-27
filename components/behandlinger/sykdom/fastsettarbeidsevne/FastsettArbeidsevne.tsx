@@ -137,7 +137,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
                 type={'text'}
                 label={'Oppgi arbeidsevnen som ikke er utnyttet i prosent'}
                 rules={{
-                  required: 'Du må angi hvor stor arbeidsevne bruker har',
+                  required: 'Du må angi hvor stor arbeidsevne brukeren har',
                   validate: (value) => {
                     const valueAsNumber = Number(value);
                     if (isNaN(valueAsNumber)) {

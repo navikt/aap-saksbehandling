@@ -33,7 +33,7 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om bruker har andre statlige ytelser som skal avregnes med AAP',
+        label: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP',
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
         defaultValue: grunnlag.vurdering?.begrunnelse,
       },
