@@ -12,6 +12,8 @@ export function formaterKlageresultat(klageresultat?: Klageresultat) {
       return 'Delvis omgjøres';
     case 'UFULLSTENDIG':
       return 'Under behandling';
+    case 'TRUKKET':
+      return 'Trukket';
     default:
       return 'Ukjent resultat';
   }
