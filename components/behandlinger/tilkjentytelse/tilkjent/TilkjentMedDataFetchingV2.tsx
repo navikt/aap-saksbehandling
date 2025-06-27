@@ -5,7 +5,6 @@ import { Tilkjent2 } from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkj
 
 interface Props {
   behandlingsReferanse: string;
-  readOnly: boolean;
 }
 
 export const TilkjentMedDatafetchingV2 = async ({ behandlingsReferanse }: Props) => {

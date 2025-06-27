@@ -52,19 +52,37 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const { sak } = useSak();
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const defaultRefusjonValue: Refusjon[] = [
-    {
-      navKontor: { label: '', value: '' },
-      fom: formaterDatoForFrontend(sak.periode.fom),
-      tom: formaterDatoForFrontend(sak.periode.tom),
-    },
-  ];
+  const defaultRefusjonValue: Refusjon[] =
+    Array.isArray(grunnlag.gjeldendeVurderinger) && grunnlag.gjeldendeVurderinger.length > 0
+      ? grunnlag.gjeldendeVurderinger.map((vurdering) => ({
+          navKontor: {
+            label: vurdering.navKontor ?? '',
+            value: vurdering.navKontor ?? '',
+          },
+          fom: formaterDatoForFrontend(vurdering.fom ?? sak.periode.fom),
+          tom: formaterDatoForFrontend(vurdering.tom ?? sak.periode.tom),
+        }))
+      : [
+          {
+            navKontor: {
+              label: '',
+              value: '',
+            },
+            fom: formaterDatoForFrontend(sak.periode.fom),
+            tom: formaterDatoForFrontend(sak.periode.tom),
+          },
+        ];
+
+  const defaultOptions: ValuePair[] = (grunnlag.gjeldendeVurderinger ?? []).map((vurdering) => ({
+    label: vurdering.navKontor ?? '',
+    value: vurdering.navKontor ?? '',
+  }));
 
   const { form } = useConfigForm<FormFields>({
     harKrav: {
       type: 'radio',
       label: 'Har noen Nav-kontor refusjonskrav for sosialhjelp?',
-      defaultValue: getJaNeiEllerUndefined(),
+      defaultValue: getJaNeiEllerUndefined(grunnlag.gjeldendeVurdering?.harKrav),
       rules: { required: 'Du må svare på om Nav-kontoret har refusjonskrav' },
       options: JaEllerNeiOptions,
     },
@@ -221,7 +239,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
                   },
                 }}
                 size={'small'}
-                defaultOptions={[]}
+                defaultOptions={defaultOptions}
                 readOnly={readOnly}
               />
               {!erFørsterefusjon && !readOnly && (

@@ -1025,7 +1025,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsGrunnlag'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.SoningsGrunnlagDto'];
           };
         };
       };
@@ -1063,7 +1063,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonGrunnlag'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.HelseinstitusjonGrunnlagDto'];
           };
         };
       };
@@ -7011,6 +7011,67 @@ export interface components {
       /** Format: uuid */
       dialogmeldingPurringUUID: string;
     };
+    'no.nav.aap.behandlingsflyt.behandling.etannetsted.HelseinstitusjonGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      opphold: components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.InstitusjonsoppholdDto'][];
+      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.HelseoppholdDto'][];
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.etannetsted.HelseinstitusjonVurderingDto': {
+      begrunnelse: string;
+      faarFriKostOgLosji: boolean;
+      forsoergerEktefelle?: boolean | null;
+      harFasteUtgifter?: boolean | null;
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.etannetsted.HelseoppholdDto': {
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string} */
+      status: 'AVSLÅTT' | 'GODKJENT' | 'UAVKLART';
+      vurderinger?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.HelseinstitusjonVurderingDto'][]
+        | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.etannetsted.InstitusjonsoppholdDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      avsluttetDato?: string | null;
+      institusjonstype: string;
+      kildeinstitusjon: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      oppholdFra: string;
+      oppholdstype: string;
+      status: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.etannetsted.SoningsGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      soningsforhold: components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.InstitusjonsoppholdDto'][];
+      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.SoningsforholdDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.etannetsted.SoningsforholdDto': {
+      /** @enum {string} */
+      status: 'AVSLÅTT' | 'GODKJENT' | 'UAVKLART';
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.SoningsvurderingDto'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vurderingsdato: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.etannetsted.SoningsvurderingDto': {
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fraDato: string;
+      'skalOpph\u00F8re': boolean;
+    };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.medlemskap.MedlemskapGrunnlagDto': {
       medlemskap: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.MedlemskapUnntakGrunnlag'];
     };
@@ -8547,27 +8608,6 @@ export interface components {
       skalVurdereAapIOvergangTilArbeid?: boolean | null;
       'skalVurdereAapIOvergangTilUf\u00F8re'?: boolean | null;
     };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.HelseinstitusjonVurdering': {
-      begrunnelse: string;
-      faarFriKostOgLosji: boolean;
-      forsoergerEktefelle?: boolean | null;
-      harFasteUtgifter?: boolean | null;
-      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.Soningsvurdering': {
-      begrunnelse: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fraDato: string;
-      'skalOpph\u00F8re': boolean;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonGrunnlag': {
-      'harTilgangTil\u00C5Saksbehandle': boolean;
-      opphold: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.InstitusjonsoppholdDto'][];
-      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.Helseopphold'][];
-    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonVurderingDto': {
       begrunnelse: string;
       faarFriKostOgLosji: boolean;
@@ -8577,45 +8617,6 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonVurderingerDto': {
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonVurderingDto'][];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.Helseopphold': {
-      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      /** @enum {string} */
-      status: 'AVSLÅTT' | 'GODKJENT' | 'UAVKLART';
-      vurderinger?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.HelseinstitusjonVurdering'][]
-        | null;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.InstitusjonsoppholdDto': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      avsluttetDato?: string | null;
-      institusjonstype: string;
-      kildeinstitusjon: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      oppholdFra: string;
-      oppholdstype: string;
-      status: string;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsGrunnlag': {
-      'harTilgangTil\u00C5Saksbehandle': boolean;
-      soningsforhold: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.InstitusjonsoppholdDto'][];
-      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.Soningsforhold'][];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.Soningsforhold': {
-      /** @enum {string} */
-      status: 'AVSLÅTT' | 'GODKJENT' | 'UAVKLART';
-      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.Soningsvurdering'];
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      vurderingsdato: string;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsvurderingDto': {
       begrunnelse: string;

@@ -5,7 +5,6 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 
 interface Props {
   behandlingsReferanse: string;
-  readOnly: boolean;
 }
 
 export const TilkjentMedDatafetching = async ({ behandlingsReferanse }: Props) => {
