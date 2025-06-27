@@ -134,7 +134,7 @@ export const BarnetilleggVurdering = ({
           <div className={'flex-column'}>
             <div>
               <BodyShort size={'small'} weight={'semibold'}>
-                Følgende barn er oppgitt av bruker og må vurderes
+                Følgende barn er oppgitt av brukeren og må vurderes
               </BodyShort>
             </div>
 

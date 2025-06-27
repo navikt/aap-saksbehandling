@@ -235,7 +235,7 @@ export function mapUtfallTilTekst(utfall: VilkårUtfall): string {
 export function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak | null | undefined): string | undefined | null {
   switch (årsak) {
     case 'BRUKER_UNDER_18':
-      return 'Bruker under 18 år';
+      return 'brukeren under 18 år';
     case 'BRUKER_OVER_67':
       return 'Brukeren over 67 år';
     case 'MANGLENDE_DOKUMENTASJON':

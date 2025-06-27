@@ -105,7 +105,7 @@ describe('SaksinfoBanner på behandling siden', () => {
     expect(screen.getByText('12345678910')).toBeVisible();
   });
 
-  it('skal vise saksnummer derosm bruker er på behandlingsiden', () => {
+  it('skal vise saksnummer derosm brukeren er på behandlingsiden', () => {
     render(
       <SaksinfoBanner
         personInformasjon={personInformasjon}

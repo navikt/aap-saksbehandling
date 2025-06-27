@@ -25,7 +25,7 @@ describe('Header', () => {
     expect(screen.getByText('Kelvin')).toBeVisible();
   });
 
-  it('skal vise navnet på bruker i header', async () => {
+  it('skal vise navnet på brukeren i header', async () => {
     mockFetchConfig();
 
     render(<KelvinAppHeader brukerInformasjon={brukerInformasjon} />);
