@@ -8279,9 +8279,13 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Avsl\u00E5tt': {
       /** @enum {string} */
+      type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG';
+      /** @enum {string} */
       '\u00E5rsak': 'IKKE_OVERHOLDT_FORMKRAV' | 'IKKE_OVERHOLDT_FRIST';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.DelvisOmgj\u00F8res': {
+      /** @enum {string} */
+      type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG';
       'vilk\u00E5rSomSkalOmgj\u00F8res': (
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
@@ -8356,6 +8360,8 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Opprettholdes']
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Ufullstendig'];
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Omgj\u00F8res': {
+      /** @enum {string} */
+      type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG';
       'vilk\u00E5rSomSkalOmgj\u00F8res': (
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
@@ -8391,6 +8397,8 @@ export interface components {
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Opprettholdes': {
+      /** @enum {string} */
+      type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG';
       'vilk\u00E5rSomSkalOpprettholdes': (
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
@@ -8426,6 +8434,8 @@ export interface components {
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Ufullstendig': {
+      /** @enum {string} */
+      type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG';
       /** @enum {string} */
       '\u00E5rsak': 'MANGLER_VURDERING' | 'INKONSISTENT_FORMKRAV_VURDERING' | 'VENTER_PÅ_SVAR_FRA_BRUKER';
     };

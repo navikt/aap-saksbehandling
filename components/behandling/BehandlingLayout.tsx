@@ -14,6 +14,7 @@ import {
   hentBehandling,
   hentFlyt,
   hentKabalKlageresultat,
+  hentKlageresultat,
   hentSak,
   hentSakPersoninfo,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
@@ -47,19 +48,21 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsReferanse);
 
-  const [personInfo, brukerInformasjon, flytResponse, sak, roller, kabalKlageResultat] = await Promise.all([
-    hentSakPersoninfo(saksId),
-    hentBrukerInformasjon(),
-    hentFlyt(behandlingsReferanse),
-    hentSak(saksId),
-    hentRollerForBruker(),
-    hentKabalKlageresultat(behandlingsReferanse),
-  ]);
+  const [personInfo, brukerInformasjon, flytResponse, sak, roller, kabalKlageResultat, klageresultat] =
+    await Promise.all([
+      hentSakPersoninfo(saksId),
+      hentBrukerInformasjon(),
+      hentFlyt(behandlingsReferanse),
+      hentSak(saksId),
+      hentRollerForBruker(),
+      hentKabalKlageresultat(behandlingsReferanse),
+      hentKlageresultat(behandlingsReferanse),
+    ]);
 
-  if (isError(flytResponse)) {
+  if (isError(flytResponse) || isError(klageresultat)) {
     return (
       <VStack padding={'4'}>
-        <ApiException apiResponses={[flytResponse]} />
+        <ApiException apiResponses={[flytResponse, klageresultat]} />
       </VStack>
     );
   }
@@ -126,8 +129,8 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
               {/*Vi må ha children inne i en div for å unngå layoutshift*/}
               <div style={{ width: '100%' }}>{children}</div>
               <aside className={`flex-column`}>
-                <Behandlingsinfo behandling={behandling.data} sak={sak} />
-                <KlageBehandlingInfo kabalKlageResultat={kabalKlageResultat} />
+                <Behandlingsinfo behandling={behandling.data} sak={sak} klageresultat={klageresultat.data} />
+                <KlageBehandlingInfo kabalKlageResultat={kabalKlageResultat} klageresultat={klageresultat.data} />
                 <Saksbehandlingsoversikt />
                 {visTotrinnsvurdering && (
                   <ToTrinnsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} />

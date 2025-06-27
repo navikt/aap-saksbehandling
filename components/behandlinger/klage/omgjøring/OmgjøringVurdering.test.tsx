@@ -7,6 +7,7 @@ describe('Klage - omgjøring', () => {
     render(
       <OmgjøringVurdering
         klageresultat={{
+          type: 'OMGJØRES',
           vilkårSomSkalOmgjøres: ['FOLKETRYGDLOVEN_11_5'],
         }}
         sak={{
@@ -39,6 +40,7 @@ describe('Klage - omgjøring', () => {
     render(
       <OmgjøringVurdering
         klageresultat={{
+          type: 'OMGJØRES',
           vilkårSomSkalOmgjøres: ['FOLKETRYGDLOVEN_11_5'],
         }}
         sak={{
