@@ -7052,6 +7052,7 @@ export interface components {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       soningsforhold: components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.InstitusjonsoppholdDto'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.SoningsforholdDto'][];
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.etannetsted.SoningsforholdDto': {
       /** @enum {string} */
@@ -8426,11 +8427,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Ufullstendig': {
       /** @enum {string} */
-      '\u00E5rsak':
-        | 'MANGLER_VURDERING'
-        | 'INKONSISTENT_KLAGE_VURDERING'
-        | 'INKONSISTENT_FORMKRAV_VURDERING'
-        | 'VENTER_PÅ_SVAR_FRA_BRUKER';
+      '\u00E5rsak': 'MANGLER_VURDERING' | 'INKONSISTENT_FORMKRAV_VURDERING' | 'VENTER_PÅ_SVAR_FRA_BRUKER';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.LovvalgVedS\u00F8knadsTidspunktDto': {
       begrunnelse: string;
