@@ -25,6 +25,7 @@ import {
   FritakMeldepliktGrunnlag,
   FullmektigGrunnlag,
   HelseinstitusjonGrunnlag,
+  KabalKlageResultat,
   KlagebehandlingKontorGrunnlag,
   KlagebehandlingNayGrunnlag,
   Klageresultat,
@@ -308,6 +309,17 @@ export const hentKlagebehandlingNayGrunnlag = async (behandlingsReferanse: strin
 export const hentKlageresultat = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/resultat`;
   return await apiFetch<Klageresultat>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentKabalKlageresultat = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/kabal-resultat`;
+  const res = await apiFetch<KabalKlageResultat>(url, saksbehandlingApiScope, 'GET');
+  if (isError(res)) {
+    logError(`Kunne ikke hente kabal-resultat for behandling ${behandlingsReferanse}`, res.apiException);
+    return;
+  } else {
+    return res.data;
+  }
 };
 
 export const hentEffektuerAvvistPåFormkravGrunnlag = async (behandlingsReferanse: string) => {
