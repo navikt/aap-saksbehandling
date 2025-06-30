@@ -51,7 +51,9 @@ describe('yrkesskade visning', () => {
 
   it('viser detaljer for beregningen', () => {
     render(<YrkesskadeVisning grunnlag={grunnlag} gjeldendeGrunnbeløp={gjeldendeGrunnbeløp} />);
-    expect(screen.getByRole('button', { name: 'Se detaljer om beregningen for bruker med yrkesskade' })).toBeVisible();
+    expect(
+      screen.getByRole('button', { name: 'Se detaljer om beregningen for brukeren med yrkesskade' })
+    ).toBeVisible();
     expect(screen.getByText(/^Der yrkesskade er medvirkende årsak til redusert/));
   });
 

@@ -20,7 +20,7 @@ const behovskodeMap = {
   '5015': '§ 11-17 AAP som arbeidssøker',
   '5016': 'Forhåndsvarsel aktivitetsplikt',
   '5017': 'Lovvalg og medlemskap',
-  '5018': 'Venter på uttalelse fra bruker på forhåndsvarsel',
+  '5018': 'Venter på uttalelse fra brukeren på forhåndsvarsel',
   '5019': 'Venter på utenlandsoverføring',
   '5020': '§ 11-2 Forutgående medlemskap',
   '5021': 'Overstyr lovvalg og medlemskap',
@@ -47,7 +47,7 @@ const behovskodeMap = {
   '6004': 'Effektuer avvist på formkrav',
   '6005': 'Skriv forhåndsvarsel klage',
   '6006': 'Oppsummering klagebehandlingen',
-  '6007': 'Venter på uttalelse fra bruker på klage forhåndsvarsel',
+  '6007': 'Venter på uttalelse fra brukeren på klage forhåndsvarsel',
   '6008': 'Håndter svar fra Kabal',
   '6009': 'Fastsett fullmektig/verge',
   '6010': 'Vurder trekk av klage',
@@ -80,7 +80,7 @@ export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker): string {
     case 'VENTER_PÅ_VURDERING_AV_ROL':
       return 'Venter på vurdering fra rådgivende overlege';
     case 'VENTER_PÅ_SVAR_FRA_BRUKER':
-      return 'Venter på svar fra bruker';
+      return 'Venter på svar fra brukeren';
     case 'VENTER_PÅ_MASKINELL_AVKLARING':
       return 'Venter på maskinell avklaring';
     case 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING':
@@ -235,9 +235,9 @@ export function mapUtfallTilTekst(utfall: VilkårUtfall): string {
 export function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak | null | undefined): string | undefined | null {
   switch (årsak) {
     case 'BRUKER_UNDER_18':
-      return 'Bruker under 18 år';
+      return 'brukeren under 18 år';
     case 'BRUKER_OVER_67':
-      return 'Bruker over 67 år';
+      return 'Brukeren over 67 år';
     case 'MANGLENDE_DOKUMENTASJON':
       return 'Manglende dokumentasjon';
     case 'IKKE_SYKDOM_AV_VISS_VARIGHET':

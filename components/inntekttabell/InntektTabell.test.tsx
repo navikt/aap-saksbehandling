@@ -21,10 +21,10 @@ describe('tabell for å vise inntekter', () => {
     expect(screen.getByText(/^Inntekter er hentet fra skatteetaten/)).toBeInTheDocument();
   });
 
-  it('har en tekst som informerer om når bruker fikk nedsatt arbeidsevne', () => {
+  it('har en tekst som informerer om når brukeren fikk nedsatt arbeidsevne', () => {
     const yrkesevneNedsattÅr = '2016';
     render(<InntektTabell inntekter={inntekter} gjennomsnittSiste3år={6} yrkesevneNedsattÅr={yrkesevneNedsattÅr} />);
-    expect(screen.getByText(`Bruker fikk arbeidsevnen nedsatt i ${yrkesevneNedsattÅr}`));
+    expect(screen.getByText(`Brukeren fikk arbeidsevnen nedsatt i ${yrkesevneNedsattÅr}`));
   });
 
   it('skal ha en kolonne som heter Periode', () => {

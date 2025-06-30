@@ -64,7 +64,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
         type: 'radio',
         label: 'Har brukeren fem års forutgående medlemskap i folketrygden jamfør § 11-2?',
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må velge om bruker har fem års forutgående medlemskap' },
+        rules: { required: 'Du må velge om brukeren har fem års forutgående medlemskap' },
         defaultValue: mapGrunnlagTilForutgående(grunnlag?.vurdering?.harForutgåendeMedlemskap),
       },
       unntaksvilkår: {
@@ -83,7 +83,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
           },
           { value: 'Nei', label: 'Nei' },
         ],
-        rules: { required: 'Du må svare på om bruker oppfyller noen av unntaksvilkårene' },
+        rules: { required: 'Du må svare på om brukeren oppfyller noen av unntaksvilkårene' },
         defaultValue: mapGrunnlagTilUnntaksvilkår(
           grunnlag?.vurdering?.harForutgåendeMedlemskap,
           grunnlag?.vurdering?.varMedlemMedNedsattArbeidsevne,

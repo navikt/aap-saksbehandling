@@ -60,7 +60,10 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
         rules: { required: 'Du må svare på om fristen er overholdt' },
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.likevelBehandles),
         options: [
-          { label: 'Ja, det er særlig grunner, eller bruker kan ikke klandres for forsinkelsen', value: JaEllerNei.Ja },
+          {
+            label: 'Ja, det er særlig grunner, eller brukeren kan ikke klandres for forsinkelsen',
+            value: JaEllerNei.Ja,
+          },
           { label: 'Nei', value: JaEllerNei.Nei },
         ],
       },
