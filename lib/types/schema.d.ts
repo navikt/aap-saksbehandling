@@ -8259,11 +8259,6 @@ export interface components {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.flate.BehandlingMedVedtakDto'][];
       gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.flate.P\u00E5klagetBehandlingVurderingDto'];
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      kravMottatt?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.flate.P\u00E5klagetBehandlingVurderingDto': {
       /** Format: uuid */
@@ -9072,6 +9067,8 @@ export interface components {
       skalForberede: boolean;
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'IVERKSETTES' | 'AVSLUTTET';
+      /** Format: uuid */
+      'tilh\u00F8rendeKlagebehandling'?: string | null;
       /** @enum {string} */
       type: 'Førstegangsbehandling' | 'Revurdering' | 'Tilbakekreving' | 'Klage' | 'SvarFraAndreinstans';
       /**

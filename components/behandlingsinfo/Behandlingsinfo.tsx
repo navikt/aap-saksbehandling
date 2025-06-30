@@ -6,6 +6,7 @@ import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatu
 import styles from './Behandlingsinfo.module.css';
 import { formaterKlageresultat } from 'lib/utils/klageresultat';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
+import Link from 'next/link';
 
 interface Props {
   behandling: DetaljertBehandling;
@@ -18,6 +19,7 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
   const erFørstegangsbehandlingEllerRevurdering =
     behandling.type === 'Førstegangsbehandling' || behandling.type === 'Revurdering';
   const erKlagebehandling = behandling.type === 'Klage';
+  const erSvarFraKabal = behandling.type === 'SvarFraAndreinstans';
 
   return (
     <Box
@@ -56,6 +58,15 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
               </BodyShort>
             </>
           )}
+          {erSvarFraKabal && behandling.tilhørendeKlagebehandling && (
+            <>
+              <BodyShort size={'small'}>
+                <Link href={`/saksbehandling/sak/${sak.saksnummer}/${behandling.tilhørendeKlagebehandling}`}>
+                  Tilhørende klagebehandling
+                </Link>
+              </BodyShort>
+            </>
+          )}
           {erKlagebehandling && (
             <>
               {behandling.kravMottatt && (
@@ -63,7 +74,7 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
                   <Label as="p" size={'small'}>
                     Krav mottatt:
                   </Label>
-                  <BodyShort size={'small'}>{formaterDatoForFrontend(behandling.kravMottatt)}</BodyShort>
+                  <BodyShort>{formaterDatoForFrontend(behandling.kravMottatt)}</BodyShort>
                 </>
               )}
               <Label as="p" size={'small'}>
