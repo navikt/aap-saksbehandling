@@ -9058,6 +9058,11 @@ export interface components {
         | 'UDEFINERT';
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
       /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      kravMottatt?: string | null;
+      /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
        */
