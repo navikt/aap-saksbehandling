@@ -1,9 +1,9 @@
-'use server'
+'use server';
 
 import { cookies } from 'next/headers';
 import { evaluateFlags, flagsClient, getDefinitions } from '@unleash/nextjs';
 import { FeatureToggle } from './featureToggle';
-import { logError } from '../../serverutlis/logger';
+import { logError } from 'lib/serverutlis/logger';
 
 export const erFeatureAktivert = async (toggleNavn: FeatureToggle) => {
   try {
@@ -13,17 +13,17 @@ export const erFeatureAktivert = async (toggleNavn: FeatureToggle) => {
     const definisjoner = await getDefinitions({
       fetchOptions: {
         next: { revalidate: 15 },
-      }
+      },
     });
 
     const { toggles } = evaluateFlags(definisjoner, {
-      sessionId
+      sessionId,
     });
 
     const flagg = flagsClient(toggles);
     return flagg.isEnabled(toggleNavn);
   } catch (error) {
-    logError(`/lip/services/unleash`, error);
+    logError(`/lib/services/unleash`, error);
     return false;
   }
 };

@@ -19,7 +19,7 @@ import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
 import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
 import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { isSuccess } from 'lib/utils/api';
-import { isProd } from '../../../../lib/utils/environment';
+import { isProd } from 'lib/utils/environment';
 
 export const SkriveBrev = ({
   referanse,
@@ -30,7 +30,7 @@ export const SkriveBrev = ({
   grunnlag,
   signaturer,
   status,
-  readOnly
+  readOnly,
 }: {
   referanse: string;
   behovstype: Behovstype;
