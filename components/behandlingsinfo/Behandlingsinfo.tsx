@@ -5,6 +5,7 @@ import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatu
 
 import styles from './Behandlingsinfo.module.css';
 import { formaterKlageresultat } from 'lib/utils/klageresultat';
+import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 
 interface Props {
   behandling: DetaljertBehandling;
@@ -29,7 +30,7 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
       <VStack gap={'4'}>
         <HStack gap={'2'} align={'center'}>
           <Label as="p" size="medium">
-            {behandling.type}
+            {mapTypeBehandlingTilTekst(behandling.type)}
           </Label>
           <Behandlingsstatus status={behandling.status} />
         </HStack>

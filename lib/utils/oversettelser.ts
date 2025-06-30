@@ -1,4 +1,4 @@
-import { AvslagÅrsak, SettPåVentÅrsaker, VilkårUtfall } from 'lib/types/types';
+import { AvslagÅrsak, SettPåVentÅrsaker, TypeBehandling, VilkårUtfall } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype, OppgaveStatus } from 'lib/types/oppgaveTypes';
 
@@ -244,5 +244,22 @@ export function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak | null | undefined)
       return 'Ikke sykdom av viss varighet';
     default:
       return årsak;
+  }
+}
+
+export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
+  switch (typeBehandling) {
+    case 'Førstegangsbehandling':
+      return 'Førstegangsbehandling';
+    case 'Klage':
+      return 'Klage';
+    case 'Revurdering':
+      return 'Revurdering';
+    case 'Tilbakekreving':
+      return 'Tilbakekreving';
+    case 'SvarFraAndreinstans':
+      return 'Svar fra Nav Klageinstans';
+    default:
+      return typeBehandling;
   }
 }
