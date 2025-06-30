@@ -119,17 +119,7 @@ export const SkriveBrev = ({
       </div>
 
       <VStack gap={'4'}>
-        {isProd() ? (
-          <Brevbygger
-            brevmal={brev}
-            mottaker={mottaker}
-            saksnummer={saksnummer}
-            onBrevChange={onChange}
-            logo={NavLogo}
-            signatur={signaturer}
-            readOnly={readOnly}
-          />
-        ) : (
+        {!isProd() ? (
           <BrevbyggerBeta
             brevmal={brev}
             mottaker={mottaker}
@@ -138,6 +128,16 @@ export const SkriveBrev = ({
             logo={NavLogo}
             signatur={signaturer}
             readonly={readOnly}
+          />
+        ) : (
+          <Brevbygger
+            brevmal={brev}
+            mottaker={mottaker}
+            saksnummer={saksnummer}
+            onBrevChange={onChange}
+            logo={NavLogo}
+            signatur={signaturer}
+            readOnly={readOnly}
           />
         )}
         {!readOnly && (
