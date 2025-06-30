@@ -2442,44 +2442,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/klage/{referanse}/grunnlag/effektuer-avvist-p\u00E5-formkrav': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description referanse */
-          referanse: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistp\u00E5formkrav.EffektuerAvvistP\u00E5FormkravGrunnlagDto'];
-          };
-        };
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/svar-fra-andreinstans/{referanse}/grunnlag/svar-fra-andreinstans': {
     parameters: {
       query?: never;
@@ -3570,7 +3532,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -3630,7 +3591,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -3687,7 +3647,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -3744,7 +3703,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -3801,7 +3759,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -3858,7 +3815,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -3915,7 +3871,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -3972,7 +3927,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4029,7 +3983,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4086,7 +4039,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4143,7 +4095,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4200,7 +4151,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4257,7 +4207,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4314,7 +4263,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4371,7 +4319,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4428,7 +4375,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4485,7 +4431,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4515,7 +4460,6 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.BekreftTotalvurderingKlageL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.BrevbestillingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Effektuer11_7L\u00F8sning']
-      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.EffektuerAvvistP\u00E5FormkravL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettArbeidsevneL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettBehandlendeEnhetL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettBeregningstidspunktL\u00F8sning']
@@ -4592,7 +4536,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4648,7 +4591,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4706,7 +4648,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4714,63 +4655,6 @@ export interface components {
         | '6009'
         | '6010'
         | '7001';
-    };
-    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.EffektuerAvvistP\u00E5FormkravL\u00F8sning': {
-      /** @enum {string} */
-      behovstype:
-        | '9001'
-        | '9002'
-        | '9003'
-        | '9004'
-        | '5029'
-        | '5001'
-        | '5003'
-        | '5004'
-        | '5005'
-        | '5006'
-        | '5007'
-        | '5008'
-        | '5009'
-        | '5010'
-        | '5011'
-        | '5012'
-        | '5013'
-        | '5014'
-        | '5015'
-        | '5016'
-        | '5017'
-        | '5018'
-        | '5020'
-        | '5024'
-        | '5097'
-        | '5098'
-        | '5099'
-        | '5021'
-        | '5022'
-        | '5023'
-        | '5025'
-        | '5027'
-        | '5028'
-        | '5019'
-        | '5050'
-        | '5051'
-        | '5052'
-        | '5026'
-        | '5999'
-        | '5056'
-        | '6000'
-        | '6001'
-        | '6002'
-        | '6003'
-        | '6004'
-        | '6005'
-        | '6006'
-        | '6007'
-        | '6008'
-        | '6009'
-        | '6010'
-        | '7001';
-      'effektuerAvvistP\u00E5FormkravVurdering': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.effektueravvistp\u00E5formkrav.flate.EffektuerAvvistP\u00E5FormkravL\u00F8sningDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettArbeidsevneL\u00F8sning': {
       arbeidsevneVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.FastsettArbeidsevneDto'][];
@@ -4820,7 +4704,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4877,7 +4760,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4933,7 +4815,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -4990,7 +4871,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5047,7 +4927,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5104,7 +4983,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5161,7 +5039,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5218,7 +5095,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5274,7 +5150,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5285,7 +5160,6 @@ export interface components {
       fritaksvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritaksvurderingDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FullmektigL\u00F8sningDto': {
-      fullmektigIdent?: string | null;
       fullmektigIdentMedType?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.IdentMedType'];
       fullmektigNavnOgAdresse?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.NavnOgAdresse'];
       harFullmektig: boolean;
@@ -5337,7 +5211,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5432,7 +5305,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5489,7 +5361,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5545,7 +5416,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5602,7 +5472,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5658,7 +5527,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5714,7 +5582,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5774,7 +5641,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5834,7 +5700,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5894,7 +5759,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -5954,7 +5818,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -6011,7 +5874,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -6069,7 +5931,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -6125,7 +5986,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -6181,7 +6041,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -6237,7 +6096,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -6293,7 +6151,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -6350,7 +6207,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -6407,7 +6263,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -6464,7 +6319,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -6847,7 +6701,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -7209,26 +7062,6 @@ export interface components {
        * @example 2025-04-01
        */
       ytelseIverksattTom?: string | null;
-    };
-    'no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistp\u00E5formkrav.EffektuerAvvistP\u00E5FormkravGrunnlagDto': {
-      'harTilgangTil\u00C5Saksbehandle': boolean;
-      varsel?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistp\u00E5formkrav.EffektuerAvvistP\u00E5FormkravVarselDto'];
-      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistp\u00E5formkrav.EffektuerAvvistP\u00E5FormkravVurderingDto'];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistp\u00E5formkrav.EffektuerAvvistP\u00E5FormkravVarselDto': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      brevFerdigstilt?: string | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      frist?: string | null;
-    };
-    'no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistp\u00E5formkrav.EffektuerAvvistP\u00E5FormkravVurderingDto': {
-      skalEndeligAvvises: boolean;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigGrunnlagDto': {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigVurderingDto'];
@@ -7863,10 +7696,17 @@ export interface components {
       skalBehandlesAvNay: boolean;
       vurdertAv: string;
     };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.effektueravvistp\u00E5formkrav.flate.EffektuerAvvistP\u00E5FormkravL\u00F8sningDto': {
-      skalEndeligAvvises: boolean;
-    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.formkrav.flate.FormkravGrunnlagDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      varselSendtDato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      varselSvarfrist?: string | null;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.formkrav.flate.FormkravVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.formkrav.flate.FormkravVurderingDto': {
@@ -8445,7 +8285,7 @@ export interface components {
       /** @enum {string} */
       type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG' | 'TRUKKET';
       /** @enum {string} */
-      '\u00E5rsak': 'MANGLER_VURDERING' | 'INKONSISTENT_FORMKRAV_VURDERING' | 'VENTER_PÅ_SVAR_FRA_BRUKER';
+      '\u00E5rsak': 'MANGLER_VURDERING' | 'VENTER_PÅ_SVAR_FRA_BRUKER';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.LovvalgVedS\u00F8knadsTidspunktDto': {
       begrunnelse: string;
@@ -8842,7 +8682,6 @@ export interface components {
         | 'OMGJØRING'
         | 'TREKK_KLAGE'
         | 'OPPRETTHOLDELSE'
-        | 'KLAGE_AVVIST_PÅ_FORMKRAV'
         | 'SVAR_FRA_ANDREINSTANS'
         | 'IVERKSETT_KONSEKVENS';
       /** @enum {string} */
@@ -8895,7 +8734,6 @@ export interface components {
         | 'OMGJØRING'
         | 'TREKK_KLAGE'
         | 'OPPRETTHOLDELSE'
-        | 'EFFEKTUER_AVVIST_PÅ_FORMKRAV'
         | 'SVAR_FRA_ANDREINSTANS'
         | 'IVERKSETT_KONSEKVENS'
         | 'UDEFINERT';
@@ -8935,7 +8773,6 @@ export interface components {
         | 'OMGJØRING'
         | 'TREKK_KLAGE'
         | 'OPPRETTHOLDELSE'
-        | 'KLAGE_AVVIST_PÅ_FORMKRAV'
         | 'SVAR_FRA_ANDREINSTANS'
         | 'IVERKSETT_KONSEKVENS'
         | null;
@@ -8989,7 +8826,6 @@ export interface components {
         | 'OMGJØRING'
         | 'TREKK_KLAGE'
         | 'OPPRETTHOLDELSE'
-        | 'EFFEKTUER_AVVIST_PÅ_FORMKRAV'
         | 'SVAR_FRA_ANDREINSTANS'
         | 'IVERKSETT_KONSEKVENS'
         | 'UDEFINERT'
@@ -9055,7 +8891,6 @@ export interface components {
         | 'OMGJØRING'
         | 'TREKK_KLAGE'
         | 'OPPRETTHOLDELSE'
-        | 'EFFEKTUER_AVVIST_PÅ_FORMKRAV'
         | 'SVAR_FRA_ANDREINSTANS'
         | 'IVERKSETT_KONSEKVENS'
         | 'UDEFINERT';
@@ -9145,7 +8980,6 @@ export interface components {
         | 'OMGJØRING'
         | 'TREKK_KLAGE'
         | 'OPPRETTHOLDELSE'
-        | 'KLAGE_AVVIST_PÅ_FORMKRAV'
         | 'SVAR_FRA_ANDREINSTANS'
         | 'IVERKSETT_KONSEKVENS';
     };
@@ -9201,7 +9035,6 @@ export interface components {
         | 'OMGJØRING'
         | 'TREKK_KLAGE'
         | 'OPPRETTHOLDELSE'
-        | 'EFFEKTUER_AVVIST_PÅ_FORMKRAV'
         | 'SVAR_FRA_ANDREINSTANS'
         | 'IVERKSETT_KONSEKVENS'
         | 'UDEFINERT';
@@ -9370,7 +9203,6 @@ export interface components {
         | '6001'
         | '6002'
         | '6003'
-        | '6004'
         | '6005'
         | '6006'
         | '6007'
@@ -9439,7 +9271,6 @@ export interface components {
         | 'OMGJØRING'
         | 'TREKK_KLAGE'
         | 'OPPRETTHOLDELSE'
-        | 'EFFEKTUER_AVVIST_PÅ_FORMKRAV'
         | 'SVAR_FRA_ANDREINSTANS'
         | 'IVERKSETT_KONSEKVENS'
         | 'UDEFINERT';

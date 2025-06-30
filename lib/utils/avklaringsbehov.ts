@@ -43,7 +43,6 @@ export const oppgaveAvklaringsbehov = [
   { value: '6001', label: mapBehovskodeTilBehovstype('6001') },
   { value: '6002', label: mapBehovskodeTilBehovstype('6002') },
   { value: '6003', label: mapBehovskodeTilBehovstype('6003') },
-  { value: '6004', label: mapBehovskodeTilBehovstype('6004') },
   { value: '6005', label: mapBehovskodeTilBehovstype('6005') },
   { value: '6006', label: mapBehovskodeTilBehovstype('6006') },
   { value: '6007', label: mapBehovskodeTilBehovstype('6007') },

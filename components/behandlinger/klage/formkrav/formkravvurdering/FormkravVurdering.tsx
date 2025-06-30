@@ -4,10 +4,11 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent } from 'react';
 import { FormField } from 'components/form/FormField';
 import { FormkravGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { FormkravAvvisningVarsel } from 'components/behandlinger/klage/formkrav/formkravvurdering/FormkravAvvisningVarsel';
 
 interface Props {
   grunnlag?: FormkravGrunnlag;
@@ -82,16 +83,14 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
         defaultValue: grunnlag?.vurdering?.begrunnelse,
       },
     },
-    { readOnly }
+    { readOnly, shouldUnregister: true }
   );
 
-  const fristErIkkeOverholdt = form.watch('erFristOverholdt') === JaEllerNei.Nei;
-
-  useEffect(() => {
-    if (!fristErIkkeOverholdt) {
-      form.setValue('likevelBehandles', undefined);
-    }
-  }, [form, fristErIkkeOverholdt]);
+  const { erKonkret, erSignert, erBrukerPart, erFristOverholdt, likevelBehandles } = form.watch();
+  const avvistGrunnetFrist = erFristOverholdt === JaEllerNei.Nei && likevelBehandles === JaEllerNei.Nei;
+  const formkravErIkkeOppfylltVarsel =
+    !avvistGrunnetFrist &&
+    (erBrukerPart === JaEllerNei.Nei || erKonkret === JaEllerNei.Nei || erSignert === JaEllerNei.Nei);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -127,9 +126,12 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erBrukerPart} horizontalRadio />
       <FormField form={form} formField={formFields.erFristOverholdt} horizontalRadio />
-      {fristErIkkeOverholdt && <FormField form={form} formField={formFields.likevelBehandles} />}
+      {erFristOverholdt === JaEllerNei.Nei && <FormField form={form} formField={formFields.likevelBehandles} />}
       <FormField form={form} formField={formFields.erKonkret} horizontalRadio />
       <FormField form={form} formField={formFields.erSignert} horizontalRadio />
+      {grunnlag?.varselSvarfrist != null && !readOnly && formkravErIkkeOppfylltVarsel && (
+        <FormkravAvvisningVarsel frist={new Date(grunnlag.varselSvarfrist)} />
+      )}
     </VilkårsKortMedForm>
   );
 };

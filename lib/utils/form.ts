@@ -36,7 +36,6 @@ export enum Behovstype {
   FASTSETT_BEHANDLENDE_ENHET = '6001',
   VURDER_KLAGE_KONTOR = '6002',
   VURDER_KLAGE_NAY = '6003',
-  EFFEKTUER_AVVIST_PÅ_FORMKRAV_KODE = '6004',
   SKRIV_FORHÅNDSVARSEL_KLAGE_FORMKRAV_BREV_KODE = '6005',
   KLAGE_OPPSUMMERING = '6006',
   HÅNDTER_SVAR_FRA_ANDREINSTANS = '6008',
@@ -120,8 +119,6 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Vurder klage';
     case '6003':
       return 'Behandle klage';
-    case '6004':
-      return 'Effektuer avvist på formkrav';
     case '6005':
       return 'Skriv forhåndsvarsel klage';
     case '6006':
