@@ -5286,6 +5286,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FullmektigL\u00F8sningDto': {
       fullmektigIdent?: string | null;
+      fullmektigIdentMedType?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.IdentMedType'];
       fullmektigNavnOgAdresse?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.NavnOgAdresse'];
       harFullmektig: boolean;
     };
@@ -7234,6 +7235,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigVurderingDto': {
       fullmektigIdent?: string | null;
+      fullmektigIdentMedType?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.IdentMedType'];
       fullmektigNavnOgAdresse?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.NavnOgAdresse'];
       harFullmektig: boolean;
       /**
@@ -7891,6 +7893,11 @@ export interface components {
       landkode: string;
       postnummer?: string | null;
       poststed?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.IdentMedType': {
+      ident: string;
+      /** @enum {string} */
+      type: 'ORGNR' | 'UTL_ORGNR' | 'FNR_DNR';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.NavnOgAdresse': {
       adresse: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.Adresse'];
@@ -9937,7 +9944,16 @@ export interface components {
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string|null} */
-      resultat?: 'INNVILGET' | 'AVSLAG' | 'TRUKKET' | null;
+      resultat?:
+        | 'INNVILGET'
+        | 'AVSLAG'
+        | 'TRUKKET'
+        | 'KLAGE_OPPRETTHOLDES'
+        | 'KLAGE_OMGJØRES'
+        | 'KLAGE_DELVIS_OMGJØRES'
+        | 'KLAGE_AVSLÅTT'
+        | 'KLAGE_TRUKKET'
+        | null;
       saksnummer: string;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.UtvidetSaksinfoDTO': {

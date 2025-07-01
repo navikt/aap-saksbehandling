@@ -19,7 +19,7 @@ interface Props {
 
 interface FormFields {
   harFullmektig: JaEllerNei;
-  idType: 'ident' | 'navnOgAdresse';
+  idType: 'navnOgAdresse' | 'fnr' | 'orgnr';
   fullmektigIdent: string;
   navn: string;
   adresselinje1: string;
@@ -58,7 +58,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       },
       fullmektigIdent: {
         type: 'text',
-        label: 'Org.nr/fnr for fullmektig/verge',
+        label: 'Org.nr/fnr',
         rules: { required: 'Du må skrive ident' },
         defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
       },
@@ -99,7 +99,9 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       land: {
         type: 'combobox',
         label: 'Land',
-        rules: { required: 'Du må velge land' },
+        rules: {
+          required: 'Du må velge land',
+        },
         options: landMedTrygdesamarbeidInklNorge,
         defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.landkode ?? undefined,
       },
@@ -117,7 +119,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       const idType = data.idType;
       const erNorskAdresse = erNorge(data.land);
       const navnOgAdresse =
-        harFullmektig && idType === 'navnOgAdresse'
+        harFullmektig && idType !== 'fnr'
           ? {
               navn: data.navn,
               adresse: {
@@ -133,13 +135,21 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
             }
           : undefined;
 
+      const identType = mapIdentType(data.idType, data.land);
+
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.FASTSETT_FULLMEKTIG,
           fullmektigVurdering: {
             harFullmektig: harFullmektig,
-            fullmektigIdent: harFullmektig && idType === 'ident' ? data.fullmektigIdent : undefined,
+            fullmektigIdentMedType:
+              harFullmektig && identType
+                ? {
+                    ident: data.fullmektigIdent,
+                    type: identType,
+                  }
+                : undefined,
             fullmektigNavnOgAdresse: navnOgAdresse,
           },
         },
@@ -161,8 +171,10 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
     >
       <FormField form={form} formField={formFields.harFullmektig} horizontalRadio />
       {harFullmektig && <FormField form={form} formField={formFields.idType} horizontalRadio />}
-      {harFullmektig && idType === 'ident' && <FormField form={form} formField={formFields.fullmektigIdent} />}
-      {harFullmektig && idType === 'navnOgAdresse' && (
+      {harFullmektig && idType && idType !== 'navnOgAdresse' && (
+        <FormField form={form} formField={formFields.fullmektigIdent} className={'ident_input'} />
+      )}
+      {harFullmektig && idType && idType !== 'fnr' && (
         <>
           <FormField form={form} formField={formFields.land} />
           <FormField form={form} formField={formFields.navn} />
@@ -182,10 +194,8 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
 
   function idTypeOptions(): ValuePair[] {
     return [
-      {
-        label: 'ID-nummer',
-        value: 'ident',
-      },
+      { label: 'Fnr', value: 'fnr' },
+      { label: 'Org.nr', value: 'orgnr' },
       { label: 'Navn og adresse', value: 'navnOgAdresse' },
     ];
   }
@@ -193,4 +203,17 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
   function erNorge(land: string): boolean {
     return land === 'NOR';
   }
+
+  function mapIdentType(idType: string, landkode?: string): IdentType | undefined {
+    switch (idType) {
+      case 'fnr':
+        return 'FNR_DNR';
+      case 'orgnr':
+        return landkode === 'NOR' ? 'ORGNR' : 'UTL_ORGNR';
+      default:
+        return undefined;
+    }
+  }
 };
+
+type IdentType = 'FNR_DNR' | 'ORGNR' | 'UTL_ORGNR';
