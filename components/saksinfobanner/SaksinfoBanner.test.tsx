@@ -218,6 +218,22 @@ describe('SaksinfoBanner på behandling siden', () => {
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
   });
+
+  it('menyvalg for å overstyre startstidspunkt vises ikke hvis behandling er iverksatt', async () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={{ ...behandling, status: 'IVERKSETTES' }}
+        referanse={'123456'}
+        typeBehandling="Førstegangsbehandling"
+        brukerKanSaksbehandle={true}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.queryByRole('button', { name: 'Overstyr starttidspunkt' })).not.toBeInTheDocument();
+  });
 });
 
 describe('Sak status', () => {
