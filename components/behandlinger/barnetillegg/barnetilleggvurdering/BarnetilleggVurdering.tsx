@@ -14,7 +14,7 @@ import { FormEvent } from 'react';
 
 import styles from './BarnetilleggVurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
-import {VilkårsKortMedForm} from "../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm";
+import { VilkårsKortMedForm } from '../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingsversjon: number;
@@ -157,7 +157,6 @@ export const BarnetilleggVurdering = ({
                   fødselsdato={vurdering.fødselsdato}
                   navn={behandlingPersonInfo?.info[vurdering.ident] || 'Ukjent'}
                   readOnly={readOnly}
-                  rettighetsPeriodeFom={grunnlag.søknadstidspunkt}
                 />
               );
             })}

@@ -147,7 +147,7 @@ describe('barnetillegg', () => {
 
 describe('Oppgitte barn', () => {
   const user = userEvent.setup();
-  it('skal vise feilmelding dersom oppgitt tidspunkt er før virkningstidspunkt', async () => {
+  it('skal vise feilmelding dersom oppgitt tidspunkt er før fødselsdato', async () => {
     render(
       <BarnetilleggVurdering
         behandlingsversjon={1}
@@ -166,9 +166,7 @@ describe('Oppgitte barn', () => {
     await klikkPåBekreft();
     const fødselsdato = grunnlag.barnSomTrengerVurdering[0].fødselsdato;
 
-    const feilmelding = screen.getByText(
-      `Dato kan ikke være før virkningstidspunktet (${grunnlag.søknadstidspunkt}) eller fødselsdato (${fødselsdato})`
-    );
+    const feilmelding = screen.getByText(`Dato kan ikke være før fødselsdato (${fødselsdato})`);
     expect(feilmelding).toBeVisible();
   });
 
