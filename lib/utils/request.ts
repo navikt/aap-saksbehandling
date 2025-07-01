@@ -56,6 +56,7 @@ export type StatistikkQueryParamsOutput = {
 };
 export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryParamsOutput {
   const params = req.nextUrl.searchParams;
+  const antallDager = params.get('antallDager');
   const enhet = params.get('enhet') as FilterTidsEnhet;
   const antallBøtter = params.get('antallBøtter');
   const bøtteStørrelse = params.get('bøtteStørrelse');
@@ -67,6 +68,7 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
     ...(bøtteStørrelse ? { bøtteStørrelse: parseInt(bøtteStørrelse) } : {}),
     behandlingstyper,
     enheter,
+    antallDager: parseInt(antallDager ?? '0'),
   };
 }
 
