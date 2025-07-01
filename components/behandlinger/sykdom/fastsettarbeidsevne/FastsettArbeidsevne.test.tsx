@@ -29,7 +29,7 @@ describe('FastsettArbeidsevne', () => {
     const grunnlag: ArbeidsevneGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
       vurderinger: [
-        { begrunnelse: 'Grunn', fraDato: '2024-08-10', arbeidsevne: 80, vurderingsTidspunkt: '2024-08-10' },
+        { begrunnelse: 'Grunn', fraDato: '2024-08-10', arbeidsevne: 80, vurderingsTidspunkt: '2024-08-10', vurdertAv: {ident: 'saksbehandler', dato: '2024-08-10'} },
       ],
       historikk: [],
       gjeldendeVedtatteVurderinger: [],

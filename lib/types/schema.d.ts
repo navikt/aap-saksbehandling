@@ -755,7 +755,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.ArbeidsevneGrunnlagDto'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto'];
           };
         };
       };
@@ -789,7 +789,7 @@ export interface paths {
       };
       requestBody?: {
         content: {
-          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.SimulerArbeidsevneDto'];
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.SimulerArbeidsevneDto'];
         };
       };
       responses: {
@@ -799,7 +799,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.SimulertArbeidsevneResultatDto'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.SimulertArbeidsevneResultatDto'];
           };
         };
       };
@@ -3493,6 +3493,50 @@ export interface components {
       fodselsdato: string;
       harRelasjon: boolean;
     };
+    'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto': {
+      gjeldendeVedtatteVurderinger?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneVurderingDto'][]
+        | null;
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      historikk?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneVurderingDto'][]
+        | null;
+      vurderinger?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneVurderingDto'][]
+        | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneVurderingDto': {
+      /** Format: int32 */
+      arbeidsevne: number;
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fraDato: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      vurderingsTidspunkt: string;
+      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.SimulerArbeidsevneDto': {
+      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.SimuleringArbeidsevneVurderingDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.SimuleringArbeidsevneVurderingDto': {
+      /** Format: int32 */
+      arbeidsevne: number;
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fraDato: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.SimulertArbeidsevneResultatDto': {
+      gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneVurderingDto'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
@@ -5285,7 +5329,6 @@ export interface components {
       fritaksvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.FritaksvurderingDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FullmektigL\u00F8sningDto': {
-      fullmektigIdent?: string | null;
       fullmektigIdentMedType?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.IdentMedType'];
       fullmektigNavnOgAdresse?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.fullmektig.NavnOgAdresse'];
       harFullmektig: boolean;
@@ -8527,33 +8570,6 @@ export interface components {
       status: string;
       statusaarsak?: string | null;
     };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.ArbeidsevneGrunnlagDto': {
-      gjeldendeVedtatteVurderinger?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.ArbeidsevneVurderingDto'][]
-        | null;
-      'harTilgangTil\u00C5Saksbehandle': boolean;
-      historikk?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.ArbeidsevneVurderingDto'][]
-        | null;
-      vurderinger?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.ArbeidsevneVurderingDto'][]
-        | null;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.ArbeidsevneVurderingDto': {
-      /** Format: int32 */
-      arbeidsevne: number;
-      begrunnelse: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fraDato: string;
-      /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
-       */
-      vurderingsTidspunkt: string;
-    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.FastsettArbeidsevneDto': {
       /** Format: int32 */
       arbeidsevne: number;
@@ -8563,12 +8579,6 @@ export interface components {
        * @example 2025-04-01
        */
       fraDato: string;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.SimulerArbeidsevneDto': {
-      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.FastsettArbeidsevneDto'][];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.SimulertArbeidsevneResultatDto': {
-      gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.ArbeidsevneVurderingDto'][];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingAvForeldreAnsvar': {
       begrunnelse: string;
