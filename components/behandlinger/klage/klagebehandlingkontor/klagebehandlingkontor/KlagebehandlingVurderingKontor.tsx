@@ -41,7 +41,8 @@ export const KlagebehandlingVurderingKontor = ({ grunnlag, behandlingVersjon, re
       },
       notat: {
         type: 'textarea',
-        label: 'Internt notat',
+        label: 'Kommentar til klageinstans',
+        description: 'Bruker kan få innsyn i denne teksten',
         defaultValue: grunnlag?.vurdering?.notat ?? undefined,
       },
       innstilling: {
