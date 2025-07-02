@@ -18,8 +18,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
       {oppgave.påVentTil && (
         <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} begrunnelse={oppgave.venteBegrunnelse} />
       )}
-      {/* TODO fiks når typen er deployet */}
-      {(oppgave as { harUlesteDokumenter?: boolean }).harUlesteDokumenter && <SvarFraBehandler />}
+      {oppgave.harUlesteDokumenter && <SvarFraBehandler />}
       {oppgave.returInformasjon && <Returboks oppgave={oppgave} />}
       {adressebeskyttelser.map((adressebeskyttelse) => (
         <AdressebeskyttelseInfoBoks key={adressebeskyttelse} adressebeskyttelseGrad={adressebeskyttelse} />

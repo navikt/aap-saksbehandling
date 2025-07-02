@@ -31,13 +31,8 @@ describe('OppgaveInformasjon', () => {
     expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
   });
 
-  it('Skal vise ikon for mottat svar fra behandler dersom årsakTilBehandling er MOTTATT_LEGEERKLÆRING', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, årsakerTilBehandling: ['MOTTATT_LEGEERKLÆRING'] }} />);
-    expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
-  });
-
-  it('Skal vise ikon for mottat svar fra behandler dersom årsakTilBehandling er MOTTATT_AVVIST_LEGEERKLÆRING', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, årsakerTilBehandling: ['MOTTATT_AVVIST_LEGEERKLÆRING'] }} />);
+  it('Skal vise ikon for mottat svar fra behandler dersom oppgave er markert med harUlesteDokumenter', () => {
+    render(<OppgaveInformasjon oppgave={{ ...oppgave, harUlesteDokumenter: true }} />);
     expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
   });
 
@@ -47,7 +42,7 @@ describe('OppgaveInformasjon', () => {
         oppgave={{
           ...oppgave,
           påVentTil: addDays(new Date(), 1).toDateString(),
-          årsakerTilBehandling: ['MOTTATT_LEGEERKLÆRING'],
+          harUlesteDokumenter: true,
         }}
       />
     );
@@ -80,16 +75,12 @@ describe('OppgaveInformasjon', () => {
   });
 
   it('skal vise ikon for adressebeskyttelse hvis bruker er kode 7', () => {
-    render(
-        <OppgaveInformasjon oppgave={{...oppgave, harFortroligAdresse: true}} />
-    );
+    render(<OppgaveInformasjon oppgave={{ ...oppgave, harFortroligAdresse: true }} />);
     expect(screen.getByRole('img', { name: 'Adressebeskyttelse Ikon' })).toBeVisible();
   });
 
   it('skal ikke vise ikon for adressebeskyttelse hvis bruker ikke er kode 7', () => {
-    render(
-        <OppgaveInformasjon oppgave={{...oppgave, harFortroligAdresse: false}} />
-    );
+    render(<OppgaveInformasjon oppgave={{ ...oppgave, harFortroligAdresse: false }} />);
     expect(screen.queryByRole('img', { name: 'Adressebeskyttelse Ikon' })).not.toBeInTheDocument();
   });
 });

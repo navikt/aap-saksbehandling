@@ -37,7 +37,7 @@ interface Props {
   brukerKanSaksbehandle?: boolean;
   flyt?: FlytGruppe[];
   adressebeskyttelser?: Adressebeskyttelsesgrad[];
-  harUlesteDokumenter?: boolean;
+  harUlesteDokumenter?: boolean | null;
 }
 
 export const SaksinfoBanner = ({
