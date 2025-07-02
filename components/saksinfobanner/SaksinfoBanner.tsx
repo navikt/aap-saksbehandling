@@ -23,6 +23,7 @@ import { TrekkKlageModal } from './trekkklagemodal/TrekkKlageModal';
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { SvarFraBehandler } from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -36,6 +37,7 @@ interface Props {
   brukerKanSaksbehandle?: boolean;
   flyt?: FlytGruppe[];
   adressebeskyttelser?: Adressebeskyttelsesgrad[];
+  harUlesteDokumenter?: boolean;
 }
 
 export const SaksinfoBanner = ({
@@ -50,11 +52,13 @@ export const SaksinfoBanner = ({
   brukerKanSaksbehandle,
   flyt,
   adressebeskyttelser,
+  harUlesteDokumenter,
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
   const [visTrekkKlageModal, settVisTrekkKlageModal] = useState(false);
   const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
+  const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveReservertAv;
 
   const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
@@ -131,6 +135,14 @@ export const SaksinfoBanner = ({
               <AdressebeskyttelseStatus adressebeskyttelsesGrad={adressebeskyttelse} />
             </div>
           ))}
+          {visHarUlesteDokumenter && (
+            <div className={styles.oppgavestatus}>
+              <SvarFraBehandler
+                behandlingReferanse={referanse}
+                oppdaterVisHarUlesteDokumenter={settVisHarUlesteDokumenter}
+              />
+            </div>
+          )}
           <div className={styles.oppgavestatus}>{oppgaveStatus && <OppgaveStatus oppgaveStatus={oppgaveStatus} />}</div>
           <div className={styles.saksmeny}>
             <Dropdown>

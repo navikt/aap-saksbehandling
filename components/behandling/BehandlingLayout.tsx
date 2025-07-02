@@ -109,6 +109,7 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
             brukerKanSaksbehandle={brukerKanSaksbehandle}
             flyt={flytResponse.data.flyt}
             adressebeskyttelser={adressebeskyttelser}
+            harUlesteDokumenter={(oppgave as { harUlesteDokumenter?: boolean }).harUlesteDokumenter} // TODO fiks når typen er deployet
           />
 
           <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
