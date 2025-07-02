@@ -58,7 +58,7 @@ function mapTilSøknadKontrakt(data: SøknadFormFields) {
           },
     yrkesskade: data.yrkesSkade,
     oppgitteBarn: data.oppgitteBarn?.length
-      ? { identer: data.oppgitteBarn.map((barn) => ({ identifikator: barn.fnr! })) }
+      ? { identer: data.oppgitteBarn.map((barn) => ({ identifikator: barn.fnr! })), barn: [] }
       : undefined,
   };
   return JSON.stringify(søknad);
