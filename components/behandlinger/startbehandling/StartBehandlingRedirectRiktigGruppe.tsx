@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -14,8 +15,11 @@ export const StartBehandlingRedirectRiktigGruppe = ({ flyt }: Props) => {
   const router = useRouter();
   const { saksId, behandlingsReferanse } = useParams<{ saksId: string; behandlingsReferanse: string }>();
 
-  if (flyt.aktivGruppe !== 'START_BEHANDLING') {
-    router.push(`/saksbehandling/sak/${saksId}/${behandlingsReferanse}/${flyt.aktivGruppe}`);
-  }
-  return <></>;
+  useEffect(() => {
+    if (flyt.aktivGruppe !== 'START_BEHANDLING') {
+      router.push(`/saksbehandling/sak/${saksId}/${behandlingsReferanse}/${flyt.aktivGruppe}`);
+    }
+  }, [flyt.aktivGruppe, router, saksId, behandlingsReferanse]);
+
+  return null;
 };
