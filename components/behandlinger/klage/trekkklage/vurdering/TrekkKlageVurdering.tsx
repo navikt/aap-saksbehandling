@@ -47,7 +47,7 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag }: P
         type: 'radio',
         label: 'Hvorfor trekkes klagen?',
         options: [
-          { label: 'Bruker trekker klagen', value: 'TRUKKET_AV_BRUKER' },
+          { label: 'Brukeren trekker klagen', value: 'TRUKKET_AV_BRUKER' },
           { label: 'Feilregistrering', value: 'FEILREGISTRERING' },
         ],
         rules: { required: 'Du må velge hvorfor klages trekkes' },

@@ -58,7 +58,7 @@ function mapTilSøknadKontrakt(data: SøknadFormFields) {
           },
     yrkesskade: data.yrkesSkade,
     oppgitteBarn: data.oppgitteBarn?.length
-      ? { identer: data.oppgitteBarn.map((barn) => ({ identifikator: barn.fnr! })) }
+      ? { identer: data.oppgitteBarn.map((barn) => ({ identifikator: barn.fnr! })), barn: [] }
       : undefined,
   };
   return JSON.stringify(søknad);
@@ -96,7 +96,7 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
         label: 'Har søker yrkesskade?',
         options: JaNeiEllerIkkeOppgittOptions,
         defaultValue: søknadGrunnlag.yrkesskade ? stringToJaNeiIkkeOppgitt(søknadGrunnlag.yrkesskade) : undefined,
-        rules: { required: 'Du må velge om bruker har oppgitt en yrkesskade' },
+        rules: { required: 'Du må velge om brukeren har oppgitt en yrkesskade' },
       },
       erStudent: {
         type: 'radio',

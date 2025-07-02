@@ -16,7 +16,6 @@ interface Props {
   vurderingIndex: number;
   readOnly: boolean;
   form: UseFormReturn<BarnetilleggFormFields>;
-  rettighetsPeriodeFom: string;
   fødselsdato: string;
 }
 
@@ -25,7 +24,6 @@ export const OppgitteBarnVurderingFelter = ({
   barneTilleggIndex,
   vurderingIndex,
   form,
-  rettighetsPeriodeFom,
   fødselsdato,
 }: Props) => {
   const harForeldreAnsvar = form.watch(
@@ -71,15 +69,9 @@ export const OppgitteBarnVurderingFelter = ({
             validate: {
               validerDato: (value) => validerDato(value as string),
               validerIkkeFørDato: (value) => {
-                const erFørVirkingstidspunkt = erDatoFoerDato(
-                  value as string,
-                  formaterDatoForFrontend(rettighetsPeriodeFom)
-                );
                 const erFørFødselsdato = erDatoFoerDato(value as string, formaterDatoForFrontend(fødselsdato));
 
-                return erFørVirkingstidspunkt || erFørFødselsdato
-                  ? `Dato kan ikke være før virkningstidspunktet (${rettighetsPeriodeFom}) eller fødselsdato (${fødselsdato})`
-                  : true;
+                return erFørFødselsdato ? `Dato kan ikke være før fødselsdato (${fødselsdato})` : true;
               },
             },
           }}

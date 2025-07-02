@@ -16,7 +16,7 @@ export type BistandsGrunnlag =
 export type FritakMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagResponse'];
 export type ArbeidsevneGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.ArbeidsevneGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto'];
 export type RefusjonskravGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagResponse'];
 
@@ -32,7 +32,7 @@ export type TilkjentYtelseGrunnlagV2 =
 export type KvalitetssikringGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagDto'];
 export type BarnetilleggGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.BarnetilleggDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.BarnetilleggDto'];
 export type Soningsgrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.SoningsGrunnlagDto'];
 export type HelseinstitusjonGrunnlag =
@@ -96,8 +96,7 @@ export type KabalKlageResultat =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.resultat.KabalKlageResultat'];
 export type TrekkKlageGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.trekk.TrekkKlageGrunnlagDto'];
-export type EffektuerAvvistPåFormkravGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.effektueravvistpåformkrav.EffektuerAvvistPåFormkravGrunnlagDto'];
+
 export type SvarFraAndreinstansGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansGrunnlagDto'];
 export type SvarKonsekvens =
@@ -130,7 +129,7 @@ export type OpprettTestcase = components['schemas']['no.nav.aap.behandlingsflyt.
 export type FinnSakForIdent =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnSakForIdentDTO'];
 
-export type Vilkår = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårDTO'];
+export type Vilkår = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårDTO'];
 
 export type StegType = components['schemas']['no.nav.aap.behandlingsflyt.flyt.FlytSteg']['stegType'];
 
@@ -177,9 +176,8 @@ export type SettPåVentÅrsaker = components['schemas']['no.nav.aap.behandlingsf
 
 export type VenteInformasjon = components['schemas']['no.nav.aap.behandlingsflyt.flyt.Venteinformasjon'];
 
-export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['utfall'];
-export type AvslagÅrsak =
-  components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.VilkårsperiodeDTO']['avslagsårsak'];
+export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårsperiodeDTO']['utfall'];
+export type AvslagÅrsak = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårsperiodeDTO']['avslagsårsak'];
 
 export type ErStudentStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['erStudentStatus'];
@@ -187,7 +185,7 @@ export type SkalGjenopptaStudieStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['skalGjenopptaStudieStatus'];
 
 export type IdentifisertBarn =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.flate.IdentifiserteBarnDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'];
 
 export type Ident = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
 

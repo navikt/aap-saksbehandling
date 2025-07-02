@@ -1,22 +1,29 @@
-import { cookies } from "next/headers";
-import { evaluateFlags, flagsClient, getDefinitions } from "@unleash/nextjs";
+'use server';
 
-// TODO: Typesikre navn på features
-export const isFeatureEnabled = async (name: string) => {
-  const cookieStore = await cookies();
-  const sessionId = cookieStore.get('unleash-session-id')?.value || `${Math.floor(Math.random() * 1_000_000_000)}`;
+import { cookies } from 'next/headers';
+import { evaluateFlags, flagsClient, getDefinitions } from '@unleash/nextjs';
+import { FeatureToggle } from './featureToggle';
+import { logError } from 'lib/serverutlis/logger';
 
-  const definitions = await getDefinitions({
-    fetchOptions: {
-      next: { revalidate: 15 }
-    },
-  });
+export const erFeatureAktivert = async (toggleNavn: FeatureToggle) => {
+  try {
+    const cookieStore = await cookies();
+    const sessionId = cookieStore.get('unleash-session-id')?.value || `${Math.floor(Math.random() * 1_000_000_000)}`;
 
-  const { toggles } = evaluateFlags(definitions, {
-    sessionId,
-  });
+    const definisjoner = await getDefinitions({
+      fetchOptions: {
+        next: { revalidate: 15 },
+      },
+    });
 
-  const flags = flagsClient(toggles);
+    const { toggles } = evaluateFlags(definisjoner, {
+      sessionId,
+    });
 
-  return flags.isEnabled(name);
+    const flagg = flagsClient(toggles);
+    return flagg.isEnabled(toggleNavn);
+  } catch (error) {
+    logError(`/lib/services/unleash`, error);
+    return false;
+  }
 };

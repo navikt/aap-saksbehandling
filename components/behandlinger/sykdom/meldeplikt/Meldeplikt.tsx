@@ -115,10 +115,10 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
               readOnly={readOnly}
             />
             <RadioGroupWrapper
-              label={'Skal bruker få fritak fra meldeplikt?'}
+              label={'Skal brukeren få fritak fra meldeplikt?'}
               control={form.control}
               name={`fritaksvurderinger.${index}.harFritak`}
-              rules={{ required: 'Du må svare på om bruker skal få fritak fra meldeplikt' }}
+              rules={{ required: 'Du må svare på om brukeren skal få fritak fra meldeplikt' }}
               readOnly={readOnly}
               horisontal
             >

@@ -43,28 +43,29 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         type: 'textarea',
         label: 'Vilkårsvurdering',
         defaultValue: grunnlag?.vurdering?.begrunnelse,
-        rules: { required: 'Du må gi en begrunnelse om bruker har behov for oppfølging' },
+        rules: { required: 'Du må gi en begrunnelse om brukeren har behov for oppfølging' },
       },
       erBehovForAktivBehandling: {
         type: 'radio',
-        label: 'a: Har bruker behov for aktiv behandling?',
+        label: 'a: Har brukeren behov for aktiv behandling?',
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAktivBehandling),
-        rules: { required: 'Du må svare på om bruker har behov for aktiv behandling' },
+        rules: { required: 'Du må svare på om brukeren har behov for aktiv behandling' },
         options: JaEllerNeiOptions,
       },
       erBehovForArbeidsrettetTiltak: {
         type: 'radio',
-        label: 'b: Har bruker behov for arbeidsrettet tiltak?',
+        label: 'b: Har brukeren behov for arbeidsrettet tiltak?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForArbeidsrettetTiltak),
-        rules: { required: 'Du må svare på om bruker har behov for arbeidsrettet tiltak' },
+        rules: { required: 'Du må svare på om brukeren har behov for arbeidsrettet tiltak' },
       },
       erBehovForAnnenOppfølging: {
         type: 'radio',
-        label: 'c: Kan bruker anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
+        label:
+          'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAnnenOppfølging),
-        rules: { required: 'Du må svare på om bruker anses for å ha en viss mulighet til å komme i arbeid' },
+        rules: { required: 'Du må svare på om brukeren anses for å ha en viss mulighet til å komme i arbeid' },
       },
       overgangBegrunnelse: {
         type: 'textarea',
@@ -78,7 +79,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilUføre),
         rules: {
-          required: 'Du må svare på om bruker har rett på AAP i overgang til uføre',
+          required: 'Du må svare på om brukeren har rett på AAP i overgang til uføre',
           validate: (value) =>
             value === JaEllerNei.Ja ? 'AAP under behandling av søknad om uføretrygd er ikke støttet enda' : undefined,
         },
@@ -89,7 +90,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilArbeid),
         rules: {
-          required: 'Du må svare på om bruker har rett på AAP i overgang til arbeid',
+          required: 'Du må svare på om brukeren har rett på AAP i overgang til arbeid',
           validate: (value) => (value === JaEllerNei.Ja ? 'AAP i overgang til arbeid er ikke støttet enda' : undefined),
         },
       },
@@ -150,11 +151,11 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         defaultOpen={false}
         tekst={
           <div>
-            Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at bruker
-            oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a (aktiv
-            behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge vilkårene,
-            er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du svarer nei
-            på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
+            Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
+            brukeren oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a
+            (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
+            vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
+            svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
             <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-6">
               Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6
             </Link>

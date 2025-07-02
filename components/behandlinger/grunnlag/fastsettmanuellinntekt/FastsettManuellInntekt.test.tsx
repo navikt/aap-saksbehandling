@@ -17,7 +17,7 @@ describe('Fastsett manuell inntekt', () => {
 
   it('skal ha en alert', () => {
     const alert = screen.getByText(
-      'Du må oppgi pensjonsgivende inntekt for siste beregningsår, fordi ingen inntekt er registrert. Om bruker ikke har hatt inntekt for gitt år, legg inn 0.'
+      'Du må oppgi pensjonsgivende inntekt for siste beregningsår, fordi ingen inntekt er registrert. Om brukeren ikke har hatt inntekt for gitt år, legg inn 0.'
     );
     expect(alert).toBeVisible();
   });

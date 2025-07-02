@@ -69,6 +69,8 @@ export const SaksinfoBanner = ({
 
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
+  const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
+
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
     brukerKanSaksbehandle &&
@@ -83,7 +85,10 @@ export const SaksinfoBanner = ({
     behandling?.type === 'Klage';
 
   const visValgForÅOverstyreStarttidspunkt =
-    brukerKanSaksbehandle && behandlingErFørstegangsbehandling && behandlingErIkkeAvsluttet;
+    brukerKanSaksbehandle &&
+    behandlingErFørstegangsbehandling &&
+    behandlingErIkkeAvsluttet &&
+    behandlingErIkkeIverksatt;
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (oppgaveReservertAv && !erReservertAvInnloggetBruker) {

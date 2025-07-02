@@ -15,18 +15,9 @@ interface Props {
   navn: string;
   fødselsdato: string;
   readOnly: boolean;
-  rettighetsPeriodeFom: string;
 }
 
-export const OppgitteBarnVurdering = ({
-  form,
-  barnetilleggIndex,
-  ident,
-  navn,
-  readOnly,
-  fødselsdato,
-  rettighetsPeriodeFom,
-}: Props) => {
+export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, readOnly, fødselsdato }: Props) => {
   const {
     fields: vurderinger,
     remove,
@@ -65,7 +56,6 @@ export const OppgitteBarnVurdering = ({
                 ident={ident}
                 barneTilleggIndex={barnetilleggIndex}
                 vurderingIndex={vurderingIndex}
-                rettighetsPeriodeFom={rettighetsPeriodeFom}
                 fødselsdato={fødselsdato}
               />
               {kanFjernePeriode && !readOnly && (

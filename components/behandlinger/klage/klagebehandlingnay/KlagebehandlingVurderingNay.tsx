@@ -35,14 +35,13 @@ export const KlagebehandlingVurderingNay = ({ behandlingVersjon, readOnly, grunn
       vurdering: {
         type: 'textarea',
         label: 'Vurder klage',
-        description: 'Vurderingen vises i brev til bruker',
         rules: { required: 'Du må vurdere klagen' },
         defaultValue: grunnlag?.vurdering?.begrunnelse,
       },
       notat: {
         type: 'textarea',
-        label: 'Internt notat',
-        description: 'Notatet er kun synlig i Kelvin',
+        label: 'Kommentar til klageinstans',
+        description: 'Bruker kan få innsyn i denne teksten',
         defaultValue: grunnlag?.vurdering?.notat ?? undefined,
       },
       innstilling: {

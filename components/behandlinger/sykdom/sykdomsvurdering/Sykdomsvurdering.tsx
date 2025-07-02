@@ -100,17 +100,17 @@ export const Sykdomsvurdering = ({
       },
       harSkadeSykdomEllerLyte: {
         type: 'radio',
-        label: 'Har bruker sykdom, skade eller lyte?',
+        label: 'Har brukeren sykdom, skade eller lyte?',
         defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.harSkadeSykdomEllerLyte),
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om bruker har sykdom, skade eller lyte' },
+        rules: { required: 'Du må svare på om brukeren har sykdom, skade eller lyte' },
       },
       erArbeidsevnenNedsatt: {
         type: 'radio',
-        label: 'Har bruker nedsatt arbeidsevne?',
+        label: 'Har brukeren nedsatt arbeidsevne?',
         defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erArbeidsevnenNedsatt),
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om bruker har nedsatt arbeidsevne' },
+        rules: { required: 'Du må svare på om brukeren har nedsatt arbeidsevne' },
       },
       erNedsettelseIArbeidsevneMerEnnHalvparten: {
         type: 'radio',

@@ -1,6 +1,6 @@
 'use client';
 
-import { Brevbygger } from '@navikt/aap-breveditor/';
+import { Brevbygger, BrevbyggerBeta } from '@navikt/aap-breveditor/';
 import { ActionMenu, Button, Label, Loader, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
@@ -19,6 +19,7 @@ import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
 import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
 import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { isSuccess } from 'lib/utils/api';
+import { isProd } from 'lib/utils/environment';
 
 export const SkriveBrev = ({
   referanse,
@@ -118,16 +119,27 @@ export const SkriveBrev = ({
       </div>
 
       <VStack gap={'4'}>
-        <Brevbygger
-          brevmal={brev}
-          mottaker={mottaker}
-          saksnummer={saksnummer}
-          onBrevChange={onChange}
-          logo={NavLogo}
-          signatur={signaturer}
-          readOnly={readOnly}
-        />
-
+        {!isProd() ? (
+          <BrevbyggerBeta
+            brevmal={brev}
+            mottaker={mottaker}
+            saksnummer={saksnummer}
+            onBrevChange={onChange}
+            logo={NavLogo}
+            signatur={signaturer}
+            readonly={readOnly}
+          />
+        ) : (
+          <Brevbygger
+            brevmal={brev}
+            mottaker={mottaker}
+            saksnummer={saksnummer}
+            onBrevChange={onChange}
+            logo={NavLogo}
+            signatur={signaturer}
+            readOnly={readOnly}
+          />
+        )}
         {!readOnly && (
           <Button
             disabled={status !== 'FORHÅNDSVISNING_KLAR'}

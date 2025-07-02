@@ -74,7 +74,7 @@ describe('OppgaveInformasjon', () => {
     expect(tekst).toBeVisible();
   });
 
-  it('skal vise ikon for adressebeskyttelse hvis bruker er kode 7', () => {
+  it('skal vise ikon for adressebeskyttelse hvis brukeren er kode 7', () => {
     render(<OppgaveInformasjon oppgave={{ ...oppgave, harFortroligAdresse: true }} />);
     expect(screen.getByRole('img', { name: 'Adressebeskyttelse Ikon' })).toBeVisible();
   });

@@ -21,7 +21,7 @@ export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, yrkesevneNedsa
         <BodyShort size={'small'} weight={'semibold'}>
           Grunnlagsberegning § 11-19
         </BodyShort>
-        <BodyShort size={'small'}>Bruker fikk arbeidsevnen nedsatt i {yrkesevneNedsattÅr}</BodyShort>
+        <BodyShort size={'small'}>Brukeren fikk arbeidsevnen nedsatt i {yrkesevneNedsattÅr}</BodyShort>
         <Veiledning
           header={'Se detaljer om standard grunnlagsberegning'}
           tekst={

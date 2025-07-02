@@ -29,7 +29,13 @@ describe('FastsettArbeidsevne', () => {
     const grunnlag: ArbeidsevneGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
       vurderinger: [
-        { begrunnelse: 'Grunn', fraDato: '2024-08-10', arbeidsevne: 80, vurderingsTidspunkt: '2024-08-10' },
+        {
+          begrunnelse: 'Grunn',
+          fraDato: '2024-08-10',
+          arbeidsevne: 80,
+          vurderingsTidspunkt: '2024-08-10',
+          vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' },
+        },
       ],
       historikk: [],
       gjeldendeVedtatteVurderinger: [],
@@ -38,7 +44,7 @@ describe('FastsettArbeidsevne', () => {
     expect(screen.getByText('Vilkårsvurdering')).toBeVisible();
   });
 
-  it('har et felt hvor saksbehandler skal begrunne om bruker har arbeidsevne', async () => {
+  it('har et felt hvor saksbehandler skal begrunne om brukeren har arbeidsevne', async () => {
     render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} />);
     await åpneVilkårskort();
     await klikkPåNyVurdering();
@@ -105,7 +111,7 @@ describe('FastsettArbeidsevne', () => {
       await åpneVilkårskort();
       await klikkPåNyVurdering();
       await klikkPåBekreft();
-      expect(screen.getByText('Du må angi hvor stor arbeidsevne bruker har')).toBeVisible();
+      expect(screen.getByText('Du må angi hvor stor arbeidsevne brukeren har')).toBeVisible();
     });
 
     it('viser feilmelding dersom dato når arbeidsevnen gjelder fra ikke er besvart', async () => {

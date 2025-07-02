@@ -145,7 +145,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
 
     const res = response.data.map((kontor) => ({
       label: `${kontor.navn} - ${kontor.enhetsnummer}`,
-      value: `${kontor.enhetsnummer}`,
+      value: `${kontor.navn} - ${kontor.enhetsnummer}`,
     }));
     return res;
   };
@@ -168,7 +168,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
         name={`harKrav`}
         control={form.control}
         label={'Er det refusjonskrav fra Nav-kontor?'}
-        rules={{ required: 'Du må velge ett navkontor' }}
+        rules={{ required: 'Du må velge om brukeren har refusjonskrav' }}
         readOnly={readOnly}
         horisontal
       >

@@ -27,7 +27,7 @@ export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
   FOLKETRYGDLOVEN_11_20: '§ 11-20',
   FOLKETRYGDLOVEN_11_22: '§ 11-22',
   FOLKETRYGDLOVEN_11_23_UUTNYTTET_ARB_EVNE: '§ 11-23 2. ledd',
-  FOLKETRYGDLOVEN_11_23_OVERGNG_ARB: '§ 11-23 - Overgang til arbeid',
+  FOLKETRYGDLOVEN_11_23_OVERGNG_ARB: '11-23 Nær ved å komme i fullt arbeid',
   FOLKETRYGDLOVEN_11_24: '§ 11-24',
   FOLKETRYGDLOVEN_11_25: '§ 11-25',
   FOLKETRYGDLOVEN_11_26: '§ 11-26',
@@ -35,9 +35,6 @@ export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
   FOLKETRYGDLOVEN_11_28: '§ 11-28',
   FOLKETRYGDLOVEN_11_29: '§ 11-29',
   FOLKETRYGDLOVEN_11_31: '§ 11-31',
-  FOLKETRYGDLOVEN_22_13: '§ 22-13',
-  FOLKETRYGDLOVEN_22_15: '§ 22-15',
-  FOLKETRYGDLOVEN_22_17: '§ 22-17',
 };
 
 // En liste over hjemmler som ikke har implementert revurderinger i backend
@@ -56,9 +53,6 @@ export const ikkeImplementertKlageHjemmler: Hjemmel[] = [
   'FOLKETRYGDLOVEN_11_23_OVERGNG_ARB',
   'FOLKETRYGDLOVEN_11_29',
   'FOLKETRYGDLOVEN_11_31',
-  'FOLKETRYGDLOVEN_22_13',
-  'FOLKETRYGDLOVEN_22_15',
-  'FOLKETRYGDLOVEN_22_17',
 ];
 
 export const hjemmelalternativer = Object.entries(hjemmelMap).map(([k, v]) => ({
