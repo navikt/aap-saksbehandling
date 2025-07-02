@@ -24,6 +24,7 @@ import { Omgjøring } from 'components/behandlinger/klage/omgjøring/Omgjøring'
 import { Opprettholdelse } from 'components/behandlinger/klage/opprettholdelse/Opprettholdelse';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SvarFraAndreinstansGruppe } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstansGruppe';
+import { StartBehandling } from '../behandlinger/startbehandling/StartBehandling';
 
 interface Props {
   behandlingsReferanse: string;
@@ -34,6 +35,7 @@ interface Props {
 export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
   return (
     <section className={className}>
+      {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'LOVVALG' && (
         <StegSuspense>
