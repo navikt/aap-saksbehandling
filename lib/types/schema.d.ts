@@ -6505,6 +6505,11 @@ export interface components {
        */
       'f\u00F8dselsdato': string;
       'vilk\u00E5rsperioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilk\u00E5rsresultat.Vilk\u00E5rsperiode'][];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vurdertDato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagResponse': {
       gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktVurderingResponse'][];
@@ -8849,7 +8854,7 @@ export interface components {
       };
     };
     'no.nav.aap.behandlingsflyt.flyt.BehandlingResultatDto': {
-      'vilk\u00E5rene': components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.Vilk\u00E5rDTO'][];
+      'vilk\u00E5rene': components['schemas']['no.nav.aap.behandlingsflyt.flyt.Vilk\u00E5rDTO'][];
     };
     'no.nav.aap.behandlingsflyt.flyt.DetaljertBehandlingDTO': {
       /** @enum {string} */
@@ -8932,7 +8937,7 @@ export interface components {
       vedtaksdato?: string | null;
       /** Format: int64 */
       versjon: number;
-      'vilk\u00E5r': components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.Vilk\u00E5rDTO'][];
+      'vilk\u00E5r': components['schemas']['no.nav.aap.behandlingsflyt.flyt.Vilk\u00E5rDTO'][];
       /**
        * Format: date
        * @example 2025-04-01
@@ -9049,7 +9054,7 @@ export interface components {
         | 'SVAR_FRA_ANDREINSTANS'
         | 'IVERKSETT_KONSEKVENS'
         | 'UDEFINERT';
-      'vilk\u00E5rDTO'?: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.Vilk\u00E5rDTO'];
+      'vilk\u00E5rDTO'?: components['schemas']['no.nav.aap.behandlingsflyt.flyt.Vilk\u00E5rDTO'];
     };
     'no.nav.aap.behandlingsflyt.flyt.Prosessering': {
       /** @enum {string} */
@@ -9099,8 +9104,8 @@ export interface components {
         | 'VENTER_PÅ_SVAR_PÅ_FORHÅNDSVARSEL'
         | 'VENTER_PÅ_FUNKSJONALITET';
     };
-    'no.nav.aap.behandlingsflyt.flyt.flate.Vilk\u00E5rDTO': {
-      perioder: components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.Vilk\u00E5rsperiodeDTO'][];
+    'no.nav.aap.behandlingsflyt.flyt.Vilk\u00E5rDTO': {
+      perioder: components['schemas']['no.nav.aap.behandlingsflyt.flyt.Vilk\u00E5rsperiodeDTO'][];
       /** @enum {string} */
       'vilk\u00E5rtype':
         | 'ALDERSVILKÅRET'
@@ -9111,8 +9116,13 @@ export interface components {
         | 'GRUNNLAGET'
         | 'SAMORDNING'
         | 'SYKEPENGEERSTATNING';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vurdertDato?: string | null;
     };
-    'no.nav.aap.behandlingsflyt.flyt.flate.Vilk\u00E5rsperiodeDTO': {
+    'no.nav.aap.behandlingsflyt.flyt.Vilk\u00E5rsperiodeDTO': {
       /** @enum {string|null} */
       'avslags\u00E5rsak'?:
         | 'BRUKER_UNDER_18'
@@ -9590,6 +9600,17 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
       )[];
     };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManueltOppgittBarn': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'f\u00F8dselsdato'?: string | null;
+      ident?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ident'];
+      navn?: string | null;
+      /** @enum {string|null} */
+      relasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
+    };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Meldekort': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.MeldekortV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.MeldekortV0': {
       harDuArbeidet: boolean;
@@ -9647,6 +9668,7 @@ export interface components {
       utfall: 'MEDHOLD_ETTER_FVL_35';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OppgitteBarn': {
+      barn: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManueltOppgittBarn'][];
       identer: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ident'][];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knad': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0'];
