@@ -64,7 +64,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     startTransition(async () => {
       if (aktivEnhet && aktivKøId) {
         const nesteOppgaveRes = await plukkNesteOppgaveClient(aktivKøId, aktivEnhet);
-        if (isSuccess(nesteOppgaveRes)) {
+        if (isSuccess(nesteOppgaveRes) && nesteOppgaveRes.data) {
           router.push(byggKelvinURL(nesteOppgaveRes.data.avklaringsbehovReferanse));
         }
       }
