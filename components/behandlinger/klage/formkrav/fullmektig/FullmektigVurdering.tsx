@@ -19,7 +19,7 @@ interface Props {
 
 interface FormFields {
   harFullmektig: JaEllerNei;
-  idType: 'navnOgAdresse' | 'fnr' | 'orgnr';
+  idType: 'navnOgAdresse' | 'fnr' | 'orgnr' | 'utl_orgnr';
   fullmektigIdent: string;
   navn: string;
   adresselinje1: string;
@@ -101,6 +101,13 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
         label: 'Land',
         rules: {
           required: 'Du må velge land',
+          validate: {
+            utenlandskOrgnr: (value, formValues) => {
+              if (value === 'NOR' && formValues.idType === 'utl_orgnr') {
+                return 'Kan ikke velge Norge for utenlandsk org.nr';
+              }
+            },
+          },
         },
         options: landMedTrygdesamarbeidInklNorge,
         defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.landkode ?? undefined,
@@ -119,7 +126,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       const idType = data.idType;
       const erNorskAdresse = erNorge(data.land);
       const navnOgAdresse =
-        harFullmektig && idType !== 'fnr'
+        harFullmektig && skalFylleInnNavnOgAdresse(idType)
           ? {
               navn: data.navn,
               adresse: {
@@ -135,7 +142,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
             }
           : undefined;
 
-      const identType = mapIdentType(data.idType, data.land);
+      const identType = mapIdentType(data.idType);
 
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
@@ -174,14 +181,14 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       {harFullmektig && idType && idType !== 'navnOgAdresse' && (
         <FormField form={form} formField={formFields.fullmektigIdent} className={'ident_input'} />
       )}
-      {harFullmektig && idType && idType !== 'fnr' && (
+      {harFullmektig && idType && skalFylleInnNavnOgAdresse(idType) && (
         <>
           <FormField form={form} formField={formFields.land} />
           <FormField form={form} formField={formFields.navn} />
           <FormField form={form} formField={formFields.adresselinje1} />
           <FormField form={form} formField={formFields.adresselinje2} />
           <FormField form={form} formField={formFields.adresselinje3} />
-          {erNorge(land) && (
+          {idType === 'navnOgAdresse' && erNorge(land) && (
             <>
               <FormField form={form} formField={formFields.postnummer} />
               <FormField form={form} formField={formFields.poststed} />
@@ -195,7 +202,8 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
   function idTypeOptions(): ValuePair[] {
     return [
       { label: 'Fnr', value: 'fnr' },
-      { label: 'Org.nr', value: 'orgnr' },
+      { label: 'Norsk org.nr', value: 'orgnr' },
+      { label: 'Utenlandsk org.nr', value: 'utl_orgnr' },
       { label: 'Navn og adresse', value: 'navnOgAdresse' },
     ];
   }
@@ -204,16 +212,22 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
     return land === 'NOR';
   }
 
-  function mapIdentType(idType: string, landkode?: string): IdentType | undefined {
+  function mapIdentType(idType: string): IdentType | undefined {
     switch (idType) {
       case 'fnr':
         return 'FNR_DNR';
       case 'orgnr':
-        return landkode === 'NOR' ? 'ORGNR' : 'UTL_ORGNR';
+        return 'ORGNR';
+      case 'utl_orgnr':
+        return 'UTL_ORGNR';
       default:
         return undefined;
     }
   }
 };
+
+function skalFylleInnNavnOgAdresse(idType: string): boolean {
+  return idType === 'navnOgAdresse' || idType === 'utl_orgnr';
+}
 
 type IdentType = 'FNR_DNR' | 'ORGNR' | 'UTL_ORGNR';
