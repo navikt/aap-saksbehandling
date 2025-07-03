@@ -87,7 +87,7 @@ export async function plukkOppgave(oppgaveId: number, versjon: number) {
 
 export async function mottattDokumenterLest(behandlingRef: string) {
   const url = `${oppgaveApiBaseURL}/mottatt-dokumenter-lest`;
-  return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { behandlingRef: behandlingRef });
+  return await apiFetch<{}>(url, oppgaveApiScope, 'POST', { behandlingRef: behandlingRef });
 }
 
 export async function oppgaveTekstSøk(søketekst: string) {
