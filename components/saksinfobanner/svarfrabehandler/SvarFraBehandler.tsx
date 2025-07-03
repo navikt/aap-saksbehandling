@@ -3,8 +3,9 @@
 import { Alert, BodyLong, BodyShort, Box, Button, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
-import styles from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler.module.css';
 import { useMottattDokumenterLest } from 'hooks/FetchHook';
+
+import styles from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler.module.css';
 
 interface SvarFraBehandlerProps {
   behandlingReferanse: string;
@@ -49,13 +50,13 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
             </Box>
           </VStack>
           <Box borderWidth={'1'} borderColor={'border-divider'} />
-          <HStack padding={'space-8'} justify={'center'}>
-            {error && (
+          {error && (
+            <HStack padding={'space-8'} justify={'center'}>
               <Alert size={'small'} variant={'error'}>
                 Kunne ikke markere dokument som lest
               </Alert>
-            )}
-          </HStack>
+            </HStack>
+          )}
           <HStack padding={'space-8'} justify={'end'}>
             <Button
               size={'small'}
