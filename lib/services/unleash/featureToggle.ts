@@ -1,3 +1,3 @@
 export enum FeatureToggle {
-  NyBrevbygger = "NyBrevbygger"
+  NyBrevbygger = 'NyBrevbygger',
 }

@@ -3,9 +3,9 @@
 import { BodyShort, Button, Popover, Tag, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
-import styles from './LegeerklæringInfoboks.module.css';
+import styles from 'components/oppgaveliste/svarfrabehandler/SvarFraBehandler.module.css';
 
-export const LegeerklæringInfoboks = () => {
+export const SvarFraBehandler = () => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
 

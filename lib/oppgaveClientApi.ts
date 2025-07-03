@@ -92,3 +92,9 @@ export async function plukkOppgaveClient(oppgaveId: number, versjon: number) {
   const payload: PlukkOppgaveDto = { oppgaveId, versjon };
   return await clientFetch<Oppgave>('/oppgave/api/oppgave/plukk-oppgave', 'POST', payload);
 }
+
+export function clientMottattDokumenterLest(behandlingsreferanse: string) {
+  return clientFetch(`/oppgave/api/oppgave/mottatt-dokumenter-lest`, 'POST', {
+    behandlingRef: behandlingsreferanse,
+  });
+}
