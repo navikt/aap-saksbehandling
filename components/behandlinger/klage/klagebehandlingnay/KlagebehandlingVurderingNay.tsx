@@ -40,7 +40,7 @@ export const KlagebehandlingVurderingNay = ({ behandlingVersjon, readOnly, grunn
       },
       notat: {
         type: 'textarea',
-        label: 'Kommentar til klageinstans',
+        label: 'Kommentar til klageinstans (frivillig)',
         description: 'Bruker kan få innsyn i denne teksten',
         defaultValue: grunnlag?.vurdering?.notat ?? undefined,
       },

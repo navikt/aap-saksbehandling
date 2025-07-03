@@ -74,7 +74,7 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
                   <Label as="p" size={'small'}>
                     Krav mottatt:
                   </Label>
-                  <BodyShort>{formaterDatoForFrontend(behandling.kravMottatt)}</BodyShort>
+                  <BodyShort size={'small'}>{formaterDatoForFrontend(behandling.kravMottatt)}</BodyShort>
                 </>
               )}
               <Label as="p" size={'small'}>

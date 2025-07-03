@@ -35,7 +35,7 @@ describe('Klage - oppsummering', () => {
       />
     );
 
-    const heading = screen.getByText('Oppsummering klagebehandlingen');
+    const heading = screen.getByText('Oppsummering av klagebehandlingen');
     expect(heading).toBeVisible();
   });
 

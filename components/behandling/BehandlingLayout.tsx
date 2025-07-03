@@ -132,10 +132,10 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
               <aside className={`flex-column`}>
                 <Behandlingsinfo behandling={behandling.data} sak={sak} klageresultat={klageresultat.data} />
                 <KlageBehandlingInfo kabalKlageResultat={kabalKlageResultat} klageresultat={klageresultat.data} />
-                <Saksbehandlingsoversikt />
                 {visTotrinnsvurdering && (
                   <ToTrinnsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} />
                 )}
+                <Saksbehandlingsoversikt />
               </aside>
             </SakContextProvider>
           </HGrid>

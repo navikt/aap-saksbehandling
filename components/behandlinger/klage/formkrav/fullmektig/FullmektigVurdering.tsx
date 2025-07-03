@@ -9,6 +9,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { FullmektigGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { landMedTrygdesamarbeidInklNorge } from 'lib/utils/countries';
+import styles from './fullmektig.module.scss';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -20,7 +21,9 @@ interface Props {
 interface FormFields {
   harFullmektig: JaEllerNei;
   idType: 'navnOgAdresse' | 'fnr' | 'orgnr' | 'utl_orgnr';
-  fullmektigIdent: string;
+  orgnr?: string;
+  utlOrgnr?: string;
+  fnr?: string;
   navn: string;
   adresselinje1: string;
   adresselinje2?: string;
@@ -49,17 +52,37 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
         type: 'radio',
         label: 'Hvordan skal verge/fullmektig identifiseres?',
         rules: { required: 'Du må velge idtype' },
-        defaultValue: grunnlag?.vurdering?.fullmektigIdent
-          ? 'ident'
-          : grunnlag?.vurdering?.fullmektigNavnOgAdresse
-            ? 'navnOgAdresse'
-            : undefined,
+        defaultValue: mapIdentToOption(
+          grunnlag?.vurdering?.fullmektigIdentMedType?.type,
+          grunnlag?.vurdering?.fullmektigNavnOgAdresse != null
+        ),
         options: idTypeOptions(),
       },
-      fullmektigIdent: {
+      fnr: {
         type: 'text',
-        label: 'Org.nr/fnr',
-        rules: { required: 'Du må skrive ident' },
+        label: 'Fnr',
+        rules: {
+          required: 'Du må skrive fødselsnummer',
+          validate: (value: string | undefined) =>
+            value?.length !== 11 ? 'Fødselsnummeret må være 11 siffer' : undefined,
+        },
+        defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+      },
+      orgnr: {
+        type: 'text',
+        label: 'Org.nr',
+        rules: {
+          required: 'Du må skrive Org.nr',
+          validate: (value: string | undefined) => (value?.length !== 9 ? 'Org.nr. må være 9 siffer' : undefined),
+        },
+        defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+      },
+      utlOrgnr: {
+        type: 'text',
+        label: 'Org.nr',
+        rules: {
+          required: 'Du må skrive Org.nr',
+        },
         defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
       },
       navn: {
@@ -116,9 +139,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
     { readOnly }
   );
 
-  const harFullmektig = form.watch('harFullmektig') === JaEllerNei.Ja;
-  const idType = form.watch('idType');
-  const land = form.watch('land');
+  const [harFullmektig, idType, land] = form.watch(['harFullmektig', 'idType', 'land']);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -142,21 +163,13 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
             }
           : undefined;
 
-      const identType = mapIdentType(data.idType);
-
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.FASTSETT_FULLMEKTIG,
           fullmektigVurdering: {
             harFullmektig: harFullmektig,
-            fullmektigIdentMedType:
-              harFullmektig && identType
-                ? {
-                    ident: data.fullmektigIdent,
-                    type: identType,
-                  }
-                : undefined,
+            fullmektigIdentMedType: harFullmektig ? getIdentAndType(data) : undefined,
             fullmektigNavnOgAdresse: navnOgAdresse,
           },
         },
@@ -177,9 +190,15 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
     >
       <FormField form={form} formField={formFields.harFullmektig} horizontalRadio />
-      {harFullmektig && <FormField form={form} formField={formFields.idType} horizontalRadio />}
-      {harFullmektig && idType && idType !== 'navnOgAdresse' && (
-        <FormField form={form} formField={formFields.fullmektigIdent} className={'ident_input'} />
+      {harFullmektig === JaEllerNei.Ja && <FormField form={form} formField={formFields.idType} horizontalRadio />}
+      {harFullmektig === JaEllerNei.Ja && idType === 'fnr' && (
+        <FormField form={form} className={styles.orgNrOgFnr} formField={formFields.fnr} />
+      )}
+      {harFullmektig === JaEllerNei.Ja && idType === 'orgnr' && (
+        <FormField form={form} className={styles.orgNrOgFnr} formField={formFields.orgnr} />
+      )}
+      {harFullmektig === JaEllerNei.Ja && idType === 'utl_orgnr' && (
+        <FormField form={form} className={styles.orgNrOgFnr} formField={formFields.utlOrgnr} />
       )}
       {harFullmektig && idType && skalFylleInnNavnOgAdresse(idType) && (
         <>
@@ -199,6 +218,11 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
     </VilkårsKortMedForm>
   );
 
+  type IndentAndType = {
+    ident: string;
+    type: IdentType;
+  };
+
   function idTypeOptions(): ValuePair[] {
     return [
       { label: 'Fnr', value: 'fnr' },
@@ -208,21 +232,40 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
     ];
   }
 
+  function getIdentAndType(fields: FormFields): IndentAndType | undefined {
+    switch (fields.idType) {
+      case 'navnOgAdresse':
+        return undefined;
+      case 'orgnr':
+        return { ident: fields.orgnr!!, type: 'ORGNR' };
+      case 'utl_orgnr':
+        return { ident: fields.utlOrgnr!!, type: 'UTL_ORGNR' };
+      case 'fnr':
+        return { ident: fields.fnr!!, type: 'FNR_DNR' };
+    }
+  }
+
   function erNorge(land: string): boolean {
     return land === 'NOR';
   }
 
-  function mapIdentType(idType: string): IdentType | undefined {
-    switch (idType) {
-      case 'fnr':
-        return 'FNR_DNR';
-      case 'orgnr':
-        return 'ORGNR';
-      case 'utl_orgnr':
-        return 'UTL_ORGNR';
-      default:
-        return undefined;
+  function mapIdentToOption(
+    identType: IdentType | undefined | null,
+    harAdresse: boolean
+  ): 'navnOgAdresse' | 'fnr' | 'orgnr' | 'utl_orgnr' | undefined {
+    if (identType === 'FNR_DNR') {
+      return 'fnr';
     }
+    if (identType === 'UTL_ORGNR') {
+      return 'utl_orgnr';
+    }
+    if (identType === 'ORGNR') {
+      return 'orgnr';
+    }
+    if (harAdresse) {
+      return 'navnOgAdresse';
+    }
+    return undefined;
   }
 };
 

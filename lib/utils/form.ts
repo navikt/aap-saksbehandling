@@ -122,7 +122,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '6005':
       return 'Skriv forhåndsvarsel klage';
     case '6006':
-      return 'Oppsummering klagebehandlingen';
+      return 'Oppsummering av klagebehandlingen';
     case '6008':
       return 'Vurder konsekvens av svar fra Nav Klaginstans';
     case '6009':

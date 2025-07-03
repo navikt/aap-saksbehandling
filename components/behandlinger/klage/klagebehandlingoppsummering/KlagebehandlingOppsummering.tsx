@@ -74,7 +74,7 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
   };
   return (
     <VilkårsKortMedForm
-      heading={'Oppsummering klagebehandlingen'}
+      heading={'Oppsummering av klagebehandlingen'}
       steg={'KLAGEBEHANDLING_OPPSUMMERING'}
       onSubmit={handleSubmit}
       vilkårTilhørerNavKontor={false}
