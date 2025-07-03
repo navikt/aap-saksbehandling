@@ -1,18 +1,18 @@
-button.knapp {
+.knapp {
   background-color: var(--a-surface-alt-1-subtle);
   color: black;
 }
 
-button.knapp span {
+.knapp span {
   font-weight: var(--a-font-weight-regular);
 }
 
-button.knapp:hover {
+.knapp:hover {
   background-color: var(--a-surface-alt-1);
   color: white;
 }
 
-span.tag {
+.tag {
   border-top-left-radius: var(--a-border-radius-large);
   border-top-right-radius: var(--a-border-radius-large);
   justify-content: left;
