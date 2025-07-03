@@ -37,6 +37,7 @@ interface Props {
 
 export const MinEnhet = ({ enheter }: Props) => {
   const { hentLagretAktivEnhet, lagreAktivEnhet } = useLagreAktivEnhet();
+  const antallDager = 14;
 
   const [listeVisning, setListeVisning] = useState<boolean>(false);
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
@@ -61,7 +62,7 @@ export const MinEnhet = ({ enheter }: Props) => {
     antallÅpneBehandlingerPerBehandlingstypeClient
   );
   const { data: behandlingerUtvikling } = useSWR(
-    `/oppgave/api/statistikk/behandlinger/utvikling?antallDager=${0}&${behandlingstyperQuery}`,
+    `/oppgave/api/statistikk/behandlinger/utvikling?antallDager=${antallDager}&${behandlingstyperQuery}`,
     behandlingerUtviklingClient
   );
   const { data: fordelingÅpneBehandlinger } = useSWR(

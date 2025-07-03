@@ -30,6 +30,7 @@ import { isSuccess } from 'lib/utils/api';
 export const TotaloversiktBehandlinger = () => {
   const [listeVisning, setListeVisning] = useState<boolean>(false);
   const alleFiltere = useContext(AlleFiltereContext);
+  const antallDager = 14;
   const behandlingstyperQuery = useMemo(
     () => statistikkQueryparams({ behandlingstyper: alleFiltere.behandlingstyper }),
     [alleFiltere]
@@ -40,7 +41,7 @@ export const TotaloversiktBehandlinger = () => {
     antallÅpneBehandlingerPerBehandlingstypeClient
   );
   const { data: behandlingerUtvikling } = useSWR(
-    `/oppgave/api/statistikk/behandlinger/utvikling?antallDager=${0}&${behandlingstyperQuery}`,
+    `/oppgave/api/statistikk/behandlinger/utvikling?antallDager=${antallDager}&${behandlingstyperQuery}`,
     behandlingerUtviklingClient
   );
   const { data: fordelingÅpneBehandlinger } = useSWR(

@@ -1,42 +1,55 @@
 'use client';
 
-import { BodyShort, Heading, VStack } from '@navikt/ds-react';
-import { BehandlingEndringerPerDag } from 'lib/types/statistikkTypes';
-import { PlotWrapper } from '../plotwrapper/PlotWrapper';
+import { useState } from 'react';
+import { VStack, Heading, BodyShort } from '@navikt/ds-react';
+import { parseISO } from 'date-fns';
+import { AntallDagerFilter } from '../antalldagerfilter/AntallDagerFilter';
 import { ResponsivePlot } from '../responsiveplot/ResponsivePlot';
+import { PlotWrapper } from '../plotwrapper/PlotWrapper';
+import { BehandlingEndringerPerDag } from 'lib/types/statistikkTypes';
+import { filtrerPeriode } from '../../../lib/utils/datefilter';
 
 interface Props {
-  behandlingerEndringer: Array<BehandlingEndringerPerDag>;
+  behandlingerEndringer: BehandlingEndringerPerDag[];
 }
+
 export const BehandlingerInnUt = ({ behandlingerEndringer }: Props) => {
-  const nyeFørsteDag = behandlingerEndringer[0]?.nye;
-  const avsluttedeFørsteDag = behandlingerEndringer[0]?.avsluttede;
-  const sumInnUt =
-    nyeFørsteDag !== undefined && avsluttedeFørsteDag !== undefined ? nyeFørsteDag - avsluttedeFørsteDag : 0;
+  const [selectedFilter, setSelectedFilter] = useState(0);
+
+  const filteredData = behandlingerEndringer.filter((entry) => {
+    const date = parseISO(entry.dato);
+    return filtrerPeriode[selectedFilter]?.(date);
+  });
+
+  const sumNye = filteredData.reduce((sum, e) => sum + (e.nye || 0), 0);
+  const sumAvsluttede = filteredData.reduce((sum, e) => sum + (e.avsluttede || 0), 0);
+  const sumInnUt = sumNye - sumAvsluttede;
+
   return (
     <PlotWrapper>
       <VStack align={'center'} gap={'5'}>
         <Heading level={'3'} size={'small'}>
-          {'Inngang / Utgang'}
+          {'Nye og avsluttede behandlinger'}
         </Heading>
         <VStack align={'center'}>
           <BodyShort size={'large'}>
-            {sumInnUt >= 0 ? '+ ' : '- '}
+            {sumInnUt >= 0 ? '+' : ''}
             {sumInnUt}
           </BodyShort>
           <BodyShort size={'large'}>{'Endring i åpne behandlinger i dag'}</BodyShort>
         </VStack>
+        <AntallDagerFilter selectedValue={selectedFilter} onChange={setSelectedFilter} />
       </VStack>
       <ResponsivePlot
         data={[
           {
             x: ['Nye'],
-            y: [nyeFørsteDag],
+            y: [sumNye],
             type: 'bar',
           },
           {
             x: ['Avsluttede'],
-            y: [avsluttedeFørsteDag],
+            y: [sumAvsluttede],
             type: 'bar',
           },
         ]}
