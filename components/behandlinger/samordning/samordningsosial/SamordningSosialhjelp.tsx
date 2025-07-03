@@ -1,8 +1,10 @@
-import { Alert, BodyShort } from '@navikt/ds-react';
+'use client';
+
+import { Alert, BodyShort, Box, HStack, Table, VStack } from '@navikt/ds-react';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { parse } from 'date-fns';
 import { RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
   grunnlag: RefusjonskravGrunnlag;
@@ -10,7 +12,6 @@ interface Props {
 
 export const SamordningSosialhjelp = ({ grunnlag }: Props) => {
   if (!grunnlag.gjeldendeVurdering?.harKrav) return null;
-
   const vurderinger = grunnlag.gjeldendeVurderinger;
   return (
     vurderinger && (
@@ -19,20 +20,33 @@ export const SamordningSosialhjelp = ({ grunnlag }: Props) => {
           Vi har funnet perioder med sosialstønad eller tjenestepensjonsordning. Disse kan føre til refusjonskrav på
           etterbetaling.
         </BodyShort>
-        <BodyShort spacing>
-          Refusjonskrav gjelder for:{' '}
-          {vurderinger.map((vurdering, index) => {
-            const fom = vurdering.fom ? formaterDatoForFrontend(parse(vurdering.fom, 'yyyy-MM-dd', new Date())) : '-';
-            const tom = vurdering.tom ? formaterDatoForFrontend(parse(vurdering.tom, 'yyyy-MM-dd', new Date())) : '';
-            const navKontor = vurdering.navKontor ?? '';
-            return (
-              <div key={index}>
-                {fom} {tom && `til ${tom}`} {navKontor}
-                {index < vurderinger.length - 1 ? ', ' : ''}
-              </div>
-            );
-          })}
-        </BodyShort>
+        <TableStyled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Periode</Table.HeaderCell>
+              <Table.HeaderCell>Nav-kontor</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {!vurderinger.length && (
+              <Table.Row>
+                <Table.DataCell colSpan={4}>Ingen refusjon fra Nav-kontor funnet</Table.DataCell>
+              </Table.Row>
+            )}
+            {vurderinger.map((vurdering, index) => {
+              return (
+                <Table.Row key={vurdering.navKontor ?? index}>
+                  <Table.DataCell textSize="small">
+                    <HStack gap={'2'} marginInline={'2'}>
+                      {formaterDatoForFrontend(vurdering.fom!!)} - {formaterDatoForFrontend(vurdering.tom!!)}
+                    </HStack>
+                  </Table.DataCell>
+                  <Table.DataCell textSize="small">{vurdering.navKontor}</Table.DataCell>
+                </Table.Row>
+              );
+            })}
+          </Table.Body>
+        </TableStyled>
         <Alert variant={'info'}>
           Det er ikke støtte for refusjonskrav enda. Sett saken på vent og kontakt team AAP.
         </Alert>
