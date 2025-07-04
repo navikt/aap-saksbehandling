@@ -9,6 +9,9 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { SamordningArbeidsgiverGrunnlag } from 'lib/types/types';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { validerDato } from 'lib/validation/dateValidation';
+import { isBefore, parse, startOfDay } from 'date-fns';
 
 interface Props {
   grunnlag: SamordningArbeidsgiverGrunnlag;
@@ -71,7 +74,7 @@ export const SamordningArbeidsgiver = ({ readOnly, behandlingVersjon, grunnlag }
 
   return (
     <VilkårsKortMedForm
-      heading="Ytelser fra arbeidsgiver til avregning"
+      heading="Ytelser fra arbeidsgiver (sluttpakke)"
       steg="SAMORDNING_ARBEIDSGIVER"
       onSubmit={handleSubmit}
       isLoading={isLoading}
@@ -87,6 +90,32 @@ export const SamordningArbeidsgiver = ({ readOnly, behandlingVersjon, grunnlag }
             Det er ikke støtte for refusjonskrav enda. Sett saken på vent og kontakt team AAP.
           </Alert>
           <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+          <div style={{ display: 'flex', gap: '1.0rem', flexDirection: 'row', flexWrap: 'wrap' }}>
+            <DateInputWrapper
+              control={form.control}
+              name={`fom`}
+              hideLabel={true}
+              rules={{
+                required: 'Du må velge når sluttpakken gjelder fra',
+                validate: (value) => {
+                  return validerDato(value as string);
+                },
+              }}
+              readOnly={readOnly}
+            />
+            <DateInputWrapper
+              control={form.control}
+              name={`tom`}
+              hideLabel={true}
+              rules={{
+                required: 'Du må velge når sluttpakken gjelder til',
+                validate: (value) => {
+                  return validerDato(value as string);
+                },
+              }}
+              readOnly={readOnly}
+            />
+          </div>
         </VStack>
       }
     </VilkårsKortMedForm>
