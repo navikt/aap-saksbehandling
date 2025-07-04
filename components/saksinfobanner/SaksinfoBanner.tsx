@@ -148,7 +148,11 @@ export const SaksinfoBanner = ({
               />
             </div>
           )}
-          <div className={styles.oppgavestatus}>{oppgaveStatus && <OppgaveStatus oppgaveStatus={oppgaveStatus} />}</div>
+          {oppgaveStatus && (
+            <div className={styles.oppgavestatus}>
+              <OppgaveStatus oppgaveStatus={oppgaveStatus} />
+            </div>
+          )}
           <div className={styles.saksmeny}>
             <Dropdown>
               <Button
