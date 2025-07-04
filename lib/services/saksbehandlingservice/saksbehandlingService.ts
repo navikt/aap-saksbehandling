@@ -43,6 +43,7 @@ import {
   SakPersoninfo,
   SaksInfo,
   SamordningAndreStatligeYtelserGrunnlag,
+  SamordningArbeidsgiverGrunnlag,
   SamordningGraderingGrunnlag,
   SamordningTjenestePensjonGrunnlag,
   SamordningUføreGrunnlag,
@@ -223,6 +224,11 @@ export const hentSamordningTjenestePensjonGrunnlag = async (behandlingsReferanse
 export const hentSamordningAndreStatligeYtelseGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/samordning-andre-statlige-ytelser`;
   return await apiFetch<SamordningAndreStatligeYtelserGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentSamordningArbeidsgiverGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/samordning-arbeidsgiver`;
+  return await apiFetch<SamordningArbeidsgiverGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBeregningstidspunktVurdering = async (behandlingsReferanse: string) => {

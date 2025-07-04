@@ -9,6 +9,7 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SamordningTjenestePensjonMedDataFetching } from 'components/behandlinger/samordning/samordningtjenestepensjon/SamordningTjenestePensjonMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+import { SamordningArbeidsgiverMedDatafetching } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverMedDatafetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -53,6 +54,14 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
 
       <StegSuspense>
         <SamordningAndreStatligeYtelserMedDatafetching
+          behandlingsreferanse={behandlingsreferanse}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+        />
+      </StegSuspense>
+
+      <StegSuspense>
+        <SamordningArbeidsgiverMedDatafetching
           behandlingsreferanse={behandlingsreferanse}
           behandlingVersjon={flyt.data.behandlingVersjon}
           readOnly={flyt.data.visning.saksbehandlerReadOnly}
