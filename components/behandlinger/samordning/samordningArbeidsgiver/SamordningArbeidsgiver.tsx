@@ -2,7 +2,7 @@
 
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { Alert, Label, VStack } from '@navikt/ds-react';
+import { HStack, Label, VStack } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -11,7 +11,7 @@ import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform
 import { SamordningArbeidsgiverGrunnlag } from 'lib/types/types';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
-import { isBefore, parse, startOfDay } from 'date-fns';
+import { parse } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
@@ -89,7 +89,7 @@ export const SamordningArbeidsgiver = ({ readOnly, behandlingVersjon, grunnlag }
         <VStack gap={'6'}>
           <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
           <Label size={'small'}>Legg til start- og sluttdato for reduksjon som følge av ytelse fra arbeidsgiver</Label>
-          <div style={{ display: 'flex', gap: '1.0rem', flexDirection: 'row', flexWrap: 'wrap' }}>
+          <HStack gap={'6'}>
             <DateInputWrapper
               control={form.control}
               label={'Startdato'}
@@ -116,7 +116,7 @@ export const SamordningArbeidsgiver = ({ readOnly, behandlingVersjon, grunnlag }
               }}
               readOnly={readOnly}
             />
-          </div>
+          </HStack>
         </VStack>
       }
     </VilkårsKortMedForm>
