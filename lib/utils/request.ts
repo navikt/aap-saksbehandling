@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { BehandlingsTyperOption } from 'lib/utils/behandlingstyper';
 import { AvklaringsbehovReferanse, FilterTidsEnhet, Oppgave } from 'lib/types/oppgaveTypes';
-import { BehandlingstyperRequestQuery } from 'lib/types/statistikkTypes';
+import { BehandlingstyperRequestQuery, OppslagsPeriode } from 'lib/types/statistikkTypes';
 
 export function queryParamsArray(key: string, values: (string | number)[]) {
   const filtered = values.filter((value) => value !== undefined && value !== null && value !== '');
@@ -18,6 +18,7 @@ export type StatistikkQueryParams = {
   bøtteStørrelse?: number;
   enhet?: FilterTidsEnhet;
   enheter?: string[];
+  oppslagsPeriode?: string;
 };
 export function statistikkQueryparams({
   behandlingstyper,
@@ -26,6 +27,7 @@ export function statistikkQueryparams({
   bøtteStørrelse,
   enhet,
   enheter,
+  oppslagsPeriode,
 }: StatistikkQueryParams) {
   const behandlingstyperString = queryParamsArray('behandlingstyper', behandlingstyper);
   const antallDagerString = !antallDager && antallDager !== 0 ? '' : `antallDager=${antallDager}`;
@@ -33,6 +35,7 @@ export function statistikkQueryparams({
   const bøtteStørrelseString = !bøtteStørrelse && bøtteStørrelse !== 0 ? '' : `bøtteStørrelse=${bøtteStørrelse}`;
   const enhetString = enhet ? `enhet=${enhet}` : '';
   const enheterString = enheter ? queryParamsArray('enheter', enheter) : '';
+  const oppslagsPeriodeString = oppslagsPeriode ? `oppslagsPeriode=${oppslagsPeriode}` : '';
   const string = [
     behandlingstyperString,
     antallDagerString,
@@ -40,6 +43,7 @@ export function statistikkQueryparams({
     bøtteStørrelseString,
     enhetString,
     enheterString,
+    oppslagsPeriodeString,
   ]
     .filter((value) => value)
     .join('&');
@@ -53,6 +57,7 @@ export type StatistikkQueryParamsOutput = {
   bøtteStørrelse?: number;
   enhet?: FilterTidsEnhet;
   enheter: string[];
+  oppslagsPeriode?: OppslagsPeriode;
 };
 export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryParamsOutput {
   const params = req.nextUrl.searchParams;
@@ -62,6 +67,7 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
   const bøtteStørrelse = params.get('bøtteStørrelse');
   const behandlingstyper = params.getAll('behandlingstyper').map((e) => e as BehandlingstyperRequestQuery);
   const enheter = params.getAll('enheter');
+  const oppslagsPeriode = params.get('oppslagsPeriode') as OppslagsPeriode;
   return {
     ...(enhet ? { enhet } : {}),
     ...(antallBøtter ? { antallBøtter: parseInt(antallBøtter) } : {}),
@@ -69,6 +75,7 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
     behandlingstyper,
     enheter,
     antallDager: parseInt(antallDager ?? '0'),
+    oppslagsPeriode: oppslagsPeriode ?? '',
   };
 }
 

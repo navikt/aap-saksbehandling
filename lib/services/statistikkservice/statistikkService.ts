@@ -22,6 +22,15 @@ export const hentAntallÅpneBehandlingerPerBehandlingstype = async (
   return await apiFetch<Array<AntallÅpneOgGjennomsnitt>>(url, statistikkApiScope, 'GET');
 };
 
+export const hentAntallÅpneBehandlingerPerBehandlingstypeMedPeriode = async (
+  behandlingstyper: Array<BehandlingsTyperOption> = [],
+  enheter: Array<string>,
+  oppslagsPeriode?: string
+) => {
+  const url = `${statistikkApiBaseURL}/åpne-behandlinger-per-behandlingstype-med-periode?${statistikkQueryparams({ behandlingstyper, enheter, oppslagsPeriode })}`;
+  return await apiFetch<Array<AntallÅpneOgGjennomsnitt>>(url, statistikkApiScope, 'GET');
+};
+
 export const hentBehandlingerUtvikling = async (
   behandlingstyper: Array<BehandlingsTyperOption> = [],
   enheter: Array<string>,
@@ -65,6 +74,15 @@ export async function hentVenteÅrsakerForBehandlingerPåVent(
   enheter: Array<string>
 ) {
   const url = `${statistikkApiBaseURL}/behandlinger/${encodeURIComponent('på-vent')}?${statistikkQueryparams({ behandlingstyper, enheter })}`;
+  return await apiFetch<Array<VenteÅrsakOgGjennomsnitt>>(url, statistikkApiScope, 'GET');
+}
+
+export async function hentVenteÅrsakerForBehandlingerPåVentMedPeriode(
+  behandlingstyper: Array<BehandlingsTyperOption> = [],
+  enheter: Array<string>,
+  oppslagsPeriode?: string
+) {
+  const url = `${statistikkApiBaseURL}/behandlinger/${encodeURIComponent('på-vent-med-periode')}?${statistikkQueryparams({ behandlingstyper, enheter, oppslagsPeriode })}`;
   return await apiFetch<Array<VenteÅrsakOgGjennomsnitt>>(url, statistikkApiScope, 'GET');
 }
 

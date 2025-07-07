@@ -56,9 +56,6 @@ export const TotaloversiktBehandlinger = () => {
     `/oppgave/api/statistikk/behandlinger/pa-vent?${behandlingstyperQuery}`,
     venteÅrsakerClient
   );
-  const antallPåVent = isSuccess(venteÅrsaker)
-    ? venteÅrsaker.data?.map((årsak) => årsak.antall).reduce((acc, curr) => acc + curr, 0)
-    : undefined;
   const behandlingerPerSteggruppe = useSWR(
     `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
     behandlingerPerSteggruppeClient
@@ -83,9 +80,7 @@ export const TotaloversiktBehandlinger = () => {
           {isSuccess(behandlingerUtvikling) && (
             <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
           )}
-          {isSuccess(antallÅpneBehandlinger) && (
-            <ApneBehandlinger antallPåVent={antallPåVent} åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
-          )}
+          <ApneBehandlinger behandlingstyperQuery={behandlingstyperQuery} />
           {isSuccess(antallÅpneBehandlinger) && (
             <TypeBehandlinger åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
           )}

@@ -1,27 +1,54 @@
 'use client';
 
 import { BodyShort, Heading, VStack } from '@navikt/ds-react';
-import { AntallÅpneOgGjennomsnitt } from 'lib/types/statistikkTypes';
 import { PlotWrapper } from 'components/produksjonsstyring/plotwrapper/PlotWrapper';
 import { ResponsivePlot } from 'components/produksjonsstyring/responsiveplot/ResponsivePlot';
+import { useState } from 'react';
+import { AntallDagerFilter, periodeOptions } from '../antalldagerfilter/AntallDagerFilter';
+import { OppslagsPeriode } from '../../../lib/types/statistikkTypes';
+import { antallÅpneBehandlingerPerBehandlingstypeClient, venteÅrsakerClient } from '../../../lib/oppgaveClientApi';
+import useSWR from 'swr';
+import { isSuccess } from '../../../lib/utils/api';
 
 interface Props {
-  åpneOgGjennomsnitt: Array<AntallÅpneOgGjennomsnitt>;
-  antallPåVent?: number;
+  behandlingstyperQuery: string;
 }
-export const ApneBehandlinger = ({ åpneOgGjennomsnitt, antallPåVent }: Props) => {
-  const antallPåVentEllerNull = antallPåVent === undefined ? 0 : antallPåVent;
+export const ApneBehandlinger = ({ behandlingstyperQuery }: Props) => {
+  const [selectedValue, setOppslagsPeriode] = useState(0);
+
+  const oppslagsPeriode: OppslagsPeriode =
+    periodeOptions.find((o) => o.value === selectedValue)?.oppslagsPeriode ?? 'IDAG';
+
+  const { data: antallÅpneBehandlingerMedPeriode } = useSWR(
+    `/oppgave/api/statistikk/apne-behandlinger-med-periode?oppslagsPeriode=${oppslagsPeriode}&${behandlingstyperQuery}`,
+    antallÅpneBehandlingerPerBehandlingstypeClient
+  );
+
+  const { data: venteÅrsakerMedPeriode } = useSWR(
+    `/oppgave/api/statistikk/behandlinger/pa-vent-med-periode?oppslagsPeriode=${oppslagsPeriode}&${behandlingstyperQuery}`,
+    venteÅrsakerClient
+  );
+  const antallPåVentMedPeriode = isSuccess(venteÅrsakerMedPeriode)
+    ? venteÅrsakerMedPeriode.data?.map((årsak) => årsak.antall).reduce((acc, curr) => acc + curr, 0)
+    : undefined;
+
+  const åpneOgGjennomsnitt = isSuccess(antallÅpneBehandlingerMedPeriode)
+    ? antallÅpneBehandlingerMedPeriode.data || []
+    : [];
+
   const totaltAntallÅpneBehandlinger = åpneOgGjennomsnitt.reduce((acc, curr) => acc + curr.antallÅpne, 0);
+  const antallPåVentEllerNull = antallPåVentMedPeriode === undefined ? 0 : antallPåVentMedPeriode;
+
   return (
     <PlotWrapper>
       <VStack align={'center'} gap={'5'}>
         <Heading level={'3'} size={'small'}>
-          {'Status åpne behandlinger'}
+          {'Status på behandlinger'}
         </Heading>
         <VStack align={'center'}>
-          <BodyShort size={'large'}>{totaltAntallÅpneBehandlinger}</BodyShort>
-          <BodyShort size={'large'}>{'Totalt antall åpne behandlinger'}</BodyShort>
+          <BodyShort size={'large'}>{totaltAntallÅpneBehandlinger + antallPåVentEllerNull} totalt</BodyShort>
         </VStack>
+        <AntallDagerFilter selectedValue={selectedValue} onChange={setOppslagsPeriode} />
       </VStack>
       <ResponsivePlot
         data={[
