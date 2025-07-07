@@ -105,7 +105,7 @@ export const MinEnhet = ({ enheter }: Props) => {
           {isSuccess(behandlingerUtvikling) && (
             <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
           )}
-          <ApneBehandlinger behandlingstyperQuery={behandlingstyperQuery} />z
+          <ApneBehandlinger behandlingstyperQuery={behandlingstyperQuery} />
           {isSuccess(antallÅpneBehandlinger) && (
             <TypeBehandlinger åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
           )}
