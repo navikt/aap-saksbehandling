@@ -3261,7 +3261,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/{referanse}/grunnlag/samordning-arbeidsgiver': {
+  '/api/behandling/{referanse}/grunnlag/samordning-arbeidsgiver': {
     parameters: {
       query?: never;
       header?: never;
