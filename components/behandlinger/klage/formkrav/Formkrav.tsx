@@ -75,6 +75,7 @@ export const Formkrav = async ({ behandlingsreferanse }: Props) => {
       {flyt.data.visning.visBrevkort && flyt.data.aktivGruppe === 'FORMKRAV' && (
         <BrevKortMedDataFetching
           behandlingReferanse={behandlingsreferanse}
+          visAvbryt={false}
           behandlingVersjon={behandlingVersjon}
           aktivtSteg={flyt.data.aktivtSteg}
         />

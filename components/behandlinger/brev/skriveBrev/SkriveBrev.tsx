@@ -29,6 +29,7 @@ export const SkriveBrev = ({
   saksnummer,
   grunnlag,
   signaturer,
+  visAvbryt = true,
   status,
   readOnly,
 }: {
@@ -39,6 +40,7 @@ export const SkriveBrev = ({
   behandlingVersjon: number;
   grunnlag: Brev;
   signaturer: Signatur[];
+  visAvbryt?: boolean;
   status: BrevStatus;
   readOnly: boolean;
 }) => {
@@ -109,9 +111,15 @@ export const SkriveBrev = ({
                 >
                   Forhåndsvis brev
                 </ActionMenu.Item>
-                <ActionMenu.Item variant="danger" icon={<TrashIcon />} onSelect={() => settIkkeSendBrevModalOpen(true)}>
-                  Ikke send brev
-                </ActionMenu.Item>
+                {visAvbryt && (
+                  <ActionMenu.Item
+                    variant="danger"
+                    icon={<TrashIcon />}
+                    onSelect={() => settIkkeSendBrevModalOpen(true)}
+                  >
+                    Ikke send brev
+                  </ActionMenu.Item>
+                )}
               </ActionMenu.Group>
             </ActionMenu.Content>
           </ActionMenu>

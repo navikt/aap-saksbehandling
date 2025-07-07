@@ -9,10 +9,16 @@ import { Behovstype } from 'lib/utils/form';
 interface Props {
   behandlingReferanse: string;
   behandlingVersjon: number;
+  visAvbryt?: boolean;
   aktivtSteg: StegType;
 }
 
-export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingVersjon, aktivtSteg }: Props) => {
+export const BrevKortMedDataFetching = async ({
+  behandlingReferanse,
+  behandlingVersjon,
+  aktivtSteg,
+  visAvbryt = true,
+}: Props) => {
   const grunnlagene = await hentBrevGrunnlag(behandlingReferanse);
 
   console.log('grunnlagene', grunnlagene);
@@ -42,6 +48,7 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
           mottaker={mottaker}
           behandlingVersjon={behandlingVersjon}
           referanse={brevbestillingReferanse}
+          visAvbryt={visAvbryt}
           behovstype={behovstype}
           signaturer={grunnlag.signaturer}
           readOnly={readOnly}
