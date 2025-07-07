@@ -19,3 +19,4 @@ export type BehandlingÅrsakAntallGjennomsnitt =
 export type BehandlingstyperRequestQuery = `${NonNullable<
   NonNullable<paths['/behandlingstid']['get']['parameters']['query']>['behandlingstyper']
 >[number]}`;
+export type OppslagsPeriode = 'IDAG' | 'IGÅR' | 'DENNE_UKEN' | 'FORRIGE_UKE';
