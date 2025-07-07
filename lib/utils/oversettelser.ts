@@ -44,6 +44,7 @@ const behovskodeMap = {
   '6001': 'Fastsett behanadlende enhet',
   '6002': 'Vurder klage',
   '6003': 'Behandle klage',
+  '6004': 'Effektuer avvist på formkrav',
   '6005': 'Skriv forhåndsvarsel klage',
   '6006': 'Oppsummering klagebehandlingen',
   '6007': 'Venter på uttalelse fra brukeren på klage forhåndsvarsel',
