@@ -10,6 +10,7 @@ interface Props {
   visning: FlytVisning;
   behandlingReferanse: string;
   behandlingVersjon: number;
+  brevForhåndsvisning?: boolean;
   children: ReactNode;
   aktivtSteg: StegType;
 }
@@ -18,6 +19,7 @@ export const GruppeSteg = ({
   children,
   visning,
   behandlingReferanse,
+  brevForhåndsvisning = true,
   behandlingVersjon,
   aktivtSteg,
   prosessering,
@@ -46,7 +48,7 @@ export const GruppeSteg = ({
           behandlingVersjon={behandlingVersjon}
         />
       )}
-      {visning.visBrevkort && aktivtSteg !== 'BREV' && (
+      {visning.visBrevkort && brevForhåndsvisning && aktivtSteg !== 'BREV' && (
         <BrevKortMedDataFetching
           behandlingReferanse={behandlingReferanse}
           behandlingVersjon={behandlingVersjon}

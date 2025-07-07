@@ -9,6 +9,7 @@ import { FormkravVurderingMedDataFetching } from './formkravvurdering/FormkravVu
 import { PåklagetBehandlingMedDataFetching } from './påklagetbehandling/PåklagetBehandlingMedDataFetching';
 import { BehandlendeEnhetMedDataFetching } from './behandlendeenhet/BehandlendeEnhetMedDataFetching';
 import { FullmektigVurderingMedDataFetching } from 'components/behandlinger/klage/formkrav/fullmektig/FullmektigVurderingMedDataFetching';
+import { BrevKortMedDataFetching } from 'components/brev/BrevKortMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -25,6 +26,7 @@ export const Formkrav = async ({ behandlingsreferanse }: Props) => {
   return (
     <GruppeSteg
       prosessering={flyt.data.prosessering}
+      brevForhåndsvisning={flyt.data.aktivGruppe !== 'FORMKRAV'}
       visning={flyt.data.visning}
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={flyt.data.behandlingVersjon}
@@ -69,6 +71,13 @@ export const Formkrav = async ({ behandlingsreferanse }: Props) => {
             typeBehandling={flyt.data.visning.typeBehandling as TypeBehandling}
           />
         </StegSuspense>
+      )}
+      {flyt.data.visning.visBrevkort && flyt.data.aktivGruppe === 'FORMKRAV' && (
+        <BrevKortMedDataFetching
+          behandlingReferanse={behandlingsreferanse}
+          behandlingVersjon={behandlingVersjon}
+          aktivtSteg={flyt.data.aktivtSteg}
+        />
       )}
     </GruppeSteg>
   );
