@@ -39,7 +39,7 @@
     "plotly.js": "^3.0.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-hook-form": "7.59.0",
+    "react-hook-form": "7.60.0",
     "react-plotly.js": "^2.6.0",
     "react-select": "^5.10.1",
     "recharts": "^2.15.4",
