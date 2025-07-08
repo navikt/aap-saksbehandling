@@ -191,7 +191,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
             <FormField form={form} formField={formFields.vurderAAPIOvergangTilUføre} horizontalRadio />
             {form.watch('vurderAAPIOvergangTilUføre') === JaEllerNei.Ja && (
               <Alert variant="warning">
-                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18 sak.
+                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18-sak.
               </Alert>
             )}
           </VStack>

@@ -281,7 +281,7 @@ describe('Revurdering', () => {
 
     await velgJa(overgangTilArbeid);
     expect(
-      screen.getByText('Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17 sak.')
+      screen.getByText('Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17-sak.')
     ).toBeVisible();
   });
 
@@ -324,7 +324,7 @@ describe('Revurdering', () => {
     });
     await velgJa(overgangTilUføre);
     expect(
-      screen.getByText('Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18 sak.')
+      screen.getByText('Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18-sak.')
     ).toBeVisible();
   });
 
