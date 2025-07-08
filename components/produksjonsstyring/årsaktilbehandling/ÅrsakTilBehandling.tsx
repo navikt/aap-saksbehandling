@@ -4,6 +4,7 @@ import { BodyShort, Heading, Table, VStack } from '@navikt/ds-react';
 import { BehandlingÅrsakAntallGjennomsnitt } from 'lib/types/statistikkTypes';
 import { PlotWrapper } from 'components/produksjonsstyring/plotwrapper/PlotWrapper';
 import { sekunderTilDager } from 'lib/utils/time';
+import { formaterFrittÅrsak } from '../../../lib/utils/årsaker';
 
 interface Props {
   årsakTilBehandling: Array<BehandlingÅrsakAntallGjennomsnitt>;
@@ -32,9 +33,9 @@ export const ÅrsakTilBehandling = ({ årsakTilBehandling }: Props) => {
         <Table.Body>
           {årsakTilBehandling.toReversed().map((it, i) => (
             <Table.Row key={`rad-${i}`}>
-              <Table.DataCell>{it.årsak}</Table.DataCell>
+              <Table.DataCell>{formaterFrittÅrsak(it.årsak)}</Table.DataCell>
               <Table.DataCell>{it.antall}</Table.DataCell>
-              <Table.DataCell>{sekunderTilDager(it.gjennomsnittligAlder)}</Table.DataCell>
+              <Table.DataCell>{sekunderTilDager(it.gjennomsnittligAlder)} dager</Table.DataCell>
             </Table.Row>
           ))}
         </Table.Body>

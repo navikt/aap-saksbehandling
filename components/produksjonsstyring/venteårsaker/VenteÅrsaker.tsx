@@ -5,6 +5,7 @@ import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
 import { PlotWrapper } from '../plotwrapper/PlotWrapper';
 import { VenteÅrsakOgGjennomsnitt } from 'lib/types/statistikkTypes';
 import { SettPåVentÅrsaker } from 'lib/types/types';
+import { sekunderTilDager } from '../../../lib/utils/time';
 
 interface Props {
   venteÅrsaker: Array<VenteÅrsakOgGjennomsnitt>;
@@ -36,7 +37,7 @@ export const VenteÅrsaker = ({ venteÅrsaker }: Props) => {
             <Table.Row key={`rad-${i}`}>
               <Table.DataCell>{mapTilVenteÅrsakTekst(it.årsak as SettPåVentÅrsaker)}</Table.DataCell>
               <Table.DataCell>{it.antall}</Table.DataCell>
-              <Table.DataCell>{(it.gjennomsnittligAlder / (60 * 60 * 24)).toFixed(1)} dager</Table.DataCell>
+              <Table.DataCell>{sekunderTilDager(it.gjennomsnittligAlder)} dager</Table.DataCell>
             </Table.Row>
           ))}
         </Table.Body>
