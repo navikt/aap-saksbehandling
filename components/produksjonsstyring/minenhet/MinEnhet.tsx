@@ -77,13 +77,25 @@ export const MinEnhet = ({ enheter }: Props) => {
     `/oppgave/api/statistikk/behandlinger/pa-vent?${behandlingstyperQuery}`,
     venteÅrsakerClient
   );
+  const årsakerTilBehandling = useSWR(
+    `/oppgave/api/statistikk/behandlinger/arsak-til-behandling?${behandlingstyperQuery}`,
+    årsakTilBehandlingClient
+  ).data;
   const behandlingerPerSteggruppe = useSWR(
     `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
     behandlingerPerSteggruppeClient
   ).data;
-  const årsakerTilBehandling = useSWR(
-    `/oppgave/api/statistikk/behandlinger/arsak-til-behandling?${behandlingstyperQuery}`,
-    årsakTilBehandlingClient
+  const førstegangsBehandlingerPerSteggruppe = useSWR(
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Førstegangsbehandling&enheter=${aktivEnhet}`,
+    behandlingerPerSteggruppeClient
+  ).data;
+  const klageBehandlingerPerSteggruppe = useSWR(
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Klage&enheter=${aktivEnhet}`,
+    behandlingerPerSteggruppeClient
+  ).data;
+  const revurderingBehandlingerPerSteggruppe = useSWR(
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Revurdering&enheter=${aktivEnhet}`,
+    behandlingerPerSteggruppeClient
   ).data;
 
   return (
@@ -121,11 +133,32 @@ export const MinEnhet = ({ enheter }: Props) => {
             />
           )}
           {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
-          {isSuccess(behandlingerPerSteggruppe) && (
-            <BehandlingerPerSteggruppe data={behandlingerPerSteggruppe.data || []} />
-          )}
           {isSuccess(årsakerTilBehandling) && (
             <ÅrsakTilBehandling årsakTilBehandling={årsakerTilBehandling.data || []} />
+          )}
+          {isSuccess(behandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={behandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling behandling og revurdering'}
+            />
+          )}
+          {isSuccess(førstegangsBehandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={førstegangsBehandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling førstegangsbehandling'}
+            />
+          )}
+          {isSuccess(klageBehandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={klageBehandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling klagebehandlinger'}
+            />
+          )}
+          {isSuccess(revurderingBehandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={revurderingBehandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling revurderingbehandlinger'}
+            />
           )}
         </div>
       </VStack>

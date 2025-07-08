@@ -97,6 +97,8 @@ export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker): string {
 
 export function mapTilSteggruppeTekst(steggruppe: string) {
   switch (steggruppe) {
+    case 'SØKNAD':
+      return 'Søknad';
     case 'ALDER':
       return 'Alder';
     case 'LOVVALG':

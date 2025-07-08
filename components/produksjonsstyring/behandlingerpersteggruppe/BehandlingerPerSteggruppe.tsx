@@ -11,9 +11,10 @@ import { ResponsivePlot } from 'components/produksjonsstyring/responsiveplot/Res
 
 interface Props {
   data: Array<BehandlingPerSteggruppe>;
+  title: string;
 }
 
-export const BehandlingerPerSteggruppe = ({ data }: Props) => {
+export const BehandlingerPerSteggruppe = ({ data, title }: Props) => {
   const [visning, setVisning] = useState<string>('chart');
   const sorterteSteg: Array<BehandlingPerSteggruppe> = steggruppeRekkefølge.reduce(
     (acc: Array<BehandlingPerSteggruppe>, steggruppe) => {
@@ -47,7 +48,7 @@ export const BehandlingerPerSteggruppe = ({ data }: Props) => {
       </HStack>
       <VStack align={'center'} gap={'5'}>
         <Heading level={'3'} size={'small'}>
-          Stegfordeling behandling og revurdering
+          {title}
         </Heading>
         <BodyShort size={'large'}>Viser hvor i behandlingen oppgavene ligger.</BodyShort>
       </VStack>
