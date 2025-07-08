@@ -35,6 +35,7 @@ export const KlagebehandlingVurderingNay = ({ behandlingVersjon, readOnly, grunn
       vurdering: {
         type: 'textarea',
         label: 'Vurder klage',
+        description: 'Vurderingen skal brukes i brevet til bruker',
         rules: { required: 'Du må vurdere klagen' },
         defaultValue: grunnlag?.vurdering?.begrunnelse,
       },
