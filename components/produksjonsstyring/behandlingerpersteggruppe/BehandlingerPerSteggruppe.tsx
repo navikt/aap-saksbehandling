@@ -47,9 +47,9 @@ export const BehandlingerPerSteggruppe = ({ data }: Props) => {
       </HStack>
       <VStack align={'center'} gap={'5'}>
         <Heading level={'3'} size={'small'}>
-          Stegfordeling
+          Stegfordeling behandling og revurdering
         </Heading>
-        <BodyShort size={'large'}>Hvor ligger behandling i flyten?</BodyShort>
+        <BodyShort size={'large'}>Viser hvor i behandlingen oppgavene ligger.</BodyShort>
       </VStack>
 
       {visning === 'chart' && (
@@ -62,8 +62,8 @@ export const BehandlingerPerSteggruppe = ({ data }: Props) => {
           }))}
           layout={{
             xaxis: { title: 'Antall' },
+            yaxis: { automargin: true },
             showlegend: false,
-            margin: { l: 110 },
           }}
         />
       )}
