@@ -29,7 +29,7 @@ export const VenteÅrsaker = ({ venteÅrsaker }: Props) => {
           <Table.Row>
             <Table.HeaderCell>Årsak</Table.HeaderCell>
             <Table.HeaderCell>Antall</Table.HeaderCell>
-            <Table.HeaderCell>Gj.snitt ventetid</Table.HeaderCell>
+            <Table.HeaderCell>Snittalder</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>

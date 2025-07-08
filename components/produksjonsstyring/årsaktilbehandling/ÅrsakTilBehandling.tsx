@@ -27,7 +27,7 @@ export const ÅrsakTilBehandling = ({ årsakTilBehandling }: Props) => {
           <Table.Row>
             <Table.HeaderCell>Årsak</Table.HeaderCell>
             <Table.HeaderCell>Antall</Table.HeaderCell>
-            <Table.HeaderCell>Snittalder (dager)</Table.HeaderCell>
+            <Table.HeaderCell>Snittalder</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>

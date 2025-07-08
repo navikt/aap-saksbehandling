@@ -90,14 +90,17 @@ export const MinEnhet = ({ enheter }: Props) => {
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
       <VStack padding={'5'} gap={'5'}>
-        <Button
-          variant={'secondary'}
-          className={'fit-content'}
-          icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
-          onClick={() => setListeVisning(!listeVisning)}
-        >
-          {listeVisning ? 'Gridvisning' : 'Listevisning'}
-        </Button>
+        <VStack align={'end'}>
+          <Button
+            variant={'secondary'}
+            className={'fit-content'}
+            size={'small'}
+            icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
+            onClick={() => setListeVisning(!listeVisning)}
+          >
+            {listeVisning ? 'Gridvisning' : 'Listevisning'}
+          </Button>
+        </VStack>
         <HStack>
           <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
         </HStack>

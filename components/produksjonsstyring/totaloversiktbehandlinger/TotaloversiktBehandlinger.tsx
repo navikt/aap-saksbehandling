@@ -68,14 +68,18 @@ export const TotaloversiktBehandlinger = () => {
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
       <VStack padding={'5'} gap={'5'}>
-        <Button
-          variant={'secondary'}
-          icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
-          className={'fit-content'}
-          onClick={() => setListeVisning(!listeVisning)}
-        >
-          {listeVisning ? 'Gridvisning' : 'Listevisning'}
-        </Button>
+        <VStack align={'end'}>
+          <Button
+            variant={'secondary'}
+            icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
+            className={'fit-content'}
+            size={'small'}
+            onClick={() => setListeVisning(!listeVisning)}
+          >
+            {listeVisning ? 'Gridvisning' : 'Listevisning'}
+          </Button>
+        </VStack>
+
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {isSuccess(behandlingerUtvikling) && (
             <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
