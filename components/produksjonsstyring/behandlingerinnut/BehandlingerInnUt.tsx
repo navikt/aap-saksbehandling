@@ -33,10 +33,8 @@ export const BehandlingerInnUt = ({ behandlingerEndringer }: Props) => {
         </Heading>
         <VStack align={'center'}>
           <BodyShort size={'large'}>
-            {sumInnUt >= 0 ? '+' : ''}
-            {sumInnUt}
+            {sumInnUt >= 0 ? '+' : ''} {sumInnUt} inngang/utgang
           </BodyShort>
-          <BodyShort size={'large'}>{'Endring i åpne behandlinger i dag'}</BodyShort>
         </VStack>
         <AntallDagerFilter selectedValue={selectedFilter} onChange={setSelectedFilter} />
       </VStack>
@@ -46,16 +44,21 @@ export const BehandlingerInnUt = ({ behandlingerEndringer }: Props) => {
             x: ['Nye'],
             y: [sumNye],
             type: 'bar',
+            text: sumNye.toString(),
+            textposition: 'outside',
           },
           {
             x: ['Avsluttede'],
             y: [sumAvsluttede],
+            text: sumAvsluttede.toString(),
+            textposition: 'outside',
             type: 'bar',
           },
         ]}
         layout={{
           yaxis: { title: 'Antall' },
           showlegend: false,
+          autosize: true,
         }}
       />
     </PlotWrapper>

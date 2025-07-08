@@ -15,17 +15,20 @@ export const TypeBehandlinger = ({ åpneOgGjennomsnitt }: Props) => {
           {'Type behandlinger'}
         </Heading>
         <VStack align={'center'}>
-          <BodyShort size={'large'}>{'Åpne behandlinger fordelt på behandlingstype'}</BodyShort>
+          <BodyShort size={'large'}>{'Alle åpne behandlinger fordelt på behandlingstype'}</BodyShort>
         </VStack>
       </VStack>
       <ResponsivePlot
         data={åpneOgGjennomsnitt.map((it) => ({
-          x: [it.behandlingstype],
-          y: [it.antallÅpne],
+          x: [it.antallÅpne],
+          y: [it.behandlingstype],
           type: 'bar',
+          text: it.antallÅpne.toString(),
+          textposition: 'outside',
+          orientation: 'h',
         }))}
         layout={{
-          yaxis: { title: 'Antall' },
+          yaxis: { title: 'Antall', automargin: true },
           showlegend: false,
         }}
       />

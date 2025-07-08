@@ -9,14 +9,18 @@ import { SettPåVentÅrsaker } from 'lib/types/types';
 interface Props {
   venteÅrsaker: Array<VenteÅrsakOgGjennomsnitt>;
 }
+
 export const VenteÅrsaker = ({ venteÅrsaker }: Props) => {
+  const totalt = venteÅrsaker.reduce((sum, e) => sum + (e.antall || 0), 0);
   return (
     <PlotWrapper>
       <VStack align={'center'} gap={'5'}>
         <Heading level={'3'} size={'small'}>
-          {'Venteårsaker'}
+          {'Årsakene til at en behandling er på vent'}
         </Heading>
-        <BodyShort size={'large'}>{'Totalt antall åpne behandlinger'}</BodyShort>
+        <VStack align={'center'}>
+          <BodyShort size={'large'}>{totalt} behandlinger på vent</BodyShort>
+        </VStack>
       </VStack>
 
       <Table>

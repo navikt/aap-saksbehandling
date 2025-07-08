@@ -1,6 +1,6 @@
 'use client';
 
-import { Heading, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, Table, VStack } from '@navikt/ds-react';
 import { BehandlingÅrsakAntallGjennomsnitt } from 'lib/types/statistikkTypes';
 import { PlotWrapper } from 'components/produksjonsstyring/plotwrapper/PlotWrapper';
 import { sekunderTilDager } from 'lib/utils/time';
@@ -15,6 +15,11 @@ export const ÅrsakTilBehandling = ({ årsakTilBehandling }: Props) => {
         <Heading level={'3'} size={'small'}>
           {'Årsak til behandling'}
         </Heading>
+        <VStack align={'center'}>
+          <BodyShort size={'medium'}>
+            {'Viser alle registrerte årsaker til behandling. Én behandling kan ha flere årsaker.'}
+          </BodyShort>
+        </VStack>
       </VStack>
       <Table>
         <Table.Header>

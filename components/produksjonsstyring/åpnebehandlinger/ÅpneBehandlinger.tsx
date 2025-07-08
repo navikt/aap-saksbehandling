@@ -56,11 +56,15 @@ export const ApneBehandlinger = ({ behandlingstyperQuery }: Props) => {
             y: [totaltAntallÅpneBehandlinger],
             x: ['Åpne behandlinger'],
             type: 'bar',
+            text: totaltAntallÅpneBehandlinger.toString(),
+            textposition: 'outside',
           },
           {
             y: [antallPåVentEllerNull],
             x: ['På vent'],
             type: 'bar',
+            text: antallPåVentEllerNull.toString(),
+            textposition: 'outside',
           },
         ]}
         layout={{

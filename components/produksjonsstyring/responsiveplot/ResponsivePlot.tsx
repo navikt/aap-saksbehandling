@@ -1,5 +1,5 @@
 import { PlotParams } from 'react-plotly.js';
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic';
 
 interface ResponsivePlotProps {
   data: PlotParams['data'];
@@ -15,7 +15,7 @@ export const ResponsivePlot = ({ data, layout }: ResponsivePlotProps) => {
       layout={{
         ...layout,
         autosize: true,
-        margin: { ...layout.margin, t: 40, pad: 10 },
+        margin: { ...layout.margin, t: 10, b: 40, pad: 10 },
         colorway: ['#CCE1FF', '#99C4DD', '#FFC166', '#66CBEC', '#99DEAD', '#C0B2D2'],
       }}
       useResizeHandler={true}
