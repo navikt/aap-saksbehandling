@@ -11,6 +11,7 @@ import { StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
+import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
 
 export const SkriveBrevMedDataFetching = async ({
   behandlingsReferanse,
@@ -37,6 +38,16 @@ export const SkriveBrevMedDataFetching = async ({
   }
 
   const brev = brevGrunnlag.data.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
+  const sendteBrev = brevGrunnlag.data.brevGrunnlag.filter(
+    (x) => x.status === 'FULLFØRT' && x.brev != null && x.avklaringsbehovKode === '5050'
+  );
+  const avbrytteBrev = brevGrunnlag.data.brevGrunnlag.filter(
+    (x) => x.status === 'AVBRUTT' && x.brev != null && x.avklaringsbehovKode === '5050'
+  );
+
+  if (!brev?.brev) {
+    return <BrevOppsummering sendteBrev={sendteBrev} avbrutteBrev={avbrytteBrev} />;
+  }
 
   if (!brev?.brev) {
     return null;

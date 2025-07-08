@@ -13,6 +13,7 @@ import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
 import styles from 'components/behandlinger/brev/skriveBrev/SkriveBrevMedDataFetching.module.css';
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { KlagesaksopplysningerKolonne } from 'components/behandlinger/brev/skriveBrev/KlagesaksopplysningerKolonne';
+import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
 
 export const SkriveKlageBrevMedDataFetching = async ({
   behandlingsReferanse,
@@ -44,7 +45,17 @@ export const SkriveKlageBrevMedDataFetching = async ({
   }
 
   const brev = brevGrunnlag.data.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
+  const sendteBrev = brevGrunnlag.data.brevGrunnlag.filter(
+    (x) => x.status === 'FULLFØRT' && x.brev != null && x.avklaringsbehovKode === '5050'
+  );
+  const avbrytteBrev = brevGrunnlag.data.brevGrunnlag.filter(
+    (x) => x.status === 'AVBRUTT' && x.brev != null && x.avklaringsbehovKode === '5050'
+  );
   const readOnlyBrev = aktivtSteg === 'BREV' && !roller.includes(Roller.BESLUTTER);
+
+  if (!brev?.brev) {
+    return <BrevOppsummering sendteBrev={sendteBrev} avbrutteBrev={avbrytteBrev} />;
+  }
 
   if (!brev?.brev) {
     return null;
