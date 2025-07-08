@@ -111,6 +111,11 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
             erBehovForAnnenOppfølging: data.erBehovForAnnenOppfølging
               ? data.erBehovForAnnenOppfølging === JaEllerNei.Ja
               : undefined,
+            ...(bistandsbehovErIkkeOppfylt && {
+              skalVurdereAapIOvergangTilUføre: data.vurderAAPIOvergangTilUføre === JaEllerNei.Ja,
+              skalVurdereAapIOvergangTilArbeid: data.vurderAAPIOvergangTilArbeid === JaEllerNei.Ja,
+              overgangBegrunnelse: data.overgangBegrunnelse,
+            }),
           },
         },
         referanse: behandlingsReferanse,
