@@ -1,7 +1,7 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Alert, BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { TilhørigetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørigetsVurderingTabell';
 import { Dispatch, SetStateAction } from 'react';
@@ -52,7 +52,7 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({
           />
         </div>
         {visOverstyrKnapp && (
-          <HStack>
+          <HStack justify={'space-between'} align={'end'}>
             {visOverstyringsBehov ? (
               <Button variant={'secondary'} onClick={() => setOverstyring(false)}>
                 Angre overstyring
@@ -62,6 +62,7 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({
                 Overstyr
               </Button>
             )}
+            <Detail>Vurdert automatisk av Kelvin</Detail>
           </HStack>
         )}
       </VStack>
