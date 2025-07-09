@@ -1,6 +1,6 @@
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { NoNavAapOppgaveOppgaveDtoBehandlingstype } from '@navikt/aap-oppgave-typescript-types';
-import { PathsBehandlingstidLukkedeSisteDagerAntallDagerGetParametersQueryBehandlingstyper } from '@navikt/aap-statistikk-typescript-types';
+import { PathsBehandlingstidGetParametersQueryBehandlingstyper } from '@navikt/aap-statistikk-typescript-types';
 import { BehandlingstyperRequestQuery } from 'lib/types/statistikkTypes';
 import { ValuePair } from 'components/form/FormField';
 
@@ -29,9 +29,9 @@ export const oppgaveBehandlingstyper = Object.keys(
   });
 
 const behandlingsTypeAlternativerFraEnum = Object.keys(
-  PathsBehandlingstidLukkedeSisteDagerAntallDagerGetParametersQueryBehandlingstyper as unknown as keyof (typeof PathsBehandlingstidLukkedeSisteDagerAntallDagerGetParametersQueryBehandlingstyper)[]
+  PathsBehandlingstidGetParametersQueryBehandlingstyper as unknown as keyof (typeof PathsBehandlingstidGetParametersQueryBehandlingstyper)[]
 )
-  .map((key) => key as keyof typeof PathsBehandlingstidLukkedeSisteDagerAntallDagerGetParametersQueryBehandlingstyper)
+  .map((key) => key as keyof typeof PathsBehandlingstidGetParametersQueryBehandlingstyper)
   .map((key) => {
     switch (key) {
       case 'F_rstegangsbehandling':
