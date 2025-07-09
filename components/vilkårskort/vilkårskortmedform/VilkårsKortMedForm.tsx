@@ -24,6 +24,7 @@ interface Props {
   defaultOpen?: boolean;
   vilkårTilhørerNavKontor: boolean;
   vurdertAvAnsatt?: VurdertAvAnsatt;
+  vurdertAutomatisk?: boolean;
 }
 
 export const VilkårsKortMedForm = ({
@@ -39,6 +40,7 @@ export const VilkårsKortMedForm = ({
   defaultOpen = true,
   visBekreftKnapp,
   vurdertAvAnsatt,
+  vurdertAutomatisk = false,
 }: Props) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
@@ -70,10 +72,14 @@ export const VilkårsKortMedForm = ({
             <HStack justify={'space-between'} align={'end'}>
               <div>{visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}</div>
 
-              {vurdertAvAnsatt && (
-                <Detail>
-                  {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)} (${utledEnhetsnavn(vurdertAvAnsatt, vilkårTilhørerNavKontor)}), ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
-                </Detail>
+              {vurdertAutomatisk ? (
+                <Detail>Vurdert automatisk</Detail>
+              ) : (
+                vurdertAvAnsatt && (
+                  <Detail>
+                    {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)} (${utledEnhetsnavn(vurdertAvAnsatt, vilkårTilhørerNavKontor)}), ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
+                  </Detail>
+                )
               )}
             </HStack>
           </VStack>

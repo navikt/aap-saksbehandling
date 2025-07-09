@@ -137,6 +137,7 @@ export const BarnetilleggVurdering = ({
       visBekreftKnapp={!readOnly && harAvklaringsbehov}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdertAv}
+      vurdertAutomatisk={!harAvklaringsbehov}
     >
       <div className={'flex-column'}>
         {harAvklaringsbehov && (
