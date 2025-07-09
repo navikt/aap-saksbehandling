@@ -65,7 +65,7 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
                 Overstyr
               </Button>
             )}
-            <Detail>Vurdert automatisk av Kelvin</Detail>
+            <Detail>Vurdert automatisk</Detail>
           </HStack>
         )}
       </VStack>
