@@ -32,6 +32,7 @@ const behovskodeMap = {
   '5027': 'Samordning annen statlig ytelse',
   '5028': 'Vurder trekk av søknad',
   '5029': 'Vurder starttidspunkt',
+  '5030': 'Samordning arbeidsgiver',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
