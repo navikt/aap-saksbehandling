@@ -3537,7 +3537,18 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.SimulertArbeidsevneResultatDto': {
       gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneVurderingDto'][];
     };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.BeslutterDto': {
+      ident: string;
+      kontor: string;
+      navn: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      tidspunkt: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagDto': {
+      besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.BeslutterDto'];
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
