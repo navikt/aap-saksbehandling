@@ -26,10 +26,10 @@ const gyldigRefusjonsGrunnlag: RefusjonskravGrunnlag = {
   historiskeVurderinger: [],
 };
 
-describe('Refusjonskrav sosialhjelp', () => {
+describe('Refusjonskrav sosialstønad', () => {
   it('Skal ha korrekt overskrift', () => {
     render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={gyldigRefusjonsGrunnlag} />);
-    const heading = screen.getByText('Sosialhjelp refusjonskrav');
+    const heading = screen.getByText('Sosialstønad refusjonskrav');
     expect(heading).toBeVisible();
   });
 

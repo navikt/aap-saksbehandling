@@ -81,7 +81,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
   const { form } = useConfigForm<FormFields>({
     harKrav: {
       type: 'radio',
-      label: 'Har noen Nav-kontor refusjonskrav for sosialhjelp?',
+      label: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
       defaultValue: getJaNeiEllerUndefined(grunnlag.gjeldendeVurdering?.harKrav),
       rules: { required: 'Du må svare på om Nav-kontoret har refusjonskrav' },
       options: JaEllerNeiOptions,
@@ -154,7 +154,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
 
   return (
     <VilkårsKortMedForm
-      heading={'Sosialhjelp refusjonskrav'}
+      heading={'Sosialstønad refusjonskrav'}
       steg="REFUSJON_KRAV"
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}

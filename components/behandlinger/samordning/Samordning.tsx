@@ -1,7 +1,7 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { SamordningSosialhjelpMedDatafetching } from 'components/behandlinger/samordning/samordningsosial/SamordningSosialhjelpMedDatafetching';
+import { SamordningSosialstønadMedDatafetching } from 'components/behandlinger/samordning/samordningsosial/SamordningSosialstønadMedDatafetching';
 import { SamordningAndreStatligeYtelserMedDatafetching } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelserMedDatafetching';
 import { SamordningGraderingMedDatafetching } from 'components/behandlinger/samordning/samordninggradering/SamordningGraderingMedDatafetching';
 import { SamordningUføreMedDatafetching } from 'components/behandlinger/samordning/samordninguføre/SamordningUføreMedDatafetching';
@@ -32,7 +32,7 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>
-        <SamordningSosialhjelpMedDatafetching behandlingsreferanse={behandlingsreferanse} />
+        <SamordningSosialstønadMedDatafetching behandlingsreferanse={behandlingsreferanse} />
       </StegSuspense>
 
       <StegSuspense>

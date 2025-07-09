@@ -10,7 +10,7 @@ interface Props {
   grunnlag: RefusjonskravGrunnlag;
 }
 
-export const SamordningSosialhjelp = ({ grunnlag }: Props) => {
+export const SamordningSosialstønad = ({ grunnlag }: Props) => {
   if (!grunnlag.gjeldendeVurdering?.harKrav) return null;
   const vurderinger = grunnlag.gjeldendeVurderinger;
   return (
@@ -47,9 +47,6 @@ export const SamordningSosialhjelp = ({ grunnlag }: Props) => {
             })}
           </Table.Body>
         </TableStyled>
-        <Alert variant={'info'}>
-          Det er ikke støtte for refusjonskrav enda. Sett saken på vent og kontakt team AAP.
-        </Alert>
       </VilkårsKort>
     )
   );
