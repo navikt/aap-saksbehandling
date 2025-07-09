@@ -5,7 +5,8 @@ import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
 import { PlotWrapper } from '../plotwrapper/PlotWrapper';
 import { VenteÅrsakOgGjennomsnitt } from 'lib/types/statistikkTypes';
 import { SettPåVentÅrsaker } from 'lib/types/types';
-import { sekunderTilDager } from '../../../lib/utils/time';
+import { sekunderTilDager } from 'lib/utils/time';
+import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 
 interface Props {
   venteÅrsaker: Array<VenteÅrsakOgGjennomsnitt>;
@@ -13,6 +14,8 @@ interface Props {
 
 export const VenteÅrsaker = ({ venteÅrsaker }: Props) => {
   const totalt = venteÅrsaker.reduce((sum, e) => sum + (e.antall || 0), 0);
+  const { sort, håndterSortering, sortertListe } = useSortertListe(venteÅrsaker);
+
   return (
     <PlotWrapper>
       <VStack align={'center'} gap={'5'}>
@@ -23,17 +26,23 @@ export const VenteÅrsaker = ({ venteÅrsaker }: Props) => {
           <BodyShort size={'large'}>{totalt} behandlinger på vent</BodyShort>
         </VStack>
       </VStack>
-
-      <Table>
+      <Table
+        sort={sort}
+        onSortChange={(sortKey) => håndterSortering(sortKey as ScopedSortState<VenteÅrsakOgGjennomsnitt>['orderBy'])}
+      >
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Årsak</Table.HeaderCell>
-            <Table.HeaderCell>Antall</Table.HeaderCell>
-            <Table.HeaderCell>Snittalder</Table.HeaderCell>
+            <Table.ColumnHeader sortKey={'antall'} sortable={true}>
+              Antall
+            </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'gjennomsnittligAlder'} sortable={true}>
+              Snittalder
+            </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {venteÅrsaker.map((it, i) => (
+          {sortertListe.map((it, i) => (
             <Table.Row key={`rad-${i}`}>
               <Table.DataCell>{mapTilVenteÅrsakTekst(it.årsak as SettPåVentÅrsaker)}</Table.DataCell>
               <Table.DataCell>{it.antall}</Table.DataCell>
