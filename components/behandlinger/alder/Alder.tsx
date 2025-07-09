@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { CheckmarkIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { AlderGrunnlag, AvslagÅrsak } from 'lib/types/types';
 
 import styles from './Alder.module.css';
@@ -80,6 +80,9 @@ export const Alder = ({ grunnlag }: Props) => {
             })}
           </Table.Body>
         </TableStyled>
+        <HStack justify={'end'} align={'end'}>
+          <Detail>Vurdert automatisk</Detail>
+        </HStack>
       </VStack>
     </VilkårsKort>
   );
