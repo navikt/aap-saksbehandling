@@ -27,14 +27,12 @@ export const BehandlingerInnUt = ({ behandlingerEndringer }: Props) => {
 
   return (
     <PlotWrapper>
-      <VStack align={'center'} gap={'5'}>
-        <Heading level={'3'} size={'small'}>
-          {'Nye og avsluttede behandlinger'}
-        </Heading>
+      <VStack align={'center'} gap={'2'}>
+        <BodyShort size={'small'}>{'Nye og avsluttede behandlinger'}</BodyShort>
         <VStack align={'center'}>
-          <BodyShort size={'large'}>
+          <Heading size={'small'}>
             {sumInnUt >= 0 ? '+' : ''} {sumInnUt} inngang/utgang
-          </BodyShort>
+          </Heading>
         </VStack>
         <AntallDagerFilter selectedValue={selectedFilter} onChange={setSelectedFilter} />
       </VStack>
@@ -56,7 +54,7 @@ export const BehandlingerInnUt = ({ behandlingerEndringer }: Props) => {
           },
         ]}
         layout={{
-          yaxis: { title: 'Antall' },
+          yaxis: { title: 'Antall', dtick: sumAvsluttede > 4 || sumNye > 4 ? '' : 1 },
           showlegend: false,
           autosize: true,
         }}

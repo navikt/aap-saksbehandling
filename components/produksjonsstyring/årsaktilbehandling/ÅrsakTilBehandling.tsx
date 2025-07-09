@@ -1,11 +1,12 @@
 'use client';
 
-import { BodyShort, Heading, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, Table, VStack } from '@navikt/ds-react';
 import { BehandlingÅrsakAntallGjennomsnitt } from 'lib/types/statistikkTypes';
 import { PlotWrapper } from 'components/produksjonsstyring/plotwrapper/PlotWrapper';
 import { sekunderTilDager } from 'lib/utils/time';
 import { formaterFrittÅrsak } from 'lib/utils/årsaker';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
+import styles from '../../barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
 
 interface Props {
   årsakTilBehandling: Array<BehandlingÅrsakAntallGjennomsnitt>;
@@ -17,14 +18,12 @@ export const ÅrsakTilBehandling = ({ årsakTilBehandling }: Props) => {
 
   return (
     <PlotWrapper>
-      <VStack align={'center'} gap={'5'}>
-        <Heading level={'3'} size={'small'}>
-          {'Årsak til behandling'}
-        </Heading>
+      <VStack align={'center'} gap={'2'}>
+        <BodyShort size={'small'}>{'Årsak til behandling'}</BodyShort>
         <VStack align={'center'}>
-          <BodyShort size={'medium'}>
+          <Detail className={styles.detailgray}>
             {'Viser alle registrerte årsaker til behandling. Én behandling kan ha flere årsaker.'}
-          </BodyShort>
+          </Detail>
         </VStack>
       </VStack>
       <Table

@@ -1,8 +1,9 @@
 // import { PlotWrapper } from 'components/plotwrapper/PlotWrapper';
-import { BodyShort, Heading, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, VStack } from '@navikt/ds-react';
 import { AntallÅpneOgGjennomsnitt } from 'lib/types/statistikkTypes';
 import { PlotWrapper } from 'components/produksjonsstyring/plotwrapper/PlotWrapper';
 import { ResponsivePlot } from 'components/produksjonsstyring/responsiveplot/ResponsivePlot';
+import styles from '../../barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
 
 interface Props {
   åpneOgGjennomsnitt: Array<AntallÅpneOgGjennomsnitt>;
@@ -10,12 +11,10 @@ interface Props {
 export const TypeBehandlinger = ({ åpneOgGjennomsnitt }: Props) => {
   return (
     <PlotWrapper>
-      <VStack align={'center'} gap={'5'}>
-        <Heading level={'3'} size={'small'}>
-          {'Type behandlinger'}
-        </Heading>
+      <VStack align={'center'} gap={'2'}>
+        <BodyShort size={'small'}>{'Type behandlinger'}</BodyShort>
         <VStack align={'center'}>
-          <BodyShort size={'large'}>{'Alle åpne behandlinger fordelt på behandlingstype'}</BodyShort>
+          <Detail className={styles.detailgray}>{'Alle åpne behandlinger fordelt på behandlingstype'}</Detail>
         </VStack>
       </VStack>
       <ResponsivePlot

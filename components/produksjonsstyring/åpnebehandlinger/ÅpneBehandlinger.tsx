@@ -13,6 +13,7 @@ import { isSuccess } from '../../../lib/utils/api';
 interface Props {
   behandlingstyperQuery: string;
 }
+
 export const ApneBehandlinger = ({ behandlingstyperQuery }: Props) => {
   const [selectedValue, setOppslagsPeriode] = useState(0);
 
@@ -41,12 +42,10 @@ export const ApneBehandlinger = ({ behandlingstyperQuery }: Props) => {
 
   return (
     <PlotWrapper>
-      <VStack align={'center'} gap={'5'}>
-        <Heading level={'3'} size={'small'}>
-          {'Status på behandlinger'}
-        </Heading>
+      <VStack align={'center'} gap={'2'}>
+        <BodyShort size={'small'}>{'Status på behandlinger'}</BodyShort>
         <VStack align={'center'}>
-          <BodyShort size={'large'}>{totaltAntallÅpneBehandlinger + antallPåVentEllerNull} totalt</BodyShort>
+          <Heading size={'small'}>{totaltAntallÅpneBehandlinger + antallPåVentEllerNull} totalt</Heading>
         </VStack>
         <AntallDagerFilter selectedValue={selectedValue} onChange={setOppslagsPeriode} />
       </VStack>
@@ -68,7 +67,7 @@ export const ApneBehandlinger = ({ behandlingstyperQuery }: Props) => {
           },
         ]}
         layout={{
-          yaxis: { title: 'Antall' },
+          yaxis: { title: 'Antall', dtick: totaltAntallÅpneBehandlinger > 4 || antallPåVentEllerNull > 4 ? '' : 1 },
           showlegend: false,
         }}
       />

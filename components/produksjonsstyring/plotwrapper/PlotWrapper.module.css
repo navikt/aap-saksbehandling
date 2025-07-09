@@ -1,7 +1,7 @@
 .plotWrapper {
   border: 1px solid var(--a-border-subtle);
   border-radius: 0.5rem;
-  padding: var(--a-spacing-3);
+  padding: var(--a-spacing-6);
   max-height: 500px;
   overflow: scroll;
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Heading, HStack, Table, ToggleGroup, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, HStack, Table, ToggleGroup, VStack } from '@navikt/ds-react';
 import { mapTilSteggruppeTekst } from 'lib/utils/oversettelser';
 import { BarChartIcon, TableIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
@@ -8,6 +8,7 @@ import { BehandlingPerSteggruppe } from 'lib/types/statistikkTypes';
 import { steggruppeRekkefølge } from 'lib/utils/steggruppe';
 import { PlotWrapper } from 'components/produksjonsstyring/plotwrapper/PlotWrapper';
 import { ResponsivePlot } from 'components/produksjonsstyring/responsiveplot/ResponsivePlot';
+import styles from '../../barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
 
 interface Props {
   data: Array<BehandlingPerSteggruppe>;
@@ -46,11 +47,9 @@ export const BehandlingerPerSteggruppe = ({ data, title }: Props) => {
           <ToggleGroup.Item value="table" icon={<TableIcon title="Tabell" />} />
         </ToggleGroup>
       </HStack>
-      <VStack align={'center'} gap={'5'}>
-        <Heading level={'3'} size={'small'}>
-          {title}
-        </Heading>
-        <BodyShort size={'large'}>Viser hvor i behandlingen oppgavene ligger.</BodyShort>
+      <VStack align={'center'} gap={'2'}>
+        <BodyShort size={'small'}>{title}</BodyShort>
+        <Detail className={styles.detailgray}>Viser hvor i behandlingen oppgavene ligger.</Detail>
       </VStack>
 
       {visning === 'chart' && (

@@ -18,12 +18,10 @@ export const VenteÅrsaker = ({ venteÅrsaker }: Props) => {
 
   return (
     <PlotWrapper>
-      <VStack align={'center'} gap={'5'}>
-        <Heading level={'3'} size={'small'}>
-          {'Årsakene til at en behandling er på vent'}
-        </Heading>
+      <VStack align={'center'} gap={'2'}>
+        <BodyShort size={'small'}>{'Årsakene til at en behandling er på vent'}</BodyShort>
         <VStack align={'center'}>
-          <BodyShort size={'large'}>{totalt} behandlinger på vent</BodyShort>
+          <Heading size={'small'}>{totalt} behandlinger på vent</Heading>
         </VStack>
       </VStack>
       <Table

@@ -1,23 +1,25 @@
 'use client';
 
-import { BodyShort, Heading, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, VStack } from '@navikt/ds-react';
 import { FordelingLukkedeBehandlinger } from 'lib/types/statistikkTypes';
 import { PlotWrapper } from '../plotwrapper/PlotWrapper';
 import { ResponsivePlot } from 'components/produksjonsstyring/responsiveplot/ResponsivePlot';
+import styles from '../../barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
 
 interface Props {
   fordelingLukkedeBehandlinger: Array<FordelingLukkedeBehandlinger>;
 }
+
 export const FordelingLukkedeBehandlingerPerDag = ({ fordelingLukkedeBehandlinger }: Props) => {
   const sortertFordeling = fordelingLukkedeBehandlinger.sort((a, b) => a.bøtte - b.bøtte);
   return (
     <PlotWrapper>
-      <VStack align={'center'} gap={'5'}>
-        <Heading level={'3'} size={'small'}>
-          Liggetid avsluttede behandlinger
-        </Heading>
+      <VStack align={'center'} gap={'2'}>
+        <BodyShort size={'small'}>Liggetid avsluttede behandlinger</BodyShort>
         <VStack align={'center'}>
-          <BodyShort size={'large'}>{'Viser hvor mange uker behandlingene var åpne før de ble avsluttet.'}</BodyShort>
+          <Detail className={styles.detailgray}>
+            {'Viser hvor mange uker behandlingene var åpne før de ble avsluttet.'}
+          </Detail>
         </VStack>
       </VStack>
       <ResponsivePlot
