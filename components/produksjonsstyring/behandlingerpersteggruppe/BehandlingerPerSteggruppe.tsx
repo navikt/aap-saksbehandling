@@ -74,7 +74,6 @@ export const BehandlingerPerSteggruppe = ({ data, title }: Props) => {
             <Table.Row>
               <Table.HeaderCell>Steg</Table.HeaderCell>
               <Table.HeaderCell>Antall</Table.HeaderCell>
-              <Table.HeaderCell>Eldste oppgave</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -82,7 +81,6 @@ export const BehandlingerPerSteggruppe = ({ data, title }: Props) => {
               <Table.Row key={`rad-${i}`}>
                 <Table.DataCell>{mapTilSteggruppeTekst(it.steggruppe)}</Table.DataCell>
                 <Table.DataCell>{it.antall}</Table.DataCell>
-                <Table.DataCell>{'finnes ikke'}</Table.DataCell>
               </Table.Row>
             ))}
           </Table.Body>
