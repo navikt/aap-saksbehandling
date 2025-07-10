@@ -42,7 +42,7 @@ export const ApneBehandlinger = ({ behandlingstyperQuery }: Props) => {
 
   return (
     <PlotWrapper>
-      <VStack align={'center'} gap={'2'} padding={'space-2'}>
+      <VStack align={'center'} gap={'2'}>
         <BodyShort size={'small'}>{'Status på behandlinger'}</BodyShort>
         <VStack align={'center'}>
           <Heading size={'small'}>{totaltAntallÅpneBehandlinger + antallPåVentEllerNull} totalt</Heading>
