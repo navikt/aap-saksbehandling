@@ -24,6 +24,7 @@ export const VenteÅrsaker = ({ venteÅrsaker }: Props) => {
           <Heading size={'small'}>{totalt} behandlinger på vent</Heading>
         </VStack>
       </VStack>
+      <VStack padding={'space-8'} />
       <Table
         sort={sort}
         onSortChange={(sortKey) => håndterSortering(sortKey as ScopedSortState<VenteÅrsakOgGjennomsnitt>['orderBy'])}

@@ -20,6 +20,7 @@ export function FordelingÅpneBehandlingerPerDag({ fordelingÅpneBehandlingerPer
           <Detail className={styles.detailgray}>{'Viser hvor mange uker behandlingene har vært åpne.'}</Detail>
         </VStack>
       </VStack>
+      <VStack padding={'space-8'} />
       <ResponsivePlot
         data={[
           {

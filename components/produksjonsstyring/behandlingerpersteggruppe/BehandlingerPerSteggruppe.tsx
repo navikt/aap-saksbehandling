@@ -51,6 +51,7 @@ export const BehandlingerPerSteggruppe = ({ data, title }: Props) => {
         <BodyShort size={'small'}>{title}</BodyShort>
         <Detail className={styles.detailgray}>Viser hvor i behandlingen oppgavene ligger.</Detail>
       </VStack>
+      <VStack padding={'space-8'} />
 
       {visning === 'chart' && (
         <ResponsivePlot

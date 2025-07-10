@@ -17,6 +17,7 @@ export const TypeBehandlinger = ({ åpneOgGjennomsnitt }: Props) => {
           <Detail className={styles.detailgray}>{'Alle åpne behandlinger fordelt på behandlingstype'}</Detail>
         </VStack>
       </VStack>
+      <VStack padding={'space-8'} />
       <ResponsivePlot
         data={åpneOgGjennomsnitt.map((it) => ({
           x: [it.antallÅpne],

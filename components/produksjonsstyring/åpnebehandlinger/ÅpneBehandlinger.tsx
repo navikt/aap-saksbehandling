@@ -42,13 +42,14 @@ export const ApneBehandlinger = ({ behandlingstyperQuery }: Props) => {
 
   return (
     <PlotWrapper>
-      <VStack align={'center'} gap={'2'}>
+      <VStack align={'center'} gap={'2'} padding={'space-2'}>
         <BodyShort size={'small'}>{'Status på behandlinger'}</BodyShort>
         <VStack align={'center'}>
           <Heading size={'small'}>{totaltAntallÅpneBehandlinger + antallPåVentEllerNull} totalt</Heading>
         </VStack>
         <AntallDagerFilter selectedValue={selectedValue} onChange={setOppslagsPeriode} />
       </VStack>
+      <VStack padding={'space-8'} />
       <ResponsivePlot
         data={[
           {
@@ -69,6 +70,7 @@ export const ApneBehandlinger = ({ behandlingstyperQuery }: Props) => {
         layout={{
           yaxis: { title: 'Antall', dtick: totaltAntallÅpneBehandlinger > 4 || antallPåVentEllerNull > 4 ? '' : 1 },
           showlegend: false,
+          autosize: true,
         }}
       />
     </PlotWrapper>

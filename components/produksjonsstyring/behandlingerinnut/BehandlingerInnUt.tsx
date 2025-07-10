@@ -36,6 +36,7 @@ export const BehandlingerInnUt = ({ behandlingerEndringer }: Props) => {
         </VStack>
         <AntallDagerFilter selectedValue={selectedFilter} onChange={setSelectedFilter} />
       </VStack>
+      <VStack padding={'space-8'} />
       <ResponsivePlot
         data={[
           {

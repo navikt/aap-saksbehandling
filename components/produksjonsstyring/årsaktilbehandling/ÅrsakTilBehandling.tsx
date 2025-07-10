@@ -26,6 +26,7 @@ export const ÅrsakTilBehandling = ({ årsakTilBehandling }: Props) => {
           </Detail>
         </VStack>
       </VStack>
+      <VStack padding={'space-8'} />
       <Table
         sort={sort}
         onSortChange={(sortKey) =>

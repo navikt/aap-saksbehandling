@@ -22,6 +22,7 @@ export const FordelingLukkedeBehandlingerPerDag = ({ fordelingLukkedeBehandlinge
           </Detail>
         </VStack>
       </VStack>
+      <VStack padding={'space-8'} />
       <ResponsivePlot
         data={[
           {
