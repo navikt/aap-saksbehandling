@@ -88,9 +88,10 @@ export async function hentVenteÅrsakerForBehandlingerPåVentMedPeriode(
 
 export async function hentAntallBehandlingerPerSteggruppe(
   behandlingstyper: Array<BehandlingsTyperOption> = [],
-  enheter: Array<string>
+  enheter: Array<string>,
+  oppgaveTyper: Array<string> = []
 ) {
-  const url = `${statistikkApiBaseURL}/behandling-per-steggruppe?${statistikkQueryparams({ behandlingstyper, enheter })}`;
+  const url = `${statistikkApiBaseURL}/behandling-per-steggruppe?${statistikkQueryparams({ behandlingstyper, enheter, oppgaveTyper })}`;
   return await apiFetch<Array<BehandlingPerSteggruppe>>(url, statistikkApiScope, 'GET');
 }
 

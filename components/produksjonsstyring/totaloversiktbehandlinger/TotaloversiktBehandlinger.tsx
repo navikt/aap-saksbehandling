@@ -31,6 +31,7 @@ export const TotaloversiktBehandlinger = () => {
   const [listeVisning, setListeVisning] = useState<boolean>(false);
   const alleFiltere = useContext(AlleFiltereContext);
   const antallDager = 14;
+  //const oppgaveFiltre =
   const behandlingstyperQuery = useMemo(
     () => statistikkQueryparams({ behandlingstyper: alleFiltere.behandlingstyper }),
     [alleFiltere]
