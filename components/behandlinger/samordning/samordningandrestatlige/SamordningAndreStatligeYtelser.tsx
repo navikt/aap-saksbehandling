@@ -2,11 +2,11 @@
 
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { Alert, Button, HStack, VStack } from '@navikt/ds-react';
+import { Button, HStack, VStack } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 import { AndreStatligeYtelserTabell } from 'components/behandlinger/samordning/samordningandrestatlige/AndreStatligeYtelserTabell';
 import { Behovstype } from 'lib/utils/form';
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -41,8 +41,8 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
         type: 'fieldArray',
         defaultValue: (grunnlag.vurdering?.vurderingPerioder || []).map((vurdering) => ({
           ytelse: vurdering.ytelse,
-          fom: vurdering.periode.fom,
-          tom: vurdering.periode.tom,
+          fom: formaterDatoForFrontend(vurdering.periode.fom),
+          tom: formaterDatoForFrontend(vurdering.periode.tom),
           beløp: vurdering.beløp,
         })),
       },
@@ -101,9 +101,6 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
       )}
       {visYtelsesTabell && (
         <VStack gap={'6'}>
-          <Alert variant={'info'} size={'small'} className={'fit-content'}>
-            Det er ikke støtte for refusjonskrav enda. Sett saken på vent og kontakt team AAP.
-          </Alert>
           <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
           <AndreStatligeYtelserTabell form={form} readOnly={readOnly} />
         </VStack>
