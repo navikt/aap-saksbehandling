@@ -26,6 +26,7 @@ import { ÅrsakTilBehandling } from 'components/produksjonsstyring/årsaktilbeha
 import styles from './TotaloversiktBehandlinger.module.css';
 import { BulletListIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { isSuccess } from 'lib/utils/api';
+import { OppgaveFilterSamling } from '../oppgavefiltersamling/OppgaveFilterSamling';
 
 export const TotaloversiktBehandlinger = () => {
   const [listeVisning, setListeVisning] = useState<boolean>(false);
@@ -81,6 +82,7 @@ export const TotaloversiktBehandlinger = () => {
   return (
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
+      <OppgaveFilterSamling />
       <VStack padding={'5'} gap={'5'}>
         <VStack align={'end'}>
           <Button
