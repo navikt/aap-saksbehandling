@@ -16,7 +16,7 @@ const mapResultatTilTeskst = (vurdering: SvarFraAndreinstansVurdering): string =
   } else if (vurdering.konsekvens === 'BEHANDLE_PÅ_NYTT') {
     return 'Klagen må vurderes på nytt';
   } else if (vurdering.konsekvens === 'OMGJØRING') {
-    return 'Vedtaket omgøres helt eller delvis';
+    return 'Vedtaket omgjøres helt eller delvis';
   }
   return 'Ukjent konsekvenskode';
 };
