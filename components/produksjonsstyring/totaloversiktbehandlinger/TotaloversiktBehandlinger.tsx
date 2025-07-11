@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, HGrid, VStack } from '@navikt/ds-react';
+import { Button, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import useSWR from 'swr';
@@ -26,6 +26,7 @@ import { ÅrsakTilBehandling } from 'components/produksjonsstyring/årsaktilbeha
 import styles from './TotaloversiktBehandlinger.module.css';
 import { BulletListIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { isSuccess } from 'lib/utils/api';
+import { OppgaverInnUt } from '../oppgaverinnut/OppgaverInnUt';
 
 export const TotaloversiktBehandlinger = () => {
   const [listeVisning, setListeVisning] = useState<boolean>(false);
@@ -37,6 +38,7 @@ export const TotaloversiktBehandlinger = () => {
     [alleFiltere]
   );
 
+  // Behandlinger
   const { data: antallÅpneBehandlinger } = useSWR(
     `/oppgave/api/statistikk/apne-behandlinger?${behandlingstyperQuery}`,
     antallÅpneBehandlingerPerBehandlingstypeClient
@@ -61,6 +63,8 @@ export const TotaloversiktBehandlinger = () => {
     `/oppgave/api/statistikk/behandlinger/arsak-til-behandling?${behandlingstyperQuery}`,
     årsakTilBehandlingClient
   ).data;
+
+  // Oppgaver
   const behandlingerPerSteggruppe = useSWR(
     `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
     behandlingerPerSteggruppeClient
@@ -94,6 +98,7 @@ export const TotaloversiktBehandlinger = () => {
           </Button>
         </VStack>
 
+        <Heading size={'large'}>Behandlinger</Heading>
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {isSuccess(behandlingerUtvikling) && (
             <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
@@ -114,6 +119,9 @@ export const TotaloversiktBehandlinger = () => {
           {isSuccess(årsakerTilBehandling) && (
             <ÅrsakTilBehandling årsakTilBehandling={årsakerTilBehandling.data || []} />
           )}
+        </div>
+        <Heading size={'large'}>Oppgaver</Heading>
+        <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {isSuccess(behandlingerPerSteggruppe) && (
             <BehandlingerPerSteggruppe
               data={behandlingerPerSteggruppe.data || []}
@@ -138,6 +146,7 @@ export const TotaloversiktBehandlinger = () => {
               title={'Stegfordeling revurderingbehandlinger'}
             />
           )}
+          <OppgaverInnUt behandlingstyperQuery={behandlingstyperQuery} />
         </div>
       </VStack>
     </HGrid>
