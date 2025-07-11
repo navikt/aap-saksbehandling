@@ -25,6 +25,7 @@ import { Opprettholdelse } from 'components/behandlinger/klage/opprettholdelse/O
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SvarFraAndreinstansGruppe } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstansGruppe';
 import { StartBehandling } from '../behandlinger/startbehandling/StartBehandling';
+import { KabalIverksettKonsekvensSteg } from 'components/behandlinger/klage/kabaliverksettkonsekvens/KabalIverksettKonsekvensMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -76,6 +77,9 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'TREKK_KLAGE' && <TrekkKlage behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'SVAR_FRA_ANDREINSTANS' && (
         <SvarFraAndreinstansGruppe behandlingsreferanse={behandlingsReferanse} />
+      )}
+      {aktivGruppe === 'IVERKSETT_KONSEKVENS' && (
+        <KabalIverksettKonsekvensSteg behandlingsreferanse={behandlingsReferanse} />
       )}
     </section>
   );
