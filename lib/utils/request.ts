@@ -19,6 +19,7 @@ export type StatistikkQueryParams = {
   enhet?: FilterTidsEnhet;
   enheter?: string[];
   oppslagsPeriode?: string;
+  oppgaveTyper?: string[];
 };
 export function statistikkQueryparams({
   behandlingstyper,
@@ -28,6 +29,7 @@ export function statistikkQueryparams({
   enhet,
   enheter,
   oppslagsPeriode,
+  oppgaveTyper,
 }: StatistikkQueryParams) {
   const behandlingstyperString = queryParamsArray('behandlingstyper', behandlingstyper);
   const antallDagerString = !antallDager && antallDager !== 0 ? '' : `antallDager=${antallDager}`;
@@ -36,6 +38,7 @@ export function statistikkQueryparams({
   const enhetString = enhet ? `enhet=${enhet}` : '';
   const enheterString = enheter ? queryParamsArray('enheter', enheter) : '';
   const oppslagsPeriodeString = oppslagsPeriode ? `oppslagsPeriode=${oppslagsPeriode}` : '';
+  const oppgaveTyperString = oppgaveTyper ? queryParamsArray('oppgaveTyper', oppgaveTyper) : '';
   const string = [
     behandlingstyperString,
     antallDagerString,
@@ -44,6 +47,7 @@ export function statistikkQueryparams({
     enhetString,
     enheterString,
     oppslagsPeriodeString,
+    oppgaveTyperString,
   ]
     .filter((value) => value)
     .join('&');
@@ -58,6 +62,7 @@ export type StatistikkQueryParamsOutput = {
   enhet?: FilterTidsEnhet;
   enheter: string[];
   oppslagsPeriode?: OppslagsPeriode;
+  oppgaveTyper: string[];
 };
 export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryParamsOutput {
   const params = req.nextUrl.searchParams;
@@ -68,6 +73,7 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
   const behandlingstyper = params.getAll('behandlingstyper').map((e) => e as BehandlingstyperRequestQuery);
   const enheter = params.getAll('enheter');
   const oppslagsPeriode = params.get('oppslagsPeriode') as OppslagsPeriode;
+  const oppgaveTyper = params.getAll('oppgaveTyper');
   return {
     ...(enhet ? { enhet } : {}),
     ...(antallBøtter ? { antallBøtter: parseInt(antallBøtter) } : {}),
@@ -76,6 +82,7 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
     enheter,
     antallDager: parseInt(antallDager ?? '0'),
     oppslagsPeriode: oppslagsPeriode ?? '',
+    oppgaveTyper,
   };
 }
 
