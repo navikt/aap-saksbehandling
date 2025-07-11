@@ -73,7 +73,7 @@ describe('KabalIverksettKonsekvens', () => {
     expect(text).toBeVisible();
   });
 
-  it('Skal vise hjemmler som skal gjøres hvis helt eller delvis omgjøring', () => {
+  it('Skal vise hjemmler som skal omgjøres hvis helt eller delvis omgjøring', () => {
     render(
       <KabalIverksettKonsekvens
         grunnlag={{
@@ -94,7 +94,7 @@ describe('KabalIverksettKonsekvens', () => {
       />
     );
 
-    const text = screen.getByText('Vedtaket omgøres helt eller delvis');
+    const text = screen.getByText('Vedtaket omgjøres helt eller delvis');
     expect(text).toBeVisible();
     const hjemmelTekst = screen.getByText('§ 11-2, § 11-3');
     expect(hjemmelTekst).toBeVisible();
