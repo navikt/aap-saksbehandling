@@ -1,7 +1,7 @@
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { hentFlyt, hentSvarFraAndreinstansGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { KabalIverksettKonsekvens } from 'components/behandlinger/klage/kabaliverksettkonsekvens/KabalIIverksettKonsekvens';
+import { KabalIverksettKonsekvens } from 'components/behandlinger/klage/kabaliverksettkonsekvens/KabalIverksettKonsekvens';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 
 type Props = {
