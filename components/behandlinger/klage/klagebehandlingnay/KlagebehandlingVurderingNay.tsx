@@ -127,6 +127,7 @@ export const KlagebehandlingVurderingNay = ({ behandlingVersjon, readOnly, grunn
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />
