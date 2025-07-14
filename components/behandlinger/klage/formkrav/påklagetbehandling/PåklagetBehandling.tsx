@@ -56,6 +56,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly }: P
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}
+      vurdertAvAnsatt={grunnlag?.vurdertAv}
     >
       <Controller
         name="vedtak"
