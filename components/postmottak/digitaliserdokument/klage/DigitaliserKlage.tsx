@@ -22,6 +22,7 @@ interface Props extends Submittable {
 export interface KlageFormFields {
   kravMottatt: string;
   skalOppretteNyBehandling: JaEllerNei;
+  beskrivelse: string;
 }
 export const DigitaliserKlage = ({ readOnly, submit, grunnlag, isLoading, registrertDato }: Props) => {
   const vurdering: KlageV0 | null = grunnlag.vurdering?.strukturertDokumentJson
@@ -50,6 +51,11 @@ export const DigitaliserKlage = ({ readOnly, submit, grunnlag, isLoading, regist
         defaultValue: getJaNeiEllerUndefined(vurdering?.skalOppretteNyBehandling),
         options: JaEllerNeiOptions,
       },
+      beskrivelse: {
+        type: 'textarea',
+        label: 'Beskrivelse',
+        rules: { required: 'Du må skrive en beskrivelse' },
+      },
     },
     { readOnly }
   );
@@ -57,6 +63,7 @@ export const DigitaliserKlage = ({ readOnly, submit, grunnlag, isLoading, regist
   function mapTilKlageKontrakt(data: KlageFormFields) {
     const klageJournalføring: KlageV0 = {
       meldingType: 'KlageV0',
+      beskrivelse: data.beskrivelse,
       kravMottatt: formaterDatoForBackend(parse(data.kravMottatt, 'dd.MM.yyyy', new Date())),
       skalOppretteNyBehandling: data.skalOppretteNyBehandling === JaEllerNei.Ja,
     };
@@ -71,6 +78,7 @@ export const DigitaliserKlage = ({ readOnly, submit, grunnlag, isLoading, regist
       <form onSubmit={handleSubmit}>
         <FormField form={form} formField={formFields.kravMottatt} />
         <FormField form={form} formField={formFields.skalOppretteNyBehandling} horizontalRadio />
+        <FormField form={form} formField={formFields.beskrivelse} />
         <Button loading={isLoading} className={'fit-content'}>
           Neste
         </Button>
