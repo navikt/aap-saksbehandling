@@ -1,5 +1,5 @@
 import {
-  AvklaringsbehovReferanse,
+  AvreserverOppgaveDto,
   Enhet,
   Kø,
   NesteOppgaveRequestBody,
@@ -72,9 +72,9 @@ export async function oppgaveSøk(
     enheter,
   });
 }
-export async function avreserverOppgave(avklaringsbehovReferanse: AvklaringsbehovReferanse) {
-  const url = `${oppgaveApiBaseURL}/avreserver-oppgave`;
-  return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', avklaringsbehovReferanse);
+export async function avreserverOppgave({ oppgaver }: AvreserverOppgaveDto) {
+  const url = `${oppgaveApiBaseURL}/avreserver-oppgaver`;
+  return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { oppgaver: oppgaver });
 }
 export async function velgNesteOppgave({ filterId, enheter }: NesteOppgaveRequestBody) {
   const url = `${oppgaveApiBaseURL}/neste-oppgave`;

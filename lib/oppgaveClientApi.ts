@@ -1,5 +1,5 @@
 import {
-  AvklaringsbehovReferanse,
+  AvreserverOppgaveDto,
   Kø,
   NesteOppgaveRequestBody,
   NesteOppgaveResponse,
@@ -70,13 +70,10 @@ export async function hentMineOppgaverClient() {
   return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/mine-oppgaver', 'GET');
 }
 
-export async function avreserverOppgaveClient(oppgave: Oppgave) {
-  const body: AvklaringsbehovReferanse = {
-    avklaringsbehovKode: oppgave.avklaringsbehovKode,
-    journalpostId: oppgave.journalpostId,
-    saksnummer: oppgave.saksnummer,
-    referanse: oppgave.behandlingRef,
-  };
+export async function avreserverOppgaveClient(oppgaver: number[]) {
+  const body: AvreserverOppgaveDto = {
+    oppgaver: oppgaver
+  }
   return clientFetch('/oppgave/api/oppgave/avreserver', 'POST', body);
 }
 export async function hentKøerForEnheterClient(enheter: string[]) {
