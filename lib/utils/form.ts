@@ -115,7 +115,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5999':
       return 'Fastsett påklaget behandling';
     case '6000':
-      return 'Vurder formkrav';
+      return 'Formkrav';
     case '6001':
       return 'Fastsett behandlende enhet';
     case '6002':
