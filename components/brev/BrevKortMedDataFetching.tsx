@@ -21,7 +21,6 @@ export const BrevKortMedDataFetching = async ({
 }: Props) => {
   const grunnlagene = await hentBrevGrunnlag(behandlingReferanse);
 
-  console.log('grunnlagene', grunnlagene);
   if (isError(grunnlagene)) {
     return <ApiException apiResponses={[grunnlagene]} />;
   }

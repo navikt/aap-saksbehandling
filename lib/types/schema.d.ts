@@ -7399,6 +7399,7 @@ export interface components {
       ytelseIverksattTom?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.behandlendeenhet.BehandlendeEnhetGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.behandlendeenhet.BehandlendeEnhetVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.behandlendeenhet.BehandlendeEnhetVurderingDto': {
@@ -7407,6 +7408,7 @@ export interface components {
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.formkrav.FormkravGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
       /**
        * Format: date
        * @example 2025-04-01
@@ -7429,6 +7431,7 @@ export interface components {
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigVurderingDto': {
@@ -7439,9 +7442,11 @@ export interface components {
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagebehandlingKontorGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagevurderingKontorDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagebehandlingNayGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagevurderingNayDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagevurderingKontorDto': {

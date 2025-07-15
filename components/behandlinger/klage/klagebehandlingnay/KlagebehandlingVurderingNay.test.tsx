@@ -30,6 +30,7 @@ describe('Klage - vurdering nay', () => {
               enhetsnavn: 'Kontor',
             },
           },
+          harTilgangTilÅSaksbehandle: true,
         }}
         readOnly={false}
         behandlingVersjon={0}

@@ -16,6 +16,7 @@ const grunnlagKontor: KlagebehandlingKontorGrunnlag = {
       enhetsnavn: 'Kontor',
     },
   },
+  harTilgangTilÅSaksbehandle: true,
 };
 const grunnlagNay: KlagebehandlingNayGrunnlag = {
   vurdering: {
@@ -30,6 +31,7 @@ const grunnlagNay: KlagebehandlingNayGrunnlag = {
       enhetsnavn: 'Kontor',
     },
   },
+  harTilgangTilÅSaksbehandle: true,
 };
 describe('Klage - oppsummering', () => {
   it('Skal ha en overskrift', () => {

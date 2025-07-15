@@ -34,6 +34,7 @@ describe('Klage - vurdering kontor', () => {
               enhetsnavn: 'kontor',
             },
           },
+          harTilgangTilÅSaksbehandle: true,
         }}
       />
     );

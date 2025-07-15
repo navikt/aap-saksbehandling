@@ -27,7 +27,7 @@ export const FullmektigVurderingMedDataFetching = async ({
     <FullmektigVurdering
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       typeBehandling={typeBehandling}
     />
   );
