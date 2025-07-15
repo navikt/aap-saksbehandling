@@ -34,9 +34,6 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
           </Table.ColumnHeader>
           <Table.HeaderCell>Årsak</Table.HeaderCell>
           <Table.HeaderCell>Oppgave</Table.HeaderCell>
-          <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={true}>
-            Oppg. opprettet
-          </Table.ColumnHeader>
           <Table.HeaderCell>Saksbehandler</Table.HeaderCell>
           <Table.HeaderCell></Table.HeaderCell>
           <Table.HeaderCell></Table.HeaderCell>
@@ -74,7 +71,6 @@ export const AlleOppgaverTabell = ({ oppgaver }: Props) => {
                 </BodyShort>
               </Tooltip>
             </Table.DataCell>
-            <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
             <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
               <Tooltip content={oppgave.reservertAv || 'Ledig'}>
                 <BodyShort truncate size={'small'}>

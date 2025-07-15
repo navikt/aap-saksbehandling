@@ -52,9 +52,6 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
               Årsak
             </Table.ColumnHeader>
             <Table.HeaderCell>Oppgave</Table.HeaderCell>
-            <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={true}>
-              Oppg. opprettet
-            </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
@@ -106,7 +103,6 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
-              <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
 
               <Table.DataCell textSize={'small'}>
                 <OppgaveInformasjon oppgave={oppgave} />
