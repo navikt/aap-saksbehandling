@@ -15,6 +15,7 @@ describe('KabalIverksettKonsekvens', () => {
             type: 'KLAGEBEHANDLING_AVSLUTTET',
             utfall: undefined,
           },
+          harTilgangTilÅSaksbehandle: true,
         }}
       />
     );
@@ -40,6 +41,7 @@ describe('KabalIverksettKonsekvens', () => {
             type: 'KLAGEBEHANDLING_AVSLUTTET',
             utfall: undefined,
           },
+          harTilgangTilÅSaksbehandle: true,
         }}
       />
     );
@@ -65,6 +67,7 @@ describe('KabalIverksettKonsekvens', () => {
             type: 'KLAGEBEHANDLING_AVSLUTTET',
             utfall: undefined,
           },
+          harTilgangTilÅSaksbehandle: true,
         }}
       />
     );
@@ -90,6 +93,7 @@ describe('KabalIverksettKonsekvens', () => {
             type: 'KLAGEBEHANDLING_AVSLUTTET',
             utfall: undefined,
           },
+          harTilgangTilÅSaksbehandle: true,
         }}
       />
     );

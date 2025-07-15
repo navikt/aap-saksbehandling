@@ -19,5 +19,11 @@ export const SvarFraAndreinstansMedDatafetching = async ({
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  return <SvarFraAndreinstans grunnlag={grunnlag.data} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />;
+  return (
+    <SvarFraAndreinstans
+      grunnlag={grunnlag.data}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={behandlingVersjon}
+    />
+  );
 };
