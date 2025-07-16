@@ -62,6 +62,7 @@ const behovskodeMap = {
   '9004': 'Opprett hendelse på sak',
   '8001': 'dx',
   '8002': 'dd',
+  '8003': 'xx',
 
   // Postmottak
   '1337': 'Kategoriser dokument',

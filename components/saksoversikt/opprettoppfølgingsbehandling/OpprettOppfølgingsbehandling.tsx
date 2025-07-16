@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
-import { KlageV0, OppfølgingsoppgaveV0, SaksInfo } from 'lib/types/types';
+import { OppfølgingsoppgaveV0, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { clientSendHendelse } from 'lib/clientApi';
@@ -11,16 +11,14 @@ import { useRouter } from 'next/navigation';
 import styles from './OpprettOppfølgingsbehandling.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { parse } from 'date-fns';
 import { v4 as uuid } from 'uuid';
+import { parse } from 'date-fns';
 
 export interface OppfølgingsoppgaveFormFields {
   datoForOppfølging: string;
   hvaSkalFølgesOpp: string;
   hvemSkalFølgeOpp: string;
 }
-
-function hvemSkalFølgeOppTilFormat(v: string) {}
 
 export const OpprettOppfølgingsBehandling = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
@@ -40,9 +38,10 @@ export const OpprettOppfølgingsBehandling = ({ sak }: { sak: SaksInfo }) => {
       mottattTidspunkt: new Date().toISOString(),
       melding: {
         meldingType: 'OppfølgingsoppgaveV0',
-        datoForOppfølging: formaterDatoForBackend(new Date()),
+        datoForOppfølging: formaterDatoForBackend(parse(data.datoForOppfølging, 'dd.MM.yyyy', new Date())),
         hvaSkalFølgesOpp: data.hvaSkalFølgesOpp,
-        hvemSkalFølgeOpp: { '@type': 'nasjonalEnhet' },
+        reserverTilBruker: 'dd',
+        hvemSkalFølgeOpp: 'NasjonalEnhet',
       } satisfies OppfølgingsoppgaveV0,
     };
 

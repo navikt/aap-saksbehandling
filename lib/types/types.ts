@@ -326,11 +326,11 @@ export type NyÅrsakTilBehandlingV0 =
     meldingType: typeof NyÅrsakTilBehandlingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
-export const OppfølgingoppgaveV0 = 'OppfølgingsOppgaveV0';
+export const OppfølgingoppgaveV0 = 'OppfølgingsoppgaveV0';
 
 export type OppfølgingsoppgaveV0 =
   components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0'] & {
-    meldingType: typeof OppfølgingsoppgaveV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+    meldingType: typeof OppfølgingoppgaveV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
 export type DokumentÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];

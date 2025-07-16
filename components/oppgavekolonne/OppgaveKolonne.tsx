@@ -26,6 +26,7 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SvarFraAndreinstansGruppe } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstansGruppe';
 import { StartBehandling } from '../behandlinger/startbehandling/StartBehandling';
 import { KabalIverksettKonsekvensSteg } from 'components/behandlinger/klage/kabaliverksettkonsekvens/KabalIverksettKonsekvensMedDataFetching';
+import { AvklarOppfolgingsSteg } from 'components/behandlinger/oppfolgingsbehandling/AvklarOppfolgingsSteg';
 
 interface Props {
   behandlingsReferanse: string;
@@ -34,6 +35,7 @@ interface Props {
 }
 
 export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
+  console.log(aktivGruppe);
   return (
     <section className={className}>
       {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
@@ -80,6 +82,10 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       )}
       {aktivGruppe === 'IVERKSETT_KONSEKVENS' && (
         <KabalIverksettKonsekvensSteg behandlingsreferanse={behandlingsReferanse} />
+      )}
+      {/* Oppfølgingsbehandling */}
+      {aktivGruppe === 'START_OPPFØLGINGSBEHANDLING' && (
+        <AvklarOppfolgingsSteg behandlingsreferanse={behandlingsReferanse} />
       )}
     </section>
   );

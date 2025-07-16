@@ -20,6 +20,8 @@ const formaterBehandlingType = (behandlingtype: string) => {
       return 'Klage';
     case 'svar-fra-andreinstans':
       return 'Svar fra Nav Klageinstans';
+    case 'oppfølgingsbehandling':
+      return 'Oppfølgingsoppgave';
     default:
       return `Ukjent behandlingtype (${behandlingtype})`;
   }
@@ -69,6 +71,16 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
               onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
             >
               Opprett revurdering
+            </Button>
+          )}
+
+          {kanRevurdere && (
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/oppfolging`)}
+            >
+              Opprett oppfølgingsoppgave
             </Button>
           )}
         </HStack>
