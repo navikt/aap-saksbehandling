@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Label, BodyShort, Detail, VStack, ExpansionCard, Table, Chips, HStack } from '@navikt/ds-react';
+import { Label, BodyShort, Detail, VStack, ExpansionCard, Chips } from '@navikt/ds-react';
 import styles from 'components/tidligerevurderinger/TidligereVurderingerV3.module.css';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { TidligereVurdering } from './TidligereVurderingV2';
