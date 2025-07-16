@@ -1598,22 +1598,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-breveditor@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "@navikt/aap-breveditor@npm:0.4.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor%2F0.4.1%2F7641a244b7de4c8b6f9bc936ff2039b4266cba14"
+"@navikt/aap-breveditor@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "@navikt/aap-breveditor@npm:0.4.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor%2F0.4.2%2Fda36067bc641e4f6151cb419c5f29b281c3228a9"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.9.1"
     "@navikt/ds-css": "npm:^7.9.1"
     "@navikt/ds-react": "npm:^7.9.1"
     "@tiptap/core": "npm:^2.11.7"
-    "@tiptap/extension-text-style": "npm:^2.11.7"
+    "@tiptap/extension-text-style": "npm:^3.0.1"
     "@tiptap/extension-underline": "npm:^2.11.7"
     "@tiptap/react": "npm:^2.11.7"
     "@tiptap/starter-kit": "npm:^2.11.7"
     react: "npm:^19.1.0"
     react-dom: "npm:^19.1.0"
     uuid: "npm:^10.0.0"
-  checksum: 10c0/ab08c84cead811be551c7d518db5c726b49a6183810cdeeb24314826ecc8eac4d52adabaf46c8f4ea8bb5ccc51d11173be6cc267b030f0443a8d06e635f05250
+  checksum: 10c0/b3dc60a8e07065403db25d7ffd0aba93914de142c53b209124536ad6d1a16ef2da70c0c7d210b88d5457deb899dbc4940635fa82b4f39122c136601ffcd0d6fd
   languageName: node
   linkType: hard
 
@@ -2799,6 +2799,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tiptap/extension-text-style@npm:^3.0.1":
+  version: 3.0.6
+  resolution: "@tiptap/extension-text-style@npm:3.0.6"
+  peerDependencies:
+    "@tiptap/core": ^3.0.6
+  checksum: 10c0/787685f1ad7bf81a1bee1b427b6f21df800e026c4960e543d0c7573a044eaeea7a9991d0684505a6f9cd33622634dca3a0d8f259caa6da4f781b0271aab2a2ea
+  languageName: node
+  linkType: hard
+
 "@tiptap/extension-text@npm:^2.11.7":
   version: 2.11.7
   resolution: "@tiptap/extension-text@npm:2.11.7"
@@ -3833,7 +3842,7 @@ __metadata:
     "@eslint/eslintrc": "npm:^3.3.1"
     "@eslint/js": "npm:^9.31.0"
     "@grafana/faro-web-sdk": "npm:^1.19.0"
-    "@navikt/aap-breveditor": "npm:^0.4.1"
+    "@navikt/aap-breveditor": "npm:^0.4.2"
     "@navikt/aap-breveditor-css": "npm:^0.3.0"
     "@navikt/aap-felles-prettier": "npm:^5.3.0"
     "@navikt/aap-oppgave-typescript-types": "npm:0.0.283"
