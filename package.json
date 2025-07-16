@@ -31,7 +31,7 @@
     "fuse.js": "^7.1.0",
     "i18n-iso-countries": "^7.14.0",
     "is-european": "^1.0.8",
-    "jose": "^6.0.11",
+    "jose": "^6.0.12",
     "lodash": "^4.17.21",
     "next": "15.4.1",
     "node-loader": "^2.1.0",
