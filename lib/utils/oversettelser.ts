@@ -60,6 +60,8 @@ const behovskodeMap = {
   '9002': 'Bestill brev',
   '9003': 'Bestill legeerklæring',
   '9004': 'Opprett hendelse på sak',
+  '8001': 'dx',
+  '8002': 'dd',
 
   // Postmottak
   '1337': 'Kategoriser dokument',

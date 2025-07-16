@@ -1,48 +1,52 @@
 'use client';
 
 import { Alert, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
-import { KlageV0, SaksInfo } from 'lib/types/types';
+import { KlageV0, OppfølgingsoppgaveV0, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { clientSendHendelse } from 'lib/clientApi';
 import { useState } from 'react';
 import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
-import styles from './OpprettKlage.module.css';
+import styles from './OpprettOppfølgingsbehandling.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 
-export interface KlageFormFields {
-  kravMottatt: string;
-  beskrivelse: string;
+export interface OppfølgingsoppgaveFormFields {
+  datoForOppfølging: string;
+  hvaSkalFølgesOpp: string;
+  hvemSkalFølgeOpp: string;
 }
 
-export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
+function hvemSkalFølgeOppTilFormat(v: string) {}
+
+export const OpprettOppfølgingsBehandling = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
-  async function sendHendelse(data: KlageFormFields) {
+  async function sendHendelse(data: OppfølgingsoppgaveFormFields) {
     const innsending = {
       saksnummer: sak.saksnummer,
       referanse: {
-        type: 'MANUELL_OPPRETTELSE',
+        type: 'BEHANDLING_REFERANSE',
         verdi: uuid(),
       },
-      type: 'KLAGE',
+      type: 'OPPFØLGINGSOPPGAVE',
       kanal: 'DIGITAL',
       mottattTidspunkt: new Date().toISOString(),
       melding: {
-        meldingType: 'KlageV0',
-        kravMottatt: formaterDatoForBackend(parse(data.kravMottatt, 'dd.MM.yyyy', new Date())),
-        beskrivelse: data.beskrivelse,
-        skalOppretteNyBehandling: true,
-      } satisfies KlageV0,
+        meldingType: 'OppfølgingsoppgaveV0',
+        datoForOppfølging: formaterDatoForBackend(new Date()),
+        hvaSkalFølgesOpp: data.hvaSkalFølgesOpp,
+        hvemSkalFølgeOpp: { '@type': 'nasjonalEnhet' },
+      } satisfies OppfølgingsoppgaveV0,
     };
 
+    console.log(JSON.stringify(innsending));
     setIsLoading(true);
 
     const res = await clientSendHendelse(sak.saksnummer, innsending);
@@ -55,40 +59,37 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
     setIsLoading(false);
   }
 
-  const { form, formFields } = useConfigForm<KlageFormFields>({
-    kravMottatt: {
-      type: 'date_input',
-      label: 'Dato for mottatt klage',
-      rules: { required: 'Kravdato for klage må settes' },
+  const { form, formFields } = useConfigForm<OppfølgingsoppgaveFormFields>({
+    datoForOppfølging: { type: 'date_input', label: 'Dato for oppfølging', rules: { required: 'Må settes' } },
+    hvemSkalFølgeOpp: {
+      type: 'combobox',
+      label: 'Hvem',
+      options: ['Meg', 'NAY', 'Lokalkontor'],
     },
-    beskrivelse: {
+    hvaSkalFølgesOpp: {
       type: 'textarea',
       label: 'Beskrivelse av klagen',
     },
   });
 
   if (isLoading) {
-    return <Spinner label="Oppretter klage ..." />;
+    return <Spinner label="Oppretter oppfølgingsbehandling ..." />;
   }
 
   return (
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
         <VStack gap="4">
-          <ExpansionCard
-            aria-label="Opprett klage"
-            size={'small'}
-            defaultOpen={true}
-            className={styles.opprettKlageKort}
-          >
-            <ExpansionCard.Header className={styles.header}>
+          <ExpansionCard aria-label="Opprett oppfølgingsbehandling" size={'small'} defaultOpen={true}>
+            <ExpansionCard.Header>
               <ExpansionCard.Title size="small">Opprett Klage</ExpansionCard.Title>
             </ExpansionCard.Header>
 
-            <ExpansionCard.Content className={styles.content}>
+            <ExpansionCard.Content>
               <VStack gap="4">
-                <FormField form={form} formField={formFields.kravMottatt} size="medium" />
-                <FormField form={form} formField={formFields.beskrivelse} size="medium" />
+                <FormField form={form} formField={formFields.datoForOppfølging} size="medium" />
+                <FormField form={form} formField={formFields.hvaSkalFølgesOpp} size="medium" />
+                <FormField form={form} formField={formFields.hvemSkalFølgeOpp} size="medium" />
               </VStack>
             </ExpansionCard.Content>
           </ExpansionCard>
@@ -107,7 +108,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
             >
               Avbryt
             </Button>
-            <Button type="submit">Opprett klage</Button>
+            <Button type="submit">Opprett oppfølgingsbehandling</Button>
           </HStack>
         </VStack>
       </form>
