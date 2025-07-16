@@ -20,6 +20,7 @@
     --ac-chip-toggle-bg: var(--a-transparent);
     --ac-chip-toggle-hover-text: var(--ac-chip-toggle-text);
     --ac-chip-toggle-hover-bg: var(--a-transparent);
+    --ac-chip-toggle-hover-border: var(--a-transparent);
     cursor: default;
 }
 
