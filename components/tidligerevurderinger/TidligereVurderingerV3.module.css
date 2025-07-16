@@ -3,7 +3,6 @@
     grid-template-columns: 200px 1fr;
     max-width: 1680px;
     border-radius: 0.5rem;
-    padding: 1rem;
 }
 
 .sidebarItemV3 {
@@ -12,6 +11,16 @@
     cursor: pointer;
     --ac-chip-toggle-text: var(--a-surface-action);
     --ac-chip-toggle-bg: var(--a-transparent);
+}
+
+.sidebarItemSingleV3 {
+    box-shadow: none;
+    border-radius: 4px;
+    --ac-chip-toggle-text: var(--ac-chip-toggle-text);
+    --ac-chip-toggle-bg: var(--a-transparent);
+    --ac-chip-toggle-hover-text: var(--ac-chip-toggle-text);
+    --ac-chip-toggle-hover-bg: var(--a-transparent);
+    cursor: default;
 }
 
 .vurderingDetailV3 {
