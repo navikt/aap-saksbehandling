@@ -68,17 +68,23 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
   const behandlingsReferanse = useBehandlingsReferanse();
   const { isLoading, status, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+  const lovvalgBegrunnelseLabel = 'Vurder riktig lovvalg ved søknadstidspunkt'
+  const lovvalgsLandLabel = 'Hva er riktig lovvalgsland ved søknadstidspunkt?'
+  const annetLovvalgslandMedAvtaleLabel = 'Velg land som vi vurderer som lovvalgsland'
+  const medlemskapBegrunnelseLabel = 'Vurder brukerens medlemskap på søknadstidspunktet'
+  const medlemAvFolkeTrygdenVedSøknadstidspunktLabel = 'Var brukeren medlem av folketrygden ved søknadstidspunktet?'
+
   const { form, formFields } = useConfigForm<FormFields>(
     {
       lovvalgBegrunnelse: {
         type: 'textarea',
-        label: 'Vurder riktig lovvalg ved søknadstidspunkt',
+        label: lovvalgBegrunnelseLabel,
         rules: { required: 'Du må gi en begrunnelse på lovvalg ved søknadstidspunkt' },
         defaultValue: grunnlag?.vurdering?.lovvalgVedSøknadsTidspunkt?.begrunnelse,
       },
       lovvalgsLand: {
         type: 'radio',
-        label: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
+        label: lovvalgsLandLabel,
         options: [
           { label: 'Norge', value: 'Norge' },
           { label: 'Annet land med avtale', value: 'Annet land med avtale' },
@@ -88,7 +94,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       },
       annetLovvalgslandMedAvtale: {
         type: 'select',
-        label: 'Velg land som vi vurderer som lovvalgsland',
+        label: annetLovvalgslandMedAvtaleLabel,
         options: landMedTrygdesamarbeid,
         defaultValue: mapGrunnlagTilAnnetLovvalgslandMedAvtale(
           grunnlag?.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand
@@ -96,7 +102,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       },
       medlemskapBegrunnelse: {
         type: 'textarea',
-        label: 'Vurder brukerens medlemskap på søknadstidspunktet',
+        label: medlemskapBegrunnelseLabel,
         rules: { required: 'Du må begrunne medlemskap på søknadstidspunktet' },
         defaultValue: grunnlag?.vurdering?.medlemskapVedSøknadsTidspunkt?.begrunnelse
           ? grunnlag.vurdering?.medlemskapVedSøknadsTidspunkt?.begrunnelse
@@ -104,7 +110,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       },
       medlemAvFolkeTrygdenVedSøknadstidspunkt: {
         type: 'radio',
-        label: 'Var brukeren medlem av folketrygden ved søknadstidspunktet?',
+        label: medlemAvFolkeTrygdenVedSøknadstidspunktLabel,
         options: JaEllerNeiOptions,
         rules: { required: 'Du må velg om brukeren var medlem av folketrygden på søknadstidspunkt' },
         defaultValue: mapGrunnlagTilMedlemAvFolketrygdenVedSøknadstidspunkt(
@@ -170,19 +176,19 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
               ...vurdering,
               felter: [
                 {
-                  label: 'Vurder riktig lovvalg ved søknadstidspunkt',
+                  label: lovvalgBegrunnelseLabel,
                   value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.begrunnelse || '',
                 },
                 {
-                  label: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
+                  label: lovvalgsLandLabel,
                   value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLand || '',
                 },
                 {
-                  label: 'Vurder brukerens medlemskap på søknadstidspunktet',
+                  label: medlemskapBegrunnelseLabel,
                   value: vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.begrunnelse || '',
                 },
                 {
-                  label: 'Var brukeren medlem av folketrygden ved søknadstidspunktet?',
+                  label: medlemAvFolkeTrygdenVedSøknadstidspunktLabel,
                   value: getJaNeiEllerIkkeBesvart(
                     vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.varMedlemIFolketrygd
                   ),

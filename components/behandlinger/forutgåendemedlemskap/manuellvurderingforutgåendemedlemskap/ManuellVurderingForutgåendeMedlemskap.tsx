@@ -1,13 +1,15 @@
 'use client';
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerIkkeBesvart, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { ForutgåendeMedlemskapGrunnlag } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
+import { sorterEtterNyesteDato } from '../../../../lib/utils/date';
 
 interface Props {
   behandlingVersjon: number;
@@ -21,6 +23,7 @@ interface FormFields {
   harForutgåendeMedlemskap: string;
   unntaksvilkår?: string;
 }
+
 function mapGrunnlagTilForutgående(harForutgåendeMedlemskap?: boolean | null) {
   if (harForutgåendeMedlemskap === true) {
     return JaEllerNei.Ja;
@@ -29,6 +32,7 @@ function mapGrunnlagTilForutgående(harForutgåendeMedlemskap?: boolean | null) 
   }
   return undefined;
 }
+
 function mapGrunnlagTilUnntaksvilkår(
   harForutgåendeMedlemskap?: boolean | null,
   varMedlemMedNedsattArbeidsevne?: boolean | null,
@@ -43,6 +47,7 @@ function mapGrunnlagTilUnntaksvilkår(
   }
   return undefined;
 }
+
 export const ManuellVurderingForutgåendeMedlemskap = ({
   grunnlag,
   readOnly,
@@ -52,24 +57,28 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
   const behandlingsReferanse = useBehandlingsReferanse();
   const { isLoading, status, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+  const begrunnelseLabel = 'Vurder brukerens forutgående medlemskap';
+  const harForutgåendeMedlemskapLabel = 'Har brukeren fem års forutgående medlemskap i folketrygden jamfør § 11-2?';
+  const unntaksvilkårLabel = 'Oppfyller brukeren noen av unntaksvilkårene?';
+
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder brukerens forutgående medlemskap',
+        label: begrunnelseLabel,
         rules: { required: 'Du må gi en begrunnelse på brukerens forutgående medlemskap' },
         defaultValue: grunnlag?.vurdering?.begrunnelse,
       },
       harForutgåendeMedlemskap: {
         type: 'radio',
-        label: 'Har brukeren fem års forutgående medlemskap i folketrygden jamfør § 11-2?',
+        label: harForutgåendeMedlemskapLabel,
         options: JaEllerNeiOptions,
         rules: { required: 'Du må velge om brukeren har fem års forutgående medlemskap' },
         defaultValue: mapGrunnlagTilForutgående(grunnlag?.vurdering?.harForutgåendeMedlemskap),
       },
       unntaksvilkår: {
         type: 'radio',
-        label: 'Oppfyller brukeren noen av unntaksvilkårene?',
+        label: unntaksvilkårLabel,
         options: [
           {
             value: 'A',
@@ -116,7 +125,9 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
     })(event);
   };
   const heading = overstyring ? 'Overstyring av § 11-2 Forutgående medlemskap' : '§ 11-2 Forutgående medlemskap';
+  const historiskeManuelleVurderinger = grunnlag?.historiskeManuelleVurderinger;
 
+  historiskeManuelleVurderinger?.map((it) => it.manuellVurdering);
   return (
     <VilkårsKortMedForm
       heading={heading}
@@ -129,6 +140,41 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
+      {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
+        <TidligereVurderingerV3
+          tidligereVurderinger={historiskeManuelleVurderinger
+            .sort((a, b) => sorterEtterNyesteDato(a.opprettet, b.opprettet))
+            .map((vurdering) => ({
+              ...vurdering,
+              vurdertDato: vurdering.manuellVurdering.vurdertAv.dato,
+              periode: {
+                fom: vurdering.opprettet,
+              },
+              vurdertAvIdent: vurdering.manuellVurdering.vurdertAv.ident,
+              erGjeldendeVurdering: vurdering.erGjeldendeVurdering,
+              felter: [
+                {
+                  label: begrunnelseLabel,
+                  value: vurdering.manuellVurdering.begrunnelse || '',
+                },
+                {
+                  label: harForutgåendeMedlemskapLabel,
+                  value: getJaNeiEllerIkkeBesvart(vurdering.manuellVurdering.harForutgåendeMedlemskap),
+                },
+                {
+                  label: unntaksvilkårLabel,
+                  value: vurdering.manuellVurdering.harForutgåendeMedlemskap
+                    ? getJaNeiEllerIkkeBesvart(null)
+                    : getJaNeiEllerIkkeBesvart(
+                        vurdering.manuellVurdering.varMedlemMedNedsattArbeidsevne === true ||
+                          vurdering.manuellVurdering.medlemMedUnntakAvMaksFemAar === true
+                      ),
+                },
+              ],
+            }))}
+        />
+      )}
+
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
       <FormField form={form} formField={formFields.harForutgåendeMedlemskap} horizontalRadio />
       {harForutgåendeMedlemskap === JaEllerNei.Nei && (
