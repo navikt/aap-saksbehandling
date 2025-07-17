@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { Button, HGrid, VStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import useSWR from 'swr';
@@ -32,7 +32,6 @@ export const TotaloversiktBehandlinger = () => {
   const [listeVisning, setListeVisning] = useState<boolean>(false);
   const alleFiltere = useContext(AlleFiltereContext);
   const antallDager = 14;
-  //const oppgaveFiltre =
   const behandlingstyperQuery = useMemo(
     () => statistikkQueryparams({ behandlingstyper: alleFiltere.behandlingstyper }),
     [alleFiltere]
@@ -98,7 +97,6 @@ export const TotaloversiktBehandlinger = () => {
           </Button>
         </VStack>
 
-        <Heading size={'large'}>Behandlinger</Heading>
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {isSuccess(behandlingerUtvikling) && (
             <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
@@ -119,9 +117,6 @@ export const TotaloversiktBehandlinger = () => {
           {isSuccess(årsakerTilBehandling) && (
             <ÅrsakTilBehandling årsakTilBehandling={årsakerTilBehandling.data || []} />
           )}
-        </div>
-        <Heading size={'large'}>Oppgaver</Heading>
-        <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {isSuccess(behandlingerPerSteggruppe) && (
             <BehandlingerPerSteggruppe
               data={behandlingerPerSteggruppe.data || []}

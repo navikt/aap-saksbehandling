@@ -47,7 +47,7 @@ export async function behandlingerPerSteggruppeClient(url: string) {
 }
 
 export async function oppgaverPerSteggruppeClient(url: string) {
-  return clientFetch<Array<OppgaverPerSteggruppe>>(url, 'GET');
+  return clientFetch<OppgaverPerSteggruppe>(url, 'GET');
 }
 
 export async function årsakTilBehandlingClient(url: string) {

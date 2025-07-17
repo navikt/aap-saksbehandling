@@ -25,15 +25,14 @@ export const OppgaverInnUt = ({ behandlingstyperQuery }: Props) => {
     oppgaverPerSteggruppeClient
   );
 
-  const antallOppgaver = isSuccess(oppgaverPerSteggruppe) ? oppgaverPerSteggruppe : { nye: 0, lukkede: 0 };
-  console.log(antallOppgaver);
+  const antallOppgaver = isSuccess(oppgaverPerSteggruppe) ? oppgaverPerSteggruppe.data : { nye: 0, lukkede: 0, totalt: 0 };
 
   return (
     <PlotWrapper>
       <VStack align={'center'} gap={'2'}>
         <BodyShort size={'small'}>{'Nye og avsluttede oppgaver'}</BodyShort>
         <VStack align={'center'}>
-          <Heading size={'small'}>{1} totalt</Heading>
+          <Heading size={'small'}>{antallOppgaver.totalt} åpne oppgaver totalt</Heading>
         </VStack>
         <AntallDagerFilter selectedValue={selectedValue} onChange={setOppslagsPeriode} />
       </VStack>
@@ -41,22 +40,22 @@ export const OppgaverInnUt = ({ behandlingstyperQuery }: Props) => {
       <ResponsivePlot
         data={[
           {
-            y: [1],
-            x: ['Åpne behandlinger'],
+            x: ['Nye'],
+            y: [antallOppgaver.nye],
             type: 'bar',
-            text: '',
+            text: antallOppgaver.nye.toString(),
             textposition: 'outside',
           },
           {
-            y: [1],
-            x: ['På vent'],
+            x: ['Avsluttede'],
+            y: [antallOppgaver.lukkede],
             type: 'bar',
-            text: '',
+            text: antallOppgaver.lukkede.toString(),
             textposition: 'outside',
           },
         ]}
         layout={{
-          yaxis: { title: 'Antall' },
+          yaxis: { title: 'Antall', dtick: antallOppgaver.nye > 4 || antallOppgaver.lukkede > 4 ? '' : 1 },
           showlegend: false,
           autosize: true,
         }}
