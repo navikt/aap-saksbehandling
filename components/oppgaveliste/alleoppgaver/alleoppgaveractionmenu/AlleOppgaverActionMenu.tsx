@@ -9,7 +9,7 @@ import { useState, useTransition } from 'react';
 
 interface Props {
   oppgave: Oppgave;
-  revalidateFunction: () => void;
+  revalidateFunction: () => Promise<unknown>;
 }
 
 export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) => {
@@ -24,7 +24,7 @@ export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) =
         const res = await avreserverOppgaveClient([oppgave.id]);
 
         if (isSuccess(res)) {
-          await (revalidateFunction as () => Promise<void>)();
+          await revalidateFunction();
         }
       }
     });

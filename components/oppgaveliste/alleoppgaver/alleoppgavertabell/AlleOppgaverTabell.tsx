@@ -14,7 +14,7 @@ import { isSuccess } from 'lib/utils/api';
 
 interface Props {
   oppgaver: Oppgave[];
-  revalidateFunction: () => void;
+  revalidateFunction: () => Promise<unknown>;
 }
 
 export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
@@ -37,7 +37,7 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
     startTransitionFrigi(async () => {
       const res = await avreserverOppgaveClient(oppgaver);
       if (isSuccess(res)) {
-        await (revalidateFunction as () => Promise<void>)();
+        await revalidateFunction();
         setValgteRader([]);
       }
     });
