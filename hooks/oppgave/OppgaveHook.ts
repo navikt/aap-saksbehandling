@@ -26,7 +26,7 @@ export function useOppgaver({
   setSize: (size: number | ((_size: number) => number)) => void;
   isLoading: boolean;
   isValidating: boolean;
-  mutate: () => void;
+  mutate: () => Promise<unknown>;
 } {
   const getKey = (pageIndex: number, previousPageData: any) => {
     if (previousPageData && previousPageData.length === 0) return null;
@@ -83,7 +83,7 @@ export function useOppgaver({
     isLoading,
     isValidating,
     kanLasteInnFlereOppgaver,
-    mutate
+    mutate,
   };
 }
 
