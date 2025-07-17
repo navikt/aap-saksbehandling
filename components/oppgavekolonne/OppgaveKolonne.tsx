@@ -35,7 +35,6 @@ interface Props {
 }
 
 export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
-  console.log(aktivGruppe);
   return (
     <section className={className}>
       {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
@@ -87,6 +86,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'START_OPPFØLGINGSBEHANDLING' && (
         <AvklarOppfolgingsSteg behandlingsreferanse={behandlingsReferanse} />
       )}
+      {aktivGruppe === 'AVKLAR_OPPPFØLGING' && <AvklarOppfolgingsSteg behandlingsreferanse={behandlingsReferanse} />}
     </section>
   );
 };

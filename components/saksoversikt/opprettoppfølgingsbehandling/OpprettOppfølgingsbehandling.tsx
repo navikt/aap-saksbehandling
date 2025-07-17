@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
 import { OppfølgingsoppgaveV0, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -8,19 +8,26 @@ import { clientSendHendelse } from 'lib/clientApi';
 import { useState } from 'react';
 import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
-import styles from './OpprettOppfølgingsbehandling.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { v4 as uuid } from 'uuid';
 import { parse } from 'date-fns';
+import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 export interface OppfølgingsoppgaveFormFields {
   datoForOppfølging: string;
   hvaSkalFølgesOpp: string;
-  hvemSkalFølgeOpp: string;
+  hvemSkalFølgeOpp: ['NAY', 'Lokalkontor'];
+  reserverTilMeg: boolean;
 }
 
-export const OpprettOppfølgingsBehandling = ({ sak }: { sak: SaksInfo }) => {
+export const OpprettOppfølgingsBehandling = ({
+  sak,
+  brukerInformasjon,
+}: {
+  sak: SaksInfo;
+  brukerInformasjon: BrukerInformasjon;
+}) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -40,12 +47,11 @@ export const OpprettOppfølgingsBehandling = ({ sak }: { sak: SaksInfo }) => {
         meldingType: 'OppfølgingsoppgaveV0',
         datoForOppfølging: formaterDatoForBackend(parse(data.datoForOppfølging, 'dd.MM.yyyy', new Date())),
         hvaSkalFølgesOpp: data.hvaSkalFølgesOpp,
-        reserverTilBruker: 'dd',
+        reserverTilBruker: data.reserverTilMeg ? brukerInformasjon.NAVident : undefined,
         hvemSkalFølgeOpp: 'NasjonalEnhet',
       } satisfies OppfølgingsoppgaveV0,
     };
 
-    console.log(JSON.stringify(innsending));
     setIsLoading(true);
 
     const res = await clientSendHendelse(sak.saksnummer, innsending);
@@ -59,36 +65,54 @@ export const OpprettOppfølgingsBehandling = ({ sak }: { sak: SaksInfo }) => {
   }
 
   const { form, formFields } = useConfigForm<OppfølgingsoppgaveFormFields>({
-    datoForOppfølging: { type: 'date_input', label: 'Dato for oppfølging', rules: { required: 'Må settes' } },
+    datoForOppfølging: {
+      type: 'date_input',
+      label: 'Dato for oppfølging',
+      rules: { required: 'Må settes' },
+    },
     hvemSkalFølgeOpp: {
       type: 'combobox',
-      label: 'Hvem',
-      options: ['Meg', 'NAY', 'Lokalkontor'],
+      label: 'Hvem følger opp?',
+      options: [
+        {
+          label: 'NAY',
+          value: 'NAY',
+        },
+        { label: 'Lokalkontor', value: 'Lokalkontor' },
+      ],
+    },
+    reserverTilMeg: {
+      type: 'checkbox',
+      options: ['Reserver oppgaven til meg'],
     },
     hvaSkalFølgesOpp: {
       type: 'textarea',
-      label: 'Beskrivelse av klagen',
+      label: 'Hva skal følges opp?',
     },
   });
 
   if (isLoading) {
-    return <Spinner label="Oppretter oppfølgingsbehandling ..." />;
+    return <Spinner label="Oppretter oppfølgingsoppgave ..." />;
   }
 
   return (
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
         <VStack gap="4">
-          <ExpansionCard aria-label="Opprett oppfølgingsbehandling" size={'small'} defaultOpen={true}>
+          <ExpansionCard aria-label="Opprett oppfølgingsoppgave" size={'small'} defaultOpen={true}>
             <ExpansionCard.Header>
-              <ExpansionCard.Title size="small">Opprett Klage</ExpansionCard.Title>
+              <ExpansionCard.Title size="small">Opprett oppfølgingsoppgave</ExpansionCard.Title>
             </ExpansionCard.Header>
 
             <ExpansionCard.Content>
               <VStack gap="4">
+                <div>
+                  <BodyLong>Oppfølgingsoppgaven ligger på vent til ønsket dato.</BodyLong>
+                </div>
                 <FormField form={form} formField={formFields.datoForOppfølging} size="medium" />
                 <FormField form={form} formField={formFields.hvaSkalFølgesOpp} size="medium" />
                 <FormField form={form} formField={formFields.hvemSkalFølgeOpp} size="medium" />
+                <FormField form={form} formField={formFields.reserverTilMeg} size="medium" />
               </VStack>
             </ExpansionCard.Content>
           </ExpansionCard>

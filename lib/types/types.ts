@@ -1,4 +1,4 @@
-import { components, paths } from './schema';
+import { components } from './schema';
 import { components as oppgave } from '@navikt/aap-oppgave-typescript-types';
 
 // Grunnlag
@@ -325,6 +325,9 @@ export type NyÅrsakTilBehandlingV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof NyÅrsakTilBehandlingV0}`] & {
     meldingType: typeof NyÅrsakTilBehandlingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
+
+export type AvklarOppfolgingsoppgaveGrunnlagResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.AvklarOppfolgingsoppgaveGrunnlagResponse'];
 
 export const OppfølgingoppgaveV0 = 'OppfølgingsoppgaveV0';
 

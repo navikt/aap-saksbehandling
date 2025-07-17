@@ -44,6 +44,8 @@ export enum Behovstype {
   TREKK_KLAGE_KODE = '6010',
   SAMORDNING_REFUSJONS_KRAV = '5056',
   FASTSETT_MANUELL_INNTEKT = '7001',
+  AVKLAR_OPPFØLGINGSBEHOV_NAY = '8002',
+  AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR = '8001',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -136,6 +138,10 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Refusjonskrav tjenestepensjon';
     case '7001':
       return 'Pensjonsgivende inntekt mangler (§ 11-19)';
+    case '8001':
+      return 'Avklar oppfølgingsbehov lokalkontor';
+    case '8002':
+      return 'Avklar oppfølgingsbehov NAY';
   }
 }
 
