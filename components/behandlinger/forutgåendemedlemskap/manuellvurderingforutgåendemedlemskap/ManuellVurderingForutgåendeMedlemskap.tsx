@@ -127,7 +127,6 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
   const heading = overstyring ? 'Overstyring av § 11-2 Forutgående medlemskap' : '§ 11-2 Forutgående medlemskap';
   const historiskeManuelleVurderinger = grunnlag?.historiskeManuelleVurderinger;
 
-  historiskeManuelleVurderinger?.map((it) => it.manuellVurdering);
   return (
     <VilkårsKortMedForm
       heading={heading}
