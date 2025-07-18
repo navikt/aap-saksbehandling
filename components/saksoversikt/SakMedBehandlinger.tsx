@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { isLocal } from 'lib/utils/environment';
+import { isLocal, isProd } from 'lib/utils/environment';
 import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -74,7 +74,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             </Button>
           )}
 
-          {kanRevurdere && (
+          {kanRevurdere && !isProd() && (
             <Button
               variant="secondary"
               size="small"

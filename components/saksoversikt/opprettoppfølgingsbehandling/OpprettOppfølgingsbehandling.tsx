@@ -83,7 +83,8 @@ export const OpprettOppfølgingsBehandling = ({
     },
     reserverTilMeg: {
       type: 'checkbox',
-      options: ['Reserver oppgaven til meg'],
+      options: [{ label: 'Reserver oppgaven til meg', value: 'RESERVER_TIL_MEG' }],
+      defaultValue: ['RESERVER_TIL_MEG'],
     },
     hvaSkalFølgesOpp: {
       type: 'textarea',
