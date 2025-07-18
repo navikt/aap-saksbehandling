@@ -51,7 +51,7 @@ type BehovsKode = `${Behovstype}`;
 export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
   switch (kode) {
     case '5001':
-      return 'Student § 11-14';
+      return '§ 11-14 Student';
     case '5003':
       return '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng';
     case '5004':
@@ -61,11 +61,11 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5006':
       return '§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid';
     case '5007':
-      return 'Sykepengeerstatning § 11-13';
+      return '§ 11-13 AAP som sykepengeerstatning';
     case '5008':
-      return 'Fastsett beregningstidspunkt';
+      return '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5';
     case '5009':
-      return 'Barnetillegg § 11-20';
+      return '§ 11-20 tredje og fjerde ledd barnetillegg';
     case '5098':
       return 'Foreslå vedtak';
     case '5099':
@@ -75,17 +75,17 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '9001':
       return 'Manuelt satt på vent';
     case '5010':
-      return 'Soningsvurdering § 11-26';
+      return '§ 11-26 Soning';
     case '5011':
-      return 'Helseinstitusjon § 11-25';
+      return '§ 11-25 Helseinstitusjon';
     case '5012':
-      return 'Samordning gradering';
+      return '§§ 11-27 / 11-28 Samordning med andre folketrygdytelser';
     case '5013':
-      return 'Vurder yrkesskade';
+      return '§ 11-22 AAP ved yrkesskade';
     case '5014':
-      return 'Vurder yrkesskadeinntekt';
+      return 'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22';
     case '5015':
-      return 'Aktivitetsplikt § 11-7';
+      return '§ 11-7 Bidrar ikke til egen avklaring / behandling';
     case '5017':
       return 'Lovvalg og medlemskap ved søknadstidspunkt';
     case '5020':
@@ -93,11 +93,11 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5021':
       return 'Overstyr lovvalg';
     case '5024':
-      return 'Samordning uføre';
+      return 'Samordning med delvis uføre';
     case '5026':
-      return 'Refusjonskrav';
+      return 'Sosialstønad refusjonskrav';
     case '5027':
-      return 'Samordning andre statlige ytelser';
+      return 'Andre ytelser til avregning';
     case '5028':
       return 'Vurder trekk av søknad';
     case '5030':
@@ -133,9 +133,9 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '6010':
       return 'Trekk klage';
     case '5056':
-      return 'Samordning refusjon krav';
+      return 'Refusjonskrav tjenestepensjon';
     case '7001':
-      return 'Fastsett manuell inntekt';
+      return 'Pensjonsgivende inntekt mangler (§ 11-19)';
   }
 }
 

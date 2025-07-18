@@ -97,6 +97,8 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'SYKDOM/#VURDER_SYKEPENGEERSTATNING';
     case Behovstype.AVKLAR_BARNETILLEGG_KODE:
       return 'BARNETILLEGG/#BARNETILLEGG';
+    case Behovstype.FASTSETT_YRKESSKADEINNTEKT:
+      return 'GRUNNLAG/#FASTSETT_YRKESSKADEINNTEKT'
     case Behovstype.AVKLAR_SONINGSFORRHOLD:
       return 'ET_ANNET_STED';
     case Behovstype.AVKLAR_HELSEINSTITUSJON:
@@ -118,9 +120,11 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
     case Behovstype.AVKLAR_SAMORDNING_UFORE:
       return 'SAMORDNING';
     case Behovstype.FASTSETT_MANUELL_INNTEKT:
-      return 'GRUNNLAG';
+      return 'GRUNNLAG/#FASTSETT_MANUELL_INNTEKT';
     case Behovstype.VURDER_RETTIGHETSPERIODE:
       return 'RETTIGHETSPERIODE';
+    case Behovstype.EFFEKTUER_11_7_KODE:
+      return 'UNDERVEIS'
     default:
       return 'SYKDOM';
   }
