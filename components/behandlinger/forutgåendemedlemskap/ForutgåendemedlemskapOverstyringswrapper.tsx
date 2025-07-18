@@ -12,6 +12,7 @@ interface Props {
   automatiskVurdering: AutomatiskLovvalgOgMedlemskapVurdering;
   stegSomSkalVises: Array<StegType>;
   visOverstyrKnapp: boolean;
+  harYrkesskade: boolean;
   children: ReactNode;
 }
 
@@ -22,6 +23,7 @@ export const ForutgåendemedlemskapOverstyringswrapper = ({
   behandlingVersjon,
   readOnly,
   visOverstyrKnapp,
+  harYrkesskade,
 }: Props) => {
   const [overstyring, setOverstyring] = useState<boolean>(false);
   return (
@@ -31,6 +33,7 @@ export const ForutgåendemedlemskapOverstyringswrapper = ({
         setOverstyring={setOverstyring}
         visOverstyrKnapp={visOverstyrKnapp}
         visOverstyringsBehov={overstyring}
+        harYrkesskade={harYrkesskade}
       />
       {children}
       {overstyring && stegSomSkalVises.length === 0 && (
