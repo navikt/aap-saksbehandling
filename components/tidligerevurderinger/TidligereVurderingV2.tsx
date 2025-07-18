@@ -8,6 +8,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 interface Props {
   tidligereVurdering: TidligereVurdering;
 }
+// Todo: Flytt denne over til v3 når alle implementasjoner av "tidligere vurderinger" benytter sistnevnte
 export interface TidligereVurdering {
   periode: ÅpenPeriode;
   vurdertAvIdent: string;

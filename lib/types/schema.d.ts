@@ -270,6 +270,53 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/sak/{saksnummer}/finnBehandlingerAvType': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json':
+            | 'Førstegangsbehandling'
+            | 'Revurdering'
+            | 'Tilbakekreving'
+            | 'Klage'
+            | 'SvarFraAndreinstans';
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingAvTypeDTO'][];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/sak/{saksnummer}/personinformasjon': {
     parameters: {
       query?: never;
@@ -6843,6 +6890,7 @@ export interface components {
       erBehovForAktivBehandling: boolean;
       'erBehovForAnnenOppf\u00F8lging'?: boolean | null;
       erBehovForArbeidsrettetTiltak: boolean;
+      erGjeldende?: boolean | null;
       overgangBegrunnelse?: string | null;
       skalVurdereAapIOvergangTilArbeid?: boolean | null;
       'skalVurdereAapIOvergangTilUf\u00F8re'?: boolean | null;
@@ -6866,6 +6914,7 @@ export interface components {
       bidiagnoser?: string[] | null;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
       erArbeidsevnenNedsatt?: boolean | null;
+      erGjeldende?: boolean | null;
       erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
@@ -8985,6 +9034,14 @@ export interface components {
         | 'SENDT_TILBAKE_FRA_KVALITETSSIKRER'
         | 'AVBRUTT';
     };
+    'no.nav.aap.behandlingsflyt.flyt.BehandlingAvTypeDTO': {
+      behandlingsReferanse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.behandling.BehandlingReferanse'];
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      opprettetDato: string;
+    };
     'no.nav.aap.behandlingsflyt.flyt.BehandlingFlytOgTilstandDto': {
       /** @enum {string} */
       aktivGruppe:
@@ -9875,6 +9932,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Klage': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KlageV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KlageV0': {
+      behandlingReferanse?: string | null;
       beskrivelse: string;
       /**
        * Format: date
