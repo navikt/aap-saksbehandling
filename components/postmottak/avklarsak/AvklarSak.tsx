@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { FormEvent, FormEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
+import { AvsenderMottakerIdType, FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
 import { Alert, Button, Detail, HStack, Label, Radio, VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { FormFieldRadioOptions } from 'components/form/FormHook';
@@ -30,7 +30,7 @@ interface FormFields {
   };
   dokumenter: {
     dokumentInfoId: string;
-    tittel?: string;
+    tittel: string;
   }[];
 }
 
@@ -53,15 +53,15 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
   const form = useForm<FormFields>({
     defaultValues: {
       knyttTilSak: mapVurderingTilValgtOption(grunnlag.vurdering),
-      journalpostTittel: grunnlag.journalposttittel,
+      journalpostTittel: grunnlag.journalposttittel || '',
       avsenderMottaker: {
-        id: grunnlag.avsenderMottaker.id,
-        idType: grunnlag.avsenderMottaker.idType,
-        navn: grunnlag.avsenderMottaker.navn,
+        id: grunnlag.avsenderMottaker?.id || '',
+        idType: grunnlag.avsenderMottaker?.idType || 'FNR',
+        navn: grunnlag.avsenderMottaker?.navn || '',
       },
       dokumenter: grunnlag.dokumenter.map((dok) => ({
         dokumentInfoId: dok.dokumentInfoId.dokumentInfoId,
-        tittel: dok.tittel,
+        tittel: dok.tittel || '',
       })),
     },
   });
@@ -86,7 +86,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
           journalposttittel: data.journalpostTittel,
           avsenderMottaker: {
             id: data.avsenderMottaker.id,
-            idType: data.avsenderMottaker.idType,
+            idType: data.avsenderMottaker.idType as AvsenderMottakerIdType,
             navn: data.avsenderMottaker.navn,
           },
           dokumenter: data.dokumenter,
