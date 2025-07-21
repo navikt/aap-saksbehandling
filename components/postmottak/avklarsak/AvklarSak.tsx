@@ -25,7 +25,6 @@ interface FormFields {
   journalpostTittel: string;
   avsenderMottaker: {
     id: string;
-    idType: string;
     navn: string;
   };
   dokumenter: {
@@ -56,7 +55,6 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
       journalpostTittel: grunnlag.journalposttittel || '',
       avsenderMottaker: {
         id: grunnlag.avsenderMottaker?.id || '',
-        idType: grunnlag.avsenderMottaker?.idType || 'FNR',
         navn: grunnlag.avsenderMottaker?.navn || '',
       },
       dokumenter: grunnlag.dokumenter.map((dok) => ({
@@ -86,7 +84,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
           journalposttittel: data.journalpostTittel,
           avsenderMottaker: {
             id: data.avsenderMottaker.id,
-            idType: data.avsenderMottaker.idType as AvsenderMottakerIdType,
+            idType: 'FNR',
             navn: data.avsenderMottaker.navn,
           },
           dokumenter: data.dokumenter,
