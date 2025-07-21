@@ -5,6 +5,7 @@ import { FinnSakGrunnlag } from 'lib/types/postmottakTypes';
 
 describe('Avklar sak', () => {
   const grunnlag: FinnSakGrunnlag = {
+    dokumenter: [],
     saksinfo: [{ saksnummer: '23424', periode: { fom: '2025-01-01', tom: '2025-02-01' } }],
     brevkode: '',
   };
