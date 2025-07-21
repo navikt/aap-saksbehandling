@@ -1,4 +1,4 @@
-import { Link, Table, VStack } from '@navikt/ds-react';
+import { Link, Pagination, Table, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import useSWR from 'swr';
 import { useSaksnummer } from 'hooks/BehandlingHook';
@@ -9,10 +9,11 @@ import { ArrowGreen } from 'components/icons/ArrowGreen';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { clientHentAlleDokumenterPåSak } from 'lib/dokumentClientApi';
+import { isError } from 'lib/utils/api';
+import { useState } from 'react';
 
 interface FormFields {
   dokumentnavn: string;
-  dokumentType: string;
 }
 
 export const Saksdokumenter = () => {
@@ -20,35 +21,40 @@ export const Saksdokumenter = () => {
   const { data: dokumenterPåSak } = useSWR(`api/dokumenter/sak/${saksnummer}`, () =>
     clientHentAlleDokumenterPåSak(saksnummer)
   );
+  const [pageState, setPageState] = useState(1);
+  const dokumenterPerPage = 7;
 
   const { form, formFields } = useConfigForm<FormFields>({
     dokumentnavn: {
       type: 'text',
       label: 'Søk i dokumenter',
     },
-    dokumentType: {
-      type: 'select',
-      label: 'Vis typer',
-      options: Array.from(
-        new Set([
-          ...[''],
-          ...((dokumenterPåSak?.type === 'SUCCESS' &&
-            dokumenterPåSak?.data?.map((dokument) => dokument.variantformat)) ||
-            []),
-        ])
-      ),
-    },
   });
 
-  if (dokumenterPåSak?.type === 'ERROR') {
+  if (isError(dokumenterPåSak)) {
     return <ApiException apiResponses={[dokumenterPåSak]} />;
   }
+
+  const dokumenterFiltrertPåSøk =
+    dokumenterPåSak?.data?.filter(
+      (dokument) => !form.watch('dokumentnavn') || dokument.tittel.includes(form.watch('dokumentnavn'))
+    ) || [];
+
+  const skalVisePaginering = dokumenterFiltrertPåSøk.length > dokumenterPerPage;
+
+  const antallSider =
+    dokumenterFiltrertPåSøk.length > dokumenterPerPage
+      ? Math.ceil(dokumenterFiltrertPåSøk.length / dokumenterPerPage)
+      : 1;
+
+  const dokumenterForValgtSide = skalVisePaginering
+    ? dokumenterFiltrertPåSøk.slice((pageState - 1) * dokumenterPerPage, pageState * dokumenterPerPage)
+    : dokumenterFiltrertPåSøk;
 
   return (
     <VStack gap={'4'}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <FormField form={form} formField={formFields.dokumentnavn} />
-        <FormField form={form} formField={formFields.dokumentType} />
       </div>
       <TableStyled size={'small'}>
         <Table.Header>
@@ -60,7 +66,7 @@ export const Saksdokumenter = () => {
               Dokument
             </Table.HeaderCell>
             <Table.HeaderCell align={'left'} textSize={'small'}>
-              Type
+              Brevkode
             </Table.HeaderCell>
             <Table.HeaderCell align={'left'} textSize={'small'}>
               Journalført
@@ -68,36 +74,49 @@ export const Saksdokumenter = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {dokumenterPåSak?.data
-            ?.filter((dokument) => !form.watch('dokumentnavn') || dokument.tittel.includes(form.watch('dokumentnavn')))
-            .filter((dokument) => !form.watch('dokumentType') || dokument.variantformat === form.watch('dokumentType'))
-            .map((dokument) => {
-              return (
-                <Table.Row key={dokument.dokumentInfoId}>
-                  <Table.DataCell align={'left'}>
-                    <div style={{ display: 'flex', minWidth: '3rem' }}>
-                      {dokument.erUtgående ? (
-                        <ArrowOrange title={'Utgående dokument'} />
-                      ) : (
-                        <ArrowGreen title={'Inngående dokument'} />
-                      )}
-                    </div>
-                  </Table.DataCell>
-                  <Table.DataCell align={'left'}>
-                    <Link
-                      href={`/saksbehandling/api/dokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}`}
-                      target="_blank"
-                    >
-                      {dokument.tittel}
-                    </Link>
-                  </Table.DataCell>
-                  <Table.DataCell align={'left'}>{dokument.brevkode}</Table.DataCell>
-                  <Table.DataCell align={'left'}>{formaterDatoForFrontend(dokument.datoOpprettet)}</Table.DataCell>
-                </Table.Row>
-              );
-            })}
+          {dokumenterForValgtSide.map((dokument) => {
+            return (
+              <Table.Row key={dokument.dokumentInfoId}>
+                <Table.DataCell align={'left'}>
+                  <div style={{ display: 'flex', minWidth: '3rem' }}>
+                    {dokument.erUtgående ? (
+                      <ArrowOrange title={'Utgående dokument'} />
+                    ) : (
+                      <ArrowGreen title={'Inngående dokument'} />
+                    )}
+                  </div>
+                </Table.DataCell>
+                <Table.DataCell align={'left'}>
+                  <Link
+                    href={`/saksbehandling/api/dokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}`}
+                    target="_blank"
+                  >
+                    {dokument.tittel}
+                  </Link>
+                </Table.DataCell>
+                <Table.DataCell align={'left'}>{dokument.brevkode}</Table.DataCell>
+                <Table.DataCell align={'left'}>{formaterDatoForFrontend(dokument.datoOpprettet)}</Table.DataCell>
+              </Table.Row>
+            );
+          })}
         </Table.Body>
       </TableStyled>
+      {skalVisePaginering && (
+        <VStack align={'center'}>
+          <Pagination
+            page={pageState}
+            onPageChange={setPageState}
+            count={antallSider}
+            boundaryCount={1}
+            siblingCount={1}
+            size={'small'}
+            srHeading={{
+              tag: 'h2',
+              text: 'Tabellpaginering',
+            }}
+          />
+        </VStack>
+      )}
     </VStack>
   );
 };

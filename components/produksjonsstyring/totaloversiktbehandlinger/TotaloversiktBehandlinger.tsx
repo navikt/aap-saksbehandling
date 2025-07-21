@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Button, HGrid, VStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import useSWR from 'swr';
@@ -30,6 +30,8 @@ import { isSuccess } from 'lib/utils/api';
 export const TotaloversiktBehandlinger = () => {
   const [listeVisning, setListeVisning] = useState<boolean>(false);
   const alleFiltere = useContext(AlleFiltereContext);
+  const antallDager = 14;
+  //const oppgaveFiltre =
   const behandlingstyperQuery = useMemo(
     () => statistikkQueryparams({ behandlingstyper: alleFiltere.behandlingstyper }),
     [alleFiltere]
@@ -40,7 +42,7 @@ export const TotaloversiktBehandlinger = () => {
     antallÅpneBehandlingerPerBehandlingstypeClient
   );
   const { data: behandlingerUtvikling } = useSWR(
-    `/oppgave/api/statistikk/behandlinger/utvikling?antallDager=${0}&${behandlingstyperQuery}`,
+    `/oppgave/api/statistikk/behandlinger/utvikling?antallDager=${antallDager}&${behandlingstyperQuery}`,
     behandlingerUtviklingClient
   );
   const { data: fordelingÅpneBehandlinger } = useSWR(
@@ -55,40 +57,48 @@ export const TotaloversiktBehandlinger = () => {
     `/oppgave/api/statistikk/behandlinger/pa-vent?${behandlingstyperQuery}`,
     venteÅrsakerClient
   );
-  const antallPåVent = isSuccess(venteÅrsaker)
-    ? venteÅrsaker.data?.map((årsak) => årsak.antall).reduce((acc, curr) => acc + curr, 0)
-    : undefined;
-  const behandlingerPerSteggruppe = useSWR(
-    `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
-    behandlingerPerSteggruppeClient
-  ).data;
   const årsakerTilBehandling = useSWR(
     `/oppgave/api/statistikk/behandlinger/arsak-til-behandling?${behandlingstyperQuery}`,
     årsakTilBehandlingClient
   ).data;
+  const behandlingerPerSteggruppe = useSWR(
+    `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
+    behandlingerPerSteggruppeClient
+  ).data;
+  const førstegangsBehandlingerPerSteggruppe = useSWR(
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Førstegangsbehandling`,
+    behandlingerPerSteggruppeClient
+  ).data;
+  const klageBehandlingerPerSteggruppe = useSWR(
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Klage`,
+    behandlingerPerSteggruppeClient
+  ).data;
+  const revurderingBehandlingerPerSteggruppe = useSWR(
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Revurdering`,
+    behandlingerPerSteggruppeClient
+  ).data;
+
   return (
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
       <VStack padding={'5'} gap={'5'}>
-        <HStack gap={'5'}>
-          <Heading level={'2'} size={'large'}>
-            Behandlinger
-          </Heading>
+        <VStack align={'end'}>
           <Button
             variant={'secondary'}
             icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
+            className={'fit-content'}
+            size={'small'}
             onClick={() => setListeVisning(!listeVisning)}
           >
             {listeVisning ? 'Gridvisning' : 'Listevisning'}
           </Button>
-        </HStack>
+        </VStack>
+
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {isSuccess(behandlingerUtvikling) && (
             <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
           )}
-          {isSuccess(antallÅpneBehandlinger) && (
-            <ApneBehandlinger antallPåVent={antallPåVent} åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
-          )}
+          <ApneBehandlinger behandlingstyperQuery={behandlingstyperQuery} />
           {isSuccess(antallÅpneBehandlinger) && (
             <TypeBehandlinger åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
           )}
@@ -101,11 +111,32 @@ export const TotaloversiktBehandlinger = () => {
             />
           )}
           {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
-          {isSuccess(behandlingerPerSteggruppe) && (
-            <BehandlingerPerSteggruppe data={behandlingerPerSteggruppe.data || []} />
-          )}
           {isSuccess(årsakerTilBehandling) && (
             <ÅrsakTilBehandling årsakTilBehandling={årsakerTilBehandling.data || []} />
+          )}
+          {isSuccess(behandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={behandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling behandling og revurdering'}
+            />
+          )}
+          {isSuccess(førstegangsBehandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={førstegangsBehandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling førstegangsbehandling'}
+            />
+          )}
+          {isSuccess(klageBehandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={klageBehandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling klagebehandlinger'}
+            />
+          )}
+          {isSuccess(revurderingBehandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={revurderingBehandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling revurderingbehandlinger'}
+            />
           )}
         </div>
       </VStack>

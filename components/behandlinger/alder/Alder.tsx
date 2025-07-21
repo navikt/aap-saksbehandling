@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { CheckmarkIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { AlderGrunnlag, AvslagÅrsak } from 'lib/types/types';
 
 import styles from './Alder.module.css';
@@ -28,12 +28,12 @@ export const Alder = ({ grunnlag }: Props) => {
             <Label size={'small'}>Fødselsdato</Label>
             <BodyShort size={'small'}>
               <span>{formaterDatoForFrontend(grunnlag.fødselsdato)} </span>
-              <span>{`(Bruker er ${kalkulerAlder(new Date(grunnlag.fødselsdato))} i dag)`}</span>
+              <span>{`(Brukeren er ${kalkulerAlder(new Date(grunnlag.fødselsdato))} i dag)`}</span>
             </BodyShort>
           </div>
 
           <div>
-            <Label size={'small'}>Dato bruker blir 67 år</Label>
+            <Label size={'small'}>Dato brukeren blir 67 år</Label>
             <BodyShort size={'small'}>
               <span>{formaterDatoForFrontend(addYears(new Date(grunnlag.fødselsdato), 67))}</span>
             </BodyShort>
@@ -80,6 +80,9 @@ export const Alder = ({ grunnlag }: Props) => {
             })}
           </Table.Body>
         </TableStyled>
+        <HStack justify={'end'} align={'end'}>
+          <Detail>Vurdert automatisk</Detail>
+        </HStack>
       </VStack>
     </VilkårsKort>
   );

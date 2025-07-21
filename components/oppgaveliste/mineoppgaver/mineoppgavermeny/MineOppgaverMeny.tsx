@@ -6,7 +6,6 @@ import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-
 import styles from './MineOppgaverMeny.module.css';
 
 interface Props {
@@ -24,16 +23,20 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
 
   async function frigiOppgave(oppgave: Oppgave) {
     startTransitionFrigi(async () => {
-      const res = await avreserverOppgaveClient(oppgave);
+      if (oppgave.id) {
+        const res = await avreserverOppgaveClient([oppgave.id]);
 
-      if (isSuccess(res)) {
-        if (revalidateFunction) {
-          revalidateFunction();
+        if (isSuccess(res)) {
+          if (revalidateFunction) {
+            revalidateFunction();
+          }
+        } else if (res.status == 401) {
+          setÅpenModal(true);
+        } else {
+          setFeilmelding(`Feil ved avreservering av oppgave: ${res.apiException.message}`);
         }
-      } else if (res.status == 401) {
-        setÅpenModal(true);
       } else {
-        setFeilmelding(`Feil ved avreservering av oppgave: ${res.apiException.message}`);
+        setFeilmelding('Feil ved avreservering av oppgave: OppgaveId mangler');
       }
     });
   }

@@ -40,8 +40,8 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
     <div>
       <span>{vurdering.begrunnelse}</span>
       <div style={{ display: 'flex', gap: '1.5rem', flexDirection: 'row', flexWrap: 'wrap' }}>
-        <span>Har bruker sykdom, skade eller lyte: {mapTilJaEllerNei(vurdering.harSkadeSykdomEllerLyte)}</span>
-        <span>Har bruker nedsatt arbeidsevne: {mapTilJaEllerNei(vurdering.erArbeidsevnenNedsatt ?? undefined)}</span>
+        <span>Har brukeren sykdom, skade eller lyte: {mapTilJaEllerNei(vurdering.harSkadeSykdomEllerLyte)}</span>
+        <span>Har brukeren nedsatt arbeidsevne: {mapTilJaEllerNei(vurdering.erArbeidsevnenNedsatt ?? undefined)}</span>
         <span>
           Er arbeidsevnen nedsatt med minst halvparten:
           {mapTilJaEllerNei(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten ?? undefined)}

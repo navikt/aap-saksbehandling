@@ -26,7 +26,7 @@ export const PåklagetBehandlingMedDataFetching = async ({
   return (
     <PåklagetBehandling
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       typeBehandling={typeBehandling}
       grunnlag={grunnlag.data}
     />

@@ -172,7 +172,7 @@ export const OpprettSak = () => {
         <Sykepenger form={form} />
       </div>
       <Button className={'fit-content'} loading={isLoading}>
-        Opprett test sak
+        Opprett testsak
       </Button>
     </form>
   );

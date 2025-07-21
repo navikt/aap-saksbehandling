@@ -33,16 +33,16 @@ describe('Soningsvurdering', () => {
     expect(screen.getByRole('heading', { level: 3, name: '§ 11-26 Soning' })).toBeVisible();
   });
 
-  it('har en tekst som informerer om at bruker har soningsforhold', () => {
+  it('har en tekst som informerer om at brukeren har soningsforhold', () => {
     render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
-    expect(screen.getByText('Bruker har følgende soningsforhold')).toBeVisible();
+    expect(screen.getByText('Brukeren har følgende soningsforhold')).toBeVisible();
   });
 
   it('har en beskrivelse av hvordan vilkåret skal vurderes', () => {
     render(<Soningsvurdering grunnlag={soningsgrunnlag} readOnly={false} behandlingsversjon={0} />);
     expect(
       screen.getByText(
-        'Under opphold i fengsel har ikke bruker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP'
+        'Under opphold i fengsel har ikke brukeren rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP'
       )
     ).toBeVisible();
   });

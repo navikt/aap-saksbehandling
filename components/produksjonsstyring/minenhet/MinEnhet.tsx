@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import useSWR from 'swr';
@@ -37,6 +37,7 @@ interface Props {
 
 export const MinEnhet = ({ enheter }: Props) => {
   const { hentLagretAktivEnhet, lagreAktivEnhet } = useLagreAktivEnhet();
+  const antallDager = 14;
 
   const [listeVisning, setListeVisning] = useState<boolean>(false);
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
@@ -61,7 +62,7 @@ export const MinEnhet = ({ enheter }: Props) => {
     antallÅpneBehandlingerPerBehandlingstypeClient
   );
   const { data: behandlingerUtvikling } = useSWR(
-    `/oppgave/api/statistikk/behandlinger/utvikling?antallDager=${0}&${behandlingstyperQuery}`,
+    `/oppgave/api/statistikk/behandlinger/utvikling?antallDager=${antallDager}&${behandlingstyperQuery}`,
     behandlingerUtviklingClient
   );
   const { data: fordelingÅpneBehandlinger } = useSWR(
@@ -76,34 +77,42 @@ export const MinEnhet = ({ enheter }: Props) => {
     `/oppgave/api/statistikk/behandlinger/pa-vent?${behandlingstyperQuery}`,
     venteÅrsakerClient
   );
-  const antallPåVent = isSuccess(venteÅrsaker)
-    ? venteÅrsaker.data?.map((årsak) => årsak.antall).reduce((acc, curr) => acc + curr, 0)
-    : undefined;
+  const årsakerTilBehandling = useSWR(
+    `/oppgave/api/statistikk/behandlinger/arsak-til-behandling?${behandlingstyperQuery}`,
+    årsakTilBehandlingClient
+  ).data;
   const behandlingerPerSteggruppe = useSWR(
     `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
     behandlingerPerSteggruppeClient
   ).data;
-  const årsakerTilBehandling = useSWR(
-    `/oppgave/api/statistikk/behandlinger/arsak-til-behandling?${behandlingstyperQuery}`,
-    årsakTilBehandlingClient
+  const førstegangsBehandlingerPerSteggruppe = useSWR(
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Førstegangsbehandling&enheter=${aktivEnhet}`,
+    behandlingerPerSteggruppeClient
+  ).data;
+  const klageBehandlingerPerSteggruppe = useSWR(
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Klage&enheter=${aktivEnhet}`,
+    behandlingerPerSteggruppeClient
+  ).data;
+  const revurderingBehandlingerPerSteggruppe = useSWR(
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Revurdering&enheter=${aktivEnhet}`,
+    behandlingerPerSteggruppeClient
   ).data;
 
   return (
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
       <VStack padding={'5'} gap={'5'}>
-        <HStack gap={'5'}>
-          <Heading level={'2'} size={'large'}>
-            Min enhet
-          </Heading>
+        <VStack align={'end'}>
           <Button
             variant={'secondary'}
+            className={'fit-content'}
+            size={'small'}
             icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
             onClick={() => setListeVisning(!listeVisning)}
           >
             {listeVisning ? 'Gridvisning' : 'Listevisning'}
           </Button>
-        </HStack>
+        </VStack>
         <HStack>
           <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
         </HStack>
@@ -111,9 +120,7 @@ export const MinEnhet = ({ enheter }: Props) => {
           {isSuccess(behandlingerUtvikling) && (
             <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
           )}
-          {isSuccess(antallÅpneBehandlinger) && (
-            <ApneBehandlinger antallPåVent={antallPåVent} åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
-          )}
+          <ApneBehandlinger behandlingstyperQuery={behandlingstyperQuery} />
           {isSuccess(antallÅpneBehandlinger) && (
             <TypeBehandlinger åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
           )}
@@ -126,11 +133,32 @@ export const MinEnhet = ({ enheter }: Props) => {
             />
           )}
           {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
-          {isSuccess(behandlingerPerSteggruppe) && (
-            <BehandlingerPerSteggruppe data={behandlingerPerSteggruppe.data || []} />
-          )}
           {isSuccess(årsakerTilBehandling) && (
             <ÅrsakTilBehandling årsakTilBehandling={årsakerTilBehandling.data || []} />
+          )}
+          {isSuccess(behandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={behandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling behandling og revurdering'}
+            />
+          )}
+          {isSuccess(førstegangsBehandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={førstegangsBehandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling førstegangsbehandling'}
+            />
+          )}
+          {isSuccess(klageBehandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={klageBehandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling klagebehandlinger'}
+            />
+          )}
+          {isSuccess(revurderingBehandlingerPerSteggruppe) && (
+            <BehandlingerPerSteggruppe
+              data={revurderingBehandlingerPerSteggruppe.data || []}
+              title={'Stegfordeling revurderingbehandlinger'}
+            />
           )}
         </div>
       </VStack>

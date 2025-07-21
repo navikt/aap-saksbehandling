@@ -1,7 +1,7 @@
-import { Journalpost } from 'lib/types/types';
 import { Alert, Box, Button, Dropdown, HStack } from '@navikt/ds-react';
 import { ChevronDownIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import Link from 'next/link';
+import { DokumentInfo, Journalpost } from 'lib/types/journalpost';
 
 export const ÅpneDokumentButton = ({ journalpost }: { journalpost: Journalpost }) => {
   if (journalpost.dokumenter.length > 1) {
@@ -14,7 +14,7 @@ export const ÅpneDokumentButton = ({ journalpost }: { journalpost: Journalpost 
           <Dropdown.Menu.GroupedList>
             <Dropdown.Menu.GroupedList.Heading>Velg dokument</Dropdown.Menu.GroupedList.Heading>
             <Dropdown.Menu.Divider />
-            {journalpost.dokumenter.map((dok, index) => (
+            {journalpost.dokumenter.map((dok: DokumentInfo, index: number) => (
               <HStack key={index} gap="4">
                 <Dropdown.Menu.GroupedList.Item
                   key={dok.dokumentInfoId}

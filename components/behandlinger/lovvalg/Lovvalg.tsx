@@ -28,8 +28,9 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
 
   const behandlingsVersjon = flyt.data.behandlingVersjon;
   const saksBehandlerReadOnly = flyt.data.visning.saksbehandlerReadOnly;
-  const visOverstyrKnapp = vurderingAutomatisk.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0;
   const readOnly = saksBehandlerReadOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const visOverstyrKnapp =
+    vurderingAutomatisk.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0 && !readOnly;
 
   return (
     <GruppeSteg

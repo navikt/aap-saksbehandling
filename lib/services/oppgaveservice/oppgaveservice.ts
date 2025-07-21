@@ -1,5 +1,5 @@
 import {
-  AvklaringsbehovReferanse,
+  AvreserverOppgaveDto,
   Enhet,
   Kø,
   NesteOppgaveRequestBody,
@@ -9,7 +9,8 @@ import {
   OppgaveBehandlingstype,
   OppgavelisteRequest,
   OppgavelisteResponse,
-  Paging, SøkResponse,
+  Paging,
+  SøkResponse,
 } from 'lib/types/oppgaveTypes';
 import { queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
@@ -71,9 +72,9 @@ export async function oppgaveSøk(
     enheter,
   });
 }
-export async function avreserverOppgave(avklaringsbehovReferanse: AvklaringsbehovReferanse) {
-  const url = `${oppgaveApiBaseURL}/avreserver-oppgave`;
-  return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', avklaringsbehovReferanse);
+export async function avreserverOppgave({ oppgaver }: AvreserverOppgaveDto) {
+  const url = `${oppgaveApiBaseURL}/avreserver-oppgaver`;
+  return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { oppgaver: oppgaver });
 }
 export async function velgNesteOppgave({ filterId, enheter }: NesteOppgaveRequestBody) {
   const url = `${oppgaveApiBaseURL}/neste-oppgave`;
@@ -82,6 +83,11 @@ export async function velgNesteOppgave({ filterId, enheter }: NesteOppgaveReques
 export async function plukkOppgave(oppgaveId: number, versjon: number) {
   const url = `${oppgaveApiBaseURL}/plukk-oppgave`;
   return await apiFetch<Oppgave>(url, oppgaveApiScope, 'POST', { oppgaveId, versjon });
+}
+
+export async function mottattDokumenterLest(behandlingRef: string) {
+  const url = `${oppgaveApiBaseURL}/mottatt-dokumenter-lest`;
+  return await apiFetch<{}>(url, oppgaveApiScope, 'POST', { behandlingRef: behandlingRef });
 }
 
 export async function oppgaveTekstSøk(søketekst: string) {
@@ -105,13 +111,14 @@ export async function oppgaveTekstSøk(søketekst: string) {
       type: 'SUCCESS',
       status: 200,
       data: {
+        harAdressebeskyttelse: false,
         oppgaver: oppgaver,
-        harTilgang: true
+        harTilgang: true,
       },
     };
 
     return mockData;
   }
-  const url = `${oppgaveApiBaseURL}/sok/v2`;
+  const url = `${oppgaveApiBaseURL}/sok`;
   return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
 }

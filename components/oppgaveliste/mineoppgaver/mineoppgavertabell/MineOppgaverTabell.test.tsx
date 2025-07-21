@@ -41,7 +41,7 @@ describe('Mine oppgaver tabell', () => {
   beforeEach(() => render(<MineOppgaverTabell oppgaver={oppgaver} revalidateFunction={vi.fn()} />));
 
   it('Skal inneholde korrekte kolonner ', () => {
-    const kolonner = ['Navn', 'Fnr', 'ID', 'Behandlingstype', 'Beh. opprettet', 'Årsak', 'Oppgave', 'Oppg. opprettet'];
+    const kolonner = ['Navn', 'Fnr', 'ID', 'Behandlingstype', 'Beh. opprettet', 'Årsak', 'Oppgave'];
 
     kolonner.forEach((kolonne) => {
       const column = screen.getByRole('columnheader', { name: kolonne });
@@ -50,7 +50,7 @@ describe('Mine oppgaver tabell', () => {
   });
 
   it('Skal inneholde kolonner som kan sorteres ', () => {
-    const kolonnerSomKanSorteres = ['Navn', 'Fnr', 'ID', 'Beh. opprettet', 'Årsak', 'Oppg. opprettet'];
+    const kolonnerSomKanSorteres = ['Navn', 'Fnr', 'ID', 'Beh. opprettet', 'Årsak'];
     kolonnerSomKanSorteres.forEach((kolonne) => {
       const column = screen.getByRole('button', { name: kolonne });
       expect(column).toBeVisible();

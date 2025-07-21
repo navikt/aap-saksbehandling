@@ -24,6 +24,10 @@ export function formaterTilG(sum: number): string {
   return `${formatedSum} G`;
 }
 
-export function formaterTilProsent(sum: number): string {
+export function formaterTilProsent(sum?: number | null): string {
+  if (sum === null) {
+    return '';
+  }
+
   return `${sum} %`;
 }

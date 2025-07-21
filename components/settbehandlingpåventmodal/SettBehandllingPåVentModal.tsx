@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Alert, Box, Button, Modal } from '@navikt/ds-react';
+import { Alert, Box, Button, Modal, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { clientSettBehandlingPåVent } from 'lib/clientApi';
 import { revalidateFlyt } from 'lib/actions/actions';
@@ -90,52 +90,54 @@ export const SettBehandllingPåVentModal = ({ referanse, reservert, isOpen, onCl
       className={styles.settBehandlingPåVentModal}
     >
       <Modal.Body>
-        {isOpen && (
-          <form
-            id={'settBehandlingPåVent'}
-            onSubmit={form.handleSubmit(async (data) => {
-              setIsLoading(true);
-              if (!flyt?.behandlingVersjon) {
-                setError('Behandlingsversjon finnes ikke');
-                return;
-              }
+        <VStack gap={'4'}>
+          {isOpen && (
+            <form
+              id={'settBehandlingPåVent'}
+              onSubmit={form.handleSubmit(async (data) => {
+                setIsLoading(true);
+                if (!flyt?.behandlingVersjon) {
+                  setError('Behandlingsversjon finnes ikke');
+                  return;
+                }
 
-              const res = await clientSettBehandlingPåVent(referanse, {
-                begrunnelse: data.begrunnelse,
-                behandlingVersjon: flyt.behandlingVersjon,
-                frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
-                grunn: data.grunn,
-              });
+                const res = await clientSettBehandlingPåVent(referanse, {
+                  begrunnelse: data.begrunnelse,
+                  behandlingVersjon: flyt.behandlingVersjon,
+                  frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
+                  grunn: data.grunn,
+                });
 
-              if (res.type === 'SUCCESS') {
-                await revalidateFlyt(referanse);
-                onClose();
-              } else {
-                setError(res.apiException.message);
-              }
+                if (res.type === 'SUCCESS') {
+                  await revalidateFlyt(referanse);
+                  onClose();
+                } else {
+                  setError(res.apiException.message);
+                }
 
-              setIsLoading(false);
-            })}
-            className={'flex-column'}
-            autoComplete={'off'}
-          >
-            {!reservert && (
-              <Box marginBlock={'0 2'}>
-                <Alert variant={'info'} size={'small'}>
-                  Behandlingen er ikke reservert. Når du setter den på vent, blir den reservert deg.
-                </Alert>
-              </Box>
-            )}
-            <FormField form={form} formField={formFields.begrunnelse} />
-            <FormField form={form} formField={formFields.frist} />
-            <FormField form={form} formField={formFields.grunn} />
-          </form>
-        )}
-        {error && (
-          <Alert variant={'error'} size={'small'}>
-            {error}
-          </Alert>
-        )}
+                setIsLoading(false);
+              })}
+              className={'flex-column'}
+              autoComplete={'off'}
+            >
+              {!reservert && (
+                <Box marginBlock={'0 2'}>
+                  <Alert variant={'info'} size={'small'}>
+                    Behandlingen er ikke reservert. Når du setter den på vent, blir den reservert deg.
+                  </Alert>
+                </Box>
+              )}
+              <FormField form={form} formField={formFields.begrunnelse} />
+              <FormField form={form} formField={formFields.frist} />
+              <FormField form={form} formField={formFields.grunn} />
+            </form>
+          )}
+          {error && (
+            <Alert variant={'error'} size={'small'}>
+              {error}
+            </Alert>
+          )}
+        </VStack>
       </Modal.Body>
       <Modal.Footer>
         <Button form={'settBehandlingPåVent'} className={'fit-content'} loading={isLoading}>

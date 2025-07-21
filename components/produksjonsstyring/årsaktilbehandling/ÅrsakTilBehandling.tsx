@@ -1,35 +1,55 @@
 'use client';
 
-import { Heading, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, Table, VStack } from '@navikt/ds-react';
 import { BehandlingÅrsakAntallGjennomsnitt } from 'lib/types/statistikkTypes';
 import { PlotWrapper } from 'components/produksjonsstyring/plotwrapper/PlotWrapper';
 import { sekunderTilDager } from 'lib/utils/time';
+import { formaterFrittÅrsak } from 'lib/utils/årsaker';
+import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
+import styles from '../../barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
 
 interface Props {
   årsakTilBehandling: Array<BehandlingÅrsakAntallGjennomsnitt>;
 }
+
 export const ÅrsakTilBehandling = ({ årsakTilBehandling }: Props) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- Fil som starter med Å liker ikke hook rulen
+  const { sort, håndterSortering, sortertListe } = useSortertListe(årsakTilBehandling);
+
   return (
     <PlotWrapper>
-      <VStack align={'center'} gap={'5'}>
-        <Heading level={'3'} size={'small'}>
-          {'Årsak til behandling'}
-        </Heading>
+      <VStack align={'center'} gap={'2'}>
+        <BodyShort size={'small'}>{'Årsak til behandling'}</BodyShort>
+        <VStack align={'center'}>
+          <Detail className={styles.detailgray}>
+            {'Viser alle registrerte årsaker til behandling. Én behandling kan ha flere årsaker.'}
+          </Detail>
+        </VStack>
       </VStack>
-      <Table>
+      <VStack padding={'space-8'} />
+      <Table
+        sort={sort}
+        onSortChange={(sortKey) =>
+          håndterSortering(sortKey as ScopedSortState<BehandlingÅrsakAntallGjennomsnitt>['orderBy'])
+        }
+      >
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Årsak</Table.HeaderCell>
-            <Table.HeaderCell>Antall</Table.HeaderCell>
-            <Table.HeaderCell>Snittalder (dager)</Table.HeaderCell>
+            <Table.ColumnHeader sortKey={'antall'} sortable={true}>
+              Antall
+            </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'gjennomsnittligAlder'} sortable={true}>
+              Snittalder
+            </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {årsakTilBehandling.toReversed().map((it, i) => (
+          {sortertListe.map((it, i) => (
             <Table.Row key={`rad-${i}`}>
-              <Table.DataCell>{it.årsak}</Table.DataCell>
+              <Table.DataCell>{formaterFrittÅrsak(it.årsak)}</Table.DataCell>
               <Table.DataCell>{it.antall}</Table.DataCell>
-              <Table.DataCell>{sekunderTilDager(it.gjennomsnittligAlder)}</Table.DataCell>
+              <Table.DataCell>{sekunderTilDager(it.gjennomsnittligAlder)} dager</Table.DataCell>
             </Table.Row>
           ))}
         </Table.Body>

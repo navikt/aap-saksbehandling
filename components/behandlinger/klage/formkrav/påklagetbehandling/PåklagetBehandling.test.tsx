@@ -4,7 +4,7 @@ import { PåklagetBehandling } from './PåklagetBehandling';
 import { PåklagetBehandlingGrunnlag } from 'lib/types/types';
 
 const grunnlag: PåklagetBehandlingGrunnlag = {
-  kravMottatt: '2025-05-19',
+  harTilgangTilÅSaksbehandle: true,
   behandlinger: [
     {
       referanse: 'uuid-1',

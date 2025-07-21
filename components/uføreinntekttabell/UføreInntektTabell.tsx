@@ -22,7 +22,7 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, ytterlig
           Grunnlagsberegning § 11-19 etter oppjustering jf. § 11-28 fjerde ledd
         </BodyShort>
         <BodyShort size={'small'}>
-          Bruker fikk ytterligere nedsatt arbeidsevne i {ytterligereNedsattArbeidsevneÅr}
+          Brukeren fikk ytterligere nedsatt arbeidsevne i {ytterligereNedsattArbeidsevneÅr}
         </BodyShort>
         <Veiledning
           header={'Se detaljer for beregning ved uføre'}

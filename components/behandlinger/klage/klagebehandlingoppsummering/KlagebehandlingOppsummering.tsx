@@ -9,6 +9,7 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { BodyShort, Detail, VStack } from '@navikt/ds-react';
 import { mapInnstillingTilTekst } from 'lib/utils/oversettelser';
 import styles from './KlagebehandlingOppsummering.module.css';
+import { FormEvent } from 'react';
 
 interface Props {
   behandlingVersjon: number;
@@ -63,7 +64,8 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
   const vilkårSomOmgjøres = utledVilkårSomOmgjøres(grunnlagKontor, grunnlagNay);
   const vilkårSomOpprettholdes = utledVilkårSomOpprettholdes(grunnlagKontor, grunnlagNay);
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
     løsBehovOgGåTilNesteSteg({
       behandlingVersjon: behandlingVersjon,
       behov: {
@@ -74,7 +76,7 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
   };
   return (
     <VilkårsKortMedForm
-      heading={'Oppsummering klagebehandlingen'}
+      heading={'Oppsummering av klagebehandlingen'}
       steg={'KLAGEBEHANDLING_OPPSUMMERING'}
       onSubmit={handleSubmit}
       vilkårTilhørerNavKontor={false}

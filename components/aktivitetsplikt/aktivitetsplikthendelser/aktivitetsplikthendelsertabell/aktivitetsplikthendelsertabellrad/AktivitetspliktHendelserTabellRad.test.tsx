@@ -183,8 +183,8 @@ describe('aktivitetspliktHendelserTabellRad', () => {
     });
   });
 
-  describe('felt for å sette en dato bruker bidrar aktivt igjen fra', () => {
-    it('Skal vise felt dersom bruker bidrar aktivt igjen', async () => {
+  describe('felt for å sette en dato brukeren bidrar aktivt igjen fra', () => {
+    it('Skal vise felt dersom brukeren bidrar aktivt igjen', async () => {
       render(
         <TableWrapper>
           <AktivitetspliktHendelserTabellRad aktivitetspliktHendelse={aktivitetspliktHendelse117} />

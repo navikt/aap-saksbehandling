@@ -56,6 +56,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly }: P
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}
+      vurdertAvAnsatt={grunnlag?.vurdertAv}
     >
       <Controller
         name="vedtak"
@@ -65,6 +66,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly }: P
           <VelgPåklagetVedtakRadioTable
             options={mapGrunnlagTilValg(grunnlag)}
             error={fieldState.invalid ? fieldState.error?.message : undefined}
+            readOnly={readOnly}
             {...field}
           />
         )}

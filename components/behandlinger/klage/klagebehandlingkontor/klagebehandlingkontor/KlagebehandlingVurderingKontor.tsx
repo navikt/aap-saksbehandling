@@ -5,7 +5,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormField } from 'components/form/FormField';
 import { Hjemmel, KlagebehandlingKontorGrunnlag, KlageInnstilling, TypeBehandling } from 'lib/types/types';
-import { hjemmelalternativer } from 'lib/utils/hjemmel';
+import { hjemmelalternativer, getValgteHjemlerSomIkkeErImplementert, hjemmelMap } from 'lib/utils/hjemmel';
 import { FormEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
@@ -36,14 +36,14 @@ export const KlagebehandlingVurderingKontor = ({ grunnlag, behandlingVersjon, re
       vurdering: {
         type: 'textarea',
         label: 'Vurder klage',
-        description: 'Vurderingen vises i brev til bruker',
+        description: 'Vurderingen skal brukes i brevet til bruker',
         rules: { required: 'Du må vurdere klagen' },
         defaultValue: grunnlag?.vurdering?.begrunnelse,
       },
       notat: {
         type: 'textarea',
-        label: 'Internt notat',
-        description: 'Notatet er kun synlig i Kelvin',
+        label: 'Kommentar til klageinstans (frivillig)',
+        description: 'Bruker kan få innsyn i denne teksten',
         defaultValue: grunnlag?.vurdering?.notat ?? undefined,
       },
       innstilling: {
@@ -66,7 +66,17 @@ export const KlagebehandlingVurderingKontor = ({ grunnlag, behandlingVersjon, re
         description: 'Velg alle påklagde vilkår som skal omgjøres som følge av klagen',
         options: hjemmelalternativer,
         defaultValue: grunnlag?.vurdering?.vilkårSomOmgjøres,
-        rules: { required: 'Du velge hvilke påklagde vilkår som skal omgjøres' },
+        rules: {
+          required: 'Du velge hvilke påklagde vilkår som skal omgjøres',
+          validate: (value) => {
+            const ikkeImplementerteHjemler = getValgteHjemlerSomIkkeErImplementert(value);
+            if (ikkeImplementerteHjemler.length > 0) {
+              const hjemmelnavn = ikkeImplementerteHjemler.map((hjemmel) => hjemmelMap[hjemmel]).join(', ');
+              return `Det er ikke mulig å opprette revurdering på ${hjemmelnavn} enda. Sett klagen på vent og ta kontakt med team AAP.`;
+            }
+            return true;
+          },
+        },
       },
       vilkårSomSkalOpprettholdes: {
         type: 'combobox_multiple',
@@ -119,6 +129,7 @@ export const KlagebehandlingVurderingKontor = ({ grunnlag, behandlingVersjon, re
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />

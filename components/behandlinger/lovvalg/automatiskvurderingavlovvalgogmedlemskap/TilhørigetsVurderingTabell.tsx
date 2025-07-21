@@ -101,7 +101,7 @@ export const TilhørigetsVurderingTabell = ({
   );
 };
 
-type Kilde = 'SØKNAD' | 'PDL' | 'MEDL' | 'AA_REGISTERET' | 'A_INNTEKT';
+type Kilde = 'SØKNAD' | 'PDL' | 'MEDL' | 'AA_REGISTERET' | 'A_INNTEKT' | 'EREG';
 function mapKildeTilTekst(kilde: Kilde): string {
   switch (kilde) {
     case 'SØKNAD':

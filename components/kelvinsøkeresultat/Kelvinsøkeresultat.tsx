@@ -15,11 +15,9 @@ interface Props {
 }
 
 export const Kelvinsøkeresultat = ({
-  søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang },
+  søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang, harAdressebeskyttelse },
 }: Props) => {
-  const adressebeskyttelse = oppgaver?.some((oppgave) => oppgave.harAdressebeskyttelse);
-
-  if (!harTilgang && adressebeskyttelse) {
+  if (!harTilgang && harAdressebeskyttelse) {
     return (
       <HStack gap={'8'}>
         <BodyShort>Du har ikke tilgang til denne brukeren.</BodyShort>
@@ -74,7 +72,7 @@ export const Kelvinsøkeresultat = ({
                     <BodyShort size={'small'}>{søk.label}</BodyShort>
                   </Link>
                   {oppgaveStatus && <OppgaveStatus size={'xsmall'} oppgaveStatus={oppgaveStatus} showLabel={false} />}
-                  {søk.harAdressebeskyttelse && (
+                  {harAdressebeskyttelse && (
                     <AdressebeskyttelseStatus
                       size={'xsmall'}
                       showLabel={false}

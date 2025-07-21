@@ -4,10 +4,10 @@ import { hentAntallBehandlingerPerSteggruppe } from 'lib/services/statistikkserv
 import { logError } from 'lib/serverutlis/logger';
 
 export async function GET(req: NextRequest) {
-  const { behandlingstyper, enheter } = hentStatistikkQueryParams(req);
+  const { behandlingstyper, enheter, oppgaveTyper } = hentStatistikkQueryParams(req);
 
   try {
-    const result = await hentAntallBehandlingerPerSteggruppe(behandlingstyper, enheter);
+    const result = await hentAntallBehandlingerPerSteggruppe(behandlingstyper, enheter, oppgaveTyper);
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
     logError(`/api/behandling-per-steggruppe`, error);

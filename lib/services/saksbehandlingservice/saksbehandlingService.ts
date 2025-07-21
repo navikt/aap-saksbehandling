@@ -15,7 +15,6 @@ import {
   Brev,
   BrevGrunnlag,
   DetaljertBehandling,
-  EffektuerAvvistPåFormkravGrunnlag,
   FatteVedtakGrunnlag,
   FlytProsessering,
   ForhåndsvisDialogmelding,
@@ -23,7 +22,9 @@ import {
   FormkravGrunnlag,
   ForutgåendeMedlemskapGrunnlag,
   FritakMeldepliktGrunnlag,
+  FullmektigGrunnlag,
   HelseinstitusjonGrunnlag,
+  KabalKlageResultat,
   KlagebehandlingKontorGrunnlag,
   KlagebehandlingNayGrunnlag,
   Klageresultat,
@@ -32,6 +33,7 @@ import {
   LovvalgMedlemskapGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   ManuellInntektGrunnlag,
+  NavEnhetRequest,
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
@@ -41,6 +43,7 @@ import {
   SakPersoninfo,
   SaksInfo,
   SamordningAndreStatligeYtelserGrunnlag,
+  SamordningArbeidsgiverGrunnlag,
   SamordningGraderingGrunnlag,
   SamordningTjenestePensjonGrunnlag,
   SamordningUføreGrunnlag,
@@ -51,6 +54,7 @@ import {
   SykdomsGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
+  TilkjentYtelseGrunnlagV2,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
@@ -62,7 +66,7 @@ import {
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
-import { Enhet } from '../../types/oppgaveTypes';
+import { Enhet } from 'lib/types/oppgaveTypes';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -128,9 +132,9 @@ export const hentAlleSaker = async () => {
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentAlleNavEnheter = async (input: string, behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/navenheter`;
-  return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'GET');
+export const hentAlleNavEnheter = async (behandlingsReferanse: string, input: NavEnhetRequest) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/navenhet/${behandlingsReferanse}/finn`;
+  return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'POST', input);
 };
 
 export const hentYrkesskadeVurderingGrunnlag = async (behandlingsReferanse: string) => {
@@ -222,6 +226,11 @@ export const hentSamordningAndreStatligeYtelseGrunnlag = async (behandlingsRefer
   return await apiFetch<SamordningAndreStatligeYtelserGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentSamordningArbeidsgiverGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/samordning-arbeidsgiver`;
+  return await apiFetch<SamordningArbeidsgiverGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentBeregningstidspunktVurdering = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregning/tidspunkt`;
   return await apiFetch<BeregningTidspunktGrunnlag>(url, saksbehandlingApiScope, 'GET');
@@ -252,6 +261,11 @@ export const hentTilkjentYtelse = async (behandlingsReferanse: string) => {
   return await apiFetch<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentTilkjentYtelseV2 = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjentV2/${behandlingsReferanse}`;
+  return await apiFetch<TilkjentYtelseGrunnlagV2>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/trukket-søknad`;
   return await apiFetch<TrukketSøknadGrunnlag>(url, saksbehandlingApiScope, 'GET');
@@ -265,6 +279,11 @@ export const hentRettighetsperiodeGrunnlag = async (behandlingsreferanse: string
 export const hentFormkravGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/formkrav`;
   return await apiFetch<FormkravGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentFullmektigGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/fullmektig`;
+  return await apiFetch<FullmektigGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentPåklagetBehandlingGrunnlag = async (behandlingsReferanse: string) => {
@@ -297,9 +316,15 @@ export const hentKlageresultat = async (behandlingsReferanse: string) => {
   return await apiFetch<Klageresultat>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentEffektuerAvvistPåFormkravGrunnlag = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/grunnlag/effektuer-avvist-på-formkrav`;
-  return await apiFetch<EffektuerAvvistPåFormkravGrunnlag>(url, saksbehandlingApiScope, 'GET');
+export const hentKabalKlageresultat = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/kabal-resultat`;
+  const res = await apiFetch<KabalKlageResultat>(url, saksbehandlingApiScope, 'GET');
+  if (isError(res)) {
+    logError(`Kunne ikke hente kabal-resultat for behandling ${behandlingsReferanse}`, res.apiException);
+    return;
+  } else {
+    return res.data;
+  }
 };
 
 export const hentSvarFraAndreinstansGrunnlag = async (behandlingsReferanse: string) => {

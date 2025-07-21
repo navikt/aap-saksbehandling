@@ -110,7 +110,7 @@ export const Aktivitetsplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props
       <VStack gap={'4'}>
         <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
         <BodyShort>
-          Med gjeldende § 11-7 brudd vil bruker få stans i ytelsen fra {formaterDatoForFrontend(finnTidligsteDato())}
+          Med gjeldende § 11-7 brudd vil brukeren få stans i ytelsen fra {formaterDatoForFrontend(finnTidligsteDato())}
         </BodyShort>
       </VStack>
     </VilkårsKortMedForm>

@@ -20,6 +20,13 @@ const testdata: LegeerklæringStatus[] = [
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 
+// noinspection JSUnusedGlobalSymbols
+vi.mock('hooks/SakHook', () => ({
+  useSak: () => ({
+    sak: { saksnummer: '123', ident: '456' },
+  }),
+}));
+
 describe('Innhent dokumentasjon', () => {
   beforeEach(() => {
     fetchMock.resetMocks();

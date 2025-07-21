@@ -10,6 +10,7 @@ import { getErrorMessage } from 'lib/utils/errorUtil';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { postmottakEndreTemaClient, postmottakSettPåVentClient } from 'lib/postmottakClientApi';
 import { SettPåVentRequest } from 'lib/types/postmottakTypes';
+import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
 
 export function useFetch<FunctionParameters extends any[], ResponseBody>(
   fetchFunction: (...functionParameters: FunctionParameters) => Promise<ResponseBody>
@@ -131,6 +132,20 @@ export function usePurrPåDialogmelding(): {
   }
 
   return { purrPåDialogmelding: purr, isLoading, error };
+}
+
+export function useMottattDokumenterLest(): {
+  mottattDokumenterLest: (behandlingsreferanse: string) => Promise<{ ok: boolean }>;
+  isLoading: boolean;
+  error?: string;
+} {
+  const { method, isLoading, error } = useFetchV2(clientMottattDokumenterLest);
+
+  async function markerLest(behandlingsreferanse: string) {
+    return await method(behandlingsreferanse);
+  }
+
+  return { mottattDokumenterLest: markerLest, isLoading, error };
 }
 
 export function usePostmottakSettPåVent(): {

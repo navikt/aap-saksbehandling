@@ -31,7 +31,9 @@ export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
         onClick={() => setVis(!vis)}
         ref={buttonRef}
         size="xsmall"
-      />
+      >
+        {formaterDatoForFrontend(frist)}
+      </Button>
       <Popover
         onClose={() => setVis(vis)}
         open={vis}

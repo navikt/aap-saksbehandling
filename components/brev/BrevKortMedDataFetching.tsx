@@ -1,7 +1,6 @@
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { hentBrevGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
 import { AvklaringsbehovKode, StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
@@ -10,17 +9,25 @@ import { Behovstype } from 'lib/utils/form';
 interface Props {
   behandlingReferanse: string;
   behandlingVersjon: number;
+  visAvbryt?: boolean;
   aktivtSteg: StegType;
 }
 
-export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingVersjon, aktivtSteg }: Props) => {
-  const [grunnlagene, brukerRoller] = await Promise.all([hentBrevGrunnlag(behandlingReferanse), hentRollerForBruker()]);
+export const BrevKortMedDataFetching = async ({
+  behandlingReferanse,
+  behandlingVersjon,
+  aktivtSteg,
+  visAvbryt = true,
+}: Props) => {
+  const grunnlagene = await hentBrevGrunnlag(behandlingReferanse);
+
   if (isError(grunnlagene)) {
     return <ApiException apiResponses={[grunnlagene]} />;
   }
 
   const grunnlag = grunnlagene.data.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
-  if (!grunnlag || !grunnlagene.data.harTilgangTilÅSaksbehandle) {
+
+  if (!grunnlag) {
     return null;
   }
 
@@ -28,9 +35,7 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
   const mottaker = grunnlag.mottaker;
   const brevbestillingReferanse = grunnlag.brevbestillingReferanse;
   const status = grunnlag.status;
-
-  const readOnly = aktivtSteg === 'BREV' && !brukerRoller.includes(Roller.BESLUTTER);
-
+  const readOnly = aktivtSteg === 'BREV' && !grunnlag.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(grunnlag.avklaringsbehovKode);
 
   return (
@@ -42,6 +47,7 @@ export const BrevKortMedDataFetching = async ({ behandlingReferanse, behandlingV
           mottaker={mottaker}
           behandlingVersjon={behandlingVersjon}
           referanse={brevbestillingReferanse}
+          visAvbryt={visAvbryt}
           behovstype={behovstype}
           signaturer={grunnlag.signaturer}
           readOnly={readOnly}

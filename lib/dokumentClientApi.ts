@@ -1,16 +1,16 @@
-import { DokumentInfo, Journalpost } from './types/types';
-import { KnyttTilAnnenSakRequest } from 'components/saksoversikt/dokumentoversikt/KnyttTilSak';
+import { KnyttTilAnnenSakRequest } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
 import { clientFetch } from 'lib/clientApi';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
+import { Journalpost } from 'lib/types/journalpost';
 
 const BASE_URL = '/saksbehandling';
 
 export function clientHentAlleDokumenterPåSak(saksnummer: string) {
-  return clientFetch<DokumentInfo[]>(`${BASE_URL}/api/dokumenter/sak/${saksnummer}`, 'GET');
+  return clientFetch<RelevantDokumentType[]>(`${BASE_URL}/api/dokumenter/sak/${saksnummer}`, 'GET');
 }
 
-export function clientHentAlleDokumenterPåBruker(personIdent: string) {
-  return clientFetch<Journalpost[]>(`${BASE_URL}/api/dokumenter/bruker`, 'POST', { personIdent });
+export function clientHentAlleDokumenterPåBruker(request: object) {
+  return clientFetch<Journalpost[]>(`${BASE_URL}/api/dokumenter/bruker`, 'POST', request);
 }
 
 export function clientKnyttTilAnnenSak(journalpostId: string, request: KnyttTilAnnenSakRequest) {
@@ -31,6 +31,9 @@ export function opphevFeilregistrertSakstilknytning(journalpostId: string) {
   );
 }
 
-export function clientHentRelevanteDokumenter(saksnummer: string) {
-  return clientFetch<RelevantDokumentType[]>(`${BASE_URL}/api/dokumenter/sak/${saksnummer}/helsedokumenter`, 'GET');
+export function clientHentRelevanteDokumenter(saksnummer: string, personIdent: string) {
+  return clientFetch<RelevantDokumentType[]>(`${BASE_URL}/api/dokumenter/bruker/helsedokumenter`, 'POST', {
+    saksnummer,
+    personIdent,
+  });
 }

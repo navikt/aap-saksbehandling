@@ -6,6 +6,7 @@ import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 
 const grunnlag: DigitaliseringsGrunnlag = {
   erPapir: false,
+  klagebehandlinger: [],
   vurdering: {
     kategori: 'SØKNAD',
     strukturertDokumentJson: '{}',

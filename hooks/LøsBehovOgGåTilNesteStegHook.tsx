@@ -84,7 +84,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         });
 
         if (eventData.skalBytteSteg && eventData.aktivtStegBehovsKode) {
-          // Aktivt steg kan ha flere definisjonskoder. Velger å ikke vise modal dersom bruker har tilgang til minst én av de
+          // Aktivt steg kan ha flere definisjonskoder. Velger å ikke vise modal dersom brukeren har tilgang til minst én av de
           const harTilgang = (
             await Promise.all(
               eventData.aktivtStegBehovsKode.map((kode) => clientSjekkTilgang(params.behandlingsReferanse, kode))

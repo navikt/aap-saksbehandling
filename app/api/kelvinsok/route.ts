@@ -9,16 +9,15 @@ import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 import { capitalize } from 'lodash';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 
 export interface SøkeResultat {
   oppgaver?: {
     label: string;
     href: string;
     status: string;
-    harAdressebeskyttelse: boolean;
   }[];
   harTilgang: boolean;
+  harAdressebeskyttelse: boolean;
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
   person?: { href: string; label: string }[];
@@ -28,6 +27,14 @@ export interface SøkeResultat {
 interface Props {
   brukerInformasjon?: BrukerInformasjon;
 }
+
+/**
+ * Enkel formatering for å gjøre søket til saksbehandler "case-insensitive"
+ * Burde på sikt bli håndtert i backend, men det fordrer en større opprydding i typer tilknyttet Saksnummer
+ **/
+const formaterSaksnummer = (saksnummer: string) => {
+  return saksnummer.toUpperCase().replace('O', 'o').replace('I', 'i');
+};
 
 export async function POST(req: Request, brukerinformasjon: Props) {
   const body: { søketekst: string } = await req.json();
@@ -49,7 +56,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
         sakData = sakRes.data;
       }
     } else if (isSaksnummer) {
-      const sak = await hentSak(søketekst);
+      const sak = await hentSak(formaterSaksnummer(søketekst));
       sakData = [sak];
     }
   } catch (err) {
@@ -62,19 +69,20 @@ export async function POST(req: Request, brukerinformasjon: Props) {
   let personData: SøkeResultat['person'] = [];
   let behandlingsStatusData: SøkeResultat['behandlingsStatus'] = [];
   let harTilgang: boolean = false;
+  let harAdressebeskyttelse: boolean = true;
   try {
     const oppgavesøkRes = await oppgaveTekstSøk(søketekst);
     if (isSuccess(oppgavesøkRes)) {
-      harTilgang = oppgavesøkRes.data.harTilgang
+      harTilgang = oppgavesøkRes.data.harTilgang;
+      harAdressebeskyttelse = oppgavesøkRes.data.harAdressebeskyttelse;
       oppgavesøkRes.data.oppgaver.forEach((oppgave) => {
         const isReservert =
           Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon.brukerInformasjon?.NAVident;
         const isPåVent = oppgave.påVentÅrsak != null;
         oppgaveData.push({
           href: byggKelvinURL(oppgave),
-          label: `${capitalize(oppgave.behandlingstype)} - ${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}`,
+          label: `${formaterOppgave(oppgave)}`,
           status: isReservert ? 'RESERVERT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
-          harAdressebeskyttelse: utledAdressebeskyttelse(oppgave).length != 0,
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
         personData.push({
@@ -94,6 +102,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
       label: `${sak.saksnummer} (${formaterDatoForFrontend(sak.periode.fom)})`,
     })),
     harTilgang: harTilgang,
+    harAdressebeskyttelse: harAdressebeskyttelse,
     kontor: kontorData,
     person: personData,
     behandlingsStatus: behandlingsStatusData,
@@ -103,11 +112,22 @@ export async function POST(req: Request, brukerinformasjon: Props) {
     status: 200,
   });
 }
+
 function buildSaksbehandlingsURL(oppgave: Oppgave): string {
   return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef}`;
 }
+
 function buildPostmottakURL(oppgave: Oppgave): string {
   return `/postmottak/${oppgave?.behandlingRef}`;
+}
+
+function formaterOppgave(oppgave: Oppgave) {
+  const formatertBehandlingstype =
+    oppgave.behandlingstype == 'DOKUMENT_HÅNDTERING'
+      ? 'Dokumenthåndtering'
+      : capitalize(oppgave.behandlingstype).replaceAll('_', ' ');
+
+  return `${formatertBehandlingstype} - ${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}`;
 }
 
 export function byggKelvinURL(oppgave: Oppgave): string {

@@ -97,10 +97,11 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
+      vurdertAvAnsatt={grunnlag.vurdertAv}
     >
       <InstitusjonsoppholdTabell
-        label="Bruker har følgende soningsforhold"
-        beskrivelse="Under opphold i fengsel har ikke bruker rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP"
+        label="Brukeren har følgende soningsforhold"
+        beskrivelse="Under opphold i fengsel har ikke brukeren rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP"
         instutisjonsopphold={grunnlag.soningsforhold}
       />
       {fields.map((field, index) => {

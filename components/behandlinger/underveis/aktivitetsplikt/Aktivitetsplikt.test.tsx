@@ -8,15 +8,6 @@ import { describe, expect, test } from 'vitest';
 const testgrunnlag: AktivitetspliktGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   forhåndsvarselDato: '2025-01-02',
-  forhåndsvarselSvar: {
-    mottattDato: '2025-01-12',
-    journalpostId: {
-      identifikator: 'asdfjkl',
-    },
-    dokumentInfoId: {
-      dokumentInfoId: 'dokument-id',
-    },
-  },
   gjeldendeBrudd: [
     {
       begrunnelse: 'Hadde influensa. Sykemelding fra lege.',
@@ -98,11 +89,11 @@ describe('Brukers aktivitetsplikt', () => {
     expect(screen.getByRole('link', { name: 'Registrer ny / endre informasjon' })).toBeVisible();
   });
 
-  test('har en tekst som viser når bruker vil få stans i ytelsen', () => {
+  test('har en tekst som viser når brukeren vil få stans i ytelsen', () => {
     render(<Aktivitetsplikt grunnlag={testgrunnlag} readOnly={false} behandlingVersjon={1} />);
     expect(
       screen.getByText(
-        `Med gjeldende § 11-7 brudd vil bruker få stans i ytelsen fra ${formaterDatoForFrontend(testgrunnlag.gjeldendeBrudd[0].periode.fom)}`
+        `Med gjeldende § 11-7 brudd vil brukeren få stans i ytelsen fra ${formaterDatoForFrontend(testgrunnlag.gjeldendeBrudd[0].periode.fom)}`
       )
     ).toBeVisible();
   });

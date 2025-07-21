@@ -6,10 +6,11 @@ import { Behovstype, getJaNeiEllerIkkeBesvart, JaEllerNei, JaEllerNeiOptions } f
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { LovvalgEØSLand, LovvalgMedlemskapGrunnlag } from 'lib/types/types';
-import { TidligereVurderingerV2 } from 'components/tidligerevurderinger/TidligereVurderingerV2';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
+import { sorterEtterNyesteDato } from '../../../../lib/utils/date';
 
 interface Props {
   behandlingVersjon: number;
@@ -25,12 +26,14 @@ interface FormFields {
   medlemskapBegrunnelse?: string;
   medlemAvFolkeTrygdenVedSøknadstidspunkt?: JaEllerNei;
 }
+
 function maplovvalgslandTilAlpha3(lovvalgsland: string) {
   if (lovvalgsland === 'Norge') {
     return 'NOR';
   }
   return null;
 }
+
 function mapGrunnlagTilLovvalgsland(lovvalgsland?: LovvalgEØSLand) {
   if (lovvalgsland === 'NOR') {
     return 'Norge';
@@ -39,12 +42,14 @@ function mapGrunnlagTilLovvalgsland(lovvalgsland?: LovvalgEØSLand) {
   }
   return undefined;
 }
+
 function mapGrunnlagTilAnnetLovvalgslandMedAvtale(lovvalgsland?: LovvalgEØSLand) {
   if (lovvalgsland && lovvalgsland !== 'NOR') {
     return lovvalgsland;
   }
   return undefined;
 }
+
 function mapGrunnlagTilMedlemAvFolketrygdenVedSøknadstidspunkt(isMedlem?: boolean | null) {
   if (isMedlem === true) {
     return JaEllerNei.Ja;
@@ -53,6 +58,7 @@ function mapGrunnlagTilMedlemAvFolketrygdenVedSøknadstidspunkt(isMedlem?: boole
   }
   return undefined;
 }
+
 export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
   grunnlag,
   readOnly,
@@ -62,17 +68,23 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
   const behandlingsReferanse = useBehandlingsReferanse();
   const { isLoading, status, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+  const lovvalgBegrunnelseLabel = 'Vurder riktig lovvalg ved søknadstidspunkt';
+  const lovvalgsLandLabel = 'Hva er riktig lovvalgsland ved søknadstidspunkt?';
+  const annetLovvalgslandMedAvtaleLabel = 'Velg land som vi vurderer som lovvalgsland';
+  const medlemskapBegrunnelseLabel = 'Vurder brukerens medlemskap på søknadstidspunktet';
+  const medlemAvFolkeTrygdenVedSøknadstidspunktLabel = 'Var brukeren medlem av folketrygden ved søknadstidspunktet?';
+
   const { form, formFields } = useConfigForm<FormFields>(
     {
       lovvalgBegrunnelse: {
         type: 'textarea',
-        label: 'Vurder riktig lovvalg ved søknadstidspunkt',
+        label: lovvalgBegrunnelseLabel,
         rules: { required: 'Du må gi en begrunnelse på lovvalg ved søknadstidspunkt' },
         defaultValue: grunnlag?.vurdering?.lovvalgVedSøknadsTidspunkt?.begrunnelse,
       },
       lovvalgsLand: {
         type: 'radio',
-        label: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
+        label: lovvalgsLandLabel,
         options: [
           { label: 'Norge', value: 'Norge' },
           { label: 'Annet land med avtale', value: 'Annet land med avtale' },
@@ -82,7 +94,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       },
       annetLovvalgslandMedAvtale: {
         type: 'select',
-        label: 'Velg land som vi vurderer som lovvalgsland',
+        label: annetLovvalgslandMedAvtaleLabel,
         options: landMedTrygdesamarbeid,
         defaultValue: mapGrunnlagTilAnnetLovvalgslandMedAvtale(
           grunnlag?.vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand
@@ -90,7 +102,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       },
       medlemskapBegrunnelse: {
         type: 'textarea',
-        label: 'Vurder brukerens medlemskap på søknadstidspunktet',
+        label: medlemskapBegrunnelseLabel,
         rules: { required: 'Du må begrunne medlemskap på søknadstidspunktet' },
         defaultValue: grunnlag?.vurdering?.medlemskapVedSøknadsTidspunkt?.begrunnelse
           ? grunnlag.vurdering?.medlemskapVedSøknadsTidspunkt?.begrunnelse
@@ -98,7 +110,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       },
       medlemAvFolkeTrygdenVedSøknadstidspunkt: {
         type: 'radio',
-        label: 'Var brukeren medlem av folketrygden ved søknadstidspunktet?',
+        label: medlemAvFolkeTrygdenVedSøknadstidspunktLabel,
         options: JaEllerNeiOptions,
         rules: { required: 'Du må velg om brukeren var medlem av folketrygden på søknadstidspunkt' },
         defaultValue: mapGrunnlagTilMedlemAvFolketrygdenVedSøknadstidspunkt(
@@ -157,30 +169,32 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       vilkårTilhørerNavKontor={false}
     >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
-        <TidligereVurderingerV2
-          tidligereVurderinger={historiskeManuelleVurderinger.map((vurdering) => ({
-            ...vurdering,
-            felter: [
-              {
-                label: 'Vurder riktig lovvalg ved søknadstidspunkt',
-                value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.begrunnelse || '',
-              },
-              {
-                label: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
-                value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLand || '',
-              },
-              {
-                label: 'Vurder brukerens medlemskap på søknadstidspunktet',
-                value: vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.begrunnelse || '',
-              },
-              {
-                label: 'Var brukeren medlem av folketrygden ved søknadstidspunktet?',
-                value: getJaNeiEllerIkkeBesvart(
-                  vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.varMedlemIFolketrygd
-                ),
-              },
-            ],
-          }))}
+        <TidligereVurderingerV3
+          tidligereVurderinger={historiskeManuelleVurderinger
+            .sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom))
+            .map((vurdering) => ({
+              ...vurdering,
+              felter: [
+                {
+                  label: lovvalgBegrunnelseLabel,
+                  value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.begrunnelse || '',
+                },
+                {
+                  label: lovvalgsLandLabel,
+                  value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLand || '',
+                },
+                {
+                  label: medlemskapBegrunnelseLabel,
+                  value: vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.begrunnelse || '',
+                },
+                {
+                  label: medlemAvFolkeTrygdenVedSøknadstidspunktLabel,
+                  value: getJaNeiEllerIkkeBesvart(
+                    vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.varMedlemIFolketrygd
+                  ),
+                },
+              ],
+            }))}
         />
       )}
 

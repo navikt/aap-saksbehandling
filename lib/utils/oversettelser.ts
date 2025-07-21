@@ -1,4 +1,4 @@
-import { AvslagÅrsak, SettPåVentÅrsaker, VilkårUtfall } from 'lib/types/types';
+import { AvslagÅrsak, SettPåVentÅrsaker, TypeBehandling, VilkårUtfall } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype, OppgaveStatus } from 'lib/types/oppgaveTypes';
 
@@ -20,7 +20,7 @@ const behovskodeMap = {
   '5015': '§ 11-17 AAP som arbeidssøker',
   '5016': 'Forhåndsvarsel aktivitetsplikt',
   '5017': 'Lovvalg og medlemskap',
-  '5018': 'Venter på uttalelse fra bruker på forhåndsvarsel',
+  '5018': 'Venter på uttalelse fra brukeren på forhåndsvarsel',
   '5019': 'Venter på utenlandsoverføring',
   '5020': '§ 11-2 Forutgående medlemskap',
   '5021': 'Overstyr lovvalg og medlemskap',
@@ -32,6 +32,7 @@ const behovskodeMap = {
   '5027': 'Samordning annen statlig ytelse',
   '5028': 'Vurder trekk av søknad',
   '5029': 'Vurder starttidspunkt',
+  '5030': 'Samordning arbeidsgiver',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
@@ -47,10 +48,14 @@ const behovskodeMap = {
   '6004': 'Effektuer avvist på formkrav',
   '6005': 'Skriv forhåndsvarsel klage',
   '6006': 'Oppsummering klagebehandlingen',
-  '6007': 'Venter på uttalelse fra bruker på klage forhåndsvarsel',
+  '6007': 'Venter på uttalelse fra brukeren på klage forhåndsvarsel',
   '6008': 'Håndter svar fra Kabal',
+  '6009': 'Fastsett fullmektig/verge',
   '6010': 'Vurder trekk av klage',
   '7001': 'Fastsett manuell inntekt',
+  '8001': 'Oppfølgingsoppgave - kontor',
+  '8002': 'Oppfølgingsoppgave - NAY',
+  '8003': 'Venter på oppfølging',
   '9001': 'Manuelt satt på vent',
   '9002': 'Bestill brev',
   '9003': 'Bestill legeerklæring',
@@ -79,7 +84,7 @@ export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker): string {
     case 'VENTER_PÅ_VURDERING_AV_ROL':
       return 'Venter på vurdering fra rådgivende overlege';
     case 'VENTER_PÅ_SVAR_FRA_BRUKER':
-      return 'Venter på svar fra bruker';
+      return 'Venter på svar fra brukeren';
     case 'VENTER_PÅ_MASKINELL_AVKLARING':
       return 'Venter på maskinell avklaring';
     case 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING':
@@ -96,6 +101,8 @@ export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker): string {
 
 export function mapTilSteggruppeTekst(steggruppe: string) {
   switch (steggruppe) {
+    case 'SØKNAD':
+      return 'Søknad';
     case 'ALDER':
       return 'Alder';
     case 'LOVVALG':
@@ -154,8 +161,10 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Omgjøring';
     case 'OPPRETTHOLDELSE':
       return 'Opprettholdelse';
-    case 'KLAGE_AVVIST_PÅ_FORMKRAV':
-      return 'Forhåndsvarsel - avvist på formkrav';
+    case 'SVAR_FRA_ANDREINSTANS':
+      return 'Håndter svar fra Nav Klageinstans';
+    case 'IVERKSETT_KONSEKVENS':
+      return 'Iverksett konsekvens';
     default:
       return `${steggruppe}`;
   }
@@ -230,14 +239,31 @@ export function mapUtfallTilTekst(utfall: VilkårUtfall): string {
 export function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak | null | undefined): string | undefined | null {
   switch (årsak) {
     case 'BRUKER_UNDER_18':
-      return 'Bruker under 18 år';
+      return 'brukeren under 18 år';
     case 'BRUKER_OVER_67':
-      return 'Bruker over 67 år';
+      return 'Brukeren over 67 år';
     case 'MANGLENDE_DOKUMENTASJON':
       return 'Manglende dokumentasjon';
     case 'IKKE_SYKDOM_AV_VISS_VARIGHET':
       return 'Ikke sykdom av viss varighet';
     default:
       return årsak;
+  }
+}
+
+export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
+  switch (typeBehandling) {
+    case 'Førstegangsbehandling':
+      return 'Førstegangsbehandling';
+    case 'Klage':
+      return 'Klage';
+    case 'Revurdering':
+      return 'Revurdering';
+    case 'Tilbakekreving':
+      return 'Tilbakekreving';
+    case 'SvarFraAndreinstans':
+      return 'Svar fra Nav Klageinstans';
+    default:
+      return typeBehandling;
   }
 }

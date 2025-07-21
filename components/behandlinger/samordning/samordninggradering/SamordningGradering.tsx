@@ -37,7 +37,7 @@ type SamordnetYtelse = {
 export interface SamordningGraderingFormfields {
   begrunnelse: string;
   maksDatoEndelig: string;
-  maksDato?: string;
+  fristNyRevurdering?: string;
   vurderteSamordninger: SamordnetYtelse[];
 }
 
@@ -79,7 +79,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             ? undefined
             : grunnlag.maksDatoEndelig.toString(),
       },
-      maksDato: {
+      fristNyRevurdering: {
         type: 'date_input',
         label: 'Sett dato for ny revurdering',
         rules: {
@@ -88,7 +88,8 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             gyldigDato: (v) => validerDato(v as string),
           },
         },
-        defaultValue: (grunnlag.maksDato && formaterDatoForFrontend(grunnlag.maksDato)) || undefined,
+        defaultValue:
+          (grunnlag.fristNyRevurdering && formaterDatoForFrontend(grunnlag.fristNyRevurdering)) || undefined,
       },
       vurderteSamordninger: {
         type: 'fieldArray',
@@ -113,8 +114,10 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
             vurderingerForSamordning: {
               begrunnelse: data.begrunnelse,
-              maksDatoEndelig: data.maksDatoEndelig === 'true',
-              maksDato: data.maksDato && formaterDatoForBackend(parse(data.maksDato, 'dd.MM.yyyy', new Date())),
+              maksDatoEndelig: data.maksDatoEndelig !== 'false',
+              fristNyRevurdering:
+                data.fristNyRevurdering &&
+                formaterDatoForBackend(parse(data.fristNyRevurdering, 'dd.MM.yyyy', new Date())),
               vurderteSamordningerData: data.vurderteSamordninger.map((vurdertSamordning) => ({
                 manuell: vurdertSamordning.manuell,
                 gradering: vurdertSamordning.gradering,
@@ -161,6 +164,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
+      vurdertAvAnsatt={grunnlag.vurdertAv}
     >
       {visForm && (
         <VStack gap={'6'}>
@@ -188,7 +192,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
                 <VStack gap={'2'}>
                   <FormField form={form} formField={formFields.maksDatoEndelig} />
                   {form.watch('maksDatoEndelig') === 'false' && (
-                    <FormField form={form} formField={formFields.maksDato} />
+                    <FormField form={form} formField={formFields.fristNyRevurdering} />
                   )}
                 </VStack>
               </Box>

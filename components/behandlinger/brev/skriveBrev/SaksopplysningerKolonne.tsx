@@ -34,7 +34,7 @@ export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag
       {refusjonVurdering?.harKrav && (
         <SaksopplysningerKort
           tittel="Refusjonskrav"
-          begrunnelse={`Det er refusjonskrav mot sosialhjelp. Refusjonskravet gjelder fra 
+          begrunnelse={`Det er refusjonskrav mot sosialstønad. Refusjonskravet gjelder fra 
                   ${
                     refusjonVurdering.fom
                       ? formaterDatoForFrontend(parse(refusjonVurdering.fom, 'yyyy-MM-dd', new Date()))

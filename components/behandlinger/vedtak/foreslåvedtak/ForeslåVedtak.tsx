@@ -8,6 +8,7 @@ import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggå
 import styles from './ForeslåVedtak.module.css';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { FormEvent } from 'react';
 
 interface Props {
   behandlingVersjon: number;
@@ -28,7 +29,8 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly }: Props) => {
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
-      onSubmit={async () => {
+      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         løsBehovOgGåTilNesteSteg({
           behandlingVersjon: behandlingVersjon,
           behov: {

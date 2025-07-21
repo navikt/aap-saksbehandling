@@ -1,6 +1,7 @@
 import { Heading, Radio, RadioGroup, SortState, Table } from '@navikt/ds-react';
 import { ChangeEvent, Ref, useState } from 'react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import Link from 'next/link';
 
 type RadioOption = {
   saksnummer: string;
@@ -16,6 +17,7 @@ type FormFieldRadioTableProps = {
   error?: string;
   value: string | null | undefined;
   onChange: (e: ChangeEvent) => void;
+  readOnly: boolean;
 };
 
 function getSortValue(sortField: string, option: RadioOption): string {
@@ -31,7 +33,14 @@ function getSortValue(sortField: string, option: RadioOption): string {
   }
 }
 
-export const VelgPåklagetVedtakRadioTable = ({ options, value, onChange, error, ref }: FormFieldRadioTableProps) => {
+export const VelgPåklagetVedtakRadioTable = ({
+  options,
+  value,
+  onChange,
+  error,
+  ref,
+  readOnly,
+}: FormFieldRadioTableProps) => {
   const [sort, setSort] = useState<SortState | undefined>({ orderBy: 'vedtaksdato', direction: 'descending' });
 
   const handleSort = (sortKey: string) => {
@@ -66,6 +75,7 @@ export const VelgPåklagetVedtakRadioTable = ({ options, value, onChange, error,
         hideLegend={true}
         value={value ?? ''}
         onChange={onChange}
+        readOnly={readOnly}
       >
         <Heading level="2" size="xsmall" spacing={true}>
           Velg hvilket vedtak klagen gjelder
@@ -94,7 +104,17 @@ export const VelgPåklagetVedtakRadioTable = ({ options, value, onChange, error,
                 </Table.DataCell>
                 <Table.DataCell>{option.saksnummer}</Table.DataCell>
                 <Table.DataCell>{formaterDatoForFrontend(option.vedtaksdato)}</Table.DataCell>
-                <Table.DataCell>{option.behandlingstype}</Table.DataCell>
+                <Table.DataCell>
+                  <Link
+                    href={`/saksbehandling/sak/${option.saksnummer}/${option.value}`}
+                    prefetch={false}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    {option.behandlingstype}
+                  </Link>
+                </Table.DataCell>
+
                 <Table.DataCell>{option.årsakTilBehandling.join(', ')}</Table.DataCell>
               </Table.Row>
             ))}

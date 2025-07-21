@@ -22,9 +22,10 @@ import { KlagebehandlingKontor } from '../behandlinger/klage/klagebehandlingkont
 import { KlagebehandlingNay } from '../behandlinger/klage/klagebehandlingnay/KlagebehandlingNay';
 import { Omgjøring } from 'components/behandlinger/klage/omgjøring/Omgjøring';
 import { Opprettholdelse } from 'components/behandlinger/klage/opprettholdelse/Opprettholdelse';
-import { KlageAvvistPåFormkrav } from 'components/behandlinger/klage/effektuerklageavvistpåformkrav/KlageAvvistPåFormkrav';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { SvarFraAnderinstansGruppe } from 'components/behandlinger/svarfraanderinstans/SvarFraAnderinstansGruppe';
+import { SvarFraAndreinstansGruppe } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstansGruppe';
+import { StartBehandling } from '../behandlinger/startbehandling/StartBehandling';
+import { KabalIverksettKonsekvensSteg } from 'components/behandlinger/klage/kabaliverksettkonsekvens/KabalIverksettKonsekvensMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -35,6 +36,7 @@ interface Props {
 export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
   return (
     <section className={className}>
+      {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'LOVVALG' && (
         <StegSuspense>
@@ -73,11 +75,11 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'OMGJØRING' && <Omgjøring behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'OPPRETTHOLDELSE' && <Opprettholdelse behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'TREKK_KLAGE' && <TrekkKlage behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'KLAGE_AVVIST_PÅ_FORMKRAV' && (
-        <KlageAvvistPåFormkrav behandlingsreferanse={behandlingsReferanse} />
-      )}
       {aktivGruppe === 'SVAR_FRA_ANDREINSTANS' && (
-        <SvarFraAnderinstansGruppe behandlingsreferanse={behandlingsReferanse} />
+        <SvarFraAndreinstansGruppe behandlingsreferanse={behandlingsReferanse} />
+      )}
+      {aktivGruppe === 'IVERKSETT_KONSEKVENS' && (
+        <KabalIverksettKonsekvensSteg behandlingsreferanse={behandlingsReferanse} />
       )}
     </section>
   );

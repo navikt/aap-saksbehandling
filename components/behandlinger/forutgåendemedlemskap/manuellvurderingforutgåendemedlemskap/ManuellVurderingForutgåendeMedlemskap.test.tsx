@@ -126,7 +126,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
       />
     );
     await trykkPåBekreft();
-    const feilmelding = screen.getByText('Du må velge om bruker har fem års forutgående medlemskap');
+    const feilmelding = screen.getByText('Du må velge om brukeren har fem års forutgående medlemskap');
     expect(feilmelding).toBeVisible();
   });
 
@@ -147,7 +147,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     await trykkPåBekreft();
 
-    const feilmelding = screen.getByText('Du må svare på om bruker oppfyller noen av unntaksvilkårene');
+    const feilmelding = screen.getByText('Du må svare på om brukeren oppfyller noen av unntaksvilkårene');
     expect(feilmelding).toBeVisible();
   });
 });

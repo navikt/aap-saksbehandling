@@ -8,6 +8,8 @@ import {
   ForhåndsvisDialogmeldingResponse,
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
+  NavEnheterResponse,
+  NavEnhetRequest,
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
@@ -94,6 +96,10 @@ export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialo
     'POST',
     dialogmelding
   );
+}
+
+export function clientHentAlleNavenheter(behandlingReferanse: string, input: NavEnhetRequest) {
+  return clientFetch<NavEnheterResponse[]>(`${BASE_URL}/api/navenhet/${behandlingReferanse}/finn`, 'POST', input);
 }
 
 export function clientMellomlagreBrev(brevbestillingReferanse: string, brev: Brev) {

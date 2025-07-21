@@ -27,7 +27,7 @@ export const FormkravVurderingMedDataFetching = async ({
     <FormkravVurdering
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       typeBehandling={typeBehandling}
     />
   );

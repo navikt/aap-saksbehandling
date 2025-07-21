@@ -1,7 +1,6 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
 import { BarnetilleggGrunnlag, BehandlingPersoninfo } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
@@ -14,8 +13,8 @@ import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/Opp
 import { FormEvent } from 'react';
 
 import styles from './BarnetilleggVurdering.module.css';
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
+import { VilkårsKortMedForm } from '../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingsversjon: number;
@@ -101,11 +100,11 @@ export const BarnetilleggVurdering = ({
             vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
               return {
                 ident: vurderteBarn.ident,
-                vurderinger: vurderteBarn.vurderinger.map((vurdering, index) => {
+                vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
                   return {
                     begrunnelse: vurdering.begrunnelse,
                     harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
-                    fraDato: getFraDato(index, vurdering.fraDato),
+                    fraDato: getFraDato(vurdering.fraDato),
                   };
                 }),
               };
@@ -117,8 +116,8 @@ export const BarnetilleggVurdering = ({
     })(event);
   }
 
-  function getFraDato(index: number, value?: string): string {
-    if (value && index !== 0) {
+  function getFraDato(value?: string): string {
+    if (value) {
       return formaterDatoForBackend(parse(value, DATO_FORMATER.ddMMyyyy, new Date()));
     } else {
       return grunnlag.søknadstidspunkt;
@@ -128,35 +127,40 @@ export const BarnetilleggVurdering = ({
   const erFolkeregistrerteBarn = grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0;
 
   return (
-    <VilkårsKort heading={'§ 11-20 tredje og fjerde ledd barnetillegg '} steg={'BARNETILLEGG'}>
+    <VilkårsKortMedForm
+      heading={'§ 11-20 tredje og fjerde ledd barnetillegg '}
+      steg={'BARNETILLEGG'}
+      onSubmit={handleSubmit}
+      status={status}
+      isLoading={isLoading}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      visBekreftKnapp={!readOnly && harAvklaringsbehov}
+      vilkårTilhørerNavKontor={false}
+      vurdertAvAnsatt={grunnlag.vurdertAv}
+      vurdertAutomatisk={!harAvklaringsbehov}
+    >
       <div className={'flex-column'}>
         {harAvklaringsbehov && (
           <div className={'flex-column'}>
             <div>
               <BodyShort size={'small'} weight={'semibold'}>
-                Følgende barn er oppgitt av bruker og må vurderes
+                Følgende barn er oppgitt av brukeren og må vurderes
               </BodyShort>
             </div>
 
-            <form className={'flex-column'} id={'barnetillegg'} onSubmit={handleSubmit} autoComplete={'off'}>
-              <LøsBehovOgGåTilNesteStegStatusAlert
-                status={status}
-                løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-              />
-              {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
-                return (
-                  <OppgitteBarnVurdering
-                    key={vurdering.id}
-                    form={form}
-                    barnetilleggIndex={barnetilleggIndex}
-                    ident={vurdering.ident}
-                    fødselsdato={vurdering.fødselsdato}
-                    navn={behandlingPersonInfo?.info[vurdering.ident] || 'Ukjent'}
-                    readOnly={readOnly}
-                  />
-                );
-              })}
-            </form>
+            {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
+              return (
+                <OppgitteBarnVurdering
+                  key={vurdering.id}
+                  form={form}
+                  barnetilleggIndex={barnetilleggIndex}
+                  ident={vurdering.ident}
+                  fødselsdato={vurdering.fødselsdato}
+                  navn={behandlingPersonInfo?.info[vurdering.ident] || 'Ukjent'}
+                  readOnly={readOnly}
+                />
+              );
+            })}
           </div>
         )}
         {erFolkeregistrerteBarn && (
@@ -175,12 +179,7 @@ export const BarnetilleggVurdering = ({
             </div>
           </div>
         )}
-        {!readOnly && harAvklaringsbehov && (
-          <Button className={'fit-content'} form={'barnetillegg'} loading={isLoading}>
-            Bekreft
-          </Button>
-        )}
       </div>
-    </VilkårsKort>
+    </VilkårsKortMedForm>
   );
 };

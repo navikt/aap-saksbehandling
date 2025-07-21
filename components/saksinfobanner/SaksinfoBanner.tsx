@@ -23,6 +23,7 @@ import { TrekkKlageModal } from './trekkklagemodal/TrekkKlageModal';
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { SvarFraBehandler } from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -36,6 +37,7 @@ interface Props {
   brukerKanSaksbehandle?: boolean;
   flyt?: FlytGruppe[];
   adressebeskyttelser?: Adressebeskyttelsesgrad[];
+  harUlesteDokumenter?: boolean | null;
 }
 
 export const SaksinfoBanner = ({
@@ -50,11 +52,13 @@ export const SaksinfoBanner = ({
   brukerKanSaksbehandle,
   flyt,
   adressebeskyttelser,
+  harUlesteDokumenter,
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
   const [visTrekkKlageModal, settVisTrekkKlageModal] = useState(false);
   const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
+  const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveReservertAv;
 
   const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
@@ -65,6 +69,8 @@ export const SaksinfoBanner = ({
 
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
+  const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
+
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
     brukerKanSaksbehandle &&
@@ -79,7 +85,10 @@ export const SaksinfoBanner = ({
     behandling?.type === 'Klage';
 
   const visValgForÅOverstyreStarttidspunkt =
-    brukerKanSaksbehandle && behandlingErFørstegangsbehandling && behandlingErIkkeAvsluttet;
+    brukerKanSaksbehandle &&
+    behandlingErFørstegangsbehandling &&
+    behandlingErIkkeAvsluttet &&
+    behandlingErIkkeIverksatt;
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (oppgaveReservertAv && !erReservertAvInnloggetBruker) {
@@ -131,7 +140,19 @@ export const SaksinfoBanner = ({
               <AdressebeskyttelseStatus adressebeskyttelsesGrad={adressebeskyttelse} />
             </div>
           ))}
-          <div className={styles.oppgavestatus}>{oppgaveStatus && <OppgaveStatus oppgaveStatus={oppgaveStatus} />}</div>
+          {visHarUlesteDokumenter && (
+            <div className={styles.oppgavestatus}>
+              <SvarFraBehandler
+                behandlingReferanse={referanse}
+                oppdaterVisHarUlesteDokumenter={settVisHarUlesteDokumenter}
+              />
+            </div>
+          )}
+          {oppgaveStatus && (
+            <div className={styles.oppgavestatus}>
+              <OppgaveStatus oppgaveStatus={oppgaveStatus} />
+            </div>
+          )}
           <div className={styles.saksmeny}>
             <Dropdown>
               <Button

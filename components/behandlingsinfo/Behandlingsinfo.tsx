@@ -1,16 +1,26 @@
 import { BodyShort, Box, HGrid, HStack, Label, VStack } from '@navikt/ds-react';
-import { DetaljertBehandling, SaksInfo } from 'lib/types/types';
+import { DetaljertBehandling, Klageresultat, SaksInfo } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 
 import styles from './Behandlingsinfo.module.css';
+import { formaterKlageresultat } from 'lib/utils/klageresultat';
+import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
+import Link from 'next/link';
 
 interface Props {
   behandling: DetaljertBehandling;
   sak: SaksInfo;
+  klageresultat?: Klageresultat;
 }
 
-export const Behandlingsinfo = ({ behandling, sak }: Props) => {
+export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
+  const vedtaksdato = behandling.vedtaksdato;
+  const erFørstegangsbehandlingEllerRevurdering =
+    behandling.type === 'Førstegangsbehandling' || behandling.type === 'Revurdering';
+  const erKlagebehandling = behandling.type === 'Klage';
+  const erSvarFraKabal = behandling.type === 'SvarFraAndreinstans';
+
   return (
     <Box
       padding="4"
@@ -22,7 +32,7 @@ export const Behandlingsinfo = ({ behandling, sak }: Props) => {
       <VStack gap={'4'}>
         <HStack gap={'2'} align={'center'}>
           <Label as="p" size="medium">
-            {behandling.type}
+            {mapTypeBehandlingTilTekst(behandling.type)}
           </Label>
           <Behandlingsstatus status={behandling.status} />
         </HStack>
@@ -36,14 +46,51 @@ export const Behandlingsinfo = ({ behandling, sak }: Props) => {
             Saksnummer:
           </Label>
           <BodyShort size={'small'}>{sak.saksnummer}</BodyShort>
-          <Label as="p" size={'small'}>
-            Virkningstidspunkt{behandling.virkningstidspunkt == null && ' (foreløpig)'}:
-          </Label>
-          <BodyShort size={'small'}>
-            {behandling.virkningstidspunkt == null
-              ? formaterDatoForFrontend(sak.periode.fom)
-              : formaterDatoForFrontend(behandling.virkningstidspunkt)}
-          </BodyShort>
+          {erFørstegangsbehandlingEllerRevurdering && (
+            <>
+              <Label as="p" size={'small'}>
+                Virkningstidspunkt{behandling.virkningstidspunkt == null && ' (foreløpig)'}:
+              </Label>
+              <BodyShort size={'small'}>
+                {behandling.virkningstidspunkt == null
+                  ? formaterDatoForFrontend(sak.periode.fom)
+                  : formaterDatoForFrontend(behandling.virkningstidspunkt)}
+              </BodyShort>
+            </>
+          )}
+          {erSvarFraKabal && behandling.tilhørendeKlagebehandling && (
+            <>
+              <BodyShort size={'small'}>
+                <Link href={`/saksbehandling/sak/${sak.saksnummer}/${behandling.tilhørendeKlagebehandling}`}>
+                  Tilhørende klagebehandling
+                </Link>
+              </BodyShort>
+            </>
+          )}
+          {erKlagebehandling && (
+            <>
+              {behandling.kravMottatt && (
+                <>
+                  <Label as="p" size={'small'}>
+                    Krav mottatt:
+                  </Label>
+                  <BodyShort size={'small'}>{formaterDatoForFrontend(behandling.kravMottatt)}</BodyShort>
+                </>
+              )}
+              <Label as="p" size={'small'}>
+                Resultat:
+              </Label>
+              <BodyShort size={'small'}>{formaterKlageresultat(klageresultat)}</BodyShort>
+            </>
+          )}
+          {vedtaksdato && (
+            <>
+              <Label as="p" size={'small'}>
+                Vedtaksdato:
+              </Label>
+              <BodyShort size={'small'}>{formaterDatoForFrontend(vedtaksdato)}</BodyShort>
+            </>
+          )}
         </HGrid>
       </VStack>
     </Box>

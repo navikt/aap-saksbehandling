@@ -31,13 +31,8 @@ describe('OppgaveInformasjon', () => {
     expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
   });
 
-  it('Skal vise ikon for mottat svar fra behandler dersom årsakTilBehandling er MOTTATT_LEGEERKLÆRING', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, årsakerTilBehandling: ['MOTTATT_LEGEERKLÆRING'] }} />);
-    expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
-  });
-
-  it('Skal vise ikon for mottat svar fra behandler dersom årsakTilBehandling er MOTTATT_AVVIST_LEGEERKLÆRING', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, årsakerTilBehandling: ['MOTTATT_AVVIST_LEGEERKLÆRING'] }} />);
+  it('Skal vise ikon for mottat svar fra behandler dersom oppgave er markert med harUlesteDokumenter', () => {
+    render(<OppgaveInformasjon oppgave={{ ...oppgave, harUlesteDokumenter: true }} />);
     expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
   });
 
@@ -47,7 +42,7 @@ describe('OppgaveInformasjon', () => {
         oppgave={{
           ...oppgave,
           påVentTil: addDays(new Date(), 1).toDateString(),
-          årsakerTilBehandling: ['MOTTATT_LEGEERKLÆRING'],
+          harUlesteDokumenter: true,
         }}
       />
     );
@@ -70,16 +65,16 @@ describe('OppgaveInformasjon', () => {
       />
     );
 
-    const icon = screen.getByRole('img', { name: 'Returnert fra kvalitetssikrer' });
+    const icon = screen.getByRole('img', { name: 'Retur fra beslutter' });
     expect(icon).toBeVisible();
 
     user.click(icon);
 
-    const tekst = screen.getByText('Retur fra beslutter');
+    const tekst = screen.getByText('Begrunnelse');
     expect(tekst).toBeVisible();
   });
 
-  it('skal vise ikon for adressebeskyttelse hvis bruker er kode 7', () => {
+  it('skal vise ikon for adressebeskyttelse hvis brukeren er kode 7', () => {
     render(<OppgaveInformasjon oppgave={{ ...oppgave, harFortroligAdresse: true }} />);
     expect(screen.getByRole('img', { name: 'Adressebeskyttelse Ikon' })).toBeVisible();
   });

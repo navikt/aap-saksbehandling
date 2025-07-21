@@ -100,17 +100,17 @@ export const Sykdomsvurdering = ({
       },
       harSkadeSykdomEllerLyte: {
         type: 'radio',
-        label: 'Har bruker sykdom, skade eller lyte?',
+        label: 'Har brukeren sykdom, skade eller lyte?',
         defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.harSkadeSykdomEllerLyte),
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om bruker har sykdom, skade eller lyte' },
+        rules: { required: 'Du må svare på om brukeren har sykdom, skade eller lyte' },
       },
       erArbeidsevnenNedsatt: {
         type: 'radio',
-        label: 'Har bruker nedsatt arbeidsevne?',
+        label: 'Har brukeren nedsatt arbeidsevne?',
         defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erArbeidsevnenNedsatt),
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må svare på om bruker har nedsatt arbeidsevne' },
+        rules: { required: 'Du må svare på om brukeren har nedsatt arbeidsevne' },
       },
       erNedsettelseIArbeidsevneMerEnnHalvparten: {
         type: 'radio',
@@ -236,6 +236,11 @@ export const Sykdomsvurdering = ({
       // bør kunne slettes når man ikke lengre kan kvalitetssikre sin egen vurdering
       form.resetField('hoveddiagnose', {
         defaultValue: hoveddiagnoseDefaultOptions?.find((value) => value.value === diagnosegrunnlag?.hoveddiagnose),
+      });
+      form.resetField('bidiagnose', {
+        defaultValue: bidiagnoserDeafultOptions?.filter((value) =>
+          diagnosegrunnlag?.bidiagnoser?.includes(value.value)
+        ),
       });
     } else {
       form.resetField('hoveddiagnose');

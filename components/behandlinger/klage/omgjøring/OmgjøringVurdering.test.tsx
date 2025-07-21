@@ -7,6 +7,7 @@ describe('Klage - omgjøring', () => {
     render(
       <OmgjøringVurdering
         klageresultat={{
+          type: 'OMGJØRES',
           vilkårSomSkalOmgjøres: ['FOLKETRYGDLOVEN_11_5'],
         }}
         sak={{
@@ -39,6 +40,7 @@ describe('Klage - omgjøring', () => {
     render(
       <OmgjøringVurdering
         klageresultat={{
+          type: 'OMGJØRES',
           vilkårSomSkalOmgjøres: ['FOLKETRYGDLOVEN_11_5'],
         }}
         sak={{
@@ -64,6 +66,6 @@ describe('Klage - omgjøring', () => {
     );
     const begrunnelse = screen.getByRole('textbox', { name: 'Hva er årsaken?' });
     expect(begrunnelse).toBeVisible();
-    expect(begrunnelse).toHaveValue('Revurdering etter klage som tas til følge. Følgende vilkår omgjøres: $ 11-5');
+    expect(begrunnelse).toHaveValue('Revurdering etter klage som tas til følge. Følgende vilkår omgjøres: § 11-5');
   });
 });

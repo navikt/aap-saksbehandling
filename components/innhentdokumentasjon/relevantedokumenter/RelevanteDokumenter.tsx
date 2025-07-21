@@ -1,17 +1,22 @@
-import { Alert, BodyShort, Checkbox, Heading, Loader, Table } from '@navikt/ds-react';
-import { useSaksnummer } from 'hooks/BehandlingHook';
+import { ActionMenu, Alert, BodyShort, Button, Heading, Link, Loader, Table } from '@navikt/ds-react';
 import useSWR from 'swr';
 
 import styles from './RelevanteDokumenter.module.css';
-import { InformationSquareFillIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleFillIcon, InformationSquareFillIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { isError } from 'lib/utils/api';
 import { clientHentRelevanteDokumenter } from 'lib/dokumentClientApi';
+import { useSak } from 'hooks/SakHook';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { useState } from 'react';
+import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
+import { SakContextType } from 'context/SakContext';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface FormFields {
   dokumentnavn: string;
-  dokumenttype: string;
+  tema: string;
 }
 
 type Variantformat = 'ARKIV' | 'SLADDET' | 'ORIGINAL';
@@ -28,9 +33,10 @@ export interface RelevantDokumentType {
 }
 
 export const RelevanteDokumenter = () => {
-  const saksnummer = useSaksnummer();
-  const { data: relevanteDokumenter, isLoading } = useSWR(`/api/dokumenter/sak/${saksnummer}/helsedokumenter`, () =>
-    clientHentRelevanteDokumenter(saksnummer)
+  const sak = useSak();
+
+  const { data: relevanteDokumenter, isLoading } = useSWR(`/api/dokumenter/bruker/helsedokumenter`, () =>
+    clientHentRelevanteDokumenter(sak.sak.saksnummer, sak.sak.ident)
   );
 
   const { form, formFields } = useConfigForm<FormFields>({
@@ -38,14 +44,13 @@ export const RelevanteDokumenter = () => {
       type: 'text',
       label: 'Søk i helseopplysninger',
     },
-    dokumenttype: {
+    tema: {
       type: 'select',
-      label: 'Vis typer',
+      label: 'Tema',
       options: Array.from(
         new Set([
           ...[''],
-          ...((relevanteDokumenter?.type === 'SUCCESS' &&
-            relevanteDokumenter.data?.map((dokument) => dokument.variantformat)) ||
+          ...((relevanteDokumenter?.type === 'SUCCESS' && relevanteDokumenter.data?.map((dokument) => dokument.tema)) ||
             []),
         ])
       ),
@@ -68,7 +73,7 @@ export const RelevanteDokumenter = () => {
     );
   }
 
-  if (relevanteDokumenter && relevanteDokumenter.data.length === 0) {
+  if (relevanteDokumenter?.data.length === 0) {
     return (
       <Alert size={'small'} variant="info">
         Fant ingen relevante helseopplysninger
@@ -92,15 +97,16 @@ export const RelevanteDokumenter = () => {
       </div>
       <div className={styles.filterrad}>
         <FormField form={form} formField={formFields.dokumentnavn} />
-        <FormField form={form} formField={formFields.dokumenttype} />
+        <FormField form={form} formField={formFields.tema} />
       </div>
-      <Table size={'small'}>
+      <TableStyled size={'small'}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell textSize={'small'}>Dokument</Table.HeaderCell>
-            <Table.ColumnHeader textSize={'small'} sortable sortKey="type">
-              Type
-            </Table.ColumnHeader>
+            <Table.HeaderCell textSize={'small'}>Tema</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Brevkode</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Journalført</Table.HeaderCell>
+            <Table.HeaderCell />
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -110,19 +116,62 @@ export const RelevanteDokumenter = () => {
                 !form.watch('dokumentnavn') ||
                 dokument.tittel.toUpperCase().includes(form.watch('dokumentnavn').toUpperCase())
             )
-            .filter((dokument) => !form.watch('dokumenttype') || dokument.variantformat === form.watch('dokumenttype'))
-            .map((relevantDokument) => (
-              <Table.Row key={relevantDokument.dokumentInfoId}>
-                <Table.DataCell textSize={'small'}>
-                  <Checkbox size={'small'} value={relevantDokument.dokumentInfoId}>
-                    {relevantDokument.tittel}
-                  </Checkbox>
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>{relevantDokument.variantformat}</Table.DataCell>
-              </Table.Row>
-            ))}
+            .filter((dokument) => !form.watch('tema') || dokument.tema === form.watch('tema'))
+            .map((dokument) => <DokumentRad key={dokument.dokumentInfoId} sak={sak} dokument={dokument} />)}
         </Table.Body>
-      </Table>
+      </TableStyled>
     </section>
+  );
+};
+
+const DokumentRad = ({ sak, dokument }: { sak: SakContextType; dokument: RelevantDokumentType }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [erKnyttetTilSak, setErKnyttetTilSak] = useState(false);
+
+  return (
+    <Table.Row>
+      <Table.DataCell textSize={'small'}>
+        <Link
+          href={`/saksbehandling/api/dokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}`}
+          target="_blank"
+        >
+          {dokument.tittel}
+        </Link>
+      </Table.DataCell>
+      <Table.DataCell textSize="small">{dokument.tema}</Table.DataCell>
+      <Table.DataCell textSize="small">{dokument.brevkode}</Table.DataCell>
+      <Table.DataCell textSize="small">{formaterDatoForFrontend(dokument.datoOpprettet)}</Table.DataCell>
+      <Table.DataCell textSize="small">
+        {erKnyttetTilSak ? (
+          <CheckmarkCircleFillIcon color="green" />
+        ) : (
+          <ActionMenu>
+            <ActionMenu.Trigger>
+              <Button
+                variant={'tertiary-neutral'}
+                icon={<MenuElipsisVerticalIcon title={'Handlinger'} />}
+                size={'small'}
+              />
+            </ActionMenu.Trigger>
+            <ActionMenu.Content>
+              <ActionMenu.Item onSelect={() => setIsOpen(true)}>Knytt til sak</ActionMenu.Item>
+            </ActionMenu.Content>
+          </ActionMenu>
+        )}
+
+        <KnyttTilSakModal
+          journalpostId={dokument.journalpostId}
+          tema={dokument.tema}
+          saksnummer={sak.sak.saksnummer}
+          brukerIdent={sak.sak.ident}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          onSuccess={() => {
+            setErKnyttetTilSak(true);
+            setIsOpen(false);
+          }}
+        />
+      </Table.DataCell>
+    </Table.Row>
   );
 };

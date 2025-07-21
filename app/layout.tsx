@@ -1,6 +1,4 @@
-import '@navikt/ds-css';
-import '@navikt/aap-breveditor-css';
-import 'styles/globals.css';
+import './app.css';
 
 import { KelvinAppHeader } from 'components/kelvinappheader/KelvinAppHeader';
 import { hentBrukerInformasjon, hentRollerForBruker } from 'lib/services/azure/azureUserService';

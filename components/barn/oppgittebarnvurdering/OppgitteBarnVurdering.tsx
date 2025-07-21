@@ -56,6 +56,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
                 ident={ident}
                 barneTilleggIndex={barnetilleggIndex}
                 vurderingIndex={vurderingIndex}
+                fødselsdato={fødselsdato}
               />
               {kanFjernePeriode && !readOnly && (
                 <Button

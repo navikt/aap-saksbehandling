@@ -3,7 +3,6 @@
   --ac-expansioncard-border-hover-color: none;
 
   border: 1px solid var(--a-border-divider);
-  border-left: 0.5rem solid var(--a-surface-warning-subtle);
 }
 
 .header,

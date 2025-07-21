@@ -13,6 +13,8 @@ import {
   auditlog,
   hentBehandling,
   hentFlyt,
+  hentKabalKlageresultat,
+  hentKlageresultat,
   hentSak,
   hentSakPersoninfo,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
@@ -24,6 +26,7 @@ import { logWarning } from 'lib/serverutlis/logger';
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 import { StegGruppe } from 'lib/types/types';
 import { SakContextProvider } from 'context/SakContext';
+import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 
 interface Props {
   saksId: string;
@@ -45,18 +48,21 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsReferanse);
 
-  const [personInfo, brukerInformasjon, flytResponse, sak, roller] = await Promise.all([
-    hentSakPersoninfo(saksId),
-    hentBrukerInformasjon(),
-    hentFlyt(behandlingsReferanse),
-    hentSak(saksId),
-    hentRollerForBruker(),
-  ]);
+  const [personInfo, brukerInformasjon, flytResponse, sak, roller, kabalKlageResultat, klageresultat] =
+    await Promise.all([
+      hentSakPersoninfo(saksId),
+      hentBrukerInformasjon(),
+      hentFlyt(behandlingsReferanse),
+      hentSak(saksId),
+      hentRollerForBruker(),
+      hentKabalKlageresultat(behandlingsReferanse),
+      hentKlageresultat(behandlingsReferanse),
+    ]);
 
-  if (isError(flytResponse)) {
+  if (isError(flytResponse) || isError(klageresultat)) {
     return (
       <VStack padding={'4'}>
-        <ApiException apiResponses={[flytResponse]} />
+        <ApiException apiResponses={[flytResponse, klageresultat]} />
       </VStack>
     );
   }
@@ -106,6 +112,7 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
             brukerKanSaksbehandle={brukerKanSaksbehandle}
             flyt={flytResponse.data.flyt}
             adressebeskyttelser={adressebeskyttelser}
+            harUlesteDokumenter={oppgave?.harUlesteDokumenter}
           />
 
           <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
@@ -123,11 +130,12 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
               {/*Vi må ha children inne i en div for å unngå layoutshift*/}
               <div style={{ width: '100%' }}>{children}</div>
               <aside className={`flex-column`}>
-                <Behandlingsinfo behandling={behandling.data} sak={sak} />
-                <Saksbehandlingsoversikt />
+                <Behandlingsinfo behandling={behandling.data} sak={sak} klageresultat={klageresultat.data} />
+                <KlageBehandlingInfo kabalKlageResultat={kabalKlageResultat} klageresultat={klageresultat.data} />
                 {visTotrinnsvurdering && (
                   <ToTrinnsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} />
                 )}
+                <Saksbehandlingsoversikt />
               </aside>
             </SakContextProvider>
           </HGrid>

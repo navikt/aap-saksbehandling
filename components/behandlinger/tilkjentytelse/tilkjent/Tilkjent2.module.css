@@ -1,0 +1,7 @@
+.tablerowwithoutborder {
+  --ac-table-row-border: none;
+}
+
+.tablerowwithzebra {
+  background-color: var(--a-surface-subtle);
+}
