@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { FormEvent, FormEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { AvsenderMottakerIdType, FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
+import { FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
 import { Alert, Button, Detail, HStack, Label, Radio, VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { FormFieldRadioOptions } from 'components/form/FormHook';
