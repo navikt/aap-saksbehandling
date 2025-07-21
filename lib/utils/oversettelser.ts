@@ -186,6 +186,8 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Tilbakekreving';
     case 'SVAR_FRA_ANDREINSTANS':
       return 'Svar fra andreinstans';
+    case 'OPPFØLGINGSBEHANDLING':
+      return 'Oppfølgingsoppgave';
   }
   exhaustiveCheck(behandlingsType);
 }

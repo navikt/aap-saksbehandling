@@ -24,6 +24,8 @@ export const oppgaveBehandlingstyper = Object.keys(
         return { label: 'Journalføring', value: 'JOURNALFØRING' };
       case 'SVAR_FRA_ANDREINSTANS':
         return { label: 'Svar fra andreinstans', value: 'SVAR_FRA_ANDREINSTANS' };
+      case 'OPPF_LGINGSBEHANDLING':
+        return { label: 'Oppfølgingsoppgave', value: 'OPPFØLGINGSBEHANDLING' };
     }
     exhaustiveCheck(key);
   });
