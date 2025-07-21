@@ -12,7 +12,7 @@ describe('Avklar sak', () => {
 
   it('Skal ha en oversikt', () => {
     render(<AvklarSak behandlingsVersjon={1} behandlingsreferanse={'123'} grunnlag={grunnlag} readOnly={false} />);
-    const heading = screen.getByText('Avklar sak');
+    const heading = screen.getByText('Avklar sak og journalpostdetaljer');
     expect(heading).toBeVisible();
   });
 
