@@ -68,7 +68,7 @@ export const OpprettOppfølgingsBehandling = ({
     datoForOppfølging: {
       type: 'date_input',
       label: 'Dato for oppfølging',
-      rules: { required: 'Må settes' },
+      rules: { required: 'Dato for oppfølging kan ikke må settes.' },
     },
     hvemSkalFølgeOpp: {
       type: 'combobox',
@@ -80,6 +80,7 @@ export const OpprettOppfølgingsBehandling = ({
         },
         { label: 'Lokalkontor', value: 'Lokalkontor' },
       ],
+      rules: { required: 'Må sette hvem som skal følge opp.' },
     },
     reserverTilMeg: {
       type: 'checkbox',
