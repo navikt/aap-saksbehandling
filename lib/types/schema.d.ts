@@ -8546,6 +8546,10 @@ export interface components {
        */
       vurdertDato: string;
     };
+    'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.ArbeidIPeriodeDto': {
+      /** Format: double */
+      timerArbeid: number;
+    };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.Felter': {
       /** Format: int32 */
       arbeidGradering?: number | null;
@@ -8559,6 +8563,14 @@ export interface components {
       samordningGradering?: number | null;
       /** Format: int32 */
       totalReduksjon?: number | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.MeldekortDto': {
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      mottattTidspunkt: string;
+      timerArbeidPerPeriode: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.ArbeidIPeriodeDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'][];
@@ -8575,7 +8587,7 @@ export interface components {
       /** @enum {string|null} */
       meldekortStatus?: 'IKKE_LEVERT' | 'LEVERT_ETTER_FRIST' | 'OVERFØRT_TIL_ØKONOMI' | null;
       meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      sisteLeverteMeldekort?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.arbeid.Meldekort'];
+      sisteLeverteMeldekort?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.MeldekortDto'];
       vurdertePerioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.VurdertPeriode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriodeDTO': {
@@ -8902,19 +8914,6 @@ export interface components {
       /** @enum {string} */
       utfall: 'IKKE_VURDERT' | 'IKKE_RELEVANT' | 'OPPFYLT' | 'IKKE_OPPFYLT';
       versjon: string;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.arbeid.ArbeidIPeriode': {
-      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      timerArbeid: components['schemas']['no.nav.aap.komponenter.verdityper.TimerArbeid'];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.arbeid.Meldekort': {
-      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
-      /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
-       */
-      mottattTidspunkt: string;
-      timerArbeidPerPeriode: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.arbeid.ArbeidIPeriode'][];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.BrevResponse': {
       konstruertBrev: string;
@@ -10951,9 +10950,6 @@ export interface components {
     'no.nav.aap.komponenter.verdityper.Dagsatser': {
       /** Format: int32 */
       antall: number;
-    };
-    'no.nav.aap.komponenter.verdityper.TimerArbeid': {
-      antallTimer: number;
     };
     'no.nav.aap.motor.api.JobbInfoDto': {
       /** Format: int32 */
