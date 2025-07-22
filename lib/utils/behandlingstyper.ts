@@ -50,6 +50,8 @@ const behandlingsTypeAlternativerFraEnum = Object.keys(
         return 'Journalføring';
       case 'SvarFraAndreinstans':
         return 'SvarFraAndreinstans';
+      case 'Oppf_lgingsbehandling':
+        return 'Oppfølgingsbehandling';
     }
     exhaustiveCheck(key);
   });
