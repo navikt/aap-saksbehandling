@@ -11,7 +11,7 @@ describe('aktivitetsplikthendelser', () => {
 
   it('skal ha en tekst som forteller at det ikke finnes noen tidligere brudd dersom hendelser er tom', () => {
     render(<AktivitetspliktHendelser />);
-    const tekst = screen.getByText('Ingen tidligere brudd registrert');
+    const tekst = screen.getByText('Ingen tidligere brudd registrert.');
     expect(tekst).toBeVisible();
   });
 });

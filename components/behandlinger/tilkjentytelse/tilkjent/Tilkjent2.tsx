@@ -15,6 +15,7 @@ interface Props {
 }
 
 export const Tilkjent2 = ({ grunnlag }: Props) => {
+  console.log('grunnlag', grunnlag);
   return (
     <VilkårsKort heading="Tilkjent ytelse" steg="BEREGN_TILKJENT_YTELSE">
       <TableStyled size="medium">

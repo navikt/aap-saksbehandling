@@ -1,4 +1,5 @@
 import { TextField } from '@navikt/ds-react';
+import { isNullOrUndefined } from 'lib/utils/validering';
 import React, { HTMLInputAutoCompleteAttribute } from 'react';
 import { Control, Controller, FieldValues, RegisterOptions, FieldPath } from 'react-hook-form';
 
@@ -42,7 +43,7 @@ export const TextFieldWrapper = <FormFieldValues extends FieldValues>({
         type={type}
         error={error?.message}
         hideLabel={hideLabel}
-        value={value || ''}
+        value={!isNullOrUndefined(value) ? value : ''}
         onChange={onChange}
         description={description}
         readOnly={readOnly}

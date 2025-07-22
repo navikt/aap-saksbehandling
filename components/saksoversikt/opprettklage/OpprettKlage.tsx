@@ -40,7 +40,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
         kravMottatt: formaterDatoForBackend(parse(data.kravMottatt, 'dd.MM.yyyy', new Date())),
         beskrivelse: data.beskrivelse,
         skalOppretteNyBehandling: true,
-      } as KlageV0,
+      } satisfies KlageV0,
     };
 
     setIsLoading(true);

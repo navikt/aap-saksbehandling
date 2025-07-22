@@ -1,6 +1,6 @@
 import { AvslagÅrsak, SettPåVentÅrsaker, TypeBehandling, VilkårUtfall } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
-import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype, OppgaveStatus } from 'lib/types/oppgaveTypes';
+import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
 
 const behovskodeMap = {
   // Behandlingsflyt
@@ -186,19 +186,11 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Tilbakekreving';
     case 'SVAR_FRA_ANDREINSTANS':
       return 'Svar fra andreinstans';
+    case 'OPPFØLGINGSBEHANDLING':
+      return 'Oppfølgingsoppgave';
   }
   exhaustiveCheck(behandlingsType);
 }
-
-export function mapTilOppgaveStatusTekst(status: OppgaveStatus) {
-  switch (status) {
-    case 'AVSLUTTET':
-      return 'Avsluttet';
-    case 'OPPRETTET':
-      return 'Opprettet';
-  }
-}
-
 export function mapGrunnTilString(grunn: string): string {
   switch (grunn) {
     case 'FEIL_LOVANVENDELSE':
