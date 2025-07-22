@@ -34,7 +34,7 @@ export const AvklaroppfolgingVurdering = ({ behandlingVersjon, readOnly, grunnla
         type: 'textarea',
         label: 'Hva er årsaken?',
         rules: { required: 'Du må skrive en årsak.' },
-        defaultValue: grunnlag.grunnlag?.årsak,
+        defaultValue: grunnlag.grunnlag?.årsak || undefined,
       },
       konsekvens: {
         type: 'radio',
@@ -44,13 +44,13 @@ export const AvklaroppfolgingVurdering = ({ behandlingVersjon, readOnly, grunnla
           { label: 'Ingen konsekvens for saken', value: 'INGEN' },
           { label: 'Opprett vurderingsbehov', value: 'OPPRETT_VURDERINGSBEHOV' },
         ],
-        defaultValue: grunnlag.grunnlag?.konsekvensAvOppfølging
+        defaultValue: grunnlag.grunnlag?.konsekvensAvOppfølging,
       },
       hvaSkalRevurderes: {
         type: 'combobox_multiple',
         label: 'Hvilke opplysninger skal revurderes?',
         options: årsakOptions,
-        defaultValue: grunnlag.grunnlag?.opplysningerTilRevurdering
+        defaultValue: grunnlag.grunnlag?.opplysningerTilRevurdering,
       },
     },
     { readOnly: readOnly }
