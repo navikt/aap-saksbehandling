@@ -33,7 +33,16 @@ describe('opprett oppfølgingsbehandling', () => {
 
     expect(screen.getByText('Dato for oppfølging kan ikke må settes.')).toBeVisible();
 
-    await user.type(screen.getByRole('textbox', { name: 'Dato for oppfølging' }), '13.02.2005');
+    // Prøver å sette dato i fortiden
+    let datotekstboks = screen.getByRole('textbox', { name: 'Dato for oppfølging' });
+    await user.type(datotekstboks, '13.02.2005');
+    expect(screen.getByText('Datoen kan ikke være tilbake i tid.')).toBeVisible();
+
+    // Fyll inn dato i framtiden
+    await user.clear(datotekstboks)
+    await user.type(datotekstboks, '13.02.2100');
+
+
     await user.click(screen.getByRole('combobox', { name: 'Hvem følger opp?' }));
     await user.click(screen.getByRole('option', { name: 'NAY' }));
     await user.click(screen.getByRole('button', { name: 'Opprett oppfølgingsbehandling' }));
@@ -45,7 +54,7 @@ describe('opprett oppfølgingsbehandling', () => {
     const jsonBody = JSON.parse(String(firstCall[1]?.body));
 
     expect(jsonBody.melding.meldingType).toBe('OppfølgingsoppgaveV0');
-    expect(jsonBody.melding.datoForOppfølging).toBe('2005-02-13');
+    expect(jsonBody.melding.datoForOppfølging).toBe('2100-02-13');
     expect(jsonBody.melding.hvemSkalFølgeOpp).toBe('NasjonalEnhet');
   });
 });

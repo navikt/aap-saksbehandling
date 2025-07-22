@@ -13,6 +13,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { v4 as uuid } from 'uuid';
 import { parse } from 'date-fns';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 
 export interface OppfølgingsoppgaveFormFields {
   datoForOppfølging: string;
@@ -68,7 +69,19 @@ export const OpprettOppfølgingsBehandling = ({
     datoForOppfølging: {
       type: 'date_input',
       label: 'Dato for oppfølging',
-      rules: { required: 'Dato for oppfølging kan ikke må settes.' },
+      rules: {
+        required: 'Dato for oppfølging kan ikke må settes.',
+        validate: (value) => {
+          const valideringsresultat = validerDato(value as string);
+          if (valideringsresultat) {
+            return valideringsresultat;
+          }
+
+          if (!erDatoIFremtiden(value as string)) {
+            return 'Datoen kan ikke være tilbake i tid.';
+          }
+        },
+      },
     },
     hvemSkalFølgeOpp: {
       type: 'combobox',
