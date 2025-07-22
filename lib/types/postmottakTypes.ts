@@ -31,3 +31,6 @@ export type FinnSakGrunnlag = postmottak['schemas']['no.nav.aap.postmottak.api.f
 export type Saksinfo = postmottak['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.sak.SaksInfoDto'];
 export type OverleveringGrunnlag =
   postmottak['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.overlevering.OverleveringGrunnlagDto'];
+
+export type AvsenderMottakerIdType =
+  postmottak['schemas']['no.nav.aap.postmottak.gateway.AvsenderMottakerDto']['idType'];
