@@ -82,7 +82,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
       statuser: statuser || [],
       typer: typer || [],
     });
-  }, [tema, statuser, typer]);
+  }, [tema, statuser, typer, sak.ident]);
 
   if (isLoading) {
     return <Spinner label="Henter dokumenter" />;

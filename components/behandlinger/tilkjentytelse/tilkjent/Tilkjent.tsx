@@ -4,8 +4,7 @@ import { TilkjentYtelseGrunnlag } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
 import { Detail, Label, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-
-const isNullOrUndefined = (value: number | null | undefined) => value === null || value === undefined;
+import { isNullOrUndefined } from 'lib/utils/validering';
 
 interface Props {
   grunnlag: TilkjentYtelseGrunnlag;

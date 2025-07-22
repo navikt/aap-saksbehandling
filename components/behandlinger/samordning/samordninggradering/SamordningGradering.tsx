@@ -17,6 +17,7 @@ import styles from 'components/behandlinger/samordning/samordninggradering/Samor
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { isNullOrUndefined } from 'lib/utils/validering';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -47,7 +48,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     ytelseType: ytelse.ytelseType,
     kilde: '',
     graderingFraKilde: undefined,
-    gradering: ytelse.gradering || undefined,
+    gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
     manuell: ytelse.manuell || undefined,
     periode: {
       fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
@@ -143,6 +144,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     const alleTomDatoer = form
       .getValues('vurderteSamordninger')
       .filter((vurdering) => !!vurdering.periode.tom)
+      .filter((vurdering) => vurdering.gradering == 100)
       .map((vurdert) => parse(vurdert.periode.tom, 'dd.MM.yyyy', new Date()))
       .filter((dato) => isValid(dato));
 

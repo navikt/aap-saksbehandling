@@ -103,7 +103,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon }: Prop
     >
       <InstitusjonsoppholdTabell
         label={'Brukeren har følgende institusjonsopphold på helseinstitusjon'}
-        beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP ytelse'}
+        beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse.'}
         instutisjonsopphold={grunnlag.opphold}
       />
       {fields.map((field, index) => {
