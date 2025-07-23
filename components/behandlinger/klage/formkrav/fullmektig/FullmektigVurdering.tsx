@@ -9,7 +9,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { FullmektigGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { landMedTrygdesamarbeidInklNorge } from 'lib/utils/countries';
-import styles from './fullmektig.module.scss';
+import styles from './fullmektig.module.css';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
