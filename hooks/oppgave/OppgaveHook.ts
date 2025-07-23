@@ -1,6 +1,8 @@
 import { Oppgave, Paging } from 'lib/types/oppgaveTypes';
 import useSWRInfinite from 'swr/infinite';
-import { hentOppgaverClient } from 'lib/oppgaveClientApi';
+import { hentMineOppgaverClient, hentOppgaverClient } from 'lib/oppgaveClientApi';
+import useSWR from 'swr';
+import { isSuccess } from 'lib/utils/api';
 
 const PAGE_SIZE = 25;
 
@@ -109,3 +111,10 @@ export function useAlleOppgaverForEnhet(aktivEnhet: string[], aktivKøId?: numbe
     type: 'ALLE_OPPGAVER',
   });
 }
+
+export const useMineOppgaver = () => {
+  const { data, mutate, isLoading, error } = useSWR('api/mine-oppgaver', hentMineOppgaverClient);
+  const oppgaver = isSuccess(data) ? data?.data?.oppgaver?.flat() : [];
+
+  return { oppgaver, mutate, isLoading, error };
+};
