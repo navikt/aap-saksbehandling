@@ -6,7 +6,7 @@ import { Alert, BodyShort, Skeleton, VStack } from '@navikt/ds-react';
 import { isError } from 'lib/utils/api';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 import { useConfigForm } from 'components/form/FormHook';
-import { behandlingsTyperOptions, OppgaveStatuser } from 'lib/utils/behandlingstyper';
+import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { useCallback } from 'react';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { Filtrering } from 'components/oppgaveliste/filtrering/Filtrering';
@@ -42,7 +42,7 @@ export const MineOppgaver2 = () => {
     behandlingstyper: {
       type: 'checkbox',
       label: 'Behandlingstype',
-      options: behandlingsTyperOptions,
+      options: oppgaveBehandlingstyper,
     },
     behandlingOpprettetFom: {
       type: 'date',
