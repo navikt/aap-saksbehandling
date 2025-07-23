@@ -7,7 +7,7 @@ import { EyeIcon } from '@navikt/aksel-icons';
 import { capitalize } from 'lodash';
 
 interface Props {
-  behandlinger?: { id: string; status: string; opprettet: string; steg: string }[];
+  behandlinger?: { id: string; journalpostId: string; status: string; opprettet: string; steg: string }[];
 }
 
 export const BehandlingOversikt = ({ behandlinger }: Props) => {
@@ -21,6 +21,7 @@ export const BehandlingOversikt = ({ behandlinger }: Props) => {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell>JournalpostID</Table.HeaderCell>
             <Table.HeaderCell>Opprettet</Table.HeaderCell>
             <Table.HeaderCell>Steg</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
@@ -32,6 +33,7 @@ export const BehandlingOversikt = ({ behandlinger }: Props) => {
           {behandlinger?.map((behandling) => (
             <Table.Row key={behandling.id}>
               <Table.DataCell>{behandling.id}</Table.DataCell>
+              <Table.DataCell>{behandling.journalpostId}</Table.DataCell>
               <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
               <Table.DataCell>{capitalize(behandling.steg?.replace(/_/g, ' '))}</Table.DataCell>
               <Table.DataCell>
