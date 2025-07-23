@@ -7,7 +7,7 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 const Page = async () => {
-  let alleBehandlinger: { id: string; status: string; opprettet: string; steg: string }[] = [];
+  let alleBehandlinger: { id: string; journalpostId: string; status: string; opprettet: string; steg: string }[] = [];
   if (!isProd()) {
     const res = await hentAlleBehandlinger();
     if (isError(res)) {
