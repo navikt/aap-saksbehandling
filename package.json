@@ -36,7 +36,7 @@
     "next": "15.4.2",
     "node-loader": "^2.1.0",
     "pino": "^9.7.0",
-    "plotly.js": "^3.0.1",
+    "plotly.js": "^3.0.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "7.60.0",
