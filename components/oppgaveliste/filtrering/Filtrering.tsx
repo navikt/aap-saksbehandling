@@ -15,6 +15,7 @@ import {
   mapTilOppgaveBehandlingstypeTekst,
 } from 'lib/utils/oversettelser';
 import { formaterÅrsak } from 'lib/utils/årsaker';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -66,11 +67,19 @@ export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppg
     }
 
     if (key === 'behandlingOpprettetFom' && value) {
-      aktiveFilter.push({ key: key as keyof FormFieldsFilter, value: value, label: `OpprettetFom: ${value}` });
+      aktiveFilter.push({
+        key: key as keyof FormFieldsFilter,
+        value: value,
+        label: `Behandling opprettet fra: ${formaterDatoForFrontend(value)}`,
+      });
     }
 
     if (key === 'behandlingOpprettetTom' && value) {
-      aktiveFilter.push({ key: key as keyof FormFieldsFilter, value: value, label: `OpprettetTom: ${value}` });
+      aktiveFilter.push({
+        key: key as keyof FormFieldsFilter,
+        value: value,
+        label: `Behandling opprettet til: ${formaterDatoForFrontend(value)}`,
+      });
     }
   });
 
