@@ -80,26 +80,23 @@ export const MineOppgaver2 = () => {
         antallOppgaverIFilter={filtrerteOppgaver?.length}
       />
       {isLoading && (
-        <VStack gap={'7'}>
-          <VStack gap={'1'}>
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-          </VStack>
-          <VStack gap={'1'}>
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-          </VStack>
+        <VStack gap={'1'}>
+          <Skeleton variant="rectangle" width="100%" height={40} />
+          <Skeleton variant="rectangle" width="100%" height={40} />
+          <Skeleton variant="rectangle" width="100%" height={40} />
+          <Skeleton variant="rectangle" width="100%" height={40} />
+          <Skeleton variant="rectangle" width="100%" height={40} />
+          <Skeleton variant="rectangle" width="100%" height={40} />
+          <Skeleton variant="rectangle" width="100%" height={40} />
         </VStack>
       )}
 
-      {filtrerteOppgaver && filtrerteOppgaver.length > 0 ? (
-        <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
-      ) : !isLoading ? (
-        <BodyShort className={styles.ingenreserverteoppgaver}>Ingen reserverte oppgaver.</BodyShort>
-      ) : null}
+      {!isLoading &&
+        (filtrerteOppgaver?.length > 0 ? (
+          <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
+        ) : (
+          <BodyShort className={styles.ingenreserverteoppgaver}>Ingen reserverte oppgaver.</BodyShort>
+        ))}
     </div>
   );
 };
