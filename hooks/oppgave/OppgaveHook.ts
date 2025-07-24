@@ -113,8 +113,8 @@ export function useAlleOppgaverForEnhet(aktivEnhet: string[], aktivKøId?: numbe
 }
 
 export const useMineOppgaver = () => {
-  const { data, mutate, isLoading, error } = useSWR('api/mine-oppgaver', hentMineOppgaverClient);
+  const { data, mutate, isLoading } = useSWR('api/mine-oppgaver', hentMineOppgaverClient);
   const oppgaver = isSuccess(data) ? data?.data?.oppgaver?.flat() : [];
 
-  return { oppgaver, mutate, isLoading, error };
+  return { oppgaver, mutate, isLoading, error: data?.type === 'ERROR' ? data.apiException.message : undefined };
 };

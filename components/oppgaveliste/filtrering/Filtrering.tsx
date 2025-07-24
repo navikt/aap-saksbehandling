@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Box, Button, Detail, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Chips, Detail, HGrid, HStack, VStack } from '@navikt/ds-react';
 
 import styles from './Filtrering.module.css';
 import { useState } from 'react';
@@ -9,6 +9,12 @@ import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver2';
+import {
+  mapBehovskodeTilBehovstype,
+  mapStatusTilTekst,
+  mapTilOppgaveBehandlingstypeTekst,
+} from 'lib/utils/oversettelser';
+import { formaterÅrsak } from 'lib/utils/årsaker';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -19,6 +25,54 @@ interface Props {
 
 export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppgaverTotalt }: Props) => {
   const [visFilter, setVisFilter] = useState(false);
+
+  const aktiveFilter: { key: keyof FormFieldsFilter; value: string; label: string }[] = [];
+
+  Object.entries(form.watch()).forEach(([key, value]) => {
+    if (key === 'behandlingstyper' && Array.isArray(value)) {
+      aktiveFilter.push(
+        ...value.map((value) => {
+          return {
+            key: key as keyof FormFieldsFilter,
+            label: mapTilOppgaveBehandlingstypeTekst(value),
+            value: value,
+          };
+        })
+      );
+    }
+
+    if (key === 'årsaker' && Array.isArray(value)) {
+      aktiveFilter.push(
+        ...value.map((value) => {
+          return { key: key as keyof FormFieldsFilter, value: value, label: formaterÅrsak(value) };
+        })
+      );
+    }
+
+    if (key === 'avklaringsbehov' && Array.isArray(value)) {
+      aktiveFilter.push(
+        ...value.map((value) => {
+          return { key: key as keyof FormFieldsFilter, value: value, label: mapBehovskodeTilBehovstype(value) };
+        })
+      );
+    }
+
+    if (key === 'statuser' && Array.isArray(value)) {
+      aktiveFilter.push(
+        ...value.map((value) => {
+          return { key: key as keyof FormFieldsFilter, value: value, label: mapStatusTilTekst(value) };
+        })
+      );
+    }
+
+    if (key === 'behandlingOpprettetFom' && value) {
+      aktiveFilter.push({ key: key as keyof FormFieldsFilter, value: value, label: `OpprettetFom: ${value}` });
+    }
+
+    if (key === 'behandlingOpprettetTom' && value) {
+      aktiveFilter.push({ key: key as keyof FormFieldsFilter, value: value, label: `OpprettetTom: ${value}` });
+    }
+  });
 
   return (
     <div className={styles.wrapper}>
@@ -33,7 +87,26 @@ export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppg
           >
             {visFilter ? 'Lukk filter' : 'Filtrer listen'}
           </Button>
-          <div></div>
+          <HStack gap={'2'}>
+            <Chips size={'small'}>
+              {aktiveFilter.map((filter) => (
+                <Chips.Removable
+                  key={filter.value}
+                  onClick={() => {
+                    const values = form.watch(filter.key);
+                    if (Array.isArray(values)) {
+                      const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
+                      form.setValue(filter.key, arrayUtenValgtFilter);
+                    } else {
+                      form.setValue(filter.key, undefined);
+                    }
+                  }}
+                >
+                  {filter.label}
+                </Chips.Removable>
+              ))}
+            </Chips>
+          </HStack>
         </HStack>
         <Detail>
           Viser {antallOppgaverIFilter} av totalt {antallOppgaverTotalt} oppgaver

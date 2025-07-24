@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Skeleton, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Skeleton, VStack } from '@navikt/ds-react';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
@@ -11,6 +11,7 @@ import styles from './MineOppgaver2.module.css';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { useFiltrerteOppgaver } from './MineOppgaverHook';
 import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
+import { alleÅrsakerTilBehandlingOptions } from 'lib/utils/årsakerTilBehandling';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];
@@ -22,7 +23,7 @@ export interface FormFieldsFilter {
 }
 
 export const MineOppgaver2 = () => {
-  const { oppgaver, mutate, isLoading } = useMineOppgaver();
+  const { oppgaver, mutate, isLoading, error } = useMineOppgaver();
 
   const { form, formFields } = useConfigForm<FormFieldsFilter>({
     behandlingstyper: {
@@ -42,7 +43,7 @@ export const MineOppgaver2 = () => {
     årsaker: {
       type: 'combobox_multiple',
       label: 'Årsak',
-      options: ['hello pello'],
+      options: alleÅrsakerTilBehandlingOptions,
       defaultValue: [],
     },
     avklaringsbehov: {
@@ -63,11 +64,21 @@ export const MineOppgaver2 = () => {
 
   const filtrerteOppgaver = useFiltrerteOppgaver({
     oppgaver,
-    filters: watchedValues,
+    filter: watchedValues,
   });
 
+  if (error) {
+    return <Alert variant="error">{error}</Alert>;
+  }
+
   return (
-    <>
+    <div className={styles.tabell}>
+      <Filtrering
+        form={form}
+        formFields={formFields}
+        antallOppgaverTotalt={oppgaver?.length}
+        antallOppgaverIFilter={filtrerteOppgaver?.length}
+      />
       {isLoading && (
         <VStack gap={'7'}>
           <VStack gap={'1'}>
@@ -83,20 +94,12 @@ export const MineOppgaver2 = () => {
           </VStack>
         </VStack>
       )}
-      <div className={styles.tabell}>
-        <Filtrering
-          form={form}
-          formFields={formFields}
-          antallOppgaverTotalt={oppgaver?.length}
-          antallOppgaverIFilter={filtrerteOppgaver?.length}
-        />
 
-        {filtrerteOppgaver && filtrerteOppgaver.length > 0 ? (
-          <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
-        ) : (
-          <BodyShort className={styles.ingenreserverteoppgaver}>Ingen reserverte oppgaver.</BodyShort>
-        )}
-      </div>
-    </>
+      {filtrerteOppgaver && filtrerteOppgaver.length > 0 ? (
+        <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
+      ) : !isLoading ? (
+        <BodyShort className={styles.ingenreserverteoppgaver}>Ingen reserverte oppgaver.</BodyShort>
+      ) : null}
+    </div>
   );
 };

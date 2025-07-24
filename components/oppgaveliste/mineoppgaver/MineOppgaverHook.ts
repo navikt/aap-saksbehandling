@@ -16,11 +16,11 @@ const oppgaveStatus = {
 
 interface Props {
   oppgaver: Oppgave[];
-  filters: FormFieldsFilter;
+  filter: FormFieldsFilter;
 }
 
-export const useFiltrerteOppgaver = ({ oppgaver, filters }: Props) => {
-  const debouncedFilters = useDebouncedValue(filters, 300);
+export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
+  const debouncedFilters = useDebouncedValue(filter, 300);
   return useMemo(() => {
     const filtrerOppgave = (oppgave: Oppgave) => {
       const dato = formaterDatoForFrontend(oppgave.behandlingOpprettet);
