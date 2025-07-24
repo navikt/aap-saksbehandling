@@ -19,7 +19,7 @@ export const oppgaveBehandlingstyper = Object.keys(
       case 'KLAGE':
         return { label: 'Klage', value: 'KLAGE' };
       case 'DOKUMENT_H_NDTERING':
-        return { label: 'Dokumenthåndtering', value: 'DOKUMENTHÅNDTERING' };
+        return { label: 'Dokumenthåndtering', value: 'DOKUMENT_HÅNDTERING' };
       case 'JOURNALF_RING':
         return { label: 'Journalføring', value: 'JOURNALFØRING' };
       case 'SVAR_FRA_ANDREINSTANS':

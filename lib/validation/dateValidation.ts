@@ -31,9 +31,10 @@ export function validerNullableDato(value?: string) {
 }
 
 export function erDatoFoerDato(inputDato: string, referanseDato: string): boolean {
-  return (
-    new Date(parse(inputDato, 'dd.MM.yyyy', new Date())) < new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()))
-  );
+  const parsedInputDato = new Date(parse(inputDato, 'dd.MM.yyyy', new Date()));
+  const parsedReferanseDato = new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()));
+
+  return parsedInputDato < parsedReferanseDato;
 }
 
 export function erDatoIFremtiden(value: string): boolean {

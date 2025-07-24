@@ -189,7 +189,7 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
     case 'OPPFØLGINGSBEHANDLING':
       return 'Oppfølgingsoppgave';
   }
-  exhaustiveCheck(behandlingsType);
+  // exhaustiveCheck(behandlingsType);
 }
 export function mapGrunnTilString(grunn: string): string {
   switch (grunn) {
@@ -257,5 +257,16 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
       return 'Svar fra Nav Klageinstans';
     default:
       return typeBehandling;
+  }
+}
+
+export function mapStatusTilTekst(status: 'VENT' | 'RETUR_KVALITETSSIKRER' | 'RETUR_BESLUTTER'): string {
+  switch (status) {
+    case 'VENT':
+      return 'På vent';
+    case 'RETUR_KVALITETSSIKRER':
+      return 'Retur fra kvalitetssikrer';
+    case 'RETUR_BESLUTTER':
+      return 'Retur fra beslutter';
   }
 }

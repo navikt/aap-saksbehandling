@@ -1,68 +1,68 @@
 .panelV3 {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    max-width: 1680px;
-    border-radius: 0.5rem;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  max-width: 1680px;
+  border-radius: 0.5rem;
 }
 
 .sidebarItemV3 {
-    box-shadow: none;
-    border-radius: 4px;
-    cursor: pointer;
-    --ac-chip-toggle-text: var(--a-surface-action);
-    --ac-chip-toggle-bg: var(--a-transparent);
+  box-shadow: none;
+  border-radius: 4px;
+  cursor: pointer;
+  --ac-chip-toggle-text: var(--a-surface-action);
+  --ac-chip-toggle-bg: var(--a-transparent);
 }
 
 .sidebarItemSingleV3 {
-    box-shadow: none;
-    border-radius: 4px;
-    --ac-chip-toggle-text: var(--ac-chip-toggle-text);
-    --ac-chip-toggle-bg: var(--a-transparent);
-    --ac-chip-toggle-hover-text: var(--ac-chip-toggle-text);
-    --ac-chip-toggle-hover-bg: var(--a-transparent);
-    --ac-chip-toggle-hover-border: var(--a-transparent);
-    cursor: default;
+  box-shadow: none;
+  border-radius: 4px;
+  --ac-chip-toggle-text: var(--ac-chip-toggle-text);
+  --ac-chip-toggle-bg: var(--a-transparent);
+  --ac-chip-toggle-hover-text: var(--ac-chip-toggle-text);
+  --ac-chip-toggle-hover-bg: var(--a-transparent);
+  --ac-chip-toggle-hover-border: var(--a-transparent);
+  cursor: default;
 }
 
 .vurderingDetailV3 {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .fieldsV3 {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding-left: var(--a-spacing-4);
-    border-left: 2px solid var(--a-border-divider);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-left: var(--a-spacing-4);
+  border-left: 2px solid var(--a-border-divider);
 }
 
 .footerV3 {
-    margin-top: auto;
+  margin-top: auto;
 }
 
 .tidligereVurderingerV3 {
-    --ac-expansioncard-bg: var(--a-surface-default);
-    --ac-expansioncard-header-bg: var(--a-surface-transparent);
-    --ac-expansioncard-header-bg-hover: var(--a-surface-hover);
-    --ac-expansioncard-header-open-bg: var(--a-surface-transparent);
-    --ac-expansioncard-border-color: var(--a-border-default);
-    --ac-expansioncard-border-open-color: var(--a-border-default);
-    --ac-expansioncard-border-radius: var(--a-border-radius-large);
-    --ac-expansioncard-button-border-radius: var(--a-border-radius-medium);
-    --ac-expansioncard-border-hover-color: var(--a-border-strong);
-    margin-bottom: var(--a-spacing-4);
-    background: #E6F0FF80;
+  --ac-expansioncard-bg: var(--a-surface-default);
+  --ac-expansioncard-header-bg: var(--a-surface-transparent);
+  --ac-expansioncard-header-bg-hover: var(--a-surface-hover);
+  --ac-expansioncard-header-open-bg: var(--a-surface-transparent);
+  --ac-expansioncard-border-color: var(--a-border-default);
+  --ac-expansioncard-border-open-color: var(--a-border-default);
+  --ac-expansioncard-border-radius: var(--a-border-radius-large);
+  --ac-expansioncard-button-border-radius: var(--a-border-radius-medium);
+  --ac-expansioncard-border-hover-color: var(--a-border-strong);
+  margin-bottom: var(--a-spacing-4);
+  background: #e6f0ff80;
 }
 
 .cardHeadingV3 {
-    display: flex;
-    flex-direction: row;
-    gap: var(--a-spacing-2);
-    align-items: flex-end;
+  display: flex;
+  flex-direction: row;
+  gap: var(--a-spacing-2);
+  align-items: flex-end;
 }
 
 .cardHeadingV3 > svg {
-    font-size: var(--a-font-size-xlarge);
+  font-size: var(--a-font-size-xlarge);
 }

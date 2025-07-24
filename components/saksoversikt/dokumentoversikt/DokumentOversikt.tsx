@@ -48,7 +48,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
       label: 'Tema',
       defaultValue: ['AAP'],
       options: [
-        { value: 'AAP', label: 'Arbeidsavklaringspenger'},
+        { value: 'AAP', label: 'Arbeidsavklaringspenger' },
         { value: 'SYK', label: 'Sykepenger' },
         { value: 'OPP', label: 'Arbeidsoppfølging' },
       ],
@@ -56,12 +56,18 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
     typer: {
       type: 'combobox_multiple',
       label: 'Type',
-      options: Object.keys(Journalposttype).map((value) => ({ value, label: formaterJournalpostType(value as Journalposttype)})),
+      options: Object.keys(Journalposttype).map((value) => ({
+        value,
+        label: formaterJournalpostType(value as Journalposttype),
+      })),
     },
     statuser: {
       type: 'combobox_multiple',
       label: 'Status',
-      options: Object.keys(Journalstatus).map((value) => ({ value, label: formaterJournalstatus(value as Journalstatus)})),
+      options: Object.keys(Journalstatus).map((value) => ({
+        value,
+        label: formaterJournalstatus(value as Journalstatus),
+      })),
     },
   });
 
@@ -126,7 +132,9 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
               <Table.DataCell>
                 {journalpost.journalposttype && formaterJournalpostType(journalpost.journalposttype)}
               </Table.DataCell>
-              <Table.DataCell>{journalpost.journalstatus && formaterJournalstatus(journalpost.journalstatus)}</Table.DataCell>
+              <Table.DataCell>
+                {journalpost.journalstatus && formaterJournalstatus(journalpost.journalstatus)}
+              </Table.DataCell>
               <Table.DataCell>{journalpost.sak?.fagsakId}</Table.DataCell>
               <Table.DataCell>
                 <HStack gap="2" wrap={false}>

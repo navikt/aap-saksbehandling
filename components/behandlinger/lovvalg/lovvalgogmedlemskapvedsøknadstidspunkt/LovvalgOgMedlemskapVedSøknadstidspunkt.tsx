@@ -68,11 +68,11 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
   const behandlingsReferanse = useBehandlingsReferanse();
   const { isLoading, status, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
-  const lovvalgBegrunnelseLabel = 'Vurder riktig lovvalg ved søknadstidspunkt'
-  const lovvalgsLandLabel = 'Hva er riktig lovvalgsland ved søknadstidspunkt?'
-  const annetLovvalgslandMedAvtaleLabel = 'Velg land som vi vurderer som lovvalgsland'
-  const medlemskapBegrunnelseLabel = 'Vurder brukerens medlemskap på søknadstidspunktet'
-  const medlemAvFolkeTrygdenVedSøknadstidspunktLabel = 'Var brukeren medlem av folketrygden ved søknadstidspunktet?'
+  const lovvalgBegrunnelseLabel = 'Vurder riktig lovvalg ved søknadstidspunkt';
+  const lovvalgsLandLabel = 'Hva er riktig lovvalgsland ved søknadstidspunkt?';
+  const annetLovvalgslandMedAvtaleLabel = 'Velg land som vi vurderer som lovvalgsland';
+  const medlemskapBegrunnelseLabel = 'Vurder brukerens medlemskap på søknadstidspunktet';
+  const medlemAvFolkeTrygdenVedSøknadstidspunktLabel = 'Var brukeren medlem av folketrygden ved søknadstidspunktet?';
 
   const { form, formFields } = useConfigForm<FormFields>(
     {

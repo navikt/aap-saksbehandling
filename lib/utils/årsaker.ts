@@ -1,6 +1,6 @@
 import { ÅrsakTilBehandling } from 'lib/types/types';
 
-export const formaterÅrsak = (årsak: ÅrsakTilBehandling) => {
+export const formaterÅrsak = (årsak: ÅrsakTilBehandling): string => {
   switch (årsak) {
     case 'MOTTATT_SØKNAD':
       return 'Søknad';
@@ -54,8 +54,12 @@ export const formaterÅrsak = (årsak: ÅrsakTilBehandling) => {
       return 'Klage trukket';
     case 'MOTTATT_KABAL_HENDELSE':
       return 'Mottatt svar fra Nav Klageinstans';
-    default:
-      return årsak;
+    case 'FRITAK_MELDEPLIKT':
+      return 'Fritak meldeplikt';
+    case 'REVURDER_MANUELL_INNTEKT':
+      return 'Revurder mannuell inntekt';
+    case 'OPPFØLGINGSOPPGAVE':
+      return 'Oppfølgingsoppgave';
   }
 };
 

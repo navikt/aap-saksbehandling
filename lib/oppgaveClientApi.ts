@@ -72,8 +72,8 @@ export async function hentMineOppgaverClient() {
 
 export async function avreserverOppgaveClient(oppgaver: number[]) {
   const body: AvreserverOppgaveDto = {
-    oppgaver: oppgaver
-  }
+    oppgaver: oppgaver,
+  };
   return clientFetch('/oppgave/api/oppgave/avreserver', 'POST', body);
 }
 export async function hentKøerForEnheterClient(enheter: string[]) {
