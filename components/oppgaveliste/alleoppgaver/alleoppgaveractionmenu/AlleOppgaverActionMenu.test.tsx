@@ -19,6 +19,7 @@ const oppgave: Oppgave = {
   status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
   versjon: 0,
   årsakerTilBehandling: [],
+  markeringer: []
 };
 
 describe('AlleOppgaverActionMenu', () => {

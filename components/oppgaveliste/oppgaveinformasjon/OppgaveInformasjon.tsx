@@ -5,6 +5,7 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import { Returboks } from '../returboks/Returboks';
 import { AdressebeskyttelseInfoBoks } from 'components/oppgaveliste/adressebeskyttelse/AdressebeskyttelseInfoBoks';
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
+import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 
 interface Props {
   oppgave: Oppgave;
@@ -22,6 +23,14 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
       {oppgave.returInformasjon && <Returboks oppgave={oppgave} />}
       {adressebeskyttelser.map((adressebeskyttelse) => (
         <AdressebeskyttelseInfoBoks key={adressebeskyttelse} adressebeskyttelseGrad={adressebeskyttelse} />
+      ))}
+      {oppgave.markeringer.map((markering) => (
+        <MarkeringInfoboks
+          markering={markering}
+          key={markering.markeringType}
+          referanse={oppgave.behandlingRef}
+          size={'xsmall'}
+        />
       ))}
     </HStack>
   );

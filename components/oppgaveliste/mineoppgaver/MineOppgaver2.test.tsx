@@ -23,6 +23,7 @@ const oppgaver: OppgavelisteResponse = {
       versjon: 0,
       årsakerTilBehandling: [],
       personIdent: '12345678910',
+      markeringer: []
     },
     {
       avklaringsbehovKode: '5004',
@@ -35,6 +36,7 @@ const oppgaver: OppgavelisteResponse = {
       versjon: 0,
       årsakerTilBehandling: [],
       personIdent: '10987654321',
+      markeringer: []
     },
   ],
   antallTotalt: 2,
