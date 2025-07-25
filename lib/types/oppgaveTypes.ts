@@ -25,9 +25,6 @@ export type SøkResponse = oppgave['schemas']['no.nav.aap.oppgave.SøkResponse']
 export type AvreserverOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.AvreserverOppgaveDto'];
 export type Markering = oppgave['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'];
 
-export type SøkResponse = oppgave['schemas']['no.nav.aap.oppgave.SøkResponse'];
-export type AvreserverOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.AvreserverOppgaveDto'];
-
 // typer fra enums
 export type OppgaveBehandlingstype = `${NoNavAapOppgaveOppgaveDtoBehandlingstype}`;
 export type OppgaveStatus = `${NoNavAapOppgaveOppgaveDtoStatus}`;
