@@ -25,7 +25,7 @@ export const KlagebehandlingVurderingKontorMedDataFetching = async ({
     <KlagebehandlingVurderingKontor
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       typeBehandling={typeBehandling}
     />
   );

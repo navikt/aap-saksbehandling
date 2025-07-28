@@ -9,7 +9,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { FullmektigGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { landMedTrygdesamarbeidInklNorge } from 'lib/utils/countries';
-import styles from './fullmektig.module.scss';
+import styles from './fullmektig.module.css';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -188,6 +188,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.harFullmektig} horizontalRadio />
       {harFullmektig === JaEllerNei.Ja && <FormField form={form} formField={formFields.idType} horizontalRadio />}

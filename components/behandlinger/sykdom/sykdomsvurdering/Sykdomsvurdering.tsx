@@ -237,6 +237,11 @@ export const Sykdomsvurdering = ({
       form.resetField('hoveddiagnose', {
         defaultValue: hoveddiagnoseDefaultOptions?.find((value) => value.value === diagnosegrunnlag?.hoveddiagnose),
       });
+      form.resetField('bidiagnose', {
+        defaultValue: bidiagnoserDeafultOptions?.filter((value) =>
+          diagnosegrunnlag?.bidiagnoser?.includes(value.value)
+        ),
+      });
     } else {
       form.resetField('hoveddiagnose');
       form.resetField('bidiagnose');

@@ -11,7 +11,7 @@ const vurdering: AutomatiskLovvalgOgMedlemskapVurdering = {
       kilde: ['SØKNAD'],
       opplysning: 'opplysning',
       resultat: true,
-      vurdertPeriode: "INNEVÆRENDE_OG_FORRIGE_MND"
+      vurdertPeriode: 'INNEVÆRENDE_OG_FORRIGE_MND',
     },
   ],
 };
@@ -23,6 +23,7 @@ describe('Automatisk vurdering av forutgående medlemskap', () => {
         setOverstyring={() => {}}
         visOverstyrKnapp={true}
         visOverstyringsBehov={false}
+        harYrkesskade={false}
       />
     );
     const button = screen.getByText('Overstyr');
@@ -36,6 +37,7 @@ describe('Automatisk vurdering av forutgående medlemskap', () => {
         setOverstyring={() => {}}
         visOverstyrKnapp={true}
         visOverstyringsBehov={true}
+        harYrkesskade={false}
       />
     );
     const button = screen.getByText('Angre overstyring');

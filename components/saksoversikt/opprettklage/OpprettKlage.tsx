@@ -16,6 +16,7 @@ import { v4 as uuid } from 'uuid';
 
 export interface KlageFormFields {
   kravMottatt: string;
+  beskrivelse: string;
 }
 
 export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
@@ -37,8 +38,9 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
       melding: {
         meldingType: 'KlageV0',
         kravMottatt: formaterDatoForBackend(parse(data.kravMottatt, 'dd.MM.yyyy', new Date())),
+        beskrivelse: data.beskrivelse,
         skalOppretteNyBehandling: true,
-      } as KlageV0,
+      } satisfies KlageV0,
     };
 
     setIsLoading(true);
@@ -58,6 +60,10 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
       type: 'date_input',
       label: 'Dato for mottatt klage',
       rules: { required: 'Kravdato for klage må settes' },
+    },
+    beskrivelse: {
+      type: 'textarea',
+      label: 'Beskrivelse av klagen',
     },
   });
 
@@ -82,6 +88,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
             <ExpansionCard.Content className={styles.content}>
               <VStack gap="4">
                 <FormField form={form} formField={formFields.kravMottatt} size="medium" />
+                <FormField form={form} formField={formFields.beskrivelse} size="medium" />
               </VStack>
             </ExpansionCard.Content>
           </ExpansionCard>

@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server';
-import { AvklaringsbehovReferanse } from 'lib/types/oppgaveTypes';
 import { avreserverOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
+import { AvreserverOppgaveDto } from 'lib/types/oppgaveTypes';
 
 export async function POST(req: NextRequest) {
   try {
-    const body: AvklaringsbehovReferanse = await req.json();
+    const body: AvreserverOppgaveDto = await req.json();
     const res = await avreserverOppgave(body);
     if (isError(res)) {
       logError(`/oppgave/api/avreserver`, res.apiException);

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { isLocal } from 'lib/utils/environment';
+import { isLocal, isProd } from 'lib/utils/environment';
 import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -20,6 +20,8 @@ const formaterBehandlingType = (behandlingtype: string) => {
       return 'Klage';
     case 'svar-fra-andreinstans':
       return 'Svar fra Nav Klageinstans';
+    case 'oppfølgingsbehandling':
+      return 'Oppfølgingsoppgave';
     default:
       return `Ukjent behandlingtype (${behandlingtype})`;
   }
@@ -69,6 +71,16 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
               onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
             >
               Opprett revurdering
+            </Button>
+          )}
+
+          {kanRevurdere && !isProd() && (
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/oppfolging`)}
+            >
+              Opprett oppfølgingsoppgave
             </Button>
           )}
         </HStack>

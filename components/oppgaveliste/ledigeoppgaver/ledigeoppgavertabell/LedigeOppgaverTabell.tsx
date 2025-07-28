@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { LedigeOppgaverMeny } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavermeny/LedigeOppgaverMeny';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
-import {ManglerTilgangModal} from "components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal";
+import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -21,11 +21,15 @@ interface Props {
 export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string>();
   const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
-      <ManglerTilgangModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} revalidateFunction={revalidateFunction} />
+      <ManglerTilgangModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        revalidateFunction={revalidateFunction}
+      />
       {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
       <TableStyled
         size={'small'}
@@ -52,9 +56,6 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
               Årsak
             </Table.ColumnHeader>
             <Table.HeaderCell>Oppgave</Table.HeaderCell>
-            <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={true}>
-              Oppg. opprettet
-            </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
@@ -106,7 +107,6 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
-              <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
 
               <Table.DataCell textSize={'small'}>
                 <OppgaveInformasjon oppgave={oppgave} />

@@ -1,20 +1,18 @@
 'use client';
 
-import {useState} from 'react';
-import {Behovstype} from 'lib/utils/form';
-import {useParams} from 'next/navigation';
-import {Historikk} from 'components/totrinnsvurdering/historikk/Historikk';
-import {Oppsummering} from 'components/totrinnsvurdering/oppsummering/Oppsummering';
+import { useState } from 'react';
+import { Behovstype } from 'lib/utils/form';
+import { useParams } from 'next/navigation';
+import { Historikk } from 'components/totrinnsvurdering/historikk/Historikk';
+import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsummering';
 import {
   AvklaringsbehovKode,
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
   ToTrinnsVurderingGrunn,
 } from 'lib/types/types';
-import {
-  ToTrinnsvurderingToggleGroup
-} from 'components/totrinnsvurdering/totrinnsvurderingtogglegroup/ToTrinnsvurderingToggleGroup';
-import {TotrinnsvurderingForm} from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
+import { ToTrinnsvurderingToggleGroup } from 'components/totrinnsvurdering/totrinnsvurderingtogglegroup/ToTrinnsvurderingToggleGroup';
+import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
 
@@ -97,6 +95,8 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'SYKDOM/#VURDER_SYKEPENGEERSTATNING';
     case Behovstype.AVKLAR_BARNETILLEGG_KODE:
       return 'BARNETILLEGG/#BARNETILLEGG';
+    case Behovstype.FASTSETT_YRKESSKADEINNTEKT:
+      return 'GRUNNLAG/#FASTSETT_YRKESSKADEINNTEKT';
     case Behovstype.AVKLAR_SONINGSFORRHOLD:
       return 'ET_ANNET_STED';
     case Behovstype.AVKLAR_HELSEINSTITUSJON:
@@ -118,9 +118,11 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
     case Behovstype.AVKLAR_SAMORDNING_UFORE:
       return 'SAMORDNING';
     case Behovstype.FASTSETT_MANUELL_INNTEKT:
-      return 'GRUNNLAG';
+      return 'GRUNNLAG/#FASTSETT_MANUELL_INNTEKT';
     case Behovstype.VURDER_RETTIGHETSPERIODE:
       return 'RETTIGHETSPERIODE';
+    case Behovstype.EFFEKTUER_11_7_KODE:
+      return 'UNDERVEIS';
     default:
       return 'SYKDOM';
   }

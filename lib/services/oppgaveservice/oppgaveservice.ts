@@ -1,7 +1,7 @@
 import {
-  AvklaringsbehovReferanse,
+  AvreserverOppgaveDto,
   Enhet,
-  Kø,
+  Kø, Markering,
   NesteOppgaveRequestBody,
   NesteOppgaveResponse,
   Oppgave,
@@ -72,9 +72,9 @@ export async function oppgaveSøk(
     enheter,
   });
 }
-export async function avreserverOppgave(avklaringsbehovReferanse: AvklaringsbehovReferanse) {
-  const url = `${oppgaveApiBaseURL}/avreserver-oppgave`;
-  return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', avklaringsbehovReferanse);
+export async function avreserverOppgave({ oppgaver }: AvreserverOppgaveDto) {
+  const url = `${oppgaveApiBaseURL}/avreserver-oppgaver`;
+  return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { oppgaver: oppgaver });
 }
 export async function velgNesteOppgave({ filterId, enheter }: NesteOppgaveRequestBody) {
   const url = `${oppgaveApiBaseURL}/neste-oppgave`;
@@ -122,3 +122,13 @@ export async function oppgaveTekstSøk(søketekst: string) {
   const url = `${oppgaveApiBaseURL}/sok`;
   return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
 }
+
+export const settMarkeringForBehandling = async (referanse: string, requestBody: Markering) => {
+  const url = `${oppgaveApiBaseURL}/${referanse}/ny-markering`;
+  return await apiFetch(url, oppgaveApiScope, 'POST', requestBody);
+};
+
+export const fjernMarkering = async (referanse: string, requestBody: Markering) => {
+  const url = `${oppgaveApiBaseURL}/${referanse}/fjern-markering`;
+  return await apiFetch(url, oppgaveApiScope, 'POST', requestBody);
+};

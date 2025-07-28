@@ -23,9 +23,14 @@ describe('Klage - vurdering nay', () => {
             innstilling: 'OMGJØR',
             vilkårSomOmgjøres: ['FOLKETRYGDLOVEN_11_5'],
             vilkårSomOpprettholdes: [],
-            vurdertAv: 'Ine',
-            opprettet: '2023-10-01T12:00:00Z',
+            vurdertAv: {
+              ident: 'ident',
+              dato: '2025-01-01',
+              ansattnavn: 'Ine',
+              enhetsnavn: 'Kontor',
+            },
           },
+          harTilgangTilÅSaksbehandle: true,
         }}
         readOnly={false}
         behandlingVersjon={0}

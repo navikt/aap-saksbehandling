@@ -3,7 +3,7 @@ import {
   AktivitetspliktHendelser,
   AlderGrunnlag,
   ArbeidsevneGrunnlag,
-  AutomatiskLovvalgOgMedlemskapVurdering,
+  AutomatiskLovvalgOgMedlemskapVurdering, AvklarOppfolgingsoppgaveGrunnlagResponse,
   BarnetilleggGrunnlag,
   BehandlendeEnhetGrunnlag,
   BehandlingFlytOgTilstand,
@@ -441,6 +441,13 @@ export const hentRefusjonGrunnlag = async (behandlingsReferanse: string) => {
 export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string): Promise<Blob | undefined> => {
   return apiFetchPdf(
     `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/forhandsvis`,
+    saksbehandlingApiScope
+  );
+};
+
+export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsReferanse: string) => {
+  return apiFetch<AvklarOppfolgingsoppgaveGrunnlagResponse>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/oppfolgingsoppgave`,
     saksbehandlingApiScope
   );
 };

@@ -1,6 +1,6 @@
 import { components as postmottak } from '@navikt/aap-postmottak-backend-typescript-types';
 import {
-  components as oppgave,
+  components as oppgave, NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
@@ -21,11 +21,14 @@ export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.
 export type NesteOppgaveResponse = oppgave['schemas']['no.nav.aap.oppgave.plukk.NesteOppgaveDto'];
 export type NesteOppgaveRequestBody = oppgave['schemas']['no.nav.aap.oppgave.plukk.FinnNesteOppgaveDto'];
 export type PlukkOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.plukk.PlukkOppgaveDto'];
-export type SøkResponse = oppgave['schemas']['no.nav.aap.oppgave.SøkResponse']
+export type SøkResponse = oppgave['schemas']['no.nav.aap.oppgave.SøkResponse'];
+export type AvreserverOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.AvreserverOppgaveDto'];
+export type Markering = oppgave['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'];
 
 // typer fra enums
 export type OppgaveBehandlingstype = `${NoNavAapOppgaveOppgaveDtoBehandlingstype}`;
 export type OppgaveStatus = `${NoNavAapOppgaveOppgaveDtoStatus}`;
+export type MarkeringType = `${NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType}`;
 
 export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | PostmottakAvklaringsbehovKode;
 export type FilterTidsEnhet = 'DAG' | 'UKE' | 'MÅNED' | 'ÅR';

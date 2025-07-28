@@ -8,7 +8,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
-import { hjemmelalternativer } from 'lib/utils/hjemmel';
+import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap } from 'lib/utils/hjemmel';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormField } from 'components/form/FormField';
 
@@ -55,7 +55,17 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon }: P
       vilkårSomSkalOmgjøres: {
         type: 'combobox_multiple',
         label: 'Hvilke vilkår skal omgjøres?',
-        rules: { required: 'Du må velge hvilke vilkår som skal omgjøres' },
+        rules: {
+          required: 'Du velge hvilke påklagde vilkår som skal omgjøres',
+          validate: (value) => {
+            const ikkeImplementerteHjemler = getValgteHjemlerSomIkkeErImplementert(value);
+            if (ikkeImplementerteHjemler.length > 0) {
+              const hjemmelnavn = ikkeImplementerteHjemler.map((hjemmel) => hjemmelMap[hjemmel]).join(', ');
+              return `Det er ikke mulig å opprette revurdering på ${hjemmelnavn} enda. Sett klagen på vent og ta kontakt med team AAP.`;
+            }
+            return true;
+          },
+        },
         options: hjemmelalternativer,
         defaultValue: grunnlag?.gjeldendeVurdering?.vilkårSomOmgjøres,
       },
