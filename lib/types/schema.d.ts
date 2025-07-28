@@ -7813,7 +7813,7 @@ export interface components {
       'bel\u00F8p': number;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
-      ytelse: 'TILTAKSPENGER' | 'OMSTILLINGSSTØNAD' | 'OVERGANGSSTØNAD' | 'DAGPENGER' | 'BARNEPENSJON';
+      ytelse: 'SYKEPENGER' | 'TILTAKSPENGER' | 'OMSTILLINGSSTØNAD' | 'OVERGANGSSTØNAD' | 'DAGPENGER' | 'BARNEPENSJON';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningArbeidsgiverGrunnlagDTO': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -8814,7 +8814,7 @@ export interface components {
       'bel\u00F8p': number;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
-      ytelse: 'TILTAKSPENGER' | 'OMSTILLINGSSTØNAD' | 'OVERGANGSSTØNAD' | 'DAGPENGER' | 'BARNEPENSJON';
+      ytelse: 'SYKEPENGER' | 'TILTAKSPENGER' | 'OMSTILLINGSSTØNAD' | 'OVERGANGSSTØNAD' | 'DAGPENGER' | 'BARNEPENSJON';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.arbeidsgiver.SamordningArbeidsgiverVurderingDTO': {
       /**
