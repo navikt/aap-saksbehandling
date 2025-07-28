@@ -19,7 +19,7 @@ export interface OppfølgingsoppgaveFormFields {
   datoForOppfølging: string;
   hvaSkalFølgesOpp: string;
   hvemSkalFølgeOpp: ['NAY', 'Lokalkontor'];
-  reserverTilMeg: boolean;
+  reserverTilMeg: string[];
 }
 
 export const OpprettOppfølgingsBehandling = ({
@@ -48,7 +48,7 @@ export const OpprettOppfølgingsBehandling = ({
         meldingType: 'OppfølgingsoppgaveV0',
         datoForOppfølging: formaterDatoForBackend(parse(data.datoForOppfølging, 'dd.MM.yyyy', new Date())),
         hvaSkalFølgesOpp: data.hvaSkalFølgesOpp,
-        reserverTilBruker: data.reserverTilMeg ? brukerInformasjon.NAVident : undefined,
+        reserverTilBruker: data.reserverTilMeg.length > 0 ? brukerInformasjon.NAVident : undefined,
         hvemSkalFølgeOpp: 'NasjonalEnhet',
       } satisfies OppfølgingsoppgaveV0,
     };
