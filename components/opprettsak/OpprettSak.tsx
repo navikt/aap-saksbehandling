@@ -17,6 +17,7 @@ import { parse } from 'date-fns';
 interface Barn {
   fodselsdato: string;
   harRelasjon: string;
+  skalFinnesIPDL: string;
 }
 
 interface Inntekt {
@@ -76,11 +77,11 @@ export const OpprettSak = () => {
     },
     barn: {
       type: 'fieldArray',
-      defaultValue: [{ fodselsdato: '2015', harRelasjon: 'folkeregistrertBarn' }],
+      defaultValue: [{ fodselsdato: '2015', harRelasjon: 'folkeregistrertBarn', skalFinnesIPDL: 'true' }],
     },
     inntekter: {
       type: 'fieldArray',
-      defaultValue: [{ år: '2015', beløp: '200000' }],
+      defaultValue: [{ år: '2024', beløp: '200000' }],
     },
     uføre: {
       type: 'number',
@@ -127,6 +128,7 @@ export const OpprettSak = () => {
               return {
                 fodselsdato: formaterDatoForBackend(new Date(barn.fodselsdato)),
                 harRelasjon: barn.harRelasjon === 'folkeregistrertBarn',
+                skalFinnesIPDL: barn.skalFinnesIPDL == 'true',
               };
             }) || [],
           institusjoner: {

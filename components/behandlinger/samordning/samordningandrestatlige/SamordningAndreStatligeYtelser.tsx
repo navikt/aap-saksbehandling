@@ -26,7 +26,6 @@ export interface AnnenStatligYtelse {
   ytelse?: SamordningAndreStatligeYtelserYtelse;
   fom?: string;
   tom?: string;
-  beløp?: number;
 }
 export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, grunnlag }: Props) => {
   const { form, formFields } = useConfigForm<SamordningAndreStatligeYtelserFormFields>(
@@ -43,7 +42,6 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
           ytelse: vurdering.ytelse,
           fom: formaterDatoForFrontend(vurdering.periode.fom),
           tom: formaterDatoForFrontend(vurdering.periode.tom),
-          beløp: vurdering.beløp,
         })),
       },
     },
@@ -65,7 +63,6 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
             begrunnelse: data.begrunnelse,
             vurderingPerioder: data.vurderteSamordninger.map((vurdertSamordning) => ({
               ytelse: vurdertSamordning.ytelse!,
-              beløp: vurdertSamordning.beløp!,
               periode: {
                 fom: formaterDatoForBackend(parse(vurdertSamordning.fom!, 'dd.MM.yyyy', new Date())),
                 tom: formaterDatoForBackend(parse(vurdertSamordning.tom!, 'dd.MM.yyyy', new Date())),
