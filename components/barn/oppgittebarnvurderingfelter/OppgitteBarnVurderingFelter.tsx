@@ -11,12 +11,12 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
-  ident: string;
+  ident: string | null | undefined;
   barneTilleggIndex: number;
   vurderingIndex: number;
   readOnly: boolean;
   form: UseFormReturn<BarnetilleggFormFields>;
-  fødselsdato: string;
+  fødselsdato: string | null | undefined;
 }
 
 export const OppgitteBarnVurderingFelter = ({
@@ -69,6 +69,10 @@ export const OppgitteBarnVurderingFelter = ({
             validate: {
               validerDato: (value) => validerDato(value as string),
               validerIkkeFørDato: (value) => {
+                if (!fødselsdato) {
+                  return;
+                }
+
                 const erFørFødselsdato = erDatoFoerDato(value as string, formaterDatoForFrontend(fødselsdato));
 
                 return erFørFødselsdato ? `Dato kan ikke være før fødselsdato (${fødselsdato})` : true;
