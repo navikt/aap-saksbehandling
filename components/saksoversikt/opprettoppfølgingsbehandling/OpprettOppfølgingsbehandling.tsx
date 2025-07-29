@@ -18,7 +18,7 @@ import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 export interface OppfølgingsoppgaveFormFields {
   datoForOppfølging: string;
   hvaSkalFølgesOpp: string;
-  hvemSkalFølgeOpp: ['NAY', 'Lokalkontor'];
+  hvemSkalFølgeOpp: 'NasjonalEnhet' | 'Lokalkontor';
   reserverTilMeg: string[];
 }
 
@@ -49,7 +49,7 @@ export const OpprettOppfølgingsBehandling = ({
         datoForOppfølging: formaterDatoForBackend(parse(data.datoForOppfølging, 'dd.MM.yyyy', new Date())),
         hvaSkalFølgesOpp: data.hvaSkalFølgesOpp,
         reserverTilBruker: data.reserverTilMeg.length > 0 ? brukerInformasjon.NAVident : undefined,
-        hvemSkalFølgeOpp: 'NasjonalEnhet',
+        hvemSkalFølgeOpp: data.hvemSkalFølgeOpp,
       } satisfies OppfølgingsoppgaveV0,
     };
 
@@ -89,7 +89,7 @@ export const OpprettOppfølgingsBehandling = ({
       options: [
         {
           label: 'NAY',
-          value: 'NAY',
+          value: 'NasjonalEnhet',
         },
         { label: 'Lokalkontor', value: 'Lokalkontor' },
       ],

@@ -89,7 +89,7 @@ describe('opprett oppfølgingsbehandling', () => {
     await user.type(datotekstboks, '13.02.2100');
 
     await user.click(screen.getByRole('combobox', { name: 'Hvem følger opp?' }));
-    await user.click(screen.getByRole('option', { name: 'NAY' }));
+    await user.click(screen.getByRole('option', { name: 'Lokalkontor' }));
 
     const checkbox = screen.getByRole('checkbox', { name: 'Reserver oppgaven til meg' });
     await user.click(checkbox);
@@ -105,7 +105,7 @@ describe('opprett oppfølgingsbehandling', () => {
 
     expect(jsonBody.melding.meldingType).toBe('OppfølgingsoppgaveV0');
     expect(jsonBody.melding.datoForOppfølging).toBe('2100-02-13');
-    expect(jsonBody.melding.hvemSkalFølgeOpp).toBe('NasjonalEnhet');
+    expect(jsonBody.melding.hvemSkalFølgeOpp).toBe('Lokalkontor');
     expect(jsonBody.melding.reserverTilBruker).toBeUndefined();
   });
 });
