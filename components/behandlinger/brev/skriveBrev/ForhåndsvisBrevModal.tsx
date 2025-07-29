@@ -16,23 +16,27 @@ export const ForhåndsvisBrevModal = ({ isOpen, brevbestillingReferanse, onClose
 
   useEffect(() => {
     // Unngår å gjøre kallet når modalen er lukket.
-    if (isOpen) {
-      const hentDokument = async (brevbestillingReferanse: string) => {
-        fetch(`/saksbehandling/api/brev/${brevbestillingReferanse}/forhandsvis/`, { method: 'GET' })
-          .then((res) => res.blob())
-          .then((blob: Blob) => {
-            let reader = new FileReader();
-            reader.readAsDataURL(blob);
-            new Promise((res) => {
-              reader.onloadend = function () {
-                res(reader.result);
-              };
-            }).then((dataUri) => setDataUri(dataUri as string));
-          });
-        setIsLoading(false);
-      };
-      hentDokument(brevbestillingReferanse);
-    }
+    if (!isOpen) return;
+
+    let objectURL: string | undefined;
+    const hentDokument = async (brevbestillingReferanse: string) => {
+      const blob = await fetch(`/saksbehandling/api/brev/${brevbestillingReferanse}/forhandsvis/`, {
+        method: 'GET',
+      }).then((res) => res.blob());
+
+      objectURL = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+      setDataUri(objectURL);
+
+      setIsLoading(false);
+    };
+
+    hentDokument(brevbestillingReferanse);
+
+    return () => {
+      if (objectURL) {
+        URL.revokeObjectURL(objectURL);
+      }
+    };
   }, [brevbestillingReferanse, isOpen]);
 
   return (
