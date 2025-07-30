@@ -1667,10 +1667,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-breveditor-css@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@navikt/aap-breveditor-css@npm:0.3.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor-css%2F0.3.1%2Fdc43c7d150825e4c8078e46e0bb22fb578ee222e"
-  checksum: 10c0/68250995e9aa0975f63e97d5ed97190c60787158a69f49654862852f53557c0ee976093cc7252f3d72785f64bede4fe2105043674ee409fb0bed3016ec9b8d80
+"@navikt/aap-breveditor-css@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@navikt/aap-breveditor-css@npm:0.4.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor-css%2F0.4.0%2F05fe9228f5a007fc0ee6a21afb0eeb5261ffaa7d"
+  checksum: 10c0/707c164c8f91c944b8085d526bd3200035abbaf44e81362a8f3ee73c292792d9213f447c73a7f286348998a883e1488749c2fee9a3021059dbb6818f25fcd187
   languageName: node
   linkType: hard
 
@@ -3739,7 +3739,7 @@ __metadata:
     "@eslint/js": "npm:^9.32.0"
     "@grafana/faro-web-sdk": "npm:^1.19.0"
     "@navikt/aap-breveditor": "npm:^0.4.2"
-    "@navikt/aap-breveditor-css": "npm:^0.3.1"
+    "@navikt/aap-breveditor-css": "npm:^0.4.0"
     "@navikt/aap-felles-prettier": "npm:^5.3.0"
     "@navikt/aap-oppgave-typescript-types": "npm:0.0.310"
     "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.332"
