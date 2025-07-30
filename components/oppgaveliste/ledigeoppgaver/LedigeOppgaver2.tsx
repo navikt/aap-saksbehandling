@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from 'react';
 import useSWR from 'swr';
-import { BodyShort, Box, Button, HStack, Label, Skeleton, Switch, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
 import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { byggKelvinURL, queryParamsArray } from 'lib/utils/request';
@@ -24,6 +24,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import styles from './LedigeOppgaver2.module.css';
 import { NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper } from '@navikt/aap-oppgave-typescript-types';
 import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
+import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 
 interface Props {
   enheter: Enhet[];
@@ -79,19 +80,16 @@ export const LedigeOppgaver2 = ({ enheter }: Props) => {
 
   const behandlingOpprettetTom = form.watch('behandlingOpprettetTom');
   const behandlingOpprettetFom = form.watch('behandlingOpprettetFom');
-  const behandlingstyper = form.watch('behandlingstyper') || [];
-  const statuser = form.watch('statuser') || [];
-  const årsaker = form.watch('årsaker') || [];
-  const avklaringsbehov = form.watch('avklaringsbehov') || [];
 
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
     useLedigeOppgaver([aktivEnhet], veilederFilter === 'veileder', aktivKøId, {
-      behandlingstyper: behandlingstyper as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
-      tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : null,
-      fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : null,
-      statuser: statuser,
-      årsaker: årsaker,
-      avklaringsbehovKoder: avklaringsbehov,
+      behandlingstyper: (form.watch('behandlingstyper') ||
+        []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
+      tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
+      fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
+      statuser: form.watch('statuser') || [],
+      årsaker: form.watch('årsaker') || [],
+      avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
     });
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
@@ -138,7 +136,7 @@ export const LedigeOppgaver2 = ({ enheter }: Props) => {
   return (
     <VStack gap={'5'}>
       <Box borderColor="border-divider" borderWidth="1" borderRadius={'xlarge'}>
-        <VStack gap={'4'}>
+        <VStack>
           <HStack
             justify={'space-between'}
             align={'end'}
@@ -146,32 +144,24 @@ export const LedigeOppgaver2 = ({ enheter }: Props) => {
             paddingBlock={'2'}
             style={{ borderBottom: '1px solid #071A3636' }}
           >
-            <HStack gap={'4'}>
-              <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
-              <KøSelect
-                label={'Velg kø'}
-                køer={oppgaveKøer || []}
-                aktivKøId={aktivKøId}
-                valgtKøListener={oppdaterKøId}
-              />
-              <VStack justify={'end'}>
-                <Switch
-                  value="veileder"
-                  checked={veilederFilter === 'veileder'}
-                  onChange={(e) => setVeilederFilter((prevState) => (prevState ? '' : e.target.value))}
-                  size={'small'}
-                >
-                  Vis kun oppgaver jeg er veileder på
-                </Switch>
-              </VStack>
+            <HStack gap={'4'} align={'end'}>
+              <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} setAktivEnhet={oppdaterEnhet} />
+              <KøSelect label={'Velg kø'} køer={oppgaveKøer || []} aktivKøId={aktivKøId} setAktivKø={oppdaterKøId} />
+              <Switch
+                value="veileder"
+                checked={veilederFilter === 'veileder'}
+                onChange={(e) => setVeilederFilter((prevState) => (prevState ? '' : e.target.value))}
+                size={'small'}
+              >
+                Vis kun oppgaver jeg er veileder på
+              </Switch>
             </HStack>
-            <VStack justify={'center'}>
-              <Button size="medium" onClick={() => plukkOgGåTilOppgave()} loading={isPending}>
-                Behandle neste oppgave
-              </Button>
-            </VStack>
+
+            <Button size="medium" onClick={() => plukkOgGåTilOppgave()} loading={isPending}>
+              Behandle neste oppgave
+            </Button>
           </HStack>
-          <HStack gap={'2'} padding={'4'}>
+          <HStack gap={'2'} paddingInline={'4'} paddingBlock={'2'}>
             <Label as="p" size={'small'}>
               Beskrivelse av køen:
             </Label>
@@ -188,17 +178,7 @@ export const LedigeOppgaver2 = ({ enheter }: Props) => {
           kanFiltrere={aktivKøId === 27}
           onFiltrerClick={() => setAktivKøId(ALLE_OPPGAVER_ID)}
         />
-        {isLoading && (
-          <VStack gap={'1'}>
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-          </VStack>
-        )}
+        {isLoading && <TabellSkeleton />}
 
         {!isLoading &&
           (oppgaver.length > 0 ? (
