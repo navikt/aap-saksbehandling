@@ -53,10 +53,12 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
     defaultValues: {
       knyttTilSak: mapVurderingTilValgtOption(grunnlag.vurdering),
       journalpostTittel: grunnlag.journalposttittel || '',
-      avsenderMottaker: {
-        id: grunnlag.avsenderMottaker?.id || '',
-        navn: grunnlag.avsenderMottaker?.navn || '',
-      },
+      avsenderMottaker: grunnlag.kanEndreAvsenderMottaker
+        ? {
+            id: grunnlag.avsenderMottaker?.id || '',
+            navn: grunnlag.avsenderMottaker?.navn || '',
+          }
+        : undefined,
       dokumenter: grunnlag.dokumenter.map((dok) => ({
         dokumentInfoId: dok.dokumentInfoId.dokumentInfoId,
         tittel: dok.tittel || '',
@@ -82,11 +84,13 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
           førPåGenerellSak: data.knyttTilSak === GENERELL,
           saksnummer: data.knyttTilSak === NY || data.knyttTilSak === GENERELL ? null : data.knyttTilSak,
           journalposttittel: data.journalpostTittel,
-          avsenderMottaker: {
-            id: data.avsenderMottaker.id,
-            idType: 'FNR',
-            navn: data.avsenderMottaker.navn,
-          },
+          avsenderMottaker: grunnlag.kanEndreAvsenderMottaker
+            ? {
+                id: data.avsenderMottaker.id,
+                idType: 'FNR',
+                navn: data.avsenderMottaker.navn,
+              }
+            : undefined,
           dokumenter: data.dokumenter,
         },
         // @ts-ignore
@@ -146,30 +150,32 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
             ))}
           </VStack>
 
-          <VStack gap="2">
-            <Label size="small">Avsender</Label>
-            <HStack gap="2">
+          {grunnlag.kanEndreAvsenderMottaker && (
+            <VStack gap="2">
+              <Label size="small">Avsender</Label>
+              <HStack gap="2">
+                <TextFieldToggle
+                  form={form}
+                  rules={{
+                    required: 'Fødselsnummer må være satt',
+                    minLength: { value: 11, message: 'Fødselsnummer må bestå av 11 siffer' },
+                    maxLength: { value: 11, message: 'Fødselsnummer må bestå av 11 siffer' },
+                  }}
+                  name={'avsenderMottaker.id'}
+                  label="Fødselsnummer"
+                  readOnly={readOnly}
+                />
+              </HStack>
+
               <TextFieldToggle
                 form={form}
-                rules={{
-                  required: 'Fødselsnummer må være satt',
-                  minLength: { value: 11, message: 'Fødselsnummer må bestå av 11 siffer' },
-                  maxLength: { value: 11, message: 'Fødselsnummer må bestå av 11 siffer' },
-                }}
-                name={'avsenderMottaker.id'}
-                label="Fødselsnummer"
+                rules={{ required: 'Navn må være satt' }}
+                name={'avsenderMottaker.navn'}
+                label="Navn"
                 readOnly={readOnly}
               />
-            </HStack>
-
-            <TextFieldToggle
-              form={form}
-              rules={{ required: 'Navn må være satt' }}
-              name={'avsenderMottaker.navn'}
-              label="Navn"
-              readOnly={readOnly}
-            />
-          </VStack>
+            </VStack>
+          )}
 
           {error && <Alert variant="error">{error.message}</Alert>}
 
