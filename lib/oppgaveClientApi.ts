@@ -4,8 +4,8 @@ import {
   NesteOppgaveRequestBody,
   NesteOppgaveResponse,
   Oppgave,
+  OppgavelisteRequest,
   OppgavelisteResponse,
-  Paging,
   PlukkOppgaveDto,
 } from './types/oppgaveTypes';
 import {
@@ -50,20 +50,8 @@ export async function årsakTilBehandlingClient(url: string) {
 }
 
 // oppgave
-export async function hentOppgaverClient(
-  filterId: number,
-  enheter: string[],
-  veileder: boolean,
-  paging: Paging,
-  kunLedigeOppgaver?: boolean
-) {
-  return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', {
-    filterId,
-    enheter,
-    veileder,
-    paging,
-    kunLedigeOppgaver,
-  });
+export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
+  return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', oppgavelisteRequest);
 }
 
 export async function hentMineOppgaverClient() {

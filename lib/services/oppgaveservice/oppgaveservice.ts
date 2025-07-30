@@ -1,7 +1,8 @@
 import {
   AvreserverOppgaveDto,
   Enhet,
-  Kø, Markering,
+  Kø,
+  Markering,
   NesteOppgaveRequestBody,
   NesteOppgaveResponse,
   Oppgave,
@@ -25,22 +26,9 @@ export const hentKøer = async (enheter: string[]) => {
   return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET');
 };
 
-export const hentOppgaverForFilter = async (
-  filterId: number,
-  enheter: string[],
-  veileder: boolean,
-  paging: Paging,
-  kunLedigeOppgaver?: boolean
-) => {
-  const payload: OppgavelisteRequest = {
-    filterId,
-    enheter,
-    veileder,
-    paging,
-    kunLedigeOppgaver,
-  };
+export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
   const url = `${oppgaveApiBaseURL}/oppgaveliste`;
-  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', payload);
+  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', data);
 };
 
 //TODO: ubrukt? ser ingen steder som kaller route
