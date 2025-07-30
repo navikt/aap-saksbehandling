@@ -2,20 +2,14 @@
 
 import { BodyShort, Box, Button, Chips, Detail, HGrid, HStack, VStack } from '@navikt/ds-react';
 
-import styles from './Filtrering.module.css';
+import styles from 'components/oppgaveliste/filtrering/Filtrering.module.css';
 import { useState } from 'react';
 import { FilterIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver2';
-import {
-  mapBehovskodeTilBehovstype,
-  mapStatusTilTekst,
-  mapTilOppgaveBehandlingstypeTekst,
-} from 'lib/utils/oversettelser';
-import { formaterÅrsak } from 'lib/utils/årsaker';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -24,64 +18,10 @@ interface Props {
   antallOppgaverIFilter?: number;
 }
 
-export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppgaverTotalt }: Props) => {
+export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter, antallOppgaverTotalt }: Props) => {
   const [visFilter, setVisFilter] = useState(false);
 
-  const aktiveFilter: { key: keyof FormFieldsFilter; value: string; label: string }[] = [];
-
-  Object.entries(form.watch()).forEach(([key, value]) => {
-    if (key === 'behandlingstyper' && Array.isArray(value)) {
-      aktiveFilter.push(
-        ...value.map((value) => {
-          return {
-            key: key as keyof FormFieldsFilter,
-            label: mapTilOppgaveBehandlingstypeTekst(value),
-            value: value,
-          };
-        })
-      );
-    }
-
-    if (key === 'årsaker' && Array.isArray(value)) {
-      aktiveFilter.push(
-        ...value.map((value) => {
-          return { key: key as keyof FormFieldsFilter, value: value, label: formaterÅrsak(value) };
-        })
-      );
-    }
-
-    if (key === 'avklaringsbehov' && Array.isArray(value)) {
-      aktiveFilter.push(
-        ...value.map((value) => {
-          return { key: key as keyof FormFieldsFilter, value: value, label: mapBehovskodeTilBehovstype(value) };
-        })
-      );
-    }
-
-    if (key === 'statuser' && Array.isArray(value)) {
-      aktiveFilter.push(
-        ...value.map((value) => {
-          return { key: key as keyof FormFieldsFilter, value: value, label: mapStatusTilTekst(value) };
-        })
-      );
-    }
-
-    if (key === 'behandlingOpprettetFom' && value) {
-      aktiveFilter.push({
-        key: key as keyof FormFieldsFilter,
-        value: value,
-        label: `Behandling opprettet fra: ${formaterDatoForFrontend(value)}`,
-      });
-    }
-
-    if (key === 'behandlingOpprettetTom' && value) {
-      aktiveFilter.push({
-        key: key as keyof FormFieldsFilter,
-        value: value,
-        label: `Behandling opprettet til: ${formaterDatoForFrontend(value)}`,
-      });
-    }
-  });
+  const aktiveFilter = aktiveFiltreringer(form.watch());
 
   return (
     <div className={styles.wrapper}>

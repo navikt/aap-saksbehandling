@@ -4,7 +4,7 @@ import { Alert, BodyShort, Skeleton, VStack } from '@navikt/ds-react';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
-import { Filtrering } from 'components/oppgaveliste/filtrering/Filtrering';
+import { MineOppgaverFiltrering } from 'components/oppgaveliste/filtrering/mineoppgaverfiltrering/MineOppgaverFiltrering';
 import { useWatch } from 'react-hook-form';
 
 import styles from './MineOppgaver2.module.css';
@@ -73,7 +73,7 @@ export const MineOppgaver2 = () => {
 
   return (
     <div className={styles.tabell}>
-      <Filtrering
+      <MineOppgaverFiltrering
         form={form}
         formFields={formFields}
         antallOppgaverTotalt={oppgaver?.length}
