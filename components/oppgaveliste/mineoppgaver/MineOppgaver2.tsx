@@ -12,10 +12,9 @@ import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { useFiltrerteOppgaver } from './MineOppgaverHook';
 import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
 import { alleÅrsakerTilBehandlingOptions } from 'lib/utils/årsakerTilBehandling';
-import { NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper } from '@navikt/aap-oppgave-typescript-types';
 
 export interface FormFieldsFilter {
-  behandlingstyper?: NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[];
+  behandlingstyper?: string[];
   behandlingOpprettetFom?: Date;
   behandlingOpprettetTom?: Date;
   årsaker?: string[];

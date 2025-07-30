@@ -10,7 +10,6 @@ import {
   OppgaveBehandlingstype,
   OppgavelisteRequest,
   OppgavelisteResponse,
-  Paging,
   SøkResponse,
 } from 'lib/types/oppgaveTypes';
 import { queryParamsArray } from 'lib/utils/request';
