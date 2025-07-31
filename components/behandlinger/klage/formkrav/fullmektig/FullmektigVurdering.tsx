@@ -10,6 +10,8 @@ import { FullmektigGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import styles from './fullmektig.module.css';
 import { landMedTrygdesamarbeidInklNorgeAlpha2 } from 'lib/utils/countries';
+import { erGyldigFødselsnummer } from 'lib/utils/fnr';
+import { erGyldigOrganisasjonsnummer } from 'lib/utils/orgnr';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -60,11 +62,14 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       },
       fnr: {
         type: 'text',
-        label: 'Fnr',
+        label: 'Fødselsnummer',
         rules: {
           required: 'Du må skrive fødselsnummer',
-          validate: (value: string | undefined) =>
-            value?.length !== 11 ? 'Fødselsnummeret må være 11 siffer' : undefined,
+          validate: (value: string | undefined) => {
+            if (value?.length !== 11) return 'Fødselsnummeret må være 11 siffer';
+            else if (erGyldigFødselsnummer(value)) return undefined;
+            else return 'Ugyldig fødselsnummer';
+          },
         },
         defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
       },
@@ -73,7 +78,11 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
         label: 'Org.nr',
         rules: {
           required: 'Du må skrive Org.nr',
-          validate: (value: string | undefined) => (value?.length !== 9 ? 'Org.nr. må være 9 siffer' : undefined),
+          validate: (value: string | undefined) => {
+            if (value?.length !== 9) return 'Org.nr. må være 9 siffer';
+            else if (erGyldigOrganisasjonsnummer(value)) return undefined;
+            else return 'Ugyldig organisasjonsnummer';
+          },
         },
         defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
       },
