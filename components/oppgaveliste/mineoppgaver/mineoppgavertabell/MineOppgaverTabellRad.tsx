@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { formaterÅrsak } from 'lib/utils/årsaker';
+import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
-import { ÅrsakTilBehandling } from 'lib/types/types';
+import { Vurderingsbehov } from 'lib/types/types';
 import { memo } from 'react';
 
 const OppgaveRad = ({
@@ -42,10 +42,12 @@ const OppgaveRad = ({
       <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
       <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
         <Tooltip
-          content={oppgave.årsakerTilBehandling.map((årsak) => formaterÅrsak(årsak as ÅrsakTilBehandling)).join(', ')}
+          content={oppgave.årsakerTilBehandling
+            .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
+            .join(', ')}
         >
           <BodyShort truncate size={'small'}>
-            {oppgave.årsakerTilBehandling.map((årsak) => formaterÅrsak(årsak as ÅrsakTilBehandling)).join(', ')}
+            {oppgave.årsakerTilBehandling.map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov)).join(', ')}
           </BodyShort>
         </Tooltip>
       </Table.DataCell>

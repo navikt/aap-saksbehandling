@@ -14,7 +14,7 @@ import {
   mapStatusTilTekst,
   mapTilOppgaveBehandlingstypeTekst,
 } from 'lib/utils/oversettelser';
-import { formaterÅrsak } from 'lib/utils/årsaker';
+import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
@@ -45,7 +45,7 @@ export const Filtrering = ({ form, formFields, antallOppgaverIFilter, antallOppg
     if (key === 'årsaker' && Array.isArray(value)) {
       aktiveFilter.push(
         ...value.map((value) => {
-          return { key: key as keyof FormFieldsFilter, value: value, label: formaterÅrsak(value) };
+          return { key: key as keyof FormFieldsFilter, value: value, label: formaterVurderingsbehov(value) };
         })
       );
     }

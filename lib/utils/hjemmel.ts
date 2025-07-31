@@ -1,4 +1,4 @@
-import { Hjemmel, ÅrsakTilBehandling } from 'lib/types/types';
+import { Hjemmel, Vurderingsbehov } from 'lib/types/types';
 
 export const getValgteHjemlerSomIkkeErImplementert = (value: string | Hjemmel[] | undefined): Hjemmel[] => {
   if (!value || !Array.isArray(value)) return [];
@@ -68,7 +68,7 @@ export const hjemmelalternativer = Object.entries(hjemmelMap).map(([k, v]) => ({
   label: v,
 }));
 
-export const hjemmelÅrsakMapMap: Partial<Record<Hjemmel, ÅrsakTilBehandling>> = {
+export const hjemmelÅrsakMapMap: Partial<Record<Hjemmel, Vurderingsbehov>> = {
   FOLKETRYGDLOVEN_11_5: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',
   FOLKETRYGDLOVEN_11_6: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',
 };

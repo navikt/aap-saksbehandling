@@ -11,7 +11,7 @@ import styles from './MineOppgaver2.module.css';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { useFiltrerteOppgaver } from './MineOppgaverHook';
 import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
-import { alleÅrsakerTilBehandlingOptions } from 'lib/utils/årsakerTilBehandling';
+import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];
@@ -43,7 +43,7 @@ export const MineOppgaver2 = () => {
     årsaker: {
       type: 'combobox_multiple',
       label: 'Årsak',
-      options: alleÅrsakerTilBehandlingOptions,
+      options: alleVurderingsbehovOptions,
       defaultValue: [],
     },
     avklaringsbehov: {
