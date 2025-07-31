@@ -240,7 +240,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       case 'orgnr':
         return { ident: fields.orgnr!!, type: 'ORGNR' };
       case 'utl_orgnr':
-        return { ident: fields.utlOrgnr!!, type: 'UTL_ORGNR' };
+        return { ident: fields.utlOrgnr!!, type: 'UTL_ORG' };
       case 'fnr':
         return { ident: fields.fnr!!, type: 'FNR_DNR' };
     }
@@ -257,7 +257,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
     if (identType === 'FNR_DNR') {
       return 'fnr';
     }
-    if (identType === 'UTL_ORGNR') {
+    if (identType === 'UTL_ORG') {
       return 'utl_orgnr';
     }
     if (identType === 'ORGNR') {
@@ -274,4 +274,4 @@ function skalFylleInnNavnOgAdresse(idType: string): boolean {
   return idType === 'navnOgAdresse' || idType === 'utl_orgnr';
 }
 
-type IdentType = 'FNR_DNR' | 'ORGNR' | 'UTL_ORGNR';
+type IdentType = 'FNR_DNR' | 'ORGNR' | 'UTL_ORG';
