@@ -8,8 +8,8 @@ import { FormEvent } from 'react';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { FullmektigGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { landMedTrygdesamarbeidInklNorge } from 'lib/utils/countries';
 import styles from './fullmektig.module.css';
+import { landMedTrygdesamarbeidInklNorgeAlpha2 } from 'lib/utils/countries';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -126,13 +126,13 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
           required: 'Du må velge land',
           validate: {
             utenlandskOrgnr: (value, formValues) => {
-              if (value === 'NOR' && formValues.idType === 'utl_orgnr') {
+              if (value === 'NO' && formValues.idType === 'utl_orgnr') {
                 return 'Kan ikke velge Norge for utenlandsk org.nr';
               }
             },
           },
         },
-        options: landMedTrygdesamarbeidInklNorge,
+        options: landMedTrygdesamarbeidInklNorgeAlpha2,
         defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.landkode ?? undefined,
       },
     },
@@ -247,7 +247,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
   }
 
   function erNorge(land: string): boolean {
-    return land === 'NOR';
+    return land === 'NO';
   }
 
   function mapIdentToOption(
