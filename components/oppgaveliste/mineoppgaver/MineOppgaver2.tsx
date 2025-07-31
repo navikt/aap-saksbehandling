@@ -1,10 +1,10 @@
 'use client';
 
-import { Alert, BodyShort, Skeleton, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort } from '@navikt/ds-react';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
-import { Filtrering } from 'components/oppgaveliste/filtrering/Filtrering';
+import { MineOppgaverFiltrering } from 'components/oppgaveliste/filtrering/mineoppgaverfiltrering/MineOppgaverFiltrering';
 import { useWatch } from 'react-hook-form';
 
 import styles from './MineOppgaver2.module.css';
@@ -12,6 +12,7 @@ import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { useFiltrerteOppgaver } from './MineOppgaverHook';
 import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];
@@ -73,23 +74,14 @@ export const MineOppgaver2 = () => {
 
   return (
     <div className={styles.tabell}>
-      <Filtrering
+      <MineOppgaverFiltrering
         form={form}
         formFields={formFields}
         antallOppgaverTotalt={oppgaver?.length}
         antallOppgaverIFilter={filtrerteOppgaver?.length}
       />
-      {isLoading && (
-        <VStack gap={'1'}>
-          <Skeleton variant="rectangle" width="100%" height={40} />
-          <Skeleton variant="rectangle" width="100%" height={40} />
-          <Skeleton variant="rectangle" width="100%" height={40} />
-          <Skeleton variant="rectangle" width="100%" height={40} />
-          <Skeleton variant="rectangle" width="100%" height={40} />
-          <Skeleton variant="rectangle" width="100%" height={40} />
-          <Skeleton variant="rectangle" width="100%" height={40} />
-        </VStack>
-      )}
+
+      {isLoading && <TabellSkeleton />}
 
       {!isLoading &&
         (filtrerteOppgaver?.length > 0 ? (

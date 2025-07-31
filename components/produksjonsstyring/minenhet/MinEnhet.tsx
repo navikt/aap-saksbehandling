@@ -114,7 +114,7 @@ export const MinEnhet = ({ enheter }: Props) => {
           </Button>
         </VStack>
         <HStack>
-          <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
+          <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} setAktivEnhet={oppdaterEnhet} />
         </HStack>
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {isSuccess(behandlingerUtvikling) && (
