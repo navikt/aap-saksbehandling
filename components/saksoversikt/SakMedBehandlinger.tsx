@@ -6,7 +6,7 @@ import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
 import { useRouter } from 'next/navigation';
-import { formaterÅrsak } from 'lib/utils/årsaker';
+import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
 
@@ -34,11 +34,11 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
     (behandling) =>
       behandling.type === 'ae0034' &&
       behandling.status !== 'OPPRETTET' &&
-      !behandling.årsaker.includes('SØKNAD_TRUKKET')
+      !behandling.vurderingsbehov.includes('SØKNAD_TRUKKET')
   ).length;
 
   const kanRegistrerebrudd = !!sak.behandlinger.filter(
-    (behandling) => behandling.type === 'ae0034' && !behandling.årsaker.includes('SØKNAD_TRUKKET')
+    (behandling) => behandling.type === 'ae0034' && !behandling.vurderingsbehov.includes('SØKNAD_TRUKKET')
   ).length;
 
   return (
@@ -92,7 +92,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             <Table.HeaderCell>Opprettet</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Årsak</Table.HeaderCell>
+            <Table.HeaderCell>Vurderingsbehov</Table.HeaderCell>
             <Table.HeaderCell align="right">Handlinger</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -103,7 +103,9 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
               <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
               <Table.DataCell>{formaterBehandlingType(behandling.type)}</Table.DataCell>
               <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
-              <Table.DataCell>{behandling.årsaker.map((årsak) => formaterÅrsak(årsak)).join(', ')}</Table.DataCell>
+              <Table.DataCell>
+                {behandling.vurderingsbehov.map((behov) => formaterVurderingsbehov(behov)).join(', ')}
+              </Table.DataCell>
 
               <Table.DataCell>
                 <BehandlingButtons

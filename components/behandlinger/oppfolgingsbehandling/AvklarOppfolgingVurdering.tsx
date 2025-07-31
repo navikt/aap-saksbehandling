@@ -3,12 +3,12 @@
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { AvklarOppfolgingsoppgaveGrunnlagResponse, ÅrsakTilBehandling } from 'lib/types/types';
+import { AvklarOppfolgingsoppgaveGrunnlagResponse, Vurderingsbehov } from 'lib/types/types';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormEvent } from 'react';
-import { årsakOptions } from '../../../lib/utils/årsakerTilBehandling';
+import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { BodyShort, Label } from '@navikt/ds-react';
 
 interface SykdomProps {
@@ -20,7 +20,7 @@ interface SykdomProps {
 interface FormFields {
   årsak: string;
   konsekvens: 'INGEN' | 'OPPRETT_VURDERINGSBEHOV';
-  hvaSkalRevurderes: ÅrsakTilBehandling[];
+  hvaSkalRevurderes: Vurderingsbehov[];
 }
 
 export const AvklaroppfolgingVurdering = ({ behandlingVersjon, readOnly, grunnlag }: SykdomProps) => {
@@ -49,7 +49,7 @@ export const AvklaroppfolgingVurdering = ({ behandlingVersjon, readOnly, grunnla
       hvaSkalRevurderes: {
         type: 'combobox_multiple',
         label: 'Hvilke opplysninger skal revurderes?',
-        options: årsakOptions,
+        options: vurderingsbehovOptions,
         defaultValue: grunnlag.grunnlag?.opplysningerTilRevurdering,
       },
     },

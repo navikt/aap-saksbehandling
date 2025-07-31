@@ -22,7 +22,7 @@ import { FordelingÅpneBehandlingerPerDag } from 'components/produksjonsstyring/
 import { FordelingLukkedeBehandlingerPerDag } from 'components/produksjonsstyring/fordelinglukkedebehandlingerperdag/FordelingLukkedeBehandlingerPerDag';
 import { VenteÅrsaker } from 'components/produksjonsstyring/venteårsaker/VenteÅrsaker';
 import { BehandlingerPerSteggruppe } from '../behandlingerpersteggruppe/BehandlingerPerSteggruppe';
-import { ÅrsakTilBehandling } from 'components/produksjonsstyring/årsaktilbehandling/ÅrsakTilBehandling';
+import { VurderingsbehovPåBehandlinger } from 'components/produksjonsstyring/vurderingsbehov/VurderingsbehovPåBehandlinger';
 import styles from './MinEnhet.module.css';
 import { BulletListIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { Enhet } from 'lib/types/oppgaveTypes';
@@ -134,7 +134,7 @@ export const MinEnhet = ({ enheter }: Props) => {
           )}
           {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
           {isSuccess(årsakerTilBehandling) && (
-            <ÅrsakTilBehandling årsakTilBehandling={årsakerTilBehandling.data || []} />
+            <VurderingsbehovPåBehandlinger vurderingsbehov={årsakerTilBehandling.data || []} />
           )}
           {isSuccess(behandlingerPerSteggruppe) && (
             <BehandlingerPerSteggruppe

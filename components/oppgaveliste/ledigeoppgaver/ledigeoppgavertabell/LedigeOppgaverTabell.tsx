@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { formaterÅrsak } from 'lib/utils/årsaker';
-import { AvklaringsbehovKode, ÅrsakTilBehandling } from 'lib/types/types';
+import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+import { AvklaringsbehovKode, Vurderingsbehov } from 'lib/types/types';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
@@ -53,7 +53,7 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
               Beh. opprettet
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'årsak'} sortable={true}>
-              Årsak
+              Vurderingsbehov
             </Table.ColumnHeader>
             <Table.HeaderCell>Oppgave</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
@@ -92,11 +92,13 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip
                   content={oppgave.årsakerTilBehandling
-                    .map((årsak) => formaterÅrsak(årsak as ÅrsakTilBehandling))
+                    .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
                     .join(', ')}
                 >
                   <BodyShort truncate size={'small'}>
-                    {oppgave.årsakerTilBehandling.map((årsak) => formaterÅrsak(årsak as ÅrsakTilBehandling)).join(', ')}
+                    {oppgave.årsakerTilBehandling
+                      .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
+                      .join(', ')}
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>

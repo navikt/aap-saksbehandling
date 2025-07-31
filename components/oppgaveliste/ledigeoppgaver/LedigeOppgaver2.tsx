@@ -16,7 +16,7 @@ import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
 import { LedigeOppgaverTabell } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavertabell/LedigeOppgaverTabell';
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
-import { alleÅrsakerTilBehandlingOptions } from 'lib/utils/årsakerTilBehandling';
+import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver2';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -61,7 +61,7 @@ export const LedigeOppgaver2 = ({ enheter }: Props) => {
     årsaker: {
       type: 'combobox_multiple',
       label: 'Årsak',
-      options: alleÅrsakerTilBehandlingOptions,
+      options: alleVurderingsbehovOptions,
       defaultValue: [],
     },
     avklaringsbehov: {

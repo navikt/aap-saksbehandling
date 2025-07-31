@@ -1,7 +1,7 @@
-import { ÅrsakTilBehandling } from 'lib/types/types';
+import { Vurderingsbehov } from 'lib/types/types';
 
-export const formaterÅrsak = (årsak: ÅrsakTilBehandling): string => {
-  switch (årsak) {
+export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): string => {
+  switch (vurderingsbehov) {
     case 'MOTTATT_SØKNAD':
       return 'Søknad';
     case 'MOTTATT_AKTIVITETSMELDING':
@@ -64,10 +64,10 @@ export const formaterÅrsak = (årsak: ÅrsakTilBehandling): string => {
 };
 
 /*
- * Kombinerer behandlingsflyt og statistikks årsaker
+ * Kombinerer behandlingsflyt og statistikks vurderingsbehov
  * */
-export const formaterFrittÅrsak = (årsak: String) => {
-  switch (årsak) {
+export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
+  switch (vurderingsbehov) {
     case 'MOTTATT_SØKNAD':
     case 'SØKNAD':
       return 'Søknad';
@@ -131,6 +131,6 @@ export const formaterFrittÅrsak = (årsak: String) => {
     case 'REVURDER_MANUELL_INNTEKT':
       return 'Revurder manuell inntekt';
     default:
-      return årsak;
+      return vurderingsbehov;
   }
 };

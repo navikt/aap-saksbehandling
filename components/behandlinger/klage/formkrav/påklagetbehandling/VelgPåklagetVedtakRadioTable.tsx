@@ -8,7 +8,7 @@ type RadioOption = {
   value: string;
   vedtaksdato: Date;
   behandlingstype: string;
-  årsakTilBehandling: string[];
+  vurderingsbehov: string[];
 };
 
 type FormFieldRadioTableProps = {
@@ -93,7 +93,7 @@ export const VelgPåklagetVedtakRadioTable = ({
               <Table.ColumnHeader textSize="small" sortable={true} sortKey="behandlingstype">
                 Behandlingstype
               </Table.ColumnHeader>
-              <Table.ColumnHeader textSize="small">Årsak til behandling</Table.ColumnHeader>
+              <Table.ColumnHeader textSize="small">Vurderingsbehov</Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -115,7 +115,7 @@ export const VelgPåklagetVedtakRadioTable = ({
                   </Link>
                 </Table.DataCell>
 
-                <Table.DataCell>{option.årsakTilBehandling.join(', ')}</Table.DataCell>
+                <Table.DataCell>{option.vurderingsbehov.join(', ')}</Table.DataCell>
               </Table.Row>
             ))}
           </Table.Body>

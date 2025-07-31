@@ -11,8 +11,7 @@ import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
 import styles from './OpprettRevurdering.module.css';
 import { isSuccess } from 'lib/utils/api';
-import { årsakOptions } from 'lib/utils/årsakerTilBehandling';
-
+import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -76,7 +75,7 @@ export const OpprettRevurdering = ({
     årsaker: {
       type: 'combobox_multiple',
       label: 'Hvilke opplysninger skal revurderes?',
-      options: årsakOptions,
+      options: vurderingsbehovOptions,
       defaultValue: defaultÅrsaker,
       rules: {
         required: 'Velg opplysning som er grunnlaget for revurdering',
