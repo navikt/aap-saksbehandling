@@ -147,13 +147,18 @@ export function useLedigeOppgaver(
   });
 }
 
-export function useAlleOppgaverForEnhet(aktivEnhet: string[], aktivKøId?: number) {
+export function useAlleOppgaverForEnhet(
+  aktivEnhet: string[],
+  aktivKøId?: number,
+  utvidetFilter?: OppgavelisteRequest['utvidetFilter']
+) {
   return useOppgaver({
     aktivEnhet,
     aktivKøId,
     visKunOppgaverSomBrukerErVeilederPå: false,
     kunLedigeOppgaver: false,
     type: 'ALLE_OPPGAVER',
+    utvidetFilter: utvidetFilter,
   });
 }
 
