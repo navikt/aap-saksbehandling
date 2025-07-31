@@ -6,7 +6,7 @@ import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev, BrevMottaker, BrevStatus, Signatur } from 'lib/types/types';
+import { Brev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 
@@ -20,12 +20,16 @@ import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/F
 import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { isSuccess } from 'lib/utils/api';
 import { isProd } from 'lib/utils/environment';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField } from 'components/form/FormField';
 
 export const SkriveBrev = ({
   referanse,
   behovstype,
   behandlingVersjon,
   mottaker,
+  fullmektigMottaker,
+  brukerMottaker,
   saksnummer,
   grunnlag,
   signaturer,
@@ -36,6 +40,8 @@ export const SkriveBrev = ({
   referanse: string;
   behovstype: Behovstype;
   mottaker: BrevMottaker;
+  fullmektigMottaker?: Mottaker;
+  brukerMottaker?: Mottaker;
   saksnummer?: string;
   behandlingVersjon: number;
   grunnlag: Brev;
@@ -87,110 +93,171 @@ export const SkriveBrev = ({
 
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
 
+  const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
+
   return (
-    <div className={style.brevbygger}>
-      <div className={style.topBar}>
-        <div className={style.sistLagret}>
-          {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
-          {isSaving && <Loader />}
-        </div>
-        {!readOnly && (
-          <ActionMenu>
-            <ActionMenu.Trigger>
-              <Button variant="secondary-neutral" icon={<ChevronDownIcon aria-hidden />} iconPosition="right">
-                Andre handlinger
-              </Button>
-            </ActionMenu.Trigger>
-            <ActionMenu.Content>
-              <ActionMenu.Group label="Brev">
-                <ActionMenu.Item
-                  icon={<GlassIcon />}
-                  onSelect={() => {
-                    setForhåndsvisModalOpen(true);
-                  }}
-                >
-                  Forhåndsvis brev
-                </ActionMenu.Item>
-                {visAvbryt && (
+    <>
+      {fullmektigMottaker && brukerMottaker && (
+        <VelgeMottakere
+          setMottakere={setMottakere}
+          readOnly={readOnly}
+          brukerNavn={mottaker.navn}
+          bruker={brukerMottaker}
+          fullmektig={fullmektigMottaker}
+        />
+      )}
+      <div className={style.brevbygger}>
+        <div className={style.topBar}>
+          <div className={style.sistLagret}>
+            {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
+            {isSaving && <Loader />}
+          </div>
+          {!readOnly && (
+            <ActionMenu>
+              <ActionMenu.Trigger>
+                <Button variant="secondary-neutral" icon={<ChevronDownIcon aria-hidden />} iconPosition="right">
+                  Andre handlinger
+                </Button>
+              </ActionMenu.Trigger>
+              <ActionMenu.Content>
+                <ActionMenu.Group label="Brev">
                   <ActionMenu.Item
-                    variant="danger"
-                    icon={<TrashIcon />}
-                    onSelect={() => settIkkeSendBrevModalOpen(true)}
+                    icon={<GlassIcon />}
+                    onSelect={() => {
+                      setForhåndsvisModalOpen(true);
+                    }}
                   >
-                    Ikke send brev
+                    Forhåndsvis brev
                   </ActionMenu.Item>
-                )}
-              </ActionMenu.Group>
-            </ActionMenu.Content>
-          </ActionMenu>
-        )}
+                  {visAvbryt && (
+                    <ActionMenu.Item
+                      variant="danger"
+                      icon={<TrashIcon />}
+                      onSelect={() => settIkkeSendBrevModalOpen(true)}
+                    >
+                      Ikke send brev
+                    </ActionMenu.Item>
+                  )}
+                </ActionMenu.Group>
+              </ActionMenu.Content>
+            </ActionMenu>
+          )}
+        </div>
+
+        <VStack gap={'4'}>
+          {!isProd() ? (
+            <BrevbyggerBeta
+              brevmal={brev}
+              mottaker={mottaker}
+              saksnummer={saksnummer}
+              onBrevChange={onChange}
+              logo={NavLogo}
+              signatur={signaturer}
+              readonly={readOnly}
+            />
+          ) : (
+            <Brevbygger
+              brevmal={brev}
+              mottaker={mottaker}
+              saksnummer={saksnummer}
+              onBrevChange={onChange}
+              logo={NavLogo}
+              signatur={signaturer}
+              readOnly={readOnly}
+            />
+          )}
+          {!readOnly && (
+            <Button
+              disabled={status !== 'FORHÅNDSVISNING_KLAR'}
+              onClick={async () => {
+                await clientMellomlagreBrev(referanse, brev);
+                const flyt = await clientHentFlyt(behandlingsReferanse);
+                if (flyt.type === 'SUCCESS' && flyt.data.behandlingVersjon) {
+                  løsBehovOgGåTilNesteSteg({
+                    behandlingVersjon: flyt.data.behandlingVersjon,
+                    behov: {
+                      behovstype: behovstype,
+                      brevbestillingReferanse: referanse,
+                      mottakere: valgteMottakere,
+                      handling: 'FERDIGSTILL',
+                    },
+                    referanse: behandlingsReferanse,
+                  });
+                  await revalidateFlyt(behandlingsReferanse);
+                }
+              }}
+              className={'fit-content'}
+              loading={isLoading}
+            >
+              Send brev
+            </Button>
+          )}
+        </VStack>
+
+        <ForhåndsvisBrevModal
+          isOpen={forhåndsvisModalOpen}
+          brevbestillingReferanse={referanse}
+          onClose={() => {
+            setForhåndsvisModalOpen(false);
+          }}
+        />
+        <IkkeSendBrevModal
+          isOpen={ikkeSendBrevModalOpen}
+          onClose={() => {
+            settIkkeSendBrevModalOpen(false);
+          }}
+          onDelete={() => {
+            slettBrev();
+          }}
+        />
       </div>
-
-      <VStack gap={'4'}>
-        {!isProd() ? (
-          <BrevbyggerBeta
-            brevmal={brev}
-            mottaker={mottaker}
-            saksnummer={saksnummer}
-            onBrevChange={onChange}
-            logo={NavLogo}
-            signatur={signaturer}
-            readonly={readOnly}
-          />
-        ) : (
-          <Brevbygger
-            brevmal={brev}
-            mottaker={mottaker}
-            saksnummer={saksnummer}
-            onBrevChange={onChange}
-            logo={NavLogo}
-            signatur={signaturer}
-            readOnly={readOnly}
-          />
-        )}
-        {!readOnly && (
-          <Button
-            disabled={status !== 'FORHÅNDSVISNING_KLAR'}
-            onClick={async () => {
-              await clientMellomlagreBrev(referanse, brev);
-              const flyt = await clientHentFlyt(behandlingsReferanse);
-              if (flyt.type === 'SUCCESS' && flyt.data.behandlingVersjon) {
-                løsBehovOgGåTilNesteSteg({
-                  behandlingVersjon: flyt.data.behandlingVersjon,
-                  behov: {
-                    behovstype: behovstype,
-                    brevbestillingReferanse: referanse,
-                    handling: 'FERDIGSTILL',
-                  },
-                  referanse: behandlingsReferanse,
-                });
-                await revalidateFlyt(behandlingsReferanse);
-              }
-            }}
-            className={'fit-content'}
-            loading={isLoading}
-          >
-            Send brev
-          </Button>
-        )}
-      </VStack>
-
-      <ForhåndsvisBrevModal
-        isOpen={forhåndsvisModalOpen}
-        brevbestillingReferanse={referanse}
-        onClose={() => {
-          setForhåndsvisModalOpen(false);
-        }}
-      />
-      <IkkeSendBrevModal
-        isOpen={ikkeSendBrevModalOpen}
-        onClose={() => {
-          settIkkeSendBrevModalOpen(false);
-        }}
-        onDelete={() => {
-          slettBrev();
-        }}
-      />
-    </div>
+    </>
   );
 };
+
+function VelgeMottakere({
+  setMottakere,
+  readOnly,
+  fullmektig,
+  brukerNavn,
+  bruker,
+}: {
+  setMottakere: (mottakere: Mottaker[]) => void;
+  readOnly: boolean;
+  brukerNavn: string;
+  bruker: Mottaker;
+  fullmektig: Mottaker;
+}) {
+  interface FormFields {
+    mottakere: ('BRUKER' | 'FULLMEKTIG')[];
+  }
+
+  const fullmektigNavn = fullmektig.navnOgAdresse?.navn;
+
+  const { formFields, form } = useConfigForm<FormFields>(
+    {
+      mottakere: {
+        type: 'checkbox',
+        label: 'Velg mottakere',
+        options: [
+          { label: brukerNavn ? `${brukerNavn} (Bruker)` : 'Bruker', value: 'BRUKER' },
+          { label: fullmektigNavn ? `${fullmektigNavn} (Fullmektig)` : 'Fullmektig', value: 'FULLMEKTIG' },
+        ],
+        defaultValue: ['FULLMEKTIG'],
+      },
+    },
+    { readOnly }
+  );
+
+  const valgteMottakere = form.watch('mottakere');
+  useEffect(() => {
+    const mottakere = valgteMottakere.map((mottaker) => (mottaker === 'BRUKER' ? bruker : fullmektig));
+    setMottakere(mottakere);
+  }, [bruker, fullmektig, setMottakere, valgteMottakere]);
+
+  return (
+    <div>
+      <FormField form={form} formField={formFields.mottakere} />
+    </div>
+  );
+}

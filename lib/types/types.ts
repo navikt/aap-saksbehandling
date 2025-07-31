@@ -54,7 +54,8 @@ export type BrevStatus =
 export type BrevMottaker =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
 export type Signatur = components['schemas']['no.nav.aap.brev.kontrakt.Signatur'];
-
+export type Mottaker =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.SkrivBrevLøsning']['mottakere'][number];
 export type SamordningTjenestePensjonGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.TjenestepensjonGrunnlagDTO'];
 export type SamordningGraderingGrunnlag =
@@ -79,6 +80,8 @@ export type RettighetsperiodeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeGrunnlagResponse'];
 export type FullmektigGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigGrunnlagDto'];
+export type FullmektigVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigVurderingDto'];
 export type FormkravGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.formkrav.FormkravGrunnlagDto'];
 export type PåklagetBehandlingGrunnlag =
