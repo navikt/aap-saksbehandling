@@ -9,6 +9,7 @@ import {
 } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
+import { isDev, isLocal, isProd } from 'lib/utils/environment';
 
 interface Props {
   sykdomsgrunnlag: SykdomsGrunnlag;
@@ -31,19 +32,22 @@ export const SaksopplysningerKolonne = ({
   return (
     <div className={styles.kolonne}>
       <Label as="p">Vilkårsvurderinger</Label>
-      {gjeldendeSykdomsvurdering && (
+      {/* TODO fjern toggles når verifisert */}
+      {isProd() && gjeldendeSykdomsvurdering && (
         <SaksopplysningerKort
           tittel="§11-5 Nedsatt arbeidsevne og krav til årsakssammenheng"
           begrunnelse={gjeldendeSykdomsvurdering.begrunnelse}
         />
       )}
-      {gjeldendeBistandsbehov && (
+      {/* TODO fjern toggles når verifisert */}
+      {isProd() && gjeldendeBistandsbehov && (
         <SaksopplysningerKort
           tittel="§11-6 Behov for bistand til å skaffe seg eller beholde arbeid"
           begrunnelse={gjeldendeBistandsbehov.begrunnelse}
         />
       )}
-      {gjeldendeSykdomsvurderingForBrev && (
+      {/* TODO fjern toggles når verifisert */}
+      {(isDev() || isLocal()) && gjeldendeSykdomsvurderingForBrev && (
         <SaksopplysningerKort tittel="Tekst til vedtaksbrev" begrunnelse={gjeldendeSykdomsvurderingForBrev.vurdering} />
       )}
       {refusjonVurdering?.harKrav && (
