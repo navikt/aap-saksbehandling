@@ -56,7 +56,7 @@ export const DigitaliserKlage = ({ readOnly, submit, grunnlag, isLoading, regist
         options: [
           ...grunnlag.klagebehandlinger.map((behandling) => ({
             label: `Klage opprettet ${formaterDatoForFrontend(behandling.opprettetDato)}`,
-            value: behandling.behandlingsreferanse,
+            value: behandling.behandlingsReferanse,
           })),
           { label: 'Opprett ny klagebehandling', value: NY_KLAGEBEHANDLING_OPTION },
         ],
