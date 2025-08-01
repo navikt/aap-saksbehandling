@@ -2,6 +2,9 @@
   "name": "aap-saksbehandling",
   "version": "0.1.0",
   "private": true,
+  "resolutions": {
+    "strip-json-comments": "3.1.1"
+  },
   "scripts": {
     "dev": "next dev --turbo | pino-pretty",
     "build": "next build",
