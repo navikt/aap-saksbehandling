@@ -1,7 +1,12 @@
 import { SaksopplysningerKort } from 'components/behandlinger/brev/skriveBrev/SaksopplysningerKort';
 import styles from './SaksopplysningerKolonne.module.css';
 import { Label } from '@navikt/ds-react';
-import { BistandsGrunnlag, RefusjonskravGrunnlag, SykdomsGrunnlag } from 'lib/types/types';
+import {
+  BistandsGrunnlag,
+  RefusjonskravGrunnlag,
+  SykdomsGrunnlag,
+  SykdomsvurderingBrevGrunnlag,
+} from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
@@ -9,11 +14,18 @@ interface Props {
   sykdomsgrunnlag: SykdomsGrunnlag;
   bistandsbehovGrunnlag: BistandsGrunnlag;
   refusjonGrunnlag: RefusjonskravGrunnlag;
+  sykdomsvurderingBrevGrunnlag?: SykdomsvurderingBrevGrunnlag;
 }
 
-export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag }: Props) => {
+export const SaksopplysningerKolonne = ({
+  sykdomsgrunnlag,
+  bistandsbehovGrunnlag,
+  refusjonGrunnlag,
+  sykdomsvurderingBrevGrunnlag,
+}: Props) => {
   const gjeldendeSykdomsvurdering = sykdomsgrunnlag.sykdomsvurderinger[sykdomsgrunnlag.sykdomsvurderinger.length - 1];
   const gjeldendeBistandsbehov = bistandsbehovGrunnlag.vurdering;
+  const gjeldendeSykdomsvurderingForBrev = sykdomsvurderingBrevGrunnlag?.vurdering;
   const refusjonVurdering = refusjonGrunnlag.gjeldendeVurdering;
 
   return (
@@ -30,6 +42,9 @@ export const SaksopplysningerKolonne = ({ sykdomsgrunnlag, bistandsbehovGrunnlag
           tittel="§11-6 Behov for bistand til å skaffe seg eller beholde arbeid"
           begrunnelse={gjeldendeBistandsbehov.begrunnelse}
         />
+      )}
+      {gjeldendeSykdomsvurderingForBrev && (
+        <SaksopplysningerKort tittel="Tekst til vedtaksbrev" begrunnelse={gjeldendeSykdomsvurderingForBrev.vurdering} />
       )}
       {refusjonVurdering?.harKrav && (
         <SaksopplysningerKort
