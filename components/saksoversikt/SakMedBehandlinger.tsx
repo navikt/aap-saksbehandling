@@ -74,7 +74,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             </Button>
           )}
 
-          {kanRevurdere && !isProd() && (
+          {kanRevurdere && (
             <Button
               variant="secondary"
               size="small"
