@@ -19,19 +19,34 @@ const oppgaver: Oppgave = {
   status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
   versjon: 0,
   årsakerTilBehandling: [],
+  markeringer: []
 };
 
 describe('MineOppgaverMeny', () => {
   const user = userEvent.setup();
 
   it('skal ha en knapp for å behandle oppgaven', () => {
-    render(<MineOppgaverMeny oppgave={oppgaver} setFeilmelding={vi.fn()} revalidateFunction={vi.fn()} setÅpenModal={vi.fn()} />);
+    render(
+      <MineOppgaverMeny
+        oppgave={oppgaver}
+        setFeilmelding={vi.fn()}
+        revalidateFunction={vi.fn()}
+        setÅpenModal={vi.fn()}
+      />
+    );
     const button = screen.getByRole('button', { name: 'Behandle' });
     expect(button).toBeVisible();
   });
 
   it('skal ha en knapp for å frigi oppgaven', async () => {
-    render(<MineOppgaverMeny oppgave={oppgaver} setFeilmelding={vi.fn()} revalidateFunction={vi.fn()} setÅpenModal={vi.fn()} />);
+    render(
+      <MineOppgaverMeny
+        oppgave={oppgaver}
+        setFeilmelding={vi.fn()}
+        revalidateFunction={vi.fn()}
+        setÅpenModal={vi.fn()}
+      />
+    );
     const menu = screen.getByRole('img', { name: 'Meny' });
     await user.click(menu);
     const button = screen.getByRole('button', { name: 'Frigi oppgave' });

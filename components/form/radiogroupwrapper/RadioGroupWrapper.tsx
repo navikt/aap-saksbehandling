@@ -6,7 +6,7 @@ import styles from './RadioGroupWrapper.module.css';
 
 interface RadioProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
-  control: Control<FormFieldValues>;
+  control: Control<FormFieldValues, any, any>;
   children: ReactNode;
   hideLabel?: boolean;
   label?: string;

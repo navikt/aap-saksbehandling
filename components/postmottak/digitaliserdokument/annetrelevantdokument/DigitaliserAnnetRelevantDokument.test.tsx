@@ -5,6 +5,7 @@ import { userEvent } from '@testing-library/user-event';
 import { DigitaliserAnnetRelevantDokument } from './DigitaliserAnnetRelevantDokument';
 
 const grunnlag: DigitaliseringsGrunnlag = {
+  klagebehandlinger: [],
   erPapir: false,
   vurdering: {
     kategori: 'ANNET_RELEVANT_DOKUMENT',

@@ -5,7 +5,7 @@ import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 import { useEffect, useState } from 'react';
 import { useLagreAktivEnhet } from 'hooks/oppgave/aktivEnhetHook';
 import { BodyShort, Box, Button, HStack, Skeleton, VStack } from '@navikt/ds-react';
-import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/AlleOppgaverTabell';
+import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
 import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { isError, isSuccess } from 'lib/utils/api';
@@ -53,10 +53,8 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     lagreAktivKøId(id);
   };
 
-  const { oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver } = useAlleOppgaverForEnhet(
-    [aktivEnhet],
-    aktivKøId
-  );
+  const { oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
+    useAlleOppgaverForEnhet([aktivEnhet], aktivKøId);
 
   const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;
 
@@ -64,8 +62,8 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     <VStack gap={'4'}>
       <Box background="surface-subtle" padding="4" borderRadius="xlarge">
         <HStack gap={'4'}>
-          <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
-          <KøSelect label={'Velg kø'} køer={oppgaveKøer || []} aktivKøId={aktivKøId} valgtKøListener={oppdaterKøId} />
+          <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} setAktivEnhet={oppdaterEnhet} />
+          <KøSelect label={'Velg kø'} køer={oppgaveKøer || []} aktivKøId={aktivKøId} setAktivKø={oppdaterKøId} />
         </HStack>
       </Box>
 
@@ -81,7 +79,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
 
       {!isLoading && oppgaver && oppgaver.length === 0 && <BodyShort>Ingen oppgaver for enhet {aktivEnhet}</BodyShort>}
 
-      {oppgaver && oppgaver.length > 0 && <AlleOppgaverTabell oppgaver={oppgaver} />}
+      {oppgaver && oppgaver.length > 0 && <AlleOppgaverTabell oppgaver={oppgaver} revalidateFunction={mutate} />}
 
       {kanLasteInnFlereOppgaver && (
         <HStack justify={'center'}>

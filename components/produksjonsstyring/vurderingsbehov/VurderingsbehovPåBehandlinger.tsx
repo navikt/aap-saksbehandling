@@ -4,25 +4,24 @@ import { BodyShort, Detail, Table, VStack } from '@navikt/ds-react';
 import { BehandlingÅrsakAntallGjennomsnitt } from 'lib/types/statistikkTypes';
 import { PlotWrapper } from 'components/produksjonsstyring/plotwrapper/PlotWrapper';
 import { sekunderTilDager } from 'lib/utils/time';
-import { formaterFrittÅrsak } from 'lib/utils/årsaker';
+import { formaterFrittVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import styles from '../../barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
 
 interface Props {
-  årsakTilBehandling: Array<BehandlingÅrsakAntallGjennomsnitt>;
+  vurderingsbehov: Array<BehandlingÅrsakAntallGjennomsnitt>;
 }
 
-export const ÅrsakTilBehandling = ({ årsakTilBehandling }: Props) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks -- Fil som starter med Å liker ikke hook rulen
-  const { sort, håndterSortering, sortertListe } = useSortertListe(årsakTilBehandling);
+export const VurderingsbehovPåBehandlinger = ({ vurderingsbehov }: Props) => {
+  const { sort, håndterSortering, sortertListe } = useSortertListe(vurderingsbehov);
 
   return (
     <PlotWrapper>
       <VStack align={'center'} gap={'2'}>
-        <BodyShort size={'small'}>{'Årsak til behandling'}</BodyShort>
+        <BodyShort size={'small'}>{'Vurderingsbehov på behandlinger'}</BodyShort>
         <VStack align={'center'}>
           <Detail className={styles.detailgray}>
-            {'Viser alle registrerte årsaker til behandling. Én behandling kan ha flere årsaker.'}
+            {'Viser alle registrerte vurderingsbehov på behandlinger. Én behandling kan ha flere vurderingsbehov.'}
           </Detail>
         </VStack>
       </VStack>
@@ -35,7 +34,7 @@ export const ÅrsakTilBehandling = ({ årsakTilBehandling }: Props) => {
       >
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Årsak</Table.HeaderCell>
+            <Table.HeaderCell>Vurderingsbehov</Table.HeaderCell>
             <Table.ColumnHeader sortKey={'antall'} sortable={true}>
               Antall
             </Table.ColumnHeader>
@@ -47,7 +46,7 @@ export const ÅrsakTilBehandling = ({ årsakTilBehandling }: Props) => {
         <Table.Body>
           {sortertListe.map((it, i) => (
             <Table.Row key={`rad-${i}`}>
-              <Table.DataCell>{formaterFrittÅrsak(it.årsak)}</Table.DataCell>
+              <Table.DataCell>{formaterFrittVurderingsbehov(it.årsak)}</Table.DataCell>
               <Table.DataCell>{it.antall}</Table.DataCell>
               <Table.DataCell>{sekunderTilDager(it.gjennomsnittligAlder)} dager</Table.DataCell>
             </Table.Row>

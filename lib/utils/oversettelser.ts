@@ -1,6 +1,6 @@
 import { AvslagÅrsak, SettPåVentÅrsaker, TypeBehandling, VilkårUtfall } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
-import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype, OppgaveStatus } from 'lib/types/oppgaveTypes';
+import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
 
 const behovskodeMap = {
   // Behandlingsflyt
@@ -36,6 +36,7 @@ const behovskodeMap = {
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
+  '5053': 'Skriv sykdomsvurdering brev',
   '5056': 'Samordning refusjonskrav',
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',
@@ -53,6 +54,9 @@ const behovskodeMap = {
   '6009': 'Fastsett fullmektig/verge',
   '6010': 'Vurder trekk av klage',
   '7001': 'Fastsett manuell inntekt',
+  '8001': 'Oppfølgingsoppgave - kontor',
+  '8002': 'Oppfølgingsoppgave - NAY',
+  '8003': 'Venter på oppfølging',
   '9001': 'Manuelt satt på vent',
   '9002': 'Bestill brev',
   '9003': 'Bestill legeerklæring',
@@ -183,19 +187,11 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Tilbakekreving';
     case 'SVAR_FRA_ANDREINSTANS':
       return 'Svar fra andreinstans';
+    case 'OPPFØLGINGSBEHANDLING':
+      return 'Oppfølgingsoppgave';
   }
-  exhaustiveCheck(behandlingsType);
+  // exhaustiveCheck(behandlingsType);
 }
-
-export function mapTilOppgaveStatusTekst(status: OppgaveStatus) {
-  switch (status) {
-    case 'AVSLUTTET':
-      return 'Avsluttet';
-    case 'OPPRETTET':
-      return 'Opprettet';
-  }
-}
-
 export function mapGrunnTilString(grunn: string): string {
   switch (grunn) {
     case 'FEIL_LOVANVENDELSE':
@@ -262,5 +258,16 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
       return 'Svar fra Nav Klageinstans';
     default:
       return typeBehandling;
+  }
+}
+
+export function mapStatusTilTekst(status: 'VENT' | 'RETUR_KVALITETSSIKRER' | 'RETUR_BESLUTTER'): string {
+  switch (status) {
+    case 'VENT':
+      return 'På vent';
+    case 'RETUR_KVALITETSSIKRER':
+      return 'Retur fra kvalitetssikrer';
+    case 'RETUR_BESLUTTER':
+      return 'Retur fra beslutter';
   }
 }

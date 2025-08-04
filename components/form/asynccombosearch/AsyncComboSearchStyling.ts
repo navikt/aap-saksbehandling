@@ -50,4 +50,10 @@ export const customStyles: StylesConfig = {
     ...provided,
     color: '#5f6167',
   }),
+
+  // Container for selve "menyen" som dukker opp
+  menu: (base) => ({
+    ...base,
+    zIndex: 1000, // Setter Z-index slik at den faktisk er forran ting bak, dette fikset et problem med "clickthrough" hvor man kunne trykke på form-elementer som lå bak
+  }),
 };

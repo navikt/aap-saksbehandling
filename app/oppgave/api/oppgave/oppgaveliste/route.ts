@@ -2,9 +2,10 @@ import { NextRequest } from 'next/server';
 import { hentOppgaverForFilter } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
+import { OppgavelisteRequest } from 'lib/types/oppgaveTypes';
 
 export async function POST(req: NextRequest) {
-  const data = await req.json();
+  const data: OppgavelisteRequest = await req.json();
   if (!data.filterId) {
     return new Response(JSON.stringify({ message: 'filterId mangler', status: 400 }), { status: 400 });
   } else if (!data.enheter) {
@@ -16,13 +17,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const res = await hentOppgaverForFilter(
-      data.filterId,
-      data.enheter,
-      data.veileder,
-      data.paging,
-      data.kunLedigeOppgaver
-    );
+    const res = await hentOppgaverForFilter(data);
     if (isError(res)) {
       logError(`/api/oppgave/oppgaveliste`, res.apiException);
     }

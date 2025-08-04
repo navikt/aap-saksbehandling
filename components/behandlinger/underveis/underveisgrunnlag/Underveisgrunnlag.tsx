@@ -32,7 +32,6 @@ const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => (
 );
 
 export const Underveisgrunnlag = ({ grunnlag }: Props) => {
-  console.log(grunnlag);
   return (
     <Table>
       <Table.Header>

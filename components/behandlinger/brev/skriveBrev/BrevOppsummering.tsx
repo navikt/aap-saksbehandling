@@ -1,7 +1,7 @@
 'use client';
 
 import { BrevGrunnlagBrev } from 'lib/types/types';
-import styles from './brevoppsummering.module.scss';
+import styles from './brevoppsummering.module.css';
 import { Heading } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 

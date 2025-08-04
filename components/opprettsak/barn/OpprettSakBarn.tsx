@@ -38,6 +38,14 @@ export const OpprettSakBarn = ({ form }: Props) => {
                   <option value={'manueltBarn'}>Manuelt barn</option>
                   <option value={'folkeregistrertBarn'}>Folkeregistrert barn</option>
                 </SelectWrapper>
+                <SelectWrapper
+                  label={'Skal barnet finnes i PDL?'}
+                  name={`barn.${index}.skalFinnesIPDL`}
+                  control={form.control}
+                >
+                  <option value={'true'}>Ja</option>
+                  <option value={'false'}>Nei</option>
+                </SelectWrapper>
                 <Button
                   type="button"
                   variant={'tertiary'}
@@ -57,7 +65,7 @@ export const OpprettSakBarn = ({ form }: Props) => {
                   className={'fit-content'}
                   size={'small'}
                   onClick={() => {
-                    append({ fodselsdato: '', harRelasjon: JaEllerNei.Ja });
+                    append({ fodselsdato: '', harRelasjon: JaEllerNei.Ja, skalFinnesIPDL: 'true' });
                   }}
                   variant={'tertiary'}
                   icon={<PlusIcon aria-hidden />}

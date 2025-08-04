@@ -21,6 +21,7 @@ describe('Svar fra andreinstans', () => {
             utfall: null,
             feilregistrertBegrunnelse: 'Dette er en begrunnelse for feilregistrering.',
           },
+          harTilgangTilÅSaksbehandle: true,
         }}
       />
     );
@@ -40,6 +41,7 @@ describe('Svar fra andreinstans', () => {
             type: 'KLAGEBEHANDLING_AVSLUTTET',
             utfall: 'AVVIST',
           },
+          harTilgangTilÅSaksbehandle: true,
         }}
       />
     );

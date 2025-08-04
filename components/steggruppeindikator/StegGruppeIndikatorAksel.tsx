@@ -100,6 +100,8 @@ function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
       return 'Håndter svar fra Nav Klageinstans';
     case 'IVERKSETT_KONSEKVENS':
       return 'Iverksett konsekvens';
+    case 'AVKLAR_OPPPFØLGING':
+      return 'Avklar oppfølging'
     case 'UDEFINERT':
       return 'Udefinert';
     default:

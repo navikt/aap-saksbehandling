@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { Dispatch, SetStateAction } from 'react';
