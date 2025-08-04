@@ -30,6 +30,7 @@ import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 
 import { isSuccess } from 'lib/utils/api';
 import { useLagreAktivEnhet } from 'hooks/oppgave/aktivEnhetHook';
+import { OppgaverInnUt } from '../oppgaverinnut/OppgaverInnUt';
 
 interface Props {
   enheter: Array<Enhet>;
@@ -160,6 +161,7 @@ export const MinEnhet = ({ enheter }: Props) => {
               title={'Stegfordeling revurderingbehandlinger'}
             />
           )}
+          <OppgaverInnUt behandlingstyperQuery={behandlingstyperQuery} />
         </div>
       </VStack>
     </HGrid>

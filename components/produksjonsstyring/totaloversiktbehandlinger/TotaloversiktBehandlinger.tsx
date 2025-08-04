@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, HGrid, VStack } from '@navikt/ds-react';
+import { Box, Button, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import useSWR from 'swr';
@@ -26,17 +26,18 @@ import { VurderingsbehovPåBehandlinger } from 'components/produksjonsstyring/vu
 import styles from './TotaloversiktBehandlinger.module.css';
 import { BulletListIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { isSuccess } from 'lib/utils/api';
+import { OppgaverInnUt } from '../oppgaverinnut/OppgaverInnUt';
 
 export const TotaloversiktBehandlinger = () => {
   const [listeVisning, setListeVisning] = useState<boolean>(false);
   const alleFiltere = useContext(AlleFiltereContext);
   const antallDager = 14;
-  //const oppgaveFiltre =
   const behandlingstyperQuery = useMemo(
     () => statistikkQueryparams({ behandlingstyper: alleFiltere.behandlingstyper }),
     [alleFiltere]
   );
 
+  // Behandlinger
   const { data: antallÅpneBehandlinger } = useSWR(
     `/oppgave/api/statistikk/apne-behandlinger?${behandlingstyperQuery}`,
     antallÅpneBehandlingerPerBehandlingstypeClient
@@ -61,6 +62,8 @@ export const TotaloversiktBehandlinger = () => {
     `/oppgave/api/statistikk/behandlinger/arsak-til-behandling?${behandlingstyperQuery}`,
     årsakTilBehandlingClient
   ).data;
+
+  // Oppgaver
   const behandlingerPerSteggruppe = useSWR(
     `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
     behandlingerPerSteggruppeClient
@@ -94,51 +97,64 @@ export const TotaloversiktBehandlinger = () => {
           </Button>
         </VStack>
 
-        <div className={listeVisning ? styles.plotList : styles.plotGrid}>
-          {isSuccess(behandlingerUtvikling) && (
-            <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
-          )}
-          <ApneBehandlinger behandlingstyperQuery={behandlingstyperQuery} />
-          {isSuccess(antallÅpneBehandlinger) && (
-            <TypeBehandlinger åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
-          )}
-          {isSuccess(fordelingÅpneBehandlinger) && (
-            <FordelingÅpneBehandlingerPerDag fordelingÅpneBehandlingerPerDag={fordelingÅpneBehandlinger.data || []} />
-          )}
-          {isSuccess(fordelingLukkedeBehandlinger) && (
-            <FordelingLukkedeBehandlingerPerDag
-              fordelingLukkedeBehandlinger={fordelingLukkedeBehandlinger.data || []}
-            />
-          )}
-          {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
-          {isSuccess(årsakerTilBehandling) && (
-            <VurderingsbehovPåBehandlinger vurderingsbehov={årsakerTilBehandling.data || []} />
-          )}
-          {isSuccess(behandlingerPerSteggruppe) && (
-            <BehandlingerPerSteggruppe
-              data={behandlingerPerSteggruppe.data || []}
-              title={'Stegfordeling behandling og revurdering'}
-            />
-          )}
-          {isSuccess(førstegangsBehandlingerPerSteggruppe) && (
-            <BehandlingerPerSteggruppe
-              data={førstegangsBehandlingerPerSteggruppe.data || []}
-              title={'Stegfordeling førstegangsbehandling'}
-            />
-          )}
-          {isSuccess(klageBehandlingerPerSteggruppe) && (
-            <BehandlingerPerSteggruppe
-              data={klageBehandlingerPerSteggruppe.data || []}
-              title={'Stegfordeling klagebehandlinger'}
-            />
-          )}
-          {isSuccess(revurderingBehandlingerPerSteggruppe) && (
-            <BehandlingerPerSteggruppe
-              data={revurderingBehandlingerPerSteggruppe.data || []}
-              title={'Stegfordeling revurderingbehandlinger'}
-            />
-          )}
-        </div>
+        <VStack gap={'4'}>
+          <Box borderColor={'border-subtle'} borderWidth={'1'} padding={'8'} borderRadius={"medium"}>
+            <Heading size={"large"} spacing>Behandlinger</Heading>
+            <div className={listeVisning ? styles.plotList : styles.plotGrid}>
+              {isSuccess(behandlingerUtvikling) && (
+                <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
+              )}
+              <ApneBehandlinger behandlingstyperQuery={behandlingstyperQuery} />
+              {isSuccess(antallÅpneBehandlinger) && (
+                <TypeBehandlinger åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
+              )}
+              {isSuccess(fordelingÅpneBehandlinger) && (
+                <FordelingÅpneBehandlingerPerDag
+                  fordelingÅpneBehandlingerPerDag={fordelingÅpneBehandlinger.data || []}
+                />
+              )}
+              {isSuccess(fordelingLukkedeBehandlinger) && (
+                <FordelingLukkedeBehandlingerPerDag
+                  fordelingLukkedeBehandlinger={fordelingLukkedeBehandlinger.data || []}
+                />
+              )}
+              {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
+              {isSuccess(årsakerTilBehandling) && (
+                <VurderingsbehovPåBehandlinger vurderingsbehov={årsakerTilBehandling.data || []} />
+              )}
+            </div>
+          </Box>
+          <Box borderColor={'border-subtle'} borderWidth={'1'} padding={'8'} borderRadius={"medium"}>
+            <Heading size={"large"} spacing>Oppgaver</Heading>
+            <div className={listeVisning ? styles.plotList : styles.plotGrid}>
+              {isSuccess(behandlingerPerSteggruppe) && (
+                <BehandlingerPerSteggruppe
+                  data={behandlingerPerSteggruppe.data || []}
+                  title={'Stegfordeling behandling og revurdering'}
+                />
+              )}
+              {isSuccess(førstegangsBehandlingerPerSteggruppe) && (
+                <BehandlingerPerSteggruppe
+                  data={førstegangsBehandlingerPerSteggruppe.data || []}
+                  title={'Stegfordeling førstegangsbehandling'}
+                />
+              )}
+              {isSuccess(klageBehandlingerPerSteggruppe) && (
+                <BehandlingerPerSteggruppe
+                  data={klageBehandlingerPerSteggruppe.data || []}
+                  title={'Stegfordeling klagebehandlinger'}
+                />
+              )}
+              {isSuccess(revurderingBehandlingerPerSteggruppe) && (
+                <BehandlingerPerSteggruppe
+                  data={revurderingBehandlingerPerSteggruppe.data || []}
+                  title={'Stegfordeling revurderingbehandlinger'}
+                />
+              )}
+              <OppgaverInnUt behandlingstyperQuery={behandlingstyperQuery} />
+            </div>
+          </Box>
+        </VStack>
       </VStack>
     </HGrid>
   );
