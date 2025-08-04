@@ -19,11 +19,13 @@ export const oppgaveBehandlingstyper = Object.keys(
       case 'KLAGE':
         return { label: 'Klage', value: 'KLAGE' };
       case 'DOKUMENT_H_NDTERING':
-        return { label: 'Dokumenthåndtering', value: 'DOKUMENTHÅNDTERING' };
+        return { label: 'Dokumenthåndtering', value: 'DOKUMENT_HÅNDTERING' };
       case 'JOURNALF_RING':
         return { label: 'Journalføring', value: 'JOURNALFØRING' };
       case 'SVAR_FRA_ANDREINSTANS':
         return { label: 'Svar fra andreinstans', value: 'SVAR_FRA_ANDREINSTANS' };
+      case 'OPPF_LGINGSBEHANDLING':
+        return { label: 'Oppfølgingsoppgave', value: 'OPPFØLGINGSBEHANDLING' };
     }
     exhaustiveCheck(key);
   });
@@ -48,6 +50,8 @@ const behandlingsTypeAlternativerFraEnum = Object.keys(
         return 'Journalføring';
       case 'SvarFraAndreinstans':
         return 'SvarFraAndreinstans';
+      case 'Oppf_lgingsbehandling':
+        return 'Oppfølgingsbehandling';
     }
     exhaustiveCheck(key);
   });

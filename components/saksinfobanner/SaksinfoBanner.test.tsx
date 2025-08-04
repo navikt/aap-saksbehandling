@@ -234,6 +234,23 @@ describe('SaksinfoBanner på behandling siden', () => {
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.queryByRole('button', { name: 'Overstyr starttidspunkt' })).not.toBeInTheDocument();
   });
+
+  it('menyvalg for å sette markeringer på behandling vises', async () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={{ ...behandling, status: 'IVERKSETTES' }}
+        referanse={'123456'}
+        typeBehandling="Førstegangsbehandling"
+        brukerKanSaksbehandle={true}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.getByText('Marker som haster')).toBeVisible();
+    expect(screen.getByText('Marker med krever spesialkompetanse')).toBeVisible();
+  });
 });
 
 describe('Sak status', () => {

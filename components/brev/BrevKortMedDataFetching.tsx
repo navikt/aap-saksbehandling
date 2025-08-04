@@ -1,10 +1,11 @@
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { hentBrevGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBrevGrunnlag, hentFullmektigGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { AvklaringsbehovKode, StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
 
 interface Props {
   behandlingReferanse: string;
@@ -19,11 +20,13 @@ export const BrevKortMedDataFetching = async ({
   aktivtSteg,
   visAvbryt = true,
 }: Props) => {
-  const grunnlagene = await hentBrevGrunnlag(behandlingReferanse);
+  const [grunnlagene, fullmektigGrunnlag] = await Promise.all([
+    hentBrevGrunnlag(behandlingReferanse),
+    hentFullmektigGrunnlag(behandlingReferanse),
+  ]);
 
-  console.log('grunnlagene', grunnlagene);
-  if (isError(grunnlagene)) {
-    return <ApiException apiResponses={[grunnlagene]} />;
+  if (isError(grunnlagene) || isError(fullmektigGrunnlag)) {
+    return <ApiException apiResponses={[grunnlagene, fullmektigGrunnlag]} />;
   }
 
   const grunnlag = grunnlagene.data.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
@@ -38,6 +41,7 @@ export const BrevKortMedDataFetching = async ({
   const status = grunnlag.status;
   const readOnly = aktivtSteg === 'BREV' && !grunnlag.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(grunnlag.avklaringsbehovKode);
+  const { bruker, fullmektig } = mapGrunnlagTilMottakere(mottaker, fullmektigGrunnlag.data.vurdering);
 
   return (
     <VilkårsKort heading={'Skriv brev'} steg="BREV" defaultOpen={true}>
@@ -46,6 +50,8 @@ export const BrevKortMedDataFetching = async ({
           status={status}
           grunnlag={brev}
           mottaker={mottaker}
+          brukerMottaker={bruker}
+          fullmektigMottaker={fullmektig}
           behandlingVersjon={behandlingVersjon}
           referanse={brevbestillingReferanse}
           visAvbryt={visAvbryt}

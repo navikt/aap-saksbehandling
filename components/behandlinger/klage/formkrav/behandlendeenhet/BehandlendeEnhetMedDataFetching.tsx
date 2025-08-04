@@ -26,7 +26,7 @@ export const BehandlendeEnhetMedDataFetching = async ({
       grunnlag={grunnlag.data}
       typeBehandling={typeBehandling}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
     />
   );
 };

@@ -66,6 +66,7 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly }: Prop
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.hvemSkalBehandle} />
     </VilkårsKortMedForm>

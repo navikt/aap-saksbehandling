@@ -2,13 +2,14 @@
 
 import { TilkjentYtelseGrunnlagV2 } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
-import { Table } from '@navikt/ds-react';
+import { ActionMenu, BodyShort, Button, Table, VStack } from '@navikt/ds-react';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
 import { formaterTilNok, formaterTilProsent } from 'lib/utils/string';
 
 import styles from './Tilkjent2.module.css';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 
 interface Props {
   grunnlag: TilkjentYtelseGrunnlagV2;
@@ -30,6 +31,7 @@ export const Tilkjent2 = ({ grunnlag }: Props) => {
             <Table.HeaderCell>Total reduksjon</Table.HeaderCell>
             <Table.HeaderCell>Effektiv dagsats</Table.HeaderCell>
             <Table.HeaderCell>Meldekort levert</Table.HeaderCell>
+            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -74,6 +76,23 @@ export const Tilkjent2 = ({ grunnlag }: Props) => {
                       (periode.levertMeldekortDato
                         ? formaterDatoForFrontend(periode.levertMeldekortDato)
                         : 'Ikke levert')}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {periode.sisteLeverteMeldekort && (
+                      <ActionMenu>
+                        <ActionMenu.Trigger>
+                          <Button variant={'tertiary'} icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />} />
+                        </ActionMenu.Trigger>
+                        <ActionMenu.Content>
+                          <VStack gap={'4'} width={'250px'}>
+                            <BodyShort weight={'semibold'}>Meldekort</BodyShort>
+                            <BodyShort>
+                              Bruker har ført {periode.sisteLeverteMeldekort.timerArbeidPerPeriode.timerArbeid} timer.
+                            </BodyShort>
+                          </VStack>
+                        </ActionMenu.Content>
+                      </ActionMenu>
+                    )}
                   </Table.DataCell>
                 </Table.Row>
               );

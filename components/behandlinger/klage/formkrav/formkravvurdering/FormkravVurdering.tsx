@@ -122,6 +122,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
       isLoading={isLoading}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erBrukerPart} horizontalRadio />

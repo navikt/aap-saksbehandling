@@ -1,11 +1,11 @@
 import {
-  AvklaringsbehovReferanse,
+  AvreserverOppgaveDto,
   Kø,
   NesteOppgaveRequestBody,
   NesteOppgaveResponse,
   Oppgave,
+  OppgavelisteRequest,
   OppgavelisteResponse,
-  Paging,
   PlukkOppgaveDto,
 } from './types/oppgaveTypes';
 import {
@@ -55,32 +55,17 @@ export async function årsakTilBehandlingClient(url: string) {
 }
 
 // oppgave
-export async function hentOppgaverClient(
-  filterId: number,
-  enheter: string[],
-  veileder: boolean,
-  paging: Paging,
-  kunLedigeOppgaver?: boolean
-) {
-  return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', {
-    filterId,
-    enheter,
-    veileder,
-    paging,
-    kunLedigeOppgaver,
-  });
+export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
+  return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', oppgavelisteRequest);
 }
 
 export async function hentMineOppgaverClient() {
   return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/mine-oppgaver', 'GET');
 }
 
-export async function avreserverOppgaveClient(oppgave: Oppgave) {
-  const body: AvklaringsbehovReferanse = {
-    avklaringsbehovKode: oppgave.avklaringsbehovKode,
-    journalpostId: oppgave.journalpostId,
-    saksnummer: oppgave.saksnummer,
-    referanse: oppgave.behandlingRef,
+export async function avreserverOppgaveClient(oppgaver: number[]) {
+  const body: AvreserverOppgaveDto = {
+    oppgaver: oppgaver,
   };
   return clientFetch('/oppgave/api/oppgave/avreserver', 'POST', body);
 }

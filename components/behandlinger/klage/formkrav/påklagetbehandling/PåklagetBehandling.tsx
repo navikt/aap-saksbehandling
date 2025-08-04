@@ -7,7 +7,7 @@ import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform
 import { VelgPåklagetVedtakRadioTable } from 'components/behandlinger/klage/formkrav/påklagetbehandling/VelgPåklagetVedtakRadioTable';
 import { Controller, useForm } from 'react-hook-form';
 import { Behovstype } from 'lib/utils/form';
-import { formaterÅrsak } from 'lib/utils/årsaker';
+import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -56,6 +56,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly }: P
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}
+      vurdertAvAnsatt={grunnlag?.vurdertAv}
     >
       <Controller
         name="vedtak"
@@ -81,7 +82,7 @@ function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
       value: behandling.referanse,
       vedtaksdato: new Date(behandling.vedtakstidspunkt),
       behandlingstype: behandling.typeBehandling,
-      årsakTilBehandling: behandling.årsaker.map(formaterÅrsak),
+      vurderingsbehov: behandling.vurderingsbehov.map(formaterVurderingsbehov),
     })) ?? []
   );
 }

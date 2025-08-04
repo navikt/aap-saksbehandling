@@ -22,13 +22,10 @@ export const KlagesaksopplysningerKolonne = ({
       <Label as="p">Vilkårsvurderinger</Label>
       {formkravVurdering && <SaksopplysningerKort tittel="Formkrav" begrunnelse={formkravVurdering.begrunnelse} />}
       {klagebehandlingKontorVurdering && (
-        <SaksopplysningerKort
-          tittel="Vurdering av klage - kontor"
-          begrunnelse={klagebehandlingKontorVurdering.begrunnelse}
-        />
+        <SaksopplysningerKort tittel="Vurder klage" begrunnelse={klagebehandlingKontorVurdering.begrunnelse} />
       )}
       {klagebehandlingNayVurdering && (
-        <SaksopplysningerKort tittel="Vurdering av klage - Nay" begrunnelse={klagebehandlingNayVurdering.begrunnelse} />
+        <SaksopplysningerKort tittel="Behandle klage" begrunnelse={klagebehandlingNayVurdering.begrunnelse} />
       )}
     </div>
   );

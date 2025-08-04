@@ -16,7 +16,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching = async ({
     <LovvalgOgMedlemskapVedSKnadstidspunkt
       behandlingVersjon={behandlingVersjon}
       grunnlag={grunnlag}
-      readOnly={readOnly}
+      readOnly={readOnly || !grunnlag.harTilgangTilÅSaksbehandle}
       overstyring={!!grunnlag?.vurdering?.overstyrt}
     />
   );

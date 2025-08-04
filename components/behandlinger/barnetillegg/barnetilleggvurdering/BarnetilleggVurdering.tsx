@@ -29,9 +29,9 @@ export interface BarnetilleggFormFields {
 }
 
 interface BarneTilleggVurdering {
-  ident: string;
-  fødselsdato: string;
-  navn: string;
+  ident: string | null | undefined;
+  fødselsdato: string | null | undefined;
+  navn: string | null | undefined;
   vurderinger: Vurdering[];
 }
 
@@ -53,9 +53,10 @@ export const BarnetilleggVurdering = ({
     useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
   const vurderteBarn: BarneTilleggVurdering[] = grunnlag.vurderteBarn.map((barn) => {
+    const navn = barn.navn || barn.ident || 'Ukjent';
     return {
       ident: barn.ident,
-      navn: behandlingPersonInfo?.info[barn.ident],
+      navn: barn.ident ? behandlingPersonInfo?.info[barn.ident] : navn,
       fødselsdato: barn.fødselsdato,
       vurderinger: barn.vurderinger.map((value) => {
         return {
@@ -68,11 +69,12 @@ export const BarnetilleggVurdering = ({
   });
 
   const barnSomTrengerVurdering: BarneTilleggVurdering[] = grunnlag.barnSomTrengerVurdering.map((barn) => {
+    const navn = barn.navn ? barn.ident?.identifikator : 'Ukjent';
     return {
-      ident: barn.ident.identifikator,
-      navn: behandlingPersonInfo?.info[barn.ident.identifikator],
+      ident: barn?.ident?.identifikator,
+      navn: barn.ident?.aktivIdent ? behandlingPersonInfo?.info[barn.ident.identifikator] : navn,
       vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
-      fødselsdato: barn.fødselsdato,
+      fødselsdato: barn.fodselsDato,
     };
   });
 
@@ -156,7 +158,7 @@ export const BarnetilleggVurdering = ({
                   barnetilleggIndex={barnetilleggIndex}
                   ident={vurdering.ident}
                   fødselsdato={vurdering.fødselsdato}
-                  navn={behandlingPersonInfo?.info[vurdering.ident] || 'Ukjent'}
+                  navn={behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
                   readOnly={readOnly}
                 />
               );
@@ -173,7 +175,7 @@ export const BarnetilleggVurdering = ({
                 <RegistrertBarn
                   key={index}
                   registrertBarn={barn}
-                  navn={behandlingPersonInfo?.info[barn.ident.identifikator] || 'Ukjent'}
+                  navn={barn.navn ? behandlingPersonInfo?.info[barn?.ident?.identifikator || 'null'] : 'Ukjent'}
                 />
               ))}
             </div>
