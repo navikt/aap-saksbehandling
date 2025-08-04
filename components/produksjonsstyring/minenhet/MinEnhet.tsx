@@ -1,10 +1,9 @@
 'use client';
 
 import { Box, Button, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
-import { useContext, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import useSWR from 'swr';
-import { AlleFiltereContext } from '../allefiltereprovider/AlleFiltereProvider';
 import {
   antallÅpneBehandlingerPerBehandlingstypeClient,
   behandlingerPerSteggruppeClient,
@@ -31,7 +30,7 @@ import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 import { isSuccess } from 'lib/utils/api';
 import { useLagreAktivEnhet } from 'hooks/oppgave/aktivEnhetHook';
 import { OppgaverInnUt } from '../oppgaverinnut/OppgaverInnUt';
-import { OppgaveFilterSamling } from '../oppgavefiltersamling/OppgaveFilterSamling';
+import { useProduksjonsstyringFilter } from 'components/produksjonsstyring/allefiltereprovider/ProduksjonsstyringFilterHook';
 
 interface Props {
   enheter: Array<Enhet>;
@@ -43,15 +42,15 @@ export const MinEnhet = ({ enheter }: Props) => {
 
   const [listeVisning, setListeVisning] = useState<boolean>(false);
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
-  const alleFiltere = useContext(AlleFiltereContext);
+  const { filter } = useProduksjonsstyringFilter();
 
   const behandlingstyperQuery = useMemo(
     () =>
       statistikkQueryparams({
-        behandlingstyper: alleFiltere.behandlingstyper,
+        behandlingstyper: filter.behandlingstyper,
         ...(aktivEnhet ? { enheter: [aktivEnhet] } : {}),
       }),
-    [alleFiltere, aktivEnhet]
+    [filter, aktivEnhet]
   );
 
   const oppdaterEnhet = (enhetsnr: string) => {
@@ -104,22 +103,34 @@ export const MinEnhet = ({ enheter }: Props) => {
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
       <VStack padding={'5'} gap={'5'}>
-        <VStack align={'end'}>
-          <Button
-            variant={'secondary'}
-            className={'fit-content'}
-            size={'small'}
-            icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
-            onClick={() => setListeVisning(!listeVisning)}
-          >
-            {listeVisning ? 'Gridvisning' : 'Listevisning'}
-          </Button>
-        </VStack>
-        <HStack>
-          <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} setAktivEnhet={oppdaterEnhet} />
-        </HStack>
+        <Box
+          background={'bg-default'}
+          borderColor={'border-subtle'}
+          borderWidth={'1'}
+          padding={'4'}
+          borderRadius={'medium'}
+        >
+          <HStack justify={'space-between'} align={'center'}>
+            <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} setAktivEnhet={oppdaterEnhet} />
+            <Button
+              variant={'secondary'}
+              icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
+              className={'fit-content'}
+              size={'small'}
+              onClick={() => setListeVisning(!listeVisning)}
+            >
+              {listeVisning ? 'Gridvisning' : 'Listevisning'}
+            </Button>
+          </HStack>
+        </Box>
         <VStack gap={'4'}>
-          <Box borderColor={'border-subtle'} borderWidth={'1'} padding={'8'} borderRadius={'medium'}>
+          <Box
+            background={'bg-default'}
+            borderColor={'border-subtle'}
+            borderWidth={'1'}
+            padding={'8'}
+            borderRadius={'medium'}
+          >
             <Heading size={'large'} spacing>
               Behandlinger
             </Heading>
@@ -147,11 +158,16 @@ export const MinEnhet = ({ enheter }: Props) => {
               )}
             </div>
           </Box>
-          <Box borderColor={'border-subtle'} borderWidth={'1'} padding={'8'} borderRadius={'medium'}>
+          <Box
+            background={'bg-default'}
+            borderColor={'border-subtle'}
+            borderWidth={'1'}
+            padding={'8'}
+            borderRadius={'medium'}
+          >
             <Heading size={'large'} spacing>
               Oppgaver
             </Heading>
-            <OppgaveFilterSamling />
             <div className={listeVisning ? styles.plotList : styles.plotGrid}>
               {isSuccess(behandlingerPerSteggruppe) && (
                 <BehandlingerPerSteggruppe

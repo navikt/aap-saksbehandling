@@ -2,7 +2,7 @@
 
 import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
-import { AlleFiltereProvider } from 'components/produksjonsstyring/allefiltereprovider/AlleFiltereProvider';
+import { ProduksjonsstyringFilterProvider } from 'components/produksjonsstyring/allefiltereprovider/ProduksjonsstyringFilterProvider';
 import { TotaloversiktBehandlinger } from 'components/produksjonsstyring/totaloversiktbehandlinger/TotaloversiktBehandlinger';
 import { MinEnhet } from 'components/produksjonsstyring/minenhet/MinEnhet';
 import { Enhet } from 'lib/types/oppgaveTypes';
@@ -19,7 +19,7 @@ export const Produksjonsstyringsmeny = ({ enheter }: Props) => {
   const [selected, setSelected] = useState<MenyValg>('Totaloversikt');
 
   return (
-    <AlleFiltereProvider>
+    <ProduksjonsstyringFilterProvider>
       <VStack gap={'8'} padding={'8'} maxWidth={'1680px'} marginInline={'auto'} marginBlock={'0'}>
         <HStack gap={'4'} align={'center'}>
           <Heading level={'1'} size={'large'}>
@@ -37,6 +37,6 @@ export const Produksjonsstyringsmeny = ({ enheter }: Props) => {
         {selected === 'Totaloversikt' && <TotaloversiktBehandlinger />}
         {selected === 'Min enhet' && <MinEnhet enheter={enheter} />}
       </VStack>
-    </AlleFiltereProvider>
+    </ProduksjonsstyringFilterProvider>
   );
 };
