@@ -103,7 +103,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5028':
       return 'Vurder trekk av søknad';
     case '5030':
-      return 'Samordning arbeidsgiver';
+      return 'Ytelser fra arbeidsgiver (sluttpakke)';
     case '5022':
       return 'Overstyr § 11-2 forutgående medlemskap';
     case '5050':
