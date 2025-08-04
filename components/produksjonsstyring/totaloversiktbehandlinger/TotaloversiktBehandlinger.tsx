@@ -85,7 +85,6 @@ export const TotaloversiktBehandlinger = () => {
   return (
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
-      <OppgaveFilterSamling />
       <VStack padding={'5'} gap={'5'}>
         <VStack align={'end'}>
           <Button
@@ -128,6 +127,7 @@ export const TotaloversiktBehandlinger = () => {
           </Box>
           <Box borderColor={'border-subtle'} borderWidth={'1'} padding={'8'} borderRadius={"medium"}>
             <Heading size={"large"} spacing>Oppgaver</Heading>
+            <OppgaveFilterSamling />
             <div className={listeVisning ? styles.plotList : styles.plotGrid}>
               {isSuccess(behandlingerPerSteggruppe) && (
                 <BehandlingerPerSteggruppe

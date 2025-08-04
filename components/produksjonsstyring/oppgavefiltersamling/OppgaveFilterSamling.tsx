@@ -1,6 +1,6 @@
 'use client';
 
-import { HStack, Label, UNSAFE_Combobox, VStack } from '@navikt/ds-react';
+import { HStack, UNSAFE_Combobox, VStack } from '@navikt/ds-react';
 import { useContext, useEffect, useState } from 'react';
 import { OppgaveAvklaringsbehovKode } from 'lib/types/oppgaveTypes';
 import { oppgaveAvklaringsbehov } from '../../../lib/utils/avklaringsbehov';
@@ -35,10 +35,9 @@ export const OppgaveFilterSamling = () => {
   }
   return (
     <VStack padding={'5'} gap={'5'}>
-      <Label>Oppgavefiltere</Label>
       <HStack>
         <UNSAFE_Combobox
-          label={'Type oppgave'}
+          label={'Filtrer på oppgavetype'}
           options={oppgaveOptions}
           size={'small'}
           isMultiSelect
