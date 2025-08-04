@@ -15,6 +15,9 @@ export type BehandlingPerSteggruppe =
   components['schemas']['no.nav.aap.statistikk.produksjonsstyring.BehandlingPerSteggruppe'];
 export type BehandlingÅrsakAntallGjennomsnitt =
   components['schemas']['no.nav.aap.statistikk.produksjonsstyring.BehandlingAarsakAntallGjennomsnitt'];
+export type OppgaverPerSteggruppe =
+  components['schemas']['no.nav.aap.statistikk.produksjonsstyring.OppgaverPerSteggruppe'];
+
 // typer fra enums
 export type BehandlingstyperRequestQuery = `${NonNullable<
   NonNullable<paths['/behandlingstid']['get']['parameters']['query']>['behandlingstyper']

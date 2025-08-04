@@ -14,6 +14,7 @@ import {
   BehandlingÅrsakAntallGjennomsnitt,
   FordelingLukkedeBehandlinger,
   FordelingÅpneBehandlinger,
+  OppgaverPerSteggruppe,
   VenteÅrsakOgGjennomsnitt,
 } from './types/statistikkTypes';
 import { BehandlingEndringerPerDag } from 'lib/types/statistikkTypes';
@@ -43,6 +44,10 @@ export async function venteÅrsakerClient(url: string) {
 
 export async function behandlingerPerSteggruppeClient(url: string) {
   return clientFetch<Array<BehandlingPerSteggruppe>>(url, 'GET');
+}
+
+export async function oppgaverPerSteggruppeClient(url: string) {
+  return clientFetch<OppgaverPerSteggruppe>(url, 'GET');
 }
 
 export async function årsakTilBehandlingClient(url: string) {
