@@ -31,6 +31,7 @@ import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 import { isSuccess } from 'lib/utils/api';
 import { useLagreAktivEnhet } from 'hooks/oppgave/aktivEnhetHook';
 import { OppgaverInnUt } from '../oppgaverinnut/OppgaverInnUt';
+import { OppgaveFilterSamling } from '../oppgavefiltersamling/OppgaveFilterSamling';
 
 interface Props {
   enheter: Array<Enhet>;
@@ -150,6 +151,7 @@ export const MinEnhet = ({ enheter }: Props) => {
             <Heading size={'large'} spacing>
               Oppgaver
             </Heading>
+            <OppgaveFilterSamling />
             <div className={listeVisning ? styles.plotList : styles.plotGrid}>
               {isSuccess(behandlingerPerSteggruppe) && (
                 <BehandlingerPerSteggruppe
