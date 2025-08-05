@@ -41,6 +41,7 @@ import {
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
+  RimeligGrunnMeldepliktGrunnlag,
   SakPersoninfo,
   SaksInfo,
   SamordningAndreStatligeYtelserGrunnlag,
@@ -176,6 +177,11 @@ export const hentAlderGrunnlag = async (behandlingsReferanse: string) => {
 export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/fritak-meldeplikt`;
   return await apiFetch<FritakMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentRimeligGrunnMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/meldeplikt-rimelig-grunn`;
+  return await apiFetch<RimeligGrunnMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSykdomsvurderingBrevGrunnlag = async (behandlingsReferanse: string) => {

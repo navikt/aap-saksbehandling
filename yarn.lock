@@ -1703,24 +1703,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.310":
-  version: 0.0.310
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.310::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.310%2F86f2387ab9b4febce85efcec06f09d2d5d5a2910"
-  checksum: 10c0/667f688eab186008cfee18c9ba88f6b5b0a96fbe5e7559c762a235538e68d97c3fe5ba1e373752975a51e623d71b46d53da3d2df242234c8b59eca01d6d45694
+"@navikt/aap-oppgave-typescript-types@npm:0.0.311":
+  version: 0.0.311
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.311::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.311%2Fd26d2596a8b384b51f9dcd423e2e598b1416ef7c"
+  checksum: 10c0/99bce28df801e2e4ae0fad088dca57eebb653c60f172495813dc748f9b934d552041db3100c18c7035e4f29570e1d63bdefbc4cef14baee2514eeaa16c1e9e50
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.338":
-  version: 0.0.338
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.338::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.338%2Ff803195dcfa32a381bfd6fce21f104273baadaa6"
-  checksum: 10c0/dfb4236de3740ea6d4415ba21219a15e46dc90880bfeb39f3aa3704071406e8c2837ae21577807b1d7333ebebcc4fc093ebb253d9d84da129613b09357614502
+"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.340":
+  version: 0.0.340
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.340::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.340%2F1bb94eae1e9bdf904fa6653f56e339ba1f7f81ed"
+  checksum: 10c0/e272d6c314c6ed3b247d6a4723b256d302a0bb70423d05a486e84bf3d5de165413d3f5c8979cfce61ec963072f6f539583eaeb8b8154f49656a0ab5cf5f4fe84
   languageName: node
   linkType: hard
 
-"@navikt/aap-statistikk-typescript-types@npm:^0.1.228":
-  version: 0.1.228
-  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.228::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.228%2Fca008ca6eaa5f9f4632056c29f94a2c4e458e848"
-  checksum: 10c0/20b4b01f6dda85a73e099d96bb0b0a8d8d081439fa426d4c5d5eeadabee3347c071de0cb6f4a73ef58244183e8b43176cf5763400dc7add1bbaed55fe48ca350
+"@navikt/aap-statistikk-typescript-types@npm:^0.1.231":
+  version: 0.1.231
+  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.231::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.231%2F88f03aba662a65fb32763c887ac67895d7de56c3"
+  checksum: 10c0/77865623f5a8acc0db18e2863c828c7c904a0643ff3eee5d6a00bdc40348c1ade88dbf078d39241545e5b9aaa7070f5c1787f90541da4a42e9e23baa713a522c
   languageName: node
   linkType: hard
 
@@ -3741,9 +3741,9 @@ __metadata:
     "@navikt/aap-breveditor": "npm:^0.4.2"
     "@navikt/aap-breveditor-css": "npm:^0.4.0"
     "@navikt/aap-felles-prettier": "npm:^5.3.0"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.310"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.338"
-    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.228"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.311"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.340"
+    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.231"
     "@navikt/aksel-icons": "npm:7.25.1"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
     "@navikt/ds-css": "npm:7.25.1"
@@ -3797,7 +3797,7 @@ __metadata:
     prettier: "npm:^3.5.3"
     react: "npm:19.1.0"
     react-dom: "npm:19.1.0"
-    react-hook-form: "npm:7.61.1"
+    react-hook-form: "npm:7.62.0"
     react-plotly.js: "npm:^2.6.0"
     react-select: "npm:^5.10.2"
     recharts: "npm:^2.15.4"
@@ -10902,12 +10902,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.61.1":
-  version: 7.61.1
-  resolution: "react-hook-form@npm:7.61.1"
+"react-hook-form@npm:7.62.0":
+  version: 7.62.0
+  resolution: "react-hook-form@npm:7.62.0"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 10c0/c241bca80f6d5f9f8b4f24b668670a3ee7249f9cf99537219c4ac1072431493d3768a910b6f2aaff20689a727d0e2797aeacb1ab9285b3e59309de3dd1bead41
+  checksum: 10c0/451a25a2ddf07be14f690d2ad3f2f970e0b933fd059ef141c6da9e19d0566d739e9d5cc9c482e3533f3fd01d97e658b896a01ce45a1259ad7b0d4638ba0112c6
   languageName: node
   linkType: hard
 

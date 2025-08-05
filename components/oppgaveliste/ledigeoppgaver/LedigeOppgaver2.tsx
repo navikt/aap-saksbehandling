@@ -81,16 +81,21 @@ export const LedigeOppgaver2 = ({ enheter }: Props) => {
   const behandlingOpprettetTom = form.watch('behandlingOpprettetTom');
   const behandlingOpprettetFom = form.watch('behandlingOpprettetFom');
 
+  const utvidetFilter =
+    aktivKøId === ALLE_OPPGAVER_ID
+      ? {
+          behandlingstyper: (form.watch('behandlingstyper') ||
+            []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
+          tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
+          fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
+          statuser: form.watch('statuser') || [],
+          årsaker: form.watch('årsaker') || [],
+          avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
+        }
+      : undefined;
+
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
-    useLedigeOppgaver([aktivEnhet], veilederFilter === 'veileder', aktivKøId, {
-      behandlingstyper: (form.watch('behandlingstyper') ||
-        []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
-      tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
-      fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
-      statuser: form.watch('statuser') || [],
-      årsaker: form.watch('årsaker') || [],
-      avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
-    });
+    useLedigeOppgaver([aktivEnhet], veilederFilter === 'veileder', aktivKøId, utvidetFilter);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
     hentKøerForEnheterClient([aktivEnhet])

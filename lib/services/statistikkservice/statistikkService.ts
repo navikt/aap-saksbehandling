@@ -102,3 +102,12 @@ export const hentÅrsakTilBehandling = async (
   const url = `${statistikkApiBaseURL}/behandlinger/årsak-til-behandling?${statistikkQueryparams({ behandlingstyper, enheter })}`;
   return await apiFetch<BehandlingÅrsakAntallGjennomsnitt[]>(url, statistikkApiScope, 'GET');
 };
+
+export const hentOppgaverInnUt = async (
+  behandlingstyper: Array<BehandlingsTyperOption> = [],
+  enheter: Array<string>,
+  oppslagsPeriode?: string
+) => {
+  const url = `${statistikkApiBaseURL}/oppgaver-per-steggruppe-med-periode?${statistikkQueryparams({ behandlingstyper, enheter, oppslagsPeriode })}`;
+  return await apiFetch<BehandlingÅrsakAntallGjennomsnitt[]>(url, statistikkApiScope, 'GET');
+};
