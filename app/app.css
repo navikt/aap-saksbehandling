@@ -1,5 +1,3 @@
-@layer aksel, brev, globals;
-
 @import '@navikt/ds-css' layer(aksel);
 @import '@navikt/aap-breveditor-css' layer(brev);
-@import 'styles/globals.css' layer(globals);
+@import 'styles/globals.css';
