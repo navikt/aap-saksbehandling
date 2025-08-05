@@ -9,7 +9,7 @@ import {
   JaEllerNeiOptions,
 } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent, useCallback, useEffect } from 'react';
+import { FormEvent, useCallback } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Alert, Link } from '@navikt/ds-react';
 import { DiagnoseSystem } from 'lib/diagnosesøker/DiagnoseSøker';
@@ -138,6 +138,10 @@ export const Sykdomsvurdering = ({
         ],
         defaultValue: getStringEllerUndefined(diagnosegrunnlag?.kodeverk),
         rules: { required: 'Du må velge et system for diagnoser' },
+        onChange: () => {
+          form.setValue('hoveddiagnose', null);
+          form.setValue('bidiagnose', null);
+        },
       },
       hoveddiagnose: {
         type: 'async_combobox',
