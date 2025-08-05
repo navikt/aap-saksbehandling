@@ -47,7 +47,7 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
   }
 
   const queryString = params.toString();
-  return queryString ? `?${queryString}` : '/';
+  return queryString ? `?${queryString}` : '';
 }
 
 export function useOppgaver({
@@ -75,7 +75,8 @@ export function useOppgaver({
     const suffix = visKunOppgaverSomBrukerErVeilederPå ? '/veileder/' : '/';
     const typeSuffix = `/${type}`;
     const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
-    return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}?side=${pageIndex}`;
+    const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`
+    return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}`;
   };
 
   const {
