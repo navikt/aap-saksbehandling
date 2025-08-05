@@ -34,8 +34,12 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
     params.append('tom', filter.tom);
   }
 
-  if (filter?.statuser?.length) {
-    filter.statuser.forEach((status) => params.append('statuser', status));
+  if (filter?.returStatuser?.length) {
+    filter.returStatuser.forEach((status) => params.append('returStatuser', status));
+  }
+
+  if (filter?.påVent) {
+    params.append('påVent', filter.påVent.toString());
   }
 
   if (filter?.årsaker?.length) {

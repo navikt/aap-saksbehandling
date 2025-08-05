@@ -22,7 +22,10 @@ import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppga
 import { formaterDatoForBackend } from 'lib/utils/date';
 
 import styles from './LedigeOppgaver2.module.css';
-import { NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper } from '@navikt/aap-oppgave-typescript-types';
+import {
+  NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
+  NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
+} from '@navikt/aap-oppgave-typescript-types';
 import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 
@@ -88,7 +91,8 @@ export const LedigeOppgaver2 = ({ enheter }: Props) => {
             []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
           tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
           fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
-          statuser: form.watch('statuser') || [],
+          returStatuser: (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[],
+          påVent: form.watch('statuser')?.includes('VENT'),
           årsaker: form.watch('årsaker') || [],
           avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
         }
