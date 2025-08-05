@@ -1,12 +1,16 @@
 'use client';
 
 import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react';
-import { AlleFiltere } from 'components/produksjonsstyring/filtersamling/FilterSamling';
-import { behandlingsTyperOptions } from 'lib/utils/behandlingstyper';
+import { BehandlingsTyperOption, behandlingsTyperOptions } from 'lib/utils/behandlingstyper';
+
+interface Filter {
+  behandlingstyper: BehandlingsTyperOption[];
+  oppgaveType: string[];
+}
 
 interface ProduksjonsstyringContextType {
-  filter: AlleFiltere;
-  setFilter: Dispatch<SetStateAction<AlleFiltere>>;
+  filter: Filter;
+  setFilter: Dispatch<SetStateAction<Filter>>;
 }
 
 export const ProduksjonsstyringFilterContext = createContext<ProduksjonsstyringContextType | null>(null);
@@ -16,7 +20,7 @@ interface Props {
 }
 
 export const ProduksjonsstyringFilterProvider = ({ children }: Props) => {
-  const [filter, setFilter] = useState<AlleFiltere>({ behandlingstyper: behandlingsTyperOptions });
+  const [filter, setFilter] = useState<Filter>({ behandlingstyper: behandlingsTyperOptions, oppgaveType: [] });
 
   const context: ProduksjonsstyringContextType = {
     filter,

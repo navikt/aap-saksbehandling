@@ -102,7 +102,7 @@ export const MinEnhet = ({ enheter }: Props) => {
   return (
     <HGrid columns={'1fr 6fr'}>
       <FilterSamling />
-      <VStack padding={'5'} gap={'5'}>
+      <VStack gap={'4'}>
         <Box
           background={'bg-default'}
           borderColor={'border-subtle'}

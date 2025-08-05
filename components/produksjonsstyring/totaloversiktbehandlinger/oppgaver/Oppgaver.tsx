@@ -1,31 +1,21 @@
-import { Box, Heading, VStack } from '@navikt/ds-react';
-import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
+import { Box, Heading, UNSAFE_Combobox, VStack } from '@navikt/ds-react';
 import styles from 'components/produksjonsstyring/totaloversiktbehandlinger/TotaloversiktBehandlinger.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { BehandlingerPerSteggruppe } from 'components/produksjonsstyring/behandlingerpersteggruppe/BehandlingerPerSteggruppe';
 import { OppgaverInnUt } from 'components/produksjonsstyring/oppgaverinnut/OppgaverInnUt';
 import useSWR from 'swr';
 import { behandlingerPerSteggruppeClient } from 'lib/oppgaveClientApi';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { useProduksjonsstyringFilter } from 'components/produksjonsstyring/allefiltereprovider/ProduksjonsstyringFilterHook';
+import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
+import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 
 interface Props {
   behandlingstyperQuery: string;
   listeVisning: boolean;
 }
 
-interface FormField {
-  oppgaveType: string;
-}
-
 export const Oppgaver = ({ behandlingstyperQuery, listeVisning }: Props) => {
-  const { form, formFields } = useConfigForm<FormField>({
-    oppgaveType: {
-      type: 'combobox_multiple',
-      options: oppgaveAvklaringsbehov,
-      label: 'Filtrer på oppgavetype',
-    },
-  });
+  const { setFilter, filter } = useProduksjonsstyringFilter();
 
   const behandlingerPerSteggruppe = useSWR(
     `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
@@ -47,6 +37,14 @@ export const Oppgaver = ({ behandlingstyperQuery, listeVisning }: Props) => {
     behandlingerPerSteggruppeClient
   ).data;
 
+  const onToggleSelected = (option: string, isSelected: boolean) => {
+    if (isSelected) {
+      setFilter({ ...filter, oppgaveType: [...filter.oppgaveType, option] });
+    } else {
+      setFilter({ ...filter, oppgaveType: filter.oppgaveType.filter((o) => o !== option) });
+    }
+  };
+
   return (
     <Box
       background={'bg-default'}
@@ -57,7 +55,20 @@ export const Oppgaver = ({ behandlingstyperQuery, listeVisning }: Props) => {
     >
       <VStack gap={'4'}>
         <Heading size={'large'}>Oppgaver</Heading>
-        <FormField form={form} formField={formFields.oppgaveType} />
+
+        <UNSAFE_Combobox
+          label={'Type behandling'}
+          options={oppgaveAvklaringsbehov}
+          size={'small'}
+          isMultiSelect
+          onToggleSelected={onToggleSelected}
+          selectedOptions={filter.oppgaveType.map((option) => {
+            return {
+              label: mapBehovskodeTilBehovstype(option),
+              value: option,
+            };
+          })}
+        />
 
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {isSuccess(behandlingerPerSteggruppe) && (
