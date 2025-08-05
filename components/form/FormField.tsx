@@ -47,6 +47,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           readOnly={formField.readOnly}
           className={className}
           autocomplete={autocomplete}
+          onChangeCustom={formField.onChange}
         />
       )}
       {formField.type === 'textarea' && (
@@ -61,6 +62,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           readOnly={formField.readOnly}
           className={className}
           autocomplete={autocomplete}
+          onChangeCustom={formField.onChange}
         />
       )}
       {formField.type === 'radio' && (
@@ -75,6 +77,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           size={size}
           horisontal={horizontalRadio}
           readOnly={formField.readOnly}
+          onChangeCustom={formField.onChange}
         >
           {formField.options.map((option) => (
             <Radio key={option.value} value={option.value} description={option.description}>
@@ -98,6 +101,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           selected={form.getValues(formField.name)}
           readOnly={formField.readOnly}
           strategy={formField.strategy}
+          onChangeCustom={formField.onChange}
         />
       )}
       {formField.type === 'date_input' && (
@@ -112,6 +116,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           readOnly={formField.readOnly}
           className={className}
           autocomplete={autocomplete}
+          onChangeCustom={formField.onChange}
         />
       )}
       {formField.type === 'checkbox' && (
@@ -125,6 +130,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           description={formField.description}
           readOnly={formField.readOnly}
           className={className}
+          onChangeCustom={formField.onChange}
         >
           {formField.options.map(mapToValuePair).map((option) => (
             <Checkbox value={option.value} key={option.value}>
@@ -164,6 +170,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           size={size}
           readOnly={formField.readOnly}
           className={className}
+          onChangeCustom={formField.onChange}
         >
           {children}
         </CheckboxWrapper>
