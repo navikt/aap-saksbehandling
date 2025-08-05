@@ -85,7 +85,9 @@ export const AlleOppgaver2 = ({ enheter }: Props) => {
             []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
           tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
           fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
-          returStatuser: (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[],
+          returStatuser: (
+            (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[]
+          ).filter((status) => status.valueOf() !== 'VENT'),
           påVent: form.watch('statuser')?.includes('VENT'),
           årsaker: form.watch('årsaker') || [],
           avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
