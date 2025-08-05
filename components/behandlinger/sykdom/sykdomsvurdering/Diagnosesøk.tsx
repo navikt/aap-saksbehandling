@@ -21,12 +21,13 @@ export const Diagnosesøk = ({ form, formFields, readOnly, hoveddiagnoseDefaultO
   const defaultOptionsBidiagnose = hoveddiagnoseDefaultOptions
     ? hoveddiagnoseDefaultOptions
     : diagnoseSøker(kodeverkValue!, '');
+
+  const harSkadeEllerLyte = form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja;
+
   return (
     <>
-      {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
-        <FormField form={form} formField={formFields.kodeverk} />
-      )}
-      {kodeverkValue && (
+      {harSkadeEllerLyte && <FormField form={form} formField={formFields.kodeverk} />}
+      {kodeverkValue != null && harSkadeEllerLyte && (
         <>
           <AsyncComboSearch
             label={'Hoveddiagnose'}
