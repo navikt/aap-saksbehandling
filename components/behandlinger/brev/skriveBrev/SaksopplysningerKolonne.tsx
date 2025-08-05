@@ -26,7 +26,7 @@ export const SaksopplysningerKolonne = ({
 }: Props) => {
   const gjeldendeSykdomsvurdering = sykdomsgrunnlag.sykdomsvurderinger[sykdomsgrunnlag.sykdomsvurderinger.length - 1];
   const gjeldendeBistandsbehov = bistandsbehovGrunnlag.vurdering;
-  const gjeldendeSykdomsvurderingForBrev = sykdomsvurderingBrevGrunnlag?.vurdering;
+  const gjeldendeSykdomsvurderingForBrev = sykdomsvurderingBrevGrunnlag?.vurdering?.vurdering;
   const refusjonVurdering = refusjonGrunnlag.gjeldendeVurdering;
 
   return (
@@ -48,7 +48,7 @@ export const SaksopplysningerKolonne = ({
       )}
       {/* TODO fjern toggles når verifisert */}
       {(isDev() || isLocal()) && gjeldendeSykdomsvurderingForBrev && (
-        <SaksopplysningerKort tittel="Tekst til vedtaksbrev" begrunnelse={gjeldendeSykdomsvurderingForBrev.vurdering} />
+        <SaksopplysningerKort tittel="Tekst til vedtaksbrev" begrunnelse={gjeldendeSykdomsvurderingForBrev} />
       )}
       {refusjonVurdering?.harKrav && (
         <SaksopplysningerKort

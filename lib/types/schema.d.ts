@@ -6418,7 +6418,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003';
-      vurdering: string;
+      vurdering?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.TjenestepensjonRefusjonskravL\u00F8sning': {
       /** @enum {string} */
@@ -7605,11 +7605,12 @@ export interface components {
       navn: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevDto': {
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto'][];
       kanSaksbehandle: boolean;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto': {
-      vurdering: string;
+      vurdering?: string | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.brev.VarselOmBrevbestillingDto': {
