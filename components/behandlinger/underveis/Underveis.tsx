@@ -44,7 +44,11 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
         </StegSuspense>
       )}
       <StegSuspense>
-        <UnderveisgrunnlagMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+        <UnderveisgrunnlagMedDataFetching
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          behandlingsreferanse={behandlingsreferanse}
+        />
       </StegSuspense>
     </GruppeSteg>
   );

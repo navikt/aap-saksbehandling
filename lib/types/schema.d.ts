@@ -5801,6 +5801,7 @@ export interface components {
       /** @enum {string} */
       konsekvens: 'OMGJØRING' | 'BEHANDLE_PÅ_NYTT' | 'INGENTING';
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -8077,6 +8078,7 @@ export interface components {
       innstilling: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR';
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -8112,6 +8114,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -8154,6 +8157,7 @@ export interface components {
       innstilling: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR';
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -8189,6 +8193,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -8623,6 +8628,7 @@ export interface components {
       /** @enum {string} */
       konsekvens: 'OMGJØRING' | 'BEHANDLE_PÅ_NYTT' | 'INGENTING';
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9118,6 +9124,7 @@ export interface components {
       innstilling: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR';
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9153,6 +9160,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9194,6 +9202,7 @@ export interface components {
       innstilling: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR';
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9229,6 +9238,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9280,6 +9290,7 @@ export interface components {
       /** @enum {string} */
       type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG' | 'TRUKKET';
       'vilk\u00E5rSomSkalOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9315,6 +9326,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
       'vilk\u00E5rSomSkalOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9361,6 +9373,7 @@ export interface components {
       /** @enum {string} */
       type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG' | 'TRUKKET';
       'vilk\u00E5rSomSkalOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9400,6 +9413,7 @@ export interface components {
       /** @enum {string} */
       type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG' | 'TRUKKET';
       'vilk\u00E5rSomSkalOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
