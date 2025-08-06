@@ -263,13 +263,13 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
   }
 }
 
-export function mapStatusTilTekst(status: 'VENT' | 'RETUR_KVALITETSSIKRER' | 'RETUR_BESLUTTER'): string {
+export function mapStatusTilTekst(status: 'VENT' | 'RETUR_FRA_KVALITETSSIKRER' | 'RETUR_FRA_BESLUTTER'): string {
   switch (status) {
     case 'VENT':
       return 'På vent';
-    case 'RETUR_KVALITETSSIKRER':
+    case 'RETUR_FRA_KVALITETSSIKRER':
       return 'Retur fra kvalitetssikrer';
-    case 'RETUR_BESLUTTER':
+    case 'RETUR_FRA_BESLUTTER':
       return 'Retur fra beslutter';
   }
 }

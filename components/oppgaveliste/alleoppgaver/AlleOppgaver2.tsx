@@ -18,7 +18,10 @@ import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppga
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
-import { NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper } from '@navikt/aap-oppgave-typescript-types';
+import {
+  NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
+  NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
+} from '@navikt/aap-oppgave-typescript-types';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver2.module.css';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
@@ -82,7 +85,10 @@ export const AlleOppgaver2 = ({ enheter }: Props) => {
             []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
           tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
           fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
-          statuser: form.watch('statuser') || [],
+          returStatuser: (
+            (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[]
+          ).filter((status) => status.valueOf() !== 'VENT'),
+          påVent: form.watch('statuser')?.includes('VENT'),
           årsaker: form.watch('årsaker') || [],
           avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
         }
