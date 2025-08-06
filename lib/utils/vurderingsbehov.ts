@@ -62,6 +62,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Revurder mannuell inntekt';
     case 'OPPFØLGINGSOPPGAVE':
       return 'Oppfølgingsoppgave';
+    case 'HELHETLIG_VURDERING':
+      return 'Helhetlig vurdering';
   }
 };
 
