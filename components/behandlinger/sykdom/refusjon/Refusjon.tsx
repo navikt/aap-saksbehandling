@@ -224,7 +224,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
                 readOnly={readOnly}
               />
               <AsyncComboSearch
-                label={'Velg Nav-kontor'}
+                label={'Søk opp Nav-kontor'}
                 form={form}
                 name={`refusjoner.${index}.navKontor`}
                 fetcher={kontorSøk}

@@ -34,8 +34,12 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
     params.append('tom', filter.tom);
   }
 
-  if (filter?.statuser?.length) {
-    filter.statuser.forEach((status) => params.append('statuser', status));
+  if (filter?.returStatuser?.length) {
+    filter.returStatuser.forEach((status) => params.append('returStatuser', status));
+  }
+
+  if (filter?.påVent) {
+    params.append('påVent', filter.påVent.toString());
   }
 
   if (filter?.årsaker?.length) {
@@ -43,7 +47,7 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
   }
 
   const queryString = params.toString();
-  return queryString ? `?${queryString}` : '/';
+  return queryString ? `?${queryString}` : '';
 }
 
 export function useOppgaver({
@@ -71,7 +75,8 @@ export function useOppgaver({
     const suffix = visKunOppgaverSomBrukerErVeilederPå ? '/veileder/' : '/';
     const typeSuffix = `/${type}`;
     const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
-    return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}?side=${pageIndex}`;
+    const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`
+    return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}`;
   };
 
   const {

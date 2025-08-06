@@ -7,6 +7,7 @@ export const getValgteHjemlerSomIkkeErImplementert = (value: string | Hjemmel[] 
 };
 
 export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
+  FOLKETRYGDLOVEN_KAPITTEL_2: 'Kapittel 2',
   FOLKETRYGDLOVEN_11_2: '§ 11-2',
   FOLKETRYGDLOVEN_11_3: '§ 11-3',
   FOLKETRYGDLOVEN_11_4: '§ 11-4',

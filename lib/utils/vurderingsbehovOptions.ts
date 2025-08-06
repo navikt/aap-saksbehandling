@@ -14,6 +14,7 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Refusjonskrav', value: 'REFUSJONSKRAV' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
   { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
+  { label: 'Rimelig grunn til ikke overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
   // TODO: For at denne skal fungere må det gjøres litt justering i data som sendes i melding.
   // { label: 'Utenlandsopphold før søknadstidspunkt', value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT' },
 ];
