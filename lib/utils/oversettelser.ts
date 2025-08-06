@@ -5,6 +5,7 @@ import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/op
 const behovskodeMap = {
   // Behandlingsflyt
   '5001': '§ 11-14 Student',
+  '5002': '§ 11-10 Rimelig grunn',
   '5003': '§ 11-5 Nedsatt arbeidsevne',
   '5004': '§ 11-23 Arbeidsevne som ikke er utnyttet',
   '5005': '§ 11-10 Fritak fra meldeplikt',

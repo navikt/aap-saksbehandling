@@ -3,6 +3,7 @@ import type { Vurderingsbehov } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
 export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
+  { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
   { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
   { label: 'Forutgående medlemskap', value: 'FORUTGAENDE_MEDLEMSKAP' },
   { label: 'Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
