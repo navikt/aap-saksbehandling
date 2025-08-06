@@ -10,7 +10,7 @@ import {
   JaEllerNeiOptions,
 } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent, useCallback, useEffect } from 'react';
+import { FormEvent, useCallback } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Alert, Link } from '@navikt/ds-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
