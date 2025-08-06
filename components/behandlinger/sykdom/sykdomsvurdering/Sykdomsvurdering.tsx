@@ -71,7 +71,7 @@ export const Sykdomsvurdering = ({
   const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
 
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
-  const harSkadeSykdomEllerLyteLabel = 'Har bruker sykdom, skade eller lyte?';
+  const harSkadeSykdomEllerLyteLabel = 'Har brukeren sykdom, skade eller lyte?';
   const erArbeidsevnenNedsattLabel = 'Har brukeren nedsatt arbeidsevne?';
   const erNedsettelseIArbeidsevneMerEnnHalvpartenLabel = 'Er arbeidsevnen nedsatt med minst halvparten?';
   const erSkadeSykdomEllerLyteVesentligdelLabel =
