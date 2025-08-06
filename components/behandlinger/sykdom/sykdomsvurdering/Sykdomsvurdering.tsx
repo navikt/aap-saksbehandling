@@ -236,33 +236,6 @@ export const Sykdomsvurdering = ({
     })(event);
   };
 
-  const kodeverkValue = form.watch('kodeverk');
-  useEffect(() => {
-    if (kodeverkValue !== diagnosegrunnlag?.kodeverk) {
-      form.setValue('hoveddiagnose', null);
-      form.setValue('bidiagnose', null);
-    } else if (
-      kodeverkValue === diagnosegrunnlag?.kodeverk &&
-      Array.isArray(hoveddiagnoseDefaultOptions) &&
-      hoveddiagnoseDefaultOptions.length
-    ) {
-      // kode for å omgå en bug som oppstår under test når man kan kvalitetssikre sin egen vurdering
-      // bør kunne slettes når man ikke lengre kan kvalitetssikre sin egen vurdering
-      form.resetField('hoveddiagnose', {
-        defaultValue: hoveddiagnoseDefaultOptions?.find((value) => value.value === diagnosegrunnlag?.hoveddiagnose),
-      });
-      form.resetField('bidiagnose', {
-        defaultValue: bidiagnoserDeafultOptions?.filter((value) =>
-          diagnosegrunnlag?.bidiagnoser?.includes(value.value)
-        ),
-      });
-    } else {
-      form.resetField('hoveddiagnose');
-      form.resetField('bidiagnose');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- tar ikke med form som en dependency da den fører til at useEffect kjøres feil
-  }, [kodeverkValue, diagnosegrunnlag?.kodeverk]);
-
   const vurderingenGjelderFra = form.watch('vurderingenGjelderFra');
 
   const behandlingErRevurderingAvFørstegangsbehandling = useCallback(() => {
