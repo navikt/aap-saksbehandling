@@ -27,6 +27,7 @@ interface BaseFormField<FormFieldIds extends FieldValues> {
   description?: string;
   hideLabel?: boolean;
   rules?: RegisterOptions<FormFieldIds>;
+  onChange?: (event: React.SyntheticEvent) => void;
 }
 
 interface FormFieldText<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {

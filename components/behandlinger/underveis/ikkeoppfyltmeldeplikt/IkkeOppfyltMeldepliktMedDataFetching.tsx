@@ -5,14 +5,20 @@ import { IkkeOppfyltMeldeplikt } from 'components/behandlinger/underveis/ikkeopp
 
 interface Props {
   behandlingsreferanse: string;
+  behandlingVersjon: number;
+  readOnly: boolean;
 }
 
-export const IkkeOppfyltMeldepliktMedDataFetching = async ({ behandlingsreferanse }: Props) => {
+export const IkkeOppfyltMeldepliktMedDataFetching = async ({
+  behandlingsreferanse,
+  behandlingVersjon,
+  readOnly,
+}: Props) => {
   const grunnlag = await hentRimeligGrunnMeldepliktGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  return <IkkeOppfyltMeldeplikt grunnlag={grunnlag.data} />;
+  return <IkkeOppfyltMeldeplikt grunnlag={grunnlag.data} behandlingVersjon={behandlingVersjon} readOnly={readOnly} />;
 };
