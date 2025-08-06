@@ -2,6 +2,8 @@ import { Vurderingsbehov } from 'lib/types/types';
 
 export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): string => {
   switch (vurderingsbehov) {
+    case 'HELHETLIG_VURDERING':
+      return 'Helhetlig vurdering';
     case 'MOTTATT_SØKNAD':
       return 'Søknad';
     case 'MOTTATT_AKTIVITETSMELDING':

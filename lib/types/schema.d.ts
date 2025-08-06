@@ -4921,6 +4921,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.H\u00E5ndterSvarFraAndreinstansL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KvalitetssikringL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Legeerkl\u00E6ringBestillingL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.OverstyrIkkeOppfyltMeldepliktL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.RefusjonkravL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SamordningVentPaVirkningstidspunktL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SattP\u00E5VentL\u00F8sning']
@@ -5863,6 +5864,69 @@ export interface components {
         | '8001'
         | '8002'
         | '8003';
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.OverstyrIkkeOppfyltMeldepliktL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '5029'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5020'
+        | '5024'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5025'
+        | '5027'
+        | '5030'
+        | '5028'
+        | '5019'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5026'
+        | '5999'
+        | '5056'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003';
+      rimeligGrunnVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.RimeligGrunnVurderingDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.RefusjonkravL\u00F8sning': {
       /** @enum {string} */
@@ -8073,6 +8137,7 @@ export interface components {
       virkningstidspunkt?: string | null;
       vurderingsbehov: (
         | 'MOTTATT_SØKNAD'
+        | 'HELHETLIG_VURDERING'
         | 'MOTTATT_AKTIVITETSMELDING'
         | 'MOTTATT_MELDEKORT'
         | 'MOTTATT_LEGEERKLÆRING'
@@ -8105,20 +8170,22 @@ export interface components {
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
         | 'SØKNAD'
-        | 'OMGJØRING_ETTER_KLAGE'
-        | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
         | 'MANUELL_OPPRETTELSE'
         | 'HELSEOPPLYSNINGER'
+        | 'ANNET_RELEVANT_DOKUMENT'
+        | 'OMGJØRING_ETTER_KLAGE'
+        | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
+        | 'FASTSATT_PERIODE_PASSERT'
+        | 'FRITAK_MELDEPLIKT'
         | 'MELDEKORT'
         | 'AKTIVITETSMELDING'
-        | 'ANNET_RELEVANT_DOKUMENT'
         | 'OPPFØLGINGSOPPGAVE'
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'KLAGE'
-        | 'FASTSATT_PERIODE_PASSERT'
         | null;
       '\u00E5rsaker': (
         | 'MOTTATT_SØKNAD'
+        | 'HELHETLIG_VURDERING'
         | 'MOTTATT_AKTIVITETSMELDING'
         | 'MOTTATT_MELDEKORT'
         | 'MOTTATT_LEGEERKLÆRING'
@@ -8273,6 +8340,7 @@ export interface components {
       'konsekvensAvOppf\u00F8lging': 'INGEN' | 'OPPRETT_VURDERINGSBEHOV';
       opplysningerTilRevurdering: (
         | 'MOTTATT_SØKNAD'
+        | 'HELHETLIG_VURDERING'
         | 'MOTTATT_AKTIVITETSMELDING'
         | 'MOTTATT_MELDEKORT'
         | 'MOTTATT_LEGEERKLÆRING'
@@ -8311,6 +8379,7 @@ export interface components {
       opplysningerTilRevurdering?:
         | (
             | 'MOTTATT_SØKNAD'
+            | 'HELHETLIG_VURDERING'
             | 'MOTTATT_AKTIVITETSMELDING'
             | 'MOTTATT_MELDEKORT'
             | 'MOTTATT_LEGEERKLÆRING'
@@ -9431,6 +9500,15 @@ export interface components {
       fraDato: string;
       harFritak: boolean;
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.RimeligGrunnVurderingDto': {
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fraDato: string;
+      harRimeligGrunn: boolean;
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.refusjonkrav.RefusjonkravVurderingDto': {
       /**
        * Format: date
@@ -9542,6 +9620,8 @@ export interface components {
        * @example 2025-04-01
        */
       skadedato: string;
+      /** Format: int32 */
+      yrkesskadeSaksnummer?: number | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningDto': {
       begrunnelse: string;
@@ -10392,6 +10472,7 @@ export interface components {
         | 'REVURDER_MANUELL_INNTEKT'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
+        | 'HELHETLIG_VURDERING'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ArbeidIPeriodeV0': {
@@ -10539,6 +10620,7 @@ export interface components {
         | 'REVURDER_MANUELL_INNTEKT'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
+        | 'HELHETLIG_VURDERING'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManueltOppgittBarn': {
@@ -10599,6 +10681,7 @@ export interface components {
         | 'REVURDER_MANUELL_INNTEKT'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
+        | 'HELHETLIG_VURDERING'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OmgjoeringskravbehandlingAvsluttetDetaljer': {
@@ -10645,6 +10728,7 @@ export interface components {
         | 'REVURDER_MANUELL_INNTEKT'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
+        | 'HELHETLIG_VURDERING'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgave': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0'];
@@ -10739,6 +10823,7 @@ export interface components {
       type: string;
       vurderingsbehov: (
         | 'MOTTATT_SØKNAD'
+        | 'HELHETLIG_VURDERING'
         | 'MOTTATT_AKTIVITETSMELDING'
         | 'MOTTATT_MELDEKORT'
         | 'MOTTATT_LEGEERKLÆRING'
@@ -10771,20 +10856,22 @@ export interface components {
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
         | 'SØKNAD'
-        | 'OMGJØRING_ETTER_KLAGE'
-        | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
         | 'MANUELL_OPPRETTELSE'
         | 'HELSEOPPLYSNINGER'
+        | 'ANNET_RELEVANT_DOKUMENT'
+        | 'OMGJØRING_ETTER_KLAGE'
+        | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
+        | 'FASTSATT_PERIODE_PASSERT'
+        | 'FRITAK_MELDEPLIKT'
         | 'MELDEKORT'
         | 'AKTIVITETSMELDING'
-        | 'ANNET_RELEVANT_DOKUMENT'
         | 'OPPFØLGINGSOPPGAVE'
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'KLAGE'
-        | 'FASTSATT_PERIODE_PASSERT'
         | null;
       '\u00E5rsaker': (
         | 'MOTTATT_SØKNAD'
+        | 'HELHETLIG_VURDERING'
         | 'MOTTATT_AKTIVITETSMELDING'
         | 'MOTTATT_MELDEKORT'
         | 'MOTTATT_LEGEERKLÆRING'
