@@ -9,7 +9,7 @@ export const erFerdigstilt = (status: Journalstatus) => {
     default:
       return false;
   }
-}
+};
 
 export const kanRedigeres = (status: Journalstatus) => {
   switch (status) {

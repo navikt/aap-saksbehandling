@@ -9,15 +9,15 @@ const registrertBarn: IdentifisertBarn = {
     identifikator: '98765432121',
     aktivIdent: true,
   },
-  fødselsdato: '2020-01-01',
+  fodselsDato: '2020-01-01',
   forsorgerPeriode: { fom: '2020-03-03', tom: '2038-03-03' },
 };
 
 describe('registrert barn', () => {
   it('har en heading med navn,pid og alder', () => {
     render(<RegistrertBarn registrertBarn={registrertBarn} navn={'TOR NADO'} />);
-    const forventetAlder = kalkulerAlder(new Date(registrertBarn.fødselsdato));
-    expect(screen.getByText(`TOR NADO, ${registrertBarn.ident.identifikator} (${forventetAlder})`)).toBeVisible();
+    const forventetAlder = kalkulerAlder(new Date(registrertBarn.fodselsDato!!));
+    expect(screen.getByText(`TOR NADO, ${registrertBarn?.ident?.identifikator} (${forventetAlder})`)).toBeVisible();
   });
 
   it('har en tekst som viser at det er et folkeregistrert barn', () => {

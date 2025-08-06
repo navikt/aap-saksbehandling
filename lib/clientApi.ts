@@ -21,6 +21,7 @@ import { ClientConfig } from 'lib/types/clientConfig';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { Markering } from 'lib/types/oppgaveTypes';
 
 const BASE_URL = '/saksbehandling';
 
@@ -129,6 +130,14 @@ export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKod
   return clientFetch<TilgangResponse>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/sjekk-tilgang`, 'POST', {
     kode: behovsKode,
   });
+}
+
+export function clientSettMarkeringForBehandling(referanse: string, markering: Markering) {
+  return clientFetch(`${BASE_URL}/api/behandling/${referanse}/markering/ny`, 'POST', markering);
+}
+
+export function clientFjernMarkeringForBehandling(referanse: string, markering: Markering) {
+  return clientFetch(`${BASE_URL}/api/behandling/${referanse}/markering/fjern`, 'POST', markering);
 }
 
 export async function clientHentBrukerInformasjon() {

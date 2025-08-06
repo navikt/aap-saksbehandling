@@ -15,7 +15,7 @@ export const AktivitetspliktHendelser = ({ hendelser }: Props) => {
       {hendelser && hendelser.length > 0 ? (
         <AktivitetspliktHendelserTabell aktivitetspliktHendelser={hendelser} />
       ) : (
-        <BodyShort>Ingen tidligere brudd registrert</BodyShort>
+        <BodyShort>Ingen tidligere brudd registrert.</BodyShort>
       )}
     </section>
   );

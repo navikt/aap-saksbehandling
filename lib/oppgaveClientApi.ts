@@ -4,8 +4,8 @@ import {
   NesteOppgaveRequestBody,
   NesteOppgaveResponse,
   Oppgave,
+  OppgavelisteRequest,
   OppgavelisteResponse,
-  Paging,
   PlukkOppgaveDto,
 } from './types/oppgaveTypes';
 import {
@@ -14,6 +14,7 @@ import {
   BehandlingÅrsakAntallGjennomsnitt,
   FordelingLukkedeBehandlinger,
   FordelingÅpneBehandlinger,
+  OppgaverPerSteggruppe,
   VenteÅrsakOgGjennomsnitt,
 } from './types/statistikkTypes';
 import { BehandlingEndringerPerDag } from 'lib/types/statistikkTypes';
@@ -45,25 +46,17 @@ export async function behandlingerPerSteggruppeClient(url: string) {
   return clientFetch<Array<BehandlingPerSteggruppe>>(url, 'GET');
 }
 
+export async function oppgaverPerSteggruppeClient(url: string) {
+  return clientFetch<OppgaverPerSteggruppe>(url, 'GET');
+}
+
 export async function årsakTilBehandlingClient(url: string) {
   return clientFetch<Array<BehandlingÅrsakAntallGjennomsnitt>>(url, 'GET');
 }
 
 // oppgave
-export async function hentOppgaverClient(
-  filterId: number,
-  enheter: string[],
-  veileder: boolean,
-  paging: Paging,
-  kunLedigeOppgaver?: boolean
-) {
-  return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', {
-    filterId,
-    enheter,
-    veileder,
-    paging,
-    kunLedigeOppgaver,
-  });
+export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
+  return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', oppgavelisteRequest);
 }
 
 export async function hentMineOppgaverClient() {
@@ -72,8 +65,8 @@ export async function hentMineOppgaverClient() {
 
 export async function avreserverOppgaveClient(oppgaver: number[]) {
   const body: AvreserverOppgaveDto = {
-    oppgaver: oppgaver
-  }
+    oppgaver: oppgaver,
+  };
   return clientFetch('/oppgave/api/oppgave/avreserver', 'POST', body);
 }
 export async function hentKøerForEnheterClient(enheter: string[]) {

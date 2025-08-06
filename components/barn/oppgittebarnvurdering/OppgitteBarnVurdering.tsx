@@ -11,9 +11,9 @@ import styles from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering.
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
   barnetilleggIndex: number;
-  ident: string;
+  ident: string | null | undefined;
   navn: string;
-  fødselsdato: string;
+  fødselsdato: string | null | undefined;
   readOnly: boolean;
 }
 
@@ -41,7 +41,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
         <div>
           <Detail className={styles.detailgray}>Oppgitt fosterbarn</Detail>
           <BodyShort size={'small'}>
-            {navn}, {ident} ({kalkulerAlder(new Date(fødselsdato))})
+            {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent fødselsdato'})
           </BodyShort>
         </div>
       </div>

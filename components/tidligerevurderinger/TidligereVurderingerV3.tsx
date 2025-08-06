@@ -34,7 +34,7 @@ export const TidligereVurderingerV3 = ({ tidligereVurderinger }: Props) => {
             <VStack gap={'1'}>
               {tidligereVurderinger.map((v, index) => {
                 const periode = `${formaterDatoForFrontend(v.periode.fom)} - ${v.periode.tom ? formaterDatoForFrontend(v.periode.tom) : ''}`;
-                const flereVurderinger = tidligereVurderinger.length > 1
+                const flereVurderinger = tidligereVurderinger.length > 1;
                 return (
                   //@ts-ignore
                   <Chips.Toggle

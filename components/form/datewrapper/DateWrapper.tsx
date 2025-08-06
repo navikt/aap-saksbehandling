@@ -1,8 +1,9 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
-import { addYears, isValid, subYears } from 'date-fns';
-import React from 'react';
+import { addYears, isEqual, isValid, subYears } from 'date-fns';
+import React, { useEffect } from 'react';
 import { Control, FieldPath, FieldValues, RegisterOptions, useController } from 'react-hook-form';
 import { isDate } from 'lodash';
+import { createSyntheticEvent } from 'lib/types/SyntheticEvent';
 
 export interface DateProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
@@ -18,6 +19,7 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   selected?: Date;
   readOnly?: boolean;
   strategy?: 'absolute' | 'fixed';
+  onChangeCustom?: (event: React.SyntheticEvent) => void;
 }
 
 const FRA_DATO = subYears(new Date(), 80);
@@ -37,6 +39,7 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
   selected,
   readOnly,
   strategy,
+  onChangeCustom,
 }: DateProps<FormFieldValues>) => {
   const {
     field: { value, onChange },
@@ -50,21 +53,45 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
     },
   });
 
-  const { datepickerProps, inputProps } = useDatepicker({
+  const {
+    datepickerProps,
+    inputProps,
+    selectedDay: selectedInternal,
+    setSelected,
+  } = useDatepicker({
     defaultSelected: selected,
-    onDateChange: (date) => onChange(date),
+    onDateChange: (date) => {
+      onChange(date);
+      if (onChangeCustom) {
+        onChangeCustom(createSyntheticEvent(date));
+      }
+    },
     toDate,
     fromDate,
     disableWeekends,
   });
 
+  // Må synce state slik at resetting av felt i rhf også oppdaterer intern state i datepicker
+  useEffect(() => {
+    if (!value && !selectedInternal) {
+      return;
+    }
+
+    if (
+      (value && !selectedInternal) ||
+      (!value && selectedInternal) ||
+      (value && selectedInternal && !isEqual(value, selectedInternal))
+    ) {
+      if (isValid(value)) {
+        setSelected(value);
+      } else {
+        setSelected(undefined);
+      }
+    }
+  }, [value, selectedInternal, setSelected]);
+
   return (
-    <DatePicker
-      {...datepickerProps}
-      id={name}
-      dropdownCaption
-      strategy={strategy}
-    >
+    <DatePicker {...datepickerProps} id={name} dropdownCaption strategy={strategy}>
       <DatePicker.Input
         onChange={onChange}
         onInput={onChange}

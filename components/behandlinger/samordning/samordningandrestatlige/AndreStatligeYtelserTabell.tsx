@@ -3,8 +3,6 @@
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SamordningAndreStatligeYtelserFormFields } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelser';
 import { Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
-import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
-import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
@@ -22,6 +20,10 @@ const ytelsesoptions: ValuePair<SamordningAndreStatligeYtelserYtelse | undefined
   {
     value: undefined,
     label: 'Velg',
+  },
+  {
+    value: 'SYKEPENGER',
+    label: 'Sykepenger',
   },
   {
     value: 'TILTAKSPENGER',
@@ -51,18 +53,16 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
       ytelse: undefined,
       fom: '',
       tom: '',
-      beløp: undefined,
     });
   }
   return (
     <VStack gap={'2'}>
-      <Label size={'small'}>Legg til ytelse, periode og beløp for utbetaling</Label>
+      <Label size={'small'}>Legg til ytelse og periode for utbetaling</Label>
       <TableStyled>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Ytelse</Table.HeaderCell>
             <Table.HeaderCell>Periode</Table.HeaderCell>
-            <Table.HeaderCell>Beløp</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -114,29 +114,6 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
                     readOnly={readOnly}
                   />
                 </HStack>
-              </Table.DataCell>
-              <Table.DataCell>
-                <TextFieldWrapper
-                  name={`vurderteSamordninger.${index}.beløp`}
-                  label={'Utbetalingsgrad'}
-                  hideLabel
-                  type={'text'}
-                  size={'small'}
-                  control={form.control}
-                  readOnly={readOnly}
-                  rules={{
-                    required: 'Du må velge beløp',
-                    validate: (value) => {
-                      if (Number.isNaN(Number(value))) {
-                        return 'Beløp må angis med siffer';
-                      }
-                      if (Number(value) < 0) {
-                        return 'Beløp kan ikke være mindre enn 0';
-                      }
-                    },
-                  }}
-                  className={styles.utbetalingsgrad}
-                />
               </Table.DataCell>
               <Table.DataCell>
                 <Button

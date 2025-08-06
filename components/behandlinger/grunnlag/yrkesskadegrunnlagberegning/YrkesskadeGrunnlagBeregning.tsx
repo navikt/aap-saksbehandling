@@ -61,9 +61,8 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
   );
 
   const { fields } = useFieldArray({ control: form.control, name: 'vurderinger' });
-  const vurdertAvAnsatt = yrkeskadeBeregningGrunnlag.vurderinger.length > 0
-    ? yrkeskadeBeregningGrunnlag.vurderinger[0].vurdertAv
-    : undefined;
+  const vurdertAvAnsatt =
+    yrkeskadeBeregningGrunnlag.vurderinger.length > 0 ? yrkeskadeBeregningGrunnlag.vurderinger[0].vurdertAv : undefined;
 
   return (
     <VilkårsKortMedForm

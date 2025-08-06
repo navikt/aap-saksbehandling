@@ -15,6 +15,8 @@ export type BistandsGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandGrunnlagResponse'];
 export type FritakMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagResponse'];
+export type RimeligGrunnMeldepliktGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktRimeligGrunnGrunnlagResponse'];
 export type ArbeidsevneGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto'];
 export type RefusjonskravGrunnlag =
@@ -54,7 +56,8 @@ export type BrevStatus =
 export type BrevMottaker =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
 export type Signatur = components['schemas']['no.nav.aap.brev.kontrakt.Signatur'];
-
+export type Mottaker =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.SkrivBrevLøsning']['mottakere'][number];
 export type SamordningTjenestePensjonGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.TjenestepensjonGrunnlagDTO'];
 export type SamordningGraderingGrunnlag =
@@ -79,6 +82,8 @@ export type RettighetsperiodeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeGrunnlagResponse'];
 export type FullmektigGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigGrunnlagDto'];
+export type FullmektigVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigVurderingDto'];
 export type FormkravGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.formkrav.FormkravGrunnlagDto'];
 export type PåklagetBehandlingGrunnlag =
@@ -326,10 +331,20 @@ export type NyÅrsakTilBehandlingV0 =
     meldingType: typeof NyÅrsakTilBehandlingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
+export type AvklarOppfolgingsoppgaveGrunnlagResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.AvklarOppfolgingsoppgaveGrunnlagResponse'];
+
+export const OppfølgingoppgaveV0 = 'OppfølgingsoppgaveV0';
+
+export type OppfølgingsoppgaveV0 =
+  components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0'] & {
+    meldingType: typeof OppfølgingoppgaveV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
 export type DokumentÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
 
-export type ÅrsakTilBehandling =
-  components['schemas'][`no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO`]['årsaker'][number];
+export type Vurderingsbehov =
+  components['schemas'][`no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO`]['vurderingsbehov'][number];
 
 // oppgave
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];

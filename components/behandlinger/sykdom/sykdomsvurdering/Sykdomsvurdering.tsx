@@ -10,7 +10,7 @@ import {
   JaEllerNeiOptions,
 } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent, useCallback, useEffect } from 'react';
+import { FormEvent, useCallback } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Alert, Link } from '@navikt/ds-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
@@ -79,6 +79,7 @@ export const Sykdomsvurdering = ({
   const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte arbeidsevnen av en viss varighet?';
 
   const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(-1);
+
   const { formFields, form } = useConfigForm<SykdomsvurderingFormFields>(
     {
       begrunnelse: {
@@ -146,6 +147,10 @@ export const Sykdomsvurdering = ({
         ],
         defaultValue: getStringEllerUndefined(diagnosegrunnlag?.kodeverk),
         rules: { required: 'Du må velge et system for diagnoser' },
+        onChange: () => {
+          form.setValue('hoveddiagnose', null);
+          form.setValue('bidiagnose', null);
+        },
       },
       hoveddiagnose: {
         type: 'async_combobox',
@@ -190,7 +195,7 @@ export const Sykdomsvurdering = ({
         defaultValue: getStringEllerUndefined(sykdomsvurdering?.yrkesskadeBegrunnelse),
       },
     },
-    { shouldUnregister: true, readOnly: readOnly },
+    { shouldUnregister: false, readOnly: readOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

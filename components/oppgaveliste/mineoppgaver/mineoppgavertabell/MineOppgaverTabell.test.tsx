@@ -34,6 +34,7 @@ const oppgaver: Oppgave[] = [
     endretAv: 'Kelvin',
     endretTidspunkt: '2025-05-21T09:28:56.725',
     versjon: 8,
+    markeringer: [],
   },
 ];
 
@@ -41,7 +42,7 @@ describe('Mine oppgaver tabell', () => {
   beforeEach(() => render(<MineOppgaverTabell oppgaver={oppgaver} revalidateFunction={vi.fn()} />));
 
   it('Skal inneholde korrekte kolonner ', () => {
-    const kolonner = ['Navn', 'Fnr', 'ID', 'Behandlingstype', 'Beh. opprettet', 'Årsak', 'Oppgave'];
+    const kolonner = ['Navn', 'Fnr', 'ID', 'Behandlingstype', 'Beh. opprettet', 'Vurderingsbehov', 'Oppgave'];
 
     kolonner.forEach((kolonne) => {
       const column = screen.getByRole('columnheader', { name: kolonne });
@@ -50,7 +51,7 @@ describe('Mine oppgaver tabell', () => {
   });
 
   it('Skal inneholde kolonner som kan sorteres ', () => {
-    const kolonnerSomKanSorteres = ['Navn', 'Fnr', 'ID', 'Beh. opprettet', 'Årsak'];
+    const kolonnerSomKanSorteres = ['Navn', 'Fnr', 'ID', 'Beh. opprettet', 'Vurderingsbehov'];
     kolonnerSomKanSorteres.forEach((kolonne) => {
       const column = screen.getByRole('button', { name: kolonne });
       expect(column).toBeVisible();

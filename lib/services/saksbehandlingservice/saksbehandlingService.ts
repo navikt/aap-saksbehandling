@@ -4,6 +4,7 @@ import {
   AlderGrunnlag,
   ArbeidsevneGrunnlag,
   AutomatiskLovvalgOgMedlemskapVurdering,
+  AvklarOppfolgingsoppgaveGrunnlagResponse,
   BarnetilleggGrunnlag,
   BehandlendeEnhetGrunnlag,
   BehandlingFlytOgTilstand,
@@ -40,6 +41,7 @@ import {
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
+  RimeligGrunnMeldepliktGrunnlag,
   SakPersoninfo,
   SaksInfo,
   SamordningAndreStatligeYtelserGrunnlag,
@@ -174,6 +176,11 @@ export const hentAlderGrunnlag = async (behandlingsReferanse: string) => {
 export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/fritak-meldeplikt`;
   return await apiFetch<FritakMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentRimeligGrunnMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/meldeplikt-rimelig-grunn`;
+  return await apiFetch<RimeligGrunnMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFastsettArbeidsevneGrunnlag = async (behandlingsReferanse: string) => {
@@ -441,6 +448,13 @@ export const hentRefusjonGrunnlag = async (behandlingsReferanse: string) => {
 export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string): Promise<Blob | undefined> => {
   return apiFetchPdf(
     `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/forhandsvis`,
+    saksbehandlingApiScope
+  );
+};
+
+export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsReferanse: string) => {
+  return apiFetch<AvklarOppfolgingsoppgaveGrunnlagResponse>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/oppfolgingsoppgave`,
     saksbehandlingApiScope
   );
 };

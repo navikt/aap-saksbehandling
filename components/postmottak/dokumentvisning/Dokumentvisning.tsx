@@ -23,21 +23,23 @@ export const Dokumentvisning = ({ journalpostId, dokumenter, setIsExpandedAction
   const [dataUri, setDataUri] = useState<string>();
 
   useEffect(() => {
+    let objectURL: string | undefined;
+
     const hentDokument = async (dokumentInfoId: string) => {
-      postmottakHentDokumentClient(journalpostId, dokumentInfoId).then((blob: Blob) => {
-        let reader = new FileReader();
-        reader.readAsDataURL(blob);
-        new Promise((res) => {
-          reader.onloadend = function () {
-            res(reader.result);
-          };
-        }).then((dataUri) => setDataUri(dataUri as string));
-      });
+      const blob = await postmottakHentDokumentClient(journalpostId, dokumentInfoId);
+      objectURL = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+      setDataUri(objectURL);
     };
 
     if (valgtDokumentInfoId) {
       hentDokument(valgtDokumentInfoId);
     }
+
+    return () => {
+      if (objectURL) {
+        URL.revokeObjectURL(objectURL);
+      }
+    };
   }, [valgtDokumentInfoId, journalpostId]);
 
   return (

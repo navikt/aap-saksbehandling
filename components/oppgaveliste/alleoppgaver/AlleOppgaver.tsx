@@ -62,8 +62,8 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     <VStack gap={'4'}>
       <Box background="surface-subtle" padding="4" borderRadius="xlarge">
         <HStack gap={'4'}>
-          <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} valgtEnhetListener={oppdaterEnhet} />
-          <KøSelect label={'Velg kø'} køer={oppgaveKøer || []} aktivKøId={aktivKøId} valgtKøListener={oppdaterKøId} />
+          <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} setAktivEnhet={oppdaterEnhet} />
+          <KøSelect label={'Velg kø'} køer={oppgaveKøer || []} aktivKøId={aktivKøId} setAktivKø={oppdaterKøId} />
         </HStack>
       </Box>
 

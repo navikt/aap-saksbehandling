@@ -8,8 +8,10 @@ import { FormEvent } from 'react';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { FullmektigGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { landMedTrygdesamarbeidInklNorge } from 'lib/utils/countries';
-import styles from './fullmektig.module.scss';
+import styles from './fullmektig.module.css';
+import { landMedTrygdesamarbeidInklNorgeAlpha2 } from 'lib/utils/countries';
+import { erGyldigFødselsnummer } from 'lib/utils/fnr';
+import { erGyldigOrganisasjonsnummer } from 'lib/utils/orgnr';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -60,11 +62,14 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       },
       fnr: {
         type: 'text',
-        label: 'Fnr',
+        label: 'Fødselsnummer',
         rules: {
           required: 'Du må skrive fødselsnummer',
-          validate: (value: string | undefined) =>
-            value?.length !== 11 ? 'Fødselsnummeret må være 11 siffer' : undefined,
+          validate: (value: string | undefined) => {
+            if (value?.length !== 11) return 'Fødselsnummeret må være 11 siffer';
+            else if (erGyldigFødselsnummer(value)) return undefined;
+            else return 'Ugyldig fødselsnummer';
+          },
         },
         defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
       },
@@ -73,7 +78,11 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
         label: 'Org.nr',
         rules: {
           required: 'Du må skrive Org.nr',
-          validate: (value: string | undefined) => (value?.length !== 9 ? 'Org.nr. må være 9 siffer' : undefined),
+          validate: (value: string | undefined) => {
+            if (value?.length !== 9) return 'Org.nr. må være 9 siffer';
+            else if (erGyldigOrganisasjonsnummer(value)) return undefined;
+            else return 'Ugyldig organisasjonsnummer';
+          },
         },
         defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
       },
@@ -126,13 +135,13 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
           required: 'Du må velge land',
           validate: {
             utenlandskOrgnr: (value, formValues) => {
-              if (value === 'NOR' && formValues.idType === 'utl_orgnr') {
+              if (value === 'NO' && formValues.idType === 'utl_orgnr') {
                 return 'Kan ikke velge Norge for utenlandsk org.nr';
               }
             },
           },
         },
-        options: landMedTrygdesamarbeidInklNorge,
+        options: landMedTrygdesamarbeidInklNorgeAlpha2,
         defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.landkode ?? undefined,
       },
     },
@@ -240,14 +249,14 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       case 'orgnr':
         return { ident: fields.orgnr!!, type: 'ORGNR' };
       case 'utl_orgnr':
-        return { ident: fields.utlOrgnr!!, type: 'UTL_ORGNR' };
+        return { ident: fields.utlOrgnr!!, type: 'UTL_ORG' };
       case 'fnr':
         return { ident: fields.fnr!!, type: 'FNR_DNR' };
     }
   }
 
   function erNorge(land: string): boolean {
-    return land === 'NOR';
+    return land === 'NO';
   }
 
   function mapIdentToOption(
@@ -257,7 +266,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
     if (identType === 'FNR_DNR') {
       return 'fnr';
     }
-    if (identType === 'UTL_ORGNR') {
+    if (identType === 'UTL_ORG') {
       return 'utl_orgnr';
     }
     if (identType === 'ORGNR') {
@@ -274,4 +283,4 @@ function skalFylleInnNavnOgAdresse(idType: string): boolean {
   return idType === 'navnOgAdresse' || idType === 'utl_orgnr';
 }
 
-type IdentType = 'FNR_DNR' | 'ORGNR' | 'UTL_ORGNR';
+type IdentType = 'FNR_DNR' | 'ORGNR' | 'UTL_ORG';

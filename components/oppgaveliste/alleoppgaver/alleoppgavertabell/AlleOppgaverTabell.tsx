@@ -1,10 +1,10 @@
-import { AvklaringsbehovKode, Oppgave, ÅrsakTilBehandling } from 'lib/types/types';
+import { AvklaringsbehovKode, Oppgave, Vurderingsbehov } from 'lib/types/types';
 import { BodyShort, Box, Button, Checkbox, Detail, HStack, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import Link from 'next/link';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { formaterÅrsak } from 'lib/utils/årsaker';
+import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
@@ -82,7 +82,7 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
             <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={true}>
               Beh. opprettet
             </Table.ColumnHeader>
-            <Table.HeaderCell>Årsak</Table.HeaderCell>
+            <Table.HeaderCell>Vurderingsbehov</Table.HeaderCell>
             <Table.HeaderCell>Oppgave</Table.HeaderCell>
             <Table.HeaderCell>Saksbehandler</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
@@ -115,11 +115,13 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip
                   content={oppgave.årsakerTilBehandling
-                    .map((årsak) => formaterÅrsak(årsak as ÅrsakTilBehandling))
+                    .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
                     .join(', ')}
                 >
                   <BodyShort truncate size={'small'}>
-                    {oppgave.årsakerTilBehandling.map((årsak) => formaterÅrsak(årsak as ÅrsakTilBehandling)).join(', ')}
+                    {oppgave.årsakerTilBehandling
+                      .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
+                      .join(', ')}
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>

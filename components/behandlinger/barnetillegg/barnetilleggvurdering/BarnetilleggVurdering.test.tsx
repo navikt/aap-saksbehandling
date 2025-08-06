@@ -15,7 +15,7 @@ const grunnlag: BarnetilleggGrunnlag = {
         identifikator: '01987654321',
         aktivIdent: true,
       },
-      fødselsdato: '2023-06-05',
+      fodselsDato: '2023-06-05',
       forsorgerPeriode: {
         fom: '2020-02-02',
         tom: '2038-02-02',
@@ -28,7 +28,7 @@ const grunnlag: BarnetilleggGrunnlag = {
         identifikator: '12345678910',
         aktivIdent: true,
       },
-      fødselsdato: '2023-05-05',
+      fodselsDato: '2023-05-05',
       forsorgerPeriode: {
         fom: '2020-01-30',
         tom: '2038-01-30',
@@ -164,7 +164,7 @@ describe('Oppgitte barn', () => {
     });
     await user.type(datofelt, '01.01.2000');
     await klikkPåBekreft();
-    const fødselsdato = grunnlag.barnSomTrengerVurdering[0].fødselsdato;
+    const fødselsdato = grunnlag.barnSomTrengerVurdering[0].fodselsDato;
 
     const feilmelding = screen.getByText(`Dato kan ikke være før fødselsdato (${fødselsdato})`);
     expect(feilmelding).toBeVisible();
@@ -180,7 +180,7 @@ describe('Oppgitte barn', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const alder = kalkulerAlder(new Date(grunnlag.barnSomTrengerVurdering[0].fødselsdato));
+    const alder = kalkulerAlder(new Date(grunnlag.barnSomTrengerVurdering[0].fodselsDato!!));
     const tekst = screen.getByText(`HELLO PELLO, 12345678910 (${alder})`);
     expect(tekst).toBeVisible();
   });

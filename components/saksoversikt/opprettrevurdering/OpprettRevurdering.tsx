@@ -1,9 +1,9 @@
 'use client';
 
 import { Alert, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
-import { ManuellRevurderingV0, SaksInfo, type ÅrsakTilBehandling } from 'lib/types/types';
+import { ManuellRevurderingV0, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField, ValuePair } from 'components/form/FormField';
+import { FormField } from 'components/form/FormField';
 import { clientSendHendelse } from 'lib/clientApi';
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
@@ -11,21 +11,7 @@ import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
 import styles from './OpprettRevurdering.module.css';
 import { isSuccess } from 'lib/utils/api';
-
-const årsakOptions: ValuePair<ÅrsakTilBehandling>[] = [
-  { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
-  { label: 'Forutgående medlemskap', value: 'FORUTGAENDE_MEDLEMSKAP' },
-  { label: 'Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
-  { label: 'Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
-  { label: 'Barnetillegg', value: 'BARNETILLEGG' },
-  { label: 'Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
-  { label: 'Samordning og avregning', value: 'SAMORDNING_OG_AVREGNING' },
-  { label: 'Refusjonskrav', value: 'REFUSJONSKRAV' },
-  { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
-  { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
-  // TODO: For at denne skal fungere må det gjøres litt justering i data som sendes i melding.
-  // { label: 'Utenlandsopphold før søknadstidspunkt', value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT' },
-];
+import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -89,7 +75,7 @@ export const OpprettRevurdering = ({
     årsaker: {
       type: 'combobox_multiple',
       label: 'Hvilke opplysninger skal revurderes?',
-      options: årsakOptions,
+      options: vurderingsbehovOptions,
       defaultValue: defaultÅrsaker,
       rules: {
         required: 'Velg opplysning som er grunnlaget for revurdering',

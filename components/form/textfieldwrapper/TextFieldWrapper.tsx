@@ -1,4 +1,5 @@
 import { TextField } from '@navikt/ds-react';
+import { isNullOrUndefined } from 'lib/utils/validering';
 import React, { HTMLInputAutoCompleteAttribute } from 'react';
 import { Control, Controller, FieldValues, RegisterOptions, FieldPath } from 'react-hook-form';
 
@@ -14,6 +15,7 @@ export interface TextFieldProps<FormFieldValues extends FieldValues> {
   readOnly?: boolean;
   className?: string;
   autocomplete?: HTMLInputAutoCompleteAttribute;
+  onChangeCustom?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const TextFieldWrapper = <FormFieldValues extends FieldValues>({
@@ -28,27 +30,37 @@ export const TextFieldWrapper = <FormFieldValues extends FieldValues>({
   readOnly,
   className,
   autocomplete,
+  onChangeCustom,
 }: TextFieldProps<FormFieldValues>) => (
   <Controller
     name={name}
     control={control}
     rules={rules}
-    render={({ field: { name, value, onChange }, fieldState: { error } }) => (
-      <TextField
-        id={name}
-        name={name}
-        size={size}
-        label={label}
-        type={type}
-        error={error?.message}
-        hideLabel={hideLabel}
-        value={value || ''}
-        onChange={onChange}
-        description={description}
-        readOnly={readOnly}
-        className={className}
-        autoComplete={autocomplete}
-      />
-    )}
+    render={({ field: { name, value, onChange }, fieldState: { error } }) => {
+      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange(e);
+        if (onChangeCustom) {
+          onChangeCustom(e);
+        }
+      };
+      
+      return (
+        <TextField
+          id={name}
+          name={name}
+          size={size}
+          label={label}
+          type={type}
+          error={error?.message}
+          hideLabel={hideLabel}
+          value={!isNullOrUndefined(value) ? value : ''}
+          onChange={handleChange}
+          description={description}
+          readOnly={readOnly}
+          className={className}
+          autoComplete={autocomplete}
+        />
+      );
+    }}
   />
 );

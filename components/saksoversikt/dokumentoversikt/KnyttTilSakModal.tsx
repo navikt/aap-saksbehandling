@@ -51,7 +51,7 @@ export const KnyttTilSakModal = ({
     });
 
     if (isSuccess(result)) {
-      setIsLoading(false)
+      setIsLoading(false);
       onSuccess();
     } else if (isError(result)) {
       setError('En ukjent feil oppsto');

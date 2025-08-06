@@ -24,6 +24,10 @@ import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/Ad
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { SvarFraBehandler } from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler';
+import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbehandlingmodal/SettMarkeringForBehandlingModal';
+import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
+import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
+import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -37,6 +41,7 @@ interface Props {
   brukerKanSaksbehandle?: boolean;
   flyt?: FlytGruppe[];
   adressebeskyttelser?: Adressebeskyttelsesgrad[];
+  markeringer?: Markering[] | null;
   harUlesteDokumenter?: boolean | null;
 }
 
@@ -52,6 +57,7 @@ export const SaksinfoBanner = ({
   brukerKanSaksbehandle,
   flyt,
   adressebeskyttelser,
+  markeringer,
   harUlesteDokumenter,
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
@@ -59,6 +65,7 @@ export const SaksinfoBanner = ({
   const [visTrekkKlageModal, settVisTrekkKlageModal] = useState(false);
   const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!harUlesteDokumenter);
+  const [aktivMarkeringType, settAktivMarkeringType] = useState<MarkeringType | null>(null);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveReservertAv;
 
   const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
@@ -68,6 +75,7 @@ export const SaksinfoBanner = ({
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
 
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
+  const behandlingErRevurdering = typeBehandling && typeBehandling === 'Revurdering';
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
@@ -86,9 +94,11 @@ export const SaksinfoBanner = ({
 
   const visValgForÅOverstyreStarttidspunkt =
     brukerKanSaksbehandle &&
-    behandlingErFørstegangsbehandling &&
+    (behandlingErRevurdering || behandlingErFørstegangsbehandling) &&
     behandlingErIkkeAvsluttet &&
     behandlingErIkkeIverksatt;
+
+  const visValgForÅSetteMarkering = !isProd() && brukerKanSaksbehandle && behandlingErIkkeAvsluttet;
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (oppgaveReservertAv && !erReservertAvInnloggetBruker) {
@@ -153,6 +163,11 @@ export const SaksinfoBanner = ({
               <OppgaveStatus oppgaveStatus={oppgaveStatus} />
             </div>
           )}
+          {markeringer?.map((markering) => (
+            <div className={styles.oppgavestatus} key={markering.markeringType}>
+              <MarkeringInfoboks markering={markering} referanse={behandling?.referanse} showLabel={true} />
+            </div>
+          ))}
           <div className={styles.saksmeny}>
             <Dropdown>
               <Button
@@ -184,6 +199,24 @@ export const SaksinfoBanner = ({
                       Overstyr starttidspunkt
                     </Dropdown.Menu.GroupedList.Item>
                   )}
+                  {visValgForÅSetteMarkering && (
+                    <Dropdown.Menu.GroupedList.Item
+                      onClick={() => settAktivMarkeringType(NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER)}
+                    >
+                      Marker som haster
+                    </Dropdown.Menu.GroupedList.Item>
+                  )}
+                  {visValgForÅSetteMarkering && (
+                    <Dropdown.Menu.GroupedList.Item
+                      onClick={() =>
+                        settAktivMarkeringType(
+                          NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE
+                        )
+                      }
+                    >
+                      Marker med krever spesialkompetanse
+                    </Dropdown.Menu.GroupedList.Item>
+                  )}
                 </Dropdown.Menu.GroupedList>
               </Dropdown.Menu>
             </Dropdown>
@@ -213,6 +246,14 @@ export const SaksinfoBanner = ({
               saksnummer={sak.saksnummer}
               behandling={behandling}
             />
+            {aktivMarkeringType && (
+              <SettMarkeringForBehandlingModal
+                referanse={behandling?.referanse!}
+                type={aktivMarkeringType}
+                isOpen={true}
+                onClose={() => settAktivMarkeringType(null)}
+              />
+            )}
           </div>
         </HStack>
       )}

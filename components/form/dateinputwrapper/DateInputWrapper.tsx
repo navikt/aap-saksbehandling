@@ -17,6 +17,7 @@ export type DateInputWrapperProps<FormFieldValues extends FieldValues> = {
   readOnly?: boolean;
   className?: string;
   autocomplete?: HTMLInputAutoCompleteAttribute;
+  onChangeCustom?: (event: React.FormEvent<HTMLInputElement>) => void;
 };
 
 export const DateInputWrapper = <FormFieldValues extends FieldValues>({
@@ -30,6 +31,7 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
   className,
   hideLabel,
   autocomplete,
+  onChangeCustom,
 }: DateInputWrapperProps<FormFieldValues>) => {
   const classNames = `${styles.aap_date_input} ${className}`;
   const transform = (input: React.FormEvent<HTMLInputElement>) => mapShortDateToDateString(input.currentTarget.value);
@@ -39,23 +41,32 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
       name={name}
       control={control}
       rules={rules}
-      render={({ field: { name, value, onChange }, fieldState: { error } }) => (
-        <TextField
-          id={name}
-          name={name}
-          size={size}
-          label={label}
-          hideLabel={hideLabel}
-          type={'text'}
-          error={error?.message}
-          value={value || ''}
-          onChange={(value) => onChange(transform(value))}
-          description={description}
-          readOnly={readOnly}
-          className={classNames}
-          autoComplete={autocomplete}
-        />
-      )}
+      render={({ field: { name, value, onChange }, fieldState: { error } }) => {
+        const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+          onChange(transform(e));
+          if (onChangeCustom) {
+            onChangeCustom(e);
+          }
+        };
+
+        return (
+          <TextField
+            id={name}
+            name={name}
+            size={size}
+            label={label}
+            hideLabel={hideLabel}
+            type={'text'}
+            error={error?.message}
+            value={value || ''}
+            onChange={handleChange}
+            description={description}
+            readOnly={readOnly}
+            className={classNames}
+            autoComplete={autocomplete}
+          />
+        );
+      }}
     />
   );
 };

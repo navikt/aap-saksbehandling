@@ -14,11 +14,13 @@ const grunnlag: PåklagetBehandlingGrunnlag = {
       vedtakstidspunkt: '2024-02-02T00:00:00Z',
       virkningstidspunkt: null,
       årsaker: ['FRITAK_MELDEPLIKT'],
+      vurderingsbehov: ['FRITAK_MELDEPLIKT'],
       saksnummer: '1234',
     },
     {
       saksnummer: '1223',
       årsaker: ['MOTTATT_SØKNAD'],
+      vurderingsbehov: ['MOTTATT_SØKNAD'],
       referanse: 'uuid-2',
       opprettetTidspunkt: '2024-01-01T00:00:00Z',
       typeBehandling: 'Førstegangsbehandling',

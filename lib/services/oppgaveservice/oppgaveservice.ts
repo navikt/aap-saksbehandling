@@ -2,6 +2,7 @@ import {
   AvreserverOppgaveDto,
   Enhet,
   Kø,
+  Markering,
   NesteOppgaveRequestBody,
   NesteOppgaveResponse,
   Oppgave,
@@ -9,7 +10,6 @@ import {
   OppgaveBehandlingstype,
   OppgavelisteRequest,
   OppgavelisteResponse,
-  Paging,
   SøkResponse,
 } from 'lib/types/oppgaveTypes';
 import { queryParamsArray } from 'lib/utils/request';
@@ -25,22 +25,9 @@ export const hentKøer = async (enheter: string[]) => {
   return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET');
 };
 
-export const hentOppgaverForFilter = async (
-  filterId: number,
-  enheter: string[],
-  veileder: boolean,
-  paging: Paging,
-  kunLedigeOppgaver?: boolean
-) => {
-  const payload: OppgavelisteRequest = {
-    filterId,
-    enheter,
-    veileder,
-    paging,
-    kunLedigeOppgaver,
-  };
+export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
   const url = `${oppgaveApiBaseURL}/oppgaveliste`;
-  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', payload);
+  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', data);
 };
 
 //TODO: ubrukt? ser ingen steder som kaller route
@@ -122,3 +109,13 @@ export async function oppgaveTekstSøk(søketekst: string) {
   const url = `${oppgaveApiBaseURL}/sok`;
   return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
 }
+
+export const settMarkeringForBehandling = async (referanse: string, requestBody: Markering) => {
+  const url = `${oppgaveApiBaseURL}/${referanse}/ny-markering`;
+  return await apiFetch(url, oppgaveApiScope, 'POST', requestBody);
+};
+
+export const fjernMarkering = async (referanse: string, requestBody: Markering) => {
+  const url = `${oppgaveApiBaseURL}/${referanse}/fjern-markering`;
+  return await apiFetch(url, oppgaveApiScope, 'POST', requestBody);
+};

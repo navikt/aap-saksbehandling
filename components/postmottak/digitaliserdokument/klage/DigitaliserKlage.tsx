@@ -9,8 +9,6 @@ import { FormEvent } from 'react';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { KlageV0 } from 'lib/types/types';
 import { parse } from 'date-fns';
-import { getJaNeiEllerUndefined, JaEllerNeiOptions } from 'lib/utils/form';
-import { JaEllerNei } from 'lib/postmottakForm';
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 
 interface Props extends Submittable {
@@ -19,11 +17,15 @@ interface Props extends Submittable {
   grunnlag: DigitaliseringsGrunnlag;
   registrertDato?: string | null;
 }
+
 export interface KlageFormFields {
   kravMottatt: string;
-  skalOppretteNyBehandling: JaEllerNei;
   beskrivelse: string;
+  behandlingsreferanse: string | null;
 }
+
+const NY_KLAGEBEHANDLING_OPTION = 'NY_KLAGEBEHANDLING';
+
 export const DigitaliserKlage = ({ readOnly, submit, grunnlag, isLoading, registrertDato }: Props) => {
   const vurdering: KlageV0 | null = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
@@ -42,30 +44,35 @@ export const DigitaliserKlage = ({ readOnly, submit, grunnlag, isLoading, regist
         defaultValue: registrertDatoForInput,
         rules: { required: 'Kravdato for klage må settes' },
       },
-      skalOppretteNyBehandling: {
-        type: 'radio',
-        label: 'Opprett ny klagebehandling i Kelvin',
-        description:
-          'Dersom dokumentet som journalføres skal knyttes til en eksisterende klagebehandling så kan du velge "Nei" her.',
-        rules: { required: 'Du må ta stilling til om det skal opprettes en ny klagebehandling' },
-        defaultValue: getJaNeiEllerUndefined(vurdering?.skalOppretteNyBehandling),
-        options: JaEllerNeiOptions,
-      },
       beskrivelse: {
         type: 'textarea',
         label: 'Beskrivelse',
         rules: { required: 'Du må skrive en beskrivelse' },
+      },
+      behandlingsreferanse: {
+        type: 'radio',
+        label: 'Vil du legge dokumentet til en eksisterende klage, eller opprette en ny?',
+        rules: { required: 'Du må velge et alternativ' },
+        options: [
+          ...grunnlag.klagebehandlinger.map((behandling) => ({
+            label: `Klage opprettet ${formaterDatoForFrontend(behandling.opprettetDato)}`,
+            value: behandling.behandlingsReferanse,
+          })),
+          { label: 'Opprett ny klagebehandling', value: NY_KLAGEBEHANDLING_OPTION },
+        ],
       },
     },
     { readOnly }
   );
 
   function mapTilKlageKontrakt(data: KlageFormFields) {
+    const behandlingsreferanse =
+      data.behandlingsreferanse === NY_KLAGEBEHANDLING_OPTION ? null : data.behandlingsreferanse;
     const klageJournalføring: KlageV0 = {
       meldingType: 'KlageV0',
       beskrivelse: data.beskrivelse,
       kravMottatt: formaterDatoForBackend(parse(data.kravMottatt, 'dd.MM.yyyy', new Date())),
-      skalOppretteNyBehandling: data.skalOppretteNyBehandling === JaEllerNei.Ja,
+      behandlingReferanse: behandlingsreferanse,
     };
     return JSON.stringify(klageJournalføring);
   }
@@ -77,7 +84,7 @@ export const DigitaliserKlage = ({ readOnly, submit, grunnlag, isLoading, regist
     <VilkårsKort heading={'Klage'}>
       <form onSubmit={handleSubmit}>
         <FormField form={form} formField={formFields.kravMottatt} />
-        <FormField form={form} formField={formFields.skalOppretteNyBehandling} horizontalRadio />
+        <FormField form={form} formField={formFields.behandlingsreferanse} />
         <FormField form={form} formField={formFields.beskrivelse} />
         <Button loading={isLoading} className={'fit-content'}>
           Neste
