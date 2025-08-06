@@ -14,7 +14,7 @@ const grunnlag: RimeligGrunnMeldepliktGrunnlag = {
 
 describe('IkkeOppfyltMeldeplikt', () => {
   it('viser overskrift for å identifisere steget', () => {
-    render(<IkkeOppfyltMeldeplikt grunnlag={grunnlag} />);
+    render(<IkkeOppfyltMeldeplikt behandlingVersjon={1} readOnly={false} grunnlag={grunnlag} />);
     expect(
       screen.getByRole('heading', { name: 'Perioder uten oppfylt meldeplikt (§ 11-10 andre ledd)' })
     ).toBeVisible();
@@ -25,7 +25,7 @@ describe('IkkeOppfyltMeldeplikt', () => {
       ...grunnlag,
       perioderIkkeMeldt: [],
     };
-    render(<IkkeOppfyltMeldeplikt grunnlag={tomtGrunnlag} />);
+    render(<IkkeOppfyltMeldeplikt behandlingVersjon={1} readOnly={false} grunnlag={tomtGrunnlag} />);
     expect(
       screen.queryByRole('heading', { name: 'Perioder uten oppfylt meldeplikt (§ 11-10 andre ledd)' })
     ).not.toBeInTheDocument();
