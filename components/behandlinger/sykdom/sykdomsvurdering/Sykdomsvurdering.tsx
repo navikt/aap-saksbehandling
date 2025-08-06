@@ -10,7 +10,7 @@ import {
   JaEllerNeiOptions,
 } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent, useCallback } from 'react';
+import { FormEvent, useCallback, useEffect } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Alert, Link } from '@navikt/ds-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
@@ -54,13 +54,13 @@ interface SykdomProps {
 }
 
 export const Sykdomsvurdering = ({
-                                   grunnlag,
-                                   behandlingVersjon,
-                                   readOnly,
-                                   bidiagnoserDeafultOptions,
-                                   hoveddiagnoseDefaultOptions,
-                                   typeBehandling,
-                                 }: SykdomProps) => {
+  grunnlag,
+  behandlingVersjon,
+  readOnly,
+  bidiagnoserDeafultOptions,
+  hoveddiagnoseDefaultOptions,
+  typeBehandling,
+}: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -159,7 +159,7 @@ export const Sykdomsvurdering = ({
       bidiagnose: {
         type: 'async_combobox',
         defaultValue: bidiagnoserDeafultOptions?.filter((option) =>
-          diagnosegrunnlag?.bidiagnoser?.includes(option.value),
+          diagnosegrunnlag?.bidiagnoser?.includes(option.value)
         ),
       },
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
@@ -222,10 +222,10 @@ export const Sykdomsvurdering = ({
                   ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten)
                   : getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnFørtiProsent),
               erNedsettelseIArbeidsevneAvEnVissVarighet: getTrueFalseEllerUndefined(
-                data.erNedsettelseIArbeidsevneAvEnVissVarighet,
+                data.erNedsettelseIArbeidsevneAvEnVissVarighet
               ),
               erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getTrueFalseEllerUndefined(
-                data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
+                data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
               ),
               yrkesskadeBegrunnelse: data?.yrkesskadeBegrunnelse,
             },
@@ -253,7 +253,7 @@ export const Sykdomsvurdering = ({
       });
       form.resetField('bidiagnose', {
         defaultValue: bidiagnoserDeafultOptions?.filter((value) =>
-          diagnosegrunnlag?.bidiagnoser?.includes(value.value),
+          diagnosegrunnlag?.bidiagnoser?.includes(value.value)
         ),
       });
     } else {
@@ -322,7 +322,7 @@ export const Sykdomsvurdering = ({
                 {
                   label: 'Bidiagnose',
                   value: (vurdering.bidiagnoser ?? ['Ingen'])
-                    .map(it => diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, it)[0]?.label)
+                    .map((it) => diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, it)[0]?.label)
                     .filter(Boolean)
                     .join(', '),
                 },
