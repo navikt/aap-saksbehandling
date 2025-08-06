@@ -312,55 +312,53 @@ export const Sykdomsvurdering = ({
   );
 
   function mapTidligereVurderinger() {
-    return historiskeVurderinger
-      .sort((a, b) => sorterEtterNyesteDato(a.vurdertAv.dato, b.vurdertAv.dato))
-      .map((vurdering) => ({
-        ...vurdering,
-        vurdertAvIdent: vurdering.vurdertAv.ident,
-        vurdertDato: vurdering.vurdertAv.dato,
-        erGjeldendeVurdering: !!vurdering.erGjeldende,
-        periode: {
-          fom: vurdering.vurdertAv.dato,
+    return historiskeVurderinger.toReversed().map((vurdering) => ({
+      ...vurdering,
+      vurdertAvIdent: vurdering.vurdertAv.ident,
+      vurdertDato: vurdering.vurdertAv.dato,
+      erGjeldendeVurdering: !!vurdering.erGjeldende,
+      periode: {
+        fom: vurdering.vurdertAv.dato,
+      },
+      felter: [
+        {
+          label: vilkårsvurderingLabel,
+          value: vurdering.begrunnelse,
         },
-        felter: [
-          {
-            label: vilkårsvurderingLabel,
-            value: vurdering.begrunnelse,
-          },
-          {
-            label: harSkadeSykdomEllerLyteLabel,
-            value: getJaNeiEllerIkkeBesvart(vurdering.harSkadeSykdomEllerLyte),
-          },
-          {
-            label: 'Hoveddiagnose',
-            value: vurdering.hoveddiagnose
-              ? diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, vurdering.hoveddiagnose)[0]?.label
-              : '',
-          },
-          {
-            label: 'Bidiagnose',
-            value: (vurdering.bidiagnoser ?? ['Ingen'])
-              .map((it) => diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, it)[0]?.label)
-              .filter(Boolean)
-              .join(', '),
-          },
-          {
-            label: erArbeidsevnenNedsattLabel,
-            value: getJaNeiEllerIkkeBesvart(vurdering.erArbeidsevnenNedsatt),
-          },
-          {
-            label: erNedsettelseIArbeidsevneMerEnnHalvpartenLabel,
-            value: getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten),
-          },
-          {
-            label: erSkadeSykdomEllerLyteVesentligdelLabel,
-            value: getJaNeiEllerIkkeBesvart(vurdering.erSkadeSykdomEllerLyteVesentligdel),
-          },
-          {
-            label: erNedsettelseIArbeidsevneAvEnVissVarighetLabel,
-            value: getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet),
-          },
-        ],
-      }));
+        {
+          label: harSkadeSykdomEllerLyteLabel,
+          value: getJaNeiEllerIkkeBesvart(vurdering.harSkadeSykdomEllerLyte),
+        },
+        {
+          label: 'Hoveddiagnose',
+          value: vurdering.hoveddiagnose
+            ? diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, vurdering.hoveddiagnose)[0]?.label
+            : '',
+        },
+        {
+          label: 'Bidiagnose',
+          value: (vurdering.bidiagnoser ?? ['Ingen'])
+            .map((it) => diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, it)[0]?.label)
+            .filter(Boolean)
+            .join(', '),
+        },
+        {
+          label: erArbeidsevnenNedsattLabel,
+          value: getJaNeiEllerIkkeBesvart(vurdering.erArbeidsevnenNedsatt),
+        },
+        {
+          label: erNedsettelseIArbeidsevneMerEnnHalvpartenLabel,
+          value: getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten),
+        },
+        {
+          label: erSkadeSykdomEllerLyteVesentligdelLabel,
+          value: getJaNeiEllerIkkeBesvart(vurdering.erSkadeSykdomEllerLyteVesentligdel),
+        },
+        {
+          label: erNedsettelseIArbeidsevneAvEnVissVarighetLabel,
+          value: getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet),
+        },
+      ],
+    }));
   }
 };
