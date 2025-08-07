@@ -8798,6 +8798,7 @@ export interface components {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktRimeligGrunnVurderingResponse'][];
       perioderIkkeMeldt: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      perioderRimeligGrunn: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktRimeligGrunnVurderingResponse'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktRimeligGrunnVurderingResponse': {
