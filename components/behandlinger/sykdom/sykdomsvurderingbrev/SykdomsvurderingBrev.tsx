@@ -3,7 +3,7 @@
 import { BodyLong, Box, List, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
-import { SykdomsvurderingBrevGrunnlag } from 'lib/types/types';
+import { SykdomsvurderingBrevGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
@@ -16,6 +16,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 type Props = {
   behandlingVersjon: number;
   grunnlag?: SykdomsvurderingBrevGrunnlag;
+  typeBehandling: TypeBehandling;
   readOnly: boolean;
 };
 
@@ -24,7 +25,7 @@ type VurderingBrevFormFields = {
   vurdering: string;
 };
 
-export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandling, readOnly }: Props) => {
   const { formFields, form } = useConfigForm<VurderingBrevFormFields>(
     {
       vurderingSkalFyllesUt: {
@@ -79,6 +80,9 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, readOnly }: 
     })(event);
   };
 
+  const skalViseTidligereVurderinger =
+    typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0;
+
   return (
     <VilkårsKortMedForm
       heading={'Tekst til vedtaksbrev'}
@@ -93,9 +97,7 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, readOnly }: 
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <VStack gap={'4'}>
-        {historiskeVurderinger && historiskeVurderinger.length > 0 && (
-          <TidligereVurderingerV3 tidligereVurderinger={historiskeVurderinger} />
-        )}
+        {skalViseTidligereVurderinger && <TidligereVurderingerV3 tidligereVurderinger={historiskeVurderinger} />}
 
         <FormField form={form} formField={formFields.vurderingSkalFyllesUt} horizontalRadio />
         {form.watch('vurderingSkalFyllesUt') === JaEllerNei.Ja && (

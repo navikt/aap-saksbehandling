@@ -13,7 +13,14 @@ const grunnlag: SykdomsvurderingBrevGrunnlag = {
 
 describe('sykdomsvurdering for brev', () => {
   it('Skal gi feilmelding dersom det ikke svares på om vurdering for brev er relevant', async () => {
-    render(<SykdomsvurderingBrev grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <SykdomsvurderingBrev
+        grunnlag={grunnlag}
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={false}
+        behandlingVersjon={0}
+      />
+    );
     const button = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(button);
 
@@ -25,14 +32,28 @@ describe('sykdomsvurdering for brev', () => {
   });
 
   it('Skal ha et vurderingsfelt hvis det er valgt at dette er relevant for behandlingen', async () => {
-    render(<SykdomsvurderingBrev grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <SykdomsvurderingBrev
+        grunnlag={grunnlag}
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={false}
+        behandlingVersjon={0}
+      />
+    );
     await velgAtVurderingSkalLeggesTil();
     const textbox = screen.getByRole('textbox', { name: 'Innhold til vedtaksbrevet' });
     expect(textbox).toBeVisible();
   });
 
   it('Skal vise feilmelding dersom vurderingsfeltet ikke har blitt besvart', async () => {
-    render(<SykdomsvurderingBrev grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <SykdomsvurderingBrev
+        grunnlag={grunnlag}
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={false}
+        behandlingVersjon={0}
+      />
+    );
     await velgAtVurderingSkalLeggesTil();
     const button = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(button);

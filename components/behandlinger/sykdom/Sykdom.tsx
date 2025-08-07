@@ -86,6 +86,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
         <StegSuspense>
           <SykdomsvurderingBrevMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
+            typeBehandling={flyt.data.visning.typeBehandling}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
           />
