@@ -10,7 +10,6 @@ import { useConfigForm } from 'components/form/FormHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormField } from 'components/form/FormField';
 import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
-import { sorterEtterNyesteDato } from 'lib/utils/date';
 import { Veiledning } from 'components/veiledning/Veiledning';
 
 type Props = {
@@ -49,20 +48,18 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
 
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const historiskeVurderinger = grunnlag?.historiskeVurderinger
-    .sort((a, b) => sorterEtterNyesteDato(a.vurdertAv.dato, b.vurdertAv.dato))
-    .map((vurdering) => ({
-      periode: { fom: vurdering.vurdertAv.dato },
-      vurdertAvIdent: vurdering.vurdertAv.ident,
-      vurdertDato: vurdering.vurdertAv.dato,
-      erGjeldendeVurdering: true,
-      felter: [
-        {
-          label: 'Vurdering',
-          value: vurdering.vurdering || '',
-        },
-      ],
-    }));
+  const historiskeVurderinger = grunnlag?.historiskeVurderinger.map((vurdering) => ({
+    periode: { fom: vurdering.vurdertAv.dato },
+    vurdertAvIdent: vurdering.vurdertAv.ident,
+    vurdertDato: vurdering.vurdertAv.dato,
+    erGjeldendeVurdering: true,
+    felter: [
+      {
+        label: 'Vurdering',
+        value: vurdering.vurdering || 'Ikke relevant for behandling',
+      },
+    ],
+  }));
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SYKDOMSVURDERING_BREV');
