@@ -222,7 +222,7 @@ export const SaksinfoBanner = ({
             </Dropdown>
 
             <SettBehandllingPåVentModal
-              referanse={referanse}
+              behandlingsReferanse={referanse}
               reservert={!!oppgaveReservertAv}
               isOpen={settBehandlingPåVentmodalIsOpen}
               onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}
