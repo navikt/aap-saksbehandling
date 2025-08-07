@@ -77,7 +77,6 @@ export const OpprettSak = () => {
     },
     barn: {
       type: 'fieldArray',
-      defaultValue: [{ fodselsdato: '2015', harRelasjon: 'folkeregistrertBarn', skalFinnesIPDL: 'true' }],
     },
     inntekter: {
       type: 'fieldArray',
