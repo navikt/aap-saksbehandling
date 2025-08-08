@@ -1,21 +1,13 @@
 'use client';
 
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
-import { ÅpenPeriode } from 'lib/types/types';
-import { ValuePair } from 'components/form/FormField';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { TidligereVurdering } from './TidligereVurderingerV3';
 
 interface Props {
   tidligereVurdering: TidligereVurdering;
 }
-// Todo: Flytt denne over til v3 når alle implementasjoner av "tidligere vurderinger" benytter sistnevnte
-export interface TidligereVurdering {
-  periode: ÅpenPeriode;
-  vurdertAvIdent: string;
-  vurdertDato: string;
-  felter: ValuePair[];
-  erGjeldendeVurdering: boolean;
-}
+
 export const TidligereVurderingV2 = ({ tidligereVurdering }: Props) => {
   return (
     <Table.ExpandableRow
