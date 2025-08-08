@@ -12,6 +12,7 @@ import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
+import { OvergangUforeMedDataFetching } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
