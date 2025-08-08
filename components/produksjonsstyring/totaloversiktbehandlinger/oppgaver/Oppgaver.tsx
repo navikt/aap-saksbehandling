@@ -57,7 +57,7 @@ export const Oppgaver = ({ behandlingstyperQuery, listeVisning }: Props) => {
         <Heading size={'large'}>Oppgaver</Heading>
 
         <UNSAFE_Combobox
-          label={'Type behandling'}
+          label={'Type oppgave'}
           options={oppgaveAvklaringsbehov}
           size={'small'}
           isMultiSelect
