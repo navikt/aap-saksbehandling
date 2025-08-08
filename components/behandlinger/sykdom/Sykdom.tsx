@@ -12,6 +12,7 @@ import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
+import { OvergangUforeMedDataFetching } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -24,6 +25,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   }
 
   const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt.data);
+  console.log('vises' + stegSomSkalVises);
   const saksBehandlerReadOnly = flyt.data.visning.saksbehandlerReadOnly;
   const behandlingVersjon = flyt.data.behandlingVersjon;
 
@@ -79,6 +81,16 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
+      {stegSomSkalVises.includes('OVERGANG_UFORE') && (
+        <StegSuspense>
+          <OvergangUforeMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+            typeBehandling={flyt.data.visning.typeBehandling}
           />
         </StegSuspense>
       )}

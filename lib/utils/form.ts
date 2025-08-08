@@ -24,6 +24,7 @@ export enum Behovstype {
   SYKDOMSVURDERING_BREV_KODE = '5053',
   AVKLAR_LOVVALG_MEDLEMSKAP = '5017',
   MANUELL_OVERSTYRING_LOVVALG = '5021',
+  OVERGANG_UFORE = '5031',
   FORESLÅ_UTTAK_KODE = '5096',
   KVALITETSSIKRING_KODE = '5097',
   FORESLÅ_VEDTAK_KODE = '5098',
@@ -111,6 +112,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Vurder trekk av søknad';
     case '5030':
       return 'Ytelser fra arbeidsgiver (sluttpakke)';
+    case '5031':
+      return '§ 11-18 AAP under behandling av krav om uføretrygd';
     case '5022':
       return 'Overstyr § 11-2 forutgående medlemskap';
     case '5050':

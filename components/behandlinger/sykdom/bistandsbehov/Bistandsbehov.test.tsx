@@ -91,27 +91,6 @@ describe('Førstegangsbehandling', () => {
     expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
   });
 
-  it('viser spørsmål om brukeren skal vurderes for AAP i overgang til uføre hvis det svares nei på a,b og c', async () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
-    await velgNei(finnGruppeForBokstavA());
-    await velgNei(finnGruppeForBokstavB());
-    const gruppeC = screen.getByRole('group', {
-      name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
-    });
-    await velgNei(gruppeC);
-    expect(
-      screen.getByRole('heading', {
-        name: '§ 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd',
-        level: 3,
-      })
-    ).toBeVisible();
-    expect(
-      await screen.findByRole('group', {
-        name: 'Har brukeren rett til AAP under behandling av krav om uføretrygd?',
-      })
-    ).toBeVisible();
-  });
-
   /* TODO Skippes inntil backend er klar. Mangler å avgjøre hvordan steget skal vite om 11-5 er oppfylt eller ei */
   it.skip('viser spørsmål for om brukeren skal vurderes for AAP i overgang til arbeid hvis det er en revurdering og det er avslag på både 11-5 og 11-6', async () => {
     render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Revurdering'} />);
@@ -216,34 +195,6 @@ describe('Revurdering', () => {
     ],
   };
 
-  it('viser spørsmål om brukeren skal vurderes for AAP i overgang til uføre hvis det svares nei på a,b og c', async () => {
-    render(
-      <Bistandsbehov
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Revurdering'}
-        grunnlag={grunnlagRevurdering}
-      />
-    );
-    await velgNei(finnGruppeForBokstavA());
-    await velgNei(finnGruppeForBokstavB());
-    const gruppeC = screen.getByRole('group', {
-      name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
-    });
-    await velgNei(gruppeC);
-    expect(
-      screen.getByRole('heading', {
-        name: '§ 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd',
-        level: 3,
-      })
-    ).toBeVisible();
-    expect(
-      await screen.findByRole('group', {
-        name: 'Har brukeren rett til AAP under behandling av krav om uføretrygd?',
-      })
-    ).toBeVisible();
-  });
-
   it('viser spørsmål om brukeren skal vurders for AAP i overgang til arbeid hvis det er avslag på både 11-5 og det svares nei på a,b og c', async () => {
     const grunnlag = { ...grunnlagRevurdering, harOppfylt11_5: false };
     render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Revurdering'} grunnlag={grunnlag} />);
@@ -302,53 +253,6 @@ describe('Revurdering', () => {
     await velgJa(overgangTilArbeid);
     await trykkPåBekreft();
     expect(screen.getByText('AAP i overgang til arbeid er ikke støttet enda')).toBeVisible();
-  });
-
-  it('dersom det svares ja på 11-18 skal det vises en melding som sier at dette ikke er klart enda', async () => {
-    render(
-      <Bistandsbehov
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Revurdering'}
-        grunnlag={grunnlagRevurdering}
-      />
-    );
-    await velgNei(finnGruppeForBokstavA());
-    await velgNei(finnGruppeForBokstavB());
-    const gruppeC = screen.getByRole('group', {
-      name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
-    });
-    await velgNei(gruppeC);
-    const overgangTilUføre = screen.getByRole('group', {
-      name: 'Har brukeren rett til AAP under behandling av krav om uføretrygd?',
-    });
-    await velgJa(overgangTilUføre);
-    expect(
-      screen.getByText('Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18-sak.')
-    ).toBeVisible();
-  });
-
-  it('viser en feilmelding ved forsøk på å sende inn når det er svart ja på 11-18', async () => {
-    render(
-      <Bistandsbehov
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Revurdering'}
-        grunnlag={grunnlagRevurdering}
-      />
-    );
-    await velgNei(finnGruppeForBokstavA());
-    await velgNei(finnGruppeForBokstavB());
-    const gruppeC = screen.getByRole('group', {
-      name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
-    });
-    await velgNei(gruppeC);
-    const overgangTilUføre = screen.getByRole('group', {
-      name: 'Har brukeren rett til AAP under behandling av krav om uføretrygd?',
-    });
-    await velgJa(overgangTilUføre);
-    await trykkPåBekreft();
-    expect(screen.getByText('AAP under behandling av søknad om uføretrygd er ikke støttet enda')).toBeVisible();
   });
 });
 

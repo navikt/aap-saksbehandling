@@ -32,8 +32,6 @@ interface FormFields {
   erBehovForAktivBehandling: string;
   erBehovForArbeidsrettetTiltak: string;
   erBehovForAnnenOppfølging?: string;
-  overgangBegrunnelse?: string;
-  vurderAAPIOvergangTilUføre?: string;
   vurderAAPIOvergangTilArbeid?: string;
 }
 
@@ -79,23 +77,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAnnenOppfølging),
         rules: { required: 'Du må svare på om brukeren anses for å ha en viss mulighet til å komme i arbeid' },
       },
-      overgangBegrunnelse: {
-        type: 'textarea',
-        label: vilkårsvurderingLabel,
-        defaultValue: grunnlag?.vurdering?.overgangBegrunnelse || undefined,
-        rules: { required: 'Du må gjøre en vilkårsvurdering' },
-      },
-      vurderAAPIOvergangTilUføre: {
-        type: 'radio',
-        label: vurderAAPIOvergangTilUføreLabel,
-        options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilUføre),
-        rules: {
-          required: 'Du må svare på om brukeren har rett på AAP i overgang til uføre',
-          validate: (value) =>
-            value === JaEllerNei.Ja ? 'AAP under behandling av søknad om uføretrygd er ikke støttet enda' : undefined,
-        },
-      },
       vurderAAPIOvergangTilArbeid: {
         type: 'radio',
         label: vurderAAPIOvergangTilArbeidLabel,
@@ -124,9 +105,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
               ? data.erBehovForAnnenOppfølging === JaEllerNei.Ja
               : undefined,
             ...(bistandsbehovErIkkeOppfylt && {
-              skalVurdereAapIOvergangTilUføre: data.vurderAAPIOvergangTilUføre === JaEllerNei.Ja,
               skalVurdereAapIOvergangTilArbeid: data.vurderAAPIOvergangTilArbeid === JaEllerNei.Ja,
-              overgangBegrunnelse: data.overgangBegrunnelse,
             }),
           },
         },
@@ -201,27 +180,11 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
         )}
-      {(typeBehandling === 'Førstegangsbehandling' || (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
-        bistandsbehovErIkkeOppfylt && (
-          <VStack gap={'4'} as={'section'}>
-            <Heading level={'3'} size="small">
-              § 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd
-            </Heading>
-            <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-            <FormField form={form} formField={formFields.vurderAAPIOvergangTilUføre} horizontalRadio />
-            {form.watch('vurderAAPIOvergangTilUføre') === JaEllerNei.Ja && (
-              <Alert variant="warning">
-                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18-sak.
-              </Alert>
-            )}
-          </VStack>
-        )}
       {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
         <VStack gap={'4'} as={'section'}>
           <Heading level={'3'} size="small">
             § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
           </Heading>
-          <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
           <FormField form={form} formField={formFields.vurderAAPIOvergangTilArbeid} horizontalRadio />
           {form.watch('vurderAAPIOvergangTilArbeid') === JaEllerNei.Ja && (
             <Alert variant="warning">
