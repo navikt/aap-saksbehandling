@@ -1,11 +1,11 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import {
   BehandlingFlytOgTilstand,
-  BehandlingsFlytAvklaringsbehovKode,
   BestillLegeerklæring,
   Brev,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
+  KvalitetssikringTilgang,
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   NavEnheterResponse,
@@ -20,8 +20,6 @@ import {
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
 import { FetchResponse } from 'lib/utils/api';
-import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
-import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { Markering } from 'lib/types/oppgaveTypes';
 
 const BASE_URL = '/saksbehandling';
@@ -92,6 +90,10 @@ export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
   return clientFetch<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
 }
 
+export function clientHentTilgangForKvalitetssikring(referanse: string) {
+  return clientFetch<KvalitetssikringTilgang>(`${BASE_URL}/api/behandling/${referanse}/kvalitetssikring-tilgang`, 'GET')
+}
+
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
@@ -131,20 +133,10 @@ export function clientConfig() {
   return clientFetch<ClientConfig>('/api/config', 'GET');
 }
 
-export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKode: BehandlingsFlytAvklaringsbehovKode) {
-  return clientFetch<TilgangResponse>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/sjekk-tilgang`, 'POST', {
-    kode: behovsKode,
-  });
-}
-
 export function clientSettMarkeringForBehandling(referanse: string, markering: Markering) {
   return clientFetch(`${BASE_URL}/api/behandling/${referanse}/markering/ny`, 'POST', markering);
 }
 
 export function clientFjernMarkeringForBehandling(referanse: string, markering: Markering) {
   return clientFetch(`${BASE_URL}/api/behandling/${referanse}/markering/fjern`, 'POST', markering);
-}
-
-export async function clientHentBrukerInformasjon() {
-  return clientFetch<BrukerInformasjon>('/api/bruker', 'GET');
 }

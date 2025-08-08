@@ -5,7 +5,7 @@ import {
 } from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
-import { clientHentFlyt, clientLøsBehov, clientSjekkTilgang } from 'lib/clientApi';
+import { clientHentFlyt, clientHentTilgangForKvalitetssikring, clientLøsBehov } from 'lib/clientApi';
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
@@ -69,45 +69,44 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     );
     eventSource.onmessage = async (event: any) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
-      if (eventData.status === 'DONE') {
+      const { status, skalBytteGruppe, skalBytteSteg, aktivGruppe, aktivtSteg } = eventData;
+      if (status === 'DONE') {
         eventSource.close();
 
-        if (eventData.skalBytteGruppe || eventData.skalBytteSteg) {
-          router.push(
-            `/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${eventData.aktivGruppe}/#${eventData.aktivtSteg}`
-          );
+        let kanFortsetteSaksbehandling = false;
+        const kanFortsetteSaksbehandlingRespons = await clientHentTilgangForKvalitetssikring(params.behandlingsReferanse);
+
+        if (isSuccess(kanFortsetteSaksbehandlingRespons)) {
+          kanFortsetteSaksbehandling = kanFortsetteSaksbehandlingRespons.data.harTilgangTilÅKvalitetssikre;
         }
 
-        startTransition(() => {
-          router.refresh();
-          refetchFlytClient();
-        });
-
-        if (eventData.skalBytteSteg && eventData.aktivtStegBehovsKode) {
-          // Aktivt steg kan ha flere definisjonskoder. Velger å ikke vise modal dersom brukeren har tilgang til minst én av de
-          const harTilgang = (
-            await Promise.all(
-              eventData.aktivtStegBehovsKode.map((kode) => clientSjekkTilgang(params.behandlingsReferanse, kode))
-            )
-          ).some((tilgangResponse) => isSuccess(tilgangResponse) && tilgangResponse.data.tilgang);
-
-          // Brev har ingen egen definisjonskode som vi kan hente ut fra steget. Må skrives om i backend
-          if (!harTilgang && eventData.aktivtSteg !== 'BREV') {
-            setIsModalOpen(true);
+        // TODO Brev har ingen egen definisjonskode som vi kan hente ut fra steget. Må skrives om i backend
+        if (!kanFortsetteSaksbehandling && aktivtSteg !== 'BREV') {
+          setIsModalOpen(true);
+        } else {
+          if (skalBytteGruppe || skalBytteSteg) {
+            router.push(
+              `/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${aktivGruppe}/#${aktivtSteg}`
+            );
           }
+
+          startTransition(() => {
+            router.refresh();
+            refetchFlytClient();
+          });
         }
 
         setIsLoading(false);
       }
 
-      if (eventData.status === 'ERROR') {
-        setStatus(eventData.status);
+      if (status === 'ERROR') {
+        setStatus(status);
         eventSource.close();
         setIsLoading(false);
         router.refresh();
       }
-      if (eventData.status === 'POLLING') {
-        setStatus(eventData.status);
+      if (status === 'POLLING') {
+        setStatus(status);
         setIsLoading(false);
       }
     };
