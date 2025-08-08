@@ -80,7 +80,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       overgangBegrunnelse: {
         type: 'textarea',
         label: vilkårsvurderingLabel,
-        defaultValue: grunnlag?.vurdering?.overgangBegrunnelse || undefined,
+        defaultValue: grunnlag?.vurdering?.begrunnelse || undefined,
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
       },
       vurderAAPIOvergangTilArbeid: {
