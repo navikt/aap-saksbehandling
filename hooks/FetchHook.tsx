@@ -3,9 +3,15 @@ import {
   clientBestillDialogmelding,
   clientOpprettAktivitetspliktBrudd,
   clientOpprettSak,
+  clientOpprettDummySak,
   clientPurrPåLegeerklæring,
 } from 'lib/clientApi';
-import { BestillLegeerklæring, OpprettAktivitetspliktBrudd, OpprettTestcase } from 'lib/types/types';
+import {
+  BestillLegeerklæring,
+  OpprettAktivitetspliktBrudd,
+  OpprettTestcase,
+  OpprettDummySakDto,
+} from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { postmottakEndreTemaClient, postmottakSettPåVentClient } from 'lib/postmottakClientApi';
@@ -100,6 +106,19 @@ export function useOpprettSak(): {
   const { method, isLoading } = useFetchV2(clientOpprettSak);
 
   async function opprettSakMethod(body: OpprettTestcase) {
+    await method(body);
+  }
+
+  return { opprettSak: opprettSakMethod, isLoading };
+}
+
+export function useOpprettDummySak(): {
+  opprettSak: (sak: OpprettDummySakDto) => Promise<void>;
+  isLoading: boolean;
+} {
+  const { method, isLoading } = useFetchV2(clientOpprettDummySak);
+
+  async function opprettSakMethod(body: OpprettDummySakDto) {
     await method(body);
   }
 
