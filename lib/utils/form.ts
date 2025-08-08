@@ -3,6 +3,7 @@ import { ValuePair } from 'components/form/FormField';
 export enum Behovstype {
   MANUELT_SATT_PÅ_VENT_KODE = '9001',
   AVKLAR_STUDENT_KODE = '5001',
+  OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT_KODE = '5002',
   AVKLAR_SYKDOM_KODE = '5003',
   FASTSETT_ARBEIDSEVNE_KODE = '5004',
   FRITAK_MELDEPLIKT_KODE = '5005',
@@ -22,9 +23,10 @@ export enum Behovstype {
   EFFEKTUER_11_7_KODE = '5015',
   AVKLAR_LOVVALG_MEDLEMSKAP = '5017',
   MANUELL_OVERSTYRING_LOVVALG = '5021',
+  FORESLÅ_UTTAK_KODE = '5096',
+  KVALITETSSIKRING_KODE = '5097',
   FORESLÅ_VEDTAK_KODE = '5098',
   FATTE_VEDTAK_KODE = '5099',
-  KVALITETSSIKRING_KODE = '5097',
   SKRIV_BREV_KODE = '5050',
   SKRIV_VEDTAKSBREV_KODE = '5051',
   SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE = '5052',
@@ -54,6 +56,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
   switch (kode) {
     case '5001':
       return '§ 11-14 Student';
+    case '5002':
+      return '§ 11-10 Rimelig grunn';
     case '5003':
       return '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng';
     case '5004':
@@ -72,6 +76,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Foreslå vedtak';
     case '5099':
       return 'Fatte vedtak';
+    case '5096':
+      return 'Foreslå uttak';
     case '5097':
       return 'Kvalitetssikring';
     case '9001':
@@ -103,7 +109,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5028':
       return 'Vurder trekk av søknad';
     case '5030':
-      return 'Samordning arbeidsgiver';
+      return 'Ytelser fra arbeidsgiver (sluttpakke)';
     case '5022':
       return 'Overstyr § 11-2 forutgående medlemskap';
     case '5050':

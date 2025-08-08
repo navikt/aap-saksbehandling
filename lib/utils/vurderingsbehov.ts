@@ -60,6 +60,10 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Revurder mannuell inntekt';
     case 'OPPFØLGINGSOPPGAVE':
       return 'Oppfølgingsoppgave';
+    case 'HELHETLIG_VURDERING':
+      return 'Helhetlig vurdering';
+    case 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN':
+      return 'Revurder meldeplikt rimelig grunn';
   }
 };
 
@@ -130,6 +134,8 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
       return 'Mottatt svar fra Nav Klageinstans';
     case 'REVURDER_MANUELL_INNTEKT':
       return 'Revurder manuell inntekt';
+    case 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN':
+      return 'Rimelig grunn til ikke overholdt meldeplikt';
     default:
       return vurderingsbehov;
   }

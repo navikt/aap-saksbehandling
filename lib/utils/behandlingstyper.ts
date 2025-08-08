@@ -60,6 +60,6 @@ export const behandlingsTyperOptions: BehandlingsTyperOption[] = behandlingsType
 
 export const OppgaveStatuser: ValuePair[] = [
   { label: 'På vent', value: 'VENT' },
-  { label: 'Retur fra kvalitetssikrer', value: 'RETUR_KVALITETSSIKRER' },
-  { label: 'Retur fra beslutter', value: 'RETUR_BESLUTTER' },
+  { label: 'Retur fra kvalitetssikrer', value: 'RETUR_FRA_KVALITETSSIKRER' },
+  { label: 'Retur fra beslutter', value: 'RETUR_FRA_BESLUTTER' },
 ];

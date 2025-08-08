@@ -9,7 +9,6 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
-import { sorterEtterNyesteDato } from '../../../../lib/utils/date';
 
 interface Props {
   behandlingVersjon: number;
@@ -141,36 +140,34 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
     >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
         <TidligereVurderingerV3
-          tidligereVurderinger={historiskeManuelleVurderinger
-            .sort((a, b) => sorterEtterNyesteDato(a.opprettet, b.opprettet))
-            .map((vurdering) => ({
-              ...vurdering,
-              vurdertDato: vurdering.manuellVurdering.vurdertAv.dato,
-              periode: {
-                fom: vurdering.opprettet,
+          tidligereVurderinger={historiskeManuelleVurderinger.toReversed().map((vurdering) => ({
+            ...vurdering,
+            vurdertDato: vurdering.manuellVurdering.vurdertAv.dato,
+            periode: {
+              fom: vurdering.opprettet,
+            },
+            vurdertAvIdent: vurdering.manuellVurdering.vurdertAv.ident,
+            erGjeldendeVurdering: vurdering.erGjeldendeVurdering,
+            felter: [
+              {
+                label: begrunnelseLabel,
+                value: vurdering.manuellVurdering.begrunnelse || '',
               },
-              vurdertAvIdent: vurdering.manuellVurdering.vurdertAv.ident,
-              erGjeldendeVurdering: vurdering.erGjeldendeVurdering,
-              felter: [
-                {
-                  label: begrunnelseLabel,
-                  value: vurdering.manuellVurdering.begrunnelse || '',
-                },
-                {
-                  label: harForutgåendeMedlemskapLabel,
-                  value: getJaNeiEllerIkkeBesvart(vurdering.manuellVurdering.harForutgåendeMedlemskap),
-                },
-                {
-                  label: unntaksvilkårLabel,
-                  value: vurdering.manuellVurdering.harForutgåendeMedlemskap
-                    ? getJaNeiEllerIkkeBesvart(null)
-                    : getJaNeiEllerIkkeBesvart(
-                        vurdering.manuellVurdering.varMedlemMedNedsattArbeidsevne === true ||
-                          vurdering.manuellVurdering.medlemMedUnntakAvMaksFemAar === true
-                      ),
-                },
-              ],
-            }))}
+              {
+                label: harForutgåendeMedlemskapLabel,
+                value: getJaNeiEllerIkkeBesvart(vurdering.manuellVurdering.harForutgåendeMedlemskap),
+              },
+              {
+                label: unntaksvilkårLabel,
+                value: vurdering.manuellVurdering.harForutgåendeMedlemskap
+                  ? getJaNeiEllerIkkeBesvart(null)
+                  : getJaNeiEllerIkkeBesvart(
+                      vurdering.manuellVurdering.varMedlemMedNedsattArbeidsevne === true ||
+                        vurdering.manuellVurdering.medlemMedUnntakAvMaksFemAar === true
+                    ),
+              },
+            ],
+          }))}
         />
       )}
 

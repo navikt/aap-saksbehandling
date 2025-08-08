@@ -8,9 +8,9 @@ import { useDebouncedValue } from 'hooks/useDebouncedValueHook';
 
 const oppgaveStatus = {
   VENT: (oppgave: Oppgave) => !!oppgave.påVentTil,
-  RETUR_KVALITETSSIKRER: (oppgave: Oppgave) =>
+  RETUR_FRA_KVALITETSSIKRER: (oppgave: Oppgave) =>
     oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_KVALITETSSIKRER,
-  RETUR_BESLUTTER: (oppgave: Oppgave) =>
+  RETUR_FRA_BESLUTTER: (oppgave: Oppgave) =>
     oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_BESLUTTER,
 } as const;
 

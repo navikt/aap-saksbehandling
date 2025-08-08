@@ -2,6 +2,7 @@ import { mapBehovskodeTilBehovstype } from './oversettelser';
 
 export const oppgaveAvklaringsbehov = [
   { value: '5001', label: mapBehovskodeTilBehovstype('5001') },
+  { value: '5002', label: mapBehovskodeTilBehovstype('5002') },
   { value: '5003', label: mapBehovskodeTilBehovstype('5003') },
   { value: '5004', label: mapBehovskodeTilBehovstype('5004') },
   { value: '5005', label: mapBehovskodeTilBehovstype('5005') },

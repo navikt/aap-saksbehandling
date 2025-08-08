@@ -702,6 +702,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/kvalitetssikring-tilgang': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringTilgangDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/bistand': {
     parameters: {
       query?: never;
@@ -766,6 +804,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/behandling/{referanse}/grunnlag/meldeplikt-rimelig-grunn': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktRimeligGrunnGrunnlagResponse'];
           };
         };
       };
@@ -2723,84 +2799,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/brev/los-bestilling': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: {
-        content: {
-          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.L\u00F8sBrevbestillingDto'];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': string;
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/brev/faktagrunnlag': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: {
-        content: {
-          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.HentFaktaGrunnlagRequest'];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.FaktagrunnlagDto'];
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/dokumentinnhenting/syfo/bestill': {
     parameters: {
       query?: never;
@@ -3539,7 +3537,6 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
-    'java.time.Year': Record<string, never>;
     'no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto': {
       'bel\u00F8p': components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
       /** Format: int32 */
@@ -3674,6 +3671,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -3692,6 +3690,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -3739,6 +3738,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -3757,6 +3757,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -3801,6 +3802,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -3819,6 +3821,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -3863,6 +3866,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -3881,6 +3885,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -3925,6 +3930,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -3943,6 +3949,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -3987,6 +3994,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4005,6 +4013,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4049,6 +4058,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4067,6 +4077,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4112,6 +4123,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4130,6 +4142,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4174,6 +4187,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4192,6 +4206,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4235,6 +4250,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4253,6 +4269,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4297,6 +4314,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4315,6 +4333,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4359,6 +4378,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4377,6 +4397,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4421,6 +4442,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4439,6 +4461,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4483,6 +4506,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4501,6 +4525,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4545,6 +4570,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4563,6 +4589,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4607,6 +4634,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4625,6 +4653,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4669,6 +4698,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4687,6 +4717,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4731,6 +4762,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4749,6 +4781,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4793,6 +4826,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4811,6 +4845,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4855,6 +4890,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4873,6 +4909,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -4929,7 +4966,6 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSykepengerErstatningL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarYrkesskadeL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.BekreftTotalvurderingKlageL\u00F8sning']
-      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.BrevbestillingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Effektuer11_7L\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettArbeidsevneL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettBehandlendeEnhetL\u00F8sning']
@@ -4938,11 +4974,13 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettP\u00E5klagetBehandlingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FastsettYrkesskadeInntektL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FatteVedtakL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Foresl\u00E5UttakL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Foresl\u00E5VedtakL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FritakMeldepliktL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.H\u00E5ndterSvarFraAndreinstansL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KvalitetssikringL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Legeerkl\u00E6ringBestillingL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.OverstyrIkkeOppfyltMeldepliktL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.RefusjonkravL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SamordningVentPaVirkningstidspunktL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SattP\u00E5VentL\u00F8sning']
@@ -4971,6 +5009,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -4989,6 +5028,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5022,68 +5062,6 @@ export interface components {
         | '8001'
         | '8002'
         | '8003';
-    };
-    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.BrevbestillingL\u00F8sning': {
-      /** @enum {string} */
-      behovstype:
-        | '9001'
-        | '9002'
-        | '9003'
-        | '9004'
-        | '5029'
-        | '5001'
-        | '5003'
-        | '5004'
-        | '5005'
-        | '5006'
-        | '5007'
-        | '5008'
-        | '5009'
-        | '5010'
-        | '5011'
-        | '5012'
-        | '5013'
-        | '5014'
-        | '5015'
-        | '5016'
-        | '5017'
-        | '5018'
-        | '5020'
-        | '5024'
-        | '5097'
-        | '5098'
-        | '5099'
-        | '5021'
-        | '5022'
-        | '5023'
-        | '5025'
-        | '5027'
-        | '5030'
-        | '5028'
-        | '5019'
-        | '5050'
-        | '5051'
-        | '5052'
-        | '5053'
-        | '5026'
-        | '5999'
-        | '5056'
-        | '6000'
-        | '6001'
-        | '6002'
-        | '6003'
-        | '6004'
-        | '6005'
-        | '6006'
-        | '6007'
-        | '6008'
-        | '6009'
-        | '6010'
-        | '7001'
-        | '8001'
-        | '8002'
-        | '8003';
-      oppdatertStatusForBestilling: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.L\u00F8sBrevbestillingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Effektuer11_7L\u00F8sning': {
       begrunnelse: string;
@@ -5095,6 +5073,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5113,6 +5092,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5157,6 +5137,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5175,6 +5156,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5219,6 +5201,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5237,6 +5220,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5280,6 +5264,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5298,6 +5283,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5342,6 +5328,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5360,6 +5347,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5404,6 +5392,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5422,6 +5411,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5466,6 +5456,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5484,6 +5475,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5528,6 +5520,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5546,6 +5539,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5581,7 +5575,7 @@ export interface components {
         | '8003';
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
     };
-    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Foresl\u00E5VedtakL\u00F8sning': {
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Foresl\u00E5UttakL\u00F8sning': {
       /** @enum {string} */
       behovstype:
         | '9001'
@@ -5590,6 +5584,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5608,6 +5603,70 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5025'
+        | '5027'
+        | '5030'
+        | '5028'
+        | '5019'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5026'
+        | '5999'
+        | '5056'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003';
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Foresl\u00E5VedtakL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '5029'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5020'
+        | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5651,6 +5710,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5669,6 +5729,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5718,6 +5779,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5736,6 +5798,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5776,6 +5839,7 @@ export interface components {
       /** @enum {string} */
       konsekvens: 'OMGJØRING' | 'BEHANDLE_PÅ_NYTT' | 'INGENTING';
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -5820,6 +5884,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5838,6 +5903,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5882,6 +5948,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5900,6 +5967,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -5934,7 +6002,7 @@ export interface components {
         | '8002'
         | '8003';
     };
-    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.RefusjonkravL\u00F8sning': {
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.OverstyrIkkeOppfyltMeldepliktL\u00F8sning': {
       /** @enum {string} */
       behovstype:
         | '9001'
@@ -5943,6 +6011,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -5961,6 +6030,71 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5025'
+        | '5027'
+        | '5030'
+        | '5028'
+        | '5019'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5026'
+        | '5999'
+        | '5056'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003';
+      rimeligGrunnVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.RimeligGrunnVurderingDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.RefusjonkravL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '5029'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5020'
+        | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6005,6 +6139,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6023,6 +6158,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6066,6 +6202,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6084,6 +6221,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6127,6 +6265,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6145,6 +6284,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6193,6 +6333,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6211,6 +6352,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6259,6 +6401,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6277,6 +6420,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6325,6 +6469,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6343,6 +6488,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6391,6 +6537,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6409,6 +6556,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6453,6 +6601,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6471,6 +6620,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6516,6 +6666,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6534,6 +6685,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6577,6 +6729,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6595,6 +6748,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6638,6 +6792,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6656,6 +6811,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6699,6 +6855,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6717,6 +6874,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6760,6 +6918,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6778,6 +6937,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6821,6 +6981,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6839,6 +7000,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6882,6 +7044,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6900,6 +7063,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -6944,6 +7108,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6962,6 +7127,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -7006,6 +7172,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -7024,6 +7191,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -7068,6 +7236,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -7086,6 +7255,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -7359,6 +7529,8 @@ export interface components {
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
       harSkadeSykdomEllerLyte: boolean;
       hoveddiagnose?: string | null;
+      /** Format: int64 */
+      id?: number | null;
       kodeverk?: string | null;
       /**
        * Format: date
@@ -7465,6 +7637,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -7483,6 +7656,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -7944,6 +8118,7 @@ export interface components {
       innstilling: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR';
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -7979,6 +8154,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -8021,6 +8197,7 @@ export interface components {
       innstilling: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR';
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -8056,6 +8233,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -8123,6 +8301,7 @@ export interface components {
       virkningstidspunkt?: string | null;
       vurderingsbehov: (
         | 'MOTTATT_SØKNAD'
+        | 'HELHETLIG_VURDERING'
         | 'MOTTATT_AKTIVITETSMELDING'
         | 'MOTTATT_MELDEKORT'
         | 'MOTTATT_LEGEERKLÆRING'
@@ -8137,6 +8316,7 @@ export interface components {
         | 'REVURDER_BEREGNING'
         | 'REVURDER_YRKESSKADE'
         | 'REVURDER_MANUELL_INNTEKT'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'G_REGULERING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
@@ -8152,37 +8332,22 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
       )[];
-      '\u00E5rsaker': (
-        | 'MOTTATT_SØKNAD'
-        | 'MOTTATT_AKTIVITETSMELDING'
-        | 'MOTTATT_MELDEKORT'
-        | 'MOTTATT_LEGEERKLÆRING'
-        | 'MOTTATT_AVVIST_LEGEERKLÆRING'
-        | 'MOTTATT_DIALOGMELDING'
-        | 'MOTATT_KLAGE'
-        | 'SØKNAD_TRUKKET'
-        | 'KLAGE_TRUKKET'
-        | 'REVURDER_MEDLEMSKAP'
-        | 'REVURDER_SAMORDNING'
-        | 'REVURDER_LOVVALG'
-        | 'REVURDER_BEREGNING'
-        | 'REVURDER_YRKESSKADE'
-        | 'REVURDER_MANUELL_INNTEKT'
-        | 'G_REGULERING'
-        | 'LOVVALG_OG_MEDLEMSKAP'
-        | 'FORUTGAENDE_MEDLEMSKAP'
-        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
-        | 'BARNETILLEGG'
-        | 'INSTITUSJONSOPPHOLD'
-        | 'SAMORDNING_OG_AVREGNING'
-        | 'REFUSJONSKRAV'
-        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
+      /** @enum {string|null} */
+      '\u00E5rsakTilOpprettelse'?:
+        | 'SØKNAD'
+        | 'MANUELL_OPPRETTELSE'
+        | 'HELSEOPPLYSNINGER'
+        | 'ANNET_RELEVANT_DOKUMENT'
+        | 'OMGJØRING_ETTER_KLAGE'
+        | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
         | 'FASTSATT_PERIODE_PASSERT'
         | 'FRITAK_MELDEPLIKT'
-        | 'VURDER_RETTIGHETSPERIODE'
-        | 'MOTTATT_KABAL_HENDELSE'
+        | 'MELDEKORT'
+        | 'AKTIVITETSMELDING'
         | 'OPPFØLGINGSOPPGAVE'
-      )[];
+        | 'SVAR_FRA_KLAGEINSTANS'
+        | 'KLAGE'
+        | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingGrunnlagDto': {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.BehandlingMedVedtakDto'][];
@@ -8206,6 +8371,9 @@ export interface components {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringTilgangDto': {
+      'harTilgangTil\u00C5Kvalitetssikre': boolean;
     };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.Forutg\u00E5endeMedlemskapGrunnlagResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -8308,6 +8476,7 @@ export interface components {
       'konsekvensAvOppf\u00F8lging': 'INGEN' | 'OPPRETT_VURDERINGSBEHOV';
       opplysningerTilRevurdering: (
         | 'MOTTATT_SØKNAD'
+        | 'HELHETLIG_VURDERING'
         | 'MOTTATT_AKTIVITETSMELDING'
         | 'MOTTATT_MELDEKORT'
         | 'MOTTATT_LEGEERKLÆRING'
@@ -8322,6 +8491,7 @@ export interface components {
         | 'REVURDER_BEREGNING'
         | 'REVURDER_YRKESSKADE'
         | 'REVURDER_MANUELL_INNTEKT'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'G_REGULERING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
@@ -8346,6 +8516,7 @@ export interface components {
       opplysningerTilRevurdering?:
         | (
             | 'MOTTATT_SØKNAD'
+            | 'HELHETLIG_VURDERING'
             | 'MOTTATT_AKTIVITETSMELDING'
             | 'MOTTATT_MELDEKORT'
             | 'MOTTATT_LEGEERKLÆRING'
@@ -8360,6 +8531,7 @@ export interface components {
             | 'REVURDER_BEREGNING'
             | 'REVURDER_YRKESSKADE'
             | 'REVURDER_MANUELL_INNTEKT'
+            | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
             | 'G_REGULERING'
             | 'LOVVALG_OG_MEDLEMSKAP'
             | 'FORUTGAENDE_MEDLEMSKAP'
@@ -8466,6 +8638,7 @@ export interface components {
       /** @enum {string} */
       konsekvens: 'OMGJØRING' | 'BEHANDLE_PÅ_NYTT' | 'INGENTING';
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -8522,6 +8695,8 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.Felter': {
       /** Format: int32 */
       arbeidGradering?: number | null;
+      /** Format: int32 */
+      arbeidsgiverGradering?: number | null;
       barneTilleggsats: number;
       dagsats: number;
       /** Format: double */
@@ -8627,6 +8802,29 @@ export interface components {
        * @description Maksverdi for endelig gradering (i prosent)
        */
       grenseverdi: number;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktRimeligGrunnGrunnlagResponse': {
+      gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktRimeligGrunnVurderingResponse'][];
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktRimeligGrunnVurderingResponse'][];
+      perioderIkkeMeldt: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      perioderRimeligGrunn: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktRimeligGrunnVurderingResponse'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktRimeligGrunnVurderingResponse': {
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fraDato: string;
+      harRimeligGrunn: boolean;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      vurderingsTidspunkt: string;
+      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto': {
       /** @enum {string|null} */
@@ -8937,6 +9135,7 @@ export interface components {
       innstilling: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR';
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -8972,6 +9171,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9013,6 +9213,7 @@ export interface components {
       innstilling: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR';
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9048,6 +9249,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9099,6 +9301,7 @@ export interface components {
       /** @enum {string} */
       type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG' | 'TRUKKET';
       'vilk\u00E5rSomSkalOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9134,6 +9337,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
       'vilk\u00E5rSomSkalOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9180,6 +9384,7 @@ export interface components {
       /** @enum {string} */
       type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG' | 'TRUKKET';
       'vilk\u00E5rSomSkalOmgj\u00F8res': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9219,6 +9424,7 @@ export interface components {
       /** @enum {string} */
       type: 'OPPRETTHOLDES' | 'OMGJØRES' | 'DELVIS_OMGJØRES' | 'AVSLÅTT' | 'UFULLSTENDIG' | 'TRUKKET';
       'vilk\u00E5rSomSkalOpprettholdes': (
+        | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FOLKETRYGDLOVEN_11_2'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_4'
@@ -9444,6 +9650,15 @@ export interface components {
       fraDato: string;
       harFritak: boolean;
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.RimeligGrunnVurderingDto': {
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fraDato: string;
+      harRimeligGrunn: boolean;
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.refusjonkrav.RefusjonkravVurderingDto': {
       /**
        * Format: date
@@ -9555,6 +9770,8 @@ export interface components {
        * @example 2025-04-01
        */
       skadedato: string;
+      /** Format: int32 */
+      yrkesskadeSaksnummer?: number | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningDto': {
       begrunnelse: string;
@@ -9668,6 +9885,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_UTTAK'
         | 'EFFEKTUER_11_7'
         | 'DU_ER_ET_ANNET_STED'
@@ -9766,6 +9984,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_UTTAK'
         | 'EFFEKTUER_11_7'
         | 'DU_ER_ET_ANNET_STED'
@@ -9835,6 +10054,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_UTTAK'
         | 'EFFEKTUER_11_7'
         | 'DU_ER_ET_ANNET_STED'
@@ -9991,6 +10211,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_UTTAK'
         | 'EFFEKTUER_11_7'
         | 'DU_ER_ET_ANNET_STED'
@@ -10154,6 +10375,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -10172,6 +10394,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -10248,6 +10471,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_UTTAK'
         | 'EFFEKTUER_11_7'
         | 'DU_ER_ET_ANNET_STED'
@@ -10280,42 +10504,6 @@ export interface components {
     'no.nav.aap.behandlingsflyt.kontrakt.behandling.BehandlingReferanse': {
       /** Format: uuid */
       referanse: string;
-    };
-    'no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.Faktagrunnlag':
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.Faktagrunnlag.FristDato11_7']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.Faktagrunnlag.GrunnlagBeregning'];
-    'no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.Faktagrunnlag.FristDato11_7': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      frist: string;
-      /** @enum {string} */
-      type: 'FRIST_DATO_11_7' | 'GRUNNLAG_BEREGNING';
-    };
-    'no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.Faktagrunnlag.GrunnlagBeregning': {
-      'inntekterPer\u00C5r': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.Faktagrunnlag.GrunnlagBeregning.InntektPer\u00C5r'][];
-      /** @enum {string} */
-      type: 'FRIST_DATO_11_7' | 'GRUNNLAG_BEREGNING';
-    };
-    'no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.Faktagrunnlag.GrunnlagBeregning.InntektPer\u00C5r': {
-      inntekt: number;
-      '\u00E5r': components['schemas']['java.time.Year'];
-    };
-    'no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.FaktagrunnlagDto': {
-      faktagrunnlag: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.Faktagrunnlag'][];
-    };
-    'no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.HentFaktaGrunnlagRequest': {
-      behandlingReferanse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.behandling.BehandlingReferanse'];
-      faktagrunnlag: ('FRIST_DATO_11_7' | 'GRUNNLAG_BEREGNING')[];
-    };
-    'no.nav.aap.behandlingsflyt.kontrakt.brevbestilling.L\u00F8sBrevbestillingDto': {
-      /** Format: uuid */
-      behandlingReferanse: string;
-      /** Format: uuid */
-      bestillingReferanse: string;
-      /** @enum {string} */
-      status: 'KLAR_FOR_EDITERING' | 'AUTOMATISK_FERDIGSTILT';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.AvvistLegeerkl\u00E6ringId': {
       asString: string;
@@ -10435,6 +10623,8 @@ export interface components {
         | 'REVURDER_MANUELL_INNTEKT'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
+        | 'HELHETLIG_VURDERING'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ArbeidIPeriodeV0': {
@@ -10506,6 +10696,7 @@ export interface components {
         | 'KLAGE'
         | 'ANNET_RELEVANT_DOKUMENT'
         | 'MANUELL_REVURDERING'
+        | 'OMGJØRING_KLAGE_REVURDERING'
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE';
@@ -10581,6 +10772,8 @@ export interface components {
         | 'REVURDER_MANUELL_INNTEKT'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
+        | 'HELHETLIG_VURDERING'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManueltOppgittBarn': {
@@ -10607,6 +10800,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurdering']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Meldekort']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandling']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurdering']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgave']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knad'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandling': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandlingV0'];
@@ -10640,6 +10834,8 @@ export interface components {
         | 'REVURDER_MANUELL_INNTEKT'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
+        | 'HELHETLIG_VURDERING'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OmgjoeringskravbehandlingAvsluttetDetaljer': {
@@ -10651,6 +10847,44 @@ export interface components {
       journalpostReferanser: string[];
       /** @enum {string} */
       utfall: 'MEDHOLD_ETTER_FVL_35';
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurdering': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurderingV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurderingV0': {
+      beskrivelse: string;
+      /** @enum {string} */
+      kilde: 'KLAGEINSTANS' | 'KELVIN';
+      vurderingsbehov: (
+        | 'SØKNAD'
+        | 'AKTIVITETSMELDING'
+        | 'MELDEKORT'
+        | 'LEGEERKLÆRING'
+        | 'AVVIST_LEGEERKLÆRING'
+        | 'DIALOGMELDING'
+        | 'G_REGULERING'
+        | 'REVURDER_MEDLEMSKAP'
+        | 'REVURDER_YRKESSKADE'
+        | 'REVURDER_BEREGNING'
+        | 'REVURDER_LOVVALG'
+        | 'REVURDER_SAMORDNING'
+        | 'KLAGE'
+        | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'FORUTGAENDE_MEDLEMSKAP'
+        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'BARNETILLEGG'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'SAMORDNING_OG_AVREGNING'
+        | 'REFUSJONSKRAV'
+        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
+        | 'VURDER_RETTIGHETSPERIODE'
+        | 'SØKNAD_TRUKKET'
+        | 'FRITAK_MELDEPLIKT'
+        | 'KLAGE_TRUKKET'
+        | 'REVURDER_MANUELL_INNTEKT'
+        | 'MOTTATT_KABAL_HENDELSE'
+        | 'OPPFØLGINGSOPPGAVE'
+        | 'HELHETLIG_VURDERING'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+      )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgave': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0': {
@@ -10744,6 +10978,7 @@ export interface components {
       type: string;
       vurderingsbehov: (
         | 'MOTTATT_SØKNAD'
+        | 'HELHETLIG_VURDERING'
         | 'MOTTATT_AKTIVITETSMELDING'
         | 'MOTTATT_MELDEKORT'
         | 'MOTTATT_LEGEERKLÆRING'
@@ -10758,6 +10993,7 @@ export interface components {
         | 'REVURDER_BEREGNING'
         | 'REVURDER_YRKESSKADE'
         | 'REVURDER_MANUELL_INNTEKT'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'G_REGULERING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
@@ -10773,37 +11009,22 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
       )[];
-      '\u00E5rsaker': (
-        | 'MOTTATT_SØKNAD'
-        | 'MOTTATT_AKTIVITETSMELDING'
-        | 'MOTTATT_MELDEKORT'
-        | 'MOTTATT_LEGEERKLÆRING'
-        | 'MOTTATT_AVVIST_LEGEERKLÆRING'
-        | 'MOTTATT_DIALOGMELDING'
-        | 'MOTATT_KLAGE'
-        | 'SØKNAD_TRUKKET'
-        | 'KLAGE_TRUKKET'
-        | 'REVURDER_MEDLEMSKAP'
-        | 'REVURDER_SAMORDNING'
-        | 'REVURDER_LOVVALG'
-        | 'REVURDER_BEREGNING'
-        | 'REVURDER_YRKESSKADE'
-        | 'REVURDER_MANUELL_INNTEKT'
-        | 'G_REGULERING'
-        | 'LOVVALG_OG_MEDLEMSKAP'
-        | 'FORUTGAENDE_MEDLEMSKAP'
-        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
-        | 'BARNETILLEGG'
-        | 'INSTITUSJONSOPPHOLD'
-        | 'SAMORDNING_OG_AVREGNING'
-        | 'REFUSJONSKRAV'
-        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
+      /** @enum {string|null} */
+      '\u00E5rsakTilOpprettelse'?:
+        | 'SØKNAD'
+        | 'MANUELL_OPPRETTELSE'
+        | 'HELSEOPPLYSNINGER'
+        | 'ANNET_RELEVANT_DOKUMENT'
+        | 'OMGJØRING_ETTER_KLAGE'
+        | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
         | 'FASTSATT_PERIODE_PASSERT'
         | 'FRITAK_MELDEPLIKT'
-        | 'VURDER_RETTIGHETSPERIODE'
-        | 'MOTTATT_KABAL_HENDELSE'
+        | 'MELDEKORT'
+        | 'AKTIVITETSMELDING'
         | 'OPPFØLGINGSOPPGAVE'
-      )[];
+        | 'SVAR_FRA_KLAGEINSTANS'
+        | 'KLAGE'
+        | null;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnBehandlingForIdentDTO': {
       ident: string;

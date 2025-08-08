@@ -75,6 +75,7 @@ export const SaksinfoBanner = ({
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
 
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
+  const behandlingErRevurdering = typeBehandling && typeBehandling === 'Revurdering';
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
@@ -93,7 +94,7 @@ export const SaksinfoBanner = ({
 
   const visValgForÅOverstyreStarttidspunkt =
     brukerKanSaksbehandle &&
-    behandlingErFørstegangsbehandling &&
+    (behandlingErRevurdering || behandlingErFørstegangsbehandling) &&
     behandlingErIkkeAvsluttet &&
     behandlingErIkkeIverksatt;
 

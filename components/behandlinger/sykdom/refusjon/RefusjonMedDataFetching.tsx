@@ -18,6 +18,7 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandling
   }
 
   if (isProd()) {
+    //TODO: Fjerne denne og bare bruke Refusjon-objektet når vi er i produksjon
     return (
       <RefusjonUtenFlereNavKontor
         grunnlag={refusjonGrunnlag.data}

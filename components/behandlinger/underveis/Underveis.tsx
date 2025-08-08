@@ -6,6 +6,7 @@ import { getStegSomSkalVises } from 'lib/utils/steg';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+import { IkkeOppfyltMeldepliktMedDataFetching } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeOppfyltMeldepliktMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -26,6 +27,13 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
+      <StegSuspense>
+        <IkkeOppfyltMeldepliktMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+        />
+      </StegSuspense>
       {stegSomSkalVises.includes('EFFEKTUER_11_7') && (
         <StegSuspense>
           <AktivitetspliktMedDatafetching
@@ -36,7 +44,11 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
         </StegSuspense>
       )}
       <StegSuspense>
-        <UnderveisgrunnlagMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+        <UnderveisgrunnlagMedDataFetching
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          behandlingsreferanse={behandlingsreferanse}
+        />
       </StegSuspense>
     </GruppeSteg>
   );

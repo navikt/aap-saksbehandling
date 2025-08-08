@@ -3,6 +3,7 @@ import type { Vurderingsbehov } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
 export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
+  { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
   { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
   { label: 'Forutgående medlemskap', value: 'FORUTGAENDE_MEDLEMSKAP' },
   { label: 'Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
@@ -13,6 +14,7 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Refusjonskrav', value: 'REFUSJONSKRAV' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
   { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
+  { label: 'Rimelig grunn til ikke overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
   // TODO: For at denne skal fungere må det gjøres litt justering i data som sendes i melding.
   // { label: 'Utenlandsopphold før søknadstidspunkt', value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT' },
 ];
