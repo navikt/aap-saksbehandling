@@ -95,6 +95,17 @@ export const Bistandsbehov = ({
         defaultValue: defaultValue?.erBehovForAnnenOppfølging,
         rules: { required: 'Du må svare på om brukeren anses for å ha en viss mulighet til å komme i arbeid' },
       },
+      vurderAAPIOvergangTilArbeid: {
+        type: 'radio',
+        label: vurderAAPIOvergangTilArbeidLabel,
+        options: JaEllerNeiOptions,
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilArbeid),
+        rules: {
+          required: 'Du må svare på om brukeren har rett på AAP i overgang til arbeid',
+          validate: (value) => (value === JaEllerNei.Ja ? 'AAP i overgang til arbeid er ikke støttet enda' : undefined),
+        },
+      },
+      vurderAAPIOvergangTilUføre: {
       overgangBegrunnelse: {
         type: 'textarea',
         label: vilkårsvurderingLabel,

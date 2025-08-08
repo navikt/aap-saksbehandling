@@ -94,6 +94,16 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
+      {stegSomSkalVises.includes('OVERGANG_UFORE') && (
+        <StegSuspense>
+          <OvergangUforeMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+            typeBehandling={flyt.data.visning.typeBehandling}
+          />
+        </StegSuspense>
+      )}
       {stegSomSkalVises.includes('SYKDOMSVURDERING_BREV') && (
       )}
       {sykdomsvurderingBrevSteg.skalViseSteg && (

@@ -55,3 +55,7 @@ describe('Førstegangsbehandling', () => {
     await user.click(within(group).getByRole('radio', { name: 'Ja' }));
   };
 });
+
+const velgNei = async (group: HTMLElement) => {
+  await user.click(within(group).getByRole('radio', { name: 'Nei' }));
+};*/
