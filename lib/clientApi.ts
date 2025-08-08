@@ -13,6 +13,7 @@ import {
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
+  OpprettDummySakDto,
   SaksInfo,
   SettPåVent,
 } from './types/types';
@@ -54,6 +55,10 @@ export function clientSettBehandlingPåVent(referanse: string, settPåVent: Sett
 
 export function clientOpprettSak(sak: OpprettTestcase) {
   return clientFetch(`${BASE_URL}/api/test/opprett`, 'POST', sak);
+}
+
+export function clientOpprettDummySak(sak: OpprettDummySakDto) {
+  return clientFetch(`${BASE_URL}/api/test/opprettDummySak`, 'POST', sak);
 }
 
 export function clientHentAlleSaker() {

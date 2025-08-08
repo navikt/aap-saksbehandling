@@ -6,7 +6,18 @@
   gap: var(--a-spacing-4);
   padding: var(--a-spacing-4);
   margin-top: var(--a-spacing-4);
-  width: fit-content;
+  width: 100%;
+}
+
+.formTest {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid gray;
+  box-shadow: var(--a-shadow-large);
+  gap: var(--a-spacing-4);
+  padding: var(--a-spacing-4);
+  margin-top: var(--a-spacing-4);
+  width: 100%;
 }
 
 .barn {
@@ -14,4 +25,8 @@
   flex-direction: row;
   align-items: flex-end;
   gap: var(--a-spacing-4);
+}
+
+.fnr {
+  width: 15ch;
 }

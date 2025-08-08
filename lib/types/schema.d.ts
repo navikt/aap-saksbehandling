@@ -3495,6 +3495,45 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/test/opprettDummySak': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.test.OpprettDummySakDto'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': string;
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/test/opprett': {
     parameters: {
       query?: never;
@@ -7522,7 +7561,6 @@ export interface components {
       bidiagnoser?: string[] | null;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
       erArbeidsevnenNedsatt?: boolean | null;
-      erGjeldende?: boolean | null;
       erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
@@ -11092,6 +11130,12 @@ export interface components {
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'LØPENDE' | 'AVSLUTTET';
       's\u00F8knadErTrukket'?: boolean | null;
+    };
+    'no.nav.aap.behandlingsflyt.test.OpprettDummySakDto': {
+      erStudent: boolean;
+      harMedlemskap: boolean;
+      harYrkesskade: boolean;
+      ident: string;
     };
     'no.nav.aap.behandlingsflyt.test.modell.TestPerson.Sykepenger': {
       /** Format: int32 */

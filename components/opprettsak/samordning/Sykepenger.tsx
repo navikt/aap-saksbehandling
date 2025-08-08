@@ -2,7 +2,7 @@ import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
-import { OpprettSakFormFields } from 'components/opprettsak/OpprettSak';
+import { OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 
 interface Props {
