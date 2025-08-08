@@ -1,4 +1,4 @@
-import { AvslagÅrsak, SettPåVentÅrsaker, TypeBehandling, VilkårUtfall } from 'lib/types/types';
+import { AvslagÅrsak, SettPåVentÅrsaker, TypeBehandling, VilkårUtfall, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
 
@@ -193,6 +193,37 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Oppfølgingsoppgave';
   }
   // exhaustiveCheck(behandlingsType);
+}
+
+export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakTilOpprettelse) {
+  switch (årsakTilOpprettelse) {
+    case 'SØKNAD':
+      return 'Søknad';
+    case 'MANUELL_OPPRETTELSE':
+      return 'Manuell opprettelse';
+    case 'HELSEOPPLYSNINGER':
+      return 'Helseopplysninger';
+    case 'ANNET_RELEVANT_DOKUMENT':
+      return 'Annet relevant dokument';
+    case 'OMGJØRING_ETTER_KLAGE':
+      return 'Omgjøring etter klage';
+    case 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS':
+      return 'Omgjøring etter svar fra klageinstans';
+    case 'FASTSATT_PERIODE_PASSERT':
+      return 'Fastsatt periode passert';
+    case 'FRITAK_MELDEPLIKT':
+      return 'Fritak meldeplikt';
+    case 'MELDEKORT':
+      return 'Meldekort';
+    case 'AKTIVITETSMELDING':
+      return 'Aktivitetsmelding';
+    case 'OPPFØLGINGSOPPGAVE':
+      return 'Oppfølgingsoppgave';
+    case 'SVAR_FRA_KLAGEINSTANS':
+      return 'Svar fra klageinstans';
+    case 'KLAGE':
+      return 'Klage';
+  }
 }
 export function mapGrunnTilString(grunn: string): string {
   switch (grunn) {
