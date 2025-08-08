@@ -77,6 +77,7 @@ export const OpprettSakLocal = () => {
     },
     barn: {
       type: 'fieldArray',
+      defaultValue: [],
     },
     inntekter: {
       type: 'fieldArray',
