@@ -26,7 +26,6 @@ export const MinEnhetOppgaver = ({ listeVisning, aktivEnhet }: Props) => {
 
   const oppgaveTyperQuery = useMemo(() => statistikkQueryparams({ oppgaveTyper: filter.oppgaveType }), [filter]);
 
-  // Oppgave
   const behandlingerPerSteggruppe = useSWR(
     `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
     behandlingerPerSteggruppeClient
