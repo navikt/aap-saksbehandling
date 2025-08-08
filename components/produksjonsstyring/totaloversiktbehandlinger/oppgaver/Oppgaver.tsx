@@ -78,13 +78,13 @@ export const Oppgaver = ({ listeVisning }: Props) => {
           })}
         />
 
+        {isSuccess(behandlingerPerSteggruppe) && (
+          <BehandlingerPerSteggruppe
+            data={behandlingerPerSteggruppe.data || []}
+            title={'Stegfordeling behandling og revurdering'}
+          />
+        )}
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
-          {isSuccess(behandlingerPerSteggruppe) && (
-            <BehandlingerPerSteggruppe
-              data={behandlingerPerSteggruppe.data || []}
-              title={'Stegfordeling behandling og revurdering'}
-            />
-          )}
           {isSuccess(førstegangsBehandlingerPerSteggruppe) && (
             <BehandlingerPerSteggruppe
               data={førstegangsBehandlingerPerSteggruppe.data || []}
