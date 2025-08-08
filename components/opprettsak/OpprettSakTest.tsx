@@ -61,8 +61,12 @@ const OpprettTestSakSkjema = () => {
 
   const handleSubmit = async (data: OpprettSakFormFields) => {
     try {
-      await opprettSak(mapFormTilDto(data));
-      form.reset();
+      const { ok } = await opprettSak(mapFormTilDto(data));
+      if (ok) {
+        form.reset();
+      } else {
+        setShowError(true);
+      }
     } catch {
       setShowError(true);
     }
