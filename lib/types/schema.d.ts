@@ -702,6 +702,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/kvalitetssikring-tilgang': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringTilgangDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/bistand': {
     parameters: {
       query?: never;
@@ -7491,6 +7529,8 @@ export interface components {
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
       harSkadeSykdomEllerLyte: boolean;
       hoveddiagnose?: string | null;
+      /** Format: int64 */
+      id?: number | null;
       kodeverk?: string | null;
       /**
        * Format: date
@@ -8308,39 +8348,6 @@ export interface components {
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'KLAGE'
         | null;
-      '\u00E5rsaker': (
-        | 'MOTTATT_SØKNAD'
-        | 'HELHETLIG_VURDERING'
-        | 'MOTTATT_AKTIVITETSMELDING'
-        | 'MOTTATT_MELDEKORT'
-        | 'MOTTATT_LEGEERKLÆRING'
-        | 'MOTTATT_AVVIST_LEGEERKLÆRING'
-        | 'MOTTATT_DIALOGMELDING'
-        | 'MOTATT_KLAGE'
-        | 'SØKNAD_TRUKKET'
-        | 'KLAGE_TRUKKET'
-        | 'REVURDER_MEDLEMSKAP'
-        | 'REVURDER_SAMORDNING'
-        | 'REVURDER_LOVVALG'
-        | 'REVURDER_BEREGNING'
-        | 'REVURDER_YRKESSKADE'
-        | 'REVURDER_MANUELL_INNTEKT'
-        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
-        | 'G_REGULERING'
-        | 'LOVVALG_OG_MEDLEMSKAP'
-        | 'FORUTGAENDE_MEDLEMSKAP'
-        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
-        | 'BARNETILLEGG'
-        | 'INSTITUSJONSOPPHOLD'
-        | 'SAMORDNING_OG_AVREGNING'
-        | 'REFUSJONSKRAV'
-        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
-        | 'FASTSATT_PERIODE_PASSERT'
-        | 'FRITAK_MELDEPLIKT'
-        | 'VURDER_RETTIGHETSPERIODE'
-        | 'MOTTATT_KABAL_HENDELSE'
-        | 'OPPFØLGINGSOPPGAVE'
-      )[];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingGrunnlagDto': {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.BehandlingMedVedtakDto'][];
@@ -8364,6 +8371,9 @@ export interface components {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringTilgangDto': {
+      'harTilgangTil\u00C5Kvalitetssikre': boolean;
     };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.Forutg\u00E5endeMedlemskapGrunnlagResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -11015,39 +11025,6 @@ export interface components {
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'KLAGE'
         | null;
-      '\u00E5rsaker': (
-        | 'MOTTATT_SØKNAD'
-        | 'HELHETLIG_VURDERING'
-        | 'MOTTATT_AKTIVITETSMELDING'
-        | 'MOTTATT_MELDEKORT'
-        | 'MOTTATT_LEGEERKLÆRING'
-        | 'MOTTATT_AVVIST_LEGEERKLÆRING'
-        | 'MOTTATT_DIALOGMELDING'
-        | 'MOTATT_KLAGE'
-        | 'SØKNAD_TRUKKET'
-        | 'KLAGE_TRUKKET'
-        | 'REVURDER_MEDLEMSKAP'
-        | 'REVURDER_SAMORDNING'
-        | 'REVURDER_LOVVALG'
-        | 'REVURDER_BEREGNING'
-        | 'REVURDER_YRKESSKADE'
-        | 'REVURDER_MANUELL_INNTEKT'
-        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
-        | 'G_REGULERING'
-        | 'LOVVALG_OG_MEDLEMSKAP'
-        | 'FORUTGAENDE_MEDLEMSKAP'
-        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
-        | 'BARNETILLEGG'
-        | 'INSTITUSJONSOPPHOLD'
-        | 'SAMORDNING_OG_AVREGNING'
-        | 'REFUSJONSKRAV'
-        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
-        | 'FASTSATT_PERIODE_PASSERT'
-        | 'FRITAK_MELDEPLIKT'
-        | 'VURDER_RETTIGHETSPERIODE'
-        | 'MOTTATT_KABAL_HENDELSE'
-        | 'OPPFØLGINGSOPPGAVE'
-      )[];
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnBehandlingForIdentDTO': {
       ident: string;
