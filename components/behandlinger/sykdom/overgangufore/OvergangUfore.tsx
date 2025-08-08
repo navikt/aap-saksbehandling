@@ -117,6 +117,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const brukerHarSoktOmUforetrygd = form.watch('brukerHarSøktUføretrygd') === JaEllerNei.Ja;
   const brukerHarFattAvslagPaUforetrygd = form.watch('brukerHarFåttVedtakOmUføretrygd') === 'JA_AVSLAG';
 
+
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
 
@@ -166,14 +167,6 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         </Alert>
       )}
       <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
-      {typeBehandling === 'Revurdering' && (
-        <VStack gap={'4'} as={'section'}>
-          <Heading level={'3'} size="small">
-            § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
-          </Heading>
-          <FormField form={form} formField={formFields.virkningsdato} horizontalRadio />
-        </VStack>
-      )}
     </VilkårsKortMedForm>
   );
 };

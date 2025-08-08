@@ -54,15 +54,15 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
     <Table.ExpandableRow content={content} togglePlacement="right" expandOnRowClick>
       <Table.DataCell style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
         <span style={{ marginLeft: '0.25rem', textDecoration: vurderingErGjeldende ? 'none' : 'line-through' }}>
-          {vurdering.vurdering.vurderingenGjelderFra
-            ? formaterDatoForFrontend(vurdering.vurdering.vurderingenGjelderFra)
+          {vurdering.vurderingenGjelderFra
+            ? formaterDatoForFrontend(vurdering.vurderingenGjelderFra)
             : formaterDatoForFrontend(søknadstidspunkt)}
           {' - '}
           {sluttdato}
         </span>
       </Table.DataCell>
       <Table.DataCell align="right">
-        ({vurdering.vurdering.vurdertAv.ident}) {vurdering.vurdertAv.dato && formaterDatoForFrontend(vurdering.vurdertAv.dato)}
+        ({vurdering.vurdertAv.ident}) {vurdering.vurdertAv.dato && formaterDatoForFrontend(vurdering.vurdertAv.dato)}
       </Table.DataCell>
     </Table.ExpandableRow>
   );
