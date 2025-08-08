@@ -33,6 +33,7 @@ interface FormFields {
   erBehovForArbeidsrettetTiltak: string;
   erBehovForAnnenOppfølging?: string;
   vurderAAPIOvergangTilArbeid?: string;
+  overgangBegrunnelse?: string;
 }
 
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {

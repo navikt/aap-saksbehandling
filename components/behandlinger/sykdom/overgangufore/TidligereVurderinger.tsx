@@ -3,7 +3,7 @@ import { ExpansionCard, Table } from '@navikt/ds-react';
 
 import styles from './TidligereVurderinger.module.css';
 import { format, parse, subDays } from 'date-fns';
-import {BistandsbehovVurdering, OvergangUforeVurdering} from 'lib/types/types';
+import { BistandsbehovVurdering, OvergangUføreVurdering } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): boolean {
@@ -30,7 +30,7 @@ function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): bool
 const mapTilJaEllerNei = (verdi?: boolean) => (verdi ? 'Ja' : 'Nei');
 
 interface VurderingProps {
-  vurdering: OvergangUforeVurdering;
+  vurdering: OvergangUføreVurdering;
   søknadstidspunkt: string;
   vurderingErGjeldende: boolean;
   sluttdato?: string;
@@ -39,7 +39,7 @@ interface VurderingProps {
 export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, sluttdato }: VurderingProps) => {
   const content = (
     <div>
-      <span>{vurdering.vurdering?.begrunnelse}</span>
+      <span>{vurdering?.begrunnelse}</span>
       <div style={{ display: 'flex', gap: '1.5rem', flexDirection: 'row', flexWrap: 'wrap' }}>
         <span>
           a: Har brukeren behov for aktiv behandling?: {mapTilJaEllerNei(vurdering.vurdering?.brukerSoktUforetrygd)}
@@ -49,7 +49,7 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
         </span>
         <span>
           c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?{' '}
-          {mapTilJaEllerNei(vurdering.erBehovForAnnenOppfølging ?? undefined)}
+          {mapTilJaEllerNei(vurdering.brukerSoktUforetrygd?? undefined)}
         </span>
       </div>
       {vurdering.overgangBegrunnelse && (
@@ -59,6 +59,12 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
               ? 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?'
             : {vurdering.overgangBegrunnelse}}
           </span>
+          {vurdering.skalVurdereAapIOvergangTilArbeid && (
+            <span>
+              Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?
+              {mapTilJaEllerNei(vurdering.skalVurdereAapIOvergangTilArbeid)}
+            </span>
+          )}
           {vurdering.skalVurdereAapIOvergangTilUføre && (
             <span>
               Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?
@@ -73,15 +79,15 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
     <Table.ExpandableRow content={content} togglePlacement="right" expandOnRowClick>
       <Table.DataCell style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
         <span style={{ marginLeft: '0.25rem', textDecoration: vurderingErGjeldende ? 'none' : 'line-through' }}>
-          {vurdering.vurdering.vurderingenGjelderFra
-            ? formaterDatoForFrontend(vurdering.vurdering.vurderingenGjelderFra)
+          {vurdering.vurderingenGjelderFra
+            ? formaterDatoForFrontend(vurdering.vurderingenGjelderFra)
             : formaterDatoForFrontend(søknadstidspunkt)}
           {' - '}
           {sluttdato}
         </span>
       </Table.DataCell>
       <Table.DataCell align="right">
-        ({vurdering.vurdering.vurdertAv.ident}) {vurdering.vurdertAv.dato && formaterDatoForFrontend(vurdering.vurdertAv.dato)}
+        ({vurdering.vurdertAv.ident}) {vurdering.vurdertAv.dato && formaterDatoForFrontend(vurdering.vurdertAv.dato)}
       </Table.DataCell>
     </Table.ExpandableRow>
   );
