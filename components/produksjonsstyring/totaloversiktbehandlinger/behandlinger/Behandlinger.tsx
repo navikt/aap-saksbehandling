@@ -17,15 +17,24 @@ import {
   venteÅrsakerClient,
   årsakTilBehandlingClient,
 } from 'lib/oppgaveClientApi';
+import { useMemo } from 'react';
+import { statistikkQueryparams } from 'lib/utils/request';
+import { useProduksjonsstyringFilter } from 'components/produksjonsstyring/allefiltereprovider/ProduksjonsstyringFilterHook';
 
 interface Props {
-  behandlingstyperQuery: string;
   listeVisning: boolean;
 }
 
 const antallDager = 14;
 
-export const Behandlinger = ({ behandlingstyperQuery, listeVisning }: Props) => {
+export const Behandlinger = ({ listeVisning }: Props) => {
+  const { filter } = useProduksjonsstyringFilter();
+
+  const behandlingstyperQuery = useMemo(
+    () => statistikkQueryparams({ behandlingstyper: filter.behandlingstyper }),
+    [filter]
+  );
+
   const { data: antallÅpneBehandlinger } = useSWR(
     `/oppgave/api/statistikk/apne-behandlinger?${behandlingstyperQuery}`,
     antallÅpneBehandlingerPerBehandlingstypeClient

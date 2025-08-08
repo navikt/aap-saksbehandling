@@ -8,14 +8,22 @@ import { behandlingerPerSteggruppeClient } from 'lib/oppgaveClientApi';
 import { useProduksjonsstyringFilter } from 'components/produksjonsstyring/allefiltereprovider/ProduksjonsstyringFilterHook';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
+import { useMemo } from 'react';
+import { statistikkQueryparams } from 'lib/utils/request';
 
 interface Props {
-  behandlingstyperQuery: string;
   listeVisning: boolean;
 }
 
-export const Oppgaver = ({ behandlingstyperQuery, listeVisning }: Props) => {
+export const Oppgaver = ({ listeVisning }: Props) => {
   const { setFilter, filter } = useProduksjonsstyringFilter();
+
+  const behandlingstyperQuery = useMemo(
+    () => statistikkQueryparams({ behandlingstyper: filter.behandlingstyper, oppgaveTyper: filter.oppgaveType }),
+    [filter]
+  );
+
+  const oppgaveTyperQuery = useMemo(() => statistikkQueryparams({ oppgaveTyper: filter.oppgaveType }), [filter]);
 
   const behandlingerPerSteggruppe = useSWR(
     `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
@@ -23,17 +31,17 @@ export const Oppgaver = ({ behandlingstyperQuery, listeVisning }: Props) => {
   ).data;
 
   const førstegangsBehandlingerPerSteggruppe = useSWR(
-    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Førstegangsbehandling`,
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Førstegangsbehandling&${oppgaveTyperQuery}`,
     behandlingerPerSteggruppeClient
   ).data;
 
   const klageBehandlingerPerSteggruppe = useSWR(
-    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Klage`,
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Klage&${oppgaveTyperQuery}`,
     behandlingerPerSteggruppeClient
   ).data;
 
   const revurderingBehandlingerPerSteggruppe = useSWR(
-    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Revurdering`,
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Revurdering&${oppgaveTyperQuery}`,
     behandlingerPerSteggruppeClient
   ).data;
 
