@@ -93,6 +93,13 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
     })(event);
   };
 
+  const erBehovForAktivBehandling = form.watch('erBehovForAktivBehandling') === JaEllerNei.Nei;
+  const erBehovForArbeidsrettetTiltak = form.watch('erBehovForArbeidsrettetTiltak') === JaEllerNei.Nei;
+  const erBehovForAnnenOppfølging = form.watch('erBehovForAnnenOppfølging') === JaEllerNei.Nei;
+
+  const bistandsbehovErIkkeOppfylt =
+    erBehovForAktivBehandling && erBehovForArbeidsrettetTiltak && erBehovForAnnenOppfølging;
+
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
 
@@ -140,6 +147,14 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurders til oppfylt.
       </Alert>
       <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
+      {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
+        <VStack gap={'4'} as={'section'}>
+          <Heading level={'3'} size="small">
+            § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
+          </Heading>
+          <FormField form={form} formField={formFields.virkningsdato} horizontalRadio />
+        </VStack>
+      )}
     </VilkårsKortMedForm>
   );
 };
