@@ -19,6 +19,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { Behovstype } from 'lib/utils/form';
 import { parse } from 'date-fns';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { isProd } from 'lib/utils/environment';
 
 type Props = {
   grunnlag?: RimeligGrunnMeldepliktGrunnlag;
@@ -181,7 +182,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
 
         {!readOnly && (
           <HStack justify={'space-between'} align={'end'}>
-            {overstyring ? (
+            {overstyring && !isProd ? (
               <div className={'flex-row'}>
                 <Button variant={'secondary'} onClick={() => setOverstyring(false)}>
                   Angre overstyring
