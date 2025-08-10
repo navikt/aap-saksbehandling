@@ -36,26 +36,29 @@ export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter
           >
             {visFilter ? 'Lukk filter' : 'Filtrer listen'}
           </Button>
-          <HStack gap={'2'}>
-            <Chips size={'small'}>
-              {aktiveFilter.map((filter) => (
-                <Chips.Removable
-                  key={filter.value}
-                  onClick={() => {
-                    const values = form.watch(filter.key);
-                    if (Array.isArray(values)) {
-                      const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
-                      form.setValue(filter.key, arrayUtenValgtFilter);
-                    } else {
-                      form.setValue(filter.key, undefined);
-                    }
-                  }}
-                >
-                  {filter.label}
-                </Chips.Removable>
-              ))}
-            </Chips>
-          </HStack>
+          {aktiveFilter.length > 0 && (
+            <HStack gap={'2'}>
+              <BodyShort>Filtre: </BodyShort>
+              <Chips size={'small'}>
+                {aktiveFilter.map((filter) => (
+                  <Chips.Removable
+                    key={filter.value}
+                    onClick={() => {
+                      const values = form.watch(filter.key);
+                      if (Array.isArray(values)) {
+                        const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
+                        form.setValue(filter.key, arrayUtenValgtFilter);
+                      } else {
+                        form.setValue(filter.key, undefined);
+                      }
+                    }}
+                  >
+                    {filter.label}
+                  </Chips.Removable>
+                ))}
+              </Chips>
+            </HStack>
+          )}
         </HStack>
         <Detail>
           Viser {antallOppgaverIFilter} av totalt {antallOppgaverTotalt} oppgaver
