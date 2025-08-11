@@ -18,7 +18,7 @@ interface OpprettSakFormFields {
 }
 
 const OpprettTestSakSkjema = () => {
-  const { isLoading, opprettSak } = useOpprettDummySak();
+  const { isLoading, opprettSak, error } = useOpprettDummySak();
   const [showError, setShowError] = useState(false);
   const { formFields, form } = useConfigForm<OpprettSakFormFields>({
     ident: {
@@ -81,9 +81,9 @@ const OpprettTestSakSkjema = () => {
       <FormField form={form} formField={formFields.student} />
 
       {showError && (
-        <Alert variant="error" closeButton onClose={() => setShowError(false)}>
-          Noe gikk galt ved oppretting av testsaken. Vennligst sjekk at fødselsnummer er en gyldig testbruker og prøv
-          igjen.
+        <Alert fullWidth={true} contentMaxWidth={false} variant="error" closeButton onClose={() => setShowError(false)}>
+          {error?.toString() ||
+            'Noe gikk galt ved oppretting av testsaken. Vennligst sjekk at fødselsnummer er en gyldig testbruker og prøv igjen.'}
         </Alert>
       )}
 
