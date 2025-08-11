@@ -41,7 +41,7 @@ describe('sykdomsvurdering for brev', () => {
       />
     );
     await velgAtVurderingSkalLeggesTil();
-    const textbox = screen.getByRole('textbox', { name: 'Innhold til vedtaksbrevet' });
+    const textbox = screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' });
     expect(textbox).toBeVisible();
   });
 
