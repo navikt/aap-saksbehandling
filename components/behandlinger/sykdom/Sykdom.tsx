@@ -13,6 +13,7 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
 import { OvergangUforeMedDataFetching } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeMedDataFetching';
+import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -91,6 +92,16 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
             typeBehandling={flyt.data.visning.typeBehandling}
+          />
+        </StegSuspense>
+      )}
+      {stegSomSkalVises.includes('SYKDOMSVURDERING_BREV') && (
+        <StegSuspense>
+          <SykdomsvurderingBrevMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            typeBehandling={flyt.data.visning.typeBehandling}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
           />
         </StegSuspense>
       )}
