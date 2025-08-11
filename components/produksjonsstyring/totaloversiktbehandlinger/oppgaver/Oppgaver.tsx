@@ -5,7 +5,7 @@ import { BehandlingerPerSteggruppe } from 'components/produksjonsstyring/behandl
 import { OppgaverInnUt } from 'components/produksjonsstyring/oppgaverinnut/OppgaverInnUt';
 import useSWR from 'swr';
 import { behandlingerPerSteggruppeClient } from 'lib/oppgaveClientApi';
-import { useProduksjonsstyringFilter } from 'components/produksjonsstyring/allefiltereprovider/ProduksjonsstyringFilterHook';
+import { useProduksjonsstyringFilter } from 'hooks/produksjonsstyring/ProduksjonsstyringFilterHook';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 import { useMemo } from 'react';

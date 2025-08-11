@@ -19,7 +19,7 @@ import {
 } from 'lib/oppgaveClientApi';
 import { useMemo } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
-import { useProduksjonsstyringFilter } from 'components/produksjonsstyring/allefiltereprovider/ProduksjonsstyringFilterHook';
+import { useProduksjonsstyringFilter } from 'hooks/produksjonsstyring/ProduksjonsstyringFilterHook';
 
 interface Props {
   listeVisning: boolean;

@@ -2,7 +2,7 @@
 
 import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { BehandlingsTyperOption, behandlingsTyperOptions } from 'lib/utils/behandlingstyper';
-import { useProduksjonsstyringFilter } from 'components/produksjonsstyring/allefiltereprovider/ProduksjonsstyringFilterHook';
+import { useProduksjonsstyringFilter } from 'hooks/produksjonsstyring/ProduksjonsstyringFilterHook';
 
 export const FilterSamling = () => {
   const { filter, setFilter } = useProduksjonsstyringFilter();

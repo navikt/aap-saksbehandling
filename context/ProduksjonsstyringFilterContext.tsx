@@ -19,7 +19,7 @@ interface Props {
   children: ReactNode;
 }
 
-export const ProduksjonsstyringFilterProvider = ({ children }: Props) => {
+export const ProduksjonsstyringFilterContextProvider = ({ children }: Props) => {
   const [filter, setFilter] = useState<Filter>({ behandlingstyper: behandlingsTyperOptions, oppgaveType: [] });
 
   const context: ProduksjonsstyringContextType = {

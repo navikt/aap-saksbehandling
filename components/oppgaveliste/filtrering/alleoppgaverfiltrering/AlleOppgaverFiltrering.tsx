@@ -125,7 +125,7 @@ export const AlleOppgaverFiltrering = ({ form, formFields, antallOppgaver, onFil
             )}
           </div>
         </div>
-      )}{' '}
+      )}
     </div>
   );
 };
