@@ -55,13 +55,13 @@ interface SykdomProps {
 }
 
 export const Sykdomsvurdering = ({
-                                   grunnlag,
-                                   behandlingVersjon,
-                                   readOnly,
-                                   bidiagnoserDeafultOptions,
-                                   hoveddiagnoseDefaultOptions,
-                                   typeBehandling,
-                                 }: SykdomProps) => {
+  grunnlag,
+  behandlingVersjon,
+  readOnly,
+  bidiagnoserDeafultOptions,
+  hoveddiagnoseDefaultOptions,
+  typeBehandling,
+}: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -160,7 +160,7 @@ export const Sykdomsvurdering = ({
       bidiagnose: {
         type: 'async_combobox',
         defaultValue: bidiagnoserDeafultOptions?.filter((option) =>
-          diagnosegrunnlag?.bidiagnoser?.includes(option.value),
+          diagnosegrunnlag?.bidiagnoser?.includes(option.value)
         ),
       },
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
@@ -196,7 +196,7 @@ export const Sykdomsvurdering = ({
         defaultValue: getStringEllerUndefined(sykdomsvurdering?.yrkesskadeBegrunnelse),
       },
     },
-    { shouldUnregister: false, readOnly: readOnly },
+    { shouldUnregister: false, readOnly: readOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -223,10 +223,10 @@ export const Sykdomsvurdering = ({
                   ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten)
                   : getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnFørtiProsent),
               erNedsettelseIArbeidsevneAvEnVissVarighet: getTrueFalseEllerUndefined(
-                data.erNedsettelseIArbeidsevneAvEnVissVarighet,
+                data.erNedsettelseIArbeidsevneAvEnVissVarighet
               ),
               erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getTrueFalseEllerUndefined(
-                data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
+                data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
               ),
               yrkesskadeBegrunnelse: data?.yrkesskadeBegrunnelse,
             },
@@ -324,14 +324,16 @@ export const Sykdomsvurdering = ({
         return null;
       }
       const vurderingGjelderFra =
-        historiskeVurderinger.at(index)?.vurderingenGjelderFra ||
-        historiskeVurderinger.at(index)?.vurdertAv.dato!!;
+        historiskeVurderinger.at(index)?.vurderingenGjelderFra || historiskeVurderinger.at(index)?.vurdertAv.dato!!;
 
       if (forrigeGjelderFra === vurderingGjelderFra) {
         return format(subDays(parse(vurderingGjelderFra, 'yyyy-MM-dd', new Date()), 0), 'yyyy-MM-dd');
       }
 
-      const tom = erDatoFoerDato(formaterDatoForFrontend(vurderingGjelderFra), formaterDatoForFrontend(forrigeGjelderFra))
+      const tom = erDatoFoerDato(
+        formaterDatoForFrontend(vurderingGjelderFra),
+        formaterDatoForFrontend(forrigeGjelderFra)
+      )
         ? forrigeGjelderFra
         : vurderingGjelderFra;
 
@@ -340,7 +342,7 @@ export const Sykdomsvurdering = ({
 
     const erVurderingenGjeldende = (historiskVurdering: SykdomsGrunnlag['historikkSykdomsvurderinger'][number]) => {
       const vurderingenFinnesSomGjeldende = grunnlag.gjeldendeVedtatteSykdomsvurderinger.some((gjeldendeVurdering) =>
-        deepEqual(historiskVurdering, gjeldendeVurdering),
+        deepEqual(historiskVurdering, gjeldendeVurdering)
       );
       return vurderingenFinnesSomGjeldende;
     };

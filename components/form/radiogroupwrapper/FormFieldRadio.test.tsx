@@ -90,7 +90,7 @@ describe('Radio', () => {
     render(<FormMedRadios onChange={onChangeMock} />);
 
     await user.click(screen.getByRole('radio', { name: /Ja/ }));
-    
+
     expect(onChangeMock).toHaveBeenCalled();
   });
 });

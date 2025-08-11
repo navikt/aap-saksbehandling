@@ -21,6 +21,7 @@ export enum Behovstype {
   YRKESSKADE_KODE = '5013',
   FASTSETT_YRKESSKADEINNTEKT = '5014',
   EFFEKTUER_11_7_KODE = '5015',
+  SYKDOMSVURDERING_BREV_KODE = '5053',
   AVKLAR_LOVVALG_MEDLEMSKAP = '5017',
   MANUELL_OVERSTYRING_LOVVALG = '5021',
   FORESLÅ_UTTAK_KODE = '5096',
@@ -118,6 +119,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Skriv brev';
     case '5052':
       return 'Skriv brev';
+    case '5053':
+      return 'Tekst til vedtaksbrev';
     case '5029':
       return 'Starttidspunkt';
     case '5999':

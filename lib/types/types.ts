@@ -6,6 +6,8 @@ export type StudentGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse'];
 export type SykdomsGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomGrunnlagResponse'];
+export type SykdomsvurderingBrevGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevDto'];
 export type SykepengeerstatningGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerGrunnlagResponse'];
 

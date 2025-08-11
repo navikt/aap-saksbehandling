@@ -6,6 +6,7 @@ import {
   hentFullmektigGrunnlag,
   hentRefusjonGrunnlag,
   hentSykdomsGrunnlag,
+  hentSykdomsvurderingBrevGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import styles from './SkriveBrevMedDataFetching.module.css';
 import { StegType } from 'lib/types/types';
@@ -24,18 +25,26 @@ export const SkriveBrevMedDataFetching = async ({
   behandlingVersjon: number;
   aktivtSteg: StegType;
 }) => {
-  const [brevGrunnlag, sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag, fullmektigGrunnlag] =
-    await Promise.all([
-      hentBrevGrunnlag(behandlingsReferanse),
-      hentSykdomsGrunnlag(behandlingsReferanse),
-      hentBistandsbehovGrunnlag(behandlingsReferanse),
-      hentRefusjonGrunnlag(behandlingsReferanse),
-      hentFullmektigGrunnlag(behandlingsReferanse),
-    ]);
+  const [
+    brevGrunnlag,
+    sykdomsgrunnlag,
+    bistandsbehovGrunnlag,
+    refusjonGrunnlag,
+    sykdomsvurderingBrevGrunnlag,
+    fullmektigGrunnlag,
+  ] = await Promise.all([
+    hentBrevGrunnlag(behandlingsReferanse),
+    hentSykdomsGrunnlag(behandlingsReferanse),
+    hentBistandsbehovGrunnlag(behandlingsReferanse),
+    hentRefusjonGrunnlag(behandlingsReferanse),
+    hentSykdomsvurderingBrevGrunnlag(behandlingsReferanse),
+    hentFullmektigGrunnlag(behandlingsReferanse),
+  ]);
   if (
     isError(sykdomsgrunnlag) ||
     isError(bistandsbehovGrunnlag) ||
     isError(refusjonGrunnlag) ||
+    isError(sykdomsvurderingBrevGrunnlag) ||
     isError(brevGrunnlag) ||
     isError(fullmektigGrunnlag)
   ) {
@@ -69,6 +78,7 @@ export const SkriveBrevMedDataFetching = async ({
         sykdomsgrunnlag={sykdomsgrunnlag.data}
         bistandsbehovGrunnlag={bistandsbehovGrunnlag.data}
         refusjonGrunnlag={refusjonGrunnlag.data}
+        sykdomsvurderingBrevGrunnlag={sykdomsvurderingBrevGrunnlag.data}
       />
       <SkriveBrev
         status={brev.status}
