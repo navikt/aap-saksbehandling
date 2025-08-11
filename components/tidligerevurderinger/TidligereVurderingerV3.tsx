@@ -2,11 +2,20 @@ import React, { useState } from 'react';
 import { Label, BodyShort, Detail, VStack, ExpansionCard, Chips } from '@navikt/ds-react';
 import styles from 'components/tidligerevurderinger/TidligereVurderingerV3.module.css';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { TidligereVurdering } from './TidligereVurderingV2';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
+import { ÅpenPeriode } from '../../lib/types/types';
+import { ValuePair } from '../form/FormField';
 
 interface Props {
   tidligereVurderinger: TidligereVurdering[];
+}
+
+export interface TidligereVurdering {
+  periode: ÅpenPeriode;
+  vurdertAvIdent: string;
+  vurdertDato: string;
+  felter: ValuePair[];
+  erGjeldendeVurdering: boolean;
 }
 
 export const TidligereVurderingerV3 = ({ tidligereVurderinger }: Props) => {

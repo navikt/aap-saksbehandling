@@ -1703,24 +1703,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.320":
-  version: 0.0.320
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.320::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.320%2F097bf6ebeda2c57f6014043ce2a65cf04d02f12b"
-  checksum: 10c0/b35f5d8e8478ab6fe6ae05f2e56cd87c6035db22a049168ddbd1a0771db72d56d8c3c896782dbebfbbfb99eb8c8224685df23869187da73a5fdf53bffd8d3eaf
+"@navikt/aap-oppgave-typescript-types@npm:0.0.329":
+  version: 0.0.329
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.329::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.329%2F42e953c1d0b5a843601dcb019e1dbce874e84f15"
+  checksum: 10c0/4699e5135895a3f7d65c6ea0f7c53fcb3674e5dafa8f5077901cc48a8fd780023adf49a1e3b0bc53da1f0c569957449dd66a74d6b56842f9c9c9dd8e69892489
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.342":
-  version: 0.0.342
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.342::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.342%2F26b65c564cc5302a200783c2b2d42ce3c90245b3"
-  checksum: 10c0/23c998054a931ced09cf2914f3fa5fa5ae9a1ea57a004cccca8ca0a8381d99af7bf3716a3cf73f09bc323664baa64a21efe2c257dd75c6c9ea92c62be01a23e5
+"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.355":
+  version: 0.0.355
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.355::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.355%2F13af7c0c5a171660d46cc498a1f6769d87b9400e"
+  checksum: 10c0/13e08ce61328c66519d03fec0a40cdd5d6bfdd40aaf971ecc7279ebb34e129eb28b19eb8df07d1aacb9295e50ea065cb1d996e15a633aeb3812e4ef3e98005de
   languageName: node
   linkType: hard
 
-"@navikt/aap-statistikk-typescript-types@npm:^0.1.241":
-  version: 0.1.241
-  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.241::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.241%2F44798f03428984803a0bad53d6ebcddbec0ab2a8"
-  checksum: 10c0/4dc41e9dfd01e84f3dd62322e5483d241e4615c9068daf6289efbcd6f566323af44884cfbee9144405375874c45f975cb97708cf6c5bdaa5662aebb9a7b54c23
+"@navikt/aap-statistikk-typescript-types@npm:^0.1.247":
+  version: 0.1.247
+  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.247::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.247%2Fdc722caa22d9732feb805da66f484469660abbe0"
+  checksum: 10c0/ed7ea596e8c88864aa74345c707fa38c1fd13577b8b9f3b906e5b7ae365ab2fa1e037af3c1819f48c7203e9254085ef238d9f3ffb6a7acaaf9ba0314f2d084b2
   languageName: node
   linkType: hard
 
@@ -3741,9 +3741,9 @@ __metadata:
     "@navikt/aap-breveditor": "npm:^0.4.2"
     "@navikt/aap-breveditor-css": "npm:^0.4.0"
     "@navikt/aap-felles-prettier": "npm:^5.3.0"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.320"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.342"
-    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.241"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.329"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.355"
+    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.247"
     "@navikt/aksel-icons": "npm:7.26.0"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
     "@navikt/ds-css": "npm:7.26.0"
@@ -3801,7 +3801,7 @@ __metadata:
     react-plotly.js: "npm:^2.6.0"
     react-select: "npm:^5.10.2"
     recharts: "npm:^2.15.4"
-    swr: "npm:^2.3.4"
+    swr: "npm:^2.3.5"
     typescript: "npm:^5.9.2"
     uuid: "npm:^11.1.0"
     vite-tsconfig-paths: "npm:^5.1.4"
@@ -12458,15 +12458,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swr@npm:^2.3.4":
-  version: 2.3.4
-  resolution: "swr@npm:2.3.4"
+"swr@npm:^2.3.5":
+  version: 2.3.5
+  resolution: "swr@npm:2.3.5"
   dependencies:
     dequal: "npm:^2.0.3"
     use-sync-external-store: "npm:^1.4.0"
   peerDependencies:
     react: ^16.11.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/c5cf536c2652fc6b64d64d3ce232f8bbe25dcaffc688f852fb81cf06e28b59280ebebde752429d9801c3af8e7a956ee7242376a6386a599cedc0000b862a712d
+  checksum: 10c0/528580022fdde256541257cf0a4da379664c705c9c66c6341c5943fb4d2dee8dc898b2a8bb0bee3703295f1edb452119e38bcca90656ec83efab26c14571bc8f
   languageName: node
   linkType: hard
 

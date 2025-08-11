@@ -25,7 +25,9 @@ export const OppgaverInnUt = ({ behandlingstyperQuery }: Props) => {
     oppgaverPerSteggruppeClient
   );
 
-  const antallOppgaver = isSuccess(oppgaverPerSteggruppe) ? oppgaverPerSteggruppe.data : { nye: 0, lukkede: 0, totalt: 0 };
+  const antallOppgaver = isSuccess(oppgaverPerSteggruppe)
+    ? oppgaverPerSteggruppe.data
+    : { nye: 0, lukkede: 0, totalt: 0 };
 
   return (
     <PlotWrapper>

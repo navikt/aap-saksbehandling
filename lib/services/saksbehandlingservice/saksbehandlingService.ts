@@ -55,6 +55,7 @@ import {
   StudentGrunnlag,
   SvarFraAndreinstansGrunnlag,
   SykdomsGrunnlag,
+  SykdomsvurderingBrevGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
   TilkjentYtelseGrunnlagV2,
@@ -183,6 +184,11 @@ export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string)
 export const hentRimeligGrunnMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/meldeplikt-rimelig-grunn`;
   return await apiFetch<RimeligGrunnMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentSykdomsvurderingBrevGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdomsvurdering-for-brev`;
+  return await apiFetch<SykdomsvurderingBrevGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFastsettArbeidsevneGrunnlag = async (behandlingsReferanse: string) => {

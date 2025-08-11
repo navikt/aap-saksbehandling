@@ -11,6 +11,7 @@ import { YrkesskadeMedDataFetching } from 'components/behandlinger/sykdom/yrkess
 import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon/RefusjonMedDataFetching';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -23,7 +24,6 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   }
 
   const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt.data);
-
   const saksBehandlerReadOnly = flyt.data.visning.saksbehandlerReadOnly;
   const behandlingVersjon = flyt.data.behandlingVersjon;
 
@@ -38,6 +38,16 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
       {stegSomSkalVises.includes('AVKLAR_SYKDOM') && (
         <StegSuspense>
           <SykdomsvurderingMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+            typeBehandling={flyt.data.visning.typeBehandling}
+          />
+        </StegSuspense>
+      )}
+      {stegSomSkalVises.includes('VURDER_BISTANDSBEHOV') && (
+        <StegSuspense>
+          <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
@@ -63,20 +73,20 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('VURDER_BISTANDSBEHOV') && (
-        <StegSuspense>
-          <BistandsbehovMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-            typeBehandling={flyt.data.visning.typeBehandling}
-          />
-        </StegSuspense>
-      )}
       {stegSomSkalVises.includes('REFUSJON_KRAV') && (
         <StegSuspense>
           <RefusjonMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+          />
+        </StegSuspense>
+      )}
+      {stegSomSkalVises.includes('SYKDOMSVURDERING_BREV') && (
+        <StegSuspense>
+          <SykdomsvurderingBrevMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            typeBehandling={flyt.data.visning.typeBehandling}
             readOnly={saksBehandlerReadOnly}
             behandlingVersjon={behandlingVersjon}
           />

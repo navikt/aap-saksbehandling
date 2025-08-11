@@ -75,7 +75,7 @@ export function useOppgaver({
     const suffix = visKunOppgaverSomBrukerErVeilederPå ? '/veileder/' : '/';
     const typeSuffix = `/${type}`;
     const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
-    const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`
+    const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`;
     return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}`;
   };
 

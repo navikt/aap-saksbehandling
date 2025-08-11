@@ -14,7 +14,7 @@ export const ResponsivePlot = ({ data, layout }: ResponsivePlotProps) => {
       data={data}
       layout={{
         ...layout,
-        autosize: true,
+        autosize: false,
         margin: { ...layout.margin, t: 10, b: 40, pad: 10 },
         colorway: ['#CCE1FF', '#99C4DD', '#FFC166', '#66CBEC', '#99DEAD', '#C0B2D2'],
       }}
