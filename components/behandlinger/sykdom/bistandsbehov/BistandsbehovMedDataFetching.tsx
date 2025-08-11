@@ -1,8 +1,9 @@
-import { hentBistandsbehovGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBistandsbehovGrunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { TypeBehandling } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -17,7 +18,11 @@ export const BistandsbehovMedDataFetching = async ({
   readOnly,
   typeBehandling,
 }: Props) => {
-  const grunnlag = await hentBistandsbehovGrunnlag(behandlingsReferanse);
+  const [grunnlag, mellomlagring] = await Promise.all([
+    hentBistandsbehovGrunnlag(behandlingsReferanse),
+    hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_BISTANDSBEHOV_KODE),
+  ]);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
@@ -27,6 +32,7 @@ export const BistandsbehovMedDataFetching = async ({
       grunnlag={grunnlag.data}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
+      mellomlagring={mellomlagring}
       typeBehandling={typeBehandling}
     />
   );

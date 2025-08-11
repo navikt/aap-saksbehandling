@@ -70,6 +70,7 @@ import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFe
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
 import { Enhet } from 'lib/types/oppgaveTypes';
+import { Behovstype } from 'lib/utils/form';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -463,6 +464,12 @@ export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsReferanse: stri
     `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/oppfolgingsoppgave`,
     saksbehandlingApiScope
   );
+};
+
+export const hentMellomlagring = async (behandlingsReferanse: string, kode: Behovstype) => {
+  console.log(behandlingsReferanse, kode);
+  // TODO Gjør noe her
+  return undefined;
 };
 
 export const sendLokalHendelse = async (saksnummer: string, body: Object) => {

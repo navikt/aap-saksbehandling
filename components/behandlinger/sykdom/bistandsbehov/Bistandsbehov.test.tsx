@@ -6,7 +6,7 @@ import { BistandsGrunnlag } from 'lib/types/types';
 
 const user = userEvent.setup();
 
-describe('Førstegangsbehandling', () => {
+describe('Generelt', () => {
   it('Skal ha en overskrift', () => {
     render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
 
@@ -14,6 +14,26 @@ describe('Førstegangsbehandling', () => {
     expect(heading).toBeVisible();
   });
 
+  it('Skal vise et varsel dersom det finnes en mellomlagring på vurderingen', () => {
+    render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
+    const mellomlagringWarning = screen.getByText('Det finnes en mellomlagring blablabla');
+    expect(mellomlagringWarning).toBeVisible();
+  });
+
+  it('Skal ikke vise et varsel dersom det ikke finnes en mellomlagring på vurderingen', () => {
+    render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
+    const mellomlagringWarning = screen.queryByText('Det finnes en mellomlagring blablabla');
+    expect(mellomlagringWarning).not.toBeInTheDocument();
+  });
+
+  it('Skal ha en knapp for å kunne mellomlagre vurderingen', () => {
+    render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
+    const knapp = screen.getByRole('Mellomlagre vurdering');
+    expect(knapp).toBeVisible();
+  });
+});
+
+describe('Førstegangsbehandling', () => {
   it('Skal ha felt for begrunnelse', () => {
     render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
     const begrunnelse = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });

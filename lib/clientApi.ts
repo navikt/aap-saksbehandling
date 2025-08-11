@@ -12,8 +12,8 @@ import {
   NavEnhetRequest,
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
-  OpprettTestcase,
   OpprettDummySakDto,
+  OpprettTestcase,
   SaksInfo,
   SettPåVent,
 } from './types/types';
@@ -23,6 +23,7 @@ import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { Markering } from 'lib/types/oppgaveTypes';
+import { MellomlagringRequest, SlettMellomlagringRequest } from 'app/saksbehandling/api/mellomlagring/route';
 
 const BASE_URL = '/saksbehandling';
 
@@ -47,6 +48,18 @@ export async function clientFetch<ResponseBody>(
       },
     };
   }
+}
+
+export function clientOpprettMellomlagring(request: MellomlagringRequest) {
+  return clientFetch(`${BASE_URL}/api/mellomlagring`, 'POST', request);
+}
+
+export function clientOppdaterMellomlagring(request: MellomlagringRequest) {
+  return clientFetch(`${BASE_URL}/api/mellomlagring`, 'PATCH', request);
+}
+
+export function clientSlettMellomlagring(request: SlettMellomlagringRequest) {
+  return clientFetch(`${BASE_URL}/api/mellomlagring`, 'DELETE', request);
 }
 
 export function clientSettBehandlingPåVent(referanse: string, settPåVent: SettPåVent) {
