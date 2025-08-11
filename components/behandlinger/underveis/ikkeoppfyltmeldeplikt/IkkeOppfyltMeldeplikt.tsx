@@ -1,7 +1,12 @@
 'use client';
 
 import { RimeligGrunnMeldepliktGrunnlag } from 'lib/types/types';
-import { formaterDatoForBackend, formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
+import {
+  formaterDatoForBackend,
+  formaterDatoForFrontend,
+  formaterPeriode,
+  sorterEtterNyesteDato,
+} from 'lib/utils/date';
 import { FormEvent, useState } from 'react';
 import { Button, HStack, Link, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -14,6 +19,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegH
 import { Behovstype } from 'lib/utils/form';
 import { parse } from 'date-fns';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { isProd } from 'lib/utils/environment';
 
 type Props = {
   grunnlag?: RimeligGrunnMeldepliktGrunnlag;
@@ -21,28 +27,43 @@ type Props = {
   readOnly: boolean;
 };
 
-type RimeligGrunnVurderinger = {
+type RimeligGrunnVurdering = {
   fraDato: string;
   begrunnelse: string;
   harRimeligGrunn: string;
 };
 
 type FormFields = {
-  rimeligGrunnVurderinger: RimeligGrunnVurderinger[];
+  rimeligGrunnVurderinger: RimeligGrunnVurdering[];
 };
 
 export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const [overstyring, setOverstyring] = useState<boolean>(false);
 
-  const defaultValues: RimeligGrunnVurderinger[] =
-    grunnlag?.perioderIkkeMeldt.map((periode) => {
-      const vurdering = grunnlag.vurderinger.find((v) => v.fraDato === periode.fom);
-      return {
-        fraDato: formaterDatoForFrontend(periode.fom),
-        begrunnelse: vurdering?.begrunnelse ?? '',
-        harRimeligGrunn: vurdering?.harRimeligGrunn ? 'RIMELIG_GRUNN' : 'IKKE_OPPFYLT',
-      };
-    }) || [];
+  const relevantePerioder =
+    grunnlag?.perioderIkkeMeldt
+      .map((e) => ({ periode: e, harRimeligGrunn: false }))
+      .concat(grunnlag?.perioderRimeligGrunn.map((e) => ({ periode: e, harRimeligGrunn: true })))
+      .sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom)) ?? [];
+
+  const defaultValues: RimeligGrunnVurdering[] = relevantePerioder.map((periode) => {
+    const vurdering = finnVurdering(periode.periode.fom);
+    if (vurdering && vurdering?.harRimeligGrunn !== periode.harRimeligGrunn) {
+      console.error('Inkonsistent status for ' + periode.periode.fom);
+    }
+
+    return {
+      fraDato: formaterDatoForFrontend(periode.periode.fom),
+      begrunnelse: vurdering?.begrunnelse ?? '',
+      harRimeligGrunn: vurdering
+        ? vurdering.harRimeligGrunn
+          ? 'RIMELIG_GRUNN'
+          : 'IKKE_OPPFYLT'
+        : periode.harRimeligGrunn
+          ? 'RIMELIG_GRUNN'
+          : 'IKKE_OPPFYLT',
+    };
+  });
 
   const { form } = useConfigForm<FormFields>({
     rimeligGrunnVurderinger: {
@@ -98,13 +119,19 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
             <Table.Row>
               <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
               <Table.HeaderCell>Meldeplikt</Table.HeaderCell>
-              {overstyring && <Table.HeaderCell>Begrunnelse</Table.HeaderCell>}
+              {overstyring && (
+                <>
+                  <Table.HeaderCell>Begrunnelse</Table.HeaderCell>
+                  <Table.HeaderCell>Vurdert av</Table.HeaderCell>
+                </>
+              )}
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {grunnlag?.perioderIkkeMeldt.map((periode, periodeIndex) => {
+            {relevantePerioder.map((relevantPeriode, periodeIndex) => {
+              const periode = relevantPeriode.periode;
               const skilleLinjeClassName =
-                grunnlag?.perioderIkkeMeldt.length === periodeIndex + 1 || grunnlag?.perioderIkkeMeldt.length === 1
+                relevantePerioder.length === periodeIndex + 1 || relevantePerioder.length === 1
                   ? ''
                   : styles.tablerowwithoutborder;
 
@@ -127,13 +154,25 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
                     </SelectWrapper>
                   </Table.DataCell>
                   {overstyring && (
-                    <Table.DataCell>
-                      <TextAreaWrapper
-                        name={`rimeligGrunnVurderinger.${periodeIndex}.begrunnelse`}
-                        control={form.control}
-                        rules={{ required: 'Du må gi en begrunnelse' }}
-                      />
-                    </Table.DataCell>
+                    <>
+                      <Table.DataCell>
+                        <TextAreaWrapper
+                          name={`rimeligGrunnVurderinger.${periodeIndex}.begrunnelse`}
+                          control={form.control}
+                          rules={{
+                            validate: (value) => {
+                              const harRimeligGrunn = form.getValues(
+                                `rimeligGrunnVurderinger.${periodeIndex}.harRimeligGrunn`
+                              );
+                              if (harRimeligGrunn == 'RIMELIG_GRUNN' && !value) {
+                                return 'Du må skrive en begrunnelse for rimelig grunn';
+                              }
+                            },
+                          }}
+                        />
+                      </Table.DataCell>
+                      <Table.DataCell>{finnVurdertAv(periode.fom)}</Table.DataCell>
+                    </>
                   )}
                 </Table.Row>
               );
@@ -143,7 +182,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
 
         {!readOnly && (
           <HStack justify={'space-between'} align={'end'}>
-            {overstyring ? (
+            {overstyring && !isProd ? (
               <div className={'flex-row'}>
                 <Button variant={'secondary'} onClick={() => setOverstyring(false)}>
                   Angre overstyring
@@ -162,4 +201,21 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
   ) : (
     <></>
   );
+
+  function finnVurdering(fraDato: string) {
+    return (
+      grunnlag?.vurderinger.find((v) => v.fraDato === fraDato) ??
+      grunnlag?.gjeldendeVedtatteVurderinger.find((v) => v.fraDato === fraDato)
+    );
+  }
+
+  function finnVurdertAv(fraDato: string): string {
+    const vurdering =
+      grunnlag?.vurderinger?.find((v) => v.fraDato === fraDato) ??
+      grunnlag?.gjeldendeVedtatteVurderinger.find((v) => v.fraDato === fraDato);
+
+    const vurdertDato = vurdering?.vurderingsTidspunkt ? formaterDatoForFrontend(vurdering?.vurderingsTidspunkt) : '';
+    const vurdertAv = vurdering?.vurdertAv.ansattnavn ?? vurdering?.vurdertAv.ident ?? '';
+    return vurdertAv + ' ' + vurdertDato;
+  }
 };

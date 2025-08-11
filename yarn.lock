@@ -1703,24 +1703,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.313":
-  version: 0.0.313
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.313::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.313%2Fdfd49deb1e1f28d0ad5ec7b5f9fc1e4b5559d7fa"
-  checksum: 10c0/0733a60c031f73c1580fd3f1984d1e94fa761fb7fd989b21ee35ce74a819631c4caf7c9302784394f411d99e6d210c76e2d22802369fcd2d301e769e75a9037c
+"@navikt/aap-oppgave-typescript-types@npm:0.0.329":
+  version: 0.0.329
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.329::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.329%2F42e953c1d0b5a843601dcb019e1dbce874e84f15"
+  checksum: 10c0/4699e5135895a3f7d65c6ea0f7c53fcb3674e5dafa8f5077901cc48a8fd780023adf49a1e3b0bc53da1f0c569957449dd66a74d6b56842f9c9c9dd8e69892489
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.340":
-  version: 0.0.340
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.340::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.340%2F1bb94eae1e9bdf904fa6653f56e339ba1f7f81ed"
-  checksum: 10c0/e272d6c314c6ed3b247d6a4723b256d302a0bb70423d05a486e84bf3d5de165413d3f5c8979cfce61ec963072f6f539583eaeb8b8154f49656a0ab5cf5f4fe84
+"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.355":
+  version: 0.0.355
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.355::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.355%2F13af7c0c5a171660d46cc498a1f6769d87b9400e"
+  checksum: 10c0/13e08ce61328c66519d03fec0a40cdd5d6bfdd40aaf971ecc7279ebb34e129eb28b19eb8df07d1aacb9295e50ea065cb1d996e15a633aeb3812e4ef3e98005de
   languageName: node
   linkType: hard
 
-"@navikt/aap-statistikk-typescript-types@npm:^0.1.231":
-  version: 0.1.231
-  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.231::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.231%2F88f03aba662a65fb32763c887ac67895d7de56c3"
-  checksum: 10c0/77865623f5a8acc0db18e2863c828c7c904a0643ff3eee5d6a00bdc40348c1ade88dbf078d39241545e5b9aaa7070f5c1787f90541da4a42e9e23baa713a522c
+"@navikt/aap-statistikk-typescript-types@npm:^0.1.247":
+  version: 0.1.247
+  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.247::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.247%2Fdc722caa22d9732feb805da66f484469660abbe0"
+  checksum: 10c0/ed7ea596e8c88864aa74345c707fa38c1fd13577b8b9f3b906e5b7ae365ab2fa1e037af3c1819f48c7203e9254085ef238d9f3ffb6a7acaaf9ba0314f2d084b2
   languageName: node
   linkType: hard
 
@@ -1843,10 +1843,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.4.5":
-  version: 15.4.5
-  resolution: "@next/env@npm:15.4.5"
-  checksum: 10c0/ac79c1f35aaba43ac5a036dc7f6c408334cbe6b4e37dc301b282dd81cac12eabc2ac1ebaff7d2fb25141dc679ff7c3c06c5e8e9ec03cfadbc83eb7a3626eef4a
+"@next/env@npm:15.4.6":
+  version: 15.4.6
+  resolution: "@next/env@npm:15.4.6"
+  checksum: 10c0/039a757f5e083f44bd71268d804e86064233b023c72930ab45a3a46ba651c5bd474096550ca140b9ec00338c4013afbba7972c09eba23082005d7e9086a4eb67
   languageName: node
   linkType: hard
 
@@ -1859,58 +1859,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-arm64@npm:15.4.5":
-  version: 15.4.5
-  resolution: "@next/swc-darwin-arm64@npm:15.4.5"
+"@next/swc-darwin-arm64@npm:15.4.6":
+  version: 15.4.6
+  resolution: "@next/swc-darwin-arm64@npm:15.4.6"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-x64@npm:15.4.5":
-  version: 15.4.5
-  resolution: "@next/swc-darwin-x64@npm:15.4.5"
+"@next/swc-darwin-x64@npm:15.4.6":
+  version: 15.4.6
+  resolution: "@next/swc-darwin-x64@npm:15.4.6"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-gnu@npm:15.4.5":
-  version: 15.4.5
-  resolution: "@next/swc-linux-arm64-gnu@npm:15.4.5"
+"@next/swc-linux-arm64-gnu@npm:15.4.6":
+  version: 15.4.6
+  resolution: "@next/swc-linux-arm64-gnu@npm:15.4.6"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-musl@npm:15.4.5":
-  version: 15.4.5
-  resolution: "@next/swc-linux-arm64-musl@npm:15.4.5"
+"@next/swc-linux-arm64-musl@npm:15.4.6":
+  version: 15.4.6
+  resolution: "@next/swc-linux-arm64-musl@npm:15.4.6"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-gnu@npm:15.4.5":
-  version: 15.4.5
-  resolution: "@next/swc-linux-x64-gnu@npm:15.4.5"
+"@next/swc-linux-x64-gnu@npm:15.4.6":
+  version: 15.4.6
+  resolution: "@next/swc-linux-x64-gnu@npm:15.4.6"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-musl@npm:15.4.5":
-  version: 15.4.5
-  resolution: "@next/swc-linux-x64-musl@npm:15.4.5"
+"@next/swc-linux-x64-musl@npm:15.4.6":
+  version: 15.4.6
+  resolution: "@next/swc-linux-x64-musl@npm:15.4.6"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-win32-arm64-msvc@npm:15.4.5":
-  version: 15.4.5
-  resolution: "@next/swc-win32-arm64-msvc@npm:15.4.5"
+"@next/swc-win32-arm64-msvc@npm:15.4.6":
+  version: 15.4.6
+  resolution: "@next/swc-win32-arm64-msvc@npm:15.4.6"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-win32-x64-msvc@npm:15.4.5":
-  version: 15.4.5
-  resolution: "@next/swc-win32-x64-msvc@npm:15.4.5"
+"@next/swc-win32-x64-msvc@npm:15.4.6":
+  version: 15.4.6
+  resolution: "@next/swc-win32-x64-msvc@npm:15.4.6"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -3741,9 +3741,9 @@ __metadata:
     "@navikt/aap-breveditor": "npm:^0.4.2"
     "@navikt/aap-breveditor-css": "npm:^0.4.0"
     "@navikt/aap-felles-prettier": "npm:^5.3.0"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.313"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.340"
-    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.231"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.329"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.355"
+    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.247"
     "@navikt/aksel-icons": "npm:7.26.0"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
     "@navikt/ds-css": "npm:7.26.0"
@@ -3788,10 +3788,10 @@ __metadata:
     json-diff: "npm:^1.0.6"
     lint-staged: "npm:^15.5.2"
     lodash: "npm:^4.17.21"
-    next: "npm:15.4.5"
+    next: "npm:15.4.6"
     node-loader: "npm:^2.1.0"
     openapi-typescript: "npm:7.8.0"
-    pino: "npm:^9.7.0"
+    pino: "npm:^9.8.0"
     pino-pretty: "npm:^13.1.1"
     plotly.js: "npm:^3.0.3"
     prettier: "npm:^3.5.3"
@@ -9573,19 +9573,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:15.4.5":
-  version: 15.4.5
-  resolution: "next@npm:15.4.5"
+"next@npm:15.4.6":
+  version: 15.4.6
+  resolution: "next@npm:15.4.6"
   dependencies:
-    "@next/env": "npm:15.4.5"
-    "@next/swc-darwin-arm64": "npm:15.4.5"
-    "@next/swc-darwin-x64": "npm:15.4.5"
-    "@next/swc-linux-arm64-gnu": "npm:15.4.5"
-    "@next/swc-linux-arm64-musl": "npm:15.4.5"
-    "@next/swc-linux-x64-gnu": "npm:15.4.5"
-    "@next/swc-linux-x64-musl": "npm:15.4.5"
-    "@next/swc-win32-arm64-msvc": "npm:15.4.5"
-    "@next/swc-win32-x64-msvc": "npm:15.4.5"
+    "@next/env": "npm:15.4.6"
+    "@next/swc-darwin-arm64": "npm:15.4.6"
+    "@next/swc-darwin-x64": "npm:15.4.6"
+    "@next/swc-linux-arm64-gnu": "npm:15.4.6"
+    "@next/swc-linux-arm64-musl": "npm:15.4.6"
+    "@next/swc-linux-x64-gnu": "npm:15.4.6"
+    "@next/swc-linux-x64-musl": "npm:15.4.6"
+    "@next/swc-win32-arm64-msvc": "npm:15.4.6"
+    "@next/swc-win32-x64-msvc": "npm:15.4.6"
     "@swc/helpers": "npm:0.5.15"
     caniuse-lite: "npm:^1.0.30001579"
     postcss: "npm:8.4.31"
@@ -9628,7 +9628,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 10c0/b9b4d3ca18c2e00b309f66c50eae2832279722c844f0cc2fa4de930bd7f4984540ea6b70992272da662a2fb3830048f6d7e2aa80c60dd883382770f32b6f425b
+  checksum: 10c0/d0cf35100cb0903e6828f9279d5d0ac637e181427845dd2afa224b42db09f3de805522c2b9bbc3b0f630d60e4c26c79b4c1a99d434500968591b864bf341b1d5
   languageName: node
   linkType: hard
 
@@ -10263,9 +10263,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:^9.7.0":
-  version: 9.7.0
-  resolution: "pino@npm:9.7.0"
+"pino@npm:^9.8.0":
+  version: 9.8.0
+  resolution: "pino@npm:9.8.0"
   dependencies:
     atomic-sleep: "npm:^1.0.0"
     fast-redact: "npm:^3.1.1"
@@ -10280,7 +10280,7 @@ __metadata:
     thread-stream: "npm:^3.0.0"
   bin:
     pino: bin.js
-  checksum: 10c0/c7f8a83a9a9d728b4eff6d0f4b9367f031c91bcaa5806fbf0eedcc8e77faba593d59baf11a8fba0dd1c778bb17ca7ed01418ac1df4ec129faeedd4f3ecaff66f
+  checksum: 10c0/a6de40d8c777520a0f2bdd1727512db2dba51d0d8098500ec8326f1f95412e4e704ee4301287ccbbafbf7a7ab07999d5659333a7079d1b70341d0d69e4d40b29
   languageName: node
   linkType: hard
 

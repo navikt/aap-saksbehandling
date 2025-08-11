@@ -36,6 +36,7 @@ export const MineOppgaver2 = () => {
     behandlingOpprettetFom: {
       type: 'date',
       label: 'Opprettet fra',
+      toDate: new Date(),
     },
     behandlingOpprettetTom: {
       type: 'date',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { OpprettSakFormFields } from 'components/opprettsak/OpprettSak';
+import { OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
 import styles from 'components/opprettsak/OpprettSak.module.css';
 import { Button, Label } from '@navikt/ds-react';
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
@@ -58,25 +58,23 @@ export const OpprettSakBarn = ({ form }: Props) => {
                 </Button>
               </div>
             </div>
-            <div className={'flex-row'}>
-              {fields.length === index + 1 && (
-                <Button
-                  type="button"
-                  className={'fit-content'}
-                  size={'small'}
-                  onClick={() => {
-                    append({ fodselsdato: '', harRelasjon: JaEllerNei.Ja, skalFinnesIPDL: 'true' });
-                  }}
-                  variant={'tertiary'}
-                  icon={<PlusIcon aria-hidden />}
-                >
-                  Legg til barn
-                </Button>
-              )}
-            </div>
           </div>
         );
       })}
+      <div className={'flex-row'}>
+        <Button
+          type="button"
+          className={'fit-content'}
+          size={'small'}
+          onClick={() => {
+            append({ fodselsdato: '', harRelasjon: JaEllerNei.Ja, skalFinnesIPDL: 'true' });
+          }}
+          variant={'tertiary'}
+          icon={<PlusIcon aria-hidden />}
+        >
+          Legg til barn
+        </Button>
+      </div>
     </div>
   );
 };
