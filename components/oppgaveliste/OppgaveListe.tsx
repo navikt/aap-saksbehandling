@@ -6,6 +6,10 @@ import { useState } from 'react';
 import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
+import { MineOppgaver2 } from 'components/oppgaveliste/mineoppgaver/MineOppgaver2';
+import { LedigeOppgaver2 } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver2';
+import { AlleOppgaver2 } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver2';
+import { isDev } from 'lib/utils/environment';
 
 interface Props {
   enheter: Enhet[];
@@ -33,9 +37,19 @@ export const OppgaveListe = ({ enheter }: Props) => {
         </Tabs>
       </HStack>
 
-      {selected === 'Mine oppgaver' && <MineOppgaver />}
-      {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
-      {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
+      {isDev() ? (
+        <>
+          {selected === 'Mine oppgaver' && <MineOppgaver2 />}
+          {selected === 'Ledige oppgaver' && <LedigeOppgaver2 enheter={enheter} />}
+          {selected === 'Alle oppgaver' && <AlleOppgaver2 enheter={enheter} />}
+        </>
+      ) : (
+        <>
+          {selected === 'Mine oppgaver' && <MineOppgaver />}
+          {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
+          {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
+        </>
+      )}
     </VStack>
   );
 };

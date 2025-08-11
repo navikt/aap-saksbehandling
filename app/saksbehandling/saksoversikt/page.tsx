@@ -1,12 +1,14 @@
 import { AlleSakerListe } from 'components/saksliste/AlleSakerListe';
 import styles from './page.module.css';
-import { isLocal, isProd } from 'lib/utils/environment';
-import { OpprettSak } from 'components/opprettsak/OpprettSak';
+import { isDev, isLocal, isProd } from 'lib/utils/environment';
+import { OpprettSakLocal } from 'components/opprettsak/OpprettSakLocal';
+import OpprettSakTest from 'components/opprettsak/OpprettSakTest';
 
 const Page = async () => {
   return (
     <main className={styles.main}>
-      {isLocal() && <OpprettSak />}
+      {isLocal() && <OpprettSakLocal />}
+      {isDev() && <OpprettSakTest />}
       {!isProd() && <AlleSakerListe />}
     </main>
   );

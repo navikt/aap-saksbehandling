@@ -14,6 +14,7 @@ export interface TextAreaProps<FormFieldValues extends FieldValues> {
   readOnly?: boolean;
   className?: string;
   autocomplete?: HTMLInputAutoCompleteAttribute;
+  onChangeCustom?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export const TextAreaWrapper = <FormFieldValues extends FieldValues>({
@@ -28,27 +29,37 @@ export const TextAreaWrapper = <FormFieldValues extends FieldValues>({
   readOnly,
   className,
   autocomplete,
+  onChangeCustom,
 }: TextAreaProps<FormFieldValues>) => (
   <Controller
     name={name}
     control={control}
     rules={rules}
-    render={({ field: { name, value, onChange }, fieldState: { error } }) => (
-      <Textarea
-        id={name}
-        label={label}
-        size={size}
-        description={description}
-        value={value}
-        onChange={onChange}
-        hideLabel={hideLabel}
-        error={error?.message}
-        name={name}
-        maxLength={maxLength}
-        readOnly={readOnly}
-        className={className}
-        autoComplete={autocomplete}
-      />
-    )}
+    render={({ field: { name, value, onChange }, fieldState: { error } }) => {
+      const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        onChange(e);
+        if (onChangeCustom) {
+          onChangeCustom(e);
+        }
+      };
+
+      return (
+        <Textarea
+          id={name}
+          label={label}
+          size={size}
+          description={description}
+          value={value}
+          onChange={handleChange}
+          hideLabel={hideLabel}
+          error={error?.message}
+          name={name}
+          maxLength={maxLength}
+          readOnly={readOnly}
+          className={className}
+          autoComplete={autocomplete}
+        />
+      );
+    }}
   />
 );

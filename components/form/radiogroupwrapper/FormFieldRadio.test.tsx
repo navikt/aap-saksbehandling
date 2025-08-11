@@ -84,6 +84,15 @@ describe('Radio', () => {
       await screen.queryByText('Du må ta stilling til om arbeidsevnen er nedsatt med minst 50 prosent')
     ).not.toBeInTheDocument();
   });
+
+  test('at onChange blir kalt når radioknapp velges', async () => {
+    const onChangeMock = vi.fn();
+    render(<FormMedRadios onChange={onChangeMock} />);
+
+    await user.click(screen.getByRole('radio', { name: /Ja/ }));
+
+    expect(onChangeMock).toHaveBeenCalled();
+  });
 });
 
 interface FormFields {
@@ -92,6 +101,7 @@ interface FormFields {
 
 interface Props {
   defaultValue?: string;
+  onChange?: () => void;
 }
 function FormMedRadios(props: Props) {
   const onSubmitMock = vi.fn();
@@ -106,6 +116,7 @@ function FormMedRadios(props: Props) {
         { label: 'Ja', value: 'true', description: 'Dette er en description' },
         { label: 'Nei', value: 'false' },
       ],
+      onChange: props.onChange,
     },
   });
   return (

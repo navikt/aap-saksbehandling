@@ -1,7 +1,8 @@
 import { ExpansionCard, Table } from '@navikt/ds-react';
 import styles from 'components/tidligerevurderinger/TidligereVurderinger.module.css';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
-import { TidligereVurdering, TidligereVurderingV2 } from 'components/tidligerevurderinger/TidligereVurderingV2';
+import { TidligereVurderingV2 } from 'components/tidligerevurderinger/TidligereVurderingV2';
+import { TidligereVurdering } from './TidligereVurderingerV3';
 interface Props {
   tidligereVurderinger: TidligereVurdering[];
 }

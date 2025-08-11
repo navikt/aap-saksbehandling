@@ -1,13 +1,22 @@
 'use client';
 
-import { Table } from '@navikt/ds-react';
+import { BodyShort, Table } from '@navikt/ds-react';
 import { UnderveisAvslagsÅrsak, UnderveisGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
 import { exhaustiveCheck } from 'lib/utils/typescript';
+import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { FormEvent } from 'react';
+import { Behovstype } from 'lib/utils/form';
+import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
+  readOnly: boolean;
+  behandlingVersjon: number;
 };
 
 const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => (
@@ -31,26 +40,58 @@ const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => (
   </Table.Row>
 );
 
-export const Underveisgrunnlag = ({ grunnlag }: Props) => {
+export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
+  const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('FASTSETT_UTTAK');
+
   return (
-    <Table>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
-          <Table.HeaderCell>Utfall</Table.HeaderCell>
-          <Table.HeaderCell>Avslagsårsak</Table.HeaderCell>
-          <Table.HeaderCell>Gradering</Table.HeaderCell>
-          <Table.HeaderCell>Trekk (dagsatser)</Table.HeaderCell>
-          <Table.HeaderCell>Kvoter</Table.HeaderCell>
-          <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {grunnlag.map((periode, index) => (
-          <Perioderad key={index} periode={periode} />
-        ))}
-      </Table.Body>
-    </Table>
+    <VilkårsKortMedForm
+      heading="Underveis"
+      steg={'FASTSETT_UTTAK'}
+      vilkårTilhørerNavKontor={true}
+      status={status}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={isLoading}
+      visBekreftKnapp={!readOnly}
+      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        løsBehovOgGåTilNesteSteg({
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.FORESLÅ_UTTAK_KODE,
+          },
+          referanse: behandlingsReferanse,
+        });
+      }}
+      knappTekst={'Neste'}
+    >
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
+            <Table.HeaderCell>Utfall</Table.HeaderCell>
+            <Table.HeaderCell>Avslagsårsak</Table.HeaderCell>
+            <Table.HeaderCell>Gradering</Table.HeaderCell>
+            <Table.HeaderCell>Trekk (dagsatser)</Table.HeaderCell>
+            <Table.HeaderCell>Kvoter</Table.HeaderCell>
+            <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {grunnlag.map((periode, index) => (
+            <Perioderad key={index} periode={periode} />
+          ))}
+        </Table.Body>
+      </Table>
+      <div className={styles.foreslåvedtak}>
+        {!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}
+        <LøsBehovOgGåTilNesteStegStatusAlert
+          status={status}
+          løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        />
+      </div>
+    </VilkårsKortMedForm>
   );
 };
 

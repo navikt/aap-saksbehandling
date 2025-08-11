@@ -28,7 +28,11 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>
-        <IkkeOppfyltMeldepliktMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+        <IkkeOppfyltMeldepliktMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+        />
       </StegSuspense>
       {stegSomSkalVises.includes('EFFEKTUER_11_7') && (
         <StegSuspense>
@@ -40,7 +44,11 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
         </StegSuspense>
       )}
       <StegSuspense>
-        <UnderveisgrunnlagMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+        <UnderveisgrunnlagMedDataFetching
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          behandlingsreferanse={behandlingsreferanse}
+        />
       </StegSuspense>
     </GruppeSteg>
   );

@@ -38,6 +38,7 @@ import {
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
+  OpprettDummySakDto,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
@@ -373,8 +374,13 @@ export const mellomlagreBrev = async (brevbestillingReferanse: string, brev: Bre
   return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT', brev);
 };
 
-export const opprettTestSak = async (sak: OpprettTestcase) => {
+export const opprettDummySakDev = async (sak: OpprettTestcase) => {
   const url = `${saksbehandlingApiBaseUrl}/test/opprett`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
+};
+
+export const opprettDummySakTest = async (sak: OpprettDummySakDto) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/test/opprettDummySak`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
 };
 

@@ -138,6 +138,7 @@ export type SakPersoninfo =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SakPersoninfoDTO'];
 
 export type OpprettTestcase = components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
+export type OpprettDummySakDto = components['schemas']['no.nav.aap.behandlingsflyt.test.OpprettDummySakDto'];
 export type FinnSakForIdent =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnSakForIdentDTO'];
 
@@ -347,6 +348,9 @@ export type DokumentÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBe
 
 export type Vurderingsbehov =
   components['schemas'][`no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO`]['vurderingsbehov'][number];
+
+export type ÅrsakTilOpprettelse =
+  components['schemas'][`no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO`]['årsakTilOpprettelse'];
 
 // oppgave
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];

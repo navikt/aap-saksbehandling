@@ -10,7 +10,6 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
-import { sorterEtterNyesteDato } from '../../../../lib/utils/date';
 
 interface Props {
   behandlingVersjon: number;
@@ -170,31 +169,29 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
     >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
         <TidligereVurderingerV3
-          tidligereVurderinger={historiskeManuelleVurderinger
-            .sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom))
-            .map((vurdering) => ({
-              ...vurdering,
-              felter: [
-                {
-                  label: lovvalgBegrunnelseLabel,
-                  value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.begrunnelse || '',
-                },
-                {
-                  label: lovvalgsLandLabel,
-                  value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLand || '',
-                },
-                {
-                  label: medlemskapBegrunnelseLabel,
-                  value: vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.begrunnelse || '',
-                },
-                {
-                  label: medlemAvFolkeTrygdenVedSøknadstidspunktLabel,
-                  value: getJaNeiEllerIkkeBesvart(
-                    vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.varMedlemIFolketrygd
-                  ),
-                },
-              ],
-            }))}
+          tidligereVurderinger={historiskeManuelleVurderinger.toReversed().map((vurdering) => ({
+            ...vurdering,
+            felter: [
+              {
+                label: lovvalgBegrunnelseLabel,
+                value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.begrunnelse || '',
+              },
+              {
+                label: lovvalgsLandLabel,
+                value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLand || '',
+              },
+              {
+                label: medlemskapBegrunnelseLabel,
+                value: vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.begrunnelse || '',
+              },
+              {
+                label: medlemAvFolkeTrygdenVedSøknadstidspunktLabel,
+                value: getJaNeiEllerIkkeBesvart(
+                  vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.varMedlemIFolketrygd
+                ),
+              },
+            ],
+          }))}
         />
       )}
 

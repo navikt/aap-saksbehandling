@@ -1,6 +1,7 @@
 import { RadioGroup } from '@navikt/ds-react';
 import React, { ReactNode } from 'react';
 import { Control, Controller, RegisterOptions, FieldValues, FieldPath } from 'react-hook-form';
+import { createSyntheticEvent } from 'lib/types/SyntheticEvent';
 
 import styles from './RadioGroupWrapper.module.css';
 
@@ -16,6 +17,7 @@ interface RadioProps<FormFieldValues extends FieldValues> {
   horisontal?: boolean;
   readOnly?: boolean;
   className?: string;
+  onChangeCustom?: (event: React.SyntheticEvent) => void;
 }
 
 const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
@@ -30,6 +32,7 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
   horisontal = false,
   readOnly,
   className,
+  onChangeCustom,
 }: RadioProps<FormFieldValues>) => {
   const classNames = `${className} ${horisontal ? styles.radiowrapper_horizontal : ''}`;
   return (
@@ -39,6 +42,13 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
         control={control}
         rules={rules}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
+          const handleChange = (val: string) => {
+            onChange(val);
+            if (onChangeCustom) {
+              onChangeCustom(createSyntheticEvent(val));
+            }
+          };
+
           return (
             <RadioGroup
               id={name}
@@ -48,7 +58,7 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
               name={name}
               legend={label}
               error={error?.message}
-              onChange={onChange}
+              onChange={handleChange}
               description={description}
               className={classNames}
               readOnly={readOnly}

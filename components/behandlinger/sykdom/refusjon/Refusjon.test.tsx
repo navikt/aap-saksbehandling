@@ -180,7 +180,7 @@ describe('Refusjonskrav sosialstønad', () => {
       name: 'Refusjonen gjelder til',
     });
 
-  const finnNavkontorListe = () => screen.queryByRole('combobox', { name: 'Velg Nav-kontor' });
+  const finnNavkontorListe = () => screen.queryByRole('combobox', { name: 'Søk opp Nav-kontor' });
 
   const trykkPåBekreft = async () => await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 

@@ -12,7 +12,7 @@ export function queryParamsArray(key: string, values: (string | number)[]) {
 }
 
 export type StatistikkQueryParams = {
-  behandlingstyper: Array<BehandlingsTyperOption>;
+  behandlingstyper?: Array<BehandlingsTyperOption>;
   antallDager?: number;
   antallBøtter?: number;
   bøtteStørrelse?: number;
@@ -31,7 +31,7 @@ export function statistikkQueryparams({
   oppslagsPeriode,
   oppgaveTyper,
 }: StatistikkQueryParams) {
-  const behandlingstyperString = queryParamsArray('behandlingstyper', behandlingstyper);
+  const behandlingstyperString = behandlingstyper ? queryParamsArray('behandlingstyper', behandlingstyper) : '';
   const antallDagerString = !antallDager && antallDager !== 0 ? '' : `antallDager=${antallDager}`;
   const antallBøtterString = !antallBøtter && antallBøtter !== 0 ? '' : `antallBøtter=${antallBøtter}`;
   const bøtteStørrelseString = !bøtteStørrelse && bøtteStørrelse !== 0 ? '' : `bøtteStørrelse=${bøtteStørrelse}`;
