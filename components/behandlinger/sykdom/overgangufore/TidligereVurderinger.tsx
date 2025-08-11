@@ -55,17 +55,10 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
       {vurdering.overgangBegrunnelse && (
         <div style={{ display: 'flex', gap: '1.5rem', flexDirection: 'row', flexWrap: 'wrap' }}>
           <span>
-            {vurdering.skalVurdereAapIOvergangTilArbeid
-              ? 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?'
-              : 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?'}
-            : {vurdering.overgangBegrunnelse}
+            {vurdering.skalVurdereAapIOvergangTilUføre
+              ? 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?'
+            : {vurdering.overgangBegrunnelse}}
           </span>
-          {vurdering.skalVurdereAapIOvergangTilArbeid && (
-            <span>
-              Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?
-              {mapTilJaEllerNei(vurdering.skalVurdereAapIOvergangTilArbeid)}
-            </span>
-          )}
           {vurdering.skalVurdereAapIOvergangTilUføre && (
             <span>
               Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?
