@@ -1,23 +1,48 @@
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { Behovstype } from 'lib/utils/form';
+import { clientOppdaterMellomlagring, clientOpprettMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { useState } from 'react';
 
-export function useMellomlagring(): {
-  lagreMellomlagring: () => void;
-  opprettMellomlagring: () => void;
+export function useMellomlagring(
+  behovstype: Behovstype,
+  mellomlagringErTilstede: boolean
+): {
+  oppdaterMellomlagring: (vurdering: Object) => void;
+  opprettMellomlagring: (vurdering: Object) => void;
   slettMellomlagring: () => void;
+  mellomlagringFinnes: boolean;
 } {
+  const [mellomlagringFinnes, setMellomlagringFinnes] = useState(mellomlagringErTilstede);
   const behandlingsReferanse = useBehandlingsReferanse();
+  const { NAVident } = useInnloggetBruker();
 
-  function lagreMellomlagring() {
-    console.log('Nå oppdaterer jeg mellomlagring', behandlingsReferanse);
+  async function oppdaterMellomlagring(vurdering: Object) {
+    await clientOppdaterMellomlagring({
+      behandlingsreferanse: behandlingsReferanse,
+      behovstype: behovstype,
+      vurdering: vurdering,
+      vurdertAv: NAVident,
+    });
   }
 
-  function slettMellomlagring() {
-    console.log('Nå sletter jeg ', behandlingsReferanse);
+  async function slettMellomlagring() {
+    await clientSlettMellomlagring({
+      behandlingsreferanse: behandlingsReferanse,
+      behovstype: behovstype,
+    });
   }
 
-  function opprettMellomlagring() {
-    console.log('Nå oppretter jeg mellomlagring', behandlingsReferanse);
+  async function opprettMellomlagring(vurdering: Object) {
+    await clientOpprettMellomlagring({
+      behandlingsreferanse: behandlingsReferanse,
+      behovstype: behovstype,
+      vurdering: vurdering,
+      vurdertAv: NAVident,
+    });
+
+    setMellomlagringFinnes(true);
   }
 
-  return { lagreMellomlagring, slettMellomlagring, opprettMellomlagring };
+  return { oppdaterMellomlagring, slettMellomlagring, opprettMellomlagring, mellomlagringFinnes };
 }

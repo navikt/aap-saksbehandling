@@ -13,7 +13,7 @@ import { TidligereVurderinger } from 'components/behandlinger/sykdom/bistandsbeh
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { clientOppdaterMellomlagring, clientOpprettMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -38,6 +38,11 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
+
+  const { oppdaterMellomlagring, slettMellomlagring, opprettMellomlagring, mellomlagringFinnes } = useMellomlagring(
+    Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
+    mellomlagring !== undefined
+  );
 
   const defaultValue = mellomlagring ? mellomlagring : grunnlag?.vurdering;
 
@@ -149,42 +154,15 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
+      {mellomlagringFinnes && <Alert variant={'warning'}>Det finnes en mellomlagring.</Alert>}
       <HGrid gap={'4'}>
-        <Button
-          type={'button'}
-          onClick={() =>
-            clientOpprettMellomlagring({
-              behandlingsreferanse: behandlingsReferanse,
-              behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-              vurdering: { thmas: 'hehe' },
-              vurdertAv: 'Thomas',
-            })
-          }
-        >
+        <Button type={'button'} onClick={() => opprettMellomlagring({ thmas: 'hehe' })}>
           Opprett
         </Button>
-        <Button
-          type={'button'}
-          onClick={() =>
-            clientOppdaterMellomlagring({
-              behandlingsreferanse: behandlingsReferanse,
-              behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-              vurdering: { thmas: 'hehe' },
-              vurdertAv: 'Thomas',
-            })
-          }
-        >
+        <Button type={'button'} onClick={() => oppdaterMellomlagring({ thomas: 'hehe' })}>
           Oppdater
         </Button>
-        <Button
-          type={'button'}
-          onClick={() =>
-            clientSlettMellomlagring({
-              behandlingsreferanse: behandlingsReferanse,
-              behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-            })
-          }
-        >
+        <Button type={'button'} onClick={() => slettMellomlagring()}>
           Slett
         </Button>
       </HGrid>

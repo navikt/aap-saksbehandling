@@ -5,7 +5,7 @@ export interface MellomlagringRequest {
   behandlingsreferanse: string;
   behovstype: Behovstype;
   vurdering: Object;
-  vurdertAv: string;
+  vurdertAv?: string;
 }
 
 export interface SlettMellomlagringRequest {
