@@ -116,13 +116,13 @@ export function useOpprettDummySak(): {
   opprettSak: (sak: OpprettDummySakDto) => Promise<void>;
   isLoading: boolean;
 } {
-  const { method, isLoading } = useFetchV2(clientOpprettDummySak);
+  const { method, isLoading, data, error } = useFetchV2(clientOpprettDummySak);
 
   async function opprettSakMethod(body: OpprettDummySakDto) {
     await method(body);
   }
 
-  return { opprettSak: opprettSakMethod, isLoading };
+  return { opprettSak: opprettSakMethod, isLoading, data, error };
 }
 
 export function useOpprettDummySak(): {
