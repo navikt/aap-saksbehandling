@@ -33,6 +33,8 @@ export function formaterUtfall(utfall: KabalUtfall): string {
 
 export function formaterSvartype(svarType: KabalSvarType): string {
   switch (svarType) {
+    case 'OMGJOERINGSKRAV':
+      return 'Omgjøringskrav';
     case 'KLAGEBEHANDLING_AVSLUTTET':
       return 'Klagebehandling avsluttet ';
     case 'ANKEBEHANDLING_OPPRETTET':
