@@ -1,12 +1,12 @@
 'use client';
 
-import { BistandsGrunnlag, TypeBehandling } from 'lib/types/types';
+import { OvergangUforeGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Link } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { TidligereVurderinger } from 'components/behandlinger/sykdom/bistandsbehov/TidligereVurderinger';
@@ -18,7 +18,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  grunnlag?: BistandsGrunnlag;
+  grunnlag?: OvergangUforeGrunnlag;
 }
 
 interface FormFields {
@@ -46,7 +46,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       brukerHarSøktUføretrygd: {
         type: 'radio',
         label: 'Har brukeren søkt om uføretrygd?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harBruketSøktOmUføretrygd),
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.brukerSoktUforetrygd),
         rules: { required: 'Du må svare på om brukeren har søkt om uføretrygd' },
         options: JaEllerNeiOptions,
       },
@@ -54,20 +54,20 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         type: 'radio',
         label: 'Har brukeren fått vedtak på søknaden om uføretrygd?',
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harBrukerFåttVedtakOmUføretrygd),
+        defaultValue: grunnlag?.vurdering?.brukerVedtakUforetrygd,
         rules: { required: 'Du må svare på om brukeren har fått vedtak om uføretrygd' },
       },
       brukerRettPåAAP: {
         type: 'radio',
         label: 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?',
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harBrukerRettPåAAP),
+        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.brukerRettPaaAAP),
         rules: { required: 'Du må svare på om brukeren har krav på AAP etter vedtak om uføretrygd etter § 11-18' },
       },
       virkningsdato: {
         type: 'textarea',
         label: 'Virkningsdato for vurderingen',
-        defaultValue: grunnlag?.vurdering?.virkningsdato || undefined,
+        defaultValue: grunnlag?.vurdering?.virkningsDato || undefined,
         rules: { required: 'Du må velge virkningsdato for vurderingen' },
       },
     },
@@ -79,32 +79,19 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
-          behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-          bistandsVurdering: {
+          behovstype: Behovstype.OVERGANG_UFORE,
+          overgangUføreVurdering: {
             begrunnelse: data.begrunnelse,
-            erBehovForAktivBehandling: data.erBehovForAktivBehandling === JaEllerNei.Ja,
-            erBehovForArbeidsrettetTiltak: data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja,
-            erBehovForAnnenOppfølging: data.erBehovForAnnenOppfølging
-              ? data.erBehovForAnnenOppfølging === JaEllerNei.Ja
-              : undefined,
-            ...(bistandsbehovErIkkeOppfylt && {
-              skalVurdereAapIOvergangTilUføre: data.vurderAAPIOvergangTilUføre === JaEllerNei.Ja,
-              skalVurdereAapIOvergangTilArbeid: data.vurderAAPIOvergangTilArbeid === JaEllerNei.Ja,
-              overgangBegrunnelse: data.overgangBegrunnelse,
-            }),
+            brukerSoktUforetrygd: data.brukerHarSøktUføretrygd === JaEllerNei.Ja,
+            brukerVedtakUforetrygd: data.brukerHarFåttVedtakOmUføretrygd,
+            brukerRettPaaAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
+            virkningsDato: data.virkningsdato,
           },
         },
         referanse: behandlingsReferanse,
       });
     })(event);
   };
-
-  const erBehovForAktivBehandling = form.watch('erBehovForAktivBehandling') === JaEllerNei.Nei;
-  const erBehovForArbeidsrettetTiltak = form.watch('erBehovForArbeidsrettetTiltak') === JaEllerNei.Nei;
-  const erBehovForAnnenOppfølging = form.watch('erBehovForAnnenOppfølging') === JaEllerNei.Nei;
-
-  const bistandsbehovErIkkeOppfylt =
-    erBehovForAktivBehandling && erBehovForArbeidsrettetTiltak && erBehovForAnnenOppfølging;
 
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
@@ -153,14 +140,6 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurders til oppfylt.
       </Alert>
       <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
-      {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
-        <VStack gap={'4'} as={'section'}>
-          <Heading level={'3'} size="small">
-            § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
-          </Heading>
-          <FormField form={form} formField={formFields.virkningsdato} horizontalRadio />
-        </VStack>
-      )}
     </VilkårsKortMedForm>
   );
 };

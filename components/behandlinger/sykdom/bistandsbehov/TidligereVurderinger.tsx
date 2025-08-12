@@ -3,7 +3,7 @@ import { ExpansionCard, Table } from '@navikt/ds-react';
 
 import styles from './TidligereVurderinger.module.css';
 import { format, parse, subDays } from 'date-fns';
-import { BistandsbehovVurdering } from 'lib/types/types';
+import { OvergangUføreVurdering } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): boolean {
@@ -30,7 +30,7 @@ function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): bool
 const mapTilJaEllerNei = (verdi?: boolean) => (verdi ? 'Ja' : 'Nei');
 
 interface VurderingProps {
-  vurdering: BistandsbehovVurdering;
+  vurdering: OvergangUføreVurdering;
   søknadstidspunkt: string;
   vurderingErGjeldende: boolean;
   sluttdato?: string;
@@ -39,40 +39,17 @@ interface VurderingProps {
 export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, sluttdato }: VurderingProps) => {
   const content = (
     <div>
-      <span>{vurdering.begrunnelse}</span>
+      <span>{vurdering?.begrunnelse}</span>
       <div style={{ display: 'flex', gap: '1.5rem', flexDirection: 'row', flexWrap: 'wrap' }}>
-        <span>
-          a: Har brukeren behov for aktiv behandling?: {mapTilJaEllerNei(vurdering.erBehovForAktivBehandling)}
-        </span>
-        <span>
-          b: Har brukeren behov for arbeidsrettet tiltak?: {mapTilJaEllerNei(vurdering.erBehovForArbeidsrettetTiltak)}
-        </span>
-        <span>
-          c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?{' '}
-          {mapTilJaEllerNei(vurdering.erBehovForAnnenOppfølging ?? undefined)}
-        </span>
+        <span>a: Har brukeren behov for aktiv behandling?: {mapTilJaEllerNei(vurdering.brukerSoktUforetrygd)}</span>
+        <span>b: Har brukeren behov for arbeidsrettet tiltak?: {vurdering.brukerVedtakUforetrygd}</span>
       </div>
-      {vurdering.overgangBegrunnelse && (
-        <div style={{ display: 'flex', gap: '1.5rem', flexDirection: 'row', flexWrap: 'wrap' }}>
-          <span>
-            {vurdering.skalVurdereAapIOvergangTilArbeid
-              ? 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?'
-              : 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?'}
-            : {vurdering.overgangBegrunnelse}
-          </span>
-          {vurdering.skalVurdereAapIOvergangTilArbeid && (
-            <span>
-              Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?
-              {mapTilJaEllerNei(vurdering.skalVurdereAapIOvergangTilArbeid)}
-            </span>
-          )}
-          {vurdering.skalVurdereAapIOvergangTilUføre && (
-            <span>
-              Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?
-              {mapTilJaEllerNei(vurdering.skalVurdereAapIOvergangTilUføre)}
-            </span>
-          )}
-        </div>
+
+      {vurdering.brukerRettPaaAAP && (
+        <span>
+          Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?
+          {mapTilJaEllerNei(vurdering.brukerRettPaaAAP)}
+        </span>
       )}
     </div>
   );
@@ -95,8 +72,8 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
 };
 
 interface Props {
-  historiskeVurderinger: BistandsbehovVurdering[];
-  gjeldendeVurderinger: BistandsbehovVurdering[];
+  historiskeVurderinger: OvergangUføreVurdering[];
+  gjeldendeVurderinger: OvergangUføreVurdering[];
   søknadstidspunkt: string;
 }
 
@@ -113,7 +90,7 @@ export const TidligereVurderinger = ({ historiskeVurderinger, gjeldendeVurdering
     return format(subDays(parse(forrigeGjelderFra, 'yyyy-MM-dd', new Date()), 1), 'dd.MM.yyyy');
   };
 
-  const erVurderingenGjeldende = (historiskVurdering: BistandsbehovVurdering) => {
+  const erVurderingenGjeldende = (historiskVurdering: OvergangUføreVurdering) => {
     const vurderingenFinnesSomGjeldende = gjeldendeVurderinger.some((gjeldendeVurdering) =>
       deepEqual(historiskVurdering, gjeldendeVurdering, ['dokumenterBruktIVurderingen'])
     );

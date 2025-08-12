@@ -40,6 +40,7 @@ import {
   OpprettAktivitetspliktBrudd,
   OpprettDummySakDto,
   OpprettTestcase,
+  OvergangUforeGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,

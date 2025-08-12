@@ -3,7 +3,7 @@ import { ExpansionCard, Table } from '@navikt/ds-react';
 
 import styles from './TidligereVurderinger.module.css';
 import { format, parse, subDays } from 'date-fns';
-import { BistandsbehovVurdering } from 'lib/types/types';
+import {BistandsbehovVurdering, OvergangUforeVurdering} from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): boolean {
@@ -30,7 +30,7 @@ function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): bool
 const mapTilJaEllerNei = (verdi?: boolean) => (verdi ? 'Ja' : 'Nei');
 
 interface VurderingProps {
-  vurdering: BistandsbehovVurdering;
+  vurdering: OvergangUforeVurdering;
   søknadstidspunkt: string;
   vurderingErGjeldende: boolean;
   sluttdato?: string;
@@ -39,10 +39,10 @@ interface VurderingProps {
 export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, sluttdato }: VurderingProps) => {
   const content = (
     <div>
-      <span>{vurdering.begrunnelse}</span>
+      <span>{vurdering.vurdering?.begrunnelse}</span>
       <div style={{ display: 'flex', gap: '1.5rem', flexDirection: 'row', flexWrap: 'wrap' }}>
         <span>
-          a: Har brukeren behov for aktiv behandling?: {mapTilJaEllerNei(vurdering.erBehovForAktivBehandling)}
+          a: Har brukeren behov for aktiv behandling?: {mapTilJaEllerNei(vurdering.vurdering?.brukerSoktUforetrygd)}
         </span>
         <span>
           b: Har brukeren behov for arbeidsrettet tiltak?: {mapTilJaEllerNei(vurdering.erBehovForArbeidsrettetTiltak)}
@@ -73,15 +73,15 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
     <Table.ExpandableRow content={content} togglePlacement="right" expandOnRowClick>
       <Table.DataCell style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
         <span style={{ marginLeft: '0.25rem', textDecoration: vurderingErGjeldende ? 'none' : 'line-through' }}>
-          {vurdering.vurderingenGjelderFra
-            ? formaterDatoForFrontend(vurdering.vurderingenGjelderFra)
+          {vurdering.vurdering.vurderingenGjelderFra
+            ? formaterDatoForFrontend(vurdering.vurdering.vurderingenGjelderFra)
             : formaterDatoForFrontend(søknadstidspunkt)}
           {' - '}
           {sluttdato}
         </span>
       </Table.DataCell>
       <Table.DataCell align="right">
-        ({vurdering.vurdertAv.ident}) {vurdering.vurdertAv.dato && formaterDatoForFrontend(vurdering.vurdertAv.dato)}
+        ({vurdering.vurdering.vurdertAv.ident}) {vurdering.vurdertAv.dato && formaterDatoForFrontend(vurdering.vurdertAv.dato)}
       </Table.DataCell>
     </Table.ExpandableRow>
   );
