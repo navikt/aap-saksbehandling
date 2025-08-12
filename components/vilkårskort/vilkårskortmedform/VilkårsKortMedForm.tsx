@@ -77,7 +77,7 @@ export const VilkårsKortMedForm = ({
               ) : (
                 vurdertAvAnsatt && (
                   <Detail>
-                    {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)} (${utledEnhetsnavn(vurdertAvAnsatt, vilkårTilhørerNavKontor)}), ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
+                    {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
                   </Detail>
                 )
               )}
@@ -91,12 +91,4 @@ export const VilkårsKortMedForm = ({
 
 function utledVurdertAv(vurdertAvAnsatt: VurdertAvAnsatt): string {
   return vurdertAvAnsatt.ansattnavn ? vurdertAvAnsatt.ansattnavn : vurdertAvAnsatt.ident;
-}
-
-function utledEnhetsnavn(vurdertAvAnsatt: VurdertAvAnsatt, vilkårTilhøreNavKontor: boolean): string {
-  if (!vurdertAvAnsatt.enhetsnavn) {
-    return vilkårTilhøreNavKontor ? 'Nav kontor' : 'Nay';
-  } else {
-    return vurdertAvAnsatt.enhetsnavn;
-  }
 }
