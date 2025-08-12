@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { CalendarIcon } from '@navikt/aksel-icons';
 import { DetaljertBehandling, NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 
-import { useSendHendelseOgVentPåProsessering } from 'hooks/SendHendelseOgVentPåProsessering';
+import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 import styles from './VurderRettighetsperiodeModal.module.css';
 import { Behovstype } from 'lib/utils/form';
 

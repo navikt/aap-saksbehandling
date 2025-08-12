@@ -33,7 +33,7 @@ describe('Vilkårskort med form', () => {
   it('skal vise informasjon om hvem som har gjort en vurdering', () => {
     renderComponent(true);
 
-    const tekst = screen.getByText('Vurdert av Lokalsaksbehandler (Nav kontor), 25.04.2025');
+    const tekst = screen.getByText('Vurdert av Lokalsaksbehandler, 25.04.2025');
     expect(tekst).toBeVisible();
   });
 

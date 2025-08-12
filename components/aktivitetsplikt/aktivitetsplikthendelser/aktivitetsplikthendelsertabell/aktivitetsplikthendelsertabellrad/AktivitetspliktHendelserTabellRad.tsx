@@ -11,7 +11,7 @@ import {
 } from 'lib/types/types';
 import { useState } from 'react';
 import { revalidateAktivitetspliktHendelser } from 'lib/actions/actions';
-import { useSaksnummer } from 'hooks/BehandlingHook';
+import { useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { clientOppdaterAktivitetspliktBrudd } from 'lib/clientApi';
 
 import { useFetchV2 } from 'hooks/FetchHook';

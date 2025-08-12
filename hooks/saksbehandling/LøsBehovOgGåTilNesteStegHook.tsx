@@ -6,9 +6,9 @@ import {
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { clientHentFlyt, clientLøsBehov, clientSjekkTilgang } from 'lib/clientApi';
-import { useIngenFlereOppgaverModal } from 'hooks/IngenFlereOppgaverModalHook';
+import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
-import { useRequiredFlyt } from './FlytHook';
+import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 

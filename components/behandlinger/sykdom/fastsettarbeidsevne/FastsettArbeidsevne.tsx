@@ -3,12 +3,12 @@
 import { FormEvent } from 'react';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 
 import { useFieldArray } from 'react-hook-form';
 import { validerDato } from 'lib/validation/dateValidation';
 import { ArbeidsevneGrunnlag } from 'lib/types/types';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 import { parse } from 'date-fns';

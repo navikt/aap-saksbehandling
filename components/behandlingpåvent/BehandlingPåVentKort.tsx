@@ -6,9 +6,9 @@ import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { SettPåVentÅrsaker, VenteInformasjon } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { useLøsBehovOgVentPåProsessering } from 'hooks/LøsBehovOgVentPåProsessering';
-import { useFlyt } from 'hooks/FlytHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgVentPåProsessering } from 'hooks/saksbehandling/LøsBehovOgVentPåProsessering';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 
 interface Props {
   behandlingVersjon: number;

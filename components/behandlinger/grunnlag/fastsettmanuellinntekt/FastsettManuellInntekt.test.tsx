@@ -92,7 +92,7 @@ describe('Fastsett manuell inntekt vurdering', () => {
   );
 
   it('skal vise hvem som har gjort vurderingen dersom det har blitt gjort en vurdering', () => {
-    const vurdertAvTekst = screen.getByText('Vurdert av Lokalsaksbehandler (Nay), 01.05.2020');
+    const vurdertAvTekst = screen.getByText('Vurdert av Lokalsaksbehandler, 01.05.2020');
     expect(vurdertAvTekst).toBeVisible();
   });
 

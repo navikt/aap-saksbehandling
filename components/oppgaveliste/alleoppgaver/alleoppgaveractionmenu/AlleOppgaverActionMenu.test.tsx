@@ -10,6 +10,7 @@ import { screen } from '@testing-library/react';
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 
 const oppgave: Oppgave = {
+  vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',
   behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
@@ -19,7 +20,7 @@ const oppgave: Oppgave = {
   status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
   versjon: 0,
   årsakerTilBehandling: [],
-  markeringer: []
+  markeringer: [],
 };
 
 describe('AlleOppgaverActionMenu', () => {
