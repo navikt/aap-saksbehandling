@@ -5,8 +5,8 @@ import {
   hentBruddTekst,
   hentGrunnTekst,
 } from 'components/aktivitetsplikt/aktivitetsplikthendelser/aktivitetsplikthendelsertabell/aktivitetsplikthendelsertabellrad/AktivitetspliktHendelserTabellRad';
-import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { AktivitetspliktGrunnlag, AktivitetspliktPeriode } from 'lib/types/types';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';

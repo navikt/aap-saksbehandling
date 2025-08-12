@@ -12,6 +12,7 @@ import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/O
 import userEvent from '@testing-library/user-event';
 
 const oppgave: Oppgave = {
+  vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',
   behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
@@ -21,7 +22,7 @@ const oppgave: Oppgave = {
   status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
   versjon: 0,
   årsakerTilBehandling: [],
-  markeringer: []
+  markeringer: [],
 };
 
 const user = userEvent.setup();

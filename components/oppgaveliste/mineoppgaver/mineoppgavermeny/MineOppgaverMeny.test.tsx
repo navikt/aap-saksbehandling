@@ -10,6 +10,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 const oppgaver: Oppgave = {
+  vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',
   behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
@@ -19,7 +20,7 @@ const oppgaver: Oppgave = {
   status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
   versjon: 0,
   årsakerTilBehandling: [],
-  markeringer: []
+  markeringer: [],
 };
 
 describe('MineOppgaverMeny', () => {

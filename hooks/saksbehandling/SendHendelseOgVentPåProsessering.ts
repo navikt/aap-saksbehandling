@@ -4,7 +4,7 @@ import { FlytProsesseringStatus } from 'lib/types/types';
 import { clientSendHendelse } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { ApiException } from 'lib/utils/api';
-import { useFlyt } from 'hooks/FlytHook';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useRouter } from 'next/navigation';
 
 export type SendHendelseOgVentPåProsesseringStatus =

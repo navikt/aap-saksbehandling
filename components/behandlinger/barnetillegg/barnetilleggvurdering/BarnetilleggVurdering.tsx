@@ -3,9 +3,9 @@
 import { BodyShort } from '@navikt/ds-react';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
 import { BarnetilleggGrunnlag, BehandlingPersoninfo } from 'lib/types/types';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useFieldArray } from 'react-hook-form';
 import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
@@ -69,10 +69,9 @@ export const BarnetilleggVurdering = ({
   });
 
   const barnSomTrengerVurdering: BarneTilleggVurdering[] = grunnlag.barnSomTrengerVurdering.map((barn) => {
-    const navn = barn.navn ? barn.ident?.identifikator : 'Ukjent';
     return {
       ident: barn?.ident?.identifikator,
-      navn: barn.ident?.aktivIdent ? behandlingPersonInfo?.info[barn.ident.identifikator] : navn,
+      navn: barn.navn || (barn.ident?.aktivIdent ? behandlingPersonInfo?.info[barn.ident.identifikator] : 'Ukjent'),
       vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
       fødselsdato: barn.fodselsDato,
     };
@@ -102,6 +101,8 @@ export const BarnetilleggVurdering = ({
             vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
               return {
                 ident: vurderteBarn.ident,
+                navn: vurderteBarn.navn,
+                fødselsdato: vurderteBarn.fødselsdato,
                 vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
                   return {
                     begrunnelse: vurdering.begrunnelse,
@@ -158,7 +159,7 @@ export const BarnetilleggVurdering = ({
                   barnetilleggIndex={barnetilleggIndex}
                   ident={vurdering.ident}
                   fødselsdato={vurdering.fødselsdato}
-                  navn={behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
+                  navn={vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
                   readOnly={readOnly}
                 />
               );

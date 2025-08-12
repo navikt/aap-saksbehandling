@@ -13,7 +13,7 @@ import { parse } from 'date-fns';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
-import { useFlyt } from 'hooks/FlytHook';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { FlytProsesseringServerSentEvent } from '../../app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 
 interface Props {

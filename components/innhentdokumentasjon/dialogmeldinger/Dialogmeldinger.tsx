@@ -5,7 +5,7 @@ import { ReactNode, useState } from 'react';
 import styles from './Dialogmeldinger.module.css';
 import { TimerPauseFillIcon, TimerPauseIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isBefore, subDays } from 'date-fns';
 import { usePurrPåDialogmelding } from 'hooks/FetchHook';
 
@@ -37,16 +37,15 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null
 const grenseForPurring = subDays(new Date(), 21);
 const kanSendePurring = (opprettet: string) => isBefore(new Date(opprettet), grenseForPurring);
 
-
 const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
-    const [purringSent, setPurringSent] = useState(false);
+  const [purringSent, setPurringSent] = useState(false);
 
-    const handlePurringClick = async () => {
-        if (!purringSent) {
-            setPurringSent(true);
-            await purrPåDialogmelding(melding.dialogmeldingUuid, behandlingsreferanse);
-        }
-    };
+  const handlePurringClick = async () => {
+    if (!purringSent) {
+      setPurringSent(true);
+      await purrPåDialogmelding(melding.dialogmeldingUuid, behandlingsreferanse);
+    }
+  };
 
   const behandlingsreferanse = useBehandlingsReferanse();
   const { purrPåDialogmelding, isLoading } = usePurrPåDialogmelding();
@@ -69,11 +68,7 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
               type="button"
               size="small"
               icon={
-                  purringSent ? (
-                      <TimerPauseFillIcon title="Purring sendt" />
-                  ) : (
-                      <TimerPauseIcon title="Send purring" />
-                  )
+                purringSent ? <TimerPauseFillIcon title="Purring sendt" /> : <TimerPauseIcon title="Send purring" />
               }
               loading={isLoading}
               onClick={handlePurringClick}

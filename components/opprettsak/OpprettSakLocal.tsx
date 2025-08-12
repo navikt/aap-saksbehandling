@@ -49,7 +49,7 @@ export interface OpprettSakFormFields {
   tjenestePensjon?: JaEllerNei;
 }
 
-export const OpprettSak = () => {
+export const OpprettSakLocal = () => {
   const { isLoading, opprettSak } = useOpprettSak();
   const { formFields, form } = useConfigForm<OpprettSakFormFields>({
     søknadsdato: {
@@ -77,6 +77,7 @@ export const OpprettSak = () => {
     },
     barn: {
       type: 'fieldArray',
+      defaultValue: [],
     },
     inntekter: {
       type: 'fieldArray',

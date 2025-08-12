@@ -23,6 +23,18 @@ const utledDetaljerFraType = (type: KabalSvarType): KabalBehandlingDetaljer => {
     klagebehandlingAvsluttet: null,
   };
   switch (type) {
+    case 'OMGJOERINGSKRAV':
+      return {
+        ...tomtResultat,
+        behandlingFeilregistrert: {
+          type: 'KLAGE',
+          navIdent: 'AB1234',
+          feilregistrert: '2025-06-16T08:03:29.954401',
+          reason:
+            'Noe tekst som begrunner hvorfor behandlingen er feilregistrert. Noe tekst som begrunner hvorfor behandlingen er feilregistrert. Noe tekst som begrunner hvorfor behandlingen er feilregistrert. Noe tekst som begrunner hvorfor behandlingen er feilregistrert. ',
+        },
+      };
+
     case 'KLAGEBEHANDLING_AVSLUTTET':
       return {
         ...tomtResultat,

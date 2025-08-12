@@ -1,18 +1,26 @@
 'use client';
 
-import { BistandsGrunnlag, TypeBehandling } from 'lib/types/types';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { BistandsbehovVurdering, BistandsGrunnlag, TypeBehandling } from 'lib/types/types';
+import {
+  Behovstype,
+  getJaNeiEllerIkkeBesvart,
+  getJaNeiEllerUndefined,
+  JaEllerNei,
+  JaEllerNeiOptions,
+} from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { TidligereVurderinger } from 'components/behandlinger/sykdom/bistandsbehov/TidligereVurderinger';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import { useSak } from 'hooks/SakHook';
+import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
+import { format, parse, subDays } from 'date-fns';
+import { deepEqual } from '../../../tidligerevurderinger/TidligereVurderingerUtils';
+import { erDatoFoerDato } from '../../../../lib/validation/dateValidation';
 
 interface Props {
   behandlingVersjon: number;
@@ -33,49 +41,55 @@ interface FormFields {
 
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
+
+  const vilkårsvurderingLabel = 'Vilkårsvurdering';
+  const erBehovForAktivBehandlingLabel = 'a: Har brukeren behov for aktiv behandling?';
+  const erBehovForArbeidsrettetTiltakLabel = 'b: Har brukeren behov for arbeidsrettet tiltak?';
+  const erBehovForAnnenOppfølgingLabel =
+    'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?';
+  const vurderAAPIOvergangTilUføreLabel = 'Har brukeren rett til AAP under behandling av krav om uføretrygd?';
+  const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vilkårsvurdering',
+        label: vilkårsvurderingLabel,
         defaultValue: grunnlag?.vurdering?.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse om brukeren har behov for oppfølging' },
       },
       erBehovForAktivBehandling: {
         type: 'radio',
-        label: 'a: Har brukeren behov for aktiv behandling?',
+        label: erBehovForAktivBehandlingLabel,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAktivBehandling),
         rules: { required: 'Du må svare på om brukeren har behov for aktiv behandling' },
         options: JaEllerNeiOptions,
       },
       erBehovForArbeidsrettetTiltak: {
         type: 'radio',
-        label: 'b: Har brukeren behov for arbeidsrettet tiltak?',
+        label: erBehovForArbeidsrettetTiltakLabel,
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForArbeidsrettetTiltak),
         rules: { required: 'Du må svare på om brukeren har behov for arbeidsrettet tiltak' },
       },
       erBehovForAnnenOppfølging: {
         type: 'radio',
-        label:
-          'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
+        label: erBehovForAnnenOppfølgingLabel,
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAnnenOppfølging),
         rules: { required: 'Du må svare på om brukeren anses for å ha en viss mulighet til å komme i arbeid' },
       },
       overgangBegrunnelse: {
         type: 'textarea',
-        label: 'Vilkårsvurdering',
+        label: vilkårsvurderingLabel,
         defaultValue: grunnlag?.vurdering?.overgangBegrunnelse || undefined,
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
       },
       vurderAAPIOvergangTilUføre: {
         type: 'radio',
-        label: 'Har brukeren rett til AAP under behandling av krav om uføretrygd?',
+        label: vurderAAPIOvergangTilUføreLabel,
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilUføre),
         rules: {
@@ -86,7 +100,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       },
       vurderAAPIOvergangTilArbeid: {
         type: 'radio',
-        label: 'Har brukeren rett til AAP i perioden som arbeidssøker?',
+        label: vurderAAPIOvergangTilArbeidLabel,
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilArbeid),
         rules: {
@@ -132,6 +146,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
 
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
+  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
     <VilkårsKortMedForm
@@ -145,12 +160,8 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
-      {typeBehandling === 'Revurdering' && (
-        <TidligereVurderinger
-          historiskeVurderinger={grunnlag?.historiskeVurderinger.toReversed() ?? []}
-          gjeldendeVurderinger={grunnlag?.gjeldendeVedtatteVurderinger ?? []}
-          søknadstidspunkt={sak.periode.fom}
-        />
+      {historiskeVurderinger && historiskeVurderinger.length > 0 && (
+        <TidligereVurderingerV3 tidligereVurderinger={mapTidligereVurderinger()} />
       )}
       <Veiledning
         defaultOpen={false}
@@ -212,4 +223,95 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       )}
     </VilkårsKortMedForm>
   );
+
+  function mapTidligereVurderinger() {
+    const antallVurderinger = historiskeVurderinger?.length;
+    const gjeldendeVurderinger = grunnlag!!.gjeldendeVedtatteVurderinger;
+
+    const finnSluttdato = (index: number) => {
+      if ((antallVurderinger && antallVurderinger <= 1) || index === 0) {
+        return null;
+      }
+      const forrigeGjelderFra =
+        historiskeVurderinger!!.at(index - 1)?.vurderingenGjelderFra ||
+        historiskeVurderinger!!.at(index - 1)?.vurdertAv.dato;
+      if (!forrigeGjelderFra) {
+        return null;
+      }
+      const vurderingGjelderFra =
+        historiskeVurderinger!!.at(index)?.vurderingenGjelderFra || historiskeVurderinger!!.at(index)?.vurdertAv.dato!!;
+
+      if (forrigeGjelderFra === vurderingGjelderFra) {
+        return format(subDays(parse(vurderingGjelderFra, 'yyyy-MM-dd', new Date()), 0), 'yyyy-MM-dd');
+      }
+
+      const tom = erDatoFoerDato(
+        formaterDatoForFrontend(vurderingGjelderFra),
+        formaterDatoForFrontend(forrigeGjelderFra)
+      )
+        ? forrigeGjelderFra
+        : vurderingGjelderFra;
+
+      return format(subDays(parse(tom, 'yyyy-MM-dd', new Date()), 1), 'yyyy-MM-dd');
+    };
+
+    const erVurderingenGjeldende = (historiskVurdering: BistandsbehovVurdering) => {
+      const vurderingenFinnesSomGjeldende = gjeldendeVurderinger.some((gjeldendeVurdering) =>
+        deepEqual(historiskVurdering, gjeldendeVurdering, ['dokumenterBruktIVurderingen'])
+      );
+      return vurderingenFinnesSomGjeldende;
+    };
+
+    return historiskeVurderinger!!
+      .sort((a, b) => {
+        const afom = a.vurderingenGjelderFra ?? a.vurdertAv.dato;
+        const bfom = b.vurderingenGjelderFra ?? b.vurdertAv.dato;
+
+        if (afom === bfom) {
+          const aGjeldende = erVurderingenGjeldende(a);
+          const bGjeldende = erVurderingenGjeldende(b);
+
+          if (aGjeldende && !bGjeldende) return -1;
+          if (!aGjeldende && bGjeldende) return 1;
+        }
+
+        return sorterEtterNyesteDato(afom, bfom);
+      })
+      .map((vurdering, index) => ({
+        ...vurdering,
+        vurdertAvIdent: vurdering.vurdertAv.ident,
+        vurdertDato: vurdering.vurdertAv.dato,
+        erGjeldendeVurdering: erVurderingenGjeldende(vurdering),
+        periode: {
+          fom: vurdering.vurderingenGjelderFra ? vurdering.vurderingenGjelderFra : vurdering.vurdertAv.dato,
+          tom: finnSluttdato(index),
+        },
+        felter: [
+          {
+            label: vilkårsvurderingLabel,
+            value: vurdering.begrunnelse,
+          },
+          {
+            label: erBehovForAktivBehandlingLabel,
+            value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForAktivBehandling),
+          },
+          {
+            label: erBehovForArbeidsrettetTiltakLabel,
+            value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForArbeidsrettetTiltak),
+          },
+          {
+            label: erBehovForAnnenOppfølgingLabel,
+            value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForAnnenOppfølging),
+          },
+          {
+            label: vurderAAPIOvergangTilUføreLabel,
+            value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilUføre),
+          },
+          {
+            label: vurderAAPIOvergangTilArbeidLabel,
+            value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilArbeid),
+          },
+        ],
+      }));
+  }
 };

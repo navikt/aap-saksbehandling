@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { OpprettSakFormFields } from 'components/opprettsak/OpprettSak';
+import { OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
 import styles from 'components/opprettsak/OpprettSak.module.css';
 import { Button, Label } from '@navikt/ds-react';
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';

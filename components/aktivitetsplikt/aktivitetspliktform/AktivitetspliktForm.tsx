@@ -7,7 +7,7 @@ import { Alert, Button, Radio } from '@navikt/ds-react';
 import { AktivitetspliktDato } from 'components/aktivitetsplikt/aktivitetspliktdato/AktivitetspliktDato';
 import { Dispatch, useEffect, useState } from 'react';
 import { useAktivitetsplikt } from 'hooks/FetchHook';
-import { useSaksnummer } from 'hooks/BehandlingHook';
+import { useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { AktivitetspliktBrudd, AktivitetspliktGrunn, AktivitetspliktParagraf, SaksInfo } from 'lib/types/types';
 import { useFieldArray } from 'react-hook-form';
 import { formaterPerioder } from 'components/aktivitetsplikt/util/AktivitetspliktUtil';

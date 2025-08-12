@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
+import { mapTilÅrsakTilOpprettelseTilTekst } from 'lib/utils/oversettelser';
 
 const formaterBehandlingType = (behandlingtype: string) => {
   switch (behandlingtype) {
@@ -91,6 +92,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           <Table.Row>
             <Table.HeaderCell>Opprettet</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
+            <Table.HeaderCell>Årsak</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
             <Table.HeaderCell>Vurderingsbehov</Table.HeaderCell>
             <Table.HeaderCell align="right">Handlinger</Table.HeaderCell>
@@ -102,6 +104,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             <Table.Row key={behandling.referanse}>
               <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
               <Table.DataCell>{formaterBehandlingType(behandling.type)}</Table.DataCell>
+              <Table.DataCell>{mapTilÅrsakTilOpprettelseTilTekst(behandling.årsakTilOpprettelse)}</Table.DataCell>
               <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
               <Table.DataCell>
                 {behandling.vurderingsbehov.map((behov) => formaterVurderingsbehov(behov)).join(', ')}

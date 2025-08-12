@@ -3,7 +3,7 @@
 import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { useRouter } from 'next/navigation';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
-import { useIngenFlereOppgaverModal } from 'hooks/IngenFlereOppgaverModalHook';
+import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
 
 export const IngenFlereOppgaverModal = () => {
   const router = useRouter();

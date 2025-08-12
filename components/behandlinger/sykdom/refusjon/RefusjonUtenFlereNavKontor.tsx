@@ -3,8 +3,8 @@
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { isBefore, parse, startOfDay } from 'date-fns';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
@@ -29,6 +29,7 @@ interface FormFields {
   vurderingenGjelderFra: string;
   vurderingenGjelderTil?: string;
   navKontor?: string;
+  thomas: string;
 }
 
 export const RefusjonUtenFlereNavKontor = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
@@ -40,6 +41,9 @@ export const RefusjonUtenFlereNavKontor = ({ behandlingVersjon, grunnlag, readOn
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
+      thomas: {
+        type: 'text',
+      },
       harKrav: {
         type: 'radio',
         label: 'Har Nav-kontoret refusjonskrav?',

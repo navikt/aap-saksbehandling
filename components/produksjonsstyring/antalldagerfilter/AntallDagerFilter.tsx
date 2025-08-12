@@ -9,8 +9,8 @@ interface Props {
 export const periodeOptions = [
   { label: 'I dag', value: 0, oppslagsPeriode: 'IDAG' as OppslagsPeriode },
   { label: 'I går', value: 1, oppslagsPeriode: 'IGÅR' as OppslagsPeriode },
-  { label: 'Denne uken', value: 2, oppslagsPeriode: 'DENNE_UKEN' as OppslagsPeriode },
-  { label: 'Forrige uke', value: 3, oppslagsPeriode: 'FORRIGE_UKE' as OppslagsPeriode },
+  { label: 'Siste 7 dager', value: 2, oppslagsPeriode: 'DENNE_UKEN' as OppslagsPeriode },
+  { label: 'Siste 8-14 dager', value: 3, oppslagsPeriode: 'FORRIGE_UKE' as OppslagsPeriode },
 ];
 
 export const AntallDagerFilter = ({ selectedValue, onChange }: Props) => (

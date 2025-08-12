@@ -38,6 +38,7 @@ import {
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
   OpprettTestcase,
+  OpprettDummySakDto,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
@@ -54,6 +55,7 @@ import {
   StudentGrunnlag,
   SvarFraAndreinstansGrunnlag,
   SykdomsGrunnlag,
+  SykdomsvurderingBrevGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
   TilkjentYtelseGrunnlagV2,
@@ -181,6 +183,11 @@ export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string)
 export const hentRimeligGrunnMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/meldeplikt-rimelig-grunn`;
   return await apiFetch<RimeligGrunnMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentSykdomsvurderingBrevGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdomsvurdering-for-brev`;
+  return await apiFetch<SykdomsvurderingBrevGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFastsettArbeidsevneGrunnlag = async (behandlingsReferanse: string) => {
@@ -367,8 +374,13 @@ export const mellomlagreBrev = async (brevbestillingReferanse: string, brev: Bre
   return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT', brev);
 };
 
-export const opprettTestSak = async (sak: OpprettTestcase) => {
+export const opprettDummySakDev = async (sak: OpprettTestcase) => {
   const url = `${saksbehandlingApiBaseUrl}/test/opprett`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
+};
+
+export const opprettDummySakTest = async (sak: OpprettDummySakDto) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/test/opprettDummySak`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
 };
 

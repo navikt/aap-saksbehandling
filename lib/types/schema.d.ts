@@ -702,6 +702,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/kvalitetssikring-tilgang': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringTilgangDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/bistand': {
     parameters: {
       query?: never;
@@ -1036,6 +1074,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.YrkesskadeVurderingGrunnlagResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/behandling/{referanse}/grunnlag/sykdomsvurdering-for-brev': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevDto'];
           };
         };
       };
@@ -3457,6 +3533,47 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/test/opprettDummySak': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.test.OpprettDummySakDto'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              [key: string]: string;
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/test/opprett': {
     parameters: {
       query?: never;
@@ -4950,6 +5067,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivForh\u00E5ndsvarselBruddAktivitetspliktBrevL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivForh\u00E5ndsvarselKlageFormkravBrevL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivVedtaksbrevL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SykdomsvurderingForBrevL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.TjenestepensjonRefusjonskravL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.TrekkKlageL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.TrekkS\u00F8knadL\u00F8sning']
@@ -6490,6 +6608,68 @@ export interface components {
       handling: 'FERDIGSTILL' | 'AVBRYT';
       mottakere: components['schemas']['no.nav.aap.brev.kontrakt.MottakerDto'][];
     };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SykdomsvurderingForBrevL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '5029'
+        | '5001'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5020'
+        | '5024'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5025'
+        | '5027'
+        | '5030'
+        | '5028'
+        | '5019'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5026'
+        | '5999'
+        | '5056'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003';
+      vurdering?: string | null;
+    };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.TjenestepensjonRefusjonskravL\u00F8sning': {
       /** @enum {string} */
       behovstype:
@@ -7484,7 +7664,6 @@ export interface components {
       bidiagnoser?: string[] | null;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
       erArbeidsevnenNedsatt?: boolean | null;
-      erGjeldende?: boolean | null;
       erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
@@ -7686,6 +7865,15 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker': {
       ident: string;
       navn: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevDto': {
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto'][];
+      kanSaksbehandle: boolean;
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto': {
+      vurdering?: string | null;
+      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.brev.VarselOmBrevbestillingDto': {
       behandlingsReferanse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.behandling.BehandlingReferanse'];
@@ -8308,39 +8496,6 @@ export interface components {
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'KLAGE'
         | null;
-      '\u00E5rsaker': (
-        | 'MOTTATT_SØKNAD'
-        | 'HELHETLIG_VURDERING'
-        | 'MOTTATT_AKTIVITETSMELDING'
-        | 'MOTTATT_MELDEKORT'
-        | 'MOTTATT_LEGEERKLÆRING'
-        | 'MOTTATT_AVVIST_LEGEERKLÆRING'
-        | 'MOTTATT_DIALOGMELDING'
-        | 'MOTATT_KLAGE'
-        | 'SØKNAD_TRUKKET'
-        | 'KLAGE_TRUKKET'
-        | 'REVURDER_MEDLEMSKAP'
-        | 'REVURDER_SAMORDNING'
-        | 'REVURDER_LOVVALG'
-        | 'REVURDER_BEREGNING'
-        | 'REVURDER_YRKESSKADE'
-        | 'REVURDER_MANUELL_INNTEKT'
-        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
-        | 'G_REGULERING'
-        | 'LOVVALG_OG_MEDLEMSKAP'
-        | 'FORUTGAENDE_MEDLEMSKAP'
-        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
-        | 'BARNETILLEGG'
-        | 'INSTITUSJONSOPPHOLD'
-        | 'SAMORDNING_OG_AVREGNING'
-        | 'REFUSJONSKRAV'
-        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
-        | 'FASTSATT_PERIODE_PASSERT'
-        | 'FRITAK_MELDEPLIKT'
-        | 'VURDER_RETTIGHETSPERIODE'
-        | 'MOTTATT_KABAL_HENDELSE'
-        | 'OPPFØLGINGSOPPGAVE'
-      )[];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingGrunnlagDto': {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.BehandlingMedVedtakDto'][];
@@ -8364,6 +8519,9 @@ export interface components {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringTilgangDto': {
+      'harTilgangTil\u00C5Kvalitetssikre': boolean;
     };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.Forutg\u00E5endeMedlemskapGrunnlagResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -8601,7 +8759,8 @@ export interface components {
         | 'ANKE_I_TRYGDERETTENBEHANDLING_OPPRETTET'
         | 'BEHANDLING_FEILREGISTRERT'
         | 'BEHANDLING_ETTER_TRYGDERETTEN_OPPHEVET_AVSLUTTET'
-        | 'OMGJOERINGSKRAVBEHANDLING_AVSLUTTET';
+        | 'OMGJOERINGSKRAVBEHANDLING_AVSLUTTET'
+        | 'OMGJOERINGSKRAV';
       /** @enum {string|null} */
       utfall?:
         | 'TRUKKET'
@@ -8687,7 +8846,9 @@ export interface components {
       arbeidGradering?: number | null;
       /** Format: int32 */
       arbeidsgiverGradering?: number | null;
+      /** Format: double */
       barneTilleggsats: number;
+      /** Format: double */
       dagsats: number;
       /** Format: double */
       effektivDagsats: number;
@@ -8714,8 +8875,8 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto': {
       /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
+       * Format: date
+       * @example 2025-04-01
        */
       levertMeldekortDato?: string | null;
       /** @enum {string|null} */
@@ -10659,7 +10820,7 @@ export interface components {
       navIdent: string;
       reason: string;
       /** @enum {string} */
-      type: 'KLAGE' | 'ANKE' | 'ANKE_I_TRYGDERETTEN' | 'BEHANDLING_ETTER_TRYGDERETTEN_OPPHEVET';
+      type: 'KLAGE' | 'ANKE' | 'ANKE_I_TRYGDERETTEN' | 'BEHANDLING_ETTER_TRYGDERETTEN_OPPHEVET' | 'OMGJOERINGSKRAV';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ident': {
       identifikator: string;
@@ -10707,7 +10868,8 @@ export interface components {
         | 'ANKE_I_TRYGDERETTENBEHANDLING_OPPRETTET'
         | 'BEHANDLING_FEILREGISTRERT'
         | 'BEHANDLING_ETTER_TRYGDERETTEN_OPPHEVET_AVSLUTTET'
-        | 'OMGJOERINGSKRAVBEHANDLING_AVSLUTTET';
+        | 'OMGJOERINGSKRAVBEHANDLING_AVSLUTTET'
+        | 'OMGJOERINGSKRAV';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Klage': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KlageV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KlageV0': {
@@ -11015,39 +11177,6 @@ export interface components {
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'KLAGE'
         | null;
-      '\u00E5rsaker': (
-        | 'MOTTATT_SØKNAD'
-        | 'HELHETLIG_VURDERING'
-        | 'MOTTATT_AKTIVITETSMELDING'
-        | 'MOTTATT_MELDEKORT'
-        | 'MOTTATT_LEGEERKLÆRING'
-        | 'MOTTATT_AVVIST_LEGEERKLÆRING'
-        | 'MOTTATT_DIALOGMELDING'
-        | 'MOTATT_KLAGE'
-        | 'SØKNAD_TRUKKET'
-        | 'KLAGE_TRUKKET'
-        | 'REVURDER_MEDLEMSKAP'
-        | 'REVURDER_SAMORDNING'
-        | 'REVURDER_LOVVALG'
-        | 'REVURDER_BEREGNING'
-        | 'REVURDER_YRKESSKADE'
-        | 'REVURDER_MANUELL_INNTEKT'
-        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
-        | 'G_REGULERING'
-        | 'LOVVALG_OG_MEDLEMSKAP'
-        | 'FORUTGAENDE_MEDLEMSKAP'
-        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
-        | 'BARNETILLEGG'
-        | 'INSTITUSJONSOPPHOLD'
-        | 'SAMORDNING_OG_AVREGNING'
-        | 'REFUSJONSKRAV'
-        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
-        | 'FASTSATT_PERIODE_PASSERT'
-        | 'FRITAK_MELDEPLIKT'
-        | 'VURDER_RETTIGHETSPERIODE'
-        | 'MOTTATT_KABAL_HENDELSE'
-        | 'OPPFØLGINGSOPPGAVE'
-      )[];
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnBehandlingForIdentDTO': {
       ident: string;
@@ -11115,6 +11244,12 @@ export interface components {
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'LØPENDE' | 'AVSLUTTET';
       's\u00F8knadErTrukket'?: boolean | null;
+    };
+    'no.nav.aap.behandlingsflyt.test.OpprettDummySakDto': {
+      erStudent: boolean;
+      harMedlemskap: boolean;
+      harYrkesskade: boolean;
+      ident: string;
     };
     'no.nav.aap.behandlingsflyt.test.modell.TestPerson.Sykepenger': {
       /** Format: int32 */

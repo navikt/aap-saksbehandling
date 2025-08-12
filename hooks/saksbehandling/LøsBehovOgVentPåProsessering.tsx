@@ -5,7 +5,7 @@ import { clientHentFlyt, clientLøsBehov } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
-import { useFlyt } from 'hooks/FlytHook';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 
 export type LøsBehovOgVentPåProsesseringStatus = FlytProsesseringStatus | undefined;
 

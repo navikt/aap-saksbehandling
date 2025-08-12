@@ -50,6 +50,7 @@ export const AlleOppgaver2 = ({ enheter }: Props) => {
     behandlingOpprettetFom: {
       type: 'date',
       label: 'Opprettet fra',
+      toDate: new Date(),
     },
     behandlingOpprettetTom: {
       type: 'date',

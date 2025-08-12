@@ -2,8 +2,8 @@
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Link, Radio, VStack } from '@navikt/ds-react';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FritakMeldepliktGrunnlag } from 'lib/types/types';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';

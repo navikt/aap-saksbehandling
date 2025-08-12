@@ -1,7 +1,7 @@
 'use client';
 
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
 import { SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -10,7 +10,7 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { FormField } from 'components/form/FormField';
 import { formaterPeriode } from 'lib/utils/date';
 import { FormEvent } from 'react';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   grunnlag: SamordningTjenestePensjonGrunnlag;
