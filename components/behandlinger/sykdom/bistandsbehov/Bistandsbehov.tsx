@@ -16,7 +16,6 @@ import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
-import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
 import { format, parse, subDays } from 'date-fns';
@@ -42,7 +41,6 @@ interface FormFields {
 
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
