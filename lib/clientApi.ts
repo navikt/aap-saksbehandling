@@ -16,11 +16,13 @@ import {
   OpprettDummySakDto,
   SaksInfo,
   SettPåVent,
+  BehandlingsFlytAvklaringsbehovKode,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
 import { FetchResponse } from 'lib/utils/api';
 import { Markering } from 'lib/types/oppgaveTypes';
+import { TilgangResponse } from './services/tilgangservice/tilgangsService';
 
 const BASE_URL = '/saksbehandling';
 
@@ -131,6 +133,12 @@ export function clientSendHendelse(saksnummer: string, body: Object) {
 
 export function clientConfig() {
   return clientFetch<ClientConfig>('/api/config', 'GET');
+}
+
+export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKode: BehandlingsFlytAvklaringsbehovKode) {
+  return clientFetch<TilgangResponse>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/sjekk-tilgang`, 'POST', {
+    kode: behovsKode,
+  });
 }
 
 export function clientSettMarkeringForBehandling(referanse: string, markering: Markering) {

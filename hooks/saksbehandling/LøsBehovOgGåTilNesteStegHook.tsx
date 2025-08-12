@@ -5,10 +5,16 @@ import {
 } from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
-import { clientHentFlyt, clientHentTilgangForKvalitetssikring, clientLøsBehov } from 'lib/clientApi';
+import {
+  clientHentFlyt,
+  clientHentTilgangForKvalitetssikring,
+  clientLøsBehov,
+  clientSjekkTilgang,
+} from 'lib/clientApi';
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { isProd } from '../../lib/utils/environment';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
@@ -69,15 +75,26 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     );
     eventSource.onmessage = async (event: any) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
-      const { status, skalBytteGruppe, skalBytteSteg, aktivGruppe, aktivtSteg } = eventData;
+      const { status, skalBytteGruppe, skalBytteSteg, aktivGruppe, aktivtSteg, aktivtStegBehovsKode } = eventData;
+      
       if (status === 'DONE') {
         eventSource.close();
-
         let kanFortsetteSaksbehandling = false;
-        const kanFortsetteSaksbehandlingRespons = await clientHentTilgangForKvalitetssikring(params.behandlingsReferanse);
 
-        if (isSuccess(kanFortsetteSaksbehandlingRespons)) {
-          kanFortsetteSaksbehandling = kanFortsetteSaksbehandlingRespons.data.harTilgangTilÅKvalitetssikre;
+        // TODO Fjerne feature toggle etter verifisering i dev
+        if (isProd()) {
+          if (skalBytteSteg && aktivtStegBehovsKode) {
+            kanFortsetteSaksbehandling = (
+              await Promise.all(
+                aktivtStegBehovsKode.map((kode) => clientSjekkTilgang(params.behandlingsReferanse, kode))
+              )
+            ).some((tilgangResponse) => isSuccess(tilgangResponse) && tilgangResponse.data.tilgang);
+          }
+        } else {
+          const kanFortsetteSaksbehandlingRespons = await clientHentTilgangForKvalitetssikring(params.behandlingsReferanse);
+          if (isSuccess(kanFortsetteSaksbehandlingRespons)) {
+            kanFortsetteSaksbehandling = kanFortsetteSaksbehandlingRespons.data.harTilgangTilÅKvalitetssikre;
+          }
         }
 
         // TODO Brev har ingen egen definisjonskode som vi kan hente ut fra steget. Må skrives om i backend
