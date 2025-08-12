@@ -1,8 +1,8 @@
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
 import { clientOppdaterMellomlagring, clientOpprettMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { useState } from 'react';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 
 export function useMellomlagring(
   behovstype: Behovstype,
