@@ -77,6 +77,12 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAnnenOppfølging),
         rules: { required: 'Du må svare på om brukeren anses for å ha en viss mulighet til å komme i arbeid' },
       },
+      overgangBegrunnelse: {
+        type: 'textarea',
+        label: vilkårsvurderingLabel,
+        defaultValue: grunnlag?.vurdering?.overgangBegrunnelse || undefined,
+        rules: { required: 'Du må gjøre en vilkårsvurdering' },
+      },
       vurderAAPIOvergangTilArbeid: {
         type: 'radio',
         label: vurderAAPIOvergangTilArbeidLabel,
