@@ -54,7 +54,6 @@ export const SkriveBrev = ({
   const [brev, setBrev] = useState<Brev>(grunnlag);
   const [sistLagret, setSistLagret] = useState<Date | undefined>();
   const [isSaving, setIsSaving] = useState(false);
-
   const debouncedBrev = useDebounce<Brev>(brev, 2000);
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
@@ -69,9 +68,13 @@ export const SkriveBrev = ({
     setIsSaving(false);
   }, [debouncedBrev, referanse]);
 
+  const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
+
   useEffect(() => {
-    mellomlagreBackendRequest();
-  }, [debouncedBrev, mellomlagreBackendRequest]);
+    if (!isLoading) {
+      mellomlagreBackendRequest();
+    }
+  }, [debouncedBrev, mellomlagreBackendRequest, isLoading]);
 
   const onChange = (brev: Brev) => {
     setBrev(brev);
@@ -90,8 +93,6 @@ export const SkriveBrev = ({
     await revalidateFlyt(behandlingsReferanse);
     settIkkeSendBrevModalOpen(false);
   };
-
-  const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
 
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
 
