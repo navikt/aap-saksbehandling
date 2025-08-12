@@ -42,6 +42,7 @@ import {
   OppfølgningOppgaveOpprinnelseResponse,
   OpprettDummySakDto,
   OpprettTestcase,
+  OvergangUforeGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
