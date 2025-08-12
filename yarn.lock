@@ -3793,7 +3793,7 @@ __metadata:
     openapi-typescript: "npm:7.9.0"
     pino: "npm:^9.8.0"
     pino-pretty: "npm:^13.1.1"
-    plotly.js: "npm:^3.0.3"
+    plotly.js: "npm:^3.1.0"
     prettier: "npm:^3.5.3"
     react: "npm:19.1.0"
     react-dom: "npm:19.1.0"
@@ -10291,9 +10291,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"plotly.js@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "plotly.js@npm:3.0.3"
+"plotly.js@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "plotly.js@npm:3.1.0"
   dependencies:
     "@plotly/d3": "npm:3.8.2"
     "@plotly/d3-sankey": "npm:0.7.2"
@@ -10345,7 +10345,7 @@ __metadata:
     topojson-client: "npm:^3.1.0"
     webgl-context: "npm:^2.2.0"
     world-calendars: "npm:^1.0.4"
-  checksum: 10c0/0d5a8e60b905f24713851a14bf4f542fae3462fec498005d08ffc9e626b3302c6b4bb81c3c0c996e7c0fc97b7e366b5a6a0d50e046fdeb6fc7a1de50c38f4681
+  checksum: 10c0/8a761514c9d977b8d1d611ed7e8683b79e6d2160d850178129e1546644ebbdfeaaae696cac942d8eb636da536338f553389e72de0fccea8ec8a2f37812e5f582
   languageName: node
   linkType: hard
 
