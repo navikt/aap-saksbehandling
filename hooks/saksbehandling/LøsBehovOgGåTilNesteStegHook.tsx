@@ -14,7 +14,7 @@ import {
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { isProd } from '../../lib/utils/environment';
+import { isDev } from '../../lib/utils/environment';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
@@ -76,24 +76,27 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     eventSource.onmessage = async (event: any) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
       const { status, skalBytteGruppe, skalBytteSteg, aktivGruppe, aktivtSteg, aktivtStegBehovsKode } = eventData;
-      
+
       if (status === 'DONE') {
         eventSource.close();
-        let kanFortsetteSaksbehandling = false;
+        let kanFortsetteSaksbehandling = true;
+        const skalKvalitetssikre = !!aktivtSteg && ['KVALITETSSIKRING', 'AVKLAR_STUDENT', 'AVKLAR_SYKDOM', 'AVKLAR_OPPFØLGING'].includes(aktivtSteg);
 
         // TODO Fjerne feature toggle etter verifisering i dev
-        if (isProd()) {
+        if (isDev() && skalKvalitetssikre) {
+          const kanFortsetteSaksbehandlingRespons = await clientHentTilgangForKvalitetssikring(
+            params.behandlingsReferanse
+          );
+          if (isSuccess(kanFortsetteSaksbehandlingRespons)) {
+            kanFortsetteSaksbehandling = kanFortsetteSaksbehandlingRespons.data.harTilgangTilÅKvalitetssikre;
+          }
+        } else {
           if (skalBytteSteg && aktivtStegBehovsKode) {
             kanFortsetteSaksbehandling = (
               await Promise.all(
                 aktivtStegBehovsKode.map((kode) => clientSjekkTilgang(params.behandlingsReferanse, kode))
               )
             ).some((tilgangResponse) => isSuccess(tilgangResponse) && tilgangResponse.data.tilgang);
-          }
-        } else {
-          const kanFortsetteSaksbehandlingRespons = await clientHentTilgangForKvalitetssikring(params.behandlingsReferanse);
-          if (isSuccess(kanFortsetteSaksbehandlingRespons)) {
-            kanFortsetteSaksbehandling = kanFortsetteSaksbehandlingRespons.data.harTilgangTilÅKvalitetssikre;
           }
         }
 
