@@ -17,8 +17,14 @@ interface OpprettSakFormFields {
   medlemskap?: JaEllerNei;
 }
 
+interface OpprettSakAlert {
+  id: number;
+  fnr: string;
+}
+
 const OpprettTestSakSkjema = () => {
   const { isLoading, opprettSak, error } = useOpprettDummySak();
+  const [opprettSakAlert, setOpprettSakAlert] = useState<OpprettSakAlert | null>(null);
   const [showError, setShowError] = useState(false);
   const { formFields, form } = useConfigForm<OpprettSakFormFields>({
     ident: {
@@ -62,7 +68,17 @@ const OpprettTestSakSkjema = () => {
   const handleSubmit = async (data: OpprettSakFormFields) => {
     try {
       const { ok } = await opprettSak(mapFormTilDto(data));
+      if (opprettSakAlert) {
+        setOpprettSakAlert(null);
+        clearTimeout(opprettSakAlert.id);
+      }
       if (ok) {
+        setOpprettSakAlert({
+          fnr: data.ident!!,
+          id: window.setTimeout(() => {
+            setOpprettSakAlert(null);
+          }, 10000),
+        });
         form.reset();
       } else {
         setShowError(true);
@@ -84,6 +100,23 @@ const OpprettTestSakSkjema = () => {
         <Alert fullWidth={true} contentMaxWidth={false} variant="error" closeButton onClose={() => setShowError(false)}>
           {error?.toString() ||
             'Noe gikk galt ved oppretting av testsaken. Vennligst sjekk at fødselsnummer er en gyldig testbruker og prøv igjen.'}
+        </Alert>
+      )}
+
+      {opprettSakAlert && (
+        <Alert
+          fullWidth={true}
+          contentMaxWidth={false}
+          variant="success"
+          closeButton
+          onClose={() => {
+            clearTimeout(opprettSakAlert?.id);
+            setOpprettSakAlert(null);
+          }}
+        >
+          En test-sak har blitt opprettet for bruker med fødselsnummer {opprettSakAlert.fnr}. Det kan ta opp mot et
+          minutt før saken dukker opp i listen under, bruk gjerne knappen &#34;Refresh listen&#34; for å sjekke om saken
+          er klar for behandling i Kelvin.
         </Alert>
       )}
 
