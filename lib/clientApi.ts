@@ -1,11 +1,11 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import {
   BehandlingFlytOgTilstand,
-  BehandlingsFlytAvklaringsbehovKode,
   BestillLegeerklæring,
   Brev,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
+  KvalitetssikringTilgang,
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   NavEnheterResponse,
@@ -16,12 +16,12 @@ import {
   OpprettTestcase,
   SaksInfo,
   SettPåVent,
+  BehandlingsFlytAvklaringsbehovKode,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
-import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { Markering } from 'lib/types/oppgaveTypes';
 import { MellomlagringRequest, SlettMellomlagringRequest } from 'app/saksbehandling/api/mellomlagring/route';
 
@@ -105,6 +105,13 @@ export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
   return clientFetch<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
 }
 
+export function clientHentTilgangForKvalitetssikring(referanse: string) {
+  return clientFetch<KvalitetssikringTilgang>(
+    `${BASE_URL}/api/behandling/${referanse}/kvalitetssikring-tilgang`,
+    'GET'
+  );
+}
+
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
@@ -156,8 +163,4 @@ export function clientSettMarkeringForBehandling(referanse: string, markering: M
 
 export function clientFjernMarkeringForBehandling(referanse: string, markering: Markering) {
   return clientFetch(`${BASE_URL}/api/behandling/${referanse}/markering/fjern`, 'POST', markering);
-}
-
-export async function clientHentBrukerInformasjon() {
-  return clientFetch<BrukerInformasjon>('/api/bruker', 'GET');
 }

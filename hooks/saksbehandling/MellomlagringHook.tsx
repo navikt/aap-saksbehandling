@@ -31,6 +31,7 @@ export function useMellomlagring(
       behandlingsreferanse: behandlingsReferanse,
       behovstype: behovstype,
     });
+    setMellomlagringFinnes(false);
   }
 
   async function opprettMellomlagring(vurdering: Object) {

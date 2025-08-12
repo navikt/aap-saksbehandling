@@ -30,6 +30,7 @@ import {
   KlagebehandlingNayGrunnlag,
   Klageresultat,
   KvalitetssikringGrunnlag,
+  KvalitetssikringTilgang,
   LegeerklæringStatus,
   LovvalgMedlemskapGrunnlag,
   LøsAvklaringsbehovPåBehandling,
@@ -132,6 +133,7 @@ export const finnSakerForIdent = async (ident: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/finn`;
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
 };
+
 export const hentAlleSaker = async () => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
@@ -167,6 +169,11 @@ export const hentKvalitetssikringGrunnlag = async (behandlingsReferanse: string)
   return await apiFetch<KvalitetssikringGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentKvalitetssikringTilgang = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/kvalitetssikring-tilgang`;
+  return await apiFetch<KvalitetssikringTilgang>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentSykepengerErstatningGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykdom/sykepengergrunnlag`;
   return await apiFetch<SykepengeerstatningGrunnlag>(url, saksbehandlingApiScope, 'GET');
@@ -176,6 +183,7 @@ export const hentAlderGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/alder`;
   return await apiFetch<AlderGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
+
 export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/fritak-meldeplikt`;
   return await apiFetch<FritakMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
