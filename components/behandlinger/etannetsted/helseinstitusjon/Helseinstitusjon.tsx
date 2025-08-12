@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyShort, Label } from '@navikt/ds-react';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/etannetsted/InstitusjonsoppholdTabell';
 import { HelseinstitusjonGrunnlag, Periode } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
@@ -11,7 +11,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import styles from './Helseinstitusjon.module.css';
 import { FormEvent } from 'react';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 

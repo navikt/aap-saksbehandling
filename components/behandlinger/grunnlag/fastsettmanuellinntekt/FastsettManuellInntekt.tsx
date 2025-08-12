@@ -1,13 +1,13 @@
 'use client';
 
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyShort, HStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { ManuellInntektGrunnlag } from 'lib/types/types';
 
 interface Props {

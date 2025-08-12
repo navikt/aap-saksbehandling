@@ -2,9 +2,9 @@
 
 import { Brevbygger, BrevbyggerBeta } from '@navikt/aap-breveditor/';
 import { ActionMenu, Button, Label, Loader, VStack } from '@navikt/ds-react';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
 import { Brev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';

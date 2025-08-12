@@ -3,13 +3,13 @@
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
 import { StegType, VurdertAvAnsatt } from 'lib/types/types';
 import { FormEvent, ReactNode } from 'react';
-import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/VilkårsKort.module.css';
-import { useRequiredFlyt } from 'hooks/FlytHook';
+import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 
 interface Props {
   heading: string;

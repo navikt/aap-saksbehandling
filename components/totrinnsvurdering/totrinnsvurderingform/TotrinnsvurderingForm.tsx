@@ -6,12 +6,12 @@ import {
   behovstypeTilVilkårskortLink,
   ToTrinnsVurderingFormFields,
 } from 'components/totrinnsvurdering/ToTrinnsvurdering';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useFieldArray } from 'react-hook-form';
 import { useState } from 'react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
-import { useRequiredFlyt } from 'hooks/FlytHook';
+import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;

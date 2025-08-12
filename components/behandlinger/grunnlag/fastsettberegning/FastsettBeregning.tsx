@@ -3,9 +3,9 @@
 import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { BeregningTidspunktGrunnlag } from 'lib/types/types';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isBefore, parse } from 'date-fns';
 import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import styles from './FastsettBeregning.module.css';

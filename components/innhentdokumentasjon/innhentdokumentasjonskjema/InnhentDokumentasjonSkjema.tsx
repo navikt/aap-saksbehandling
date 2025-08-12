@@ -3,7 +3,7 @@ import { FormEvent, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
 import { BestillLegeerklæring } from 'lib/types/types';
-import { useBehandlingsReferanse, useSaksnummer } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { clientSøkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
 import { useBestillDialogmelding } from 'hooks/FetchHook';

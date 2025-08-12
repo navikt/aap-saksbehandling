@@ -2,7 +2,7 @@ import { Alert, BodyLong, Button, Modal } from '@navikt/ds-react';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 
-import { useSendHendelseOgVentPåProsessering } from 'hooks/SendHendelseOgVentPåProsessering';
+import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 
 import styles from './TrekkKlageModal.module.css';
 

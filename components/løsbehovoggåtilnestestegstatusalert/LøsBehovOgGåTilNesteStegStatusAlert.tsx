@@ -2,7 +2,7 @@
 
 import { Alert, BodyShort } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
-import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 
 interface Props {

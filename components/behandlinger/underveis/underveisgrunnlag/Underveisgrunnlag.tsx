@@ -10,8 +10,8 @@ import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];

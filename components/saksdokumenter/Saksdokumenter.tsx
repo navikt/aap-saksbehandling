@@ -1,7 +1,7 @@
 import { Link, Pagination, Table, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import useSWR from 'swr';
-import { useSaksnummer } from 'hooks/BehandlingHook';
+import { useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { ArrowOrange } from 'components/icons/ArrowOrange';

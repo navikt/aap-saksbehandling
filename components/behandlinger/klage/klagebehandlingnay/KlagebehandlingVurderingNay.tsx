@@ -1,14 +1,14 @@
 'use client';
 
 import { useConfigForm } from 'components/form/FormHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormField } from 'components/form/FormField';
 import { Hjemmel, KlagebehandlingNayGrunnlag, KlageInnstilling, TypeBehandling } from 'lib/types/types';
 import { FormEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { hjemmelalternativer, getValgteHjemlerSomIkkeErImplementert, hjemmelMap } from 'lib/utils/hjemmel';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   behandlingVersjon: number;

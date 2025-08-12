@@ -1,8 +1,8 @@
 'use client';
 
 import { BodyLong, Box, Heading, List, VStack } from '@navikt/ds-react';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { SykdomsvurderingBrevGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
