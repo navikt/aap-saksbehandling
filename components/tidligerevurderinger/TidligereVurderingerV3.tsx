@@ -8,13 +8,13 @@ import { ValuePair } from '../form/FormField';
 import { format, parse, subDays } from 'date-fns';
 import { erDatoFoerDato } from 'lib/validation/dateValidation';
 
-interface Props<T> {
-  data: T[];
-  buildFelter: (vurdering: T) => ValuePair[];
-  getErGjeldende?: (vurdering: T) => boolean;
-  getVurdertAvIdent?: (vurdering: T) => string;
-  getVurdertDato?: (vurdering: T) => string;
-  getFomDato?: (vurdering: T) => string;
+interface Props {
+  data: any[];
+  buildFelter: (vurdering: any) => ValuePair[];
+  getErGjeldende?: (vurdering: any) => boolean;
+  getVurdertAvIdent?: (vurdering: any) => string;
+  getVurdertDato?: (vurdering: any) => string;
+  getFomDato?: (vurdering: any) => string;
 }
 
 export interface TidligereVurdering {
@@ -25,15 +25,15 @@ export interface TidligereVurdering {
   erGjeldendeVurdering: boolean;
 }
 
-export function TidligereVurderingerV3<T>({
+export function TidligereVurderingerV3({
   data,
   buildFelter,
   getErGjeldende = () => false,
   getVurdertAvIdent = (v: any) => v.vurdertAv.ident,
   getVurdertDato = (v: any) => v.vurdertAv.dato,
   getFomDato = (v: any) => v.vurderingenGjelderFra ?? v.vurdertAv?.dato,
-}: Props<T>) {
-  const finnSluttdato = (index: number, arr: T[]) => {
+}: Props) {
+  const finnSluttdato = (index: number, arr: any[]) => {
     if (arr.length <= 1 || index === 0) return null;
 
     const forrigeGjelderFra = getFomDato(arr[index - 1]);
@@ -102,7 +102,6 @@ export function TidligereVurderingerV3<T>({
                 const periode = `${formaterDatoForFrontend(v.periode.fom)} - ${v.periode.tom ? formaterDatoForFrontend(v.periode.tom) : ''}`;
                 const flereVurderinger = mappedVurderinger.length > 1;
                 return (
-                  //@ts-ignore
                   <Chips.Toggle
                     type="button"
                     checkmark={false}
@@ -112,15 +111,12 @@ export function TidligereVurderingerV3<T>({
                       return flereVurderinger ? setSelectedIndex(index) : null;
                     }}
                     className={flereVurderinger ? styles.sidebarItemV3 : styles.sidebarItemSingleV3}
+                    style={{
+                      textDecoration: v.erGjeldendeVurdering ? 'none' : 'line-through',
+                      fontWeight: 'bold',
+                    }}
                   >
-                    <span
-                      style={{
-                        textDecoration: v.erGjeldendeVurdering ? 'none' : 'line-through',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      {periode}
-                    </span>
+                    {periode}
                   </Chips.Toggle>
                 );
               })}
