@@ -55,13 +55,13 @@ interface SykdomProps {
 }
 
 export const Sykdomsvurdering = ({
-                                   grunnlag,
-                                   behandlingVersjon,
-                                   readOnly,
-                                   bidiagnoserDeafultOptions,
-                                   hoveddiagnoseDefaultOptions,
-                                   typeBehandling,
-                                 }: SykdomProps) => {
+  grunnlag,
+  behandlingVersjon,
+  readOnly,
+  bidiagnoserDeafultOptions,
+  hoveddiagnoseDefaultOptions,
+  typeBehandling,
+}: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -160,7 +160,7 @@ export const Sykdomsvurdering = ({
       bidiagnose: {
         type: 'async_combobox',
         defaultValue: bidiagnoserDeafultOptions?.filter((option) =>
-          diagnosegrunnlag?.bidiagnoser?.includes(option.value),
+          diagnosegrunnlag?.bidiagnoser?.includes(option.value)
         ),
       },
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
@@ -196,7 +196,7 @@ export const Sykdomsvurdering = ({
         defaultValue: getStringEllerUndefined(sykdomsvurdering?.yrkesskadeBegrunnelse),
       },
     },
-    { shouldUnregister: false, readOnly: readOnly },
+    { shouldUnregister: false, readOnly: readOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -223,10 +223,10 @@ export const Sykdomsvurdering = ({
                   ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten)
                   : getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnFørtiProsent),
               erNedsettelseIArbeidsevneAvEnVissVarighet: getTrueFalseEllerUndefined(
-                data.erNedsettelseIArbeidsevneAvEnVissVarighet,
+                data.erNedsettelseIArbeidsevneAvEnVissVarighet
               ),
               erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getTrueFalseEllerUndefined(
-                data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
+                data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
               ),
               yrkesskadeBegrunnelse: data?.yrkesskadeBegrunnelse,
             },
@@ -270,13 +270,12 @@ export const Sykdomsvurdering = ({
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) =>
-            grunnlag.gjeldendeVedtatteSykdomsvurderinger.some((gjeldendeVurdering) =>
-              deepEqual(v, gjeldendeVurdering),
-            )
+            grunnlag.gjeldendeVedtatteSykdomsvurderinger.some((gjeldendeVurdering) => deepEqual(v, gjeldendeVurdering))
           }
           getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
-          getVurdertDato={(v) => v.vurdertAv.dato} />
+          getVurdertDato={(v) => v.vurdertAv.dato}
+        />
       )}
       {grunnlag.skalVurdereYrkesskade && (
         <Alert variant={'warning'} size={'small'}>
