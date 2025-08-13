@@ -7,8 +7,9 @@ const DEFAULT_TIMEOUT_IN_MS = 500;
 const RETRIES = 0;
 
 export interface ServerSentEventData {
-  aktivGruppe?: StegGruppe;
-  aktivtSteg?: StegType;
+  gjeldendeSteg?: StegType;
+  aktivtVisningGruppe?: StegGruppe;
+  aktivtVisningSteg?: StegType;
   aktivtStegBehovsKode?: BehandlingsFlytAvklaringsbehovKode[];
   skalBytteGruppe?: boolean;
   skalBytteSteg?: boolean;
@@ -71,12 +72,15 @@ export async function GET(
 
       if (flyt.data.prosessering.status === 'FERDIG') {
         logInfo('Prosessering ferdig');
+
+        // vurdertGruppe og vurdertSteg er tilstede for å utlede hvilken visningsgruppe frontend skal rute til for kvalitetsikring / totrinn
         const aktivGruppe = flyt.data.vurdertGruppe != null ? flyt.data.vurdertGruppe : flyt.data.aktivGruppe;
         const aktivtSteg = flyt.data.vurdertSteg != null ? flyt.data.vurdertSteg : flyt.data.aktivtSteg;
 
         const json: ServerSentEventData = {
-          aktivGruppe,
-          aktivtSteg,
+          gjeldendeSteg: flyt.data.aktivtSteg,
+          aktivtVisningGruppe: aktivGruppe,
+          aktivtVisningSteg: aktivtSteg,
           skalBytteGruppe: aktivGruppe !== (await context.params).gruppe,
           skalBytteSteg: aktivtSteg !== (await context.params).steg,
           aktivtStegBehovsKode: flyt.data.aktivtStegDefinisjon.map((definisjon) => definisjon.kode),
