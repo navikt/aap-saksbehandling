@@ -97,7 +97,7 @@ describe('TidligereVurderingerV3', () => {
   });
 
   it('kan stryke ut ikke-gjeldende vurderinger', () => {
-    const struckText = screen.getByText('01.01.2025 - 01.02.2025');
+    const struckText = screen.getByText('01.01.2025 - 01.02.2025').parentElement;
     expect(struckText).toHaveStyle('text-decoration: line-through');
   });
 
