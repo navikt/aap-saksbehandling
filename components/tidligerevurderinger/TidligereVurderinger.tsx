@@ -1,7 +1,7 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { ExpansionCard, Table } from '@navikt/ds-react';
 
-import { Sykdomsvurdering } from 'lib/types/types';
+import { SykdomsvurderingResponse } from 'lib/types/types';
 import styles from './TidligereVurderinger.module.css';
 import { format, parse, subDays } from 'date-fns';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -29,7 +29,7 @@ function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): bool
 
 const mapTilJaEllerNei = (verdi?: boolean) => (verdi ? 'Ja' : 'Nei');
 interface VurderingProps {
-  vurdering: Sykdomsvurdering;
+  vurdering: SykdomsvurderingResponse;
   søknadstidspunkt: string;
   vurderingErGjeldende: boolean;
   sluttdato?: string;
@@ -77,8 +77,8 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
 };
 
 interface Props {
-  historiskeVurderinger: Sykdomsvurdering[];
-  gjeldendeVurderinger: Sykdomsvurdering[];
+  historiskeVurderinger: SykdomsvurderingResponse[];
+  gjeldendeVurderinger: SykdomsvurderingResponse[];
   søknadstidspunkt: string;
 }
 
@@ -95,7 +95,7 @@ export const TidligereVurderinger = ({ historiskeVurderinger, gjeldendeVurdering
     return format(subDays(parse(forrigeGjelderFra, 'yyyy-MM-dd', new Date()), 1), 'dd.MM.yyyy');
   };
 
-  const erVurderingenGjeldende = (historiskVurdering: Sykdomsvurdering) => {
+  const erVurderingenGjeldende = (historiskVurdering: SykdomsvurderingResponse) => {
     const vurderingenFinnesSomGjeldende = gjeldendeVurderinger.some((gjeldendeVurdering) =>
       deepEqual(historiskVurdering, gjeldendeVurdering, ['dokumenterBruktIVurderingen', 'bidiagnoser'])
     );

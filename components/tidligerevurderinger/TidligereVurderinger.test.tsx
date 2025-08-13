@@ -2,12 +2,12 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TidligereVurderinger, Vurdering } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { format, parse, subDays, subWeeks } from 'date-fns';
-import { Sykdomsvurdering } from 'lib/types/types';
+import { SykdomsvurderingResponse } from 'lib/types/types';
 import { ReactNode } from 'react';
 
 import { describe, expect, test } from 'vitest';
 
-const historiskVurdering: Sykdomsvurdering = {
+const historiskVurdering: SykdomsvurderingResponse = {
   erNedsettelseIArbeidsevneAvEnVissVarighet: true,
   erSkadeSykdomEllerLyteVesentligdel: true,
   erNedsettelseIArbeidsevneMerEnnHalvparten: true,
@@ -18,7 +18,7 @@ const historiskVurdering: Sykdomsvurdering = {
   vurdertAv: { ident: 'IDENT', dato: '2025-02-01' },
 };
 
-const gjeldendeVurdering: Sykdomsvurdering = {
+const gjeldendeVurdering: SykdomsvurderingResponse = {
   erNedsettelseIArbeidsevneAvEnVissVarighet: true,
   erSkadeSykdomEllerLyteVesentligdel: true,
   erNedsettelseIArbeidsevneMerEnnHalvparten: true,
@@ -51,7 +51,7 @@ describe('Tidligere vurderinger', () => {
     const fireUkerSiden = subWeeks(new Date(), 4);
 
     const søknadstidspunktTilbakeITid = format(tolvUkerSiden, 'yyyy-MM-dd');
-    const historiskeVurderinger: Sykdomsvurdering[] = [
+    const historiskeVurderinger: SykdomsvurderingResponse[] = [
       {
         erNedsettelseIArbeidsevneAvEnVissVarighet: true,
         erSkadeSykdomEllerLyteVesentligdel: true,
@@ -100,7 +100,7 @@ describe('Tidligere vurderinger', () => {
     const fireUkerSiden = subWeeks(new Date(), 4);
 
     const søknadstidspunktTilbakeITid = format(tolvUkerSiden, 'yyyy-MM-dd');
-    const historiskeVurderinger: Sykdomsvurdering[] = [
+    const historiskeVurderinger: SykdomsvurderingResponse[] = [
       {
         erNedsettelseIArbeidsevneAvEnVissVarighet: true,
         erSkadeSykdomEllerLyteVesentligdel: true,
