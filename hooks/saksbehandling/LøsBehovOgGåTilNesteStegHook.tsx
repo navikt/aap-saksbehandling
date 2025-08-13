@@ -14,7 +14,7 @@ import {
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { isDev } from '../../lib/utils/environment';
+import { isDev } from 'lib/utils/environment';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
