@@ -38,8 +38,8 @@ import {
   NavEnhetRequest,
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
-  OpprettTestcase,
   OpprettDummySakDto,
+  OpprettTestcase,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
@@ -357,7 +357,9 @@ export const hentSvarFraAndreinstansGrunnlag = async (behandlingsReferanse: stri
 
 export const hentFlyt = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/flyt`;
-  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined);
+  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
+    `flyt/${behandlingsReferanse}`,
+  ]);
 };
 
 // Requestene skal ikke caches ved polling
