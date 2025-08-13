@@ -6,7 +6,8 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Link } from '@navikt/ds-react';
+
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { formaterDatoForFrontend } from 'lib/utils/date';
