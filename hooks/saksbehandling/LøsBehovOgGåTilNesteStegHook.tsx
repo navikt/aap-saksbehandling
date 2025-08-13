@@ -79,7 +79,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         status,
         skalBytteGruppe,
         skalBytteSteg,
-        aktivtVisningGruppe,
+        aktivVisningGruppe,
         aktivtVisningSteg,
         aktivtStegBehovsKode,
         gjeldendeSteg,
@@ -114,7 +114,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         } else {
           if (skalBytteGruppe || skalBytteSteg) {
             router.push(
-              `/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${aktivtVisningGruppe}/#${aktivtVisningSteg}`
+              `/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${aktivVisningGruppe}/#${aktivtVisningSteg}`
             );
           }
 

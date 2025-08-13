@@ -8,7 +8,7 @@ const RETRIES = 0;
 
 export interface ServerSentEventData {
   gjeldendeSteg?: StegType;
-  aktivtVisningGruppe?: StegGruppe;
+  aktivVisningGruppe?: StegGruppe;
   aktivtVisningSteg?: StegType;
   aktivtStegBehovsKode?: BehandlingsFlytAvklaringsbehovKode[];
   skalBytteGruppe?: boolean;
@@ -59,7 +59,9 @@ export async function GET(
         return;
       }
 
-      if (flyt.data.prosessering.status === 'FEILET') {
+      const { vurdertGruppe, vurdertSteg, aktivGruppe, aktivtSteg, aktivtStegDefinisjon, prosessering } = flyt.data;
+
+      if (prosessering.status === 'FEILET') {
         const json: ServerSentEventData = {
           status: 'ERROR',
           errormessage: `Prosessering feilet i backend`,
@@ -70,20 +72,20 @@ export async function GET(
         return;
       }
 
-      if (flyt.data.prosessering.status === 'FERDIG') {
+      if (prosessering.status === 'FERDIG') {
         logInfo('Prosessering ferdig');
 
         // vurdertGruppe og vurdertSteg er tilstede for å utlede hvilken visningsgruppe frontend skal rute til for kvalitetsikring / totrinn
-        const aktivGruppe = flyt.data.vurdertGruppe != null ? flyt.data.vurdertGruppe : flyt.data.aktivGruppe;
-        const aktivtSteg = flyt.data.vurdertSteg != null ? flyt.data.vurdertSteg : flyt.data.aktivtSteg;
+        const aktivVisningGruppe = vurdertGruppe != null ? vurdertGruppe : aktivGruppe;
+        const aktivtVisningSteg = vurdertSteg != null ? vurdertSteg : aktivtSteg;
 
         const json: ServerSentEventData = {
-          gjeldendeSteg: flyt.data.aktivtSteg,
-          aktivtVisningGruppe: aktivGruppe,
-          aktivtVisningSteg: aktivtSteg,
+          gjeldendeSteg: aktivtSteg,
+          aktivVisningGruppe,
+          aktivtVisningSteg,
           skalBytteGruppe: aktivGruppe !== (await context.params).gruppe,
           skalBytteSteg: aktivtSteg !== (await context.params).steg,
-          aktivtStegBehovsKode: flyt.data.aktivtStegDefinisjon.map((definisjon) => definisjon.kode),
+          aktivtStegBehovsKode: aktivtStegDefinisjon.map((definisjon) => definisjon.kode),
           status: 'DONE',
         };
 
