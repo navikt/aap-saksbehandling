@@ -49,7 +49,16 @@ const vurderinger = [
 
 describe('TidligereVurderingerV3', () => {
   beforeEach(() => {
-    render(<TidligereVurderingerV3 tidligereVurderinger={vurderinger} />);
+    render(
+      <TidligereVurderingerV3
+        data={vurderinger}
+        buildFelter={(v) => v.felter}
+        getErGjeldende={(v) => v.erGjeldendeVurdering}
+        getVurdertAvIdent={(v) => v.vurdertAvIdent}
+        getVurdertDato={(v) => v.vurdertDato}
+        getFomDato={(v) => v.periode.fom}
+      />
+    );
   });
 
   it('kan vise tittel på kort', () => {
@@ -68,23 +77,23 @@ describe('TidligereVurderingerV3', () => {
     });
   });
 
-  it('Kan vise forskjellige felter i vurderingskortet', () => {
-    expect(screen.getByText('Vilkår')).toBeInTheDocument();
-    expect(screen.getByText('Oppfylt')).toBeInTheDocument();
-    expect(screen.getByText('Begrunnelse')).toBeInTheDocument();
-    expect(screen.getByText('En god begrunnelse')).toBeInTheDocument();
-    expect(screen.getByText(/Vurdert av AB123, 02.02.2025/)).toBeInTheDocument();
-  });
-
-  it('kan oppdatere valgt vurdering', async () => {
-    const secondChip = screen.getByText('02.02.2025 -');
-    await user.click(secondChip);
-
+  it('kan oppdatere valgt vurdering', () => {
     expect(screen.getByText('Vilkår')).toBeInTheDocument();
     expect(screen.getByText('Ikke oppfylt')).toBeInTheDocument();
     expect(screen.getByText('Begrunnelse')).toBeInTheDocument();
     expect(screen.getByText('En annen begrunnelse')).toBeInTheDocument();
     expect(screen.getByText(/Vurdert av CD456, 15.02.2025/)).toBeInTheDocument();
+  });
+
+  it('Kan vise forskjellige felter i vurderingskortet', async () => {
+    const secondChip = screen.getByText('01.01.2025 - 01.02.2025');
+    await user.click(secondChip);
+
+    expect(screen.getByText('Vilkår')).toBeInTheDocument();
+    expect(screen.getByText('Oppfylt')).toBeInTheDocument();
+    expect(screen.getByText('Begrunnelse')).toBeInTheDocument();
+    expect(screen.getByText('En god begrunnelse')).toBeInTheDocument();
+    expect(screen.getByText(/Vurdert av AB123, 02.02.2025/)).toBeInTheDocument();
   });
 
   it('kan stryke ut ikke-gjeldende vurderinger', () => {
