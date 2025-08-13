@@ -94,7 +94,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         },
       },
     },
-    { readOnly: readOnly, shouldUnregister: true }
+    { readOnly: readOnly, shouldUnregister: true },
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
