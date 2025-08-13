@@ -75,12 +75,20 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     );
     eventSource.onmessage = async (event: any) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
-      const { status, skalBytteGruppe, skalBytteSteg, aktivGruppe, aktivtSteg, aktivtStegBehovsKode } = eventData;
+      const {
+        status,
+        skalBytteGruppe,
+        skalBytteSteg,
+        aktivVisningGruppe,
+        aktivtVisningSteg,
+        aktivtStegBehovsKode,
+        gjeldendeSteg,
+      } = eventData;
 
       if (status === 'DONE') {
         eventSource.close();
         let kanFortsetteSaksbehandling = false;
-        const skalKvalitetssikre = !!aktivtSteg && ['KVALITETSSIKRING', 'AVKLAR_STUDENT', 'AVKLAR_SYKDOM', 'AVKLAR_OPPFØLGING'].includes(aktivtSteg);
+        const skalKvalitetssikre = gjeldendeSteg === 'KVALITETSSIKRING';
 
         // TODO Fjerne feature toggle etter verifisering i dev
         if (isDev() && skalKvalitetssikre) {
@@ -101,12 +109,12 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         }
 
         // TODO Brev har ingen egen definisjonskode som vi kan hente ut fra steget. Må skrives om i backend
-        if (!kanFortsetteSaksbehandling && aktivtSteg !== 'BREV') {
+        if (!kanFortsetteSaksbehandling && aktivtVisningSteg !== 'BREV') {
           setIsModalOpen(true);
         } else {
           if (skalBytteGruppe || skalBytteSteg) {
             router.push(
-              `/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${aktivGruppe}/#${aktivtSteg}`
+              `/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${aktivVisningGruppe}/#${aktivtVisningSteg}`
             );
           }
 
