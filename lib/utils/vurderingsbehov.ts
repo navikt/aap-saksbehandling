@@ -69,6 +69,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Aktivitetsplikt $ 11-7';
     case 'EFFEKTUER_AKTIVITETSPLIKT':
       return 'Effektuer aktivitetsplikt';
+    case 'OVERGANG_UFORE':
+      return 'Overgang til uføre';
   }
   exhaustiveCheck(vurderingsbehov);
 };
