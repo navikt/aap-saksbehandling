@@ -3,7 +3,7 @@ import { ExpansionCard, Table } from '@navikt/ds-react';
 
 import styles from './TidligereVurderinger.module.css';
 import { format, parse, subDays } from 'date-fns';
-import { BistandsbehovVurdering, OvergangUføreVurdering } from 'lib/types/types';
+import { OvergangUføreVurdering } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): boolean {
@@ -41,55 +41,36 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
     <div>
       <span>{vurdering?.begrunnelse}</span>
       <div style={{ display: 'flex', gap: '1.5rem', flexDirection: 'row', flexWrap: 'wrap' }}>
+        <span>Har brukeren søkt uføretrygd?: {mapTilJaEllerNei(vurdering.brukerSoktUforetrygd)}</span>
+        <span>Har brukeren fått vedtak om uføretrygd?: {vurdering.brukerSoktUforetrygd}</span>
         <span>
-          a: Har brukeren behov for aktiv behandling?: {mapTilJaEllerNei(vurdering.vurdering?.brukerSoktUforetrygd)}
-        </span>
-        <span>
-          b: Har brukeren behov for arbeidsrettet tiltak?: {mapTilJaEllerNei(vurdering.erBehovForArbeidsrettetTiltak)}
-        </span>
-        <span>
-          c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?{' '}
-          {mapTilJaEllerNei(vurdering.brukerSoktUforetrygd?? undefined)}
+          c: Har brukeren rett på AAP?
+          {mapTilJaEllerNei(vurdering.brukerRettPaaAAP ?? undefined)}
         </span>
       </div>
-      {vurdering.overgangBegrunnelse && (
-        <div style={{ display: 'flex', gap: '1.5rem', flexDirection: 'row', flexWrap: 'wrap' }}>
-          <span>
-            {vurdering.skalVurdereAapIOvergangTilUføre
-              ? 'Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?'
-            : {vurdering.overgangBegrunnelse}}
-          </span>
-          {vurdering.skalVurdereAapIOvergangTilUføre && (
-            <span>
-              Har brukeren rett til AAP under behandling av søknad om uføretrygd etter § 11-18?
-              {mapTilJaEllerNei(vurdering.skalVurdereAapIOvergangTilUføre)}
-            </span>
-          )}
-        </div>
-      )}
     </div>
   );
   return (
     <Table.ExpandableRow content={content} togglePlacement="right" expandOnRowClick>
       <Table.DataCell style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
         <span style={{ marginLeft: '0.25rem', textDecoration: vurderingErGjeldende ? 'none' : 'line-through' }}>
-          {vurdering.vurdering.vurderingenGjelderFra
-            ? formaterDatoForFrontend(vurdering.vurdering.vurderingenGjelderFra)
+          {vurdering.vurderingenGjelderFra
+            ? formaterDatoForFrontend(vurdering.vurderingenGjelderFra)
             : formaterDatoForFrontend(søknadstidspunkt)}
           {' - '}
           {sluttdato}
         </span>
       </Table.DataCell>
       <Table.DataCell align="right">
-        ({vurdering.vurdering.vurdertAv.ident}) {vurdering.vurdertAv.dato && formaterDatoForFrontend(vurdering.vurdertAv.dato)}
+        ({vurdering.vurdertAv.ident}) {vurdering.vurdertAv.dato && formaterDatoForFrontend(vurdering.vurdertAv.dato)}
       </Table.DataCell>
     </Table.ExpandableRow>
   );
 };
 
 interface Props {
-  historiskeVurderinger: BistandsbehovVurdering[];
-  gjeldendeVurderinger: BistandsbehovVurdering[];
+  historiskeVurderinger: OvergangUføreVurdering[];
+  gjeldendeVurderinger: OvergangUføreVurdering[];
   søknadstidspunkt: string;
 }
 
@@ -106,7 +87,7 @@ export const TidligereVurderinger = ({ historiskeVurderinger, gjeldendeVurdering
     return format(subDays(parse(forrigeGjelderFra, 'yyyy-MM-dd', new Date()), 1), 'dd.MM.yyyy');
   };
 
-  const erVurderingenGjeldende = (historiskVurdering: BistandsbehovVurdering) => {
+  const erVurderingenGjeldende = (historiskVurdering: OvergangUføreVurdering) => {
     const vurderingenFinnesSomGjeldende = gjeldendeVurderinger.some((gjeldendeVurdering) =>
       deepEqual(historiskVurdering, gjeldendeVurdering, ['dokumenterBruktIVurderingen'])
     );

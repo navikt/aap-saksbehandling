@@ -3,9 +3,9 @@
 import { OvergangUforeGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/LøsBehovOgGåTilNesteStegHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
-import { useBehandlingsReferanse } from 'hooks/BehandlingHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Alert, BodyShort, Link } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';

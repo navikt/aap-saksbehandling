@@ -208,7 +208,7 @@ describe('Revurdering', () => {
     expect(
       screen.getByRole('heading', { name: '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker', level: 3 })
     ).toBeVisible();
-    expect(screen.getAllByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveLength(2);
+    expect(screen.getAllByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveLength(1);
     expect(
       await screen.findByRole('group', {
         name: 'Har brukeren rett til AAP i perioden som arbeidssøker?',

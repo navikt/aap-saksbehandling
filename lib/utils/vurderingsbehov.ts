@@ -64,6 +64,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Helhetlig vurdering';
     case 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN':
       return 'Revurder meldeplikt rimelig grunn';
+    case 'OVERGANG_UFORE':
+      return 'Overgang til uføre';
   }
 };
 

@@ -46,7 +46,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const erBehovForArbeidsrettetTiltakLabel = 'b: Har brukeren behov for arbeidsrettet tiltak?';
   const erBehovForAnnenOppfølgingLabel =
     'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?';
-  const vurderAAPIOvergangTilUføreLabel = 'Har brukeren rett til AAP under behandling av krav om uføretrygd?';
   const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
 
   const { formFields, form } = useConfigForm<FormFields>(
