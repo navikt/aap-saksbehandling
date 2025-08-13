@@ -26,13 +26,13 @@ export interface TidligereVurdering {
 }
 
 export function TidligereVurderingerV3<T>({
-                                            data,
-                                            buildFelter,
-                                            getErGjeldende = () => false,
-                                            getVurdertAvIdent = (v: any) => v.vurdertAv.ident,
-                                            getVurdertDato = (v: any) => v.vurdertAv.dato,
-                                            getFomDato = (v: any) => v.vurderingenGjelderFra ?? v.vurdertAv?.dato,
-                                          }: Props<T>) {
+  data,
+  buildFelter,
+  getErGjeldende = () => false,
+  getVurdertAvIdent = (v: any) => v.vurdertAv.ident,
+  getVurdertDato = (v: any) => v.vurdertAv.dato,
+  getFomDato = (v: any) => v.vurderingenGjelderFra ?? v.vurdertAv?.dato,
+}: Props<T>) {
   const finnSluttdato = (index: number, arr: T[]) => {
     if (arr.length <= 1 || index === 0) return null;
 
