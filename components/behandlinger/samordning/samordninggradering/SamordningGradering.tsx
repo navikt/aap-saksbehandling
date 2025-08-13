@@ -119,7 +119,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
               fristNyRevurdering:
                 data.fristNyRevurdering &&
                 formaterDatoForBackend(parse(data.fristNyRevurdering, 'dd.MM.yyyy', new Date())),
-              vurderteSamordningerData: data.vurderteSamordninger.map((vurdertSamordning) => ({
+              vurderteSamordningerData: (data.vurderteSamordninger || []).map((vurdertSamordning) => ({
                 manuell: vurdertSamordning.manuell,
                 gradering: vurdertSamordning.gradering,
                 periode: {
