@@ -17,7 +17,7 @@ interface Props {
   getFomDato?: (vurdering: any) => string;
 }
 
-export interface TidligereVurdering {
+interface TidligereVurdering {
   periode: ÅpenPeriode;
   vurdertAvIdent: string;
   vurdertDato: string;
