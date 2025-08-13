@@ -79,7 +79,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
 
       if (status === 'DONE') {
         eventSource.close();
-        let kanFortsetteSaksbehandling = true;
+        let kanFortsetteSaksbehandling = false;
         const skalKvalitetssikre = !!aktivtSteg && ['KVALITETSSIKRING', 'AVKLAR_STUDENT', 'AVKLAR_SYKDOM', 'AVKLAR_OPPFØLGING'].includes(aktivtSteg);
 
         // TODO Fjerne feature toggle etter verifisering i dev
