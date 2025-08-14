@@ -90,8 +90,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         let kanFortsetteSaksbehandling = false;
         const skalKvalitetssikre = gjeldendeSteg === 'KVALITETSSIKRING';
 
-        // TODO Fjerne feature toggle etter verifisering i dev
-        if (isDev() && skalKvalitetssikre) {
+        if (skalKvalitetssikre) {
           const kanFortsetteSaksbehandlingRespons = await clientHentTilgangForKvalitetssikring(
             params.behandlingsReferanse
           );
