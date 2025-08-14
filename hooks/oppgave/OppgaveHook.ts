@@ -4,7 +4,7 @@ import { hentMineOppgaverClient, hentOppgaverClient } from 'lib/oppgaveClientApi
 import useSWR from 'swr';
 import { isSuccess } from 'lib/utils/api';
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 50;
 
 type UseOppgaverOptions = {
   aktivEnhet: string[];
