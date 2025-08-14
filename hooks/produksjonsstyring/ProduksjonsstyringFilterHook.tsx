@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ProduksjonsstyringFilterContext } from 'context/ProduksjonsstyringFilterContext';
+import { ProduksjonsstyringFilterContext } from 'context/produksjonsstyring/ProduksjonsstyringFilterContext';
 
 export function useProduksjonsstyringFilter() {
   const context = useContext(ProduksjonsstyringFilterContext);

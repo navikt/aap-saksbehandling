@@ -2,7 +2,7 @@
 
 import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
-import { ProduksjonsstyringFilterContextProvider } from 'context/ProduksjonsstyringFilterContext';
+import { ProduksjonsstyringFilterContextProvider } from 'context/produksjonsstyring/ProduksjonsstyringFilterContext';
 import { TotaloversiktBehandlinger } from 'components/produksjonsstyring/totaloversiktbehandlinger/TotaloversiktBehandlinger';
 import { MinEnhet } from 'components/produksjonsstyring/minenhet/MinEnhet';
 import { Enhet } from 'lib/types/oppgaveTypes';
