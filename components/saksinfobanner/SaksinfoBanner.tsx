@@ -206,17 +206,6 @@ export const SaksinfoBanner = ({
                       Marker som haster
                     </Dropdown.Menu.GroupedList.Item>
                   )}
-                  {visValgForÅSetteMarkering && (
-                    <Dropdown.Menu.GroupedList.Item
-                      onClick={() =>
-                        settAktivMarkeringType(
-                          NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE
-                        )
-                      }
-                    >
-                      Marker med krever spesialkompetanse
-                    </Dropdown.Menu.GroupedList.Item>
-                  )}
                 </Dropdown.Menu.GroupedList>
               </Dropdown.Menu>
             </Dropdown>
