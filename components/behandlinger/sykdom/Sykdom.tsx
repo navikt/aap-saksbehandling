@@ -25,7 +25,6 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   }
 
   const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt.data);
-  console.log('vises' + stegSomSkalVises);
   const saksBehandlerReadOnly = flyt.data.visning.saksbehandlerReadOnly;
   const behandlingVersjon = flyt.data.behandlingVersjon;
 
@@ -84,7 +83,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('OVERGANG_UFORE') && (
+      {
         <StegSuspense>
           <OvergangUforeMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
@@ -93,36 +92,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             typeBehandling={flyt.data.visning.typeBehandling}
           />
         </StegSuspense>
-      )}
-      {stegSomSkalVises.includes('SYKDOMSVURDERING_BREV') && (
-        <StegSuspense>
-          <SykdomsvurderingBrevMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            typeBehandling={flyt.data.visning.typeBehandling}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-          />
-        </StegSuspense>
-      )}
-      {stegSomSkalVises.includes('VURDER_BISTANDSBEHOV') && (
-        <StegSuspense>
-          <RefusjonMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-          />
-        </StegSuspense>
-      )}
-      {stegSomSkalVises.includes('OVERGANG_UFORE') && (
-        <StegSuspense>
-          <OvergangUforeMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-            typeBehandling={flyt.data.visning.typeBehandling}
-          />
-        </StegSuspense>
-      )}
+      }
       {stegSomSkalVises.includes('SYKDOMSVURDERING_BREV') && (
         <StegSuspense>
           <SykdomsvurderingBrevMedDataFetching

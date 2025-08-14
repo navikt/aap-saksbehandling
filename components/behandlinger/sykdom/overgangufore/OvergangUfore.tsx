@@ -137,7 +137,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       <FormField form={form} formField={formFields.brukerHarSøktUføretrygd} horizontalRadio />
       <FormField form={form} formField={formFields.brukerHarFåttVedtakOmUføretrygd} horizontalRadio />
       <Alert variant="warning">
-        Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurders til oppfylt.
+        Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurderes til oppfylt.
       </Alert>
       <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
     </VilkårsKortMedForm>

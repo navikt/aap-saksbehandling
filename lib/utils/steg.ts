@@ -5,8 +5,6 @@ export const getStegSomSkalVises = (
   behandlingFlytOgTilstand: BehandlingFlytOgTilstand
 ): Array<StegType> => {
   const stegGruppe = behandlingFlytOgTilstand.flyt.find((gruppe) => gruppe.stegGruppe === aktivStegGruppe);
-  console.log(behandlingFlytOgTilstand.flyt.find((gruppe) => gruppe.stegGruppe === aktivStegGruppe));
-  console.log(behandlingFlytOgTilstand.flyt);
   return (
     stegGruppe?.steg
       .filter((steg) => steg.avklaringsbehov && steg.avklaringsbehov.length > 0)
