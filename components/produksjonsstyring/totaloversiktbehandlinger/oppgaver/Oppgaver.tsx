@@ -86,24 +86,26 @@ export const Oppgaver = ({ listeVisning }: Props) => {
         )}
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
           {isSuccess(førstegangsBehandlingerPerSteggruppe) &&
-            filter.behandlingstyper.includes('Førstegangsbehandling') && (
+            (filter.behandlingstyper.includes('Førstegangsbehandling') || filter.behandlingstyper.length === 0) && (
               <BehandlingerPerSteggruppe
                 data={førstegangsBehandlingerPerSteggruppe.data || []}
                 title={'Stegfordeling førstegangsbehandling'}
               />
             )}
-          {isSuccess(klageBehandlingerPerSteggruppe) && (
-            <BehandlingerPerSteggruppe
-              data={klageBehandlingerPerSteggruppe.data || []}
-              title={'Stegfordeling klagebehandlinger'}
-            />
-          )}
-          {isSuccess(revurderingBehandlingerPerSteggruppe) && (
-            <BehandlingerPerSteggruppe
-              data={revurderingBehandlingerPerSteggruppe.data || []}
-              title={'Stegfordeling revurderingbehandlinger'}
-            />
-          )}
+          {isSuccess(klageBehandlingerPerSteggruppe) &&
+            (filter.behandlingstyper.includes('Klage') || filter.behandlingstyper.length === 0) && (
+              <BehandlingerPerSteggruppe
+                data={klageBehandlingerPerSteggruppe.data || []}
+                title={'Stegfordeling klagebehandlinger'}
+              />
+            )}
+          {isSuccess(revurderingBehandlingerPerSteggruppe) &&
+            (filter.behandlingstyper.includes('Revurdering') || filter.behandlingstyper.length === 0) && (
+              <BehandlingerPerSteggruppe
+                data={revurderingBehandlingerPerSteggruppe.data || []}
+                title={'Stegfordeling revurderingbehandlinger'}
+              />
+            )}
           <OppgaverInnUt behandlingstyperQuery={behandlingstyperQuery} />
         </div>
       </VStack>
