@@ -1,6 +1,7 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import {
   BehandlingFlytOgTilstand,
+  BehandlingsFlytAvklaringsbehovKode,
   BestillLegeerklæring,
   Brev,
   ForhåndsvisDialogmelding,
@@ -8,6 +9,7 @@ import {
   KvalitetssikringTilgang,
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
+  MellomlagredeVurderingRequest,
   NavEnheterResponse,
   NavEnhetRequest,
   OppdaterAktivitetspliktBrudd2,
@@ -16,14 +18,13 @@ import {
   OpprettTestcase,
   SaksInfo,
   SettPåVent,
-  BehandlingsFlytAvklaringsbehovKode,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { Markering } from 'lib/types/oppgaveTypes';
-import { MellomlagringRequest, SlettMellomlagringRequest } from 'app/saksbehandling/api/mellomlagring/route';
+import { SlettMellomlagringRequest } from 'app/saksbehandling/api/mellomlagring/route';
 
 const BASE_URL = '/saksbehandling';
 
@@ -50,12 +51,8 @@ export async function clientFetch<ResponseBody>(
   }
 }
 
-export function clientOpprettMellomlagring(request: MellomlagringRequest) {
+export function clientLagreMellomlagring(request: MellomlagredeVurderingRequest) {
   return clientFetch(`${BASE_URL}/api/mellomlagring`, 'POST', request);
-}
-
-export function clientOppdaterMellomlagring(request: MellomlagringRequest) {
-  return clientFetch(`${BASE_URL}/api/mellomlagring`, 'PATCH', request);
 }
 
 export function clientSlettMellomlagring(request: SlettMellomlagringRequest) {

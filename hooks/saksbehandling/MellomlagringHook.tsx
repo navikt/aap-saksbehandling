@@ -1,28 +1,25 @@
 import { Behovstype } from 'lib/utils/form';
-import { clientOppdaterMellomlagring, clientOpprettMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
 import { useState } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { MellomlagredeVurderingRequest } from 'lib/types/types';
 
 export function useMellomlagring(
   behovstype: Behovstype,
   mellomlagringErTilstede: boolean
 ): {
-  oppdaterMellomlagring: (vurdering: Object) => void;
-  opprettMellomlagring: (vurdering: Object) => void;
+  lagreMellomlagring: (vurdering: MellomlagredeVurderingRequest['data']) => void;
   slettMellomlagring: () => void;
   mellomlagringFinnes: boolean;
 } {
   const [mellomlagringFinnes, setMellomlagringFinnes] = useState(mellomlagringErTilstede);
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { NAVident } = useInnloggetBruker();
 
-  async function oppdaterMellomlagring(vurdering: Object) {
-    await clientOppdaterMellomlagring({
-      behandlingsreferanse: behandlingsReferanse,
-      behovstype: behovstype,
-      vurdering: vurdering,
-      vurdertAv: NAVident,
+  async function lagreMellomlagring(vurdering: MellomlagredeVurderingRequest['data']) {
+    await clientLagreMellomlagring({
+      avklaringsbehovkode: behovstype,
+      behandlingsReferanse: behandlingsReferanse,
+      data: vurdering,
     });
   }
 
@@ -34,16 +31,5 @@ export function useMellomlagring(
     setMellomlagringFinnes(false);
   }
 
-  async function opprettMellomlagring(vurdering: Object) {
-    await clientOpprettMellomlagring({
-      behandlingsreferanse: behandlingsReferanse,
-      behovstype: behovstype,
-      vurdering: vurdering,
-      vurdertAv: NAVident,
-    });
-
-    setMellomlagringFinnes(true);
-  }
-
-  return { oppdaterMellomlagring, slettMellomlagring, opprettMellomlagring, mellomlagringFinnes };
+  return { lagreMellomlagring, slettMellomlagring, mellomlagringFinnes };
 }

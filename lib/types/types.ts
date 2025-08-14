@@ -371,3 +371,12 @@ export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
 export type ReturStatus = NonNullable<Oppgave['returInformasjon']>['status'];
 
 export type Behandlingsstatus = DetaljertBehandling['status'];
+
+// Mellomlagring
+
+export type MellomlagredeVurderingResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagredeVurderingResponse'];
+export type MellomlagredeVurderingRequest =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingRequest'];
+export type MeellomlagretVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto'];

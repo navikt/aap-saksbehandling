@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Behovstype } from 'lib/utils/form';
-
-export interface MellomlagringRequest {
-  behandlingsreferanse: string;
-  behovstype: Behovstype;
-  vurdering: Object;
-  vurdertAv?: string;
-}
+import { MellomlagredeVurderingRequest } from 'lib/types/types';
+import { lagreMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isSuccess } from 'lib/utils/api';
 
 export interface SlettMellomlagringRequest {
   behandlingsreferanse: string;
@@ -14,29 +10,27 @@ export interface SlettMellomlagringRequest {
 }
 
 export async function POST(request: NextRequest) {
-  const payload: MellomlagringRequest = await request.json();
+  const payload: MellomlagredeVurderingRequest = await request.json();
 
-  console.log('Nå oppretter jeg mellomlagring!', payload);
-  // Gjør kall mot behandlingsflyt
+  const res = await lagreMellomlagring(payload);
 
-  return NextResponse.json(null, {
-    status: 200,
-  });
+  if (isSuccess(res)) {
+    return NextResponse.json(null, {
+      status: 200,
+    });
+  } else {
+    return NextResponse.json(
+      { message: 'Noe gikk galt av lagring av mellomlagring' },
+      {
+        status: 500,
+      }
+    );
+  }
 }
 
 export async function DELETE(request: NextRequest) {
   const payload: SlettMellomlagringRequest = await request.json();
   console.log('Nå sletter jeg mellomlagring!', payload);
-  // Gjør kall mot behandlingsflyt
-
-  return NextResponse.json(null, {
-    status: 200,
-  });
-}
-
-export async function PATCH(request: NextRequest) {
-  const payload: MellomlagringRequest = await request.json();
-  console.log('Nå oppdaterer jeg mellomlagring', payload);
   // Gjør kall mot behandlingsflyt
 
   return NextResponse.json(null, {
