@@ -14,7 +14,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
-import { FlytProsesseringServerSentEvent } from '../../app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
+import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 
 interface Props {
   behandlingsReferanse: string;
@@ -117,8 +117,12 @@ export const SettBehandllingPåVentModal = ({ behandlingsReferanse, reservert, i
       if (eventData.status === 'FERDIG') {
         eventSource.close();
         await revalidateFlyt(behandlingsReferanse);
-        setIsLoading(false);
-        onClose();
+
+        // Simuler en delay for å vise loading state før modalen lukkes
+        setTimeout(() => {
+          setIsLoading(false);
+          onClose();
+        }, 1000);
       }
       if (eventData.status === 'FEILET') {
         eventSource.close();
