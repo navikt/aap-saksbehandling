@@ -26,7 +26,7 @@ export const FordelingLukkedeBehandlingerPerDag = ({ fordelingLukkedeBehandlinge
       <ResponsivePlot
         data={[
           {
-            x: sortertFordeling.map((e) => `${e.bøtte}`),
+            x: sortertFordeling.map((e) => `${e.bøtte-1}`),
             y: sortertFordeling.map((v) => v.antall),
             type: 'bar',
             hovertemplate: 'Antall behandlinger: %{y} <br> Alder: %{x} uker',

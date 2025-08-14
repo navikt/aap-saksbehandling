@@ -6,10 +6,9 @@ import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentM
 import { Alert, Button, Modal, VStack } from '@navikt/ds-react';
 
 import { revalidateFlyt } from 'lib/actions/actions';
-import { FormField } from 'components/form/FormField';
-import {clientSettMarkeringForBehandling} from "lib/clientApi";
-import {MarkeringType} from "lib/types/oppgaveTypes";
-import {NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType} from "@navikt/aap-oppgave-typescript-types";
+import { clientSettMarkeringForBehandling } from 'lib/clientApi';
+import { MarkeringType } from 'lib/types/oppgaveTypes';
+import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 
 interface Props {
   referanse: string;
@@ -18,6 +17,7 @@ interface Props {
   onClose: () => void;
 }
 
+// Fjerner begrunnelse-felt fra modal midlertidig
 interface FormFields {
   begrunnelse: string;
 }
@@ -26,11 +26,10 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { form, formFields } = useConfigForm<FormFields>({
+  const { form } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
       label: 'Skriv en begrunnelse',
-      rules: { required: 'Du må gi en begrunnelse' },
     },
   });
 
@@ -51,11 +50,10 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
           {isOpen && (
             <form
               id={'settMarkeringPåBehandling'}
-              onSubmit={form.handleSubmit(async (data) => {
+              onSubmit={form.handleSubmit(async () => {
                 setIsLoading(true);
 
                 const res = await clientSettMarkeringForBehandling(referanse, {
-                  begrunnelse: data.begrunnelse,
                   markeringType: markeringTypeTilEnum(type),
                 });
 
@@ -70,9 +68,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
               })}
               className={'flex-column'}
               autoComplete={'off'}
-            >
-              <FormField form={form} formField={formFields.begrunnelse} />
-            </form>
+            ></form>
           )}
           {error && (
             <Alert variant={'error'} size={'small'}>
@@ -93,16 +89,16 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
   );
 };
 
-const markeringTypeTilEnum = (type: MarkeringType)=> {
+const markeringTypeTilEnum = (type: MarkeringType) => {
   switch (type) {
     case 'HASTER':
       return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
     case 'KREVER_SPESIALKOMPETANSE':
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE
+      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE;
     default:
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
+      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
   }
-}
+};
 
 const markeringTypeTilOverskrift = (type: MarkeringType) => {
   switch (type) {

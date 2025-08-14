@@ -1,5 +1,5 @@
 import { SWRConfig } from 'swr';
-import { IngenFlereOppgaverModalContextProvider } from 'context/IngenFlereOppgaverModalContext';
+import { IngenFlereOppgaverModalContextProvider } from 'context/saksbehandling/IngenFlereOppgaverModalContext';
 import styles from 'app/saksbehandling/sak/[saksId]/[behandlingsReferanse]/layout.module.css';
 import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
@@ -25,7 +25,7 @@ import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logWarning } from 'lib/serverutlis/logger';
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 import { StegGruppe } from 'lib/types/types';
-import { SakContextProvider } from 'context/SakContext';
+import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 
 interface Props {

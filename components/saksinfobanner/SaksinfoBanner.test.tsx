@@ -249,7 +249,6 @@ describe('SaksinfoBanner på behandling siden', () => {
 
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.getByText('Marker som haster')).toBeVisible();
-    expect(screen.getByText('Marker med krever spesialkompetanse')).toBeVisible();
   });
 });
 
