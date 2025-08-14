@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Alert, Box, Button, Modal, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { clientSettBehandlingPåVent } from 'lib/clientApi';
@@ -14,9 +14,10 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
+import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 
 interface Props {
-  referanse: string;
+  behandlingsReferanse: string;
   reservert: boolean;
   isOpen: boolean;
   onClose: () => void;
@@ -28,7 +29,7 @@ interface FormFields {
   grunn: SettPåVentÅrsaker;
 }
 
-export const SettBehandllingPåVentModal = ({ referanse, reservert, isOpen, onClose }: Props) => {
+export const SettBehandllingPåVentModal = ({ behandlingsReferanse, reservert, isOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const { flyt } = useFlyt();
@@ -82,6 +83,59 @@ export const SettBehandllingPåVentModal = ({ referanse, reservert, isOpen, onCl
     setError(undefined);
   }, [isOpen, form]);
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit(async (data) => {
+      setIsLoading(true);
+      if (!flyt?.behandlingVersjon) {
+        setError('Behandlingsversjon finnes ikke');
+        setIsLoading(false);
+        return;
+      }
+
+      const res = await clientSettBehandlingPåVent(behandlingsReferanse, {
+        begrunnelse: data.begrunnelse,
+        behandlingVersjon: flyt.behandlingVersjon,
+        frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
+        grunn: data.grunn,
+      });
+
+      if (res.type === 'SUCCESS') {
+        listenSSE();
+      } else {
+        setError(res.apiException.message);
+      }
+    })(event);
+  };
+
+  const listenSSE = () => {
+    const eventSource = new EventSource(`/saksbehandling/api/behandling/hent/${behandlingsReferanse}/prosessering/`, {
+      withCredentials: true,
+    });
+
+    eventSource.onmessage = async (event: any) => {
+      const eventData: FlytProsesseringServerSentEvent = JSON.parse(event.data);
+      if (eventData.status === 'FERDIG') {
+        eventSource.close();
+        await revalidateFlyt(behandlingsReferanse);
+
+        // Simuler en delay for å vise loading state før modalen lukkes
+        setTimeout(() => {
+          setIsLoading(false);
+          onClose();
+        }, 1000);
+      }
+      if (eventData.status === 'FEILET') {
+        eventSource.close();
+        await revalidateFlyt(behandlingsReferanse);
+        setIsLoading(false);
+        setError('Kan ikke sette behandlingen på vent.');
+      }
+    };
+    eventSource.onerror = (event: Event) => {
+      throw new Error(`event onError ${JSON.stringify(event)}`);
+    };
+  };
+
   return (
     <Modal
       open={isOpen}
@@ -92,34 +146,7 @@ export const SettBehandllingPåVentModal = ({ referanse, reservert, isOpen, onCl
       <Modal.Body>
         <VStack gap={'4'}>
           {isOpen && (
-            <form
-              id={'settBehandlingPåVent'}
-              onSubmit={form.handleSubmit(async (data) => {
-                setIsLoading(true);
-                if (!flyt?.behandlingVersjon) {
-                  setError('Behandlingsversjon finnes ikke');
-                  return;
-                }
-
-                const res = await clientSettBehandlingPåVent(referanse, {
-                  begrunnelse: data.begrunnelse,
-                  behandlingVersjon: flyt.behandlingVersjon,
-                  frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
-                  grunn: data.grunn,
-                });
-
-                if (res.type === 'SUCCESS') {
-                  await revalidateFlyt(referanse);
-                  onClose();
-                } else {
-                  setError(res.apiException.message);
-                }
-
-                setIsLoading(false);
-              })}
-              className={'flex-column'}
-              autoComplete={'off'}
-            >
+            <form id={'settBehandlingPåVent'} onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
               {!reservert && (
                 <Box marginBlock={'0 2'}>
                   <Alert variant={'info'} size={'small'}>
