@@ -93,7 +93,10 @@ export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
 }
 
 export function clientHentTilgangForKvalitetssikring(referanse: string) {
-  return clientFetch<KvalitetssikringTilgang>(`${BASE_URL}/api/behandling/${referanse}/kvalitetssikring-tilgang`, 'GET')
+  return clientFetch<KvalitetssikringTilgang>(
+    `${BASE_URL}/api/behandling/${referanse}/kvalitetssikring-tilgang`,
+    'GET'
+  );
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {

@@ -107,7 +107,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         },
       },
     },
-    { readOnly: readOnly, shouldUnregister: true },
+    { readOnly: readOnly, shouldUnregister: true }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -164,7 +164,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
           buildFelter={byggFelter}
           getErGjeldende={(v) =>
             grunnlag?.gjeldendeVedtatteVurderinger.some((gjeldendeVurdering) =>
-              deepEqual(v, gjeldendeVurdering, ['dato']),
+              deepEqual(v, gjeldendeVurdering, ['dato'])
             )
           }
           getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}

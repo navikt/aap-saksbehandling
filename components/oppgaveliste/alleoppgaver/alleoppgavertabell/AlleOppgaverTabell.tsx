@@ -78,13 +78,21 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
           <Table.Row>
             <Table.HeaderCell />
             <Table.HeaderCell>ID</Table.HeaderCell>
-            <Table.HeaderCell>Behandlingstype</Table.HeaderCell>
+            <Table.ColumnHeader sortKey={'behandlingstype'} sortable={true}>
+              Behandlingstype
+            </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={true}>
               Beh. opprettet
             </Table.ColumnHeader>
-            <Table.HeaderCell>Vurderingsbehov</Table.HeaderCell>
-            <Table.HeaderCell>Oppgave</Table.HeaderCell>
-            <Table.HeaderCell>Saksbehandler</Table.HeaderCell>
+            <Table.ColumnHeader sortKey={'årsak'} sortable={true}>
+              Vurderingsbehov
+            </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'avklaringsbehovKode'} sortable={true}>
+              Oppgave
+            </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'reservertAv'} sortable={true}>
+              Saksbehandler
+            </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
