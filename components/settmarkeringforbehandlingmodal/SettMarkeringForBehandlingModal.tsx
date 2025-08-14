@@ -9,6 +9,7 @@ import { revalidateFlyt } from 'lib/actions/actions';
 import { clientSettMarkeringForBehandling } from 'lib/clientApi';
 import { MarkeringType } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
+import { FormField } from 'components/form/FormField';
 
 interface Props {
   referanse: string;
@@ -17,7 +18,6 @@ interface Props {
   onClose: () => void;
 }
 
-// Fjerner begrunnelse-felt fra modal midlertidig
 interface FormFields {
   begrunnelse: string;
 }
@@ -26,10 +26,11 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { form } = useConfigForm<FormFields>({
+  const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
       label: 'Skriv en begrunnelse',
+      rules: { required: 'Du må gi en begrunnelse' },
     },
   });
 
@@ -50,10 +51,11 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
           {isOpen && (
             <form
               id={'settMarkeringPåBehandling'}
-              onSubmit={form.handleSubmit(async () => {
+              onSubmit={form.handleSubmit(async (data) => {
                 setIsLoading(true);
 
                 const res = await clientSettMarkeringForBehandling(referanse, {
+                  begrunnelse: data.begrunnelse,
                   markeringType: markeringTypeTilEnum(type),
                 });
 
@@ -68,7 +70,9 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
               })}
               className={'flex-column'}
               autoComplete={'off'}
-            ></form>
+            >
+              <FormField form={form} formField={formFields.begrunnelse} />
+            </form>
           )}
           {error && (
             <Alert variant={'error'} size={'small'}>
