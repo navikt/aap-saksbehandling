@@ -26,6 +26,7 @@ import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/Tidliger
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { z } from 'zod';
+import { bool } from 'sharp';
 
 interface Props {
   behandlingVersjon: number;
@@ -35,34 +36,32 @@ interface Props {
   mellomlagring?: MellomlagredeVurderingResponse['mellomlagretVurdering'];
 }
 
-const jaNeiBoolean = z
-  .string()
-  .refine((val) => val === "ja" || val === "nei", {
-    message: "Må være 'ja' eller 'nei'",
-  })
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const formFieldsSchema = z.object({
-  begrunnelse: z.string(),
-  erBehovForAktivBehandling: jaNeiBoolean,
-  erBehovForArbeidsrettetTiltak: jaNeiBoolean,
-  erBehovForAnnenOppfølging: jaNeiBoolean.optional(),
-  overgangBegrunnelse: z.string().optional(),
-  skalVurdereAapIOvergangTilUføre: jaNeiBoolean.optional(),
-  skalVurdereAapIOvergangTilArbeid: jaNeiBoolean.optional(),
+const jaNeiBoolean = z.string().refine((val) => val === 'ja' || val === 'nei', {
+  message: "Må være 'ja' eller 'nei'",
 });
 
-type FormFields = z.infer<typeof formFieldsSchema>;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const defaultValueFormFieldSchema = z.object({
+  begrunnelse: z.string().optional(),
+  erBehovForAktivBehandling: z.boolean().optional(),
+  erBehovForArbeidsrettetTiltak: z.boolean().optional(),
+  erBehovForAnnenOppfølging: z.boolean().optional(),
+  overgangBegrunnelse: z.string().optional(),
+  skalVurdereAapIOvergangTilUføre: z.boolean().optional(),
+  skalVurdereAapIOvergangTilArbeid: z.boolean().optional(),
+});
 
-// interface FormFields {
-//   begrunnelse: string;
-//   erBehovForAktivBehandling: string;
-//   erBehovForArbeidsrettetTiltak: string;
-//   erBehovForAnnenOppfølging?: string;
-//   overgangBegrunnelse?: string;
-//   skalVurdereAapIOvergangTilUføre?: string;
-//   skalVurdereAapIOvergangTilArbeid?: string;
-// }
+type mellomLagringFormFields = z.infer<typeof defaultValueFormFieldSchema>;
+
+interface FormFields {
+  begrunnelse: string;
+  erBehovForAktivBehandling: string;
+  erBehovForArbeidsrettetTiltak: string;
+  erBehovForAnnenOppfølging?: string;
+  overgangBegrunnelse?: string;
+  skalVurdereAapIOvergangTilUføre?: string;
+  skalVurdereAapIOvergangTilArbeid?: string;
+}
 
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling, mellomlagring }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
@@ -95,8 +94,20 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   }
 
   const defaultValue = mellomlagring
-    ? formFieldsSchema.parse(replaceJaNeiMedTrueFalse(JSON.parse(mellomlagring.data)))
-    : grunnlag?.vurdering;
+    ? defaultValueFormFieldSchema.parse(replaceJaNeiMedTrueFalse(JSON.parse(mellomlagring.data)))
+    : defaultValueFormFieldSchema.parse(grunnlag?.vurdering);
+
+
+  /**
+   * TODO Hvordan løser vi det med typene?
+   *
+   * 1. Mellomlagret versjon har samme type som formfields bare at ALT er optional
+   * 2. grunnlag.vurdering har en egen type.
+   * 3. FormFields skal representere hvordan tilstanden er etter validering.
+   */
+
+  console.log(mellomlagring?.data);
+  console.log(grunnlag?.vurdering);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -183,7 +194,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
     })(event);
   };
 
-  const erBehovForAktivBehandling = form.watch('erBehovForAktivBehandling') === ;
+  const erBehovForAktivBehandling = form.watch('erBehovForAktivBehandling') === JaEllerNei.Nei;
   const erBehovForArbeidsrettetTiltak = form.watch('erBehovForArbeidsrettetTiltak') === JaEllerNei.Nei;
   const erBehovForAnnenOppfølging = form.watch('erBehovForAnnenOppfølging') === JaEllerNei.Nei;
 
