@@ -1,8 +1,8 @@
 import { cleanup, render } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { afterEach } from 'vitest';
-import { IngenFlereOppgaverModalContextProvider } from 'context/IngenFlereOppgaverModalContext';
-import { SakContextProvider } from 'context/SakContext';
+import { IngenFlereOppgaverModalContextProvider } from 'context/saksbehandling/IngenFlereOppgaverModalContext';
+import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { addDays, format } from 'date-fns';
 
 afterEach(() => {

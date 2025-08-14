@@ -58,12 +58,4 @@ describe('Mine oppgaver tabell', () => {
       expect(column).toBeVisible();
     });
   });
-
-  it('Skal inneholde kolonner som ikke kan sorteres', () => {
-    const kolonnerSomIkkeKanSorteres = ['Behandlingstype', 'Oppgave'];
-    kolonnerSomIkkeKanSorteres.forEach((kolonne) => {
-      const column = screen.queryByRole('button', { name: kolonne });
-      expect(column).not.toBeInTheDocument();
-    });
-  });
 });

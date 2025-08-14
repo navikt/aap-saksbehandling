@@ -6,10 +6,10 @@ import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentM
 import { Alert, Button, Modal, VStack } from '@navikt/ds-react';
 
 import { revalidateFlyt } from 'lib/actions/actions';
+import { clientSettMarkeringForBehandling } from 'lib/clientApi';
+import { MarkeringType } from 'lib/types/oppgaveTypes';
+import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { FormField } from 'components/form/FormField';
-import {clientSettMarkeringForBehandling} from "lib/clientApi";
-import {MarkeringType} from "lib/types/oppgaveTypes";
-import {NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType} from "@navikt/aap-oppgave-typescript-types";
 
 interface Props {
   referanse: string;
@@ -93,16 +93,16 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
   );
 };
 
-const markeringTypeTilEnum = (type: MarkeringType)=> {
+const markeringTypeTilEnum = (type: MarkeringType) => {
   switch (type) {
     case 'HASTER':
       return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
     case 'KREVER_SPESIALKOMPETANSE':
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE
+      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE;
     default:
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
+      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
   }
-}
+};
 
 const markeringTypeTilOverskrift = (type: MarkeringType) => {
   switch (type) {

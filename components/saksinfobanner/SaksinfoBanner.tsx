@@ -206,23 +206,12 @@ export const SaksinfoBanner = ({
                       Marker som haster
                     </Dropdown.Menu.GroupedList.Item>
                   )}
-                  {visValgForÅSetteMarkering && (
-                    <Dropdown.Menu.GroupedList.Item
-                      onClick={() =>
-                        settAktivMarkeringType(
-                          NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE
-                        )
-                      }
-                    >
-                      Marker med krever spesialkompetanse
-                    </Dropdown.Menu.GroupedList.Item>
-                  )}
                 </Dropdown.Menu.GroupedList>
               </Dropdown.Menu>
             </Dropdown>
 
             <SettBehandllingPåVentModal
-              referanse={referanse}
+              behandlingsReferanse={referanse}
               reservert={!!oppgaveReservertAv}
               isOpen={settBehandlingPåVentmodalIsOpen}
               onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}

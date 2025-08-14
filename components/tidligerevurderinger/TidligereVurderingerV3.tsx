@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
 import { Label, BodyShort, Detail, VStack, ExpansionCard, Chips } from '@navikt/ds-react';
 import styles from 'components/tidligerevurderinger/TidligereVurderingerV3.module.css';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { ÅpenPeriode } from '../../lib/types/types';
 import { ValuePair } from '../form/FormField';
+import { format, parse, subDays } from 'date-fns';
+import { erDatoFoerDato } from 'lib/validation/dateValidation';
 
 interface Props {
-  tidligereVurderinger: TidligereVurdering[];
+  data: any[];
+  buildFelter: (vurdering: any) => ValuePair[];
+  getErGjeldende?: (vurdering: any) => boolean;
+  getVurdertAvIdent?: (vurdering: any) => string;
+  getVurdertDato?: (vurdering: any) => string;
+  getFomDato?: (vurdering: any) => string;
 }
 
-export interface TidligereVurdering {
+interface TidligereVurdering {
   periode: ÅpenPeriode;
   vurdertAvIdent: string;
   vurdertDato: string;
@@ -18,9 +25,59 @@ export interface TidligereVurdering {
   erGjeldendeVurdering: boolean;
 }
 
-export const TidligereVurderingerV3 = ({ tidligereVurderinger }: Props) => {
+export function TidligereVurderingerV3({
+  data,
+  buildFelter,
+  getErGjeldende = () => false,
+  getVurdertAvIdent = (v: any) => v.vurdertAv.ident,
+  getVurdertDato = (v: any) => v.vurdertAv.dato,
+  getFomDato = (v: any) => v.vurderingenGjelderFra ?? v.vurdertAv?.dato,
+}: Props) {
+  const finnSluttdato = (index: number, arr: any[]) => {
+    if (arr.length <= 1 || index === 0) return null;
+
+    const forrigeGjelderFra = getFomDato(arr[index - 1]);
+    if (!forrigeGjelderFra) return null;
+
+    const vurderingGjelderFra = getFomDato(arr[index]);
+    if (forrigeGjelderFra === vurderingGjelderFra) {
+      return format(subDays(parse(vurderingGjelderFra, 'yyyy-MM-dd', new Date()), 0), 'yyyy-MM-dd');
+    }
+
+    const tom = erDatoFoerDato(formaterDatoForFrontend(vurderingGjelderFra), formaterDatoForFrontend(forrigeGjelderFra))
+      ? forrigeGjelderFra
+      : vurderingGjelderFra;
+
+    return format(subDays(parse(tom, 'yyyy-MM-dd', new Date()), 1), 'yyyy-MM-dd');
+  };
+
+  const sortedData = [...data].sort((a, b) => {
+    const afom = getFomDato(a);
+    const bfom = getFomDato(b);
+
+    if (afom === bfom) {
+      const aGjeldende = getErGjeldende(a);
+      const bGjeldende = getErGjeldende(b);
+
+      if (aGjeldende && !bGjeldende) return -1;
+      if (!aGjeldende && bGjeldende) return 1;
+    }
+
+    return sorterEtterNyesteDato(afom, bfom);
+  });
+
+  const mappedVurderinger: TidligereVurdering[] = sortedData.map((v, index, arr) => ({
+    periode: {
+      fom: getFomDato(v),
+      tom: finnSluttdato(index, arr),
+    },
+    vurdertAvIdent: getVurdertAvIdent(v),
+    vurdertDato: getVurdertDato(v),
+    erGjeldendeVurdering: getErGjeldende(v),
+    felter: buildFelter(v),
+  }));
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const selected = tidligereVurderinger[selectedIndex];
+  const selected = mappedVurderinger[selectedIndex];
 
   return (
     <ExpansionCard
@@ -41,11 +98,10 @@ export const TidligereVurderingerV3 = ({ tidligereVurderinger }: Props) => {
         <VStack className={styles.panelV3}>
           <Chips size={'medium'}>
             <VStack gap={'1'}>
-              {tidligereVurderinger.map((v, index) => {
+              {mappedVurderinger.map((v, index) => {
                 const periode = `${formaterDatoForFrontend(v.periode.fom)} - ${v.periode.tom ? formaterDatoForFrontend(v.periode.tom) : ''}`;
-                const flereVurderinger = tidligereVurderinger.length > 1;
+                const flereVurderinger = mappedVurderinger.length > 1;
                 return (
-                  //@ts-ignore
                   <Chips.Toggle
                     type="button"
                     checkmark={false}
@@ -55,15 +111,12 @@ export const TidligereVurderingerV3 = ({ tidligereVurderinger }: Props) => {
                       return flereVurderinger ? setSelectedIndex(index) : null;
                     }}
                     className={flereVurderinger ? styles.sidebarItemV3 : styles.sidebarItemSingleV3}
+                    style={{
+                      textDecoration: v.erGjeldendeVurdering ? 'none' : 'line-through',
+                      fontWeight: 'bold',
+                    }}
                   >
-                    <span
-                      style={{
-                        textDecoration: v.erGjeldendeVurdering ? 'none' : 'line-through',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      {periode}
-                    </span>
+                    {periode}
                   </Chips.Toggle>
                 );
               })}
@@ -88,4 +141,4 @@ export const TidligereVurderingerV3 = ({ tidligereVurderinger }: Props) => {
       </ExpansionCard.Content>
     </ExpansionCard>
   );
-};
+}

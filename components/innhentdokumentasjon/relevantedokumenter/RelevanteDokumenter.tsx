@@ -11,7 +11,7 @@ import { useSak } from 'hooks/SakHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useState } from 'react';
 import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
-import { SakContextType } from 'context/SakContext';
+import { SakContextType } from 'context/saksbehandling/SakContext';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface FormFields {

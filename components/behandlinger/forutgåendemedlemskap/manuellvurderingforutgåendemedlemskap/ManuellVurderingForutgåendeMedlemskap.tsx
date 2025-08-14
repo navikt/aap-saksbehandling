@@ -4,9 +4,9 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { Behovstype, getJaNeiEllerIkkeBesvart, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { ForutgåendeMedlemskapGrunnlag } from 'lib/types/types';
+import { ForutgåendeMedlemskapGrunnlag, HistoriskForutgåendeMedlemskapVurdering } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
 
@@ -140,34 +140,12 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
     >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
         <TidligereVurderingerV3
-          tidligereVurderinger={historiskeManuelleVurderinger.toReversed().map((vurdering) => ({
-            ...vurdering,
-            vurdertDato: vurdering.manuellVurdering.vurdertAv.dato,
-            periode: {
-              fom: vurdering.opprettet,
-            },
-            vurdertAvIdent: vurdering.manuellVurdering.vurdertAv.ident,
-            erGjeldendeVurdering: vurdering.erGjeldendeVurdering,
-            felter: [
-              {
-                label: begrunnelseLabel,
-                value: vurdering.manuellVurdering.begrunnelse || '',
-              },
-              {
-                label: harForutgåendeMedlemskapLabel,
-                value: getJaNeiEllerIkkeBesvart(vurdering.manuellVurdering.harForutgåendeMedlemskap),
-              },
-              {
-                label: unntaksvilkårLabel,
-                value: vurdering.manuellVurdering.harForutgåendeMedlemskap
-                  ? getJaNeiEllerIkkeBesvart(null)
-                  : getJaNeiEllerIkkeBesvart(
-                      vurdering.manuellVurdering.varMedlemMedNedsattArbeidsevne === true ||
-                        vurdering.manuellVurdering.medlemMedUnntakAvMaksFemAar === true
-                    ),
-              },
-            ],
-          }))}
+          data={historiskeManuelleVurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={(v) => v.erGjeldendeVurdering}
+          getFomDato={(v) => v.manuellVurdering.vurdertAv.dato}
+          getVurdertAvIdent={(v) => v.manuellVurdering.vurdertAv.ident}
+          getVurdertDato={(v) => v.manuellVurdering.vurdertAv.dato}
         />
       )}
 
@@ -178,4 +156,26 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
       )}
     </VilkårsKortMedForm>
   );
+
+  function byggFelter(vurdering: HistoriskForutgåendeMedlemskapVurdering): ValuePair[] {
+    return [
+      {
+        label: begrunnelseLabel,
+        value: vurdering.manuellVurdering.begrunnelse || '',
+      },
+      {
+        label: harForutgåendeMedlemskapLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.manuellVurdering.harForutgåendeMedlemskap),
+      },
+      {
+        label: unntaksvilkårLabel,
+        value: vurdering.manuellVurdering.harForutgåendeMedlemskap
+          ? getJaNeiEllerIkkeBesvart(null)
+          : getJaNeiEllerIkkeBesvart(
+              vurdering.manuellVurdering.varMedlemMedNedsattArbeidsevne === true ||
+                vurdering.manuellVurdering.medlemMedUnntakAvMaksFemAar === true
+            ),
+      },
+    ];
+  }
 };

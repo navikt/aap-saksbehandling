@@ -14,7 +14,6 @@ import {
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { isDev } from 'lib/utils/environment';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
@@ -84,13 +83,13 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         aktivtStegBehovsKode,
         gjeldendeSteg,
       } = eventData;
+
       if (status === 'DONE') {
         eventSource.close();
         let kanFortsetteSaksbehandling = false;
         const skalKvalitetssikre = gjeldendeSteg === 'KVALITETSSIKRING';
 
-        // TODO Fjerne feature toggle etter verifisering i dev
-        if (isDev() && skalKvalitetssikre) {
+        if (skalKvalitetssikre) {
           const kanFortsetteSaksbehandlingRespons = await clientHentTilgangForKvalitetssikring(
             params.behandlingsReferanse
           );

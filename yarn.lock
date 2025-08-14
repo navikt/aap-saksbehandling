@@ -1703,17 +1703,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.333":
-  version: 0.0.333
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.333::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.333%2Fc791cffbdfe64a59d7e831d5700803485b662413"
-  checksum: 10c0/d30ffbc71a1b0d513a2c3fa84110dde07523c5d81efe5b414c2c6ff826e57f6625f03264274279ecb2afc07a80153e970c4a2f97e1950b1b1d75253a3802d4be
+"@navikt/aap-oppgave-typescript-types@npm:0.0.336":
+  version: 0.0.336
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.336::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.336%2Fcaf9bda086c9bbe26e27af28fb70d2d2c88b65fe"
+  checksum: 10c0/1d74226473acfddfb6376a6da3bf36ab17f764e4644bd3d9bc296f7c65ef41f8720b6397271b58a5dbcf907502c49edb6cf52369b0414a81b5a7f8488d2de0bb
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.363":
-  version: 0.0.363
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.363::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.363%2F66fe62ffcce03a27f267dc439d04cb33008b321f"
-  checksum: 10c0/b622a824e5029cd7d096b1f90e8a81cb0f1dbeceb85309d5231a8f120a5aa42bcadedf234bb48aaabb77023887ce83522d87eff8ed8a6f64864006dd0b8928de
+"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.365":
+  version: 0.0.365
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.365::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.365%2Fef755448cace148af51f822edb21c593fe4ed3b7"
+  checksum: 10c0/6076b44405f2234389feb364f81334159dcb2fcafc18ea9d708c8ad2e0fe21e3d268dd8ec2bb96b225be363271d6537868877f42dcd7cda8eb807aceb12bda32
   languageName: node
   linkType: hard
 
@@ -2494,18 +2494,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:^6.6.4":
-  version: 6.6.4
-  resolution: "@testing-library/jest-dom@npm:6.6.4"
+"@testing-library/jest-dom@npm:^6.7.0":
+  version: 6.7.0
+  resolution: "@testing-library/jest-dom@npm:6.7.0"
   dependencies:
     "@adobe/css-tools": "npm:^4.4.0"
     aria-query: "npm:^5.0.0"
     css.escape: "npm:^1.5.1"
     dom-accessibility-api: "npm:^0.6.3"
-    lodash: "npm:^4.17.21"
     picocolors: "npm:^1.1.1"
     redent: "npm:^3.0.0"
-  checksum: 10c0/cb73adf4910f654f6cc61cfb9a551efdffa04ef423bc7fbfd67a6d8aa31c6c6dc6363fe9db23a35fc7cb32ff1390e6e1c77575c2fa70d8b028a943af32bc214c
+  checksum: 10c0/e6c5be7a49895b152f78727220064397eff4b5232d13a6206296d837c7a783e5add232219d3333962292002b846fc4909482d299ab92db94d5580f84dc5c1a8a
   languageName: node
   linkType: hard
 
@@ -3741,8 +3740,8 @@ __metadata:
     "@navikt/aap-breveditor": "npm:^0.4.2"
     "@navikt/aap-breveditor-css": "npm:^0.4.0"
     "@navikt/aap-felles-prettier": "npm:^5.3.0"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.333"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.363"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.336"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.365"
     "@navikt/aap-statistikk-typescript-types": "npm:^0.1.251"
     "@navikt/aksel-icons": "npm:7.28.0"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
@@ -3752,7 +3751,7 @@ __metadata:
     "@navikt/oasis": "npm:^3.8.0"
     "@portabletext/react": "npm:^3.2.1"
     "@testing-library/dom": "npm:^10.4.1"
-    "@testing-library/jest-dom": "npm:^6.6.4"
+    "@testing-library/jest-dom": "npm:^6.7.0"
     "@testing-library/react": "npm:^16.3.0"
     "@testing-library/user-event": "npm:14.6.1"
     "@types/lodash": "npm:^4.17.16"
@@ -3791,7 +3790,7 @@ __metadata:
     next: "npm:15.4.6"
     node-loader: "npm:^2.1.0"
     openapi-typescript: "npm:7.9.1"
-    pino: "npm:^9.8.0"
+    pino: "npm:^9.9.0"
     pino-pretty: "npm:^13.1.1"
     plotly.js: "npm:^3.1.0"
     prettier: "npm:^3.5.3"
@@ -10263,9 +10262,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:^9.8.0":
-  version: 9.8.0
-  resolution: "pino@npm:9.8.0"
+"pino@npm:^9.9.0":
+  version: 9.9.0
+  resolution: "pino@npm:9.9.0"
   dependencies:
     atomic-sleep: "npm:^1.0.0"
     fast-redact: "npm:^3.1.1"
@@ -10280,7 +10279,7 @@ __metadata:
     thread-stream: "npm:^3.0.0"
   bin:
     pino: bin.js
-  checksum: 10c0/a6de40d8c777520a0f2bdd1727512db2dba51d0d8098500ec8326f1f95412e4e704ee4301287ccbbafbf7a7ab07999d5659333a7079d1b70341d0d69e4d40b29
+  checksum: 10c0/e2b05d4b1cf73447648ec98d247fd0f1f8020a819ebc2c97fab7fa8b9efe2d1a82ebf674ed2489bb7a1d3a75350c044c776f124e9c29c004bfb133b9e2ac0871
   languageName: node
   linkType: hard
 

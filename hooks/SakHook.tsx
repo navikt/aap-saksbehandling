@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { SakContext } from 'context/SakContext';
+import { SakContext } from 'context/saksbehandling/SakContext';
 
 export function useSak() {
   const sak = useContext(SakContext);
