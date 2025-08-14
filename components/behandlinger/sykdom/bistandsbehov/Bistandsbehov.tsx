@@ -14,13 +14,11 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
-import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
-import { format, parse, subDays } from 'date-fns';
 import { deepEqual } from '../../../tidligerevurderinger/TidligereVurderingerUtils';
-import { erDatoFoerDato } from '../../../../lib/validation/dateValidation';
 
 interface Props {
   behandlingVersjon: number;
@@ -161,7 +159,18 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
-        <TidligereVurderingerV3 tidligereVurderinger={mapTidligereVurderinger()} />
+        <TidligereVurderingerV3
+          data={historiskeVurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={(v) =>
+            grunnlag?.gjeldendeVedtatteVurderinger.some((gjeldendeVurdering) =>
+              deepEqual(v, gjeldendeVurdering, ['dato'])
+            )
+          }
+          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+          getVurdertAvIdent={(v) => v.vurdertAv.ident}
+          getVurdertDato={(v) => v.vurdertAv.dato}
+        />
       )}
       <Veiledning
         defaultOpen={false}
@@ -224,94 +233,32 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
     </VilkårsKortMedForm>
   );
 
-  function mapTidligereVurderinger() {
-    const antallVurderinger = historiskeVurderinger?.length;
-    const gjeldendeVurderinger = grunnlag!!.gjeldendeVedtatteVurderinger;
-
-    const finnSluttdato = (index: number) => {
-      if ((antallVurderinger && antallVurderinger <= 1) || index === 0) {
-        return null;
-      }
-      const forrigeGjelderFra =
-        historiskeVurderinger!!.at(index - 1)?.vurderingenGjelderFra ||
-        historiskeVurderinger!!.at(index - 1)?.vurdertAv.dato;
-      if (!forrigeGjelderFra) {
-        return null;
-      }
-      const vurderingGjelderFra =
-        historiskeVurderinger!!.at(index)?.vurderingenGjelderFra || historiskeVurderinger!!.at(index)?.vurdertAv.dato!!;
-
-      if (forrigeGjelderFra === vurderingGjelderFra) {
-        return format(subDays(parse(vurderingGjelderFra, 'yyyy-MM-dd', new Date()), 0), 'yyyy-MM-dd');
-      }
-
-      const tom = erDatoFoerDato(
-        formaterDatoForFrontend(vurderingGjelderFra),
-        formaterDatoForFrontend(forrigeGjelderFra)
-      )
-        ? forrigeGjelderFra
-        : vurderingGjelderFra;
-
-      return format(subDays(parse(tom, 'yyyy-MM-dd', new Date()), 1), 'yyyy-MM-dd');
-    };
-
-    const erVurderingenGjeldende = (historiskVurdering: BistandsbehovVurdering) => {
-      const vurderingenFinnesSomGjeldende = gjeldendeVurderinger.some((gjeldendeVurdering) =>
-        deepEqual(historiskVurdering, gjeldendeVurdering, ['dokumenterBruktIVurderingen'])
-      );
-      return vurderingenFinnesSomGjeldende;
-    };
-
-    return historiskeVurderinger!!
-      .sort((a, b) => {
-        const afom = a.vurderingenGjelderFra ?? a.vurdertAv.dato;
-        const bfom = b.vurderingenGjelderFra ?? b.vurdertAv.dato;
-
-        if (afom === bfom) {
-          const aGjeldende = erVurderingenGjeldende(a);
-          const bGjeldende = erVurderingenGjeldende(b);
-
-          if (aGjeldende && !bGjeldende) return -1;
-          if (!aGjeldende && bGjeldende) return 1;
-        }
-
-        return sorterEtterNyesteDato(afom, bfom);
-      })
-      .map((vurdering, index) => ({
-        ...vurdering,
-        vurdertAvIdent: vurdering.vurdertAv.ident,
-        vurdertDato: vurdering.vurdertAv.dato,
-        erGjeldendeVurdering: erVurderingenGjeldende(vurdering),
-        periode: {
-          fom: vurdering.vurderingenGjelderFra ? vurdering.vurderingenGjelderFra : vurdering.vurdertAv.dato,
-          tom: finnSluttdato(index),
-        },
-        felter: [
-          {
-            label: vilkårsvurderingLabel,
-            value: vurdering.begrunnelse,
-          },
-          {
-            label: erBehovForAktivBehandlingLabel,
-            value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForAktivBehandling),
-          },
-          {
-            label: erBehovForArbeidsrettetTiltakLabel,
-            value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForArbeidsrettetTiltak),
-          },
-          {
-            label: erBehovForAnnenOppfølgingLabel,
-            value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForAnnenOppfølging),
-          },
-          {
-            label: vurderAAPIOvergangTilUføreLabel,
-            value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilUføre),
-          },
-          {
-            label: vurderAAPIOvergangTilArbeidLabel,
-            value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilArbeid),
-          },
-        ],
-      }));
+  function byggFelter(vurdering: BistandsbehovVurdering): ValuePair[] {
+    return [
+      {
+        label: vilkårsvurderingLabel,
+        value: vurdering.begrunnelse,
+      },
+      {
+        label: erBehovForAktivBehandlingLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForAktivBehandling),
+      },
+      {
+        label: erBehovForArbeidsrettetTiltakLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForArbeidsrettetTiltak),
+      },
+      {
+        label: erBehovForAnnenOppfølgingLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForAnnenOppfølging),
+      },
+      {
+        label: vurderAAPIOvergangTilUføreLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilUføre),
+      },
+      {
+        label: vurderAAPIOvergangTilArbeidLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilArbeid),
+      },
+    ];
   }
 };
