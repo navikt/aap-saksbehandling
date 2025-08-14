@@ -3,12 +3,12 @@
 import { BodyLong, Box, Heading, List, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { SykdomsvurderingBrevGrunnlag, TypeBehandling } from 'lib/types/types';
+import { SykdomBrevVurdering, SykdomsvurderingBrevGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
 import { Veiledning } from 'components/veiledning/Veiledning';
 
@@ -48,18 +48,7 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
 
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const historiskeVurderinger = grunnlag?.historiskeVurderinger.map((vurdering) => ({
-    periode: { fom: vurdering.vurdertAv.dato },
-    vurdertAvIdent: vurdering.vurdertAv.ident,
-    vurdertDato: vurdering.vurdertAv.dato,
-    erGjeldendeVurdering: true,
-    felter: [
-      {
-        label: 'Vurdering',
-        value: vurdering.vurdering || 'Ikke relevant for behandling',
-      },
-    ],
-  }));
+  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SYKDOMSVURDERING_BREV');
@@ -94,7 +83,16 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       <VStack gap={'4'}>
-        {skalViseTidligereVurderinger && <TidligereVurderingerV3 tidligereVurderinger={historiskeVurderinger} />}
+        {skalViseTidligereVurderinger && (
+          <TidligereVurderingerV3
+            data={historiskeVurderinger}
+            buildFelter={byggFelter}
+            getErGjeldende={() => true}
+            getFomDato={(v) => v.vurdertAv.dato}
+            getVurdertAvIdent={(v) => v.vurdertAv.ident}
+            getVurdertDato={(v) => v.vurdertAv.dato}
+          />
+        )}
 
         <Veiledning
           header={'Hva skal være med i teksten?'}
@@ -146,4 +144,13 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
       </VStack>
     </VilkårsKortMedForm>
   );
+
+  function byggFelter(vurdering: SykdomBrevVurdering): ValuePair[] {
+    return [
+      {
+        label: 'Vurdering',
+        value: vurdering?.vurdering || 'Ikke relevant for behandling',
+      },
+    ];
+  }
 };

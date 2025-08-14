@@ -5,9 +5,9 @@ import { landMedTrygdesamarbeid } from 'lib/utils/countries';
 import { Behovstype, getJaNeiEllerIkkeBesvart, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { LovvalgEØSLand, LovvalgMedlemskapGrunnlag } from 'lib/types/types';
+import { HistoriskLovvalgMedlemskapVurdering, LovvalgEØSLand, LovvalgMedlemskapGrunnlag } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
 
@@ -169,29 +169,12 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
     >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
         <TidligereVurderingerV3
-          tidligereVurderinger={historiskeManuelleVurderinger.toReversed().map((vurdering) => ({
-            ...vurdering,
-            felter: [
-              {
-                label: lovvalgBegrunnelseLabel,
-                value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.begrunnelse || '',
-              },
-              {
-                label: lovvalgsLandLabel,
-                value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLand || '',
-              },
-              {
-                label: medlemskapBegrunnelseLabel,
-                value: vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.begrunnelse || '',
-              },
-              {
-                label: medlemAvFolkeTrygdenVedSøknadstidspunktLabel,
-                value: getJaNeiEllerIkkeBesvart(
-                  vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.varMedlemIFolketrygd
-                ),
-              },
-            ],
-          }))}
+          data={historiskeManuelleVurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={(v) => v.erGjeldendeVurdering}
+          getFomDato={(v) => v.vurdertDato}
+          getVurdertAvIdent={(v) => v.vurdertAvIdent}
+          getVurdertDato={(v) => v.vurdertDato}
         />
       )}
 
@@ -208,4 +191,25 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       )}
     </VilkårsKortMedForm>
   );
+
+  function byggFelter(vurdering: HistoriskLovvalgMedlemskapVurdering): ValuePair[] {
+    return [
+      {
+        label: lovvalgBegrunnelseLabel,
+        value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.begrunnelse || '',
+      },
+      {
+        label: lovvalgsLandLabel,
+        value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLand || '',
+      },
+      {
+        label: medlemskapBegrunnelseLabel,
+        value: vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.begrunnelse || '',
+      },
+      {
+        label: medlemAvFolkeTrygdenVedSøknadstidspunktLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.vurdering.medlemskapVedSøknadsTidspunkt?.varMedlemIFolketrygd),
+      },
+    ];
+  }
 };
