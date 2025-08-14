@@ -73,7 +73,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('OVERGANG_UFORE') && (
+      {
         <StegSuspense>
           <OvergangUforeMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
@@ -82,35 +82,8 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             typeBehandling={flyt.data.visning.typeBehandling}
           />
         </StegSuspense>
-      )}
+      }
       {stegSomSkalVises.includes('SYKDOMSVURDERING_BREV') && (
-        <StegSuspense>
-          <SykdomsvurderingBrevMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            typeBehandling={flyt.data.visning.typeBehandling}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-          />
-        </StegSuspense>
-      )}
-      {stegSomSkalVises.includes('VURDER_BISTANDSBEHOV') && (
-        <StegSuspense>
-          <RefusjonMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-          />
-        </StegSuspense>
-      )}
-      {stegSomSkalVises.includes('OVERGANG_UFORE') && (
-        <StegSuspense>
-          <OvergangUforeMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-            typeBehandling={flyt.data.visning.typeBehandling}
-          />
-        </StegSuspense>
       )}
       {sykdomsvurderingBrevSteg.skalViseSteg && (
         <StegSuspense>
