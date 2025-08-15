@@ -120,7 +120,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5052':
       return 'Skriv brev';
     case '5053':
-      return 'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev besluttersteget';
+      return 'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev';
     case '5029':
       return 'Starttidspunkt';
     case '5999':
