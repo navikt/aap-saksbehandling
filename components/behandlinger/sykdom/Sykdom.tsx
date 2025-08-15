@@ -83,25 +83,6 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
-      {
-        <StegSuspense>
-          <OvergangUforeMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-            typeBehandling={flyt.data.visning.typeBehandling}
-          />
-        </StegSuspense>
-      }
-      {stegSomSkalVises.includes('VURDER_BISTANDSBEHOV') && (
-        <StegSuspense>
-          <RefusjonMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-          />
-        </StegSuspense>
-      )}
       {stegSomSkalVises.includes('OVERGANG_UFORE') && (
         <StegSuspense>
           <OvergangUforeMedDataFetching
