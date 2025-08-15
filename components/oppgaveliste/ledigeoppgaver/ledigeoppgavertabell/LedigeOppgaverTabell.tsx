@@ -58,7 +58,7 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
             <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={true}>
               Beh. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'årsakTilOpprettelse'} sortable={true} textSize={'small'}>
+            <Table.ColumnHeader sortKey={'årsakTilOpprettelse'} sortable={true}>
               Årsak
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'årsak'} sortable={true}>
