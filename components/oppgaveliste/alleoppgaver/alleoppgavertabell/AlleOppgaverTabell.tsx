@@ -1,6 +1,10 @@
-import { AvklaringsbehovKode, Oppgave, Vurderingsbehov } from 'lib/types/types';
+import { AvklaringsbehovKode, Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { BodyShort, Box, Button, Checkbox, Detail, HStack, Table, Tooltip, VStack } from '@navikt/ds-react';
-import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
+import {
+  mapBehovskodeTilBehovstype,
+  mapTilOppgaveBehandlingstypeTekst,
+  mapTilÅrsakTilOpprettelseTilTekst,
+} from 'lib/utils/oversettelser';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import Link from 'next/link';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -84,6 +88,10 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
             <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={true}>
               Beh. opprettet
             </Table.ColumnHeader>
+            <Table.HeaderCell>Årsak</Table.HeaderCell>
+            <Table.HeaderCell>Vurderingsbehov</Table.HeaderCell>
+            <Table.HeaderCell>Oppgave</Table.HeaderCell>
+            <Table.HeaderCell>Saksbehandler</Table.HeaderCell>
             <Table.ColumnHeader sortKey={'årsak'} sortable={true}>
               Vurderingsbehov
             </Table.ColumnHeader>
@@ -120,6 +128,11 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
                 {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                {oppgave.årsakTilOpprettelse != null
+                  ? mapTilÅrsakTilOpprettelseTilTekst(oppgave.årsakTilOpprettelse as ÅrsakTilOpprettelse)
+                  : ''}
+              </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip
                   content={oppgave.årsakerTilBehandling

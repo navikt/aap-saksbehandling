@@ -2,12 +2,16 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import { BodyShort, CopyButton, Table, Tooltip } from '@navikt/ds-react';
 import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
-import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
+import {
+  mapBehovskodeTilBehovstype,
+  mapTilOppgaveBehandlingstypeTekst,
+  mapTilÅrsakTilOpprettelseTilTekst,
+} from 'lib/utils/oversettelser';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
-import { Vurderingsbehov } from 'lib/types/types';
+import { Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { memo } from 'react';
 
 const OppgaveRad = ({
@@ -40,6 +44,11 @@ const OppgaveRad = ({
       <Table.DataCell textSize={'small'}>{oppgave.saksnummer || oppgave.journalpostId}</Table.DataCell>
       <Table.DataCell textSize={'small'}>{mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}</Table.DataCell>
       <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
+      <Table.DataCell textSize={'small'}>
+        {oppgave.årsakTilOpprettelse != null
+          ? mapTilÅrsakTilOpprettelseTilTekst(oppgave.årsakTilOpprettelse as ÅrsakTilOpprettelse)
+          : ''}
+      </Table.DataCell>
       <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
         <Tooltip
           content={oppgave.årsakerTilBehandling
