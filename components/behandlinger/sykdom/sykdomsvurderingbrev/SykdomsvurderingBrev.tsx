@@ -71,7 +71,7 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
 
   return (
     <VilkårsKortMedForm
-      heading={'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev besluttersteget'}
+      heading={'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev'}
       steg="SYKDOMSVURDERING_BREV"
       vilkårTilhørerNavKontor={true}
       defaultOpen={true}
