@@ -110,7 +110,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
     })(event);
   };
 
-  const brukerHarSoktOmUforetrygd = form.watch('brukerHarSøktUføretrygd') === JaEllerNei.Nei;
+  const brukerHarSoktOmUforetrygd = form.watch('brukerHarSøktUføretrygd') === JaEllerNei.Ja;
   const brukerHarFattAvslagPaUforetrygd = form.watch('brukerHarFåttVedtakOmUføretrygd') === 'JA_AVSLAG';
 
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
@@ -155,9 +155,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       )}
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.brukerHarSøktUføretrygd} horizontalRadio />
-      {brukerHarSoktOmUforetrygd && (
-        <FormField form={form} formField={formFields.brukerHarFåttVedtakOmUføretrygd} horizontalRadio />
-      )}
+      {brukerHarSoktOmUforetrygd && <FormField form={form} formField={formFields.brukerHarFåttVedtakOmUføretrygd} />}
       {brukerHarFattAvslagPaUforetrygd && (
         <Alert variant="warning">
           Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurderes til oppfylt.
