@@ -321,6 +321,10 @@ export const Bistandsbehov = ({
         label: vurderAAPIOvergangTilUføreLabel,
         value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilUføre),
       },
+      {
+        label: vurderAAPIOvergangTilArbeidLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilArbeid),
+      },
     ];
   }
 };
