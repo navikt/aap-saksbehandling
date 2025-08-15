@@ -94,7 +94,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         },
       },
     },
-    { readOnly: readOnly, shouldUnregister: true },
+    { readOnly: readOnly, shouldUnregister: true }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -219,10 +219,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       {
         label: erBehovForAnnenOppfølgingLabel,
         value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForAnnenOppfølging),
-      },
-      {
-        label: vurderAAPIOvergangTilUføreLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilUføre),
       },
       {
         label: vurderAAPIOvergangTilArbeidLabel,
