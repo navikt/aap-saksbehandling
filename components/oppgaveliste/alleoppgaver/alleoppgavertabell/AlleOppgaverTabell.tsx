@@ -47,6 +47,7 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
     });
   };
 
+  console.log(sortertListe);
   return (
     <>
       <VStack>
@@ -88,11 +89,10 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
             <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={true}>
               Beh. opprettet
             </Table.ColumnHeader>
-            <Table.HeaderCell>Årsak</Table.HeaderCell>
-            <Table.HeaderCell>Vurderingsbehov</Table.HeaderCell>
-            <Table.HeaderCell>Oppgave</Table.HeaderCell>
-            <Table.HeaderCell>Saksbehandler</Table.HeaderCell>
-            <Table.ColumnHeader sortKey={'årsak'} sortable={true}>
+            <Table.ColumnHeader sortKey={'årsakerTilOpprettelse'} sortable={true}>
+              Årsak
+            </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'årsakerTilBehandling'} sortable={true}>
               Vurderingsbehov
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'avklaringsbehovKode'} sortable={true}>
