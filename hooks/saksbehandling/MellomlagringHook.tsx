@@ -1,34 +1,55 @@
+'use client';
+
 import { Behovstype } from 'lib/utils/form';
-import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
-import { useState } from 'react';
+import { clientHentMellomlagring, clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { isSuccess } from 'lib/utils/api';
+import { MellomlagredeVurderingResponse } from 'lib/types/types';
+import useSWR from 'swr';
 
 export function useMellomlagring(
   behovstype: Behovstype,
-  mellomlagringErTilstede: boolean
+  mellomlagring?: MellomlagredeVurderingResponse['mellomlagretVurdering']
 ): {
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: () => void;
-  mellomlagringFinnes: boolean;
+  mellomlagring?: MellomlagredeVurderingResponse['mellomlagretVurdering'];
 } {
-  const [mellomlagringFinnes, setMellomlagringFinnes] = useState(mellomlagringErTilstede);
   const behandlingsReferanse = useBehandlingsReferanse();
 
+  const { data: response, mutate } = useSWR(`mellomlagring/${behandlingsReferanse}/${behovstype}`, () =>
+    clientHentMellomlagring({
+      behandlingsreferanse: behandlingsReferanse,
+      behovstype: behovstype,
+    })
+  );
+
   async function lagreMellomlagring(vurdering: object) {
-    await clientLagreMellomlagring({
+    const res = await clientLagreMellomlagring({
       avklaringsbehovkode: behovstype,
       behandlingsReferanse: behandlingsReferanse,
       data: JSON.stringify(vurdering),
     });
+
+    if (isSuccess(res)) {
+      mutate();
+    }
   }
 
   async function slettMellomlagring() {
-    await clientSlettMellomlagring({
+    const res = await clientSlettMellomlagring({
       behandlingsreferanse: behandlingsReferanse,
       behovstype: behovstype,
     });
-    setMellomlagringFinnes(false);
+
+    if (isSuccess(res)) {
+      mutate();
+    }
   }
 
-  return { lagreMellomlagring, slettMellomlagring, mellomlagringFinnes };
+  return {
+    lagreMellomlagring,
+    slettMellomlagring,
+    mellomlagring: isSuccess(response) ? response.data.mellomlagretVurdering : mellomlagring,
+  };
 }

@@ -10,6 +10,7 @@ import {
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   MellomlagredeVurderingRequest,
+  MellomlagredeVurderingResponse,
   NavEnheterResponse,
   NavEnhetRequest,
   OppdaterAktivitetspliktBrudd2,
@@ -24,7 +25,7 @@ import { ClientConfig } from 'lib/types/clientConfig';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { Markering } from 'lib/types/oppgaveTypes';
-import { SlettMellomlagringRequest } from 'app/saksbehandling/api/mellomlagring/route';
+import { HentOgSlettMellomlagringRequest } from 'app/saksbehandling/api/mellomlagring/route';
 
 const BASE_URL = '/saksbehandling';
 
@@ -51,11 +52,15 @@ export async function clientFetch<ResponseBody>(
   }
 }
 
+export function clientHentMellomlagring(request: HentOgSlettMellomlagringRequest) {
+  return clientFetch<MellomlagredeVurderingResponse>(`${BASE_URL}/api/mellomlagring`, 'GET', request);
+}
+
 export function clientLagreMellomlagring(request: MellomlagredeVurderingRequest) {
   return clientFetch(`${BASE_URL}/api/mellomlagring`, 'POST', request);
 }
 
-export function clientSlettMellomlagring(request: SlettMellomlagringRequest) {
+export function clientSlettMellomlagring(request: HentOgSlettMellomlagringRequest) {
   return clientFetch(`${BASE_URL}/api/mellomlagring`, 'DELETE', request);
 }
 

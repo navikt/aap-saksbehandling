@@ -31,7 +31,7 @@ interface Props {
   readOnly: boolean;
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
-  mellomlagring?: MellomlagredeVurderingResponse['mellomlagretVurdering'];
+  mellomlagredeVurdering?: MellomlagredeVurderingResponse['mellomlagretVurdering'];
 }
 
 interface FormFields {
@@ -46,7 +46,13 @@ interface FormFields {
 
 type DraftFormFields = Partial<FormFields>;
 
-export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling, mellomlagring }: Props) => {
+export const Bistandsbehov = ({
+  behandlingVersjon,
+  grunnlag,
+  readOnly,
+  typeBehandling,
+  mellomlagredeVurdering,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
@@ -59,13 +65,13 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const vurderAAPIOvergangTilUføreLabel = 'Har brukeren rett til AAP under behandling av krav om uføretrygd?';
   const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagringFinnes } = useMellomlagring(
+  const { lagreMellomlagring, slettMellomlagring, mellomlagring } = useMellomlagring(
     Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-    mellomlagring !== null
+    mellomlagredeVurdering
   );
 
-  const defaultValue: DraftFormFields = mellomlagring
-    ? JSON.parse(mellomlagring.data)
+  const defaultValue: DraftFormFields = mellomlagredeVurdering
+    ? JSON.parse(mellomlagredeVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
   function mapVurderingToDraftFormFields(vurdering: BistandsGrunnlag['vurdering']): DraftFormFields {
@@ -176,6 +182,9 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
+  console.log('mellomlagredeVurdering', mellomlagredeVurdering);
+  console.log('mellomlagring client', mellomlagring);
+
   return (
     <VilkårsKortMedForm
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
@@ -188,7 +197,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
-      {mellomlagringFinnes && (
+      {mellomlagring && (
         <Alert variant={'warning'}>
           <BodyShort weight={'semibold'}>Det finnes en mellomlagring</BodyShort>
           <BodyShort>Mellomlagring skrevet av: {mellomlagring?.vurdertAv}</BodyShort>
@@ -201,7 +210,13 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         <Button type={'button'} onClick={() => lagreMellomlagring(form.watch())}>
           Oppdater
         </Button>
-        <Button type={'button'} onClick={() => slettMellomlagring()}>
+        <Button
+          type={'button'}
+          onClick={() => {
+            slettMellomlagring();
+            form.reset(mapVurderingToDraftFormFields(grunnlag?.vurdering));
+          }}
+        >
           Slett
         </Button>
       </HGrid>

@@ -494,6 +494,14 @@ export const lagreMellomlagring = async (request: MellomlagredeVurderingRequest)
   );
 };
 
+export const slettMellomlagring = async (behandlingsReferanse: string, kode: Behovstype) => {
+  return apiFetch(
+    `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsReferanse}/${kode}/slett`,
+    saksbehandlingApiScope,
+    'POST'
+  );
+};
+
 export const sendLokalHendelse = async (saksnummer: string, body: Object) => {
   const url = `${saksbehandlingApiBaseUrl}/api/hendelse/sak/${saksnummer}/send`;
   return await apiFetch(url, saksbehandlingApiScope, 'POST', body);

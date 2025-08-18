@@ -1,12 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Behovstype } from 'lib/utils/form';
 import { MellomlagredeVurderingRequest } from 'lib/types/types';
-import { lagreMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentMellomlagring,
+  lagreMellomlagring,
+  slettMellomlagring,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isSuccess } from 'lib/utils/api';
 
-export interface SlettMellomlagringRequest {
+export interface HentOgSlettMellomlagringRequest {
   behandlingsreferanse: string;
   behovstype: Behovstype;
+}
+
+export async function GET(request: NextRequest) {
+  const payload: HentOgSlettMellomlagringRequest = await request.json();
+
+  const res = await hentMellomlagring(payload.behandlingsreferanse, payload.behovstype);
+
+  console.log('hva er dette', res);
+
+  if (isSuccess(res)) {
+    return NextResponse.json(res, {
+      status: 200,
+    });
+  } else {
+    return NextResponse.json(
+      { message: 'Noe gikk galt av lagring av mellomlagring' },
+      {
+        status: 500,
+      }
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -15,7 +40,7 @@ export async function POST(request: NextRequest) {
   const res = await lagreMellomlagring(payload);
 
   if (isSuccess(res)) {
-    return NextResponse.json(null, {
+    return NextResponse.json(res, {
       status: 200,
     });
   } else {
@@ -29,11 +54,13 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const payload: SlettMellomlagringRequest = await request.json();
-  console.log('Nå sletter jeg mellomlagring!', payload);
-  // Gjør kall mot behandlingsflyt
+  const payload: HentOgSlettMellomlagringRequest = await request.json();
 
-  return NextResponse.json(null, {
-    status: 200,
-  });
+  const res = await slettMellomlagring(payload.behandlingsreferanse, payload.behovstype);
+
+  if (isSuccess(res)) {
+    return NextResponse.json(res, {
+      status: 200,
+    });
+  }
 }
