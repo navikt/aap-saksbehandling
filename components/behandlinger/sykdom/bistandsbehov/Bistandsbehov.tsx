@@ -25,8 +25,6 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { Veiledning } from 'components/veiledning/Veiledning';
-import { z } from 'zod';
-import { bool } from 'sharp';
 
 interface Props {
   behandlingVersjon: number;
@@ -35,23 +33,6 @@ interface Props {
   grunnlag?: BistandsGrunnlag;
   mellomlagring?: MellomlagredeVurderingResponse['mellomlagretVurdering'];
 }
-
-const jaNeiBoolean = z.string().refine((val) => val === 'ja' || val === 'nei', {
-  message: "Må være 'ja' eller 'nei'",
-});
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const defaultValueFormFieldSchema = z.object({
-  begrunnelse: z.string().optional(),
-  erBehovForAktivBehandling: z.boolean().optional(),
-  erBehovForArbeidsrettetTiltak: z.boolean().optional(),
-  erBehovForAnnenOppfølging: z.boolean().optional(),
-  overgangBegrunnelse: z.string().optional(),
-  skalVurdereAapIOvergangTilUføre: z.boolean().optional(),
-  skalVurdereAapIOvergangTilArbeid: z.boolean().optional(),
-});
-
-type mellomLagringFormFields = z.infer<typeof defaultValueFormFieldSchema>;
 
 interface FormFields {
   begrunnelse: string;
@@ -62,6 +43,8 @@ interface FormFields {
   skalVurdereAapIOvergangTilUføre?: string;
   skalVurdereAapIOvergangTilArbeid?: string;
 }
+
+type DraftFormFields = Partial<FormFields>;
 
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling, mellomlagring }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
@@ -78,36 +61,24 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagringFinnes } = useMellomlagring(
     Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-    mellomlagring !== undefined
+    mellomlagring !== null
   );
 
-  function replaceJaNeiMedTrueFalse(obj: any) {
-    for (const key in obj) {
-      if (obj[key] === 'ja') {
-        obj[key] = true;
-      } else if (obj[key] === 'nei') {
-        obj[key] = false;
-      }
-    }
+  const defaultValue: DraftFormFields = mellomlagring
+    ? JSON.parse(mellomlagring.data)
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
-    return obj;
+  function mapVurderingToDraftFormFields(vurdering: BistandsGrunnlag['vurdering']): DraftFormFields {
+    return {
+      begrunnelse: vurdering?.begrunnelse,
+      erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling),
+      erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging),
+      overgangBegrunnelse: vurdering?.overgangBegrunnelse || undefined,
+      skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
+      skalVurdereAapIOvergangTilUføre: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilUføre),
+      erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
+    };
   }
-
-  const defaultValue = mellomlagring
-    ? defaultValueFormFieldSchema.parse(replaceJaNeiMedTrueFalse(JSON.parse(mellomlagring.data)))
-    : defaultValueFormFieldSchema.parse(grunnlag?.vurdering);
-
-
-  /**
-   * TODO Hvordan løser vi det med typene?
-   *
-   * 1. Mellomlagret versjon har samme type som formfields bare at ALT er optional
-   * 2. grunnlag.vurdering har en egen type.
-   * 3. FormFields skal representere hvordan tilstanden er etter validering.
-   */
-
-  console.log(mellomlagring?.data);
-  console.log(grunnlag?.vurdering);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -120,7 +91,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       erBehovForAktivBehandling: {
         type: 'radio',
         label: erBehovForAktivBehandlingLabel,
-        defaultValue: getJaNeiEllerUndefined(defaultValue?.erBehovForAktivBehandling),
+        defaultValue: defaultValue.erBehovForAktivBehandling,
         rules: { required: 'Du må svare på om brukeren har behov for aktiv behandling' },
         options: JaEllerNeiOptions,
       },
@@ -128,14 +99,14 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         type: 'radio',
         label: erBehovForArbeidsrettetTiltakLabel,
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(defaultValue?.erBehovForArbeidsrettetTiltak),
+        defaultValue: defaultValue.erBehovForArbeidsrettetTiltak,
         rules: { required: 'Du må svare på om brukeren har behov for arbeidsrettet tiltak' },
       },
       erBehovForAnnenOppfølging: {
         type: 'radio',
         label: erBehovForAnnenOppfølgingLabel,
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(defaultValue?.erBehovForAnnenOppfølging),
+        defaultValue: defaultValue?.erBehovForAnnenOppfølging,
         rules: { required: 'Du må svare på om brukeren anses for å ha en viss mulighet til å komme i arbeid' },
       },
       overgangBegrunnelse: {
@@ -148,7 +119,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         type: 'radio',
         label: vurderAAPIOvergangTilUføreLabel,
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(defaultValue?.skalVurdereAapIOvergangTilUføre),
+        defaultValue: defaultValue?.skalVurdereAapIOvergangTilUføre,
         rules: {
           required: 'Du må svare på om brukeren har rett på AAP i overgang til uføre',
           validate: (value) =>
@@ -159,7 +130,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         type: 'radio',
         label: vurderAAPIOvergangTilArbeidLabel,
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(defaultValue?.skalVurdereAapIOvergangTilArbeid),
+        defaultValue: defaultValue?.skalVurdereAapIOvergangTilArbeid,
         rules: {
           required: 'Du må svare på om brukeren har rett på AAP i overgang til arbeid',
           validate: (value) => (value === JaEllerNei.Ja ? 'AAP i overgang til arbeid er ikke støttet enda' : undefined),
@@ -205,7 +176,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
-  console.log(form.watch());
   return (
     <VilkårsKortMedForm
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
@@ -228,7 +198,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         </Alert>
       )}
       <HGrid gap={'4'}>
-        <Button type={'button'} onClick={() => lagreMellomlagring(JSON.stringify(form.watch()))}>
+        <Button type={'button'} onClick={() => lagreMellomlagring(form.watch())}>
           Oppdater
         </Button>
         <Button type={'button'} onClick={() => slettMellomlagring()}>

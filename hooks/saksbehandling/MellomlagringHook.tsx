@@ -2,24 +2,23 @@ import { Behovstype } from 'lib/utils/form';
 import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
 import { useState } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { MellomlagredeVurderingRequest } from 'lib/types/types';
 
 export function useMellomlagring(
   behovstype: Behovstype,
   mellomlagringErTilstede: boolean
 ): {
-  lagreMellomlagring: (vurdering: MellomlagredeVurderingRequest['data']) => void;
+  lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: () => void;
   mellomlagringFinnes: boolean;
 } {
   const [mellomlagringFinnes, setMellomlagringFinnes] = useState(mellomlagringErTilstede);
   const behandlingsReferanse = useBehandlingsReferanse();
 
-  async function lagreMellomlagring(vurdering: MellomlagredeVurderingRequest['data']) {
+  async function lagreMellomlagring(vurdering: object) {
     await clientLagreMellomlagring({
       avklaringsbehovkode: behovstype,
       behandlingsReferanse: behandlingsReferanse,
-      data: vurdering,
+      data: JSON.stringify(vurdering),
     });
   }
 
