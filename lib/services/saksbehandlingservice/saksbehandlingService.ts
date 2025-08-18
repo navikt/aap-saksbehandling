@@ -59,7 +59,6 @@ import {
   SykdomsvurderingBrevGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
-  TilkjentYtelseGrunnlagV2,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
@@ -279,13 +278,8 @@ export const hentSoningsvurdering = async (behandlingsreferanse: string) => {
 };
 
 export const hentTilkjentYtelse = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent/${behandlingsReferanse}`;
-  return await apiFetch<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentTilkjentYtelseV2 = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjentV2/${behandlingsReferanse}`;
-  return await apiFetch<TilkjentYtelseGrunnlagV2>(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
