@@ -9,6 +9,7 @@ import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
+import { MarkeringStatus } from 'components/markeringstatus/MarkeringStatus';
 
 interface Props {
   søkeresultat: SøkeResultat;
@@ -79,6 +80,9 @@ export const Kelvinsøkeresultat = ({
                       adressebeskyttelsesGrad={Adressebeskyttelsesgrad.FORTROLIG}
                     />
                   )}
+                  {søk.markeringer.map((markeringtype) => {
+                    return <MarkeringStatus markeringType={markeringtype} key={markeringtype} />;
+                  })}
                 </HStack>
               );
             })

@@ -11,6 +11,7 @@ const søkeresultat: SøkeResultat = {
       label: '',
       href: '',
       status: '',
+      markeringer: []
     },
   ],
 };
@@ -39,6 +40,7 @@ describe('Kelvinsøkeresultat', () => {
               label: '',
               href: '',
               status: '',
+              markeringer: []
             },
           ],
         }}
