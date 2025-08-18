@@ -39,6 +39,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
 
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [aktivKøId, setAktivKøId] = useState<number>();
+  const [valgteRader, setValgteRader] = useState<number[]>([]);
 
   const { form, formFields } = useConfigForm<FormFieldsFilter>({
     behandlingstyper: {
@@ -152,12 +153,20 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           antallOppgaver={antallOppgaver}
           kanFiltrere={aktivKøId === 27}
           onFiltrerClick={() => setAktivKøId(ALLE_OPPGAVER_ID)}
+          valgteRader={valgteRader}
+          setValgteRader={setValgteRader}
+          revalidateFunction={mutate}
         />
         {isLoading && <TabellSkeleton />}
 
         {!isLoading &&
           (oppgaver.length > 0 ? (
-            <AlleOppgaverTabell oppgaver={oppgaver} revalidateFunction={mutate} />
+            <AlleOppgaverTabell
+              oppgaver={oppgaver}
+              revalidateFunction={mutate}
+              valgteRader={valgteRader}
+              setValgteRader={setValgteRader}
+            />
           ) : (
             <BodyShort size={'small'} className={styles.ingenoppgaver}>
               Ingen oppgaver i valgt kø for valgt enhet
