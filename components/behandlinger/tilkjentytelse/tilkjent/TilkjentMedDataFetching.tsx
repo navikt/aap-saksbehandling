@@ -13,6 +13,5 @@ export const TilkjentMedDatafetching = async ({ behandlingsReferanse }: Props) =
     return <ApiException apiResponses={[tilkjentYtelse]} />;
   }
 
-  console.log(tilkjentYtelse);
   return <Tilkjent grunnlag={tilkjentYtelse.data} />;
 };
