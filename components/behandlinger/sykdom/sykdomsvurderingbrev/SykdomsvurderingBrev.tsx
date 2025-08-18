@@ -29,11 +29,11 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
     {
       vurderingSkalFyllesUt: {
         type: 'radio',
-        label: 'Er det relevant å informere bruker om hva som er vurdert i sykdomssteget i denne behandlingen?',
+        label: 'Er det behov for en individuell begrunnelse i vedtaksbrevet?',
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering ? !!grunnlag?.vurdering?.vurdering : undefined),
         options: JaEllerNeiOptions,
         rules: {
-          required: 'Du må svare på om det er relevant å informere bruker om hva som er vurdert i sykdomssteget',
+          required: 'Du må svare på om det er behov for en individuell begrunnelse i vedtaksbrevet',
         },
       },
       vurdering: {
@@ -71,7 +71,7 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
 
   return (
     <VilkårsKortMedForm
-      heading={'Tekst til vedtaksbrev'}
+      heading={'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev'}
       steg="SYKDOMSVURDERING_BREV"
       vilkårTilhørerNavKontor={true}
       defaultOpen={true}
@@ -103,7 +103,7 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
                 <List.Item>hvilke opplysninger som er lagt til grunn, eksempelvis fra lege</List.Item>
                 <List.Item>hvilke hovedhensyn som har vært avgjørende for utfallet</List.Item>
               </List>
-              <BodyLong size={'small'}>Melding om avslag skal inneholde</BodyLong>
+              <BodyLong size={'small'}>Melding om avslag skal i tillegg inneholde</BodyLong>
               <List size={'small'}>
                 <List.Item>opplysninger om vilkåret eller vilkårene som er avslått</List.Item>
                 <List.Item>begrunnelse for vilkåret eller vilkårene som er avslått</List.Item>
@@ -125,9 +125,9 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
               <Box marginBlock={'3 0'}>
                 <Heading size={'xsmall'}>Hvem kan få AAP?</Heading>
                 <BodyLong size={'small'}>
-                  For å ha rett til AAP må arbeidsevnen din må være nedsatt med minst halvparten på grunn av sykdom
-                  eller skade, og du må ha aktiv behandling eller bistand fra NAV for å kunne bedre arbeidsevnen din.
-                  Dette går fram av folketrygdlovens §§ 11-5 og 11-6.
+                  For å ha rett til AAP må arbeidsevnen din være nedsatt med minst halvparten på grunn av sykdom eller
+                  skade, og du må ha aktiv behandling eller bistand fra NAV for å kunne bedre arbeidsevnen din. Dette
+                  går fram av folketrygdlovens §§ 11-5 og 11-6.
                 </BodyLong>
               </Box>
             </Box>

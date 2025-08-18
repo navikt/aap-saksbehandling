@@ -1,11 +1,9 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { TilkjentMedDatafetching } from 'components/behandlinger/tilkjentytelse/tilkjent/TilkjentMedDatafetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { TilkjentMedDatafetchingV2 } from 'components/behandlinger/tilkjentytelse/tilkjent/TilkjentMedDataFetchingV2';
-import { isDev } from 'lib/utils/environment';
+import { TilkjentMedDatafetching } from 'components/behandlinger/tilkjentytelse/tilkjent/TilkjentMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -25,7 +23,6 @@ export const TilkjentYtelse = async ({ behandlingsReferanse }: Props) => {
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>
-        {isDev() && <TilkjentMedDatafetchingV2 behandlingsReferanse={behandlingsReferanse} />}
         <TilkjentMedDatafetching behandlingsReferanse={behandlingsReferanse} />
       </StegSuspense>
     </GruppeSteg>

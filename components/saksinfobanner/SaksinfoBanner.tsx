@@ -181,9 +181,11 @@ export const SaksinfoBanner = ({
               </Button>
               <Dropdown.Menu>
                 <Dropdown.Menu.GroupedList>
-                  <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
-                    Sett behandling på vent
-                  </Dropdown.Menu.GroupedList.Item>
+                  {behandlingErIkkeAvsluttet && (
+                    <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
+                      Sett behandling på vent
+                    </Dropdown.Menu.GroupedList.Item>
+                  )}
                   {visValgForÅTrekkeSøknad && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisTrekkSøknadModal(true)}>
                       Trekk søknad
