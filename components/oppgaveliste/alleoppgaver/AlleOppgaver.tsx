@@ -14,7 +14,7 @@ import { queryParamsArray } from 'lib/utils/request';
 import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
 import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver2';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
@@ -23,7 +23,7 @@ import {
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver2.module.css';
+import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 
@@ -33,7 +33,7 @@ interface Props {
 
 const ALLE_OPPGAVER_ID = 27; // Denne er definert i aap-oppgave
 
-export const AlleOppgaver2 = ({ enheter }: Props) => {
+export const AlleOppgaver = ({ enheter }: Props) => {
   const { hentLagretAktivEnhet, lagreAktivEnhet } = useLagreAktivEnhet();
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
 

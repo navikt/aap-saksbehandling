@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { MineOppgaver2 } from 'components/oppgaveliste/mineoppgaver/MineOppgaver2';
-import { LedigeOppgaver2 } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver2';
-import { AlleOppgaver2 } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver2';
+import { MineOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
+import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
 
 interface Props {
   enheter: Enhet[];
@@ -33,9 +33,9 @@ export const OppgaveListe = ({ enheter }: Props) => {
         </Tabs>
       </HStack>
 
-      {selected === 'Mine oppgaver' && <MineOppgaver2 />}
-      {selected === 'Ledige oppgaver' && <LedigeOppgaver2 enheter={enheter} />}
-      {selected === 'Alle oppgaver' && <AlleOppgaver2 enheter={enheter} />}
+      {selected === 'Mine oppgaver' && <MineOppgaver />}
+      {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
+      {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
     </VStack>
   );
 };

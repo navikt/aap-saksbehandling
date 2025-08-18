@@ -1,4 +1,4 @@
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver2';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import {
   mapBehovskodeTilBehovstype,
   mapStatusTilTekst,

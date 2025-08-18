@@ -7,7 +7,7 @@ import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingst
 import { MineOppgaverFiltrering } from 'components/oppgaveliste/filtrering/mineoppgaverfiltrering/MineOppgaverFiltrering';
 import { useWatch } from 'react-hook-form';
 
-import styles from './MineOppgaver2.module.css';
+import styles from 'components/oppgaveliste/mineoppgaver/MineOppgaver.module.css';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { useFiltrerteOppgaver } from './MineOppgaverHook';
 import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
@@ -23,7 +23,7 @@ export interface FormFieldsFilter {
   statuser?: string[];
 }
 
-export const MineOppgaver2 = () => {
+export const MineOppgaver = () => {
   const { oppgaver, mutate, isLoading, error } = useMineOppgaver();
 
   const { form, formFields } = useConfigForm<FormFieldsFilter>({

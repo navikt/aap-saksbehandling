@@ -18,10 +18,10 @@ import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver2';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { formaterDatoForBackend } from 'lib/utils/date';
 
-import styles from './LedigeOppgaver2.module.css';
+import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
 import {
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
@@ -35,7 +35,7 @@ interface Props {
 
 const ALLE_OPPGAVER_ID = 27; // Denne er definert i aap-oppgave
 
-export const LedigeOppgaver2 = ({ enheter }: Props) => {
+export const LedigeOppgaver = ({ enheter }: Props) => {
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
   const { lagreAktivEnhet, hentLagretAktivEnhet } = useLagreAktivEnhet();
 
