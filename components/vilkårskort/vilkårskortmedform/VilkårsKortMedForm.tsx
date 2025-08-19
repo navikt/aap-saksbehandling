@@ -25,6 +25,8 @@ interface Props {
   vilkårTilhørerNavKontor: boolean;
   vurdertAvAnsatt?: VurdertAvAnsatt;
   vurdertAutomatisk?: boolean;
+  onDeleteMellomlagringClick?: () => void;
+  onLagreMellomLagringClick?: () => void;
 }
 
 export const VilkårsKortMedForm = ({
@@ -41,6 +43,8 @@ export const VilkårsKortMedForm = ({
   visBekreftKnapp,
   vurdertAvAnsatt,
   vurdertAutomatisk = false,
+  onDeleteMellomlagringClick,
+  onLagreMellomLagringClick,
 }: Props) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
@@ -70,7 +74,20 @@ export const VilkårsKortMedForm = ({
               status={status}
             />
             <HStack justify={'space-between'} align={'end'}>
-              <div>{visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}</div>
+              <HStack gap={'4'}>
+                {visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}
+
+                {onLagreMellomLagringClick && (
+                  <Button type={'button'} size={'small'} variant={'secondary'} onClick={onLagreMellomLagringClick}>
+                    Lagre
+                  </Button>
+                )}
+                {onDeleteMellomlagringClick && (
+                  <Button type={'button'} size={'small'} variant={'secondary'} onClick={onDeleteMellomlagringClick}>
+                    Slett
+                  </Button>
+                )}
+              </HStack>
 
               {vurdertAutomatisk ? (
                 <Detail>Vurdert automatisk</Detail>

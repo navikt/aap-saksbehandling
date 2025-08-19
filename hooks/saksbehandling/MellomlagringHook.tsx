@@ -5,24 +5,21 @@ import { clientHentMellomlagring, clientLagreMellomlagring, clientSlettMellomlag
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
 import { MellomlagredeVurderingResponse } from 'lib/types/types';
-import useSWR from 'swr';
+import { useState } from 'react';
 
 export function useMellomlagring(
   behovstype: Behovstype,
-  mellomlagring?: MellomlagredeVurderingResponse['mellomlagretVurdering']
+  initialMellomlagring?: MellomlagredeVurderingResponse['mellomlagretVurdering']
 ): {
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: () => void;
   mellomlagring?: MellomlagredeVurderingResponse['mellomlagretVurdering'];
 } {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const [mellomlagring, setMellomlagring] = useState<
+    MellomlagredeVurderingResponse['mellomlagretVurdering'] | undefined
+  >(initialMellomlagring);
 
-  const { data: response, mutate } = useSWR(`mellomlagring/${behandlingsReferanse}/${behovstype}`, () =>
-    clientHentMellomlagring({
-      behandlingsreferanse: behandlingsReferanse,
-      behovstype: behovstype,
-    })
-  );
+  const behandlingsReferanse = useBehandlingsReferanse();
 
   async function lagreMellomlagring(vurdering: object) {
     const res = await clientLagreMellomlagring({
@@ -32,7 +29,10 @@ export function useMellomlagring(
     });
 
     if (isSuccess(res)) {
-      mutate();
+      clientHentMellomlagring({
+        behandlingsreferanse: behandlingsReferanse,
+        behovstype: behovstype,
+      }).then((res) => isSuccess(res) && setMellomlagring(res.data.mellomlagretVurdering));
     }
   }
 
@@ -43,13 +43,13 @@ export function useMellomlagring(
     });
 
     if (isSuccess(res)) {
-      mutate();
+      setMellomlagring(undefined);
     }
   }
 
   return {
     lagreMellomlagring,
     slettMellomlagring,
-    mellomlagring: isSuccess(response) ? response.data.mellomlagretVurdering : mellomlagring,
+    mellomlagring,
   };
 }

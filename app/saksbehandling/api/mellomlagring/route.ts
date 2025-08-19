@@ -1,37 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Behovstype } from 'lib/utils/form';
 import { MellomlagredeVurderingRequest } from 'lib/types/types';
-import {
-  hentMellomlagring,
-  lagreMellomlagring,
-  slettMellomlagring,
-} from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { lagreMellomlagring, slettMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isSuccess } from 'lib/utils/api';
 
 export interface HentOgSlettMellomlagringRequest {
   behandlingsreferanse: string;
   behovstype: Behovstype;
-}
-
-export async function GET(request: NextRequest) {
-  const payload: HentOgSlettMellomlagringRequest = await request.json();
-
-  const res = await hentMellomlagring(payload.behandlingsreferanse, payload.behovstype);
-
-  console.log('hva er dette', res);
-
-  if (isSuccess(res)) {
-    return NextResponse.json(res, {
-      status: 200,
-    });
-  } else {
-    return NextResponse.json(
-      { message: 'Noe gikk galt av lagring av mellomlagring' },
-      {
-        status: 500,
-      }
-    );
-  }
 }
 
 export async function POST(request: NextRequest) {

@@ -478,7 +478,7 @@ export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsReferanse: stri
   );
 };
 
-export const hentMellomlagring = async (behandlingsReferanse: string, kode: Behovstype) => {
+export const hentMellomlagring = async (behandlingsReferanse: string, kode: string) => {
   return apiFetch<MellomlagredeVurderingResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsReferanse}/${kode}`,
     saksbehandlingApiScope

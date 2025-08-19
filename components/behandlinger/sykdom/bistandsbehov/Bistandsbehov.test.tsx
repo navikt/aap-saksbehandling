@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
-import { BistandsGrunnlag } from 'lib/types/types';
+import { BistandsGrunnlag, MellomlagredeVurderingResponse } from 'lib/types/types';
 
 const user = userEvent.setup();
 
@@ -13,23 +13,150 @@ describe('Generelt', () => {
     const heading = screen.getByText('§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid');
     expect(heading).toBeVisible();
   });
+});
+
+describe('mellomlagring i bistandsbehov', () => {
+  const mellomlagring: MellomlagredeVurderingResponse = {
+    harTilgangTilÅSaksbehandle: true,
+    mellomlagretVurdering: {
+      avklaringsbehovkode: '5006',
+      behandlingId: { id: 1 },
+      data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret","erBehovForAktivBehandling":"ja","erBehovForArbeidsrettetTiltak":"ja"}',
+      vurdertAv: 'Saksbehandler',
+      vurdertDato: '2025-08-19',
+    },
+  };
+
+  const bistandsgrunnlag: BistandsGrunnlag = {
+    vurdering: {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      erBehovForAktivBehandling: true,
+      erBehovForArbeidsrettetTiltak: true,
+      vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
+    },
+    gjeldendeSykdsomsvurderinger: [],
+    gjeldendeVedtatteVurderinger: [],
+    harTilgangTilÅSaksbehandle: true,
+    historiskeVurderinger: [],
+  };
 
   it('Skal vise et varsel dersom det finnes en mellomlagring på vurderingen', () => {
-    render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
-    const mellomlagringWarning = screen.getByText('Det finnes en mellomlagring blablabla');
+    render(
+      <Bistandsbehov
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        mellomlagredeVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+    const mellomlagringWarning = screen.getByText('Det finnes en mellomlagring');
     expect(mellomlagringWarning).toBeVisible();
   });
 
   it('Skal ikke vise et varsel dersom det ikke finnes en mellomlagring på vurderingen', () => {
     render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
-    const mellomlagringWarning = screen.queryByText('Det finnes en mellomlagring blablabla');
+    const mellomlagringWarning = screen.queryByText('Det finnes en mellomlagring');
     expect(mellomlagringWarning).not.toBeInTheDocument();
   });
 
-  it('Skal ha en knapp for å kunne mellomlagre vurderingen', () => {
+  it('Skal vise et varsel dersom bruker trykker på lagre mellomlagring', async () => {
     render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
-    const knapp = screen.getByRole('Mellomlagre vurdering');
-    expect(knapp).toBeVisible();
+
+    await user.type(
+      screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
+      'Her har jeg begynt å skrive en vurdering..'
+    );
+
+    expect(screen.queryByText('Det finnes en mellomlagring')).not.toBeVisible();
+
+    const lagreKnapp = screen.getByRole('button', { name: 'Lagre' });
+    await user.click(lagreKnapp);
+
+    expect(screen.getByText('Det finnes en mellomlagring')).toBeVisible();
+  });
+
+  it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
+    render(
+      <Bistandsbehov
+        behandlingVersjon={0}
+        readOnly={false}
+        typeBehandling={'Førstegangsbehandling'}
+        grunnlag={bistandsgrunnlag}
+        mellomlagredeVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: /vilkårsvurdering/i,
+    });
+
+    expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
+  });
+
+  it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
+    render(
+      <Bistandsbehov
+        behandlingVersjon={0}
+        readOnly={false}
+        typeBehandling={'Førstegangsbehandling'}
+        grunnlag={bistandsgrunnlag}
+      />
+    );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: /vilkårsvurdering/i,
+    });
+
+    expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
+  });
+
+  it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
+    render(
+      <Bistandsbehov
+        behandlingVersjon={0}
+        readOnly={false}
+        typeBehandling={'Førstegangsbehandling'}
+        mellomlagredeVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), ' her er ekstra tekst');
+
+    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
+      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
+    );
+
+    const slettKnapp = screen.getByRole('button', { name: 'Slett' });
+
+    await user.click(slettKnapp);
+
+    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue('');
+  });
+
+  it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
+    render(
+      <Bistandsbehov
+        behandlingVersjon={0}
+        readOnly={false}
+        typeBehandling={'Førstegangsbehandling'}
+        mellomlagredeVurdering={mellomlagring.mellomlagretVurdering}
+        grunnlag={bistandsgrunnlag}
+      />
+    );
+
+    await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), ' her er ekstra tekst');
+
+    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
+      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
+    );
+
+    const slettKnapp = screen.getByRole('button', { name: 'Slett' });
+
+    await user.click(slettKnapp);
+
+    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
+      'Dette er min vurdering som er bekreftet'
+    );
   });
 });
 

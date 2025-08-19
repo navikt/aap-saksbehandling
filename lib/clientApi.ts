@@ -53,7 +53,10 @@ export async function clientFetch<ResponseBody>(
 }
 
 export function clientHentMellomlagring(request: HentOgSlettMellomlagringRequest) {
-  return clientFetch<MellomlagredeVurderingResponse>(`${BASE_URL}/api/mellomlagring`, 'GET', request);
+  return clientFetch<MellomlagredeVurderingResponse>(
+    `${BASE_URL}/api/mellomlagring/${request.behandlingsreferanse}/${request.behovstype}`,
+    'GET'
+  );
 }
 
 export function clientLagreMellomlagring(request: MellomlagredeVurderingRequest) {

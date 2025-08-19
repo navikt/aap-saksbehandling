@@ -14,7 +14,7 @@ import {
   JaEllerNeiOptions,
 } from 'lib/utils/form';
 import { FormEvent } from 'react';
-import { Alert, BodyShort, Button, Heading, HGrid, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
@@ -76,13 +76,13 @@ export const Bistandsbehov = ({
 
   function mapVurderingToDraftFormFields(vurdering: BistandsGrunnlag['vurdering']): DraftFormFields {
     return {
-      begrunnelse: vurdering?.begrunnelse,
-      erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling),
-      erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging),
-      overgangBegrunnelse: vurdering?.overgangBegrunnelse || undefined,
-      skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
-      skalVurdereAapIOvergangTilUføre: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilUføre),
-      erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
+      begrunnelse: vurdering?.begrunnelse || '',
+      erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling) || '',
+      erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging) || '',
+      overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
+      skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid) || '',
+      skalVurdereAapIOvergangTilUføre: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilUføre) || '',
+      erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak) || '',
     };
   }
 
@@ -182,9 +182,6 @@ export const Bistandsbehov = ({
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
-  console.log('mellomlagredeVurdering', mellomlagredeVurdering);
-  console.log('mellomlagring client', mellomlagring);
-
   return (
     <VilkårsKortMedForm
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
@@ -196,6 +193,11 @@ export const Bistandsbehov = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring();
+        form.reset(mapVurderingToDraftFormFields(grunnlag?.vurdering));
+      }}
     >
       {mellomlagring && (
         <Alert variant={'warning'}>
@@ -206,20 +208,7 @@ export const Bistandsbehov = ({
           )}
         </Alert>
       )}
-      <HGrid gap={'4'}>
-        <Button type={'button'} onClick={() => lagreMellomlagring(form.watch())}>
-          Oppdater
-        </Button>
-        <Button
-          type={'button'}
-          onClick={() => {
-            slettMellomlagring();
-            form.reset(mapVurderingToDraftFormFields(grunnlag?.vurdering));
-          }}
-        >
-          Slett
-        </Button>
-      </HGrid>
+
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderingerV3
           data={historiskeVurderinger}
