@@ -26,19 +26,18 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
+import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 
 interface Props {
   enheter: Enhet[];
 }
-
-const ALLE_OPPGAVER_ID = 27; // Denne er definert i aap-oppgave
 
 export const AlleOppgaver = ({ enheter }: Props) => {
   const { hentLagretAktivEnhet, lagreAktivEnhet } = useLagreAktivEnhet();
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
 
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
-  const [aktivKøId, setAktivKøId] = useState<number>();
+  const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
   const [valgteRader, setValgteRader] = useState<number[]>([]);
 
   const { form, formFields } = useConfigForm<FormFieldsFilter>({

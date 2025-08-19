@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { finnSakerForIdent, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behandlingsstatus, SaksInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
-import { Oppgave } from 'lib/types/oppgaveTypes';
+import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
 import { isSuccess } from 'lib/utils/api';
 import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
@@ -15,6 +15,7 @@ export interface SøkeResultat {
     label: string;
     href: string;
     status: string;
+    markeringer: MarkeringType[];
   }[];
   harTilgang: boolean;
   harAdressebeskyttelse: boolean;
@@ -83,6 +84,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
           href: byggKelvinURL(oppgave),
           label: `${formaterOppgave(oppgave)}`,
           status: isReservert ? 'RESERVERT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
+          markeringer: oppgave.markeringer.map((markering) => markering.markeringType),
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
         personData.push({
