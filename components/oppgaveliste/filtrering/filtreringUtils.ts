@@ -7,6 +7,8 @@ import {
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
+export const ALLE_OPPGAVER_ID = 27; // Denne er definert i aap-oppgave
+
 export function aktiveFiltreringer(form: FormFieldsFilter) {
   const aktiveFilter: { key: keyof FormFieldsFilter; value: string; label: string }[] = [];
   Object.entries(form).forEach(([key, value]) => {

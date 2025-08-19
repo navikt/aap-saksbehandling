@@ -28,12 +28,11 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
+import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 
 interface Props {
   enheter: Enhet[];
 }
-
-const ALLE_OPPGAVER_ID = 27; // Denne er definert i aap-oppgave
 
 export const LedigeOppgaver = ({ enheter }: Props) => {
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
@@ -44,7 +43,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
 
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [veilederFilter, setVeilederFilter] = useState<string>('');
-  const [aktivKøId, setAktivKøId] = useState<number>();
+  const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
 
   const { form, formFields } = useConfigForm<FormFieldsFilter>({
     behandlingstyper: {
