@@ -93,7 +93,7 @@ function markeringTypeTilTekst(type: MarkeringType): string {
   }
 }
 
-function ikonForMarkeringType(type: MarkeringType) {
+export function ikonForMarkeringType(type: MarkeringType) {
   switch (type) {
     case 'HASTER':
       return <ExclamationmarkTriangleIcon />;
@@ -102,7 +102,7 @@ function ikonForMarkeringType(type: MarkeringType) {
   }
 }
 
-function variantFraType(type: MarkeringType) {
+export function variantFraType(type: MarkeringType) {
   switch (type) {
     case 'HASTER':
       return 'error-moderate';
