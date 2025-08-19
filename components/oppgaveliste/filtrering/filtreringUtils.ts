@@ -6,8 +6,9 @@ import {
 } from 'lib/utils/oversettelser';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { isProd } from 'lib/utils/environment';
 
-export const ALLE_OPPGAVER_ID = 27; // Denne er definert i aap-oppgave
+export const ALLE_OPPGAVER_ID = isProd() ? 8 : 27; // Denne er definert i aap-oppgave
 
 export function aktiveFiltreringer(form: FormFieldsFilter) {
   const aktiveFilter: { key: keyof FormFieldsFilter; value: string; label: string }[] = [];
