@@ -60,7 +60,7 @@ export function clientHentMellomlagring(request: HentOgSlettMellomlagringRequest
 }
 
 export function clientLagreMellomlagring(request: MellomlagredeVurderingRequest) {
-  return clientFetch(`${BASE_URL}/api/mellomlagring`, 'POST', request);
+  return clientFetch<MellomlagredeVurderingResponse>(`${BASE_URL}/api/mellomlagring`, 'POST', request);
 }
 
 export function clientSlettMellomlagring(request: HentOgSlettMellomlagringRequest) {

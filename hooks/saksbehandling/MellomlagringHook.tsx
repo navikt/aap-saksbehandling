@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype } from 'lib/utils/form';
-import { clientHentMellomlagring, clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
+import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
 import { MellomlagredeVurderingResponse } from 'lib/types/types';
@@ -29,10 +29,7 @@ export function useMellomlagring(
     });
 
     if (isSuccess(res)) {
-      clientHentMellomlagring({
-        behandlingsreferanse: behandlingsReferanse,
-        behovstype: behovstype,
-      }).then((res) => isSuccess(res) && setMellomlagring(res.data.mellomlagretVurdering));
+      setMellomlagring(res.data.mellomlagretVurdering);
     }
   }
 

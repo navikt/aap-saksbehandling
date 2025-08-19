@@ -1,9 +1,13 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { BistandsGrunnlag, MellomlagredeVurderingResponse } from 'lib/types/types';
+import createFetchMock from 'vitest-fetch-mock';
+import { FetchResponse } from 'lib/utils/api';
 
+const fetchMock = createFetchMock(vi);
+fetchMock.enableMocks();
 const user = userEvent.setup();
 
 describe('Generelt', () => {
@@ -67,12 +71,40 @@ describe('mellomlagring i bistandsbehov', () => {
       'Her har jeg begynt å skrive en vurdering..'
     );
 
-    expect(screen.queryByText('Det finnes en mellomlagring')).not.toBeVisible();
+    expect(screen.queryByText('Det finnes en mellomlagring')).not.toBeInTheDocument();
+
+    const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagredeVurderingResponse> = {
+      type: 'SUCCESS',
+      data: mellomlagring,
+      status: 200,
+    };
+    fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
 
     const lagreKnapp = screen.getByRole('button', { name: 'Lagre' });
     await user.click(lagreKnapp);
 
     expect(screen.getByText('Det finnes en mellomlagring')).toBeVisible();
+  });
+
+  it('Skal ikke vise et varsel dersom bruker trykker på slett mellomlagring', async () => {
+    render(
+      <Bistandsbehov
+        behandlingVersjon={0}
+        readOnly={false}
+        typeBehandling={'Førstegangsbehandling'}
+        mellomlagredeVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    expect(screen.getByText('Det finnes en mellomlagring')).toBeVisible();
+
+    const mockFetchResponseSlettMellomlagring: FetchResponse<object> = { type: 'SUCCESS', status: 202, data: {} };
+    fetchMock.mockResponse(JSON.stringify(mockFetchResponseSlettMellomlagring));
+
+    const slettKnapp = screen.getByRole('button', { name: 'Slett' });
+    await user.click(slettKnapp);
+
+    expect(screen.queryByText('Det finnes en mellomlagring')).not.toBeInTheDocument();
   });
 
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
