@@ -27,6 +27,7 @@ import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 import { StegGruppe } from 'lib/types/types';
 import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
+import { ÅrsakTilRevurdering } from 'components/revurderingsinfo/ÅrsakTilRevurdering';
 
 interface Props {
   saksId: string;
@@ -79,7 +80,6 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   } else {
     logWarning('henting av oppgave for behandling feilet', oppgavesøkRes.apiException);
   }
-
   const adressebeskyttelser = utledAdressebeskyttelse(oppgave);
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.data.flyt
@@ -88,6 +88,9 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
 
   const visTotrinnsvurdering =
     flytResponse.data.visning.visBeslutterKort || flytResponse.data.visning.visKvalitetssikringKort;
+
+  const visÅrsakTilRevurdering = behandling.data.type === 'Revurdering';
+
   return (
     <SWRConfig
       value={{
@@ -128,8 +131,13 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
                 virkningsTidspunkt: behandling.data.virkningstidspunkt,
               }}
             >
-              {/*Vi må ha children inne i en div for å unngå layoutshift*/}
-              <div style={{ width: '100%' }}>{children}</div>
+              <VStack gap={'5'}>
+                {visÅrsakTilRevurdering && (
+                  <ÅrsakTilRevurdering vurderingsbehovOgÅrsaker={behandling.data.vurderingsbehovOgÅrsaker} />
+                )}
+                {/*Vi må ha children inne i en div for å unngå layoutshift*/}
+                <div style={{ width: '100%' }}>{children}</div>
+              </VStack>
               <aside className={`flex-column`}>
                 <Behandlingsinfo behandling={behandling.data} sak={sak} klageresultat={klageresultat.data} />
                 <KlageBehandlingInfo kabalKlageResultat={kabalKlageResultat} klageresultat={klageresultat.data} />
