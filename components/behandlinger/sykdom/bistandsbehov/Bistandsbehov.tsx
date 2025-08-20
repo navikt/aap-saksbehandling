@@ -157,6 +157,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      kvalitetssikretAv={grunnlag?.kvalitetssikretAv}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderingerV3
