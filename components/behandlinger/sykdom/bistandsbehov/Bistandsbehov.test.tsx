@@ -21,7 +21,6 @@ describe('Generelt', () => {
 
 describe('mellomlagring i bistandsbehov', () => {
   const mellomlagring: MellomlagredeVurderingResponse = {
-    harTilgangTilÅSaksbehandle: true,
     mellomlagretVurdering: {
       avklaringsbehovkode: '5006',
       behandlingId: { id: 1 },

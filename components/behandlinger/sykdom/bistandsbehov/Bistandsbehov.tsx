@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  BistandsbehovVurdering,
-  BistandsGrunnlag,
-  MellomlagredeVurderingResponse,
-  TypeBehandling,
-} from 'lib/types/types';
+import { BistandsbehovVurdering, BistandsGrunnlag, MellomLagretVurdering, TypeBehandling } from 'lib/types/types';
 import {
   Behovstype,
   getJaNeiEllerIkkeBesvart,
@@ -31,7 +26,7 @@ interface Props {
   readOnly: boolean;
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
-  mellomlagredeVurdering?: MellomlagredeVurderingResponse['mellomlagretVurdering'];
+  mellomlagredeVurdering?: MellomLagretVurdering;
 }
 
 interface FormFields {
@@ -65,7 +60,7 @@ export const Bistandsbehov = ({
   const vurderAAPIOvergangTilUføreLabel = 'Har brukeren rett til AAP under behandling av krav om uføretrygd?';
   const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagring } = useMellomlagring(
+  const { lagreMellomlagring, slettMellomlagring, mellomlagring, setMellomlagring } = useMellomlagring(
     Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
     mellomlagredeVurdering
   );
@@ -73,18 +68,6 @@ export const Bistandsbehov = ({
   const defaultValue: DraftFormFields = mellomlagredeVurdering
     ? JSON.parse(mellomlagredeVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurdering);
-
-  function mapVurderingToDraftFormFields(vurdering: BistandsGrunnlag['vurdering']): DraftFormFields {
-    return {
-      begrunnelse: vurdering?.begrunnelse || '',
-      erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling) || '',
-      erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging) || '',
-      overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
-      skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid) || '',
-      skalVurdereAapIOvergangTilUføre: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilUføre) || '',
-      erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak) || '',
-    };
-  }
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -168,6 +151,10 @@ export const Bistandsbehov = ({
         },
         referanse: behandlingsReferanse,
       });
+
+      if (!løsBehovOgGåTilNesteStegError) {
+        setMellomlagring(undefined);
+      }
     })(event);
   };
 
@@ -283,6 +270,18 @@ export const Bistandsbehov = ({
       )}
     </VilkårsKortMedForm>
   );
+
+  function mapVurderingToDraftFormFields(vurdering: BistandsGrunnlag['vurdering']): DraftFormFields {
+    return {
+      begrunnelse: vurdering?.begrunnelse || '',
+      erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling) || '',
+      erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging) || '',
+      overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
+      skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid) || '',
+      skalVurdereAapIOvergangTilUføre: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilUføre) || '',
+      erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak) || '',
+    };
+  }
 
   function byggFelter(vurdering: BistandsbehovVurdering): ValuePair[] {
     return [

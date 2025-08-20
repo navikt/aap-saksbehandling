@@ -4,20 +4,19 @@ import { Behovstype } from 'lib/utils/form';
 import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
-import { MellomlagredeVurderingResponse } from 'lib/types/types';
-import { useState } from 'react';
+import { MellomLagretVurdering } from 'lib/types/types';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 export function useMellomlagring(
   behovstype: Behovstype,
-  initialMellomlagring?: MellomlagredeVurderingResponse['mellomlagretVurdering']
+  initialMellomlagring?: MellomLagretVurdering
 ): {
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: () => void;
-  mellomlagring?: MellomlagredeVurderingResponse['mellomlagretVurdering'];
+  mellomlagring?: MellomLagretVurdering;
+  setMellomlagring: Dispatch<SetStateAction<MellomLagretVurdering | undefined>>;
 } {
-  const [mellomlagring, setMellomlagring] = useState<
-    MellomlagredeVurderingResponse['mellomlagretVurdering'] | undefined
-  >(initialMellomlagring);
+  const [mellomlagring, setMellomlagring] = useState<MellomLagretVurdering | undefined>(initialMellomlagring);
 
   const behandlingsReferanse = useBehandlingsReferanse();
 
@@ -47,6 +46,7 @@ export function useMellomlagring(
   return {
     lagreMellomlagring,
     slettMellomlagring,
+    setMellomlagring,
     mellomlagring,
   };
 }

@@ -375,5 +375,5 @@ export type MellomlagredeVurderingResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagredeVurderingResponse'];
 export type MellomlagredeVurderingRequest =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingRequest'];
-export type MeellomlagretVurdering =
+export type MellomLagretVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto'];
