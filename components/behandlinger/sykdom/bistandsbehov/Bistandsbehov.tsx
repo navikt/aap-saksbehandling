@@ -60,7 +60,7 @@ export const Bistandsbehov = ({
   const vurderAAPIOvergangTilUføreLabel = 'Har brukeren rett til AAP under behandling av krav om uføretrygd?';
   const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagring, setMellomlagring } = useMellomlagring(
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, setMellomlagretVurdering } = useMellomlagring(
     Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
     mellomlagredeVurdering
   );
@@ -153,7 +153,7 @@ export const Bistandsbehov = ({
       });
 
       if (!løsBehovOgGåTilNesteStegError) {
-        setMellomlagring(undefined);
+        setMellomlagretVurdering(undefined);
       }
     })(event);
   };
@@ -187,12 +187,14 @@ export const Bistandsbehov = ({
         form.reset(mapVurderingToDraftFormFields(grunnlag?.vurdering));
       }}
     >
-      {mellomlagring && (
+      {mellomlagretVurdering && (
         <Alert variant={'info'} size={'small'}>
           <BodyShort weight={'semibold'}>Det finnes en mellomlagring</BodyShort>
-          <BodyShort>Mellomlagring skrevet av: {mellomlagring?.vurdertAv}</BodyShort>
-          {mellomlagring?.vurdertDato && (
-            <BodyShort>Mellomlagring fra: {formaterDatoMedTidspunktForFrontend(mellomlagring?.vurdertDato)}</BodyShort>
+          <BodyShort>Mellomlagring skrevet av: {mellomlagretVurdering?.vurdertAv}</BodyShort>
+          {mellomlagretVurdering?.vurdertDato && (
+            <BodyShort>
+              Mellomlagring fra: {formaterDatoMedTidspunktForFrontend(mellomlagretVurdering?.vurdertDato)}
+            </BodyShort>
           )}
         </Alert>
       )}

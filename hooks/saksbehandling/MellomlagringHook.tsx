@@ -13,8 +13,8 @@ export function useMellomlagring(
 ): {
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: () => void;
-  mellomlagring?: MellomLagretVurdering;
-  setMellomlagring: Dispatch<SetStateAction<MellomLagretVurdering | undefined>>;
+  mellomlagretVurdering?: MellomLagretVurdering;
+  setMellomlagretVurdering: Dispatch<SetStateAction<MellomLagretVurdering | undefined>>;
 } {
   const behandlingsReferanse = useBehandlingsReferanse();
   const [mellomlagring, setMellomlagring] = useState<MellomLagretVurdering | undefined>(initialMellomlagring);
@@ -45,7 +45,7 @@ export function useMellomlagring(
   return {
     lagreMellomlagring,
     slettMellomlagring,
-    setMellomlagring,
-    mellomlagring,
+    setMellomlagretVurdering: setMellomlagring,
+    mellomlagretVurdering: mellomlagring,
   };
 }
