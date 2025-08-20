@@ -371,9 +371,9 @@ export type Behandlingsstatus = DetaljertBehandling['status'];
 
 // Mellomlagring
 
-export type MellomlagredeVurderingResponse =
+export type MellomlagretVurderingResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagredeVurderingResponse'];
-export type MellomlagredeVurderingRequest =
+export type MellomlagretVurderingRequest =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingRequest'];
-export type MellomLagretVurdering =
+export type MellomlagretVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto'];

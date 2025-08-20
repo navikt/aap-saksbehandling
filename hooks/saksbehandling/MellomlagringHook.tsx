@@ -4,20 +4,20 @@ import { Behovstype } from 'lib/utils/form';
 import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
-import { MellomLagretVurdering } from 'lib/types/types';
+import { MellomlagretVurdering } from 'lib/types/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 
 export function useMellomlagring(
   behovstype: Behovstype,
-  initialMellomlagring?: MellomLagretVurdering
+  initialMellomlagring?: MellomlagretVurdering
 ): {
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: () => void;
-  mellomlagretVurdering?: MellomLagretVurdering;
-  setMellomlagretVurdering: Dispatch<SetStateAction<MellomLagretVurdering | undefined>>;
+  mellomlagretVurdering?: MellomlagretVurdering;
+  setMellomlagretVurdering: Dispatch<SetStateAction<MellomlagretVurdering | undefined>>;
 } {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const [mellomlagring, setMellomlagring] = useState<MellomLagretVurdering | undefined>(initialMellomlagring);
+  const [mellomlagring, setMellomlagring] = useState<MellomlagretVurdering | undefined>(initialMellomlagring);
 
   async function lagreMellomlagring(vurdering: object) {
     const res = await clientLagreMellomlagring({

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Behovstype } from 'lib/utils/form';
-import { MellomlagredeVurderingRequest } from 'lib/types/types';
+import { MellomlagretVurderingRequest } from 'lib/types/types';
 import { lagreMellomlagring, slettMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isSuccess } from 'lib/utils/api';
 
@@ -10,7 +10,7 @@ export interface MellomLagringIdentifikator {
 }
 
 export async function POST(request: NextRequest) {
-  const payload: MellomlagredeVurderingRequest = await request.json();
+  const payload: MellomlagretVurderingRequest = await request.json();
 
   const res = await lagreMellomlagring(payload);
 

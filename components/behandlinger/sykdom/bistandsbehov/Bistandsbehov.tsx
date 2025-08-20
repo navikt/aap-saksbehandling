@@ -1,6 +1,6 @@
 'use client';
 
-import { BistandsbehovVurdering, BistandsGrunnlag, MellomLagretVurdering, TypeBehandling } from 'lib/types/types';
+import { BistandsbehovVurdering, BistandsGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
 import {
   Behovstype,
   getJaNeiEllerIkkeBesvart,
@@ -26,7 +26,7 @@ interface Props {
   readOnly: boolean;
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
-  mellomlagredeVurdering?: MellomLagretVurdering;
+  mellomlagredeVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {

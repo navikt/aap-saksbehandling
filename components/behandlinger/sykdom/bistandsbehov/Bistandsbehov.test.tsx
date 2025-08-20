@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
-import { BistandsGrunnlag, MellomlagredeVurderingResponse } from 'lib/types/types';
+import { BistandsGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
 
@@ -20,7 +20,7 @@ describe('Generelt', () => {
 });
 
 describe('mellomlagring i bistandsbehov', () => {
-  const mellomlagring: MellomlagredeVurderingResponse = {
+  const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
       avklaringsbehovkode: '5006',
       behandlingId: { id: 1 },
@@ -72,7 +72,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
     expect(screen.queryByText('Det finnes en mellomlagring')).not.toBeInTheDocument();
 
-    const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagredeVurderingResponse> = {
+    const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
       type: 'SUCCESS',
       data: mellomlagring,
       status: 200,

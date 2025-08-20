@@ -9,8 +9,8 @@ import {
   KvalitetssikringTilgang,
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
-  MellomlagredeVurderingRequest,
-  MellomlagredeVurderingResponse,
+  MellomlagretVurderingRequest,
+  MellomlagretVurderingResponse,
   NavEnheterResponse,
   NavEnhetRequest,
   OppdaterAktivitetspliktBrudd2,
@@ -53,14 +53,14 @@ export async function clientFetch<ResponseBody>(
 }
 
 export function clientHentMellomlagring(request: MellomLagringIdentifikator) {
-  return clientFetch<MellomlagredeVurderingResponse>(
+  return clientFetch<MellomlagretVurderingResponse>(
     `${BASE_URL}/api/mellomlagring/${request.behandlingsreferanse}/${request.behovstype}`,
     'GET'
   );
 }
 
-export function clientLagreMellomlagring(request: MellomlagredeVurderingRequest) {
-  return clientFetch<MellomlagredeVurderingResponse>(`${BASE_URL}/api/mellomlagring`, 'POST', request);
+export function clientLagreMellomlagring(request: MellomlagretVurderingRequest) {
+  return clientFetch<MellomlagretVurderingResponse>(`${BASE_URL}/api/mellomlagring`, 'POST', request);
 }
 
 export function clientSlettMellomlagring(request: MellomLagringIdentifikator) {

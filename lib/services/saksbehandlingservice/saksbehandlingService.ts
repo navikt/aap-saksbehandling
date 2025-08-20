@@ -35,8 +35,8 @@ import {
   LovvalgMedlemskapGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   ManuellInntektGrunnlag,
-  MellomlagredeVurderingRequest,
-  MellomlagredeVurderingResponse,
+  MellomlagretVurderingRequest,
+  MellomlagretVurderingResponse,
   NavEnhetRequest,
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
@@ -479,14 +479,14 @@ export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsReferanse: stri
 };
 
 export const hentMellomlagring = async (behandlingsReferanse: string, kode: string) => {
-  return apiFetch<MellomlagredeVurderingResponse>(
+  return apiFetch<MellomlagretVurderingResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsReferanse}/${kode}`,
     saksbehandlingApiScope
   );
 };
 
-export const lagreMellomlagring = async (request: MellomlagredeVurderingRequest) => {
-  return apiFetch<MellomlagredeVurderingResponse>(
+export const lagreMellomlagring = async (request: MellomlagretVurderingRequest) => {
+  return apiFetch<MellomlagretVurderingResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering`,
     saksbehandlingApiScope,
     'POST',
