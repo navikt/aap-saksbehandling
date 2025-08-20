@@ -10,7 +10,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/VilkårsKort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { isProd } from 'lib/utils/environment';
+import { isLocal, isProd } from 'lib/utils/environment';
 
 interface Props {
   heading: string;
@@ -80,7 +80,8 @@ export const VilkårsKortMedForm = ({
               <HStack gap={'4'}>
                 {visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}
 
-                {!isProd() && (
+                {/* Har den kun lokalt foreløpig frem til vi har implementert mellomlagring i et vilkårskort til*/}
+                {isLocal() && (
                   <>
                     {onLagreMellomLagringClick && (
                       <Button type={'button'} size={'small'} variant={'secondary'} onClick={onLagreMellomLagringClick}>
