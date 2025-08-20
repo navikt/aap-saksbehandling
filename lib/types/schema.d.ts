@@ -2252,7 +2252,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagredeVurderingResponse'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingResponse'];
           };
         };
       };
@@ -2290,7 +2290,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagredeVurderingResponse'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingResponse'];
           };
         };
       };
@@ -8692,9 +8692,6 @@ export interface components {
       begrunnelse?: string | null;
       varMedlemIFolketrygd?: boolean | null;
     };
-    'no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagredeVurderingResponse': {
-      mellomlagretVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto'];
-    };
     'no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto': {
       /** @enum {string} */
       avklaringsbehovkode:
@@ -8771,6 +8768,9 @@ export interface components {
       /** Format: uuid */
       behandlingsReferanse: string;
       data: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingResponse': {
+      mellomlagretVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.AvklarOppfolgingsoppgaveGrunnlagResponse': {
       /**
