@@ -37,6 +37,13 @@ describe('Vilkårskort med form', () => {
     expect(tekst).toBeVisible();
   });
 
+  it('skal vise informasjon om hvem som har gjort kvalitetssikring', () => {
+    renderComponent(true);
+
+    const tekst = screen.getByText('Kvalitetssikret av Kvalitetssikrer, 26.04.2025');
+    expect(tekst).toBeVisible();
+  });
+
   it('skal vise feilmelding dersom det finnes', () => {
     renderComponent(true, { message: 'Dette er en feil fra backend gjennom løs behov', code: 'UKJENT' });
 
@@ -57,6 +64,7 @@ function renderComponent(skalViseBekreftKnapp?: boolean, error?: ApiException) {
       vilkårTilhørerNavKontor={true}
       løsBehovOgGåTilNesteStegError={error}
       vurdertAvAnsatt={{ ident: 'Lokalsaksbehandler', dato: '2025-04-25' }}
+      kvalitetssikretAv={{ ident: 'Kvalitetssikrer', dato: '2025-04-26' }}
     >
       <span>Dette er innhold</span>
     </VilkårsKortMedForm>
