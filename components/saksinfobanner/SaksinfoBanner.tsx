@@ -98,7 +98,7 @@ export const SaksinfoBanner = ({
     behandlingErIkkeAvsluttet &&
     behandlingErIkkeIverksatt;
 
-  const visValgForÅSetteMarkering = !isProd() && brukerKanSaksbehandle && behandlingErIkkeAvsluttet;
+  const visValgForÅSetteMarkering = brukerKanSaksbehandle && behandlingErIkkeAvsluttet;
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (oppgaveReservertAv && !erReservertAvInnloggetBruker) {
