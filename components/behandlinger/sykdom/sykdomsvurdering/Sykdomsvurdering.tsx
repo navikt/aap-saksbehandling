@@ -264,6 +264,7 @@ export const Sykdomsvurdering = ({
       visBekreftKnapp={!readOnly}
       vurdertAvAnsatt={sykdomsvurdering?.vurdertAv}
       knappTekst={'Bekreft'}
+      kvalitetssikretAv={grunnlag.kvalitetssikretAv}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderingerV3

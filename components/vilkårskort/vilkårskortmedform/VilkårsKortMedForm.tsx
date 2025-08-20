@@ -10,6 +10,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/VilkårsKort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import {isProd} from "lib/utils/environment";
 
 interface Props {
   heading: string;
@@ -25,6 +26,7 @@ interface Props {
   vilkårTilhørerNavKontor: boolean;
   vurdertAvAnsatt?: VurdertAvAnsatt;
   vurdertAutomatisk?: boolean;
+  kvalitetssikretAv?: VurdertAvAnsatt;
 }
 
 export const VilkårsKortMedForm = ({
@@ -41,6 +43,7 @@ export const VilkårsKortMedForm = ({
   visBekreftKnapp,
   vurdertAvAnsatt,
   vurdertAutomatisk = false,
+  kvalitetssikretAv,
 }: Props) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
@@ -76,9 +79,16 @@ export const VilkårsKortMedForm = ({
                 <Detail>Vurdert automatisk</Detail>
               ) : (
                 vurdertAvAnsatt && (
-                  <Detail>
-                    {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
-                  </Detail>
+                  <VStack>
+                    <Detail>
+                      {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
+                    </Detail>
+                    {kvalitetssikretAv && !isProd() && (
+                      <Detail>
+                        {`Kvalitetssikret av ${utledVurdertAv(kvalitetssikretAv)}, ${formaterDatoForFrontend(kvalitetssikretAv.dato)}`}
+                      </Detail>
+                    )}
+                  </VStack>
                 )
               )}
             </HStack>
