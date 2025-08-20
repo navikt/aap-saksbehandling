@@ -25,7 +25,7 @@ import { ClientConfig } from 'lib/types/clientConfig';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { Markering } from 'lib/types/oppgaveTypes';
-import { HentOgSlettMellomlagringRequest } from 'app/saksbehandling/api/mellomlagring/route';
+import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 
 const BASE_URL = '/saksbehandling';
 
@@ -52,7 +52,7 @@ export async function clientFetch<ResponseBody>(
   }
 }
 
-export function clientHentMellomlagring(request: HentOgSlettMellomlagringRequest) {
+export function clientHentMellomlagring(request: MellomLagringIdentifikator) {
   return clientFetch<MellomlagredeVurderingResponse>(
     `${BASE_URL}/api/mellomlagring/${request.behandlingsreferanse}/${request.behovstype}`,
     'GET'
@@ -63,7 +63,7 @@ export function clientLagreMellomlagring(request: MellomlagredeVurderingRequest)
   return clientFetch<MellomlagredeVurderingResponse>(`${BASE_URL}/api/mellomlagring`, 'POST', request);
 }
 
-export function clientSlettMellomlagring(request: HentOgSlettMellomlagringRequest) {
+export function clientSlettMellomlagring(request: MellomLagringIdentifikator) {
   return clientFetch(`${BASE_URL}/api/mellomlagring`, 'DELETE', request);
 }
 

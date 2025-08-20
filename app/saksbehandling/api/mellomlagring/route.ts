@@ -4,7 +4,7 @@ import { MellomlagredeVurderingRequest } from 'lib/types/types';
 import { lagreMellomlagring, slettMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isSuccess } from 'lib/utils/api';
 
-export interface HentOgSlettMellomlagringRequest {
+export interface MellomLagringIdentifikator {
   behandlingsreferanse: string;
   behovstype: Behovstype;
 }
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const payload: HentOgSlettMellomlagringRequest = await request.json();
+  const payload: MellomLagringIdentifikator = await request.json();
 
   const res = await slettMellomlagring(payload.behandlingsreferanse, payload.behovstype);
 
