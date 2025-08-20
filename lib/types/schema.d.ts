@@ -356,6 +356,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/sak/{saksnummser}/historikk': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksHistorikkDTO'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}': {
     parameters: {
       query?: never;
@@ -2262,6 +2300,123 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/mellomlagret-vurdering': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/behandling/mellomlagret-vurdering/{referanse}/{avklaringsbehovkode}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+          /** @description avklaringsbehovkode */
+          avklaringsbehovkode: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagredeVurderingResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/behandling/mellomlagret-vurdering/{referanse}/{avklaringsbehovkode}/slett': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+          /** @description avklaringsbehovkode */
+          avklaringsbehovkode: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/klage/{referanse}/grunnlag/p\u00E5klaget-behandling': {
     parameters: {
       query?: never;
@@ -3613,9 +3768,7 @@ export interface paths {
     trace?: never;
   };
 }
-
 export type webhooks = Record<string, never>;
-
 export interface components {
   schemas: {
     'no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto': {
@@ -6619,6 +6772,7 @@ export interface components {
         | '9004'
         | '5029'
         | '5001'
+        | '5002'
         | '5003'
         | '5004'
         | '5005'
@@ -6637,6 +6791,7 @@ export interface components {
         | '5018'
         | '5020'
         | '5024'
+        | '5096'
         | '5097'
         | '5098'
         | '5099'
@@ -8609,6 +8764,87 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.MedlemskapVedS\u00F8knadsTidspunktResponse': {
       begrunnelse?: string | null;
       varMedlemIFolketrygd?: boolean | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagredeVurderingResponse': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      mellomlagretVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto': {
+      /** @enum {string} */
+      avklaringsbehovkode:
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '5029'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5020'
+        | '5024'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5025'
+        | '5027'
+        | '5030'
+        | '5028'
+        | '5019'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5026'
+        | '5999'
+        | '5056'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003';
+      behandlingId: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+      data: string;
+      vurdertAv: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      vurdertDato: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingRequest': {
+      avklaringsbehovkode: string;
+      /** Format: uuid */
+      behandlingsReferanse: string;
+      data: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.AvklarOppfolgingsoppgaveGrunnlagResponse': {
       /**
@@ -11110,6 +11346,10 @@ export interface components {
       aktivIdent: boolean;
       identifikator: string;
     };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId': {
+      /** Format: int64 */
+      id: number;
+    };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingAvTypeDTO': {
       /** Format: uuid */
       behandlingsReferanse: string;
@@ -11118,6 +11358,33 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       opprettetDato: string;
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingHendelseDTO': {
+      begrunnelse?: string | null;
+      /** @enum {string} */
+      hendelse:
+        | 'SATT_PÅ_VENT'
+        | 'TATT_AV_VENT'
+        | 'VEDTAK_FATTET'
+        | 'BREV_SENDT'
+        | 'SENDT_TIL_BESLUTTER'
+        | 'SENDT_TIL_KVALITETSSIKRER'
+        | 'RETUR_FRA_KVALITETSSIKRER'
+        | 'REVURDERING_OPPRETTET'
+        | 'FØRSTEGANGSBEHANDLING_OPPRETTET'
+        | 'MOTTATT_DIALOGMELDING';
+      resultat?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tidspunkt: string;
+      'utf\u00F8rtAv'?: string | null;
+      '\u00E5rsak'?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingHistorikkDTO': {
+      behandlingId: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+      hendelser: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingHendelseDTO'][];
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       /**
@@ -11211,6 +11478,9 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SakPersoninfoDTO': {
       fnr: string;
       navn: string;
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksHistorikkDTO': {
+      behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingHistorikkDTO'][];
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksinfoDTO': {
       ident: string;
@@ -11458,6 +11728,5 @@ export interface components {
   headers: never;
   pathItems: never;
 }
-
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;

@@ -17,6 +17,7 @@ import {
   SaksInfo,
   SettPåVent,
   BehandlingsFlytAvklaringsbehovKode,
+  SaksHistorikk,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
@@ -93,7 +94,14 @@ export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
 }
 
 export function clientHentTilgangForKvalitetssikring(referanse: string) {
-  return clientFetch<KvalitetssikringTilgang>(`${BASE_URL}/api/behandling/${referanse}/kvalitetssikring-tilgang`, 'GET')
+  return clientFetch<KvalitetssikringTilgang>(
+    `${BASE_URL}/api/behandling/${referanse}/kvalitetssikring-tilgang`,
+    'GET'
+  );
+}
+
+export function clientHentSakshistorikk(saksnummer: string) {
+  return clientFetch<SaksHistorikk>(`${BASE_URL}/api/sak/${saksnummer}/historikk`, 'GET');
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {

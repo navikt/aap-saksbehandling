@@ -1,12 +1,13 @@
 'use client';
 
 import { Tabs, Tooltip } from '@navikt/ds-react';
-import { FilesIcon, HddDownIcon } from '@navikt/aksel-icons';
+import { ClockDashedIcon, FilesIcon, HddDownIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDokumentasjon';
 
 import styles from './Saksbehandlingsoversikt.module.css';
+import { Sakshistorikk } from '../sakshistorikk/Sakshistorikk';
 
 export const Saksbehandlingsoversikt = () => {
   const [toggleGroupValue, setToggleGroupValue] = useState<string>('saksdokumenter');
@@ -28,11 +29,15 @@ export const Saksbehandlingsoversikt = () => {
           <Tooltip content={'Åpne be om opplysninger'}>
             <Tabs.Tab value="be_om_opplysninger" label={'Be om opplysninger'} icon={<HddDownIcon aria-hidden />} />
           </Tooltip>
+          <Tooltip content={'Historikk'}>
+            <Tabs.Tab value="historikk" label={'Historikk'} icon={<ClockDashedIcon aria-hidden />} />
+          </Tooltip>
         </Tabs.List>
       </Tabs>
       <div className={styles.tabContent}>
         {toggleGroupValue === 'saksdokumenter' && <Saksdokumenter />}
         {toggleGroupValue === 'be_om_opplysninger' && <InnhentDokumentasjon />}
+        {toggleGroupValue === 'historikk' && <Sakshistorikk />}
       </div>
     </div>
   );

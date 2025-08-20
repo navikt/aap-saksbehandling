@@ -45,6 +45,7 @@ import {
   RettighetsperiodeGrunnlag,
   RimeligGrunnMeldepliktGrunnlag,
   SakPersoninfo,
+  SaksHistorikk,
   SaksInfo,
   SamordningAndreStatligeYtelserGrunnlag,
   SamordningArbeidsgiverGrunnlag,
@@ -101,6 +102,11 @@ export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersonin
   } else {
     return { fnr: 'Ukjent', navn: 'Ukjent' };
   }
+};
+
+export const hentSaksHistorikk = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/historikk`;
+  return await apiFetch<SaksHistorikk>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBehandlingPersoninfo = async (behandlingsreferanse: string) => {
