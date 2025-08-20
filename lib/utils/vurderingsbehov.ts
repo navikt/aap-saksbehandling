@@ -148,6 +148,8 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
       return 'Rimelig grunn til ikke overholdt meldeplikt';
     case 'AKTIVITETSPLIKT_11_7':
       return 'Aktivitetsplikt $ 11-7';
+    case 'OVERGANG_ARBEID':
+      return 'Overgang til arbeid';
     default:
       return vurderingsbehov;
   }

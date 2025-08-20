@@ -44,6 +44,7 @@ export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { value: 'SAMORDNING_OG_AVREGNING', label: formaterVurderingsbehov('SAMORDNING_OG_AVREGNING') },
   { value: 'REFUSJONSKRAV', label: formaterVurderingsbehov('REFUSJONSKRAV') },
   { value: 'OVERGANG_UFORE', label: formaterVurderingsbehov('OVERGANG_UFORE') },
+  { value: 'OVERGANG_ARBEID', label: formaterVurderingsbehov('OVERGANG_ARBEID') },
   {
     value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT',
     label: formaterVurderingsbehov('UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'),

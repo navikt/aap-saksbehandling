@@ -58,7 +58,6 @@ export const Bistandsbehov = ({
   const erBehovForAnnenOppfølgingLabel =
     'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?';
   const vurderAAPIOvergangTilUføreLabel = 'Har brukeren rett til AAP under behandling av krav om uføretrygd?';
-  const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
@@ -305,6 +304,10 @@ export const Bistandsbehov = ({
       {
         label: vurderAAPIOvergangTilArbeidLabel,
         value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilArbeid),
+      },
+      {
+        label: vurderAAPIOvergangTilUføreLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilUføre),
       },
     ];
   }

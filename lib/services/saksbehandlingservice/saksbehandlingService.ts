@@ -216,6 +216,11 @@ export const hentOvergangUforeGrunnlag = async (behandlingsReferanse: string) =>
   return await apiFetch<OvergangUforeGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentOvergangArbeidGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/overgangarbeid`;
+  return await apiFetch<OvergangArbeidGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentFatteVedtakGrunnlang = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/fatte-vedtak`;
   return await apiFetch<FatteVedtakGrunnlag>(url, saksbehandlingApiScope, 'GET');
