@@ -16,9 +16,8 @@ export function useMellomlagring(
   mellomlagring?: MellomLagretVurdering;
   setMellomlagring: Dispatch<SetStateAction<MellomLagretVurdering | undefined>>;
 } {
-  const [mellomlagring, setMellomlagring] = useState<MellomLagretVurdering | undefined>(initialMellomlagring);
-
   const behandlingsReferanse = useBehandlingsReferanse();
+  const [mellomlagring, setMellomlagring] = useState<MellomLagretVurdering | undefined>(initialMellomlagring);
 
   async function lagreMellomlagring(vurdering: object) {
     const res = await clientLagreMellomlagring({

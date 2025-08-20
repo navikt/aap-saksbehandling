@@ -188,7 +188,7 @@ export const Bistandsbehov = ({
       }}
     >
       {mellomlagring && (
-        <Alert variant={'warning'}>
+        <Alert variant={'info'} size={'small'}>
           <BodyShort weight={'semibold'}>Det finnes en mellomlagring</BodyShort>
           <BodyShort>Mellomlagring skrevet av: {mellomlagring?.vurdertAv}</BodyShort>
           {mellomlagring?.vurdertDato && (
