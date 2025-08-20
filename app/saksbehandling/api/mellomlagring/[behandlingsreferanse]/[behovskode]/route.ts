@@ -15,7 +15,7 @@ export async function GET(
     });
   } else {
     return NextResponse.json(
-      { message: 'Noe gikk galt av lagring av mellomlagring' },
+      { message: 'Noe gikk galt ved uthenting av mellomlagring' },
       {
         status: 500,
       }
