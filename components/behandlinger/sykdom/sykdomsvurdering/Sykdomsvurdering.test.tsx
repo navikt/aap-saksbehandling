@@ -616,7 +616,7 @@ describe('revurdering', () => {
     const datoForVurderingInput = format(subDays(new Date(), 7), 'ddMMyy');
     await user.type(datofelt, datoForVurderingInput);
     await velgBekreft();
-    expect(screen.getByText('Vurderingen kan ikke gjelde fra før søknadstidspunkt')).toBeVisible();
+    expect(screen.getByText('Vurderingen kan ikke gjelde fra før starttidspunktet')).toBeVisible();
   });
 
   it('viser ikke feilmelding når dato for vurderingen er etter søknadstidspunkt', async () => {
@@ -634,7 +634,7 @@ describe('revurdering', () => {
     const datoForVurderingInput = format(new Date(), 'ddMMyy');
     await user.type(datofelt, datoForVurderingInput);
     await velgBekreft();
-    expect(screen.queryByText('Vurderingen kan ikke gjelde fra før søknadstidspunkt')).not.toBeInTheDocument();
+    expect(screen.queryByText('Vurderingen kan ikke gjelde fra før starttidspunktet')).not.toBeInTheDocument();
   });
 
   it('viser ikke feilmelding når dato for vurderingen er lik søknadstidspunkt', async () => {
@@ -653,7 +653,7 @@ describe('revurdering', () => {
     const datoForVurderingInput = format(søknadstidspunkt, 'ddMMyy');
     await user.type(datofelt, datoForVurderingInput);
     await velgBekreft();
-    expect(screen.queryByText('Vurderingen kan ikke gjelde fra før søknadstidspunkt')).not.toBeInTheDocument();
+    expect(screen.queryByText('Vurderingen kan ikke gjelde fra før starttidspunktet')).not.toBeInTheDocument();
   });
 
   it('viser spørsmål om den nedsatte arbeidsevnen er minst 40 prosent når det ikke skal vurderes mot yrkesskade', async () => {

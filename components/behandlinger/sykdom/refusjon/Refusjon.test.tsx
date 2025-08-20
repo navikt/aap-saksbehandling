@@ -138,7 +138,7 @@ describe('Refusjonskrav sosialstønad', () => {
     await velgJa(finnGruppeVelgRefusjonskrav());
     await skrivInnDatoForNårVurderingenGjelderFra(format(ugyldigSøknadstidspunkt, 'dd.MM.yyyy'));
     await trykkPåBekreft();
-    const feilmelding = await screen.findByText('Vurderingen kan ikke gjelde fra før søknadstidspunkt');
+    const feilmelding = await screen.findByText('Vurderingen kan ikke gjelde fra før starttidspunktet');
     expect(feilmelding).toBeVisible();
   });
 

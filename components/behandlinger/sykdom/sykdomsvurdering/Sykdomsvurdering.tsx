@@ -100,10 +100,10 @@ export const Sykdomsvurdering = ({
           validate: {
             gyldigDato: (v) => validerDato(v as string),
             kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
-              const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
+              const starttidspunkt = startOfDay(new Date(sak.periode.fom));
               const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
-              if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
-                return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
+              if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), starttidspunkt)) {
+                return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
               }
             },
           },
