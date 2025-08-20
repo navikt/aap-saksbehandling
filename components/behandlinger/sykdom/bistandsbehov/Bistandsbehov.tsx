@@ -184,7 +184,7 @@ export const Bistandsbehov = ({
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring();
-        form.reset(mapVurderingToDraftFormFields(grunnlag?.vurdering));
+        form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
       }}
     >
       {mellomlagretVurdering && (
@@ -274,15 +274,27 @@ export const Bistandsbehov = ({
     </VilkårsKortMedForm>
   );
 
-  function mapVurderingToDraftFormFields(vurdering: BistandsGrunnlag['vurdering']): DraftFormFields {
+  function mapVurderingToDraftFormFields(vurdering?: BistandsbehovVurdering): DraftFormFields {
     return {
-      begrunnelse: vurdering?.begrunnelse || '',
-      erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling) || '',
-      erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging) || '',
+      begrunnelse: vurdering?.begrunnelse,
+      erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling),
+      erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging),
       overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
-      skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid) || '',
-      skalVurdereAapIOvergangTilUføre: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilUføre) || '',
-      erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak) || '',
+      skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
+      skalVurdereAapIOvergangTilUføre: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilUføre),
+      erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
+    };
+  }
+
+  function emptyDraftFormFields(): DraftFormFields {
+    return {
+      begrunnelse: '',
+      erBehovForAktivBehandling: '',
+      erBehovForAnnenOppfølging: '',
+      overgangBegrunnelse: '',
+      skalVurdereAapIOvergangTilArbeid: '',
+      skalVurdereAapIOvergangTilUføre: '',
+      erBehovForArbeidsrettetTiltak: '',
     };
   }
 
