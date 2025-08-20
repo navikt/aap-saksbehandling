@@ -60,10 +60,8 @@ export const Bistandsbehov = ({
   const vurderAAPIOvergangTilUføreLabel = 'Har brukeren rett til AAP under behandling av krav om uføretrygd?';
   const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, setMellomlagretVurdering } = useMellomlagring(
-    Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-    mellomlagredeVurdering
-  );
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, mellomlagredeVurdering);
 
   const defaultValue: DraftFormFields = mellomlagredeVurdering
     ? JSON.parse(mellomlagredeVurdering.data)
@@ -131,30 +129,29 @@ export const Bistandsbehov = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-          bistandsVurdering: {
-            begrunnelse: data.begrunnelse,
-            erBehovForAktivBehandling: data.erBehovForAktivBehandling === JaEllerNei.Ja,
-            erBehovForArbeidsrettetTiltak: data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja,
-            erBehovForAnnenOppfølging: data.erBehovForAnnenOppfølging
-              ? data.erBehovForAnnenOppfølging === JaEllerNei.Ja
-              : undefined,
-            ...(bistandsbehovErIkkeOppfylt && {
-              skalVurdereAapIOvergangTilUføre: data.skalVurdereAapIOvergangTilUføre === JaEllerNei.Ja,
-              skalVurdereAapIOvergangTilArbeid: data.skalVurdereAapIOvergangTilArbeid === JaEllerNei.Ja,
-              overgangBegrunnelse: data.overgangBegrunnelse,
-            }),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
+            bistandsVurdering: {
+              begrunnelse: data.begrunnelse,
+              erBehovForAktivBehandling: data.erBehovForAktivBehandling === JaEllerNei.Ja,
+              erBehovForArbeidsrettetTiltak: data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja,
+              erBehovForAnnenOppfølging: data.erBehovForAnnenOppfølging
+                ? data.erBehovForAnnenOppfølging === JaEllerNei.Ja
+                : undefined,
+              ...(bistandsbehovErIkkeOppfylt && {
+                skalVurdereAapIOvergangTilUføre: data.skalVurdereAapIOvergangTilUføre === JaEllerNei.Ja,
+                skalVurdereAapIOvergangTilArbeid: data.skalVurdereAapIOvergangTilArbeid === JaEllerNei.Ja,
+                overgangBegrunnelse: data.overgangBegrunnelse,
+              }),
+            },
           },
+          referanse: behandlingsReferanse,
         },
-        referanse: behandlingsReferanse,
-      });
-
-      if (!løsBehovOgGåTilNesteStegError) {
-        setMellomlagretVurdering(undefined);
-      }
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 

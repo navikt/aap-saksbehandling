@@ -5,7 +5,7 @@ import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientAp
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
 import { MellomlagretVurdering } from 'lib/types/types';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 
 export function useMellomlagring(
   behovstype: Behovstype,
@@ -14,10 +14,12 @@ export function useMellomlagring(
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: () => void;
   mellomlagretVurdering?: MellomlagretVurdering;
-  setMellomlagretVurdering: Dispatch<SetStateAction<MellomlagretVurdering | undefined>>;
+  nullstillMellomlagretVurdering: () => void;
 } {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const [mellomlagring, setMellomlagring] = useState<MellomlagretVurdering | undefined>(initialMellomlagring);
+  const [mellomlagretVurdering, setMellomlagretVurdering] = useState<MellomlagretVurdering | undefined>(
+    initialMellomlagring
+  );
 
   async function lagreMellomlagring(vurdering: object) {
     const res = await clientLagreMellomlagring({
@@ -27,7 +29,7 @@ export function useMellomlagring(
     });
 
     if (isSuccess(res)) {
-      setMellomlagring(res.data.mellomlagretVurdering);
+      setMellomlagretVurdering(res.data.mellomlagretVurdering);
     }
   }
 
@@ -38,14 +40,18 @@ export function useMellomlagring(
     });
 
     if (isSuccess(res)) {
-      setMellomlagring(undefined);
+      setMellomlagretVurdering(undefined);
     }
+  }
+
+  function nullstillMellomlagretVurdering() {
+    setMellomlagretVurdering(undefined);
   }
 
   return {
     lagreMellomlagring,
     slettMellomlagring,
-    setMellomlagretVurdering: setMellomlagring,
-    mellomlagretVurdering: mellomlagring,
+    nullstillMellomlagretVurdering,
+    mellomlagretVurdering,
   };
 }
