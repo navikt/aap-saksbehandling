@@ -88,7 +88,7 @@ describe('Vilkårskort med form', () => {
         onLagreMellomLagringClick={vitest.fn}
         onDeleteMellomlagringClick={vitest.fn}
         mellomlagretVurdering={{
-          vurdertDato: '2025-08-21',
+          vurdertDato: '2025-08-21T12:00:00.000',
           vurdertAv: 'Jan T. Loven',
           data: '{begrunnelse: 12}',
           avklaringsbehovkode: '5003',
@@ -97,7 +97,7 @@ describe('Vilkårskort med form', () => {
       />
     );
 
-    const tekst = screen.getByText('Utkast lagret 21.08.2025 02:00 (Jan T. Loven)');
+    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
     expect(tekst).toBeVisible();
   });
 });
