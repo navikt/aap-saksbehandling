@@ -63,8 +63,6 @@ export const Bistandsbehov = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, mellomlagredeVurdering);
 
-  console.log(mellomlagretVurdering);
-
   const defaultValue: DraftFormFields = mellomlagredeVurdering
     ? JSON.parse(mellomlagredeVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurdering);
