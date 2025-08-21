@@ -36,7 +36,7 @@ export const BistandsbehovMedDataFetching = async ({
       grunnlag={grunnlag.data}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
-      mellomlagredeVurdering={mellomlagring}
+      initialMellomlagretVurdering={mellomlagring}
       typeBehandling={typeBehandling}
     />
   );

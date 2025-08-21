@@ -26,7 +26,7 @@ interface Props {
   readOnly: boolean;
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
-  mellomlagredeVurdering?: MellomlagretVurdering;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -46,7 +46,7 @@ export const Bistandsbehov = ({
   grunnlag,
   readOnly,
   typeBehandling,
-  mellomlagredeVurdering,
+  initialMellomlagretVurdering,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -61,10 +61,10 @@ export const Bistandsbehov = ({
   const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, mellomlagredeVurdering);
+    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
 
-  const defaultValue: DraftFormFields = mellomlagredeVurdering
-    ? JSON.parse(mellomlagredeVurdering.data)
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
   const { formFields, form } = useConfigForm<FormFields>(

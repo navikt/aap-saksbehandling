@@ -49,7 +49,7 @@ describe('mellomlagring i bistandsbehov', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
-        mellomlagredeVurdering={mellomlagring.mellomlagretVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
     const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -85,7 +85,7 @@ describe('mellomlagring i bistandsbehov', () => {
         behandlingVersjon={0}
         readOnly={false}
         typeBehandling={'Førstegangsbehandling'}
-        mellomlagredeVurdering={mellomlagring.mellomlagretVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
 
@@ -107,7 +107,7 @@ describe('mellomlagring i bistandsbehov', () => {
         readOnly={false}
         typeBehandling={'Førstegangsbehandling'}
         grunnlag={bistandsgrunnlag}
-        mellomlagredeVurdering={mellomlagring.mellomlagretVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
 
@@ -141,7 +141,7 @@ describe('mellomlagring i bistandsbehov', () => {
         behandlingVersjon={0}
         readOnly={false}
         typeBehandling={'Førstegangsbehandling'}
-        mellomlagredeVurdering={mellomlagring.mellomlagretVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
 
@@ -164,7 +164,7 @@ describe('mellomlagring i bistandsbehov', () => {
         behandlingVersjon={0}
         readOnly={false}
         typeBehandling={'Førstegangsbehandling'}
-        mellomlagredeVurdering={mellomlagring.mellomlagretVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         grunnlag={bistandsgrunnlag}
       />
     );
