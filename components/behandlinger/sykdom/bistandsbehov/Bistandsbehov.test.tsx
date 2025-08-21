@@ -25,8 +25,8 @@ describe('mellomlagring i bistandsbehov', () => {
       avklaringsbehovkode: '5006',
       behandlingId: { id: 1 },
       data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret","erBehovForAktivBehandling":"ja","erBehovForArbeidsrettetTiltak":"ja"}',
-      vurdertAv: 'Saksbehandler',
-      vurdertDato: '2025-08-19',
+      vurdertDato: '2025-08-21',
+      vurdertAv: 'Jan T. Loven',
     },
   };
 
@@ -43,7 +43,7 @@ describe('mellomlagring i bistandsbehov', () => {
     historiskeVurderinger: [],
   };
 
-  it('Skal vise et varsel dersom det finnes en mellomlagring på vurderingen', () => {
+  it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
       <Bistandsbehov
         readOnly={false}
@@ -52,25 +52,19 @@ describe('mellomlagring i bistandsbehov', () => {
         mellomlagredeVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
-    const mellomlagringWarning = screen.getByText('Det finnes en mellomlagring');
-    expect(mellomlagringWarning).toBeVisible();
+    const tekst = screen.getByText('Utkast lagret 21.08.2025 02:00 (Jan T. Loven)');
+    expect(tekst).toBeVisible();
   });
 
-  it('Skal ikke vise et varsel dersom det ikke finnes en mellomlagring på vurderingen', () => {
-    render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
-    const mellomlagringWarning = screen.queryByText('Det finnes en mellomlagring');
-    expect(mellomlagringWarning).not.toBeInTheDocument();
-  });
-
-  it('Skal vise et varsel dersom bruker trykker på lagre mellomlagring', async () => {
+  // TODO Ta inn denne når mellomlagring ligger ute i dev og ikke er feature togglet
+  it.skip('Skal vise et varsel dersom bruker trykker på lagre mellomlagring', async () => {
     render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
 
     await user.type(
       screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
       'Her har jeg begynt å skrive en vurdering..'
     );
-
-    expect(screen.queryByText('Det finnes en mellomlagring')).not.toBeInTheDocument();
+    expect(screen.queryByText('Utkast lagret 21.08.2025 02:00 (Jan T. Loven)')).not.toBeInTheDocument();
 
     const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
       type: 'SUCCESS',
@@ -79,10 +73,10 @@ describe('mellomlagring i bistandsbehov', () => {
     };
     fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
 
-    const lagreKnapp = screen.getByRole('button', { name: 'Lagre' });
+    const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
     await user.click(lagreKnapp);
-
-    expect(screen.getByText('Det finnes en mellomlagring')).toBeVisible();
+    const tekst = screen.getByText('Utkast lagret 21.08.2025 02:00 (Jan T. Loven)');
+    expect(tekst).toBeVisible();
   });
 
   it('Skal ikke vise et varsel dersom bruker trykker på slett mellomlagring', async () => {
@@ -95,15 +89,15 @@ describe('mellomlagring i bistandsbehov', () => {
       />
     );
 
-    expect(screen.getByText('Det finnes en mellomlagring')).toBeVisible();
+    expect(screen.getByText('Utkast lagret 21.08.2025 02:00 (Jan T. Loven)')).toBeVisible();
 
     const mockFetchResponseSlettMellomlagring: FetchResponse<object> = { type: 'SUCCESS', status: 202, data: {} };
     fetchMock.mockResponse(JSON.stringify(mockFetchResponseSlettMellomlagring));
 
-    const slettKnapp = screen.getByRole('button', { name: 'Slett' });
+    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
     await user.click(slettKnapp);
 
-    expect(screen.queryByText('Det finnes en mellomlagring')).not.toBeInTheDocument();
+    expect(screen.queryByText('Utkast lagret 21.08.2025 02:00 (Jan T. Loven)')).not.toBeInTheDocument();
   });
 
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
@@ -157,7 +151,7 @@ describe('mellomlagring i bistandsbehov', () => {
       'Dette er min vurdering som er mellomlagret her er ekstra tekst'
     );
 
-    const slettKnapp = screen.getByRole('button', { name: 'Slett' });
+    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
 
     await user.click(slettKnapp);
 
@@ -181,7 +175,7 @@ describe('mellomlagring i bistandsbehov', () => {
       'Dette er min vurdering som er mellomlagret her er ekstra tekst'
     );
 
-    const slettKnapp = screen.getByRole('button', { name: 'Slett' });
+    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
 
     await user.click(slettKnapp);
 

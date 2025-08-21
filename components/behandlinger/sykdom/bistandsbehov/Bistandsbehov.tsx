@@ -12,7 +12,7 @@ import { FormEvent } from 'react';
 import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -183,19 +183,8 @@ export const Bistandsbehov = ({
         slettMellomlagring();
         form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
       }}
+      mellomlagretVurdering={mellomlagretVurdering}
     >
-      {mellomlagretVurdering && (
-        <Alert variant={'info'} size={'small'}>
-          <BodyShort weight={'semibold'}>Det finnes en mellomlagring</BodyShort>
-          <BodyShort>Mellomlagring skrevet av: {mellomlagretVurdering?.vurdertAv}</BodyShort>
-          {mellomlagretVurdering?.vurdertDato && (
-            <BodyShort>
-              Mellomlagring fra: {formaterDatoMedTidspunktForFrontend(mellomlagretVurdering?.vurdertDato)}
-            </BodyShort>
-          )}
-        </Alert>
-      )}
-
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderingerV3
           data={historiskeVurderinger}

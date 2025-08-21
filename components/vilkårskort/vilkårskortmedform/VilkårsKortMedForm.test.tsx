@@ -1,6 +1,9 @@
 import { describe, expect, it, vitest } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import {
+  VilkårsKortMedForm,
+  VilkårsKortMedFormProps,
+} from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { ApiException } from 'lib/utils/api';
 
 describe('Vilkårskort med form', () => {
@@ -50,21 +53,74 @@ describe('Vilkårskort med form', () => {
     const errorMessage = screen.getByText('Dette er en feil fra backend gjennom løs behov');
     expect(errorMessage).toBeVisible();
   });
+
+  // TODO Ta inn når isLocal er borte fra komponenten
+  it.skip('Skal ha en knapp for å mellomlagre en vurdering dersom det har blitt sendt inn en lagre funksjon', () => {
+    render(<VilkårsKortMedForm {...defaultProps} onLagreMellomLagringClick={vitest.fn} />);
+    const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
+    expect(lagreUtkastKnapp).toBeVisible();
+  });
+
+  it('Skal ha en knapp for å slette en mellomlagret vurdering dersom det finnes en mellomlagret vurdering og det finnes en delete funksjon', () => {
+    render(
+      <VilkårsKortMedForm
+        {...defaultProps}
+        onLagreMellomLagringClick={vitest.fn}
+        onDeleteMellomlagringClick={vitest.fn}
+        mellomlagretVurdering={{
+          vurdertDato: '2025-08-21',
+          vurdertAv: 'Jan T. Loven',
+          data: '{begrunnelse: 12}',
+          avklaringsbehovkode: '5003',
+          behandlingId: { id: 1 },
+        }}
+      />
+    );
+
+    const slettUtkastKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+    expect(slettUtkastKnapp).toBeVisible();
+  });
+
+  it('Skal vise hvem som har gjort mellomlagring hvis det finnes', () => {
+    render(
+      <VilkårsKortMedForm
+        {...defaultProps}
+        onLagreMellomLagringClick={vitest.fn}
+        onDeleteMellomlagringClick={vitest.fn}
+        mellomlagretVurdering={{
+          vurdertDato: '2025-08-21',
+          vurdertAv: 'Jan T. Loven',
+          data: '{begrunnelse: 12}',
+          avklaringsbehovkode: '5003',
+          behandlingId: { id: 1 },
+        }}
+      />
+    );
+
+    const tekst = screen.getByText('Utkast lagret 21.08.2025 02:00 (Jan T. Loven)');
+    expect(tekst).toBeVisible();
+  });
 });
+
+const defaultProps: VilkårsKortMedFormProps = {
+  heading: 'Dette er en overskrift',
+  steg: 'AVKLAR_SYKDOM',
+  onSubmit: vitest.fn(),
+  isLoading: false,
+  status: 'DONE',
+  visBekreftKnapp: false,
+  vilkårTilhørerNavKontor: true,
+  vurdertAvAnsatt: { ident: 'Lokalsaksbehandler', dato: '2025-04-25' },
+  kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26' },
+  children: undefined,
+};
 
 function renderComponent(skalViseBekreftKnapp?: boolean, error?: ApiException) {
   render(
     <VilkårsKortMedForm
-      heading={'Dette er en overskrift'}
-      steg={'AVKLAR_SYKDOM'}
-      onSubmit={vitest.fn()}
-      isLoading={false}
-      status={'DONE'}
+      {...defaultProps}
       visBekreftKnapp={!!skalViseBekreftKnapp}
-      vilkårTilhørerNavKontor={true}
       løsBehovOgGåTilNesteStegError={error}
-      vurdertAvAnsatt={{ ident: 'Lokalsaksbehandler', dato: '2025-04-25' }}
-      kvalitetssikretAv={{ ident: 'Kvalitetssikrer', dato: '2025-04-26' }}
     >
       <span>Dette er innhold</span>
     </VilkårsKortMedForm>
