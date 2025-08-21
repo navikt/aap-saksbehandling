@@ -18,7 +18,6 @@ import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/Oppga
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
 import { VurderRettighetsperiodeModal } from './rettighetsperiodemodal/VurderRettighetsperiodeModal';
-import { isProd } from 'lib/utils/environment';
 import { TrekkKlageModal } from './trekkklagemodal/TrekkKlageModal';
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
@@ -86,11 +85,7 @@ export const SaksinfoBanner = ({
     behandlingErIkkeAvsluttet;
 
   const visValgForÅTrekkeKlage =
-    !isProd() &&
-    brukerKanSaksbehandle &&
-    !harAlleredeValgtTrekkKlage &&
-    behandlingErIkkeAvsluttet &&
-    behandling?.type === 'Klage';
+    brukerKanSaksbehandle && !harAlleredeValgtTrekkKlage && behandlingErIkkeAvsluttet && behandling?.type === 'Klage';
 
   const visValgForÅOverstyreStarttidspunkt =
     brukerKanSaksbehandle &&
