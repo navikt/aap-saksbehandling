@@ -2,6 +2,7 @@ import { hentOvergangArbeidGrunnlag } from 'lib/services/saksbehandlingservice/s
 import { TypeBehandling } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { OvergangArbeid } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid';
 
 interface Props {
   behandlingsReferanse: string;

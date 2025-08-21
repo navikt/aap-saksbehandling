@@ -13,6 +13,7 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
 import { OvergangUforeMedDataFetching } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeMedDataFetching';
+import { OvergangArbeidMedDataFetching } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;

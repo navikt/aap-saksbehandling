@@ -41,11 +41,13 @@ export const Vurdering = ({ vurdering, søknadstidspunkt, vurderingErGjeldende, 
     <div>
       <span>{vurdering?.begrunnelse}</span>
       <div style={{ display: 'flex', gap: '1.5rem', flexDirection: 'row', flexWrap: 'wrap' }}>
-        <span>Har brukeren søkt uføretrygd?: {mapTilJaEllerNei(vurdering.brukerSoktUforetrygd)}</span>
-        <span>Har brukeren fått vedtak om uføretrygd?: {vurdering.brukerSoktUforetrygd}</span>
         <span>
-          c: Har brukeren rett på AAP?
+          Har brukeren rett på AAP?
           {mapTilJaEllerNei(vurdering.brukerRettPaaAAP ?? undefined)}
+        </span>
+        <span>
+          Virkningsdato:
+          {vurdering.virkningsDato && formaterDatoForFrontend(vurdering.virkningsDato)}
         </span>
       </div>
     </div>
