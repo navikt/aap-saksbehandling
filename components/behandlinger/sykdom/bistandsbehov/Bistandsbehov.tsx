@@ -1,6 +1,6 @@
 'use client';
 
-import { BistandsbehovVurdering, BistandsGrunnlag, TypeBehandling } from 'lib/types/types';
+import { BistandsbehovVurdering, BistandsGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
 import {
   Behovstype,
   getJaNeiEllerIkkeBesvart,
@@ -8,23 +8,25 @@ import {
   JaEllerNei,
   JaEllerNeiOptions,
 } from 'lib/utils/form';
-import { Veiledning } from 'components/veiledning/Veiledning';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
-import { deepEqual } from '../../../tidligerevurderinger/TidligereVurderingerUtils';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
+import { Veiledning } from 'components/veiledning/Veiledning';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
+  mellomlagredeVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -33,11 +35,19 @@ interface FormFields {
   erBehovForArbeidsrettetTiltak: string;
   erBehovForAnnenOppfølging?: string;
   overgangBegrunnelse?: string;
-  vurderAAPIOvergangTilUføre?: string;
-  vurderAAPIOvergangTilArbeid?: string;
+  skalVurdereAapIOvergangTilUføre?: string;
+  skalVurdereAapIOvergangTilArbeid?: string;
 }
 
-export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const Bistandsbehov = ({
+  behandlingVersjon,
+  grunnlag,
+  readOnly,
+  typeBehandling,
+  mellomlagredeVurdering,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
@@ -50,18 +60,25 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const vurderAAPIOvergangTilUføreLabel = 'Har brukeren rett til AAP under behandling av krav om uføretrygd?';
   const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
 
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, mellomlagredeVurdering);
+
+  const defaultValue: DraftFormFields = mellomlagredeVurdering
+    ? JSON.parse(mellomlagredeVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
         label: vilkårsvurderingLabel,
-        defaultValue: grunnlag?.vurdering?.begrunnelse,
+        defaultValue: defaultValue?.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse om brukeren har behov for oppfølging' },
       },
       erBehovForAktivBehandling: {
         type: 'radio',
         label: erBehovForAktivBehandlingLabel,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAktivBehandling),
+        defaultValue: defaultValue.erBehovForAktivBehandling,
         rules: { required: 'Du må svare på om brukeren har behov for aktiv behandling' },
         options: JaEllerNeiOptions,
       },
@@ -69,38 +86,38 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         type: 'radio',
         label: erBehovForArbeidsrettetTiltakLabel,
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForArbeidsrettetTiltak),
+        defaultValue: defaultValue.erBehovForArbeidsrettetTiltak,
         rules: { required: 'Du må svare på om brukeren har behov for arbeidsrettet tiltak' },
       },
       erBehovForAnnenOppfølging: {
         type: 'radio',
         label: erBehovForAnnenOppfølgingLabel,
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBehovForAnnenOppfølging),
+        defaultValue: defaultValue?.erBehovForAnnenOppfølging,
         rules: { required: 'Du må svare på om brukeren anses for å ha en viss mulighet til å komme i arbeid' },
       },
       overgangBegrunnelse: {
         type: 'textarea',
         label: vilkårsvurderingLabel,
-        defaultValue: grunnlag?.vurdering?.overgangBegrunnelse || undefined,
+        defaultValue: defaultValue?.overgangBegrunnelse || undefined,
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
       },
-      vurderAAPIOvergangTilUføre: {
+      skalVurdereAapIOvergangTilUføre: {
         type: 'radio',
         label: vurderAAPIOvergangTilUføreLabel,
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilUføre),
+        defaultValue: defaultValue?.skalVurdereAapIOvergangTilUføre,
         rules: {
           required: 'Du må svare på om brukeren har rett på AAP i overgang til uføre',
           validate: (value) =>
             value === JaEllerNei.Ja ? 'AAP under behandling av søknad om uføretrygd er ikke støttet enda' : undefined,
         },
       },
-      vurderAAPIOvergangTilArbeid: {
+      skalVurdereAapIOvergangTilArbeid: {
         type: 'radio',
         label: vurderAAPIOvergangTilArbeidLabel,
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.skalVurdereAapIOvergangTilArbeid),
+        defaultValue: defaultValue?.skalVurdereAapIOvergangTilArbeid,
         rules: {
           required: 'Du må svare på om brukeren har rett på AAP i overgang til arbeid',
           validate: (value) => (value === JaEllerNei.Ja ? 'AAP i overgang til arbeid er ikke støttet enda' : undefined),
@@ -112,26 +129,29 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-          bistandsVurdering: {
-            begrunnelse: data.begrunnelse,
-            erBehovForAktivBehandling: data.erBehovForAktivBehandling === JaEllerNei.Ja,
-            erBehovForArbeidsrettetTiltak: data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja,
-            erBehovForAnnenOppfølging: data.erBehovForAnnenOppfølging
-              ? data.erBehovForAnnenOppfølging === JaEllerNei.Ja
-              : undefined,
-            ...(bistandsbehovErIkkeOppfylt && {
-              skalVurdereAapIOvergangTilUføre: data.vurderAAPIOvergangTilUføre === JaEllerNei.Ja,
-              skalVurdereAapIOvergangTilArbeid: data.vurderAAPIOvergangTilArbeid === JaEllerNei.Ja,
-              overgangBegrunnelse: data.overgangBegrunnelse,
-            }),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
+            bistandsVurdering: {
+              begrunnelse: data.begrunnelse,
+              erBehovForAktivBehandling: data.erBehovForAktivBehandling === JaEllerNei.Ja,
+              erBehovForArbeidsrettetTiltak: data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja,
+              erBehovForAnnenOppfølging: data.erBehovForAnnenOppfølging
+                ? data.erBehovForAnnenOppfølging === JaEllerNei.Ja
+                : undefined,
+              ...(bistandsbehovErIkkeOppfylt && {
+                skalVurdereAapIOvergangTilUføre: data.skalVurdereAapIOvergangTilUføre === JaEllerNei.Ja,
+                skalVurdereAapIOvergangTilArbeid: data.skalVurdereAapIOvergangTilArbeid === JaEllerNei.Ja,
+                overgangBegrunnelse: data.overgangBegrunnelse,
+              }),
+            },
           },
+          referanse: behandlingsReferanse,
         },
-        referanse: behandlingsReferanse,
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 
@@ -158,6 +178,12 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       kvalitetssikretAv={grunnlag?.kvalitetssikretAv}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring();
+        form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+      }}
+      mellomlagretVurdering={mellomlagretVurdering}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderingerV3
@@ -209,8 +235,8 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
               § 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd
             </Heading>
             <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-            <FormField form={form} formField={formFields.vurderAAPIOvergangTilUføre} horizontalRadio />
-            {form.watch('vurderAAPIOvergangTilUføre') === JaEllerNei.Ja && (
+            <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilUføre} horizontalRadio />
+            {form.watch('skalVurdereAapIOvergangTilUføre') === JaEllerNei.Ja && (
               <Alert variant="warning">
                 Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18-sak.
               </Alert>
@@ -223,8 +249,8 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
             § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
           </Heading>
           <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-          <FormField form={form} formField={formFields.vurderAAPIOvergangTilArbeid} horizontalRadio />
-          {form.watch('vurderAAPIOvergangTilArbeid') === JaEllerNei.Ja && (
+          <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilArbeid} horizontalRadio />
+          {form.watch('skalVurdereAapIOvergangTilArbeid') === JaEllerNei.Ja && (
             <Alert variant="warning">
               Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17-sak.
             </Alert>
@@ -233,6 +259,30 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       )}
     </VilkårsKortMedForm>
   );
+
+  function mapVurderingToDraftFormFields(vurdering?: BistandsbehovVurdering): DraftFormFields {
+    return {
+      begrunnelse: vurdering?.begrunnelse,
+      erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling),
+      erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging),
+      overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
+      skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
+      skalVurdereAapIOvergangTilUføre: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilUføre),
+      erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
+    };
+  }
+
+  function emptyDraftFormFields(): DraftFormFields {
+    return {
+      begrunnelse: '',
+      erBehovForAktivBehandling: '',
+      erBehovForAnnenOppfølging: '',
+      overgangBegrunnelse: '',
+      skalVurdereAapIOvergangTilArbeid: '',
+      skalVurdereAapIOvergangTilUføre: '',
+      erBehovForArbeidsrettetTiltak: '',
+    };
+  }
 
   function byggFelter(vurdering: BistandsbehovVurdering): ValuePair[] {
     return [
