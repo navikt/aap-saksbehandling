@@ -1,0 +1,16 @@
+.beskrivelse {
+    max-width: 350px;
+}
+
+.valgtRad {
+    background: var(--a-surface-action-subtle);
+}
+
+.skjemaContainer {
+    padding-left: 16px;
+    border-left: 1px solid var(--a-spacing-4);
+}
+
+.skjemaContainer:last-of-type {
+    margin-bottom: 16px;
+}
