@@ -9,10 +9,13 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { TidligereVurderinger } from 'components/behandlinger/sykdom/overgangarbeid/TidligereVurderinger';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { validerNullableDato } from 'lib/validation/dateValidation';
+import { parse } from 'date-fns';
 
 interface Props {
   behandlingVersjon: number;
@@ -68,7 +71,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
           overgangArbeidVurdering: {
             begrunnelse: data.begrunnelse,
             brukerRettPaaAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
-            virkningsDato: data.virkningsdato,
+            virkningsDato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
           },
         },
         referanse: behandlingsReferanse,
@@ -118,14 +121,22 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
       )}
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
-      {typeBehandling === 'Revurdering' && (
-        <VStack gap={'4'} as={'section'}>
-          <Heading level={'3'} size="small">
-            § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
-          </Heading>
-          <FormField form={form} formField={formFields.virkningsdato} horizontalRadio />
-        </VStack>
-      )}
+      <VStack gap={'4'} as={'section'}>
+        <Heading level={'3'} size="small">
+          § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
+        </Heading>
+        <DateInputWrapper
+          name={`virkningsdato`}
+          control={form.control}
+          label={'Virkningsdato for vurderingen'}
+          rules={{
+            validate: {
+              gyldigDato: (value) => validerNullableDato(value as string),
+            },
+          }}
+          readOnly={readOnly}
+        />
+      </VStack>
     </VilkårsKortMedForm>
   );
 };
