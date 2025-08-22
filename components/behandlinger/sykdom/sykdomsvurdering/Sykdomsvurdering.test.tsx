@@ -27,7 +27,8 @@ const grunnlagMedYrkesskade: SykdomsGrunnlag = {
   sykdomsvurderinger: [],
   historikkSykdomsvurderinger: [],
 };
--describe('generelt', () => {
+
+describe('generelt', () => {
   it('Skal ha korrekt heading', () => {
     render(
       <Sykdomsvurdering
