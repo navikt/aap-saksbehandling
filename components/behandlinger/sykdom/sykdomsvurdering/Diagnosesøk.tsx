@@ -1,6 +1,6 @@
 import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
-import { diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
+import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { JaEllerNei } from 'lib/utils/form';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFields } from 'components/form/FormHook';
@@ -17,10 +17,10 @@ export const Diagnosesøk = ({ form, formFields, readOnly, hoveddiagnoseDefaultO
   const kodeverkValue = form.watch('kodeverk');
   const defaultOptionsHoveddiagnose = hoveddiagnoseDefaultOptions
     ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue!, '');
+    : diagnoseSøker(kodeverkValue as DiagnoseSystem, '');
   const defaultOptionsBidiagnose = hoveddiagnoseDefaultOptions
     ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue!, '');
+    : diagnoseSøker(kodeverkValue as DiagnoseSystem, '');
 
   const harSkadeEllerLyte = form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja;
 
@@ -33,7 +33,7 @@ export const Diagnosesøk = ({ form, formFields, readOnly, hoveddiagnoseDefaultO
             label={'Hoveddiagnose'}
             form={form}
             name={'hoveddiagnose'}
-            fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
+            fetcher={async (value) => diagnoseSøker(kodeverkValue as DiagnoseSystem, value)}
             defaultOptions={defaultOptionsHoveddiagnose}
             rules={{ required: 'Du må velge en hoveddiagnose' }}
             readOnly={readOnly}
@@ -44,7 +44,7 @@ export const Diagnosesøk = ({ form, formFields, readOnly, hoveddiagnoseDefaultO
               form={form}
               isMulti={true}
               name={'bidiagnose'}
-              fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
+              fetcher={async (value) => diagnoseSøker(kodeverkValue as DiagnoseSystem, value)}
               defaultOptions={defaultOptionsBidiagnose}
               readOnly={readOnly}
             />
