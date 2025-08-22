@@ -66,10 +66,10 @@ export const RefusjonUtenFlereNavKontor = ({ behandlingVersjon, grunnlag, readOn
           validate: {
             gyldigDato: (v?) => validerDato(v as string),
             kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
-              const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
+              const starttidspunkt = startOfDay(new Date(sak.periode.fom));
               const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
-              if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
-                return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
+              if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), starttidspunkt)) {
+                return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
               }
             },
           },
@@ -85,10 +85,10 @@ export const RefusjonUtenFlereNavKontor = ({ behandlingVersjon, grunnlag, readOn
           validate: {
             gyldigDato: (v?) => (v ? validerDato(v as string) : true),
             kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
-              const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
+              const starttidspunkt = startOfDay(new Date(sak.periode.fom));
               const vurderingenGjelderTil = stringToDate(v as string, 'dd.MM.yyyy');
-              if (vurderingenGjelderTil && isBefore(startOfDay(vurderingenGjelderTil), soknadstidspunkt)) {
-                return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
+              if (vurderingenGjelderTil && isBefore(startOfDay(vurderingenGjelderTil), starttidspunkt)) {
+                return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
               }
             },
           },

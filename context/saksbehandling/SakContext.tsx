@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useState } from 'react';
+import React, { createContext } from 'react';
 
 export interface SakContextType {
   sak: Sak;
@@ -21,13 +21,6 @@ interface Props {
   children: React.ReactNode;
 }
 
-export function SakContextProvider(props: Props) {
-  const { children } = props;
-  const [sak] = useState<Sak>(props.sak);
-
-  const context: SakContextType = {
-    sak,
-  };
-
-  return <SakContext.Provider value={context}>{children}</SakContext.Provider>;
+export function SakContextProvider({ sak, children }: Props) {
+  return <SakContext value={{ sak }}>{children}</SakContext>;
 }
