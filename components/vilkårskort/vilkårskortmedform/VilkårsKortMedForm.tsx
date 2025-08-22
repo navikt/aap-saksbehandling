@@ -10,7 +10,7 @@ import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'li
 
 import styles from 'components/vilkårskort/VilkårsKort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { isDev, isProd } from 'lib/utils/environment';
+import { isProd } from 'lib/utils/environment';
 
 export interface VilkårsKortMedFormProps {
   heading: string;
@@ -83,7 +83,7 @@ export const VilkårsKortMedForm = ({
                 <HStack gap={'4'}>
                   {visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}
 
-                  {isDev() && onLagreMellomLagringClick && (
+                  {!isProd() && onLagreMellomLagringClick && (
                     <Button type={'button'} size={'small'} variant={'tertiary'} onClick={onLagreMellomLagringClick}>
                       Lagre utkast
                     </Button>
