@@ -14,6 +14,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
 import { OvergangUforeMedDataFetching } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeMedDataFetching';
 import { OvergangArbeidMedDataFetching } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMedDataFetching';
+import { isLocal } from 'lib/utils/environment';
 
 interface Props {
   behandlingsReferanse: string;
@@ -57,8 +58,25 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
         </StegSuspense>
       )}
       {fritakMeldepliktSteg.skalViseSteg && (
+      {isLocal() && stegSomSkalVises.includes('OVERGANG_UFORE') && (
         <StegSuspense>
           <MeldepliktMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={fritakMeldepliktSteg} />
+          <OvergangUforeMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+            typeBehandling={flyt.data.visning.typeBehandling}
+          />
+        </StegSuspense>
+      )}
+      {isLocal() && stegSomSkalVises.includes('OVERGANG_ARBEID') && (
+        <StegSuspense>
+          <OvergangArbeidMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            readOnly={saksBehandlerReadOnly}
+            behandlingVersjon={behandlingVersjon}
+            typeBehandling={flyt.data.visning.typeBehandling}
+          />
         </StegSuspense>
       )}
       {fastsettArbeidsevneSteg.skalViseSteg && (
@@ -104,6 +122,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
+
       {stegSomSkalVises.includes('SYKDOMSVURDERING_BREV') && (
       )}
       {sykdomsvurderingBrevSteg.skalViseSteg && (
