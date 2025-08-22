@@ -78,7 +78,6 @@ export const VilkårsKortMedForm = ({
               løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
               status={status}
             />
-            ∏
             <HStack justify={'space-between'} align={'end'}>
               <VStack gap={'4'}>
                 <HStack gap={'4'}>
