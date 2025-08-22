@@ -821,7 +821,7 @@ describe('revurdering av førstegangsbehandling', () => {
   });
 });
 
-describe('mellomlagring i bistandsbehov', () => {
+describe('mellomlagring i sykdom', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
       avklaringsbehovkode: '5006',
@@ -871,8 +871,7 @@ describe('mellomlagring i bistandsbehov', () => {
     expect(tekst).toBeVisible();
   });
 
-  // TODO Ta inn denne når mellomlagring ligger ute i dev og ikke er feature togglet
-  it.skip('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
+  it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
     render(
       <Sykdomsvurdering
         readOnly={false}
@@ -886,7 +885,7 @@ describe('mellomlagring i bistandsbehov', () => {
       screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
       'Her har jeg begynt å skrive en vurdering..'
     );
-    expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
+    expect(screen.queryByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)')).not.toBeInTheDocument();
 
     const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
       type: 'SUCCESS',
@@ -901,7 +900,7 @@ describe('mellomlagring i bistandsbehov', () => {
     expect(tekst).toBeVisible();
   });
 
-  it('Skal ikke vise et varsel dersom bruker trykker på slett mellomlagring', async () => {
+  it('Skal ikke vise en tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
       <Sykdomsvurdering
         readOnly={false}
