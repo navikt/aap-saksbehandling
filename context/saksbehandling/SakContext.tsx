@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useMemo } from 'react';
+import React, { createContext } from 'react';
 
 export interface SakContextType {
   sak: Sak;
@@ -21,13 +21,6 @@ interface Props {
   children: React.ReactNode;
 }
 
-export function SakContextProvider(props: Props) {
-  const { children } = props;
-  const sak = useMemo<Sak>(() => props.sak, [props.sak]);
-
-  const context: SakContextType = {
-    sak,
-  };
-
-  return <SakContext value={context}>{children}</SakContext>;
+export function SakContextProvider({ sak, children }: Props) {
+  return <SakContext value={{ sak }}>{children}</SakContext>;
 }
