@@ -16,6 +16,10 @@ import { queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
 import { isLocal } from 'lib/utils/environment';
 import { FetchResponse } from 'lib/utils/api';
+import {
+  NoNavAapOppgaveOppgaveDtoBehandlingstype,
+  NoNavAapOppgaveOppgaveDtoStatus,
+} from '@navikt/aap-oppgave-typescript-types';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
@@ -31,6 +35,27 @@ export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
 };
 
 export async function hentOppgave(behandlingReferanse: string) {
+  if (isLocal()) {
+    const mockResponse: FetchResponse<Oppgave> = {
+      type: 'SUCCESS',
+      data: {
+        avklaringsbehovKode: '5008',
+        behandlingOpprettet: '2025-08-20',
+        behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.REVURDERING,
+        enhet: 'ASKER',
+        markeringer: [],
+        opprettetAv: 'Kelvin',
+        opprettetTidspunkt: '2025-08-20',
+        status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
+        versjon: 0,
+        vurderingsbehov: [],
+        årsakerTilBehandling: [],
+      },
+    };
+
+    return mockResponse;
+  }
+
   const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/hent-oppgave`;
   return await apiFetch<Oppgave>(url, oppgaveApiScope, 'GET');
 }
