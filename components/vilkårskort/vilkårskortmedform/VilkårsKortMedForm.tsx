@@ -10,7 +10,7 @@ import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'li
 
 import styles from 'components/vilkårskort/VilkårsKort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { isLocal, isProd } from 'lib/utils/environment';
+import { isDev, isProd } from 'lib/utils/environment';
 
 export interface VilkårsKortMedFormProps {
   heading: string;
@@ -78,13 +78,13 @@ export const VilkårsKortMedForm = ({
               løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
               status={status}
             />
+            ∏
             <HStack justify={'space-between'} align={'end'}>
               <VStack gap={'4'}>
                 <HStack gap={'4'}>
                   {visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}
 
-                  {/* Har den kun lokalt foreløpig frem til vi har implementert mellomlagring i et vilkårskort til*/}
-                  {isLocal() && onLagreMellomLagringClick && (
+                  {isDev() && onLagreMellomLagringClick && (
                     <Button type={'button'} size={'small'} variant={'tertiary'} onClick={onLagreMellomLagringClick}>
                       Lagre utkast
                     </Button>
