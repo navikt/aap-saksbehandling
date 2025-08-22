@@ -44,7 +44,6 @@ import {
   OpprettTestcase,
   OvergangUforeGrunnlag,
   OvergangArbeidGrunnlag,
-  OvergangUforeGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
@@ -221,11 +220,6 @@ export const hentOvergangUforeGrunnlag = async (behandlingsReferanse: string) =>
 export const hentOvergangArbeidGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/overgangarbeid`;
   return await apiFetch<OvergangArbeidGrunnlag>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentOvergangUforeGrunnlag = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/overgangufore`;
-  return await apiFetch<BistandsGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFatteVedtakGrunnlang = async (behandlingsReferanse: string) => {

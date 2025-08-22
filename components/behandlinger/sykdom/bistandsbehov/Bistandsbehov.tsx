@@ -96,35 +96,6 @@ export const Bistandsbehov = ({
         defaultValue: defaultValue?.erBehovForAnnenOppfølging,
         rules: { required: 'Du må svare på om brukeren anses for å ha en viss mulighet til å komme i arbeid' },
       },
-      vurderAAPIOvergangTilArbeid: {
-      overgangBegrunnelse: {
-        type: 'textarea',
-        label: vilkårsvurderingLabel,
-        defaultValue: defaultValue?.overgangBegrunnelse || undefined,
-        rules: { required: 'Du må gjøre en vilkårsvurdering' },
-      },
-      skalVurdereAapIOvergangTilUføre: {
-        type: 'radio',
-        label: vurderAAPIOvergangTilUføreLabel,
-        options: JaEllerNeiOptions,
-        defaultValue: defaultValue?.skalVurdereAapIOvergangTilUføre,
-        rules: {
-          required: 'Du må svare på om brukeren har rett på AAP i overgang til uføre',
-          validate: (value) =>
-            value === JaEllerNei.Ja ? 'AAP under behandling av søknad om uføretrygd er ikke støttet enda' : undefined,
-        },
-      },
-      skalVurdereAapIOvergangTilArbeid: {
-        type: 'radio',
-        label: vurderAAPIOvergangTilArbeidLabel,
-        options: JaEllerNeiOptions,
-        defaultValue: defaultValue?.skalVurdereAapIOvergangTilArbeid,
-        rules: {
-          required: 'Du må svare på om brukeren har rett på AAP i overgang til arbeid',
-          validate: (value) => (value === JaEllerNei.Ja ? 'AAP i overgang til arbeid er ikke støttet enda' : undefined),
-        },
-      },
-      vurderAAPIOvergangTilUføre: {
       overgangBegrunnelse: {
         type: 'textarea',
         label: vilkårsvurderingLabel,
@@ -330,10 +301,6 @@ export const Bistandsbehov = ({
       {
         label: erBehovForAnnenOppfølgingLabel,
         value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForAnnenOppfølging),
-      },
-      {
-        label: vurderAAPIOvergangTilArbeidLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilArbeid),
       },
       {
         label: vurderAAPIOvergangTilUføreLabel,

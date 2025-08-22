@@ -37,7 +37,6 @@ const behovskodeMap = {
   '5030': 'Samordning arbeidsgiver',
   '5032': '§ 11-17 AAP i perioden som arbeidssøker',
   '5031': '§ 11-18 AAP under behandling av krav om uføretrygd',
-  '5032': '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
