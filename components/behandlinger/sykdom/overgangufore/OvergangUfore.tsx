@@ -13,6 +13,7 @@ import { FormField } from 'components/form/FormField';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { TidligereVurderinger } from 'components/behandlinger/sykdom/overgangufore/TidligereVurderinger';
 
 interface Props {
   behandlingVersjon: number;
