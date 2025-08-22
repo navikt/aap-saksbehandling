@@ -28,6 +28,7 @@ import { StegGruppe } from 'lib/types/types';
 import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 import { ÅrsakTilRevurdering } from 'components/revurderingsinfo/ÅrsakTilRevurdering';
+import { isDev, isLocal } from 'lib/utils/environment';
 
 interface Props {
   saksId: string;
@@ -89,7 +90,10 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   const visTotrinnsvurdering =
     flytResponse.data.visning.visBeslutterKort || flytResponse.data.visning.visKvalitetssikringKort;
 
-  const visÅrsakTilRevurdering = behandling.data.type === 'Revurdering';
+  const visÅrsakTilRevurdering =
+    (isDev() || isLocal()) &&
+    behandling.data.type === 'Revurdering' &&
+    behandling.data.vurderingsbehovOgÅrsaker.length > 0;
 
   return (
     <SWRConfig
