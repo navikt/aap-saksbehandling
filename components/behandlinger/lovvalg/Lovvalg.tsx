@@ -3,21 +3,24 @@ import {
   hentAutomatiskLovvalgOgMedlemskapVurdering,
   hentFlyt,
   hentLovvalgMedlemskapGrunnlag,
+  hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringswrapper';
-import { LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunktMedDatafetching';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError } from 'lib/utils/api';
+import { isError, isSuccess } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
+import { LovvalgOgMedlemskapVedSKnadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
 
 interface Props {
   behandlingsReferanse: string;
 }
 export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
-  const [flyt, vurderingAutomatisk, grunnlag] = await Promise.all([
+  const [flyt, vurderingAutomatisk, grunnlag, mellomlagring] = await Promise.all([
     hentFlyt(behandlingsReferanse),
     hentAutomatiskLovvalgOgMedlemskapVurdering(behandlingsReferanse),
     hentLovvalgMedlemskapGrunnlag(behandlingsReferanse),
+    hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP),
   ]);
 
   if (isError(vurderingAutomatisk) || isError(grunnlag) || isError(flyt)) {
@@ -31,6 +34,8 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
   const readOnly = saksBehandlerReadOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
   const visOverstyrKnapp =
     vurderingAutomatisk.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0 && !readOnly;
+
+  const initialMellomlagring = isSuccess(mellomlagring) ? mellomlagring.data.mellomlagretVurdering : undefined;
 
   return (
     <GruppeSteg
@@ -47,12 +52,15 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
         behandlingVersjon={behandlingsVersjon}
         readOnly={readOnly}
         visOverstyrKnapp={visOverstyrKnapp}
+        initialMellomlagring={initialMellomlagring}
       >
         {stegSomSkalVises.includes('VURDER_LOVVALG') && (
-          <LovvalgOgMedlemskapVedSKnadstidspunktMedDatafetching
-            grunnlag={grunnlag.data}
+          <LovvalgOgMedlemskapVedSKnadstidspunkt
             behandlingVersjon={behandlingsVersjon}
-            readOnly={readOnly}
+            grunnlag={grunnlag.data}
+            readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+            overstyring={!!grunnlag?.data.vurdering?.overstyrt}
+            initialMellomlagretVurdering={initialMellomlagring}
           />
         )}
       </LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper>

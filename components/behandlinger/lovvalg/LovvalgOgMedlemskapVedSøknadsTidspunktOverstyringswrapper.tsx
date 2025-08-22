@@ -1,6 +1,6 @@
 'use client';
 
-import { AutomatiskLovvalgOgMedlemskapVurdering, StegType } from 'lib/types/types';
+import { AutomatiskLovvalgOgMedlemskapVurdering, MellomlagretVurdering, StegType } from 'lib/types/types';
 import { ReactNode, useState } from 'react';
 import { AutomatiskVurderingAvLovvalgOgMedlemskap } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/AutomatiskVurderingAvLovvalgOgMedlemskap';
 import { LovvalgOgMedlemskapVedSKnadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
@@ -12,6 +12,7 @@ interface Props {
   automatiskVurdering: AutomatiskLovvalgOgMedlemskapVurdering;
   stegSomSkalVises: Array<StegType>;
   visOverstyrKnapp?: boolean;
+  initialMellomlagring?: MellomlagretVurdering;
   children: ReactNode;
 }
 
@@ -22,8 +23,10 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
   behandlingVersjon,
   readOnly,
   visOverstyrKnapp,
+  initialMellomlagring,
 }: Props) => {
-  const [overstyring, setOverstyring] = useState<boolean>(false);
+  const skalOverstyre = initialMellomlagring ? JSON.parse(initialMellomlagring.data).overstyring : false;
+  const [overstyring, setOverstyring] = useState<boolean>(skalOverstyre);
 
   return (
     <>
@@ -39,6 +42,7 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
           behandlingVersjon={behandlingVersjon}
           readOnly={readOnly}
           overstyring={true}
+          initialMellomlagretVurdering={initialMellomlagring}
         />
       )}
     </>
