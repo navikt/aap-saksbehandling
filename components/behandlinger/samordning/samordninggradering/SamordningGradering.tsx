@@ -161,12 +161,76 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly, ini
     return format(addDays(new Date(senesteDato), 1), 'dd.MM.yyyy');
   };
 
+  const vurderVirkningstidspunktEtterSamordningDato = () => {
+    const alleTomDatoer = form
+      .getValues('vurderteSamordninger')
+      .filter((vurdering) => !!vurdering.periode.tom)
+      .filter((vurdering) => vurdering.gradering == 100)
+      .map((vurdert) => parse(vurdert.periode.tom, 'dd.MM.yyyy', new Date()))
+      .filter((dato) => isValid(dato));
+
+    if (!alleTomDatoer.length) {
+      return undefined;
+    }
+
+    const senesteDato = Math.max(...alleTomDatoer.map((e) => e.getTime()));
+    return format(new Date(senesteDato), 'dd.MM.yyyy');
+  };
+
   const bruker = useInnloggetBruker();
-
   const sak = useSak();
-
+  const [visModalForOppfølgingsoppgaveState, setModalForOppfølgingsoppgaveState] = useState<boolean>(false);
   const ref = useRef<HTMLDialogElement>(null);
+
   return (
+    <>
+      <VilkårsKortMedForm
+        heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser"
+        steg="SAMORDNING_GRADERING"
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        status={status}
+        visBekreftKnapp={!readOnly}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        vilkårTilhørerNavKontor={false}
+        vurdertAvAnsatt={grunnlag.vurdertAv}
+      >
+        {visForm && (
+          <VStack gap={'6'}>
+            <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+            <YtelseTabell ytelser={grunnlag.ytelser} />
+            <Ytelsesvurderinger form={form} readOnly={readOnly} />
+            {visRevurderVirkningstidspunkt && (
+              <Box maxWidth={'90ch'}>
+                <VStack gap={'12'}>
+                  <Alert variant="info">
+                    <Heading spacing size="small" level="3">
+                      Tidligste virkningstidspunkt etter samordning er{' '}
+                      <strong>{finnTidligsteVirkningstidspunkt()}</strong>
+                    </Heading>
+                    <VStack gap={'2'}>
+                      <BodyLong size="small">
+                        Kelvin oppretter automatisk revurdering hvis det kommer vedtak om folketrygdytelse som går
+                        utover denne perioden, eller hvis graden i vedtaket endres.
+                      </BodyLong>
+                      <BodyLong size="small">
+                        Hvis det er andre årsaker til at virkningstidspunktet bør vurderes igjen, så kan du opprette en
+                        oppfølgingsoppgave
+                      </BodyLong>
+
+                      <Button
+                        size={'small'}
+                        type={'button'}
+                        variant={'secondary'}
+                        onClick={() => {
+                          setModalForOppfølgingsoppgaveState(true);
+                        }}
+                        className={styles.OpprettOppfølgingsoppgaveBtn}
+                      >
+                        Opprett oppfølgingsoppgave
+                      </Button>
+                    </VStack>
+                  </Alert>
     <VilkårsKortMedForm
       heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser"
       steg="SAMORDNING_GRADERING"

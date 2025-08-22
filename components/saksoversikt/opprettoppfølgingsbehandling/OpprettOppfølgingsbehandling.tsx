@@ -22,6 +22,13 @@ interface Props {
   finnTidligsteVirkningstidspunkt?: string;
 }
 
+interface DefaultValues {
+  datoForOppfølging: string;
+  hvaSkalFølgesOpp: string;
+  hvemSkalFølgeOpp: string;
+  reserverTilMeg?: string[];
+}
+
 export interface OppfølgingsoppgaveFormFields {
   datoForOppfølging: string;
   hvaSkalFølgesOpp: string;
@@ -35,6 +42,13 @@ export const OpprettOppfølgingsBehandling = ({
   modalOnClose,
   finnTidligsteVirkningstidspunkt,
 }: Props) => {
+  const defaultValues: DefaultValues = {
+    datoForOppfølging: finnTidligsteVirkningstidspunkt ? finnTidligsteVirkningstidspunkt : '',
+    hvaSkalFølgesOpp: modalOnClose ? 'Vurder virkningstidspunkt etter samordning' : '',
+    hvemSkalFølgeOpp: modalOnClose ? 'NasjonalEnhet' : '',
+    reserverTilMeg: modalOnClose ? undefined : ['RESERVER_TIL_MEG'],
+  };
+
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -82,7 +96,7 @@ export const OpprettOppfølgingsBehandling = ({
     datoForOppfølging: {
       type: 'date_input',
       label: 'Dato for oppfølging',
-      defaultValue: finnTidligsteVirkningstidspunkt,
+      defaultValue: defaultValues.datoForOppfølging,
       rules: {
         required: 'Dato for oppfølging kan ikke må settes.',
         validate: (value) => {
@@ -100,7 +114,7 @@ export const OpprettOppfølgingsBehandling = ({
     hvemSkalFølgeOpp: {
       type: 'combobox',
       label: 'Hvem følger opp?',
-      defaultValue: 'NasjonalEnhet',
+      defaultValue: defaultValues.hvemSkalFølgeOpp,
       options: [
         {
           label: 'NAY',
@@ -113,12 +127,12 @@ export const OpprettOppfølgingsBehandling = ({
     reserverTilMeg: {
       type: 'checkbox',
       options: [{ label: 'Reserver oppgaven til meg', value: 'RESERVER_TIL_MEG' }],
-      defaultValue: ['RESERVER_TIL_MEG'],
+      defaultValue: defaultValues.reserverTilMeg,
     },
     hvaSkalFølgesOpp: {
       type: 'textarea',
       label: 'Hva skal følges opp?',
-      defaultValue: 'Vurder virkningstidspunkt etter samordning',
+      defaultValue: defaultValues.hvaSkalFølgesOpp,
     },
   });
 
