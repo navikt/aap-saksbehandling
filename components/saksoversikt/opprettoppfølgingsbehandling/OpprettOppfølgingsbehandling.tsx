@@ -26,7 +26,7 @@ interface DefaultValues {
   datoForOppfølging: string;
   hvaSkalFølgesOpp: string;
   hvemSkalFølgeOpp: string;
-  reserverTilMeg?: string[];
+  reserverTilMeg: string[];
 }
 
 export interface OppfølgingsoppgaveFormFields {
@@ -46,7 +46,7 @@ export const OpprettOppfølgingsBehandling = ({
     datoForOppfølging: finnTidligsteVirkningstidspunkt ? finnTidligsteVirkningstidspunkt : '',
     hvaSkalFølgesOpp: modalOnClose ? 'Vurder virkningstidspunkt etter samordning' : '',
     hvemSkalFølgeOpp: modalOnClose ? 'NasjonalEnhet' : '',
-    reserverTilMeg: modalOnClose ? undefined : ['RESERVER_TIL_MEG'],
+    reserverTilMeg: modalOnClose ? [] : ['RESERVER_TIL_MEG'],
   };
 
   const router = useRouter();
