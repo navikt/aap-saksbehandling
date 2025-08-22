@@ -2,8 +2,8 @@
 
 import { MellomlagretVurdering, Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Alert, BodyShort, Box, Button, Detail, HStack, VStack } from '@navikt/ds-react';
-import { FormEvent, useState } from 'react';
+import { Alert, BodyLong, Box, Button, Detail, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
+import { FormEvent, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -14,11 +14,13 @@ import { YtelseTabell } from 'components/behandlinger/samordning/samordninggrade
 import { validerDato } from 'lib/validation/dateValidation';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
-import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { isNullOrUndefined } from 'lib/utils/validering';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { OpprettOppfølgingsBehandling } from '../../../saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
+import { useInnloggetBruker } from '../../../../hooks/BrukerHook';
+import { useSak } from '../../../../hooks/SakHook';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -143,7 +145,6 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly, ini
   const samordninger = form.watch('vurderteSamordninger')?.map((vurdering) => vurdering.gradering);
 
   const visRevurderVirkningstidspunkt = samordninger?.some((verdi) => Number(verdi) === 100);
-
   const finnTidligsteVirkningstidspunkt = () => {
     const alleTomDatoer = form
       .getValues('vurderteSamordninger')
@@ -160,6 +161,11 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly, ini
     return format(addDays(new Date(senesteDato), 1), 'dd.MM.yyyy');
   };
 
+  const bruker = useInnloggetBruker();
+
+  const sak = useSak();
+
+  const ref = useRef<HTMLDialogElement>(null);
   return (
     <VilkårsKortMedForm
       heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser"

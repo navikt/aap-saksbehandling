@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, BodyLong, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
-import { OppfølgingsoppgaveV0, SaksInfo } from 'lib/types/types';
+import { OppfølgingsoppgaveV0 } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { clientSendHendelse } from 'lib/clientApi';
@@ -15,6 +15,13 @@ import { parse } from 'date-fns';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 
+interface Props {
+  saksnummer: string;
+  brukerInformasjon: BrukerInformasjon;
+  modalOnClose?: () => void;
+  finnTidligsteVirkningstidspunkt?: string;
+}
+
 export interface OppfølgingsoppgaveFormFields {
   datoForOppfølging: string;
   hvaSkalFølgesOpp: string;
@@ -23,20 +30,22 @@ export interface OppfølgingsoppgaveFormFields {
 }
 
 export const OpprettOppfølgingsBehandling = ({
-  sak,
+  saksnummer,
   brukerInformasjon,
-}: {
-  sak: SaksInfo;
-  brukerInformasjon: BrukerInformasjon;
-}) => {
+  modalOnClose,
+  finnTidligsteVirkningstidspunkt,
+}: Props) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
+  const avbrytButton = (modalOnClose?: () => void) =>
+    modalOnClose ? modalOnClose() : router.push(`/saksbehandling/sak/${saksnummer}`);
+
   async function sendHendelse(data: OppfølgingsoppgaveFormFields) {
     const innsending = {
-      saksnummer: sak.saksnummer,
+      saksnummer: saksnummer,
       referanse: {
         type: 'BEHANDLING_REFERANSE',
         verdi: uuid(),
@@ -55,20 +64,25 @@ export const OpprettOppfølgingsBehandling = ({
 
     setIsLoading(true);
 
-    const res = await clientSendHendelse(sak.saksnummer, innsending);
+    const res = await clientSendHendelse(saksnummer, innsending);
 
     if (isSuccess(res)) {
-      router.push(`/saksbehandling/sak/${sak.saksnummer}`);
+      setIsLoading(false);
+      if (modalOnClose) {
+        modalOnClose();
+      } else {
+        router.push(`/saksbehandling/sak/${saksnummer}`);
+      }
     } else {
       setError(res.apiException.message);
     }
-    setIsLoading(false);
   }
 
   const { form, formFields } = useConfigForm<OppfølgingsoppgaveFormFields>({
     datoForOppfølging: {
       type: 'date_input',
       label: 'Dato for oppfølging',
+      defaultValue: finnTidligsteVirkningstidspunkt,
       rules: {
         required: 'Dato for oppfølging kan ikke må settes.',
         validate: (value) => {
@@ -86,6 +100,7 @@ export const OpprettOppfølgingsBehandling = ({
     hvemSkalFølgeOpp: {
       type: 'combobox',
       label: 'Hvem følger opp?',
+      defaultValue: 'NasjonalEnhet',
       options: [
         {
           label: 'NAY',
@@ -103,6 +118,7 @@ export const OpprettOppfølgingsBehandling = ({
     hvaSkalFølgesOpp: {
       type: 'textarea',
       label: 'Hva skal følges opp?',
+      defaultValue: 'Vurder virkningstidspunkt etter samordning',
     },
   });
 
@@ -139,11 +155,7 @@ export const OpprettOppfølgingsBehandling = ({
           )}
 
           <HStack gap="4">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}`)}
-            >
+            <Button type="button" variant="secondary" onClick={() => avbrytButton(modalOnClose)}>
               Avbryt
             </Button>
             <Button type="submit">Opprett oppfølgingsbehandling</Button>

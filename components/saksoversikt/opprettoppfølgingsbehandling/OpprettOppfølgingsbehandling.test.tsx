@@ -13,18 +13,7 @@ describe('opprett oppfølgingsbehandling', () => {
   it('viser feilmelding om dato ikke settes, og verifiserer riktig kall til backend', async () => {
     render(
       <OpprettOppfølgingsBehandling
-        sak={{
-          behandlinger: [],
-          ident: 'minident',
-          opprettetTidspunkt: '',
-          periode: {
-            fom: '',
-            tom: '',
-          },
-          saksnummer: 'ABCDEFG',
-          status: 'OPPRETTET',
-          søknadErTrukket: undefined,
-        }}
+        saksnummer="ABCDEFG"
         brukerInformasjon={{ navn: 'Navn på bruker', NAVident: 'minident' }}
       />
     );
@@ -66,18 +55,7 @@ describe('opprett oppfølgingsbehandling', () => {
   it('om boksen for oppfølging ikke er avkrysset, så sendes null med i hvemskalfølgeopp', async () => {
     render(
       <OpprettOppfølgingsBehandling
-        sak={{
-          behandlinger: [],
-          ident: '',
-          opprettetTidspunkt: '',
-          periode: {
-            fom: '',
-            tom: '',
-          },
-          saksnummer: 'ABCDEFG',
-          status: 'OPPRETTET',
-          søknadErTrukket: undefined,
-        }}
+        saksnummer="ABCDEFG"
         brukerInformasjon={{ navn: 'Navn på bruker', NAVident: 'minident' }}
       />
     );

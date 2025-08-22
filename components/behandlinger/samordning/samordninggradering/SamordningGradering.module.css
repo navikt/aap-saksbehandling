@@ -1,3 +1,9 @@
 .infoIkon {
   color: var(--a-icon-info);
 }
+.OpprettOppfølgingsoppgaveBtn {
+  border-color: black;
+  margin-top: 8px;
+  color: black;
+  width: 223px;
+}
