@@ -178,8 +178,7 @@ describe('SaksinfoBanner på behandling siden', () => {
     expect(knapp).toBeVisible();
   });
 
-  // Hopper over testen enn så lenge da det ikke er klart for prod
-  it.skip('menyvalg for å trekke søknad vises for førstegangsbehandling', async () => {
+  it('menyvalg for å trekke søknad vises for førstegangsbehandling', async () => {
     render(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
