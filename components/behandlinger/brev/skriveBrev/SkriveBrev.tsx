@@ -54,6 +54,7 @@ export const SkriveBrev = ({
   const [sistLagret, setSistLagret] = useState<Date | undefined>();
   const [isSaving, setIsSaving] = useState(false);
   const debouncedBrev = useDebounce<Brev>(brev, 2000);
+  const [kanMellomlagreBrev, setKanMellomlagreBrev] = useState(true);
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
@@ -70,10 +71,10 @@ export const SkriveBrev = ({
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
 
   useEffect(() => {
-    if (!isLoading) {
+    if (kanMellomlagreBrev) {
       mellomlagreBackendRequest();
     }
-  }, [debouncedBrev, mellomlagreBackendRequest, isLoading]);
+  }, [debouncedBrev, mellomlagreBackendRequest, kanMellomlagreBrev]);
 
   const onChange = (brev: Brev) => {
     setBrev(brev);
@@ -161,6 +162,7 @@ export const SkriveBrev = ({
                 await clientMellomlagreBrev(referanse, brev);
                 const flyt = await clientHentFlyt(behandlingsReferanse);
                 if (flyt.type === 'SUCCESS' && flyt.data.behandlingVersjon) {
+                  setKanMellomlagreBrev(false);
                   løsBehovOgGåTilNesteSteg({
                     behandlingVersjon: flyt.data.behandlingVersjon,
                     behov: {
