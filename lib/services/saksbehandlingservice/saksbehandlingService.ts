@@ -35,6 +35,8 @@ import {
   LovvalgMedlemskapGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   ManuellInntektGrunnlag,
+  MellomlagretVurderingRequest,
+  MellomlagretVurderingResponse,
   NavEnhetRequest,
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
@@ -71,6 +73,7 @@ import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFe
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
 import { Enhet } from 'lib/types/oppgaveTypes';
+import { Behovstype } from 'lib/utils/form';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -472,6 +475,30 @@ export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsReferanse: stri
   return apiFetch<AvklarOppfolgingsoppgaveGrunnlagResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/oppfolgingsoppgave`,
     saksbehandlingApiScope
+  );
+};
+
+export const hentMellomlagring = async (behandlingsReferanse: string, kode: string) => {
+  return apiFetch<MellomlagretVurderingResponse>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsReferanse}/${kode}`,
+    saksbehandlingApiScope
+  );
+};
+
+export const lagreMellomlagring = async (request: MellomlagretVurderingRequest) => {
+  return apiFetch<MellomlagretVurderingResponse>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering`,
+    saksbehandlingApiScope,
+    'POST',
+    request
+  );
+};
+
+export const slettMellomlagring = async (behandlingsReferanse: string, kode: Behovstype) => {
+  return apiFetch(
+    `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsReferanse}/${kode}/slett`,
+    saksbehandlingApiScope,
+    'POST'
   );
 };
 

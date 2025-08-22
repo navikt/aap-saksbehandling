@@ -21,7 +21,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   løsBehovOgGåTilNesteStegError?: ApiException;
   status: LøsBehovOgGåTilNesteStegStatus;
   isLoading: boolean;
-  løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling) => void;
+  løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling, callback?: () => void) => void;
 } {
   const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
   const router = useRouter();
@@ -33,7 +33,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
 
-  const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling) => {
+  const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling, callback?: () => void) => {
     setIsLoading(true);
     setStatus(undefined);
     setError(undefined);
@@ -62,6 +62,11 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         return;
       }
     }
+
+    if (callback) {
+      callback();
+    }
+
     listenSSE();
   };
 
