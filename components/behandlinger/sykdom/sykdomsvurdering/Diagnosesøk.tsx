@@ -14,13 +14,13 @@ interface Props {
 }
 
 export const Diagnosesøk = ({ form, formFields, readOnly, hoveddiagnoseDefaultOptions }: Props) => {
-  const kodeverkValue = form.watch('kodeverk');
+  const kodeverkValue = form.watch('kodeverk') as DiagnoseSystem;
   const defaultOptionsHoveddiagnose = hoveddiagnoseDefaultOptions
     ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue as DiagnoseSystem, '');
+    : diagnoseSøker(kodeverkValue, '');
   const defaultOptionsBidiagnose = hoveddiagnoseDefaultOptions
     ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue as DiagnoseSystem, '');
+    : diagnoseSøker(kodeverkValue, '');
 
   const harSkadeEllerLyte = form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja;
 
@@ -33,7 +33,7 @@ export const Diagnosesøk = ({ form, formFields, readOnly, hoveddiagnoseDefaultO
             label={'Hoveddiagnose'}
             form={form}
             name={'hoveddiagnose'}
-            fetcher={async (value) => diagnoseSøker(kodeverkValue as DiagnoseSystem, value)}
+            fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
             defaultOptions={defaultOptionsHoveddiagnose}
             rules={{ required: 'Du må velge en hoveddiagnose' }}
             readOnly={readOnly}
@@ -44,7 +44,7 @@ export const Diagnosesøk = ({ form, formFields, readOnly, hoveddiagnoseDefaultO
               form={form}
               isMulti={true}
               name={'bidiagnose'}
-              fetcher={async (value) => diagnoseSøker(kodeverkValue as DiagnoseSystem, value)}
+              fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
               defaultOptions={defaultOptionsBidiagnose}
               readOnly={readOnly}
             />
