@@ -30,6 +30,11 @@ export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', data);
 };
 
+export async function hentOppgave(behandlingReferanse: string) {
+  const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/hent-oppgave`;
+  return await apiFetch<Oppgave>(url, oppgaveApiScope, 'GET');
+}
+
 //TODO: ubrukt? ser ingen steder som kaller route
 export async function hentAntallOppgaver(behandlingstype?: string) {
   const url = `${oppgaveApiBaseURL}/produksjonsstyring/antall-oppgaver`;

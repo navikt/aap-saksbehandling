@@ -18,12 +18,10 @@ import {
   hentSak,
   hentSakPersoninfo,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError, isSuccess } from 'lib/utils/api';
+import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { hentBrukerInformasjon, hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
-import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
-import { logWarning } from 'lib/serverutlis/logger';
-import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
+import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { StegGruppe } from 'lib/types/types';
 import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
@@ -48,8 +46,9 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsReferanse);
 
-  const [personInfo, brukerInformasjon, flytResponse, sak, roller, kabalKlageResultat, klageresultat] =
+  const [oppgave, personInfo, brukerInformasjon, flytResponse, sak, roller, kabalKlageResultat, klageresultat] =
     await Promise.all([
+      hentOppgave(behandlingsReferanse),
       hentSakPersoninfo(saksId),
       hentBrukerInformasjon(),
       hentFlyt(behandlingsReferanse),
@@ -59,10 +58,10 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
       hentKlageresultat(behandlingsReferanse),
     ]);
 
-  if (isError(flytResponse) || isError(klageresultat)) {
+  if (isError(flytResponse) || isError(klageresultat) || isError(oppgave)) {
     return (
       <VStack padding={'4'}>
-        <ApiException apiResponses={[flytResponse, klageresultat]} />
+        <ApiException apiResponses={[flytResponse, klageresultat, oppgave]} />
       </VStack>
     );
   }
@@ -70,17 +69,6 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   const brukerKanSaksbehandle = roller.some((rolle) =>
     [Roller.SAKSBEHANDLER_OPPFØLGING, Roller.SAKSBEHANDLER_NASJONAL].includes(rolle)
   );
-
-  let oppgave;
-
-  const oppgavesøkRes = await oppgaveTekstSøk(personInfo.fnr);
-  if (isSuccess(oppgavesøkRes)) {
-    oppgave = oppgavesøkRes.data.oppgaver.find((oppgave) => oppgave.behandlingRef === behandlingsReferanse);
-  } else {
-    logWarning('henting av oppgave for behandling feilet', oppgavesøkRes.apiException);
-  }
-
-  const adressebeskyttelser = utledAdressebeskyttelse(oppgave);
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.data.flyt
     .filter((steg) => steg.skalVises)
@@ -105,15 +93,12 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
             referanse={behandlingsReferanse}
             behandling={behandling.data}
             sak={sak}
-            oppgaveReservertAv={oppgave?.reservertAv}
+            oppgave={oppgave.data}
             påVent={flytResponse.data.visning.visVentekort}
             brukerInformasjon={brukerInformasjon}
             typeBehandling={flytResponse.data.visning.typeBehandling}
             brukerKanSaksbehandle={brukerKanSaksbehandle}
             flyt={flytResponse.data.flyt}
-            adressebeskyttelser={adressebeskyttelser}
-            markeringer={oppgave?.markeringer}
-            harUlesteDokumenter={oppgave?.harUlesteDokumenter}
           />
 
           <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />
