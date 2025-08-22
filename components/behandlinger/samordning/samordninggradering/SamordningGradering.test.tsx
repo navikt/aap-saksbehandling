@@ -4,6 +4,7 @@ import { format, subWeeks } from 'date-fns';
 import { MellomlagretVurderingResponse, SamordningGraderingGrunnlag } from 'lib/types/types';
 import { describe, expect, it, test, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
+import { BrukerInformasjon } from '../../../../lib/services/azure/azureUserService';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
@@ -47,6 +48,10 @@ const grunnlagUtenVurdering: SamordningGraderingGrunnlag = {
   ],
 };
 
+const bruker: BrukerInformasjon = {
+  navn: 'Iren Panikk',
+  NAVident: 'z123456',
+};
 describe('Samordning gradering', () => {
   test('skal kunne redigere ytelse, periode og gradering for en manuell rad', () => {
     render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);

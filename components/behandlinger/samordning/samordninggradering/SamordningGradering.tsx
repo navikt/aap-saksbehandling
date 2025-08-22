@@ -3,7 +3,6 @@
 import { MellomlagretVurdering, Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyLong, Box, Button, Detail, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
-import { FormEvent, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -19,10 +18,12 @@ import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform
 import { isNullOrUndefined } from 'lib/utils/validering';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OpprettOppfølgingsBehandling } from '../../../saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
-import { useInnloggetBruker } from '../../../../hooks/BrukerHook';
 import { useSak } from '../../../../hooks/SakHook';
+import { BrukerInformasjon } from '../../../../lib/services/azure/azureUserService';
+import { FormEvent, useRef, useState } from 'react';
 
 interface Props {
+  bruker: BrukerInformasjon;
   grunnlag: SamordningGraderingGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
@@ -177,7 +178,6 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly, ini
     return format(new Date(senesteDato), 'dd.MM.yyyy');
   };
 
-  const bruker = useInnloggetBruker();
   const sak = useSak();
   const [visModalForOppfølgingsoppgaveState, setModalForOppfølgingsoppgaveState] = useState<boolean>(false);
   const ref = useRef<HTMLDialogElement>(null);
