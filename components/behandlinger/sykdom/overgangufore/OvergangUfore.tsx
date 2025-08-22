@@ -9,10 +9,10 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { TidligereVurderinger } from 'components/behandlinger/sykdom/bistandsbehov/TidligereVurderinger';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { TidligereVurderinger } from 'components/behandlinger/sykdom/overgangufore/TidligereVurderinger';
 
 interface Props {
   behandlingVersjon: number;
