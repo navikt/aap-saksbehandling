@@ -31,12 +31,12 @@ describe('opprett oppfølgingsbehandling', () => {
     await user.clear(datotekstboks);
     await user.type(datotekstboks, '13.02.2100');
 
+    const checkbox = screen.getByRole('checkbox', { name: 'Reserver oppgaven til meg' });
+    expect(checkbox).toBeChecked();
+
     await user.click(screen.getByRole('combobox', { name: 'Hvem følger opp?' }));
     await user.click(screen.getByRole('option', { name: 'NAY' }));
     await user.click(screen.getByRole('button', { name: 'Opprett oppfølgingsbehandling' }));
-
-    const checkbox = screen.getByRole('checkbox', { name: 'Reserver oppgaven til meg' });
-    expect(checkbox).toBeChecked();
 
     // Kaller `send` bare én gang
     expect(fetchMock.mock.calls).toHaveLength(1);
