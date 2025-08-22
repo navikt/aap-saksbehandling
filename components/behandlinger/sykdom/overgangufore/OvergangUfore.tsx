@@ -1,6 +1,6 @@
 'use client';
 
-import { OvergangUforeGrunnlag, TypeBehandling } from 'lib/types/types';
+import { MellomlagretVurdering, OvergangUforeGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -19,6 +19,7 @@ interface Props {
   readOnly: boolean;
   typeBehandling: TypeBehandling;
   grunnlag?: OvergangUforeGrunnlag;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -71,7 +72,11 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
             value: 'JA_AVSLAG',
           },
         ],
-        defaultValue: grunnlag?.vurdering?.brukerVedtakUforetrygd,
+        defaultValue:
+          grunnlag?.vurdering?.brukerVedtakUforetrygd === undefined ||
+          grunnlag?.vurdering?.brukerVedtakUforetrygd === null
+            ? undefined
+            : grunnlag?.vurdering?.brukerVedtakUforetrygd.toString(),
         rules: { required: 'Du må svare på om brukeren har fått vedtak om uføretrygd' },
       },
       brukerRettPåAAP: {
