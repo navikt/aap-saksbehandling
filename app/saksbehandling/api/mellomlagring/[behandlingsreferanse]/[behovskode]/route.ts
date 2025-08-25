@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isSuccess } from 'lib/utils/api';
 
 export async function GET(
   _: NextRequest,
@@ -9,7 +8,7 @@ export async function GET(
   const params = await props.params;
   const res = await hentMellomlagring(params.behandlingsreferanse, params.behovskode);
 
-  if (isSuccess(res)) {
+  if (res) {
     return NextResponse.json(res, {
       status: 200,
     });

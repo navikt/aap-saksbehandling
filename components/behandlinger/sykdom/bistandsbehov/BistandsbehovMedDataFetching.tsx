@@ -2,7 +2,7 @@ import { hentBistandsbehovGrunnlag, hentMellomlagring } from 'lib/services/saksb
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { TypeBehandling } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError, isSuccess } from 'lib/utils/api';
+import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 
 interface Props {
@@ -18,7 +18,7 @@ export const BistandsbehovMedDataFetching = async ({
   readOnly,
   typeBehandling,
 }: Props) => {
-  const [grunnlag, mellomlagringForBistand] = await Promise.all([
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentBistandsbehovGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_BISTANDSBEHOV_KODE),
   ]);
@@ -27,16 +27,12 @@ export const BistandsbehovMedDataFetching = async ({
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const mellomlagring = isSuccess(mellomlagringForBistand)
-    ? mellomlagringForBistand.data.mellomlagretVurdering
-    : undefined;
-
   return (
     <Bistandsbehov
       grunnlag={grunnlag.data}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
-      initialMellomlagretVurdering={mellomlagring}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
       typeBehandling={typeBehandling}
     />
   );

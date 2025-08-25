@@ -6,7 +6,7 @@ import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurd
 import { TypeBehandling } from 'lib/types/types';
 import { ValuePair } from 'components/form/FormField';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError, isSuccess } from 'lib/utils/api';
+import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 
 interface Props {
@@ -22,7 +22,7 @@ export const SykdomsvurderingMedDataFetching = async ({
   readOnly,
   typeBehandling,
 }: Props) => {
-  const [grunnlag, mellomlagring] = await Promise.all([
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentSykdomsGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_SYKDOM_KODE),
   ]);
@@ -30,8 +30,6 @@ export const SykdomsvurderingMedDataFetching = async ({
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
-
-  const initialMellomlagretVurdering = isSuccess(mellomlagring) ? mellomlagring.data.mellomlagretVurdering : undefined;
 
   const bidiagnoserDefaultOptions = await getDefaultOptions(
     finnDiagnosegrunnlag(typeBehandling, grunnlag.data)?.bidiagnoser,

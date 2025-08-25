@@ -479,10 +479,18 @@ export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsReferanse: stri
 };
 
 export const hentMellomlagring = async (behandlingsReferanse: string, kode: string) => {
-  return apiFetch<MellomlagretVurderingResponse>(
+  const res = await apiFetch<MellomlagretVurderingResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsReferanse}/${kode}`,
     saksbehandlingApiScope
   );
+
+  if (isSuccess(res)) {
+    if (res.data.mellomlagretVurdering !== null) {
+      return res.data.mellomlagretVurdering;
+    }
+
+    return undefined;
+  }
 };
 
 export const lagreMellomlagring = async (request: MellomlagretVurderingRequest) => {

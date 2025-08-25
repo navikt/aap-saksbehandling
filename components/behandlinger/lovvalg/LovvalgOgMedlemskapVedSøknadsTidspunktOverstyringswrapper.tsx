@@ -12,7 +12,7 @@ interface Props {
   automatiskVurdering: AutomatiskLovvalgOgMedlemskapVurdering;
   stegSomSkalVises: Array<StegType>;
   visOverstyrKnapp?: boolean;
-  initialMellomlagring?: MellomlagretVurdering;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
   children: ReactNode;
 }
 
@@ -23,9 +23,10 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
   behandlingVersjon,
   readOnly,
   visOverstyrKnapp,
-  initialMellomlagring,
+  initialMellomlagretVurdering,
 }: Props) => {
-  const [overstyring, setOverstyring] = useState<boolean>(initialMellomlagring !== null);
+  console.log(initialMellomlagretVurdering);
+  const [overstyring, setOverstyring] = useState<boolean>(initialMellomlagretVurdering !== undefined);
 
   return (
     <>
@@ -41,7 +42,7 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
           behandlingVersjon={behandlingVersjon}
           readOnly={readOnly}
           overstyring={true}
-          initialMellomlagretVurdering={initialMellomlagring}
+          initialMellomlagretVurdering={initialMellomlagretVurdering}
         />
       )}
     </>

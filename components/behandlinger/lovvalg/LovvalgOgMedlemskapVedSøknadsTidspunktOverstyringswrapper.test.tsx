@@ -19,7 +19,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
         readOnly={false}
         automatiskVurdering={automatiskLovvalgOgMedlemskapVurdering}
         stegSomSkalVises={[]}
-        initialMellomlagring={{
+        initialMellomlagretVurdering={{
           data: '{"lovvalgBegrunnelse":"Dette er min vurdering som er mellomlagret"}',
           vurdertAv: 'Ane Rikke',
           vurdertDato: '2025-08-08',

@@ -8,7 +8,7 @@ import {
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringswrapper';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError, isSuccess } from 'lib/utils/api';
+import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { LovvalgOgMedlemskapVedSKnadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
 
@@ -16,7 +16,7 @@ interface Props {
   behandlingsReferanse: string;
 }
 export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
-  const [flyt, vurderingAutomatisk, grunnlag, mellomlagring] = await Promise.all([
+  const [flyt, vurderingAutomatisk, grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentFlyt(behandlingsReferanse),
     hentAutomatiskLovvalgOgMedlemskapVurdering(behandlingsReferanse),
     hentLovvalgMedlemskapGrunnlag(behandlingsReferanse),
@@ -35,8 +35,6 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
   const visOverstyrKnapp =
     vurderingAutomatisk.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0 && !readOnly;
 
-  const initialMellomlagring = isSuccess(mellomlagring) ? mellomlagring.data.mellomlagretVurdering : undefined;
-
   return (
     <GruppeSteg
       prosessering={flyt.data.prosessering}
@@ -52,7 +50,7 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
         behandlingVersjon={behandlingsVersjon}
         readOnly={readOnly}
         visOverstyrKnapp={visOverstyrKnapp}
-        initialMellomlagring={initialMellomlagring}
+        initialMellomlagretVurdering={initialMellomlagretVurdering}
       >
         {stegSomSkalVises.includes('VURDER_LOVVALG') && (
           <LovvalgOgMedlemskapVedSKnadstidspunkt
@@ -60,7 +58,7 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
             grunnlag={grunnlag.data}
             readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
             overstyring={!!grunnlag?.data.vurdering?.overstyrt}
-            initialMellomlagretVurdering={initialMellomlagring}
+            initialMellomlagretVurdering={initialMellomlagretVurdering}
           />
         )}
       </LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper>
