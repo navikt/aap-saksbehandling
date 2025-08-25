@@ -17,6 +17,7 @@ import {
   DetaljertBehandling,
   FatteVedtakGrunnlag,
   FlytProsessering,
+  ForeslåVedtakGrunnlag,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
   FormkravGrunnlag,
@@ -425,6 +426,11 @@ export const hentUnderveisGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/underveis/${behandlingsreferanse}`;
   return await apiFetch<UnderveisGrunnlag[]>(url, saksbehandlingApiScope, 'GET');
 };
+
+export const hentForeslåVedtakGrunnlag = async (behandlingsreferanse: string) => {
+    const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/foreslaa-vedtak`
+    return await apiFetch<ForeslåVedtakGrunnlag>(url, saksbehandlingApiScope, 'GET');
+}
 
 export const hentForutgåendeMedlemskapsVurdering = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/lovvalgmedlemskap/forutgaaendevurdering/${behandlingsReferanse}`;
