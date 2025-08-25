@@ -194,7 +194,7 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
     case 'AKTIVITETSPLIKT':
       return 'Aktivitetsplikt';
   }
-  // exhaustiveCheck(behandlingsType);
+  exhaustiveCheck(behandlingsType);
 }
 
 export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakTilOpprettelse) {
@@ -229,6 +229,7 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Endring i register';
   }
 }
+
 export function mapGrunnTilString(grunn: string): string {
   switch (grunn) {
     case 'FEIL_LOVANVENDELSE':
