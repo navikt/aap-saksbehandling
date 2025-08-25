@@ -3,7 +3,7 @@ import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { TilkjentMedDatafetching } from 'components/behandlinger/tilkjentytelse/tilkjent/TilkjentMedDatafetching';
+import { TilkjentMedDataFetching } from 'components/behandlinger/tilkjentytelse/tilkjent/TilkjentMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -23,7 +23,7 @@ export const TilkjentYtelse = async ({ behandlingsReferanse }: Props) => {
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>
-        <TilkjentMedDatafetching behandlingsReferanse={behandlingsReferanse} />
+        <TilkjentMedDataFetching behandlingsReferanse={behandlingsReferanse} />
       </StegSuspense>
     </GruppeSteg>
   );

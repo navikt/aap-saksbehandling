@@ -7,7 +7,7 @@ interface Props {
   behandlingsReferanse: string;
 }
 
-export const TilkjentMedDatafetching = async ({ behandlingsReferanse }: Props) => {
+export const TilkjentMedDataFetching = async ({ behandlingsReferanse }: Props) => {
   const tilkjentYtelse = await hentTilkjentYtelse(behandlingsReferanse);
   if (isError(tilkjentYtelse)) {
     return <ApiException apiResponses={[tilkjentYtelse]} />;
