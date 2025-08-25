@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useParams } from 'next/navigation';
-import { Historikk } from 'components/totrinnsvurdering/historikk/Historikk';
 import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsummering';
 import {
   AvklaringsbehovKode,
@@ -54,19 +53,7 @@ export const ToTrinnsvurdering = ({ grunnlag, behandlingsReferanse, readOnly, er
         erKvalitetssikring={erKvalitetssikring}
       />
 
-      {toggleGroupValue === 'historikk' && (
-        <div>
-          {grunnlag.historikk.map((historikk, index) => (
-            <Historikk key={index} historikk={historikk} erFørsteElementIListen={index === 0} />
-          ))}
-        </div>
-      )}
-
-      <div
-        hidden={toggleGroupValue === 'historikk'}
-        aria-hidden={toggleGroupValue === 'historikk'}
-        className={toggleGroupValue === 'totrinnsvurdering' ? 'flex-column' : ''}
-      >
+      <div className={toggleGroupValue === 'totrinnsvurdering' ? 'flex-column' : ''}>
         <TotrinnsvurderingForm
           grunnlag={grunnlag}
           link={link}

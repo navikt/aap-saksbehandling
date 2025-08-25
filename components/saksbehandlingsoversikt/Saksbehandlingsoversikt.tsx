@@ -7,7 +7,7 @@ import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDokumentasjon';
 
 import styles from './Saksbehandlingsoversikt.module.css';
-import { Sakshistorikk } from '../sakshistorikk/Sakshistorikk';
+import { Behandlingshistorikk } from 'components/behandlingshistorikk/Behandlingshistorikk';
 
 export const Saksbehandlingsoversikt = () => {
   const [toggleGroupValue, setToggleGroupValue] = useState<string>('saksdokumenter');
@@ -37,7 +37,7 @@ export const Saksbehandlingsoversikt = () => {
       <div className={styles.tabContent}>
         {toggleGroupValue === 'saksdokumenter' && <Saksdokumenter />}
         {toggleGroupValue === 'be_om_opplysninger' && <InnhentDokumentasjon />}
-        {toggleGroupValue === 'historikk' && <Sakshistorikk />}
+        {toggleGroupValue === 'historikk' && <Behandlingshistorikk />}
       </div>
     </div>
   );
