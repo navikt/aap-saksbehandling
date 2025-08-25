@@ -25,8 +25,7 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
   visOverstyrKnapp,
   initialMellomlagring,
 }: Props) => {
-  const skalOverstyre = initialMellomlagring ? JSON.parse(initialMellomlagring.data).overstyring : false;
-  const [overstyring, setOverstyring] = useState<boolean>(skalOverstyre);
+  const [overstyring, setOverstyring] = useState<boolean>(initialMellomlagring !== undefined);
 
   return (
     <>
