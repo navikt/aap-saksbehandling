@@ -10,6 +10,7 @@ import createFetchMock from 'vitest-fetch-mock';
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
 const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   skalVurdereYrkesskade: false,
@@ -897,7 +898,7 @@ describe('mellomlagring i sykdom', () => {
 
     const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
     await user.click(lagreKnapp);
-    const tekst = screen.getByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)');
+    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
     expect(tekst).toBeVisible();
   });
 
