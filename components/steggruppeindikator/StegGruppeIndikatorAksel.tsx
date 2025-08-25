@@ -4,6 +4,7 @@ import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 import { useParams, useRouter } from 'next/navigation';
 import { Stepper } from '@navikt/ds-react';
 import styles from './StegGruppeIndikator.module.css';
+import { mapTilSteggruppeTekst } from 'lib/utils/oversettelser';
 
 interface Props {
   flytRespons: BehandlingFlytOgTilstand;
@@ -33,7 +34,7 @@ export const StegGruppeIndikatorAksel = ({ flytRespons, stegGrupperSomSkalVises 
                   router.push(`/saksbehandling/sak/${saksId}/${behandlingsReferanse}/${gruppe.stegGruppe}`)
                 }
               >
-                {mapGruppeTypeToGruppeNavn(gruppe.stegGruppe)}
+                {mapTilSteggruppeTekst(gruppe.stegGruppe)}
               </Stepper.Step>
             );
           })}
@@ -41,70 +42,3 @@ export const StegGruppeIndikatorAksel = ({ flytRespons, stegGrupperSomSkalVises 
     </div>
   );
 };
-
-function mapGruppeTypeToGruppeNavn(steg: StegGruppe): string {
-  switch (steg) {
-    case 'BREV':
-      return 'Brev';
-    case 'MEDLEMSKAP':
-      return 'Forutgående medlemskap';
-    case 'SYKDOM':
-      return 'Sykdom';
-    case 'UNDERVEIS':
-      return 'Underveis';
-    case 'TILKJENT_YTELSE':
-      return 'Tilkjent ytelse';
-    case 'VEDTAK':
-      return 'Vedtak';
-    case 'SIMULERING':
-      return 'Simulering';
-    case 'START_BEHANDLING':
-      return 'Start behandling';
-    case 'BARNETILLEGG':
-      return 'Barnetillegg';
-    case 'ALDER':
-      return 'Alder';
-    case 'GRUNNLAG':
-      return 'Grunnlag';
-    case 'LOVVALG':
-      return 'Lovvalg og medlemskap';
-    case 'FATTE_VEDTAK':
-      return 'Fatte vedtak';
-    case 'IVERKSETT_VEDTAK':
-      return 'Iverksett vedtak';
-    case 'KVALITETSSIKRING':
-      return 'Kvalitetssikring';
-    case 'STUDENT':
-      return 'Student';
-    case 'ET_ANNET_STED':
-      return 'Institusjonsopphold';
-    case 'SAMORDNING':
-      return 'Samordning';
-    case 'SØKNAD':
-      return 'Trekk søknad';
-    case 'RETTIGHETSPERIODE':
-      return 'Starttidspunkt';
-    case 'FORMKRAV':
-      return 'Formkrav';
-    case 'TREKK_KLAGE':
-      return 'Trekk klage';
-    case 'KLAGEBEHANDLING_KONTOR':
-      return 'Vurder klage';
-    case 'KLAGEBEHANDLING_NAY':
-      return 'Behandle klage';
-    case 'OMGJØRING':
-      return 'Omgjøring';
-    case 'OPPRETTHOLDELSE':
-      return 'Opprettholdelse';
-    case 'SVAR_FRA_ANDREINSTANS':
-      return 'Håndter svar fra Nav Klageinstans';
-    case 'IVERKSETT_KONSEKVENS':
-      return 'Iverksett konsekvens';
-    case 'AVKLAR_OPPPFØLGING':
-      return 'Avklar oppfølging'
-    case 'UDEFINERT':
-      return 'Udefinert';
-    default:
-      return steg;
-  }
-}

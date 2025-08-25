@@ -23,6 +23,8 @@ const formaterBehandlingType = (behandlingtype: string) => {
       return 'Svar fra Nav Klageinstans';
     case 'oppfølgingsbehandling':
       return 'Oppfølgingsoppgave';
+    case 'aktivitetsplikt':
+      return 'Aktivitetsplikt $ 11-7';
     default:
       return `Ukjent behandlingtype (${behandlingtype})`;
   }
