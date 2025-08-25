@@ -8,6 +8,7 @@ import { BrukerInformasjon } from '../../../../lib/services/azure/azureUserServi
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();

@@ -8,7 +8,7 @@ import { FormField } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { addDays, format, isValid, parse } from 'date-fns';
+import { addDays, format, isValid, max, parse } from 'date-fns';
 import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
 import { validerDato } from 'lib/validation/dateValidation';
 
@@ -18,8 +18,8 @@ import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform
 import { isNullOrUndefined } from 'lib/utils/validering';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OpprettOppfølgingsBehandling } from '../../../saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
-import { useSak } from '../../../../hooks/SakHook';
-import { BrukerInformasjon } from '../../../../lib/services/azure/azureUserService';
+import { useSak } from 'hooks/SakHook';
+import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { FormEvent, useRef, useState } from 'react';
 
 interface Props {
@@ -158,7 +158,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly, ini
       return undefined;
     }
 
-    const senesteDato = Math.max(...alleTomDatoer.map((e) => e.getTime()));
+    const senesteDato = max(alleTomDatoer).getTime();
     return format(addDays(new Date(senesteDato), 1), 'dd.MM.yyyy');
   };
 
@@ -174,7 +174,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly, ini
       return undefined;
     }
 
-    const senesteDato = Math.max(...alleTomDatoer.map((e) => e.getTime()));
+    const senesteDato = max(alleTomDatoer).getTime();
     return format(new Date(senesteDato), 'dd.MM.yyyy');
   };
 
@@ -221,7 +221,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly, ini
                       <Button
                         size={'small'}
                         type={'button'}
-                        variant={'secondary'}
+                        variant={'secondary-neutral'}
                         onClick={() => {
                           setModalForOppfølgingsoppgaveState(true);
                         }}
@@ -280,28 +280,45 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly, ini
                   )}
                 </VStack>
               </Box>
-            </Box>
-          )}
-          {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
-        </VStack>
+            )}
+            {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
+          </VStack>
+        )}
+        {!visForm && grunnlag.ytelser.length === 0 && grunnlag.vurderinger.length === 0 && (
+          <VStack gap={'2'}>
+            <Detail>Vi finner ingen ytelser fra folketrygden</Detail>
+            <HStack>
+              <Button
+                size={'small'}
+                type={'button'}
+                variant={'secondary'}
+                onClick={() => setVisForm(true)}
+                disabled={readOnly}
+              >
+                Legg til folketrygdytelse
+              </Button>
+            </HStack>
+          </VStack>
+        )}
+      </VilkårsKortMedForm>
+      {bruker && visModalForOppfølgingsoppgaveState && (
+        <Modal
+          ref={ref}
+          header={{ heading: 'Opprett oppfølgningsoppgave' }}
+          onClose={() => setModalForOppfølgingsoppgaveState(false)}
+          open={true}
+        >
+          <Modal.Body>
+            <OpprettOppfølgingsBehandling
+              saksnummer={sak.sak.saksnummer}
+              brukerInformasjon={bruker}
+              modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
+              finnTidligsteVirkningstidspunkt={vurderVirkningstidspunktEtterSamordningDato()}
+            />
+          </Modal.Body>
+        </Modal>
       )}
-      {!visForm && grunnlag.ytelser.length === 0 && grunnlag.vurdering?.vurderinger?.length === 0 && (
-        <VStack gap={'2'}>
-          <Detail>Vi finner ingen ytelser fra folketrygden</Detail>
-          <HStack>
-            <Button
-              size={'small'}
-              type={'button'}
-              variant={'secondary'}
-              onClick={() => setVisForm(true)}
-              disabled={readOnly}
-            >
-              Legg til folketrygdytelse
-            </Button>
-          </HStack>
-        </VStack>
-      )}
-    </VilkårsKortMedForm>
+    </>
   );
 };
 

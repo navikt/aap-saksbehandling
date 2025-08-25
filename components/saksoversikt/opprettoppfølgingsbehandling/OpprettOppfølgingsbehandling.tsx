@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyLong, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, Box, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
 import { OppfølgingsoppgaveV0 } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -144,23 +144,17 @@ export const OpprettOppfølgingsBehandling = ({
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
         <VStack gap="4">
-          <ExpansionCard aria-label="Opprett oppfølgingsoppgave" size={'small'} defaultOpen={true}>
-            <ExpansionCard.Header>
-              <ExpansionCard.Title size="small">Opprett oppfølgingsoppgave</ExpansionCard.Title>
-            </ExpansionCard.Header>
-
-            <ExpansionCard.Content>
-              <VStack gap="4">
-                <div>
-                  <BodyLong>Oppfølgingsoppgaven ligger på vent til ønsket dato.</BodyLong>
-                </div>
-                <FormField form={form} formField={formFields.datoForOppfølging} size="medium" />
-                <FormField form={form} formField={formFields.hvaSkalFølgesOpp} size="medium" />
-                <FormField form={form} formField={formFields.hvemSkalFølgeOpp} size="medium" />
-                <FormField form={form} formField={formFields.reserverTilMeg} size="medium" />
-              </VStack>
-            </ExpansionCard.Content>
-          </ExpansionCard>
+          <Box>
+            <VStack gap="4">
+              <div>
+                <BodyLong>Oppfølgingsoppgaven ligger på vent til ønsket dato.</BodyLong>
+              </div>
+              <FormField form={form} formField={formFields.datoForOppfølging} size="medium" />
+              <FormField form={form} formField={formFields.hvaSkalFølgesOpp} size="medium" />
+              <FormField form={form} formField={formFields.hvemSkalFølgeOpp} size="medium" />
+              <FormField form={form} formField={formFields.reserverTilMeg} size="medium" />
+            </VStack>
+          </Box>
 
           {error && (
             <Alert variant={'error'} size={'small'}>

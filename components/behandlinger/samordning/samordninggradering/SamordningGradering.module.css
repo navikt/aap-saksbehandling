@@ -2,8 +2,6 @@
   color: var(--a-icon-info);
 }
 .OpprettOppfølgingsoppgaveBtn {
-  border-color: black;
-  margin-top: 8px;
-  color: black;
-  width: 223px;
+  width: fit-content;
+  margin-top: var(--a-spacing-2);
 }

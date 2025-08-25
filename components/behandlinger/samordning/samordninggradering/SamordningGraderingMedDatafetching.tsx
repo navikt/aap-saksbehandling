@@ -7,6 +7,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { hentBrukerInformasjon } from '../../../../lib/services/azure/azureUserService';
 import { Behovstype } from 'lib/utils/form';
+import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 interface Props {
   behandlingsreferanse: string;
