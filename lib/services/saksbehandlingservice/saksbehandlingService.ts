@@ -1,6 +1,4 @@
 import {
-  AktivitetspliktGrunnlag,
-  AktivitetspliktHendelser,
   AlderGrunnlag,
   ArbeidsevneGrunnlag,
   AutomatiskLovvalgOgMedlemskapVurdering,
@@ -39,8 +37,6 @@ import {
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
-  OppdaterAktivitetspliktBrudd2,
-  OpprettAktivitetspliktBrudd,
   OpprettDummySakDto,
   OpprettTestcase,
   PåklagetBehandlingGrunnlag,
@@ -114,26 +110,6 @@ export const hentSaksHistorikk = async (saksnummer: string) => {
 export const hentBehandlingPersoninfo = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/personinformasjon`;
   return await apiFetch<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const opprettBruddPåAktivitetsplikten = async (saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/aktivitetsplikt/opprett`;
-  return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
-};
-
-export const oppdaterBruddPåAktivitetsplikten = async (
-  saksnummer: string,
-  aktivitet: OppdaterAktivitetspliktBrudd2
-) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/aktivitetsplikt/oppdater`;
-  return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST', aktivitet);
-};
-
-export const hentAktivitetspliktHendelser = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/aktivitetsplikt`;
-  return await apiFetch<AktivitetspliktHendelser>(url, saksbehandlingApiScope, 'GET', undefined, [
-    `aktivitetsplikt/${saksnummer}`,
-  ]);
 };
 
 export const finnSakerForIdent = async (ident: string) => {
@@ -448,11 +424,6 @@ export const purrPåLegeerklæring = async (requestBody: { dialogmeldingPurringU
 export const hentUnderveisGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/underveis/${behandlingsreferanse}`;
   return await apiFetch<UnderveisGrunnlag[]>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentAktivitetspliktGrunnlag = async (behandlingsreferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/aktivitetsplikt/effektuer`;
-  return await apiFetch<AktivitetspliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentForutgåendeMedlemskapsVurdering = async (behandlingsReferanse: string) => {
