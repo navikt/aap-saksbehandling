@@ -78,6 +78,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
 
   const behandlingOpprettetTom = form.watch('behandlingOpprettetTom');
   const behandlingOpprettetFom = form.watch('behandlingOpprettetFom');
+  const andreStatusTyper = ['VENT', 'ER_HASTESAK'];
 
   const utvidetFilter =
     aktivKøId === ALLE_OPPGAVER_ID
@@ -88,10 +89,11 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
           returStatuser: (
             (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[]
-          ).filter((status) => status.valueOf() !== 'VENT'),
+          ).filter((status) => !andreStatusTyper.includes(status.valueOf())),
           påVent: form.watch('statuser')?.includes('VENT'),
           årsaker: form.watch('årsaker') || [],
           avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
+          markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
         }
       : undefined;
 

@@ -191,6 +191,8 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Svar fra andreinstans';
     case 'OPPFØLGINGSBEHANDLING':
       return 'Oppfølgingsoppgave';
+    case 'AKTIVITETSPLIKT':
+      return 'Aktivitetsplikt';
   }
   // exhaustiveCheck(behandlingsType);
 }
@@ -296,7 +298,9 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
   }
 }
 
-export function mapStatusTilTekst(status: 'VENT' | 'RETUR_FRA_KVALITETSSIKRER' | 'RETUR_FRA_BESLUTTER'): string {
+export function mapStatusTilTekst(
+  status: 'VENT' | 'RETUR_FRA_KVALITETSSIKRER' | 'RETUR_FRA_BESLUTTER' | 'ER_HASTESAK'
+): string {
   switch (status) {
     case 'VENT':
       return 'På vent';
@@ -304,5 +308,7 @@ export function mapStatusTilTekst(status: 'VENT' | 'RETUR_FRA_KVALITETSSIKRER' |
       return 'Retur fra kvalitetssikrer';
     case 'RETUR_FRA_BESLUTTER':
       return 'Retur fra beslutter';
+    case 'ER_HASTESAK':
+      return 'Hastesak';
   }
 }
