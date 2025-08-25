@@ -1,7 +1,7 @@
 import { hentBistandsbehovGrunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { TypeBehandling } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError, isSuccess } from 'lib/utils/api';
+import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { Bistandsbehovutenovergang } from 'components/behandlinger/sykdom/bistandsbehovutenovergang/Bistandsbehovutenovergang';
 
