@@ -30,7 +30,7 @@ describe('Trekk søknad', () => {
     });
   });
 
-  describe('mellomlagring i bistandsbehov', () => {
+  describe('mellomlagring', () => {
     const mellomlagring: MellomlagretVurderingResponse = {
       mellomlagretVurdering: {
         avklaringsbehovkode: Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
