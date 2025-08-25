@@ -14,6 +14,7 @@ import { ToTrinnsvurderingToggleGroup } from 'components/totrinnsvurdering/totri
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
+import { Historikk } from 'components/totrinnsvurdering/historikk/Historikk';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -52,8 +53,19 @@ export const ToTrinnsvurdering = ({ grunnlag, behandlingsReferanse, readOnly, er
         setToggleValue={setToggleGroupValue}
         erKvalitetssikring={erKvalitetssikring}
       />
+      {toggleGroupValue === 'historikk' && (
+        <div>
+          {grunnlag.historikk.map((historikk, index) => (
+            <Historikk key={index} historikk={historikk} erFørsteElementIListen={index === 0} />
+          ))}
+        </div>
+      )}
 
-      <div className={toggleGroupValue === 'totrinnsvurdering' ? 'flex-column' : ''}>
+      <div
+        hidden={toggleGroupValue === 'historikk'}
+        aria-hidden={toggleGroupValue === 'historikk'}
+        className={toggleGroupValue === 'totrinnsvurdering' ? 'flex-column' : ''}
+      >
         <TotrinnsvurderingForm
           grunnlag={grunnlag}
           link={link}
