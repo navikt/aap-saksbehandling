@@ -10443,6 +10443,7 @@ export interface components {
        * @example 2025-04-01
        */
       virkningstidspunkt?: string | null;
+      'vurderingsbehovOg\u00C5rsaker': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovOg\u00C5rsak'][];
     };
     'no.nav.aap.behandlingsflyt.flyt.EndringDTO': {
       begrunnelse?: string | null;
@@ -11292,6 +11293,67 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId': {
       /** Format: int64 */
       id: number;
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovMedPeriode': {
+      periode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string} */
+      type:
+        | 'MOTTATT_SØKNAD'
+        | 'HELHETLIG_VURDERING'
+        | 'MOTTATT_AKTIVITETSMELDING'
+        | 'MOTTATT_MELDEKORT'
+        | 'MOTTATT_LEGEERKLÆRING'
+        | 'MOTTATT_AVVIST_LEGEERKLÆRING'
+        | 'MOTTATT_DIALOGMELDING'
+        | 'MOTATT_KLAGE'
+        | 'SØKNAD_TRUKKET'
+        | 'KLAGE_TRUKKET'
+        | 'REVURDER_MEDLEMSKAP'
+        | 'REVURDER_SAMORDNING'
+        | 'REVURDER_LOVVALG'
+        | 'REVURDER_BEREGNING'
+        | 'REVURDER_YRKESSKADE'
+        | 'REVURDER_MANUELL_INNTEKT'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+        | 'G_REGULERING'
+        | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'FORUTGAENDE_MEDLEMSKAP'
+        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'BARNETILLEGG'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'SAMORDNING_OG_AVREGNING'
+        | 'REFUSJONSKRAV'
+        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
+        | 'FASTSATT_PERIODE_PASSERT'
+        | 'FRITAK_MELDEPLIKT'
+        | 'VURDER_RETTIGHETSPERIODE'
+        | 'MOTTATT_KABAL_HENDELSE'
+        | 'OPPFØLGINGSOPPGAVE';
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovOg\u00C5rsak': {
+      beskrivelse?: string | null;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      opprettet: string;
+      vurderingsbehov: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovMedPeriode'][];
+      /** @enum {string} */
+      '\u00E5rsak':
+        | 'SØKNAD'
+        | 'MANUELL_OPPRETTELSE'
+        | 'HELSEOPPLYSNINGER'
+        | 'ANNET_RELEVANT_DOKUMENT'
+        | 'OMGJØRING_ETTER_KLAGE'
+        | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
+        | 'ENDRING_I_REGISTERDATA'
+        | 'FASTSATT_PERIODE_PASSERT'
+        | 'FRITAK_MELDEPLIKT'
+        | 'MELDEKORT'
+        | 'AKTIVITETSMELDING'
+        | 'OPPFØLGINGSOPPGAVE'
+        | 'SVAR_FRA_KLAGEINSTANS'
+        | 'KLAGE';
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingAvTypeDTO': {
       /** Format: uuid */

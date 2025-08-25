@@ -83,6 +83,7 @@ const behandling: DetaljertBehandling = {
   versjon: 0,
   vilkår: [],
   virkningstidspunkt: '2025-01-02',
+  vurderingsbehovOgÅrsaker: [],
 };
 
 const avsluttetBehandling: DetaljertBehandling = {
@@ -96,6 +97,7 @@ const avsluttetBehandling: DetaljertBehandling = {
   versjon: 0,
   vilkår: [],
   virkningstidspunkt: '2025-01-02',
+  vurderingsbehovOgÅrsaker: [],
 };
 
 describe('SaksinfoBanner på behandling siden', () => {
