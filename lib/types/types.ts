@@ -361,8 +361,14 @@ export type DokumentÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBe
 export type Vurderingsbehov =
   components['schemas'][`no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO`]['vurderingsbehov'][number];
 
+export type VurderingsbehovMedPeriode =
+  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovMedPeriode'];
+
 export type ÅrsakTilOpprettelse =
   components['schemas'][`no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO`]['årsakTilOpprettelse'];
+
+export type VurderingsbehovOgÅrsak =
+  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovOgÅrsak'];
 
 // oppgave
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];

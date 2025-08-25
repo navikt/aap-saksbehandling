@@ -83,6 +83,7 @@ const behandling: DetaljertBehandling = {
   versjon: 0,
   vilkår: [],
   virkningstidspunkt: '2025-01-02',
+  vurderingsbehovOgÅrsaker: [],
 };
 
 const avsluttetBehandling: DetaljertBehandling = {
@@ -96,6 +97,7 @@ const avsluttetBehandling: DetaljertBehandling = {
   versjon: 0,
   vilkår: [],
   virkningstidspunkt: '2025-01-02',
+  vurderingsbehovOgÅrsaker: [],
 };
 
 describe('SaksinfoBanner på behandling siden', () => {
@@ -178,8 +180,7 @@ describe('SaksinfoBanner på behandling siden', () => {
     expect(knapp).toBeVisible();
   });
 
-  // Hopper over testen enn så lenge da det ikke er klart for prod
-  it.skip('menyvalg for å trekke søknad vises for førstegangsbehandling', async () => {
+  it('menyvalg for å trekke søknad vises for førstegangsbehandling', async () => {
     render(
       <SaksinfoBanner
         personInformasjon={personInformasjon}

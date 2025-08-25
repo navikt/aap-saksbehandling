@@ -54,8 +54,7 @@ describe('Vilkårskort med form', () => {
     expect(errorMessage).toBeVisible();
   });
 
-  // TODO Ta inn når isLocal er borte fra komponenten
-  it.skip('Skal ha en knapp for å mellomlagre en vurdering dersom det har blitt sendt inn en lagre funksjon', () => {
+  it('Skal ha en knapp for å mellomlagre en vurdering dersom det har blitt sendt inn en lagre funksjon', () => {
     render(<VilkårsKortMedForm {...defaultProps} onLagreMellomLagringClick={vitest.fn} />);
     const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
     expect(lagreUtkastKnapp).toBeVisible();
