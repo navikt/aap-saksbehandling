@@ -200,6 +200,8 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Svar fra andreinstans';
     case 'OPPFØLGINGSBEHANDLING':
       return 'Oppfølgingsoppgave';
+    case 'AKTIVITETSPLIKT':
+      return 'Aktivitetsplikt';
   }
   exhaustiveCheck(behandlingsType);
 }
