@@ -152,7 +152,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           form={form}
           formFields={formFields}
           antallOppgaver={antallOppgaver}
-          kanFiltrere={aktivKøId === 27}
+          kanFiltrere={aktivKøId === ALLE_OPPGAVER_ID}
           onFiltrerClick={() => setAktivKøId(ALLE_OPPGAVER_ID)}
           valgteRader={valgteRader}
           setValgteRader={setValgteRader}
