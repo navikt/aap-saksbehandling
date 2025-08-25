@@ -8,6 +8,7 @@ import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDok
 
 import styles from './Saksbehandlingsoversikt.module.css';
 import { Behandlingshistorikk } from 'components/behandlingshistorikk/Behandlingshistorikk';
+import { isDev } from 'lib/utils/environment';
 
 export const Saksbehandlingsoversikt = () => {
   const [toggleGroupValue, setToggleGroupValue] = useState<string>('saksdokumenter');
@@ -29,9 +30,11 @@ export const Saksbehandlingsoversikt = () => {
           <Tooltip content={'Åpne be om opplysninger'}>
             <Tabs.Tab value="be_om_opplysninger" label={'Be om opplysninger'} icon={<HddDownIcon aria-hidden />} />
           </Tooltip>
-          <Tooltip content={'Historikk'}>
-            <Tabs.Tab value="historikk" label={'Historikk'} icon={<ClockDashedIcon aria-hidden />} />
-          </Tooltip>
+          {isDev() && (
+            <Tooltip content={'Historikk'}>
+              <Tabs.Tab value="historikk" label={'Historikk'} icon={<ClockDashedIcon aria-hidden />} />
+            </Tooltip>
+          )}
         </Tabs.List>
       </Tabs>
       <div className={styles.tabContent}>
