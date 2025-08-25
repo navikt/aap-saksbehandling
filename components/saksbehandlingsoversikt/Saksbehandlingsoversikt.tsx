@@ -7,7 +7,7 @@ import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDokumentasjon';
 
 import styles from './Saksbehandlingsoversikt.module.css';
-import { Behandlingshistorikk } from 'components/behandlingshistorikk/Behandlingshistorikk';
+import { SaksHistorikk } from 'components/sakshistorikk/SaksHistorikk';
 import { isDev } from 'lib/utils/environment';
 
 export const Saksbehandlingsoversikt = () => {
@@ -40,7 +40,7 @@ export const Saksbehandlingsoversikt = () => {
       <div className={styles.tabContent}>
         {toggleGroupValue === 'saksdokumenter' && <Saksdokumenter />}
         {toggleGroupValue === 'be_om_opplysninger' && <InnhentDokumentasjon />}
-        {toggleGroupValue === 'historikk' && <Behandlingshistorikk />}
+        {toggleGroupValue === 'historikk' && <SaksHistorikk />}
       </div>
     </div>
   );

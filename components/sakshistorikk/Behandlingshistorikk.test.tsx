@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { BehandlingsHendelserTidslinje } from 'components/behandlingshistorikk/BehandlingsHendelserTidslinje';
+import { BehandlingsHendelserTidslinje } from 'components/sakshistorikk/BehandlingsHendelserTidslinje';
 import { BehandlingsHistorikk } from 'lib/types/types';
 const historikk: BehandlingsHistorikk = {
   hendelser: [

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BehandlingsHistorikk } from 'lib/types/types';
-import { BehandlingsHendelse } from 'components/behandlingshistorikk/BehandlingsHendelse';
+import { BehandlingsHendelse } from 'components/sakshistorikk/BehandlingsHendelse';
 
 interface Props {
   hendelser: BehandlingsHistorikk['hendelser'];

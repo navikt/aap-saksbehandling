@@ -1,7 +1,7 @@
 import { BehandlingsHistorikk } from 'lib/types/types';
 import { BodyShort, HGrid, HStack, Link, VStack } from '@navikt/ds-react';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { HistorikkEvent, mapEventTilIkon, mapEventTilString } from 'components/behandlingshistorikk/oversettelser';
+import { HistorikkEvent, mapEventTilIkon, mapEventTilString } from 'components/sakshistorikk/oversettelser';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
 interface Props {

@@ -4,9 +4,9 @@ import useSWR from 'swr';
 import { useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { clientHentSakshistorikk } from 'lib/clientApi';
 import { VStack } from '@navikt/ds-react';
-import { BehandlingsHendelserTidslinje } from 'components/behandlingshistorikk/BehandlingsHendelserTidslinje';
+import { BehandlingsHendelserTidslinje } from 'components/sakshistorikk/BehandlingsHendelserTidslinje';
 
-export function Behandlingshistorikk() {
+export function SaksHistorikk() {
   const saksnummer = useSaksnummer();
   const { data: saksHistorikk } = useSWR(`sak/${saksnummer}/historikk`, () => clientHentSakshistorikk(saksnummer));
   console.log('historikk', saksHistorikk);
