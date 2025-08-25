@@ -42,7 +42,9 @@ export const BehandlingsHendelserTidslinje = ({ hendelser, defaultKollapset }: P
             førsteHendelse={hendelseIndex === 0}
             sisteHendelse={hendelseIndex === hendelser.length - 1}
             hendelse={hendelse}
+            // vis linje mellom hendelser, ikke under siste hendelse
             visLinje={hendelseIndex < hendelser.length - 1}
+            // kollapsknapp vises under øverste hendelse, men bare hvis det er mer enn en hendelse
             medKollapsKnapp={hendelseIndex === 0 && hendelser.length > 1}
             erKollapset={isCollapsed}
             toggleKollaps={toggleCollapsed}
