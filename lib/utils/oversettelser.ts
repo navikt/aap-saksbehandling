@@ -35,8 +35,8 @@ const behovskodeMap = {
   '5028': 'Vurder trekk av søknad',
   '5029': 'Vurder starttidspunkt',
   '5030': 'Samordning arbeidsgiver',
-  '5032': '§ 11-17 AAP i perioden som arbeidssøker',
   '5031': '§ 11-18 AAP under behandling av krav om uføretrygd',
+  '5032': '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
@@ -200,8 +200,6 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Svar fra andreinstans';
     case 'OPPFØLGINGSBEHANDLING':
       return 'Oppfølgingsoppgave';
-    case 'AKTIVITETSPLIKT':
-      return 'Aktivitetsplikt';
   }
   exhaustiveCheck(behandlingsType);
 }

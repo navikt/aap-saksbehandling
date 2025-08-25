@@ -18,7 +18,7 @@ export const BistandsbehovutenovergangMedDataFetching = async ({
   readOnly,
   typeBehandling,
 }: Props) => {
-  const [grunnlag, mellomlagringForBistand] = await Promise.all([
+  const [grunnlag] = await Promise.all([
     hentBistandsbehovGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_BISTANDSBEHOV_KODE),
   ]);
@@ -27,16 +27,11 @@ export const BistandsbehovutenovergangMedDataFetching = async ({
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const mellomlagring = isSuccess(mellomlagringForBistand)
-    ? mellomlagringForBistand.data.mellomlagretVurdering
-    : undefined;
-
   return (
     <Bistandsbehovutenovergang
       grunnlag={grunnlag.data}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
-      initialMellomlagretVurdering={mellomlagring}
       typeBehandling={typeBehandling}
     />
   );

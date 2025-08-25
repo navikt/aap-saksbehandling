@@ -26,8 +26,6 @@ export const oppgaveBehandlingstyper = Object.keys(
         return { label: 'Svar fra andreinstans', value: 'SVAR_FRA_ANDREINSTANS' };
       case 'OPPF_LGINGSBEHANDLING':
         return { label: 'Oppfølgingsoppgave', value: 'OPPFØLGINGSBEHANDLING' };
-      case 'AKTIVITETSPLIKT':
-        return { label: 'Aktivitetsplikt', value: 'AKTIVITETSPLIKT' };
     }
     exhaustiveCheck(key);
   });
