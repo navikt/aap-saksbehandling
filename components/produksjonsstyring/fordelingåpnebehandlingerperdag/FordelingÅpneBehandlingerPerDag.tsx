@@ -24,7 +24,7 @@ export function FordelingÅpneBehandlingerPerDag({ fordelingÅpneBehandlingerPer
       <ResponsivePlot
         data={[
           {
-            x: sortertFordeling.map((e) => `${e.bøtte-1}`),
+            x: sortertFordeling.map((e) => `${e.bøtte - 1}`),
             y: sortertFordeling.map((v) => v.antall),
             type: 'bar',
             hovertemplate: 'Antall behandlinger: %{y} <br> Alder: %{x} uker',

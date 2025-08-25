@@ -1,7 +1,7 @@
 import { hentTilkjentYtelse } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Tilkjent } from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { Tilkjent } from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent';
 
 interface Props {
   behandlingsReferanse: string;

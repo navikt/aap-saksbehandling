@@ -18,14 +18,13 @@ import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/Oppga
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
 import { VurderRettighetsperiodeModal } from './rettighetsperiodemodal/VurderRettighetsperiodeModal';
-import { isProd } from 'lib/utils/environment';
 import { TrekkKlageModal } from './trekkklagemodal/TrekkKlageModal';
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
-import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
+import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { SvarFraBehandler } from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler';
 import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbehandlingmodal/SettMarkeringForBehandlingModal';
-import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
+import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 
@@ -35,14 +34,11 @@ interface Props {
   typeBehandling?: TypeBehandling;
   referanse?: string;
   behandling?: DetaljertBehandling;
-  oppgaveReservertAv?: string | null;
+  oppgave?: Oppgave;
   påVent?: boolean;
   brukerInformasjon?: BrukerInformasjon;
   brukerKanSaksbehandle?: boolean;
   flyt?: FlytGruppe[];
-  adressebeskyttelser?: Adressebeskyttelsesgrad[];
-  markeringer?: Markering[] | null;
-  harUlesteDokumenter?: boolean | null;
 }
 
 export const SaksinfoBanner = ({
@@ -50,23 +46,20 @@ export const SaksinfoBanner = ({
   sak,
   referanse,
   behandling,
-  oppgaveReservertAv,
+  oppgave,
   påVent,
   brukerInformasjon,
   typeBehandling,
   brukerKanSaksbehandle,
   flyt,
-  adressebeskyttelser,
-  markeringer,
-  harUlesteDokumenter,
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
   const [visTrekkKlageModal, settVisTrekkKlageModal] = useState(false);
   const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
-  const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!harUlesteDokumenter);
+  const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgave?.harUlesteDokumenter);
   const [aktivMarkeringType, settAktivMarkeringType] = useState<MarkeringType | null>(null);
-  const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveReservertAv;
+  const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgave?.reservertAv;
 
   const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
   const behandlerEnSøknadSomSkalTrekkes = søknadStegGruppe && søknadStegGruppe.skalVises;
@@ -79,6 +72,8 @@ export const SaksinfoBanner = ({
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
+  const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
+
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
     brukerKanSaksbehandle &&
@@ -86,11 +81,7 @@ export const SaksinfoBanner = ({
     behandlingErIkkeAvsluttet;
 
   const visValgForÅTrekkeKlage =
-    !isProd() &&
-    brukerKanSaksbehandle &&
-    !harAlleredeValgtTrekkKlage &&
-    behandlingErIkkeAvsluttet &&
-    behandling?.type === 'Klage';
+    brukerKanSaksbehandle && !harAlleredeValgtTrekkKlage && behandlingErIkkeAvsluttet && behandling?.type === 'Klage';
 
   const visValgForÅOverstyreStarttidspunkt =
     brukerKanSaksbehandle &&
@@ -98,11 +89,11 @@ export const SaksinfoBanner = ({
     behandlingErIkkeAvsluttet &&
     behandlingErIkkeIverksatt;
 
-  const visValgForÅSetteMarkering = !isProd() && brukerKanSaksbehandle && behandlingErIkkeAvsluttet;
+  const visValgForÅSetteMarkering = brukerKanSaksbehandle && behandlingErIkkeAvsluttet;
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
-    if (oppgaveReservertAv && !erReservertAvInnloggetBruker) {
-      return { status: 'RESERVERT', label: `Reservert ${oppgaveReservertAv}` };
+    if (oppgave?.reservertAv && !erReservertAvInnloggetBruker) {
+      return { status: 'RESERVERT', label: `Reservert ${oppgave.reservertAv}` };
     } else if (påVent === true) {
       return { status: 'PÅ_VENT', label: 'På vent' };
     } else if (sak.søknadErTrukket) {
@@ -163,7 +154,7 @@ export const SaksinfoBanner = ({
               <OppgaveStatus oppgaveStatus={oppgaveStatus} />
             </div>
           )}
-          {markeringer?.map((markering) => (
+          {oppgave?.markeringer?.map((markering) => (
             <div className={styles.oppgavestatus} key={markering.markeringType}>
               <MarkeringInfoboks markering={markering} referanse={behandling?.referanse} showLabel={true} />
             </div>
@@ -181,9 +172,11 @@ export const SaksinfoBanner = ({
               </Button>
               <Dropdown.Menu>
                 <Dropdown.Menu.GroupedList>
-                  <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
-                    Sett behandling på vent
-                  </Dropdown.Menu.GroupedList.Item>
+                  {behandlingErIkkeAvsluttet && (
+                    <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
+                      Sett behandling på vent
+                    </Dropdown.Menu.GroupedList.Item>
+                  )}
                   {visValgForÅTrekkeSøknad && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisTrekkSøknadModal(true)}>
                       Trekk søknad
@@ -211,8 +204,8 @@ export const SaksinfoBanner = ({
             </Dropdown>
 
             <SettBehandllingPåVentModal
-              referanse={referanse}
-              reservert={!!oppgaveReservertAv}
+              behandlingsReferanse={referanse}
+              reservert={!!oppgave?.reservertAv}
               isOpen={settBehandlingPåVentmodalIsOpen}
               onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}
             />

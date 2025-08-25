@@ -25,9 +25,7 @@ describe('sykdomsvurdering for brev', () => {
     await user.click(button);
 
     expect(
-      await screen.findByText(
-        'Du må svare på om det er relevant å informere bruker om hva som er vurdert i sykdomssteget'
-      )
+      await screen.findByText('Du må svare på om det er behov for en individuell begrunnelse i vedtaksbrevet')
     ).toBeVisible();
   });
 
@@ -65,7 +63,7 @@ describe('sykdomsvurdering for brev', () => {
 const velgAtVurderingSkalLeggesTil = async () => {
   const jaValg = within(
     screen.getByRole('group', {
-      name: 'Er det relevant å informere bruker om hva som er vurdert i sykdomssteget i denne behandlingen?',
+      name: 'Er det behov for en individuell begrunnelse i vedtaksbrevet?',
     })
   ).getByRole('radio', {
     name: 'Ja',

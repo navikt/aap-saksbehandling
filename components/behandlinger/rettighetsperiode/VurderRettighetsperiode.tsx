@@ -129,7 +129,8 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
       {form.watch('harKravPåRenter') === JaEllerNei.Ja && (
         <HStack>
           <Alert variant={'warning'} size={'small'}>
-            Det er ikke støtte for utbetaling av renter i Kelvin. Kontakt brukerstøtte for å finne en løsning.
+            Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på arenasaker (via
+            gosys).
           </Alert>
         </HStack>
       )}

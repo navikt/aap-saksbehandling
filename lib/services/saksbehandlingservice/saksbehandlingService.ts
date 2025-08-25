@@ -9,6 +9,7 @@ import {
   BehandlendeEnhetGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingPersoninfo,
+  BehandlingsHistorikk,
   BeregningsGrunnlag,
   BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
@@ -35,6 +36,8 @@ import {
   LovvalgMedlemskapGrunnlag,
   LøsAvklaringsbehovPåBehandling,
   ManuellInntektGrunnlag,
+  MellomlagretVurderingRequest,
+  MellomlagretVurderingResponse,
   NavEnhetRequest,
   OppdaterAktivitetspliktBrudd2,
   OpprettAktivitetspliktBrudd,
@@ -45,7 +48,6 @@ import {
   RettighetsperiodeGrunnlag,
   RimeligGrunnMeldepliktGrunnlag,
   SakPersoninfo,
-  SaksHistorikk,
   SaksInfo,
   SamordningAndreStatligeYtelserGrunnlag,
   SamordningArbeidsgiverGrunnlag,
@@ -60,7 +62,6 @@ import {
   SykdomsvurderingBrevGrunnlag,
   SykepengeerstatningGrunnlag,
   TilkjentYtelseGrunnlag,
-  TilkjentYtelseGrunnlagV2,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
@@ -73,6 +74,8 @@ import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFe
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
 import { Enhet } from 'lib/types/oppgaveTypes';
+import { Behovstype } from 'lib/utils/form';
+import { Behandlingshistorikk } from 'components/behandlingshistorikk/Behandlingshistorikk';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -106,7 +109,7 @@ export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersonin
 
 export const hentSaksHistorikk = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/historikk`;
-  return await apiFetch<SaksHistorikk>(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<Array<BehandlingsHistorikk>>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBehandlingPersoninfo = async (behandlingsreferanse: string) => {
@@ -285,13 +288,8 @@ export const hentSoningsvurdering = async (behandlingsreferanse: string) => {
 };
 
 export const hentTilkjentYtelse = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent/${behandlingsReferanse}`;
-  return await apiFetch<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentTilkjentYtelseV2 = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjentV2/${behandlingsReferanse}`;
-  return await apiFetch<TilkjentYtelseGrunnlagV2>(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
@@ -484,6 +482,30 @@ export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsReferanse: stri
   return apiFetch<AvklarOppfolgingsoppgaveGrunnlagResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/oppfolgingsoppgave`,
     saksbehandlingApiScope
+  );
+};
+
+export const hentMellomlagring = async (behandlingsReferanse: string, kode: string) => {
+  return apiFetch<MellomlagretVurderingResponse>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsReferanse}/${kode}`,
+    saksbehandlingApiScope
+  );
+};
+
+export const lagreMellomlagring = async (request: MellomlagretVurderingRequest) => {
+  return apiFetch<MellomlagretVurderingResponse>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering`,
+    saksbehandlingApiScope,
+    'POST',
+    request
+  );
+};
+
+export const slettMellomlagring = async (behandlingsReferanse: string, kode: Behovstype) => {
+  return apiFetch(
+    `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsReferanse}/${kode}/slett`,
+    saksbehandlingApiScope,
+    'POST'
   );
 };
 

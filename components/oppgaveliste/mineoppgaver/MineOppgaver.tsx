@@ -1,128 +1,95 @@
 'use client';
 
-import useSWR from 'swr';
-import { hentMineOppgaverClient } from 'lib/oppgaveClientApi';
-import { Alert, BodyShort, Box, HStack, Skeleton, VStack } from '@navikt/ds-react';
-import { isError } from 'lib/utils/api';
+import { Alert, BodyShort } from '@navikt/ds-react';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
-import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
-import { FormField } from 'components/form/FormField';
-import { useCallback } from 'react';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { NoNavAapOppgaveOppgaveDtoReturStatus } from '@navikt/aap-oppgave-typescript-types';
+import { MineOppgaverFiltrering } from 'components/oppgaveliste/filtrering/mineoppgaverfiltrering/MineOppgaverFiltrering';
+import { useWatch } from 'react-hook-form';
 
-interface FormFields {
-  behandlingstype: string[];
-  avklaringsbehov: string[];
-  status: string[];
+import styles from 'components/oppgaveliste/mineoppgaver/MineOppgaver.module.css';
+import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
+import { useFiltrerteOppgaver } from './MineOppgaverHook';
+import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
+import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
+
+export interface FormFieldsFilter {
+  behandlingstyper?: string[];
+  behandlingOpprettetFom?: Date;
+  behandlingOpprettetTom?: Date;
+  årsaker?: string[];
+  avklaringsbehov?: string[];
+  statuser?: string[];
 }
 
-const oppgaveStatus = {
-  VENT: (oppgave: Oppgave) => !!oppgave.påVentTil,
-  RETUR_KVALITETSSIKRER: (oppgave: Oppgave) =>
-    oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_KVALITETSSIKRER,
-  RETUR_BESLUTTER: (oppgave: Oppgave) =>
-    oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_BESLUTTER,
-} as const;
-
 export const MineOppgaver = () => {
-  const { data: mineOppgaver, mutate, isLoading } = useSWR(`api/mine-oppgaver`, () => hentMineOppgaverClient());
+  const { oppgaver, mutate, isLoading, error } = useMineOppgaver();
 
-  const { form, formFields } = useConfigForm<FormFields>({
-    behandlingstype: {
-      type: 'combobox_multiple',
+  const { form, formFields } = useConfigForm<FormFieldsFilter>({
+    behandlingstyper: {
+      type: 'checkbox',
       label: 'Behandlingstype',
       options: oppgaveBehandlingstyper,
+      defaultValue: [],
+    },
+    behandlingOpprettetFom: {
+      type: 'date',
+      label: 'Opprettet fra',
+      toDate: new Date(),
+    },
+    behandlingOpprettetTom: {
+      type: 'date',
+      label: 'Opprettet til',
+    },
+    årsaker: {
+      type: 'combobox_multiple',
+      label: 'Årsak',
+      options: alleVurderingsbehovOptions,
+      defaultValue: [],
     },
     avklaringsbehov: {
       type: 'combobox_multiple',
       label: 'Oppgave',
       options: oppgaveAvklaringsbehov,
+      defaultValue: [],
     },
-    status: {
-      type: 'combobox_multiple',
+    statuser: {
+      type: 'checkbox',
       label: 'Status',
       options: OppgaveStatuser,
+      defaultValue: [],
     },
   });
 
-  const behandlingstyper = form.watch('behandlingstype');
-  const avklaringsbehov = form.watch('avklaringsbehov');
-  const status = form.watch('status');
+  const watchedValues = useWatch({ control: form.control });
 
-  const behandlingstypeFilter = useCallback(
-    (oppgave: Oppgave) => {
-      return behandlingstyper && behandlingstyper.length > 0
-        ? behandlingstyper.find((option) => option === oppgave.behandlingstype)
-        : true;
-    },
-    [behandlingstyper]
-  );
+  const filtrerteOppgaver = useFiltrerteOppgaver({
+    oppgaver,
+    filter: watchedValues,
+  });
 
-  const avklaringsbehovFilter = useCallback(
-    (oppgave: Oppgave) =>
-      avklaringsbehov && avklaringsbehov.length > 0
-        ? avklaringsbehov.find((option) => option === oppgave.avklaringsbehovKode)
-        : true,
-    [avklaringsbehov]
-  );
-
-  const statusFilter = useCallback(
-    (oppgave: Oppgave) =>
-      status && status.length > 0
-        ? status.find((option) => oppgaveStatus[option as keyof typeof oppgaveStatus](oppgave))
-        : true,
-    [status]
-  );
-
-  if (isError(mineOppgaver)) {
-    return (
-      <Alert
-        variant={'error'}
-        title={'Feil'}
-      >{`Status ${mineOppgaver.status}, msg: ${mineOppgaver.apiException.message}`}</Alert>
-    );
+  if (error) {
+    return <Alert variant="error">{error}</Alert>;
   }
 
-  const filtrerteOppgaver = mineOppgaver?.data.oppgaver.filter(
-    (oppgave) => behandlingstypeFilter(oppgave) && avklaringsbehovFilter(oppgave) && statusFilter(oppgave)
-  );
-
   return (
-    <>
-      <Box background="surface-subtle" padding="4" borderRadius="xlarge">
-        <HStack gap={'4'}>
-          <FormField form={form} formField={formFields.behandlingstype} />
-          <FormField form={form} formField={formFields.avklaringsbehov} />
-          <FormField form={form} formField={formFields.status} />
-        </HStack>
-      </Box>
+    <div className={styles.tabell}>
+      <MineOppgaverFiltrering
+        form={form}
+        formFields={formFields}
+        antallOppgaverTotalt={oppgaver?.length}
+        antallOppgaverIFilter={filtrerteOppgaver?.length}
+      />
 
-      {isLoading && (
-        <VStack gap={'7'}>
-          <VStack gap={'1'}>
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-          </VStack>
-          <VStack gap={'1'}>
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-            <Skeleton variant="rectangle" width="100%" height={40} />
-          </VStack>
-        </VStack>
-      )}
+      {isLoading && <TabellSkeleton />}
 
-      {!isLoading && filtrerteOppgaver && filtrerteOppgaver.length === 0 && (
-        <BodyShort>Ingen reserverte oppgaver.</BodyShort>
-      )}
-
-      {filtrerteOppgaver && filtrerteOppgaver.length > 0 && (
-        <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
-      )}
-    </>
+      {!isLoading &&
+        (filtrerteOppgaver?.length > 0 ? (
+          <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
+        ) : (
+          <BodyShort className={styles.ingenreserverteoppgaver}>Ingen reserverte oppgaver.</BodyShort>
+        ))}
+    </div>
   );
 };

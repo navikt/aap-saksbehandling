@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Popover, Tag, VStack } from '@navikt/ds-react';
 import styles from './MarkeringInfoBoks.module.css';
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
@@ -57,13 +57,6 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
               {markeringTypeTilTekst(markering.markeringType)}
             </BodyShort>
           </Tag>
-          {markering.begrunnelse ? (
-            <VStack gap={'0'}>
-              <Detail textColor="subtle">Begrunnelse</Detail>
-              <div>{markering.begrunnelse}</div>
-            </VStack>
-          ) : undefined}
-
           {referanse && visTag && (
             <VStack gap={'0'} align={'end'}>
               <Button
@@ -100,7 +93,7 @@ function markeringTypeTilTekst(type: MarkeringType): string {
   }
 }
 
-function ikonForMarkeringType(type: MarkeringType) {
+export function ikonForMarkeringType(type: MarkeringType) {
   switch (type) {
     case 'HASTER':
       return <ExclamationmarkTriangleIcon />;
@@ -109,7 +102,7 @@ function ikonForMarkeringType(type: MarkeringType) {
   }
 }
 
-function variantFraType(type: MarkeringType) {
+export function variantFraType(type: MarkeringType) {
   switch (type) {
     case 'HASTER':
       return 'error-moderate';

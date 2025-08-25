@@ -189,10 +189,10 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
                   validate: {
                     gyldigDato: (value) => validerNullableDato(value as string),
                     kanIkkeVaereFoerSoeknadstidspunkt: (value) => {
-                      const soknadstidspunkt = startOfDay(new Date(sak.periode.fom));
+                      const starttidspunkt = startOfDay(new Date(sak.periode.fom));
                       const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
-                      if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), soknadstidspunkt)) {
-                        return 'Vurderingen kan ikke gjelde fra før søknadstidspunkt';
+                      if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), starttidspunkt)) {
+                        return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
                       }
                       return true;
                     },

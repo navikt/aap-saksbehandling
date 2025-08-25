@@ -4,13 +4,13 @@ import { hentMineOppgaverClient, hentOppgaverClient } from 'lib/oppgaveClientApi
 import useSWR from 'swr';
 import { isSuccess } from 'lib/utils/api';
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 50;
 
 type UseOppgaverOptions = {
   aktivEnhet: string[];
   visKunOppgaverSomBrukerErVeilederPå?: boolean;
   type: 'LEDIGE_OPPGAVER' | 'ALLE_OPPGAVER';
-  aktivKøId?: number;
+  aktivKøId: number;
   kunLedigeOppgaver?: boolean;
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'];
 };
@@ -140,7 +140,7 @@ export function useOppgaver({
 export function useLedigeOppgaver(
   aktivEnhet: string[],
   visKunOppgaverSomBrukerErVeilederPå: boolean,
-  aktivKøId?: number,
+  aktivKøId: number,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter']
 ) {
   return useOppgaver({
@@ -154,7 +154,7 @@ export function useLedigeOppgaver(
 
 export function useAlleOppgaverForEnhet(
   aktivEnhet: string[],
-  aktivKøId?: number,
+  aktivKøId: number,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter']
 ) {
   return useOppgaver({

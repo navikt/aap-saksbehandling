@@ -48,7 +48,10 @@ export const SaksopplysningerKolonne = ({
       )}
       {/* TODO fjern toggles når verifisert */}
       {(isDev() || isLocal()) && gjeldendeSykdomsvurderingForBrev && (
-        <SaksopplysningerKort tittel="Tekst til vedtaksbrev" begrunnelse={gjeldendeSykdomsvurderingForBrev} />
+        <SaksopplysningerKort
+          tittel="Individuell begrunnelse for §§ 11-5 og 11-6"
+          begrunnelse={gjeldendeSykdomsvurderingForBrev}
+        />
       )}
       {refusjonVurdering?.harKrav && (
         <SaksopplysningerKort

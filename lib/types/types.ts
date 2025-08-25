@@ -28,9 +28,6 @@ export type BeregningTidspunktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningTidspunktAvklaringResponse'];
 
 export type TilkjentYtelseGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelseDto'];
-
-export type TilkjentYtelseGrunnlagV2 =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto'];
 
 export type KvalitetssikringGrunnlag =
@@ -138,8 +135,8 @@ export type LøsAvklaringsbehovPåBehandling =
 export type SaksInfo = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.UtvidetSaksinfoDTO'];
 export type SakPersoninfo =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SakPersoninfoDTO'];
-export type SaksHistorikk =
-  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksHistorikkDTO'];
+export type BehandlingsHistorikk =
+  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingHistorikkDTO'];
 
 export type OpprettTestcase = components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
 export type OpprettDummySakDto = components['schemas']['no.nav.aap.behandlingsflyt.test.OpprettDummySakDto'];
@@ -373,3 +370,12 @@ export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
 export type ReturStatus = NonNullable<Oppgave['returInformasjon']>['status'];
 
 export type Behandlingsstatus = DetaljertBehandling['status'];
+
+// Mellomlagring
+
+export type MellomlagretVurderingResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingResponse'];
+export type MellomlagretVurderingRequest =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingRequest'];
+export type MellomlagretVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto'];

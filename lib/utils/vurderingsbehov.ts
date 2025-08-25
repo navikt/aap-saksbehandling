@@ -64,6 +64,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Helhetlig vurdering';
     case 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN':
       return 'Revurder meldeplikt rimelig grunn';
+    case 'AKTIVITETSPLIKT_11_7':
+      return 'Aktivitetsplikt $ 11-7';
   }
 };
 
@@ -136,6 +138,8 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
       return 'Revurder manuell inntekt';
     case 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN':
       return 'Rimelig grunn til ikke overholdt meldeplikt';
+    case 'AKTIVITETSPLIKT_11_7':
+      return 'Aktivitetsplikt $ 11-7';
     default:
       return vurderingsbehov;
   }

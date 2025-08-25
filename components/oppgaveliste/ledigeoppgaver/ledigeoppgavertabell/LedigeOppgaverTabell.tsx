@@ -2,10 +2,14 @@ import { Alert, BodyShort, CopyButton, Table, Tooltip } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
-import { mapBehovskodeTilBehovstype, mapTilOppgaveBehandlingstypeTekst } from 'lib/utils/oversettelser';
+import {
+  mapBehovskodeTilBehovstype,
+  mapTilOppgaveBehandlingstypeTekst,
+  mapTilÅrsakTilOpprettelseTilTekst,
+} from 'lib/utils/oversettelser';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
-import { AvklaringsbehovKode, Vurderingsbehov } from 'lib/types/types';
+import { AvklaringsbehovKode, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
@@ -48,14 +52,21 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
             <Table.ColumnHeader sortKey={'saksnummer'} sortable={true}>
               ID
             </Table.ColumnHeader>
-            <Table.HeaderCell>Behandlingstype</Table.HeaderCell>
+            <Table.ColumnHeader sortKey={'behandlingstype'} sortable={true}>
+              Behandlingstype
+            </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={true}>
               Beh. opprettet
+            </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'årsakTilOpprettelse'} sortable={true}>
+              Årsak
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'årsak'} sortable={true}>
               Vurderingsbehov
             </Table.ColumnHeader>
-            <Table.HeaderCell>Oppgave</Table.HeaderCell>
+            <Table.ColumnHeader sortKey={'avklaringsbehovKode'} sortable={true}>
+              Oppgave
+            </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
@@ -89,6 +100,11 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
                 {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                {oppgave.årsakTilOpprettelse != null
+                  ? mapTilÅrsakTilOpprettelseTilTekst(oppgave.årsakTilOpprettelse as ÅrsakTilOpprettelse)
+                  : ''}
+              </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip
                   content={oppgave.årsakerTilBehandling

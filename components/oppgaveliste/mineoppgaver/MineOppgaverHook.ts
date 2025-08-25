@@ -3,7 +3,7 @@ import { erDatoFoerDato } from 'lib/validation/dateValidation';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveOppgaveDtoReturStatus } from '@navikt/aap-oppgave-typescript-types';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver2';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { useDebouncedValue } from 'hooks/useDebouncedValueHook';
 
 const oppgaveStatus = {

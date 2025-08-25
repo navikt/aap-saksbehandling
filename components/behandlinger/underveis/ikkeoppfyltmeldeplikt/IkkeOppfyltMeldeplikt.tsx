@@ -10,7 +10,7 @@ import {
 import { FormEvent, useState } from 'react';
 import { Button, HStack, Link, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import styles from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent2.module.css';
+import styles from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent.module.css';
 import { useConfigForm } from 'components/form/FormHook';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
@@ -48,9 +48,6 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
 
   const defaultValues: RimeligGrunnVurdering[] = relevantePerioder.map((periode) => {
     const vurdering = finnVurdering(periode.periode.fom);
-    if (vurdering && vurdering?.harRimeligGrunn !== periode.harRimeligGrunn) {
-      console.error('Inkonsistent status for ' + periode.periode.fom);
-    }
 
     return {
       fraDato: formaterDatoForFrontend(periode.periode.fom),
