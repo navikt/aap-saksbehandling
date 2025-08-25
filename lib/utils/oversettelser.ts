@@ -4,6 +4,7 @@ import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/op
 
 const behovskodeMap = {
   // Behandlingsflyt
+  '4101': '§ 11-7 Aktivitetsplikt',
   '5001': '§ 11-14 Student',
   '5002': '§ 11-10 Rimelig grunn',
   '5003': '§ 11-5 Nedsatt arbeidsevne',
