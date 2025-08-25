@@ -184,8 +184,9 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring({ ...form.watch(), overstyring })}
       onDeleteMellomlagringClick={() => {
-        slettMellomlagring();
-        form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+        slettMellomlagring(() => {
+          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+        });
       }}
     >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (

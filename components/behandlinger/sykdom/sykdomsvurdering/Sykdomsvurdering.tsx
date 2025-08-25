@@ -285,8 +285,9 @@ export const Sykdomsvurdering = ({
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
-        slettMellomlagring();
-        form.reset(sykdomsvurdering ? mapVurderingToDraftFormFields(sykdomsvurdering) : emptyDraftFormFields());
+        slettMellomlagring(() => {
+          form.reset(sykdomsvurdering ? mapVurderingToDraftFormFields(sykdomsvurdering) : emptyDraftFormFields());
+        });
       }}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (

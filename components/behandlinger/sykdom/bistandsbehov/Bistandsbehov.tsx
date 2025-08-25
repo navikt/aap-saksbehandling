@@ -180,8 +180,9 @@ export const Bistandsbehov = ({
       kvalitetssikretAv={grunnlag?.kvalitetssikretAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
-        slettMellomlagring();
-        form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+        slettMellomlagring(() => {
+          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+        });
       }}
       mellomlagretVurdering={mellomlagretVurdering}
     >

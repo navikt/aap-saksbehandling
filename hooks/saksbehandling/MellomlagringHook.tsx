@@ -12,7 +12,7 @@ export function useMellomlagring(
   initialMellomlagring?: MellomlagretVurdering
 ): {
   lagreMellomlagring: (vurdering: object) => void;
-  slettMellomlagring: () => void;
+  slettMellomlagring: (callback?: () => void) => void;
   mellomlagretVurdering?: MellomlagretVurdering;
   nullstillMellomlagretVurdering: () => void;
 } {
@@ -33,7 +33,7 @@ export function useMellomlagring(
     }
   }
 
-  async function slettMellomlagring() {
+  async function slettMellomlagring(callback?: () => void) {
     const res = await clientSlettMellomlagring({
       behandlingsreferanse: behandlingsReferanse,
       behovstype: behovstype,
@@ -41,6 +41,9 @@ export function useMellomlagring(
 
     if (isSuccess(res)) {
       setMellomlagretVurdering(undefined);
+      if (callback) {
+        callback();
+      }
     }
   }
 
