@@ -25,7 +25,6 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
   visOverstyrKnapp,
   initialMellomlagretVurdering,
 }: Props) => {
-  console.log(initialMellomlagretVurdering);
   const [overstyring, setOverstyring] = useState<boolean>(initialMellomlagretVurdering !== undefined);
 
   return (
