@@ -9,7 +9,7 @@ import {
   JaEllerNeiOptions,
 } from 'lib/utils/form';
 import { FormEvent } from 'react';
-import { BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
+import { BodyShort, Link } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -115,13 +115,6 @@ export const Bistandsbehovutenovergang = ({
     })(event);
   };
 
-  const erBehovForAktivBehandling = form.watch('erBehovForAktivBehandling') === JaEllerNei.Nei;
-  const erBehovForArbeidsrettetTiltak = form.watch('erBehovForArbeidsrettetTiltak') === JaEllerNei.Nei;
-  const erBehovForAnnenOppfølging = form.watch('erBehovForAnnenOppfølging') === JaEllerNei.Nei;
-
-  const bistandsbehovErIkkeOppfylt =
-    erBehovForAktivBehandling && erBehovForArbeidsrettetTiltak && erBehovForAnnenOppfølging;
-
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
@@ -188,21 +181,6 @@ export const Bistandsbehovutenovergang = ({
         form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
         )}
-      {(typeBehandling === 'Førstegangsbehandling' || (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
-        bistandsbehovErIkkeOppfylt && (
-          <VStack gap={'4'} as={'section'}>
-            <Heading level={'3'} size="small">
-              § 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd
-            </Heading>
-          </VStack>
-        )}
-      {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
-        <VStack gap={'4'} as={'section'}>
-          <Heading level={'3'} size="small">
-            § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
-          </Heading>
-        </VStack>
-      )}
     </VilkårsKortMedForm>
   );
 

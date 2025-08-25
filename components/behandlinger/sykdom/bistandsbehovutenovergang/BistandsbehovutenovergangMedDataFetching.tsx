@@ -1,9 +1,9 @@
 import { hentBistandsbehovGrunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { TypeBehandling } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError, isSuccess } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { Bistandsbehovutenovergang } from 'components/behandlinger/sykdom/bistandsbehovutenovergang/Bistandsbehovutenovergang';
 
 interface Props {
   behandlingsReferanse: string;
@@ -32,7 +32,7 @@ export const BistandsbehovutenovergangMedDataFetching = async ({
     : undefined;
 
   return (
-    <Bistandsbehov
+    <Bistandsbehovutenovergang
       grunnlag={grunnlag.data}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
