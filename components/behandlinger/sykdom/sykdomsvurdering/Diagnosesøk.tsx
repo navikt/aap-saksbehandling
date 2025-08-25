@@ -1,6 +1,6 @@
 import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
-import { diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
+import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { JaEllerNei } from 'lib/utils/form';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFields } from 'components/form/FormHook';
@@ -14,13 +14,13 @@ interface Props {
 }
 
 export const Diagnosesøk = ({ form, formFields, readOnly, hoveddiagnoseDefaultOptions }: Props) => {
-  const kodeverkValue = form.watch('kodeverk');
+  const kodeverkValue = form.watch('kodeverk') as DiagnoseSystem;
   const defaultOptionsHoveddiagnose = hoveddiagnoseDefaultOptions
     ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue!, '');
+    : diagnoseSøker(kodeverkValue, '');
   const defaultOptionsBidiagnose = hoveddiagnoseDefaultOptions
     ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue!, '');
+    : diagnoseSøker(kodeverkValue, '');
 
   const harSkadeEllerLyte = form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja;
 

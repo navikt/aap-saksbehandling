@@ -17,7 +17,13 @@ import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøke
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isBefore, parse, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
-import { SykdomsGrunnlag, SykdomsvurderingResponse, TypeBehandling } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  SykdomsGrunnlag,
+  SykdomsvurderingResponse,
+  Sykdomvurdering,
+  TypeBehandling,
+} from 'lib/types/types';
 import { Revurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Revurdering';
 import { Førstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/Førstegangsbehandling';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
@@ -27,13 +33,14 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
-import { deepEqual } from '../../../tidligerevurderinger/TidligereVurderingerUtils';
+import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 export interface SykdomsvurderingFormFields {
   begrunnelse: string;
   vurderingenGjelderFra: string;
   harSkadeSykdomEllerLyte: string;
-  kodeverk?: DiagnoseSystem;
+  kodeverk?: string;
   hoveddiagnose?: ValuePair | null;
   bidiagnose?: ValuePair[] | null;
   erArbeidsevnenNedsatt?: JaEllerNei;
@@ -45,6 +52,8 @@ export interface SykdomsvurderingFormFields {
   yrkesskadeBegrunnelse?: string;
 }
 
+type DraftFormFields = Partial<SykdomsvurderingFormFields>;
+
 interface SykdomProps {
   behandlingVersjon: number;
   grunnlag: SykdomsGrunnlag;
@@ -52,7 +61,16 @@ interface SykdomProps {
   typeBehandling: TypeBehandling;
   bidiagnoserDeafultOptions?: ValuePair[];
   hoveddiagnoseDefaultOptions?: ValuePair[];
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
+
+const vilkårsvurderingLabel = 'Vilkårsvurdering';
+const harSkadeSykdomEllerLyteLabel = 'Har brukeren sykdom, skade eller lyte?';
+const erArbeidsevnenNedsattLabel = 'Har brukeren nedsatt arbeidsevne?';
+const erNedsettelseIArbeidsevneMerEnnHalvpartenLabel = 'Er arbeidsevnen nedsatt med minst halvparten?';
+const erSkadeSykdomEllerLyteVesentligdelLabel =
+  'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?';
+const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte arbeidsevnen av en viss varighet?';
 
 export const Sykdomsvurdering = ({
   grunnlag,
@@ -61,40 +79,38 @@ export const Sykdomsvurdering = ({
   bidiagnoserDeafultOptions,
   hoveddiagnoseDefaultOptions,
   typeBehandling,
+  initialMellomlagretVurdering,
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
+  const { slettMellomlagring, lagreMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_SYKDOM_KODE, initialMellomlagretVurdering);
+
+  const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
+  const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(-1);
+
+  const defaultValues: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(sykdomsvurdering);
+
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
   const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
-  const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
-
-  const vilkårsvurderingLabel = 'Vilkårsvurdering';
-  const harSkadeSykdomEllerLyteLabel = 'Har brukeren sykdom, skade eller lyte?';
-  const erArbeidsevnenNedsattLabel = 'Har brukeren nedsatt arbeidsevne?';
-  const erNedsettelseIArbeidsevneMerEnnHalvpartenLabel = 'Er arbeidsevnen nedsatt med minst halvparten?';
-  const erSkadeSykdomEllerLyteVesentligdelLabel =
-    'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?';
-  const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte arbeidsevnen av en viss varighet?';
-
-  const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(-1);
 
   const { formFields, form } = useConfigForm<SykdomsvurderingFormFields>(
     {
       begrunnelse: {
         type: 'textarea',
         label: vilkårsvurderingLabel,
-        defaultValue: sykdomsvurdering?.begrunnelse,
+        defaultValue: defaultValues.begrunnelse,
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
       },
       vurderingenGjelderFra: {
         type: 'date_input',
         label: 'Vurderingen gjelder fra',
-        defaultValue: sykdomsvurdering?.vurderingenGjelderFra
-          ? formaterDatoForFrontend(sykdomsvurdering?.vurderingenGjelderFra)
-          : undefined,
+        defaultValue: defaultValues?.vurderingenGjelderFra,
         rules: {
           required: 'Du må velge når vurderingen gjelder fra',
           validate: {
@@ -112,28 +128,28 @@ export const Sykdomsvurdering = ({
       harSkadeSykdomEllerLyte: {
         type: 'radio',
         label: harSkadeSykdomEllerLyteLabel,
-        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.harSkadeSykdomEllerLyte),
+        defaultValue: defaultValues?.harSkadeSykdomEllerLyte,
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om brukeren har sykdom, skade eller lyte' },
       },
       erArbeidsevnenNedsatt: {
         type: 'radio',
         label: erArbeidsevnenNedsattLabel,
-        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erArbeidsevnenNedsatt),
+        defaultValue: defaultValues?.erArbeidsevnenNedsatt,
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om brukeren har nedsatt arbeidsevne' },
       },
       erNedsettelseIArbeidsevneMerEnnHalvparten: {
         type: 'radio',
         label: erNedsettelseIArbeidsevneMerEnnHalvpartenLabel,
-        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten),
+        defaultValue: defaultValues?.erNedsettelseIArbeidsevneMerEnnHalvparten,
         options: JaEllerNeiOptions,
         rules: { required: 'Du må svare på om arbeidsevnen er nedsatt med minst halvparten' },
       },
       erSkadeSykdomEllerLyteVesentligdel: {
         type: 'radio',
         label: erSkadeSykdomEllerLyteVesentligdelLabel,
-        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erSkadeSykdomEllerLyteVesentligdel),
+        defaultValue: defaultValues?.erSkadeSykdomEllerLyteVesentligdel,
         options: JaEllerNeiOptions,
         rules: {
           required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
@@ -146,7 +162,7 @@ export const Sykdomsvurdering = ({
           { label: 'Primærhelsetjenesten (ICPC2)', value: 'ICPC2' },
           { label: 'Spesialisthelsetjenesten (ICD10)', value: 'ICD10' },
         ],
-        defaultValue: getStringEllerUndefined(diagnosegrunnlag?.kodeverk),
+        defaultValue: defaultValues.kodeverk,
         rules: { required: 'Du må velge et system for diagnoser' },
         onChange: () => {
           form.setValue('hoveddiagnose', null);
@@ -155,19 +171,17 @@ export const Sykdomsvurdering = ({
       },
       hoveddiagnose: {
         type: 'async_combobox',
-        defaultValue: hoveddiagnoseDefaultOptions?.find((value) => value.value === diagnosegrunnlag?.hoveddiagnose),
+        defaultValue: defaultValues.hoveddiagnose !== null ? defaultValues.hoveddiagnose : undefined,
       },
       bidiagnose: {
         type: 'async_combobox',
-        defaultValue: bidiagnoserDeafultOptions?.filter((option) =>
-          diagnosegrunnlag?.bidiagnoser?.includes(option.value)
-        ),
+        defaultValue: defaultValues.bidiagnose !== null ? defaultValues.bidiagnose : undefined,
       },
       erNedsettelseIArbeidsevneAvEnVissVarighet: {
         type: 'radio',
         label: erNedsettelseIArbeidsevneAvEnVissVarighetLabel,
         description: 'Om du svarer nei, vil brukeren vurderes for AAP som sykepengeerstatning etter § 11-13.',
-        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet),
+        defaultValue: defaultValues?.erNedsettelseIArbeidsevneAvEnVissVarighet,
         rules: {
           required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet',
         },
@@ -176,14 +190,14 @@ export const Sykdomsvurdering = ({
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: {
         type: 'radio',
         label: 'Er arbeidsevnen nedsatt med minst 30 prosent?',
-        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense),
+        defaultValue: defaultValues?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
         rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.' },
         options: JaEllerNeiOptions,
       },
       erNedsettelseIArbeidsevneMerEnnFørtiProsent: {
         type: 'radio',
         label: 'Er arbeidsevnen nedsatt med minst 40 prosent?',
-        defaultValue: getJaNeiEllerUndefined(sykdomsvurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten),
+        defaultValue: defaultValues?.erNedsettelseIArbeidsevneMerEnnHalvparten,
         rules: { required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 40 prosent' },
         options: JaEllerNeiOptions,
       },
@@ -193,7 +207,7 @@ export const Sykdomsvurdering = ({
         description:
           'Brukeren har en yrkesskade som kan ha betydning for retten til AAP. Du må derfor vurdere om arbeidsevnen er nedsatt med minst 30 prosent. NAY vil vurdere om arbeidsevnen er nedsatt på grunn av yrkesskaden.',
         rules: { required: 'Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med mist 30 prosent' },
-        defaultValue: getStringEllerUndefined(sykdomsvurdering?.yrkesskadeBegrunnelse),
+        defaultValue: defaultValues?.yrkesskadeBegrunnelse,
       },
     },
     { shouldUnregister: false, readOnly: readOnly }
@@ -201,39 +215,42 @@ export const Sykdomsvurdering = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
-          sykdomsvurderinger: [
-            {
-              dokumenterBruktIVurdering: [],
-              begrunnelse: data.begrunnelse,
-              vurderingenGjelderFra: data.vurderingenGjelderFra
-                ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
-                : undefined,
-              harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
-              kodeverk: data?.kodeverk,
-              hoveddiagnose: data?.hoveddiagnose?.value,
-              bidiagnoser: data.bidiagnose?.map((diagnose) => diagnose.value),
-              erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
-              erSkadeSykdomEllerLyteVesentligdel: getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel),
-              erNedsettelseIArbeidsevneMerEnnHalvparten:
-                behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()
-                  ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten)
-                  : getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnFørtiProsent),
-              erNedsettelseIArbeidsevneAvEnVissVarighet: getTrueFalseEllerUndefined(
-                data.erNedsettelseIArbeidsevneAvEnVissVarighet
-              ),
-              erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getTrueFalseEllerUndefined(
-                data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-              ),
-              yrkesskadeBegrunnelse: data?.yrkesskadeBegrunnelse,
-            },
-          ],
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
+            sykdomsvurderinger: [
+              {
+                dokumenterBruktIVurdering: [],
+                begrunnelse: data.begrunnelse,
+                vurderingenGjelderFra: data.vurderingenGjelderFra
+                  ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
+                  : undefined,
+                harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
+                kodeverk: data?.kodeverk,
+                hoveddiagnose: data?.hoveddiagnose?.value,
+                bidiagnoser: data.bidiagnose?.map((diagnose) => diagnose.value),
+                erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
+                erSkadeSykdomEllerLyteVesentligdel: getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel),
+                erNedsettelseIArbeidsevneMerEnnHalvparten:
+                  behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()
+                    ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten)
+                    : getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnFørtiProsent),
+                erNedsettelseIArbeidsevneAvEnVissVarighet: getTrueFalseEllerUndefined(
+                  data.erNedsettelseIArbeidsevneAvEnVissVarighet
+                ),
+                erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getTrueFalseEllerUndefined(
+                  data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+                ),
+                yrkesskadeBegrunnelse: data?.yrkesskadeBegrunnelse,
+              },
+            ],
+          },
+          referanse: behandlingsReferanse,
         },
-        referanse: behandlingsReferanse,
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 
@@ -265,6 +282,12 @@ export const Sykdomsvurdering = ({
       vurdertAvAnsatt={sykdomsvurdering?.vurdertAv}
       knappTekst={'Bekreft'}
       kvalitetssikretAv={grunnlag.kvalitetssikretAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring();
+        form.reset(sykdomsvurdering ? mapVurderingToDraftFormFields(sykdomsvurdering) : emptyDraftFormFields());
+      }}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderingerV3
@@ -321,45 +344,91 @@ export const Sykdomsvurdering = ({
     </VilkårsKortMedForm>
   );
 
-  function byggFelter(vurdering: SykdomsvurderingResponse): ValuePair[] {
-    return [
-      {
-        label: vilkårsvurderingLabel,
-        value: vurdering.begrunnelse,
-      },
-      {
-        label: harSkadeSykdomEllerLyteLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.harSkadeSykdomEllerLyte),
-      },
-      {
-        label: 'Hoveddiagnose',
-        value: vurdering.hoveddiagnose
-          ? diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, vurdering.hoveddiagnose)[0]?.label
-          : '',
-      },
-      {
-        label: 'Bidiagnose',
-        value: (vurdering.bidiagnoser ?? ['Ingen'])
-          .map((it) => diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, it)[0]?.label)
-          .filter(Boolean)
-          .join(', '),
-      },
-      {
-        label: erArbeidsevnenNedsattLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.erArbeidsevnenNedsatt),
-      },
-      {
-        label: erNedsettelseIArbeidsevneMerEnnHalvpartenLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten),
-      },
-      {
-        label: erSkadeSykdomEllerLyteVesentligdelLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.erSkadeSykdomEllerLyteVesentligdel),
-      },
-      {
-        label: erNedsettelseIArbeidsevneAvEnVissVarighetLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet),
-      },
-    ];
+  function mapVurderingToDraftFormFields(vurdering?: Sykdomvurdering): DraftFormFields {
+    return {
+      begrunnelse: vurdering?.begrunnelse,
+      vurderingenGjelderFra: vurdering?.vurderingenGjelderFra
+        ? formaterDatoForFrontend(vurdering?.vurderingenGjelderFra)
+        : undefined,
+      harSkadeSykdomEllerLyte: getJaNeiEllerUndefined(vurdering?.harSkadeSykdomEllerLyte),
+      erArbeidsevnenNedsatt: getJaNeiEllerUndefined(vurdering?.erArbeidsevnenNedsatt),
+      erNedsettelseIArbeidsevneMerEnnHalvparten: getJaNeiEllerUndefined(
+        vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
+      ),
+      erSkadeSykdomEllerLyteVesentligdel: getJaNeiEllerUndefined(vurdering?.erSkadeSykdomEllerLyteVesentligdel),
+      kodeverk: getStringEllerUndefined(diagnosegrunnlag?.kodeverk),
+      hoveddiagnose: hoveddiagnoseDefaultOptions?.find((value) => value.value === diagnosegrunnlag?.hoveddiagnose),
+      bidiagnose: bidiagnoserDeafultOptions?.filter((option) => diagnosegrunnlag?.bidiagnoser?.includes(option.value)),
+      erNedsettelseIArbeidsevneAvEnVissVarighet: getJaNeiEllerUndefined(
+        vurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet
+      ),
+      erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getJaNeiEllerUndefined(
+        vurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+      ),
+      erNedsettelseIArbeidsevneMerEnnFørtiProsent: getJaNeiEllerUndefined(
+        vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
+      ),
+      yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
+    };
   }
 };
+
+function emptyDraftFormFields(): DraftFormFields {
+  return {
+    begrunnelse: '',
+    vurderingenGjelderFra: '',
+    harSkadeSykdomEllerLyte: '',
+    erArbeidsevnenNedsatt: undefined,
+    erNedsettelseIArbeidsevneMerEnnHalvparten: undefined,
+    erSkadeSykdomEllerLyteVesentligdel: undefined,
+    kodeverk: '',
+    hoveddiagnose: undefined,
+    bidiagnose: [],
+    erNedsettelseIArbeidsevneAvEnVissVarighet: undefined,
+    erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: undefined,
+    erNedsettelseIArbeidsevneMerEnnFørtiProsent: undefined,
+    yrkesskadeBegrunnelse: '',
+  };
+}
+
+function byggFelter(vurdering: SykdomsvurderingResponse): ValuePair[] {
+  return [
+    {
+      label: vilkårsvurderingLabel,
+      value: vurdering.begrunnelse,
+    },
+    {
+      label: harSkadeSykdomEllerLyteLabel,
+      value: getJaNeiEllerIkkeBesvart(vurdering.harSkadeSykdomEllerLyte),
+    },
+    {
+      label: 'Hoveddiagnose',
+      value: vurdering.hoveddiagnose
+        ? diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, vurdering.hoveddiagnose)[0]?.label
+        : '',
+    },
+    {
+      label: 'Bidiagnose',
+      value: (vurdering.bidiagnoser ?? ['Ingen'])
+        .map((it) => diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, it)[0]?.label)
+        .filter(Boolean)
+        .join(', '),
+    },
+    {
+      label: erArbeidsevnenNedsattLabel,
+      value: getJaNeiEllerIkkeBesvart(vurdering.erArbeidsevnenNedsatt),
+    },
+    {
+      label: erNedsettelseIArbeidsevneMerEnnHalvpartenLabel,
+      value: getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten),
+    },
+    {
+      label: erSkadeSykdomEllerLyteVesentligdelLabel,
+      value: getJaNeiEllerIkkeBesvart(vurdering.erSkadeSykdomEllerLyteVesentligdel),
+    },
+    {
+      label: erNedsettelseIArbeidsevneAvEnVissVarighetLabel,
+      value: getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet),
+    },
+  ];
+}

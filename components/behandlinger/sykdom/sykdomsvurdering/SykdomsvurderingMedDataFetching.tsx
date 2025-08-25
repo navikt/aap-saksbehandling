@@ -1,12 +1,13 @@
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentMellomlagring, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { TypeBehandling } from 'lib/types/types';
 import { ValuePair } from 'components/form/FormField';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError } from 'lib/utils/api';
+import { isError, isSuccess } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -21,10 +22,16 @@ export const SykdomsvurderingMedDataFetching = async ({
   readOnly,
   typeBehandling,
 }: Props) => {
-  const grunnlag = await hentSykdomsGrunnlag(behandlingsReferanse);
+  const [grunnlag, mellomlagring] = await Promise.all([
+    hentSykdomsGrunnlag(behandlingsReferanse),
+    hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_SYKDOM_KODE),
+  ]);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
+
+  const initialMellomlagretVurdering = isSuccess(mellomlagring) ? mellomlagring.data.mellomlagretVurdering : undefined;
 
   const bidiagnoserDefaultOptions = await getDefaultOptions(
     finnDiagnosegrunnlag(typeBehandling, grunnlag.data)?.bidiagnoser,
@@ -44,6 +51,7 @@ export const SykdomsvurderingMedDataFetching = async ({
       bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
       hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
       typeBehandling={typeBehandling}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
 };
