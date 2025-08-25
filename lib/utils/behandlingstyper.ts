@@ -26,6 +26,8 @@ export const oppgaveBehandlingstyper = Object.keys(
         return { label: 'Svar fra andreinstans', value: 'SVAR_FRA_ANDREINSTANS' };
       case 'OPPF_LGINGSBEHANDLING':
         return { label: 'Oppfølgingsoppgave', value: 'OPPFØLGINGSBEHANDLING' };
+      case 'AKTIVITETSPLIKT':
+        return { label: 'Aktivitetsplikt', value: 'AKTIVITETSPLIKT' };
     }
     exhaustiveCheck(key);
   });
@@ -62,4 +64,5 @@ export const OppgaveStatuser: ValuePair[] = [
   { label: 'På vent', value: 'VENT' },
   { label: 'Retur fra kvalitetssikrer', value: 'RETUR_FRA_KVALITETSSIKRER' },
   { label: 'Retur fra beslutter', value: 'RETUR_FRA_BESLUTTER' },
+  { label: 'Hastesak', value: 'ER_HASTESAK' },
 ];

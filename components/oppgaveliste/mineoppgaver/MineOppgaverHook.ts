@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { erDatoFoerDato } from 'lib/validation/dateValidation';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Oppgave } from 'lib/types/oppgaveTypes';
-import { NoNavAapOppgaveOppgaveDtoReturStatus } from '@navikt/aap-oppgave-typescript-types';
+import {
+  NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
+  NoNavAapOppgaveOppgaveDtoReturStatus,
+} from '@navikt/aap-oppgave-typescript-types';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { useDebouncedValue } from 'hooks/useDebouncedValueHook';
 
@@ -12,6 +15,8 @@ const oppgaveStatus = {
     oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_KVALITETSSIKRER,
   RETUR_FRA_BESLUTTER: (oppgave: Oppgave) =>
     oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_BESLUTTER,
+  ER_HASTESAK: (oppgave: Oppgave) =>
+    oppgave.markeringer.some((it) => it.markeringType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER),
 } as const;
 
 interface Props {
