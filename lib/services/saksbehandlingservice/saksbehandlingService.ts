@@ -75,7 +75,6 @@ import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { Behovstype } from 'lib/utils/form';
-import { Behandlingshistorikk } from 'components/behandlingshistorikk/Behandlingshistorikk';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
