@@ -104,7 +104,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell textSize={'small'}>Tilknytt yrkesskade</Table.HeaderCell>
-                  <Table.HeaderCell textSize={'small'}>Skadenummer</Table.HeaderCell>
+                  <Table.HeaderCell textSize={'small'}>Saksnummer</Table.HeaderCell>
                   <Table.HeaderCell textSize={'small'}>Kilde</Table.HeaderCell>
                   <Table.HeaderCell textSize={'small'}>Skadedato</Table.HeaderCell>
                 </Table.Row>

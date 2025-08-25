@@ -18,7 +18,7 @@ export const YrkesskadeTabell = ({ yrkesskader }: Props) => {
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell textSize={'small'}>Skadenummer</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Saksnummer</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Kilde</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Skadedato</Table.HeaderCell>
           </Table.Row>
