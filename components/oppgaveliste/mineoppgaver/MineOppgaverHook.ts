@@ -16,7 +16,7 @@ const oppgaveStatus = {
   RETUR_FRA_BESLUTTER: (oppgave: Oppgave) =>
     oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_BESLUTTER,
   ER_HASTESAK: (oppgave: Oppgave) =>
-    oppgave.markeringer.some((it) => it.markeringType == NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER),
+    oppgave.markeringer.some((it) => it.markeringType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER),
 } as const;
 
 interface Props {
