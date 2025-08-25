@@ -3,6 +3,11 @@ import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { DetaljertBehandling, SakPersoninfo, SaksInfo } from 'lib/types/types';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Oppgave } from 'lib/types/oppgaveTypes';
+import {
+  NoNavAapOppgaveOppgaveDtoBehandlingstype,
+  NoNavAapOppgaveOppgaveDtoStatus,
+} from '@navikt/aap-oppgave-typescript-types';
 
 const personInformasjon: SakPersoninfo = { navn: 'Peder Ås', fnr: '12345678910' };
 const user = userEvent.setup();
@@ -23,6 +28,21 @@ const avsluttetSak: SaksInfo = {
   saksnummer: '12345',
   status: 'AVSLUTTET',
   periode: { fom: '12 mai', tom: '27 mai' },
+};
+
+const oppgave: Oppgave = {
+  vurderingsbehov: [],
+  avklaringsbehovKode: '',
+  behandlingOpprettet: '',
+  behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
+  enhet: '',
+  opprettetAv: '',
+  opprettetTidspunkt: '',
+  status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
+  versjon: 0,
+  årsakerTilBehandling: [],
+  markeringer: [],
+  reservertAv: 'navIdent',
 };
 
 describe('Saksinfobanner på sak siden', () => {
@@ -160,8 +180,7 @@ describe('SaksinfoBanner på behandling siden', () => {
     expect(knapp).toBeVisible();
   });
 
-  // Hopper over testen enn så lenge da det ikke er klart for prod
-  it.skip('menyvalg for å trekke søknad vises for førstegangsbehandling', async () => {
+  it('menyvalg for å trekke søknad vises for førstegangsbehandling', async () => {
     render(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
@@ -292,7 +311,7 @@ describe('Sak status', () => {
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'nayBruker' }}
-        oppgaveReservertAv={'navIdent'}
+        oppgave={oppgave}
         referanse={'123456'}
         påVent={false}
         typeBehandling="Førstegangsbehandling"
@@ -310,7 +329,7 @@ describe('Sak status', () => {
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        oppgaveReservertAv={'navIdent'}
+        oppgave={oppgave}
         referanse={'123456'}
         påVent={false}
       />

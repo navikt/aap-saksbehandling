@@ -48,9 +48,6 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
 
   const defaultValues: RimeligGrunnVurdering[] = relevantePerioder.map((periode) => {
     const vurdering = finnVurdering(periode.periode.fom);
-    if (vurdering && vurdering?.harRimeligGrunn !== periode.harRimeligGrunn) {
-      console.error('Inkonsistent status for ' + periode.periode.fom);
-    }
 
     return {
       fraDato: formaterDatoForFrontend(periode.periode.fom),

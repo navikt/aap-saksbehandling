@@ -223,6 +223,8 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Svar fra klageinstans';
     case 'KLAGE':
       return 'Klage';
+    case 'ENDRING_I_REGISTERDATA':
+      return 'Endring i register';
   }
 }
 export function mapGrunnTilString(grunn: string): string {

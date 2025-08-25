@@ -56,11 +56,11 @@ export const OpprettRevurdering = ({
     const res = await clientSendHendelse(sak.saksnummer, innsending);
 
     if (isSuccess(res)) {
-      redirect && router.push(`/saksbehandling/sak/${sak.saksnummer}`);
+      redirect && setTimeout(() => router.push(`/saksbehandling/sak/${sak.saksnummer}`), 2000);
     } else {
       setError(res.apiException.message);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }
 
   const { form, formFields } = useConfigForm<ManuellRevurderingFormFields>({
