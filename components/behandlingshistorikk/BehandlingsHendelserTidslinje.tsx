@@ -4,11 +4,11 @@ import { BehandlingsHendelse } from 'components/behandlingshistorikk/Behandlings
 
 interface Props {
   hendelser: BehandlingsHistorikk['hendelser'];
-  defaultKollapset?: boolean;
+  defaultKollapset: boolean;
 }
 
 export const BehandlingsHendelserTidslinje = ({ hendelser, defaultKollapset }: Props) => {
-  const [isCollapsed, setIsCollapsed] = useState(defaultKollapset !== undefined ? defaultKollapset : true);
+  const [isCollapsed, setIsCollapsed] = useState(defaultKollapset);
   function toggleCollapsed() {
     setIsCollapsed(!isCollapsed);
   }

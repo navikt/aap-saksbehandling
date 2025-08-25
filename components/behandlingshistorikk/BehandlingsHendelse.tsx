@@ -66,7 +66,6 @@ export const BehandlingsHendelse = ({
               </HStack>
             )}
           </HGrid>
-          {/*</VStack>*/}
           <div>
             <BodyShort>{mapEventTilString(hendelse.hendelse as HistorikkEvent)}</BodyShort>
             <BodyShort size={'small'}>
