@@ -39,7 +39,7 @@ export const ÅrsakTilRevurdering = ({ vurderingsbehovOgÅrsaker }: Props) => {
             return (
               <Box key={index}>
                 <HStack gap={'2'} align={'end'}>
-                  <Label>
+                  <Label size={'small'}>
                     {vurderingsbehovOgÅrsak.vurderingsbehov
                       .map((vurderingsbehov) => formaterVurderingsbehov(vurderingsbehov.type))
                       .join(', ')}
