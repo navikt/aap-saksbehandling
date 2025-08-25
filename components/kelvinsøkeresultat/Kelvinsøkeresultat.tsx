@@ -18,14 +18,6 @@ interface Props {
 export const Kelvinsøkeresultat = ({
   søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang, harAdressebeskyttelse },
 }: Props) => {
-  if (!harTilgang && harAdressebeskyttelse) {
-    return (
-      <HStack gap={'8'}>
-        <BodyShort>Du har ikke tilgang til denne brukeren.</BodyShort>
-      </HStack>
-    );
-  }
-
   return (
     <HStack gap={'8'}>
       <VStack gap={'1'}>
@@ -35,9 +27,14 @@ export const Kelvinsøkeresultat = ({
             <BodyShort size={'small'}>Fant ikke navn på person</BodyShort>
           ) : (
             person.map((søk, index) => (
-              <Link className={styles.linkName} key={`sak-resultat-${index}`} href={søk.href}>
+              <LenkeHvisHarTilgang
+                className={styles.linkName}
+                key={`sak-resultat-${index}`}
+                href={søk.href}
+                skalViseLenke={harTilgang}
+              >
                 <BodyShort size={'small'}>{storForbokstavIHvertOrd(søk.label)}</BodyShort>
-              </Link>
+              </LenkeHvisHarTilgang>
             ))
           )}
         </VStack>
@@ -50,9 +47,14 @@ export const Kelvinsøkeresultat = ({
             <BodyShort size={'small'}>Fant ingen saker</BodyShort>
           ) : (
             saker.map((søk, index) => (
-              <Link className={styles.link} key={`sak-resultat-${index}`} href={søk.href}>
+              <LenkeHvisHarTilgang
+                className={styles.link}
+                key={`sak-resultat-${index}`}
+                href={søk.href}
+                skalViseLenke={harTilgang}
+              >
                 <BodyShort size={'small'}>{søk.label}</BodyShort>
-              </Link>
+              </LenkeHvisHarTilgang>
             ))
           )}
         </VStack>
@@ -69,9 +71,14 @@ export const Kelvinsøkeresultat = ({
 
               return (
                 <HStack gap={'2'} key={index}>
-                  <Link className={styles.link} key={`oppgave-resultat-${index}`} href={søk.href}>
+                  <LenkeHvisHarTilgang
+                    className={styles.link}
+                    key={`oppgave-resultat-${index}`}
+                    href={søk.href}
+                    skalViseLenke={harTilgang}
+                  >
                     <BodyShort size={'small'}>{søk.label}</BodyShort>
-                  </Link>
+                  </LenkeHvisHarTilgang>
                   {oppgaveStatus && <OppgaveStatus size={'xsmall'} oppgaveStatus={oppgaveStatus} showLabel={false} />}
                   {harAdressebeskyttelse && (
                     <AdressebeskyttelseStatus
@@ -127,3 +134,24 @@ function mapStatus(status: string): OppgaveStatusType | null {
   }
   return null;
 }
+
+const LenkeHvisHarTilgang = ({
+  href,
+  children,
+  skalViseLenke,
+  className,
+}: {
+  href: string;
+  children: React.ReactNode;
+  skalViseLenke: boolean;
+  className?: string;
+}) => {
+  if (skalViseLenke) {
+    return (
+      <Link className={className} href={href}>
+        {children}
+      </Link>
+    );
+  }
+  return <span>{children}</span>;
+};
