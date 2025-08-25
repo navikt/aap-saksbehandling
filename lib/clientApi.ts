@@ -116,10 +116,6 @@ export function clientHentTilgangForKvalitetssikring(referanse: string) {
     `${BASE_URL}/api/behandling/${referanse}/kvalitetssikring-tilgang`,
     'GET'
   );
-  return clientFetch<KvalitetssikringTilgang>(
-    `${BASE_URL}/api/behandling/${referanse}/kvalitetssikring-tilgang`,
-    'GET'
-  );
 }
 
 export function clientHentSakshistorikk(saksnummer: string) {
