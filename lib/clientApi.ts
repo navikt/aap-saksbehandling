@@ -19,6 +19,7 @@ import {
   OpprettTestcase,
   SaksInfo,
   SettPåVent,
+  BehandlingsHistorikk,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
@@ -115,6 +116,10 @@ export function clientHentTilgangForKvalitetssikring(referanse: string) {
     `${BASE_URL}/api/behandling/${referanse}/kvalitetssikring-tilgang`,
     'GET'
   );
+}
+
+export function clientHentSakshistorikk(saksnummer: string) {
+  return clientFetch<Array<BehandlingsHistorikk>>(`${BASE_URL}/api/sak/${saksnummer}/historikk`, 'GET');
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {

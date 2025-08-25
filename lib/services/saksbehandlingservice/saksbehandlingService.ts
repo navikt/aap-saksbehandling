@@ -9,6 +9,7 @@ import {
   BehandlendeEnhetGrunnlag,
   BehandlingFlytOgTilstand,
   BehandlingPersoninfo,
+  BehandlingsHistorikk,
   BeregningsGrunnlag,
   BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
@@ -103,6 +104,11 @@ export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersonin
   } else {
     return { fnr: 'Ukjent', navn: 'Ukjent' };
   }
+};
+
+export const hentSaksHistorikk = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/historikk`;
+  return await apiFetch<Array<BehandlingsHistorikk>>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBehandlingPersoninfo = async (behandlingsreferanse: string) => {

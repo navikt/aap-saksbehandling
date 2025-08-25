@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useParams } from 'next/navigation';
-import { Historikk } from 'components/totrinnsvurdering/historikk/Historikk';
 import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsummering';
 import {
   AvklaringsbehovKode,
@@ -15,6 +14,7 @@ import { ToTrinnsvurderingToggleGroup } from 'components/totrinnsvurdering/totri
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
+import { Historikk } from 'components/totrinnsvurdering/historikk/Historikk';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -53,7 +53,6 @@ export const ToTrinnsvurdering = ({ grunnlag, behandlingsReferanse, readOnly, er
         setToggleValue={setToggleGroupValue}
         erKvalitetssikring={erKvalitetssikring}
       />
-
       {toggleGroupValue === 'historikk' && (
         <div>
           {grunnlag.historikk.map((historikk, index) => (

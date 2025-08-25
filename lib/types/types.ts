@@ -137,6 +137,8 @@ export type LøsAvklaringsbehovPåBehandling =
 export type SaksInfo = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.UtvidetSaksinfoDTO'];
 export type SakPersoninfo =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SakPersoninfoDTO'];
+export type BehandlingsHistorikk =
+  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingHistorikkDTO'];
 
 export type OpprettTestcase = components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
 export type OpprettDummySakDto = components['schemas']['no.nav.aap.behandlingsflyt.test.OpprettDummySakDto'];
