@@ -13,7 +13,7 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 describe('Vurder rettighetsperiode', () => {
-  describe('mellomlagring i bistandsbehov', () => {
+  describe('mellomlagring', () => {
     const mellomlagring: MellomlagretVurderingResponse = {
       mellomlagretVurdering: {
         avklaringsbehovkode: Behovstype.VURDER_RETTIGHETSPERIODE,
