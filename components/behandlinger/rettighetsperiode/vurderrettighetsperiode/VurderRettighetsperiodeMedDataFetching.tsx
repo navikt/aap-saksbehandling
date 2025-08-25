@@ -1,7 +1,11 @@
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { VurderRettighetsperiode } from './VurderRettighetsperiode';
-import { hentRettighetsperiodeGrunnlag } from '../../../lib/services/saksbehandlingservice/saksbehandlingService';
+import { VurderRettighetsperiode } from 'components/behandlinger/rettighetsperiode/vurderrettighetsperiode/VurderRettighetsperiode';
+import {
+  hentMellomlagring,
+  hentRettighetsperiodeGrunnlag,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsreferanse: string;
@@ -14,7 +18,11 @@ export const VurderRettighetsperiodeMedDataFetching = async ({
   behandlingVersjon,
   behandlingsreferanse,
 }: Props) => {
-  const rettighetsperiodeGrunnlag = await hentRettighetsperiodeGrunnlag(behandlingsreferanse);
+  const [rettighetsperiodeGrunnlag, initialMellomlagretVurdering] = await Promise.all([
+    hentRettighetsperiodeGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.VURDER_RETTIGHETSPERIODE),
+  ]);
+
   if (isError(rettighetsperiodeGrunnlag)) {
     return <ApiException apiResponses={[rettighetsperiodeGrunnlag]} />;
   }
@@ -24,6 +32,7 @@ export const VurderRettighetsperiodeMedDataFetching = async ({
       grunnlag={rettighetsperiodeGrunnlag.data}
       readOnly={readOnly || !rettighetsperiodeGrunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
 };
