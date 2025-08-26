@@ -2,7 +2,7 @@
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { Checkbox, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { erProsent } from 'lib/utils/validering';
@@ -16,6 +16,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   behandlingsReferanse: string;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
