@@ -84,7 +84,7 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
     >
-      {!!historiskeVurderinger.length && (
+      {!!historiskeVurderinger?.length && (
         <TidligereVurderingerV3
           data={historiskeVurderinger}
           buildFelter={byggFelter}
