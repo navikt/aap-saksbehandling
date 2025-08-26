@@ -2,7 +2,7 @@
 
 import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { BeregningTidspunktGrunnlag } from 'lib/types/types';
+import { BeregningstidspunktVurderingResponse, BeregningTidspunktGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -11,9 +11,11 @@ import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/da
 import styles from './FastsettBeregning.module.css';
 import { Alert, Heading } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { useSak } from 'hooks/SakHook';
+import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -123,6 +125,8 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
     form.watch('nedsattArbeidsevneDato') &&
     erDatoFoerDato(formaterDatoForFrontend(sak.virkningsTidspunkt), form.watch('nedsattArbeidsevneDato'));
 
+  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
+
   return (
     <VilkårsKortMedForm
       heading={heading}
@@ -135,9 +139,19 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
       visBekreftKnapp={!readOnly}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
+      {!!historiskeVurderinger?.length && (
+        <TidligereVurderingerV3
+          data={historiskeVurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
+          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+          getVurdertAvIdent={(v) => v.vurdertAv.ident}
+          getVurdertDato={(v) => v.vurdertAv.dato}
+        />
+      )}
+
       <FormField form={form} formField={formFields.nedsattArbeidsevneDatobegrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
-
       {grunnlag?.skalVurdereYtterligere && (
         <div className={styles.ytterligerenedsattfelter}>
           <Heading size={'small'}>Tidspunkt arbeidsevne ble ytterligere nedsatt § 11-28</Heading>
@@ -157,3 +171,24 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
     </VilkårsKortMedForm>
   );
 };
+
+const byggFelter = (vurdering: BeregningstidspunktVurderingResponse): ValuePair[] => [
+  {
+    label: 'Vilkårsvurdering',
+    value: vurdering.begrunnelse,
+  },
+  {
+    label: 'Dato når arbeidsevnen ble nedsatt',
+    value: vurdering.nedsattArbeidsevneDato ? formaterDatoForFrontend(vurdering.nedsattArbeidsevneDato) : '-',
+  },
+  {
+    label: 'Vurder når brukeren fikk ytterligere nedsatt arbeidsevne',
+    value: vurdering.ytterligereNedsattBegrunnelse || '-',
+  },
+  {
+    label: 'Dato arbeidsevnen ble ytterligere nedsatt',
+    value: vurdering.ytterligereNedsattArbeidsevneDato
+      ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
+      : '-',
+  },
+];

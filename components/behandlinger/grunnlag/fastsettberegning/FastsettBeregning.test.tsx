@@ -8,6 +8,7 @@ import { addDays, format, subDays } from 'date-fns';
 const grunnlag: BeregningTidspunktGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   skalVurdereYtterligere: true,
+  historiskeVurderinger: [],
 };
 
 const user = userEvent.setup();

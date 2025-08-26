@@ -4,11 +4,14 @@ import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyShort, HStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { ManuellInntektGrunnlag } from 'lib/types/types';
+import { ManuellInntektGrunnlag, ManuellInntektVurderingGrunnlagResponse } from 'lib/types/types';
+import { formaterTilNok } from 'lib/utils/string';
+import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 
 interface Props {
   behandlingsversjon: number;
@@ -67,6 +70,8 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
   const inntekt = inntektStr && inntektStr !== '' ? Number(inntektStr) : 0;
   const inntektIgVerdi = grunnlag.gverdi ? inntekt / grunnlag.gverdi : 0;
 
+  const historiskeVurderinger = grunnlag.historiskeVurderinger;
+
   return (
     <VilkårsKortMedForm
       heading={'Pensjonsgivende inntekt mangler (§ 11-19)'}
@@ -79,6 +84,17 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
     >
+      {!!historiskeVurderinger.length && (
+        <TidligereVurderingerV3
+          data={historiskeVurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
+          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+          getVurdertAvIdent={(v) => v.vurdertAv.ident}
+          getVurdertDato={(v) => v.vurdertAv.dato}
+        />
+      )}
+
       <Alert variant={'warning'} size={'small'}>
         Du må oppgi pensjonsgivende inntekt for siste beregningsår, fordi ingen inntekt er registrert. Om brukeren ikke
         har hatt inntekt for gitt år, legg inn 0.{' '}
@@ -91,3 +107,14 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
     </VilkårsKortMedForm>
   );
 };
+
+const byggFelter = (vurdering: ManuellInntektVurderingGrunnlagResponse): ValuePair[] => [
+  {
+    label: 'Begrunnelse',
+    value: vurdering.begrunnelse,
+  },
+  {
+    label: 'Oppgitt inntekt',
+    value: vurdering.belop ? formaterTilNok(vurdering.belop) : '-',
+  },
+];
