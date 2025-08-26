@@ -1,7 +1,13 @@
 'use client';
 
-import { MellomlagretVurdering, OvergangUforeGrunnlag, TypeBehandling } from 'lib/types/types';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { MellomlagretVurdering, OvergangArbeidVurdering, OvergangUforeGrunnlag, TypeBehandling } from 'lib/types/types';
+import {
+  Behovstype,
+  getJaNeiEllerIkkeBesvart,
+  getJaNeiEllerUndefined,
+  JaEllerNei,
+  JaEllerNeiOptions,
+} from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
@@ -9,11 +15,10 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Alert, BodyShort, Link } from '@navikt/ds-react';
 
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { TidligereVurderinger } from 'components/behandlinger/sykdom/overgangufore/TidligereVurderinger';
+import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
 
 interface Props {
   behandlingVersjon: number;
@@ -33,28 +38,33 @@ interface FormFields {
 
 export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
+
+  const vilkårsvurderingLabel = 'Vilkårsvurdering';
+  const brukerSøktUføretrygdLabel = 'Har brukeren søkt om uføretrygd?';
+  const brukerHarFaattVedtakOmUføretrygdLabel = 'Har brukeren fått vedtak på søknaden om uføretrygd?';
+  const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?';
+  const virkningsdatoLabel = 'Virkningsdato for vurderingen';
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vilkårsvurdering',
+        label: vilkårsvurderingLabel,
         defaultValue: grunnlag?.vurdering?.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse om brukeren har krav på uføretrygd' },
       },
       brukerHarSøktUføretrygd: {
         type: 'radio',
-        label: 'Har brukeren søkt om uføretrygd?',
+        label: brukerSøktUføretrygdLabel,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.brukerSoktUforetrygd),
         rules: { required: 'Du må svare på om brukeren har søkt om uføretrygd' },
         options: JaEllerNeiOptions,
       },
       brukerHarFåttVedtakOmUføretrygd: {
         type: 'radio',
-        label: 'Har brukeren fått vedtak på søknaden om uføretrygd?',
+        label: brukerHarFaattVedtakOmUføretrygdLabel,
         options: [
           {
             label: 'Nei',
@@ -82,14 +92,14 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       },
       brukerRettPåAAP: {
         type: 'radio',
-        label: 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?',
+        label: brukerrettPaaAAPLabel,
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.brukerRettPaaAAP),
         rules: { required: 'Du må svare på om brukeren har krav på AAP etter vedtak om uføretrygd etter § 11-18' },
       },
       virkningsdato: {
         type: 'textarea',
-        label: 'Virkningsdato for vurderingen',
+        label: virkningsdatoLabel,
         defaultValue: grunnlag?.vurdering?.virkningsDato || undefined,
         rules: { required: 'Du må velge virkningsdato for vurderingen' },
       },
@@ -119,9 +129,9 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const brukerHarSoktOmUforetrygd = form.watch('brukerHarSøktUføretrygd') === JaEllerNei.Ja;
   const brukerHarFattAvslagPaUforetrygd = form.watch('brukerHarFåttVedtakOmUføretrygd') === 'JA_AVSLAG';
 
-
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
+  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
     <VilkårsKortMedForm
@@ -135,11 +145,14 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
-      {typeBehandling === 'Revurdering' && (
-        <TidligereVurderinger
-          historiskeVurderinger={grunnlag?.historiskeVurderinger.toReversed() ?? []}
-          gjeldendeVurderinger={grunnlag?.gjeldendeVedtatteVurderinger ?? []}
-          søknadstidspunkt={sak.periode.fom}
+      {historiskeVurderinger && historiskeVurderinger.length > 0 && (
+        <TidligereVurderingerV3
+          data={historiskeVurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={() => true}
+          getFomDato={(v) => v.vurdertAv.dato}
+          getVurdertAvIdent={(v) => v.vurdertAv.ident}
+          getVurdertDato={(v) => v.vurdering?.vurdertAv.dato}
         />
       )}
       <Veiledning
@@ -171,4 +184,21 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
     </VilkårsKortMedForm>
   );
+
+  function byggFelter(vurdering: OvergangArbeidVurdering): ValuePair[] {
+    return [
+      {
+        label: vilkårsvurderingLabel,
+        value: vurdering.begrunnelse,
+      },
+      {
+        label: brukerrettPaaAAPLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.brukerRettPaaAAP),
+      },
+      {
+        label: virkningsdatoLabel,
+        value: vurdering.virkningsDato || '',
+      },
+    ];
+  }
 };

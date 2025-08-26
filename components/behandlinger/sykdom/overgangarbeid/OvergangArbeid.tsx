@@ -1,21 +1,26 @@
 'use client';
 
-import { OvergangArbeidGrunnlag, TypeBehandling } from 'lib/types/types';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { OvergangArbeidGrunnlag, OvergangArbeidVurdering, TypeBehandling } from 'lib/types/types';
+import {
+  Behovstype,
+  getJaNeiEllerIkkeBesvart,
+  getJaNeiEllerUndefined,
+  JaEllerNei,
+  JaEllerNeiOptions,
+} from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { TidligereVurderinger } from 'components/behandlinger/sykdom/overgangarbeid/TidligereVurderinger';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerNullableDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
+import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
 
 interface Props {
   behandlingVersjon: number;
@@ -32,28 +37,31 @@ interface FormFields {
 
 export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { sak } = useSak();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_ARBEID');
+
+  const vilkårsvurderingLabel = 'Vilkårsvurdering';
+  const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP i perioden som arbeidssøker etter § 11-17?';
+  const virkningsdatoLabel = 'Virkningsdato for vurderingen';
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vilkårsvurdering',
+        label: vilkårsvurderingLabel,
         defaultValue: grunnlag?.vurdering?.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse om brukeren har krav på AAP' },
       },
       brukerRettPåAAP: {
         type: 'radio',
-        label: 'Har brukeren rett på AAP i perioden som arbeidssøker etter § 11-17?',
+        label: brukerrettPaaAAPLabel,
         options: JaEllerNeiOptions,
         defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.brukerRettPaaAAP),
         rules: { required: 'Du må svare på om brukeren har krav på AAP i perioden som arbeidssøker etter § 11-17' },
       },
       virkningsdato: {
         type: 'textarea',
-        label: 'Virkningsdato for vurderingen',
+        label: virkningsdatoLabel,
         defaultValue: grunnlag?.vurdering?.virkningsDato || undefined,
         description: 'Bruker får AAP etter § 11-17 fra til',
         rules: { required: 'Du må velge virkningsdato for vurderingen' },
@@ -81,6 +89,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
 
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
+  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
     <VilkårsKortMedForm
@@ -94,11 +103,14 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
-      {typeBehandling === 'Revurdering' && (
-        <TidligereVurderinger
-          historiskeVurderinger={grunnlag?.historiskeVurderinger.toReversed() ?? []}
-          gjeldendeVurderinger={grunnlag?.gjeldendeVedtatteVurderinger ?? []}
-          søknadstidspunkt={sak.periode.fom}
+      {typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0 && (
+        <TidligereVurderingerV3
+          data={historiskeVurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={() => true}
+          getFomDato={(v) => v.vurdertAv.dato}
+          getVurdertAvIdent={(v) => v.vurdertAv.ident}
+          getVurdertDato={(v) => v.vurdering?.vurdertAv.dato}
         />
       )}
       <Veiledning
@@ -139,4 +151,21 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
       </VStack>
     </VilkårsKortMedForm>
   );
+
+  function byggFelter(vurdering: OvergangArbeidVurdering): ValuePair[] {
+    return [
+      {
+        label: vilkårsvurderingLabel,
+        value: vurdering.begrunnelse,
+      },
+      {
+        label: brukerrettPaaAAPLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.brukerRettPaaAAP),
+      },
+      {
+        label: virkningsdatoLabel,
+        value: vurdering.virkningsDato || '',
+      },
+    ];
+  }
 };
