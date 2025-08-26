@@ -5,6 +5,7 @@ import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/fo
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   behandlingsReferanse: string;
@@ -28,7 +29,7 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {stegSomSkalVises.includes('FORESLÅ_VEDTAK') && (
+      {(stegSomSkalVises.includes('FORESLÅ_VEDTAK') || !isProd()) && ( // TODO: fjern prod-sjekk når testing er ferdig
         <StegSuspense>
           <ForeslåVedtakMedDataFetching
             behandlingVersjon={behandlingVersjon}

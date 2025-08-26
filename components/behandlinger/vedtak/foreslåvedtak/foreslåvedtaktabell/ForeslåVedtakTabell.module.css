@@ -1,0 +1,7 @@
+.godkjentIcon {
+    color: var(--a-icon-success);
+}
+
+.avslåttIcon {
+    color: var(--a-icon-danger);
+}
