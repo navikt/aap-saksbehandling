@@ -239,7 +239,12 @@ it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet v
     'Dette er min vurdering som er mellomlagret her er ekstra tekst'
   );
 
-  const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+  const mockFetchResponseSlettMellomlagring: FetchResponse<object> = { type: 'SUCCESS', status: 202, data: {} };
+  fetchMock.mockResponse(JSON.stringify(mockFetchResponseSlettMellomlagring));
+
+  const slettKnapp = screen.getByRole('button', {
+    name: /slett utkast/i,
+  });
 
   await user.click(slettKnapp);
 
