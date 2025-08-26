@@ -11,25 +11,25 @@ const søkeresultat: SøkeResultat = {
       label: 'Testoppgave',
       href: '/oppgave/123',
       status: 'PÅ_VENT',
-      markeringer: []
+      markeringer: [],
     },
   ],
   saker: [
     {
       label: 'Testsak',
-      href: '/sak/456'
-    }
+      href: '/sak/456',
+    },
   ],
   person: [
     {
       label: 'Testperson',
-      href: '/person/789'
-    }
+      href: '/person/789',
+    },
   ],
   kontor: [
     {
-      enhet: 'Testkontor'
-    }
+      enhet: 'Testkontor',
+    },
   ],
 };
 
@@ -51,5 +51,23 @@ describe('Kelvinsøkeresultat', () => {
 
     const lenker = screen.getAllByRole('link');
     expect(lenker.length).toBeGreaterThan(0);
+  });
+
+  it('skal vise infoboks når saksbehandler ikke har lesetilgang pga adressebeskyttelse', () => {
+    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: false }} />);
+
+    const infotekst = screen.getByText(
+      'Du har ikke tilgang til saken fordi personen er egen ansatt eller har adressebeskyttelse.'
+    );
+    expect(infotekst).toBeInTheDocument();
+  });
+
+  it('skal vise infoboks når saksbehandler ikke har lesetilgang uten adressebeskyttelse', () => {
+    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: false, harAdressebeskyttelse: false }} />);
+
+    const infotekst = screen.getByText(
+      'Du har ikke tilgang til saken.'
+    );
+    expect(infotekst).toBeInTheDocument();
   });
 });
