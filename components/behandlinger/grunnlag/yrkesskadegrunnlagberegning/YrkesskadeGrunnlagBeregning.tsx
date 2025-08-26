@@ -7,7 +7,7 @@ import { YrkesskadeTabell } from 'components/behandlinger/grunnlag/yrkesskadegru
 import { BodyShort, Label } from '@navikt/ds-react';
 
 import styles from './YrkesskadeGrunnlagBeregning.module.css';
-import { YrkeskadeBeregningGrunnlag, YrkesskadeBeløpVurderingResponse } from 'lib/types/types';
+import { MellomlagretVurdering, YrkeskadeBeregningGrunnlag, YrkesskadeBeløpVurderingResponse } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
@@ -18,11 +18,13 @@ import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/Tidliger
 import { ValuePair } from 'components/form/FormField';
 import { formaterTilNok } from 'lib/utils/string';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   behandlingVersjon: number;
   yrkeskadeBeregningGrunnlag: YrkeskadeBeregningGrunnlag;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -37,28 +39,30 @@ interface AntattÅrligInntektVurdering {
   gverdi: number;
 }
 
-export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnlag, behandlingVersjon }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const YrkesskadeGrunnlagBeregning = ({
+  readOnly,
+  yrkeskadeBeregningGrunnlag,
+  behandlingVersjon,
+  initialMellomlagretVurdering,
+}: Props) => {
+  const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
-  const behandlingsReferanse = useBehandlingsReferanse();
-  const defaultValue: AntattÅrligInntektVurdering[] = yrkeskadeBeregningGrunnlag.skalVurderes.map((yrkesskade) => {
-    const vurdertYrkesskade = yrkeskadeBeregningGrunnlag.vurderinger.find(
-      (vurdering) => vurdering.referanse === yrkesskade.referanse
-    );
-    return {
-      ref: yrkesskade.referanse,
-      gverdi: yrkesskade.grunnbeløp.verdi,
-      skadetidspunkt: yrkesskade.skadeDato,
-      inntekt: vurdertYrkesskade ? vurdertYrkesskade.antattÅrligInntekt.verdi.toString() : '',
-      begrunnelse: vurdertYrkesskade ? vurdertYrkesskade.begrunnelse : '',
-    };
-  });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.FASTSETT_YRKESSKADEINNTEKT, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingerToDraftFormFields(yrkeskadeBeregningGrunnlag);
 
   const { form } = useConfigForm<FormFields>(
     {
       vurderinger: {
         type: 'fieldArray',
-        defaultValue: defaultValue,
+        defaultValue: defaultValue.vurderinger,
       },
     },
     { readOnly: readOnly }
@@ -75,22 +79,25 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
       heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       onSubmit={form.handleSubmit((data) => {
-        løsBehovOgGåTilNesteSteg({
-          behov: {
-            behovstype: Behovstype.FASTSETT_YRKESSKADEINNTEKT,
-            yrkesskadeInntektVurdering: {
-              vurderinger: data.vurderinger.map((vurdering) => {
-                return {
-                  begrunnelse: vurdering.begrunnelse,
-                  antattÅrligInntekt: { verdi: Number(vurdering.inntekt) },
-                  referanse: vurdering.ref,
-                };
-              }),
+        løsBehovOgGåTilNesteSteg(
+          {
+            behov: {
+              behovstype: Behovstype.FASTSETT_YRKESSKADEINNTEKT,
+              yrkesskadeInntektVurdering: {
+                vurderinger: data.vurderinger.map((vurdering) => {
+                  return {
+                    begrunnelse: vurdering.begrunnelse,
+                    antattÅrligInntekt: { verdi: Number(vurdering.inntekt) },
+                    referanse: vurdering.ref,
+                  };
+                }),
+              },
             },
+            referanse: behandlingsReferanse,
+            behandlingVersjon: behandlingVersjon,
           },
-          referanse: behandlingsReferanse,
-          behandlingVersjon: behandlingVersjon,
-        });
+          () => nullstillMellomlagretVurdering()
+        );
       })}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
@@ -98,6 +105,14 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
       visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={vurdertAvAnsatt}
+      readOnly={readOnly}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() => {
+          form.reset(mapVurderingerToDraftFormFields(yrkeskadeBeregningGrunnlag));
+        })
+      }
     >
       {!!historiskeVurderinger?.length && (
         <TidligereVurderingerV3
@@ -153,6 +168,21 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingerToDraftFormFields(grunnlag: YrkeskadeBeregningGrunnlag): DraftFormFields {
+  return {
+    vurderinger: grunnlag.skalVurderes.map((yrkesskade) => {
+      const vurdertYrkesskade = grunnlag.vurderinger.find((vurdering) => vurdering.referanse === yrkesskade.referanse);
+      return {
+        ref: yrkesskade.referanse,
+        gverdi: yrkesskade.grunnbeløp.verdi,
+        skadetidspunkt: yrkesskade.skadeDato,
+        inntekt: vurdertYrkesskade ? vurdertYrkesskade.antattÅrligInntekt.verdi.toString() : '',
+        begrunnelse: vurdertYrkesskade ? vurdertYrkesskade.begrunnelse : '',
+      };
+    }),
+  };
+}
 
 const byggFelter = (vurdering: YrkesskadeBeløpVurderingResponse): ValuePair[] => [
   {
