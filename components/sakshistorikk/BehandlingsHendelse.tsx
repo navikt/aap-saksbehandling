@@ -149,7 +149,7 @@ export const BehandlingsHendelse = ({
             </VStack>
             <Link
               as={'button'}
-              style={{ border: '0', margin: '0', padding: '0', backgroundColor: 'white' }}
+              style={{ border: '0', margin: '0', marginLeft: '1rem', padding: '0', backgroundColor: 'white' }}
               onClick={() => toggleKollaps && toggleKollaps()}
             >
               {erKollapset ? `Se all historikk i behandlingen` : `Skjul all historikk i behandlingen`}
