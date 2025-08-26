@@ -185,6 +185,7 @@ describe('Yrkesskade', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           behandlingsReferanse={'123'}
+          initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
 

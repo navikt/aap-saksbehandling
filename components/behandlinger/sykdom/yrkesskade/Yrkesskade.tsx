@@ -2,7 +2,7 @@
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag, YrkesskadeVurderingResponse } from 'lib/types/types';
 import { Checkbox, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { erProsent } from 'lib/utils/validering';
@@ -10,6 +10,8 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { FormEvent } from 'react';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -26,15 +28,33 @@ interface FormFields {
   andelAvNedsettelsen?: number;
 }
 
-export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, readOnly }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const Yrkesskade = ({
+  grunnlag,
+  behandlingVersjon,
+  behandlingsReferanse,
+  readOnly,
+  initialMellomlagretVurdering,
+}: Props) => {
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_YRKESSKADE');
+
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.YRKESSKADE_KODE, initialMellomlagretVurdering);
+
+  const vurderingerString = grunnlag?.yrkesskadeVurdering;
+
+  const defaultValues: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(vurderingerString);
+
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
         label: 'Vilkårsvurdering',
-        defaultValue: grunnlag.yrkesskadeVurdering?.begrunnelse,
+        defaultValue: defaultValues.begrunnelse,
         rules: { required: 'Du må begrunne' },
       },
       erÅrsakssammenheng: {
@@ -70,12 +90,9 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
     { readOnly }
   );
 
-  return (
-    <VilkårsKortMedForm
-      heading={'§ 11-22 AAP ved yrkesskade'}
-      steg={'VURDER_YRKESSKADE'}
-      vilkårTilhørerNavKontor={false}
-      onSubmit={form.handleSubmit((data) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit(
+      (data) => {
         løsBehovOgGåTilNesteSteg({
           behov: {
             behovstype: Behovstype.YRKESSKADE_KODE,
@@ -89,12 +106,34 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
           behandlingVersjon: behandlingVersjon,
           referanse: behandlingsReferanse,
         });
-      })}
+      },
+      () => nullstillMellomlagretVurdering()
+    )(event);
+  };
+
+  return (
+    <VilkårsKortMedForm
+      heading={'§ 11-22 AAP ved yrkesskade'}
+      steg={'VURDER_YRKESSKADE'}
+      vilkårTilhørerNavKontor={false}
+      onSubmit={handleSubmit}
       isLoading={isLoading}
       status={status}
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag.yrkesskadeVurdering?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() => {
+          form.reset(
+            grunnlag?.yrkesskadeVurdering
+              ? mapVurderingToDraftFormFields(grunnlag.yrkesskadeVurdering)
+              : emptyDraftFormFields()
+          );
+        });
+      }}
+      readOnly={readOnly}
     >
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
@@ -136,3 +175,21 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(vurdering?: YrkesskadeVurderingResponse): DraftFormFields {
+  return {
+    begrunnelse: vurdering?.begrunnelse,
+    erÅrsakssammenheng: getJaNeiEllerUndefined(vurdering?.erÅrsakssammenheng),
+    relevanteSaker: vurdering?.relevanteSaker,
+    andelAvNedsettelsen: vurdering?.andelAvNedsettelsen ?? undefined,
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return {
+    begrunnelse: '',
+    erÅrsakssammenheng: '',
+    relevanteSaker: [],
+    andelAvNedsettelsen: undefined,
+  };
+}
