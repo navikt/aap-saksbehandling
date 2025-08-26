@@ -1,6 +1,6 @@
 'use client';
 
-import { AutomatiskLovvalgOgMedlemskapVurdering, StegType } from 'lib/types/types';
+import { AutomatiskLovvalgOgMedlemskapVurdering, MellomlagretVurdering, StegType } from 'lib/types/types';
 import { ReactNode, useState } from 'react';
 import { AutomatiskVurderingForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/automatiskvurderingforutgåendemedlemskap/AutomatiskVurderingForutgåendeMedlemskap';
 import { ManuellVurderingForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingforutgåendemedlemskap/ManuellVurderingForutgåendeMedlemskap';
@@ -14,6 +14,7 @@ interface Props {
   visOverstyrKnapp: boolean;
   harYrkesskade: boolean;
   children: ReactNode;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 export const ForutgåendemedlemskapOverstyringswrapper = ({
@@ -24,8 +25,9 @@ export const ForutgåendemedlemskapOverstyringswrapper = ({
   readOnly,
   visOverstyrKnapp,
   harYrkesskade,
+  initialMellomlagretVurdering,
 }: Props) => {
-  const [overstyring, setOverstyring] = useState<boolean>(false);
+  const [overstyring, setOverstyring] = useState<boolean>(initialMellomlagretVurdering !== undefined);
   return (
     <>
       <AutomatiskVurderingForutgåendeMedlemskap
@@ -41,6 +43,7 @@ export const ForutgåendemedlemskapOverstyringswrapper = ({
           behandlingVersjon={behandlingVersjon}
           readOnly={readOnly}
           overstyring={true}
+          initialMellomlagretVurdering={initialMellomlagretVurdering}
         />
       )}
     </>
