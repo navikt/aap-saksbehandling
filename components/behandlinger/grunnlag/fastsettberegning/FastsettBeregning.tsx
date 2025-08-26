@@ -2,7 +2,11 @@
 
 import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { BeregningstidspunktVurderingResponse, BeregningTidspunktGrunnlag } from 'lib/types/types';
+import {
+  BeregningstidspunktVurderingResponse,
+  BeregningTidspunktGrunnlag,
+  MellomlagretVurdering,
+} from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -16,11 +20,13 @@ import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform
 import { useSak } from 'hooks/SakHook';
 import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -30,27 +36,34 @@ interface FormFields {
   ytterligereNedsattArbeidsevneDatobegrunnelse?: string;
 }
 
-export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
 
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE, initialMellomlagretVurdering);
+
+  const defaultValues: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       nedsattArbeidsevneDatobegrunnelse: {
         type: 'textarea',
         label: 'Vilkårsvurdering',
-        defaultValue: getStringEllerUndefined(grunnlag?.vurdering?.begrunnelse),
+        defaultValue: defaultValues.nedsattArbeidsevneDatobegrunnelse,
         rules: { required: 'Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne' },
       },
       nedsattArbeidsevneDato: {
         type: 'date_input',
         label: 'Dato når arbeidsevnen ble nedsatt',
-        defaultValue: grunnlag?.vurdering?.nedsattArbeidsevneDato
-          ? formaterDatoForFrontend(grunnlag?.vurdering.nedsattArbeidsevneDato)
-          : undefined,
+        defaultValue: defaultValues.nedsattArbeidsevneDato,
         rules: {
           validate: (value) => {
             const valideringsresultat = validerDato(value as string);
@@ -67,15 +80,13 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
       ytterligereNedsattArbeidsevneDatobegrunnelse: {
         type: 'textarea',
         label: 'Vurder når brukeren fikk ytterligere nedsatt arbeidsevne',
-        defaultValue: getStringEllerUndefined(grunnlag?.vurdering?.ytterligereNedsattBegrunnelse),
+        defaultValue: defaultValues.ytterligereNedsattArbeidsevneDatobegrunnelse,
         rules: { required: 'Du må skrive en begrunnelse for når brukeren fikk ytterligere nedsatt arbeidsevne' },
       },
       ytterligereNedsattArbeidsevneDato: {
         type: 'date_input',
         label: 'Dato arbeidsevnen ble ytterligere nedsatt',
-        defaultValue: grunnlag?.vurdering?.ytterligereNedsattArbeidsevneDato
-          ? formaterDatoForFrontend(grunnlag?.vurdering.ytterligereNedsattArbeidsevneDato)
-          : undefined,
+        defaultValue: defaultValues.ytterligereNedsattArbeidsevneDato,
         rules: {
           validate: (value, formValues) => {
             const valideringsresultat = validerDato(value as string);
@@ -94,25 +105,28 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
-          beregningVurdering: {
-            begrunnelse: data.nedsattArbeidsevneDatobegrunnelse,
-            nedsattArbeidsevneDato: formaterDatoForBackend(
-              parse(data.nedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())
-            ),
-            ytterligereNedsattArbeidsevneDato: data.ytterligereNedsattArbeidsevneDato
-              ? formaterDatoForBackend(parse(data.ytterligereNedsattArbeidsevneDato, 'dd.MM.yyyy', new Date()))
-              : undefined,
-            ytterligereNedsattBegrunnelse: data?.ytterligereNedsattArbeidsevneDatobegrunnelse,
+    form.handleSubmit(
+      (data) => {
+        løsBehovOgGåTilNesteSteg({
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
+            beregningVurdering: {
+              begrunnelse: data.nedsattArbeidsevneDatobegrunnelse,
+              nedsattArbeidsevneDato: formaterDatoForBackend(
+                parse(data.nedsattArbeidsevneDato, 'dd.MM.yyyy', new Date())
+              ),
+              ytterligereNedsattArbeidsevneDato: data.ytterligereNedsattArbeidsevneDato
+                ? formaterDatoForBackend(parse(data.ytterligereNedsattArbeidsevneDato, 'dd.MM.yyyy', new Date()))
+                : undefined,
+              ytterligereNedsattBegrunnelse: data?.ytterligereNedsattArbeidsevneDatobegrunnelse,
+            },
           },
-        },
-        referanse: behandlingsReferanse,
-      });
-    })(event);
+          referanse: behandlingsReferanse,
+        });
+      },
+      () => nullstillMellomlagretVurdering()
+    )(event);
   };
 
   const heading = grunnlag?.skalVurdereYtterligere
@@ -138,6 +152,14 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
       status={status}
       visBekreftKnapp={!readOnly}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() =>
+          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
+        );
+      }}
+      readOnly={readOnly}
     >
       {!!historiskeVurderinger?.length && (
         <TidligereVurderingerV3
@@ -171,6 +193,28 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly }: Pro
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(vurdering: BeregningTidspunktGrunnlag['vurdering']): DraftFormFields {
+  return {
+    nedsattArbeidsevneDatobegrunnelse: vurdering?.begrunnelse,
+    nedsattArbeidsevneDato: vurdering?.nedsattArbeidsevneDato
+      ? formaterDatoForFrontend(vurdering.nedsattArbeidsevneDato)
+      : undefined,
+    ytterligereNedsattArbeidsevneDatobegrunnelse: getStringEllerUndefined(vurdering?.ytterligereNedsattBegrunnelse),
+    ytterligereNedsattArbeidsevneDato: vurdering?.ytterligereNedsattArbeidsevneDato
+      ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
+      : undefined,
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return {
+    nedsattArbeidsevneDatobegrunnelse: '',
+    nedsattArbeidsevneDato: '',
+    ytterligereNedsattArbeidsevneDato: '',
+    ytterligereNedsattArbeidsevneDatobegrunnelse: '',
+  };
+}
 
 const byggFelter = (vurdering: BeregningstidspunktVurderingResponse): ValuePair[] => [
   {
