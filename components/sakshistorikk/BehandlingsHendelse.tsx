@@ -1,5 +1,5 @@
 import { BehandlingsHistorikk } from 'lib/types/types';
-import { BodyShort, HGrid, HStack, Link, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, HGrid, HStack, Link, VStack } from '@navikt/ds-react';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { HistorikkEvent, mapEventTilIkon, mapEventTilString } from 'components/sakshistorikk/oversettelser';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
@@ -26,7 +26,7 @@ export const BehandlingsHendelse = ({
   return (
     <>
       <li style={{ listStyleType: 'none' }}>
-        <HGrid columns={'1fr 5fr'}>
+        <HGrid columns={'1fr 8fr'}>
           <HGrid columns={'1fr'}>
             {!førsteHendelse && (
               <HStack align={'center'} justify={'center'}>
@@ -44,8 +44,8 @@ export const BehandlingsHendelse = ({
                 align={'center'}
                 justify={'center'}
                 style={{
-                  width: '3rem',
-                  height: '3rem',
+                  width: '2.6rem',
+                  height: '2.6rem',
                   border: '1px solid #071A3636',
                   borderRadius: '50%',
                 }}
@@ -59,18 +59,18 @@ export const BehandlingsHendelse = ({
                 <span
                   style={{
                     borderLeft: '1px solid #071A3636',
-                    height: '100%',
+                    height: '0',
                     width: '0',
                   }}
                 />
               </HStack>
             )}
           </HGrid>
-          <div>
-            <BodyShort>{mapEventTilString(hendelse.hendelse as HistorikkEvent)}</BodyShort>
-            <BodyShort size={'small'}>
-              {`${formaterDatoMedTidspunktForFrontend(hendelse.tidspunkt)} · ${hendelse.utførtAv}`}
-            </BodyShort>
+          <div style={{ marginLeft: '.5rem' }}>
+            <BodyShort size={'small'}>{mapEventTilString(hendelse.hendelse as HistorikkEvent)}</BodyShort>
+            <Detail textColor={'subtle'}>
+              {`${formaterDatoMedTidspunktForFrontend(hendelse.tidspunkt)} ${mapUtførtAvTilTekst(hendelse.utførtAv) && '· '}${mapUtførtAvTilTekst(hendelse.utførtAv)}`}
+            </Detail>
             {hendelse.årsakTilSattPåVent && <BodyShort size={'small'}>{hendelse.årsakTilSattPåVent}</BodyShort>}
             {
               <ul style={{ listStyleType: 'none', margin: '0', padding: '0' }}>
@@ -150,3 +150,12 @@ export const BehandlingsHendelse = ({
     </>
   );
 };
+
+function mapUtførtAvTilTekst(utførtAv?: string | null) {
+  switch (utførtAv) {
+    case 'Kelvin':
+      return 'Automatisk';
+    default:
+      return '';
+  }
+}
