@@ -6,10 +6,6 @@ export async function revalidateFlyt(behandlingReferanse: string) {
   revalidateTag(`flyt/${behandlingReferanse}`);
 }
 
-export async function revalidateAktivitetspliktHendelser(saksnummer: string) {
-  revalidateTag(`aktivitetsplikt/${saksnummer}`);
-}
-
 export async function revalidatePostMottakFlyt(behandlingReferanse: string) {
   revalidateTag(`postmottak/flyt/${behandlingReferanse}`);
 }
