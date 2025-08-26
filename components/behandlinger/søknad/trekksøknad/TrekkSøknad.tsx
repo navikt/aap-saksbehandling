@@ -82,6 +82,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
           form.reset(vurderingerString ? mapVurderingToDraftFormFields(vurderingerString) : emptyDraftFormFields())
         );
       }}
+      readOnly={readOnly}
     >
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
     </VilkårsKortMedForm>

@@ -170,6 +170,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
           );
         });
       }}
+      readOnly={readOnly}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         <Label size={'small'}>Relevant informasjon fra søknaden</Label>

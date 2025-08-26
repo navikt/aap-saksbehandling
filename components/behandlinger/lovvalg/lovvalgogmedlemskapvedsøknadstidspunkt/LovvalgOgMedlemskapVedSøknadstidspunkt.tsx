@@ -188,6 +188,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
         });
       }}
+      readOnly={readOnly}
     >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
         <TidligereVurderingerV3

@@ -136,6 +136,7 @@ export const VurderRettighetsperiode = ({
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
         );
       }}
+      readOnly={readOnly}
     >
       <VStack gap={'1'}>
         <BodyShort size={'small'} weight={'semibold'}>
