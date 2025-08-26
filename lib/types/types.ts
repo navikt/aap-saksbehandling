@@ -338,6 +338,9 @@ export type OppfølgingsoppgaveV0 =
     meldingType: typeof OppfølgingoppgaveV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
+export type Aktivitetsplikt11_7Grunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7GrunnlagDto'];
+
 export type DokumentÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
 
 export type Vurderingsbehov =
