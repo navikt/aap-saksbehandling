@@ -1,10 +1,15 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { Yrkesskade } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
 import { MellomlagretVurderingResponse, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
+import createFetchMock from 'vitest-fetch-mock';
+
+const fetchMock = createFetchMock(vi);
+fetchMock.enableMocks();
+const user = userEvent.setup();
 
 const grunnlag: YrkesskadeVurderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
@@ -19,8 +24,6 @@ const grunnlag: YrkesskadeVurderingGrunnlag = {
     oppgittYrkesskadeISøknad: false,
   },
 };
-
-const user = userEvent.setup();
 
 describe('Yrkesskade', () => {
   describe('Generelt', () => {
@@ -157,7 +160,7 @@ describe('Yrkesskade', () => {
       );
 
       await user.type(
-        screen.getByRole('textbox', { name: 'Begrunnelse' }),
+        screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
         'Her har jeg begynt å skrive en vurdering..'
       );
       expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
@@ -208,7 +211,7 @@ describe('Yrkesskade', () => {
       );
 
       const begrunnelseFelt = screen.getByRole('textbox', {
-        name: /begrunnelse/i,
+        name: 'Vilkårsvurdering',
       });
 
       expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -225,7 +228,7 @@ describe('Yrkesskade', () => {
       );
 
       const begrunnelseFelt = screen.getByRole('textbox', {
-        name: /begrunnelse/i,
+        name: /Vilkårsvurdering/i,
       });
 
       expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -242,9 +245,9 @@ describe('Yrkesskade', () => {
         />
       );
 
-      await user.type(screen.getByRole('textbox', { name: 'Begrunnelse' }), ' her er ekstra tekst');
+      await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), ' her er ekstra tekst');
 
-      expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue(
+      expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
         'Dette er min vurdering som er mellomlagret her er ekstra tekst'
       );
 
@@ -252,7 +255,7 @@ describe('Yrkesskade', () => {
 
       await user.click(slettKnapp);
 
-      expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('');
+      expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue('');
     });
 
     it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
@@ -266,9 +269,9 @@ describe('Yrkesskade', () => {
         />
       );
 
-      await user.type(screen.getByRole('textbox', { name: 'Begrunnelse' }), ' her er ekstra tekst');
+      await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), ' her er ekstra tekst');
 
-      expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue(
+      expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
         'Dette er min vurdering som er mellomlagret her er ekstra tekst'
       );
 
@@ -276,7 +279,7 @@ describe('Yrkesskade', () => {
 
       await user.click(slettKnapp);
 
-      expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue(
+      expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
         'Dette er min vurdering som er bekreftet'
       );
     });
