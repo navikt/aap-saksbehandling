@@ -129,7 +129,7 @@ export const BehandlingsHendelse = ({
       {medKollapsKnapp && (
         <li>
           <HGrid columns={'1fr 8fr'}>
-            <VStack justify={'center'} align={'center'}>
+            <VStack justify={'center'} align={'center'} width={'2.6rem'}>
               <HStack
                 align={'center'}
                 justify={'center'}
@@ -149,7 +149,7 @@ export const BehandlingsHendelse = ({
             </VStack>
             <Link
               as={'button'}
-              style={{ border: '0', margin: '0', marginLeft: '1rem', padding: '0', backgroundColor: 'white' }}
+              style={{ border: '0', margin: '0', marginLeft: '.5rem', padding: '0', backgroundColor: 'white' }}
               onClick={() => toggleKollaps && toggleKollaps()}
             >
               {erKollapset ? `Se all historikk i behandlingen` : `Skjul all historikk i behandlingen`}
