@@ -95,7 +95,12 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
     >
       <YrkesskadeTabell
         yrkesskader={yrkeskadeBeregningGrunnlag.skalVurderes.map((vurdering) => {
-          return { kilde: 'YRK', ref: vurdering.referanse, skadedato: vurdering.skadeDato };
+          return {
+            ref: vurdering.referanse,
+            saksnummer: vurdering.saksnummer,
+            kilde: vurdering.kilde,
+            skadedato: vurdering.skadeDato,
+          };
         })}
       />
       {fields.map((field, index) => {
