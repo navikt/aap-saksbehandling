@@ -316,6 +316,12 @@ export type KlageV0 =
     meldingType: typeof KlageV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
+export const AktivitetspliktbruddV0 = 'AktivitetspliktbruddV0';
+export type AktivitetspliktbruddV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof AktivitetspliktbruddV0}`] & {
+    meldingType: typeof AktivitetspliktbruddV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
 export const AnnetRelevantDokumentV0 = 'AnnetRelevantDokumentV0';
 export type AnnetRelevantDokumentV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof AnnetRelevantDokumentV0}`] & {
