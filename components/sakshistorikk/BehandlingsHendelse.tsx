@@ -23,9 +23,14 @@ export const BehandlingsHendelse = ({
   førsteHendelse,
   sisteHendelse,
 }: Props) => {
+  const finnesÅrsak = !!(
+    hendelse.årsakTilSattPåVent ||
+    hendelse.årsakerTilRetur.length ||
+    hendelse.årsakerTilOpprettelse.length
+  );
   return (
     <>
-      <li style={{ listStyleType: 'none' }}>
+      <li>
         <HGrid columns={'1fr 8fr'}>
           <HGrid columns={'1fr'}>
             {!førsteHendelse && (
@@ -71,43 +76,59 @@ export const BehandlingsHendelse = ({
             <Detail textColor={'subtle'}>
               {`${formaterDatoMedTidspunktForFrontend(hendelse.tidspunkt)} ${mapUtførtAvTilTekst(hendelse.utførtAv) && '· '}${mapUtførtAvTilTekst(hendelse.utførtAv)}`}
             </Detail>
-            {hendelse.årsakTilSattPåVent && <BodyShort size={'small'}>{hendelse.årsakTilSattPåVent}</BodyShort>}
-            {
-              <ul style={{ listStyleType: 'none', margin: '0', padding: '0' }}>
-                {hendelse.årsakerTilOpprettelse.map((årsak, i) => (
-                  <li key={i}>
-                    <BodyShort size={'small'}>{årsak}</BodyShort>
-                  </li>
-                ))}
-              </ul>
-            }
-            {
-              <ul style={{ listStyleType: 'none', margin: '0', padding: '0' }}>
-                {hendelse.årsakerTilRetur.map((årsak, i) => (
-                  <li key={i}>
-                    <BodyShort size={'small'}> {årsak.årsak === 'ANNET' ? årsak.årsakFritekst : årsak.årsak}</BodyShort>
-                  </li>
-                ))}
-              </ul>
-            }
-            {hendelse.begrunnelse && <BodyShort size={'small'}>{hendelse.begrunnelse}</BodyShort>}
           </div>
-          {visLinje && (
-            <HStack align={'center'} justify={'center'}>
+          {visLinje ? (
+            <VStack align={'center'} justify={'center'}>
               <span
                 style={{
                   borderLeft: '1px solid #071A3636',
-                  height: '2.5rem',
+                  height: '100%',
                   width: '0',
                 }}
               />
-            </HStack>
+            </VStack>
+          ) : (
+            <VStack></VStack>
           )}
+          <div style={{ marginLeft: '.5rem', minHeight: '1rem', paddingBottom: '.5rem' }}>
+            {finnesÅrsak && (
+              <VStack gap={'2'} paddingBlock={'2 2'}>
+                <section>
+                  <Detail weight={'semibold'}>Årsak</Detail>
+                  {hendelse.årsakTilSattPåVent && <Detail>{hendelse.årsakTilSattPåVent}</Detail>}
+                  {
+                    <ul style={{ listStyleType: 'none', margin: '0', padding: '0' }}>
+                      {hendelse.årsakerTilOpprettelse.map((årsak, i) => (
+                        <li key={i}>
+                          <Detail>{årsak}</Detail>
+                        </li>
+                      ))}
+                    </ul>
+                  }
+                  {
+                    <ul style={{ listStyleType: 'none', margin: '0', padding: '0' }}>
+                      {hendelse.årsakerTilRetur.map((årsak, i) => (
+                        <li key={i}>
+                          <Detail> {årsak.årsak === 'ANNET' ? årsak.årsakFritekst : årsak.årsak}</Detail>
+                        </li>
+                      ))}
+                    </ul>
+                  }
+                </section>
+                {hendelse.begrunnelse && (
+                  <VStack>
+                    <Detail weight={'semibold'}>Begrunnelse</Detail>
+                    <BodyShort size={'small'}>{hendelse.begrunnelse}</BodyShort>
+                  </VStack>
+                )}
+              </VStack>
+            )}
+          </div>
         </HGrid>
       </li>
       {medKollapsKnapp && (
-        <li style={{ listStyleType: 'none' }}>
-          <HGrid columns={'1fr 5fr'}>
+        <li>
+          <HGrid columns={'1fr 8fr'}>
             <VStack justify={'center'} align={'center'}>
               <HStack
                 align={'center'}
@@ -134,15 +155,16 @@ export const BehandlingsHendelse = ({
               {erKollapset ? `Se all historikk i behandlingen` : `Skjul all historikk i behandlingen`}
             </Link>
             {visLinje && (
-              <HStack align={'center'} justify={'center'}>
+              <VStack align={'center'} justify={'center'}>
                 <span
                   style={{
                     borderLeft: '1px solid #071A3636',
-                    height: '2.5rem',
+                    height: '100%',
                     width: '0',
+                    minHeight: '1rem',
                   }}
                 />
-              </HStack>
+              </VStack>
             )}
           </HGrid>
         </li>

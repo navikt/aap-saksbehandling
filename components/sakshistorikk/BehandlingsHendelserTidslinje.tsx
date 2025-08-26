@@ -13,7 +13,7 @@ export const BehandlingsHendelserTidslinje = ({ hendelser, defaultKollapset }: P
     setIsCollapsed(!isCollapsed);
   }
   return (
-    <ol style={{ padding: '0', margin: '0' }}>
+    <ol style={{ padding: '0', margin: '0', listStyleType: 'none' }}>
       {isCollapsed && (
         <>
           <BehandlingsHendelse
