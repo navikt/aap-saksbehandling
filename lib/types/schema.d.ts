@@ -7931,6 +7931,7 @@ export interface components {
       ar: number;
       gverdi: number;
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse': {
@@ -7942,11 +7943,13 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningTidspunktAvklaringResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningstidspunktVurderingResponse'][];
       skalVurdereYtterligere: boolean;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningstidspunktVurderingResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningYrkesskadeAvklaringResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.YrkesskadeBel\u00F8pVurderingResponse'][];
       skalVurderes: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.YrkesskadeTilVurderingResponse'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.YrkesskadeBel\u00F8pVurderingResponse'][];
     };

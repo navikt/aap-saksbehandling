@@ -7,13 +7,17 @@ import { YrkesskadeTabell } from 'components/behandlinger/grunnlag/yrkesskadegru
 import { BodyShort, Label } from '@navikt/ds-react';
 
 import styles from './YrkesskadeGrunnlagBeregning.module.css';
-import { YrkeskadeBeregningGrunnlag } from 'lib/types/types';
+import { YrkeskadeBeregningGrunnlag, YrkesskadeBeløpVurderingResponse } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { ValuePair } from 'components/form/FormField';
+import { formaterTilNok } from 'lib/utils/string';
+import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 
 interface Props {
   behandlingVersjon: number;
@@ -64,6 +68,8 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
   const vurdertAvAnsatt =
     yrkeskadeBeregningGrunnlag.vurderinger.length > 0 ? yrkeskadeBeregningGrunnlag.vurderinger[0].vurdertAv : undefined;
 
+  const historiskeVurderinger = yrkeskadeBeregningGrunnlag?.historiskeVurderinger;
+
   return (
     <VilkårsKortMedForm
       heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
@@ -93,6 +99,17 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={vurdertAvAnsatt}
     >
+      {!!historiskeVurderinger?.length && (
+        <TidligereVurderingerV3
+          data={historiskeVurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
+          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+          getVurdertAvIdent={(v) => v.vurdertAv.ident}
+          getVurdertDato={(v) => v.vurdertAv.dato}
+        />
+      )}
+
       <YrkesskadeTabell
         yrkesskader={yrkeskadeBeregningGrunnlag.skalVurderes.map((vurdering) => {
           return { kilde: 'YRK', ref: vurdering.referanse, skadedato: vurdering.skadeDato };
@@ -136,3 +153,14 @@ export const YrkesskadeGrunnlagBeregning = ({ readOnly, yrkeskadeBeregningGrunnl
     </VilkårsKortMedForm>
   );
 };
+
+const byggFelter = (vurdering: YrkesskadeBeløpVurderingResponse): ValuePair[] => [
+  {
+    label: 'Begrunnelse for anslått årlig arbeidsinntekt for skadetidspunkt',
+    value: vurdering.begrunnelse || '-',
+  },
+  {
+    label: 'Anslått årlig arbeidsinntekt på skadetidspunkt',
+    value: vurdering.antattÅrligInntekt.verdi ? formaterTilNok(vurdering.antattÅrligInntekt.verdi) : '-',
+  },
+];

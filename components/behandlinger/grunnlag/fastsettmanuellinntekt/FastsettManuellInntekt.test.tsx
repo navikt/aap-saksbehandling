@@ -8,6 +8,7 @@ const grunnlag: ManuellInntektGrunnlag = {
   ar: 0,
   gverdi: 100000,
   harTilgangTilÅSaksbehandle: true,
+  historiskeVurderinger: [],
 };
 
 describe('Fastsett manuell inntekt', () => {
@@ -85,6 +86,7 @@ describe('Fastsett manuell inntekt vurdering', () => {
       },
       belop: 500000,
     },
+    historiskeVurderinger: [],
   };
 
   beforeEach(() =>
