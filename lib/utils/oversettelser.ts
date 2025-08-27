@@ -35,6 +35,7 @@ const behovskodeMap = {
   '5028': 'Vurder trekk av søknad',
   '5029': 'Vurder starttidspunkt',
   '5030': 'Samordning arbeidsgiver',
+  '5031': 'Kanseller revurdering',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
@@ -107,6 +108,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
   switch (steggruppe) {
     case 'SØKNAD':
       return 'Trekk søknad';
+    case 'KANSELLER_REVURDERING':
+      return 'Kanseller revurdering';
     case 'ALDER':
       return 'Alder';
     case 'LOVVALG':

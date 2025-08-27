@@ -1429,6 +1429,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/kansellert-revurdering': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.revurdering.KansellertRevurderingGrunnlagDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/rettighetsperiode': {
     parameters: {
       query?: never;
@@ -3692,6 +3730,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7GrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto': {
@@ -3825,6 +3864,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -3893,6 +3933,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -3958,6 +3999,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4023,6 +4065,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4088,6 +4131,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4153,6 +4197,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4218,6 +4263,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4284,6 +4330,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4349,6 +4396,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4413,6 +4461,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4478,6 +4527,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4543,6 +4593,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4608,6 +4659,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4673,6 +4725,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4738,6 +4791,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4803,6 +4857,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4868,6 +4923,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4933,6 +4989,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -4998,6 +5055,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5063,6 +5121,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5126,6 +5185,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Foresl\u00E5VedtakL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FritakMeldepliktL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.H\u00E5ndterSvarFraAndreinstansL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KansellerRevurderingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KvalitetssikringL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Legeerkl\u00E6ringBestillingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.OverstyrIkkeOppfyltMeldepliktL\u00F8sning']
@@ -5184,6 +5244,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5249,6 +5310,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5314,6 +5376,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5378,6 +5441,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5443,6 +5507,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5508,6 +5573,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5573,6 +5639,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5638,6 +5705,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5703,6 +5771,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5767,6 +5836,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5831,6 +5901,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5901,6 +5972,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -5973,6 +6045,72 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
     };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KansellerRevurderingL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5056'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004';
+      vurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.kansellerrevurdering.flate.KansellerRevurderingVurderingDto'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KvalitetssikringL\u00F8sning': {
       /** @enum {string} */
       behovstype:
@@ -6007,6 +6145,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6072,6 +6211,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6136,6 +6276,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6201,6 +6342,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6266,6 +6408,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6330,6 +6473,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6394,6 +6538,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6463,6 +6608,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6532,6 +6678,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6601,6 +6748,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6670,6 +6818,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6735,6 +6884,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6800,6 +6950,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6866,6 +7017,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6930,6 +7082,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -6994,6 +7147,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -7058,6 +7212,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -7122,6 +7277,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -7186,6 +7342,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -7251,6 +7408,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -7315,6 +7473,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -7380,6 +7539,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -7445,6 +7605,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -7510,6 +7671,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -7914,6 +8076,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -8247,6 +8410,17 @@ export interface components {
        */
       ytelseIverksattTom?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.kansellerrevurdering.flate.KansellerRevurderingVurderingDto': {
+      begrunnelse: string;
+      vurdertAv: string;
+      /** @enum {string|null} */
+      '\u00E5rsak'?:
+        | 'REVURDERING_ER_IKKE_LENGER_AKTUELL'
+        | 'REVURDERINGEN_ER_FEILREGISTRERT'
+        | 'REVURDERINGEN_ER_AVBRUTT_PÅ_GRUNN_AV_FEIL'
+        | 'ANNET'
+        | null;
+    };
     'no.nav.aap.behandlingsflyt.behandling.klage.behandlendeenhet.BehandlendeEnhetGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.behandlendeenhet.BehandlendeEnhetVurderingDto'];
@@ -8496,6 +8670,7 @@ export interface components {
         | 'MOTTATT_DIALOGMELDING'
         | 'MOTATT_KLAGE'
         | 'SØKNAD_TRUKKET'
+        | 'REVURDERING_KANSELLERT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MEDLEMSKAP'
         | 'REVURDER_SAMORDNING'
@@ -8683,6 +8858,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -8754,6 +8930,7 @@ export interface components {
         | 'MOTTATT_DIALOGMELDING'
         | 'MOTATT_KLAGE'
         | 'SØKNAD_TRUKKET'
+        | 'REVURDERING_KANSELLERT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MEDLEMSKAP'
         | 'REVURDER_SAMORDNING'
@@ -8795,6 +8972,7 @@ export interface components {
             | 'MOTTATT_DIALOGMELDING'
             | 'MOTATT_KLAGE'
             | 'SØKNAD_TRUKKET'
+            | 'REVURDERING_KANSELLERT'
             | 'KLAGE_TRUKKET'
             | 'REVURDER_MEDLEMSKAP'
             | 'REVURDER_SAMORDNING'
@@ -8841,6 +9019,9 @@ export interface components {
        */
       startDato?: string | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.revurdering.KansellertRevurderingGrunnlagDto': {
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.kansellerrevurdering.flate.KansellerRevurderingVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -10071,6 +10252,7 @@ export interface components {
         | 'SEND_FORVALTNINGSMELDING'
         | 'RETTIGHETSPERIODE'
         | 'SØKNAD'
+        | 'KANSELLER_REVURDERING'
         | 'ALDER'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -10142,6 +10324,7 @@ export interface components {
         | 'FATTE_VEDTAK'
         | 'IVERKSETT_VEDTAK'
         | 'OPPRETT_REVURDERING'
+        | 'KANSELLER_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
         | 'FULLMEKTIG'
@@ -10158,6 +10341,7 @@ export interface components {
         | 'START_OPPFØLGINGSBEHANDLING'
         | 'AVKLAR_OPPFØLGING'
         | 'VURDER_AKTIVITETSPLIKT_11_7'
+        | 'IVERKSETT_BRUDD'
         | 'UDEFINERT';
       aktivtStegDefinisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'][];
       /** Format: int64 */
@@ -10171,6 +10355,7 @@ export interface components {
         | 'SEND_FORVALTNINGSMELDING'
         | 'RETTIGHETSPERIODE'
         | 'SØKNAD'
+        | 'KANSELLER_REVURDERING'
         | 'ALDER'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -10243,6 +10428,7 @@ export interface components {
         | 'FATTE_VEDTAK'
         | 'IVERKSETT_VEDTAK'
         | 'OPPRETT_REVURDERING'
+        | 'KANSELLER_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
         | 'FULLMEKTIG'
@@ -10259,6 +10445,7 @@ export interface components {
         | 'START_OPPFØLGINGSBEHANDLING'
         | 'AVKLAR_OPPFØLGING'
         | 'VURDER_AKTIVITETSPLIKT_11_7'
+        | 'IVERKSETT_BRUDD'
         | 'UDEFINERT'
         | null;
     };
@@ -10314,6 +10501,7 @@ export interface components {
         | 'FATTE_VEDTAK'
         | 'IVERKSETT_VEDTAK'
         | 'OPPRETT_REVURDERING'
+        | 'KANSELLER_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
         | 'FULLMEKTIG'
@@ -10330,6 +10518,7 @@ export interface components {
         | 'START_OPPFØLGINGSBEHANDLING'
         | 'AVKLAR_OPPFØLGING'
         | 'VURDER_AKTIVITETSPLIKT_11_7'
+        | 'IVERKSETT_BRUDD'
         | 'UDEFINERT';
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
       /**
@@ -10401,6 +10590,7 @@ export interface components {
         | 'SEND_FORVALTNINGSMELDING'
         | 'RETTIGHETSPERIODE'
         | 'SØKNAD'
+        | 'KANSELLER_REVURDERING'
         | 'ALDER'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -10475,6 +10665,7 @@ export interface components {
         | 'FATTE_VEDTAK'
         | 'IVERKSETT_VEDTAK'
         | 'OPPRETT_REVURDERING'
+        | 'KANSELLER_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
         | 'FULLMEKTIG'
@@ -10491,6 +10682,7 @@ export interface components {
         | 'START_OPPFØLGINGSBEHANDLING'
         | 'AVKLAR_OPPFØLGING'
         | 'VURDER_AKTIVITETSPLIKT_11_7'
+        | 'IVERKSETT_BRUDD'
         | 'UDEFINERT';
       'vilk\u00E5rDTO'?: components['schemas']['no.nav.aap.behandlingsflyt.flyt.Vilk\u00E5rDTO'];
     };
@@ -10656,6 +10848,7 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
         | '5050'
         | '5051'
         | '5052'
@@ -10738,6 +10931,7 @@ export interface components {
         | 'FATTE_VEDTAK'
         | 'IVERKSETT_VEDTAK'
         | 'OPPRETT_REVURDERING'
+        | 'KANSELLER_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
         | 'FULLMEKTIG'
@@ -10754,6 +10948,7 @@ export interface components {
         | 'START_OPPFØLGINGSBEHANDLING'
         | 'AVKLAR_OPPFØLGING'
         | 'VURDER_AKTIVITETSPLIKT_11_7'
+        | 'IVERKSETT_BRUDD'
         | 'UDEFINERT';
       /** @enum {string} */
       type: 'MANUELT_PÅKREVD' | 'MANUELT_FRIVILLIG' | 'BREV' | 'BREV_VENTEPUNKT' | 'VENTEPUNKT' | 'OVERSTYR';
@@ -10876,6 +11071,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'SØKNAD_TRUKKET'
+        | 'REVURDERING_KANSELLERT'
         | 'FRITAK_MELDEPLIKT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MANUELL_INNTEKT'
@@ -11027,6 +11223,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'SØKNAD_TRUKKET'
+        | 'REVURDERING_KANSELLERT'
         | 'FRITAK_MELDEPLIKT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MANUELL_INNTEKT'
@@ -11090,6 +11287,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'SØKNAD_TRUKKET'
+        | 'REVURDERING_KANSELLERT'
         | 'FRITAK_MELDEPLIKT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MANUELL_INNTEKT'
@@ -11139,6 +11337,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'SØKNAD_TRUKKET'
+        | 'REVURDERING_KANSELLERT'
         | 'FRITAK_MELDEPLIKT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MANUELL_INNTEKT'
@@ -11236,6 +11435,7 @@ export interface components {
         | 'MOTTATT_DIALOGMELDING'
         | 'MOTATT_KLAGE'
         | 'SØKNAD_TRUKKET'
+        | 'REVURDERING_KANSELLERT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MEDLEMSKAP'
         | 'REVURDER_SAMORDNING'
@@ -11341,6 +11541,7 @@ export interface components {
         | 'MOTTATT_DIALOGMELDING'
         | 'MOTATT_KLAGE'
         | 'SØKNAD_TRUKKET'
+        | 'REVURDERING_KANSELLERT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MEDLEMSKAP'
         | 'REVURDER_SAMORDNING'
@@ -11392,6 +11593,7 @@ export interface components {
         | 'MOTTATT_DIALOGMELDING'
         | 'MOTATT_KLAGE'
         | 'SØKNAD_TRUKKET'
+        | 'REVURDERING_KANSELLERT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MEDLEMSKAP'
         | 'REVURDER_SAMORDNING'

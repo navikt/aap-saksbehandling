@@ -62,6 +62,7 @@ import {
   TilkjentYtelseGrunnlag,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
+  KansellertRevurderingGrunnlag,
   UnderveisGrunnlag,
   UtbetalingOgSimuleringGrunnlag,
   VenteInformasjon,
@@ -272,6 +273,11 @@ export const hentTilkjentYtelse = async (behandlingsReferanse: string) => {
 export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/trukket-søknad`;
   return await apiFetch<TrukketSøknadGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentKansellertRevurdering = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/kansellert-revurdering`;
+  return await apiFetch<KansellertRevurderingGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentRettighetsperiodeGrunnlag = async (behandlingsreferanse: string) => {

@@ -27,6 +27,7 @@ import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbeha
 import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
+import { KansellerRevurderingModal } from './kansellerrevurderingmodal/KansellerRevurderingModal';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -56,13 +57,16 @@ export const SaksinfoBanner = ({
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
   const [visTrekkKlageModal, settVisTrekkKlageModal] = useState(false);
+  const [visKansellerRevurderingModal, settVisKansellerRevurderingModal] = useState(false);
   const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgave?.harUlesteDokumenter);
   const [aktivMarkeringType, settAktivMarkeringType] = useState<MarkeringType | null>(null);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgave?.reservertAv;
 
   const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
+  const kansellerRevurderingSteg = flyt && flyt.find((f) => f.stegGruppe === 'KANSELLER_REVURDERING');
   const behandlerEnSøknadSomSkalTrekkes = søknadStegGruppe && søknadStegGruppe.skalVises;
+  const behandlerRevurderingSomSkalKanselleres = kansellerRevurderingSteg && kansellerRevurderingSteg.skalVises;
 
   const trekkKlageSteg = flyt && flyt.find((f) => f.stegGruppe === 'TREKK_KLAGE');
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
@@ -78,6 +82,12 @@ export const SaksinfoBanner = ({
     !behandlerEnSøknadSomSkalTrekkes &&
     brukerKanSaksbehandle &&
     behandlingErFørstegangsbehandling &&
+    behandlingErIkkeAvsluttet;
+
+  const visValgForÅKansellereRevurdering =
+    !behandlerRevurderingSomSkalKanselleres &&
+    brukerKanSaksbehandle &&
+    behandlingErRevurdering &&
     behandlingErIkkeAvsluttet;
 
   const visValgForÅTrekkeKlage =
@@ -182,6 +192,11 @@ export const SaksinfoBanner = ({
                       Trekk søknad
                     </Dropdown.Menu.GroupedList.Item>
                   )}
+                  {visValgForÅKansellereRevurdering && (
+                    <Dropdown.Menu.GroupedList.Item onClick={() => settVisKansellerRevurderingModal(true)}>
+                      Kanseller revurdering
+                    </Dropdown.Menu.GroupedList.Item>
+                  )}
                   {visValgForÅTrekkeKlage && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisTrekkKlageModal(true)}>
                       Trekk klage
@@ -218,6 +233,12 @@ export const SaksinfoBanner = ({
             <TrekkKlageModal
               isOpen={visTrekkKlageModal}
               onClose={() => settVisTrekkKlageModal(false)}
+              saksnummer={sak.saksnummer}
+              behandlingReferanse={behandling?.referanse!}
+            />
+            <KansellerRevurderingModal
+              isOpen={visKansellerRevurderingModal}
+              onClose={() => settVisKansellerRevurderingModal(false)}
               saksnummer={sak.saksnummer}
               behandlingReferanse={behandling?.referanse!}
             />
