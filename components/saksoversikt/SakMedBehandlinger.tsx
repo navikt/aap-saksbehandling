@@ -1,7 +1,6 @@
 'use client';
 
 import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { isLocal } from 'lib/utils/environment';
 import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -10,6 +9,7 @@ import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
 import { mapTilÅrsakTilOpprettelseTilTekst } from 'lib/utils/oversettelser';
+import { isLocal, isProd } from 'lib/utils/environment';
 
 const formaterBehandlingType = (behandlingtype: string) => {
   switch (behandlingtype) {
@@ -57,7 +57,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           >
             Opprett klage
           </Button>
-          {kanRegistrerebrudd && (
+          {kanRegistrerebrudd && !isProd() && (
             <Button
               variant="secondary"
               size="small"
