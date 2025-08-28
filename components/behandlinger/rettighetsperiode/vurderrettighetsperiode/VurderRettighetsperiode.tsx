@@ -155,8 +155,8 @@ export const VurderRettighetsperiode = ({
       {form.watch('harKravPåRenter') === JaEllerNei.Ja && (
         <HStack>
           <Alert variant={'warning'} size={'small'}>
-            Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på arenasaker (via
-            gosys).
+            Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på Arena-saker (via
+            Gosys).
           </Alert>
         </HStack>
       )}
