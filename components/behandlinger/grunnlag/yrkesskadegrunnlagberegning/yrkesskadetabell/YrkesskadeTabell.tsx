@@ -26,7 +26,7 @@ export const YrkesskadeTabell = ({ yrkesskader }: Props) => {
         <Table.Body>
           {yrkesskader.map((yrkesskade) => (
             <Table.Row key={yrkesskade.ref}>
-              <Table.DataCell textSize={'small'}>{yrkesskade.ref}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>{yrkesskade.saksnummer}</Table.DataCell>
               <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(yrkesskade.skadedato)}</Table.DataCell>
             </Table.Row>

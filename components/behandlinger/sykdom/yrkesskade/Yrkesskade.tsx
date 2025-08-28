@@ -118,7 +118,7 @@ export const Yrkesskade = ({ grunnlag, behandlingVersjon, behandlingsReferanse, 
                           Tilknytt yrkesskade til vurdering
                         </Checkbox>
                       </Table.DataCell>
-                      <Table.DataCell textSize={'small'}>{yrkesskade.ref}</Table.DataCell>
+                      <Table.DataCell textSize={'small'}>{yrkesskade.saksnummer}</Table.DataCell>
                       <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
                       <Table.DataCell textSize={'small'}>
                         {formaterDatoForFrontend(yrkesskade.skadedato)}
