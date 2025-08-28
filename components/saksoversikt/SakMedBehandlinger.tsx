@@ -61,7 +61,6 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             <Button
               variant="secondary"
               size="small"
-              //registret hendelse
               onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
             >
               Registrer brudd på aktivitetsplikten 11-7

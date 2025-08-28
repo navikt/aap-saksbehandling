@@ -87,15 +87,7 @@ export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandlin
 }
 
 export function clientOpprettAktivitetsplikt(saksnummer: string) {
-  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling/`, 'POST');
-}
-
-export function clientOpprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {
-  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/aktivitetsplikt/opprett`, 'POST', aktivitet);
-}
-
-export function clientOppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd2) {
-  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/aktivitetsplikt/oppdater`, 'POST', aktivitet);
+  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling`, 'POST');
 }
 
 export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {

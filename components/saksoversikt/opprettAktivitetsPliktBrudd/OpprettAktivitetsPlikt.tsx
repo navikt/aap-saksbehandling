@@ -9,17 +9,25 @@ import { Spinner } from 'components/felles/Spinner';
 import styles from './OpprettAktivitetsplikt.module.css';
 import { FormField } from 'components/form/FormField';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { isSuccess } from 'lib/utils/api';
+import { useRouter } from 'next/navigation';
 
 export interface AktivitetspliktbruddFormFields {
   aktivitetspliktBruddType: 'AKTIVITETSPLIKT_11_7';
 }
 
 export const OpprettAktivitetsPliktBrudd = ({ sak }: { sak: SaksInfo }) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
-  async function postOpprettAktivitetspliktBrudd() {
-    clientOpprettAktivitetsplikt(sak.saksnummer);
+  async function postOpprettAktivitetspliktBrudd(data: any) {
+    const res = await clientOpprettAktivitetsplikt(sak.saksnummer);
+    if (isSuccess(res)) {
+      router.push(`/saksbehandling/sak/${sak.saksnummer}`);
+    } else {
+      setError(res.apiException.message);
+    }
   }
 
   const { form, formFields } = useConfigForm<AktivitetspliktbruddFormFields>({
@@ -42,23 +50,19 @@ export const OpprettAktivitetsPliktBrudd = ({ sak }: { sak: SaksInfo }) => {
 
   return (
     <Page.Block width="md">
-      <form onSubmit={form.handleSubmit(postOpprettAktivitetspliktBrudd)}>
+      <form
+        onSubmit={(event) => {
+          form.handleSubmit((data) => postOpprettAktivitetspliktBrudd(data))(event);
+        }}
+      >
         <VStack gap="4">
-          <ExpansionCard
-            aria-label="Opprett Aktivitetspliktbrudd"
-            size={'small'}
-            defaultOpen={true}
-            className={styles.opprettKlageKort}
-          >
+          <ExpansionCard aria-label="Opprett Aktivitetspliktbrudd" size={'small'} defaultOpen={true}>
             <ExpansionCard.Header className={styles.header}>
               <ExpansionCard.Title size="small">Opprett Aktivitetspliktbrudd</ExpansionCard.Title>
             </ExpansionCard.Header>
 
             <ExpansionCard.Content className={styles.content}>
               <VStack gap="4">
-                <div>
-                  <BodyLong>Oppfølgingsoppgaven ligger på vent til ønsket dato.</BodyLong>
-                </div>
                 <FormField form={form} formField={formFields.aktivitetspliktBruddType} size="medium" />
               </VStack>
             </ExpansionCard.Content>
@@ -74,7 +78,6 @@ export const OpprettAktivitetsPliktBrudd = ({ sak }: { sak: SaksInfo }) => {
             <Button
               as="a"
               href={`/saksbehandling/sak/${sak.saksnummer}`}
-              target="_blank"
               rel="noreferrer noopener"
               size="small"
               variant="secondary"
