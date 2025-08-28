@@ -117,11 +117,14 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
         defaultOpen={false}
         tekst={
           <div>
-            <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-17">
+            <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-17" target="_blank">
               Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-17
             </Link>
             <span> </span>
-            <Link href="https://lovdata.no"> (lovdata.no)</Link>
+            <Link href="https://lovdata.no" target="_blank">
+              {' '}
+              (lovdata.no)
+            </Link>
           </div>
         }
       />

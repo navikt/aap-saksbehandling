@@ -165,7 +165,9 @@ export const Bistandsbehovutenovergang = ({
               Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6
             </Link>
             <span> </span>
-            <Link href="https://lovdata.no"> (lovdata.no)</Link>
+            <Link href="https://lovdata.no" target="_blank">
+              (lovdata.no)
+            </Link>
           </div>
         }
       />

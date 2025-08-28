@@ -159,11 +159,13 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         defaultOpen={false}
         tekst={
           <div>
-            <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18">
+            <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18" target="_blank">
               Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18
             </Link>
             <span> </span>
-            <Link href="https://lovdata.no"> (lovdata.no)</Link>
+            <Link href="https://lovdata.no" target="_blank">
+              (lovdata.no)
+            </Link>
           </div>
         }
       />
