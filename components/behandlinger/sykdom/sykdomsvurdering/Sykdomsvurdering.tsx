@@ -308,7 +308,7 @@ export const Sykdomsvurdering = ({
           Det har blitt funnet én eller flere yrkesskader på brukeren
         </Alert>
       )}
-      <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-5" target="_blank">
+      <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
         Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
       </Link>
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
