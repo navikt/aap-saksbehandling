@@ -210,13 +210,8 @@ export const Bistandsbehov = ({
             (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
             vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
             svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
-            <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-6">
+            <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-6" target="_blank">
               Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6
-            </Link>
-            <span> </span>
-            <Link href="https://lovdata.no" target="_blank">
-              {' '}
-              (lovdata.no)
             </Link>
           </div>
         }
