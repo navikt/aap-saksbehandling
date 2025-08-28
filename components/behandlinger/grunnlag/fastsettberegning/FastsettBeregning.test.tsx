@@ -157,7 +157,7 @@ describe('Felt for å sette dato for ytterligere nedsatt arbeidsevne', () => {
   });
 });
 
-describe('mellomlagring i bistandsbehov', () => {
+describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
       avklaringsbehovkode: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
