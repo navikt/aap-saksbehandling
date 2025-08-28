@@ -9,6 +9,7 @@ const user = userEvent.setup();
 describe('Vurder 11-7', () => {
   const tomtGrunnlag: Aktivitetsplikt11_7Grunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    historiskeVurderinger: [],
     vurdering: undefined,
   };
 

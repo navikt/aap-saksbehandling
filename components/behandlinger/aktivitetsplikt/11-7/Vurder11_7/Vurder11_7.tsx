@@ -7,11 +7,13 @@ import { isBefore, parse, startOfDay } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
-import { Aktivitetsplikt11_7Grunnlag } from 'lib/types/types';
+import { Aktivitetsplikt11_7Grunnlag, Aktivitetsplikt11_7Vurdering } from 'lib/types/types';
+import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 
 interface Props {
   behandlingVersjon: number;
@@ -29,6 +31,7 @@ interface FormFields {
 export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const { sak } = useSak();
   const behandlingsreferanse = useBehandlingsReferanse();
+  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_AKTIVITETSPLIKT_11_7');
@@ -114,6 +117,16 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => 
       vilkårTilhørerNavKontor={true}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
     >
+      {!!historiskeVurderinger?.length && (
+        <TidligereVurderingerV3
+          data={historiskeVurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
+          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+          getVurdertAvIdent={(v) => v.vurdertAv.ident}
+          getVurdertDato={(v) => v.vurdertAv.dato}
+        />
+      )}
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erOppfylt} />
       {form.watch('erOppfylt') === JaEllerNei.Nei && <FormField form={form} formField={formFields.utfall} />}
@@ -121,3 +134,18 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => 
     </VilkårsKortMedForm>
   );
 };
+
+const byggFelter = (vurdering: Aktivitetsplikt11_7Vurdering): ValuePair[] => [
+  {
+    label: 'Vilkårsvurdering',
+    value: vurdering.begrunnelse,
+  },
+  {
+    label: 'Er aktivitetsplikten oppfylt i henhold til § 11-7 i perioden?',
+    value: vurdering.erOppfylt ? 'Ja' : 'Nei',
+  },
+  {
+    label: 'Konsekvens for ytelse',
+    value: vurdering.utfall || '-',
+  },
+];

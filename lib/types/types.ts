@@ -341,6 +341,9 @@ export type OppfølgingsoppgaveV0 =
 export type Aktivitetsplikt11_7Grunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7GrunnlagDto'];
 
+export type Aktivitetsplikt11_7Vurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'];
+
 export type DokumentÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
 
 export type Vurderingsbehov =
