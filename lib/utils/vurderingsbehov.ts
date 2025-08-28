@@ -150,6 +150,8 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
       return 'Aktivitetsplikt $ 11-7';
     case 'OVERGANG_ARBEID':
       return 'Overgang til arbeid';
+    case 'OVERGANG_UFORE':
+      return 'Overgang til uføre';
     default:
       return vurderingsbehov;
   }

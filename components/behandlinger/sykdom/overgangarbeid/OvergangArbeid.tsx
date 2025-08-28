@@ -117,7 +117,6 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
         defaultOpen={false}
         tekst={
           <div>
-            Vilkårene i § 11-17 blabla.{' '}
             <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-17">
               Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-17
             </Link>

@@ -159,7 +159,6 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         defaultOpen={false}
         tekst={
           <div>
-            Vilkårene i § 11-18 blabla.{' '}
             <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18">
               Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18
             </Link>
