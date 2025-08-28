@@ -1,6 +1,6 @@
 'use client';
 
-import { Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
+import { MellomlagretVurdering, Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyShort, Box, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
@@ -18,22 +18,24 @@ import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { isNullOrUndefined } from 'lib/utils/validering';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-type SamordnetYtelse = {
-  ytelseType: SamordningYtelsestype | undefined;
+interface SamordnetYtelse {
+  ytelseType?: SamordningYtelsestype;
   kilde: string;
   manuell?: boolean;
   graderingFraKilde?: number;
   gradering?: number;
   kronseum?: number;
   periode: Periode;
-};
+}
 
 export interface SamordningGraderingFormfields {
   begrunnelse: string;
@@ -42,22 +44,22 @@ export interface SamordningGraderingFormfields {
   vurderteSamordninger: SamordnetYtelse[];
 }
 
-export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
-  const [errorMessage, setErrorMessage] = useState<String | undefined>(undefined);
-  const ytelserFraVurderinger: SamordnetYtelse[] = grunnlag.vurderinger.map((ytelse) => ({
-    ytelseType: ytelse.ytelseType,
-    kilde: '',
-    graderingFraKilde: undefined,
-    gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
-    manuell: ytelse.manuell || undefined,
-    periode: {
-      fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
-      tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
-    },
-  }));
+type DraftFormFields = Partial<SamordningGraderingFormfields>;
 
+export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
-  const [visForm, setVisForm] = useState<boolean>(!!(grunnlag.ytelser.length > 0 || grunnlag.vurderinger.length > 0));
+  const [errorMessage, setErrorMessage] = useState<String | undefined>(undefined);
+
+  const finnesYtelserEllerVurderinger = !!(
+    grunnlag.ytelser.length > 0 ||
+    (grunnlag.vurdering && grunnlag.vurdering?.vurderinger?.length > 0)
+  );
+
+  const [visForm, setVisForm] = useState<boolean>(finnesYtelserEllerVurderinger);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag);
 
   const { form, formFields } = useConfigForm<SamordningGraderingFormfields>(
     {
@@ -65,7 +67,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
         type: 'textarea',
         label: 'Vurder utbetalingsgrad for folketrygdytelser',
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
-        defaultValue: grunnlag.begrunnelse || undefined,
+        defaultValue: defaultValue.begrunnelse,
       },
       maksDatoEndelig: {
         type: 'radio',
@@ -75,10 +77,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
           { label: 'Nei, virkningstidspunkt er bekreftet', value: 'true' },
         ],
         rules: { required: 'Du må ta stilling til om virkningstidspunkt er endelig' },
-        defaultValue:
-          grunnlag.maksDatoEndelig === undefined || grunnlag.maksDatoEndelig === null
-            ? undefined
-            : grunnlag.maksDatoEndelig.toString(),
+        defaultValue: defaultValue.maksDatoEndelig,
       },
       fristNyRevurdering: {
         type: 'date_input',
@@ -89,12 +88,11 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
             gyldigDato: (v) => validerDato(v as string),
           },
         },
-        defaultValue:
-          (grunnlag.fristNyRevurdering && formaterDatoForFrontend(grunnlag.fristNyRevurdering)) || undefined,
+        defaultValue: defaultValue.fristNyRevurdering,
       },
       vurderteSamordninger: {
         type: 'fieldArray',
-        defaultValue: ytelserFraVurderinger,
+        defaultValue: defaultValue.vurderteSamordninger,
       },
     },
     { readOnly: readOnly, shouldUnregister: true }
@@ -103,35 +101,41 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_GRADERING');
 
+  const { mellomlagretVurdering, lagreMellomlagring, nullstillMellomlagretVurdering, slettMellomlagring } =
+    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_GRADERING, initialMellomlagretVurdering);
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) => {
       setErrorMessage(undefined);
       if (grunnlag.ytelser.length > 0 && data.vurderteSamordninger.length === 0) {
         setErrorMessage('Du må gjøre en vurdering av periodene');
       } else {
-        return løsBehovOgGåTilNesteSteg({
-          behandlingVersjon: behandlingVersjon,
-          behov: {
-            behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
-            vurderingerForSamordning: {
-              begrunnelse: data.begrunnelse,
-              maksDatoEndelig: data.maksDatoEndelig !== 'false',
-              fristNyRevurdering:
-                data.fristNyRevurdering &&
-                formaterDatoForBackend(parse(data.fristNyRevurdering, 'dd.MM.yyyy', new Date())),
-              vurderteSamordningerData: (data.vurderteSamordninger || []).map((vurdertSamordning) => ({
-                manuell: vurdertSamordning.manuell,
-                gradering: vurdertSamordning.gradering,
-                periode: {
-                  fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
-                  tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
-                },
-                ytelseType: vurdertSamordning.ytelseType!,
-              })),
+        return løsBehovOgGåTilNesteSteg(
+          {
+            behandlingVersjon: behandlingVersjon,
+            behov: {
+              behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
+              vurderingerForSamordning: {
+                begrunnelse: data.begrunnelse,
+                maksDatoEndelig: data.maksDatoEndelig !== 'false',
+                fristNyRevurdering:
+                  data.fristNyRevurdering &&
+                  formaterDatoForBackend(parse(data.fristNyRevurdering, 'dd.MM.yyyy', new Date())),
+                vurderteSamordningerData: (data.vurderteSamordninger || []).map((vurdertSamordning) => ({
+                  manuell: vurdertSamordning.manuell,
+                  gradering: vurdertSamordning.gradering,
+                  periode: {
+                    fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
+                    tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
+                  },
+                  ytelseType: vurdertSamordning.ytelseType!,
+                })),
+              },
             },
+            referanse: behandlingsreferanse,
           },
-          referanse: behandlingsreferanse,
-        });
+          () => nullstillMellomlagretVurdering()
+        );
       }
     })(event);
   };
@@ -166,7 +170,15 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag.vurdertAv}
+      vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
+      readOnly={readOnly}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() =>
+          form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
+        );
+      }}
+      mellomlagretVurdering={mellomlagretVurdering}
     >
       {visForm && (
         <VStack gap={'6'}>
@@ -203,7 +215,7 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
           {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
         </VStack>
       )}
-      {!visForm && grunnlag.ytelser.length === 0 && grunnlag.vurderinger.length === 0 && (
+      {!visForm && grunnlag.ytelser.length === 0 && grunnlag.vurdering?.vurderinger?.length === 0 && (
         <VStack gap={'2'}>
           <Detail>Vi finner ingen ytelser fra folketrygden</Detail>
           <HStack>
@@ -222,3 +234,36 @@ export const SamordningGradering = ({ grunnlag, behandlingVersjon, readOnly }: P
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): DraftFormFields {
+  return {
+    begrunnelse: grunnlag.vurdering?.begrunnelse || undefined,
+    fristNyRevurdering:
+      (grunnlag.vurdering?.fristNyRevurdering && formaterDatoForFrontend(grunnlag.vurdering?.fristNyRevurdering)) ||
+      undefined,
+    maksDatoEndelig:
+      grunnlag.vurdering?.maksDatoEndelig === undefined || grunnlag.vurdering?.maksDatoEndelig === null
+        ? undefined
+        : grunnlag.vurdering?.maksDatoEndelig.toString(),
+    vurderteSamordninger: grunnlag.vurdering?.vurderinger.map((ytelse) => ({
+      ytelseType: ytelse.ytelseType,
+      kilde: '',
+      graderingFraKilde: undefined,
+      gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
+      manuell: ytelse.manuell || undefined,
+      periode: {
+        fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
+        tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
+      },
+    })),
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return {
+    begrunnelse: '',
+    fristNyRevurdering: '',
+    maksDatoEndelig: '',
+    vurderteSamordninger: [],
+  };
+}
