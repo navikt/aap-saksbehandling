@@ -1,54 +1,25 @@
 'use client';
 
 import { Alert, BodyLong, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
-import { AktivitetspliktbruddV0, SaksInfo } from 'lib/types/types';
+import { SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
-import { clientSendHendelse } from 'lib/clientApi';
+import { clientOpprettAktivitetsplikt } from 'lib/clientApi';
 import { useState } from 'react';
 import { Spinner } from 'components/felles/Spinner';
-import { useRouter } from 'next/navigation';
 import styles from './OpprettAktivitetsplikt.module.css';
-import { isSuccess } from 'lib/utils/api';
-
-import { v4 as uuid } from 'uuid';
 import { FormField } from 'components/form/FormField';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 
 export interface AktivitetspliktbruddFormFields {
   aktivitetspliktBruddType: 'AKTIVITETSPLIKT_11_7';
 }
 
 export const OpprettAktivitetsPliktBrudd = ({ sak }: { sak: SaksInfo }) => {
-  const router = useRouter();
-
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
-  async function sendHendelse(data: AktivitetspliktbruddFormFields) {
-    const innsending = {
-      saksnummer: sak.saksnummer,
-      referanse: {
-        type: 'MANUELL_OPPRETTELSE',
-        verdi: uuid(),
-      },
-      type: 'AKTIVITETSPLIKTBRUDD',
-      kanal: 'DIGITAL',
-      mottattTidspunkt: new Date().toISOString(),
-      melding: {
-        bruddType: data.aktivitetspliktBruddType,
-        meldingType: 'AktivitetspliktbruddV0',
-      } satisfies AktivitetspliktbruddV0,
-    };
-
-    setIsLoading(true);
-
-    const res = await clientSendHendelse(sak.saksnummer, innsending);
-
-    if (isSuccess(res)) {
-      router.push(`/saksbehandling/sak/${sak.saksnummer}`);
-    } else {
-      setError(res.apiException.message);
-    }
-    setIsLoading(false);
+  async function postOpprettAktivitetspliktBrudd() {
+    clientOpprettAktivitetsplikt(sak.saksnummer);
   }
 
   const { form, formFields } = useConfigForm<AktivitetspliktbruddFormFields>({
@@ -57,12 +28,11 @@ export const OpprettAktivitetsPliktBrudd = ({ sak }: { sak: SaksInfo }) => {
       label: 'Hvilket aktivitetspliktbrudd vil du registrere?',
       options: [
         {
-          label: 'AKTIVITETSPLIKT_11_7',
+          label: '§ 11-7',
           value: 'AKTIVITETSPLIKT_11_7',
         },
-        { label: 'AKTIVITETSPLIKT_11_9', value: 'AKTIVITETSPLIKT_11_9' },
       ],
-      rules: { required: 'ow' },
+      rules: { required: 'Velg ' },
     },
   });
 
@@ -72,7 +42,7 @@ export const OpprettAktivitetsPliktBrudd = ({ sak }: { sak: SaksInfo }) => {
 
   return (
     <Page.Block width="md">
-      <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
+      <form onSubmit={form.handleSubmit(postOpprettAktivitetspliktBrudd)}>
         <VStack gap="4">
           <ExpansionCard
             aria-label="Opprett Aktivitetspliktbrudd"
@@ -102,12 +72,17 @@ export const OpprettAktivitetsPliktBrudd = ({ sak }: { sak: SaksInfo }) => {
 
           <HStack gap="4">
             <Button
-              type="button"
+              as="a"
+              href={`/saksbehandling/sak/${sak.saksnummer}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              size="small"
               variant="secondary"
-              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}`)}
+              icon={<ExternalLinkIcon aria-hidden />}
             >
               Avbryt
             </Button>
+
             <Button type="submit">Opprett Aktivitetspliktbrudd</Button>
           </HStack>
         </VStack>

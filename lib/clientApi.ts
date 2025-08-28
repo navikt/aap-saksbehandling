@@ -86,6 +86,18 @@ export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandlin
   return clientFetch(`${BASE_URL}/api/behandling/los-behov/`, 'POST', avklaringsBehov);
 }
 
+export function clientOpprettAktivitetsplikt(saksnummer: string) {
+  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling/`, 'POST');
+}
+
+export function clientOpprettAktivitetspliktBrudd(saksnummer: string, aktivitet: OpprettAktivitetspliktBrudd) {
+  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/aktivitetsplikt/opprett`, 'POST', aktivitet);
+}
+
+export function clientOppdaterAktivitetspliktBrudd(saksnummer: string, aktivitet: OppdaterAktivitetspliktBrudd2) {
+  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/aktivitetsplikt/oppdater`, 'POST', aktivitet);
+}
+
 export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
   return clientFetch<Behandler[]>(`${BASE_URL}/api/dokumentinnhenting/behandleroppslag`, 'POST', {
     fritekst: fritekst,
