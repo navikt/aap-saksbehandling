@@ -1,39 +1,22 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from 'lib/test/CustomRender';
-import { userEvent } from '@testing-library/user-event';
-import { TrekkSøknad } from 'components/behandlinger/søknad/trekksøknad/TrekkSøknad';
-import { MellomlagretVurderingResponse, TrukketSøknadGrunnlag } from 'lib/types/types';
-import { FetchResponse } from 'lib/utils/api';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { MellomlagretVurderingResponse, RettighetsperiodeGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
+import { VurderRettighetsperiode } from 'components/behandlinger/rettighetsperiode/vurderrettighetsperiode/VurderRettighetsperiode';
+import { FetchResponse } from 'lib/utils/api';
+import { customRender } from 'lib/test/CustomRender';
 import createFetchMock from 'vitest-fetch-mock';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
-describe('Trekk søknad', () => {
-  describe('Generelt', () => {
-    it('har en overskrift', () => {
-      render(<TrekkSøknad grunnlag={{ vurderinger: [] }} readOnly={false} behandlingVersjon={1} />);
-      expect(screen.getByRole('heading', { name: 'Trekk søknad', level: 3 })).toBeVisible();
-    });
-
-    it('har et felt for å begrunne hvorfor søknaden skal trekkes', () => {
-      render(<TrekkSøknad grunnlag={{ vurderinger: [] }} readOnly={false} behandlingVersjon={1} />);
-      expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toBeVisible();
-    });
-
-    it('viser en feilmelding dersom man forsøker å bekrefte uten å ha skrevet en begrunnelse', async () => {
-      render(<TrekkSøknad grunnlag={{ vurderinger: [] }} readOnly={false} behandlingVersjon={1} />);
-      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-      expect(await screen.findByText('Du må begrunne hvorfor søknaden skal trekkes')).toBeVisible();
-    });
-  });
-
+describe('Vurder rettighetsperiode', () => {
   describe('mellomlagring', () => {
     const mellomlagring: MellomlagretVurderingResponse = {
       mellomlagretVurdering: {
-        avklaringsbehovkode: Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
+        avklaringsbehovkode: Behovstype.VURDER_RETTIGHETSPERIODE,
         behandlingId: { id: 1 },
         data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret"}',
         vurdertDato: '2025-08-21T12:00:00.000',
@@ -41,27 +24,25 @@ describe('Trekk søknad', () => {
       },
     };
 
-    const trukketSøknadGrunnlagMedVurdering: TrukketSøknadGrunnlag = {
-      vurderinger: [
-        {
-          begrunnelse: 'Dette er min vurdering som er bekreftet',
-          vurdertAv: 'Kjell T. Ringen',
-          vurdertDato: '2025-08-21',
-          journalpostId: '123',
-        },
-      ],
+    const RettighetsperiodeGrunnlagMedVurdering: RettighetsperiodeGrunnlag = {
+      harTilgangTilÅSaksbehandle: false,
+      vurdering: {
+        begrunnelse: 'Dette er min vurdering som er bekreftet',
+        harRettUtoverSøknadsdato: false,
+        vurdertAv: { ident: 'Kjell T. Ringen', dato: '2025-08-21' },
+      },
     };
 
-    const trukketSøknadGrunnlagUtenVurdering: TrukketSøknadGrunnlag = {
-      vurderinger: [],
+    const RettighetsperiodeGrunnlagUtenVurdering: RettighetsperiodeGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
     };
 
     it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
-      render(
-        <TrekkSøknad
+      customRender(
+        <VurderRettighetsperiode
           readOnly={false}
           behandlingVersjon={0}
-          grunnlag={trukketSøknadGrunnlagUtenVurdering}
+          grunnlag={RettighetsperiodeGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
@@ -70,7 +51,13 @@ describe('Trekk søknad', () => {
     });
 
     it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-      render(<TrekkSøknad readOnly={false} behandlingVersjon={0} grunnlag={trukketSøknadGrunnlagUtenVurdering} />);
+      customRender(
+        <VurderRettighetsperiode
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={RettighetsperiodeGrunnlagUtenVurdering}
+        />
+      );
 
       await user.type(
         screen.getByRole('textbox', { name: 'Begrunnelse' }),
@@ -92,11 +79,11 @@ describe('Trekk søknad', () => {
     });
 
     it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
-      render(
-        <TrekkSøknad
+      customRender(
+        <VurderRettighetsperiode
           readOnly={false}
           behandlingVersjon={0}
-          grunnlag={trukketSøknadGrunnlagUtenVurdering}
+          grunnlag={RettighetsperiodeGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
@@ -113,11 +100,11 @@ describe('Trekk søknad', () => {
     });
 
     it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
-      render(
-        <TrekkSøknad
+      customRender(
+        <VurderRettighetsperiode
           readOnly={false}
           behandlingVersjon={0}
-          grunnlag={trukketSøknadGrunnlagUtenVurdering}
+          grunnlag={RettighetsperiodeGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
@@ -130,7 +117,13 @@ describe('Trekk søknad', () => {
     });
 
     it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-      render(<TrekkSøknad readOnly={false} behandlingVersjon={0} grunnlag={trukketSøknadGrunnlagMedVurdering} />);
+      customRender(
+        <VurderRettighetsperiode
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={RettighetsperiodeGrunnlagMedVurdering}
+        />
+      );
 
       const begrunnelseFelt = screen.getByRole('textbox', {
         name: /begrunnelse/i,
@@ -140,11 +133,11 @@ describe('Trekk søknad', () => {
     });
 
     it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
-      render(
-        <TrekkSøknad
+      customRender(
+        <VurderRettighetsperiode
           readOnly={false}
           behandlingVersjon={0}
-          grunnlag={trukketSøknadGrunnlagUtenVurdering}
+          grunnlag={RettighetsperiodeGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
@@ -163,11 +156,11 @@ describe('Trekk søknad', () => {
     });
 
     it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
-      render(
-        <TrekkSøknad
+      customRender(
+        <VurderRettighetsperiode
           readOnly={false}
           behandlingVersjon={0}
-          grunnlag={trukketSøknadGrunnlagMedVurdering}
+          grunnlag={RettighetsperiodeGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
@@ -188,15 +181,14 @@ describe('Trekk søknad', () => {
     });
 
     it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
-      render(
-        <TrekkSøknad
+      customRender(
+        <VurderRettighetsperiode
           readOnly={true}
           behandlingVersjon={0}
-          grunnlag={trukketSøknadGrunnlagMedVurdering}
+          grunnlag={RettighetsperiodeGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
-
       const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
       expect(lagreKnapp).not.toBeInTheDocument();
       const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });

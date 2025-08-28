@@ -27,6 +27,7 @@ import { SvarFraAndreinstansGruppe } from 'components/behandlinger/svarfraandrei
 import { StartBehandling } from '../behandlinger/startbehandling/StartBehandling';
 import { KabalIverksettKonsekvensSteg } from 'components/behandlinger/klage/kabaliverksettkonsekvens/KabalIverksettKonsekvensMedDataFetching';
 import { AvklarOppfolgingsSteg } from 'components/behandlinger/oppfolgingsbehandling/AvklarOppfolgingsSteg';
+import { Aktivitetsplikt11_7 } from 'components/behandlinger/aktivitetsplikt/11-7/Aktivitetsplikt11_7';
 
 interface Props {
   behandlingsReferanse: string;
@@ -68,6 +69,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'FATTE_VEDTAK' && <FatteVedtak behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'IVERKSETT_VEDTAK' && <div>Behandling avsluttet</div>}
       {aktivGruppe === 'BREV' && <Brev behandlingsReferanse={behandlingsReferanse} />}
+      {/* Klage */}
       {aktivGruppe === 'FORMKRAV' && <Formkrav behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'KLAGEBEHANDLING_KONTOR' && (
         <KlagebehandlingKontor behandlingsreferanse={behandlingsReferanse} />
@@ -87,6 +89,8 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
         <AvklarOppfolgingsSteg behandlingsreferanse={behandlingsReferanse} />
       )}
       {aktivGruppe === 'AVKLAR_OPPPFØLGING' && <AvklarOppfolgingsSteg behandlingsreferanse={behandlingsReferanse} />}
+      {/* Aktivitetsplikt */}
+      {aktivGruppe === 'AKTIVITETSPLIKT_11_7' && <Aktivitetsplikt11_7 behandlingsreferanse={behandlingsReferanse} />}
     </section>
   );
 };

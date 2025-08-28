@@ -7,7 +7,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 
 import { useFieldArray } from 'react-hook-form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { ArbeidsevneGrunnlag } from 'lib/types/types';
+import { ArbeidsevneGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
@@ -22,22 +22,26 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
-  grunnlag?: ArbeidsevneGrunnlag;
+  grunnlag: ArbeidsevneGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-type Arbeidsevnevurderinger = {
+interface Arbeidsevnevurderinger {
   begrunnelse: string;
   arbeidsevne: string;
   fom: string;
-};
+}
 
-type FastsettArbeidsevneFormFields = {
+interface FastsettArbeidsevneFormFields {
   arbeidsevnevurderinger: Arbeidsevnevurderinger[];
-};
+}
+
+type DraftFormFields = Partial<FastsettArbeidsevneFormFields>;
 
 const ANTALL_TIMER_FULL_UKE = 37.5;
 
@@ -53,18 +57,22 @@ const regnOmTilTimer = (value: string) => {
   return `(${tilAvrundetTimetall(value)} timer)`;
 };
 
-export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
-  const defaultValues: Arbeidsevnevurderinger[] =
-    grunnlag?.vurderinger?.map((vurdering) => ({
-      begrunnelse: vurdering.begrunnelse,
-      arbeidsevne: vurdering.arbeidsevne.toString(),
-      fom: formaterDatoForFrontend(vurdering.fraDato),
-    })) || [];
+export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
+  const behandlingsreferanse = useBehandlingsReferanse();
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
+
+  const { mellomlagretVurdering, lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.FASTSETT_ARBEIDSEVNE_KODE, initialMellomlagretVurdering);
+
+  const defaultValues: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingerToDraftFormFields(grunnlag.vurderinger);
 
   const { form } = useConfigForm<FastsettArbeidsevneFormFields>({
     arbeidsevnevurderinger: {
       type: 'fieldArray',
-      defaultValue: defaultValues,
+      defaultValue: defaultValues.arbeidsevnevurderinger,
     },
   });
 
@@ -77,28 +85,28 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
     name: 'arbeidsevnevurderinger',
   });
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
-  const behandlingsreferanse = useBehandlingsReferanse();
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        referanse: behandlingsreferanse,
-        behov: {
-          behovstype: Behovstype.FASTSETT_ARBEIDSEVNE_KODE,
-          arbeidsevneVurderinger: data.arbeidsevnevurderinger.map((vurdering) => ({
-            arbeidsevne: Number.parseInt(vurdering.arbeidsevne, 10),
-            begrunnelse: vurdering.begrunnelse,
-            fraDato: formaterDatoForBackend(parse(vurdering.fom, 'dd.MM.yyyy', new Date())),
-          })),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          referanse: behandlingsreferanse,
+          behov: {
+            behovstype: Behovstype.FASTSETT_ARBEIDSEVNE_KODE,
+            arbeidsevneVurderinger: data.arbeidsevnevurderinger.map((vurdering) => ({
+              arbeidsevne: Number.parseInt(vurdering.arbeidsevne, 10),
+              begrunnelse: vurdering.begrunnelse,
+              fraDato: formaterDatoForBackend(parse(vurdering.fom, 'dd.MM.yyyy', new Date())),
+            })),
+          },
         },
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 
-  const showAsOpen = !!grunnlag?.vurderinger && grunnlag.vurderinger.length >= 1;
+  const showAsOpen =
+    (!!grunnlag?.vurderinger && grunnlag.vurderinger.length >= 1) || initialMellomlagretVurdering !== undefined;
   const skalViseBekreftKnapp = !readOnly && arbeidsevneVurderinger.length > 0;
 
   return (
@@ -113,6 +121,16 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
       visBekreftKnapp={skalViseBekreftKnapp}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurderinger?.[0]?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() => {
+          form.reset(
+            grunnlag.vurderinger ? mapVurderingerToDraftFormFields(grunnlag.vurderinger) : emptyDraftFormFields()
+          );
+        });
+      }}
+      readOnly={readOnly}
     >
       <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
         Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
@@ -196,3 +214,18 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly }: P
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingerToDraftFormFields(vurderinger?: ArbeidsevneGrunnlag['vurderinger']): DraftFormFields {
+  return {
+    arbeidsevnevurderinger:
+      vurderinger?.map((vurdering) => ({
+        begrunnelse: vurdering.begrunnelse,
+        arbeidsevne: vurdering.arbeidsevne.toString(),
+        fom: formaterDatoForFrontend(vurdering.fraDato),
+      })) || [],
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return { arbeidsevnevurderinger: [] };
+}

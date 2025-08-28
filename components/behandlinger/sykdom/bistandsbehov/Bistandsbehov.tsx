@@ -185,6 +185,7 @@ export const Bistandsbehov = ({
         });
       }}
       mellomlagretVurdering={mellomlagretVurdering}
+      readOnly={readOnly}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderingerV3

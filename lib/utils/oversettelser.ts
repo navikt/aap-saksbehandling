@@ -106,15 +106,15 @@ export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker): string {
 export function mapTilSteggruppeTekst(steggruppe: string) {
   switch (steggruppe) {
     case 'SØKNAD':
-      return 'Søknad';
+      return 'Trekk søknad';
     case 'ALDER':
       return 'Alder';
     case 'LOVVALG':
-      return 'Lovvalg';
+      return 'Lovvalg og medlemskap';
     case 'START_BEHANDLING':
       return 'Start behandling';
     case 'MEDLEMSKAP':
-      return 'Medlemskap';
+      return 'Forutgående medlemskap';
     case 'BARNETILLEGG':
       return 'Barnetillegg';
     case 'STUDENT':
@@ -124,7 +124,7 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
     case 'GRUNNLAG':
       return 'Grunnlag';
     case 'ET_ANNET_STED':
-      return 'Et annet sted';
+      return 'Institusjonsopphold';
     case 'UNDERVEIS':
       return 'Underveis';
     case 'TILKJENT_YTELSE':
@@ -141,8 +141,6 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Iverksett vedtak';
     case 'BREV':
       return 'Brev';
-    case 'UDEFINERT':
-      return 'Udefinert';
     case 'AVKLAR_TEMA':
       return 'Avklar tema';
     case 'AVKLAR_SAK':
@@ -157,10 +155,12 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Samordning';
     case 'FORMKRAV':
       return 'Formkrav';
+    case 'TREKK_KLAGE':
+      return 'Trekk klage';
     case 'KLAGEBEHANDLING_KONTOR':
-      return 'Klagebehandling - Nav-kontor';
+      return 'Vurder klage';
     case 'KLAGEBEHANDLING_NAY':
-      return 'Klagebehandling - Nay';
+      return 'Behandle klage';
     case 'OMGJØRING':
       return 'Omgjøring';
     case 'OPPRETTHOLDELSE':
@@ -169,6 +169,12 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Håndter svar fra Nav Klageinstans';
     case 'IVERKSETT_KONSEKVENS':
       return 'Iverksett konsekvens';
+    case 'AVKLAR_OPPPFØLGING':
+      return 'Avklar oppfølging';
+    case 'AKTIVITETSPLIKT_11_7':
+      return '§ 11-7 Aktivitetsplikt';
+    case 'UDEFINERT':
+      return 'Udefinert';
     default:
       return `${steggruppe}`;
   }

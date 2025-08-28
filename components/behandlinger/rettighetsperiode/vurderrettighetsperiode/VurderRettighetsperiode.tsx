@@ -7,16 +7,18 @@ import { FormField } from 'components/form/FormField';
 import { FormEvent } from 'react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { RettighetsperiodeGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, RettighetsperiodeGrunnlag } from 'lib/types/types';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { addYears, isBefore, parse, startOfDay } from 'date-fns';
 import { Alert, BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   readOnly: boolean;
   behandlingVersjon: number;
   grunnlag?: RettighetsperiodeGrunnlag;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -26,31 +28,45 @@ interface FormFields {
   harKravPåRenter: string;
 }
 
-export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
+type DraftFormfields = Partial<FormFields>;
+
+export const VurderRettighetsperiode = ({
+  grunnlag,
+  readOnly,
+  behandlingVersjon,
+  initialMellomlagretVurdering,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_RETTIGHETSPERIODE');
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.VURDER_RETTIGHETSPERIODE, initialMellomlagretVurdering);
+
+  const defaultValues: DraftFormfields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
+
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
         label: 'Begrunnelse',
         rules: { required: 'Du må begrunne hvorfor starttidspunktet for saken skal endres' },
-        defaultValue: grunnlag?.vurdering?.begrunnelse || '',
+        defaultValue: defaultValues.begrunnelse,
       },
       harRettUtoverSøknadsdato: {
         type: 'radio',
         label: 'Har brukeren rett på AAP fra en annen dato enn søknadsdatoen?',
         rules: { required: 'Du må ta stilling til om brukeren har rett på AAP fra en annen dato enn søknadsdatoen' },
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harRettUtoverSøknadsdato),
+        defaultValue: defaultValues.harRettUtoverSøknadsdato,
       },
       harKravPåRenter: {
         type: 'radio',
         label: 'Har brukeren krav på renter etter § 22-17?',
         rules: { required: 'Du må ta stilling til om brukeren har rett på renter' },
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harKravPåRenter),
+        defaultValue: defaultValues.harKravPåRenter,
       },
       startDato: {
         type: 'date_input',
@@ -71,8 +87,7 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
             },
           },
         },
-        defaultValue:
-          (grunnlag?.vurdering?.startDato && formaterDatoForFrontend(grunnlag.vurdering?.startDato)) || undefined,
+        defaultValue: defaultValues.startDato,
       },
     },
     { readOnly: readOnly }
@@ -80,23 +95,26 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.VURDER_RETTIGHETSPERIODE,
-          rettighetsperiodeVurdering: {
-            begrunnelse: data.begrunnelse,
-            startDato:
-              data.harRettUtoverSøknadsdato === JaEllerNei.Ja
-                ? formaterDatoForBackend(parse(data.startDato, 'dd.MM.yyyy', new Date()))
-                : null,
-            harRettUtoverSøknadsdato: data.harRettUtoverSøknadsdato === JaEllerNei.Ja,
-            harKravPåRenter:
-              data.harRettUtoverSøknadsdato === JaEllerNei.Ja ? data.harKravPåRenter === JaEllerNei.Ja : null,
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.VURDER_RETTIGHETSPERIODE,
+            rettighetsperiodeVurdering: {
+              begrunnelse: data.begrunnelse,
+              startDato:
+                data.harRettUtoverSøknadsdato === JaEllerNei.Ja
+                  ? formaterDatoForBackend(parse(data.startDato, 'dd.MM.yyyy', new Date()))
+                  : null,
+              harRettUtoverSøknadsdato: data.harRettUtoverSøknadsdato === JaEllerNei.Ja,
+              harKravPåRenter:
+                data.harRettUtoverSøknadsdato === JaEllerNei.Ja ? data.harKravPåRenter === JaEllerNei.Ja : null,
+            },
           },
+          referanse: behandlingsReferanse,
         },
-        referanse: behandlingsReferanse,
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 
@@ -111,6 +129,14 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() =>
+          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
+        );
+      }}
+      readOnly={readOnly}
     >
       <VStack gap={'1'}>
         <BodyShort size={'small'} weight={'semibold'}>
@@ -137,3 +163,21 @@ export const VurderRettighetsperiode = ({ grunnlag, readOnly, behandlingVersjon 
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(vurdering: RettighetsperiodeGrunnlag['vurdering']): DraftFormfields {
+  return {
+    begrunnelse: vurdering?.begrunnelse,
+    harRettUtoverSøknadsdato: getJaNeiEllerUndefined(vurdering?.harRettUtoverSøknadsdato),
+    startDato: (vurdering?.startDato && formaterDatoForFrontend(vurdering.startDato)) || undefined,
+    harKravPåRenter: getJaNeiEllerUndefined(vurdering?.harKravPåRenter),
+  };
+}
+
+function emptyDraftFormFields(): DraftFormfields {
+  return {
+    begrunnelse: '',
+    harKravPåRenter: '',
+    harRettUtoverSøknadsdato: '',
+    startDato: '',
+  };
+}

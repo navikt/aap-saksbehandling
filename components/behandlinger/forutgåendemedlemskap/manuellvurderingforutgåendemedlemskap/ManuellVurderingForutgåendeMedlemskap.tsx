@@ -4,17 +4,23 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { Behovstype, getJaNeiEllerIkkeBesvart, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { ForutgåendeMedlemskapGrunnlag, HistoriskForutgåendeMedlemskapVurdering } from 'lib/types/types';
+import {
+  ForutgåendeMedlemskapGrunnlag,
+  HistoriskForutgåendeMedlemskapVurdering,
+  MellomlagretVurdering,
+} from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   grunnlag?: ForutgåendeMedlemskapGrunnlag;
   overstyring: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -22,6 +28,8 @@ interface FormFields {
   harForutgåendeMedlemskap: string;
   unntaksvilkår?: string;
 }
+
+type DraftFormFields = Partial<FormFields>;
 
 function mapGrunnlagTilForutgående(harForutgåendeMedlemskap?: boolean | null) {
   if (harForutgåendeMedlemskap === true) {
@@ -47,18 +55,27 @@ function mapGrunnlagTilUnntaksvilkår(
   return undefined;
 }
 
+const begrunnelseLabel = 'Vurder brukerens forutgående medlemskap';
+const harForutgåendeMedlemskapLabel = 'Har brukeren fem års forutgående medlemskap i folketrygden jamfør § 11-2?';
+const unntaksvilkårLabel = 'Oppfyller brukeren noen av unntaksvilkårene?';
+
 export const ManuellVurderingForutgåendeMedlemskap = ({
   grunnlag,
   readOnly,
   behandlingVersjon,
   overstyring,
+  initialMellomlagretVurdering,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { isLoading, status, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
-  const begrunnelseLabel = 'Vurder brukerens forutgående medlemskap';
-  const harForutgåendeMedlemskapLabel = 'Har brukeren fem års forutgående medlemskap i folketrygden jamfør § 11-2?';
-  const unntaksvilkårLabel = 'Oppfyller brukeren noen av unntaksvilkårene?';
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP, initialMellomlagretVurdering);
+
+  const defaultValues: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -66,14 +83,14 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
         type: 'textarea',
         label: begrunnelseLabel,
         rules: { required: 'Du må gi en begrunnelse på brukerens forutgående medlemskap' },
-        defaultValue: grunnlag?.vurdering?.begrunnelse,
+        defaultValue: defaultValues.begrunnelse,
       },
       harForutgåendeMedlemskap: {
         type: 'radio',
         label: harForutgåendeMedlemskapLabel,
         options: JaEllerNeiOptions,
         rules: { required: 'Du må velge om brukeren har fem års forutgående medlemskap' },
-        defaultValue: mapGrunnlagTilForutgående(grunnlag?.vurdering?.harForutgåendeMedlemskap),
+        defaultValue: defaultValues.harForutgåendeMedlemskap,
       },
       unntaksvilkår: {
         type: 'radio',
@@ -92,39 +109,38 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
           { value: 'Nei', label: 'Nei' },
         ],
         rules: { required: 'Du må svare på om brukeren oppfyller noen av unntaksvilkårene' },
-        defaultValue: mapGrunnlagTilUnntaksvilkår(
-          grunnlag?.vurdering?.harForutgåendeMedlemskap,
-          grunnlag?.vurdering?.varMedlemMedNedsattArbeidsevne,
-          grunnlag?.vurdering?.medlemMedUnntakAvMaksFemAar
-        ),
+        defaultValue: defaultValues.unntaksvilkår,
       },
     },
     { readOnly }
   );
 
-  const harForutgåendeMedlemskap = form.watch('harForutgåendeMedlemskap');
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: overstyring
-            ? Behovstype.MANUELL_OVERSTYRING_MEDLEMSKAP
-            : Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP,
-          manuellVurderingForForutgåendeMedlemskap: {
-            begrunnelse: data.begrunnelse,
-            harForutgåendeMedlemskap: data.harForutgåendeMedlemskap === JaEllerNei.Ja,
-            varMedlemMedNedsattArbeidsevne: data.unntaksvilkår === 'A' ? true : null,
-            medlemMedUnntakAvMaksFemAar: data.unntaksvilkår === 'B' ? true : null,
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: overstyring
+              ? Behovstype.MANUELL_OVERSTYRING_MEDLEMSKAP
+              : Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP,
+            manuellVurderingForForutgåendeMedlemskap: {
+              begrunnelse: data.begrunnelse,
+              harForutgåendeMedlemskap: data.harForutgåendeMedlemskap === JaEllerNei.Ja,
+              varMedlemMedNedsattArbeidsevne: data.unntaksvilkår === 'A' ? true : null,
+              medlemMedUnntakAvMaksFemAar: data.unntaksvilkår === 'B' ? true : null,
+            },
           },
+          referanse: behandlingsReferanse,
         },
-        referanse: behandlingsReferanse,
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
+
   const heading = overstyring ? 'Overstyring av § 11-2 Forutgående medlemskap' : '§ 11-2 Forutgående medlemskap';
   const historiskeManuelleVurderinger = grunnlag?.historiskeManuelleVurderinger;
+  const harForutgåendeMedlemskap = form.watch('harForutgåendeMedlemskap');
 
   return (
     <VilkårsKortMedForm
@@ -137,6 +153,14 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
       visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() =>
+          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : empptyDraftFormFields())
+        );
+      }}
+      readOnly={readOnly}
     >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
         <TidligereVurderingerV3
@@ -156,26 +180,46 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
       )}
     </VilkårsKortMedForm>
   );
-
-  function byggFelter(vurdering: HistoriskForutgåendeMedlemskapVurdering): ValuePair[] {
-    return [
-      {
-        label: begrunnelseLabel,
-        value: vurdering.manuellVurdering.begrunnelse || '',
-      },
-      {
-        label: harForutgåendeMedlemskapLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.manuellVurdering.harForutgåendeMedlemskap),
-      },
-      {
-        label: unntaksvilkårLabel,
-        value: vurdering.manuellVurdering.harForutgåendeMedlemskap
-          ? getJaNeiEllerIkkeBesvart(null)
-          : getJaNeiEllerIkkeBesvart(
-              vurdering.manuellVurdering.varMedlemMedNedsattArbeidsevne === true ||
-                vurdering.manuellVurdering.medlemMedUnntakAvMaksFemAar === true
-            ),
-      },
-    ];
-  }
 };
+
+function mapVurderingToDraftFormFields(vurdering: ForutgåendeMedlemskapGrunnlag['vurdering']): DraftFormFields {
+  return {
+    begrunnelse: vurdering?.begrunnelse,
+    unntaksvilkår: mapGrunnlagTilUnntaksvilkår(
+      vurdering?.harForutgåendeMedlemskap,
+      vurdering?.varMedlemMedNedsattArbeidsevne,
+      vurdering?.medlemMedUnntakAvMaksFemAar
+    ),
+    harForutgåendeMedlemskap: mapGrunnlagTilForutgående(vurdering?.harForutgåendeMedlemskap),
+  };
+}
+
+function empptyDraftFormFields(): DraftFormFields {
+  return {
+    begrunnelse: '',
+    harForutgåendeMedlemskap: '',
+    unntaksvilkår: '',
+  };
+}
+
+function byggFelter(vurdering: HistoriskForutgåendeMedlemskapVurdering): ValuePair[] {
+  return [
+    {
+      label: begrunnelseLabel,
+      value: vurdering.manuellVurdering.begrunnelse || '',
+    },
+    {
+      label: harForutgåendeMedlemskapLabel,
+      value: getJaNeiEllerIkkeBesvart(vurdering.manuellVurdering.harForutgåendeMedlemskap),
+    },
+    {
+      label: unntaksvilkårLabel,
+      value: vurdering.manuellVurdering.harForutgåendeMedlemskap
+        ? getJaNeiEllerIkkeBesvart(null)
+        : getJaNeiEllerIkkeBesvart(
+            vurdering.manuellVurdering.varMedlemMedNedsattArbeidsevne === true ||
+              vurdering.manuellVurdering.medlemMedUnntakAvMaksFemAar === true
+          ),
+    },
+  ];
+}

@@ -65,7 +65,7 @@ describe('Refusjonskrav sosialstønad', () => {
     expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
 
     await velgJa(finnGruppeVelgRefusjonskrav());
-    expect(finnNavkontorListe()).toBeInTheDocument();
+    expect(await finnNavkontorListe()).toBeInTheDocument();
   });
 
   it('Viser ikke felt for fradato om bruker har refusjonskrav', async () => {
@@ -92,7 +92,7 @@ describe('Refusjonskrav sosialstønad', () => {
     expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
 
     await velgNei(finnGruppeVelgRefusjonskrav());
-    expect(finnNavkontorListe()).not.toBeInTheDocument();
+    expect(await finnNavkontorListe()).not.toBeInTheDocument();
   });
 
   it('Gir feilmelding ved feil format på fradato', async () => {
@@ -180,7 +180,7 @@ describe('Refusjonskrav sosialstønad', () => {
       name: 'Refusjonen gjelder til',
     });
 
-  const finnNavkontorListe = () => screen.queryByRole('combobox', { name: 'Søk opp Nav-kontor' });
+  const finnNavkontorListe = async () => screen.queryByRole('combobox', { name: 'Søk opp Nav-kontor' });
 
   const trykkPåBekreft = async () => await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 

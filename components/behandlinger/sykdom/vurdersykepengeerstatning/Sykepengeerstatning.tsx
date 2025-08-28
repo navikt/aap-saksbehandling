@@ -1,58 +1,41 @@
 'use client';
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { SykepengeerstatningGrunnlag, SykepengeerstatningVurderingGrunn } from 'lib/types/types';
+import { MellomlagretVurdering, SykepengeerstatningGrunnlag, SykepengeerstatningVurderingGrunn } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   behandlingVersjon: number;
   grunnlag?: SykepengeerstatningGrunnlag;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
   begrunnelse: string;
   erOppfylt: string;
-  grunn: SykepengeerstatningVurderingGrunn;
+  grunn?: SykepengeerstatningVurderingGrunn;
 }
 
-export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
 
-  const grunnOptions: ValuePair<NonNullable<SykepengeerstatningVurderingGrunn>>[] = [
-    {
-      label:
-        'Brukeren har tidligere mottatt arbeidsavklaringspenger og innen seks måneder etter at arbeidsavklaringspengene er opphørt, blir arbeidsufør som følge av en annen sykdom',
-      value: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
-    },
-    {
-      label:
-        'Brukeren har tidligere mottatt arbeidsavklaringspenger og innen ett år etter at arbeidsavklaringspengene er opphørt, blir arbeidsufør som følge av samme sykdom',
-      value: 'SAMME_SYKDOM_INNEN_ETT_AAR',
-    },
-    {
-      label:
-        'Brukeren har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og igjen blir arbeidsufør på grunn av sykdom eller skade mens han eller hun er i arbeid',
-      value: 'SYKEPENGER_IGJEN_ARBEIDSUFOR',
-    },
-    {
-      label:
-        'Brukeren har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og fortsatt er arbeidsufør på grunn av sykdom eller skade',
-      value: 'SYKEPENGER_FORTSATT_ARBEIDSUFOR',
-    },
-    {
-      label:
-        'Brukeren har mottatt arbeidsavklaringspenger og deretter foreldrepenger og innen seks måneder etter foreldrepengene opphørte, blir arbeidsufør på grunn av sykdom eller skade, se § 8-2 andre ledd',
-      value: 'FORELDREPENGER_INNEN_SEKS_MND',
-    },
-  ];
+  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
+    useMellomlagring(Behovstype.VURDER_SYKEPENGEERSTATNING_KODE, initialMellomlagretVurdering);
+
+  const defaultValues: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -60,19 +43,19 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
         type: 'textarea',
         label: 'Vilkårsvurdering',
         rules: { required: 'Du må begrunne avgjørelsen din.' },
-        defaultValue: grunnlag?.vurdering?.begrunnelse,
+        defaultValue: defaultValues?.begrunnelse,
       },
       erOppfylt: {
         type: 'radio',
         label: 'Krav på sykepengeerstatning?',
         rules: { required: 'Du må ta stilling til om brukeren har rett på AAP som sykepengeerstatning.' },
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harRettPå),
+        defaultValue: defaultValues?.erOppfylt,
       },
       grunn: {
         type: 'radio',
         label: 'Velg én grunn',
-        defaultValue: grunnlag?.vurdering?.grunn || undefined,
+        defaultValue: defaultValues?.grunn || undefined,
         rules: { required: 'Du må velge én grunn' },
         options: grunnOptions,
       },
@@ -82,19 +65,22 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) =>
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
-          sykepengeerstatningVurdering: {
-            begrunnelse: data.begrunnelse,
-            dokumenterBruktIVurdering: [],
-            harRettPå: data.erOppfylt === JaEllerNei.Ja,
-            grunn: data.grunn,
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
+            sykepengeerstatningVurdering: {
+              begrunnelse: data.begrunnelse,
+              dokumenterBruktIVurdering: [],
+              harRettPå: data.erOppfylt === JaEllerNei.Ja,
+              grunn: data.grunn,
+            },
           },
+          referanse: behandlingsReferanse,
         },
-        referanse: behandlingsReferanse,
-      })
+        () => nullstillMellomlagretVurdering()
+      )
     )(event);
   };
 
@@ -109,6 +95,14 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() => {
+          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+        });
+      }}
+      readOnly={readOnly}
     >
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.erOppfylt} horizontalRadio />
@@ -118,3 +112,43 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly }: P
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(vurdering: SykepengeerstatningGrunnlag['vurdering']): DraftFormFields {
+  return {
+    begrunnelse: vurdering?.begrunnelse,
+    erOppfylt: getJaNeiEllerUndefined(vurdering?.harRettPå),
+    grunn: vurdering?.grunn,
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return { begrunnelse: '', erOppfylt: '', grunn: undefined };
+}
+
+const grunnOptions: ValuePair<NonNullable<SykepengeerstatningVurderingGrunn>>[] = [
+  {
+    label:
+      'Brukeren har tidligere mottatt arbeidsavklaringspenger og innen seks måneder etter at arbeidsavklaringspengene er opphørt, blir arbeidsufør som følge av en annen sykdom',
+    value: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
+  },
+  {
+    label:
+      'Brukeren har tidligere mottatt arbeidsavklaringspenger og innen ett år etter at arbeidsavklaringspengene er opphørt, blir arbeidsufør som følge av samme sykdom',
+    value: 'SAMME_SYKDOM_INNEN_ETT_AAR',
+  },
+  {
+    label:
+      'Brukeren har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og igjen blir arbeidsufør på grunn av sykdom eller skade mens han eller hun er i arbeid',
+    value: 'SYKEPENGER_IGJEN_ARBEIDSUFOR',
+  },
+  {
+    label:
+      'Brukeren har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og fortsatt er arbeidsufør på grunn av sykdom eller skade',
+    value: 'SYKEPENGER_FORTSATT_ARBEIDSUFOR',
+  },
+  {
+    label:
+      'Brukeren har mottatt arbeidsavklaringspenger og deretter foreldrepenger og innen seks måneder etter foreldrepengene opphørte, blir arbeidsufør på grunn av sykdom eller skade, se § 8-2 andre ledd',
+    value: 'FORELDREPENGER_INNEN_SEKS_MND',
+  },
+];

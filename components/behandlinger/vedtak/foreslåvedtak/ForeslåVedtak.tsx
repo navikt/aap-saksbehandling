@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype } from 'lib/utils/form';
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
@@ -9,13 +9,17 @@ import styles from './ForeslåVedtak.module.css';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormEvent } from 'react';
+import { ForeslåVedtakGrunnlag } from 'lib/types/types';
+import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
+  grunnlag: ForeslåVedtakGrunnlag;
 }
 
-export const ForeslåVedtak = ({ behandlingVersjon, readOnly }: Props) => {
+export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
@@ -42,7 +46,17 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly }: Props) => {
       knappTekst={'Send til beslutter'}
     >
       <div className={styles.foreslåvedtak}>
-        {!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}
+        {isProd() ? (
+          <>{!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}</>
+        ) : (
+          <>
+            <Label as="p" size={'medium'}>
+              Vedtaket medfører følgende konsekvens for brukeren:
+            </Label>
+            <ForeslåVedtakTabell grunnlag={grunnlag} />
+          </>
+        )}
+
         <LøsBehovOgGåTilNesteStegStatusAlert
           status={status}
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}

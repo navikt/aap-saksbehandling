@@ -3,7 +3,12 @@
 import { BodyLong, Box, Heading, List, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { SykdomBrevVurdering, SykdomsvurderingBrevGrunnlag, TypeBehandling } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  SykdomBrevVurdering,
+  SykdomsvurderingBrevGrunnlag,
+  TypeBehandling,
+} from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
@@ -11,26 +16,48 @@ import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform
 import { FormField, ValuePair } from 'components/form/FormField';
 import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
-type Props = {
+interface Props {
   behandlingVersjon: number;
   grunnlag?: SykdomsvurderingBrevGrunnlag;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
-};
+  initialMellomlagretVurdering?: MellomlagretVurdering;
+}
 
-type VurderingBrevFormFields = {
-  vurderingSkalFyllesUt: JaEllerNei;
+interface VurderingBrevFormFields {
+  vurderingSkalFyllesUt: string;
   vurdering: string;
-};
+}
 
-export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandling, readOnly }: Props) => {
+type DraftFormFields = Partial<VurderingBrevFormFields>;
+
+export const SykdomsvurderingBrev = ({
+  behandlingVersjon,
+  grunnlag,
+  typeBehandling,
+  readOnly,
+  initialMellomlagretVurdering,
+}: Props) => {
+  const behandlingsreferanse = useBehandlingsReferanse();
+
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('SYKDOMSVURDERING_BREV');
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.SYKDOMSVURDERING_BREV_KODE, initialMellomlagretVurdering);
+
+  const defaultValues: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
+
   const { formFields, form } = useConfigForm<VurderingBrevFormFields>(
     {
       vurderingSkalFyllesUt: {
         type: 'radio',
         label: 'Er det behov for en individuell begrunnelse i vedtaksbrevet?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering ? !!grunnlag?.vurdering?.vurdering : undefined),
+        defaultValue: defaultValues?.vurderingSkalFyllesUt,
         options: JaEllerNeiOptions,
         rules: {
           required: 'Du må svare på om det er behov for en individuell begrunnelse i vedtaksbrevet',
@@ -39,33 +66,30 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
       vurdering: {
         type: 'textarea',
         label: 'Derfor får du AAP / Derfor får du ikke AAP',
-        defaultValue: grunnlag?.vurdering?.vurdering ?? undefined,
+        defaultValue: defaultValues?.vurdering,
         rules: { required: 'Du må legge til innhold for vedtaksbrevet' },
       },
     },
     { shouldUnregister: true, readOnly: readOnly }
   );
 
-  const behandlingsreferanse = useBehandlingsReferanse();
-
-  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
-
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('SYKDOMSVURDERING_BREV');
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        referanse: behandlingsreferanse,
-        behov: {
-          behovstype: Behovstype.SYKDOMSVURDERING_BREV_KODE,
-          vurdering: data.vurdering,
-        },
-      });
-    })(event);
+    form.handleSubmit(
+      (data) => {
+        løsBehovOgGåTilNesteSteg({
+          behandlingVersjon: behandlingVersjon,
+          referanse: behandlingsreferanse,
+          behov: {
+            behovstype: Behovstype.SYKDOMSVURDERING_BREV_KODE,
+            vurdering: data.vurdering,
+          },
+        });
+      },
+      () => nullstillMellomlagretVurdering()
+    )(event);
   };
 
+  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
   const skalViseTidligereVurderinger =
     typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0;
 
@@ -81,6 +105,14 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() => {
+          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+        });
+      }}
+      readOnly={readOnly}
     >
       <VStack gap={'4'}>
         {skalViseTidligereVurderinger && (
@@ -144,13 +176,27 @@ export const SykdomsvurderingBrev = ({ behandlingVersjon, grunnlag, typeBehandli
       </VStack>
     </VilkårsKortMedForm>
   );
-
-  function byggFelter(vurdering: SykdomBrevVurdering): ValuePair[] {
-    return [
-      {
-        label: 'Vurdering',
-        value: vurdering?.vurdering || 'Ikke relevant for behandling',
-      },
-    ];
-  }
 };
+
+function mapVurderingToDraftFormFields(vurdering?: SykdomBrevVurdering): DraftFormFields {
+  return {
+    vurdering: vurdering?.vurdering || undefined,
+    vurderingSkalFyllesUt: getJaNeiEllerUndefined(vurdering?.vurdering ? !!vurdering?.vurdering : undefined),
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return {
+    vurdering: '',
+    vurderingSkalFyllesUt: '',
+  };
+}
+
+function byggFelter(vurdering: SykdomBrevVurdering): ValuePair[] {
+  return [
+    {
+      label: 'Vurdering',
+      value: vurdering?.vurdering || 'Ikke relevant for behandling',
+    },
+  ];
+}

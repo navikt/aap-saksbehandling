@@ -20,6 +20,7 @@ export interface VilkårsKortMedFormProps {
   isLoading: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
   visBekreftKnapp: boolean;
+  readOnly?: boolean;
   løsBehovOgGåTilNesteStegError?: ApiException;
   knappTekst?: string;
   defaultOpen?: boolean;
@@ -50,6 +51,7 @@ export const VilkårsKortMedForm = ({
   onDeleteMellomlagringClick,
   onLagreMellomLagringClick,
   mellomlagretVurdering,
+  readOnly,
 }: VilkårsKortMedFormProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
@@ -83,14 +85,14 @@ export const VilkårsKortMedForm = ({
                 <HStack gap={'4'}>
                   {visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}
 
-                  {!isProd() && onLagreMellomLagringClick && (
+                  {!isProd() && !readOnly && onLagreMellomLagringClick && (
                     <Button type={'button'} size={'small'} variant={'tertiary'} onClick={onLagreMellomLagringClick}>
                       Lagre utkast
                     </Button>
                   )}
                 </HStack>
 
-                {mellomlagretVurdering && onDeleteMellomlagringClick && (
+                {!readOnly && mellomlagretVurdering && onDeleteMellomlagringClick && (
                   <HStack align={'baseline'}>
                     <Detail>{`Utkast lagret ${formaterDatoMedTidspunktForFrontend(mellomlagretVurdering.vurdertDato)} (${mellomlagretVurdering.vurdertAv})`}</Detail>
                     <Button

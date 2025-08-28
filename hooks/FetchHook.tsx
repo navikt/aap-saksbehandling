@@ -1,17 +1,11 @@
 import { useState } from 'react';
 import {
   clientBestillDialogmelding,
-  clientOpprettAktivitetspliktBrudd,
   clientOpprettSak,
   clientOpprettDummySak,
   clientPurrPåLegeerklæring,
 } from 'lib/clientApi';
-import {
-  BestillLegeerklæring,
-  OpprettAktivitetspliktBrudd,
-  OpprettTestcase,
-  OpprettDummySakDto,
-} from 'lib/types/types';
+import { BestillLegeerklæring, OpprettTestcase, OpprettDummySakDto } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { postmottakEndreTemaClient, postmottakSettPåVentClient } from 'lib/postmottakClientApi';
@@ -83,20 +77,6 @@ export function useFetchV2<FunctionParameters extends any[], ResponseBody>(
   }
 
   return { isLoading, error, data, method };
-}
-
-export function useAktivitetsplikt(saksnummer: string): {
-  opprettAktivitetsplikt: (aktivitet: OpprettAktivitetspliktBrudd) => Promise<{ ok: boolean }>;
-  isLoading: boolean;
-  error?: string;
-} {
-  const { method, error, isLoading } = useFetchV2(clientOpprettAktivitetspliktBrudd);
-
-  async function opprettAktivitetsPlikt(aktivitet: OpprettAktivitetspliktBrudd) {
-    return await method(saksnummer, aktivitet);
-  }
-
-  return { opprettAktivitetsplikt: opprettAktivitetsPlikt, isLoading, error };
 }
 
 export function useOpprettSak(): {

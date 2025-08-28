@@ -1,6 +1,6 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { VurderRettighetsperiodeMedDataFetching } from 'components/behandlinger/rettighetsperiode/VurderRettighetsperiodeMedDataFetching';
+import { VurderRettighetsperiodeMedDataFetching } from 'components/behandlinger/rettighetsperiode/vurderrettighetsperiode/VurderRettighetsperiodeMedDataFetching';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';

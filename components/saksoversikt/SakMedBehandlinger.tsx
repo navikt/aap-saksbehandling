@@ -23,6 +23,8 @@ const formaterBehandlingType = (behandlingtype: string) => {
       return 'Svar fra Nav Klageinstans';
     case 'oppfølgingsbehandling':
       return 'Oppfølgingsoppgave';
+    case 'aktivitetsplikt':
+      return 'Aktivitetsplikt $ 11-7';
     default:
       return `Ukjent behandlingtype (${behandlingtype})`;
   }
@@ -38,10 +40,6 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
       !behandling.vurderingsbehov.includes('SØKNAD_TRUKKET')
   ).length;
 
-  const kanRegistrerebrudd = !!sak.behandlinger.filter(
-    (behandling) => behandling.type === 'ae0034' && !behandling.vurderingsbehov.includes('SØKNAD_TRUKKET')
-  ).length;
-
   return (
     <VStack gap="8">
       <HStack justify="space-between">
@@ -55,16 +53,6 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           >
             Opprett klage
           </Button>
-          {kanRegistrerebrudd && (
-            <Button
-              variant="secondary"
-              size="small"
-              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
-            >
-              Registrer brudd på aktivitetsplikten
-            </Button>
-          )}
-
           {kanRevurdere && (
             <Button
               variant="secondary"

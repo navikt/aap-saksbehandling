@@ -1,8 +1,6 @@
-import { AktivitetspliktMedDatafetching } from 'components/behandlinger/underveis/aktivitetsplikt/AktivitetspliktMedDatafetching';
 import { UnderveisgrunnlagMedDataFetching } from 'components/behandlinger/underveis/underveisgrunnlag/UnderveisgrunnlagMedDatafetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegSomSkalVises } from 'lib/utils/steg';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
@@ -16,7 +14,6 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
-  const stegSomSkalVises = getStegSomSkalVises('UNDERVEIS', flyt.data);
 
   return (
     <GruppeSteg
@@ -26,15 +23,6 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {stegSomSkalVises.includes('EFFEKTUER_11_7') && (
-        <StegSuspense>
-          <AktivitetspliktMedDatafetching
-            behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={flyt.data.behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-          />
-        </StegSuspense>
-      )}
       <StegSuspense>
         <UnderveisgrunnlagMedDataFetching
           readOnly={flyt.data.visning.saksbehandlerReadOnly}

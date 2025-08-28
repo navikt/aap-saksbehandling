@@ -1,7 +1,8 @@
 import { Studentvurdering } from 'components/behandlinger/sykdom/student/student/Studentvurdering';
-import { hentStudentGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentMellomlagring, hentStudentGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsreferanse: string;
@@ -10,7 +11,11 @@ interface Props {
 }
 
 export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
-  const grunnlag = await hentStudentGrunnlag(behandlingsreferanse);
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+    hentStudentGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_STUDENT_KODE),
+  ]);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
@@ -20,6 +25,7 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, be
       grunnlag={grunnlag.data}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
 };
