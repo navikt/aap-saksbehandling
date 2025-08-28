@@ -1,5 +1,4 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegSomSkalVises } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StudentvurderingMedDataFetching } from 'components/behandlinger/sykdom/student/student/StudentvurderingMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
@@ -16,8 +15,6 @@ export const Student = async ({ behandlingsreferanse }: Props) => {
     return <ApiException apiResponses={[flyt]} />;
   }
 
-  const stegSomSkalVises = getStegSomSkalVises('STUDENT', flyt.data);
-
   return (
     <GruppeSteg
       prosessering={flyt.data.prosessering}
@@ -26,19 +23,9 @@ export const Student = async ({ behandlingsreferanse }: Props) => {
       behandlingVersjon={flyt.data.behandlingVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {stegSomSkalVises.map((steg) => {
-        if (steg === 'AVKLAR_STUDENT') {
-          return (
-            <StegSuspense key={steg}>
-              <StudentvurderingMedDataFetching
-                behandlingsreferanse={behandlingsreferanse}
-                readOnly={flyt.data.visning.saksbehandlerReadOnly}
-                behandlingVersjon={flyt.data.behandlingVersjon}
-              />
-            </StegSuspense>
-          );
-        }
-      })}
+      <StegSuspense>
+        <StudentvurderingMedDataFetching flyt={flyt.data} behandlingsreferanse={behandlingsreferanse} />
+      </StegSuspense>
     </GruppeSteg>
   );
 };

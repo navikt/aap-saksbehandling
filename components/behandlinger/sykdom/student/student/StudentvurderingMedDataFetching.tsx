@@ -3,14 +3,15 @@ import { hentMellomlagring, hentStudentGrunnlag } from 'lib/services/saksbehandl
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
+import { getStegSomSkalVises } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
-  readOnly: boolean;
-  behandlingVersjon: number;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
+export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, flyt }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentStudentGrunnlag(behandlingsreferanse),
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_STUDENT_KODE),
@@ -20,11 +21,24 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, be
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  const stegSomSkalVisesForGruppe = getStegSomSkalVises('STUDENT', flyt);
+  const harAvklaringsbehov = stegSomSkalVisesForGruppe.includes('AVKLAR_STUDENT');
+
+  const erRevurdering = flyt.visning.typeBehandling === 'Revurdering';
+  const harTidligereVurdering = !!grunnlag.data.studentvurdering;
+  const visStudentvurdering = harAvklaringsbehov || (erRevurdering && harTidligereVurdering);
+  const readOnly =
+    flyt.visning.saksbehandlerReadOnly || !grunnlag.data.harTilgangTilÅSaksbehandle || !harAvklaringsbehov;
+
+  if (!visStudentvurdering) {
+    return null;
+  }
+
   return (
     <Studentvurdering
       grunnlag={grunnlag.data}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      readOnly={readOnly}
+      behandlingVersjon={flyt.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
