@@ -2,10 +2,12 @@ import {
   hentFatteVedtakGrunnlang,
   hentFlyt,
   hentKvalitetssikringGrunnlag,
+  hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ToTrinnsvurdering } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -22,6 +24,12 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
     return <ApiException apiResponses={[fatteVedtakGrunnlag, kvalitetssikringGrunnlag, flyt]} />;
   }
 
+  const erKvalitetssikring = flyt.data.visning.visKvalitetssikringKort && !flyt.data.visning.visBeslutterKort;
+
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsReferanse,
+    erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE
+  );
   return (
     <>
       {flyt.data.visning.visBeslutterKort && (
@@ -30,6 +38,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
           erKvalitetssikring={false}
           behandlingsReferanse={behandlingsReferanse}
           readOnly={flyt.data.visning.beslutterReadOnly || !fatteVedtakGrunnlag.data.harTilgangTilÅSaksbehandle}
+          initialMellomlagretVurdering={initialMellomlagretVurdering}
         />
       )}
       {flyt.data.visning.visKvalitetssikringKort && (
@@ -40,6 +49,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
           readOnly={
             flyt.data.visning.kvalitetssikringReadOnly || !kvalitetssikringGrunnlag.data.harTilgangTilÅSaksbehandle
           }
+          initialMellomlagretVurdering={initialMellomlagretVurdering}
         />
       )}
     </>

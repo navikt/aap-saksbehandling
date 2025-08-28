@@ -1,11 +1,17 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { Behovstype } from 'lib/utils/form';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
-import { FatteVedtakGrunnlag } from 'lib/types/types';
+import { FatteVedtakGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
+import { FetchResponse } from 'lib/utils/api';
+import createFetchMock from 'vitest-fetch-mock';
 
-const grunnlag: FatteVedtakGrunnlag = {
+const fetchMock = createFetchMock(vi);
+fetchMock.enableMocks();
+const user = userEvent.setup();
+
+const grunnlagUtenVurdering: FatteVedtakGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   vurderinger: [
     {
@@ -22,13 +28,7 @@ describe('totrinnsvurderingform', () => {
 
   it('skal ha en overskrift som er en lenke til vilkårsvurderingen', () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const overskriftLenke = screen.getByRole('link', {
@@ -40,13 +40,7 @@ describe('totrinnsvurderingform', () => {
 
   it('skal ha en radio group hvor beslutter kan godkjenne eller avslå vurderingen til saksbehandler/veileder', () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const godkjennValg = screen.getByRole('radio', { name: /ja/i });
@@ -58,13 +52,7 @@ describe('totrinnsvurderingform', () => {
 
   it('skal ha en knapp for å sende inn totrinnsvurderingene', () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const knapp = screen.getByRole('button', { name: /bekreft/i });
@@ -73,13 +61,7 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp felt for begrunnelse dersom vurderingen har blitt avslått', async () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
@@ -91,13 +73,7 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp felt for å velge grunner for avslag dersom vurderingen har blitt avslått', async () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
@@ -118,13 +94,7 @@ describe('totrinnsvurderingform', () => {
 
   it('skal ha riktige vlag i feltet for å velge grunner', async () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
@@ -136,13 +106,7 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp feilmelding hvis begrunnelse ikke har blitt besvart ved innsending', async () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
@@ -157,13 +121,7 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp feilmelding hvis ingen grunn har blitt valgt ved innsending', async () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
@@ -178,13 +136,7 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
@@ -202,13 +154,7 @@ describe('totrinnsvurderingform', () => {
 
   it('skal dukke opp error på fritekst felt for å skrive inn en grunn dersom ANNET er valgt og det ikke er besvart', async () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
@@ -232,13 +178,7 @@ describe('totrinnsvurderingform', () => {
 
   it('gir feilmelding hvis man velger en grunn for så å fjerne den igjen', async () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
@@ -260,13 +200,7 @@ describe('totrinnsvurderingform', () => {
 
   it('skal vise en feilmelding dersom det ikke har blitt gjort noen totrinnsvurdering og man prøver å send inn vurderingene', async () => {
     render(
-      <TotrinnsvurderingForm
-        grunnlag={grunnlag}
-        erKvalitetssikring={false}
-        link={link}
-        readOnly={false}
-        behandlingsReferanse={'456'}
-      />
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
     );
 
     const sendInnButton = screen.getByRole('button', { name: /bekreft/i });
@@ -275,5 +209,198 @@ describe('totrinnsvurderingform', () => {
     await user.click(sendInnButton);
 
     expect(screen.getByText('Du må gjøre minst én vurdering.')).toBeInTheDocument();
+  });
+});
+
+describe('mellomlagring', () => {
+  const mellomlagring: MellomlagretVurderingResponse = {
+    mellomlagretVurdering: {
+      avklaringsbehovkode: Behovstype.KVALITETSSIKRING_KODE,
+      behandlingId: { id: 1 },
+      data: '{"totrinnsvurderinger":[{"definisjon":"5003","godkjent":"false","begrunnelse":"Dette er min vurdering som er mellomlagret","grunner":[],"årsakFritekst":""}]}',
+      vurdertDato: '2025-08-21T12:00:00.000',
+      vurdertAv: 'Jan T. Loven',
+    },
+  };
+
+  const grunnlagMedVurdering: FatteVedtakGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    historikk: [],
+    vurderinger: [
+      {
+        definisjon: Behovstype.AVKLAR_SYKDOM_KODE,
+        begrunnelse: 'Dette er min vurdering som er bekreftet',
+        godkjent: false,
+      },
+    ],
+  };
+
+  it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
+    render(
+      <TotrinnsvurderingForm
+        readOnly={false}
+        link={'/mitt-avklaringsbehov'}
+        erKvalitetssikring={false}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
+    expect(tekst).toBeVisible();
+  });
+
+  it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
+    render(
+      <TotrinnsvurderingForm
+        readOnly={false}
+        link={'/mitt-avklaringsbehov'}
+        erKvalitetssikring={false}
+        grunnlag={grunnlagUtenVurdering}
+      />
+    );
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
+    await user.click(vurderPåNyttValg);
+
+    await user.type(
+      screen.getByRole('textbox', { name: 'Beskriv returårsak' }),
+      'Her har jeg begynt å skrive en vurdering..'
+    );
+    expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
+
+    const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
+      type: 'SUCCESS',
+      data: mellomlagring,
+      status: 200,
+    };
+    fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
+
+    const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
+    await user.click(lagreKnapp);
+    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
+    expect(tekst).toBeVisible();
+  });
+
+  it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
+    render(
+      <TotrinnsvurderingForm
+        readOnly={false}
+        link={'/mitt-avklaringsbehov'}
+        erKvalitetssikring={false}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    expect(screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)')).toBeVisible();
+
+    const mockFetchResponseSlettMellomlagring: FetchResponse<object> = { type: 'SUCCESS', status: 202, data: {} };
+    fetchMock.mockResponse(JSON.stringify(mockFetchResponseSlettMellomlagring));
+
+    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+    await user.click(slettKnapp);
+
+    expect(screen.queryByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)')).not.toBeInTheDocument();
+  });
+
+  it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
+    render(
+      <TotrinnsvurderingForm
+        readOnly={false}
+        link={'/mitt-avklaringsbehov'}
+        erKvalitetssikring={false}
+        grunnlag={grunnlagMedVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: 'Beskriv returårsak',
+    });
+
+    expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
+  });
+
+  it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
+    render(
+      <TotrinnsvurderingForm
+        readOnly={false}
+        link={'/mitt-avklaringsbehov'}
+        erKvalitetssikring={false}
+        grunnlag={grunnlagMedVurdering}
+      />
+    );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: 'Beskriv returårsak',
+    });
+
+    expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
+  });
+
+  it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
+    render(
+      <TotrinnsvurderingForm
+        readOnly={false}
+        link={'/mitt-avklaringsbehov'}
+        erKvalitetssikring={false}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    await user.type(screen.getByRole('textbox', { name: 'Beskriv returårsak' }), ' her er ekstra tekst');
+
+    expect(screen.getByRole('textbox', { name: 'Beskriv returårsak' })).toHaveValue(
+      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
+    );
+
+    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+
+    await user.click(slettKnapp);
+
+    expect(screen.queryByRole('textbox', { name: 'Beskriv returårsak' })).not.toBeInTheDocument();
+  });
+
+  it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
+    render(
+      <TotrinnsvurderingForm
+        readOnly={false}
+        link={'/mitt-avklaringsbehov'}
+        erKvalitetssikring={false}
+        grunnlag={grunnlagMedVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    await user.type(screen.getByRole('textbox', { name: 'Beskriv returårsak' }), ' her er ekstra tekst');
+
+    expect(screen.getByRole('textbox', { name: 'Beskriv returårsak' })).toHaveValue(
+      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
+    );
+
+    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+
+    await user.click(slettKnapp);
+
+    expect(screen.getByRole('textbox', { name: 'Beskriv returårsak' })).toHaveValue(
+      'Dette er min vurdering som er bekreftet'
+    );
+  });
+
+  it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
+    render(
+      <TotrinnsvurderingForm
+        readOnly={true}
+        link={'/mitt-avklaringsbehov'}
+        erKvalitetssikring={false}
+        grunnlag={grunnlagMedVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
+    expect(lagreKnapp).not.toBeInTheDocument();
+    const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
+    expect(slettKnapp).not.toBeInTheDocument();
   });
 });
