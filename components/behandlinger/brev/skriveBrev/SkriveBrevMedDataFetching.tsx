@@ -1,11 +1,9 @@
 import { SaksopplysningerKolonne } from 'components/behandlinger/brev/skriveBrev/SaksopplysningerKolonne';
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import {
-  hentBistandsbehovGrunnlag,
   hentBrevGrunnlag,
   hentFullmektigGrunnlag,
   hentRefusjonGrunnlag,
-  hentSykdomsGrunnlag,
   hentSykdomsvurderingBrevGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import styles from './SkriveBrevMedDataFetching.module.css';
@@ -25,30 +23,19 @@ export const SkriveBrevMedDataFetching = async ({
   behandlingVersjon: number;
   aktivtSteg: StegType;
 }) => {
-  const [
-    brevGrunnlag,
-    sykdomsgrunnlag,
-    bistandsbehovGrunnlag,
-    refusjonGrunnlag,
-    sykdomsvurderingBrevGrunnlag,
-    fullmektigGrunnlag,
-  ] = await Promise.all([
+  const [brevGrunnlag, refusjonGrunnlag, sykdomsvurderingBrevGrunnlag, fullmektigGrunnlag] = await Promise.all([
     hentBrevGrunnlag(behandlingsReferanse),
-    hentSykdomsGrunnlag(behandlingsReferanse),
-    hentBistandsbehovGrunnlag(behandlingsReferanse),
     hentRefusjonGrunnlag(behandlingsReferanse),
     hentSykdomsvurderingBrevGrunnlag(behandlingsReferanse),
     hentFullmektigGrunnlag(behandlingsReferanse),
   ]);
   if (
-    isError(sykdomsgrunnlag) ||
-    isError(bistandsbehovGrunnlag) ||
     isError(refusjonGrunnlag) ||
     isError(sykdomsvurderingBrevGrunnlag) ||
     isError(brevGrunnlag) ||
     isError(fullmektigGrunnlag)
   ) {
-    return <ApiException apiResponses={[sykdomsgrunnlag, bistandsbehovGrunnlag, refusjonGrunnlag, brevGrunnlag]} />;
+    return <ApiException apiResponses={[refusjonGrunnlag, brevGrunnlag]} />;
   }
 
   const brev = brevGrunnlag.data.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
@@ -75,8 +62,6 @@ export const SkriveBrevMedDataFetching = async ({
   return (
     <div className={styles.flex}>
       <SaksopplysningerKolonne
-        sykdomsgrunnlag={sykdomsgrunnlag.data}
-        bistandsbehovGrunnlag={bistandsbehovGrunnlag.data}
         refusjonGrunnlag={refusjonGrunnlag.data}
         sykdomsvurderingBrevGrunnlag={sykdomsvurderingBrevGrunnlag.data}
       />
