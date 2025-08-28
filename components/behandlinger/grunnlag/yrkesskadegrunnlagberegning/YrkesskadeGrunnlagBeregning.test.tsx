@@ -96,6 +96,7 @@ describe('mellomlagring', () => {
         grunnbeløp: {
           verdi: 128116,
         },
+        kilde: 'INFOTRYGD',
       },
     ],
     vurderinger: [],
@@ -110,6 +111,7 @@ describe('mellomlagring', () => {
         grunnbeløp: {
           verdi: 128116,
         },
+        kilde: 'INFOTRYGD',
       },
     ],
     vurderinger: [
