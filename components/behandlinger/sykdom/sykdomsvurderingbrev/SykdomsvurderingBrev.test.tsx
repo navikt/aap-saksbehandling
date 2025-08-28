@@ -219,7 +219,8 @@ it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurd
   expect(screen.queryByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).not.toBeInTheDocument();
 });
 
-it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
+// TODO Ta inn denne når mellomlagring er i produksjon
+it.skip('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
   render(
     <SykdomsvurderingBrev
       typeBehandling={'Førstegangsbehandling'}
