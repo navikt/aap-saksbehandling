@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { PlukkOppgaveDto } from 'lib/types/oppgaveTypes';
 import { plukkOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
-import { logError } from 'lib/serverutlis/logger';
+import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
 
 export async function POST(req: NextRequest) {
@@ -13,7 +13,11 @@ export async function POST(req: NextRequest) {
   try {
     const res = await plukkOppgave(data.oppgaveId, data.versjon);
     if (isError(res)) {
-      logError(`/api/oppgave/plukk-oppgave`, res.apiException);
+      if (res.status === 401) {
+        logInfo(`/api/oppgave/plukk-oppgave - 401 - ikke tilgang`, res.apiException);
+      } else {
+        logError(`/api/oppgave/plukk-oppgave`, res.apiException);
+      }
     }
     return new Response(JSON.stringify(res), { status: res.status });
   } catch (error) {
