@@ -85,7 +85,7 @@ export const OpprettSakLocal = () => {
     },
     uføre: {
       type: 'number',
-      label: 'Uføre?',
+      label: 'Uføregrad (%)',
     },
     institusjon: {
       type: 'checkbox',
