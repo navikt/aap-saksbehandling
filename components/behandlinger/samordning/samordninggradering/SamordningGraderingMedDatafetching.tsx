@@ -5,7 +5,6 @@ import {
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
-import { hentBrukerInformasjon } from '../../../../lib/services/azure/azureUserService';
 import { Behovstype } from 'lib/utils/form';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 
