@@ -1,7 +1,11 @@
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
-import { hentSamordningArbeidsgiverGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentMellomlagring,
+  hentSamordningArbeidsgiverGrunnlag,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { SamordningArbeidsgiver } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiver';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsreferanse: string;
@@ -13,7 +17,11 @@ export const SamordningArbeidsgiverMedDatafetching = async ({
   readOnly,
   behandlingsreferanse,
 }: Props) => {
-  const grunnlag = await hentSamordningArbeidsgiverGrunnlag(behandlingsreferanse);
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+    hentSamordningArbeidsgiverGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER),
+  ]);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
@@ -23,6 +31,7 @@ export const SamordningArbeidsgiverMedDatafetching = async ({
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
 };
