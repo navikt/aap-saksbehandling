@@ -12,7 +12,7 @@ import {
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
@@ -163,7 +163,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
       readOnly={readOnly}
     >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
-        <TidligereVurderingerV3
+        <TidligereVurderinger
           data={historiskeManuelleVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) => v.erGjeldendeVurdering}
