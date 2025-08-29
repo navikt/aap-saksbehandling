@@ -1,7 +1,6 @@
 'use client';
 
 import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { isLocal } from 'lib/utils/environment';
 import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -10,6 +9,7 @@ import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
 import { mapTilÅrsakTilOpprettelseTilTekst } from 'lib/utils/oversettelser';
+import { isLocal, isProd } from 'lib/utils/environment';
 
 const formaterBehandlingType = (behandlingtype: string) => {
   switch (behandlingtype) {
@@ -40,6 +40,11 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
       !behandling.vurderingsbehov.includes('SØKNAD_TRUKKET')
   ).length;
 
+  const kanRegistrerebrudd =
+    sak.behandlinger.filter(
+      (behandling) => behandling.type === 'ae0034' && !behandling.vurderingsbehov.includes('SØKNAD_TRUKKET')
+    ).length > 0;
+
   return (
     <VStack gap="8">
       <HStack justify="space-between">
@@ -53,6 +58,16 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           >
             Opprett klage
           </Button>
+          {kanRegistrerebrudd && !isProd() && (
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
+            >
+              Registrer brudd på aktivitetsplikten 11-7
+            </Button>
+          )}
+
           {kanRevurdere && (
             <Button
               variant="secondary"

@@ -115,6 +115,11 @@ export const hentBehandlingPersoninfo = async (behandlingsreferanse: string) => 
   return await apiFetch<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const opprettAktivitetspliktBehandling = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling`;
+  return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST');
+};
+
 export const finnSakerForIdent = async (ident: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/finn`;
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
