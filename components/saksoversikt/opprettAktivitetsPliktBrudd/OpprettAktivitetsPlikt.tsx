@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyLong, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
+import { Alert, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
 import { SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { clientOpprettAktivitetsplikt } from 'lib/clientApi';
@@ -21,13 +21,16 @@ export const OpprettAktivitetsPliktBrudd = ({ sak }: { sak: SaksInfo }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function postOpprettAktivitetspliktBrudd(data: any) {
     const res = await clientOpprettAktivitetsplikt(sak.saksnummer);
+    setIsLoading(true);
     if (isSuccess(res)) {
       router.push(`/saksbehandling/sak/${sak.saksnummer}`);
     } else {
       setError(res.apiException.message);
     }
+    setIsLoading(false);
   }
 
   const { form, formFields } = useConfigForm<AktivitetspliktbruddFormFields>({
