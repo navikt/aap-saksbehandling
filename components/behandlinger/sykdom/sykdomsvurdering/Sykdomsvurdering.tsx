@@ -32,7 +32,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { useSak } from 'hooks/SakHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { TidligereVurderinger } from '../../../tidligerevurderinger/TidligereVurderinger';
+import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
@@ -292,7 +292,7 @@ export const Sykdomsvurdering = ({
       readOnly={readOnly}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
-        <TidligereVurderinger
+        <TidligereVurderingerV3
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) =>

@@ -14,7 +14,7 @@ import {
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { TidligereVurderinger } from '../../../tidligerevurderinger/TidligereVurderinger';
+import { TidligereVurderingerV3 } from '../../../tidligerevurderinger/TidligereVurderingerV3';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
@@ -191,7 +191,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
       readOnly={readOnly}
     >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
-        <TidligereVurderinger
+        <TidligereVurderingerV3
           data={historiskeManuelleVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) => v.erGjeldendeVurdering}
