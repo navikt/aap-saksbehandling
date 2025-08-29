@@ -120,12 +120,12 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
               `/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${aktivVisningGruppe}/#${aktivtVisningSteg}`
             );
           }
-
-          startTransition(() => {
-            router.refresh();
-            refetchFlytClient();
-          });
         }
+
+        startTransition(() => {
+          router.refresh();
+          refetchFlytClient();
+        });
 
         setIsLoading(false);
       }

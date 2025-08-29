@@ -8,45 +8,66 @@ const søkeresultat: SøkeResultat = {
   harAdressebeskyttelse: true,
   oppgaver: [
     {
-      label: '',
-      href: '',
-      status: '',
-      markeringer: []
+      label: 'Testoppgave',
+      href: '/oppgave/123',
+      status: 'PÅ_VENT',
+      markeringer: [],
+    },
+  ],
+  saker: [
+    {
+      label: 'Testsak',
+      href: '/sak/456',
+    },
+  ],
+  person: [
+    {
+      label: 'Testperson',
+      href: '/person/789',
+    },
+  ],
+  kontor: [
+    {
+      enhet: 'Testkontor',
     },
   ],
 };
 
 describe('Kelvinsøkeresultat', () => {
-  it('skal vise melding om at bruker ikke har tilgang dersom harTilgang-flagg er false', () => {
-    render(<Kelvinsøkeresultat søkeresultat={søkeresultat} />);
-    const melding = screen.getByText('Du har ikke tilgang til denne brukeren.');
-    expect(melding).toBeVisible();
+  it('skal ikke lenke til saksside eller behandling når saksbehandler ikke har lesetilgang', () => {
+    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: false }} />);
+
+    const lenker = screen.queryAllByRole('link');
+    expect(lenker).toHaveLength(0);
+
+    expect(screen.getByText('Testperson')).toBeInTheDocument();
+    expect(screen.getByText('Testsak')).toBeInTheDocument();
+    expect(screen.getByText('Testoppgave')).toBeInTheDocument();
+    expect(screen.getByText('Testkontor')).toBeInTheDocument();
   });
 
-  it('skal ikke vise melding om at bruker ikke har tilgang dersom harTilgang-flagg er true', () => {
+  it('skal vise lenker når saksbehandler har lesetilgang', () => {
     render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: true }} />);
-    const melding = screen.queryByText('Du har ikke tilgang til denne brukeren.');
-    expect(melding).not.toBeInTheDocument();
+
+    const lenker = screen.getAllByRole('link');
+    expect(lenker.length).toBeGreaterThan(0);
   });
 
-  it('skal ikke vise melding om at bruker ikke har tilgang dersom harTilgang-flagg er false men ingen oppgaver har adressebeskyttelse', () => {
-    render(
-      <Kelvinsøkeresultat
-        søkeresultat={{
-          harTilgang: false,
-          harAdressebeskyttelse: false,
-          oppgaver: [
-            {
-              label: '',
-              href: '',
-              status: '',
-              markeringer: []
-            },
-          ],
-        }}
-      />
+  it('skal vise infoboks når saksbehandler ikke har lesetilgang pga adressebeskyttelse', () => {
+    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: false }} />);
+
+    const infotekst = screen.getByText(
+      'Du har ikke tilgang til saken fordi personen er egen ansatt eller har adressebeskyttelse.'
     );
-    const melding = screen.queryByText('Du har ikke tilgang til denne brukeren.');
-    expect(melding).not.toBeInTheDocument();
+    expect(infotekst).toBeInTheDocument();
+  });
+
+  it('skal vise infoboks når saksbehandler ikke har lesetilgang uten adressebeskyttelse', () => {
+    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: false, harAdressebeskyttelse: false }} />);
+
+    const infotekst = screen.getByText(
+      'Du har ikke tilgang til saken.'
+    );
+    expect(infotekst).toBeInTheDocument();
   });
 });

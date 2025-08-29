@@ -1,6 +1,6 @@
 'use client';
 
-import { SamordningUføreGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, SamordningUføreGrunnlag } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -13,56 +13,49 @@ import { format, parse } from 'date-fns';
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 export interface SamordningUføreFormFields {
   begrunnelse: string;
   vurderteSamordninger: SamordnetUførePeriode[];
 }
-type SamordnetUførePeriode = {
+
+interface SamordnetUførePeriode {
   gradering?: number;
   virkningstidspunkt: string;
-};
-export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
+}
+
+type DraftFormFields = Partial<SamordningUføreFormFields>;
+
+export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_UFØRE');
-  grunnlag.grunnlag[0].endringStatus;
 
-  function hentDefaultSamordningerFraVurderingerEllerGrunnlag(
-    grunnlag: SamordningUføreGrunnlag
-  ): SamordnetUførePeriode[] {
-    if (grunnlag.vurdering?.vurderingPerioder?.length) {
-      return grunnlag.vurdering.vurderingPerioder.map((vurdering) => ({
-        gradering: vurdering.uføregradTilSamordning,
-        virkningstidspunkt:
-          vurdering.virkningstidspunkt && format(new Date(vurdering.virkningstidspunkt), 'dd.MM.yyyy'),
-      }));
-    }
-    if (grunnlag.grunnlag.length) {
-      return grunnlag.grunnlag
-        .filter((ytelse) => ytelse.endringStatus === 'NY')
-        .map((ytelse) => ({
-          virkningstidspunkt: ytelse.virkningstidspunkt && format(new Date(ytelse.virkningstidspunkt), 'dd.MM.yyyy'),
-        }));
-    }
-    return [];
-  }
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_UFORE, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag);
+
   const { form, formFields } = useConfigForm<SamordningUføreFormFields>(
     {
       begrunnelse: {
         type: 'textarea',
         label: 'Vurder hvilken grad med uføre som skal samordnes med AAP',
         rules: { required: 'Skriv begrunnelse' },
-        defaultValue: grunnlag.vurdering?.begrunnelse,
+        defaultValue: defaultValue.begrunnelse,
       },
       vurderteSamordninger: {
         type: 'fieldArray',
-        defaultValue: hentDefaultSamordningerFraVurderingerEllerGrunnlag(grunnlag),
+        defaultValue: defaultValue.vurderteSamordninger,
       },
     },
     { readOnly }
@@ -70,24 +63,28 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     form.handleSubmit(async (data) =>
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_SAMORDNING_UFORE,
-          samordningUføreVurdering: {
-            begrunnelse: data.begrunnelse,
-            vurderingPerioder: data.vurderteSamordninger.map((samordning) => ({
-              virkningstidspunkt: formaterDatoForBackend(
-                parse(samordning.virkningstidspunkt, 'dd.MM.yyyy', new Date())
-              ),
-              uføregradTilSamordning: samordning.gradering!,
-            })),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_SAMORDNING_UFORE,
+            samordningUføreVurdering: {
+              begrunnelse: data.begrunnelse,
+              vurderingPerioder: data.vurderteSamordninger.map((samordning) => ({
+                virkningstidspunkt: formaterDatoForBackend(
+                  parse(samordning.virkningstidspunkt, 'dd.MM.yyyy', new Date())
+                ),
+                uføregradTilSamordning: samordning.gradering!,
+              })),
+            },
           },
+          referanse: behandlingsreferanse,
         },
-        referanse: behandlingsreferanse,
-      })
+        () => nullstillMellomlagretVurdering()
+      )
     )(event);
   }
+
   return (
     <VilkårsKortMedForm
       heading="Samordning med delvis uføre"
@@ -99,6 +96,12 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
       vilkårTilhørerNavKontor={false}
       visBekreftKnapp={!readOnly}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)));
+      }}
+      readOnly={readOnly}
     >
       <FormField form={form} formField={formFields.begrunnelse} />
       {grunnlag?.grunnlag?.length > 0 && (
@@ -131,3 +134,29 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly }: Prop
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(grunnlag: SamordningUføreGrunnlag): DraftFormFields {
+  return {
+    begrunnelse: grunnlag.vurdering?.begrunnelse || '',
+    vurderteSamordninger: hentDefaultSamordningerFraVurderingerEllerGrunnlag(grunnlag),
+  };
+}
+
+function hentDefaultSamordningerFraVurderingerEllerGrunnlag(
+  grunnlag: SamordningUføreGrunnlag
+): SamordnetUførePeriode[] {
+  if (grunnlag.vurdering?.vurderingPerioder?.length) {
+    return grunnlag.vurdering.vurderingPerioder.map((vurdering) => ({
+      gradering: vurdering.uføregradTilSamordning,
+      virkningstidspunkt: vurdering.virkningstidspunkt && format(new Date(vurdering.virkningstidspunkt), 'dd.MM.yyyy'),
+    }));
+  }
+  if (grunnlag.grunnlag.length) {
+    return grunnlag.grunnlag
+      .filter((ytelse) => ytelse.endringStatus === 'NY')
+      .map((ytelse) => ({
+        virkningstidspunkt: ytelse.virkningstidspunkt && format(new Date(ytelse.virkningstidspunkt), 'dd.MM.yyyy'),
+      }));
+  }
+  return [];
+}

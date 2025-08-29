@@ -4,7 +4,7 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Link, Radio, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FritakMeldepliktGrunnlag } from 'lib/types/types';
+import { FritakMeldepliktGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
@@ -18,35 +18,36 @@ import { useConfigForm } from 'components/form/FormHook';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
-type Props = {
+interface Props {
   behandlingVersjon: number;
   grunnlag?: FritakMeldepliktGrunnlag;
   readOnly: boolean;
-};
+  initialMellomlagretVurdering?: MellomlagretVurdering;
+}
 
-type Fritaksvurderinger = {
+interface Fritaksvurderinger {
   begrunnelse: string;
   harFritak: string;
   fraDato: string;
-};
+}
 
-type FritakMeldepliktFormFields = {
+interface FritakMeldepliktFormFields {
   fritaksvurderinger: Fritaksvurderinger[];
-};
+}
 
-export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
-  let defaultValues: Fritaksvurderinger[] =
-    grunnlag?.vurderinger.map((vurdering) => ({
-      begrunnelse: vurdering.begrunnelse,
-      fraDato: formaterDatoForFrontend(vurdering.fraDato),
-      harFritak: vurdering.harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
-    })) || [];
+type DraftFormFields = Partial<FritakMeldepliktFormFields>;
+
+export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
+  const defaultValues: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.vurderinger);
 
   const { form } = useConfigForm<FritakMeldepliktFormFields>({
     fritaksvurderinger: {
       type: 'fieldArray',
-      defaultValue: defaultValues,
+      defaultValue: defaultValues.fritaksvurderinger,
     },
   });
 
@@ -64,26 +65,33 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
 
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.FRITAK_MELDEPLIKT_KODE, initialMellomlagretVurdering);
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        referanse: behandlingsreferanse,
-        behov: {
-          behovstype: Behovstype.FRITAK_MELDEPLIKT_KODE,
-          fritaksvurderinger: data.fritaksvurderinger.map((periode) => ({
-            begrunnelse: periode.begrunnelse,
-            harFritak: periode.harFritak === JaEllerNei.Ja,
-            fraDato: formaterDatoForBackend(parse(periode.fraDato, 'dd.MM.yyyy', new Date())),
-          })),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          referanse: behandlingsreferanse,
+          behov: {
+            behovstype: Behovstype.FRITAK_MELDEPLIKT_KODE,
+            fritaksvurderinger: data.fritaksvurderinger.map((periode) => ({
+              begrunnelse: periode.begrunnelse,
+              harFritak: periode.harFritak === JaEllerNei.Ja,
+              fraDato: formaterDatoForBackend(parse(periode.fraDato, 'dd.MM.yyyy', new Date())),
+            })),
+          },
         },
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 
   const sisteFritakVurdertAv = grunnlag?.vurderinger?.[grunnlag.vurderinger.length - 1]?.vurdertAv;
 
-  const showAsOpen = !!grunnlag?.vurderinger && grunnlag.vurderinger.length > 0;
+  const showAsOpen =
+    (!!grunnlag?.vurderinger && grunnlag.vurderinger.length > 0) || initialMellomlagretVurdering !== undefined;
   const skalViseBekreftKnapp = !readOnly && fritakMeldepliktVurderinger.length > 0;
 
   return (
@@ -98,6 +106,16 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
       visBekreftKnapp={skalViseBekreftKnapp}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={sisteFritakVurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() =>
+          form.reset(
+            grunnlag?.vurderinger ? mapVurderingToDraftFormFields(grunnlag.vurderinger) : emptyDraftFormFields()
+          )
+        );
+      }}
+      readOnly={readOnly}
     >
       <VStack gap={'4'}>
         <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
@@ -165,3 +183,18 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly }: Props) => 
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(vurderinger?: FritakMeldepliktGrunnlag['vurderinger']): DraftFormFields {
+  return {
+    fritaksvurderinger:
+      vurderinger?.map((vurdering) => ({
+        begrunnelse: vurdering.begrunnelse,
+        fraDato: formaterDatoForFrontend(vurdering.fraDato),
+        harFritak: vurdering.harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
+      })) || [],
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return { fritaksvurderinger: [] };
+}

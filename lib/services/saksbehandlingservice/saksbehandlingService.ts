@@ -1,4 +1,5 @@
 import {
+  Aktivitetsplikt11_7Grunnlag,
   AlderGrunnlag,
   ArbeidsevneGrunnlag,
   AutomatiskLovvalgOgMedlemskapVurdering,
@@ -17,6 +18,7 @@ import {
   DetaljertBehandling,
   FatteVedtakGrunnlag,
   FlytProsessering,
+  ForeslåVedtakGrunnlag,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
   FormkravGrunnlag,
@@ -328,6 +330,11 @@ export const hentKabalKlageresultat = async (behandlingsReferanse: string) => {
   }
 };
 
+export const hentAktivitetsplikt11_7Grunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${behandlingsreferanse}/grunnlag/brudd-11-7`;
+  return await apiFetch<Aktivitetsplikt11_7Grunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentSvarFraAndreinstansGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/svar-fra-andreinstans/${behandlingsReferanse}/grunnlag/svar-fra-andreinstans`;
   return await apiFetch<SvarFraAndreinstansGrunnlag>(url, saksbehandlingApiScope, 'GET');
@@ -424,6 +431,11 @@ export const purrPåLegeerklæring = async (requestBody: { dialogmeldingPurringU
 export const hentUnderveisGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/underveis/${behandlingsreferanse}`;
   return await apiFetch<UnderveisGrunnlag[]>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentForeslåVedtakGrunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/foreslaa-vedtak`;
+  return await apiFetch<ForeslåVedtakGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentForutgåendeMedlemskapsVurdering = async (behandlingsReferanse: string) => {

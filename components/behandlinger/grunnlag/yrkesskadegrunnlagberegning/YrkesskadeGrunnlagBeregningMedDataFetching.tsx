@@ -1,7 +1,11 @@
 import { YrkesskadeGrunnlagBeregning } from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/YrkesskadeGrunnlagBeregning';
-import { hentBeregningYrkesskadeVurdering } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentBeregningYrkesskadeVurdering,
+  hentMellomlagring,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   readOnly: boolean;
@@ -14,15 +18,20 @@ export const YrkesskadeGrunnlagBeregningMedDataFetching = async ({
   readOnly,
   behandlingsreferanse,
 }: Props) => {
-  const yrkesskadeVurderingGrunnlag = await hentBeregningYrkesskadeVurdering(behandlingsreferanse);
-  if (isError(yrkesskadeVurderingGrunnlag)) {
-    return <ApiException apiResponses={[yrkesskadeVurderingGrunnlag]} />;
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+    hentBeregningYrkesskadeVurdering(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.FASTSETT_YRKESSKADEINNTEKT),
+  ]);
+
+  if (isError(grunnlag)) {
+    return <ApiException apiResponses={[grunnlag]} />;
   }
   return (
     <YrkesskadeGrunnlagBeregning
-      yrkeskadeBeregningGrunnlag={yrkesskadeVurderingGrunnlag.data}
+      yrkeskadeBeregningGrunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !yrkesskadeVurderingGrunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
 };

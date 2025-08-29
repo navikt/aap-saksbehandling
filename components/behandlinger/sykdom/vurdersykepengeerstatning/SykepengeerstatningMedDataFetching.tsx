@@ -1,7 +1,11 @@
 import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/Sykepengeerstatning';
-import { hentSykepengerErstatningGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentMellomlagring,
+  hentSykepengerErstatningGrunnlag,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -14,7 +18,11 @@ export const SykepengeerstatningMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
 }: Props) => {
-  const grunnlag = await hentSykepengerErstatningGrunnlag(behandlingsReferanse);
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+    hentSykepengerErstatningGrunnlag(behandlingsReferanse),
+    hentMellomlagring(behandlingsReferanse, Behovstype.VURDER_SYKEPENGEERSTATNING_KODE),
+  ]);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
@@ -24,6 +32,7 @@ export const SykepengeerstatningMedDataFetching = async ({
       grunnlag={grunnlag.data}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
 };

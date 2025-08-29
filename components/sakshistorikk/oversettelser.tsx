@@ -1,9 +1,9 @@
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import {
   ArrowRightIcon,
-  ArrowsCirclepathIcon,
-  ChatAddIcon,
+  ArrowsSquarepathIcon,
   EnvelopeClosedIcon,
+  FirstAidKitIcon,
   GavelSoundBlockIcon,
   HourglassBottomFilledIcon,
   HourglassTopFilledIcon,
@@ -70,11 +70,11 @@ export function mapEventTilIkon(historikkEvent: HistorikkEvent) {
     case 'SENDT_TIL_BESLUTTER':
       return <ArrowRightIcon title="sendt til beslutter" fontSize="1.5rem" />;
     case 'RETUR_FRA_BESLUTTER':
-      return <ArrowsCirclepathIcon title="return fra beslutter" fontSize="1.5rem" />;
+      return <ArrowsSquarepathIcon title="a11y-title" fontSize="1.5rem" />;
     case 'SENDT_TIL_KVALITETSSIKRER':
       return <ArrowRightIcon title="sendt til kvalitetssikrer" fontSize="1.5rem" />;
     case 'RETUR_FRA_KVALITETSSIKRER':
-      return <ArrowsCirclepathIcon title="return fra kvalitetssikrer" fontSize="1.5rem" />;
+      return <ArrowsSquarepathIcon title="a11y-title" fontSize="1.5rem" />;
     case 'REVURDERING_OPPRETTET':
       return <InboxDownIcon title="revurdering opprettet" fontSize="1.5rem" />;
     case 'FØRSTEGANGSBEHANDLING_OPPRETTET':
@@ -82,9 +82,9 @@ export function mapEventTilIkon(historikkEvent: HistorikkEvent) {
     case 'KLAGE_OPPRETTET':
       return <InboxDownIcon title="klage opprettet" fontSize="1.5rem" />;
     case 'MOTTATT_DIALOGMELDING':
-      return <ChatAddIcon title="mottatt dialogmelding" fontSize="1.5rem" />;
+      return <FirstAidKitIcon title="a11y-title" fontSize="1.5rem" />;
     case 'BESTILT_LEGEERKLÆRING':
-      return <ChatAddIcon title="bestilt legeerklæring" fontSize="1.5rem" />;
+      return <FirstAidKitIcon title="a11y-title" fontSize="1.5rem" />;
   }
   exhaustiveCheck(historikkEvent);
 }
