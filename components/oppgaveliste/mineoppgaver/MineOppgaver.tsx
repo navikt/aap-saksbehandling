@@ -44,7 +44,7 @@ export const MineOppgaver = () => {
     },
     årsaker: {
       type: 'combobox_multiple',
-      label: 'Årsak',
+      label: 'Vurderingsbehov',
       options: alleVurderingsbehovOptions,
       defaultValue: [],
     },

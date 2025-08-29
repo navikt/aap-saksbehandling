@@ -63,7 +63,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     },
     årsaker: {
       type: 'combobox_multiple',
-      label: 'Årsak',
+      label: 'Vurderingsbehov',
       options: alleVurderingsbehovOptions,
       defaultValue: [],
     },
