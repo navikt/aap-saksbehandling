@@ -20,7 +20,6 @@ import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { isProd } from 'lib/utils/environment';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -143,16 +142,15 @@ export const TotrinnsvurderingForm = ({
             <Button size={'medium'} className={'fit-content'} loading={isLoading}>
               Bekreft
             </Button>
-            {!isProd() && (
-              <Button
-                size={'small'}
-                variant={'tertiary'}
-                type={'button'}
-                onClick={() => lagreMellomlagring(form.watch())}
-              >
-                Lagre utkast
-              </Button>
-            )}
+
+            <Button
+              size={'small'}
+              variant={'tertiary'}
+              type={'button'}
+              onClick={() => lagreMellomlagring(form.watch())}
+            >
+              Lagre utkast
+            </Button>
           </HStack>
           {mellomlagretVurdering && (
             <HStack align={'baseline'}>
