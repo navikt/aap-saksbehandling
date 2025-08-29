@@ -14,7 +14,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { ValuePair } from 'components/form/FormField';
 import { formaterTilNok } from 'lib/utils/string';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
@@ -115,7 +115,7 @@ export const YrkesskadeGrunnlagBeregning = ({
       }
     >
       {!!historiskeVurderinger?.length && (
-        <TidligereVurderingerV3
+        <TidligereVurderinger
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}

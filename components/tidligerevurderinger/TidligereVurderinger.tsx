@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Label, BodyShort, Detail, VStack, ExpansionCard, Chips } from '@navikt/ds-react';
-import styles from 'components/tidligerevurderinger/TidligereVurderingerV3.module.css';
+import styles from './TidligereVurderinger.module.css';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { ÅpenPeriode } from '../../lib/types/types';
@@ -25,7 +25,7 @@ interface TidligereVurdering {
   erGjeldendeVurdering: boolean;
 }
 
-export function TidligereVurderingerV3({
+export function TidligereVurderinger({
   data,
   buildFelter,
   getErGjeldende = () => false,
@@ -84,10 +84,10 @@ export function TidligereVurderingerV3({
       aria-label="Tidligere vurderinger"
       size="small"
       defaultOpen={false}
-      className={styles.tidligereVurderingerV3}
+      className={styles.tidligereVurderinger}
     >
       <ExpansionCard.Header>
-        <div className={styles.cardHeadingV3}>
+        <div className={styles.cardHeading}>
           <div>
             <ClockDashedIcon title="a11y-title" />
           </div>
@@ -95,7 +95,7 @@ export function TidligereVurderingerV3({
         </div>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
-        <VStack className={styles.panelV3}>
+        <VStack className={styles.panel}>
           <Chips size={'medium'}>
             <VStack gap={'1'}>
               {mappedVurderinger.map((v, index) => {
@@ -110,7 +110,7 @@ export function TidligereVurderingerV3({
                     onClick={() => {
                       return flereVurderinger ? setSelectedIndex(index) : null;
                     }}
-                    className={flereVurderinger ? styles.sidebarItemV3 : styles.sidebarItemSingleV3}
+                    className={flereVurderinger ? styles.sidebarItem : styles.sidebarItemSingle}
                     style={{
                       textDecoration: v.erGjeldendeVurdering ? 'none' : 'line-through',
                       fontWeight: 'bold',
@@ -123,8 +123,8 @@ export function TidligereVurderingerV3({
             </VStack>
           </Chips>
 
-          <div className={styles.vurderingDetailV3}>
-            <div className={styles.fieldsV3}>
+          <div className={styles.vurderingDetail}>
+            <div className={styles.fields}>
               {selected.felter.map((felt, i) => (
                 <VStack key={i}>
                   <Label size="small">{felt.label}</Label>
@@ -133,7 +133,7 @@ export function TidligereVurderingerV3({
               ))}
             </div>
 
-            <Detail className={styles.footerV3} align={'end'}>
+            <Detail className={styles.footer} align={'end'}>
               {`Vurdert av ${selected.vurdertAvIdent}, ${formaterDatoForFrontend(selected.vurdertDato)}`}
             </Detail>
           </div>

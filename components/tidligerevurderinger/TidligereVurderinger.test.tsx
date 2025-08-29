@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { TidligereVurderingerV3 } from './TidligereVurderingerV3';
+import { TidligereVurderinger } from './TidligereVurderinger';
 import { format } from 'date-fns';
 
 const user = userEvent.setup();
@@ -47,10 +47,10 @@ const vurderinger = [
   },
 ];
 
-describe('TidligereVurderingerV3', () => {
+describe('TidligereVurderinger', () => {
   beforeEach(() => {
     render(
-      <TidligereVurderingerV3
+      <TidligereVurderinger
         data={vurderinger}
         buildFelter={(v) => v.felter}
         getErGjeldende={(v) => v.erGjeldendeVurdering}

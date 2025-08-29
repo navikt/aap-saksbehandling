@@ -1,11 +1,11 @@
-.panelV3 {
+.panel {
   display: grid;
   grid-template-columns: 200px 1fr;
   max-width: 1680px;
   border-radius: 0.5rem;
 }
 
-.sidebarItemV3 {
+.sidebarItem {
   box-shadow: none;
   border-radius: 4px;
   cursor: pointer;
@@ -13,7 +13,7 @@
   --ac-chip-toggle-bg: var(--a-transparent);
 }
 
-.sidebarItemSingleV3 {
+.sidebarItemSingle {
   box-shadow: none;
   border-radius: 4px;
   --ac-chip-toggle-text: var(--ac-chip-toggle-text);
@@ -24,13 +24,13 @@
   cursor: default;
 }
 
-.vurderingDetailV3 {
+.vurderingDetail {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.fieldsV3 {
+.fields {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -38,11 +38,11 @@
   border-left: 2px solid var(--a-border-divider);
 }
 
-.footerV3 {
+.footer {
   margin-top: auto;
 }
 
-.tidligereVurderingerV3 {
+.tidligereVurderinger {
   --ac-expansioncard-bg: var(--a-surface-default);
   --ac-expansioncard-header-bg: var(--a-surface-transparent);
   --ac-expansioncard-header-bg-hover: var(--a-surface-hover);
@@ -56,13 +56,13 @@
   background: #e6f0ff80;
 }
 
-.cardHeadingV3 {
+.cardHeading {
   display: flex;
   flex-direction: row;
   gap: var(--a-spacing-2);
   align-items: flex-end;
 }
 
-.cardHeadingV3 > svg {
+.cardHeading > svg {
   font-size: var(--a-font-size-xlarge);
 }

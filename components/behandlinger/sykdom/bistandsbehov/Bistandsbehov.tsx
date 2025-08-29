@@ -17,7 +17,7 @@ import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { Veiledning } from 'components/veiledning/Veiledning';
 
@@ -188,7 +188,7 @@ export const Bistandsbehov = ({
       readOnly={readOnly}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
-        <TidligereVurderingerV3
+        <TidligereVurderinger
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) =>
