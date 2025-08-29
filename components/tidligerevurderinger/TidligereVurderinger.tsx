@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Label, BodyShort, Detail, VStack, ExpansionCard, Chips } from '@navikt/ds-react';
-import styles from 'components/tidligerevurderinger/TidligereVurderingerV3.module.css';
+import styles from './TidligereVurderinger.module.css';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { ÅpenPeriode } from '../../lib/types/types';
@@ -25,7 +25,7 @@ interface TidligereVurdering {
   erGjeldendeVurdering: boolean;
 }
 
-export function TidligereVurderingerV3({
+export function TidligereVurderinger({
   data,
   buildFelter,
   getErGjeldende = () => false,

@@ -14,7 +14,7 @@ import { FormEvent } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { TidligereVurderinger } from '../../../tidligerevurderinger/TidligereVurderinger';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
@@ -116,7 +116,7 @@ export const SykdomsvurderingBrev = ({
     >
       <VStack gap={'4'}>
         {skalViseTidligereVurderinger && (
-          <TidligereVurderingerV3
+          <TidligereVurderinger
             data={historiskeVurderinger}
             buildFelter={byggFelter}
             getErGjeldende={() => true}

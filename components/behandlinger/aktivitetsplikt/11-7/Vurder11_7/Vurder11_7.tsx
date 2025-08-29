@@ -12,7 +12,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { Aktivitetsplikt11_7Grunnlag, Aktivitetsplikt11_7Vurdering } from 'lib/types/types';
-import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { TidligereVurderinger } from '../../../../tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 
 interface Props {
@@ -118,7 +118,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => 
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
     >
       {!!historiskeVurderinger?.length && (
-        <TidligereVurderingerV3
+        <TidligereVurderinger
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
