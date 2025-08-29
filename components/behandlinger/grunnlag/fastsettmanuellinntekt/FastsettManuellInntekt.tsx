@@ -10,7 +10,7 @@ import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { ManuellInntektGrunnlag, ManuellInntektVurderingGrunnlagResponse } from 'lib/types/types';
 import { formaterTilNok } from 'lib/utils/string';
-import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 
 interface Props {
@@ -85,7 +85,7 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
     >
       {!!historiskeVurderinger?.length && (
-        <TidligereVurderingerV3
+        <TidligereVurderinger
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
