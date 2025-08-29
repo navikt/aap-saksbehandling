@@ -1,7 +1,7 @@
 'use client';
 
-import { Alert, BodyLong, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
-import { OppfølgingsoppgaveV0, SaksInfo } from 'lib/types/types';
+import { Alert, BodyLong, Box, Button, HStack, Page, VStack } from '@navikt/ds-react';
+import { OppfølgingsoppgaveV0 } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { clientSendHendelse } from 'lib/clientApi';
@@ -15,6 +15,20 @@ import { parse } from 'date-fns';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 
+interface Props {
+  saksnummer: string;
+  brukerInformasjon: BrukerInformasjon;
+  modalOnClose?: () => void;
+  finnTidligsteVirkningstidspunkt?: string;
+}
+
+interface DefaultValues {
+  datoForOppfølging: string;
+  hvaSkalFølgesOpp: string;
+  hvemSkalFølgeOpp: string;
+  reserverTilMeg: string[];
+}
+
 export interface OppfølgingsoppgaveFormFields {
   datoForOppfølging: string;
   hvaSkalFølgesOpp: string;
@@ -23,20 +37,29 @@ export interface OppfølgingsoppgaveFormFields {
 }
 
 export const OpprettOppfølgingsBehandling = ({
-  sak,
+  saksnummer,
   brukerInformasjon,
-}: {
-  sak: SaksInfo;
-  brukerInformasjon: BrukerInformasjon;
-}) => {
+  modalOnClose,
+  finnTidligsteVirkningstidspunkt,
+}: Props) => {
+  const defaultValues: DefaultValues = {
+    datoForOppfølging: finnTidligsteVirkningstidspunkt ? finnTidligsteVirkningstidspunkt : '',
+    hvaSkalFølgesOpp: modalOnClose ? 'Vurder virkningstidspunkt etter samordning' : '',
+    hvemSkalFølgeOpp: modalOnClose ? 'NasjonalEnhet' : '',
+    reserverTilMeg: modalOnClose ? [] : ['RESERVER_TIL_MEG'],
+  };
+
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
+  const avbrytButton = (modalOnClose?: () => void) =>
+    modalOnClose ? modalOnClose() : router.push(`/saksbehandling/sak/${saksnummer}`);
+
   async function sendHendelse(data: OppfølgingsoppgaveFormFields) {
     const innsending = {
-      saksnummer: sak.saksnummer,
+      saksnummer: saksnummer,
       referanse: {
         type: 'BEHANDLING_REFERANSE',
         verdi: uuid(),
@@ -55,20 +78,25 @@ export const OpprettOppfølgingsBehandling = ({
 
     setIsLoading(true);
 
-    const res = await clientSendHendelse(sak.saksnummer, innsending);
+    const res = await clientSendHendelse(saksnummer, innsending);
 
     if (isSuccess(res)) {
-      router.push(`/saksbehandling/sak/${sak.saksnummer}`);
+      setIsLoading(false);
+      if (modalOnClose) {
+        modalOnClose();
+      } else {
+        router.push(`/saksbehandling/sak/${saksnummer}`);
+      }
     } else {
       setError(res.apiException.message);
     }
-    setIsLoading(false);
   }
 
   const { form, formFields } = useConfigForm<OppfølgingsoppgaveFormFields>({
     datoForOppfølging: {
       type: 'date_input',
       label: 'Dato for oppfølging',
+      defaultValue: defaultValues.datoForOppfølging,
       rules: {
         required: 'Dato for oppfølging kan ikke må settes.',
         validate: (value) => {
@@ -86,6 +114,7 @@ export const OpprettOppfølgingsBehandling = ({
     hvemSkalFølgeOpp: {
       type: 'combobox',
       label: 'Hvem følger opp?',
+      defaultValue: defaultValues.hvemSkalFølgeOpp,
       options: [
         {
           label: 'NAY',
@@ -98,11 +127,12 @@ export const OpprettOppfølgingsBehandling = ({
     reserverTilMeg: {
       type: 'checkbox',
       options: [{ label: 'Reserver oppgaven til meg', value: 'RESERVER_TIL_MEG' }],
-      defaultValue: ['RESERVER_TIL_MEG'],
+      defaultValue: defaultValues.reserverTilMeg,
     },
     hvaSkalFølgesOpp: {
       type: 'textarea',
       label: 'Hva skal følges opp?',
+      defaultValue: defaultValues.hvaSkalFølgesOpp,
     },
   });
 
@@ -114,23 +144,17 @@ export const OpprettOppfølgingsBehandling = ({
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
         <VStack gap="4">
-          <ExpansionCard aria-label="Opprett oppfølgingsoppgave" size={'small'} defaultOpen={true}>
-            <ExpansionCard.Header>
-              <ExpansionCard.Title size="small">Opprett oppfølgingsoppgave</ExpansionCard.Title>
-            </ExpansionCard.Header>
-
-            <ExpansionCard.Content>
-              <VStack gap="4">
-                <div>
-                  <BodyLong>Oppfølgingsoppgaven ligger på vent til ønsket dato.</BodyLong>
-                </div>
-                <FormField form={form} formField={formFields.datoForOppfølging} size="medium" />
-                <FormField form={form} formField={formFields.hvaSkalFølgesOpp} size="medium" />
-                <FormField form={form} formField={formFields.hvemSkalFølgeOpp} size="medium" />
-                <FormField form={form} formField={formFields.reserverTilMeg} size="medium" />
-              </VStack>
-            </ExpansionCard.Content>
-          </ExpansionCard>
+          <Box>
+            <VStack gap="4">
+              <div>
+                <BodyLong>Oppfølgingsoppgaven ligger på vent til ønsket dato.</BodyLong>
+              </div>
+              <FormField form={form} formField={formFields.datoForOppfølging} size="medium" />
+              <FormField form={form} formField={formFields.hvaSkalFølgesOpp} size="medium" />
+              <FormField form={form} formField={formFields.hvemSkalFølgeOpp} size="medium" />
+              <FormField form={form} formField={formFields.reserverTilMeg} size="medium" />
+            </VStack>
+          </Box>
 
           {error && (
             <Alert variant={'error'} size={'small'}>
@@ -139,11 +163,7 @@ export const OpprettOppfølgingsBehandling = ({
           )}
 
           <HStack gap="4">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}`)}
-            >
+            <Button type="button" variant="secondary" onClick={() => avbrytButton(modalOnClose)}>
               Avbryt
             </Button>
             <Button type="submit">Opprett oppfølgingsbehandling</Button>

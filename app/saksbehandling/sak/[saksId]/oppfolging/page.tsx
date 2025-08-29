@@ -18,7 +18,7 @@ export default async function Page(props: { params: Promise<{ saksId: string }> 
       <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
 
       <Box marginBlock="8">
-        <OpprettOppfølgingsBehandling sak={sak} brukerInformasjon={brukerInformasjon} />
+        <OpprettOppfølgingsBehandling saksnummer={sak.saksnummer} brukerInformasjon={brukerInformasjon} />
       </Box>
     </AkselPage>
   );
