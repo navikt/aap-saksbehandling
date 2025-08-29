@@ -60,7 +60,6 @@ export const ikkeImplementertKlageHjemmler: Hjemmel[] = [
   'FOLKETRYGDLOVEN_11_31',
   'FOLKETRYGDLOVEN_21_3',
   'FOLKETRYGDLOVEN_21_7',
-  'FOLKETRYGDLOVEN_22_13',
   'FOLKETRYGDLOVEN_22_17',
 ];
 
