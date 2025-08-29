@@ -1,7 +1,11 @@
 import { SamordningTjenestePensjon } from 'components/behandlinger/samordning/samordningtjenestepensjon/SamordningTjenestePensjon';
-import { hentSamordningTjenestePensjonGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentMellomlagring,
+  hentSamordningTjenestePensjonGrunnlag,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingVersjon: number;
@@ -14,7 +18,10 @@ export const SamordningTjenestePensjonMedDataFetching = async ({
   readOnly,
   behandlingreferanse,
 }: Props) => {
-  const grunnlag = await hentSamordningTjenestePensjonGrunnlag(behandlingreferanse);
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+    hentSamordningTjenestePensjonGrunnlag(behandlingreferanse),
+    hentMellomlagring(behandlingreferanse, Behovstype.SAMORDNING_REFUSJONS_KRAV),
+  ]);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
@@ -25,6 +32,7 @@ export const SamordningTjenestePensjonMedDataFetching = async ({
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
 };
