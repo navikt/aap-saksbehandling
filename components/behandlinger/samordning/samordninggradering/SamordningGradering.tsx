@@ -2,7 +2,7 @@
 
 import { MellomlagretVurdering, Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Alert, BodyLong, BodyShort, Box, Button, Detail, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, Box, Button, Detail, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import { FormEvent, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -14,7 +14,6 @@ import { YtelseTabell } from 'components/behandlinger/samordning/samordninggrade
 import { validerDato } from 'lib/validation/dateValidation';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
-import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { isNullOrUndefined } from 'lib/utils/validering';
