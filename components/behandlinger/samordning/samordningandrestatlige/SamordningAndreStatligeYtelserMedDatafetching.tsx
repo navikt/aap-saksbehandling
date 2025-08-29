@@ -1,7 +1,11 @@
 import { SamordningAndreStatligeYtelser } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelser';
-import { hentSamordningAndreStatligeYtelseGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentMellomlagring,
+  hentSamordningAndreStatligeYtelseGrunnlag,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsreferanse: string;
@@ -13,7 +17,11 @@ export const SamordningAndreStatligeYtelserMedDatafetching = async ({
   readOnly,
   behandlingsreferanse,
 }: Props) => {
-  const grunnlag = await hentSamordningAndreStatligeYtelseGrunnlag(behandlingsreferanse);
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+    hentSamordningAndreStatligeYtelseGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER),
+  ]);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
@@ -23,6 +31,7 @@ export const SamordningAndreStatligeYtelserMedDatafetching = async ({
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
 };

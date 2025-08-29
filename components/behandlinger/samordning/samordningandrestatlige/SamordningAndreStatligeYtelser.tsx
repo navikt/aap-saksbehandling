@@ -10,68 +10,91 @@ import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date'
 import { parse } from 'date-fns';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { SamordningAndreStatligeYtelserGrunnlag, SamordningAndreStatligeYtelserYtelse } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  SamordningAndreStatligeYtelserGrunnlag,
+  SamordningAndreStatligeYtelserYtelse,
+} from 'lib/types/types';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   grunnlag: SamordningAndreStatligeYtelserGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
+
 export interface SamordningAndreStatligeYtelserFormFields {
   begrunnelse: string;
   vurderteSamordninger: AnnenStatligYtelse[];
 }
+
 export interface AnnenStatligYtelse {
   ytelse?: SamordningAndreStatligeYtelserYtelse;
   fom?: string;
   tom?: string;
 }
-export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, grunnlag }: Props) => {
-  const { form, formFields } = useConfigForm<SamordningAndreStatligeYtelserFormFields>(
-    {
-      begrunnelse: {
-        type: 'textarea',
-        label: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP',
-        rules: { required: 'Du må gjøre en vilkårsvurdering' },
-        defaultValue: grunnlag.vurdering?.begrunnelse,
-      },
-      vurderteSamordninger: {
-        type: 'fieldArray',
-        defaultValue: (grunnlag.vurdering?.vurderingPerioder || []).map((vurdering) => ({
-          ytelse: vurdering.ytelse,
-          fom: formaterDatoForFrontend(vurdering.periode.fom),
-          tom: formaterDatoForFrontend(vurdering.periode.tom),
-        })),
-      },
-    },
-    { readOnly: readOnly }
-  );
+
+type DraftFormFields = Partial<SamordningAndreStatligeYtelserFormFields>;
+
+export const SamordningAndreStatligeYtelser = ({
+  readOnly,
+  behandlingVersjon,
+  grunnlag,
+  initialMellomlagretVurdering,
+}: Props) => {
   const [visYtelsesTabell, setVisYtelsesTabell] = useState<boolean>(grunnlag.vurdering !== null);
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     'SAMORDNING_ANDRE_STATLIGE_YTELSER'
   );
 
+  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag.vurdering);
+
+  const { form, formFields } = useConfigForm<SamordningAndreStatligeYtelserFormFields>(
+    {
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP',
+        rules: { required: 'Du må gjøre en vilkårsvurdering' },
+        defaultValue: defaultValue.begrunnelse,
+      },
+      vurderteSamordninger: {
+        type: 'fieldArray',
+        defaultValue: defaultValue.vurderteSamordninger,
+      },
+    },
+    { readOnly: readOnly }
+  );
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER,
-          samordningAndreStatligeYtelserVurdering: {
-            begrunnelse: data.begrunnelse,
-            vurderingPerioder: data.vurderteSamordninger.map((vurdertSamordning) => ({
-              ytelse: vurdertSamordning.ytelse!,
-              periode: {
-                fom: formaterDatoForBackend(parse(vurdertSamordning.fom!, 'dd.MM.yyyy', new Date())),
-                tom: formaterDatoForBackend(parse(vurdertSamordning.tom!, 'dd.MM.yyyy', new Date())),
-              },
-            })),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER,
+            samordningAndreStatligeYtelserVurdering: {
+              begrunnelse: data.begrunnelse,
+              vurderingPerioder: data.vurderteSamordninger.map((vurdertSamordning) => ({
+                ytelse: vurdertSamordning.ytelse!,
+                periode: {
+                  fom: formaterDatoForBackend(parse(vurdertSamordning.fom!, 'dd.MM.yyyy', new Date())),
+                  tom: formaterDatoForBackend(parse(vurdertSamordning.tom!, 'dd.MM.yyyy', new Date())),
+                },
+              })),
+            },
           },
+          referanse: behandlingsreferanse,
         },
-        referanse: behandlingsreferanse,
-      })
+        () => nullstillMellomlagretVurdering()
+      )
     )(event);
   };
 
@@ -88,6 +111,14 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
       visBekreftKnapp={skalViseBekreftKnapp}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() =>
+          form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
+        );
+      }}
+      readOnly={readOnly}
     >
       {!visYtelsesTabell && (
         <HStack>
@@ -105,3 +136,23 @@ export const SamordningAndreStatligeYtelser = ({ readOnly, behandlingVersjon, gr
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(
+  vurdering: SamordningAndreStatligeYtelserGrunnlag['vurdering']
+): DraftFormFields {
+  return {
+    begrunnelse: vurdering?.begrunnelse || '',
+    vurderteSamordninger: (vurdering?.vurderingPerioder || []).map((vurdering) => ({
+      ytelse: vurdering.ytelse,
+      fom: formaterDatoForFrontend(vurdering.periode.fom),
+      tom: formaterDatoForFrontend(vurdering.periode.tom),
+    })),
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return {
+    begrunnelse: '',
+    vurderteSamordninger: [],
+  };
+}
