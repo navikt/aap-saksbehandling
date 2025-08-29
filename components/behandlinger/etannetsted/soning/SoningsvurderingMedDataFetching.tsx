@@ -1,7 +1,8 @@
 import { Soningsvurdering } from './Soningsvurdering';
-import { hentSoningsvurdering } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentMellomlagring, hentSoningsvurdering } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsreferanse: string;
@@ -14,7 +15,11 @@ export const SoningsvurderingMedDataFetching = async ({
   behandlingsversjon,
   readOnly,
 }: Props) => {
-  const grunnlag = await hentSoningsvurdering(behandlingsreferanse);
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+    hentSoningsvurdering(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SONINGSFORRHOLD),
+  ]);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
@@ -25,6 +30,7 @@ export const SoningsvurderingMedDataFetching = async ({
         behandlingsversjon={behandlingsversjon}
         grunnlag={grunnlag.data}
         readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+        initialMellomlagretVurdering={initialMellomlagretVurdering}
       />
     )
   );

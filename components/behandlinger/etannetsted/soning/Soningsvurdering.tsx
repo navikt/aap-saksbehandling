@@ -1,7 +1,7 @@
 'use client';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Soningsgrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, Soningsgrunnlag } from 'lib/types/types';
 import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -19,11 +19,13 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   grunnlag: Soningsgrunnlag;
   readOnly: boolean;
   behandlingsversjon: number;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -36,31 +38,24 @@ interface Vurdering {
   fraDato: string;
 }
 
-export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initialMellomlagretVurdering }: Props) => {
   const { isLoading, status, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const defaultValue: Vurdering[] = grunnlag.vurderinger.map((forhold) => {
-    if (forhold.vurdering) {
-      return {
-        begrunnelse: forhold.vurdering.begrunnelse,
-        skalOpphøre: forhold.vurdering.skalOpphøre ? JaEllerNei.Ja : JaEllerNei.Nei,
-        fraDato: formaterDatoForFrontend(forhold.vurdering.fraDato),
-      };
-    } else {
-      return {
-        begrunnelse: '',
-        skalOpphøre: '',
-        fraDato: formaterDatoForFrontend(forhold.vurderingsdato),
-      };
-    }
-  });
+  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.AVKLAR_SONINGSFORRHOLD, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag.vurderinger);
 
   const { form } = useConfigForm<FormFields>({
     soningsvurderinger: {
       type: 'fieldArray',
-      defaultValue: defaultValue,
+      defaultValue: defaultValue.soningsvurderinger,
     },
   });
 
@@ -68,22 +63,25 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behov: {
-          behovstype: Behovstype.AVKLAR_SONINGSFORRHOLD,
-          soningsvurdering: {
-            vurderinger: data.soningsvurderinger.map((vurdering) => {
-              return {
-                begrunnelse: vurdering.begrunnelse,
-                skalOpphore: vurdering.skalOpphøre === JaEllerNei.Ja,
-                fraDato: formaterDatoForBackend(parse(vurdering.fraDato, 'dd.MM.yyyy', new Date())),
-              };
-            }),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behov: {
+            behovstype: Behovstype.AVKLAR_SONINGSFORRHOLD,
+            soningsvurdering: {
+              vurderinger: data.soningsvurderinger.map((vurdering) => {
+                return {
+                  begrunnelse: vurdering.begrunnelse,
+                  skalOpphore: vurdering.skalOpphøre === JaEllerNei.Ja,
+                  fraDato: formaterDatoForBackend(parse(vurdering.fraDato, 'dd.MM.yyyy', new Date())),
+                };
+              }),
+            },
           },
+          behandlingVersjon: behandlingsversjon,
+          referanse: behandlingsreferanse,
         },
-        behandlingVersjon: behandlingsversjon,
-        referanse: behandlingsreferanse,
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 
@@ -98,6 +96,12 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
       visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag.vurderinger)))
+      }
+      readOnly={readOnly}
     >
       <InstitusjonsoppholdTabell
         label="Brukeren har følgende soningsforhold"
@@ -175,3 +179,23 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon }: Pro
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(vurderinger: Soningsgrunnlag['vurderinger']): DraftFormFields {
+  return {
+    soningsvurderinger: vurderinger.map((forhold) => {
+      if (forhold.vurdering) {
+        return {
+          begrunnelse: forhold.vurdering.begrunnelse,
+          skalOpphøre: forhold.vurdering.skalOpphøre ? JaEllerNei.Ja : JaEllerNei.Nei,
+          fraDato: formaterDatoForFrontend(forhold.vurdering.fraDato),
+        };
+      } else {
+        return {
+          begrunnelse: '',
+          skalOpphøre: '',
+          fraDato: formaterDatoForFrontend(forhold.vurderingsdato),
+        };
+      }
+    }),
+  };
+}
