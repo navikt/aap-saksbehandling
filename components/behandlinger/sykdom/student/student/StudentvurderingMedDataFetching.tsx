@@ -3,15 +3,22 @@ import { hentMellomlagring, hentStudentGrunnlag } from 'lib/services/saksbehandl
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
-import { getStegSomSkalVises } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
-  flyt: BehandlingFlytOgTilstand;
+  behandlingVersjon: number;
+  readOnly: boolean;
+  harAvklaringsbehov: boolean;
+  erRevurdering: boolean;
 }
 
-export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, flyt }: Props) => {
+export const StudentvurderingMedDataFetching = async ({
+  behandlingsreferanse,
+  behandlingVersjon,
+  readOnly,
+  harAvklaringsbehov,
+  erRevurdering,
+}: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentStudentGrunnlag(behandlingsreferanse),
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_STUDENT_KODE),
@@ -21,14 +28,8 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, fl
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const stegSomSkalVisesForGruppe = getStegSomSkalVises('STUDENT', flyt);
-  const harAvklaringsbehov = stegSomSkalVisesForGruppe.includes('AVKLAR_STUDENT');
-
-  const erRevurdering = flyt.visning.typeBehandling === 'Revurdering';
   const harTidligereVurdering = !!grunnlag.data.studentvurdering;
   const visStudentvurdering = harAvklaringsbehov || (erRevurdering && harTidligereVurdering);
-  const readOnly =
-    flyt.visning.saksbehandlerReadOnly || !grunnlag.data.harTilgangTilÅSaksbehandle || !harAvklaringsbehov;
 
   if (!visStudentvurdering) {
     return null;
@@ -37,8 +38,8 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, fl
   return (
     <Studentvurdering
       grunnlag={grunnlag.data}
-      readOnly={readOnly}
-      behandlingVersjon={flyt.behandlingVersjon}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
