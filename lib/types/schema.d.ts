@@ -8418,7 +8418,6 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.kansellerrevurdering.flate.KansellerRevurderingVurderingDto': {
       begrunnelse: string;
-      vurdertAv: string;
       /** @enum {string|null} */
       '\u00E5rsak'?:
         | 'REVURDERING_ER_IKKE_LENGER_AKTUELL'
