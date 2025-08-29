@@ -40,9 +40,10 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
       !behandling.vurderingsbehov.includes('SØKNAD_TRUKKET')
   ).length;
 
-  const kanRegistrerebrudd = !!sak.behandlinger.filter(
-    (behandling) => behandling.type === 'ae0034' && !behandling.vurderingsbehov.includes('SØKNAD_TRUKKET')
-  ).length;
+  const kanRegistrerebrudd =
+    sak.behandlinger.filter(
+      (behandling) => behandling.type === 'ae0034' && !behandling.vurderingsbehov.includes('SØKNAD_TRUKKET')
+    ).length > 0;
 
   return (
     <VStack gap="8">
