@@ -1,3 +1,7 @@
 .infoIkon {
   color: var(--a-icon-info);
 }
+.OpprettOppfølgingsoppgaveBtn {
+  width: fit-content;
+  margin-top: var(--a-spacing-2);
+}

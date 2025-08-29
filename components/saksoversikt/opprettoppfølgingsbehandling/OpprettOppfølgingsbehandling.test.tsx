@@ -13,18 +13,7 @@ describe('opprett oppfølgingsbehandling', () => {
   it('viser feilmelding om dato ikke settes, og verifiserer riktig kall til backend', async () => {
     render(
       <OpprettOppfølgingsBehandling
-        sak={{
-          behandlinger: [],
-          ident: 'minident',
-          opprettetTidspunkt: '',
-          periode: {
-            fom: '',
-            tom: '',
-          },
-          saksnummer: 'ABCDEFG',
-          status: 'OPPRETTET',
-          søknadErTrukket: undefined,
-        }}
+        saksnummer="ABCDEFG"
         brukerInformasjon={{ navn: 'Navn på bruker', NAVident: 'minident' }}
       />
     );
@@ -42,12 +31,12 @@ describe('opprett oppfølgingsbehandling', () => {
     await user.clear(datotekstboks);
     await user.type(datotekstboks, '13.02.2100');
 
+    const checkbox = screen.getByRole('checkbox', { name: 'Reserver oppgaven til meg' });
+    expect(checkbox).toBeChecked();
+
     await user.click(screen.getByRole('combobox', { name: 'Hvem følger opp?' }));
     await user.click(screen.getByRole('option', { name: 'NAY' }));
     await user.click(screen.getByRole('button', { name: 'Opprett oppfølgingsbehandling' }));
-
-    const checkbox = screen.getByRole('checkbox', { name: 'Reserver oppgaven til meg' });
-    expect(checkbox).toBeChecked();
 
     // Kaller `send` bare én gang
     expect(fetchMock.mock.calls).toHaveLength(1);
@@ -66,18 +55,7 @@ describe('opprett oppfølgingsbehandling', () => {
   it('om boksen for oppfølging ikke er avkrysset, så sendes null med i hvemskalfølgeopp', async () => {
     render(
       <OpprettOppfølgingsBehandling
-        sak={{
-          behandlinger: [],
-          ident: '',
-          opprettetTidspunkt: '',
-          periode: {
-            fom: '',
-            tom: '',
-          },
-          saksnummer: 'ABCDEFG',
-          status: 'OPPRETTET',
-          søknadErTrukket: undefined,
-        }}
+        saksnummer="ABCDEFG"
         brukerInformasjon={{ navn: 'Navn på bruker', NAVident: 'minident' }}
       />
     );

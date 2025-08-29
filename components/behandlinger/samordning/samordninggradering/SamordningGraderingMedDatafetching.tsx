@@ -6,6 +6,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -26,9 +27,10 @@ export const SamordningGraderingMedDatafetching = async ({
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
-
+  const brukerInformasjon = await hentBrukerInformasjon();
   return (
     <SamordningGradering
+      bruker={brukerInformasjon}
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
