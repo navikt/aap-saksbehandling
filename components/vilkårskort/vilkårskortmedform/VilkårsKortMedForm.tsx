@@ -85,7 +85,7 @@ export const VilkårsKortMedForm = ({
                 <HStack gap={'4'}>
                   {visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}
 
-                  {!isProd() && !readOnly && onLagreMellomLagringClick && (
+                  {!readOnly && onLagreMellomLagringClick && (
                     <Button type={'button'} size={'small'} variant={'tertiary'} onClick={onLagreMellomLagringClick}>
                       Lagre utkast
                     </Button>

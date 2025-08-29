@@ -1,83 +1,15 @@
-import { render, screen } from 'lib/test/CustomRender';
-import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
-import { format, subWeeks } from 'date-fns';
-import { MellomlagretVurderingResponse, SamordningGraderingGrunnlag } from 'lib/types/types';
-import { describe, expect, it, test, vi } from 'vitest';
-import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { MellomlagretVurderingResponse, SamordningUføreGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
+import { render, screen } from 'lib/test/CustomRender';
 import { FetchResponse } from 'lib/utils/api';
+import userEvent from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
+import { SamordningUføre } from 'components/behandlinger/samordning/samordninguføre/SamordningUføre';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
-
-const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
-  harTilgangTilÅSaksbehandle: true,
-  vurdering: {
-    begrunnelse: 'Dette er min vurdering som er bekreftet',
-    vurderinger: [
-      {
-        ytelseType: 'SYKEPENGER',
-        gradering: 20,
-        manuell: true,
-        periode: {
-          fom: format(subWeeks(new Date(), 3), 'yyyy-MM-dd'),
-          tom: format(new Date(), 'yyyy-MM-dd'),
-        },
-      },
-    ],
-  },
-  ytelser: [],
-};
-
-const grunnlagUtenVurdering: SamordningGraderingGrunnlag = {
-  harTilgangTilÅSaksbehandle: true,
-  ytelser: [
-    {
-      gradering: 100,
-      periode: {
-        fom: '2025-03-01',
-        tom: '2025-03-31',
-      },
-      endringStatus: 'NY',
-      kilde: 'SP',
-      ytelseType: 'SYKEPENGER',
-    },
-  ],
-};
-
-describe('Samordning gradering', () => {
-  test('skal kunne redigere ytelse, periode og gradering for en manuell rad', () => {
-    render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
-    expect(screen.getByRole('combobox', { name: 'Ytelsestype' })).toBeVisible();
-    expect(screen.getByRole('combobox', { name: 'Ytelsestype' })).toBeEnabled();
-
-    expect(screen.getByRole('textbox', { name: 'Fra og med' })).toBeVisible();
-    expect(screen.getByRole('textbox', { name: 'Fra og med' })).toBeEnabled();
-
-    expect(screen.getByRole('textbox', { name: 'Til og med' })).toBeVisible();
-    expect(screen.getByRole('textbox', { name: 'Til og med' })).toBeEnabled();
-
-    expect(screen.getByRole('textbox', { name: 'Utbetalingsgrad' })).toBeVisible();
-    expect(screen.getByRole('textbox', { name: 'Utbetalingsgrad' })).toBeEnabled();
-  });
-
-  test('kan slette en rad', () => {
-    render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
-    expect(screen.getByRole('button', { name: 'Slett' })).toBeVisible();
-  });
-
-  test('gir feilmelding dersom det er funnet ytelser fra kilder, men ikke gjort noen vurderinger', async () => {
-    render(<SamordningGradering grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
-    await user.type(
-      screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' }),
-      'Min begrunnelse'
-    );
-    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-    expect(await screen.findByText('Du må gjøre en vurdering av periodene')).toBeVisible();
-  });
-});
 
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
@@ -90,9 +22,41 @@ describe('mellomlagring', () => {
     },
   };
 
+  const grunnlagUtenVurdering: SamordningUføreGrunnlag = {
+    grunnlag: [
+      {
+        endringStatus: 'NY',
+        kilde: 'PESYS',
+        uføregrad: 40,
+        virkningstidspunkt: '2025-08-01',
+      },
+    ],
+    harTilgangTilÅSaksbehandle: true,
+  };
+
+  const grunnlagMedVurdering: SamordningUføreGrunnlag = {
+    grunnlag: [
+      {
+        endringStatus: 'NY',
+        kilde: 'PESYS',
+        uføregrad: 40,
+        virkningstidspunkt: '2025-08-01',
+      },
+    ],
+    harTilgangTilÅSaksbehandle: true,
+    vurdering: {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      vurderingPerioder: [{ uføregradTilSamordning: 40, virkningstidspunkt: '2025-08-01' }],
+      vurdertAv: {
+        dato: '2025-08-01',
+        ident: 'Saksbehandler',
+      },
+    },
+  };
+
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
-      <SamordningGradering
+      <SamordningUføre
         grunnlag={grunnlagUtenVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -104,10 +68,10 @@ describe('mellomlagring', () => {
   });
 
   it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-    render(<SamordningGradering grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+    render(<SamordningUføre grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
 
     await user.type(
-      screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' }),
+      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' }),
       'Her har jeg begynt å skrive en vurdering..'
     );
     expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
@@ -127,7 +91,7 @@ describe('mellomlagring', () => {
 
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
-      <SamordningGradering
+      <SamordningUføre
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagUtenVurdering}
@@ -148,7 +112,7 @@ describe('mellomlagring', () => {
 
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
-      <SamordningGradering
+      <SamordningUføre
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagMedVurdering}
@@ -157,17 +121,17 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder utbetalingsgrad for folketrygdytelser',
+      name: 'Vurder hvilken grad med uføre som skal samordnes med AAP',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-    render(<SamordningGradering behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
+    render(<SamordningUføre behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder utbetalingsgrad for folketrygdytelser',
+      name: 'Vurder hvilken grad med uføre som skal samordnes med AAP',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -175,7 +139,7 @@ describe('mellomlagring', () => {
 
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <SamordningGradering
+      <SamordningUføre
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagUtenVurdering}
@@ -184,24 +148,26 @@ describe('mellomlagring', () => {
     );
 
     await user.type(
-      screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' }),
+      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' }),
       ' her er ekstra tekst'
     );
 
-    expect(screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' })).toHaveValue(
-      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
-    );
+    expect(
+      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' })
+    ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
     const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' })).toHaveValue('');
+    expect(
+      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' })
+    ).toHaveValue('');
   });
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <SamordningGradering
+      <SamordningUføre
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -210,26 +176,26 @@ describe('mellomlagring', () => {
     );
 
     await user.type(
-      screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' }),
+      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' }),
       ' her er ekstra tekst'
     );
 
-    expect(screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' })).toHaveValue(
-      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
-    );
+    expect(
+      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' })
+    ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
     const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' })).toHaveValue(
-      'Dette er min vurdering som er bekreftet'
-    );
+    expect(
+      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' })
+    ).toHaveValue('Dette er min vurdering som er bekreftet');
   });
 
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
     render(
-      <SamordningGradering
+      <SamordningUføre
         behandlingVersjon={0}
         readOnly={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}

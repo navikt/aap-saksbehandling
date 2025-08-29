@@ -8,6 +8,7 @@ import {
   AvklaringsbehovKode,
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
+  MellomlagretVurdering,
   ToTrinnsVurderingGrunn,
 } from 'lib/types/types';
 import { ToTrinnsvurderingToggleGroup } from 'components/totrinnsvurdering/totrinnsvurderingtogglegroup/ToTrinnsvurderingToggleGroup';
@@ -21,6 +22,7 @@ interface Props {
   erKvalitetssikring: boolean;
   behandlingsReferanse: string;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 export interface ToTrinnsVurderingFormFields {
@@ -31,7 +33,13 @@ export interface ToTrinnsVurderingFormFields {
   definisjon: AvklaringsbehovKode;
 }
 
-export const ToTrinnsvurdering = ({ grunnlag, behandlingsReferanse, readOnly, erKvalitetssikring }: Props) => {
+export const ToTrinnsvurdering = ({
+  grunnlag,
+  behandlingsReferanse,
+  readOnly,
+  erKvalitetssikring,
+  initialMellomlagretVurdering,
+}: Props) => {
   const params = useParams();
 
   const [toggleGroupValue, setToggleGroupValue] = useState<string>(readOnly ? 'historikk' : 'totrinnsvurdering');
@@ -71,7 +79,7 @@ export const ToTrinnsvurdering = ({ grunnlag, behandlingsReferanse, readOnly, er
           link={link}
           erKvalitetssikring={erKvalitetssikring}
           readOnly={readOnly}
-          behandlingsReferanse={behandlingsReferanse}
+          initialMellomlagretVurdering={initialMellomlagretVurdering}
         />
       </div>
     </div>

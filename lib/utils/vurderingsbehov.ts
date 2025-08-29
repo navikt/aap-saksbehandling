@@ -35,7 +35,7 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
     case 'FORUTGAENDE_MEDLEMSKAP':
       return 'Forutgående medlemskap';
     case 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND':
-      return 'Sykdom arbevne behov for bistand';
+      return 'Sykdom arbeidsevne behov for bistand';
     case 'BARNETILLEGG':
       return 'Barnetillegg';
     case 'INSTITUSJONSOPPHOLD':
@@ -117,7 +117,7 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
     case 'FORUTGAENDE_MEDLEMSKAP':
       return 'Forutgående medlemskap';
     case 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND':
-      return 'Sykdom arbevne behov for bistand';
+      return 'Arbeidsevne og behov for bistand';
     case 'BARNETILLEGG':
       return 'Barnetillegg';
     case 'INSTITUSJONSOPPHOLD':

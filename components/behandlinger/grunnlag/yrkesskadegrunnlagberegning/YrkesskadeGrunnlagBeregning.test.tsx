@@ -19,7 +19,15 @@ describe('YrkesskadeGrunnlagBeregning', () => {
         behandlingVersjon={0}
         yrkeskadeBeregningGrunnlag={{
           harTilgangTilÅSaksbehandle: true,
-          skalVurderes: [{ referanse: 'ABCDE', skadeDato: '1989-02-13', grunnbeløp: { verdi: 200000 } }],
+          skalVurderes: [
+            {
+              referanse: 'ABCDE',
+              saksnummer: 1234,
+              kilde: 'INFOTRYGD',
+              skadeDato: '1989-02-13',
+              grunnbeløp: { verdi: 200000 },
+            },
+          ],
           vurderinger: [],
           historiskeVurderinger: [],
         }}
@@ -38,7 +46,15 @@ describe('YrkesskadeGrunnlagBeregning', () => {
         behandlingVersjon={0}
         yrkeskadeBeregningGrunnlag={{
           harTilgangTilÅSaksbehandle: true,
-          skalVurderes: [{ referanse: 'ABCDE', skadeDato: '1989-02-13', grunnbeløp: { verdi: 200000 } }],
+          skalVurderes: [
+            {
+              referanse: 'ABCDE',
+              saksnummer: 1234,
+              kilde: 'INFOTRYGD',
+              skadeDato: '1989-02-13',
+              grunnbeløp: { verdi: 200000 },
+            },
+          ],
           vurderinger: [],
           historiskeVurderinger: [],
         }}
@@ -80,6 +96,7 @@ describe('mellomlagring', () => {
         grunnbeløp: {
           verdi: 128116,
         },
+        kilde: 'INFOTRYGD',
       },
     ],
     vurderinger: [],
@@ -94,6 +111,7 @@ describe('mellomlagring', () => {
         grunnbeløp: {
           verdi: 128116,
         },
+        kilde: 'INFOTRYGD',
       },
     ],
     vurderinger: [

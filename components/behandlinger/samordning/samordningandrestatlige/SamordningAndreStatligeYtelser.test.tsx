@@ -1,106 +1,26 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from 'lib/test/CustomRender';
-import { MellomlagretVurderingResponse, SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
-import { SamordningTjenestePensjon } from 'components/behandlinger/samordning/samordningtjenestepensjon/SamordningTjenestePensjon';
-import userEvent from '@testing-library/user-event';
+import { MellomlagretVurderingResponse, SamordningAndreStatligeYtelserGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
+import { render, screen } from 'lib/test/CustomRender';
 import { FetchResponse } from 'lib/utils/api';
+import userEvent from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
+import { SamordningAndreStatligeYtelser } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelser';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
-const grunnlagUtenVurdering: SamordningTjenestePensjonGrunnlag = {
+const grunnlagMedVurdering: SamordningAndreStatligeYtelserGrunnlag = {
   harTilgangTilÅSaksbehandle: false,
-  tjenestepensjonYtelser: [
-    {
-      ytelse: 'ALDER',
-      ordning: { navn: 'SPK', tpNr: '1234', orgNr: '1235' },
-      ytelseIverksattFom: '2020-01-01',
-      ytelseIverksattTom: '2020-02-02',
-    },
-  ],
-};
-
-const grunnlagMedVurdering: SamordningTjenestePensjonGrunnlag = {
-  harTilgangTilÅSaksbehandle: false,
-  tjenestepensjonRefusjonskravVurdering: {
+  vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
-    harKrav: true,
+    vurderingPerioder: [],
+    vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-01' },
   },
-  tjenestepensjonYtelser: [
-    {
-      ytelse: 'ALDER',
-      ordning: { navn: 'SPK', tpNr: '1234', orgNr: '1235' },
-      ytelseIverksattFom: '2020-01-01',
-      ytelseIverksattTom: '2020-02-02',
-    },
-  ],
 };
 
-describe('Refusjon tjenestepensjon', () => {
-  const user = userEvent.setup();
-
-  it('skal ha en tabell med kolonnene periode, ordning og ytelse', () => {
-    render(<SamordningTjenestePensjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
-
-    const periodeKolonne = screen.getByRole('columnheader', {
-      name: 'Periode',
-    });
-    const ordningKolonne = screen.getByRole('columnheader', {
-      name: 'Ordning',
-    });
-    const ytelseKolonne = screen.getByRole('columnheader', {
-      name: 'Ytelse',
-    });
-
-    expect(periodeKolonne).toBeVisible();
-    expect(ordningKolonne).toBeVisible();
-    expect(ytelseKolonne).toBeVisible();
-  });
-
-  it('skal ha verdi i tabellen dersom det er tjenestepensjon ytelser', () => {
-    render(<SamordningTjenestePensjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
-    const periodeCelle = screen.getByRole('cell', {
-      name: '01.01.2020 - 02.02.2020',
-    });
-    const ordningCelle = screen.getByRole('cell', {
-      name: 'SPK',
-    });
-    const ytelseCelle = screen.getByRole('cell', {
-      name: 'ALDER',
-    });
-
-    expect(periodeCelle).toBeVisible();
-    expect(ordningCelle).toBeVisible();
-    expect(ytelseCelle).toBeVisible();
-  });
-
-  it('skal ha et begrunnelse felt', () => {
-    render(<SamordningTjenestePensjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
-    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurdering' });
-    expect(begrunnelseFelt).toBeVisible();
-  });
-
-  it('skal ha et felt for om etterbetaling skal holdes igjen for perioden', () => {
-    render(<SamordningTjenestePensjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
-    const felt = screen.getByRole('group', { name: 'Skal etterbetaling holdes igjen for perioden?' });
-    expect(felt).toBeVisible();
-  });
-
-  it('skal vise feilmeldinger dersom feltene ikke er besvart', async () => {
-    render(<SamordningTjenestePensjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
-
-    await user.click(bekreftKnapp);
-
-    const feilmeldingBegrunnelse = screen.getByText('Du må gi en begrunnelse.');
-    const feilmeldingFeltForEtterbetaling = screen.getByText('Du må svare på om etterbetalingen skal holdes igjen.');
-    expect(feilmeldingBegrunnelse).toBeVisible();
-    expect(feilmeldingFeltForEtterbetaling).toBeVisible();
-  });
-});
+const grunnlagUtenVurdering: SamordningAndreStatligeYtelserGrunnlag = { harTilgangTilÅSaksbehandle: false };
 
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
@@ -115,7 +35,7 @@ describe('mellomlagring', () => {
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
-      <SamordningTjenestePensjon
+      <SamordningAndreStatligeYtelser
         grunnlag={grunnlagUtenVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -127,9 +47,12 @@ describe('mellomlagring', () => {
   });
 
   it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-    render(<SamordningTjenestePensjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+    render(<SamordningAndreStatligeYtelser grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
 
-    await user.type(screen.getByRole('textbox', { name: 'Vurdering' }), 'Her har jeg begynt å skrive en vurdering..');
+    await user.type(
+      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' }),
+      'Her har jeg begynt å skrive en vurdering..'
+    );
     expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
 
     const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
@@ -147,7 +70,7 @@ describe('mellomlagring', () => {
 
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
-      <SamordningTjenestePensjon
+      <SamordningAndreStatligeYtelser
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagUtenVurdering}
@@ -168,7 +91,7 @@ describe('mellomlagring', () => {
 
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
-      <SamordningTjenestePensjon
+      <SamordningAndreStatligeYtelser
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagMedVurdering}
@@ -177,17 +100,17 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurdering',
+      name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-    render(<SamordningTjenestePensjon behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
+    render(<SamordningAndreStatligeYtelser behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurdering',
+      name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -195,7 +118,7 @@ describe('mellomlagring', () => {
 
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <SamordningTjenestePensjon
+      <SamordningAndreStatligeYtelser
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagUtenVurdering}
@@ -203,22 +126,27 @@ describe('mellomlagring', () => {
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'Vurdering' }), ' her er ekstra tekst');
-
-    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue(
-      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
+    await user.type(
+      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' }),
+      ' her er ekstra tekst'
     );
+
+    expect(
+      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' })
+    ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
     const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue('');
+    expect(
+      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' })
+    ).toHaveValue('');
   });
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <SamordningTjenestePensjon
+      <SamordningAndreStatligeYtelser
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -226,22 +154,27 @@ describe('mellomlagring', () => {
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'Vurdering' }), ' her er ekstra tekst');
-
-    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue(
-      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
+    await user.type(
+      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' }),
+      ' her er ekstra tekst'
     );
+
+    expect(
+      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' })
+    ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
     const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue('Dette er min vurdering som er bekreftet');
+    expect(
+      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' })
+    ).toHaveValue('Dette er min vurdering som er bekreftet');
   });
 
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
     render(
-      <SamordningTjenestePensjon
+      <SamordningAndreStatligeYtelser
         behandlingVersjon={0}
         readOnly={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}

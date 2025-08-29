@@ -3,7 +3,7 @@
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
-import { SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useConfigForm } from 'components/form/FormHook';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
@@ -11,11 +11,13 @@ import { FormField } from 'components/form/FormField';
 import { formaterPeriode } from 'lib/utils/date';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   grunnlag: SamordningTjenestePensjonGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -23,11 +25,25 @@ interface FormFields {
   skalEtterbetalingHoldesIgjen: JaEllerNei;
 }
 
-export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const SamordningTjenestePensjon = ({
+  grunnlag,
+  behandlingVersjon,
+  readOnly,
+  initialMellomlagretVurdering,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } = useLøsBehovOgGåTilNesteSteg(
     'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
   );
+
+  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
+    useMellomlagring(Behovstype.SAMORDNING_REFUSJONS_KRAV, initialMellomlagretVurdering);
+
+  const defaultValues: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag.tjenestepensjonRefusjonskravVurdering);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -35,14 +51,14 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
         type: 'textarea',
         label: 'Vurdering',
         description: 'Vurder om etterbetaling for perioden skal holdes igjen i påvente av refusjonskrav.',
-        defaultValue: grunnlag.tjenestepensjonRefusjonskravVurdering?.begrunnelse,
+        defaultValue: defaultValues.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse.' },
       },
       skalEtterbetalingHoldesIgjen: {
         type: 'radio',
         options: JaEllerNeiOptions,
         label: 'Skal etterbetaling holdes igjen for perioden?',
-        defaultValue: getJaNeiEllerUndefined(grunnlag.tjenestepensjonRefusjonskravVurdering?.harKrav),
+        defaultValue: defaultValues.skalEtterbetalingHoldesIgjen,
         rules: { required: 'Du må svare på om etterbetalingen skal holdes igjen.' },
       },
     },
@@ -51,17 +67,20 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) =>
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.SAMORDNING_REFUSJONS_KRAV,
-          samordningRefusjonskrav: {
-            begrunnelse: data.begrunnelse,
-            harKrav: data.skalEtterbetalingHoldesIgjen === JaEllerNei.Ja,
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.SAMORDNING_REFUSJONS_KRAV,
+            samordningRefusjonskrav: {
+              begrunnelse: data.begrunnelse,
+              harKrav: data.skalEtterbetalingHoldesIgjen === JaEllerNei.Ja,
+            },
           },
+          referanse: behandlingsReferanse,
         },
-        referanse: behandlingsReferanse,
-      })
+        () => nullstillMellomlagretVurdering()
+      )
     )(event);
   };
 
@@ -75,6 +94,18 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
       steg={'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'}
       visBekreftKnapp={!readOnly}
       onSubmit={handleSubmit}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() =>
+          form.reset(
+            grunnlag.tjenestepensjonRefusjonskravVurdering
+              ? mapVurderingToDraftFormFields(grunnlag.tjenestepensjonRefusjonskravVurdering)
+              : emptyDraftFormFields()
+          )
+        )
+      }
+      readOnly={readOnly}
     >
       <VStack gap={'1'}>
         <BodyShort weight={'semibold'}>
@@ -111,3 +142,19 @@ export const SamordningTjenestePensjon = ({ grunnlag, behandlingVersjon, readOnl
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(
+  vurdering: SamordningTjenestePensjonGrunnlag['tjenestepensjonRefusjonskravVurdering']
+): DraftFormFields {
+  return {
+    begrunnelse: vurdering?.begrunnelse,
+    skalEtterbetalingHoldesIgjen: getJaNeiEllerUndefined(vurdering?.harKrav),
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return {
+    begrunnelse: '',
+    skalEtterbetalingHoldesIgjen: undefined,
+  };
+}

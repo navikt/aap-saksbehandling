@@ -1,7 +1,12 @@
 import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
 import { Behovstype } from 'lib/utils/form';
-import { Alert, Button } from '@navikt/ds-react';
-import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag } from 'lib/types/types';
+import { Alert, Button, Detail, HStack } from '@navikt/ds-react';
+import {
+  FatteVedtakGrunnlag,
+  KvalitetssikringGrunnlag,
+  MellomlagretVurdering,
+  ToTrinnsVurdering,
+} from 'lib/types/types';
 import {
   behovstypeTilVilkårskortLink,
   ToTrinnsVurderingFormFields,
@@ -12,56 +17,56 @@ import { useState } from 'react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
   link: string;
   erKvalitetssikring: boolean;
   readOnly: boolean;
-  behandlingsReferanse: string;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 export interface FormFieldsToTrinnsVurdering {
   totrinnsvurderinger: ToTrinnsVurderingFormFields[];
 }
 
+type DraftFormFields = Partial<FormFieldsToTrinnsVurdering>;
+
 export const TotrinnsvurderingForm = ({
   grunnlag,
   link,
   readOnly,
-  behandlingsReferanse,
   erKvalitetssikring,
+  initialMellomlagretVurdering,
 }: Props) => {
+  const { flyt } = useRequiredFlyt();
+  const behandlingsReferanse = useBehandlingsReferanse();
   const [errorMessage, setErrorMessage] = useState('');
+
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
-  const { flyt } = useRequiredFlyt();
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag.vurderinger);
+
+  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(
+      erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+      initialMellomlagretVurdering
+    );
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
       type: 'fieldArray',
-      defaultValue: grunnlag.vurderinger.map((vurdering) => {
-        return {
-          definisjon: vurdering.definisjon,
-          godkjent: erGodkjentEllerUndefined(vurdering.godkjent),
-          begrunnelse: vurdering.begrunnelse || '',
-          grunner: vurdering.grunner?.map((grunn) => {
-            return grunn.årsak;
-          }),
-          årsakFritekst: vurdering.grunner?.find((grunn) => grunn.årsakFritekst)?.årsakFritekst || '',
-        };
-      }),
+      defaultValue: defaultValue.totrinnsvurderinger,
     },
   });
 
-  function erGodkjentEllerUndefined(value: undefined | null | boolean): undefined | 'true' | 'false' {
-    if (value === undefined || value === null) {
-      return undefined;
-    }
-
-    return value ? 'true' : 'false';
-  }
   const { fields } = useFieldArray({
     control: form.control,
     name: 'totrinnsvurderinger',
@@ -78,33 +83,36 @@ export const TotrinnsvurderingForm = ({
         }
 
         if (assessedFields && assessedFields.length > 0) {
-          løsBehovOgGåTilNesteSteg({
-            behandlingVersjon: flyt.behandlingVersjon,
-            behov: {
-              behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-              vurderinger: assessedFields.map((vurdering) => {
-                if (vurdering.godkjent === 'true') {
-                  return {
-                    definisjon: vurdering.definisjon,
-                    godkjent: vurdering.godkjent === 'true',
-                  };
-                } else {
-                  return {
-                    definisjon: vurdering.definisjon,
-                    godkjent: vurdering.godkjent === 'true',
-                    grunner: vurdering.grunner?.map((grunn) => {
-                      return {
-                        årsak: grunn,
-                        årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
-                      };
-                    }),
-                    begrunnelse: vurdering.begrunnelse,
-                  };
-                }
-              }),
+          løsBehovOgGåTilNesteSteg(
+            {
+              behandlingVersjon: flyt.behandlingVersjon,
+              behov: {
+                behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+                vurderinger: assessedFields.map((vurdering) => {
+                  if (vurdering.godkjent === 'true') {
+                    return {
+                      definisjon: vurdering.definisjon,
+                      godkjent: vurdering.godkjent === 'true',
+                    };
+                  } else {
+                    return {
+                      definisjon: vurdering.definisjon,
+                      godkjent: vurdering.godkjent === 'true',
+                      grunner: vurdering.grunner?.map((grunn) => {
+                        return {
+                          årsak: grunn,
+                          årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+                        };
+                      }),
+                      begrunnelse: vurdering.begrunnelse,
+                    };
+                  }
+                }),
+              },
+              referanse: behandlingsReferanse,
             },
-            referanse: behandlingsReferanse,
-          });
+            () => nullstillMellomlagretVurdering()
+          );
         } else {
           setErrorMessage('Du må gjøre minst én vurdering.');
         }
@@ -129,10 +137,63 @@ export const TotrinnsvurderingForm = ({
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       />
       {!readOnly && (
-        <Button size={'medium'} className={'fit-content'} loading={isLoading}>
-          Bekreft
-        </Button>
+        <>
+          <HStack gap={'2'}>
+            <Button size={'medium'} className={'fit-content'} loading={isLoading}>
+              Bekreft
+            </Button>
+
+            <Button
+              size={'small'}
+              variant={'tertiary'}
+              type={'button'}
+              onClick={() => lagreMellomlagring(form.watch())}
+            >
+              Lagre utkast
+            </Button>
+          </HStack>
+          {mellomlagretVurdering && (
+            <HStack align={'baseline'}>
+              <Detail>{`Utkast lagret ${formaterDatoMedTidspunktForFrontend(mellomlagretVurdering.vurdertDato)} (${mellomlagretVurdering.vurdertAv})`}</Detail>
+              <Button
+                style={{ marginTop: '-5px', marginBottom: '-5px' }}
+                type={'button'}
+                size={'small'}
+                variant={'tertiary'}
+                onClick={() => {
+                  slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag.vurderinger)));
+                }}
+              >
+                Slett utkast
+              </Button>
+            </HStack>
+          )}
+        </>
       )}
     </form>
   );
 };
+
+function erGodkjentEllerUndefined(value: undefined | null | boolean): undefined | 'true' | 'false' {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  return value ? 'true' : 'false';
+}
+
+function mapVurderingToDraftFormFields(vurderinger: ToTrinnsVurdering[]): DraftFormFields {
+  return {
+    totrinnsvurderinger: vurderinger.map((vurdering) => {
+      return {
+        definisjon: vurdering.definisjon,
+        godkjent: erGodkjentEllerUndefined(vurdering.godkjent),
+        begrunnelse: vurdering.begrunnelse || '',
+        grunner: vurdering.grunner?.map((grunn) => {
+          return grunn.årsak;
+        }),
+        årsakFritekst: vurdering.grunner?.find((grunn) => grunn.årsakFritekst)?.årsakFritekst || '',
+      };
+    }),
+  };
+}

@@ -71,9 +71,10 @@ import {
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
-import { isError, isSuccess } from 'lib/utils/api';
+import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { Behovstype } from 'lib/utils/form';
+import { isLocal } from 'lib/utils/environment';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -156,6 +157,15 @@ export const hentKvalitetssikringGrunnlag = async (behandlingsReferanse: string)
 };
 
 export const hentKvalitetssikringTilgang = async (behandlingsReferanse: string) => {
+  if (isLocal()) {
+    const res: FetchResponse<KvalitetssikringTilgang> = {
+      type: 'SUCCESS',
+      status: 200,
+      data: { harTilgangTilÅKvalitetssikre: true },
+    };
+
+    return res;
+  }
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/kvalitetssikring-tilgang`;
   return await apiFetch<KvalitetssikringTilgang>(url, saksbehandlingApiScope, 'GET');
 };
