@@ -18,7 +18,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { validerNullableDato } from 'lib/validation/dateValidation';
+import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
 
@@ -145,7 +145,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
           label={'Virkningsdato for vurderingen'}
           rules={{
             validate: {
-              gyldigDato: (value) => validerNullableDato(value as string),
+              gyldigDato: (value) => validerDato(value as string),
             },
           }}
           readOnly={readOnly}

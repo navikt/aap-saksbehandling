@@ -16,9 +16,12 @@ import { Alert, BodyShort, Link } from '@navikt/ds-react';
 
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { validerDato } from 'lib/validation/dateValidation';
+import { parse } from 'date-fns';
 
 interface Props {
   behandlingVersjon: number;
@@ -118,7 +121,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
             brukerSoktUforetrygd: data.brukerHarSøktUføretrygd === JaEllerNei.Ja,
             brukerVedtakUforetrygd: data.brukerHarFåttVedtakOmUføretrygd,
             brukerRettPaaAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
-            virkningsDato: data.virkningsdato,
+            virkningsDato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
           },
         },
         referanse: behandlingsReferanse,
@@ -183,6 +186,17 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         </Alert>
       )}
       <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
+      <DateInputWrapper
+        name={`virkningsdato`}
+        control={form.control}
+        label={'Virkningsdato for vurderingen'}
+        rules={{
+          validate: {
+            gyldigDato: (value) => validerDato(value as string),
+          },
+        }}
+        readOnly={readOnly}
+      />
     </VilkårsKortMedForm>
   );
 
