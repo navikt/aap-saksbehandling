@@ -4,7 +4,7 @@ import { StudentvurderingMedDataFetching } from 'components/behandlinger/sykdom/
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { getStegSomSkalVises } from 'lib/utils/steg';
+import { getStegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
@@ -16,8 +16,7 @@ export const Student = async ({ behandlingsreferanse }: Props) => {
     return <ApiException apiResponses={[flyt]} />;
   }
 
-  const harAvklaringsbehov = getStegSomSkalVises('STUDENT', flyt.data).includes('AVKLAR_STUDENT');
-  const erRevurdering = flyt.data.visning.typeBehandling === 'Revurdering';
+  const avklarStudentSteg = getStegData('STUDENT', 'AVKLAR_STUDENT', flyt.data);
 
   return (
     <GruppeSteg
@@ -27,15 +26,9 @@ export const Student = async ({ behandlingsreferanse }: Props) => {
       behandlingVersjon={flyt.data.behandlingVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {(harAvklaringsbehov || erRevurdering) && (
+      {avklarStudentSteg.hentSteg && (
         <StegSuspense>
-          <StudentvurderingMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={flyt.data.behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly || !harAvklaringsbehov}
-            harAvklaringsbehov={harAvklaringsbehov}
-            erRevurdering={erRevurdering}
-          />
+          <StudentvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={avklarStudentSteg} />
         </StegSuspense>
       )}
     </GruppeSteg>
