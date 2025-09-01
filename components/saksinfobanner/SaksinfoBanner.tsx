@@ -108,6 +108,8 @@ export const SaksinfoBanner = ({
       return { status: 'PÅ_VENT', label: 'På vent' };
     } else if (sak.søknadErTrukket) {
       return { status: 'TRUKKET', label: 'Trukket' };
+    } else if (sak.revurderingErKansellert) {
+      return { status: 'KANSELLERT', label: 'Kansellert' };
     }
   };
 

@@ -11734,6 +11734,7 @@ export interface components {
         | 'KLAGE_DELVIS_OMGJØRES'
         | 'KLAGE_AVSLÅTT'
         | 'KLAGE_TRUKKET'
+        | 'KANSELLERT'
         | null;
       saksnummer: string;
     };
@@ -11746,6 +11747,7 @@ export interface components {
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      revurderingErKansellert?: boolean | null;
       saksnummer: string;
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'LØPENDE' | 'AVSLUTTET';

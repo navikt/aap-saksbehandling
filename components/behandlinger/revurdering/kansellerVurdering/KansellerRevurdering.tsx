@@ -23,7 +23,7 @@ export const KansellerRevurdering = async ({ behandlingsreferanse }: props) => {
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
       behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flyt.data.behandlingVersjon}
+      behandlingVersjon={behandlingVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
     >
       {stegSomSkalVises.includes('KANSELLER_REVURDERING') && (

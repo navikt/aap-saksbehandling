@@ -28,6 +28,7 @@ export const KansellerRevurderingVurdering = ({ grunnlag, readOnly, behandlingVe
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('KANSELLER_REVURDERING');
+
   const { form, formFields } = useConfigForm<FormFields>(
     {
       aarsak: {
