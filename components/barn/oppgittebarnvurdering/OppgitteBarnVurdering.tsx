@@ -14,10 +14,19 @@ interface Props {
   ident: string | null | undefined;
   navn: string;
   fødselsdato: string | null | undefined;
+  oppgittForelderRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
   readOnly: boolean;
 }
 
-export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, readOnly, fødselsdato }: Props) => {
+export const OppgitteBarnVurdering = ({
+  form,
+  barnetilleggIndex,
+  ident,
+  navn,
+  readOnly,
+  fødselsdato,
+  oppgittForelderRelasjon,
+}: Props) => {
   const {
     fields: vurderinger,
     remove,
@@ -57,6 +66,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
                 barneTilleggIndex={barnetilleggIndex}
                 vurderingIndex={vurderingIndex}
                 fødselsdato={fødselsdato}
+                oppgittForelderRelasjon={oppgittForelderRelasjon}
               />
               {kanFjernePeriode && !readOnly && (
                 <Button

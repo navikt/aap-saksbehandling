@@ -32,12 +32,14 @@ interface BarneTilleggVurdering {
   ident: string | null | undefined;
   fødselsdato: string | null | undefined;
   navn: string | null | undefined;
+  oppgittForelderRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
   vurderinger: Vurdering[];
 }
 
 interface Vurdering {
   begrunnelse: string;
   harForeldreAnsvar: string;
+  erFosterforelder?: string;
   fraDato?: string;
 }
 
@@ -52,6 +54,8 @@ export const BarnetilleggVurdering = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
+  console.log('barnTilVurdering', grunnlag.barnSomTrengerVurdering);
+  console.log('folkeregbarn', grunnlag.folkeregisterbarn);
   const vurderteBarn: BarneTilleggVurdering[] = grunnlag.vurderteBarn.map((barn) => {
     const navn = barn.navn || barn.ident || 'Ukjent';
     return {
@@ -72,6 +76,7 @@ export const BarnetilleggVurdering = ({
     return {
       ident: barn?.ident?.identifikator,
       navn: barn.navn || (barn.ident?.aktivIdent ? behandlingPersonInfo?.info[barn.ident.identifikator] : 'Ukjent'),
+      oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
       vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
       fødselsdato: barn.fodselsDato,
     };
@@ -160,6 +165,7 @@ export const BarnetilleggVurdering = ({
                   ident={vurdering.ident}
                   fødselsdato={vurdering.fødselsdato}
                   navn={vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
+                  oppgittForelderRelasjon={vurdering.oppgittForelderRelasjon}
                   readOnly={readOnly}
                 />
               );
