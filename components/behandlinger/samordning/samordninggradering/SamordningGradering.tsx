@@ -61,7 +61,7 @@ export const SamordningGradering = ({
   const [success, setSuccess] = useState(false);
 
   const handleSuccess = () => {
-    setSuccess(true); // Show success state
+    setSuccess(true);
   };
 
   const finnesYtelserEllerVurderinger = !!(
