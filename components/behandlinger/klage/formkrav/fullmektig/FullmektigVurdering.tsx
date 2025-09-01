@@ -6,22 +6,24 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormEvent } from 'react';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { FullmektigGrunnlag, TypeBehandling } from 'lib/types/types';
+import { FullmektigGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import styles from './fullmektig.module.css';
 import { landMedTrygdesamarbeidInklNorgeAlpha2 } from 'lib/utils/countries';
 import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 import { erGyldigOrganisasjonsnummer } from 'lib/utils/orgnr';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
   behandlingVersjon: number;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
-  harFullmektig: JaEllerNei;
+  harFullmektig: string;
   idType: 'navnOgAdresse' | 'fnr' | 'orgnr' | 'utl_orgnr';
   orgnr?: string;
   utlOrgnr?: string;
@@ -35,11 +37,20 @@ interface FormFields {
   land: string;
 }
 
-export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FULLMEKTIG');
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.FASTSETT_FULLMEKTIG, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -47,17 +58,14 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
         type: 'radio',
         label: 'Finnes det fullmektig eller verge i klagesaken?',
         rules: { required: 'Du må svare' },
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.harFullmektig),
+        defaultValue: defaultValue.harFullmektig,
         options: JaEllerNeiOptions,
       },
       idType: {
         type: 'radio',
         label: 'Hvordan skal verge/fullmektig identifiseres?',
         rules: { required: 'Du må velge idtype' },
-        defaultValue: mapIdentToOption(
-          grunnlag?.vurdering?.fullmektigIdentMedType?.type,
-          grunnlag?.vurdering?.fullmektigNavnOgAdresse != null
-        ),
+        defaultValue: defaultValue.idType,
         options: idTypeOptions(),
       },
       fnr: {
@@ -71,7 +79,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
             else return 'Ugyldig fødselsnummer';
           },
         },
-        defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+        defaultValue: defaultValue.fnr,
       },
       orgnr: {
         type: 'text',
@@ -84,7 +92,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
             else return 'Ugyldig organisasjonsnummer';
           },
         },
-        defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+        defaultValue: defaultValue.orgnr,
       },
       utlOrgnr: {
         type: 'text',
@@ -92,41 +100,41 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
         rules: {
           required: 'Du må skrive Org.nr',
         },
-        defaultValue: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+        defaultValue: defaultValue.utlOrgnr,
       },
       navn: {
         type: 'text',
         label: 'Navn på fullmektig/verge',
         rules: { required: 'Du må skrive inn navn' },
-        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.navn ?? undefined,
+        defaultValue: defaultValue.navn,
       },
       adresselinje1: {
         type: 'text',
         label: 'Adresselinje 1',
         rules: { required: 'Du må skrive inn addresselinje 1' },
-        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje1 ?? undefined,
+        defaultValue: defaultValue.adresselinje1,
       },
       adresselinje2: {
         type: 'text',
         label: 'Adresselinje 2 (valgfritt)',
-        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje2 ?? undefined,
+        defaultValue: defaultValue.adresselinje2,
       },
       adresselinje3: {
         type: 'text',
         label: 'Adresselinje 3 (valgfritt)',
-        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje3 ?? undefined,
+        defaultValue: defaultValue.adresselinje3,
       },
       postnummer: {
         type: 'text',
         label: 'Postnummer',
         rules: { required: 'Du må skrive inn postnummer' },
-        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.postnummer ?? undefined,
+        defaultValue: defaultValue.postnummer,
       },
       poststed: {
         type: 'text',
         label: 'Poststed',
         rules: { required: 'Du må skrive inn poststed' },
-        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.poststed ?? undefined,
+        defaultValue: defaultValue.poststed,
       },
       land: {
         type: 'combobox',
@@ -142,7 +150,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
           },
         },
         options: landMedTrygdesamarbeidInklNorgeAlpha2,
-        defaultValue: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.landkode ?? undefined,
+        defaultValue: defaultValue.land,
       },
     },
     { readOnly }
@@ -172,18 +180,21 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
             }
           : undefined;
 
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.FASTSETT_FULLMEKTIG,
-          fullmektigVurdering: {
-            harFullmektig: harFullmektig,
-            fullmektigIdentMedType: harFullmektig ? getIdentAndType(data) : undefined,
-            fullmektigNavnOgAdresse: navnOgAdresse,
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.FASTSETT_FULLMEKTIG,
+            fullmektigVurdering: {
+              harFullmektig: harFullmektig,
+              fullmektigIdentMedType: harFullmektig ? getIdentAndType(data) : undefined,
+              fullmektigNavnOgAdresse: navnOgAdresse,
+            },
           },
+          referanse: behandlingsreferanse,
         },
-        referanse: behandlingsreferanse,
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 
@@ -198,6 +209,14 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      readOnly={readOnly}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() =>
+          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
+        )
+      }
     >
       <FormField form={form} formField={formFields.harFullmektig} horizontalRadio />
       {harFullmektig === JaEllerNei.Ja && <FormField form={form} formField={formFields.idType} horizontalRadio />}
@@ -227,6 +246,32 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly }: P
       )}
     </VilkårsKortMedForm>
   );
+
+  function mapVurderingToDraftFormFields(grunnlag?: FullmektigGrunnlag): DraftFormFields {
+    return {
+      harFullmektig: getJaNeiEllerUndefined(grunnlag?.vurdering?.harFullmektig),
+      idType: mapIdentToOption(
+        grunnlag?.vurdering?.fullmektigIdentMedType?.type,
+        grunnlag?.vurdering?.fullmektigNavnOgAdresse != null
+      ),
+      fnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+      orgnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+      utlOrgnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+      navn: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.navn ?? undefined,
+      adresselinje1: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje1 ?? undefined,
+      adresselinje2: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje2 ?? undefined,
+      adresselinje3: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje3 ?? undefined,
+      postnummer: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.postnummer ?? undefined,
+      poststed: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.poststed ?? undefined,
+      land: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.landkode ?? undefined,
+    };
+  }
+
+  function emptyDraftFormFields(): DraftFormFields {
+    return {
+      harFullmektig: '',
+    };
+  }
 
   type IndentAndType = {
     ident: string;

@@ -156,6 +156,8 @@ export type FinnSakForIdent =
 
 export type Vilkår = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårDTO'];
 
+export type Avklaringsbehov = components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'];
+
 export type StegType = components['schemas']['no.nav.aap.behandlingsflyt.flyt.FlytSteg']['stegType'];
 
 export type StegGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flyt.FlytGruppe']['stegGruppe'];

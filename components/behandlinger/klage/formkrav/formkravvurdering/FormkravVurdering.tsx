@@ -6,31 +6,42 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormEvent } from 'react';
 import { FormField } from 'components/form/FormField';
-import { FormkravGrunnlag, TypeBehandling } from 'lib/types/types';
+import { FormkravGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormkravAvvisningVarsel } from 'components/behandlinger/klage/formkrav/formkravvurdering/FormkravAvvisningVarsel';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   grunnlag?: FormkravGrunnlag;
   behandlingVersjon: number;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
-  erBrukerPart: JaEllerNei;
-  erFristOverholdt: JaEllerNei;
-  likevelBehandles?: JaEllerNei;
-  erKonkret: JaEllerNei;
-  erSignert: JaEllerNei;
+  erBrukerPart: string;
+  erFristOverholdt: string;
+  likevelBehandles?: string;
+  erKonkret: string;
+  erSignert: string;
   begrunnelse: string;
 }
 
-export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FORMKRAV');
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.VURDER_FORMKRAV, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -38,28 +49,28 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
         type: 'radio',
         label: 'Er klager part i saken?',
         rules: { required: 'Du må svare på om klager er part' },
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erBrukerPart),
+        defaultValue: defaultValue.erBrukerPart,
         options: JaEllerNeiOptions,
       },
       erKonkret: {
         type: 'radio',
         label: 'Klages det på konkrete elementer i vedtaket?',
         rules: { required: 'Du må svare på om det klages på konkrete elementer i vedtaket' },
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erKonkret),
+        defaultValue: defaultValue.erKonkret,
         options: JaEllerNeiOptions,
       },
       erFristOverholdt: {
         type: 'radio',
         label: 'Er klagefristen overholdt?',
         rules: { required: 'Du må svare på om fristen er overholdt' },
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erFristOverholdt),
+        defaultValue: defaultValue.erFristOverholdt,
         options: JaEllerNeiOptions,
       },
       likevelBehandles: {
         type: 'radio',
         label: 'Skal klagen likevel behandles?',
         rules: { required: 'Du må svare på om fristen er overholdt' },
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.likevelBehandles),
+        defaultValue: defaultValue.likevelBehandles,
         options: [
           {
             label: 'Ja, det er særlig grunner, eller brukeren kan ikke klandres for forsinkelsen',
@@ -72,7 +83,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
         type: 'radio',
         label: 'Er klagen signert?',
         rules: { required: 'Du må svare på om klagen er signert' },
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.erSignert),
+        defaultValue: defaultValue.erSignert,
         options: JaEllerNeiOptions,
       },
       begrunnelse: {
@@ -80,7 +91,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
         label: 'Vurdering',
         description: 'Vurder om formkrav til klage er oppfylt',
         rules: { required: 'Du må skrive en vurdering' },
-        defaultValue: grunnlag?.vurdering?.begrunnelse,
+        defaultValue: defaultValue.begrunnelse,
       },
     },
     { readOnly, shouldUnregister: true }
@@ -94,21 +105,24 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.VURDER_FORMKRAV,
-          formkravVurdering: {
-            erBrukerPart: data.erBrukerPart === JaEllerNei.Ja,
-            erFristOverholdt: data.erFristOverholdt === JaEllerNei.Ja,
-            likevelBehandles: data.likevelBehandles ? data.likevelBehandles === JaEllerNei.Ja : undefined,
-            erKonkret: data.erKonkret === JaEllerNei.Ja,
-            erSignert: data.erSignert === JaEllerNei.Ja,
-            begrunnelse: data.begrunnelse,
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.VURDER_FORMKRAV,
+            formkravVurdering: {
+              erBrukerPart: data.erBrukerPart === JaEllerNei.Ja,
+              erFristOverholdt: data.erFristOverholdt === JaEllerNei.Ja,
+              likevelBehandles: data.likevelBehandles ? data.likevelBehandles === JaEllerNei.Ja : undefined,
+              erKonkret: data.erKonkret === JaEllerNei.Ja,
+              erSignert: data.erSignert === JaEllerNei.Ja,
+              begrunnelse: data.begrunnelse,
+            },
           },
+          referanse: behandlingsreferanse,
         },
-        referanse: behandlingsreferanse,
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 
@@ -123,6 +137,14 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      readOnly={readOnly}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() =>
+          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
+        )
+      }
     >
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erBrukerPart} horizontalRadio />
@@ -136,3 +158,25 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly }: Pro
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(vurdering: FormkravGrunnlag['vurdering']): DraftFormFields {
+  return {
+    begrunnelse: vurdering?.begrunnelse,
+    erBrukerPart: getJaNeiEllerUndefined(vurdering?.erBrukerPart),
+    erKonkret: getJaNeiEllerUndefined(vurdering?.erKonkret),
+    erFristOverholdt: getJaNeiEllerUndefined(vurdering?.erFristOverholdt),
+    likevelBehandles: getJaNeiEllerUndefined(vurdering?.likevelBehandles),
+    erSignert: getJaNeiEllerUndefined(vurdering?.erSignert),
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return {
+    begrunnelse: '',
+    erSignert: '',
+    erKonkret: '',
+    likevelBehandles: '',
+    erFristOverholdt: '',
+    erBrukerPart: '',
+  };
+}
