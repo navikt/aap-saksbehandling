@@ -42,7 +42,7 @@ export const getStegData = (
     behandlingVersjon: behandlingFlytOgTilstand.behandlingVersjon,
     typeBehandling: behandlingFlytOgTilstand.visning.typeBehandling,
     avklaringsbehov: avklaringsbehov,
-    hentSteg: harAvklaringsbehov || behandlingFlytOgTilstand.visning.typeBehandling === 'Revurdering',
+    skalViseSteg: harAvklaringsbehov || behandlingFlytOgTilstand.visning.typeBehandling === 'Revurdering',
     readOnly: behandlingFlytOgTilstand.visning.saksbehandlerReadOnly || !harAvklaringsbehov,
   };
 };
@@ -55,6 +55,6 @@ export interface StegData {
   behandlingVersjon: number;
   typeBehandling: TypeBehandling;
   avklaringsbehov: Array<Avklaringsbehov>;
-  hentSteg: boolean;
+  skalViseSteg: boolean;
   readOnly: boolean;
 }

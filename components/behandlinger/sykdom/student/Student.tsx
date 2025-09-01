@@ -26,7 +26,7 @@ export const Student = async ({ behandlingsreferanse }: Props) => {
       behandlingVersjon={flyt.data.behandlingVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {avklarStudentSteg.hentSteg && (
+      {avklarStudentSteg.skalViseSteg && (
         <StegSuspense>
           <StudentvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={avklarStudentSteg} />
         </StegSuspense>
