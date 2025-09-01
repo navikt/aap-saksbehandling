@@ -58,6 +58,11 @@ export const SamordningGradering = ({
 }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const [errorMessage, setErrorMessage] = useState<String | undefined>(undefined);
+  const [success, setSuccess] = useState(false);
+
+  const handleSuccess = () => {
+    setSuccess(true);
+  };
 
   const finnesYtelserEllerVurderinger = !!(
     grunnlag.ytelser.length > 0 ||
@@ -187,6 +192,7 @@ export const SamordningGradering = ({
               saksnummer={sak.sak.saksnummer}
               brukerInformasjon={bruker}
               modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
+              successfullOpprettelse={handleSuccess}
               finnTidligsteVirkningstidspunkt={finnTidligsteVirkningstidspunkt()}
             />
           </Modal.Body>
@@ -216,7 +222,12 @@ export const SamordningGradering = ({
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell ytelser={grunnlag.ytelser} />
             <Ytelsesvurderinger form={form} readOnly={readOnly} />
-            {visRevurderVirkningstidspunkt && (
+            {success && (
+              <Box maxWidth={'80ch'}>
+                <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
+              </Box>
+            )}
+            {visRevurderVirkningstidspunkt && !success && (
               <Box maxWidth={'90ch'}>
                 <Alert variant="info">
                   <Heading spacing size="small" level="3">
