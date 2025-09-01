@@ -19,6 +19,7 @@ interface Props {
   saksnummer: string;
   brukerInformasjon: BrukerInformasjon;
   modalOnClose?: () => void;
+  successfullOpprettelse?: () => void;
   finnTidligsteVirkningstidspunkt?: string;
 }
 
@@ -40,6 +41,7 @@ export const OpprettOppfølgingsBehandling = ({
   saksnummer,
   brukerInformasjon,
   modalOnClose,
+  successfullOpprettelse,
   finnTidligsteVirkningstidspunkt,
 }: Props) => {
   const defaultValues: DefaultValues = {
@@ -68,7 +70,12 @@ export const OpprettOppfølgingsBehandling = ({
       kanal: 'DIGITAL',
       mottattTidspunkt: new Date().toISOString(),
       melding: {
-        meldingType: 'OppfølgingsoppgaveV0',
+        meldingType:
+          'OppfølgingsoppgaveV0' /** //TODO: opprinselse logikk, hent om det er noen andre oppfølgning oppgave på denne behanddling
+        opprinnelse: {
+          behandlingsreferanse: 'behandlingsreferanse', // TODO: Id
+          årsak: 'SamordningGradering',
+        }, **/,
         datoForOppfølging: formaterDatoForBackend(parse(data.datoForOppfølging, 'dd.MM.yyyy', new Date())),
         hvaSkalFølgesOpp: data.hvaSkalFølgesOpp,
         reserverTilBruker: data.reserverTilMeg.length > 0 ? brukerInformasjon.NAVident : undefined,
@@ -82,7 +89,8 @@ export const OpprettOppfølgingsBehandling = ({
 
     if (isSuccess(res)) {
       setIsLoading(false);
-      if (modalOnClose) {
+      if (modalOnClose && successfullOpprettelse) {
+        successfullOpprettelse?.();
         modalOnClose();
       } else {
         router.push(`/saksbehandling/sak/${saksnummer}`);
