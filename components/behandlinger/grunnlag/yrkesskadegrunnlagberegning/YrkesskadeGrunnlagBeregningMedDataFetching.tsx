@@ -6,18 +6,14 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
-  readOnly: boolean;
-  behandlingVersjon: number;
   behandlingsreferanse: string;
+  stegData: StegData;
 }
 
-export const YrkesskadeGrunnlagBeregningMedDataFetching = async ({
-  behandlingVersjon,
-  readOnly,
-  behandlingsreferanse,
-}: Props) => {
+export const YrkesskadeGrunnlagBeregningMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentBeregningYrkesskadeVurdering(behandlingsreferanse),
     hentMellomlagring(behandlingsreferanse, Behovstype.FASTSETT_YRKESSKADEINNTEKT),
@@ -26,11 +22,16 @@ export const YrkesskadeGrunnlagBeregningMedDataFetching = async ({
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
+
+  if (!skalViseSteg(stegData, grunnlag.data.vurderinger != null && grunnlag.data.vurderinger.length > 0)) {
+    return null;
+  }
+
   return (
     <YrkesskadeGrunnlagBeregning
       yrkeskadeBeregningGrunnlag={grunnlag.data}
-      behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

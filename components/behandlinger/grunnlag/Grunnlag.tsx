@@ -8,7 +8,7 @@ import { Behovstype } from 'lib/utils/form';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
-import { getStegSomSkalVises } from 'lib/utils/steg';
+import { getStegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
@@ -19,61 +19,57 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
     hentFlyt(behandlingsReferanse),
     hentBeregningsGrunnlag(behandlingsReferanse),
   ]);
+
   if (isError(beregningsgrunnlag) || isError(flyt)) {
     return <ApiException apiResponses={[beregningsgrunnlag, flyt]} />;
   }
 
-  const grunnlagGruppe = flyt.data.flyt.find((gruppe) => gruppe.stegGruppe === 'GRUNNLAG');
-  const avklaringsBehov = grunnlagGruppe?.steg.find((steg) => steg.avklaringsbehov);
-
-  const readOnly = flyt.data.visning.saksbehandlerReadOnly;
-
-  const behandlingVersjon = flyt.data.behandlingVersjon;
-
-  const stegSomSkalVises = getStegSomSkalVises('GRUNNLAG', flyt.data);
-
-  const vurderFastsettBeregningstidspunkt =
-    avklaringsBehov?.avklaringsbehov.find((b) => b.definisjon.kode === Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE) !=
-    null;
-
-  const vurderYrkesskadeGrunnlagsberegning =
-    avklaringsBehov?.avklaringsbehov.find((behov) => behov.definisjon.kode === Behovstype.FASTSETT_YRKESSKADEINNTEKT) !=
-    null;
+  const aktivStegGruppe = 'GRUNNLAG';
+  const fastsettBeregningstidspunktSteg = getStegData(
+    aktivStegGruppe,
+    'FASTSETT_BEREGNINGSTIDSPUNKT',
+    flyt.data,
+    Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE
+  );
+  const fastsettYrkesskadeInntekt = getStegData(
+    aktivStegGruppe,
+    'FASTSETT_BEREGNINGSTIDSPUNKT',
+    flyt.data,
+    Behovstype.FASTSETT_YRKESSKADEINNTEKT
+  );
+  const vurderManglendeLigningSteg = getStegData(aktivStegGruppe, 'MANGLENDE_LIGNING', flyt.data);
 
   return (
     <GruppeSteg
-      behandlingVersjon={behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
+      behandlingVersjon={flyt.data.behandlingVersjon}
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {vurderFastsettBeregningstidspunkt && (
+      {fastsettBeregningstidspunktSteg.skalViseSteg && (
         <StegSuspense>
           <FastsettBeregningMedDataFeching
             behandlingsReferanse={behandlingsReferanse}
-            readOnly={readOnly}
-            behandlingVersjon={behandlingVersjon}
+            stegData={fastsettBeregningstidspunktSteg}
           />
         </StegSuspense>
       )}
 
-      {vurderYrkesskadeGrunnlagsberegning && (
+      {fastsettYrkesskadeInntekt.skalViseSteg && (
         <StegSuspense>
           <YrkesskadeGrunnlagBeregningMedDataFetching
-            readOnly={readOnly}
-            behandlingVersjon={behandlingVersjon}
             behandlingsreferanse={behandlingsReferanse}
+            stegData={fastsettYrkesskadeInntekt}
           />
         </StegSuspense>
       )}
 
-      {stegSomSkalVises.includes('MANGLENDE_LIGNING') && (
+      {vurderManglendeLigningSteg.skalViseSteg && (
         <StegSuspense>
           <FastsettManuellInntektMedDataFetching
             behandlingsreferanse={behandlingsReferanse}
-            behandlingversjon={behandlingVersjon}
-            readOnly={readOnly}
+            stegData={vurderManglendeLigningSteg}
           />
         </StegSuspense>
       )}
