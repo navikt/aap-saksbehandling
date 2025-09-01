@@ -18,10 +18,10 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 
 interface Props {
   behandlingVersjon: number;
@@ -149,7 +149,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
-        <TidligereVurderingerV3
+        <TidligereVurderinger
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={() => true}

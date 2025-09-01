@@ -17,9 +17,9 @@ import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 
 interface Props {
   behandlingVersjon: number;
@@ -139,7 +139,7 @@ export const Bistandsbehovutenovergang = ({
       mellomlagretVurdering={mellomlagretVurdering}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
-        <TidligereVurderingerV3
+        <TidligereVurderinger
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) =>

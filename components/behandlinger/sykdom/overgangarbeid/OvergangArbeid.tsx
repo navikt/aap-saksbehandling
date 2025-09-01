@@ -20,7 +20,7 @@ import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
-import { TidligereVurderingerV3 } from 'components/tidligerevurderinger/TidligereVurderingerV3';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 
 interface Props {
   behandlingVersjon: number;
@@ -104,7 +104,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
     >
       {typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0 && (
-        <TidligereVurderingerV3
+        <TidligereVurderinger
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={() => true}
