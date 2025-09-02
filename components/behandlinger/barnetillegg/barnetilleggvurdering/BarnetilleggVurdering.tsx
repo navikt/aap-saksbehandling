@@ -2,7 +2,7 @@
 
 import { BodyShort } from '@navikt/ds-react';
 import { RegistrertBarn } from 'components/barn/registrertbarn/RegistrertBarn';
-import { BarnetilleggGrunnlag, BehandlingPersoninfo } from 'lib/types/types';
+import { BarnetilleggGrunnlag, BehandlingPersoninfo, MellomlagretVurdering } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -15,6 +15,7 @@ import { FormEvent } from 'react';
 import styles from './BarnetilleggVurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   behandlingsversjon: number;
@@ -22,11 +23,14 @@ interface Props {
   behandlingPersonInfo: BehandlingPersoninfo;
   readOnly: boolean;
   harAvklaringsbehov: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 export interface BarnetilleggFormFields {
   barnetilleggVurderinger: BarneTilleggVurdering[];
 }
+
+type DraftFormFields = Partial<BarnetilleggFormFields>;
 
 interface BarneTilleggVurdering {
   ident: string | null | undefined;
@@ -47,42 +51,23 @@ export const BarnetilleggVurdering = ({
   behandlingsversjon,
   behandlingPersonInfo,
   readOnly,
+  initialMellomlagretVurdering,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
-  const vurderteBarn: BarneTilleggVurdering[] = grunnlag.vurderteBarn.map((barn) => {
-    const navn = barn.navn || barn.ident || 'Ukjent';
-    return {
-      ident: barn.ident,
-      navn: barn.ident ? behandlingPersonInfo?.info[barn.ident] : navn,
-      fødselsdato: barn.fødselsdato,
-      vurderinger: barn.vurderinger.map((value) => {
-        return {
-          begrunnelse: value.begrunnelse,
-          harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
-          fraDato: formaterDatoForFrontend(value.fraDato),
-        };
-      }),
-    };
-  });
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.AVKLAR_BARNETILLEGG_KODE, initialMellomlagretVurdering);
 
-  const barnSomTrengerVurdering: BarneTilleggVurdering[] = grunnlag.barnSomTrengerVurdering.map((barn) => {
-    return {
-      ident: barn?.ident?.identifikator,
-      navn: barn.navn || (barn.ident?.aktivIdent ? behandlingPersonInfo?.info[barn.ident.identifikator] : 'Ukjent'),
-      vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
-      fødselsdato: barn.fodselsDato,
-    };
-  });
-
-  const defaultValue = [...vurderteBarn, ...barnSomTrengerVurdering].flat();
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag.vurderteBarn, grunnlag.barnSomTrengerVurdering, behandlingPersonInfo);
 
   const { form } = useConfigForm<BarnetilleggFormFields>({
     barnetilleggVurderinger: {
       type: 'fieldArray',
-      defaultValue,
+      defaultValue: defaultValue.barnetilleggVurderinger,
     },
   });
 
@@ -93,29 +78,32 @@ export const BarnetilleggVurdering = ({
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingsversjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
-          vurderingerForBarnetillegg: {
-            vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
-              return {
-                ident: vurderteBarn.ident,
-                navn: vurderteBarn.navn,
-                fødselsdato: vurderteBarn.fødselsdato,
-                vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
-                  return {
-                    begrunnelse: vurdering.begrunnelse,
-                    harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
-                    fraDato: getFraDato(vurdering.fraDato),
-                  };
-                }),
-              };
-            }),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingsversjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_BARNETILLEGG_KODE,
+            vurderingerForBarnetillegg: {
+              vurderteBarn: data.barnetilleggVurderinger.map((vurderteBarn) => {
+                return {
+                  ident: vurderteBarn.ident,
+                  navn: vurderteBarn.navn,
+                  fødselsdato: vurderteBarn.fødselsdato,
+                  vurderinger: vurderteBarn.vurderinger.map((vurdering) => {
+                    return {
+                      begrunnelse: vurdering.begrunnelse,
+                      harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
+                      fraDato: getFraDato(vurdering.fraDato),
+                    };
+                  }),
+                };
+              }),
+            },
           },
+          referanse: behandlingsReferanse,
         },
-        referanse: behandlingsReferanse,
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   }
 
@@ -141,6 +129,16 @@ export const BarnetilleggVurdering = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdertAv}
       vurdertAutomatisk={!harAvklaringsbehov}
+      readOnly={readOnly}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() =>
+          form.reset(
+            mapVurderingToDraftFormFields(grunnlag.vurderteBarn, grunnlag.barnSomTrengerVurdering, behandlingPersonInfo)
+          )
+        )
+      }
     >
       <div className={'flex-column'}>
         {harAvklaringsbehov && (
@@ -186,3 +184,36 @@ export const BarnetilleggVurdering = ({
     </VilkRskortMedFormOgMellomlagring>
   );
 };
+
+function mapVurderingToDraftFormFields(
+  vurderteBarnArray: BarnetilleggGrunnlag['vurderteBarn'],
+  barnSomTrengerVurderingArray: BarnetilleggGrunnlag['barnSomTrengerVurdering'],
+  behandlingPersonInfo: BehandlingPersoninfo
+): DraftFormFields {
+  const vurderteBarn: BarneTilleggVurdering[] = vurderteBarnArray.map((barn) => {
+    const navn = barn.navn || barn.ident || 'Ukjent';
+    return {
+      ident: barn.ident,
+      navn: barn.ident ? behandlingPersonInfo?.info[barn.ident] : navn,
+      fødselsdato: barn.fødselsdato,
+      vurderinger: barn.vurderinger.map((value) => {
+        return {
+          begrunnelse: value.begrunnelse,
+          harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
+          fraDato: formaterDatoForFrontend(value.fraDato),
+        };
+      }),
+    };
+  });
+
+  const barnSomTrengerVurdering: BarneTilleggVurdering[] = barnSomTrengerVurderingArray.map((barn) => {
+    return {
+      ident: barn?.ident?.identifikator,
+      navn: barn.navn || (barn.ident?.aktivIdent ? behandlingPersonInfo?.info[barn.ident.identifikator] : 'Ukjent'),
+      vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
+      fødselsdato: barn.fodselsDato,
+    };
+  });
+
+  return { barnetilleggVurderinger: [...vurderteBarn, ...barnSomTrengerVurdering].flat() };
+}

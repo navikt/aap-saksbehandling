@@ -11,7 +11,7 @@ import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkRskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
@@ -46,7 +46,7 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
     useLøsBehovOgGåTilNesteSteg('FASTSETT_UTTAK');
 
   return (
-    <VilkRskortMedForm
+    <VilkårskortMedForm
       heading="Underveis"
       steg={'FASTSETT_UTTAK'}
       vilkårTilhørerNavKontor={true}
@@ -91,7 +91,7 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
       </div>
-    </VilkRskortMedForm>
+    </VilkårskortMedForm>
   );
 };
 

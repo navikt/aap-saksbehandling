@@ -30,7 +30,7 @@ export interface VilkårsKortMedFormProps {
   kvalitetssikretAv?: VurdertAvAnsatt;
 }
 
-export const VilkRskortMedForm = ({
+export const VilkårskortMedForm = ({
   heading,
   steg,
   children,

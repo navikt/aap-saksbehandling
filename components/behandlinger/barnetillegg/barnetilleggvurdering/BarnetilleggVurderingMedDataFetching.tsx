@@ -2,9 +2,11 @@ import { BarnetilleggVurdering } from 'components/behandlinger/barnetillegg/barn
 import {
   hentBarnetilleggGrunnlag,
   hentBehandlingPersoninfo,
+  hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { Behovstype } from 'lib/utils/form';
 
 type Props = {
   behandlingsreferanse: string;
@@ -19,8 +21,12 @@ export const BarnetilleggVurderingMedDataFetching = async ({
   readOnly,
   harAvklaringsbehov,
 }: Props) => {
-  const grunnlag = await hentBarnetilleggGrunnlag(behandlingsreferanse);
-  const behandlingPersoninfo = await hentBehandlingPersoninfo(behandlingsreferanse);
+  const [grunnlag, behandlingPersoninfo, initialMellomlagretVurdering] = await Promise.all([
+    hentBarnetilleggGrunnlag(behandlingsreferanse),
+    hentBehandlingPersoninfo(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_BARNETILLEGG_KODE),
+  ]);
+
   if (isError(grunnlag) || isError(behandlingPersoninfo)) {
     return <ApiException apiResponses={[grunnlag, behandlingPersoninfo]} />;
   }
@@ -32,6 +38,7 @@ export const BarnetilleggVurderingMedDataFetching = async ({
       behandlingsversjon={behandlingsversjon}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingPersonInfo={behandlingPersoninfo.data}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
 };

@@ -103,6 +103,7 @@ export const SettBehandllingPåVentModal = ({ behandlingsReferanse, reservert, i
         listenSSE();
       } else {
         setError(res.apiException.message);
+        setIsLoading(false);
       }
     })(event);
   };

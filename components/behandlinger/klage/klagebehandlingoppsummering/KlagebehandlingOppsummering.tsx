@@ -9,7 +9,7 @@ import { BodyShort, Detail, VStack } from '@navikt/ds-react';
 import { mapInnstillingTilTekst } from 'lib/utils/oversettelser';
 import styles from './KlagebehandlingOppsummering.module.css';
 import { FormEvent } from 'react';
-import { VilkRskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -75,7 +75,7 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
     });
   };
   return (
-    <VilkRskortMedForm
+    <VilkårskortMedForm
       heading={'Oppsummering av klagebehandlingen'}
       steg={'KLAGEBEHANDLING_OPPSUMMERING'}
       onSubmit={handleSubmit}
@@ -124,6 +124,6 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
           })}
         </VStack>
       )}
-    </VilkRskortMedForm>
+    </VilkårskortMedForm>
   );
 };

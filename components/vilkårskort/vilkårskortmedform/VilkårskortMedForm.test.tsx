@@ -2,7 +2,7 @@ import { describe, expect, it, vitest } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { ApiException } from 'lib/utils/api';
 import {
-  VilkRskortMedForm,
+  VilkårskortMedForm,
   VilkårsKortMedFormProps,
 } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
@@ -70,12 +70,12 @@ const defaultProps: VilkårsKortMedFormProps = {
 
 function renderComponent(skalViseBekreftKnapp?: boolean, error?: ApiException) {
   render(
-    <VilkRskortMedForm
+    <VilkårskortMedForm
       {...defaultProps}
       visBekreftKnapp={!!skalViseBekreftKnapp}
       løsBehovOgGåTilNesteStegError={error}
     >
       <span>Dette er innhold</span>
-    </VilkRskortMedForm>
+    </VilkårskortMedForm>
   );
 }
