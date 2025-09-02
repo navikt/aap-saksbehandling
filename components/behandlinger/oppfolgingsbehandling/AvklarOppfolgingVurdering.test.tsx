@@ -1,99 +1,51 @@
-import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from 'lib/test/CustomRender';
-import { SvarFraAndreinstans } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstans';
-import { MellomlagretVurderingResponse, SvarFraAndreinstansGrunnlag } from 'lib/types/types';
-import { Behovstype } from 'lib/utils/form';
-import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
-import { userEvent } from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { AvklarOppfolgingsoppgaveGrunnlagResponse, MellomlagretVurderingResponse } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
+import { render, screen } from 'lib/test/CustomRender';
+import { FetchResponse } from 'lib/utils/api';
+import { AvklaroppfolgingVurdering } from 'components/behandlinger/oppfolgingsbehandling/AvklarOppfolgingVurdering';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
-describe('Svar fra andreinstans', () => {
-  it('Skal ha en overskrift', () => {
-    render(<SvarFraAndreinstans readOnly={false} behandlingVersjon={0} />);
-
-    const heading = screen.getByText('Vurder konsekvens av svar fra Nav Klageinstans');
-    expect(heading).toBeVisible();
-  });
-
-  it('Skal vise type svar og begrunnelse for feilregistrering', () => {
-    render(
-      <SvarFraAndreinstans
-        readOnly={false}
-        behandlingVersjon={0}
-        grunnlag={{
-          svarFraAndreinstans: {
-            type: 'BEHANDLING_FEILREGISTRERT',
-            utfall: null,
-            feilregistrertBegrunnelse: 'Dette er en begrunnelse for feilregistrering.',
-          },
-          harTilgangTilÅSaksbehandle: true,
-        }}
-      />
-    );
-    const type = screen.getByText('Behandling feilregistrert');
-    const begrunnelse = screen.getByText('Dette er en begrunnelse for feilregistrering.');
-    expect(type).toBeVisible();
-    expect(begrunnelse).toBeVisible();
-  });
-
-  it('Skal vise type svar og utfall for klagebehandling', () => {
-    render(
-      <SvarFraAndreinstans
-        readOnly={false}
-        behandlingVersjon={0}
-        grunnlag={{
-          svarFraAndreinstans: {
-            type: 'KLAGEBEHANDLING_AVSLUTTET',
-            utfall: 'AVVIST',
-          },
-          harTilgangTilÅSaksbehandle: true,
-        }}
-      />
-    );
-    const type = screen.getByText('Klagebehandling avsluttet');
-    const utfall = screen.getByText('Avvist');
-    expect(type).toBeVisible();
-    expect(utfall).toBeVisible();
-  });
-});
-
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
-      avklaringsbehovkode: Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS,
+      avklaringsbehovkode: Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY,
       behandlingId: { id: 1 },
-      data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret"}',
+      data: '{"årsak":"Dette er min vurdering som er mellomlagret"}',
       vurdertDato: '2025-08-21T12:00:00.000',
       vurdertAv: 'Jan T. Loven',
     },
   };
 
-  const grunnlagMedVurdering: SvarFraAndreinstansGrunnlag = {
-    harTilgangTilÅSaksbehandle: true,
-    gjeldendeVurdering: {
-      begrunnelse: 'Dette er min vurdering som er bekreftet',
-      konsekvens: 'OMGJØRING',
-      vilkårSomOmgjøres: [],
+  const grunnlagMedVurdering: AvklarOppfolgingsoppgaveGrunnlagResponse = {
+    datoForOppfølging: '2025-09-03',
+    hvaSkalFølgesOpp: 'Masse greier',
+    hvemSkalFølgeOpp: 'NasjonalEnhet',
+    grunnlag: {
+      årsak: 'Dette er min vurdering som er bekreftet',
+      konsekvensAvOppfølging: 'OPPRETT_VURDERINGSBEHOV',
+      opplysningerTilRevurdering: [],
       vurdertAv: '',
     },
-    svarFraAndreinstans: {
-      avsluttetTidspunkt: undefined,
-      feilregistrertBegrunnelse: undefined,
-      opprettetTidspunkt: undefined,
-      type: 'BEHANDLING_FEILREGISTRERT',
-      utfall: undefined,
-    },
+  };
+
+  const grunnlagUtenVurdering: AvklarOppfolgingsoppgaveGrunnlagResponse = {
+    datoForOppfølging: '2025-09-03',
+    hvaSkalFølgesOpp: 'Masse greier',
+    hvemSkalFølgeOpp: 'NasjonalEnhet',
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
-      <SvarFraAndreinstans
+      <AvklaroppfolgingVurdering
         readOnly={false}
         behandlingVersjon={0}
+        grunnlag={grunnlagUtenVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -102,8 +54,11 @@ describe('mellomlagring', () => {
   });
 
   it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-    render(<SvarFraAndreinstans behandlingVersjon={0} readOnly={false} />);
-    await user.type(screen.getByRole('textbox', { name: 'Kommentar' }), 'Her har jeg begynt å skrive en vurdering..');
+    render(<AvklaroppfolgingVurdering grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+    await user.type(
+      screen.getByRole('textbox', { name: 'Hva er årsaken?' }),
+      'Her har jeg begynt å skrive en vurdering..'
+    );
     expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
 
     const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
@@ -121,7 +76,8 @@ describe('mellomlagring', () => {
 
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
-      <SvarFraAndreinstans
+      <AvklaroppfolgingVurdering
+        grunnlag={grunnlagUtenVurdering}
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -141,7 +97,7 @@ describe('mellomlagring', () => {
 
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
-      <SvarFraAndreinstans
+      <AvklaroppfolgingVurdering
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagMedVurdering}
@@ -150,17 +106,17 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Kommentar',
+      name: 'Hva er årsaken?',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-    render(<SvarFraAndreinstans behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
+    render(<AvklaroppfolgingVurdering behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Kommentar',
+      name: 'Hva er årsaken?',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -168,16 +124,17 @@ describe('mellomlagring', () => {
 
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <SvarFraAndreinstans
+      <AvklaroppfolgingVurdering
+        grunnlag={grunnlagUtenVurdering}
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'Kommentar' }), ' her er ekstra tekst');
+    await user.type(screen.getByRole('textbox', { name: 'Hva er årsaken?' }), ' her er ekstra tekst');
 
-    expect(screen.getByRole('textbox', { name: 'Kommentar' })).toHaveValue(
+    expect(screen.getByRole('textbox', { name: 'Hva er årsaken?' })).toHaveValue(
       'Dette er min vurdering som er mellomlagret her er ekstra tekst'
     );
 
@@ -185,12 +142,12 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Kommentar' })).toHaveValue('');
+    expect(screen.getByRole('textbox', { name: 'Hva er årsaken?' })).toHaveValue('');
   });
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <SvarFraAndreinstans
+      <AvklaroppfolgingVurdering
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -198,9 +155,9 @@ describe('mellomlagring', () => {
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'Kommentar' }), ' her er ekstra tekst');
+    await user.type(screen.getByRole('textbox', { name: 'Hva er årsaken?' }), ' her er ekstra tekst');
 
-    expect(screen.getByRole('textbox', { name: 'Kommentar' })).toHaveValue(
+    expect(screen.getByRole('textbox', { name: 'Hva er årsaken?' })).toHaveValue(
       'Dette er min vurdering som er mellomlagret her er ekstra tekst'
     );
 
@@ -208,12 +165,14 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Kommentar' })).toHaveValue('Dette er min vurdering som er bekreftet');
+    expect(screen.getByRole('textbox', { name: 'Hva er årsaken?' })).toHaveValue(
+      'Dette er min vurdering som er bekreftet'
+    );
   });
 
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
     render(
-      <SvarFraAndreinstans
+      <AvklaroppfolgingVurdering
         behandlingVersjon={0}
         readOnly={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
