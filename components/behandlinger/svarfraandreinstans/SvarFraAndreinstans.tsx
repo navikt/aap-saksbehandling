@@ -1,6 +1,6 @@
 'use client';
 
-import { Hjemmel, SvarFraAndreinstansGrunnlag, SvarKonsekvens } from 'lib/types/types';
+import { Hjemmel, MellomlagretVurdering, SvarFraAndreinstansGrunnlag, SvarKonsekvens } from 'lib/types/types';
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
 import { useConfigForm } from 'components/form/FormHook';
@@ -11,11 +11,13 @@ import { Behovstype } from 'lib/utils/form';
 import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap } from 'lib/utils/hjemmel';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormField } from 'components/form/FormField';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   grunnlag?: SvarFraAndreinstansGrunnlag;
   behandlingVersjon: number;
   readOnly?: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -24,14 +26,23 @@ interface FormFields {
   vilkårSomSkalOmgjøres: Hjemmel[];
 }
 
-export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
-  const svarType = grunnlag?.svarFraAndreinstans.type;
-  const utfall = grunnlag?.svarFraAndreinstans.utfall;
-  const feilregistrertBegrunnelse = grunnlag?.svarFraAndreinstans.feilregistrertBegrunnelse;
+type DraftFormFields = Partial<FormFields>;
 
+export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, initialMellomlagretVurdering }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SVAR_FRA_ANDREINSTANS');
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.gjeldendeVurdering);
+
+  const svarType = grunnlag?.svarFraAndreinstans.type;
+  const utfall = grunnlag?.svarFraAndreinstans.utfall;
+  const feilregistrertBegrunnelse = grunnlag?.svarFraAndreinstans.feilregistrertBegrunnelse;
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -39,7 +50,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon }: P
         type: 'textarea',
         label: 'Kommentar',
         rules: { required: 'Du må skrive en kommentar' },
-        defaultValue: grunnlag?.gjeldendeVurdering?.begrunnelse,
+        defaultValue: defaultValue.begrunnelse,
       },
       konsekvens: {
         type: 'radio',
@@ -50,7 +61,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon }: P
           { value: 'INGENTING', label: 'Vedtak opprettholdes / ingen endring' },
           { value: 'BEHANDLE_PÅ_NYTT', label: 'Klage må vurderes på nytt' },
         ],
-        defaultValue: grunnlag?.gjeldendeVurdering?.konsekvens,
+        defaultValue: defaultValue.konsekvens,
       },
       vilkårSomSkalOmgjøres: {
         type: 'combobox_multiple',
@@ -67,27 +78,30 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon }: P
           },
         },
         options: hjemmelalternativer,
-        defaultValue: grunnlag?.gjeldendeVurdering?.vilkårSomOmgjøres,
+        defaultValue: defaultValue.vilkårSomSkalOmgjøres,
       },
     },
     { readOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS,
-          svarFraAndreinstansVurdering: {
-            begrunnelse: data.begrunnelse,
-            konsekvens: data.konsekvens,
-            vilkårSomOmgjøres: data.konsekvens == 'OMGJØRING' ? data.vilkårSomSkalOmgjøres : [],
+    form.handleSubmit(
+      (data) => {
+        løsBehovOgGåTilNesteSteg({
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS,
+            svarFraAndreinstansVurdering: {
+              begrunnelse: data.begrunnelse,
+              konsekvens: data.konsekvens,
+              vilkårSomOmgjøres: data.konsekvens == 'OMGJØRING' ? data.vilkårSomSkalOmgjøres : [],
+            },
           },
-        },
-        referanse: behandlingsreferanse,
-      });
-    })(event);
+          referanse: behandlingsreferanse,
+        });
+      },
+      () => nullstillMellomlagretVurdering()
+    )(event);
   };
 
   const konsekvens = form.watch('konsekvens');
@@ -102,6 +116,18 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon }: P
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
+      readOnly={readOnly}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() =>
+          form.reset(
+            grunnlag?.gjeldendeVurdering
+              ? mapVurderingToDraftFormFields(grunnlag.gjeldendeVurdering)
+              : emptyDraftFormFields()
+          )
+        )
+      }
     >
       <VStack gap={'4'}>
         {svarType && (
@@ -129,3 +155,19 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon }: P
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(vurdering: SvarFraAndreinstansGrunnlag['gjeldendeVurdering']): DraftFormFields {
+  return {
+    begrunnelse: vurdering?.begrunnelse,
+    konsekvens: vurdering?.konsekvens,
+    vilkårSomSkalOmgjøres: vurdering?.vilkårSomOmgjøres,
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return {
+    begrunnelse: '',
+    konsekvens: '' as SvarKonsekvens, // Vi caster denne da vi ikke ønsker å ødelegge typen på den i løs-behov
+    vilkårSomSkalOmgjøres: [],
+  };
+}
