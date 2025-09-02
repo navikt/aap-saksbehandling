@@ -106,6 +106,7 @@ export const Bistandsbehovutenovergang = ({
               begrunnelse: data.begrunnelse,
               erBehovForAktivBehandling: data.erBehovForAktivBehandling === JaEllerNei.Ja,
               erBehovForArbeidsrettetTiltak: data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja,
+              erBehovForAnnenOppfølging: data.erBehovForAnnenOppfølging === JaEllerNei.Ja,
             },
           },
           referanse: behandlingsReferanse,

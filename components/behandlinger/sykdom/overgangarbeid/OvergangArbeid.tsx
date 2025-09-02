@@ -62,7 +62,9 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
       virkningsdato: {
         type: 'textarea',
         label: virkningsdatoLabel,
-        defaultValue: grunnlag?.vurdering?.virkningsDato || undefined,
+        defaultValue:
+          (grunnlag?.vurdering?.virkningsDato && formaterDatoForFrontend(grunnlag?.vurdering?.virkningsDato)) ||
+          undefined,
         description: 'Bruker får AAP etter § 11-17 fra til',
         rules: { required: 'Du må velge virkningsdato for vurderingen' },
       },
@@ -120,11 +122,6 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
             <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-17" target="_blank">
               Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-17
             </Link>
-            <span> </span>
-            <Link href="https://lovdata.no" target="_blank">
-              {' '}
-              (lovdata.no)
-            </Link>
           </div>
         }
       />
@@ -166,7 +163,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
       },
       {
         label: virkningsdatoLabel,
-        value: vurdering.virkningsDato || '',
+        value: (vurdering.virkningsDato && formaterDatoForFrontend(vurdering.virkningsDato)) || '',
       },
     ];
   }
