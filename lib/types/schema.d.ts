@@ -10833,6 +10833,7 @@ export interface components {
       brukerHarBesluttet: boolean;
       brukerHarKvalitetssikret: boolean;
       kvalitetssikringReadOnly: boolean;
+      revurderingErKansellert: boolean;
       saksbehandlerReadOnly: boolean;
       /** @enum {string} */
       typeBehandling:
@@ -11747,7 +11748,6 @@ export interface components {
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      revurderingErKansellert?: boolean | null;
       saksnummer: string;
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'LØPENDE' | 'AVSLUTTET';

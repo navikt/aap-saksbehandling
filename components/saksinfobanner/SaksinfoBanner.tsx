@@ -1,13 +1,7 @@
 'use client';
 
 import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link } from '@navikt/ds-react';
-import {
-  DetaljertBehandling,
-  FlytGruppe,
-  SakPersoninfo,
-  SaksInfo as SaksInfoType,
-  TypeBehandling,
-} from 'lib/types/types';
+import { DetaljertBehandling, FlytGruppe, FlytVisning, SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
 import { ChevronDownIcon, ChevronRightIcon } from '@navikt/aksel-icons';
@@ -32,14 +26,13 @@ import { KansellerRevurderingModal } from './kansellerrevurderingmodal/Kanseller
 interface Props {
   personInformasjon: SakPersoninfo;
   sak: SaksInfoType;
-  typeBehandling?: TypeBehandling;
   referanse?: string;
   behandling?: DetaljertBehandling;
   oppgave?: Oppgave;
-  påVent?: boolean;
   brukerInformasjon?: BrukerInformasjon;
   brukerKanSaksbehandle?: boolean;
   flyt?: FlytGruppe[];
+  visning?: FlytVisning;
 }
 
 export const SaksinfoBanner = ({
@@ -48,11 +41,10 @@ export const SaksinfoBanner = ({
   referanse,
   behandling,
   oppgave,
-  påVent,
   brukerInformasjon,
-  typeBehandling,
   brukerKanSaksbehandle,
   flyt,
+  visning,
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
@@ -71,6 +63,7 @@ export const SaksinfoBanner = ({
   const trekkKlageSteg = flyt && flyt.find((f) => f.stegGruppe === 'TREKK_KLAGE');
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
 
+  const typeBehandling = visning?.typeBehandling;
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
   const behandlingErRevurdering = typeBehandling && typeBehandling === 'Revurdering';
   const behandlingErIkkeAvsluttet = behandling && behandling.status !== 'AVSLUTTET';
@@ -104,11 +97,11 @@ export const SaksinfoBanner = ({
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (oppgave?.reservertAv && !erReservertAvInnloggetBruker) {
       return { status: 'RESERVERT', label: `Reservert ${oppgave.reservertAv}` };
-    } else if (påVent === true) {
+    } else if (visning?.visVentekort) {
       return { status: 'PÅ_VENT', label: 'På vent' };
     } else if (sak.søknadErTrukket) {
       return { status: 'TRUKKET', label: 'Trukket' };
-    } else if (sak.revurderingErKansellert) {
+    } else if (visning?.revurderingErKansellert) {
       return { status: 'KANSELLERT', label: 'Kansellert' };
     }
   };
