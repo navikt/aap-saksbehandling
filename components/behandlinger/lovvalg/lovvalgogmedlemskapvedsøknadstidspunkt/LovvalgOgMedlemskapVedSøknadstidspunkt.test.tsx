@@ -1,7 +1,7 @@
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
-import { LovvalgOgMedlemskapVedSKnadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
+import { LovvalgOgMedlemskapVedSøknadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
 import { LovvalgMedlemskapGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
@@ -18,7 +18,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   describe('generelt', () => {
     it('Skal ha en overskrift', () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -31,7 +31,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal ha riktig overskrift ved overstyring', () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -46,7 +46,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   describe('felter', () => {
     it('Skal ha felt for begrunnelse', () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -59,7 +59,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal ha felt for lovvalg', () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -74,7 +74,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('skjuler felt for lovvalgsland hvis lovvalg ikke er Annet land med avtale', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -94,7 +94,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('viser felt for lovvalgsland hvis lovvalg er Annet land med avtale', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -115,7 +115,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -129,7 +129,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal vise feilmelding dersom feltet om lovvalg ikke er besvart', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -143,7 +143,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('viser felt medlemskapbegrunnelse og vurdering hvis Norge er valgt', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -166,7 +166,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('skjuler felt for medlemskapsbegrunnelse hvis lovvalgsland er Annet land med avtale', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -188,7 +188,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -206,7 +206,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal vise feilmelding dersom feltet om medlemskap ikke er besvart', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -249,7 +249,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -263,7 +263,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -292,7 +292,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -314,7 +314,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagMedVurdering}
@@ -331,7 +331,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagMedVurdering}
@@ -348,7 +348,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -375,7 +375,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagMedVurdering}
@@ -403,7 +403,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
       render(
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           readOnly={true}
           behandlingVersjon={0}
           grunnlag={grunnlagMedVurdering}
