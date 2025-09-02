@@ -1,10 +1,10 @@
 import { describe, expect, it, vitest } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { ApiException } from 'lib/utils/api';
 import {
-  VilkårsKortMedForm,
+  VilkårskortMedForm,
   VilkårsKortMedFormProps,
 } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
-import { ApiException } from 'lib/utils/api';
 
 describe('Vilkårskort med form', () => {
   it('skal ha en overskrift', () => {
@@ -53,94 +53,6 @@ describe('Vilkårskort med form', () => {
     const errorMessage = screen.getByText('Dette er en feil fra backend gjennom løs behov');
     expect(errorMessage).toBeVisible();
   });
-
-  it('Skal ha en knapp for å mellomlagre en vurdering dersom det har blitt sendt inn en lagre funksjon', () => {
-    render(<VilkårsKortMedForm {...defaultProps} onLagreMellomLagringClick={vitest.fn} />);
-    const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
-    expect(lagreUtkastKnapp).toBeVisible();
-  });
-
-  it('Skal ha en knapp for å slette en mellomlagret vurdering dersom det finnes en mellomlagret vurdering og det finnes en delete funksjon', () => {
-    render(
-      <VilkårsKortMedForm
-        {...defaultProps}
-        onLagreMellomLagringClick={vitest.fn}
-        onDeleteMellomlagringClick={vitest.fn}
-        mellomlagretVurdering={{
-          vurdertDato: '2025-08-21',
-          vurdertAv: 'Jan T. Loven',
-          data: '{begrunnelse: 12}',
-          avklaringsbehovkode: '5003',
-          behandlingId: { id: 1 },
-        }}
-      />
-    );
-
-    const slettUtkastKnapp = screen.getByRole('button', { name: 'Slett utkast' });
-    expect(slettUtkastKnapp).toBeVisible();
-  });
-
-  it('Skal vise hvem som har gjort mellomlagring hvis det finnes', () => {
-    render(
-      <VilkårsKortMedForm
-        {...defaultProps}
-        onLagreMellomLagringClick={vitest.fn}
-        onDeleteMellomlagringClick={vitest.fn}
-        mellomlagretVurdering={{
-          vurdertDato: '2025-08-21T12:00:00.000',
-          vurdertAv: 'Jan T. Loven',
-          data: '{begrunnelse: 12}',
-          avklaringsbehovkode: '5003',
-          behandlingId: { id: 1 },
-        }}
-      />
-    );
-
-    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
-    expect(tekst).toBeVisible();
-  });
-
-  it('Skal ikke vise hvem som har gjort mellomlagring hvis det er readOnly', () => {
-    render(
-      <VilkårsKortMedForm
-        {...defaultProps}
-        readOnly={true}
-        onLagreMellomLagringClick={vitest.fn}
-        onDeleteMellomlagringClick={vitest.fn}
-        mellomlagretVurdering={{
-          vurdertDato: '2025-08-21T12:00:00.000',
-          vurdertAv: 'Jan T. Loven',
-          data: '{begrunnelse: 12}',
-          avklaringsbehovkode: '5003',
-          behandlingId: { id: 1 },
-        }}
-      />
-    );
-
-    const tekst = screen.queryByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
-    expect(tekst).not.toBeInTheDocument();
-  });
-
-  it('Skal ikke vise knapp for å lagre mellomlagring hvis det er readOnly', () => {
-    render(
-      <VilkårsKortMedForm
-        {...defaultProps}
-        readOnly={true}
-        onLagreMellomLagringClick={vitest.fn}
-        onDeleteMellomlagringClick={vitest.fn}
-        mellomlagretVurdering={{
-          vurdertDato: '2025-08-21T12:00:00.000',
-          vurdertAv: 'Jan T. Loven',
-          data: '{begrunnelse: 12}',
-          avklaringsbehovkode: '5003',
-          behandlingId: { id: 1 },
-        }}
-      />
-    );
-
-    const knapp = screen.queryByRole('button', { name: 'Lagre utkast' });
-    expect(knapp).not.toBeInTheDocument();
-  });
 });
 
 const defaultProps: VilkårsKortMedFormProps = {
@@ -158,12 +70,12 @@ const defaultProps: VilkårsKortMedFormProps = {
 
 function renderComponent(skalViseBekreftKnapp?: boolean, error?: ApiException) {
   render(
-    <VilkårsKortMedForm
+    <VilkårskortMedForm
       {...defaultProps}
       visBekreftKnapp={!!skalViseBekreftKnapp}
       løsBehovOgGåTilNesteStegError={error}
     >
       <span>Dette er innhold</span>
-    </VilkårsKortMedForm>
+    </VilkårskortMedForm>
   );
 }

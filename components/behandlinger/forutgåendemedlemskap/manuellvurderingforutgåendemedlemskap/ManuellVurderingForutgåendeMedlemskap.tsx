@@ -11,7 +11,7 @@ import {
 } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
@@ -143,7 +143,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
   const harForutgåendeMedlemskap = form.watch('harForutgåendeMedlemskap');
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={heading}
       steg={'VURDER_MEDLEMSKAP'}
       onSubmit={handleSubmit}
@@ -178,7 +178,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
       {harForutgåendeMedlemskap === JaEllerNei.Nei && (
         <FormField form={form} formField={formFields.unntaksvilkår} className={'radio'} />
       )}
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

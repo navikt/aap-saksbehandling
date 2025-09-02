@@ -7,11 +7,11 @@ import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggå
 
 import styles from './ForeslåVedtak.module.css';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormEvent } from 'react';
 import { ForeslåVedtakGrunnlag } from 'lib/types/types';
 import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
 import { isProd } from 'lib/utils/environment';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -25,7 +25,7 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
     useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedForm
       heading="Foreslå vedtak"
       steg={'FORESLÅ_VEDTAK'}
       vilkårTilhørerNavKontor={false}
@@ -62,6 +62,6 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
       </div>
-    </VilkårsKortMedForm>
+    </VilkårskortMedForm>
   );
 };

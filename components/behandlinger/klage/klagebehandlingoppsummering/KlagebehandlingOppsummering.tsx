@@ -1,7 +1,6 @@
 'use client';
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { hjemmelMap } from 'lib/utils/hjemmel';
@@ -10,6 +9,7 @@ import { BodyShort, Detail, VStack } from '@navikt/ds-react';
 import { mapInnstillingTilTekst } from 'lib/utils/oversettelser';
 import styles from './KlagebehandlingOppsummering.module.css';
 import { FormEvent } from 'react';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -75,7 +75,7 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
     });
   };
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedForm
       heading={'Oppsummering av klagebehandlingen'}
       steg={'KLAGEBEHANDLING_OPPSUMMERING'}
       onSubmit={handleSubmit}
@@ -124,6 +124,6 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
           })}
         </VStack>
       )}
-    </VilkårsKortMedForm>
+    </VilkårskortMedForm>
   );
 };

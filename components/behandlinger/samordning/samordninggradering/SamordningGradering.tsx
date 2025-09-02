@@ -15,7 +15,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
 import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
 import { isNullOrUndefined } from 'lib/utils/validering';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
@@ -198,7 +198,7 @@ export const SamordningGradering = ({
           </Modal.Body>
         </Modal>
       )}
-      <VilkårsKortMedForm
+      <VilkårskortMedFormOgMellomlagring
         heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser"
         steg="SAMORDNING_GRADERING"
         onSubmit={handleSubmit}
@@ -278,7 +278,7 @@ export const SamordningGradering = ({
             </HStack>
           </VStack>
         )}
-      </VilkårsKortMedForm>
+      </VilkårskortMedFormOgMellomlagring>
     </>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
 import { MellomlagretVurdering, SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
@@ -85,7 +85,7 @@ export const SamordningTjenestePensjon = ({
   };
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'Refusjonskrav tjenestepensjon'}
       status={status}
       isLoading={isLoading}
@@ -139,7 +139,7 @@ export const SamordningTjenestePensjon = ({
 
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.skalEtterbetalingHoldesIgjen} horizontalRadio />
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

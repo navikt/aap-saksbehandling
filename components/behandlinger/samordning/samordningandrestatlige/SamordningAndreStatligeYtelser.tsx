@@ -15,7 +15,7 @@ import {
   SamordningAndreStatligeYtelserGrunnlag,
   SamordningAndreStatligeYtelserYtelse,
 } from 'lib/types/types';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
@@ -101,7 +101,7 @@ export const SamordningAndreStatligeYtelser = ({
   const skalViseBekreftKnapp = !readOnly && visYtelsesTabell;
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading="Andre ytelser til avregning"
       steg="SAMORDNING_ANDRE_STATLIGE_YTELSER"
       onSubmit={handleSubmit}
@@ -133,7 +133,7 @@ export const SamordningAndreStatligeYtelser = ({
           <AndreStatligeYtelserTabell form={form} readOnly={readOnly} />
         </VStack>
       )}
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

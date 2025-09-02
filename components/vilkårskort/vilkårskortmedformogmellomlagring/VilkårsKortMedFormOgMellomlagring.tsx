@@ -1,18 +1,18 @@
 'use client';
 
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { StegType, VurdertAvAnsatt } from 'lib/types/types';
+import { MellomlagretVurdering, StegType, VurdertAvAnsatt } from 'lib/types/types';
 import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/VilkårsKort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { isProd } from 'lib/utils/environment';
 
-export interface VilkårsKortMedFormProps {
+export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
   steg: StegType;
   children: ReactNode;
@@ -28,9 +28,12 @@ export interface VilkårsKortMedFormProps {
   vurdertAvAnsatt?: VurdertAvAnsatt;
   vurdertAutomatisk?: boolean;
   kvalitetssikretAv?: VurdertAvAnsatt;
+  onDeleteMellomlagringClick: () => void;
+  onLagreMellomLagringClick: () => void;
+  mellomlagretVurdering: MellomlagretVurdering | undefined;
 }
 
-export const VilkårskortMedForm = ({
+export const VilkårskortMedFormOgMellomlagring = ({
   heading,
   steg,
   children,
@@ -45,7 +48,11 @@ export const VilkårskortMedForm = ({
   vurdertAvAnsatt,
   vurdertAutomatisk = false,
   kvalitetssikretAv,
-}: VilkårsKortMedFormProps) => {
+  onDeleteMellomlagringClick,
+  onLagreMellomLagringClick,
+  mellomlagretVurdering,
+  readOnly,
+}: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
   const erAktivtSteg = flyt.aktivtSteg === steg;
@@ -74,8 +81,32 @@ export const VilkårskortMedForm = ({
               status={status}
             />
             <HStack justify={'space-between'} align={'end'}>
-              {visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}
+              <VStack gap={'4'}>
+                <HStack gap={'4'}>
+                  {visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}
 
+                  {!readOnly && onLagreMellomLagringClick && (
+                    <Button type={'button'} size={'small'} variant={'tertiary'} onClick={onLagreMellomLagringClick}>
+                      Lagre utkast
+                    </Button>
+                  )}
+                </HStack>
+
+                {!readOnly && mellomlagretVurdering && onDeleteMellomlagringClick && (
+                  <HStack align={'baseline'}>
+                    <Detail>{`Utkast lagret ${formaterDatoMedTidspunktForFrontend(mellomlagretVurdering.vurdertDato)} (${mellomlagretVurdering.vurdertAv})`}</Detail>
+                    <Button
+                      style={{ marginTop: '-5px', marginBottom: '-5px' }}
+                      type={'button'}
+                      size={'small'}
+                      variant={'tertiary'}
+                      onClick={onDeleteMellomlagringClick}
+                    >
+                      Slett utkast
+                    </Button>
+                  </HStack>
+                )}
+              </VStack>
               <VStack align={'baseline'}>
                 {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
                 {vurdertAvAnsatt && (
