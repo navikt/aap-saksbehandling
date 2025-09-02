@@ -5,10 +5,10 @@ import { MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
-import styles from 'components/vilkårskort/VilkårsKort.module.css';
+import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { isProd } from 'lib/utils/environment';
-import { VilkårsKortMedFormProps } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårsKortMedFormProps } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
 export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMedFormProps {
   onDeleteMellomlagringClick: () => void;
@@ -16,7 +16,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMed
   mellomlagretVurdering: MellomlagretVurdering | undefined;
 }
 
-export const VilkårskortMedFormOgMellomlagring = ({
+export const VilkRskortMedFormOgMellomlagring = ({
   heading,
   steg,
   children,

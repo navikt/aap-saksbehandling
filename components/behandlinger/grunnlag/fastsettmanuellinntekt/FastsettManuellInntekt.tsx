@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
+import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyShort, HStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
@@ -96,7 +96,7 @@ export const FastsettManuellInntekt = ({
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkRskortMedFormOgMellomlagring
       heading={'Pensjonsgivende inntekt mangler (§ 11-19)'}
       steg={'MANGLENDE_LIGNING'}
       onSubmit={handleSubmit}
@@ -135,7 +135,7 @@ export const FastsettManuellInntekt = ({
         <FormField form={form} formField={formFields.inntekt} className={'inntekt_input'} />
         <BodyShort>{inntektIgVerdi.toFixed(2)} G</BodyShort>
       </HStack>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkRskortMedFormOgMellomlagring>
   );
 };
 

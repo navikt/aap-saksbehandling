@@ -7,7 +7,7 @@ import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
+import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { MellomlagretVurdering, SamordningArbeidsgiverGrunnlag } from 'lib/types/types';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
@@ -95,7 +95,7 @@ export const SamordningArbeidsgiver = ({
   const skalViseBekreftKnapp = !readOnly;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkRskortMedFormOgMellomlagring
       heading="Ytelser fra arbeidsgiver (sluttpakke)"
       steg="SAMORDNING_ARBEIDSGIVER"
       onSubmit={handleSubmit}
@@ -148,7 +148,7 @@ export const SamordningArbeidsgiver = ({
           </HStack>
         </VStack>
       }
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkRskortMedFormOgMellomlagring>
   );
 };
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { VilkRskort } from 'components/vilkårskort/Vilkårskort';
 import { FatteVedtakGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
@@ -11,16 +11,16 @@ type Props = {
 export const FatteVedtak = ({ grunnlag }: Props) => {
   if (grunnlag.besluttetAv == null) {
     return (
-      <VilkårsKort heading={'Fatte vedtak'} steg={'FATTE_VEDTAK'}>
+      <VilkRskort heading={'Fatte vedtak'} steg={'FATTE_VEDTAK'}>
         Fullfør besluttersteget i høyre kolonne.
-      </VilkårsKort>
+      </VilkRskort>
     );
   }
 
   return (
-    <VilkårsKort heading={'Fatte vedtak'} steg={'FATTE_VEDTAK'}>
+    <VilkRskort heading={'Fatte vedtak'} steg={'FATTE_VEDTAK'}>
       Besluttet av {grunnlag.besluttetAv.navn} ({grunnlag.besluttetAv.kontor}),{' '}
       {formaterDatoForFrontend(grunnlag.besluttetAv.tidspunkt)}
-    </VilkårsKort>
+    </VilkRskort>
   );
 };

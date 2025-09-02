@@ -12,7 +12,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { format, parse } from 'date-fns';
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
+import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
@@ -86,7 +86,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
   }
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkRskortMedFormOgMellomlagring
       heading="Samordning med delvis uføre"
       steg="SAMORDNING_UFØRE"
       onSubmit={handleSubmit}
@@ -131,7 +131,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
         </VStack>
       )}
       <SamordningUføreTabell form={form} readOnly={readOnly} />
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkRskortMedFormOgMellomlagring>
   );
 };
 

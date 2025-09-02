@@ -1,7 +1,7 @@
 'use client';
 
 import { SvarFraAndreinstansGrunnlag, SvarFraAndreinstansVurdering } from 'lib/types/types';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { VilkRskort } from 'components/vilkårskort/Vilkårskort';
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
 import { hjemmelMap } from 'lib/utils/hjemmel';
@@ -22,7 +22,7 @@ const mapResultatTilTeskst = (vurdering: SvarFraAndreinstansVurdering): string =
 };
 
 export const KabalIverksettKonsekvens = ({ grunnlag }: Props) => (
-  <VilkårsKort heading={'Oppsummering'} steg={'IVERKSETT_KONSEKVENS'}>
+  <VilkRskort heading={'Oppsummering'} steg={'IVERKSETT_KONSEKVENS'}>
     <VStack gap={'4'}>
       <HStack gap="2">
         <BodyShort weight="semibold">Svartype fra Kabal:</BodyShort>
@@ -60,5 +60,5 @@ export const KabalIverksettKonsekvens = ({ grunnlag }: Props) => (
         </HStack>
       )}
     </VStack>
-  </VilkårsKort>
+  </VilkRskort>
 );

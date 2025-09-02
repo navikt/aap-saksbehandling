@@ -6,7 +6,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvklarOppfolgingsoppgaveGrunnlagResponse, MellomlagretVurdering, Vurderingsbehov } from 'lib/types/types';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
+import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormEvent } from 'react';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { BodyShort, Label } from '@navikt/ds-react';
@@ -101,7 +101,7 @@ export const AvklaroppfolgingVurdering = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkRskortMedFormOgMellomlagring
       heading={'Avklar oppfølgingsoppgave'}
       steg="AVKLAR_OPPFØLGING"
       vilkårTilhørerNavKontor={true}
@@ -136,7 +136,7 @@ export const AvklaroppfolgingVurdering = ({
           <FormField form={form} formField={formFields.årsak} />
         </>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkRskortMedFormOgMellomlagring>
   );
 };
 

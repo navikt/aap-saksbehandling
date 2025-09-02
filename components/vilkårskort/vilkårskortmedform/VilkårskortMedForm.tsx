@@ -8,7 +8,7 @@ import { ApiException } from 'lib/utils/api';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
-import styles from 'components/vilkårskort/VilkårsKort.module.css';
+import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { isProd } from 'lib/utils/environment';
 
@@ -30,7 +30,7 @@ export interface VilkårsKortMedFormProps {
   kvalitetssikretAv?: VurdertAvAnsatt;
 }
 
-export const VilkårskortMedForm = ({
+export const VilkRskortMedForm = ({
   heading,
   steg,
   children,

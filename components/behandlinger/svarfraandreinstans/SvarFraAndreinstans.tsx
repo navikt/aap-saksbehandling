@@ -9,7 +9,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap } from 'lib/utils/hjemmel';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
+import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormField } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
@@ -107,7 +107,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
   const konsekvens = form.watch('konsekvens');
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkRskortMedFormOgMellomlagring
       heading={'Vurder konsekvens av svar fra Nav Klageinstans'}
       steg={'SVAR_FRA_ANDREINSTANS'}
       onSubmit={handleSubmit}
@@ -152,7 +152,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
         <FormField form={form} formField={formFields.konsekvens} />
         {konsekvens === 'OMGJØRING' && <FormField form={form} formField={formFields.vilkårSomSkalOmgjøres} />}
       </VStack>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkRskortMedFormOgMellomlagring>
   );
 };
 

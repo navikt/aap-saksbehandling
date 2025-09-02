@@ -14,7 +14,7 @@ import { FormEvent } from 'react';
 
 import styles from './BarnetilleggVurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
+import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingsversjon: number;
@@ -130,7 +130,7 @@ export const BarnetilleggVurdering = ({
   const erFolkeregistrerteBarn = grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkRskortMedFormOgMellomlagring
       heading={'§ 11-20 tredje og fjerde ledd barnetillegg '}
       steg={'BARNETILLEGG'}
       onSubmit={handleSubmit}
@@ -183,6 +183,6 @@ export const BarnetilleggVurdering = ({
           </div>
         )}
       </div>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkRskortMedFormOgMellomlagring>
   );
 };

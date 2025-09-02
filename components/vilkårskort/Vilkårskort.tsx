@@ -2,7 +2,7 @@
 
 import { ExpansionCard } from '@navikt/ds-react';
 import { ReactNode } from 'react';
-import styles from './VilkårsKort.module.css';
+import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { StegType } from 'lib/types/types';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
   defaultOpen?: boolean;
 }
 
-export const VilkårsKort = ({ heading, steg, children, defaultOpen = true }: Props) => {
+export const VilkRskort = ({ heading, steg, children, defaultOpen = true }: Props) => {
   return (
     <ExpansionCard
       aria-label={heading}

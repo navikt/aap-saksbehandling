@@ -1,9 +1,9 @@
 import { describe, expect, it, vitest } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import {
-  VilkårskortMedFormOgMellomlagring,
+  VilkRskortMedFormOgMellomlagring,
   VilkårsKortMedFormOgMellomlagringProps,
-} from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
+} from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { ApiException } from 'lib/utils/api';
 
 describe('Vilkårskort med form', () => {
@@ -55,14 +55,14 @@ describe('Vilkårskort med form', () => {
   });
 
   it('Skal ha en knapp for å mellomlagre en vurdering dersom det har blitt sendt inn en lagre funksjon', () => {
-    render(<VilkårskortMedFormOgMellomlagring {...defaultProps} onLagreMellomLagringClick={vitest.fn} />);
+    render(<VilkRskortMedFormOgMellomlagring {...defaultProps} onLagreMellomLagringClick={vitest.fn} />);
     const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
     expect(lagreUtkastKnapp).toBeVisible();
   });
 
   it('Skal ha en knapp for å slette en mellomlagret vurdering dersom det finnes en mellomlagret vurdering og det finnes en delete funksjon', () => {
     render(
-      <VilkårskortMedFormOgMellomlagring
+      <VilkRskortMedFormOgMellomlagring
         {...defaultProps}
         onLagreMellomLagringClick={vitest.fn}
         onDeleteMellomlagringClick={vitest.fn}
@@ -82,7 +82,7 @@ describe('Vilkårskort med form', () => {
 
   it('Skal vise hvem som har gjort mellomlagring hvis det finnes', () => {
     render(
-      <VilkårskortMedFormOgMellomlagring
+      <VilkRskortMedFormOgMellomlagring
         {...defaultProps}
         onLagreMellomLagringClick={vitest.fn}
         onDeleteMellomlagringClick={vitest.fn}
@@ -102,7 +102,7 @@ describe('Vilkårskort med form', () => {
 
   it('Skal ikke vise hvem som har gjort mellomlagring hvis det er readOnly', () => {
     render(
-      <VilkårskortMedFormOgMellomlagring
+      <VilkRskortMedFormOgMellomlagring
         {...defaultProps}
         readOnly={true}
         onLagreMellomLagringClick={vitest.fn}
@@ -123,7 +123,7 @@ describe('Vilkårskort med form', () => {
 
   it('Skal ikke vise knapp for å lagre mellomlagring hvis det er readOnly', () => {
     render(
-      <VilkårskortMedFormOgMellomlagring
+      <VilkRskortMedFormOgMellomlagring
         {...defaultProps}
         readOnly={true}
         onLagreMellomLagringClick={vitest.fn}
@@ -161,12 +161,12 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
 
 function renderComponent(skalViseBekreftKnapp?: boolean, error?: ApiException) {
   render(
-    <VilkårskortMedFormOgMellomlagring
+    <VilkRskortMedFormOgMellomlagring
       {...defaultProps}
       visBekreftKnapp={!!skalViseBekreftKnapp}
       løsBehovOgGåTilNesteStegError={error}
     >
       <span>Dette er innhold</span>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkRskortMedFormOgMellomlagring>
   );
 }

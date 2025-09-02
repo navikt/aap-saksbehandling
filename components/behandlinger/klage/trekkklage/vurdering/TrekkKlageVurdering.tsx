@@ -5,7 +5,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { MellomlagretVurdering, TrekkKlageGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
+import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormEvent } from 'react';
 import { FormField } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -93,7 +93,7 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
   const harValgtAtKlageTrekkes = form.watch('skalTrekkes') === JaEllerNei.Ja;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkRskortMedFormOgMellomlagring
       heading={'Trekk klage'}
       steg={'TREKK_KLAGE'}
       onSubmit={handleSubmit}
@@ -114,7 +114,7 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.skalTrekkes} horizontalRadio />
       {harValgtAtKlageTrekkes && <FormField form={form} formField={formFields.hvorforTrekkes} />}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkRskortMedFormOgMellomlagring>
   );
 };
 

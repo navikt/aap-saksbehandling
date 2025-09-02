@@ -13,7 +13,7 @@ import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårsKortMedFormOgMellomlagring';
+import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -167,7 +167,7 @@ export const Bistandsbehov = ({
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkRskortMedFormOgMellomlagring
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
       steg={'VURDER_BISTANDSBEHOV'}
       onSubmit={handleSubmit}
@@ -257,7 +257,7 @@ export const Bistandsbehov = ({
           )}
         </VStack>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkRskortMedFormOgMellomlagring>
   );
 
   function mapVurderingToDraftFormFields(vurdering?: BistandsbehovVurdering): DraftFormFields {
