@@ -18,7 +18,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
         behandlingVersjon={1}
         readOnly={false}
         automatiskVurdering={automatiskLovvalgOgMedlemskapVurdering}
-        stegSomSkalVises={[]}
+        harAvklaringsbehov={false}
         initialMellomlagretVurdering={{
           data: '{"lovvalgBegrunnelse":"Dette er min vurdering som er mellomlagret"}',
           vurdertAv: 'Ane Rikke',
@@ -47,7 +47,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
         behandlingVersjon={1}
         readOnly={false}
         automatiskVurdering={automatiskLovvalgOgMedlemskapVurdering}
-        stegSomSkalVises={[]}
+        harAvklaringsbehov={false}
         visOverstyrKnapp={true}
         harYrkesskade={true}
       >

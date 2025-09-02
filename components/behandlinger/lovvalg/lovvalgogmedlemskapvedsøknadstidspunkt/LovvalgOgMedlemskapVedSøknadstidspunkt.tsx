@@ -67,7 +67,7 @@ function mapGrunnlagTilMedlemAvFolketrygdenVedSøknadstidspunkt(isMedlem?: boole
   return undefined;
 }
 
-export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
+export const LovvalgOgMedlemskapVedSøknadstidspunkt = ({
   grunnlag,
   readOnly,
   behandlingVersjon,

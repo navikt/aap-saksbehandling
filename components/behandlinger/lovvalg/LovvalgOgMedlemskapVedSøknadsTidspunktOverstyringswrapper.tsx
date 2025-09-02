@@ -1,16 +1,16 @@
 'use client';
 
-import { AutomatiskLovvalgOgMedlemskapVurdering, MellomlagretVurdering, StegType } from 'lib/types/types';
+import { AutomatiskLovvalgOgMedlemskapVurdering, MellomlagretVurdering } from 'lib/types/types';
 import { ReactNode, useState } from 'react';
 import { AutomatiskVurderingAvLovvalgOgMedlemskap } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/AutomatiskVurderingAvLovvalgOgMedlemskap';
-import { LovvalgOgMedlemskapVedSKnadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
+import { LovvalgOgMedlemskapVedSøknadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
 
 interface Props {
   behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
   automatiskVurdering: AutomatiskLovvalgOgMedlemskapVurdering;
-  stegSomSkalVises: Array<StegType>;
+  harAvklaringsbehov: boolean;
   visOverstyrKnapp?: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   children: ReactNode;
@@ -19,7 +19,7 @@ interface Props {
 export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
   children,
   automatiskVurdering,
-  stegSomSkalVises,
+  harAvklaringsbehov,
   behandlingVersjon,
   readOnly,
   visOverstyrKnapp,
@@ -36,8 +36,8 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
         visOverstyringsBehov={overstyring}
       />
       {children}
-      {overstyring && stegSomSkalVises.length === 0 && (
-        <LovvalgOgMedlemskapVedSKnadstidspunkt
+      {overstyring && !harAvklaringsbehov && (
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
           behandlingVersjon={behandlingVersjon}
           readOnly={readOnly}
           overstyring={true}

@@ -6,7 +6,7 @@ import {
   hentMellomlagring,
   hentYrkesskadeVurderingGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegSomSkalVises } from 'lib/utils/steg';
+import { getStegData, skalViseSteg } from 'lib/utils/steg';
 import { ForutgåendemedlemskapOverstyringswrapper } from 'components/behandlinger/forutgåendemedlemskap/ForutgåendemedlemskapOverstyringswrapper';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
@@ -25,19 +25,19 @@ export const ForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) =>
       hentYrkesskadeVurderingGrunnlag(behandlingsReferanse),
       hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP),
     ]);
+
   if (isError(grunnlag) || isError(automatiskVurdering) || isError(flyt) || isError(yrkesskadeVurderingGrunnlag)) {
     return <ApiException apiResponses={[grunnlag, automatiskVurdering, flyt]} />;
   }
 
-  const stegSomSkalVises = getStegSomSkalVises('MEDLEMSKAP', flyt.data);
-
   const behandlingsVersjon = flyt.data.behandlingVersjon;
-  const saksBehandlerReadOnly = flyt.data.visning.saksbehandlerReadOnly;
   const harYrkesskade = yrkesskadeVurderingGrunnlag.data.yrkesskadeVurdering?.erÅrsakssammenheng === true;
+  const vurderMedlemskapSteg = getStegData('MEDLEMSKAP', 'VURDER_MEDLEMSKAP', flyt.data);
+  const readOnly = vurderMedlemskapSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
 
-  const readOnly = saksBehandlerReadOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const visManuellVurdering = skalViseSteg(vurderMedlemskapSteg, grunnlag.data.vurdering != null);
   const visOverstyrKnapp =
-    automatiskVurdering.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0 && !readOnly;
+    automatiskVurdering.data.kanBehandlesAutomatisk && !readOnly && vurderMedlemskapSteg.avklaringsbehov.length === 0;
 
   return (
     <GruppeSteg
@@ -52,12 +52,12 @@ export const ForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) =>
         behandlingVersjon={behandlingsVersjon}
         readOnly={readOnly}
         automatiskVurdering={automatiskVurdering.data}
-        stegSomSkalVises={stegSomSkalVises}
+        harAvklaringsbehov={vurderMedlemskapSteg.avklaringsbehov.length > 0}
         visOverstyrKnapp={visOverstyrKnapp}
         harYrkesskade={harYrkesskade}
         initialMellomlagretVurdering={initialMellomlagretVurdering}
       >
-        {stegSomSkalVises.includes('VURDER_MEDLEMSKAP') && (
+        {visManuellVurdering && (
           <ManuellVurderingForutgåendeMedlemskap
             grunnlag={grunnlag.data}
             behandlingVersjon={behandlingsVersjon}
