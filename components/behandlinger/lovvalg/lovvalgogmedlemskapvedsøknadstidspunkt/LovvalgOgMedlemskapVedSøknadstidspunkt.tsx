@@ -13,7 +13,7 @@ import {
 } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
@@ -171,7 +171,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
   const historiskeManuelleVurderinger = grunnlag?.historiskeManuelleVurderinger;
 
   return (
-    <VilkRskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagring
       heading={heading}
       steg={'VURDER_LOVVALG'}
       onSubmit={handleSubmit}
@@ -212,7 +212,7 @@ export const LovvalgOgMedlemskapVedSKnadstidspunkt = ({
           <FormField form={form} formField={formFields.medlemAvFolkeTrygdenVedSøknadstidspunkt} horizontalRadio />
         </>
       )}
-    </VilkRskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagring>
   );
 
   function mapVurderingToDraftFormFields(vurdering?: LovvalgMedlemskapGrunnlag['vurdering']): DraftFormFields {

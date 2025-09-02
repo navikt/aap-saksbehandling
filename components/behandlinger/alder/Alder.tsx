@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkRskort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { CheckmarkIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { BodyShort, Detail, HStack, Label, Table, VStack } from '@navikt/ds-react';
@@ -21,7 +21,7 @@ export const Alder = ({ grunnlag }: Props) => {
   );
 
   return (
-    <VilkRskort heading={'§ 11-4 Alder'} steg={'VURDER_ALDER'}>
+    <VilkårsKort heading={'§ 11-4 Alder'} steg={'VURDER_ALDER'}>
       <VStack gap={'4'}>
         <div className={'flex-column'}>
           <div>
@@ -84,7 +84,7 @@ export const Alder = ({ grunnlag }: Props) => {
           <Detail>Vurdert automatisk</Detail>
         </HStack>
       </VStack>
-    </VilkRskort>
+    </VilkårsKort>
   );
 };
 

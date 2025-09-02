@@ -21,7 +21,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
@@ -110,7 +110,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
   const skalViseBekreftKnapp = !readOnly && arbeidsevneVurderinger.length > 0;
 
   return (
-    <VilkRskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet'}
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
@@ -211,7 +211,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
           </Button>
         </div>
       )}
-    </VilkRskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

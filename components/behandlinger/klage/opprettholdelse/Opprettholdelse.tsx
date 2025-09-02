@@ -5,7 +5,7 @@ import { isError } from 'lib/utils/api';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hjemmelMap } from 'lib/utils/hjemmel';
 import { BehandlingFlytOgTilstand, Klageresultat } from 'lib/types/types';
-import { VilkRskort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 
 interface Props {
   behandlingsreferanse: string;
@@ -31,11 +31,11 @@ export const Opprettholdelse = async ({ behandlingsreferanse }: Props) => {
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>
-        <VilkRskort steg={'OPPRETTHOLDELSE'} heading={'Opprettholdelse'}>
+        <VilkårsKort steg={'OPPRETTHOLDELSE'} heading={'Opprettholdelse'}>
           <p>{utledTekst(flyt.data)}</p>
           <p>Følgende vilkår skal opprettholdes:</p>
           <p>{vilkårSomSkalOpprettholdes(klageresultat.data)}</p>
-        </VilkRskort>
+        </VilkårsKort>
       </StegSuspense>
     </GruppeSteg>
   );

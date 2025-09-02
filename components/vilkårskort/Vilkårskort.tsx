@@ -12,7 +12,7 @@ interface Props {
   defaultOpen?: boolean;
 }
 
-export const VilkRskort = ({ heading, steg, children, defaultOpen = true }: Props) => {
+export const VilkårsKort = ({ heading, steg, children, defaultOpen = true }: Props) => {
   return (
     <ExpansionCard
       aria-label={heading}

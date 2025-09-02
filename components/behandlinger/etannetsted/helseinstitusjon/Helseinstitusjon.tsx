@@ -13,7 +13,7 @@ import styles from './Helseinstitusjon.module.css';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
@@ -88,7 +88,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
   };
 
   return (
-    <VilkRskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-25 Helseinstitusjon'}
       steg={'DU_ER_ET_ANNET_STED'}
       onSubmit={handleSubmit}
@@ -123,7 +123,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           </div>
         );
       })}
-    </VilkRskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

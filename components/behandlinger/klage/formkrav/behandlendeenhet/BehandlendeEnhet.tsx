@@ -5,7 +5,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
-import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormField } from 'components/form/FormField';
 import { Behovstype } from 'lib/utils/form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -71,7 +71,7 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
   };
 
   return (
-    <VilkRskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagring
       heading={'Klagebehandlende enhet'}
       steg={'BEHANDLENDE_ENHET'}
       onSubmit={handleSubmit}
@@ -91,7 +91,7 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
       }
     >
       <FormField form={form} formField={formFields.hvemSkalBehandle} />
-    </VilkRskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

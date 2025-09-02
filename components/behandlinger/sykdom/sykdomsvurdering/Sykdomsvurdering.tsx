@@ -31,7 +31,7 @@ import { Diagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/Di
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { useSak } from 'hooks/SakHook';
-import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -270,7 +270,7 @@ export const Sykdomsvurdering = ({
 
   const historiskeVurderinger = grunnlag.historikkSykdomsvurderinger;
   return (
-    <VilkRskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
       steg="AVKLAR_SYKDOM"
       vilkårTilhørerNavKontor={true}
@@ -343,7 +343,7 @@ export const Sykdomsvurdering = ({
           }
         />
       )}
-    </VilkRskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagring>
   );
 
   function mapVurderingToDraftFormFields(vurdering?: Sykdomvurdering): DraftFormFields {

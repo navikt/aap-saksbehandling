@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkRskort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 
 import { Grunnlag1119Visning } from 'components/behandlinger/grunnlag/visberegning/visning/grunnlag1119visning/Grunnlag1119Visning';
 import { UføreVisning } from 'components/behandlinger/grunnlag/visberegning/visning/uførevisning/UføreVisning';
@@ -18,7 +18,7 @@ export const VisBeregning = ({ grunnlag }: Props) => {
 
   return (
     <>
-      <VilkRskort
+      <VilkårsKort
         heading={finnHeading(beregningsVisning)}
         // @ts-ignore-line TODO Finne ut hvordan vi skal vise disse kortene
         steg={'VIS_BEREGNING'}
@@ -42,7 +42,7 @@ export const VisBeregning = ({ grunnlag }: Props) => {
             gjeldendeGrunnbeløp={grunnlag.gjeldendeGrunnbeløp}
           />
         )}
-      </VilkRskort>
+      </VilkårsKort>
     </>
   );
 };

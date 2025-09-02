@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyShort, HStack, Table } from '@navikt/ds-react';
-import { VilkRskort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -15,7 +15,7 @@ export const SamordningSosialstønad = ({ grunnlag }: Props) => {
   const vurderinger = grunnlag.gjeldendeVurderinger;
   return (
     vurderinger && (
-      <VilkRskort heading="§11-29 Refusjonskrav sosialstønad" steg="REFUSJON_KRAV" defaultOpen={true}>
+      <VilkårsKort heading="§11-29 Refusjonskrav sosialstønad" steg="REFUSJON_KRAV" defaultOpen={true}>
         <BodyShort spacing>
           Vi har funnet perioder med sosialstønad eller tjenestepensjonsordning. Disse kan føre til refusjonskrav på
           etterbetaling.
@@ -47,7 +47,7 @@ export const SamordningSosialstønad = ({ grunnlag }: Props) => {
             })}
           </Table.Body>
         </TableStyled>
-      </VilkRskort>
+      </VilkårsKort>
     )
   );
 };

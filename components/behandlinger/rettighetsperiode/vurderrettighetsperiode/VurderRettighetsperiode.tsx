@@ -8,7 +8,7 @@ import { FormEvent } from 'react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, RettighetsperiodeGrunnlag } from 'lib/types/types';
-import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { addYears, isBefore, parse, startOfDay } from 'date-fns';
 import { Alert, BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
@@ -119,7 +119,7 @@ export const VurderRettighetsperiode = ({
   };
 
   return (
-    <VilkRskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagring
       heading={'Starttidspunkt'}
       steg={'VURDER_RETTIGHETSPERIODE'}
       onSubmit={handleSubmit}
@@ -160,7 +160,7 @@ export const VurderRettighetsperiode = ({
           </Alert>
         </HStack>
       )}
-    </VilkRskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

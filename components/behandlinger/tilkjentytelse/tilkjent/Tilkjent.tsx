@@ -1,7 +1,7 @@
 'use client';
 
 import { TilkjentYtelseGrunnlag } from 'lib/types/types';
-import { VilkRskort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { ActionMenu, BodyShort, Button, Table, VStack } from '@navikt/ds-react';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -17,7 +17,7 @@ interface Props {
 
 export const Tilkjent = ({ grunnlag }: Props) => {
   return (
-    <VilkRskort heading="Tilkjent ytelse" steg="BEREGN_TILKJENT_YTELSE">
+    <VilkårsKort heading="Tilkjent ytelse" steg="BEREGN_TILKJENT_YTELSE">
       <TableStyled size="medium">
         <Table.Header>
           <Table.Row>
@@ -104,6 +104,6 @@ export const Tilkjent = ({ grunnlag }: Props) => {
           })}
         </Table.Body>
       </TableStyled>
-    </VilkRskort>
+    </VilkårsKort>
   );
 };

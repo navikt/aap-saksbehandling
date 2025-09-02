@@ -16,7 +16,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMed
   mellomlagretVurdering: MellomlagretVurdering | undefined;
 }
 
-export const VilkRskortMedFormOgMellomlagring = ({
+export const VilkårskortMedFormOgMellomlagring = ({
   heading,
   steg,
   children,

@@ -16,7 +16,7 @@ import styles from './FastsettBeregning.module.css';
 import { Alert, Heading } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useSak } from 'hooks/SakHook';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
@@ -142,7 +142,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
-    <VilkRskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagring
       heading={heading}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       onSubmit={handleSubmit}
@@ -190,7 +190,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
           Sjekk om beregningstidspunkt skal være datert etter tidspunkt for foreløpig virkningstidspunkt
         </Alert>
       )}
-    </VilkRskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

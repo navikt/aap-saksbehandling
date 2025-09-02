@@ -17,7 +17,7 @@ import { parse } from 'date-fns';
 import { useConfigForm } from 'components/form/FormHook';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
@@ -95,7 +95,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
   const skalViseBekreftKnapp = !readOnly && fritakMeldepliktVurderinger.length > 0;
 
   return (
-    <VilkRskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-10 tredje ledd. Unntak fra meldeplikt'}
       steg="FRITAK_MELDEPLIKT"
       vilkårTilhørerNavKontor={true}
@@ -180,7 +180,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
           </Button>
         )}
       </VStack>
-    </VilkRskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

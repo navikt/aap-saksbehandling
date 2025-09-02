@@ -3,7 +3,7 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormEvent } from 'react';
 import { FormField } from 'components/form/FormField';
 import { FormkravGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
@@ -127,7 +127,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
   };
 
   return (
-    <VilkRskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagring
       heading={'Formkrav'}
       steg={'FORMKRAV'}
       onSubmit={handleSubmit}
@@ -155,7 +155,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
       {grunnlag?.varselSvarfrist != null && !readOnly && formkravErIkkeOppfylltVarsel && (
         <FormkravAvvisningVarsel frist={new Date(grunnlag.varselSvarfrist)} />
       )}
-    </VilkRskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

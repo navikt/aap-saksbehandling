@@ -1,5 +1,5 @@
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
-import { VilkRskort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { hentBrevGrunnlag, hentFullmektigGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { AvklaringsbehovKode, StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -44,7 +44,7 @@ export const BrevKortMedDataFetching = async ({
   const { bruker, fullmektig } = mapGrunnlagTilMottakere(mottaker, fullmektigGrunnlag.data.vurdering);
 
   return (
-    <VilkRskort heading={'Skriv brev'} steg="BREV" defaultOpen={true}>
+    <VilkårsKort heading={'Skriv brev'} steg="BREV" defaultOpen={true}>
       {brev && (
         <SkriveBrev
           status={status}
@@ -60,7 +60,7 @@ export const BrevKortMedDataFetching = async ({
           readOnly={readOnly}
         />
       )}
-    </VilkRskort>
+    </VilkårsKort>
   );
 };
 

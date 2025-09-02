@@ -2,7 +2,7 @@
 
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormField } from 'components/form/FormField';
 import {
   Hjemmel,
@@ -145,7 +145,7 @@ export const KlagebehandlingVurderingKontor = ({
   };
 
   return (
-    <VilkRskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagring
       heading={'Vurder klage'}
       steg={'KLAGEBEHANDLING_KONTOR'}
       onSubmit={handleSubmit}
@@ -173,7 +173,7 @@ export const KlagebehandlingVurderingKontor = ({
       {['OPPRETTHOLD', 'DELVIS_OMGJØR'].includes(innstilling) && (
         <FormField form={form} formField={formFields.vilkårSomSkalOpprettholdes} />
       )}
-    </VilkRskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

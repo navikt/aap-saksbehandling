@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkRskort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { Alert, BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { TilhørigetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørigetsVurderingTabell';
@@ -19,7 +19,7 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
   visOverstyringsBehov,
 }: Props) => {
   return (
-    <VilkRskort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
+    <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
       <VStack gap={'7'} paddingBlock={'3'}>
         {!vurdering.kanBehandlesAutomatisk && (
           <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'} className={'fit-content'}>
@@ -69,6 +69,6 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
           </HStack>
         )}
       </VStack>
-    </VilkRskort>
+    </VilkårsKort>
   );
 };

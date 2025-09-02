@@ -10,7 +10,7 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { validerNullableDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 import { useSak } from 'hooks/SakHook';
-import { VilkRskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { Button, HStack, Radio, VStack } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { useFieldArray } from 'react-hook-form';
@@ -119,7 +119,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'refusjoner' });
 
   return (
-    <VilkRskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagring
       heading={'Sosialstønad refusjonskrav'}
       steg="REFUSJON_KRAV"
       vilkårTilhørerNavKontor={true}
@@ -242,7 +242,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
           Legg til nytt Nav-kontor
         </Button>
       )}
-    </VilkRskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

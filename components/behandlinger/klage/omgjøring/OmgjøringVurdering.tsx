@@ -1,20 +1,20 @@
 'use client';
 
 import { OpprettRevurdering } from 'components/saksoversikt/opprettrevurdering/OpprettRevurdering';
-import { VilkRskort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { Klageresultat, SaksInfo } from 'lib/types/types';
 import { hjemmelMap, hjemmelÅrsakMapMap } from 'lib/utils/hjemmel';
 
 export const OmgjøringVurdering = ({ sak, klageresultat }: { sak: SaksInfo; klageresultat: Klageresultat }) => {
   return (
-    <VilkRskort heading={'Omgjøring'} steg={'OMGJØRING'}>
+    <VilkårsKort heading={'Omgjøring'} steg={'OMGJØRING'}>
       <OpprettRevurdering
         sak={sak}
         defaultBegrunnelse={konstruerBegrunnelse()}
         defaultÅrsaker={finnDefaultÅrsaker()}
         redirect={true}
       />
-    </VilkRskort>
+    </VilkårsKort>
   );
 
   function konstruerBegrunnelse() {
