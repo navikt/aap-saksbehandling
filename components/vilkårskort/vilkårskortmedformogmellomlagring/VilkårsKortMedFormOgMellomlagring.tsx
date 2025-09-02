@@ -1,33 +1,16 @@
 'use client';
 
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { MellomlagretVurdering, StegType, VurdertAvAnsatt } from 'lib/types/types';
-import { FormEvent, ReactNode } from 'react';
-import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { ApiException } from 'lib/utils/api';
+import { MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/VilkårsKort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { isProd } from 'lib/utils/environment';
+import { VilkårsKortMedFormProps } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 
-export interface VilkårsKortMedFormOgMellomlagringProps {
-  heading: string;
-  steg: StegType;
-  children: ReactNode;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  isLoading: boolean;
-  status: LøsBehovOgGåTilNesteStegStatus;
-  visBekreftKnapp: boolean;
-  readOnly?: boolean;
-  løsBehovOgGåTilNesteStegError?: ApiException;
-  knappTekst?: string;
-  defaultOpen?: boolean;
-  vilkårTilhørerNavKontor: boolean;
-  vurdertAvAnsatt?: VurdertAvAnsatt;
-  vurdertAutomatisk?: boolean;
-  kvalitetssikretAv?: VurdertAvAnsatt;
+export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMedFormProps {
   onDeleteMellomlagringClick: () => void;
   onLagreMellomLagringClick: () => void;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
