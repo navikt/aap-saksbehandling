@@ -171,7 +171,13 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           >
             <HStack gap={'4'} align={'end'}>
               <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} setAktivEnhet={oppdaterEnhet} />
-              <KøSelect label={'Velg kø'} køer={oppgaveKøer || []} aktivKøId={aktivKøId} setAktivKø={oppdaterKøId} />
+              <KøSelect
+                label={'Velg kø'}
+                køer={oppgaveKøer || []}
+                aktivKøId={aktivKøId}
+                setAktivKø={oppdaterKøId}
+                form={form}
+              />
               <Switch
                 value="veileder"
                 checked={veilederFilter === 'veileder'}

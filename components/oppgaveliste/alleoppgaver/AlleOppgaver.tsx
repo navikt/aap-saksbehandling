@@ -148,7 +148,13 @@ export const AlleOppgaver = ({ enheter }: Props) => {
         <VStack>
           <HStack paddingInline={'4'} paddingBlock={'2'} gap={'4'} style={{ borderBottom: '1px solid #071A3636' }}>
             <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} setAktivEnhet={oppdaterEnhet} />
-            <KøSelect label={'Velg kø'} køer={oppgaveKøer || []} aktivKøId={aktivKøId} setAktivKø={oppdaterKøId} />
+            <KøSelect
+              label={'Velg kø'}
+              køer={oppgaveKøer || []}
+              aktivKøId={aktivKøId}
+              setAktivKø={oppdaterKøId}
+              form={form}
+            />
           </HStack>
           <HStack gap={'2'} paddingInline={'4'} paddingBlock={'2'}>
             <Label as="p" size={'small'}>

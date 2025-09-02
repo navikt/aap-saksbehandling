@@ -13,10 +13,6 @@ interface LagretAktivUtvidetFilterData {
 const KEY = 'AKTIV_UTVIDET_FILTER_DATA_KEY';
 const MAKS_LEVETID = dagerTilMillisekunder(1);
 
-export function fjernLagretUtvidetFilter() {
-  localStorage.removeItem(KEY);
-}
-
 export function useLagreAktivUtvidetFilter(): {
   lagreAktivUtvidetFilter: (feltData: FormFieldsFilter) => void;
   hentAktivUtvidetFilter: () => FormFieldsFilter | undefined;

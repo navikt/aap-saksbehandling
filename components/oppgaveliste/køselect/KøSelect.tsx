@@ -2,23 +2,35 @@
 
 import { Select } from '@navikt/ds-react';
 import { Kø } from 'lib/types/oppgaveTypes';
-import { fjernLagretUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
+import { UseFormReturn } from 'react-hook-form';
+import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 
 interface Props {
   køer: Kø[];
   setAktivKø: (kø: number) => void;
   aktivKøId?: number;
   label?: string;
+  form: UseFormReturn<FormFieldsFilter>;
 }
 
-export const KøSelect = ({ køer, setAktivKø, aktivKøId, label }: Props) => {
+export const KøSelect = ({ køer, setAktivKø, aktivKøId, label, form }: Props) => {
   return (
     <Select
       label={label || ''}
       size="small"
       value={aktivKøId}
       onChange={(event) => {
-        fjernLagretUtvidetFilter();
+        if (event.target.value != ALLE_OPPGAVER_ID.toString()) {
+          form.reset({
+            behandlingstyper: [],
+            behandlingOpprettetTom: undefined,
+            behandlingOpprettetFom: undefined,
+            årsaker: [],
+            avklaringsbehov: [],
+            statuser: [],
+          });
+        }
         setAktivKø(parseInt(event.target.value));
       }}
     >
