@@ -191,10 +191,10 @@ it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurd
     'Dette er min vurdering som er mellomlagret her er ekstra tekst'
   );
 
-  const slettUtkastKnapp = screen.getByRole('button', { name: 'Slett utkast' });
-  await user.click(slettUtkastKnapp);
+  const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+  await user.click(slettKnapp);
 
-  // TODO AAP-1354 Legg til test for tomt vurderingsfelt etter sletting av utkast
+  expect(screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).toHaveValue('');
 });
 
 // TODO Ta inn denne når mellomlagring er i produksjon
