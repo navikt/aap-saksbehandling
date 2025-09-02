@@ -39,6 +39,7 @@ import {
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
+  OppfølgningOppgaveOpprinnselseResponse,
   OpprettDummySakDto,
   OpprettTestcase,
   PåklagetBehandlingGrunnlag,
@@ -494,6 +495,26 @@ export const hentMellomlagring = async (behandlingsReferanse: string, kode: stri
     }
 
     return undefined;
+  }
+};
+
+export const hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse = async (
+  behandlingsReferanse: string,
+  kode: string
+) => {
+  const res = await apiFetch<OppfølgningOppgaveOpprinnselseResponse>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/oppfølgningOppgaveOpprinselse/${behandlingsReferanse}/${kode}`,
+    saksbehandlingApiScope
+  );
+
+  if (isSuccess(res)) {
+    if (res.data !== null) {
+      return res.data;
+    }
+    return undefined;
+  }
+  if (isError(res)) {
+    console.log(res);
   }
 };
 

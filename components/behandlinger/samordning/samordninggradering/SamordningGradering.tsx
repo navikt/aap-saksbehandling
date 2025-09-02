@@ -2,6 +2,7 @@
 
 import {
   MellomlagretVurdering,
+  OppfølgningOppgaveOpprinnselseResponse,
   Periode,
   SamordningGraderingGrunnlag,
   SamordningYtelsestype,
@@ -36,6 +37,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  oppfølgningOppgave?: OppfølgningOppgaveOpprinnselseResponse;
 }
 
 interface SamordnetYtelse {
@@ -63,6 +65,7 @@ export const SamordningGradering = ({
   behandlingVersjon,
   readOnly,
   initialMellomlagretVurdering,
+  oppfølgningOppgave,
 }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const [errorMessage, setErrorMessage] = useState<String | undefined>(undefined);
@@ -199,6 +202,7 @@ export const SamordningGradering = ({
         >
           <Modal.Body>
             <OpprettOppfølgingsBehandling
+              behandlingsreferanse={behandlingsreferanse}
               saksnummer={sak.sak.saksnummer}
               brukerInformasjon={bruker}
               modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
