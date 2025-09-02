@@ -85,8 +85,9 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
         <KabalIverksettKonsekvensSteg behandlingsreferanse={behandlingsReferanse} />
       )}
       {/* Oppfølgingsbehandling */}
-      {aktivGruppe === 'START_OPPFØLGINGSBEHANDLING' ||
-        (aktivGruppe === 'AVKLAR_OPPPFØLGING' && <AvklarOppfolgingsSteg behandlingsreferanse={behandlingsReferanse} />)}
+      {(aktivGruppe === 'START_OPPFØLGINGSBEHANDLING' || aktivGruppe === 'AVKLAR_OPPPFØLGING') && (
+        <AvklarOppfolgingsSteg behandlingsreferanse={behandlingsReferanse} />
+      )}
       {/* Aktivitetsplikt */}
       {aktivGruppe === 'AKTIVITETSPLIKT_11_7' && <Aktivitetsplikt11_7 behandlingsreferanse={behandlingsReferanse} />}
     </section>
