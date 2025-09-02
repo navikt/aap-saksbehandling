@@ -39,7 +39,7 @@ interface BarneTilleggVurdering {
 interface Vurdering {
   begrunnelse: string;
   harForeldreAnsvar: string;
-  erFosterforelder?: string;
+  erFosterforelder?: string | null;
   fraDato?: string;
 }
 
@@ -54,8 +54,6 @@ export const BarnetilleggVurdering = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
-  console.log('barnTilVurdering', grunnlag.barnSomTrengerVurdering);
-  console.log('folkeregbarn', grunnlag.folkeregisterbarn);
   const vurderteBarn: BarneTilleggVurdering[] = grunnlag.vurderteBarn.map((barn) => {
     const navn = barn.navn || barn.ident || 'Ukjent';
     return {
@@ -67,6 +65,8 @@ export const BarnetilleggVurdering = ({
           begrunnelse: value.begrunnelse,
           harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
           fraDato: formaterDatoForFrontend(value.fraDato),
+          erFosterforelder:
+            value.erFosterForelder !== null ? (value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei) : null,
         };
       }),
     };
@@ -113,6 +113,7 @@ export const BarnetilleggVurdering = ({
                     begrunnelse: vurdering.begrunnelse,
                     harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
                     fraDato: getFraDato(vurdering.fraDato),
+                    erFosterForelder: vurdering.erFosterforelder === JaEllerNei.Ja,
                   };
                 }),
               };
