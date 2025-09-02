@@ -2,6 +2,7 @@ import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjons
 import {
   BehandlingFlytOgTilstand,
   BehandlingsFlytAvklaringsbehovKode,
+  BehandlingsHistorikk,
   BestillLegeerklæring,
   Brev,
   ForhåndsvisDialogmelding,
@@ -17,7 +18,6 @@ import {
   OpprettTestcase,
   SaksInfo,
   SettPåVent,
-  BehandlingsHistorikk,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
@@ -25,6 +25,7 @@ import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { Markering } from 'lib/types/oppgaveTypes';
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
+import { isLocal } from 'lib/utils/environment';
 
 const BASE_URL = '/saksbehandling';
 
@@ -129,6 +130,28 @@ export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialo
 }
 
 export function clientHentAlleNavenheter(behandlingReferanse: string, input: NavEnhetRequest) {
+  if (isLocal()) {
+    const res: FetchResponse<NavEnheterResponse[]> = {
+      type: 'SUCCESS',
+      data: [
+        {
+          navn: 'Nav Løten',
+          enhetsnummer: '0415',
+        },
+        {
+          navn: 'Nav Asker',
+          enhetsnummer: '0220',
+        },
+        {
+          navn: 'Nav Grorud',
+          enhetsnummer: '0328',
+        },
+      ],
+    };
+
+    return res;
+  }
+
   return clientFetch<NavEnheterResponse[]>(`${BASE_URL}/api/navenhet/${behandlingReferanse}/finn`, 'POST', input);
 }
 
