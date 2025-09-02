@@ -6,14 +6,14 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
-  readOnly: boolean;
-  behandlingVersjon: number;
+  stegData: StegData;
 }
 
-export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
+export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentBeregningstidspunktVurdering(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE),
@@ -23,11 +23,15 @@ export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, be
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  if (!skalViseSteg(stegData, !!grunnlag.data.vurdering)) {
+    return null;
+  }
+
   return (
     <FastsettBeregning
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       grunnlag={grunnlag.data}
-      behandlingVersjon={behandlingVersjon}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

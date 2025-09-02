@@ -3,30 +3,54 @@
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { AvklarOppfolgingsoppgaveGrunnlagResponse, Vurderingsbehov } from 'lib/types/types';
+import { AvklarOppfolgingsoppgaveGrunnlagResponse, MellomlagretVurdering, Vurderingsbehov } from 'lib/types/types';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormEvent } from 'react';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { BodyShort, Label } from '@navikt/ds-react';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
-interface SykdomProps {
+interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   grunnlag: AvklarOppfolgingsoppgaveGrunnlagResponse;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
   årsak: string;
-  konsekvens: 'INGEN' | 'OPPRETT_VURDERINGSBEHOV';
+  konsekvens: Konsekvens;
   hvaSkalRevurderes: Vurderingsbehov[];
 }
 
-export const AvklaroppfolgingVurdering = ({ behandlingVersjon, readOnly, grunnlag }: SykdomProps) => {
+type Konsekvens = 'INGEN' | 'OPPRETT_VURDERINGSBEHOV';
+
+type DraftFormFields = Partial<FormFields>;
+
+export const AvklaroppfolgingVurdering = ({
+  behandlingVersjon,
+  readOnly,
+  grunnlag,
+  initialMellomlagretVurdering,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_OPPFØLGING');
+
+  const behovsType =
+    grunnlag.hvemSkalFølgeOpp == 'NasjonalEnhet'
+      ? Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY
+      : Behovstype.AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR;
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(behovsType, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag.grunnlag);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -34,7 +58,7 @@ export const AvklaroppfolgingVurdering = ({ behandlingVersjon, readOnly, grunnla
         type: 'textarea',
         label: 'Hva er årsaken?',
         rules: { required: 'Du må skrive en årsak.' },
-        defaultValue: grunnlag.grunnlag?.årsak || undefined,
+        defaultValue: defaultValue.årsak,
       },
       konsekvens: {
         type: 'radio',
@@ -44,38 +68,36 @@ export const AvklaroppfolgingVurdering = ({ behandlingVersjon, readOnly, grunnla
           { label: 'Ingen konsekvens for saken', value: 'INGEN' },
           { label: 'Opprett vurderingsbehov', value: 'OPPRETT_VURDERINGSBEHOV' },
         ],
-        defaultValue: grunnlag.grunnlag?.konsekvensAvOppfølging,
+        defaultValue: defaultValue.konsekvens,
       },
       hvaSkalRevurderes: {
         type: 'combobox_multiple',
         label: 'Hvilke opplysninger skal revurderes?',
         options: vurderingsbehovOptions,
-        defaultValue: grunnlag.grunnlag?.opplysningerTilRevurdering,
+        defaultValue: defaultValue.hvaSkalRevurderes,
       },
     },
     { readOnly: readOnly }
   );
 
-  const behovsType =
-    grunnlag.hvemSkalFølgeOpp == 'NasjonalEnhet'
-      ? Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY
-      : Behovstype.AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR;
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: behovsType,
-          avklarOppfølgingsbehovVurdering: {
-            konsekvensAvOppfølging: data.konsekvens,
-            opplysningerTilRevurdering: data.hvaSkalRevurderes,
-            årsak: data.årsak,
+    form.handleSubmit(
+      (data) => {
+        løsBehovOgGåTilNesteSteg({
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: behovsType,
+            avklarOppfølgingsbehovVurdering: {
+              konsekvensAvOppfølging: data.konsekvens,
+              opplysningerTilRevurdering: data.hvaSkalRevurderes,
+              årsak: data.årsak,
+            },
           },
-        },
-        referanse: behandlingsReferanse,
-      });
-    })(event);
+          referanse: behandlingsReferanse,
+        });
+      },
+      () => nullstillMellomlagretVurdering()
+    )(event);
   };
 
   return (
@@ -90,10 +112,18 @@ export const AvklaroppfolgingVurdering = ({ behandlingVersjon, readOnly, grunnla
       visBekreftKnapp={!readOnly}
       vurdertAvAnsatt={undefined}
       knappTekst={'Fullfør'}
+      readOnly={readOnly}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() =>
+          form.reset(grunnlag.grunnlag ? mapVurderingToDraftFormFields(grunnlag.grunnlag) : emptyDraftFormFields())
+        )
+      }
     >
       <div>
         <Label>Dato for oppfølging</Label>
-        <BodyShort>{grunnlag.datoForOppfølging}</BodyShort>
+        <BodyShort>{formaterDatoForFrontend(grunnlag.datoForOppfølging)}</BodyShort>
       </div>
       <div>
         <Label>Hva skal følges opp?</Label>
@@ -109,3 +139,21 @@ export const AvklaroppfolgingVurdering = ({ behandlingVersjon, readOnly, grunnla
     </VilkårsKortMedForm>
   );
 };
+
+function mapVurderingToDraftFormFields(
+  vurdering: AvklarOppfolgingsoppgaveGrunnlagResponse['grunnlag']
+): DraftFormFields {
+  return {
+    årsak: vurdering?.årsak || '',
+    konsekvens: vurdering?.konsekvensAvOppfølging,
+    hvaSkalRevurderes: vurdering?.opplysningerTilRevurdering,
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return {
+    årsak: '',
+    hvaSkalRevurderes: [],
+    konsekvens: '' as Konsekvens, // Vi caster denne da vi ikke ønsker å ødelegge typen på den i løs-behov
+  };
+}

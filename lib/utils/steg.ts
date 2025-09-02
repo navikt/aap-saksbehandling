@@ -1,4 +1,5 @@
 import { Avklaringsbehov, BehandlingFlytOgTilstand, StegGruppe, StegType, TypeBehandling } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
 
 export const getStegSomSkalVises = (
   aktivStegGruppe: StegGruppe,
@@ -17,25 +18,41 @@ export const getStegSomSkalVises = (
 const getAvklaringsbehovForSteg = (
   aktivStegGruppe: StegGruppe,
   stegType: StegType,
-  behandlingFlytOgTilstand: BehandlingFlytOgTilstand
+  behandlingFlytOgTilstand: BehandlingFlytOgTilstand,
+  behovstype?: Behovstype
 ): Avklaringsbehov[] => {
   const stegGruppe = behandlingFlytOgTilstand.flyt.find((gruppe) => gruppe.stegGruppe === aktivStegGruppe);
 
   return (
     stegGruppe?.steg
       .filter((steg) => steg.avklaringsbehov && steg.avklaringsbehov.length > 0)
-      .filter((steg) => steg.avklaringsbehov.some((avklaringsbehov) => avklaringsbehov.status !== 'AVBRUTT'))
+      .filter((steg) =>
+        steg.avklaringsbehov.some(
+          (avklaringsbehov) =>
+            avklaringsbehov.status !== 'AVBRUTT' && (!behovstype || avklaringsbehov.definisjon.kode === behovstype)
+        )
+      )
       .filter((steg) => steg.stegType == stegType)
       .flatMap((steg) => steg.avklaringsbehov) ?? []
   );
 };
 
+export const getStegDataForBehovstype = (
+  stegGruppe: StegGruppe,
+  stegType: StegType,
+  behovstype: Behovstype,
+  behandlingFlytOgTilstand: BehandlingFlytOgTilstand
+): StegData => {
+  return getStegData(stegGruppe, stegType, behandlingFlytOgTilstand, behovstype);
+};
+
 export const getStegData = (
   stegGruppe: StegGruppe,
   stegType: StegType,
-  behandlingFlytOgTilstand: BehandlingFlytOgTilstand
+  behandlingFlytOgTilstand: BehandlingFlytOgTilstand,
+  behovstype?: Behovstype
 ): StegData => {
-  const avklaringsbehov = getAvklaringsbehovForSteg(stegGruppe, stegType, behandlingFlytOgTilstand);
+  const avklaringsbehov = getAvklaringsbehovForSteg(stegGruppe, stegType, behandlingFlytOgTilstand, behovstype);
   const harAvklaringsbehov = avklaringsbehov.length > 0;
 
   return {
