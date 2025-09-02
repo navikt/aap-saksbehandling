@@ -13,6 +13,8 @@ import { useFiltrerteOppgaver } from './MineOppgaverHook';
 import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
+import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
+import { useEffect } from 'react';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];
@@ -25,44 +27,55 @@ export interface FormFieldsFilter {
 
 export const MineOppgaver = () => {
   const { oppgaver, mutate, isLoading, error } = useMineOppgaver();
+  const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
+  const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
   const { form, formFields } = useConfigForm<FormFieldsFilter>({
     behandlingstyper: {
       type: 'checkbox',
       label: 'Behandlingstype',
       options: oppgaveBehandlingstyper,
-      defaultValue: [],
+      defaultValue: lagretUtvidetFilter?.behandlingstyper ?? [],
     },
     behandlingOpprettetFom: {
       type: 'date',
       label: 'Opprettet fra',
       toDate: new Date(),
+      defaultValue: lagretUtvidetFilter?.behandlingOpprettetFom,
     },
     behandlingOpprettetTom: {
       type: 'date',
       label: 'Opprettet til',
+      defaultValue: lagretUtvidetFilter?.behandlingOpprettetTom,
     },
     årsaker: {
       type: 'combobox_multiple',
       label: 'Vurderingsbehov',
       options: alleVurderingsbehovOptions,
-      defaultValue: [],
+      defaultValue: lagretUtvidetFilter?.årsaker ?? [],
     },
     avklaringsbehov: {
       type: 'combobox_multiple',
       label: 'Oppgave',
       options: oppgaveAvklaringsbehov,
-      defaultValue: [],
+      defaultValue: lagretUtvidetFilter?.avklaringsbehov ?? [],
     },
     statuser: {
       type: 'checkbox',
       label: 'Status',
       options: OppgaveStatuser,
-      defaultValue: [],
+      defaultValue: lagretUtvidetFilter?.statuser ?? [],
     },
   });
 
   const watchedValues = useWatch({ control: form.control });
+
+  useEffect(() => {
+    const fieldValues = form.watch((values) => {
+      lagreAktivUtvidetFilter(values as FormFieldsFilter);
+    });
+    return () => fieldValues.unsubscribe();
+  }, [form, lagreAktivUtvidetFilter]);
 
   const filtrerteOppgaver = useFiltrerteOppgaver({
     oppgaver,

@@ -27,6 +27,7 @@ import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
+import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 
 interface Props {
   enheter: Enhet[];
@@ -35,44 +36,48 @@ interface Props {
 export const AlleOppgaver = ({ enheter }: Props) => {
   const { hentLagretAktivEnhet, lagreAktivEnhet } = useLagreAktivEnhet();
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
+  const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
 
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
   const [valgteRader, setValgteRader] = useState<number[]>([]);
+  const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
   const { form, formFields } = useConfigForm<FormFieldsFilter>({
     behandlingstyper: {
       type: 'checkbox',
       label: 'Behandlingstype',
       options: oppgaveBehandlingstyper,
-      defaultValue: [],
+      defaultValue: lagretUtvidetFilter?.behandlingstyper ?? [],
     },
     behandlingOpprettetFom: {
       type: 'date',
       label: 'Opprettet fra',
       toDate: new Date(),
+      defaultValue: lagretUtvidetFilter?.behandlingOpprettetFom,
     },
     behandlingOpprettetTom: {
       type: 'date',
       label: 'Opprettet til',
+      defaultValue: lagretUtvidetFilter?.behandlingOpprettetTom,
     },
     årsaker: {
       type: 'combobox_multiple',
       label: 'Vurderingsbehov',
       options: alleVurderingsbehovOptions,
-      defaultValue: [],
+      defaultValue: lagretUtvidetFilter?.årsaker ?? [],
     },
     avklaringsbehov: {
       type: 'combobox_multiple',
       label: 'Oppgave',
       options: oppgaveAvklaringsbehov,
-      defaultValue: [],
+      defaultValue: lagretUtvidetFilter?.avklaringsbehov ?? [],
     },
     statuser: {
       type: 'checkbox',
       label: 'Status',
       options: OppgaveStatuser,
-      defaultValue: [],
+      defaultValue: lagretUtvidetFilter?.statuser ?? [],
     },
   });
 
@@ -103,6 +108,13 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
     hentKøerForEnheterClient([aktivEnhet])
   );
+
+  useEffect(() => {
+    const fieldValues = form.watch((values) => {
+      lagreAktivUtvidetFilter(values as FormFieldsFilter);
+    });
+    return () => fieldValues.unsubscribe();
+  }, [form, lagreAktivUtvidetFilter]);
 
   useEffect(() => {
     if (!køer || (køer && isError(køer))) {
@@ -153,7 +165,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           formFields={formFields}
           antallOppgaver={antallOppgaver}
           kanFiltrere={aktivKøId === ALLE_OPPGAVER_ID}
-          onFiltrerClick={() => setAktivKøId(ALLE_OPPGAVER_ID)}
+          onFiltrerClick={() => oppdaterKøId(ALLE_OPPGAVER_ID)}
           valgteRader={valgteRader}
           setValgteRader={setValgteRader}
           revalidateFunction={mutate}

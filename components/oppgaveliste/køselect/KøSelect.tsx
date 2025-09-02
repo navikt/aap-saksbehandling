@@ -2,6 +2,7 @@
 
 import { Select } from '@navikt/ds-react';
 import { Kø } from 'lib/types/oppgaveTypes';
+import { fjernLagretUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 
 interface Props {
   køer: Kø[];
@@ -16,7 +17,10 @@ export const KøSelect = ({ køer, setAktivKø, aktivKøId, label }: Props) => {
       label={label || ''}
       size="small"
       value={aktivKøId}
-      onChange={(event) => setAktivKø(parseInt(event.target.value))}
+      onChange={(event) => {
+        fjernLagretUtvidetFilter();
+        setAktivKø(parseInt(event.target.value));
+      }}
     >
       {køer.map((kø) => (
         <option key={kø.id} value={`${kø.id}`}>
