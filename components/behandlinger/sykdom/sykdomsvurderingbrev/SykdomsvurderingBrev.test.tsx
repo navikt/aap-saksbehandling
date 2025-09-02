@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen, within } from 'lib/test/CustomRender';
+import { render, screen } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { MellomlagretVurderingResponse, SykdomsvurderingBrevGrunnlag } from 'lib/types/types';
 import { SykdomsvurderingBrev } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrev';
@@ -18,7 +18,7 @@ const grunnlag: SykdomsvurderingBrevGrunnlag = {
 };
 
 describe('sykdomsvurdering for brev', () => {
-  it('Skal gi feilmelding dersom det ikke svares på om vurdering for brev er relevant', async () => {
+  it('Skal vise vurderingsfelt', async () => {
     render(
       <SykdomsvurderingBrev
         grunnlag={grunnlag}
@@ -27,24 +27,6 @@ describe('sykdomsvurdering for brev', () => {
         behandlingVersjon={0}
       />
     );
-    const button = screen.getByRole('button', { name: 'Bekreft' });
-    await user.click(button);
-
-    expect(
-      await screen.findByText('Du må svare på om det er behov for en individuell begrunnelse i vedtaksbrevet')
-    ).toBeVisible();
-  });
-
-  it('Skal ha et vurderingsfelt hvis det er valgt at dette er relevant for behandlingen', async () => {
-    render(
-      <SykdomsvurderingBrev
-        grunnlag={grunnlag}
-        typeBehandling={'Førstegangsbehandling'}
-        readOnly={false}
-        behandlingVersjon={0}
-      />
-    );
-    await velgAtVurderingSkalLeggesTil();
     const textbox = screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' });
     expect(textbox).toBeVisible();
   });
@@ -58,11 +40,10 @@ describe('sykdomsvurdering for brev', () => {
         behandlingVersjon={0}
       />
     );
-    await velgAtVurderingSkalLeggesTil();
     const button = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(button);
 
-    expect(await screen.findByText('Du må legge til innhold for vedtaksbrevet')).toBeVisible();
+    expect(await screen.findByText('Du må skrive en individuell begrunnelse')).toBeVisible();
   });
 });
 
@@ -113,8 +94,6 @@ it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker p�
       grunnlag={grunnlagUtenVurdering}
     />
   );
-
-  await velgAtVurderingSkalLeggesTil();
 
   await user.type(
     screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' }),
@@ -212,11 +191,10 @@ it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurd
     'Dette er min vurdering som er mellomlagret her er ekstra tekst'
   );
 
-  const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+  const slettUtkastKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+  await user.click(slettUtkastKnapp);
 
-  await user.click(slettKnapp);
-
-  expect(screen.queryByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).not.toBeInTheDocument();
+  // TODO AAP-1354 Legg til test for tomt vurderingsfelt etter sletting av utkast
 });
 
 // TODO Ta inn denne når mellomlagring er i produksjon
@@ -270,14 +248,3 @@ it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOn
   const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
   expect(slettKnapp).not.toBeInTheDocument();
 });
-
-const velgAtVurderingSkalLeggesTil = async () => {
-  const jaValg = within(
-    screen.getByRole('group', {
-      name: 'Er det behov for en individuell begrunnelse i vedtaksbrevet?',
-    })
-  ).getByRole('radio', {
-    name: 'Ja',
-  });
-  await user.click(jaValg);
-};
