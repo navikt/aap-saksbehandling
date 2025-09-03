@@ -9,10 +9,10 @@ import {
   SykdomsvurderingBrevGrunnlag,
   TypeBehandling,
 } from 'lib/types/types';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { Veiledning } from 'components/veiledning/Veiledning';
@@ -27,7 +27,6 @@ interface Props {
 }
 
 interface VurderingBrevFormFields {
-  vurderingSkalFyllesUt: string;
   vurdering: string;
 }
 
@@ -54,20 +53,11 @@ export const SykdomsvurderingBrev = ({
 
   const { formFields, form } = useConfigForm<VurderingBrevFormFields>(
     {
-      vurderingSkalFyllesUt: {
-        type: 'radio',
-        label: 'Er det behov for en individuell begrunnelse i vedtaksbrevet?',
-        defaultValue: defaultValues?.vurderingSkalFyllesUt,
-        options: JaEllerNeiOptions,
-        rules: {
-          required: 'Du må svare på om det er behov for en individuell begrunnelse i vedtaksbrevet',
-        },
-      },
       vurdering: {
         type: 'textarea',
         label: 'Derfor får du AAP / Derfor får du ikke AAP',
         defaultValue: defaultValues?.vurdering,
-        rules: { required: 'Du må legge til innhold for vedtaksbrevet' },
+        rules: { required: 'Du må skrive en individuell begrunnelse' },
       },
     },
     { shouldUnregister: true, readOnly: readOnly }
@@ -94,7 +84,7 @@ export const SykdomsvurderingBrev = ({
     typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0;
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev'}
       steg="SYKDOMSVURDERING_BREV"
       vilkårTilhørerNavKontor={true}
@@ -166,29 +156,21 @@ export const SykdomsvurderingBrev = ({
           }
           defaultOpen={false}
         />
-
-        <FormField form={form} formField={formFields.vurderingSkalFyllesUt} horizontalRadio />
-        {form.watch('vurderingSkalFyllesUt') === JaEllerNei.Ja && (
-          <>
-            <FormField form={form} formField={formFields.vurdering} className={'begrunnelse'} />
-          </>
-        )}
+        <FormField form={form} formField={formFields.vurdering} className={'begrunnelse'} />
       </VStack>
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 
 function mapVurderingToDraftFormFields(vurdering?: SykdomBrevVurdering): DraftFormFields {
   return {
     vurdering: vurdering?.vurdering || undefined,
-    vurderingSkalFyllesUt: getJaNeiEllerUndefined(vurdering?.vurdering ? !!vurdering?.vurdering : undefined),
   };
 }
 
 function emptyDraftFormFields(): DraftFormFields {
   return {
     vurdering: '',
-    vurderingSkalFyllesUt: '',
   };
 }
 

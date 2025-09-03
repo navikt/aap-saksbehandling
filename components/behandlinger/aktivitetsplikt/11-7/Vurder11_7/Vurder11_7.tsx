@@ -6,29 +6,35 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { isBefore, parse, startOfDay } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { useSak } from 'hooks/SakHook';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
-import { Aktivitetsplikt11_7Grunnlag, Aktivitetsplikt11_7Vurdering } from 'lib/types/types';
+import { Aktivitetsplikt11_7Grunnlag, Aktivitetsplikt11_7Vurdering, MellomlagretVurdering } from 'lib/types/types';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   grunnlag: Aktivitetsplikt11_7Grunnlag;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
-  erOppfylt: JaEllerNei;
-  utfall: 'STANS' | 'OPPHØR';
+  erOppfylt: string;
+  utfall: Utfall;
   begrunnelse: string;
   gjelderFra: string;
 }
 
-export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
+type Utfall = 'STANS' | 'OPPHØR';
+
+type DraftFormFields = Partial<FormFields>;
+
+export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
   const { sak } = useSak();
   const behandlingsreferanse = useBehandlingsReferanse();
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
@@ -36,21 +42,31 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_AKTIVITETSPLIKT_11_7');
 
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.VURDER_BRUDD_11_7_KODE, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag.vurdering);
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        referanse: behandlingsreferanse,
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.VURDER_BRUDD_11_7_KODE,
-          aktivitetsplikt11_7Vurdering: {
-            erOppfylt: data.erOppfylt === JaEllerNei.Ja,
-            utfall: data.erOppfylt === JaEllerNei.Ja ? null : data.utfall,
-            begrunnelse: data.begrunnelse,
-            gjelderFra: formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date())),
+      løsBehovOgGåTilNesteSteg(
+        {
+          referanse: behandlingsreferanse,
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.VURDER_BRUDD_11_7_KODE,
+            aktivitetsplikt11_7Vurdering: {
+              erOppfylt: data.erOppfylt === JaEllerNei.Ja,
+              utfall: data.erOppfylt === JaEllerNei.Ja ? null : data.utfall,
+              begrunnelse: data.begrunnelse,
+              gjelderFra: formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date())),
+            },
           },
         },
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 
@@ -60,14 +76,14 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => 
         type: 'radio',
         label: 'Oppfyller brukeren aktivitetsplikten sin etter § 11-7?',
         rules: { required: 'Du må svare på om aktivitetsplikten er oppfylt' },
-        defaultValue: getJaNeiEllerUndefined(grunnlag.vurdering?.erOppfylt),
+        defaultValue: defaultValue.erOppfylt,
         options: JaEllerNeiOptions,
       },
       utfall: {
         type: 'radio',
         label: 'Skal ytelsen stanses eller opphøres?',
         rules: { required: 'Du må svare på om ytelsen skal stanses eller opphøres' },
-        defaultValue: grunnlag.vurdering?.utfall ?? undefined,
+        defaultValue: defaultValue.utfall,
         options: [
           { label: 'Stans', value: 'STANS' },
           { label: 'Opphør', value: 'OPPHØR' },
@@ -77,7 +93,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => 
         type: 'textarea',
         label: 'Vilkårsvurdering',
         description: 'Teksten benyttes i vedtaksbrevet',
-        defaultValue: grunnlag.vurdering?.begrunnelse ?? undefined,
+        defaultValue: defaultValue.begrunnelse,
         rules: { required: 'Du må begrunne' },
       },
       gjelderFra: {
@@ -85,9 +101,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => 
         label: 'Vurderingen gjelder fra',
         description:
           'Hvis § 11-7 ikke er oppfylt, bør dato settes 3 uker fram i tid for å gi bruker tid til å svare på forhåndsvarsel',
-        defaultValue: grunnlag.vurdering?.gjelderFra
-          ? formaterDatoForFrontend(grunnlag.vurdering?.gjelderFra)
-          : undefined,
+        defaultValue: defaultValue.gjelderFra,
         rules: {
           required: 'Du må velge når vurderingen gjelder fra',
           validate: {
@@ -107,7 +121,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => 
   );
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading="§ 11-7 Medlemmets aktivitetsplikt"
       steg={'VURDER_AKTIVITETSPLIKT_11_7'}
       onSubmit={handleSubmit}
@@ -116,6 +130,14 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => 
       status={status}
       vilkårTilhørerNavKontor={true}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() =>
+          form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
+        )
+      }
+      readOnly={readOnly}
     >
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger
@@ -131,9 +153,27 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly }: Props) => 
       <FormField form={form} formField={formFields.erOppfylt} />
       {form.watch('erOppfylt') === JaEllerNei.Nei && <FormField form={form} formField={formFields.utfall} />}
       <FormField form={form} formField={formFields.gjelderFra} />
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
+
+function mapVurderingToDraftFormFields(vurdering?: Aktivitetsplikt11_7Vurdering): DraftFormFields {
+  return {
+    erOppfylt: getJaNeiEllerUndefined(vurdering?.erOppfylt),
+    utfall: vurdering?.utfall || undefined,
+    begrunnelse: vurdering?.begrunnelse || undefined,
+    gjelderFra: vurdering?.gjelderFra ? formaterDatoForFrontend(vurdering?.gjelderFra) : undefined,
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return {
+    erOppfylt: '',
+    gjelderFra: '',
+    begrunnelse: '',
+    utfall: '' as Utfall, // Vi caster denne da vi ikke ønsker å ødelegge typen på den i løs-behov
+  };
+}
 
 const byggFelter = (vurdering: Aktivitetsplikt11_7Vurdering): ValuePair[] => [
   {

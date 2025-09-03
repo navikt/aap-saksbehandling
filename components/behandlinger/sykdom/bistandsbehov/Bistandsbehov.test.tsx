@@ -56,27 +56,30 @@ describe('mellomlagring i bistandsbehov', () => {
     expect(tekst).toBeVisible();
   });
 
-  it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-    render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
+  it(
+    'Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre ' + 'mellomlagring',
+    async () => {
+      render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
 
-    await user.type(
-      screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
-      'Her har jeg begynt å skrive en vurdering..'
-    );
-    expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
+      await user.type(
+        screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
+        'Her har jeg begynt å skrive en vurdering..'
+      );
+      expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
 
-    const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
-      type: 'SUCCESS',
-      data: mellomlagring,
-      status: 200,
-    };
-    fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
+      const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
+        type: 'SUCCESS',
+        data: mellomlagring,
+        status: 200,
+      };
+      fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
 
-    const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
-    await user.click(lagreKnapp);
-    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
-    expect(tekst).toBeVisible();
-  });
+      const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
+      await user.click(lagreKnapp);
+      const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
+      expect(tekst).toBeVisible();
+    }
+  );
 
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(

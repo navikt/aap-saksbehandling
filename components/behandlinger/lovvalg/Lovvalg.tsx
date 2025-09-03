@@ -5,12 +5,12 @@ import {
   hentLovvalgMedlemskapGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegSomSkalVises } from 'lib/utils/steg';
+import { getStegData, skalViseSteg } from 'lib/utils/steg';
 import { LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringswrapper';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { LovvalgOgMedlemskapVedSKnadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
+import { LovvalgOgMedlemskapVedSøknadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
 
 interface Props {
   behandlingsReferanse: string;
@@ -27,13 +27,13 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
     return <ApiException apiResponses={[vurderingAutomatisk, grunnlag, flyt]} />;
   }
 
-  const stegSomSkalVises = getStegSomSkalVises('LOVVALG', flyt.data);
-
+  const vurderLovvalgSteg = getStegData('LOVVALG', 'VURDER_LOVVALG', flyt.data);
   const behandlingsVersjon = flyt.data.behandlingVersjon;
-  const saksBehandlerReadOnly = flyt.data.visning.saksbehandlerReadOnly;
-  const readOnly = saksBehandlerReadOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const readOnly = vurderLovvalgSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+
+  const visManuellVurdering = skalViseSteg(vurderLovvalgSteg, !!grunnlag.data.vurdering);
   const visOverstyrKnapp =
-    vurderingAutomatisk.data.kanBehandlesAutomatisk && stegSomSkalVises.length === 0 && !readOnly;
+    vurderingAutomatisk.data.kanBehandlesAutomatisk && !readOnly && vurderLovvalgSteg.avklaringsbehov.length === 0;
 
   return (
     <GruppeSteg
@@ -45,18 +45,18 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
     >
       <LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper
         automatiskVurdering={vurderingAutomatisk.data}
-        stegSomSkalVises={stegSomSkalVises}
+        harAvklaringsbehov={vurderLovvalgSteg.avklaringsbehov.length > 0}
         behandlingsReferanse={behandlingsReferanse}
         behandlingVersjon={behandlingsVersjon}
         readOnly={readOnly}
         visOverstyrKnapp={visOverstyrKnapp}
         initialMellomlagretVurdering={initialMellomlagretVurdering}
       >
-        {stegSomSkalVises.includes('VURDER_LOVVALG') && (
-          <LovvalgOgMedlemskapVedSKnadstidspunkt
+        {visManuellVurdering && (
+          <LovvalgOgMedlemskapVedSøknadstidspunkt
             behandlingVersjon={behandlingsVersjon}
             grunnlag={grunnlag.data}
-            readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+            readOnly={readOnly}
             overstyring={!!grunnlag?.data.vurdering?.overstyrt}
             initialMellomlagretVurdering={initialMellomlagretVurdering}
           />

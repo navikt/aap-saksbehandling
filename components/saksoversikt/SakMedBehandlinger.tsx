@@ -9,7 +9,7 @@ import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
 import { mapTilÅrsakTilOpprettelseTilTekst } from 'lib/utils/oversettelser';
-import { isLocal, isProd } from 'lib/utils/environment';
+import { isLocal } from 'lib/utils/environment';
 
 const formaterBehandlingType = (behandlingtype: string) => {
   switch (behandlingtype) {
@@ -58,7 +58,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           >
             Opprett klage
           </Button>
-          {kanRegistrerebrudd && !isProd() && (
+          {kanRegistrerebrudd && isLocal() && (
             <Button
               variant="secondary"
               size="small"

@@ -2,52 +2,66 @@
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { PåklagetBehandlingGrunnlag, TypeBehandling } from 'lib/types/types';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { MellomlagretVurdering, PåklagetBehandlingGrunnlag, TypeBehandling } from 'lib/types/types';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { VelgPåklagetVedtakRadioTable } from 'components/behandlinger/klage/formkrav/påklagetbehandling/VelgPåklagetVedtakRadioTable';
 import { Controller, useForm } from 'react-hook-form';
 import { Behovstype } from 'lib/utils/form';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   behandlingVersjon: number;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
   grunnlag?: PåklagetBehandlingGrunnlag;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface FormSchema {
+interface FormFields {
   vedtak: string | null | undefined;
 }
 
-export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('PÅKLAGET_BEHANDLING');
 
-  const { control, handleSubmit } = useForm<FormSchema>({
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.FASTSETT_PÅKLAGET_BEHANDLING, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.gjeldendeVurdering);
+
+  const { control, handleSubmit, watch, reset } = useForm<FormFields>({
     defaultValues: {
-      vedtak: grunnlag?.gjeldendeVurdering?.påklagetBehandling,
+      vedtak: defaultValue.vedtak,
     },
   });
 
-  const onSubmit = (data: FormSchema) => {
-    løsBehovOgGåTilNesteSteg({
-      behandlingVersjon: behandlingVersjon,
-      referanse: behandlingsreferanse,
-      behov: {
-        behovstype: Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
-        påklagetBehandlingVurdering: {
-          påklagetVedtakType: 'KELVIN_BEHANDLING',
-          påklagetBehandling: data.vedtak,
+  const onSubmit = (data: FormFields) => {
+    løsBehovOgGåTilNesteSteg(
+      {
+        behandlingVersjon: behandlingVersjon,
+        referanse: behandlingsreferanse,
+        behov: {
+          behovstype: Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
+          påklagetBehandlingVurdering: {
+            påklagetVedtakType: 'KELVIN_BEHANDLING',
+            påklagetBehandling: data.vedtak,
+          },
         },
       },
-    });
+      () => nullstillMellomlagretVurdering()
+    );
   };
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'Klage på vedtak'}
       steg={'PÅKLAGET_BEHANDLING'}
       onSubmit={handleSubmit(onSubmit)}
@@ -57,6 +71,18 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly }: P
       isLoading={isLoading}
       status={status}
       vurdertAvAnsatt={grunnlag?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(watch())}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() =>
+          reset(
+            grunnlag?.gjeldendeVurdering
+              ? mapVurderingToDraftFormFields(grunnlag.gjeldendeVurdering)
+              : emptyDraftFormFields()
+          )
+        )
+      }
+      readOnly={readOnly}
     >
       <Controller
         name="vedtak"
@@ -71,9 +97,19 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly }: P
           />
         )}
       />
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
+
+function mapVurderingToDraftFormFields(vurdering: PåklagetBehandlingGrunnlag['gjeldendeVurdering']): DraftFormFields {
+  return {
+    vedtak: vurdering?.påklagetBehandling,
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return { vedtak: '' };
+}
 
 function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
   return (

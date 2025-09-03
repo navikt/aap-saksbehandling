@@ -5,13 +5,13 @@ import { UnderveisAvslagsÅrsak, UnderveisGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
 import { exhaustiveCheck } from 'lib/utils/typescript';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
@@ -46,7 +46,7 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
     useLøsBehovOgGåTilNesteSteg('FASTSETT_UTTAK');
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedForm
       heading="Underveis"
       steg={'FASTSETT_UTTAK'}
       vilkårTilhørerNavKontor={true}
@@ -91,7 +91,7 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
       </div>
-    </VilkårsKortMedForm>
+    </VilkårskortMedForm>
   );
 };
 

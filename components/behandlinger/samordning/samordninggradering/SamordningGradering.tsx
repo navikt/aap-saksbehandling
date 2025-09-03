@@ -15,7 +15,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
 import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { isNullOrUndefined } from 'lib/utils/validering';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
@@ -58,6 +58,11 @@ export const SamordningGradering = ({
 }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const [errorMessage, setErrorMessage] = useState<String | undefined>(undefined);
+  const [success, setSuccess] = useState(false);
+
+  const handleSuccess = () => {
+    setSuccess(true);
+  };
 
   const finnesYtelserEllerVurderinger = !!(
     grunnlag.ytelser.length > 0 ||
@@ -187,12 +192,13 @@ export const SamordningGradering = ({
               saksnummer={sak.sak.saksnummer}
               brukerInformasjon={bruker}
               modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
+              successfullOpprettelse={handleSuccess}
               finnTidligsteVirkningstidspunkt={finnTidligsteVirkningstidspunkt()}
             />
           </Modal.Body>
         </Modal>
       )}
-      <VilkårsKortMedForm
+      <VilkårskortMedFormOgMellomlagring
         heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser"
         steg="SAMORDNING_GRADERING"
         onSubmit={handleSubmit}
@@ -216,7 +222,12 @@ export const SamordningGradering = ({
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell ytelser={grunnlag.ytelser} />
             <Ytelsesvurderinger form={form} readOnly={readOnly} />
-            {visRevurderVirkningstidspunkt && (
+            {success && (
+              <Box maxWidth={'80ch'}>
+                <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
+              </Box>
+            )}
+            {visRevurderVirkningstidspunkt && !success && (
               <Box maxWidth={'90ch'}>
                 <Alert variant="info">
                   <Heading spacing size="small" level="3">
@@ -251,7 +262,7 @@ export const SamordningGradering = ({
             {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
           </VStack>
         )}
-        {!visForm && grunnlag.ytelser.length === 0 && grunnlag.vurdering?.vurderinger?.length === 0 && (
+        {!visForm && (
           <VStack gap={'2'}>
             <Detail>Vi finner ingen ytelser fra folketrygden</Detail>
             <HStack>
@@ -267,7 +278,7 @@ export const SamordningGradering = ({
             </HStack>
           </VStack>
         )}
-      </VilkårsKortMedForm>
+      </VilkårskortMedFormOgMellomlagring>
     </>
   );
 };

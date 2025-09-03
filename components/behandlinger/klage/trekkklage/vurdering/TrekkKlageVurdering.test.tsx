@@ -1,35 +1,20 @@
-import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from 'lib/test/CustomRender';
-import { FormkravVurdering } from './FormkravVurdering';
-import { FormkravGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
-import { Behovstype } from 'lib/utils/form';
-import { FetchResponse } from 'lib/utils/api';
-import userEvent from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
+import { describe, expect, it, vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { MellomlagretVurderingResponse, TrekkKlageGrunnlag } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
+import { render, screen } from 'lib/test/CustomRender';
+import { FetchResponse } from 'lib/utils/api';
+import { TrekkKlageVurdering } from 'components/behandlinger/klage/trekkklage/vurdering/TrekkKlageVurdering';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
-describe('Klage', () => {
-  it('Skal ha en overskrift', () => {
-    render(<FormkravVurdering readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
-
-    const heading = screen.getByText('Formkrav');
-    expect(heading).toBeVisible();
-  });
-
-  it('Skal ha felt for begrunnelse', () => {
-    render(<FormkravVurdering readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
-    const begrunnelse = screen.getByRole('textbox', { name: 'Vurdering' });
-    expect(begrunnelse).toBeVisible();
-  });
-});
-
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
-      avklaringsbehovkode: Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER,
+      avklaringsbehovkode: Behovstype.TREKK_KLAGE_KODE,
       behandlingId: { id: 1 },
       data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret"}',
       vurdertDato: '2025-08-21T12:00:00.000',
@@ -37,20 +22,16 @@ describe('mellomlagring', () => {
     },
   };
 
-  const grunnlagMedVurdering: FormkravGrunnlag = {
-    harTilgangTilÅSaksbehandle: true,
+  const grunnlagMedVurdering: TrekkKlageGrunnlag = {
     vurdering: {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
-      erFristOverholdt: true,
-      erKonkret: true,
-      erSignert: true,
-      erBrukerPart: true,
+      skalTrekkes: false,
     },
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
-      <FormkravVurdering
+      <TrekkKlageVurdering
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -62,8 +43,8 @@ describe('mellomlagring', () => {
   });
 
   it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-    render(<FormkravVurdering behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} readOnly={false} />);
-    await user.type(screen.getByRole('textbox', { name: 'Vurdering' }), 'Her har jeg begynt å skrive en vurdering..');
+    render(<TrekkKlageVurdering behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} readOnly={false} />);
+    await user.type(screen.getByRole('textbox', { name: 'Begrunnelse' }), 'Her har jeg begynt å skrive en vurdering..');
     expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
 
     const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
@@ -81,7 +62,7 @@ describe('mellomlagring', () => {
 
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
-      <FormkravVurdering
+      <TrekkKlageVurdering
         typeBehandling={'Førstegangsbehandling'}
         behandlingVersjon={0}
         readOnly={false}
@@ -102,7 +83,7 @@ describe('mellomlagring', () => {
 
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
-      <FormkravVurdering
+      <TrekkKlageVurdering
         typeBehandling={'Førstegangsbehandling'}
         behandlingVersjon={0}
         readOnly={false}
@@ -112,7 +93,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurdering',
+      name: 'Begrunnelse',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -120,7 +101,7 @@ describe('mellomlagring', () => {
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
     render(
-      <FormkravVurdering
+      <TrekkKlageVurdering
         typeBehandling={'Førstegangsbehandling'}
         behandlingVersjon={0}
         readOnly={false}
@@ -129,7 +110,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurdering',
+      name: 'Begrunnelse',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -137,7 +118,7 @@ describe('mellomlagring', () => {
 
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <FormkravVurdering
+      <TrekkKlageVurdering
         typeBehandling={'Førstegangsbehandling'}
         behandlingVersjon={0}
         readOnly={false}
@@ -145,9 +126,9 @@ describe('mellomlagring', () => {
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'Vurdering' }), ' her er ekstra tekst');
+    await user.type(screen.getByRole('textbox', { name: 'Begrunnelse' }), ' her er ekstra tekst');
 
-    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue(
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue(
       'Dette er min vurdering som er mellomlagret her er ekstra tekst'
     );
 
@@ -155,12 +136,12 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue('');
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('');
   });
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <FormkravVurdering
+      <TrekkKlageVurdering
         typeBehandling={'Førstegangsbehandling'}
         behandlingVersjon={0}
         readOnly={false}
@@ -169,9 +150,9 @@ describe('mellomlagring', () => {
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'Vurdering' }), ' her er ekstra tekst');
+    await user.type(screen.getByRole('textbox', { name: 'Begrunnelse' }), ' her er ekstra tekst');
 
-    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue(
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue(
       'Dette er min vurdering som er mellomlagret her er ekstra tekst'
     );
 
@@ -179,12 +160,12 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue('Dette er min vurdering som er bekreftet');
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('Dette er min vurdering som er bekreftet');
   });
 
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
     render(
-      <FormkravVurdering
+      <TrekkKlageVurdering
         typeBehandling={'Førstegangsbehandling'}
         behandlingVersjon={0}
         readOnly={true}

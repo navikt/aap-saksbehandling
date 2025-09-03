@@ -1,10 +1,17 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { BarnetilleggVurdering } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { userEvent } from '@testing-library/user-event';
-import { BarnetilleggGrunnlag, BehandlingPersoninfo } from 'lib/types/types';
+import { BarnetilleggGrunnlag, BehandlingPersoninfo, MellomlagretVurderingResponse } from 'lib/types/types';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { render, screen, within } from 'lib/test/CustomRender';
+import createFetchMock from 'vitest-fetch-mock';
+import { Behovstype } from 'lib/utils/form';
+import { FetchResponse } from 'lib/utils/api';
+
+const fetchMock = createFetchMock(vi);
+fetchMock.enableMocks();
+const user = userEvent.setup();
 
 const barnSomTrengerVurderingFosterforelder: BarnetilleggGrunnlag['barnSomTrengerVurdering'][number] = {
   ident: {
@@ -78,7 +85,7 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -92,7 +99,7 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -190,7 +197,7 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -204,7 +211,7 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -216,7 +223,7 @@ describe('barnetillegg', () => {
     render(
       <BarnetilleggVurdering
         grunnlag={grunnlag}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingsversjon={0}
         readOnly={true}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -226,11 +233,11 @@ describe('barnetillegg', () => {
     expect(knapp).not.toBeInTheDocument();
   });
 
-  it('skal ikke vise knapp for å fullføre steget dersom det ikke finnes et avklaringsbehov', () => {
+  it('skal ikke vise knapp for å fullføre steget dersom manuell vurdering er false', () => {
     render(
       <BarnetilleggVurdering
         grunnlag={grunnlag}
-        harAvklaringsbehov={false}
+        visManuellVurdering={false}
         behandlingsversjon={0}
         readOnly={true}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -240,11 +247,11 @@ describe('barnetillegg', () => {
     expect(knapp).not.toBeInTheDocument();
   });
 
-  it('skal  vise knapp for å fullføre steget dersom det finnes et avklaringsbehov', () => {
+  it('skal  vise knapp for å fullføre steget dersom det finnes manuell vurdering og readOnly er false', () => {
     render(
       <BarnetilleggVurdering
         grunnlag={grunnlag}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingsversjon={0}
         readOnly={false}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -261,10 +268,10 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
         grunnlag={grunnlag}
         readOnly={false}
-        harAvklaringsbehov={true}
-        behandlingPersonInfo={behandlingPersonInfo}
+        visManuellVurdering={true}
       />
     );
 
@@ -286,7 +293,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -301,7 +308,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -317,7 +324,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -334,7 +341,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -350,7 +357,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -367,7 +374,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -387,7 +394,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -409,7 +416,7 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -429,7 +436,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={true}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -443,7 +450,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -457,7 +464,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -484,7 +491,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -498,7 +505,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -529,7 +536,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -547,7 +554,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -567,7 +574,7 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -598,4 +605,280 @@ describe('Oppgitte barn', () => {
   const klikkPåBekreft = async () => {
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
   };
+});
+
+describe('mellomlagring', () => {
+  const mellomlagring: MellomlagretVurderingResponse = {
+    mellomlagretVurdering: {
+      avklaringsbehovkode: Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
+      behandlingId: { id: 1 },
+      data: '{"barnetilleggVurderinger": [{"navn": "ISABELLA ORM", "ident": "01412086860", "vurderinger": [{"fraDato": "", "begrunnelse": "Dette er min vurdering som er mellomlagret", "harForeldreAnsvar": ""}], "fødselsdato": "2020-01-01"}]}',
+      vurdertDato: '2025-08-21T12:00:00.000',
+      vurdertAv: 'Jan T. Loven',
+    },
+  };
+
+  const grunnlagMedVurdering: BarnetilleggGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    søknadstidspunkt: '2025-09-02',
+    folkeregisterbarn: [],
+    vurderteBarn: [
+      {
+        ident: '01412086860',
+        navn: null,
+        vurderinger: [
+          {
+            fraDato: '2025-09-02',
+            harForeldreAnsvar: false,
+            begrunnelse: 'Dette er min vurdering som er bekreftet',
+          },
+        ],
+        fødselsdato: '2020-01-01',
+      },
+    ],
+    vurdertAv: {
+      ident: 'KVALITETSSIKRER',
+      dato: '2025-09-02',
+      ansattnavn: 'KVALITETSSIKRER',
+      enhetsnavn: 'Lokalenhetsnavn',
+    },
+    barnSomTrengerVurdering: [],
+  };
+
+  const grunnlagUtenVurdering: BarnetilleggGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    søknadstidspunkt: '2025-09-02',
+    folkeregisterbarn: [],
+    vurderteBarn: [],
+    barnSomTrengerVurdering: [
+      {
+        ident: {
+          identifikator: '01412086860',
+          aktivIdent: true,
+        },
+        fodselsDato: '2020-01-01',
+        navn: 'ISABELLA ORM',
+        forsorgerPeriode: {
+          fom: '2020-01-01',
+          tom: '2037-12-31',
+        },
+      },
+    ],
+  };
+
+  it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
+    render(
+      <BarnetilleggVurdering
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+        visManuellVurdering={true}
+        readOnly={false}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
+    expect(tekst).toBeVisible();
+  });
+
+  it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
+    render(
+      <BarnetilleggVurdering
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+        visManuellVurdering={true}
+        readOnly={false}
+        grunnlag={grunnlagUtenVurdering}
+      />
+    );
+
+    await user.type(
+      screen.getByRole('textbox', {
+        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      }),
+      'Her har jeg begynt å skrive en vurdering..'
+    );
+    expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
+
+    const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
+      type: 'SUCCESS',
+      data: mellomlagring,
+      status: 200,
+    };
+    fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
+
+    const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
+    await user.click(lagreKnapp);
+    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
+    expect(tekst).toBeVisible();
+  });
+
+  it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
+    render(
+      <BarnetilleggVurdering
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+        visManuellVurdering={true}
+        readOnly={false}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    expect(screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)')).toBeVisible();
+
+    const mockFetchResponseSlettMellomlagring: FetchResponse<object> = { type: 'SUCCESS', status: 202, data: {} };
+    fetchMock.mockResponse(JSON.stringify(mockFetchResponseSlettMellomlagring));
+
+    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+    await user.click(slettKnapp);
+
+    expect(screen.queryByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)')).not.toBeInTheDocument();
+  });
+
+  it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
+    render(
+      <BarnetilleggVurdering
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+        visManuellVurdering={true}
+        readOnly={false}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+    });
+
+    expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
+  });
+
+  it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
+    render(
+      <BarnetilleggVurdering
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+        visManuellVurdering={true}
+        readOnly={false}
+        grunnlag={grunnlagMedVurdering}
+      />
+    );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+    });
+
+    expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
+  });
+
+  it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
+    render(
+      <BarnetilleggVurdering
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+        visManuellVurdering={true}
+        readOnly={false}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    await user.type(
+      screen.getByRole('textbox', {
+        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      }),
+      ' her er ekstra tekst'
+    );
+
+    expect(
+      screen.getByRole('textbox', {
+        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      })
+    ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
+
+    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+
+    await user.click(slettKnapp);
+
+    expect(
+      screen.queryByRole('textbox', {
+        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      })
+    ).toHaveValue('');
+  });
+
+  it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
+    render(
+      <BarnetilleggVurdering
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+        visManuellVurdering={true}
+        readOnly={false}
+        grunnlag={grunnlagMedVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    await user.type(
+      screen.getByRole('textbox', {
+        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      }),
+      ' her er ekstra tekst'
+    );
+
+    expect(
+      screen.getByRole('textbox', {
+        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      })
+    ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
+
+    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+
+    await user.click(slettKnapp);
+
+    expect(
+      screen.getByRole('textbox', {
+        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      })
+    ).toHaveValue('Dette er min vurdering som er bekreftet');
+  });
+
+  it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
+    render(
+      <BarnetilleggVurdering
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+        visManuellVurdering={true}
+        readOnly={true}
+        grunnlag={grunnlagMedVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
+    expect(lagreKnapp).not.toBeInTheDocument();
+    const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
+    expect(slettKnapp).not.toBeInTheDocument();
+  });
+
+  it('Vilkårskortet skal være default åpen dersom det finnes en mellomlagret vurdering', () => {
+    render(
+      <BarnetilleggVurdering
+        behandlingsversjon={1}
+        behandlingPersonInfo={behandlingPersonInfo}
+        visManuellVurdering={true}
+        readOnly={true}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    expect(
+      screen.getByRole('textbox', {
+        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      })
+    ).toBeVisible();
+  });
 });

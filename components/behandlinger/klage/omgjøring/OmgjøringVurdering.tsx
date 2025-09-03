@@ -1,7 +1,7 @@
 'use client';
 
 import { OpprettRevurdering } from 'components/saksoversikt/opprettrevurdering/OpprettRevurdering';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { Klageresultat, SaksInfo } from 'lib/types/types';
 import { hjemmelMap, hjemmelÅrsakMapMap } from 'lib/utils/hjemmel';
 

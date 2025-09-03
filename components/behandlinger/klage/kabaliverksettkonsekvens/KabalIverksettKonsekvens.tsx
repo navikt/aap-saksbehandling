@@ -1,7 +1,7 @@
 'use client';
 
 import { SvarFraAndreinstansGrunnlag, SvarFraAndreinstansVurdering } from 'lib/types/types';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
 import { hjemmelMap } from 'lib/utils/hjemmel';

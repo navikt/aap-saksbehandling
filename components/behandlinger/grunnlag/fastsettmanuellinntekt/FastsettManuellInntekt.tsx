@@ -1,22 +1,28 @@
 'use client';
 
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyShort, HStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { FormEvent } from 'react';
-import { Behovstype } from 'lib/utils/form';
+import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { ManuellInntektGrunnlag, ManuellInntektVurderingGrunnlagResponse } from 'lib/types/types';
+import {
+  ManuellInntektGrunnlag,
+  ManuellInntektVurderingGrunnlagResponse,
+  MellomlagretVurdering,
+} from 'lib/types/types';
 import { formaterTilNok } from 'lib/utils/string';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   behandlingsversjon: number;
   grunnlag: ManuellInntektGrunnlag;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -24,10 +30,24 @@ interface FormFields {
   inntekt: string;
 }
 
-export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const FastsettManuellInntekt = ({
+  behandlingsversjon,
+  grunnlag,
+  readOnly,
+  initialMellomlagretVurdering,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('MANGLENDE_LIGNING');
+
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.FASTSETT_MANUELL_INNTEKT, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag.vurdering);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -35,7 +55,7 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
         type: 'textarea',
         label: `Begrunn inntekt for siste beregningsår (${grunnlag.ar})`,
         rules: { required: 'Du må gi en begrunnelse.' },
-        defaultValue: grunnlag.vurdering?.begrunnelse,
+        defaultValue: defaultValue.begrunnelse,
       },
       inntekt: {
         type: 'number',
@@ -44,7 +64,7 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
           required: 'Du må oppgi inntekt for det siste året.',
           min: { value: 0, message: 'Inntekt kan ikke være negativ.' },
         },
-        defaultValue: grunnlag.vurdering?.belop.toString() || '',
+        defaultValue: defaultValue.inntekt || '',
       },
     },
     { readOnly }
@@ -52,17 +72,20 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingsversjon,
-        behov: {
-          behovstype: Behovstype.FASTSETT_MANUELL_INNTEKT,
-          manuellVurderingForManglendeInntekt: {
-            begrunnelse: data.begrunnelse,
-            belop: Number(data.inntekt),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingsversjon,
+          behov: {
+            behovstype: Behovstype.FASTSETT_MANUELL_INNTEKT,
+            manuellVurderingForManglendeInntekt: {
+              begrunnelse: data.begrunnelse,
+              belop: Number(data.inntekt),
+            },
           },
+          referanse: behandlingsReferanse,
         },
-        referanse: behandlingsReferanse,
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   }
 
@@ -73,7 +96,7 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'Pensjonsgivende inntekt mangler (§ 11-19)'}
       steg={'MANGLENDE_LIGNING'}
       onSubmit={handleSubmit}
@@ -83,6 +106,14 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
       visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() => {
+          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+        });
+      }}
+      mellomlagretVurdering={mellomlagretVurdering}
+      readOnly={readOnly}
     >
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger
@@ -104,8 +135,21 @@ export const FastsettManuellInntekt = ({ behandlingsversjon, grunnlag, readOnly 
         <FormField form={form} formField={formFields.inntekt} className={'inntekt_input'} />
         <BodyShort>{inntektIgVerdi.toFixed(2)} G</BodyShort>
       </HStack>
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
+};
+
+const mapVurderingToDraftFormFields = (vurdering?: ManuellInntektVurderingGrunnlagResponse): DraftFormFields => {
+  return {
+    begrunnelse: vurdering?.begrunnelse,
+    inntekt: getStringEllerUndefined(vurdering?.belop),
+  };
+};
+const emptyDraftFormFields = (): DraftFormFields => {
+  return {
+    begrunnelse: '',
+    inntekt: '',
+  };
 };
 
 const byggFelter = (vurdering: ManuellInntektVurderingGrunnlagResponse): ValuePair[] => [

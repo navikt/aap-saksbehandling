@@ -10,7 +10,6 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { SamordningTjenestePensjonMedDataFetching } from 'components/behandlinger/samordning/samordningtjenestepensjon/SamordningTjenestePensjonMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SamordningArbeidsgiverMedDatafetching } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverMedDatafetching';
-import { isDev } from 'lib/utils/environment';
 
 interface Props {
   behandlingsreferanse: string;
@@ -61,15 +60,13 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
         />
       </StegSuspense>
 
-      {isDev() && (
-        <StegSuspense>
-          <SamordningArbeidsgiverMedDatafetching
-            behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={flyt.data.behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <SamordningArbeidsgiverMedDatafetching
+          behandlingsreferanse={behandlingsreferanse}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+        />
+      </StegSuspense>
 
       {stegSomSkalVises.includes('SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV') && (
         <StegSuspense>

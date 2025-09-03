@@ -2,7 +2,11 @@ import { TypeBehandling } from 'lib/types/types';
 import { PåklagetBehandling } from './PåklagetBehandling';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { hentPåklagetBehandlingGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentMellomlagring,
+  hentPåklagetBehandlingGrunnlag,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsreferanse: string;
@@ -17,7 +21,10 @@ export const PåklagetBehandlingMedDataFetching = async ({
   typeBehandling,
   behandlingsreferanse,
 }: Props) => {
-  const grunnlag = await hentPåklagetBehandlingGrunnlag(behandlingsreferanse);
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+    hentPåklagetBehandlingGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.FASTSETT_PÅKLAGET_BEHANDLING),
+  ]);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
@@ -29,6 +36,7 @@ export const PåklagetBehandlingMedDataFetching = async ({
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       typeBehandling={typeBehandling}
       grunnlag={grunnlag.data}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
 };
