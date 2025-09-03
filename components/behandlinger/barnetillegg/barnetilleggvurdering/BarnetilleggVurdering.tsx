@@ -166,7 +166,7 @@ export const BarnetilleggVurdering = ({
                   ident={vurdering.ident}
                   fødselsdato={vurdering.fødselsdato}
                   navn={vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
-                  oppgittForelderRelasjon={vurdering.oppgittForelderRelasjon}
+                  harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
                   readOnly={readOnly}
                 />
               );

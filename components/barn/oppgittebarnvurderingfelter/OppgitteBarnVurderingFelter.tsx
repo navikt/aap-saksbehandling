@@ -17,7 +17,7 @@ interface Props {
   readOnly: boolean;
   form: UseFormReturn<BarnetilleggFormFields>;
   fødselsdato: string | null | undefined;
-  oppgittForelderRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
+  harOppgittFosterforelderRelasjon: boolean;
 }
 
 export const OppgitteBarnVurderingFelter = ({
@@ -26,7 +26,7 @@ export const OppgitteBarnVurderingFelter = ({
   vurderingIndex,
   form,
   fødselsdato,
-  oppgittForelderRelasjon,
+  harOppgittFosterforelderRelasjon,
 }: Props) => {
   const harForeldreAnsvar = form.watch(
     `barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`
@@ -40,8 +40,6 @@ export const OppgitteBarnVurderingFelter = ({
   const skalSetteEnFraOgMedDato =
     (harForeldreAnsvar === JaEllerNei.Nei && vurderingIndex !== 0) || harForeldreAnsvar === JaEllerNei.Ja;
 
-  const erFosterhjemsBarn = oppgittForelderRelasjon === 'FOSTERFORELDER';
-
   return (
     <div className={'flex-column'}>
       <TextAreaWrapper
@@ -52,22 +50,23 @@ export const OppgitteBarnVurderingFelter = ({
         rules={{ required: 'Du må gi en begrunnelse' }}
         className="begrunnelse"
       />
-      {erFosterhjemsBarn ||
-        (erFosterforelder !== null && (
-          <RadioGroupWrapper
-            label={'Har fosterhjemsordningen vart i to år eller er den av varig karakter?'}
-            control={form.control}
-            name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.erFosterforelder`}
-            readOnly={readOnly}
-            rules={{
-              required: 'Du må besvare om fosterhjemsordingen har vart i to år eller om den er av varig karakter',
-            }}
-            horisontal
-          >
-            <Radio value={JaEllerNei.Ja}>Ja</Radio>
-            <Radio value={JaEllerNei.Nei}>Nei</Radio>
-          </RadioGroupWrapper>
-        ))}
+      {(harOppgittFosterforelderRelasjon ||
+        erFosterforelder === JaEllerNei.Ja ||
+        erFosterforelder === JaEllerNei.Nei) && (
+        <RadioGroupWrapper
+          label={'Har fosterhjemsordningen vart i to år eller er den av varig karakter?'}
+          control={form.control}
+          name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.erFosterforelder`}
+          readOnly={readOnly}
+          rules={{
+            required: 'Du må besvare om fosterhjemsordingen har vart i to år eller om den er av varig karakter',
+          }}
+          horisontal
+        >
+          <Radio value={JaEllerNei.Ja}>Ja</Radio>
+          <Radio value={JaEllerNei.Nei}>Nei</Radio>
+        </RadioGroupWrapper>
+      )}
       {erFosterforelder !== JaEllerNei.Nei && (
         <RadioGroupWrapper
           label={'Skal brukeren få barnetillegg for barnet?'}

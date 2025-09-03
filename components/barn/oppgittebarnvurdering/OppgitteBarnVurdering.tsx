@@ -14,7 +14,7 @@ interface Props {
   ident: string | null | undefined;
   navn: string;
   fødselsdato: string | null | undefined;
-  oppgittForelderRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
+  harOppgittFosterforelderRelasjon: boolean;
   readOnly: boolean;
 }
 
@@ -25,7 +25,7 @@ export const OppgitteBarnVurdering = ({
   navn,
   readOnly,
   fødselsdato,
-  oppgittForelderRelasjon,
+  harOppgittFosterforelderRelasjon,
 }: Props) => {
   const {
     fields: vurderinger,
@@ -48,7 +48,9 @@ export const OppgitteBarnVurdering = ({
           <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'2rem'} />
         </div>
         <div>
-          <Detail className={styles.detailgray}>Oppgitt fosterbarn</Detail>
+          <Detail className={styles.detailgray}>
+            {harOppgittFosterforelderRelasjon ? 'Oppgitt fosterbarn' : 'Oppgitt barn'}
+          </Detail>
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent fødselsdato'})
           </BodyShort>
@@ -66,7 +68,7 @@ export const OppgitteBarnVurdering = ({
                 barneTilleggIndex={barnetilleggIndex}
                 vurderingIndex={vurderingIndex}
                 fødselsdato={fødselsdato}
-                oppgittForelderRelasjon={oppgittForelderRelasjon}
+                harOppgittFosterforelderRelasjon={harOppgittFosterforelderRelasjon}
               />
               {kanFjernePeriode && !readOnly && (
                 <Button

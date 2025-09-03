@@ -6,6 +6,32 @@ import { BarnetilleggGrunnlag, BehandlingPersoninfo } from 'lib/types/types';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { render, screen, within } from 'lib/test/CustomRender';
 
+const barnSomTrengerVurderingFosterforelder: BarnetilleggGrunnlag['barnSomTrengerVurdering'][number] = {
+  ident: {
+    identifikator: '12345678910',
+    aktivIdent: true,
+  },
+  fodselsDato: '2015-01-01',
+  forsorgerPeriode: {
+    fom: '2020-01-30',
+    tom: '2038-01-30',
+  },
+  oppgittForeldreRelasjon: 'FOSTERFORELDER',
+};
+
+const vurdertBarnFosterForelder: BarnetilleggGrunnlag['vurderteBarn'][number] = {
+  fødselsdato: '2023-05-05',
+  ident: '1234567890',
+  navn: 'Snill Såpe',
+  vurderinger: [
+    {
+      begrunnelse: 'en god begrunnelse',
+      erFosterForelder: true,
+      fraDato: '2023-05-05',
+      harForeldreAnsvar: true,
+    },
+  ],
+};
 const grunnlag: BarnetilleggGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   søknadstidspunkt: '12.12.2023',
@@ -72,6 +98,91 @@ describe('barnetillegg', () => {
     );
     const heading = screen.getByText('Følgende barn er oppgitt av brukeren og må vurderes');
     expect(heading).toBeVisible();
+  });
+
+  it('oppgitt barn skal ha overskrift oppgitt fosterbarn dersom oppgittforeldrerelasjon er FOSTERFORELDER', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        harAvklaringsbehov={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const el = screen.getByText('Oppgitt fosterbarn');
+    expect(el).toBeVisible();
+  });
+
+  it('oppgitt barn skal ha overskrift oppgitt barn dersom oppgittforeldrerelasjon ikke er FOSTERFORELDER', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={grunnlag}
+        behandlingsversjon={0}
+        readOnly={false}
+        harAvklaringsbehov={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const el = screen.getByText('Oppgitt barn');
+    expect(el).toBeVisible();
+  });
+
+  it('skal vise spørsmål om fosterhjem dersom oppgittforeldrerelasjon er FOSTERFORELDER', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        harAvklaringsbehov={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const el = screen.getByText('Har fosterhjemsordningen vart i to år eller er den av varig karakter?');
+    expect(el).toBeInTheDocument();
+  });
+
+  it('skal ikke vise spørsmål om fosterhjem dersom oppgittforeldrerelasjon er  noe annet enn FOSTERFORELDER', async () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={grunnlag}
+        behandlingsversjon={0}
+        readOnly={false}
+        harAvklaringsbehov={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    screen.logTestingPlaygroundURL();
+    const el = await screen.queryByText('Har fosterhjemsordningen vart i to år eller er den av varig karakter?');
+    expect(el).not.toBeInTheDocument();
+  });
+
+  it('skal vise spørsmål om fosterhjem dersom det er besvart i en eksisterende vurdering', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, vurderteBarn: [vurdertBarnFosterForelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        harAvklaringsbehov={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const el = screen.getByText('Har fosterhjemsordningen vart i to år eller er den av varig karakter?');
+    expect(el).toBeInTheDocument();
+  });
+
+  it('skal ikke vise spørsmål om fosterhjem dersom det ikke er besvart i en eksisterende vurdering', async () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={grunnlag}
+        behandlingsversjon={0}
+        readOnly={false}
+        harAvklaringsbehov={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const el = await screen.queryByText('Har fosterhjemsordningen vart i to år eller er den av varig karakter?');
+    expect(el).not.toBeInTheDocument();
   });
 
   it('skal ha en heading for registrerte barn fra folkeregisteret', () => {
