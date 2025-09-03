@@ -1,0 +1,25 @@
+.manueltbarnheading {
+  display: flex;
+  flex-direction: row;
+  gap: var(--a-spacing-4);
+  align-items: center;
+}
+
+.vurdering {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-4);
+  border-left: 1px solid var(--a-border-subtle);
+  padding: var(--a-spacing-2) var(--a-spacing-4);
+}
+
+.vurderingwrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-4);
+  margin-bottom: var(--a-spacing-4);
+}
+
+.detailgray {
+  color: var(--a-text-subtle);
+}

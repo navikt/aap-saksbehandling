@@ -13,6 +13,32 @@ const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
+const barnSomTrengerVurderingFosterforelder: BarnetilleggGrunnlag['barnSomTrengerVurdering'][number] = {
+  ident: {
+    identifikator: '12345678910',
+    aktivIdent: true,
+  },
+  fodselsDato: '2015-01-01',
+  forsorgerPeriode: {
+    fom: '2020-01-30',
+    tom: '2038-01-30',
+  },
+  oppgittForeldreRelasjon: 'FOSTERFORELDER',
+};
+
+const vurdertBarnFosterForelder: BarnetilleggGrunnlag['vurderteBarn'][number] = {
+  fødselsdato: '2023-05-05',
+  ident: '1234567890',
+  navn: 'Snill Såpe',
+  vurderinger: [
+    {
+      begrunnelse: 'en god begrunnelse',
+      erFosterForelder: true,
+      fraDato: '2023-05-05',
+      harForeldreAnsvar: true,
+    },
+  ],
+};
 const grunnlag: BarnetilleggGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   søknadstidspunkt: '12.12.2023',
@@ -203,7 +229,7 @@ describe('Oppgitte barn', () => {
       />
     );
     const felt = screen.getByRole('textbox', {
-      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
     });
     expect(felt).toBeVisible();
   });
@@ -236,7 +262,7 @@ describe('Oppgitte barn', () => {
       />
     );
     const felt = screen.getByRole('group', {
-      name: 'Har fosterhjemsordningen vart i to år eller er den av varig karakter?',
+      name: 'Skal brukeren få barnetillegg for barnet?',
     });
     expect(felt).toBeVisible();
   });
@@ -256,6 +282,90 @@ describe('Oppgitte barn', () => {
 
     const feilmelding = screen.getByText('Du må besvare om det skal beregnes barnetillegg for barnet');
     expect(feilmelding).toBeVisible();
+  });
+
+  it('oppgitt barn skal ha overskrift oppgitt fosterbarn dersom oppgittforeldrerelasjon er FOSTERFORELDER', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const el = screen.getByText('Oppgitt fosterbarn');
+    expect(el).toBeVisible();
+  });
+
+  it('oppgitt barn skal ha overskrift oppgitt barn dersom oppgittforeldrerelasjon ikke er FOSTERFORELDER', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={grunnlag}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const el = screen.getByText('Oppgitt barn');
+    expect(el).toBeVisible();
+  });
+
+  it('skal vise spørsmål om fosterhjem dersom oppgittforeldrerelasjon er FOSTERFORELDER', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const el = screen.getByText('Har fosterhjemsordningen vart i to år eller er den av varig karakter?');
+    expect(el).toBeInTheDocument();
+  });
+
+  it('skal ikke vise spørsmål om fosterhjem dersom oppgittforeldrerelasjon er  noe annet enn FOSTERFORELDER', async () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={grunnlag}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const el = await screen.queryByText('Har fosterhjemsordningen vart i to år eller er den av varig karakter?');
+    expect(el).not.toBeInTheDocument();
+  });
+
+  it('skal vise spørsmål om fosterhjem dersom det er besvart i en eksisterende vurdering', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, vurderteBarn: [vurdertBarnFosterForelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const el = screen.getByText('Har fosterhjemsordningen vart i to år eller er den av varig karakter?');
+    expect(el).toBeInTheDocument();
+  });
+
+  it('skal ikke vise spørsmål om fosterhjem dersom det ikke er besvart i en eksisterende vurdering', async () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={grunnlag}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    const el = await screen.queryByText('Har fosterhjemsordningen vart i to år eller er den av varig karakter?');
+    expect(el).not.toBeInTheDocument();
   });
 
   it('skal ha et felt for å sette datoen brukeren har forsørgeransvar for barnet fra dersom det har blitt besvart ja på spørsmålet om det skal beregnes barnetillegg', async () => {
@@ -362,7 +472,7 @@ describe('Oppgitte barn', () => {
     );
 
     const begrunnelsesFelterFørDetErLagtTilEnNy = screen.getAllByRole('textbox', {
-      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
     });
 
     expect(begrunnelsesFelterFørDetErLagtTilEnNy.length).toBe(1);
@@ -371,7 +481,7 @@ describe('Oppgitte barn', () => {
     await user.click(knapp);
 
     const begrunnelsesFelter = screen.getAllByRole('textbox', {
-      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
     });
 
     expect(begrunnelsesFelter.length).toBe(2);
@@ -404,7 +514,7 @@ describe('Oppgitte barn', () => {
 
     expect(
       screen.getAllByRole('textbox', {
-        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
       }).length
     ).toBe(1);
 
@@ -415,7 +525,7 @@ describe('Oppgitte barn', () => {
 
     expect(
       screen.getAllByRole('textbox', {
-        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
       }).length
     ).toBe(2);
 
@@ -478,7 +588,7 @@ describe('Oppgitte barn', () => {
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
     const skalBeregnesBarnetilleggFelt = screen.getByRole('group', {
-      name: 'Har fosterhjemsordningen vart i to år eller er den av varig karakter?',
+      name: 'Skal brukeren få barnetillegg for barnet?',
     });
     const jaVerdi = within(skalBeregnesBarnetilleggFelt).getByRole('radio', { name: 'Ja' });
 
@@ -487,7 +597,7 @@ describe('Oppgitte barn', () => {
 
   const fyllUtEnBegrunnelse = async () => {
     const begrunnelsesfelt = screen.getByRole('textbox', {
-      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
     });
     await user.type(begrunnelsesfelt, 'Dette er en begrunnelse');
   };
@@ -584,7 +694,7 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
       }),
       'Her har jeg begynt å skrive en vurdering..'
     );
@@ -639,7 +749,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -657,7 +767,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -677,14 +787,14 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -694,7 +804,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.queryByRole('textbox', {
-        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
       })
     ).toHaveValue('');
   });
@@ -713,14 +823,14 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -730,7 +840,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
       })
     ).toHaveValue('Dette er min vurdering som er bekreftet');
   });
@@ -767,7 +877,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om fosterhjemsordningen har vart i to år eller har en varig karakter',
+        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
       })
     ).toBeVisible();
   });
