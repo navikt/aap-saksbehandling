@@ -12,7 +12,7 @@ import {
 import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { Veiledning } from 'components/veiledning/Veiledning';
@@ -84,7 +84,7 @@ export const SykdomsvurderingBrev = ({
     typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0;
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev'}
       steg="SYKDOMSVURDERING_BREV"
       vilkårTilhørerNavKontor={true}
@@ -158,7 +158,7 @@ export const SykdomsvurderingBrev = ({
         />
         <FormField form={form} formField={formFields.vurdering} className={'begrunnelse'} />
       </VStack>
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

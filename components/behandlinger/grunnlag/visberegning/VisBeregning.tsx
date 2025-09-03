@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 
 import { Grunnlag1119Visning } from 'components/behandlinger/grunnlag/visberegning/visning/grunnlag1119visning/Grunnlag1119Visning';
 import { UføreVisning } from 'components/behandlinger/grunnlag/visberegning/visning/uførevisning/UføreVisning';

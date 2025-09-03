@@ -5,7 +5,7 @@ import { isError } from 'lib/utils/api';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hjemmelMap } from 'lib/utils/hjemmel';
 import { Klageresultat } from 'lib/types/types';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 
 interface Props {
   behandlingsreferanse: string;

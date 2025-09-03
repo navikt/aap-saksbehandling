@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { FatteVedtakGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 

@@ -2,7 +2,7 @@
 
 import { ExpansionCard } from '@navikt/ds-react';
 import { ReactNode } from 'react';
-import styles from './VilkårsKort.module.css';
+import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { StegType } from 'lib/types/types';
 
 interface Props {

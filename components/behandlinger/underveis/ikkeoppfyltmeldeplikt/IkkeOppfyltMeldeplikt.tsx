@@ -18,8 +18,8 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { parse } from 'date-fns';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { isProd } from 'lib/utils/environment';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
 type Props = {
   grunnlag?: RimeligGrunnMeldepliktGrunnlag;
@@ -92,7 +92,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
   };
 
   return grunnlag && grunnlag.perioderIkkeMeldt.length > 0 ? (
-    <VilkårsKortMedForm
+    <VilkårskortMedForm
       heading={'Perioder uten oppfylt meldeplikt (§ 11-10 andre ledd)'}
       steg={'IKKE_OPPFYLT_MELDEPLIKT'}
       vilkårTilhørerNavKontor={true}
@@ -194,7 +194,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
           </HStack>
         )}
       </VStack>
-    </VilkårsKortMedForm>
+    </VilkårskortMedForm>
   ) : (
     <></>
   );

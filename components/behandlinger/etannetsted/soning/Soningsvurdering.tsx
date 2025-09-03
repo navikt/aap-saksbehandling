@@ -18,7 +18,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
@@ -86,7 +86,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
   };
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-26 Soning'}
       steg={'DU_ER_ET_ANNET_STED'}
       onSubmit={handleSubmit}
@@ -176,7 +176,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
           Legg til ny vurdering
         </Button>
       )}
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 
