@@ -262,7 +262,7 @@ export const SamordningGradering = ({
             {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
           </VStack>
         )}
-        {!visForm && grunnlag.ytelser.length === 0 && grunnlag.vurdering?.vurderinger?.length === 0 && (
+        {!visForm && (
           <VStack gap={'2'}>
             <Detail>Vi finner ingen ytelser fra folketrygden</Detail>
             <HStack>
