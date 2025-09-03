@@ -15,6 +15,8 @@ import { FormEvent } from 'react';
 import styles from './BarnetilleggVurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårsKortMedForm } from '../../../vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { isProd } from 'lib/utils/environment';
+import { OppgitteBarnVurderingV2 } from 'components/barn/oppgittebarnvurderingV2/OppgitteBarnVurderingV2';
 
 interface Props {
   behandlingsversjon: number;
@@ -158,8 +160,8 @@ export const BarnetilleggVurdering = ({
             </div>
 
             {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
-              return (
-                <OppgitteBarnVurdering
+              return !isProd() ? (
+                <OppgitteBarnVurderingV2
                   key={vurdering.id}
                   form={form}
                   barnetilleggIndex={barnetilleggIndex}
@@ -167,6 +169,16 @@ export const BarnetilleggVurdering = ({
                   fødselsdato={vurdering.fødselsdato}
                   navn={vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
                   harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
+                  readOnly={readOnly}
+                />
+              ) : (
+                <OppgitteBarnVurdering
+                  key={vurdering.id}
+                  form={form}
+                  barnetilleggIndex={barnetilleggIndex}
+                  ident={vurdering.ident}
+                  fødselsdato={vurdering.fødselsdato}
+                  navn={vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
                   readOnly={readOnly}
                 />
               );

@@ -152,7 +152,6 @@ describe('barnetillegg', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    screen.logTestingPlaygroundURL();
     const el = await screen.queryByText('Har fosterhjemsordningen vart i to år eller er den av varig karakter?');
     expect(el).not.toBeInTheDocument();
   });
