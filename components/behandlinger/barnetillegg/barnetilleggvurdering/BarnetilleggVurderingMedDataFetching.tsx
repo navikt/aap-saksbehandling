@@ -7,20 +7,14 @@ import {
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
+import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 type Props = {
   behandlingsreferanse: string;
-  behandlingsversjon: number;
-  harAvklaringsbehov: boolean;
-  readOnly: boolean;
+  stegData: StegData;
 };
 
-export const BarnetilleggVurderingMedDataFetching = async ({
-  behandlingsreferanse,
-  behandlingsversjon,
-  readOnly,
-  harAvklaringsbehov,
-}: Props) => {
+export const BarnetilleggVurderingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, behandlingPersoninfo, initialMellomlagretVurdering] = await Promise.all([
     hentBarnetilleggGrunnlag(behandlingsreferanse),
     hentBehandlingPersoninfo(behandlingsreferanse),
@@ -31,12 +25,15 @@ export const BarnetilleggVurderingMedDataFetching = async ({
     return <ApiException apiResponses={[grunnlag, behandlingPersoninfo]} />;
   }
 
+  const harTidligereVurderinger = [grunnlag.data.barnSomTrengerVurdering, grunnlag.data.vurderteBarn].flat().length > 0;
+  const visManuellVurdering = skalViseSteg(stegData, harTidligereVurderinger);
+
   return (
     <BarnetilleggVurdering
-      harAvklaringsbehov={harAvklaringsbehov}
+      visManuellVurdering={visManuellVurdering}
       grunnlag={grunnlag.data}
-      behandlingsversjon={behandlingsversjon}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingsversjon={stegData.behandlingVersjon}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingPersonInfo={behandlingPersoninfo.data}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
