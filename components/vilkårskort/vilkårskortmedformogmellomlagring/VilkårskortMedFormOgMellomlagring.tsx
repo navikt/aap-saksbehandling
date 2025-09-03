@@ -68,14 +68,14 @@ export const VilkårskortMedFormOgMellomlagring = ({
                 <HStack gap={'4'}>
                   {visBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}
 
-                  {!readOnly && onLagreMellomLagringClick && (
+                  {!readOnly && (
                     <Button type={'button'} size={'small'} variant={'tertiary'} onClick={onLagreMellomLagringClick}>
                       Lagre utkast
                     </Button>
                   )}
                 </HStack>
 
-                {!readOnly && mellomlagretVurdering && onDeleteMellomlagringClick && (
+                {!readOnly && mellomlagretVurdering && (
                   <HStack align={'baseline'}>
                     <Detail>{`Utkast lagret ${formaterDatoMedTidspunktForFrontend(mellomlagretVurdering.vurdertDato)} (${mellomlagretVurdering.vurdertAv})`}</Detail>
                     <Button
