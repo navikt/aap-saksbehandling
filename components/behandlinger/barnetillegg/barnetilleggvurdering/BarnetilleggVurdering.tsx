@@ -174,7 +174,7 @@ export const BarnetilleggVurdering = ({
                 <RegistrertBarn
                   key={index}
                   registrertBarn={barn}
-                  navn={barn.navn ? behandlingPersonInfo?.info[barn?.ident?.identifikator || 'null'] : 'Ukjent'}
+                  navn={barn.navn || behandlingPersonInfo?.info[barn?.ident?.identifikator || 'null'] || 'Ukjent'}
                 />
               ))}
             </div>
