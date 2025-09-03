@@ -13,13 +13,13 @@ import { BodyShort, Link } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -121,7 +121,7 @@ export const Bistandsbehovutenovergang = ({
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
       steg={'VURDER_BISTANDSBEHOV'}
       onSubmit={handleSubmit}
@@ -184,7 +184,7 @@ export const Bistandsbehovutenovergang = ({
         form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
         )}
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 
   function mapVurderingToDraftFormFields(vurdering?: BistandsbehovVurdering): DraftFormFields {

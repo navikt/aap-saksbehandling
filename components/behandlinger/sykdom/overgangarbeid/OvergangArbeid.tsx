@@ -1,6 +1,11 @@
 'use client';
 
-import { OvergangArbeidGrunnlag, OvergangArbeidVurdering, TypeBehandling } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  OvergangArbeidGrunnlag,
+  OvergangArbeidVurdering,
+  TypeBehandling,
+} from 'lib/types/types';
 import {
   Behovstype,
   getJaNeiEllerIkkeBesvart,
@@ -16,17 +21,19 @@ import { BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
   grunnlag?: OvergangArbeidGrunnlag;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
 interface FormFields {
@@ -35,7 +42,15 @@ interface FormFields {
   virkningsdato: string;
 }
 
-export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
+type DraftFormFields = Partial<FormFields>;
+
+export const OvergangArbeid = ({
+  behandlingVersjon,
+  grunnlag,
+  readOnly,
+  typeBehandling,
+  initialMellomlagretVurdering,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_ARBEID');
@@ -43,6 +58,8 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
   const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP i perioden som arbeidssøker etter § 11-17?';
   const virkningsdatoLabel = 'Virkningsdato for vurderingen';
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -74,18 +91,21 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.OVERGANG_ARBEID,
-          overgangArbeidVurdering: {
-            begrunnelse: data.begrunnelse,
-            brukerRettPaaAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
-            virkningsDato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.OVERGANG_ARBEID,
+            overgangArbeidVurdering: {
+              begrunnelse: data.begrunnelse,
+              brukerRettPaaAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
+              virkningsDato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
+            },
           },
+          referanse: behandlingsReferanse,
         },
-        referanse: behandlingsReferanse,
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 
@@ -94,7 +114,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-17 AAP i perioden som arbeidssøker'}
       steg={'OVERGANG_ARBEID'}
       onSubmit={handleSubmit}
@@ -104,6 +124,12 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring();
+        form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+      }}
+      mellomlagretVurdering={mellomlagretVurdering}
     >
       {typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
@@ -148,8 +174,24 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, typeBeha
           readOnly={readOnly}
         />
       </VStack>
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
+
+  function mapVurderingToDraftFormFields(vurdering?: OvergangArbeidVurdering): DraftFormFields {
+    return {
+      begrunnelse: vurdering?.begrunnelse,
+      brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPaaAAP),
+      virkningsdato: vurdering?.virkningsDato || '',
+    };
+  }
+
+  function emptyDraftFormFields(): DraftFormFields {
+    return {
+      begrunnelse: '',
+      brukerRettPåAAP: '',
+      virkningsdato: '',
+    };
+  }
 
   function byggFelter(vurdering: OvergangArbeidVurdering): ValuePair[] {
     return [

@@ -1,6 +1,6 @@
 'use client';
 
-import { MellomlagretVurdering, OvergangArbeidVurdering, OvergangUforeGrunnlag, TypeBehandling } from 'lib/types/types';
+import { MellomlagretVurdering, OvergangUforeGrunnlag, OvergangUføreVurdering, TypeBehandling } from 'lib/types/types';
 import {
   Behovstype,
   getJaNeiEllerIkkeBesvart,
@@ -17,11 +17,12 @@ import { Alert, BodyShort, Link } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -39,7 +40,13 @@ interface FormFields {
   virkningsdato: string;
 }
 
-export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehandling }: Props) => {
+export const OvergangUfore = ({
+  behandlingVersjon,
+  grunnlag,
+  readOnly,
+  typeBehandling,
+  initialMellomlagretVurdering,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
@@ -49,6 +56,8 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const brukerHarFaattVedtakOmUføretrygdLabel = 'Har brukeren fått vedtak på søknaden om uføretrygd?';
   const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?';
   const virkningsdatoLabel = 'Virkningsdato for vurderingen';
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -112,22 +121,27 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
     { readOnly: readOnly, shouldUnregister: true }
   );
 
+  type DraftFormFields = Partial<FormFields>;
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.OVERGANG_UFORE,
-          overgangUføreVurdering: {
-            begrunnelse: data.begrunnelse,
-            brukerSoktUforetrygd: data.brukerHarSøktUføretrygd === JaEllerNei.Ja,
-            brukerVedtakUforetrygd: data.brukerHarFåttVedtakOmUføretrygd,
-            brukerRettPaaAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
-            virkningsDato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.OVERGANG_UFORE,
+            overgangUføreVurdering: {
+              begrunnelse: data.begrunnelse,
+              brukerSoktUforetrygd: data.brukerHarSøktUføretrygd === JaEllerNei.Ja,
+              brukerVedtakUforetrygd: data.brukerHarFåttVedtakOmUføretrygd,
+              brukerRettPaaAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
+              virkningsDato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
+            },
           },
+          referanse: behandlingsReferanse,
         },
-        referanse: behandlingsReferanse,
-      });
+        () => nullstillMellomlagretVurdering()
+      );
     })(event);
   };
 
@@ -139,7 +153,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-18 AAP under behandling av krav om uføretrygd'}
       steg={'OVERGANG_UFORE'}
       onSubmit={handleSubmit}
@@ -149,6 +163,12 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring();
+        form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+      }}
+      mellomlagretVurdering={mellomlagretVurdering}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
@@ -195,10 +215,30 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
         }}
         readOnly={readOnly}
       />
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 
-  function byggFelter(vurdering: OvergangArbeidVurdering): ValuePair[] {
+  function mapVurderingToDraftFormFields(vurdering?: OvergangUføreVurdering): DraftFormFields {
+    return {
+      begrunnelse: vurdering?.begrunnelse,
+      brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPaaAAP),
+      brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerSoktUforetrygd),
+      brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerVedtakUforetrygd || '',
+      virkningsdato: vurdering?.virkningsDato || '',
+    };
+  }
+
+  function emptyDraftFormFields(): DraftFormFields {
+    return {
+      begrunnelse: '',
+      brukerHarSøktUføretrygd: '',
+      brukerHarFåttVedtakOmUføretrygd: '',
+      brukerRettPåAAP: '',
+      virkningsdato: '',
+    };
+  }
+
+  function byggFelter(vurdering: OvergangUføreVurdering): ValuePair[] {
     return [
       {
         label: vilkårsvurderingLabel,
@@ -207,6 +247,14 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, typeBehan
       {
         label: brukerrettPaaAAPLabel,
         value: getJaNeiEllerIkkeBesvart(vurdering.brukerRettPaaAAP),
+      },
+      {
+        label: brukerSøktUføretrygdLabel,
+        value: getJaNeiEllerIkkeBesvart(vurdering.brukerSoktUforetrygd),
+      },
+      {
+        label: brukerHarFaattVedtakOmUføretrygdLabel,
+        value: vurdering.brukerVedtakUforetrygd || '',
       },
       {
         label: virkningsdatoLabel,
