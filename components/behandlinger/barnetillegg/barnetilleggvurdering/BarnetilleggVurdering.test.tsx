@@ -113,7 +113,7 @@ describe('barnetillegg', () => {
         grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
         behandlingsversjon={0}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -127,7 +127,7 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -141,7 +141,7 @@ describe('barnetillegg', () => {
         grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
         behandlingsversjon={0}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -155,7 +155,7 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -169,7 +169,7 @@ describe('barnetillegg', () => {
         grunnlag={{ ...grunnlag, vurderteBarn: [vurdertBarnFosterForelder] }}
         behandlingsversjon={0}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -183,7 +183,7 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        harAvklaringsbehov={true}
+        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );

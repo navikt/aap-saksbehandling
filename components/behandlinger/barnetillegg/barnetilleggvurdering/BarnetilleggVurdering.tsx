@@ -16,6 +16,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { isProd } from 'lib/utils/environment';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { OppgitteBarnVurderingV2 } from 'components/barn/oppgittebarnvurderingV2/OppgitteBarnVurderingV2';
 
 interface Props {
   behandlingsversjon: number;

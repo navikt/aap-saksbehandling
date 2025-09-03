@@ -1,4 +1,5 @@
 import { Vurderingsbehov } from 'lib/types/types';
+import { exhaustiveCheck } from 'lib/utils/typescript';
 
 export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): string => {
   switch (vurderingsbehov) {
@@ -66,7 +67,10 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Revurder meldeplikt rimelig grunn';
     case 'AKTIVITETSPLIKT_11_7':
       return 'Aktivitetsplikt $ 11-7';
+    case 'EFFEKTUER_AKTIVITETSPLIKT':
+      return 'Effektuer aktivitetsplikt';
   }
+  exhaustiveCheck(vurderingsbehov);
 };
 
 /*
