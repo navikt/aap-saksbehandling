@@ -22,7 +22,7 @@ interface Props {
   grunnlag: BarnetilleggGrunnlag;
   behandlingPersonInfo: BehandlingPersoninfo;
   readOnly: boolean;
-  harAvklaringsbehov: boolean;
+  visManuellVurdering: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
@@ -47,10 +47,10 @@ interface Vurdering {
 
 export const BarnetilleggVurdering = ({
   grunnlag,
-  harAvklaringsbehov,
   behandlingsversjon,
   behandlingPersonInfo,
   readOnly,
+  visManuellVurdering,
   initialMellomlagretVurdering,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
@@ -125,10 +125,10 @@ export const BarnetilleggVurdering = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={!readOnly && harAvklaringsbehov}
+      visBekreftKnapp={!readOnly && visManuellVurdering}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdertAv}
-      vurdertAutomatisk={!harAvklaringsbehov}
+      vurdertAutomatisk={erFolkeregistrerteBarn}
       readOnly={readOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
@@ -141,7 +141,7 @@ export const BarnetilleggVurdering = ({
       }
     >
       <div className={'flex-column'}>
-        {harAvklaringsbehov && (
+        {visManuellVurdering && (
           <div className={'flex-column'}>
             <div>
               <BodyShort size={'small'} weight={'semibold'}>
