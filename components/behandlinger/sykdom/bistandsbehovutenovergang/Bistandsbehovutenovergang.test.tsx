@@ -5,7 +5,6 @@ import { BistandsGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
 import { Bistandsbehovutenovergang } from 'components/behandlinger/sykdom/bistandsbehovutenovergang/Bistandsbehovutenovergang';
-import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -48,7 +47,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
-      <Bistandsbehov
+      <Bistandsbehovutenovergang
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
@@ -62,7 +61,9 @@ describe('mellomlagring i bistandsbehov', () => {
   it(
     'Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre ' + 'mellomlagring',
     async () => {
-      render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
+      render(
+        <Bistandsbehovutenovergang behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />
+      );
 
       await user.type(
         screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
@@ -86,7 +87,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
-      <Bistandsbehov
+      <Bistandsbehovutenovergang
         behandlingVersjon={0}
         readOnly={false}
         typeBehandling={'Førstegangsbehandling'}
@@ -107,7 +108,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
-      <Bistandsbehov
+      <Bistandsbehovutenovergang
         behandlingVersjon={0}
         readOnly={false}
         typeBehandling={'Førstegangsbehandling'}
@@ -125,7 +126,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
     render(
-      <Bistandsbehov
+      <Bistandsbehovutenovergang
         behandlingVersjon={0}
         readOnly={false}
         typeBehandling={'Førstegangsbehandling'}
@@ -142,7 +143,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <Bistandsbehov
+      <Bistandsbehovutenovergang
         behandlingVersjon={0}
         readOnly={false}
         typeBehandling={'Førstegangsbehandling'}
@@ -165,7 +166,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <Bistandsbehov
+      <Bistandsbehovutenovergang
         behandlingVersjon={0}
         readOnly={false}
         typeBehandling={'Førstegangsbehandling'}
@@ -191,7 +192,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
     render(
-      <Bistandsbehov
+      <Bistandsbehovutenovergang
         behandlingVersjon={0}
         readOnly={true}
         typeBehandling={'Førstegangsbehandling'}

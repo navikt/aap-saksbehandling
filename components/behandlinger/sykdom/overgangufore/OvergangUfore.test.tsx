@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { OvergangUfore } from 'components/behandlinger/sykdom/overgangufore/OvergangUfore';
 import { within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { MellomlagretVurderingResponse, OvergangUforeGrunnlag } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
@@ -11,7 +11,7 @@ const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
-describe('mellomlagring i overgang Uføre', () => {
+describe('mellomlagring i overgang uføre', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
       avklaringsbehovkode: '5031',

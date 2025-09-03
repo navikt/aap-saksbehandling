@@ -4,13 +4,13 @@ import { OvergangArbeid } from 'components/behandlinger/sykdom/overgangarbeid/Ov
 import { MellomlagretVurderingResponse, OvergangArbeidGrunnlag } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
-import { userEvent } from '@testing-library/user-event/index';
+import { userEvent } from '@testing-library/user-event';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
-describe('mellomlagring i overgang Uføre', () => {
+describe('mellomlagring i overgang arbeid', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
       avklaringsbehovkode: '5006',
