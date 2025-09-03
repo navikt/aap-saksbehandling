@@ -200,7 +200,8 @@ export const OvergangUfore = ({
       {brukerHarSoktOmUforetrygd && <FormField form={form} formField={formFields.brukerHarFåttVedtakOmUføretrygd} />}
       {brukerHarFattAvslagPaUforetrygd && (
         <Alert variant="warning">
-          Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurderes til oppfylt.
+          Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurderes til oppfylt fra dato på
+          uføretrygdvedtaket.
         </Alert>
       )}
       <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
