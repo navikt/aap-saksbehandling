@@ -63,14 +63,14 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
       }
     }
 
-    if (callback) {
-      callback();
-    }
-
-    listenSSE();
+    listenSSE().then(() => {
+      if (callback) {
+        callback();
+      }
+    });
   };
 
-  const listenSSE = () => {
+  const listenSSE = async () => {
     const eventSource = new EventSource(
       `/saksbehandling/api/behandling/hent/${params.behandlingsReferanse}/${params.aktivGruppe}/${steg}/nesteSteg/`,
       {
