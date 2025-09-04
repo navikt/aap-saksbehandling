@@ -225,10 +225,10 @@ export const OvergangUfore = ({
   function mapVurderingToDraftFormFields(vurdering?: OvergangUføreVurdering): DraftFormFields {
     return {
       begrunnelse: vurdering?.begrunnelse,
-      brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPaaAAP),
-      brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerSoktUforetrygd),
-      brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerVedtakUforetrygd || '',
-      virkningsdato: vurdering?.virkningsDato || '',
+      brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPåAAP),
+      brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerHarSøktUføretrygd),
+      brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || '',
+      virkningsdato: vurdering?.virkningsdato || '',
     };
   }
 
@@ -250,19 +250,19 @@ export const OvergangUfore = ({
       },
       {
         label: brukerrettPaaAAPLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.brukerRettPaaAAP),
+        value: getJaNeiEllerIkkeBesvart(vurdering.brukerRettPåAAP),
       },
       {
         label: brukerSøktUføretrygdLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.brukerSoktUforetrygd),
+        value: getJaNeiEllerIkkeBesvart(vurdering.brukerHarSøktUføretrygd),
       },
       {
         label: brukerHarFaattVedtakOmUføretrygdLabel,
-        value: vurdering.brukerVedtakUforetrygd || '',
+        value: vurdering.brukerHarFåttVedtakOmUføretrygd || '',
       },
       {
         label: virkningsdatoLabel,
-        value: (vurdering.virkningsDato && formaterDatoForFrontend(vurdering.virkningsDato)) || '',
+        value: (vurdering.virkningsdato && formaterDatoForFrontend(vurdering.virkningsdato)) || '',
       },
     ];
   }

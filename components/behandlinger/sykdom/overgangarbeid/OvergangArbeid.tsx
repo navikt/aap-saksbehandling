@@ -182,8 +182,8 @@ export const OvergangArbeid = ({
   function mapVurderingToDraftFormFields(vurdering?: OvergangArbeidVurdering): DraftFormFields {
     return {
       begrunnelse: vurdering?.begrunnelse,
-      brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPaaAAP),
-      virkningsdato: vurdering?.virkningsDato || '',
+      brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPåAAP),
+      virkningsdato: vurdering?.virkningsdato || '',
     };
   }
 
@@ -203,11 +203,11 @@ export const OvergangArbeid = ({
       },
       {
         label: brukerrettPaaAAPLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.brukerRettPaaAAP),
+        value: getJaNeiEllerIkkeBesvart(vurdering.brukerRettPåAAP),
       },
       {
         label: virkningsdatoLabel,
-        value: (vurdering.virkningsDato && formaterDatoForFrontend(vurdering.virkningsDato)) || '',
+        value: (vurdering.virkningsdato && formaterDatoForFrontend(vurdering.virkningsdato)) || '',
       },
     ];
   }
