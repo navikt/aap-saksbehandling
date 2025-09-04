@@ -16,7 +16,7 @@ describe('mellomlagring i overgang uføre', () => {
     mellomlagretVurdering: {
       avklaringsbehovkode: '5031',
       behandlingId: { id: 1 },
-      data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret","brukerRettPaaAAP":"ja","brukerSoktUforetrygd":"ja",brukerVedtakUforetrygd: \'NEI\'}',
+      data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret","brukerRettPåAAP":"ja","brukerHarSøktOmUføretrygd":"ja","brukerHarFåttVedtakOmUføretrygd": "NEI"}',
       vurdertDato: '2025-08-21T12:00:00.000',
       vurdertAv: 'Jan T. Loven',
     },
@@ -25,9 +25,9 @@ describe('mellomlagring i overgang uføre', () => {
   const overgangUføregrunnlag: OvergangUforeGrunnlag = {
     vurdering: {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
-      brukerRettPaaAAP: true,
-      brukerVedtakUforetrygd: 'NEI',
-      brukerSoktUforetrygd: true,
+      brukerRettPåAAP: true,
+      brukerHarSøktUføretrygd: true,
+      brukerHarFåttVedtakOmUføretrygd: 'NEI',
       vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
     },
     gjeldendeSykdsomsvurderinger: [],

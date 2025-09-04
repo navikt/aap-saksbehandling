@@ -61,7 +61,6 @@ export const Bistandsbehovutenovergang = ({
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurdering);
-
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {

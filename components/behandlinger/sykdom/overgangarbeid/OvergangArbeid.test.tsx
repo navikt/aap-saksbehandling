@@ -15,7 +15,7 @@ describe('mellomlagring i overgang arbeid', () => {
     mellomlagretVurdering: {
       avklaringsbehovkode: '5006',
       behandlingId: { id: 1 },
-      data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret","brukerRettPaaAAP":"ja","virkningsDato":\'2025-08-19\'}',
+      data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret","brukerRettPåAAP":"ja","virkningsdato": "2025-08-19"}',
       vurdertDato: '2025-08-21T12:00:00.000',
       vurdertAv: 'Jan T. Loven',
     },
@@ -24,8 +24,8 @@ describe('mellomlagring i overgang arbeid', () => {
   const overgangArbeidgrunnlag: OvergangArbeidGrunnlag = {
     vurdering: {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
-      brukerRettPaaAAP: true,
-      virkningsDato: '2025-08-19',
+      brukerRettPåAAP: true,
+      virkningsdato: '2025-08-19',
       vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
     },
     gjeldendeSykdsomsvurderinger: [],

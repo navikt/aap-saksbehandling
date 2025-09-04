@@ -59,29 +59,31 @@ export const OvergangArbeid = ({
   const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP i perioden som arbeidssøker etter § 11-17?';
   const virkningsdatoLabel = 'Virkningsdato for vurderingen';
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
+    useMellomlagring(Behovstype.OVERGANG_ARBEID, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
         label: vilkårsvurderingLabel,
-        defaultValue: grunnlag?.vurdering?.begrunnelse,
+        defaultValue: defaultValue.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse om brukeren har krav på AAP' },
       },
       brukerRettPåAAP: {
         type: 'radio',
         label: brukerrettPaaAAPLabel,
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.brukerRettPaaAAP),
+        defaultValue: defaultValue.brukerRettPåAAP,
         rules: { required: 'Du må svare på om brukeren har krav på AAP i perioden som arbeidssøker etter § 11-17' },
       },
       virkningsdato: {
         type: 'textarea',
         label: virkningsdatoLabel,
-        defaultValue:
-          (grunnlag?.vurdering?.virkningsDato && formaterDatoForFrontend(grunnlag?.vurdering?.virkningsDato)) ||
-          undefined,
+        defaultValue: (defaultValue.virkningsdato && formaterDatoForFrontend(defaultValue.virkningsdato)) || undefined,
         description: 'Bruker får AAP etter § 11-17 fra til',
         rules: { required: 'Du må velge virkningsdato for vurderingen' },
       },
@@ -98,8 +100,8 @@ export const OvergangArbeid = ({
             behovstype: Behovstype.OVERGANG_ARBEID,
             overgangArbeidVurdering: {
               begrunnelse: data.begrunnelse,
-              brukerRettPaaAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
-              virkningsDato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
+              brukerRettPåAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
+              virkningsdato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
             },
           },
           referanse: behandlingsReferanse,

@@ -73,6 +73,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Overgang til uføre';
     case 'OVERGANG_ARBEID':
       return 'Overgang arbeidssøker';
+    case 'EFFEKTUER_AKTIVITETSPLIKT':
+      return 'Effektuer aktivitetsplikt';
   }
   exhaustiveCheck(vurderingsbehov);
 };

@@ -18,7 +18,7 @@ export const BistandsbehovutenovergangMedDataFetching = async ({
   readOnly,
   typeBehandling,
 }: Props) => {
-  const [grunnlag] = await Promise.all([
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentBistandsbehovGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_BISTANDSBEHOV_KODE),
   ]);
@@ -33,6 +33,7 @@ export const BistandsbehovutenovergangMedDataFetching = async ({
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
       typeBehandling={typeBehandling}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
 };

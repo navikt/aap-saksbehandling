@@ -56,21 +56,26 @@ export const OvergangUfore = ({
   const brukerHarFaattVedtakOmUføretrygdLabel = 'Har brukeren fått vedtak på søknaden om uføretrygd?';
   const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?';
   const virkningsdatoLabel = 'Virkningsdato for vurderingen';
+
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
+    useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering);
+
+  const defaultValue: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
         label: vilkårsvurderingLabel,
-        defaultValue: grunnlag?.vurdering?.begrunnelse,
+        defaultValue: defaultValue.begrunnelse,
         rules: { required: 'Du må gi en begrunnelse om brukeren har krav på uføretrygd' },
       },
       brukerHarSøktUføretrygd: {
         type: 'radio',
         label: brukerSøktUføretrygdLabel,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.brukerSoktUforetrygd),
+        defaultValue: defaultValue.brukerHarSøktUføretrygd,
         rules: { required: 'Du må svare på om brukeren har søkt om uføretrygd' },
         options: JaEllerNeiOptions,
       },
@@ -96,25 +101,23 @@ export const OvergangUfore = ({
           },
         ],
         defaultValue:
-          grunnlag?.vurdering?.brukerVedtakUforetrygd === undefined ||
-          grunnlag?.vurdering?.brukerVedtakUforetrygd === null
+          defaultValue.brukerHarFåttVedtakOmUføretrygd === undefined ||
+          defaultValue.brukerHarFåttVedtakOmUføretrygd === null
             ? undefined
-            : grunnlag?.vurdering?.brukerVedtakUforetrygd.toString(),
+            : defaultValue.brukerHarFåttVedtakOmUføretrygd.toString(),
         rules: { required: 'Du må svare på om brukeren har fått vedtak om uføretrygd' },
       },
       brukerRettPåAAP: {
         type: 'radio',
         label: brukerrettPaaAAPLabel,
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag?.vurdering?.brukerRettPaaAAP),
+        defaultValue: defaultValue.brukerRettPåAAP,
         rules: { required: 'Du må svare på om brukeren har krav på AAP etter vedtak om uføretrygd etter § 11-18' },
       },
       virkningsdato: {
         type: 'textarea',
         label: virkningsdatoLabel,
-        defaultValue:
-          (grunnlag?.vurdering?.virkningsDato && formaterDatoForFrontend(grunnlag?.vurdering?.virkningsDato)) ||
-          undefined,
+        defaultValue: (defaultValue.virkningsdato && formaterDatoForFrontend(defaultValue.virkningsdato)) || undefined,
         rules: { required: 'Du må velge virkningsdato for vurderingen' },
       },
     },
@@ -132,10 +135,10 @@ export const OvergangUfore = ({
             behovstype: Behovstype.OVERGANG_UFORE,
             overgangUføreVurdering: {
               begrunnelse: data.begrunnelse,
-              brukerSoktUforetrygd: data.brukerHarSøktUføretrygd === JaEllerNei.Ja,
-              brukerVedtakUforetrygd: data.brukerHarFåttVedtakOmUføretrygd,
-              brukerRettPaaAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
-              virkningsDato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
+              brukerHarSøktOmUføretrygd: data.brukerHarSøktUføretrygd === JaEllerNei.Ja,
+              brukerHarFåttVedtakOmUføretrygd: data.brukerHarFåttVedtakOmUføretrygd,
+              brukerRettPåAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
+              virkningsdato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
             },
           },
           referanse: behandlingsReferanse,
