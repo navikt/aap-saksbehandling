@@ -12,6 +12,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { ManuellVurderingForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingforutgåendemedlemskap/ManuellVurderingForutgåendeMedlemskap';
+import { kanViseOverstyrKnapp } from 'lib/utils/overstyring';
 
 interface Props {
   behandlingsReferanse: string;
@@ -36,8 +37,11 @@ export const ForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) =>
   const readOnly = vurderMedlemskapSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
 
   const visManuellVurdering = skalViseSteg(vurderMedlemskapSteg, grunnlag.data.vurdering != null);
-  const visOverstyrKnapp =
-    automatiskVurdering.data.kanBehandlesAutomatisk && !readOnly && vurderMedlemskapSteg.avklaringsbehov.length === 0;
+  const visOverstyrKnapp = kanViseOverstyrKnapp(
+    automatiskVurdering.data.kanBehandlesAutomatisk,
+    readOnly,
+    vurderMedlemskapSteg.avklaringsbehov
+  );
 
   return (
     <GruppeSteg

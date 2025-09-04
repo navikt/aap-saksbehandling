@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { BehandlingsHistorikk } from 'lib/types/types';
 import { BehandlingsHendelse } from 'components/sakshistorikk/BehandlingsHendelse';
+import { Link, Process } from '@navikt/ds-react';
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
 interface Props {
   hendelser: BehandlingsHistorikk['hendelser'];
@@ -13,43 +15,34 @@ export const BehandlingsHendelserTidslinje = ({ hendelser, defaultKollapset }: P
     setIsCollapsed(!isCollapsed);
   }
   return (
-    <ol style={{ padding: '0', margin: '0', listStyleType: 'none' }}>
-      {isCollapsed && (
+    <Process>
+      {hendelser.map((hendelse, hendelseIndex) => (
         <>
-          <BehandlingsHendelse
-            førsteHendelse={true}
-            sisteHendelse={false}
-            hendelse={hendelser[0]}
-            visLinje={hendelser.length > 1}
-            medKollapsKnapp={hendelser.length > 1}
-            erKollapset={isCollapsed}
-            toggleKollaps={toggleCollapsed}
-          />
-          {hendelser.length > 1 && (
-            <BehandlingsHendelse
-              førsteHendelse={false}
-              sisteHendelse={true}
-              hendelse={hendelser[hendelser.length - 1]}
-              visLinje={false}
-            />
+          {(!isCollapsed || hendelseIndex === 0 || hendelseIndex === hendelser.length - 1) && (
+            <BehandlingsHendelse key={`hendelse-${hendelseIndex}`} hendelse={hendelse} />
+          )}
+          {hendelseIndex === 0 && hendelser.length > 2 && (
+            <Process.Event
+              key={`hendelse-toggle-${hendelseIndex}`}
+              bullet={
+                isCollapsed ? (
+                  <ChevronDownIcon title="a11y-title" fontSize="1.1rem" />
+                ) : (
+                  <ChevronUpIcon title="a11y-title" fontSize="1.1rem" />
+                )
+              }
+            >
+              <Link
+                as={'button'}
+                style={{ border: '0', margin: '0', padding: '0', backgroundColor: 'white' }}
+                onClick={() => toggleCollapsed && toggleCollapsed()}
+              >
+                {isCollapsed ? `Se all historikk i behandlingen` : `Skjul all historikk i behandlingen`}
+              </Link>
+            </Process.Event>
           )}
         </>
-      )}
-      {!isCollapsed &&
-        hendelser.map((hendelse, hendelseIndex) => (
-          <BehandlingsHendelse
-            key={`hendelse-${hendelseIndex}`}
-            førsteHendelse={hendelseIndex === 0}
-            sisteHendelse={hendelseIndex === hendelser.length - 1}
-            hendelse={hendelse}
-            // vis linje mellom hendelser, ikke under siste hendelse
-            visLinje={hendelseIndex < hendelser.length - 1}
-            // kollapsknapp vises under øverste hendelse, men bare hvis det er mer enn to hendelser
-            medKollapsKnapp={hendelseIndex === 0 && hendelser.length > 2}
-            erKollapset={isCollapsed}
-            toggleKollaps={toggleCollapsed}
-          />
-        ))}
-    </ol>
+      ))}
+    </Process>
   );
 };

@@ -11,11 +11,12 @@ import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from '
 import { parse } from 'date-fns';
 import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
 import { FormEvent } from 'react';
-
 import styles from './BarnetilleggVurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
+import { isProd } from 'lib/utils/environment';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { OppgitteBarnVurderingV2 } from 'components/barn/oppgittebarnvurderingV2/OppgitteBarnVurderingV2';
 
 interface Props {
   behandlingsversjon: number;
@@ -36,12 +37,14 @@ interface BarneTilleggVurdering {
   ident: string | null | undefined;
   fødselsdato: string | null | undefined;
   navn: string | null | undefined;
+  oppgittForelderRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
   vurderinger: Vurdering[];
 }
 
 interface Vurdering {
   begrunnelse: string;
   harForeldreAnsvar: string;
+  erFosterforelder?: string | null;
   fraDato?: string;
 }
 
@@ -94,6 +97,7 @@ export const BarnetilleggVurdering = ({
                       begrunnelse: vurdering.begrunnelse,
                       harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
                       fraDato: getFraDato(vurdering.fraDato),
+                      erFosterForelder: vurdering.erFosterforelder === JaEllerNei.Ja,
                     };
                   }),
                 };
@@ -150,7 +154,18 @@ export const BarnetilleggVurdering = ({
             </div>
 
             {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
-              return (
+              return !isProd() ? (
+                <OppgitteBarnVurderingV2
+                  key={vurdering.id}
+                  form={form}
+                  barnetilleggIndex={barnetilleggIndex}
+                  ident={vurdering.ident}
+                  fødselsdato={vurdering.fødselsdato}
+                  navn={vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
+                  harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
+                  readOnly={readOnly}
+                />
+              ) : (
                 <OppgitteBarnVurdering
                   key={vurdering.id}
                   form={form}
@@ -201,6 +216,8 @@ function mapVurderingToDraftFormFields(
           begrunnelse: value.begrunnelse,
           harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
           fraDato: formaterDatoForFrontend(value.fraDato),
+          erFosterforelder:
+            value.erFosterForelder !== null ? (value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei) : null,
         };
       }),
     };
@@ -210,6 +227,7 @@ function mapVurderingToDraftFormFields(
     return {
       ident: barn?.ident?.identifikator,
       navn: barn.navn || (barn.ident?.aktivIdent ? behandlingPersonInfo?.info[barn.ident.identifikator] : 'Ukjent'),
+      oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
       vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
       fødselsdato: barn.fodselsDato,
     };

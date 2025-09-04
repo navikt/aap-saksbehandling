@@ -117,9 +117,9 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
               </Tooltip>
             </Table.DataCell>
             <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-              <Tooltip content={oppgave.reservertAv || 'Ledig'}>
+              <Tooltip content={(oppgave.reservertAvNavn ?? oppgave.reservertAv) || 'Ledig'}>
                 <BodyShort truncate size={'small'}>
-                  {oppgave.reservertAv || 'Ledig'}
+                  {(oppgave.reservertAvNavn ?? oppgave.reservertAv) || 'Ledig'}
                 </BodyShort>
               </Tooltip>
             </Table.DataCell>
