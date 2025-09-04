@@ -172,6 +172,7 @@ export const OvergangUfore = ({
         form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
       }}
       mellomlagretVurdering={mellomlagretVurdering}
+      readOnly={readOnly}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger

@@ -131,6 +131,7 @@ export const OvergangArbeid = ({
         slettMellomlagring();
         form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
       }}
+      readOnly={readOnly}
       mellomlagretVurdering={mellomlagretVurdering}
     >
       {typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0 && (
