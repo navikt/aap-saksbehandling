@@ -19,6 +19,6 @@ describe('Visning av vilkårskort i førstegangsbehandling', () => {
 
   it('Skal har riktig visning hvis det erAktivtSteg og readOnly er false', () => {
     const verdi = hentVisning(false, true);
-    expect(verdi).toBe(VisningModus.AKTIV_UTEN_VURDERING);
+    expect(verdi).toBe(VisningModus.AKTIV_UTEN_AVBRYT);
   });
 });

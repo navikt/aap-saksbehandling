@@ -41,7 +41,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
-  const erAktivtSteg = flyt.aktivtSteg === steg || modus === 'AKTIV_MED_VURDERING';
+  const erAktivtSteg = flyt.aktivtSteg === steg || modus === 'AKTIV_MED_AVBRYT';
 
   const readOnly = modus === 'LÅST_MED_ENDRE' || modus === 'LÅST_UTEN_ENDRE';
 
@@ -78,7 +78,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
               <VStack gap="4">
                 <HStack gap="4">
                   {/* Modus-styrte knapper */}
-                  {modus === 'AKTIV_UTEN_VURDERING' && (
+                  {modus === 'AKTIV_UTEN_AVBRYT' && (
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
                       {onLagreMellomLagringClick && (
@@ -89,7 +89,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                     </>
                   )}
 
-                  {modus === 'AKTIV_MED_VURDERING' && (
+                  {modus === 'AKTIV_MED_AVBRYT' && (
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
                       {actions && (

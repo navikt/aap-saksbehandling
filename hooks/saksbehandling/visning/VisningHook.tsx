@@ -3,8 +3,8 @@ import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { StegType } from 'lib/types/types';
 
 export enum VisningModus {
-  AKTIV_UTEN_VURDERING = 'AKTIV_UTEN_VURDERING',
-  AKTIV_MED_VURDERING = 'AKTIV_MED_VURDERING',
+  AKTIV_UTEN_AVBRYT = 'AKTIV_UTEN_AVBRYT',
+  AKTIV_MED_AVBRYT = 'AKTIV_MED_AVBRYT',
   LÅST_MED_ENDRE = 'LÅST_MED_ENDRE',
   LÅST_UTEN_ENDRE = 'LÅST_UTEN_ENDRE',
 }
@@ -45,12 +45,13 @@ export function useVisning(readOnly: boolean, steg: StegType): VisningState {
   }
 
   function onEndreClick() {
-    setVisning(VisningModus.AKTIV_MED_VURDERING);
+    setVisning(VisningModus.AKTIV_MED_AVBRYT);
     setFormReadOnly(false);
   }
 
   function onBekreftClick() {
     setVisning(VisningModus.LÅST_MED_ENDRE);
+    setFormReadOnly(true);
   }
 
   return {
@@ -65,6 +66,8 @@ export function useVisning(readOnly: boolean, steg: StegType): VisningState {
 }
 
 /**
+ * Frontend antar at steget inneholder en tidligere vurdering dersom det har blitt rendret og ikke er aktivtSteg
+ *
  * | readOnly | erAktivtSteg | resultat             |
  * |----------|--------------|----------------------|
  * | False    | False        | LÅST_MED_ENDRE       |
@@ -77,7 +80,7 @@ export function hentVisning(readOnly: boolean, erAktivtSteg: boolean): VisningMo
   if (readOnly) {
     return VisningModus.LÅST_UTEN_ENDRE;
   } else if (erAktivtSteg && !readOnly) {
-    return VisningModus.AKTIV_UTEN_VURDERING;
+    return VisningModus.AKTIV_UTEN_AVBRYT;
   } else {
     return VisningModus.LÅST_MED_ENDRE;
   }
