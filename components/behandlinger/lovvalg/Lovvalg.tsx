@@ -11,6 +11,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { LovvalgOgMedlemskapVedSøknadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
+import { kanViseOverstyrKnapp } from 'lib/utils/overstyring';
 
 interface Props {
   behandlingsReferanse: string;
@@ -32,8 +33,11 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
   const readOnly = vurderLovvalgSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
 
   const visManuellVurdering = skalViseSteg(vurderLovvalgSteg, !!grunnlag.data.vurdering);
-  const visOverstyrKnapp =
-    vurderingAutomatisk.data.kanBehandlesAutomatisk && !readOnly && vurderLovvalgSteg.avklaringsbehov.length === 0;
+  const visOverstyrKnapp = kanViseOverstyrKnapp(
+    vurderingAutomatisk.data.kanBehandlesAutomatisk,
+    readOnly,
+    vurderLovvalgSteg.avklaringsbehov
+  );
 
   return (
     <GruppeSteg
