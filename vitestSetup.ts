@@ -9,8 +9,8 @@ const flytResponse: FetchResponse<BehandlingFlytOgTilstand> = {
   status: 200,
   data: {
     behandlingVersjon: 5,
-    aktivGruppe: 'START_BEHANDLING',
-    aktivtSteg: 'START_BEHANDLING',
+    aktivGruppe: 'SYKDOM',
+    aktivtSteg: 'AVKLAR_SYKDOM',
     aktivtStegDefinisjon: [],
     flyt: [],
     prosessering: {
