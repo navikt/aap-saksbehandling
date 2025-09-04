@@ -1,14 +1,5 @@
 import { exhaustiveCheck } from 'lib/utils/typescript';
-import {
-  ArrowRightIcon,
-  ArrowsSquarepathIcon,
-  EnvelopeClosedIcon,
-  FirstAidKitIcon,
-  GavelSoundBlockIcon,
-  HourglassBottomFilledIcon,
-  HourglassTopFilledIcon,
-  InboxDownIcon,
-} from '@navikt/aksel-icons';
+import { EnvelopeClosedIcon, GavelSoundBlockIcon, PlayIcon } from '@navikt/aksel-icons';
 
 export type HistorikkEvent =
   | 'SATT_PÅ_VENT' //  Behandling satt på vent, med årsak og begrunnelse
@@ -60,31 +51,31 @@ export function mapEventTilString(historikkEvent: HistorikkEvent) {
 export function mapEventTilIkon(historikkEvent: HistorikkEvent) {
   switch (historikkEvent) {
     case 'SATT_PÅ_VENT':
-      return <HourglassTopFilledIcon title="satt på vent" fontSize="1.5rem" />;
+      return null;
     case 'TATT_AV_VENT':
-      return <HourglassBottomFilledIcon title="tatt av vent" fontSize="1.5rem" />;
+      return null;
     case 'VEDTAK_FATTET':
       return <GavelSoundBlockIcon title="vedtakk fattet" fontSize="1.5rem" />;
     case 'BREV_SENDT':
       return <EnvelopeClosedIcon title="brev sendt" fontSize="1.5rem" />;
     case 'SENDT_TIL_BESLUTTER':
-      return <ArrowRightIcon title="sendt til beslutter" fontSize="1.5rem" />;
+      return null;
     case 'RETUR_FRA_BESLUTTER':
-      return <ArrowsSquarepathIcon title="a11y-title" fontSize="1.5rem" />;
+      return null;
     case 'SENDT_TIL_KVALITETSSIKRER':
-      return <ArrowRightIcon title="sendt til kvalitetssikrer" fontSize="1.5rem" />;
+      return null;
     case 'RETUR_FRA_KVALITETSSIKRER':
-      return <ArrowsSquarepathIcon title="a11y-title" fontSize="1.5rem" />;
+      return null;
     case 'REVURDERING_OPPRETTET':
-      return <InboxDownIcon title="revurdering opprettet" fontSize="1.5rem" />;
+      return <PlayIcon title="revurdering opprettet" fontSize="1.5rem" />;
     case 'FØRSTEGANGSBEHANDLING_OPPRETTET':
-      return <InboxDownIcon title="førstegangsbehandling opprettet" fontSize="1.5rem" />;
+      return <PlayIcon title="førstegangsbehandling opprettet" fontSize="1.5rem" />;
     case 'KLAGE_OPPRETTET':
-      return <InboxDownIcon title="klage opprettet" fontSize="1.5rem" />;
+      return <PlayIcon title="klage opprettet" fontSize="1.5rem" />;
     case 'MOTTATT_DIALOGMELDING':
-      return <FirstAidKitIcon title="a11y-title" fontSize="1.5rem" />;
+      return null;
     case 'BESTILT_LEGEERKLÆRING':
-      return <FirstAidKitIcon title="a11y-title" fontSize="1.5rem" />;
+      return null;
   }
   exhaustiveCheck(historikkEvent);
 }

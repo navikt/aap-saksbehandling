@@ -1,175 +1,67 @@
 import { BehandlingsHistorikk } from 'lib/types/types';
-import { BodyShort, Detail, HGrid, HStack, Link, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, Process, VStack } from '@navikt/ds-react';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { HistorikkEvent, mapEventTilIkon, mapEventTilString } from 'components/sakshistorikk/oversettelser';
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { mapGrunnTilString, mapTilVenteÅrsakTekst, mapTilÅrsakTilOpprettelseTilTekst } from 'lib/utils/oversettelser';
 
 interface Props {
   hendelse: BehandlingsHistorikk['hendelser'][number];
-  førsteHendelse: boolean;
-  sisteHendelse: boolean;
-  visLinje: boolean;
-  medKollapsKnapp?: boolean;
-  erKollapset?: boolean;
-  toggleKollaps?: () => void;
 }
 
-export const BehandlingsHendelse = ({
-  hendelse,
-  visLinje,
-  medKollapsKnapp,
-  erKollapset,
-  toggleKollaps,
-  førsteHendelse,
-  sisteHendelse,
-}: Props) => {
+export const BehandlingsHendelse = ({ hendelse }: Props) => {
   const finnesÅrsak = !!(
     hendelse.årsakTilSattPåVent ||
     hendelse.årsakerTilRetur.length ||
     hendelse.årsakerTilOpprettelse.length
   );
+  const ikon = mapEventTilIkon(hendelse.hendelse as HistorikkEvent);
+  const ikonProp = ikon ? { bullet: ikon } : {};
   return (
-    <>
-      <li>
-        <HGrid columns={'1fr 8fr'}>
-          <HGrid columns={'1fr'}>
-            {!førsteHendelse && (
-              <HStack align={'center'} justify={'center'}>
-                <span
-                  style={{
-                    borderLeft: '1px solid #071A3636',
-                    height: '100%',
-                    width: '0',
-                  }}
-                />
-              </HStack>
-            )}
-            <HStack align={'center'} justify={'center'}>
-              <HStack
-                align={'center'}
-                justify={'center'}
-                style={{
-                  width: '2.6rem',
-                  height: '2.6rem',
-                  border: '1px solid #071A3636',
-                  borderRadius: '50%',
-                }}
-              >
-                {mapEventTilIkon(hendelse.hendelse as HistorikkEvent)}
-              </HStack>
-            </HStack>
-
-            {!sisteHendelse && (
-              <HStack align={'center'} justify={'center'}>
-                <span
-                  style={{
-                    borderLeft: '1px solid #071A3636',
-                    height: '0',
-                    width: '0',
-                  }}
-                />
-              </HStack>
-            )}
-          </HGrid>
-          <div style={{ marginLeft: '.5rem' }}>
-            <BodyShort size={'small'}>{mapEventTilString(hendelse.hendelse as HistorikkEvent)}</BodyShort>
-            <Detail textColor={'subtle'}>
-              {`${formaterDatoMedTidspunktForFrontend(hendelse.tidspunkt)} ${mapUtførtAvTilTekst(hendelse.utførtAv) && '· '}${mapUtførtAvTilTekst(hendelse.utførtAv)}`}
-            </Detail>
-          </div>
-          {visLinje ? (
-            <VStack align={'center'} justify={'center'}>
-              <span
-                style={{
-                  borderLeft: '1px solid #071A3636',
-                  height: '100%',
-                  width: '0',
-                }}
-              />
-            </VStack>
-          ) : (
-            <VStack></VStack>
-          )}
-          <div style={{ marginLeft: '.5rem', minHeight: '1rem', paddingBottom: '.5rem' }}>
-            {finnesÅrsak && (
-              <VStack gap={'2'} paddingBlock={'2 2'}>
-                <section>
-                  <Detail weight={'semibold'}>Årsak</Detail>
-                  {hendelse.årsakTilSattPåVent && <Detail>{hendelse.årsakTilSattPåVent}</Detail>}
-                  {
-                    <ul style={{ listStyleType: 'none', margin: '0', padding: '0' }}>
-                      {hendelse.årsakerTilOpprettelse.map((årsak, i) => (
-                        <li key={i}>
-                          <Detail>{årsak}</Detail>
-                        </li>
-                      ))}
-                    </ul>
-                  }
-                  {
-                    <ul style={{ listStyleType: 'none', margin: '0', padding: '0' }}>
-                      {hendelse.årsakerTilRetur.map((årsak, i) => (
-                        <li key={i}>
-                          <Detail> {årsak.årsak === 'ANNET' ? årsak.årsakFritekst : årsak.årsak}</Detail>
-                        </li>
-                      ))}
-                    </ul>
-                  }
-                </section>
-                {hendelse.begrunnelse && (
-                  <VStack>
-                    <Detail weight={'semibold'}>Begrunnelse</Detail>
-                    <BodyShort size={'small'}>{hendelse.begrunnelse}</BodyShort>
-                  </VStack>
-                )}
+    <Process.Event {...ikonProp}>
+      <div>
+        <BodyShort size={'small'}>{mapEventTilString(hendelse.hendelse as HistorikkEvent)}</BodyShort>
+        <Detail textColor={'subtle'}>
+          {`${formaterDatoMedTidspunktForFrontend(hendelse.tidspunkt)} ${mapUtførtAvTilTekst(hendelse.utførtAv) && '· '}${mapUtførtAvTilTekst(hendelse.utførtAv)}`}
+        </Detail>
+        {finnesÅrsak && (
+          <VStack gap={'2'} paddingBlock={'2 2'}>
+            <section>
+              <Detail weight={'semibold'}>Årsak</Detail>
+              {hendelse.årsakTilSattPåVent && <Detail>{mapTilVenteÅrsakTekst(hendelse.årsakTilSattPåVent)}</Detail>}
+              {
+                <ul style={{ listStyleType: 'none', margin: '0', padding: '0' }}>
+                  {hendelse.årsakerTilOpprettelse.map((årsak, i) => (
+                    <li key={i}>
+                      <Detail>
+                        {
+                          // @ts-ignore
+                          mapTilÅrsakTilOpprettelseTilTekst(årsak)
+                        }
+                      </Detail>
+                    </li>
+                  ))}
+                </ul>
+              }
+              {
+                <ul style={{ listStyleType: 'none', margin: '0', padding: '0' }}>
+                  {hendelse.årsakerTilRetur.map((årsak, i) => (
+                    <li key={i}>
+                      <Detail> {årsak.årsak === 'ANNET' ? årsak.årsakFritekst : mapGrunnTilString(årsak.årsak)}</Detail>
+                    </li>
+                  ))}
+                </ul>
+              }
+            </section>
+            {hendelse.begrunnelse && (
+              <VStack>
+                <Detail weight={'semibold'}>Begrunnelse</Detail>
+                <BodyShort size={'small'}>{hendelse.begrunnelse}</BodyShort>
               </VStack>
             )}
-          </div>
-        </HGrid>
-      </li>
-      {medKollapsKnapp && (
-        <li>
-          <HGrid columns={'1fr 8fr'}>
-            <VStack justify={'center'} align={'center'} width={'2.6rem'}>
-              <HStack
-                align={'center'}
-                justify={'center'}
-                height={'2rem'}
-                width={'2rem'}
-                style={{
-                  border: '1px solid #071A3636',
-                  borderRadius: '50%',
-                }}
-              >
-                {erKollapset ? (
-                  <ChevronDownIcon title="a11y-title" fontSize="1.1rem" />
-                ) : (
-                  <ChevronUpIcon title="a11y-title" fontSize="1.1rem" />
-                )}
-              </HStack>
-            </VStack>
-            <Link
-              as={'button'}
-              style={{ border: '0', margin: '0', marginLeft: '.5rem', padding: '0', backgroundColor: 'white' }}
-              onClick={() => toggleKollaps && toggleKollaps()}
-            >
-              {erKollapset ? `Se all historikk i behandlingen` : `Skjul all historikk i behandlingen`}
-            </Link>
-            {visLinje && (
-              <VStack align={'center'} justify={'center'}>
-                <span
-                  style={{
-                    borderLeft: '1px solid #071A3636',
-                    height: '100%',
-                    width: '0',
-                    minHeight: '1rem',
-                  }}
-                />
-              </VStack>
-            )}
-          </HGrid>
-        </li>
-      )}
-    </>
+          </VStack>
+        )}
+      </div>
+    </Process.Event>
   );
 };
 
