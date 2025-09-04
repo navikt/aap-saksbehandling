@@ -10,9 +10,9 @@ export enum VisningModus {
 }
 
 interface VisningState {
-  visning: VisningModus;
+  visningModus: VisningModus;
   formReadOnly: boolean;
-  actions: VisningActions;
+  visningActions: VisningActions;
 }
 
 export interface VisningActions {
@@ -21,7 +21,7 @@ export interface VisningActions {
   onBekreftClick: () => void;
 }
 
-export function useVisning(readOnly: boolean, steg: StegType): VisningState {
+export function useVilkårskortVisning(readOnly: boolean, steg: StegType): VisningState {
   const { flyt } = useRequiredFlyt();
 
   const erAktivtSteg = flyt.aktivtSteg === steg;
@@ -55,9 +55,9 @@ export function useVisning(readOnly: boolean, steg: StegType): VisningState {
   }
 
   return {
-    visning: visning,
+    visningModus: visning,
     formReadOnly: formReadOnly,
-    actions: {
+    visningActions: {
       avbrytEndringClick: avbrytEndringClick,
       onEndreClick: onEndreClick,
       onBekreftClick: onBekreftClick,

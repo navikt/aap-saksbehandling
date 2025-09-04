@@ -157,6 +157,7 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
   onDeleteMellomlagringClick: vitest.fn,
   mellomlagretVurdering: undefined,
   onLagreMellomLagringClick: vitest.fn(),
+  løsBehovOgGåTilNesteStegError: undefined,
 };
 
 function renderComponent(skalViseBekreftKnapp?: boolean, error?: ApiException) {

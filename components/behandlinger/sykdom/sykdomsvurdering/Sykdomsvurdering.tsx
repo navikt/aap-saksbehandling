@@ -34,10 +34,8 @@ import { useSak } from 'hooks/SakHook';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { isDev } from 'lib/utils/environment';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 export interface SykdomsvurderingFormFields {
   begrunnelse: string;
@@ -95,7 +93,7 @@ export const Sykdomsvurdering = ({
   const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
   const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(-1);
 
-  const { visning, actions, formReadOnly } = useVisning(readOnly, 'AVKLAR_SYKDOM');
+  const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(readOnly, 'AVKLAR_SYKDOM');
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -256,7 +254,7 @@ export const Sykdomsvurdering = ({
         },
         () => {
           nullstillMellomlagretVurdering();
-          actions.onBekreftClick();
+          visningActions.onBekreftClick();
         }
       );
     })(event);
@@ -278,18 +276,16 @@ export const Sykdomsvurdering = ({
 
   const historiskeVurderinger = grunnlag.historikkSykdomsvurderinger;
 
-  return isDev() ? (
+  return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
       steg="AVKLAR_SYKDOM"
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
       status={status}
+      visBekreftKnapp={false}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      actions={actions}
-      modus={visning}
-      visBekreftKnapp={false}
       vurdertAvAnsatt={sykdomsvurdering?.vurdertAv}
       knappTekst={'Bekreft'}
       kvalitetssikretAv={grunnlag.kvalitetssikretAv}
@@ -300,6 +296,8 @@ export const Sykdomsvurdering = ({
           form.reset(sykdomsvurdering ? mapVurderingToDraftFormFields(sykdomsvurdering) : emptyDraftFormFields());
         });
       }}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
@@ -354,80 +352,6 @@ export const Sykdomsvurdering = ({
         />
       )}
     </VilkårskortMedFormOgMellomlagringNyVisning>
-  ) : (
-    <VilkårskortMedFormOgMellomlagring
-      heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
-      steg="AVKLAR_SYKDOM"
-      vilkårTilhørerNavKontor={true}
-      onSubmit={handleSubmit}
-      status={status}
-      visBekreftKnapp={false}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={sykdomsvurdering?.vurdertAv}
-      knappTekst={'Bekreft'}
-      kvalitetssikretAv={grunnlag.kvalitetssikretAv}
-      mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
-      onDeleteMellomlagringClick={() => {
-        slettMellomlagring(() => {
-          form.reset(sykdomsvurdering ? mapVurderingToDraftFormFields(sykdomsvurdering) : emptyDraftFormFields());
-        });
-      }}
-    >
-      {historiskeVurderinger && historiskeVurderinger.length > 0 && (
-        <TidligereVurderinger
-          data={historiskeVurderinger}
-          buildFelter={byggFelter}
-          getErGjeldende={(v) =>
-            grunnlag.gjeldendeVedtatteSykdomsvurderinger.some((gjeldendeVurdering) => deepEqual(v, gjeldendeVurdering))
-          }
-          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
-          getVurdertAvIdent={(v) => v.vurdertAv.ident}
-          getVurdertDato={(v) => v.vurdertAv.dato}
-        />
-      )}
-      {grunnlag.skalVurdereYrkesskade && (
-        <Alert variant={'warning'} size={'small'}>
-          Det har blitt funnet én eller flere yrkesskader på brukeren
-        </Alert>
-      )}
-      <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
-        Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
-      </Link>
-      <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-      {behandlingErRevurdering && <FormField form={form} formField={formFields.vurderingenGjelderFra} />}
-      {(behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()) && (
-        <Førstegangsbehandling
-          form={form}
-          formFields={formFields}
-          skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-          diagnosesøker={
-            <Diagnosesøk
-              form={form}
-              formFields={formFields}
-              readOnly={readOnly}
-              hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
-            />
-          }
-        />
-      )}
-      {behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling() && (
-        <Revurdering
-          form={form}
-          formFields={formFields}
-          skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-          diagnosesøker={
-            <Diagnosesøk
-              form={form}
-              formFields={formFields}
-              readOnly={readOnly}
-              hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
-            />
-          }
-        />
-      )}
-    </VilkårskortMedFormOgMellomlagring>
   );
 
   function mapVurderingToDraftFormFields(vurdering?: Sykdomvurdering): DraftFormFields {

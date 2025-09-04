@@ -15,8 +15,8 @@ export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMed
   onDeleteMellomlagringClick: () => void;
   onLagreMellomLagringClick: () => void;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
-  modus: VisningModus;
-  actions: VisningActions;
+  visningModus: VisningModus;
+  visningActions: VisningActions;
 }
 
 export const VilkårskortMedFormOgMellomlagringNyVisning = ({
@@ -36,14 +36,14 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   onDeleteMellomlagringClick,
   onLagreMellomLagringClick,
   mellomlagretVurdering,
-  modus,
-  actions,
+  visningModus,
+  visningActions,
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
-  const erAktivtSteg = flyt.aktivtSteg === steg || modus === 'AKTIV_MED_AVBRYT';
+  const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
 
-  const readOnly = modus === 'LÅST_MED_ENDRE' || modus === 'LÅST_UTEN_ENDRE';
+  const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
 
   return (
     <ExpansionCard
@@ -64,7 +64,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
       <ExpansionCard.Content className={styles.content}>
         <form onSubmit={onSubmit} id={steg} autoComplete="off">
           <VStack gap="4">
-            {/* Skjemainnhold */}
+            {/* innhold i vilkårskortet */}
             {children}
 
             {/* Status / feil */}
@@ -78,7 +78,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
               <VStack gap="4">
                 <HStack gap="4">
                   {/* Modus-styrte knapper */}
-                  {modus === 'AKTIV_UTEN_AVBRYT' && (
+                  {visningModus === 'AKTIV_UTEN_AVBRYT' && (
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
                       {onLagreMellomLagringClick && (
@@ -89,11 +89,11 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                     </>
                   )}
 
-                  {modus === 'AKTIV_MED_AVBRYT' && (
+                  {visningModus === 'AKTIV_MED_AVBRYT' && (
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
-                      {actions && (
-                        <Button type="button" variant="secondary" onClick={actions.avbrytEndringClick}>
+                      {visningActions && (
+                        <Button type="button" variant="secondary" onClick={visningActions.avbrytEndringClick}>
                           Avbryt
                         </Button>
                       )}
@@ -105,13 +105,13 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                     </>
                   )}
 
-                  {modus === 'LÅST_MED_ENDRE' && (
-                    <Button type="button" variant={'secondary'} onClick={actions.onEndreClick}>
+                  {visningModus === 'LÅST_MED_ENDRE' && (
+                    <Button type="button" variant={'secondary'} onClick={visningActions.onEndreClick}>
                       Endre
                     </Button>
                   )}
 
-                  {modus === 'LÅST_UTEN_ENDRE' && null}
+                  {visningModus === 'LÅST_UTEN_ENDRE' && null}
                 </HStack>
 
                 {/* Utkast-info */}
