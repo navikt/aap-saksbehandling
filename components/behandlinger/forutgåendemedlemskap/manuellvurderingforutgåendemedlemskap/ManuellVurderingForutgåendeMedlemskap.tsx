@@ -56,7 +56,7 @@ function mapGrunnlagTilUnntaksvilkår(
 }
 
 const begrunnelseLabel = 'Vurder brukerens forutgående medlemskap';
-const harForutgåendeMedlemskapLabel = 'Har brukeren fem års forutgående medlemskap i folketrygden jamfør § 11-2?';
+const harForutgåendeMedlemskapLabel = 'Har brukeren fem års forutgående medlemskap i folketrygden jf. § 11-2?';
 const unntaksvilkårLabel = 'Oppfyller brukeren noen av unntaksvilkårene?';
 
 export const ManuellVurderingForutgåendeMedlemskap = ({

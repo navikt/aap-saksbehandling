@@ -65,7 +65,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
       />
     );
     const felt = screen.getByRole('group', {
-      name: 'Har brukeren fem års forutgående medlemskap i folketrygden jamfør § 11-2?',
+      name: 'Har brukeren fem års forutgående medlemskap i folketrygden jf. § 11-2?',
     });
     expect(felt).toBeVisible();
   });
@@ -80,7 +80,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
       />
     );
     const forutgående = screen.getByRole('group', {
-      name: 'Har brukeren fem års forutgående medlemskap i folketrygden jamfør § 11-2?',
+      name: 'Har brukeren fem års forutgående medlemskap i folketrygden jf. § 11-2?',
     });
     expect(forutgående).toBeVisible();
     await user.click(within(forutgående).getByRole('radio', { name: 'Ja' }));
@@ -100,7 +100,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
       />
     );
     const forutgående = screen.getByRole('group', {
-      name: 'Har brukeren fem års forutgående medlemskap i folketrygden jamfør § 11-2?',
+      name: 'Har brukeren fem års forutgående medlemskap i folketrygden jf. § 11-2?',
     });
     expect(forutgående).toBeVisible();
     await user.click(within(forutgående).getByRole('radio', { name: 'Nei' }));
@@ -149,7 +149,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
       />
     );
     const forutgående = screen.getByRole('group', {
-      name: 'Har brukeren fem års forutgående medlemskap i folketrygden jamfør § 11-2?',
+      name: 'Har brukeren fem års forutgående medlemskap i folketrygden jf. § 11-2?',
     });
     expect(forutgående).toBeVisible();
     await user.click(within(forutgående).getByRole('radio', { name: 'Nei' }));
