@@ -344,7 +344,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
     );
 
     const felt = screen.getByRole('group', {
-      name: 'Er den nedsatte arbeidsevnen av en viss varighet?',
+      name: 'Er den nedsatte arbeidsevnen av en viss varighet? Om du svarer nei, vil brukeren vurderes for AAP som sykepengeerstatning etter § 11-13.',
     });
     expect(felt).toBeVisible();
   });
@@ -800,7 +800,7 @@ describe('revurdering av førstegangsbehandling', () => {
     );
     expect(
       screen.getByRole('group', {
-        name: 'Er den nedsatte arbeidsevnen av en viss varighet?',
+        name: 'Er den nedsatte arbeidsevnen av en viss varighet? Om du svarer nei, vil brukeren vurderes for AAP som sykepengeerstatning etter § 11-13.',
       })
     ).toBeVisible();
   });
