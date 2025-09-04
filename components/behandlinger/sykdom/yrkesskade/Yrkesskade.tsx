@@ -161,7 +161,7 @@ export const Yrkesskade = ({
                       <Table.DataCell textSize={'small'}>{yrkesskade.saksnummer}</Table.DataCell>
                       <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
                       <Table.DataCell textSize={'small'}>
-                        {formaterDatoForFrontend(yrkesskade.skadedato)}
+                        {yrkesskade.skadedato ? formaterDatoForFrontend(yrkesskade.skadedato) : 'Ukjent'}
                       </Table.DataCell>
                     </Table.Row>
                   ))}
