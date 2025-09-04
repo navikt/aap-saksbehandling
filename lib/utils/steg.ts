@@ -54,13 +54,16 @@ export const getStegData = (
 ): StegData => {
   const avklaringsbehov = getAvklaringsbehovForSteg(stegGruppe, stegType, behandlingFlytOgTilstand, behovstype);
   const harAvklaringsbehov = avklaringsbehov.length > 0;
+  const typeBehandling = behandlingFlytOgTilstand.visning.typeBehandling;
+  const readOnly =
+    behandlingFlytOgTilstand.visning.saksbehandlerReadOnly || (typeBehandling === 'Revurdering' && !harAvklaringsbehov);
 
   return {
     behandlingVersjon: behandlingFlytOgTilstand.behandlingVersjon,
-    typeBehandling: behandlingFlytOgTilstand.visning.typeBehandling,
+    typeBehandling: typeBehandling,
     avklaringsbehov: avklaringsbehov,
     skalViseSteg: harAvklaringsbehov || behandlingFlytOgTilstand.visning.typeBehandling === 'Revurdering',
-    readOnly: behandlingFlytOgTilstand.visning.saksbehandlerReadOnly || !harAvklaringsbehov,
+    readOnly: readOnly,
   };
 };
 
