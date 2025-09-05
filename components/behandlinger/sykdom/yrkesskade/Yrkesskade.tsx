@@ -49,7 +49,7 @@ export const Yrkesskade = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(vurderingerString);
 
-  const yrkesskadeManglerSkadedato = grunnlag.opplysninger.innhentedeYrkesskader.find((ys) => !!ys.skadedato);
+  const yrkesskadeManglerSkadedato = grunnlag.opplysninger.innhentedeYrkesskader.find((ys) => ys.skadedato === null);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
