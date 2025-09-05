@@ -23,6 +23,7 @@ interface Props {
   successfullOpprettelse?: () => void;
   finnTidligsteVirkningstidspunkt?: string;
   behandlingsreferanse?: string;
+  behovsType?: Behovstype;
 }
 
 interface DefaultValues {
@@ -46,6 +47,7 @@ export const OpprettOppfølgingsBehandling = ({
   successfullOpprettelse,
   finnTidligsteVirkningstidspunkt,
   behandlingsreferanse,
+  behovsType,
 }: Props) => {
   const defaultValues: DefaultValues = {
     datoForOppfølging: finnTidligsteVirkningstidspunkt ? finnTidligsteVirkningstidspunkt : '',
@@ -76,7 +78,7 @@ export const OpprettOppfølgingsBehandling = ({
         meldingType: 'OppfølgingsoppgaveV0',
         opprinnelse: {
           behandlingsreferanse: behandlingsreferanse,
-          avklaringsbehovKode: 'AVKLAR_SAMORDNING_GRADERING',
+          avklaringsbehovKode: behovsType,
         },
         datoForOppfølging: formaterDatoForBackend(parse(data.datoForOppfølging, 'dd.MM.yyyy', new Date())),
         hvaSkalFølgesOpp: data.hvaSkalFølgesOpp,

@@ -202,6 +202,7 @@ export const SamordningGradering = ({
         >
           <Modal.Body>
             <OpprettOppfølgingsBehandling
+              behovsType={Behovstype.AVKLAR_SAMORDNING_GRADERING}
               behandlingsreferanse={behandlingsreferanse}
               saksnummer={sak.sak.saksnummer}
               brukerInformasjon={bruker}
@@ -242,12 +243,12 @@ export const SamordningGradering = ({
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell ytelser={grunnlag.ytelser} />
             <Ytelsesvurderinger form={form} readOnly={readOnly} />
-            {success && (
+            {(success || oppfølgningOppgave) && (
               <Box maxWidth={'80ch'}>
                 <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
               </Box>
             )}
-            {visRevurderVirkningstidspunkt && !success && (
+            {!oppfølgningOppgave && visRevurderVirkningstidspunkt && !success && (
               <Box maxWidth={'90ch'}>
                 <Alert variant="info">
                   <Heading spacing size="small" level="3">

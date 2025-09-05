@@ -11268,7 +11268,7 @@ export interface components {
       identer: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ident'][];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Opprinnelse': {
-      avklaringsbehovKode: string;
+      avklaringsbehovKode?: string | null;
       behandlingsreferanse?: string | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knad': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0'];
