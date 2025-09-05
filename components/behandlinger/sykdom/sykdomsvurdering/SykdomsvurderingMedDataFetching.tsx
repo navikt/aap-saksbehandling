@@ -9,6 +9,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { isDev } from 'lib/utils/environment';
+import { SykdomsvurderingNyVisning } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedNyVisning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -43,7 +44,7 @@ export const SykdomsvurderingMedDataFetching = async ({
   );
 
   return isDev() ? (
-    <Sykdomsvurdering
+    <SykdomsvurderingNyVisning
       grunnlag={grunnlag.data}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={behandlingVersjon}
