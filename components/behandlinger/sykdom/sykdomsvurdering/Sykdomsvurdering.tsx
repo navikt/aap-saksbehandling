@@ -93,7 +93,11 @@ export const Sykdomsvurdering = ({
   const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
   const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(-1);
 
-  const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(readOnly, 'AVKLAR_SYKDOM');
+  const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
+    readOnly,
+    'AVKLAR_SYKDOM',
+    mellomlagretVurdering
+  );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
