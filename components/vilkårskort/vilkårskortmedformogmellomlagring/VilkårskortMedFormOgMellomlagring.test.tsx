@@ -5,6 +5,8 @@ import {
   VilkårsKortMedFormOgMellomlagringProps,
 } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { ApiException } from 'lib/utils/api';
+import { VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 describe('Vilkårskort med form', () => {
   it('skal ha en overskrift', () => {
@@ -141,6 +143,58 @@ describe('Vilkårskort med form', () => {
     const knapp = screen.queryByRole('button', { name: 'Lagre utkast' });
     expect(knapp).not.toBeInTheDocument();
   });
+
+  it('Skal ha knapper for bekreft, avbryt og lagre utkast når visningsModus er AKTIV_MED_AVBRYT', () => {
+    renderComponentNyVisning(VisningModus.AKTIV_MED_AVBRYT);
+    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
+
+    expect(bekreftKnapp).toBeVisible();
+    expect(avbrytKnapp).toBeVisible();
+    expect(lagreUtkastKnapp).toBeVisible();
+  });
+
+  it('Skal ha knapper for bekreft og lagre utkast når visningsModus er AKTIV_UTEN_AVBRYT', () => {
+    renderComponentNyVisning(VisningModus.AKTIV_UTEN_AVBRYT);
+
+    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    const avbrytKnapp = screen.queryByRole('button', { name: 'Avbryt' });
+    const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
+
+    expect(bekreftKnapp).toBeVisible();
+    expect(avbrytKnapp).not.toBeInTheDocument();
+    expect(lagreUtkastKnapp).toBeVisible();
+  });
+
+  it('Skal ha knapp for å endre vurdering når visningsModus er LÅST_MED_ENDRE', () => {
+    renderComponentNyVisning(VisningModus.LÅST_MED_ENDRE);
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    expect(endreKnapp).toBeVisible();
+
+    const bekreftKnapp = screen.queryByRole('button', { name: 'Bekreft' });
+    const avbrytKnapp = screen.queryByRole('button', { name: 'Avbryt' });
+    const lagreUtkastKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
+
+    expect(bekreftKnapp).not.toBeInTheDocument();
+    expect(avbrytKnapp).not.toBeInTheDocument();
+    expect(lagreUtkastKnapp).not.toBeInTheDocument();
+  });
+
+  it('Skal ikke ha noen knapper når visningsModus er LÅST_UTEN_ENDRE', () => {
+    renderComponentNyVisning(VisningModus.LÅST_UTEN_ENDRE);
+
+    const endreKnapp = screen.queryByRole('button', { name: 'Endre' });
+    const bekreftKnapp = screen.queryByRole('button', { name: 'Bekreft' });
+    const avbrytKnapp = screen.queryByRole('button', { name: 'Avbryt' });
+    const lagreUtkastKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
+
+    expect(endreKnapp).not.toBeInTheDocument();
+    expect(bekreftKnapp).not.toBeInTheDocument();
+    expect(avbrytKnapp).not.toBeInTheDocument();
+    expect(lagreUtkastKnapp).not.toBeInTheDocument();
+  });
 });
 
 const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
@@ -156,8 +210,14 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
   children: undefined,
   onDeleteMellomlagringClick: vitest.fn,
   mellomlagretVurdering: undefined,
-  onLagreMellomLagringClick: vitest.fn(),
+  onLagreMellomLagringClick: vitest.fn,
   løsBehovOgGåTilNesteStegError: undefined,
+  visningActions: {
+    onBekreftClick: vitest.fn,
+    onEndreClick: vitest.fn,
+    avbrytEndringClick: vitest.fn,
+  },
+  visningModus: VisningModus.AKTIV_UTEN_AVBRYT,
 };
 
 function renderComponent(skalViseBekreftKnapp?: boolean, error?: ApiException) {
@@ -169,5 +229,21 @@ function renderComponent(skalViseBekreftKnapp?: boolean, error?: ApiException) {
     >
       <span>Dette er innhold</span>
     </VilkårskortMedFormOgMellomlagring>
+  );
+}
+
+function renderComponentNyVisning(visningModus: VisningModus) {
+  render(
+    <VilkårskortMedFormOgMellomlagringNyVisning
+      {...defaultProps}
+      visningModus={visningModus}
+      visningActions={{
+        onBekreftClick: vitest.fn,
+        onEndreClick: vitest.fn,
+        avbrytEndringClick: vitest.fn,
+      }}
+    >
+      <span>Dette er innhold</span>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 }
