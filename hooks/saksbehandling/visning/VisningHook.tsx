@@ -28,6 +28,8 @@ export function useVilkårskortVisning(
 ): VisningState {
   const { flyt } = useRequiredFlyt();
 
+  console.log(flyt.aktivtSteg);
+
   const erAktivtSteg = flyt.aktivtSteg === steg;
   const initialVisningModus = hentVisning(readOnly, erAktivtSteg, mellomlagring);
   const initialFormReadOnly =

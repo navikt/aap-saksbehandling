@@ -1,35 +1,39 @@
-import { afterEach, beforeAll, vi } from 'vitest';
+import { beforeAll, beforeEach, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
-import { cleanup } from '@testing-library/react';
-import { FetchResponse } from 'lib/utils/api';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
-const flytResponse: FetchResponse<BehandlingFlytOgTilstand> = {
-  type: 'SUCCESS',
-  status: 200,
-  data: {
-    behandlingVersjon: 5,
-    aktivGruppe: 'SYKDOM',
-    aktivtSteg: 'AVKLAR_SYKDOM',
-    aktivtStegDefinisjon: [],
-    flyt: [],
-    prosessering: {
-      status: 'FERDIG',
-      ventendeOppgaver: [],
-    },
-    visning: {
-      beslutterReadOnly: false,
-      kvalitetssikringReadOnly: false,
-      saksbehandlerReadOnly: false,
-      brukerHarBesluttet: false,
-      brukerHarKvalitetssikret: false,
-      typeBehandling: 'Førstegangsbehandling',
-      visBeslutterKort: false,
-      visBrevkort: false,
-      visKvalitetssikringKort: false,
-      visVentekort: false,
-    },
+export const defaultFlytResponse: BehandlingFlytOgTilstand = {
+  behandlingVersjon: 5,
+  aktivGruppe: 'SYKDOM',
+  aktivtSteg: 'AVKLAR_SYKDOM',
+  aktivtStegDefinisjon: [],
+  flyt: [],
+  prosessering: {
+    status: 'FERDIG',
+    ventendeOppgaver: [],
   },
+  visning: {
+    beslutterReadOnly: false,
+    kvalitetssikringReadOnly: false,
+    saksbehandlerReadOnly: false,
+    brukerHarBesluttet: false,
+    brukerHarKvalitetssikret: false,
+    typeBehandling: 'Førstegangsbehandling',
+    visBeslutterKort: false,
+    visBrevkort: false,
+    visKvalitetssikringKort: false,
+    visVentekort: false,
+  },
+};
+
+let mockFlytResponse: BehandlingFlytOgTilstand = defaultFlytResponse;
+
+export function setMockFlytResponse(flyt: BehandlingFlytOgTilstand) {
+  mockFlytResponse = flyt;
+}
+
+export const resetMockFlytResponse = () => {
+  mockFlytResponse = defaultFlytResponse;
 };
 
 beforeAll(() => {
@@ -37,7 +41,7 @@ beforeAll(() => {
     default: vi.fn((key) => {
       if (key?.startsWith('api/flyt')) {
         return {
-          data: flytResponse,
+          data: { type: 'SUCCESS', status: 200, data: mockFlytResponse },
           error: undefined,
           mutate: vi.fn(),
         };
@@ -67,6 +71,6 @@ beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = function () {};
 });
 
-afterEach(() => {
-  cleanup();
+beforeEach(() => {
+  resetMockFlytResponse();
 });
