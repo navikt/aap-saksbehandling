@@ -14,7 +14,7 @@ const user = userEvent.setup();
 describe('Vurder 11-7', () => {
   const tomtGrunnlag: Aktivitetsplikt11_7Grunnlag = {
     harTilgangTilÅSaksbehandle: true,
-    historiskeVurderinger: [],
+    vedtatteVurderinger: [],
     vurdering: undefined,
   };
 
@@ -56,12 +56,12 @@ describe('mellomlagring', () => {
       erOppfylt: false,
       gjelderFra: '2025-09-01',
     },
-    historiskeVurderinger: [],
+    vedtatteVurderinger: [],
   };
 
   const grunnlagUtenVurdering: Aktivitetsplikt11_7Grunnlag = {
     harTilgangTilÅSaksbehandle: false,
-    historiskeVurderinger: [],
+    vedtatteVurderinger: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {

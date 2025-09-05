@@ -37,7 +37,7 @@ type DraftFormFields = Partial<FormFields>;
 export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
   const { sak } = useSak();
   const behandlingsreferanse = useBehandlingsReferanse();
-  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
+  const vedtatteVurderinger = grunnlag?.vedtatteVurderinger;
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_AKTIVITETSPLIKT_11_7');
@@ -139,12 +139,14 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       }
       readOnly={readOnly}
     >
-      {!!historiskeVurderinger?.length && (
+      {!!vedtatteVurderinger?.length && (
         <TidligereVurderinger
-          data={historiskeVurderinger}
+          data={vedtatteVurderinger}
           buildFelter={byggFelter}
-          getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
-          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+          getErGjeldende={(v) =>
+            grunnlag?.vedtatteVurderinger.some((gjeldendeVurdering) => deepEqual(v, gjeldendeVurdering, ['dato']))
+          }
+          getFomDato={(v) => v.gjelderFra ?? v.vurdertAv.dato}
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
           getVurdertDato={(v) => v.vurdertAv.dato}
         />
