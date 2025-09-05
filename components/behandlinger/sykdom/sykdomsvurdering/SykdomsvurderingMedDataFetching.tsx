@@ -8,6 +8,7 @@ import { ValuePair } from 'components/form/FormField';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { isDev } from 'lib/utils/environment';
 
 interface Props {
   behandlingsReferanse: string;
@@ -41,7 +42,17 @@ export const SykdomsvurderingMedDataFetching = async ({
     finnDiagnosegrunnlag(typeBehandling, grunnlag.data)?.kodeverk as DiagnoseSystem
   );
 
-  return (
+  return isDev() ? (
+    <Sykdomsvurdering
+      grunnlag={grunnlag.data}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={behandlingVersjon}
+      bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
+      hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
+      typeBehandling={typeBehandling}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
+    />
+  ) : (
     <Sykdomsvurdering
       grunnlag={grunnlag.data}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
