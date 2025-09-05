@@ -9798,6 +9798,8 @@ export interface components {
         | 'IKKE_OPPFYLT_OPPHOLDSKRAV_EØS'
         | 'NORGE_IKKE_KOMPETENT_STAT'
         | 'ANNEN_FULL_YTELSE'
+        | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
+        | 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'
         | null;
       begrunnelse?: string | null;
       /** @enum {string|null} */
@@ -11109,6 +11111,8 @@ export interface components {
         | 'IKKE_OPPFYLT_OPPHOLDSKRAV_EØS'
         | 'NORGE_IKKE_KOMPETENT_STAT'
         | 'ANNEN_FULL_YTELSE'
+        | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
+        | 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'
         | null;
       begrunnelse?: string | null;
       /** @enum {string|null} */
