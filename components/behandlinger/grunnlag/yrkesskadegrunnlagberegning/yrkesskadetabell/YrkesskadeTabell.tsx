@@ -26,7 +26,7 @@ export const YrkesskadeTabell = ({ yrkesskader }: Props) => {
         <Table.Body>
           {yrkesskader.map((yrkesskade) => {
             // TODO denne skal alternativt hentes fra vurderingen dersom skadedato mangler i grunnlaget
-            const skadedato = formaterDatoForFrontend(yrkesskade.skadedato!!);
+            const skadedato = yrkesskade.skadedato ? formaterDatoForFrontend(yrkesskade.skadedato) : 'Ukjent';
 
             return (
               <Table.Row key={yrkesskade.ref}>
