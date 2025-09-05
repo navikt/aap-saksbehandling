@@ -27,13 +27,13 @@ describe('Generelt', () => {
         grunnlag={{ ...grunnlagUtenVurdering, skalVurdereYtterligere: false }}
       />
     );
-    const heading = screen.getByText('§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5');
+    const heading = screen.getByText('§ 11-19 Tidspunktet da arbeidsevnen ble nedsatt, jf. § 11-5');
     expect(heading).toBeVisible();
   });
 
   it('skal ha korrekt heading for vilkårskortet dersom det skal vurderes ytterligere nedsatt arbeidsevne', () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-    const heading = screen.getByText('§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5 og § 11-28');
+    const heading = screen.getByText('§ 11-19 Tidspunktet da arbeidsevnen ble nedsatt, jf. § 11-5 og § 11-28');
     expect(heading).toBeVisible();
   });
 
@@ -132,7 +132,7 @@ describe('Felt for å skrive begrunnelse for ytterligere nedsatt arbeidsevne', (
 describe('Felt for å sette dato for ytterligere nedsatt arbeidsevne', () => {
   it('skal være synlig dersom flagget for å vurdere ytterligere nedsatt arbeidsevne er satt til true', () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-    const felt = screen.getByRole('textbox', { name: 'Dato arbeidsevnen ble ytterligere nedsatt' });
+    const felt = screen.getByRole('textbox', { name: 'Datoen da arbeidsevnen ble ytterligere nedsatt' });
     expect(felt).toBeVisible();
   });
 
@@ -148,7 +148,9 @@ describe('Felt for å sette dato for ytterligere nedsatt arbeidsevne', () => {
     const nedsattDato = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
     await user.type(nedsattDato, '11.11.2011');
 
-    const ytterligereNedsattDato = screen.getByRole('textbox', { name: 'Dato arbeidsevnen ble ytterligere nedsatt' });
+    const ytterligereNedsattDato = screen.getByRole('textbox', {
+      name: 'Datoen da arbeidsevnen ble ytterligere nedsatt',
+    });
     await user.type(ytterligereNedsattDato, '11.11.2010');
 
     await velgBekreft();
