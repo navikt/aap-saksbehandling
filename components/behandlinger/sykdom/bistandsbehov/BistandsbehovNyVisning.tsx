@@ -21,8 +21,6 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { isDev } from 'lib/utils/environment';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -133,7 +131,7 @@ export const BistandsbehovNyVisning = ({
         },
       },
     },
-    { readOnly: isDev() ? formReadOnly : readOnly, shouldUnregister: true }
+    { readOnly: formReadOnly, shouldUnregister: true }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -178,7 +176,7 @@ export const BistandsbehovNyVisning = ({
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
-  return isDev() ? (
+  return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
       steg={'VURDER_BISTANDSBEHOV'}
@@ -271,99 +269,6 @@ export const BistandsbehovNyVisning = ({
         </VStack>
       )}
     </VilkårskortMedFormOgMellomlagringNyVisning>
-  ) : (
-    <VilkårskortMedFormOgMellomlagring
-      heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
-      steg={'VURDER_BISTANDSBEHOV'}
-      onSubmit={handleSubmit}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vilkårTilhørerNavKontor={true}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
-      kvalitetssikretAv={grunnlag?.kvalitetssikretAv}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
-      onDeleteMellomlagringClick={() => {
-        slettMellomlagring(() => {
-          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
-        });
-      }}
-      mellomlagretVurdering={mellomlagretVurdering}
-      visBekreftKnapp={!readOnly}
-      visningModus={visningModus}
-      visningActions={visningActions}
-    >
-      {historiskeVurderinger && historiskeVurderinger.length > 0 && (
-        <TidligereVurderinger
-          data={historiskeVurderinger}
-          buildFelter={byggFelter}
-          getErGjeldende={(v) =>
-            grunnlag?.gjeldendeVedtatteVurderinger.some((gjeldendeVurdering) =>
-              deepEqual(v, gjeldendeVurdering, ['dato'])
-            )
-          }
-          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
-          getVurdertAvIdent={(v) => v.vurdertAv.ident}
-          getVurdertDato={(v) => v.vurdertAv.dato}
-        />
-      )}
-      <Veiledning
-        defaultOpen={false}
-        tekst={
-          <div>
-            Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
-            brukeren oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a
-            (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
-            vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
-            svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
-            <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_8" target="_blank">
-              Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6 (lovdata.no)
-            </Link>
-          </div>
-        }
-      />
-      {typeBehandling === 'Revurdering' && (
-        <BodyShort>
-          Vurderingen gjelder fra {vurderingenGjelderFra && formaterDatoForFrontend(vurderingenGjelderFra)}
-        </BodyShort>
-      )}
-      <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-      <FormField form={form} formField={formFields.erBehovForAktivBehandling} horizontalRadio />
-      <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} horizontalRadio />
-      {form.watch('erBehovForAktivBehandling') !== JaEllerNei.Ja &&
-        form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
-        )}
-      {(typeBehandling === 'Førstegangsbehandling' || (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
-        bistandsbehovErIkkeOppfylt && (
-          <VStack gap={'4'} as={'section'}>
-            <Heading level={'3'} size="small">
-              § 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd
-            </Heading>
-            <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-            <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilUføre} horizontalRadio />
-            {form.watch('skalVurdereAapIOvergangTilUføre') === JaEllerNei.Ja && (
-              <Alert variant="warning">
-                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18-sak.
-              </Alert>
-            )}
-          </VStack>
-        )}
-      {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
-        <VStack gap={'4'} as={'section'}>
-          <Heading level={'3'} size="small">
-            § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
-          </Heading>
-          <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-          <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilArbeid} horizontalRadio />
-          {form.watch('skalVurdereAapIOvergangTilArbeid') === JaEllerNei.Ja && (
-            <Alert variant="warning">
-              Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17-sak.
-            </Alert>
-          )}
-        </VStack>
-      )}
-    </VilkårskortMedFormOgMellomlagring>
   );
 
   function mapVurderingToDraftFormFields(vurdering?: BistandsbehovVurdering): DraftFormFields {
