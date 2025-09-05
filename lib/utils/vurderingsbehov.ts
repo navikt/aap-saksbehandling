@@ -58,7 +58,7 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
     case 'FRITAK_MELDEPLIKT':
       return 'Fritak meldeplikt';
     case 'REVURDER_MANUELL_INNTEKT':
-      return 'Revurder mannuell inntekt';
+      return 'Revurder manuell inntekt';
     case 'OPPFØLGINGSOPPGAVE':
       return 'Oppfølgingsoppgave';
     case 'HELHETLIG_VURDERING':

@@ -85,7 +85,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
       },
       ytterligereNedsattArbeidsevneDato: {
         type: 'date_input',
-        label: 'Dato arbeidsevnen ble ytterligere nedsatt',
+        label: 'Datoen da arbeidsevnen ble ytterligere nedsatt',
         defaultValue: defaultValues.ytterligereNedsattArbeidsevneDato,
         rules: {
           validate: (value, formValues) => {
@@ -130,8 +130,8 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
   };
 
   const heading = grunnlag?.skalVurdereYtterligere
-    ? '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5 og § 11-28'
-    : '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5';
+    ? '§ 11-19 Tidspunktet da arbeidsevnen ble nedsatt, jf. § 11-5 og § 11-28'
+    : '§ 11-19 Tidspunktet da arbeidsevnen ble nedsatt, jf. § 11-5';
 
   const erBeregningsTidspunktEtterVirkningsTidspunkt =
     sak.virkningsTidspunkt !== null &&
@@ -230,7 +230,7 @@ const byggFelter = (vurdering: BeregningstidspunktVurderingResponse): ValuePair[
     value: vurdering.ytterligereNedsattBegrunnelse || '-',
   },
   {
-    label: 'Dato arbeidsevnen ble ytterligere nedsatt',
+    label: 'Datoen da arbeidsevnen ble ytterligere nedsatt',
     value: vurdering.ytterligereNedsattArbeidsevneDato
       ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
       : '-',
