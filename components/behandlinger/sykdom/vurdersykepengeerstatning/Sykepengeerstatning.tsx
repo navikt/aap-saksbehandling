@@ -47,7 +47,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       },
       erOppfylt: {
         type: 'radio',
-        label: 'Krav på sykepengeerstatning?',
+        label: 'Har brukeren krav på sykepengeerstatning?',
         rules: { required: 'Du må ta stilling til om brukeren har rett på AAP som sykepengeerstatning.' },
         options: JaEllerNeiOptions,
         defaultValue: defaultValues?.erOppfylt,
