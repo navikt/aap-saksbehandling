@@ -10071,7 +10071,7 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
-      skadedato: string;
+      skadedato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningDto': {
       begrunnelse: string;
