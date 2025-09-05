@@ -6,7 +6,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { KansellertRevurderingGrunnlag } from 'lib/types/types';
 
 interface Props {
@@ -73,7 +73,7 @@ export const KansellerRevurderingVurdering = ({ grunnlag, readOnly, behandlingVe
   };
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedForm
       heading={'Kanseller revurdering'}
       steg={'KANSELLER_REVURDERING'}
       onSubmit={handleSubmit}
@@ -85,6 +85,6 @@ export const KansellerRevurderingVurdering = ({ grunnlag, readOnly, behandlingVe
     >
       <FormField form={form} formField={formFields.aarsak} className="årsak" />
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-    </VilkårsKortMedForm>
+    </VilkårskortMedForm>
   );
 };
