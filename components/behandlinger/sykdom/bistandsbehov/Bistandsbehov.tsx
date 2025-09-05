@@ -187,6 +187,7 @@ export const Bistandsbehov = ({
       }}
       mellomlagretVurdering={mellomlagretVurdering}
       visBekreftKnapp={!readOnly}
+      readOnly={readOnly}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger

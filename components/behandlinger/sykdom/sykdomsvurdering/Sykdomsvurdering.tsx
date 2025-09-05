@@ -292,6 +292,7 @@ export const Sykdomsvurdering = ({
           form.reset(sykdomsvurdering ? mapVurderingToDraftFormFields(sykdomsvurdering) : emptyDraftFormFields());
         });
       }}
+      readOnly={readOnly}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
