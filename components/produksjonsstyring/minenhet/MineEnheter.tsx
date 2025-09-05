@@ -25,7 +25,6 @@ export const MineEnheter = ({ enheter }: Props) => {
   );
 
   const oppdaterEnheter = (enheter: ComboOption[]) => {
-    console.log('lagrer', enheter);
     setAktiveEnheter(enheter);
     lagreAktiveEnheter(enheter);
   };
