@@ -3,7 +3,7 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormEvent } from 'react';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { FullmektigGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
@@ -199,7 +199,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
   };
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'Fullmektig/verge'}
       steg={'FULLMEKTIG'}
       onSubmit={handleSubmit}
@@ -244,7 +244,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
           )}
         </>
       )}
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 
   function mapVurderingToDraftFormFields(grunnlag?: FullmektigGrunnlag): DraftFormFields {

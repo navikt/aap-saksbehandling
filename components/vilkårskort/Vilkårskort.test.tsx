@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { VilkårsKort } from './VilkårsKort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 
-describe('VilkårsKort', () => {
+describe('VilkRskort', () => {
   it('skal vise overskrift', () => {
     render(
       <VilkårsKort heading={'Dette er en overskrift'} steg={'UDEFINERT'}>

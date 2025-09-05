@@ -13,7 +13,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { ValuePair } from 'components/form/FormField';
 import { formaterTilNok } from 'lib/utils/string';
@@ -75,7 +75,7 @@ export const YrkesskadeGrunnlagBeregning = ({
   const historiskeVurderinger = yrkeskadeBeregningGrunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       onSubmit={form.handleSubmit((data) => {
@@ -170,7 +170,7 @@ export const YrkesskadeGrunnlagBeregning = ({
           </div>
         );
       })}
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

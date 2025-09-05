@@ -8,7 +8,7 @@ import { FormEvent } from 'react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, RettighetsperiodeGrunnlag } from 'lib/types/types';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { addYears, isBefore, parse, startOfDay } from 'date-fns';
 import { Alert, BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
@@ -119,7 +119,7 @@ export const VurderRettighetsperiode = ({
   };
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'Starttidspunkt'}
       steg={'VURDER_RETTIGHETSPERIODE'}
       onSubmit={handleSubmit}
@@ -155,12 +155,12 @@ export const VurderRettighetsperiode = ({
       {form.watch('harKravPåRenter') === JaEllerNei.Ja && (
         <HStack>
           <Alert variant={'warning'} size={'small'}>
-            Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på arenasaker (via
-            gosys).
+            Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på Arena-saker (via
+            Gosys).
           </Alert>
         </HStack>
       )}
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

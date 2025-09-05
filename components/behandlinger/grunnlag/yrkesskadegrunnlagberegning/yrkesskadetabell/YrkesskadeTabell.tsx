@@ -24,13 +24,18 @@ export const YrkesskadeTabell = ({ yrkesskader }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {yrkesskader.map((yrkesskade) => (
-            <Table.Row key={yrkesskade.ref}>
-              <Table.DataCell textSize={'small'}>{yrkesskade.saksnummer}</Table.DataCell>
-              <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
-              <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(yrkesskade.skadedato)}</Table.DataCell>
-            </Table.Row>
-          ))}
+          {yrkesskader.map((yrkesskade) => {
+            // TODO denne skal alternativt hentes fra vurderingen dersom skadedato mangler i grunnlaget
+            const skadedato = formaterDatoForFrontend(yrkesskade.skadedato!!);
+
+            return (
+              <Table.Row key={yrkesskade.ref}>
+                <Table.DataCell textSize={'small'}>{yrkesskade.saksnummer}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{skadedato}</Table.DataCell>
+              </Table.Row>
+            );
+          })}
         </Table.Body>
       </Table>
     </div>

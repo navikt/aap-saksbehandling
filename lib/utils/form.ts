@@ -74,7 +74,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5007':
       return '§ 11-13 AAP som sykepengeerstatning';
     case '5008':
-      return '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5';
+      return '§ 11-19 Tidspunktet da arbeidsevnen ble nedsatt, jf. § 11-5';
     case '5009':
       return '§ 11-20 tredje og fjerde ledd barnetillegg';
     case '5098':

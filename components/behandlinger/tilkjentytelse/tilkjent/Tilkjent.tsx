@@ -1,7 +1,7 @@
 'use client';
 
 import { TilkjentYtelseGrunnlag } from 'lib/types/types';
-import { VilkårsKort } from 'components/vilkårskort/VilkårsKort';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { ActionMenu, BodyShort, Button, Table, VStack } from '@navikt/ds-react';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';

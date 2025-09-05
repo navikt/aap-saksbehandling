@@ -16,7 +16,7 @@ import styles from './FastsettBeregning.module.css';
 import { Alert, Heading } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useSak } from 'hooks/SakHook';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
@@ -85,7 +85,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
       },
       ytterligereNedsattArbeidsevneDato: {
         type: 'date_input',
-        label: 'Dato arbeidsevnen ble ytterligere nedsatt',
+        label: 'Datoen da arbeidsevnen ble ytterligere nedsatt',
         defaultValue: defaultValues.ytterligereNedsattArbeidsevneDato,
         rules: {
           validate: (value, formValues) => {
@@ -130,8 +130,8 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
   };
 
   const heading = grunnlag?.skalVurdereYtterligere
-    ? '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5 og § 11-28'
-    : '§ 11-19 Tidspunktet for når arbeidsevnen ble nedsatt, jf. § 11-5';
+    ? '§ 11-19 Tidspunktet da arbeidsevnen ble nedsatt, jf. § 11-5 og § 11-28'
+    : '§ 11-19 Tidspunktet da arbeidsevnen ble nedsatt, jf. § 11-5';
 
   const erBeregningsTidspunktEtterVirkningsTidspunkt =
     sak.virkningsTidspunkt !== null &&
@@ -142,7 +142,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={heading}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       onSubmit={handleSubmit}
@@ -190,7 +190,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
           Sjekk om beregningstidspunkt skal være datert etter tidspunkt for foreløpig virkningstidspunkt
         </Alert>
       )}
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 
@@ -230,7 +230,7 @@ const byggFelter = (vurdering: BeregningstidspunktVurderingResponse): ValuePair[
     value: vurdering.ytterligereNedsattBegrunnelse || '-',
   },
   {
-    label: 'Dato arbeidsevnen ble ytterligere nedsatt',
+    label: 'Datoen da arbeidsevnen ble ytterligere nedsatt',
     value: vurdering.ytterligereNedsattArbeidsevneDato
       ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
       : '-',

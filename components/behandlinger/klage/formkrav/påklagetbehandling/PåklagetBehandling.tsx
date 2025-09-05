@@ -3,7 +3,7 @@
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { MellomlagretVurdering, PåklagetBehandlingGrunnlag, TypeBehandling } from 'lib/types/types';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { VelgPåklagetVedtakRadioTable } from 'components/behandlinger/klage/formkrav/påklagetbehandling/VelgPåklagetVedtakRadioTable';
 import { Controller, useForm } from 'react-hook-form';
 import { Behovstype } from 'lib/utils/form';
@@ -61,7 +61,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
   };
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'Klage på vedtak'}
       steg={'PÅKLAGET_BEHANDLING'}
       onSubmit={handleSubmit(onSubmit)}
@@ -97,7 +97,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
           />
         )}
       />
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

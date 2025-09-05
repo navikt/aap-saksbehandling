@@ -64,6 +64,7 @@ export const OppgitteBarnVurderingFelter = ({
               : 'Oppgi dato for når barnetillegget skal gis fra'
           }
           control={form.control}
+          readOnly={readOnly}
           name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`}
           rules={{
             validate: {

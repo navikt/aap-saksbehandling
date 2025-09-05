@@ -3,13 +3,13 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag, YrkesskadeVurderingResponse } from 'lib/types/types';
-import { Checkbox, Table } from '@navikt/ds-react';
+import { Alert, Checkbox, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { FormEvent } from 'react';
 
@@ -48,6 +48,8 @@ export const Yrkesskade = ({
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(vurderingerString);
+
+  const yrkesskadeManglerSkadedato = grunnlag.opplysninger.innhentedeYrkesskader.find((ys) => !ys.skadedato);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -112,7 +114,7 @@ export const Yrkesskade = ({
   };
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-22 AAP ved yrkesskade'}
       steg={'VURDER_YRKESSKADE'}
       vilkårTilhørerNavKontor={false}
@@ -139,6 +141,12 @@ export const Yrkesskade = ({
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
       {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
         <>
+          {yrkesskadeManglerSkadedato && (
+            <Alert variant={'warning'}>
+              En eller flere av yrkesskadene har ukjent skadedato. Det jobbes med funksjonalitet for å kunne sette denne
+              manuelt. Dersom denne yrkesskaden er aktuell for saken, kan den ikke behandles videre pr nå.
+            </Alert>
+          )}
           <FormField form={form} formField={formFields.relevanteSaker}>
             <TableStyled>
               <Table.Header>
@@ -161,7 +169,7 @@ export const Yrkesskade = ({
                       <Table.DataCell textSize={'small'}>{yrkesskade.saksnummer}</Table.DataCell>
                       <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
                       <Table.DataCell textSize={'small'}>
-                        {formaterDatoForFrontend(yrkesskade.skadedato)}
+                        {yrkesskade.skadedato ? formaterDatoForFrontend(yrkesskade.skadedato) : 'Ukjent'}
                       </Table.DataCell>
                     </Table.Row>
                   ))}
@@ -172,7 +180,7 @@ export const Yrkesskade = ({
           <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
         </>
       )}
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

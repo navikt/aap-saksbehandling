@@ -11,7 +11,7 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { VilkårsKortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårsKortMedForm';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 
 interface Props {
@@ -149,7 +149,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
   };
 
   return (
-    <VilkårsKortMedForm
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-14 Student'}
       steg={'AVKLAR_STUDENT'}
       onSubmit={handleSubmit}
@@ -204,7 +204,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
       {form.watch('avbruddMerEnn6Måneder') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.avbruttDato} />
       )}
-    </VilkårsKortMedForm>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 
