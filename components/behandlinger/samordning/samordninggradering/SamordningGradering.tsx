@@ -30,6 +30,7 @@ import { useSak } from 'hooks/SakHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { capitalize } from 'lodash';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   bruker: BrukerInformasjon;
@@ -187,6 +188,8 @@ export const SamordningGradering = ({
 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
+  const erAllereddeOppfølgningsOppgave = oppfølgningOppgave && oppfølgningOppgave?.data.length > 0;
+
   const sak = useSak();
   const [visModalForOppfølgingsoppgaveState, setModalForOppfølgingsoppgaveState] = useState<boolean>(false);
   const ref = useRef<HTMLDialogElement>(null);
@@ -232,7 +235,7 @@ export const SamordningGradering = ({
         }}
         mellomlagretVurdering={mellomlagretVurdering}
       >
-        {!!historiskeVurderinger.length && (
+        {!!historiskeVurderinger && !!historiskeVurderinger.length && (
           /* TODO: <TidligereVurderinger/> er ikke ideelt for visning av denne typen data (samordning, inst, m.m.).
               Burde på sikt utformes litt annerledes, men dette får fungere som en slags "MVP" */
           <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
@@ -243,12 +246,12 @@ export const SamordningGradering = ({
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell ytelser={grunnlag.ytelser} />
             <Ytelsesvurderinger form={form} readOnly={readOnly} />
-            {(success || oppfølgningOppgave) && (
+            {!isProd && (success || erAllereddeOppfølgningsOppgave) && (
               <Box maxWidth={'80ch'}>
                 <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
               </Box>
             )}
-            {!oppfølgningOppgave && visRevurderVirkningstidspunkt && !success && (
+            {!isProd && !erAllereddeOppfølgningsOppgave && visRevurderVirkningstidspunkt && !success && (
               <Box maxWidth={'90ch'}>
                 <Alert variant="info">
                   <Heading spacing size="small" level="3">
