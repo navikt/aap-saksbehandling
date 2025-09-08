@@ -7,33 +7,33 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
-  behandlingVersjon: number;
-  readOnly: boolean;
+  stegData: StegData;
 }
 
-export const SamordningGraderingMedDatafetching = async ({
-  behandlingsreferanse,
-  behandlingVersjon,
-  readOnly,
-}: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse, stegData }: Props) => {
+  const [grunnlag, brukerInformasjon, initialMellomlagretVurdering] = await Promise.all([
     hentSamordningGraderingGrunnlag(behandlingsreferanse),
+    hentBrukerInformasjon(),
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SAMORDNING_GRADERING),
   ]);
-
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
-  const brukerInformasjon = await hentBrukerInformasjon();
+
+  if (!skalViseSteg(stegData, grunnlag.data.vurdering != null)) {
+    return null;
+  }
+
   return (
     <SamordningGradering
       bruker={brukerInformasjon}
       grunnlag={grunnlag.data}
-      behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
