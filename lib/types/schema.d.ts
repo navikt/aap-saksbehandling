@@ -2714,7 +2714,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/behandling/oppf\u00F8lgningOppgaveOpprinselse/{referanse}/{avklaringsbehovKode}': {
+  '/api/behandling/oppf\u00F8lgningOppgaveOpprinnelse/{referanse}/{avklaringsbehovKode}': {
     parameters: {
       query?: never;
       header?: never;
@@ -2741,7 +2741,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgningOppgaveOpprinnselseResponse'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgningOppgaveOpprinnelseResponse'];
           };
         };
       };
@@ -8874,12 +8874,12 @@ export interface components {
       vurdertAv: string;
       '\u00E5rsak'?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgningOppgaveOpprinnelseResponse': {
+      data: components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgningOppgaveOpprinnselseDto'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgningOppgaveOpprinnselseDto': {
       behandlingReferanse: string;
       opprinnelse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Opprinnelse'];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgningOppgaveOpprinnselseResponse': {
-      data: components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgningOppgaveOpprinnselseDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.oppf\u00F8lgingsbehandling.Oppf\u00F8lgingsoppgaveGrunnlagDto': {
       /** @enum {string} */

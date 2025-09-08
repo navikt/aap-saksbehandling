@@ -2,7 +2,7 @@
 
 import {
   MellomlagretVurdering,
-  OppfølgningOppgaveOpprinnselseResponse,
+  OppfølgningOppgaveOpprinnelseResponse,
   Periode,
   SamordningGraderingGrunnlag,
   SamordningYtelsestype,
@@ -38,7 +38,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  oppfølgningOppgave?: OppfølgningOppgaveOpprinnselseResponse;
+  oppfølgningOppgave?: OppfølgningOppgaveOpprinnelseResponse;
 }
 
 interface SamordnetYtelse {

@@ -503,7 +503,7 @@ export const hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse = async
   kode: string
 ) => {
   const res = await apiFetch<OppfølgningOppgaveOpprinnelseResponse>(
-    `${saksbehandlingApiBaseUrl}/api/behandling/oppfølgningOppgaveOpprinselse/${behandlingsReferanse}/${kode}`,
+    `${saksbehandlingApiBaseUrl}/api/behandling/oppfølgningOppgaveOpprinnelse/${behandlingsReferanse}/${kode}`,
     saksbehandlingApiScope
   );
 
