@@ -54,6 +54,8 @@ const behandlingsTypeAlternativerFraEnum = Object.keys(
         return 'SvarFraAndreinstans';
       case 'Oppf_lgingsbehandling':
         return 'Oppfølgingsbehandling';
+      case 'Aktivitetsplikt':
+        return 'Aktivitetsplikt';
     }
     exhaustiveCheck(key);
   });

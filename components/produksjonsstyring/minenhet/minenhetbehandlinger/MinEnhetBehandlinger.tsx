@@ -10,6 +10,7 @@ import { VenteÅrsaker } from 'components/produksjonsstyring/venteårsaker/Vente
 import { VurderingsbehovPåBehandlinger } from 'components/produksjonsstyring/vurderingsbehov/VurderingsbehovPåBehandlinger';
 import useSWR from 'swr';
 import {
+  antallÅpneBehandlingerMedReturPerAvklaringsbehovClient,
   antallÅpneBehandlingerPerBehandlingstypeClient,
   behandlingerUtviklingClient,
   fordelingLukkedeBehandlingerClient,
@@ -20,6 +21,7 @@ import {
 import { useMemo } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import { useProduksjonsstyringFilter } from 'hooks/produksjonsstyring/ProduksjonsstyringFilterHook';
+import { AvklaringsbehovReturer } from '../../avklaringsbehovreturer/AvklaringsbehovReturer';
 
 interface Props {
   listeVisning: boolean;
@@ -64,6 +66,10 @@ export const MinEnhetBehandlinger = ({ listeVisning, aktivEnhet }: Props) => {
     `/oppgave/api/statistikk/behandlinger/arsak-til-behandling?${behandlingstyperQuery}`,
     årsakTilBehandlingClient
   ).data;
+  const { data: fordelingReturerPerAvklaringsbehov } = useSWR(
+    `/oppgave/api/statistikk/behandlinger/retur?${behandlingstyperQuery}`,
+    antallÅpneBehandlingerMedReturPerAvklaringsbehovClient
+  );
 
   return (
     <Box
@@ -91,6 +97,9 @@ export const MinEnhetBehandlinger = ({ listeVisning, aktivEnhet }: Props) => {
           <FordelingLukkedeBehandlingerPerDag fordelingLukkedeBehandlinger={fordelingLukkedeBehandlinger.data || []} />
         )}
         {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
+        {isSuccess(fordelingReturerPerAvklaringsbehov) && (
+          <AvklaringsbehovReturer data={fordelingReturerPerAvklaringsbehov.data || []} />
+        )}
         {isSuccess(årsakerTilBehandling) && (
           <VurderingsbehovPåBehandlinger vurderingsbehov={årsakerTilBehandling.data || []} />
         )}
