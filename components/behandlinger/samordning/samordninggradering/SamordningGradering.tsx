@@ -1,11 +1,17 @@
 'use client';
 
-import { MellomlagretVurdering, Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  Periode,
+  SamordningGraderingGrunnlag,
+  SamordningYtelsestype,
+  SamordningYtelseVurdering,
+} from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyLong, Box, Button, Detail, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import { FormEvent, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
@@ -21,6 +27,8 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
 import { useSak } from 'hooks/SakHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { capitalize } from 'lodash';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 
 interface Props {
   bruker: BrukerInformasjon;
@@ -174,6 +182,8 @@ export const SamordningGradering = ({
     return format(addDays(new Date(senesteDato), 1), 'dd.MM.yyyy');
   };
 
+  const historiskeVurderinger = grunnlag.historiskeVurderinger;
+
   const sak = useSak();
   const [visModalForOppfølgingsoppgaveState, setModalForOppfølgingsoppgaveState] = useState<boolean>(false);
   const ref = useRef<HTMLDialogElement>(null);
@@ -217,6 +227,12 @@ export const SamordningGradering = ({
         }}
         mellomlagretVurdering={mellomlagretVurdering}
       >
+        {!!historiskeVurderinger.length && (
+          /* TODO: <TidligereVurderinger/> er ikke ideelt for visning av denne typen data (samordning, inst, m.m.).
+              Burde på sikt utformes litt annerledes, men dette får fungere som en slags "MVP" */
+          <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
+        )}
+
         {visForm && (
           <VStack gap={'6'}>
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
@@ -315,3 +331,9 @@ function emptyDraftFormFields(): DraftFormFields {
     vurderteSamordninger: [],
   };
 }
+
+const byggFelter = (vurdering: SamordningYtelseVurdering): ValuePair[] =>
+  vurdering.vurderinger.map((v) => ({
+    label: `${capitalize(v.ytelseType)} (${formaterDatoForFrontend(v.periode.fom)} - ${formaterDatoForFrontend(v.periode.tom)})`,
+    value: `${v.gradering}% samordningsgrad`,
+  }));

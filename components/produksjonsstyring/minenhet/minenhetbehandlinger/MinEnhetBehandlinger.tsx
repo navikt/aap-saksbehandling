@@ -23,21 +23,21 @@ import { useProduksjonsstyringFilter } from 'hooks/produksjonsstyring/Produksjon
 
 interface Props {
   listeVisning: boolean;
-  aktivEnhet: string;
+  aktiveEnheter: string[];
 }
 
 const antallDager = 14;
 
-export const MinEnhetBehandlinger = ({ listeVisning, aktivEnhet }: Props) => {
+export const MinEnhetBehandlinger = ({ listeVisning, aktiveEnheter }: Props) => {
   const { filter } = useProduksjonsstyringFilter();
 
   const behandlingstyperQuery = useMemo(
     () =>
       statistikkQueryparams({
         behandlingstyper: filter.behandlingstyper,
-        ...(aktivEnhet ? { enheter: [aktivEnhet] } : {}),
+        ...(aktiveEnheter.length ? { enheter: [...aktiveEnheter] } : {}),
       }),
-    [filter, aktivEnhet]
+    [filter, aktiveEnheter]
   );
 
   const { data: antallÅpneBehandlinger } = useSWR(

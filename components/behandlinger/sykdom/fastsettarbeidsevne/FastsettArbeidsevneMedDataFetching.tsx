@@ -6,18 +6,14 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
-  behandlingVersjon: number;
-  readOnly: boolean;
+  stegData: StegData;
 }
 
-export const FastsettArbeidsevneMedDataFetching = async ({
-  behandlingsReferanse,
-  behandlingVersjon,
-  readOnly,
-}: Props) => {
+export const FastsettArbeidsevneMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentFastsettArbeidsevneGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.FASTSETT_ARBEIDSEVNE_KODE),
@@ -30,8 +26,8 @@ export const FastsettArbeidsevneMedDataFetching = async ({
   return (
     <FastsettArbeidsevne
       grunnlag={grunnlag.data}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

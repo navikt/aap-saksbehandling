@@ -3,18 +3,14 @@ import { hentMellomlagring, hentSoningsvurdering } from 'lib/services/saksbehand
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
-  behandlingsversjon: number;
-  readOnly: boolean;
+  stegData: StegData;
 }
 
-export const SoningsvurderingMedDataFetching = async ({
-  behandlingsreferanse,
-  behandlingsversjon,
-  readOnly,
-}: Props) => {
+export const SoningsvurderingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentSoningsvurdering(behandlingsreferanse),
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SONINGSFORRHOLD),
@@ -24,12 +20,16 @@ export const SoningsvurderingMedDataFetching = async ({
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  if (!skalViseSteg(stegData, grunnlag.data.vurderinger.length > 0)) {
+    return null;
+  }
+
   return (
     grunnlag.data.soningsforhold.length > 0 && (
       <Soningsvurdering
-        behandlingsversjon={behandlingsversjon}
+        behandlingsversjon={stegData.behandlingVersjon}
         grunnlag={grunnlag.data}
-        readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+        readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
         initialMellomlagretVurdering={initialMellomlagretVurdering}
       />
     )

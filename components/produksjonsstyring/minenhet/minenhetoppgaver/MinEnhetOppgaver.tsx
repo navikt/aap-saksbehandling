@@ -13,33 +13,45 @@ import { statistikkQueryparams } from 'lib/utils/request';
 
 interface Props {
   listeVisning: boolean;
-  aktivEnhet: string;
+  aktiveEnheter: string[];
 }
 
-export const MinEnhetOppgaver = ({ listeVisning, aktivEnhet }: Props) => {
+export const MinEnhetOppgaver = ({ listeVisning, aktiveEnheter }: Props) => {
   const { setFilter, filter } = useProduksjonsstyringFilter();
 
   const behandlingstyperQuery = useMemo(
-    () => statistikkQueryparams({ behandlingstyper: filter.behandlingstyper, oppgaveTyper: filter.oppgaveType }),
-    [filter]
+    () =>
+      statistikkQueryparams({
+        behandlingstyper: filter.behandlingstyper,
+        oppgaveTyper: filter.oppgaveType,
+        ...(aktiveEnheter.length ? { enheter: [...aktiveEnheter] } : {}),
+      }),
+    [filter, aktiveEnheter]
   );
 
-  const oppgaveTyperQuery = useMemo(() => statistikkQueryparams({ oppgaveTyper: filter.oppgaveType }), [filter]);
+  const oppgaveTyperQuery = useMemo(
+    () =>
+      statistikkQueryparams({
+        oppgaveTyper: filter.oppgaveType,
+        ...(aktiveEnheter.length ? { enheter: [...aktiveEnheter] } : {}),
+      }),
+    [filter]
+  );
 
   const behandlingerPerSteggruppe = useSWR(
     `/oppgave/api/statistikk/behandling-per-steggruppe?${behandlingstyperQuery}`,
     behandlingerPerSteggruppeClient
   ).data;
   const førstegangsBehandlingerPerSteggruppe = useSWR(
-    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Førstegangsbehandling&enheter=${aktivEnhet}&${oppgaveTyperQuery}`,
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Førstegangsbehandling&${oppgaveTyperQuery}`,
     behandlingerPerSteggruppeClient
   ).data;
   const klageBehandlingerPerSteggruppe = useSWR(
-    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Klage&enheter=${aktivEnhet}&${oppgaveTyperQuery}`,
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Klage&${oppgaveTyperQuery}`,
     behandlingerPerSteggruppeClient
   ).data;
   const revurderingBehandlingerPerSteggruppe = useSWR(
-    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Revurdering&enheter=${aktivEnhet}&${oppgaveTyperQuery}`,
+    `/oppgave/api/statistikk/behandling-per-steggruppe?behandlingstyper=Revurdering&${oppgaveTyperQuery}`,
     behandlingerPerSteggruppeClient
   ).data;
 

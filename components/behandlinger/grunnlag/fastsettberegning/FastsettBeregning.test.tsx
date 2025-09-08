@@ -39,13 +39,13 @@ describe('Generelt', () => {
 
   it('skal ha en overskrift for ytterlige nedsatt arbeidsevne', () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-    const heading = screen.getByText('Tidspunkt arbeidsevne ble ytterligere nedsatt § 11-28');
+    const heading = screen.getByText('Tidspunktet da arbeidsevnen ble ytterligere nedsatt § 11-28');
     expect(heading).toBeVisible();
   });
 
   it('skal vise alert dersom beregningstidspunkt er etter virkningstidspunkt', async () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-    const felt = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
+    const felt = screen.getByRole('textbox', { name: 'Datoen for når arbeidsevnen ble nedsatt' });
 
     const imorgen = format(addDays(Date.now(), 1), 'dd.MM.yyyy');
     await user.type(felt, imorgen);
@@ -58,7 +58,7 @@ describe('Generelt', () => {
 
   it('skal ikke vise alert dersom beregningstidspunkt er før virkningstidspunkt', async () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-    const felt = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
+    const felt = screen.getByRole('textbox', { name: 'Datoen for når arbeidsevnen ble nedsatt' });
 
     const igår = format(subDays(Date(), 1), 'dd.MM.yyyy');
     await user.type(felt, igår);
@@ -87,7 +87,7 @@ describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
   it('skal vise feilmelding hvis satt frem i tid', async () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
 
-    const nedsattDato = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
+    const nedsattDato = screen.getByRole('textbox', { name: 'Datoen for når arbeidsevnen ble nedsatt' });
 
     const imorgen = format(addDays(Date.now(), 1), 'dd.MM.yyyy');
     await user.type(nedsattDato, imorgen);
@@ -101,7 +101,7 @@ describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
 describe('Felt for å sette dato for nedsatt arbeidsevne', () => {
   it('skal være synlig', () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-    const felt = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
+    const felt = screen.getByRole('textbox', { name: 'Datoen for når arbeidsevnen ble nedsatt' });
     expect(felt).toBeVisible();
   });
 
@@ -145,7 +145,7 @@ describe('Felt for å sette dato for ytterligere nedsatt arbeidsevne', () => {
 
   it('skal vise feilmelding dersom ytterligere nedsatt dato er før datoen arbeidsevnen ble nedsatt', async () => {
     render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-    const nedsattDato = screen.getByRole('textbox', { name: 'Dato når arbeidsevnen ble nedsatt' });
+    const nedsattDato = screen.getByRole('textbox', { name: 'Datoen for når arbeidsevnen ble nedsatt' });
     await user.type(nedsattDato, '11.11.2011');
 
     const ytterligereNedsattDato = screen.getByRole('textbox', {

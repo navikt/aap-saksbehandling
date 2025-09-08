@@ -6,50 +6,50 @@ import { SoningsvurderingMedDataFetching } from './soning/SoningsvurderingMedDat
 import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { getStegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
 }
 
 export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
-  const flytResponse = await hentFlyt(behandlingsreferanse);
-  if (isError(flytResponse)) {
-    return <ApiException apiResponses={[flytResponse]} />;
+  const flyt = await hentFlyt(behandlingsreferanse);
+  if (isError(flyt)) {
+    return <ApiException apiResponses={[flyt]} />;
   }
 
-  const etAnnetStedGruppe = flytResponse.data.flyt.find((gruppe) => gruppe.stegGruppe === 'ET_ANNET_STED');
-  const avklaringsBehov = etAnnetStedGruppe?.steg.find((steg) => steg.avklaringsbehov);
-
-  const vurderHelseinstitusjon =
-    avklaringsBehov?.avklaringsbehov.find((b) => b.definisjon.kode === Behovstype.AVKLAR_HELSEINSTITUSJON) != null;
-  const vurderSoning =
-    avklaringsBehov?.avklaringsbehov.find((behov) => behov.definisjon.kode === Behovstype.AVKLAR_SONINGSFORRHOLD) !=
-    null;
+  const vurderHelseinstitusjonSteg = getStegData(
+    'ET_ANNET_STED',
+    'DU_ER_ET_ANNET_STED',
+    flyt.data,
+    Behovstype.AVKLAR_HELSEINSTITUSJON
+  );
+  const vurderSoningSteg = getStegData(
+    'ET_ANNET_STED',
+    'DU_ER_ET_ANNET_STED',
+    flyt.data,
+    Behovstype.AVKLAR_SONINGSFORRHOLD
+  );
 
   return (
     <GruppeSteg
-      prosessering={flytResponse.data.prosessering}
-      visning={flytResponse.data.visning}
+      prosessering={flyt.data.prosessering}
+      visning={flyt.data.visning}
       behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flytResponse.data.behandlingVersjon}
-      aktivtSteg={flytResponse.data.aktivtSteg}
+      behandlingVersjon={flyt.data.behandlingVersjon}
+      aktivtSteg={flyt.data.aktivtSteg}
     >
-      {vurderHelseinstitusjon && (
+      {vurderHelseinstitusjonSteg.skalViseSteg && (
         <StegSuspense>
           <HelseinstitusjonMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
-            readOnly={flytResponse.data.visning.saksbehandlerReadOnly}
-            behandlingVersjon={flytResponse.data.behandlingVersjon}
+            stegData={vurderHelseinstitusjonSteg}
           />
         </StegSuspense>
       )}
-      {vurderSoning && (
+      {vurderSoningSteg.skalViseSteg && (
         <StegSuspense>
-          <SoningsvurderingMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            behandlingsversjon={flytResponse.data.behandlingVersjon}
-            readOnly={flytResponse.data.visning.saksbehandlerReadOnly}
-          />
+          <SoningsvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderSoningSteg} />
         </StegSuspense>
       )}
     </GruppeSteg>
