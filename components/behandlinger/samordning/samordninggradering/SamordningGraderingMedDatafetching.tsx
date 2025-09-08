@@ -1,6 +1,7 @@
 import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import {
   hentMellomlagring,
+  hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse,
   hentSamordningGraderingGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -28,8 +29,15 @@ export const SamordningGraderingMedDatafetching = async ({
     return <ApiException apiResponses={[grunnlag]} />;
   }
   const brukerInformasjon = await hentBrukerInformasjon();
+
+  const oppfølgningOppgaver = await hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_SAMORDNING_GRADERING
+  );
+
   return (
     <SamordningGradering
+      oppfølgningOppgave={oppfølgningOppgaver}
       bruker={brukerInformasjon}
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}

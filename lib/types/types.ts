@@ -383,3 +383,6 @@ export type MellomlagretVurderingRequest =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingRequest'];
 export type MellomlagretVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto'];
+
+export type OppfølgningOppgaveOpprinnelseResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.OppfølgningOppgaveOpprinnelseResponse'];

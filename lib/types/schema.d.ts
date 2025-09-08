@@ -2714,6 +2714,46 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/oppf\u00F8lgningOppgaveOpprinnelse/{referanse}/{avklaringsbehovKode}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+          /** @description avklaringsbehovKode */
+          avklaringsbehovKode: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgningOppgaveOpprinnelseResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/aktivitetsplikt/{referanse}/grunnlag/brudd-11-7': {
     parameters: {
       query?: never;
@@ -8834,6 +8874,13 @@ export interface components {
       vurdertAv: string;
       '\u00E5rsak'?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgningOppgaveOpprinnelseResponse': {
+      data: components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgningOppgaveOpprinnselseDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgningOppgaveOpprinnselseDto': {
+      behandlingReferanse: string;
+      opprinnelse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Opprinnelse'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.oppf\u00F8lgingsbehandling.Oppf\u00F8lgingsoppgaveGrunnlagDto': {
       /** @enum {string} */
       'konsekvensAvOppf\u00F8lging': 'INGEN' | 'OPPRETT_VURDERINGSBEHOV';
@@ -11223,11 +11270,16 @@ export interface components {
       'hvaSkalF\u00F8lgesOpp': string;
       /** @enum {string} */
       'hvemSkalF\u00F8lgeOpp': 'NasjonalEnhet' | 'Lokalkontor';
+      opprinnelse?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Opprinnelse'];
       reserverTilBruker?: string | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OppgitteBarn': {
       barn: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManueltOppgittBarn'][];
       identer: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ident'][];
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Opprinnelse': {
+      avklaringsbehovKode?: string | null;
+      behandlingsreferanse?: string | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knad': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadMedlemskapDto': {
