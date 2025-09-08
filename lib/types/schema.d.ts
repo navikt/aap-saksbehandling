@@ -3770,7 +3770,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7GrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'][];
+      vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto': {
@@ -7656,6 +7656,8 @@ export interface components {
       forsorgerPeriode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       ident?: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
       navn?: string | null;
+      /** @enum {string|null} */
+      oppgittForeldreRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.BeregningDTO': {
       /** @enum {string} */
@@ -8607,6 +8609,7 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
       )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
@@ -8866,6 +8869,7 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
       )[];
       vurdertAv: string;
       '\u00E5rsak'?: string | null;
@@ -8914,6 +8918,7 @@ export interface components {
             | 'MOTTATT_KABAL_HENDELSE'
             | 'OPPFØLGINGSOPPGAVE'
             | 'AKTIVITETSPLIKT_11_7'
+            | 'EFFEKTUER_AKTIVITETSPLIKT'
           )[]
         | null;
       '\u00E5rsak'?: string | null;
@@ -9904,6 +9909,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingAvForeldreAnsvarDto': {
       begrunnelse: string;
+      erFosterForelder?: boolean | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -10113,7 +10119,7 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
-      skadedato: string;
+      skadedato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningDto': {
       begrunnelse: string;
@@ -10985,6 +10991,7 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ArbeidIPeriodeV0': {
@@ -11136,6 +11143,7 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManueltOppgittBarn': {
@@ -11199,6 +11207,7 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OmgjoeringskravbehandlingAvsluttetDetaljer': {
@@ -11248,6 +11257,7 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgave': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0'];
@@ -11364,7 +11374,8 @@ export interface components {
         | 'VURDER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
-        | 'AKTIVITETSPLIKT_11_7';
+        | 'AKTIVITETSPLIKT_11_7'
+        | 'EFFEKTUER_AKTIVITETSPLIKT';
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovOg\u00C5rsak': {
       beskrivelse?: string | null;
@@ -11471,6 +11482,7 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
         | null
       )[];
       '\u00E5rsakerTilRetur': components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.\u00C5rsakTilRetur'][];
@@ -11522,6 +11534,7 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
       )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
