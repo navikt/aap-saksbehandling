@@ -29,6 +29,7 @@ const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
       },
     ],
   },
+  historiskeVurderinger: [],
   ytelser: [],
 };
 
@@ -46,6 +47,7 @@ const grunnlagUtenVurdering: SamordningGraderingGrunnlag = {
       ytelseType: 'SYKEPENGER',
     },
   ],
+  historiskeVurderinger: [],
 };
 
 const bruker: BrukerInformasjon = {
