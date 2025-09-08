@@ -39,7 +39,7 @@ import {
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
-  OppfølgningOppgaveOpprinnselseResponse,
+  OppfølgningOppgaveOpprinnelseResponse,
   OpprettDummySakDto,
   OpprettTestcase,
   PåklagetBehandlingGrunnlag,
@@ -502,7 +502,7 @@ export const hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse = async
   behandlingsReferanse: string,
   kode: string
 ) => {
-  const res = await apiFetch<OppfølgningOppgaveOpprinnselseResponse>(
+  const res = await apiFetch<OppfølgningOppgaveOpprinnelseResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/oppfølgningOppgaveOpprinselse/${behandlingsReferanse}/${kode}`,
     saksbehandlingApiScope
   );
