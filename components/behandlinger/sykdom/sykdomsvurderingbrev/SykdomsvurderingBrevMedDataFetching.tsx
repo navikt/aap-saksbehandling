@@ -5,22 +5,15 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { SykdomsvurderingBrev } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrev';
-import { TypeBehandling } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
+import { StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
-  behandlingVersjon: number;
-  typeBehandling: TypeBehandling;
-  readOnly: boolean;
+  stegData: StegData;
 }
 
-export const SykdomsvurderingBrevMedDataFetching = async ({
-  behandlingsReferanse,
-  behandlingVersjon,
-  typeBehandling,
-  readOnly,
-}: Props) => {
+export const SykdomsvurderingBrevMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentSykdomsvurderingBrevGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.SYKDOMSVURDERING_BREV_KODE),
@@ -33,9 +26,9 @@ export const SykdomsvurderingBrevMedDataFetching = async ({
   return (
     <SykdomsvurderingBrev
       grunnlag={grunnlag.data}
-      typeBehandling={typeBehandling}
-      readOnly={readOnly || !grunnlag.data.kanSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      typeBehandling={stegData.typeBehandling}
+      readOnly={stegData.readOnly || !grunnlag.data.kanSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

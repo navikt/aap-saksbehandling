@@ -3,14 +3,14 @@ import { hentMellomlagring, hentRefusjonGrunnlag } from 'lib/services/saksbehand
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
-  behandlingVersjon: number;
-  readOnly: boolean;
+  stegData: StegData;
 }
 
-export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandlingVersjon, readOnly }: Props) => {
+export const RefusjonMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
   const [refusjonGrunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentRefusjonGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.REFUSJON_KRAV_KODE),
@@ -20,11 +20,15 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandling
     return <ApiException apiResponses={[refusjonGrunnlag]} />;
   }
 
+  if (!skalViseSteg(stegData, refusjonGrunnlag.data.gjeldendeVurdering != null)) {
+    return null;
+  }
+
   return (
     <Refusjon
       grunnlag={refusjonGrunnlag.data}
-      readOnly={readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      readOnly={stegData.readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
