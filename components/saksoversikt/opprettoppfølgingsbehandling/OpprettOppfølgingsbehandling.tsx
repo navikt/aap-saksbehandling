@@ -175,10 +175,10 @@ export const OpprettOppfølgingsBehandling = ({
           )}
 
           <HStack gap="4">
+            <Button type="submit">Bekreft</Button>
             <Button type="button" variant="secondary" onClick={() => avbrytButton(modalOnClose)}>
               Avbryt
             </Button>
-            <Button type="submit">Bekreft</Button>
           </HStack>
         </VStack>
       </form>
