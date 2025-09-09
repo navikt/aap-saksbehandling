@@ -51,18 +51,14 @@ export const AvklaringsbehovReturer = ({ data }: Props) => {
             </Table.ColumnHeader>
             <Table.ColumnHeader>Retur fra</Table.ColumnHeader>
             {visning === 'medÅrsak' && <Table.ColumnHeader>Årsak til retur</Table.ColumnHeader>}
-            <Table.ColumnHeader sortKey={'antallIndividuelt'} sortable={true}>
-              Antall
-            </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'gjennomsnittligAlder'} sortable={true}>
-              Snittalder
-            </Table.ColumnHeader>
+            <Table.ColumnHeader>Antall</Table.ColumnHeader>
+            <Table.ColumnHeader>Snittalder</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {sortertListe.map((avklaringsbehov, groupIdx) =>
             avklaringsbehov.returerPerAvklaringsbehov.map((row, rowIdx) => (
-              <Table.Row key={`${groupIdx}-${rowIdx}`}>
+              <Table.Row key={`${groupIdx}-${rowIdx}`} shadeOnHover={false}>
                 {rowIdx === 0 && (
                   <>
                     <Table.DataCell rowSpan={avklaringsbehov.returerPerAvklaringsbehov.length}>

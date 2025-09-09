@@ -1,4 +1,4 @@
-import { Box, Heading } from '@navikt/ds-react';
+import { Box, Heading, VStack } from '@navikt/ds-react';
 import styles from 'components/produksjonsstyring/totaloversiktbehandlinger/TotaloversiktBehandlinger.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { BehandlingerInnUt } from 'components/produksjonsstyring/behandlingerinnut/BehandlingerInnUt';
@@ -21,7 +21,8 @@ import {
 import { useMemo } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import { useProduksjonsstyringFilter } from 'hooks/produksjonsstyring/ProduksjonsstyringFilterHook';
-import { AvklaringsbehovReturer } from '../../avklaringsbehovreturer/AvklaringsbehovReturer';
+import { AvklaringsbehovReturer } from 'components/produksjonsstyring/avklaringsbehovreturer/AvklaringsbehovReturer';
+import { isDev } from 'lib/utils/environment';
 
 interface Props {
   listeVisning: boolean;
@@ -74,33 +75,37 @@ export const Behandlinger = ({ listeVisning }: Props) => {
       padding={'8'}
       borderRadius={'medium'}
     >
-      <Heading size={'large'} spacing>
-        Behandlinger
-      </Heading>
-      <div className={listeVisning ? styles.plotList : styles.plotGrid}>
-        {isSuccess(behandlingerUtvikling) && (
-          <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
+      <VStack gap={'4'}>
+        <Heading size={'large'} spacing>
+          Behandlinger
+        </Heading>
+        <div className={listeVisning ? styles.plotList : styles.plotGrid}>
+          {isSuccess(behandlingerUtvikling) && (
+            <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
+          )}
+          <ApneBehandlinger behandlingstyperQuery={behandlingstyperQuery} />
+          {isSuccess(antallÅpneBehandlinger) && (
+            <TypeBehandlinger åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
+          )}
+          {isSuccess(fordelingÅpneBehandlinger) && (
+            <FordelingÅpneBehandlingerPerDag fordelingÅpneBehandlingerPerDag={fordelingÅpneBehandlinger.data || []} />
+          )}
+          {isSuccess(fordelingLukkedeBehandlinger) && (
+            <FordelingLukkedeBehandlingerPerDag
+              fordelingLukkedeBehandlinger={fordelingLukkedeBehandlinger.data || []}
+            />
+          )}
+          {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
+        </div>
+        {isDev() && isSuccess(fordelingReturerPerAvklaringsbehov) && (
+          <AvklaringsbehovReturer data={fordelingReturerPerAvklaringsbehov.data || []} />
         )}
-        <ApneBehandlinger behandlingstyperQuery={behandlingstyperQuery} />
-        {isSuccess(antallÅpneBehandlinger) && (
-          <TypeBehandlinger åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
-        )}
-        {isSuccess(fordelingÅpneBehandlinger) && (
-          <FordelingÅpneBehandlingerPerDag fordelingÅpneBehandlingerPerDag={fordelingÅpneBehandlinger.data || []} />
-        )}
-        {isSuccess(fordelingLukkedeBehandlinger) && (
-          <FordelingLukkedeBehandlingerPerDag fordelingLukkedeBehandlinger={fordelingLukkedeBehandlinger.data || []} />
-        )}
-        {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
-      </div>
-      {isSuccess(fordelingReturerPerAvklaringsbehov) && (
-        <AvklaringsbehovReturer data={fordelingReturerPerAvklaringsbehov.data || []} />
-      )}
-      <div className={listeVisning ? styles.plotList : styles.plotGrid}>
-        {isSuccess(årsakerTilBehandling) && (
-          <VurderingsbehovPåBehandlinger vurderingsbehov={årsakerTilBehandling.data || []} />
-        )}
-      </div>
+        <div className={listeVisning ? styles.plotList : styles.plotGrid}>
+          {isSuccess(årsakerTilBehandling) && (
+            <VurderingsbehovPåBehandlinger vurderingsbehov={årsakerTilBehandling.data || []} />
+          )}
+        </div>
+      </VStack>
     </Box>
   );
 };
