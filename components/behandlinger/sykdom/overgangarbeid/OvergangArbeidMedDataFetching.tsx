@@ -2,7 +2,6 @@ import {
   hentMellomlagring,
   hentOvergangArbeidGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { TypeBehandling } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { OvergangArbeid } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid';
@@ -11,18 +10,10 @@ import { StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
-  behandlingVersjon: number;
-  readOnly: boolean;
-  typeBehandling: TypeBehandling;
   stegData: StegData;
 }
 
-export const OvergangArbeidMedDataFetching = async ({
-  behandlingsReferanse,
-  behandlingVersjon,
-  readOnly,
-  typeBehandling,
-}: Props) => {
+export const OvergangArbeidMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentOvergangArbeidGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.OVERGANG_ARBEID),
@@ -34,10 +25,10 @@ export const OvergangArbeidMedDataFetching = async ({
   return (
     <OvergangArbeid
       grunnlag={grunnlag.data}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
-      typeBehandling={typeBehandling}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      typeBehandling={stegData.typeBehandling}
     />
   );
 };

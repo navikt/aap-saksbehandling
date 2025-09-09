@@ -14,6 +14,8 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
 import { OvergangArbeidMedDataFetching } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMedDataFetching';
 import { OvergangUforeMedDataFetching } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeMedDataFetching';
+import { BistandsbehovutenovergangMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehovutenovergang/BistandsbehovutenovergangMedDataFetching';
+import { isDev, isLocal, isProd } from 'lib/utils/environment';
 
 interface Props {
   behandlingsReferanse: string;
@@ -50,7 +52,15 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <SykdomsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={sykdomSteg} />
         </StegSuspense>
       )}
-      {vurderBistandsbehovSteg.skalViseSteg && (
+      {(isDev() || isLocal()) && vurderBistandsbehovSteg.skalViseSteg && (
+        <StegSuspense>
+          <BistandsbehovutenovergangMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            stegData={vurderBistandsbehovSteg}
+          />
+        </StegSuspense>
+      )}
+      {isProd() && vurderBistandsbehovSteg.skalViseSteg && (
         <StegSuspense>
           <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
@@ -76,26 +86,14 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />
         </StegSuspense>
       )}
-      {overganguføreSteg.skalViseSteg && (
+      {(isDev() || isLocal()) && overganguføreSteg.skalViseSteg && (
         <StegSuspense>
-          <OvergangUforeMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            stegData={overganguføreSteg}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            behandlingVersjon={flyt.data.behandlingVersjon}
-            typeBehandling={flyt.data.visning.typeBehandling}
-          />
+          <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
         </StegSuspense>
       )}
-      {overgangarbeidSteg.skalViseSteg && (
+      {(isDev() || isLocal()) && overgangarbeidSteg.skalViseSteg && (
         <StegSuspense>
-          <OvergangArbeidMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            stegData={overgangarbeidSteg}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            behandlingVersjon={flyt.data.behandlingVersjon}
-            typeBehandling={flyt.data.visning.typeBehandling}
-          />
+          <OvergangArbeidMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overgangarbeidSteg} />
         </StegSuspense>
       )}
       {sykdomsvurderingBrevSteg.skalViseSteg && (
