@@ -132,7 +132,7 @@ const TidligereVurdertPeriodeRow = ({ periode, checked, onChange }: TidligereVur
     </Table.DataCell>
     <Table.DataCell textSize="small">{formaterDatoForFrontend(periode.vurderingsTidspunkt)}</Table.DataCell>
     <Table.DataCell textSize="small">
-      {periode.vurdertAv?.ansattnavn ?? ''}
+      {periode.vurdertAv?.ansattnavn ?? periode.vurdertAv?.ident ?? ''}
       <br />
       {periode.vurdertAv?.enhetsnavn ?? ''}
     </Table.DataCell>
