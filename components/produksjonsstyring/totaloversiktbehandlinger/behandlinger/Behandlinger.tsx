@@ -92,9 +92,11 @@ export const Behandlinger = ({ listeVisning }: Props) => {
           <FordelingLukkedeBehandlingerPerDag fordelingLukkedeBehandlinger={fordelingLukkedeBehandlinger.data || []} />
         )}
         {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
-        {isSuccess(fordelingReturerPerAvklaringsbehov) && (
-          <AvklaringsbehovReturer data={fordelingReturerPerAvklaringsbehov.data || []} />
-        )}
+      </div>
+      {isSuccess(fordelingReturerPerAvklaringsbehov) && (
+        <AvklaringsbehovReturer data={fordelingReturerPerAvklaringsbehov.data || []} />
+      )}
+      <div className={listeVisning ? styles.plotList : styles.plotGrid}>
         {isSuccess(årsakerTilBehandling) && (
           <VurderingsbehovPåBehandlinger vurderingsbehov={årsakerTilBehandling.data || []} />
         )}

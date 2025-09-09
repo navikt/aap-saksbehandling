@@ -1,19 +1,22 @@
 'use client';
 
-import { BodyShort, Detail, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, Switch, Table, VStack } from '@navikt/ds-react';
 import { PlotWrapper } from '../plotwrapper/PlotWrapper';
 import { BehandlingAvklaringsbehovRetur, BehandlingAvklaringsbehovReturDTO } from 'lib/types/statistikkTypes';
 import { sekunderTilDager } from 'lib/utils/time';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import styles from '../totaloversiktbehandlinger/TotaloversiktBehandlinger.module.css';
 import { mapBehovskodeTilBehovstype, mapGrunnTilString, mapReturFraStatusTilTekst } from 'lib/utils/oversettelser';
+import { useState } from 'react';
 
 interface Props {
   data: Array<BehandlingAvklaringsbehovReturDTO>;
 }
 
 export const AvklaringsbehovReturer = ({ data }: Props) => {
-  const { sort, håndterSortering, sortertListe } = useSortertListe(data);
+  const [visning, setVisningMedÅrsak] = useState<string>('medÅrsak');
+  const dataMapped = visning === 'medÅrsak' ? data : slåSammenÅrsak(data);
+  const { sort, håndterSortering, sortertListe } = useSortertListe(dataMapped);
 
   return (
     <PlotWrapper>
@@ -24,21 +27,30 @@ export const AvklaringsbehovReturer = ({ data }: Props) => {
         </Detail>
       </VStack>
       <VStack padding={'space-8'} />
+      <VStack align={'center'} gap={'2'}>
+        <Switch
+          value="medÅrsak"
+          checked={visning === 'medÅrsak'}
+          onChange={(e) => setVisningMedÅrsak((prevState) => (prevState ? '' : e.target.value))}
+        >
+          Årsak til retur
+        </Switch>
+      </VStack>
+      <VStack padding={'space-8'} />
       <Table
         sort={sort}
         onSortChange={(sortKey) =>
-          // @ts-ignore
-          håndterSortering(sortKey as ScopedSortState<BehandlingAvklaringsbehovRetur>['orderBy'])
+          håndterSortering(sortKey as ScopedSortState<BehandlingAvklaringsbehovReturDTO>['orderBy'])
         }
       >
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Avklaringsbehov</Table.HeaderCell>
-            <Table.ColumnHeader sortKey={'antallTotalt'} sortable={true}>
+            <Table.ColumnHeader sortKey={'totalt'} sortable={true}>
               Antall
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'returFra'}>Retur fra</Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'årsakTilRetur'}>Årsak til retur</Table.ColumnHeader>
+            <Table.ColumnHeader>Retur fra</Table.ColumnHeader>
+            {visning === 'medÅrsak' && <Table.ColumnHeader>Årsak til retur</Table.ColumnHeader>}
             <Table.ColumnHeader sortKey={'antallIndividuelt'} sortable={true}>
               Antall
             </Table.ColumnHeader>
@@ -62,9 +74,9 @@ export const AvklaringsbehovReturer = ({ data }: Props) => {
                   </>
                 )}
                 <Table.DataCell>{mapReturFraStatusTilTekst(row.returFra)}</Table.DataCell>
-                <Table.DataCell>{mapGrunnTilString(row.returÅrsak)}</Table.DataCell>
+                {visning === 'medÅrsak' && <Table.DataCell>{mapGrunnTilString(row.returÅrsak)}</Table.DataCell>}
                 <Table.DataCell>{row.antallÅpneBehandlinger}</Table.DataCell>
-                <Table.DataCell>{sekunderTilDager(row.gjennomsnittTidFraRetur)}</Table.DataCell>
+                <Table.DataCell>{sekunderTilDager(row.gjennomsnittTidFraRetur)} dager</Table.DataCell>
               </Table.Row>
             ))
           )}
@@ -73,3 +85,33 @@ export const AvklaringsbehovReturer = ({ data }: Props) => {
     </PlotWrapper>
   );
 };
+
+function slåSammenÅrsak(
+  alleAvklaringsbehov: Array<BehandlingAvklaringsbehovReturDTO> = []
+): Array<BehandlingAvklaringsbehovReturDTO> {
+  return alleAvklaringsbehov.map((behov) => {
+    const grouped: Record<string, BehandlingAvklaringsbehovRetur[]> = {};
+
+    behov.returerPerAvklaringsbehov.forEach((cur) => {
+      if (!grouped[cur.returFra]) {
+        grouped[cur.returFra] = [];
+      }
+      grouped[cur.returFra].push(cur);
+    });
+
+    const sammenslått = Object.entries(grouped).map(([returFra, items]) => {
+      return {
+        avklaringsbehov: items[0].avklaringsbehov,
+        returFra,
+        returÅrsak: '',
+        antallÅpneBehandlinger: items.reduce((sum, x) => sum + x.antallÅpneBehandlinger, 0),
+        gjennomsnittTidFraRetur: items.reduce((sum, x) => sum + x.gjennomsnittTidFraRetur, 0) / items.length,
+      };
+    });
+
+    return {
+      ...behov,
+      returerPerAvklaringsbehov: sammenslått,
+    };
+  });
+}
