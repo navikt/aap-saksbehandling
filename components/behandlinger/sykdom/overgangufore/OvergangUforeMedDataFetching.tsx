@@ -4,12 +4,14 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { OvergangUfore } from 'components/behandlinger/sykdom/overgangufore/OvergangUfore';
 import { Behovstype } from 'lib/utils/form';
+import { StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
+  stegData: StegData;
 }
 
 export const OvergangUforeMedDataFetching = async ({
