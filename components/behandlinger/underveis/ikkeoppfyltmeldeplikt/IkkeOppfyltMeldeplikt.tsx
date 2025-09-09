@@ -131,7 +131,13 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
     }
   };
 
-  return grunnlag && grunnlag.perioderIkkeMeldt.length > 0 ? (
+  const harIkkeMeldteEllerOverstyrtePerioder =
+    grunnlag != null &&
+    (grunnlag.perioderIkkeMeldt.length > 0 ||
+      grunnlag.overstyringsvurderinger.length > 0 ||
+      grunnlag.gjeldendeVedtatteOversyringsvurderinger.length > 0);
+
+  return harIkkeMeldteEllerOverstyrtePerioder ? (
     <VilkårskortMedForm
       heading={'§ 11-10 andre ledd. Perioder uten overholdt meldeplikt'}
       steg={'IKKE_OPPFYLT_MELDEPLIKT'}
