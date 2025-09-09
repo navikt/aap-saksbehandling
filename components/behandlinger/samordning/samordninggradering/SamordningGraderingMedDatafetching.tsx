@@ -16,9 +16,13 @@ interface Props {
 }
 
 export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, brukerInformasjon, initialMellomlagretVurdering] = await Promise.all([
+  const [grunnlag, brukerInformasjon, oppfølgningOppgaver, initialMellomlagretVurdering] = await Promise.all([
     hentSamordningGraderingGrunnlag(behandlingsreferanse),
     hentBrukerInformasjon(),
+    hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse(
+      behandlingsreferanse,
+      Behovstype.AVKLAR_SAMORDNING_GRADERING
+    ),
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SAMORDNING_GRADERING),
   ]);
 
@@ -29,11 +33,6 @@ export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse,
   if (!skalViseSteg(stegData, grunnlag.data.vurdering != null)) {
     return null;
   }
-
-  const oppfølgningOppgaver = await hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse(
-    behandlingsreferanse,
-    Behovstype.AVKLAR_SAMORDNING_GRADERING
-  );
 
   return (
     <SamordningGradering
