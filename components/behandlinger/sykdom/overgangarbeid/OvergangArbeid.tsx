@@ -17,7 +17,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
+import { BodyShort, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
@@ -162,9 +162,6 @@ export const OvergangArbeid = ({
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
       <VStack gap={'4'} as={'section'}>
-        <Heading level={'3'} size="small">
-          § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
-        </Heading>
         <DateInputWrapper
           name={`virkningsdato`}
           control={form.control}

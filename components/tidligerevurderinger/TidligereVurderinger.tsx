@@ -132,9 +132,10 @@ export function TidligereVurderinger({
                 </VStack>
               ))}
             </div>
-
-            <Detail className={styles.footer} align={'end'}>
-              {`Vurdert av ${selected.vurdertAvIdent}, ${formaterDatoForFrontend(selected.vurdertDato)}`}
+            <Detail className={styles.footer} align="end">
+              {`Vurdert av ${selected.vurdertAvIdent}${
+                selected.vurdertDato ? `, ${formaterDatoForFrontend(selected.vurdertDato)}` : ''
+              }`}
             </Detail>
           </div>
         </VStack>
