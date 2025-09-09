@@ -42,6 +42,8 @@ import {
   OppfølgningOppgaveOpprinnelseResponse,
   OpprettDummySakDto,
   OpprettTestcase,
+  OvergangUforeGrunnlag,
+  OvergangArbeidGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
@@ -208,6 +210,16 @@ export const hentFastsettArbeidsevneGrunnlag = async (behandlingsReferanse: stri
 export const hentBistandsbehovGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/bistand`;
   return await apiFetch<BistandsGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentOvergangUforeGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/overgangufore`;
+  return await apiFetch<OvergangUforeGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentOvergangArbeidGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/overgangarbeid`;
+  return await apiFetch<OvergangArbeidGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFatteVedtakGrunnlang = async (behandlingsReferanse: string) => {

@@ -69,6 +69,10 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Aktivitetsplikt $ 11-7';
     case 'EFFEKTUER_AKTIVITETSPLIKT':
       return 'Effektuer aktivitetsplikt';
+    case 'OVERGANG_UFORE':
+      return 'Overgang til uføre';
+    case 'OVERGANG_ARBEID':
+      return 'Overgang arbeidssøker';
   }
   exhaustiveCheck(vurderingsbehov);
 };
@@ -144,6 +148,10 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
       return 'Rimelig grunn til ikke overholdt meldeplikt';
     case 'AKTIVITETSPLIKT_11_7':
       return 'Aktivitetsplikt $ 11-7';
+    case 'OVERGANG_ARBEID':
+      return 'Overgang til arbeid';
+    case 'OVERGANG_UFORE':
+      return 'Overgang til uføre';
     default:
       return vurderingsbehov;
   }

@@ -1011,6 +1011,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/overgangufore': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reGrunnlagResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/medlemskap': {
     parameters: {
       query?: never;
@@ -3645,6 +3683,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/overgangarbeid': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidGrunnlagResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/test/opprettDummySak': {
     parameters: {
       query?: never;
@@ -3904,6 +3980,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -3972,6 +4050,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4037,6 +4117,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4102,6 +4184,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4167,6 +4251,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4232,6 +4318,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4297,6 +4385,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4363,6 +4453,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4428,6 +4520,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4457,6 +4551,140 @@ export interface components {
         | '9002'
         | '9003'
         | '9004';
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOvergangArbeidL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5056'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004';
+      overgangArbeidVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangarbeid.flate.OvergangArbeidVurderingL\u00F8sningDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOvergangUf\u00F8reL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5056'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004';
+      'overgangUf\u00F8reVurdering': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangufore.flate.OvergangUf\u00F8reVurderingL\u00F8sningDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOverstyrtForutg\u00E5endeMedlemskapL\u00F8sning': {
       /** @enum {string} */
@@ -4492,6 +4720,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4557,6 +4787,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4622,6 +4854,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4687,6 +4921,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4752,6 +4988,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4817,6 +5055,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4882,6 +5122,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -4947,6 +5189,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5012,6 +5256,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5077,6 +5323,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5142,6 +5390,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5182,6 +5432,8 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarManuellInntektVurderingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOppf\u00F8lgingLokalkontorL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOppf\u00F8lgingNAYL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOvergangArbeidL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOvergangUf\u00F8reL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOverstyrtForutg\u00E5endeMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOverstyrtLovvalgMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningAndreStatligeYtelserL\u00F8sning']
@@ -5263,6 +5515,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5328,6 +5582,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5393,6 +5649,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5457,6 +5715,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5522,6 +5782,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5587,6 +5849,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5652,6 +5916,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5717,6 +5983,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5782,6 +6050,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5846,6 +6116,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5910,6 +6182,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -5980,6 +6254,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6086,6 +6362,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6151,6 +6429,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6215,6 +6495,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6280,6 +6562,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6345,6 +6629,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6409,6 +6695,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6473,6 +6761,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6542,6 +6832,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6611,6 +6903,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6680,6 +6974,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6749,6 +7045,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6814,6 +7112,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6879,6 +7179,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -6945,6 +7247,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -7009,6 +7313,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -7073,6 +7379,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -7137,6 +7445,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -7201,6 +7511,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -7265,6 +7577,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -7330,6 +7644,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -7394,6 +7710,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -7459,6 +7777,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -7524,6 +7844,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -7589,6 +7911,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -7841,6 +8165,54 @@ export interface components {
       vurderingenGjelderFra?: string | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidGrunnlagResponse': {
+      gjeldendeSykdsomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
+      gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'][];
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'][];
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse': {
+      begrunnelse: string;
+      'brukerRettP\u00E5AAP'?: boolean | null;
+      erGjeldende?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      virkningsdato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vurderingenGjelderFra?: string | null;
+      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reGrunnlagResponse': {
+      gjeldendeSykdsomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
+      gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse': {
+      begrunnelse: string;
+      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?: string | null;
+      'brukerHarS\u00F8ktUf\u00F8retrygd': boolean;
+      'brukerRettP\u00E5AAP'?: boolean | null;
+      erGjeldende?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      virkningsdato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vurderingenGjelderFra?: string | null;
+      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomGrunnlagResponse': {
       gjeldendeVedtatteSykdomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -7998,6 +8370,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -8610,6 +8984,8 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
       )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
@@ -8775,6 +9151,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -8870,6 +9248,8 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
       )[];
       vurdertAv: string;
       '\u00E5rsak'?: string | null;
@@ -8919,6 +9299,8 @@ export interface components {
             | 'OPPFØLGINGSOPPGAVE'
             | 'AKTIVITETSPLIKT_11_7'
             | 'EFFEKTUER_AKTIVITETSPLIKT'
+            | 'OVERGANG_UFORE'
+            | 'OVERGANG_ARBEID'
           )[]
         | null;
       '\u00E5rsak'?: string | null;
@@ -9416,6 +9798,8 @@ export interface components {
         | 'IKKE_OPPFYLT_OPPHOLDSKRAV_EØS'
         | 'NORGE_IKKE_KOMPETENT_STAT'
         | 'ANNEN_FULL_YTELSE'
+        | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
+        | 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'
         | null;
       begrunnelse?: string | null;
       /** @enum {string|null} */
@@ -10021,6 +10405,28 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.MeldepliktOverstyringL\u00F8sningDto': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.OverstyringMeldepliktVurderingPeriode'][];
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangarbeid.flate.OvergangArbeidVurderingL\u00F8sningDto': {
+      begrunnelse: string;
+      'brukerRettP\u00E5AAP'?: boolean | null;
+      overgangBegrunnelse?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      virkningsdato?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangufore.flate.OvergangUf\u00F8reVurderingL\u00F8sningDto': {
+      begrunnelse: string;
+      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?: string | null;
+      'brukerHarS\u00F8ktOmUf\u00F8retrygd': boolean;
+      'brukerRettP\u00E5AAP'?: boolean | null;
+      overgangBegrunnelse?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      virkningsdato?: string | null;
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.refusjonkrav.RefusjonkravVurderingDto': {
       /**
        * Format: date
@@ -10228,6 +10634,8 @@ export interface components {
         | 'FASTSETT_MELDEPERIODER'
         | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FASTSETT_SYKDOMSVILKÅRET'
         | 'VURDER_YRKESSKADE'
@@ -10330,6 +10738,8 @@ export interface components {
         | 'FASTSETT_MELDEPERIODER'
         | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FASTSETT_SYKDOMSVILKÅRET'
         | 'VURDER_YRKESSKADE'
@@ -10402,6 +10812,8 @@ export interface components {
         | 'FASTSETT_MELDEPERIODER'
         | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FASTSETT_SYKDOMSVILKÅRET'
         | 'VURDER_YRKESSKADE'
@@ -10564,6 +10976,8 @@ export interface components {
         | 'FASTSETT_MELDEPERIODER'
         | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FASTSETT_SYKDOMSVILKÅRET'
         | 'VURDER_YRKESSKADE'
@@ -10670,6 +11084,8 @@ export interface components {
         | 'LOVVALG'
         | 'SYKDOMSVILKÅRET'
         | 'BISTANDSVILKÅRET'
+        | 'OVERGANGARBEIDVILKÅRET'
+        | 'OVERGANGUFØREVILKÅRET'
         | 'MEDLEMSKAP'
         | 'GRUNNLAGET'
         | 'SAMORDNING'
@@ -10695,6 +11111,8 @@ export interface components {
         | 'IKKE_OPPFYLT_OPPHOLDSKRAV_EØS'
         | 'NORGE_IKKE_KOMPETENT_STAT'
         | 'ANNEN_FULL_YTELSE'
+        | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
+        | 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'
         | null;
       begrunnelse?: string | null;
       /** @enum {string|null} */
@@ -10776,6 +11194,8 @@ export interface components {
         | '5028'
         | '5029'
         | '5030'
+        | '5031'
+        | '5032'
         | '5050'
         | '5051'
         | '5052'
@@ -10828,6 +11248,8 @@ export interface components {
         | 'FASTSETT_MELDEPERIODER'
         | 'AVKLAR_STUDENT'
         | 'VURDER_BISTANDSBEHOV'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'FASTSETT_SYKDOMSVILKÅRET'
         | 'VURDER_YRKESSKADE'
@@ -11005,6 +11427,8 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
       )[];
     };
@@ -11157,6 +11581,8 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
       )[];
     };
@@ -11221,6 +11647,8 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
       )[];
     };
@@ -11271,6 +11699,8 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
       )[];
     };
@@ -11389,7 +11819,9 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
-        | 'EFFEKTUER_AKTIVITETSPLIKT';
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID';
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovOg\u00C5rsak': {
       beskrivelse?: string | null;
@@ -11497,6 +11929,8 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
         | null
       )[];
       '\u00E5rsakerTilRetur': components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.\u00C5rsakTilRetur'][];
@@ -11549,6 +11983,8 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
       )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:

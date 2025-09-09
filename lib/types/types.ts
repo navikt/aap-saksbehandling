@@ -17,6 +17,13 @@ export type SykepengeerstatningVurderingGrunn =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerVurderingDto']['grunn'];
 export type BistandsGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandGrunnlagResponse'];
+
+export type OvergangUforeGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reGrunnlagResponse'];
+
+export type OvergangArbeidGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidGrunnlagResponse'];
+
 export type FritakMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagResponse'];
 export type OverstyringMeldepliktGrunnlag =
@@ -304,6 +311,12 @@ export type VurdertAvAnsatt =
 
 export type BistandsbehovVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'];
+
+export type OvergangUføreVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUføreVurderingResponse'];
+
+export type OvergangArbeidVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'];
 
 export type NavEnhetRequest =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.NavEnheterRequest'];
