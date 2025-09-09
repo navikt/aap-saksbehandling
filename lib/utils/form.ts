@@ -61,7 +61,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5001':
       return '§ 11-14 Student';
     case '5002':
-      return '§ 11-10 Rimelig grunn';
+      return '§ 11-10 andre ledd. Perioder uten overholdt meldeplikt';
     case '5003':
       return '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng';
     case '5004':
