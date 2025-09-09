@@ -178,7 +178,7 @@ export const OpprettOppfølgingsBehandling = ({
             <Button type="button" variant="secondary" onClick={() => avbrytButton(modalOnClose)}>
               Avbryt
             </Button>
-            <Button type="submit">Opprett oppfølgingsbehandling</Button>
+            <Button type="submit">Bekreft</Button>
           </HStack>
         </VStack>
       </form>

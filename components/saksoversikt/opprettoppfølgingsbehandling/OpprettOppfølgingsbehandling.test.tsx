@@ -18,7 +18,7 @@ describe('opprett oppfølgingsbehandling', () => {
       />
     );
 
-    await user.click(screen.getByRole('button', { name: 'Opprett oppfølgingsbehandling' }));
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
     expect(screen.getByText('Dato for oppfølging kan ikke må settes.')).toBeVisible();
 
@@ -36,7 +36,7 @@ describe('opprett oppfølgingsbehandling', () => {
 
     await user.click(screen.getByRole('combobox', { name: 'Hvem følger opp?' }));
     await user.click(screen.getByRole('option', { name: 'NAY' }));
-    await user.click(screen.getByRole('button', { name: 'Opprett oppfølgingsbehandling' }));
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
     // Kaller `send` bare én gang
     expect(fetchMock.mock.calls).toHaveLength(1);
@@ -73,7 +73,7 @@ describe('opprett oppfølgingsbehandling', () => {
     await user.click(checkbox);
     expect(checkbox).not.toBeChecked();
 
-    await user.click(screen.getByRole('button', { name: 'Opprett oppfølgingsbehandling' }));
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
     // Kaller `send` bare én gang
     expect(fetchMock.mock.calls).toHaveLength(1);
