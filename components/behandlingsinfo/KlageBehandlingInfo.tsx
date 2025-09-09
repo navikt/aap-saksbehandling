@@ -12,7 +12,7 @@ interface Props {
 export const KlageBehandlingInfo = ({ kabalKlageResultat, klageresultat }: Props) => {
   const harHendelserFraKabal =
     kabalKlageResultat?.svarFraAndreinstans && kabalKlageResultat?.svarFraAndreinstans.length > 0;
-  const skalVises = klageresultat && ['OMGJØRES', 'DELVIS_OMGJØRES'].includes(klageresultat.type);
+  const skalVises = klageresultat && ['OPPRETTHOLDES', 'DELVIS_OMGJØRES'].includes(klageresultat.type);
 
   return (
     skalVises && (

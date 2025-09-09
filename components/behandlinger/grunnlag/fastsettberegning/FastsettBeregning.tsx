@@ -62,7 +62,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
       },
       nedsattArbeidsevneDato: {
         type: 'date_input',
-        label: 'Datoen for når arbeidsevnen ble nedsatt',
+        label: 'Datoen da arbeidsevnen ble nedsatt',
         defaultValue: defaultValues.nedsattArbeidsevneDato,
         rules: {
           validate: (value) => {
@@ -222,7 +222,7 @@ const byggFelter = (vurdering: BeregningstidspunktVurderingResponse): ValuePair[
     value: vurdering.begrunnelse,
   },
   {
-    label: 'Datoen for når arbeidsevnen ble nedsatt',
+    label: 'Datoen da arbeidsevnen ble nedsatt',
     value: vurdering.nedsattArbeidsevneDato ? formaterDatoForFrontend(vurdering.nedsattArbeidsevneDato) : '-',
   },
   {
