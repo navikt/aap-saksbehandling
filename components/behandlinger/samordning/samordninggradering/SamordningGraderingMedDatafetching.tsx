@@ -26,8 +26,8 @@ export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse,
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SAMORDNING_GRADERING),
   ]);
 
-  if (isError(grunnlag)) {
-    return <ApiException apiResponses={[grunnlag]} />;
+  if (isError(grunnlag) || isError(oppfølgningOppgaver)) {
+    return <ApiException apiResponses={[grunnlag, oppfølgningOppgaver]} />;
   }
 
   if (!skalViseSteg(stegData, grunnlag.data.vurdering != null)) {
@@ -36,7 +36,7 @@ export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse,
 
   return (
     <SamordningGradering
-      oppfølgningOppgave={oppfølgningOppgaver}
+      oppfølgningOppgave={oppfølgningOppgaver.data}
       bruker={brukerInformasjon}
       grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}
