@@ -12,7 +12,7 @@ interface Props {
 
 export const SaksopplysningerKolonne = ({ refusjonGrunnlag, sykdomsvurderingBrevGrunnlag }: Props) => {
   const gjeldendeSykdomsvurderingForBrev = sykdomsvurderingBrevGrunnlag?.vurdering?.vurdering;
-  const refusjonVurdering = refusjonGrunnlag.gjeldendeVurdering;
+  const refusjonVurderinger = refusjonGrunnlag.gjeldendeVurderinger;
 
   return (
     <div className={styles.kolonne}>
@@ -24,22 +24,29 @@ export const SaksopplysningerKolonne = ({ refusjonGrunnlag, sykdomsvurderingBrev
           begrunnelse={gjeldendeSykdomsvurderingForBrev}
         />
       )}
-      {refusjonVurdering?.harKrav && (
-        <SaksopplysningerKort
-          tittel="Refusjonskrav"
-          begrunnelse={`Det er refusjonskrav mot sosialstønad. Refusjonskravet gjelder fra 
-                  ${
-                    refusjonVurdering.fom
-                      ? formaterDatoForFrontend(parse(refusjonVurdering.fom, 'yyyy-MM-dd', new Date()))
-                      : '-'
-                  }
-                  ${
-                    refusjonVurdering.tom
-                      ? `til ${formaterDatoForFrontend(parse(refusjonVurdering.tom, 'yyyy-MM-dd', new Date()))}`
-                      : ''
-                  }`}
-        />
-      )}
+      {refusjonVurderinger &&
+        refusjonVurderinger.length > 0 &&
+        refusjonVurderinger
+          .filter((refusjonVurdering) => refusjonVurdering.harKrav === true)
+          .map((refusjonVurdering, index) => {
+            return (
+              <SaksopplysningerKort
+                key={refusjonVurdering.navKontor ?? index}
+                tittel={`Refusjonskrav ${refusjonVurdering.navKontor}`}
+                begrunnelse={`Det er refusjonskrav mot sosialstønad. Refusjonskravet gjelder fra
+                              ${
+                                refusjonVurdering.fom
+                                  ? formaterDatoForFrontend(parse(refusjonVurdering.fom, 'yyyy-MM-dd', new Date()))
+                                  : '-'
+                              }
+                              ${
+                                refusjonVurdering.tom
+                                  ? `til ${formaterDatoForFrontend(parse(refusjonVurdering.tom, 'yyyy-MM-dd', new Date()))}`
+                                  : ''
+                              }`}
+              />
+            );
+          })}
     </div>
   );
 };
