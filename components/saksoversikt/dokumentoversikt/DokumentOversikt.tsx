@@ -50,6 +50,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
       options: [
         { value: 'AAP', label: 'Arbeidsavklaringspenger' },
         { value: 'SYK', label: 'Sykepenger' },
+        { value: 'SYM', label: 'Sykmelding' },
         { value: 'OPP', label: 'Arbeidsoppfølging' },
       ],
     },
