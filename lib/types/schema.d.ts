@@ -308,6 +308,45 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/sak/sok': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.S\u00F8kDto'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.S\u00F8kP\u00E5SakDTO'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/sak/{saksnummer}/finnBehandlingerAvType': {
     parameters: {
       query?: never;
@@ -9557,9 +9596,9 @@ export interface components {
         | 'IKKE_OVERHOLDT_MELDEPLIKT_SANKSJON'
         | 'ARBEIDER_MER_ENN_GRENSEVERDI'
         | 'SONER_STRAFF'
-        | 'BRUDD_PÅ_AKTIVITETSPLIKT'
-        | 'FRAVÆR_FASTSATT_AKTIVITET'
         | 'VARIGHETSKVOTE_BRUKT_OPP'
+        | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS'
+        | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR'
         | null;
       brukerAvKvoter: ('ORDINÆR' | 'STUDENT' | 'ETABLERINGSFASE' | 'UTVIKLINGSFASE' | 'SYKEPENGEERSTATNING')[];
       gradering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.GraderingDto'];
@@ -12057,6 +12096,20 @@ export interface components {
         | 'KLAGE_TRUKKET'
         | null;
       saksnummer: string;
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.S\u00F8kDto': {
+      's\u00F8ketekst': string;
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.S\u00F8kP\u00E5SakDTO': {
+      harTilgang: boolean;
+      ident: string;
+      navn: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      opprettetTidspunkt: string;
+      saksnummer: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.sak.Saksnummer'];
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.UtvidetSaksinfoDTO': {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO'][];
