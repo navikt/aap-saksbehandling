@@ -19,6 +19,7 @@ const options: MenyValg[] = ['Totaloversikt', 'Min enhet'];
 
 export const Produksjonsstyringsmeny = ({ enheter }: Props) => {
   const [selected, setSelected] = useState<MenyValg>('Totaloversikt');
+  const enhet = isDev() ? <MineEnheter enheter={enheter} /> : <MinEnhet enheter={enheter} />;
 
   return (
     <ProduksjonsstyringFilterContextProvider>
@@ -37,7 +38,7 @@ export const Produksjonsstyringsmeny = ({ enheter }: Props) => {
         </HStack>
 
         {selected === 'Totaloversikt' && <TotaloversiktBehandlinger />}
-        {selected === 'Min enhet' && isDev() ? <MineEnheter enheter={enheter} /> : <MinEnhet enheter={enheter} />}
+        {selected === 'Min enhet' && enhet}
       </VStack>
     </ProduksjonsstyringFilterContextProvider>
   );
