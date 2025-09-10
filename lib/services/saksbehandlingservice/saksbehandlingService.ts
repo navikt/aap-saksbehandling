@@ -70,6 +70,7 @@ import {
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
+  SøkPåSakInfo,
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
@@ -95,6 +96,11 @@ export const hentSak = async (saksnummer: string) => {
   } else {
     return res.data;
   }
+};
+
+export const søkEtterSak = async (søketekst: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/sok`;
+  return await apiFetch<SøkPåSakInfo[]>(url, saksbehandlingApiScope, 'POST', { søketekst });
 };
 
 export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {

@@ -336,7 +336,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.S\u00F8kP\u00E5SakDTO'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.S\u00F8kP\u00E5SakDTO'][];
           };
         };
       };
