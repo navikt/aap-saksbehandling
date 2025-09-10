@@ -93,7 +93,7 @@ export const SaksinfoBanner = ({
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (oppgave?.reservertAv && !erReservertAvInnloggetBruker) {
-      return { status: 'RESERVERT', label: `Reservert ${oppgave.reservertAv}` };
+      return { status: 'RESERVERT', label: `Reservert ${oppgave.reservertAvNavn ?? oppgave.reservertAv}` };
     } else if (påVent === true) {
       return { status: 'PÅ_VENT', label: 'På vent' };
     } else if (sak.søknadErTrukket) {
