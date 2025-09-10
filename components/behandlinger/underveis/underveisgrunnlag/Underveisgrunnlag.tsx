@@ -107,12 +107,12 @@ function årsakTilString(avslagsÅrsak: UnderveisAvslagsÅrsak): string {
       return 'Arbeider mer enn grenseverdi';
     case 'SONER_STRAFF':
       return 'Soner straff';
-    case 'BRUDD_PÅ_AKTIVITETSPLIKT':
-      return 'Brudd på aktivitetsplikt';
-    case 'FRAVÆR_FASTSATT_AKTIVITET':
-      return 'Fravær fastsatt aktivitet';
     case 'VARIGHETSKVOTE_BRUKT_OPP':
       return 'Varighetskvote brukt opp';
+    case 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR':
+      return 'Brudd på aktivitetsplikt etter § 11-7 - Opphør';
+    case 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS':
+      return 'Brudd på aktivitetsplikt etter § 11-7 - Stans';
     default:
       exhaustiveCheck(avslagsÅrsak);
   }

@@ -4,9 +4,7 @@ import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { ProduksjonsstyringFilterContextProvider } from 'context/produksjonsstyring/ProduksjonsstyringFilterContext';
 import { TotaloversiktBehandlinger } from 'components/produksjonsstyring/totaloversiktbehandlinger/TotaloversiktBehandlinger';
-import { MinEnhet } from 'components/produksjonsstyring/minenhet/MinEnhet';
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { isDev } from 'lib/utils/environment';
 import { MineEnheter } from 'components/produksjonsstyring/minenhet/MineEnheter';
 
 interface Props {
@@ -37,7 +35,7 @@ export const Produksjonsstyringsmeny = ({ enheter }: Props) => {
         </HStack>
 
         {selected === 'Totaloversikt' && <TotaloversiktBehandlinger />}
-        {selected === 'Min enhet' && isDev() ? <MineEnheter enheter={enheter} /> : <MinEnhet enheter={enheter} />}
+        {selected === 'Min enhet' && <MineEnheter enheter={enheter} />}
       </VStack>
     </ProduksjonsstyringFilterContextProvider>
   );

@@ -22,7 +22,6 @@ import { useMemo } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import { useProduksjonsstyringFilter } from 'hooks/produksjonsstyring/ProduksjonsstyringFilterHook';
 import { AvklaringsbehovReturer } from 'components/produksjonsstyring/avklaringsbehovreturer/AvklaringsbehovReturer';
-import { isDev } from 'lib/utils/environment';
 
 interface Props {
   listeVisning: boolean;
@@ -102,7 +101,7 @@ export const MinEnhetBehandlinger = ({ listeVisning, aktiveEnheter }: Props) => 
           )}
           {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
         </div>
-        {isDev() && isSuccess(fordelingReturerPerAvklaringsbehov) && (
+        {isSuccess(fordelingReturerPerAvklaringsbehov) && (
           <AvklaringsbehovReturer data={fordelingReturerPerAvklaringsbehov.data || []} />
         )}
         <div className={listeVisning ? styles.plotList : styles.plotGrid}>
