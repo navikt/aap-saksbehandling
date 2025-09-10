@@ -6,7 +6,7 @@ const behovskodeMap = {
   // Behandlingsflyt
   '4101': '§ 11-7 Aktivitetsplikt',
   '5001': '§ 11-14 Student',
-  '5002': '§ 11-10 Rimelig grunn',
+  '5002': '§ 11-10 andre ledd. Perioder uten overholdt meldeplikt',
   '5003': '§ 11-5 Nedsatt arbeidsevne',
   '5004': '§ 11-23 Arbeidsevne som ikke er utnyttet',
   '5005': '§ 11-10 Fritak fra meldeplikt',
@@ -35,7 +35,9 @@ const behovskodeMap = {
   '5028': 'Vurder trekk av søknad',
   '5029': 'Vurder starttidspunkt',
   '5030': 'Samordning arbeidsgiver',
-  '5031': 'Kanseller revurdering',
+  '5031': '§ 11-18 AAP under behandling av krav om uføretrygd',
+  '5032': '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker',
+  '5033': 'Kanseller revurdering',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
@@ -321,5 +323,16 @@ export function mapStatusTilTekst(
       return 'Retur fra beslutter';
     case 'ER_HASTESAK':
       return 'Hastesak';
+  }
+}
+
+export function mapReturFraStatusTilTekst(status: string): string {
+  switch (status) {
+    case 'SENDT_TILBAKE_FRA_BESLUTTER':
+      return 'Sendt tilbake fra beslutter';
+    case 'SENDT_TILBAKE_FRA_KVALITETSSIKRER':
+      return 'Sendt tilbake fra kvalitetssikrer';
+    default:
+      return status;
   }
 }

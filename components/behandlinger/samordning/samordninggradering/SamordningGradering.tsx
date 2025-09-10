@@ -2,6 +2,7 @@
 
 import {
   MellomlagretVurdering,
+  OppfølgningOppgaveOpprinnelseResponse,
   Periode,
   SamordningGraderingGrunnlag,
   SamordningYtelsestype,
@@ -29,6 +30,7 @@ import { useSak } from 'hooks/SakHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { capitalize } from 'lodash';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   bruker: BrukerInformasjon;
@@ -36,6 +38,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  oppfølgningOppgave?: OppfølgningOppgaveOpprinnelseResponse;
 }
 
 interface SamordnetYtelse {
@@ -63,6 +66,7 @@ export const SamordningGradering = ({
   behandlingVersjon,
   readOnly,
   initialMellomlagretVurdering,
+  oppfølgningOppgave,
 }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const [errorMessage, setErrorMessage] = useState<String | undefined>(undefined);
@@ -184,6 +188,8 @@ export const SamordningGradering = ({
 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
+  const erAllereddeOppfølgningsOppgave = oppfølgningOppgave && oppfølgningOppgave?.data.length > 0;
+
   const sak = useSak();
   const [visModalForOppfølgingsoppgaveState, setModalForOppfølgingsoppgaveState] = useState<boolean>(false);
   const ref = useRef<HTMLDialogElement>(null);
@@ -199,6 +205,8 @@ export const SamordningGradering = ({
         >
           <Modal.Body>
             <OpprettOppfølgingsBehandling
+              behovsType={Behovstype.AVKLAR_SAMORDNING_GRADERING}
+              behandlingsreferanse={behandlingsreferanse}
               saksnummer={sak.sak.saksnummer}
               brukerInformasjon={bruker}
               modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
@@ -227,7 +235,7 @@ export const SamordningGradering = ({
         }}
         mellomlagretVurdering={mellomlagretVurdering}
       >
-        {!!historiskeVurderinger.length && (
+        {!!historiskeVurderinger && !!historiskeVurderinger.length && (
           /* TODO: <TidligereVurderinger/> er ikke ideelt for visning av denne typen data (samordning, inst, m.m.).
               Burde på sikt utformes litt annerledes, men dette får fungere som en slags "MVP" */
           <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
@@ -238,12 +246,12 @@ export const SamordningGradering = ({
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell ytelser={grunnlag.ytelser} />
             <Ytelsesvurderinger form={form} readOnly={readOnly} />
-            {success && (
+            {!isProd() && (success || erAllereddeOppfølgningsOppgave) && (
               <Box maxWidth={'80ch'}>
                 <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
               </Box>
             )}
-            {visRevurderVirkningstidspunkt && !success && (
+            {!isProd() && !erAllereddeOppfølgningsOppgave && visRevurderVirkningstidspunkt && !success && (
               <Box maxWidth={'90ch'}>
                 <Alert variant="info">
                   <Heading spacing size="small" level="3">

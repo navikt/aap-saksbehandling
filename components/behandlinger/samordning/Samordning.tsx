@@ -1,5 +1,5 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegSomSkalVises } from 'lib/utils/steg';
+import { getStegData } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { SamordningSosialstønadMedDatafetching } from 'components/behandlinger/samordning/samordningsosial/SamordningSosialstønadMedDatafetching';
 import { SamordningAndreStatligeYtelserMedDatafetching } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelserMedDatafetching';
@@ -20,7 +20,13 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
-  const stegSomSkalVises = getStegSomSkalVises('SAMORDNING', flyt.data);
+  const aktivGruppe = 'SAMORDNING';
+  const samordningSosialStønadSteg = getStegData('SYKDOM', 'REFUSJON_KRAV', flyt.data);
+  const samordningGraderingSteg = getStegData(aktivGruppe, 'SAMORDNING_GRADERING', flyt.data);
+  const samordningUføreSteg = getStegData(aktivGruppe, 'SAMORDNING_UFØRE', flyt.data);
+  const samordningStatligeYtelserSteg = getStegData(aktivGruppe, 'SAMORDNING_ANDRE_STATLIGE_YTELSER', flyt.data);
+  const samordningArbeidsgiverSteg = getStegData(aktivGruppe, 'SAMORDNING_ARBEIDSGIVER', flyt.data);
+  const samordningTjenestepensjonSteg = getStegData(aktivGruppe, 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV', flyt.data);
 
   return (
     <GruppeSteg
@@ -30,50 +36,53 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      <StegSuspense>
-        <SamordningSosialstønadMedDatafetching behandlingsreferanse={behandlingsreferanse} />
-      </StegSuspense>
-
-      <StegSuspense>
-        <SamordningGraderingMedDatafetching
-          behandlingsreferanse={behandlingsreferanse}
-          behandlingVersjon={flyt.data.behandlingVersjon}
-          readOnly={flyt.data.visning.saksbehandlerReadOnly}
-        />
-      </StegSuspense>
-
-      {stegSomSkalVises.includes('SAMORDNING_UFØRE') && (
+      {samordningSosialStønadSteg.skalViseSteg && (
         <StegSuspense>
-          <SamordningUføreMedDatafetching
+          <SamordningSosialstønadMedDatafetching
             behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={flyt.data.behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
+            stegData={samordningSosialStønadSteg}
           />
         </StegSuspense>
       )}
 
-      <StegSuspense>
-        <SamordningAndreStatligeYtelserMedDatafetching
-          behandlingsreferanse={behandlingsreferanse}
-          behandlingVersjon={flyt.data.behandlingVersjon}
-          readOnly={flyt.data.visning.saksbehandlerReadOnly}
-        />
-      </StegSuspense>
+      {samordningGraderingSteg.skalViseSteg && (
+        <StegSuspense>
+          <SamordningGraderingMedDatafetching
+            behandlingsreferanse={behandlingsreferanse}
+            stegData={samordningGraderingSteg}
+          />
+        </StegSuspense>
+      )}
 
-      <StegSuspense>
-        <SamordningArbeidsgiverMedDatafetching
-          behandlingsreferanse={behandlingsreferanse}
-          behandlingVersjon={flyt.data.behandlingVersjon}
-          readOnly={flyt.data.visning.saksbehandlerReadOnly}
-        />
-      </StegSuspense>
+      {samordningUføreSteg.skalViseSteg && (
+        <StegSuspense>
+          <SamordningUføreMedDatafetching behandlingsreferanse={behandlingsreferanse} stegData={samordningUføreSteg} />
+        </StegSuspense>
+      )}
 
-      {stegSomSkalVises.includes('SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV') && (
+      {samordningStatligeYtelserSteg.skalViseSteg && (
+        <StegSuspense>
+          <SamordningAndreStatligeYtelserMedDatafetching
+            behandlingsreferanse={behandlingsreferanse}
+            stegData={samordningStatligeYtelserSteg}
+          />
+        </StegSuspense>
+      )}
+
+      {samordningArbeidsgiverSteg.skalViseSteg && (
+        <StegSuspense>
+          <SamordningArbeidsgiverMedDatafetching
+            behandlingsreferanse={behandlingsreferanse}
+            stegData={samordningArbeidsgiverSteg}
+          />
+        </StegSuspense>
+      )}
+
+      {samordningTjenestepensjonSteg.skalViseSteg && (
         <StegSuspense>
           <SamordningTjenestePensjonMedDataFetching
             behandlingreferanse={behandlingsreferanse}
-            behandlingVersjon={flyt.data.behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
+            stegData={samordningTjenestepensjonSteg}
           />
         </StegSuspense>
       )}

@@ -39,12 +39,15 @@ import {
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
+  OppfølgningOppgaveOpprinnelseResponse,
   OpprettDummySakDto,
   OpprettTestcase,
+  OvergangUforeGrunnlag,
+  OvergangArbeidGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
-  RimeligGrunnMeldepliktGrunnlag,
+  OverstyringMeldepliktGrunnlag,
   SakPersoninfo,
   SaksInfo,
   SamordningAndreStatligeYtelserGrunnlag,
@@ -191,8 +194,8 @@ export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string)
 };
 
 export const hentRimeligGrunnMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/meldeplikt-rimelig-grunn`;
-  return await apiFetch<RimeligGrunnMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/meldeplikt-overstyring`;
+  return await apiFetch<OverstyringMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSykdomsvurderingBrevGrunnlag = async (behandlingsReferanse: string) => {
@@ -208,6 +211,16 @@ export const hentFastsettArbeidsevneGrunnlag = async (behandlingsReferanse: stri
 export const hentBistandsbehovGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/bistand`;
   return await apiFetch<BistandsGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentOvergangUforeGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/overgangufore`;
+  return await apiFetch<OvergangUforeGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentOvergangArbeidGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/overgangarbeid`;
+  return await apiFetch<OvergangArbeidGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFatteVedtakGrunnlang = async (behandlingsReferanse: string) => {
@@ -500,6 +513,26 @@ export const hentMellomlagring = async (behandlingsReferanse: string, kode: stri
     }
 
     return undefined;
+  }
+};
+
+export const hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse = async (
+  behandlingsReferanse: string,
+  kode: string
+) => {
+  const res = await apiFetch<OppfølgningOppgaveOpprinnelseResponse>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/oppfølgningOppgaveOpprinnelse/${behandlingsReferanse}/${kode}`,
+    saksbehandlingApiScope
+  );
+
+  if (isSuccess(res)) {
+    if (res.data !== null) {
+      return res.data;
+    }
+    return undefined;
+  }
+  if (isError(res)) {
+    console.log(res);
   }
 };
 

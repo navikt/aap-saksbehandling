@@ -1,218 +1,180 @@
 'use client';
 
-import { RimeligGrunnMeldepliktGrunnlag } from 'lib/types/types';
-import {
-  formaterDatoForBackend,
-  formaterDatoForFrontend,
-  formaterPeriode,
-  sorterEtterNyesteDato,
-} from 'lib/utils/date';
-import { FormEvent, useState } from 'react';
-import { Button, HStack, Link, Table, VStack } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
-import styles from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent.module.css';
-import { useConfigForm } from 'components/form/FormHook';
-import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { Periode, MeldepliktOverstyringLøsningDto, OverstyringMeldepliktGrunnlag } from 'lib/types/types';
+import { FormEvent } from 'react';
+import { Link, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype } from 'lib/utils/form';
-import { parse } from 'date-fns';
-import { isProd } from 'lib/utils/environment';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { IkkeMeldtPerioderTable } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeMeldtPerioderTable';
+import { VurderingMeldepliktOverstyringSkjema } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/VurderingMeldepliktOverstyringSkjema';
+import { useConfigForm } from 'components/form/FormHook';
+import { useFieldArray } from 'react-hook-form';
+import {
+  MeldepliktOverstyringFormFields,
+  MeldepliktOverstyringVurdering,
+} from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/types';
+import { Behovstype } from 'lib/utils/form';
 
 type Props = {
-  grunnlag?: RimeligGrunnMeldepliktGrunnlag;
+  grunnlag?: OverstyringMeldepliktGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
 };
 
-type RimeligGrunnVurdering = {
-  fraDato: string;
-  begrunnelse: string;
-  harRimeligGrunn: string;
-};
-
-type FormFields = {
-  rimeligGrunnVurderinger: RimeligGrunnVurdering[];
-};
-
 export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
-  const [overstyring, setOverstyring] = useState<boolean>(false);
-
-  const relevantePerioder =
-    grunnlag?.perioderIkkeMeldt
-      .map((e) => ({ periode: e, harRimeligGrunn: false }))
-      .concat(grunnlag?.perioderRimeligGrunn.map((e) => ({ periode: e, harRimeligGrunn: true })))
-      .sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom)) ?? [];
-
-  const defaultValues: RimeligGrunnVurdering[] = relevantePerioder.map((periode) => {
-    const vurdering = finnVurdering(periode.periode.fom);
-
-    return {
-      fraDato: formaterDatoForFrontend(periode.periode.fom),
-      begrunnelse: vurdering?.begrunnelse ?? '',
-      harRimeligGrunn: vurdering
-        ? vurdering.harRimeligGrunn
-          ? 'RIMELIG_GRUNN'
-          : 'IKKE_OPPFYLT'
-        : periode.harRimeligGrunn
-          ? 'RIMELIG_GRUNN'
-          : 'IKKE_OPPFYLT',
-    };
-  });
-
-  const { form } = useConfigForm<FormFields>({
-    rimeligGrunnVurderinger: {
-      type: 'fieldArray',
-      defaultValue: defaultValues,
-    },
-  });
-
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('IKKE_OPPFYLT_MELDEPLIKT');
 
+  /**
+   * Ikke meldte perioder som skal vises er alle perioder som er registrert som ikke meldt
+   * men som ikke har registrert en vurdering på seg (da vil vi heller vise den med vurderings-data)
+   * i tillegg må vi legge til gjeldende vurderinger fra denne behandlingen (som ikke er på samme peridoe som en
+   * tidligere vurdering), siden disse periodene ikke lenger er markert som ikke meldt.
+   */
+  const redigerbarePerioderSomIkkeHarTidligereVurderinger: Periode[] =
+    grunnlag?.overstyringsvurderinger
+      .filter((v) => grunnlag?.gjeldendeVedtatteOversyringsvurderinger.every((t) => t.fraDato !== v.fraDato))
+      .map((vurdering) => ({
+        fom: vurdering.fraDato,
+        tom: vurdering.tilDato,
+      })) ?? [];
+
+  const tidligereVurderinger = grunnlag?.gjeldendeVedtatteOversyringsvurderinger ?? [];
+
+  const ikkeMeldtPerioderSomSkalVises = redigerbarePerioderSomIkkeHarTidligereVurderinger
+    .concat(
+      grunnlag?.perioderIkkeMeldt.filter((p) =>
+        redigerbarePerioderSomIkkeHarTidligereVurderinger.every((v) => v.fom !== p.fom)
+      ) ?? []
+    )
+    .filter((periode) => tidligereVurderinger.every((v) => v.fraDato !== periode.fom));
+
+  const allePerioder = tidligereVurderinger
+    .map((p) => ({ fom: p.fraDato, tom: p.tilDato }))
+    .concat(ikkeMeldtPerioderSomSkalVises)
+    .sort((a, b) => a.fom.localeCompare(b.fom));
+
+  /**
+   * Gitt en periode, om den finner perioden overstyrt i gjeldende behandling bruker vi default-values fra den, hvis ikke
+   * prøver vi å bruke fra tidligere vurderinger. Ellers fallbacker vi til default-verdier.
+   */
+  const getDefaultFormValuesForFraPeriode = (periode: Periode): MeldepliktOverstyringVurdering => {
+    const gjeldendeVurdering = grunnlag?.overstyringsvurderinger.find((v) => v.fraDato === periode.fom);
+    const tidligereVurtdering = grunnlag?.gjeldendeVedtatteOversyringsvurderinger.find(
+      (v) => v.fraDato === periode.fom
+    );
+
+    return {
+      fraDato: periode.fom,
+      tilDato: periode.tom,
+      begrunnelse: gjeldendeVurdering?.begrunnelse ?? tidligereVurtdering?.begrunnelse ?? '',
+      meldepliktOverstyringStatus:
+        gjeldendeVurdering?.meldepliktOverstyringStatus ??
+        tidligereVurtdering?.meldepliktOverstyringStatus ??
+        'IKKE_MELDT_SEG',
+    };
+  };
+
+  const { form } = useConfigForm<MeldepliktOverstyringFormFields>({
+    vurderinger: {
+      type: 'fieldArray',
+      defaultValue:
+        grunnlag?.overstyringsvurderinger?.map((v) => ({
+          fraDato: v.fraDato,
+          tilDato: v.tilDato,
+          begrunnelse: v.begrunnelse ?? '',
+          meldepliktOverstyringStatus: v.meldepliktOverstyringStatus,
+        })) ?? [],
+    },
+  });
+
+  const { fields: vurderinger, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
+  const valgtePerioder = vurderinger.map((v) => v.fraDato).sort((a, b) => a.localeCompare(b));
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      const meldepliktOverstyringDto: MeldepliktOverstyringLøsningDto = {
+        perioder: data.vurderinger
+          .sort((a, b) => a.fraDato.localeCompare(b.fraDato))
+          .map((dataForPeriode) => ({
+            fom: dataForPeriode.fraDato,
+            tom: dataForPeriode.tilDato,
+            begrunnelse: dataForPeriode.begrunnelse,
+            meldepliktOverstyringStatus: dataForPeriode.meldepliktOverstyringStatus,
+          })),
+      };
+
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         referanse: behandlingsreferanse,
         behov: {
           behovstype: Behovstype.OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT_KODE,
-          rimeligGrunnVurderinger: data.rimeligGrunnVurderinger.map((periode) => ({
-            begrunnelse: periode.begrunnelse,
-            harRimeligGrunn: periode.harRimeligGrunn === 'RIMELIG_GRUNN',
-            fraDato: formaterDatoForBackend(parse(periode.fraDato, 'dd.MM.yyyy', new Date())),
-          })),
+          meldepliktOverstyringVurdering: meldepliktOverstyringDto,
         },
       });
     })(event);
   };
 
-  return grunnlag && grunnlag.perioderIkkeMeldt.length > 0 ? (
+  const getPeriodeForFraDato = (fraDato: string): Periode => allePerioder.find((p) => p.fom === fraDato)!;
+
+  const handleChange = (checked: boolean, fraDato: string) => {
+    if (checked) {
+      const periode = getPeriodeForFraDato(fraDato);
+      append(getDefaultFormValuesForFraPeriode(periode));
+      return;
+    } else {
+      const eksisterendeIndex = vurderinger.findIndex((v) => v.fraDato === fraDato);
+      remove(eksisterendeIndex);
+    }
+  };
+
+  const harIkkeMeldteEllerOverstyrtePerioder =
+    grunnlag != null &&
+    (grunnlag.perioderIkkeMeldt.length > 0 ||
+      grunnlag.overstyringsvurderinger.length > 0 ||
+      grunnlag.gjeldendeVedtatteOversyringsvurderinger.length > 0);
+
+  return harIkkeMeldteEllerOverstyrtePerioder ? (
     <VilkårskortMedForm
-      heading={'Perioder uten oppfylt meldeplikt (§ 11-10 andre ledd)'}
+      heading={'§ 11-10 andre ledd. Perioder uten overholdt meldeplikt'}
       steg={'IKKE_OPPFYLT_MELDEPLIKT'}
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={false}
+      visBekreftKnapp={!readOnly}
+      readOnly={readOnly}
     >
       <VStack gap={'4'}>
         <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
           Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
         </Link>
-
-        <div>
-          Tabellen viser meldeperioder brukeren ikke har levert meldekort i tide og derfor ikke oppfyller meldeplikten.
-          Du kan overstyre dette hvis brukeren hadde rimelig grunn for å unnlate å melde seg.
-        </div>
-        <TableStyled size="medium">
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
-              <Table.HeaderCell>Meldeplikt</Table.HeaderCell>
-              {overstyring && (
-                <>
-                  <Table.HeaderCell>Begrunnelse</Table.HeaderCell>
-                  <Table.HeaderCell>Vurdert av</Table.HeaderCell>
-                </>
-              )}
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {relevantePerioder.map((relevantPeriode, periodeIndex) => {
-              const periode = relevantPeriode.periode;
-              const skilleLinjeClassName =
-                relevantePerioder.length === periodeIndex + 1 || relevantePerioder.length === 1
-                  ? ''
-                  : styles.tablerowwithoutborder;
-
-              const bakgrunnClassName = periodeIndex % 2 ? styles.tablerowwithzebra : '';
-
-              return (
-                <Table.Row key={periode.fom} className={`${skilleLinjeClassName} ${bakgrunnClassName}`}>
-                  <Table.DataCell textSize={'small'}>{formaterPeriode(periode.fom, periode.tom)}</Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
-                    <SelectWrapper
-                      control={form.control}
-                      readOnly={readOnly || !overstyring}
-                      name={`rimeligGrunnVurderinger.${periodeIndex}.harRimeligGrunn`}
-                      rules={{
-                        required: 'Du må svare på om brukeren har rimelig grunn for ikke overholdt meldeplikt',
-                      }}
-                    >
-                      <option value={'RIMELIG_GRUNN'}>Rimelig grunn</option>
-                      <option value={'IKKE_OPPFYLT'}>Ikke oppfylt</option>
-                    </SelectWrapper>
-                  </Table.DataCell>
-                  {overstyring && (
-                    <>
-                      <Table.DataCell>
-                        <TextAreaWrapper
-                          name={`rimeligGrunnVurderinger.${periodeIndex}.begrunnelse`}
-                          control={form.control}
-                          rules={{
-                            validate: (value) => {
-                              const harRimeligGrunn = form.getValues(
-                                `rimeligGrunnVurderinger.${periodeIndex}.harRimeligGrunn`
-                              );
-                              if (harRimeligGrunn == 'RIMELIG_GRUNN' && !value) {
-                                return 'Du må skrive en begrunnelse for rimelig grunn';
-                              }
-                            },
-                          }}
-                        />
-                      </Table.DataCell>
-                      <Table.DataCell>{finnVurdertAv(periode.fom)}</Table.DataCell>
-                    </>
-                  )}
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </TableStyled>
-
-        {!readOnly && (
-          <HStack justify={'space-between'} align={'end'}>
-            {overstyring && !isProd ? (
-              <div className={'flex-row'}>
-                <Button variant={'secondary'} onClick={() => setOverstyring(false)}>
-                  Angre overstyring
-                </Button>
-                <Button>Bekreft</Button>
-              </div>
-            ) : (
-              <Button variant={'secondary'} onClick={() => setOverstyring(true)}>
-                Overstyr
-              </Button>
-            )}
-          </HStack>
-        )}
+        <VStack gap={'10'}>
+          <IkkeMeldtPerioderTable
+            ikkeMeldtPerioder={ikkeMeldtPerioderSomSkalVises}
+            tidligereVurdertePerioder={tidligereVurderinger}
+            valgtePerioder={valgtePerioder}
+            readOnly={readOnly}
+            onClickPeriode={handleChange}
+          />
+          {valgtePerioder.map((periode) => (
+            <VurderingMeldepliktOverstyringSkjema
+              key={periode}
+              periode={getPeriodeForFraDato(periode)}
+              control={form.control}
+              index={vurderinger.findIndex((field) => field.fraDato === periode)}
+              field={vurderinger.find((field) => field.fraDato === periode)!}
+              readOnly={readOnly}
+            />
+          ))}
+        </VStack>
       </VStack>
     </VilkårskortMedForm>
   ) : (
     <></>
   );
-
-  function finnVurdering(fraDato: string) {
-    return (
-      grunnlag?.vurderinger.find((v) => v.fraDato === fraDato) ??
-      grunnlag?.gjeldendeVedtatteVurderinger.find((v) => v.fraDato === fraDato)
-    );
-  }
-
-  function finnVurdertAv(fraDato: string): string {
-    const vurdering =
-      grunnlag?.vurderinger?.find((v) => v.fraDato === fraDato) ??
-      grunnlag?.gjeldendeVedtatteVurderinger.find((v) => v.fraDato === fraDato);
-
-    const vurdertDato = vurdering?.vurderingsTidspunkt ? formaterDatoForFrontend(vurdering?.vurderingsTidspunkt) : '';
-    const vurdertAv = vurdering?.vurdertAv.ansattnavn ?? vurdering?.vurdertAv.ident ?? '';
-    return vurdertAv + ' ' + vurdertDato;
-  }
 };

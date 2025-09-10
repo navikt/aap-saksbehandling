@@ -10,7 +10,6 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { isProd } from 'lib/utils/environment';
 
 export interface VilkårsKortMedFormProps {
   heading: string;
@@ -83,7 +82,7 @@ export const VilkårskortMedForm = ({
                     {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
                   </Detail>
                 )}
-                {kvalitetssikretAv && !isProd() && (
+                {kvalitetssikretAv && (
                   <Detail>
                     {`Kvalitetssikret av ${utledVurdertAv(kvalitetssikretAv)}, ${formaterDatoForFrontend(kvalitetssikretAv.dato)}`}
                   </Detail>

@@ -1,25 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 
-import { RimeligGrunnMeldepliktGrunnlag } from 'lib/types/types';
+import { OverstyringMeldepliktGrunnlag } from 'lib/types/types';
 import { IkkeOppfyltMeldeplikt } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeOppfyltMeldeplikt';
 
-import { userEvent } from '@testing-library/user-event';
-
-const user = userEvent.setup();
-
 describe('IkkeOppfyltMeldeplikt', () => {
-  const grunnlag: RimeligGrunnMeldepliktGrunnlag = {
+  const grunnlag: OverstyringMeldepliktGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
-    historikk: [],
     perioderIkkeMeldt: [{ fom: '2023-01-01', tom: '2023-01-15' }],
-    perioderRimeligGrunn: [{ fom: '2023-01-15', tom: '2023-01-28' }],
-    gjeldendeVedtatteVurderinger: [],
-    vurderinger: [
+    overstyringsvurderinger: [],
+    gjeldendeVedtatteOversyringsvurderinger: [
       {
         fraDato: '2023-01-15',
+        tilDato: '2023-01-29',
         begrunnelse: 'Vurdering 2',
-        harRimeligGrunn: true,
+        vurdertIBehandling: { referanse: '123' },
+        meldepliktOverstyringStatus: 'RIMELIG_GRUNN',
         vurderingsTidspunkt: '2024-08-10',
         vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' },
       },
@@ -29,48 +25,42 @@ describe('IkkeOppfyltMeldeplikt', () => {
   it('viser overskrift for å identifisere steget', () => {
     render(<IkkeOppfyltMeldeplikt behandlingVersjon={1} readOnly={false} grunnlag={grunnlag} />);
     expect(
-      screen.getByRole('heading', { name: 'Perioder uten oppfylt meldeplikt (§ 11-10 andre ledd)' })
+      screen.getByRole('heading', { name: '§ 11-10 andre ledd. Perioder uten overholdt meldeplikt' })
     ).toBeVisible();
   });
 
-  it('skal ikke vises hvis det ikke finnes perioder uten oppfylt meldeplikt eller rimelig grunn', () => {
-    const tomtGrunnlag: RimeligGrunnMeldepliktGrunnlag = {
+  it('skal ikke vises hvis det ikke finnes Perioder uten overholdt meldeplikt eller rimelig grunn', () => {
+    const tomtGrunnlag: OverstyringMeldepliktGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
-      historikk: [],
       perioderIkkeMeldt: [],
-      perioderRimeligGrunn: [],
-      gjeldendeVedtatteVurderinger: [],
-      vurderinger: [],
+      gjeldendeVedtatteOversyringsvurderinger: [],
+      overstyringsvurderinger: [],
     };
 
     render(<IkkeOppfyltMeldeplikt behandlingVersjon={1} readOnly={false} grunnlag={tomtGrunnlag} />);
     expect(
-      screen.queryByRole('heading', { name: 'Perioder uten oppfylt meldeplikt (§ 11-10 andre ledd)' })
+      screen.queryByRole('heading', { name: '§ 11-10 andre ledd. Perioder uten overholdt meldeplikt' })
     ).not.toBeInTheDocument();
   });
 
   it('skal vise vurderingene gjort i denne behandlingen dersom de finnes', async () => {
-    const vurderingerGrunnlag: RimeligGrunnMeldepliktGrunnlag = {
+    const vurderingerGrunnlag: OverstyringMeldepliktGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
-      historikk: [],
       perioderIkkeMeldt: [{ fom: '2023-01-01', tom: '2023-01-15' }],
-      perioderRimeligGrunn: [{ fom: '2023-01-15', tom: '2023-01-28' }],
-      gjeldendeVedtatteVurderinger: [],
-      vurderinger: [
+      overstyringsvurderinger: [
         {
-          fraDato: '2023-01-15',
+          fraDato: '2023-01-01',
+          tilDato: '2023-01-15',
           begrunnelse: 'Vurdering 2',
-          harRimeligGrunn: true,
+          vurdertIBehandling: { referanse: '123' },
+          meldepliktOverstyringStatus: 'RIMELIG_GRUNN',
           vurderingsTidspunkt: '2024-08-10',
           vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' },
         },
       ],
+      gjeldendeVedtatteOversyringsvurderinger: [],
     };
     render(<IkkeOppfyltMeldeplikt behandlingVersjon={1} readOnly={false} grunnlag={vurderingerGrunnlag} />);
-    await user.click(screen.getByRole('button', { name: /Overstyr/ }));
-    expect(screen.getByRole('row', { name: '01.01.2023 - 15.01.2023 Ikke oppfylt' })).toBeVisible();
-    expect(
-      screen.getByRole('row', { name: '15.01.2023 - 28.01.2023 Rimelig grunn Vurdering 2 saksbehandler 10.08.2024' })
-    ).toBeVisible();
+    expect(screen.getByText('Vurdering av periode 01.01.2023 - 15.01.2023')).toBeVisible();
   });
 });

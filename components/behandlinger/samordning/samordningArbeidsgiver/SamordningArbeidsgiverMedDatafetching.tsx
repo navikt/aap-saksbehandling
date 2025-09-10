@@ -6,17 +6,13 @@ import {
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { SamordningArbeidsgiver } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiver';
 import { Behovstype } from 'lib/utils/form';
+import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
-  behandlingVersjon: number;
-  readOnly: boolean;
+  stegData: StegData;
 }
-export const SamordningArbeidsgiverMedDatafetching = async ({
-  behandlingVersjon,
-  readOnly,
-  behandlingsreferanse,
-}: Props) => {
+export const SamordningArbeidsgiverMedDatafetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentSamordningArbeidsgiverGrunnlag(behandlingsreferanse),
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER),
@@ -26,11 +22,15 @@ export const SamordningArbeidsgiverMedDatafetching = async ({
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  if (!skalViseSteg(stegData, grunnlag.data.vurdering != null)) {
+    return null;
+  }
+
   return (
     <SamordningArbeidsgiver
       grunnlag={grunnlag.data}
-      behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

@@ -18,6 +18,7 @@ export enum Behovstype {
   AVKLAR_SAMORDNING_UFORE = '5024',
   AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER = '5027',
   AVKLAR_SAMORDNING_ARBEIDSGIVER = '5030',
+  OVERGANG_ARBEID = '5032',
   VURDER_TREKK_AV_SØKNAD_KODE = '5028',
   KANSELLER_REVURDERING_KODE = '5031',
   YRKESSKADE_KODE = '5013',
@@ -26,6 +27,7 @@ export enum Behovstype {
   SYKDOMSVURDERING_BREV_KODE = '5053',
   AVKLAR_LOVVALG_MEDLEMSKAP = '5017',
   MANUELL_OVERSTYRING_LOVVALG = '5021',
+  OVERGANG_UFORE = '5031',
   FORESLÅ_UTTAK_KODE = '5096',
   KVALITETSSIKRING_KODE = '5097',
   FORESLÅ_VEDTAK_KODE = '5098',
@@ -62,7 +64,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5001':
       return '§ 11-14 Student';
     case '5002':
-      return '§ 11-10 Rimelig grunn';
+      return '§ 11-10 andre ledd. Perioder uten overholdt meldeplikt';
     case '5003':
       return '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng';
     case '5004':
@@ -116,6 +118,10 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5030':
       return 'Ytelser fra arbeidsgiver (sluttpakke)';
     case '5031':
+      return '§ 11-18 AAP under behandling av krav om uføretrygd';
+    case '5032':
+      return '§ 11-17 AAP i perioden som arbeidssøker';
+    case '5033':
       return 'kanseller revurdering';
     case '5022':
       return 'Overstyr § 11-2 forutgående medlemskap';

@@ -304,7 +304,25 @@ describe('Sak status', () => {
     expect(påVentTag).not.toBeInTheDocument();
   });
 
-  it('skal vise en tag som viser om behandlingen er reservert dersom den er det', () => {
+  it('skal vise saksbehandlers navn på reservert-tag dersom oppgaven er reservert', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={behandling}
+        brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'nayBruker' }}
+        oppgave={{ ...oppgave, reservertAvNavn: 'Test Testesen' }}
+        referanse={'123456'}
+        påVent={false}
+        typeBehandling="Førstegangsbehandling"
+      />
+    );
+
+    const reservertTag = screen.getByText('Reservert Test Testesen');
+    expect(reservertTag).toBeVisible();
+  });
+
+  it('skal vise saksbehandlers ident på reservert-tag dersom oppgaven er reservert og navn ikke finnes', () => {
     render(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
@@ -318,8 +336,8 @@ describe('Sak status', () => {
       />
     );
 
-    const reservertTag = screen.getByText('Reservert navIdent');
-    expect(reservertTag).toBeVisible();
+    const reservertTagIdent = screen.getByText('Reservert navIdent');
+    expect(reservertTagIdent).toBeVisible();
   });
 
   it('skal ikke vise en tag som viser om behandlingen er reservert dersom innnlogget bruker har resertvert den', () => {
@@ -335,7 +353,7 @@ describe('Sak status', () => {
       />
     );
 
-    const reservertTag = screen.queryByText('Reservert navIdent');
+    const reservertTag = screen.queryByText('Reservert Test Testesen');
     expect(reservertTag).not.toBeInTheDocument();
   });
 
@@ -351,7 +369,7 @@ describe('Sak status', () => {
       />
     );
 
-    const reservertTag = screen.queryByText('Reservert navIdent');
+    const reservertTag = screen.queryByText('Reservert Test Testesen');
     expect(reservertTag).not.toBeInTheDocument();
   });
 

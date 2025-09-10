@@ -14,6 +14,7 @@ import { v4 as uuid } from 'uuid';
 import { parse } from 'date-fns';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   saksnummer: string;
@@ -21,6 +22,8 @@ interface Props {
   modalOnClose?: () => void;
   successfullOpprettelse?: () => void;
   finnTidligsteVirkningstidspunkt?: string;
+  behandlingsreferanse?: string;
+  behovsType?: Behovstype;
 }
 
 interface DefaultValues {
@@ -43,6 +46,8 @@ export const OpprettOppfølgingsBehandling = ({
   modalOnClose,
   successfullOpprettelse,
   finnTidligsteVirkningstidspunkt,
+  behandlingsreferanse,
+  behovsType,
 }: Props) => {
   const defaultValues: DefaultValues = {
     datoForOppfølging: finnTidligsteVirkningstidspunkt ? finnTidligsteVirkningstidspunkt : '',
@@ -70,12 +75,11 @@ export const OpprettOppfølgingsBehandling = ({
       kanal: 'DIGITAL',
       mottattTidspunkt: new Date().toISOString(),
       melding: {
-        meldingType:
-          'OppfølgingsoppgaveV0' /** //TODO: opprinselse logikk, hent om det er noen andre oppfølgning oppgave på denne behanddling
+        meldingType: 'OppfølgingsoppgaveV0',
         opprinnelse: {
-          behandlingsreferanse: 'behandlingsreferanse', // TODO: Id
-          årsak: 'SamordningGradering',
-        }, **/,
+          behandlingsreferanse: behandlingsreferanse,
+          avklaringsbehovKode: behovsType,
+        },
         datoForOppfølging: formaterDatoForBackend(parse(data.datoForOppfølging, 'dd.MM.yyyy', new Date())),
         hvaSkalFølgesOpp: data.hvaSkalFølgesOpp,
         reserverTilBruker: data.reserverTilMeg.length > 0 ? brukerInformasjon.NAVident : undefined,
@@ -171,10 +175,10 @@ export const OpprettOppfølgingsBehandling = ({
           )}
 
           <HStack gap="4">
+            <Button type="submit">Bekreft</Button>
             <Button type="button" variant="secondary" onClick={() => avbrytButton(modalOnClose)}>
               Avbryt
             </Button>
-            <Button type="submit">Opprett oppfølgingsbehandling</Button>
           </HStack>
         </VStack>
       </form>

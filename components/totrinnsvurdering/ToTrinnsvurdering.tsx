@@ -131,7 +131,7 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
     case Behovstype.EFFEKTUER_11_7_KODE:
       return 'UNDERVEIS';
     case Behovstype.OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT_KODE:
-      return 'OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT';
+      return 'UNDERVEIS';
     case Behovstype.VURDER_BRUDD_11_7_KODE:
       return 'AKTIVITETSPLIKT_11_7';
     default:
