@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyShort, Detail, Switch, Table, VStack } from '@navikt/ds-react';
-import { PlotWrapper } from '../plotwrapper/PlotWrapper';
+import { PlotWrapper } from 'components/produksjonsstyring/plotwrapper/PlotWrapper';
 import { BehandlingAvklaringsbehovRetur, BehandlingAvklaringsbehovReturDTO } from 'lib/types/statistikkTypes';
 import { sekunderTilDager } from 'lib/utils/time';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
