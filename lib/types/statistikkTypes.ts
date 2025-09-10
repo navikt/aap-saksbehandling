@@ -17,6 +17,10 @@ export type BehandlingÅrsakAntallGjennomsnitt =
   components['schemas']['no.nav.aap.statistikk.produksjonsstyring.BehandlingAarsakAntallGjennomsnitt'];
 export type OppgaverPerSteggruppe =
   components['schemas']['no.nav.aap.statistikk.produksjonsstyring.OppgaverPerSteggruppe'];
+export type BehandlingAvklaringsbehovRetur =
+  components['schemas']['no.nav.aap.statistikk.produksjonsstyring.BehandlingAvklaringsbehovRetur'];
+export type BehandlingAvklaringsbehovReturDTO =
+  components['schemas']['no.nav.aap.statistikk.produksjonsstyring.BehandlingAvklaringsbehovReturDTO'];
 
 // typer fra enums
 export type BehandlingstyperRequestQuery = `${NonNullable<

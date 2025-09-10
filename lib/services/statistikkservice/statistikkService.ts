@@ -1,6 +1,7 @@
 import { statistikkQueryparams } from 'lib/utils/request';
 import {
   AntallÅpneOgGjennomsnitt,
+  BehandlingAvklaringsbehovRetur,
   BehandlingEndringerPerDag,
   BehandlingPerSteggruppe,
   BehandlingÅrsakAntallGjennomsnitt,
@@ -101,6 +102,14 @@ export const hentÅrsakTilBehandling = async (
 ) => {
   const url = `${statistikkApiBaseURL}/behandlinger/årsak-til-behandling?${statistikkQueryparams({ behandlingstyper, enheter })}`;
   return await apiFetch<BehandlingÅrsakAntallGjennomsnitt[]>(url, statistikkApiScope, 'GET');
+};
+
+export const hentReturerPerAvklaringsbehovBehandling = async (
+  behandlingstyper: Array<BehandlingsTyperOption> = [],
+  enheter: Array<string>
+) => {
+  const url = `${statistikkApiBaseURL}/behandlinger/retur?${statistikkQueryparams({ behandlingstyper, enheter })}`;
+  return await apiFetch<BehandlingAvklaringsbehovRetur[]>(url, statistikkApiScope, 'GET');
 };
 
 export const hentOppgaverInnUt = async (

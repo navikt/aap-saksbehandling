@@ -10,6 +10,7 @@ import {
 } from './types/oppgaveTypes';
 import {
   AntallÅpneOgGjennomsnitt,
+  BehandlingAvklaringsbehovReturDTO,
   BehandlingPerSteggruppe,
   BehandlingÅrsakAntallGjennomsnitt,
   FordelingLukkedeBehandlinger,
@@ -52,6 +53,10 @@ export async function oppgaverPerSteggruppeClient(url: string) {
 
 export async function årsakTilBehandlingClient(url: string) {
   return clientFetch<Array<BehandlingÅrsakAntallGjennomsnitt>>(url, 'GET');
+}
+
+export async function antallÅpneBehandlingerMedReturPerAvklaringsbehovClient(url: string) {
+  return clientFetch<Array<BehandlingAvklaringsbehovReturDTO>>(url, 'GET');
 }
 
 // oppgave
