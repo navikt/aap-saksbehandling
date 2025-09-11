@@ -3,7 +3,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { OvergangUfore } from 'components/behandlinger/sykdom/overgangufore/OvergangUfore';
 import { Behovstype } from 'lib/utils/form';
-import { StegData } from 'lib/utils/steg';
+import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
@@ -17,6 +17,13 @@ export const OvergangUforeMedDataFetching = async ({ behandlingsReferanse, stegD
   ]);
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
+  }
+
+  const harTidligereVurderinger =
+    grunnlag.data.gjeldendeVedtatteVurderinger != null && grunnlag.data.gjeldendeVedtatteVurderinger.length > 0;
+
+  if (!skalViseSteg(stegData, harTidligereVurderinger)) {
+    return null;
   }
 
   return (
