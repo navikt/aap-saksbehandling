@@ -50,7 +50,7 @@ const visning: FlytVisning = {
   brukerHarBesluttet: false,
   brukerHarKvalitetssikret: false,
   kvalitetssikringReadOnly: false,
-  revurderingErKansellert: false,
+  resultatKode: null,
   saksbehandlerReadOnly: true,
   typeBehandling: "Førstegangsbehandling",
   visBeslutterKort: false,

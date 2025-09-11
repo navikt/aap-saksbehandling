@@ -28,7 +28,7 @@ const flytResponse: FetchResponse<BehandlingFlytOgTilstand> = {
       visBrevkort: false,
       visKvalitetssikringKort: false,
       visVentekort: false,
-      revurderingErKansellert: false
+      resultatKode: null
     },
   },
 };
