@@ -103,6 +103,8 @@ export const Yrkesskade = ({
               erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
               andelAvNedsettelsen: data?.andelAvNedsettelsen,
               relevanteSaker: data.relevanteSaker || [],
+              relevanteYrkesskadeSaker:
+                data.relevanteSaker?.map((s) => ({ referanse: s, manuellYrkesskadeDato: null })) || [],
             },
           },
           behandlingVersjon: behandlingVersjon,
