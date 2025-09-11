@@ -37,8 +37,6 @@ const årsakOptions: ValuePair<DokumentÅrsakTilBehandling>[] = [
   { value: 'BARNETILLEGG', label: 'Barnetillegg' },
   { value: 'INSTITUSJONSOPPHOLD', label: 'Institusjonsopphold' },
   { value: 'SAMORDNING_OG_AVREGNING', label: 'Samordning og avregning' },
-  { value: 'REFUSJONSKRAV', label: 'Refusjonskrav' },
-  { value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT', label: 'Utenlandsopphold før søknadstidspunkt' },
   { value: 'REVURDER_MANUELL_INNTEKT', label: 'Manuell inntekt' },
   // { value: '', label: 'Journalfør på saken uten å starte revurdering' }, venter på enum i behandlingsflyt
 ];
