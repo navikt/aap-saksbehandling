@@ -28,6 +28,13 @@ const alpha3Countries: ValuePair[] = countryList.map((country) => ({
 const filteredEeaCountries = eeaCountries.filter((country) => country.value !== 'NOR');
 const filteredEeaCountriesAlpha2 = eeaCountriesAlpha2.filter((country) => country.value !== 'NO');
 
+export const alleLandUtenNorge: ValuePair[] = [
+  { value: '', label: '' },
+  ...alpha3Countries
+    .filter((country) => country.value !== 'NO')
+    .sort((code, name) => code.label.localeCompare(name.label, 'no')),
+];
+
 export const landMedTrygdesamarbeid: ValuePair[] = [
   { value: '', label: '' },
   ...filteredEeaCountries.sort((code, name) => code.label.localeCompare(name.label, 'no')),
