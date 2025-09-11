@@ -37,6 +37,8 @@ export type ArbeidsevneGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto'];
 export type RefusjonskravGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagResponse'];
+export type RefusjonkravVurderingResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse'];
 
 export type BeregningTidspunktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningTidspunktAvklaringResponse'];
