@@ -4674,6 +4674,7 @@ export interface components {
         | '5030'
         | '5031'
         | '5032'
+        | '5033'
         | '5050'
         | '5051'
         | '5052'
@@ -4741,6 +4742,7 @@ export interface components {
         | '5030'
         | '5031'
         | '5032'
+        | '5033'
         | '5050'
         | '5051'
         | '5052'
@@ -6473,6 +6475,8 @@ export interface components {
         | '5029'
         | '5030'
         | '5031'
+        | '5032'
+        | '5033'
         | '5050'
         | '5051'
         | '5052'
@@ -8940,12 +8944,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.kansellerrevurdering.flate.KansellerRevurderingVurderingDto': {
       begrunnelse: string;
       /** @enum {string|null} */
-      '\u00E5rsak'?:
-        | 'REVURDERING_ER_IKKE_LENGER_AKTUELL'
-        | 'REVURDERINGEN_ER_FEILREGISTRERT'
-        | 'REVURDERINGEN_ER_AVBRUTT_PÅ_GRUNN_AV_FEIL'
-        | 'ANNET'
-        | null;
+      '\u00E5rsak'?: 'REVURDERINGEN_ER_FEILREGISTRERT' | 'REVURDERINGEN_ER_AVBRUTT_PÅ_GRUNN_AV_FEIL' | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.behandlendeenhet.BehandlendeEnhetGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;

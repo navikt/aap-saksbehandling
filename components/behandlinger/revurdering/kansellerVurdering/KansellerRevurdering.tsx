@@ -4,7 +4,7 @@ import { getStegSomSkalVises } from 'lib/utils/steg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { KansellerRevurderingMedDatafetching } from './vurdering/KansellerRevurderingMedDatafetching';
+import { KansellerRevurderingMedDatafetching } from 'components/behandlinger/revurdering/kansellerVurdering/vurdering/KansellerRevurderingMedDatafetching';
 
 interface props {
   behandlingsreferanse: string;

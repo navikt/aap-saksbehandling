@@ -21,7 +21,9 @@ import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbeha
 import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
-import { KansellerRevurderingModal } from './kansellerrevurderingmodal/KansellerRevurderingModal';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { KansellerRevurderingModal } from 'components/saksinfobanner/kansellerrevurderingmodal/KansellerRevurderingModal';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -78,6 +80,7 @@ export const SaksinfoBanner = ({
     behandlingErIkkeAvsluttet;
 
   const visValgForÅKansellereRevurdering =
+    !isProd() &&
     !behandlerRevurderingSomSkalKanselleres &&
     brukerKanSaksbehandle &&
     behandlingErRevurdering &&
@@ -96,7 +99,7 @@ export const SaksinfoBanner = ({
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (oppgave?.reservertAv && !erReservertAvInnloggetBruker) {
-      return { status: 'RESERVERT', label: `Reservert ${oppgave.reservertAv}` };
+      return { status: 'RESERVERT', label: `Reservert ${oppgave.reservertAvNavn ?? oppgave.reservertAv}` };
     } else if (visning?.visVentekort) {
       return { status: 'PÅ_VENT', label: 'På vent' };
     } else if (sak.søknadErTrukket) {
@@ -106,6 +109,7 @@ export const SaksinfoBanner = ({
     }
   };
 
+  const behandlingsreferanse = useBehandlingsReferanse();
   const oppgaveStatus = hentOppgaveStatus();
 
   const erPåBehandlingSiden = referanse !== undefined;
@@ -235,7 +239,7 @@ export const SaksinfoBanner = ({
               isOpen={visKansellerRevurderingModal}
               onClose={() => settVisKansellerRevurderingModal(false)}
               saksnummer={sak.saksnummer}
-              behandlingReferanse={behandling?.referanse!}
+              behandlingReferanse={behandlingsreferanse}
             />
             <VurderRettighetsperiodeModal
               isOpen={visVurderRettighetsperiodeModal}

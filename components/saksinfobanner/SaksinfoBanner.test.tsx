@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
-import { DetaljertBehandling, SakPersoninfo, SaksInfo } from 'lib/types/types';
+import { DetaljertBehandling, FlytVisning, SakPersoninfo, SaksInfo } from 'lib/types/types';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Oppgave } from 'lib/types/oppgaveTypes';
@@ -44,6 +44,20 @@ const oppgave: Oppgave = {
   markeringer: [],
   reservertAv: 'navIdent',
 };
+
+const visning: FlytVisning = {
+  beslutterReadOnly: false,
+  brukerHarBesluttet: false,
+  brukerHarKvalitetssikret: false,
+  kvalitetssikringReadOnly: false,
+  revurderingErKansellert: false,
+  saksbehandlerReadOnly: true,
+  typeBehandling: "Førstegangsbehandling",
+  visBeslutterKort: false,
+  visBrevkort: false,
+  visKvalitetssikringKort: false,
+  visVentekort: false,
+}
 
 describe('Saksinfobanner på sak siden', () => {
   beforeEach(() => {
@@ -108,7 +122,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         referanse={'123456'}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
       />
     );
     expect(screen.getByText('Peder Ås')).toBeVisible();
@@ -121,7 +135,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         referanse={'123456'}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
       />
     );
     expect(screen.getByText('12345678910')).toBeVisible();
@@ -134,7 +148,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         referanse={'123456'}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
       />
     );
     expect(screen.getByText('Sak 12345'));
@@ -147,7 +161,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         referanse={'123456'}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
       />
     );
     expect(screen.getByText('Førstegangsbehandling')).toBeVisible();
@@ -160,7 +174,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         referanse={'123456'}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
       />
     );
     expect(screen.getByText('Utredes')).toBeVisible();
@@ -173,7 +187,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         referanse={'123456'}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
       />
     );
     const knapp = screen.getByRole('button', { name: 'Saksmeny' });
@@ -187,7 +201,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         referanse={'123456'}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
         brukerKanSaksbehandle={true}
       />
     );
@@ -202,7 +216,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         referanse={'123456'}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
         brukerKanSaksbehandle={false}
       />
     );
@@ -217,7 +231,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={avsluttetSak}
         behandling={avsluttetBehandling}
         referanse={'123456'}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
         brukerKanSaksbehandle={true}
       />
     );
@@ -232,8 +246,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         referanse={'123456'}
-        påVent={false}
-        typeBehandling="Revurdering"
+        visning={{ ...visning, typeBehandling: 'Revurdering' }}
       />
     );
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
@@ -247,7 +260,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={{ ...behandling, status: 'IVERKSETTES' }}
         referanse={'123456'}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
         brukerKanSaksbehandle={true}
       />
     );
@@ -263,7 +276,7 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={{ ...behandling, status: 'IVERKSETTES' }}
         referanse={'123456'}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
         brukerKanSaksbehandle={true}
       />
     );
@@ -281,7 +294,7 @@ describe('Sak status', () => {
         sak={sak}
         behandling={behandling}
         referanse={'123456'}
-        påVent={true}
+        visning={{ ...visning, visVentekort: true }}
       />
     );
 
@@ -296,7 +309,7 @@ describe('Sak status', () => {
         sak={sak}
         behandling={behandling}
         referanse={'123456'}
-        påVent={false}
+        visning={visning}
       />
     );
 
@@ -313,8 +326,7 @@ describe('Sak status', () => {
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'nayBruker' }}
         oppgave={{ ...oppgave, reservertAvNavn: 'Test Testesen' }}
         referanse={'123456'}
-        påVent={false}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
       />
     );
 
@@ -331,8 +343,7 @@ describe('Sak status', () => {
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'nayBruker' }}
         oppgave={oppgave}
         referanse={'123456'}
-        påVent={false}
-        typeBehandling="Førstegangsbehandling"
+        visning={visning}
       />
     );
 
@@ -349,7 +360,6 @@ describe('Sak status', () => {
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
         oppgave={oppgave}
         referanse={'123456'}
-        påVent={false}
       />
     );
 
@@ -365,7 +375,6 @@ describe('Sak status', () => {
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
         referanse={'123456'}
-        påVent={false}
       />
     );
 
@@ -381,7 +390,6 @@ describe('Sak status', () => {
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
         referanse={'123456'}
-        påVent={false}
       />
     );
     expect(screen.queryByText('Trukket')).not.toBeInTheDocument();
@@ -396,7 +404,6 @@ describe('Sak status', () => {
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
         referanse={'123456'}
-        påVent={false}
       />
     );
     expect(screen.getByText('Trukket')).toBeVisible();

@@ -17,10 +17,8 @@ interface Props {
 
 interface FormFields {
   aarsak?:
-    | 'REVURDERING_ER_IKKE_LENGER_AKTUELL'
     | 'REVURDERINGEN_ER_FEILREGISTRERT'
-    | 'REVURDERINGEN_ER_AVBRUTT_PÅ_GRUNN_AV_FEIL'
-    | 'ANNET';
+    | 'REVURDERINGEN_ER_AVBRUTT_PÅ_GRUNN_AV_FEIL';
   begrunnelse: string;
 }
 
@@ -35,10 +33,8 @@ export const KansellerRevurderingVurdering = ({ grunnlag, readOnly, behandlingVe
         type: 'combobox',
         label: 'Hva er årsaken til kansellering?',
         options: [
-          { value: 'REVURDERING_ER_IKKE_LENGER_AKTUELL', label: 'Revurdering er ikke lenger aktuell' },
           { value: 'REVURDERINGEN_ER_FEILREGISTRERT', label: 'Revurderingen er feilregistrert' },
           { value: 'REVURDERINGEN_ER_AVBRUTT_PÅ_GRUNN_AV_FEIL', label: 'Revurdering er avbrutt på grunn av feil' },
-          { value: 'ANNET', label: 'Annet' },
         ],
         defaultValue: grunnlag?.vurdering?.årsak ?? undefined,
         rules: {
