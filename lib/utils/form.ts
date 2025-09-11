@@ -20,6 +20,7 @@ export enum Behovstype {
   AVKLAR_SAMORDNING_ARBEIDSGIVER = '5030',
   OVERGANG_ARBEID = '5032',
   VURDER_TREKK_AV_SØKNAD_KODE = '5028',
+  KANSELLER_REVURDERING_KODE = '5033',
   YRKESSKADE_KODE = '5013',
   FASTSETT_YRKESSKADEINNTEKT = '5014',
   EFFEKTUER_11_7_KODE = '5015',
@@ -120,6 +121,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return '§ 11-18 AAP under behandling av krav om uføretrygd';
     case '5032':
       return '§ 11-17 AAP i perioden som arbeidssøker';
+    case '5033':
+      return 'kanseller revurdering';
     case '5022':
       return 'Overstyr § 11-2 forutgående medlemskap';
     case '5050':

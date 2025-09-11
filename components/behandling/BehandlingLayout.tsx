@@ -99,11 +99,10 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
             behandling={behandling.data}
             sak={sak}
             oppgave={oppgave.data}
-            påVent={flytResponse.data.visning.visVentekort}
             brukerInformasjon={brukerInformasjon}
-            typeBehandling={flytResponse.data.visning.typeBehandling}
             brukerKanSaksbehandle={brukerKanSaksbehandle}
             flyt={flytResponse.data.flyt}
+            visning={flytResponse.data.visning}
           />
 
           <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />

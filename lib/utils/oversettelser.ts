@@ -37,6 +37,7 @@ const behovskodeMap = {
   '5030': 'Samordning arbeidsgiver',
   '5031': '§ 11-18 AAP under behandling av krav om uføretrygd',
   '5032': '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker',
+  '5033': 'Kanseller revurdering',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
@@ -109,6 +110,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
   switch (steggruppe) {
     case 'SØKNAD':
       return 'Trekk søknad';
+    case 'KANSELLER_REVURDERING':
+      return 'Kanseller revurdering';
     case 'ALDER':
       return 'Alder';
     case 'LOVVALG':
