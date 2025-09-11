@@ -11,6 +11,7 @@ import {
   KvalitetssikringTilgang,
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
+  LøsPeriodisertBehovPåBehandling,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnheterResponse,
@@ -87,6 +88,10 @@ export function clientOpprettDummySak(sak: OpprettDummySakDto) {
 
 export function clientHentAlleSaker() {
   return clientFetch<SaksInfo[]>(`${BASE_URL}/api/sak/alle`, 'GET');
+}
+
+export function clientLøsPeriodisertBehov(avklaringsBehov: LøsPeriodisertBehovPåBehandling) {
+  return clientFetch(`${BASE_URL}/api/behandling/los-periodisert-behov/`, 'POST', avklaringsBehov);
 }
 
 export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {

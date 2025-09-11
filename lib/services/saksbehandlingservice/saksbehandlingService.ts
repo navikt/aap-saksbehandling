@@ -75,6 +75,8 @@ import {
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
+  OppholdskravGrunnlagResponse,
+  LøsPeriodisertBehovPåBehandling,
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
@@ -208,6 +210,11 @@ export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string)
 export const hentRimeligGrunnMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/meldeplikt-overstyring`;
   return await apiFetch<OverstyringMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentOppholdskravGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/oppholdskrav`;
+  return await apiFetch<OppholdskravGrunnlagResponse>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSykdomsvurderingBrevGrunnlag = async (behandlingsReferanse: string) => {
@@ -409,6 +416,11 @@ export const hentUtbetalingOgSimuleringGrunnlag = async (behandlingsreferanse: s
   return await apiFetch<UtbetalingOgSimuleringGrunnlag[]>(url, saksbehandlingApiScope, 'GET', undefined, [
     `utbetalingogsimulering/${behandlingsreferanse}`,
   ]);
+};
+
+export const løsPeriodisertAvklaringsbehov = async (avklaringsBehov: LøsPeriodisertBehovPåBehandling) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/løs-periodisert-behov`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', avklaringsBehov);
 };
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {

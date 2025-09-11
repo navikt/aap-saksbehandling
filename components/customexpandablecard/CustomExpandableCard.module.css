@@ -1,0 +1,9 @@
+.container {
+    border-bottom: 1px solid var(--a-border-divider);
+    padding-bottom: 6px;
+}
+
+.headingButton{
+    background: none;
+    border: none;
+}

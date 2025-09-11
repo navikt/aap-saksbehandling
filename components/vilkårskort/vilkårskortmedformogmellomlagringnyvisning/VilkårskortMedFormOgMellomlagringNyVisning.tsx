@@ -10,6 +10,7 @@ import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { isProd } from 'lib/utils/environment';
 import { VilkårsKortMedFormProps } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
+import { ReactNode } from 'react';
 
 export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMedFormProps {
   onDeleteMellomlagringClick: () => void;
@@ -17,6 +18,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMed
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   visningModus: VisningModus;
   visningActions: VisningActions;
+  extraActions?: ReactNode;
 }
 
 export const VilkårskortMedFormOgMellomlagringNyVisning = ({
@@ -38,6 +40,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   mellomlagretVurdering,
   visningModus,
   visningActions,
+  extraActions,
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
@@ -81,6 +84,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                   {visningModus === 'AKTIV_UTEN_AVBRYT' && (
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
+                      {extraActions != null && extraActions}
                       {onLagreMellomLagringClick && (
                         <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
                           Lagre utkast
@@ -97,6 +101,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                           Avbryt
                         </Button>
                       )}
+                      {extraActions != null && extraActions}
                       {onLagreMellomLagringClick && (
                         <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
                           Lagre utkast
