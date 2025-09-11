@@ -11375,7 +11375,18 @@ export interface components {
       brukerHarBesluttet: boolean;
       brukerHarKvalitetssikret: boolean;
       kvalitetssikringReadOnly: boolean;
-      revurderingErKansellert: boolean;
+      /** @enum {string|null} */
+      resultatKode?:
+        | 'INNVILGET'
+        | 'AVSLAG'
+        | 'TRUKKET'
+        | 'KLAGE_OPPRETTHOLDES'
+        | 'KLAGE_OMGJØRES'
+        | 'KLAGE_DELVIS_OMGJØRES'
+        | 'KLAGE_AVSLÅTT'
+        | 'KLAGE_TRUKKET'
+        | 'KANSELLERT'
+        | null;
       saksbehandlerReadOnly: boolean;
       /** @enum {string} */
       typeBehandling:
