@@ -2,7 +2,7 @@ import { Box, Page as AkselPage } from '@navikt/ds-react';
 import { hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
-import { hentBrukerInformasjon } from '../../../../../lib/services/azure/azureUserService';
+import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 export default async function Page(props: { params: Promise<{ saksId: string }> }) {
   const params = await props.params;

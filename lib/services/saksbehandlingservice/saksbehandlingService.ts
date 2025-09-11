@@ -514,20 +514,10 @@ export const hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse = async
   behandlingsReferanse: string,
   kode: string
 ) => {
-  const res = await apiFetch<OppfølgningOppgaveOpprinnelseResponse>(
+  return apiFetch<OppfølgningOppgaveOpprinnelseResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/oppfølgningOppgaveOpprinnelse/${behandlingsReferanse}/${kode}`,
     saksbehandlingApiScope
   );
-
-  if (isSuccess(res)) {
-    if (res.data !== null) {
-      return res.data;
-    }
-    return undefined;
-  }
-  if (isError(res)) {
-    console.log(res);
-  }
 };
 
 export const lagreMellomlagring = async (request: MellomlagretVurderingRequest) => {

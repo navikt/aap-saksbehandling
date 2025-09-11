@@ -5,8 +5,7 @@ import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 
 export default async function Page(props: { params: Promise<{ saksId: string }> }) {
   const params = await props.params;
-  const sak = await hentSak(params.saksId);
-  const personInfo = await hentSakPersoninfo(params.saksId);
+  const [sak, personInfo] = await Promise.all([hentSak(params.saksId), hentSakPersoninfo(params.saksId)]);
 
   return (
     <AkselPage>
