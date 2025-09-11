@@ -11,7 +11,6 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Barnetillegg', value: 'BARNETILLEGG' },
   { label: 'Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
   { label: 'Samordning og avregning', value: 'SAMORDNING_OG_AVREGNING' },
-  { label: 'Refusjonskrav', value: 'REFUSJONSKRAV' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
   { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
   { label: 'Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
