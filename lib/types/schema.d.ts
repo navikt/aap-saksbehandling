@@ -8637,7 +8637,6 @@ export interface components {
       /** @enum {string} */
       brevtype:
         | 'INNVILGELSE'
-        | 'VEDTAK_11_18'
         | 'AVSLAG'
         | 'VARSEL_OM_BESTILLING'
         | 'FORHÅNDSVARSEL_BRUDD_AKTIVITETSPLIKT'
@@ -8945,7 +8944,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.kansellerrevurdering.flate.KansellerRevurderingVurderingDto': {
       begrunnelse: string;
       /** @enum {string|null} */
-      '\u00E5rsak'?: 'REVURDERINGEN_ER_FEILREGISTRERT' | 'REVURDERINGEN_ER_AVBRUTT_PÅ_GRUNN_AV_FEIL' | null;
+      '\u00E5rsak'?: 'FEILREGISTRERING' | 'START_REVURDERING_PAA_NYTT' | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.behandlendeenhet.BehandlendeEnhetGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;

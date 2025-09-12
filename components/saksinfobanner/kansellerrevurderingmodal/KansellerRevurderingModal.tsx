@@ -28,7 +28,7 @@ export const KansellerRevurderingModal = ({ saksnummer, isOpen, onClose, behandl
       className={styles.modal}
     >
       <Modal.Body>
-        <BodyLong>Når du kansellerer revurderingen vil saken avsluttes.</BodyLong>
+        <BodyLong>Når du kansellerer revurderingen vil behandlingen avsluttes og ingen endringer vil blir lagret på saken.</BodyLong>
         {sendHendelseError && (
           <Alert variant={'error'} size={'small'}>
             {sendHendelseError.message}

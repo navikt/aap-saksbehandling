@@ -17,8 +17,8 @@ interface Props {
 
 interface FormFields {
   aarsak?:
-    | 'REVURDERINGEN_ER_FEILREGISTRERT'
-    | 'REVURDERINGEN_ER_AVBRUTT_PÅ_GRUNN_AV_FEIL';
+    | 'FEILREGISTRERING'
+    | 'START_REVURDERING_PAA_NYTT';
   begrunnelse: string;
 }
 
@@ -33,8 +33,8 @@ export const KansellerRevurderingVurdering = ({ grunnlag, readOnly, behandlingVe
         type: 'combobox',
         label: 'Hva er årsaken til kansellering?',
         options: [
-          { value: 'REVURDERINGEN_ER_FEILREGISTRERT', label: 'Revurderingen er feilregistrert' },
-          { value: 'REVURDERINGEN_ER_AVBRUTT_PÅ_GRUNN_AV_FEIL', label: 'Revurdering er avbrutt på grunn av feil' },
+          { value: 'FEILREGISTRERING', label: 'Feilregistrering' },
+          { value: 'START_REVURDERING_PAA_NYTT', label: 'Start revurdering på nytt' },
         ],
         defaultValue: grunnlag?.vurdering?.årsak ?? undefined,
         rules: {
