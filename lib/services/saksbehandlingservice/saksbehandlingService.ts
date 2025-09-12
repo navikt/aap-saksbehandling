@@ -98,7 +98,7 @@ export const hentSak = async (saksnummer: string) => {
   }
 };
 
-export const søkEtterSak = async (søketekst: string) => {
+export const søkPåSak = async (søketekst: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/sok`;
   return await apiFetch<SøkPåSakInfo[]>(url, saksbehandlingApiScope, 'POST', { søketekst });
 };

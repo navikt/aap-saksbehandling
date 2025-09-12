@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { finnSakerForIdent, hentSak, søkEtterSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { finnSakerForIdent, hentSak, søkPåSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behandlingsstatus, SaksInfo, SøkPåSakInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
@@ -60,7 +60,7 @@ async function utledSøkeresultatDev(søketekst: string, brukerinformasjon?: Bru
 
   // Hent sak fra behandlingsflyt
   try {
-    const sakRes = await søkEtterSak(søketekst);
+    const sakRes = await søkPåSak(søketekst);
     if (isSuccess(sakRes)) {
       sakData = sakRes.data;
       sakData.forEach((sak) => {

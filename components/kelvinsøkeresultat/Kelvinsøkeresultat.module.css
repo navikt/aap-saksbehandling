@@ -10,3 +10,7 @@
   font-size: var(--a-font-size-small);
   color: var(--a-text-on-inverted);
 }
+
+.info {
+  color: var(--a-text-default);
+}
