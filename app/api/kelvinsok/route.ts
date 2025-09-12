@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { finnSakerForIdent, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Behandlingsstatus, SaksInfo } from 'lib/types/types';
+import { finnSakerForIdent, hentSak, søkPåSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { Behandlingsstatus, SaksInfo, SøkPåSakInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
@@ -9,6 +9,7 @@ import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 import { capitalize } from 'lodash';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { isProd } from 'lib/utils/environment';
 
 export interface SøkeResultat {
   oppgaver?: {
@@ -44,6 +45,78 @@ export async function POST(req: Request, brukerinformasjon: Props) {
   }
 
   const søketekst = body.søketekst;
+  const data = isProd()
+    ? await utledSøkeresultatProd(søketekst, brukerinformasjon.brukerInformasjon)
+    : await utledSøkeresultatDev(søketekst, brukerinformasjon.brukerInformasjon);
+
+  return NextResponse.json(data, {
+    status: 200,
+  });
+}
+
+async function utledSøkeresultatDev(søketekst: string, brukerinformasjon?: BrukerInformasjon): Promise<SøkeResultat> {
+  let sakData: SøkPåSakInfo[] = [];
+  let personData: SøkeResultat['person'] = [];
+
+  // Hent sak fra behandlingsflyt
+  try {
+    const sakRes = await søkPåSak(søketekst);
+    if (isSuccess(sakRes)) {
+      sakData = sakRes.data;
+      sakData.forEach((sak) => {
+        personData.push({
+          href: `/saksbehandling/sak/${sak.saksnummer}`,
+          label: `${sak.navn}`,
+        });
+      });
+    }
+  } catch (err) {
+    logError('/api/kelvinsøk saker', err);
+  }
+
+  // Oppgaver
+  let oppgaveData: SøkeResultat['oppgaver'] = [];
+  let kontorData: SøkeResultat['kontor'] = [];
+  let behandlingsStatusData: SøkeResultat['behandlingsStatus'] = [];
+  let harAdressebeskyttelse: boolean = true;
+  try {
+    const oppgavesøkRes = await oppgaveTekstSøk(søketekst);
+    if (isSuccess(oppgavesøkRes)) {
+      harAdressebeskyttelse = oppgavesøkRes.data.harAdressebeskyttelse;
+      oppgavesøkRes.data.oppgaver.forEach((oppgave) => {
+        const isReservert = Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon?.NAVident;
+        const isPåVent = oppgave.påVentÅrsak != null;
+        oppgaveData.push({
+          href: byggKelvinURL(oppgave),
+          label: `${formaterOppgave(oppgave)}`,
+          status: isReservert ? 'RESERVERT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
+          markeringer: oppgave.markeringer.map((markering) => markering.markeringType),
+        });
+        kontorData.push({ enhet: `${oppgave.enhet}` });
+        behandlingsStatusData.push({ status: `${oppgave.status}` });
+      });
+    }
+  } catch (err) {
+    logError('/api/kelvinsøk oppgaver', err);
+  }
+
+  const saker = sakData?.map((sak) => ({
+    href: `/saksbehandling/sak/${sak.saksnummer}`,
+    label: `${sak.saksnummer} (${formaterDatoForFrontend(sak.opprettetTidspunkt)})`,
+  }));
+
+  return {
+    oppgaver: oppgaveData,
+    saker: saker,
+    harTilgang: sakData[0]?.harTilgang ?? true,
+    harAdressebeskyttelse: harAdressebeskyttelse,
+    kontor: kontorData,
+    person: personData,
+    behandlingsStatus: behandlingsStatusData,
+  };
+}
+
+async function utledSøkeresultatProd(søketekst: string, brukerinformasjon?: BrukerInformasjon): Promise<SøkeResultat> {
   let sakData: SaksInfo[] = [];
   const isFnr = søketekst.length === 11;
   const isSaksnummer = søketekst.length === 7;
@@ -77,8 +150,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
       harTilgang = oppgavesøkRes.data.harTilgang;
       harAdressebeskyttelse = oppgavesøkRes.data.harAdressebeskyttelse;
       oppgavesøkRes.data.oppgaver.forEach((oppgave) => {
-        const isReservert =
-          Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon.brukerInformasjon?.NAVident;
+        const isReservert = Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon?.NAVident;
         const isPåVent = oppgave.påVentÅrsak != null;
         oppgaveData.push({
           href: byggKelvinURL(oppgave),
@@ -97,7 +169,7 @@ export async function POST(req: Request, brukerinformasjon: Props) {
   } catch (err) {
     logError('/api/kelvinsøk oppgaver', err);
   }
-  const data = {
+  return {
     oppgaver: oppgaveData,
     saker: sakData?.map((sak) => ({
       href: `/saksbehandling/sak/${sak.saksnummer}`,
@@ -109,10 +181,6 @@ export async function POST(req: Request, brukerinformasjon: Props) {
     person: personData,
     behandlingsStatus: behandlingsStatusData,
   };
-
-  return NextResponse.json(data, {
-    status: 200,
-  });
 }
 
 function buildSaksbehandlingsURL(oppgave: Oppgave): string {
