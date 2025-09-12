@@ -1,13 +1,14 @@
 import { SaksopplysningerKolonne } from 'components/behandlinger/brev/skriveBrev/SaksopplysningerKolonne';
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import {
+  hentAktivitetsplikt11_7Grunnlag,
   hentBrevGrunnlag,
   hentFullmektigGrunnlag,
   hentRefusjonGrunnlag,
   hentSykdomsvurderingBrevGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import styles from './SkriveBrevMedDataFetching.module.css';
-import { StegType } from 'lib/types/types';
+import { StegType, TypeBehandling } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
@@ -18,22 +19,32 @@ export const SkriveBrevMedDataFetching = async ({
   behandlingsReferanse,
   behandlingVersjon,
   aktivtSteg,
+  behandlingstype,
 }: {
   behandlingsReferanse: string;
   behandlingVersjon: number;
   aktivtSteg: StegType;
+  behandlingstype: TypeBehandling;
 }) => {
-  const [brevGrunnlag, refusjonGrunnlag, sykdomsvurderingBrevGrunnlag, fullmektigGrunnlag] = await Promise.all([
+  const [
+    brevGrunnlag,
+    refusjonGrunnlag,
+    sykdomsvurderingBrevGrunnlag,
+    fullmektigGrunnlag,
+    aktivitetsplikt11_7Grunnlag,
+  ] = await Promise.all([
     hentBrevGrunnlag(behandlingsReferanse),
     hentRefusjonGrunnlag(behandlingsReferanse),
     hentSykdomsvurderingBrevGrunnlag(behandlingsReferanse),
     hentFullmektigGrunnlag(behandlingsReferanse),
+    hentAktivitetsplikt11_7Grunnlag(behandlingsReferanse),
   ]);
   if (
     isError(refusjonGrunnlag) ||
     isError(sykdomsvurderingBrevGrunnlag) ||
     isError(brevGrunnlag) ||
-    isError(fullmektigGrunnlag)
+    isError(fullmektigGrunnlag) ||
+    isError(aktivitetsplikt11_7Grunnlag)
   ) {
     return <ApiException apiResponses={[refusjonGrunnlag, brevGrunnlag]} />;
   }
@@ -64,6 +75,9 @@ export const SkriveBrevMedDataFetching = async ({
       <SaksopplysningerKolonne
         refusjonGrunnlag={refusjonGrunnlag.data}
         sykdomsvurderingBrevGrunnlag={sykdomsvurderingBrevGrunnlag.data}
+        aktivitetsplikt11_7Grunnlag={
+          behandlingstype === 'Aktivitetsplikt' ? aktivitetsplikt11_7Grunnlag.data : undefined
+        }
       />
       <SkriveBrev
         status={brev.status}
