@@ -123,7 +123,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
 
     return (
       <VStack gap={'2'}>
-        {utenlandsAddresserGrunnlag.map((utenlandsAdresse, index) => {
+        {utenlandsAddresserGrunnlag.adresser?.map((utenlandsAdresse, index) => {
           return (
             <VStack gap={'1'} key={index} className={styles.sideDivider}>
               <LabelValue
@@ -135,6 +135,17 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
                 label={'Periode'}
                 value={formaterPeriode(utenlandsAdresse.gyldigFraOgMed, utenlandsAdresse.gyldigTilOgMed)}
               />
+            </VStack>
+          );
+        })}
+        {utenlandsAddresserGrunnlag.personStatus?.map((it, index) => {
+          const periode =
+            it.opphoerstidspunkt || it.gyldighetstidspunkt
+              ? `(${formaterPeriode(it.gyldighetstidspunkt, it.opphoerstidspunkt)})`
+              : '';
+          return (
+            <VStack gap={'1'} key={index} className={styles.sideDivider}>
+              <LabelValue label={'Folkeregisterstatus:'} value={`${it.status} ${periode}`} />
             </VStack>
           );
         })}
