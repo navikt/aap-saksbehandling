@@ -9,9 +9,9 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent } from 'react';
 import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
 interface Props {
@@ -57,8 +57,6 @@ export const Yrkesskade = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag);
 
-  console.log('defaultvalues', defaultValues);
-
   const yrkesskadeManglerSkadedato = grunnlag.opplysninger.innhentedeYrkesskader.find((ys) => !ys.skadedato);
 
   const { form, formFields } = useConfigForm<YrkesskadeFormFields>(
@@ -84,7 +82,10 @@ export const Yrkesskade = ({
       },
       relevanteYrkesskadeSaker: {
         type: 'fieldArray',
-        defaultValue: defaultValues.relevanteYrkesskadeSaker,
+        defaultValue: defaultValues.relevanteYrkesskadeSaker?.map((sak) => ({
+          ...sak,
+          manuellYrkesskadeDato: sak.manuellYrkesskadeDato ? formaterDatoForFrontend(sak.manuellYrkesskadeDato) : null,
+        })),
       },
       andelAvNedsettelsen: {
         type: 'text',
@@ -135,11 +136,6 @@ export const Yrkesskade = ({
       () => nullstillMellomlagretVurdering()
     )(event);
   };
-  console.log('grunnlag', grunnlag);
-  const relSaker = form.watch('relevanteYrkesskadeSaker');
-  useEffect(() => {
-    console.log('relevante', relSaker);
-  }, [relSaker]);
 
   return (
     <VilkårskortMedFormOgMellomlagring

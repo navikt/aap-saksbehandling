@@ -2,10 +2,11 @@
 
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { Checkbox, Table, TextField } from '@navikt/ds-react';
+import { Checkbox, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { YrkesskadeFormFields, YrkesskadeSak } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
 import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
   form: UseFormReturn<YrkesskadeFormFields>;
@@ -14,21 +15,11 @@ interface Props {
 }
 
 export const YrkesskadeVurderingTabell = ({ form }: Props) => {
-  const { fields: relevanteYrkesskadeSaker, update } = useFieldArray({
+  let { fields: relevanteYrkesskadeSaker, update } = useFieldArray({
     name: 'relevanteYrkesskadeSaker',
     control: form.control,
   });
-  console.log(relevanteYrkesskadeSaker);
-  function oppdaterYrkesskadeDato(index: number, manuellYrkesskadeDato: string, yrkesskade: YrkesskadeSak) {
-    update(index, {
-      ref: yrkesskade.ref,
-      kilde: yrkesskade.kilde,
-      skadedato: yrkesskade.skadedato,
-      manuellYrkesskadeDato,
-      saksnummer: yrkesskade.saksnummer,
-      erTilknyttet: yrkesskade.erTilknyttet,
-    });
-  }
+
   function oppdaterTilknytning(index: number, erTilknyttet: boolean, yrkesskade: YrkesskadeSak) {
     update(index, {
       ref: yrkesskade.ref,
@@ -39,6 +30,7 @@ export const YrkesskadeVurderingTabell = ({ form }: Props) => {
       erTilknyttet,
     });
   }
+
   return (
     <TableStyled>
       <Table.Header>
@@ -70,16 +62,9 @@ export const YrkesskadeVurderingTabell = ({ form }: Props) => {
                 {yrkesskade.skadedato ? (
                   formaterDatoForFrontend(yrkesskade.skadedato)
                 ) : (
-                  // TODO få DateInputWrapper til å funke
-                  // <DateInputWrapper
-                  //   name={`relevanteYrkesskadeSaker.${index}.manuellYrkesskadeDato`}
-                  //   control={form.control}
-                  // />
-                  <TextField
-                    value={yrkesskade.manuellYrkesskadeDato || ''}
-                    size={'small'}
-                    label={''}
-                    onChange={(e) => oppdaterYrkesskadeDato(index, e.target.value, yrkesskade)}
+                  <DateInputWrapper
+                    name={`relevanteYrkesskadeSaker.${index}.manuellYrkesskadeDato`}
+                    control={form.control}
                   />
                 )}
               </Table.DataCell>
