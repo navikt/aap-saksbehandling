@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype } from 'lib/utils/form';
-import { BodyShort, Label } from '@navikt/ds-react';
+import { Label } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
@@ -10,7 +10,6 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { ForeslåVedtakGrunnlag } from 'lib/types/types';
 import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
-import { isProd } from 'lib/utils/environment';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
 interface Props {
@@ -46,17 +45,10 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
       knappTekst={'Send til beslutter'}
     >
       <div className={styles.foreslåvedtak}>
-        {isProd() ? (
-          <>{!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}</>
-        ) : (
-          <>
-            <Label as="p" size={'medium'}>
-              Vedtaket medfører følgende konsekvens for brukeren:
-            </Label>
-            <ForeslåVedtakTabell grunnlag={grunnlag} />
-          </>
-        )}
-
+        <Label as="p" size={'medium'}>
+          Vedtaket medfører følgende konsekvens for brukeren:
+        </Label>
+        <ForeslåVedtakTabell grunnlag={grunnlag} />
         <LøsBehovOgGåTilNesteStegStatusAlert
           status={status}
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
