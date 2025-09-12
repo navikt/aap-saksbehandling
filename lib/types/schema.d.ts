@@ -8637,6 +8637,7 @@ export interface components {
       /** @enum {string} */
       brevtype:
         | 'INNVILGELSE'
+        | 'VEDTAK_11_18'
         | 'AVSLAG'
         | 'VARSEL_OM_BESTILLING'
         | 'FORHÅNDSVARSEL_BRUDD_AKTIVITETSPLIKT'
@@ -9826,6 +9827,29 @@ export interface components {
       virksomhetId: string;
       virksomhetNavn?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.FolkeregisterStatusDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gyldighetstidspunkt?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      opphoerstidspunkt?: string | null;
+      /** @enum {string} */
+      status:
+        | 'bosatt'
+        | 'utflyttet'
+        | 'forsvunnet'
+        | 'doed'
+        | 'opphort'
+        | 'foedselsregistrert'
+        | 'ikkeBosatt'
+        | 'midlertidig'
+        | 'inaktiv';
+    };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering': {
       kanBehandlesAutomatisk: boolean;
       'tilh\u00F8righetVurdering': components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.Tilh\u00F8righetVurdering'][];
@@ -9895,15 +9919,21 @@ export interface components {
         | null;
       opplysning: string;
       resultat: boolean;
-      utenlandsAddresserGrunnlag?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.UtenlandsAdresseGrunnlag'][]
-        | null;
+      utenlandsAddresserGrunnlag?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.UtenlandsAdresserGrunnlag'];
       vedtakImedlGrunnlag?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VedtakIMEDLGrunnlag'][]
         | null;
       vurdertPeriode: string;
     };
-    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.UtenlandsAdresseGrunnlag': {
+    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.UtenlandsAdresserGrunnlag': {
+      adresser?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.UtenlandskAdresseDto'][]
+        | null;
+      personStatus?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.FolkeregisterStatusDto'][]
+        | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.UtenlandskAdresseDto': {
       adresseNavn?: string | null;
       /** @enum {string|null} */
       adresseType?: 'KONTAKT_ADRESSE' | 'OPPHOLDS_ADRESSE' | 'BOSTEDS_ADRESSE' | null;
