@@ -36,6 +36,11 @@ export const ÅrsakTilRevurdering = ({ vurderingsbehovOgÅrsaker }: Props) => {
           {vurderingsbehovOgÅrsaker.map((vurderingsbehovOgÅrsak, index) => {
             const opprettetTid = formaterDatoForFrontend(vurderingsbehovOgÅrsak.opprettet ?? '');
 
+            const årsakTilOpprettelseTekst = mapTilÅrsakTilOpprettelseTilTekst(vurderingsbehovOgÅrsak.årsak);
+            const erManueltKansellert =
+              vurderingsbehovOgÅrsak.vurderingsbehov.some((v) => v.type === 'REVURDERING_KANSELLERT') &&
+              årsakTilOpprettelseTekst === 'Manuell opprettelse';
+
             return (
               <Box key={index}>
                 <HStack gap={'2'} align={'end'}>
@@ -45,7 +50,9 @@ export const ÅrsakTilRevurdering = ({ vurderingsbehovOgÅrsaker }: Props) => {
                       .join(', ')}
                   </Label>
                   <Detail textColor={'subtle'}>
-                    {mapTilÅrsakTilOpprettelseTilTekst(vurderingsbehovOgÅrsak.årsak)} {opprettetTid}
+                    {erManueltKansellert
+                      ? `Manuelt kansellert ${opprettetTid}`
+                      : `${årsakTilOpprettelseTekst} ${opprettetTid}`}
                   </Detail>
                 </HStack>
                 {vurderingsbehovOgÅrsak.beskrivelse && (
