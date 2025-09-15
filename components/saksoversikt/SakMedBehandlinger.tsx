@@ -25,6 +25,8 @@ const formaterBehandlingType = (behandlingtype: string) => {
       return 'Oppfølgingsoppgave';
     case 'aktivitetsplikt':
       return 'Aktivitetsplikt $ 11-7';
+    case 'aktivitetsplikt11-9':
+      return 'Aktivitetsplikt $ 11-9';
     default:
       return `Ukjent behandlingtype (${behandlingtype})`;
   }
@@ -64,7 +66,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
               size="small"
               onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
             >
-              Registrer brudd på aktivitetsplikten 11-7
+              Registrer brudd på aktivitetsplikten
             </Button>
           )}
 
