@@ -167,7 +167,7 @@ export const Yrkesskade = ({
               manuelt. Dersom denne yrkesskaden er aktuell for saken, kan den ikke behandles videre pr nå.
             </Alert>
           )}
-          <YrkesskadeVurderingTabell form={form} grunnlag={grunnlag} readOnly={readOnly} />
+          <YrkesskadeVurderingTabell form={form} readOnly={readOnly} />
           <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
         </>
       )}

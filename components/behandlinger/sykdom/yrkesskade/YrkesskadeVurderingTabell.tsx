@@ -5,16 +5,15 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { Checkbox, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { YrkesskadeFormFields, YrkesskadeSak } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
-import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   form: UseFormReturn<YrkesskadeFormFields>;
-  grunnlag: YrkesskadeVurderingGrunnlag;
   readOnly: boolean;
 }
 
-export const YrkesskadeVurderingTabell = ({ form }: Props) => {
+export const YrkesskadeVurderingTabell = ({ form, readOnly }: Props) => {
   let { fields: relevanteYrkesskadeSaker, update } = useFieldArray({
     name: 'relevanteYrkesskadeSaker',
     control: form.control,
@@ -52,6 +51,7 @@ export const YrkesskadeVurderingTabell = ({ form }: Props) => {
                   value={yrkesskade.ref}
                   checked={yrkesskade.erTilknyttet}
                   onChange={(e) => oppdaterTilknytning(index, e.target.checked, yrkesskade)}
+                  readOnly={readOnly}
                 >
                   Tilknytt yrkesskade til vurdering
                 </Checkbox>
@@ -65,6 +65,18 @@ export const YrkesskadeVurderingTabell = ({ form }: Props) => {
                   <DateInputWrapper
                     name={`relevanteYrkesskadeSaker.${index}.manuellYrkesskadeDato`}
                     control={form.control}
+                    readOnly={!yrkesskade.erTilknyttet || readOnly}
+                    rules={{
+                      validate: (value) => {
+                        if (!yrkesskade.erTilknyttet) {
+                          return;
+                        } else if (!value) {
+                          return 'Du må angi dato for yrkesskade';
+                        }
+                        return validerDato(value as string);
+                      },
+                    }}
+                    hideLabel={true}
                   />
                 )}
               </Table.DataCell>
