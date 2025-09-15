@@ -206,6 +206,8 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Oppfølgingsoppgave';
     case 'AKTIVITETSPLIKT':
       return 'Aktivitetsplikt';
+    case 'AKTIVITETSPLIKT_11_9':
+      return { label: 'Aktivitetsplikt 11-9', value: 'AKTIVITETSPLIKT_11_9' };
   }
   exhaustiveCheck(behandlingsType);
 }

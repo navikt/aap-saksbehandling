@@ -1,6 +1,7 @@
 import {
   AvreserverOppgaveDto,
   Enhet,
+  EnhetSynkroniseringOppgave,
   Kø,
   Markering,
   NesteOppgaveRequestBody,
@@ -76,6 +77,10 @@ export const hentMineOppgaver = async () => {
 export async function hentEnheter() {
   const url = `${oppgaveApiBaseURL}/enheter`;
   return await apiFetch<Array<Enhet>>(url, oppgaveApiScope, 'GET');
+}
+export async function synkroniserEnhetPåOppgave(data: EnhetSynkroniseringOppgave) {
+  const url = `${oppgaveApiBaseURL}/synkroniser-enhet-paa-oppgave`;
+  return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { oppgaveId: data.oppgaveId });
 }
 export async function oppgaveSøk(
   avklaringsbehovKoder: OppgaveAvklaringsbehovKode[],
