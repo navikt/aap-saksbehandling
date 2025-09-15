@@ -2,16 +2,17 @@
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag, YrkesskadeVurderingResponse } from 'lib/types/types';
-import { Alert, Checkbox, Table } from '@navikt/ds-react';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
+import { Alert } from '@navikt/ds-react';
 import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { TableStyled } from 'components/tablestyled/TableStyled';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { FormEvent } from 'react';
+import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { parse } from 'date-fns';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -21,16 +22,25 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface FormFields {
+export interface YrkesskadeMedSkadeDatoFormFields {
   begrunnelse: string;
   erÅrsakssammenheng: string;
   relevanteSaker?: string[];
+  relevanteYrkesskadeSaker?: YrkesskadeMedSkadeDatoSak[];
   andelAvNedsettelsen?: number;
 }
+export interface YrkesskadeMedSkadeDatoSak {
+  ref: string;
+  skadedato?: string | null;
+  manuellYrkesskadeDato?: string | null;
+  saksnummer?: number | null;
+  erTilknyttet?: boolean;
+  kilde: string;
+}
 
-type DraftFormFields = Partial<FormFields>;
+type DraftFormFields = Partial<YrkesskadeMedSkadeDatoFormFields>;
 
-export const Yrkesskade = ({
+export const YrkesskadeMedManuellYrkesskadeDato = ({
   grunnlag,
   behandlingVersjon,
   behandlingsReferanse,
@@ -43,15 +53,13 @@ export const Yrkesskade = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.YRKESSKADE_KODE, initialMellomlagretVurdering);
 
-  const vurderingerString = grunnlag?.yrkesskadeVurdering;
-
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(vurderingerString);
+    : mapVurderingToDraftFormFields(grunnlag);
 
   const yrkesskadeManglerSkadedato = grunnlag.opplysninger.innhentedeYrkesskader.find((ys) => !ys.skadedato);
 
-  const { form, formFields } = useConfigForm<FormFields>(
+  const { form, formFields } = useConfigForm<YrkesskadeMedSkadeDatoFormFields>(
     {
       begrunnelse: {
         type: 'textarea',
@@ -67,10 +75,18 @@ export const Yrkesskade = ({
         rules: { required: 'Du må svare på om det finnes en årsakssammenheng' },
       },
       relevanteSaker: {
+        //TODO: deprecated
         type: 'checkbox_nested',
         label: 'Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.',
         defaultValue: grunnlag.yrkesskadeVurdering?.relevanteSaker,
         rules: { required: 'Du må velge minst én yrkesskade' },
+      },
+      relevanteYrkesskadeSaker: {
+        type: 'fieldArray',
+        defaultValue: defaultValues.relevanteYrkesskadeSaker?.map((sak) => ({
+          ...sak,
+          manuellYrkesskadeDato: sak.manuellYrkesskadeDato ? formaterDatoForFrontend(sak.manuellYrkesskadeDato) : null,
+        })),
       },
       andelAvNedsettelsen: {
         type: 'text',
@@ -104,7 +120,14 @@ export const Yrkesskade = ({
               andelAvNedsettelsen: data?.andelAvNedsettelsen,
               relevanteSaker: data.relevanteSaker || [],
               relevanteYrkesskadeSaker:
-                data.relevanteSaker?.map((s) => ({ referanse: s, manuellYrkesskadeDato: null })) || [],
+                data.relevanteYrkesskadeSaker
+                  ?.filter((sak) => sak.erTilknyttet)
+                  .map((s) => ({
+                    referanse: s.ref,
+                    manuellYrkesskadeDato: s.manuellYrkesskadeDato
+                      ? formaterDatoForBackend(parse(s.manuellYrkesskadeDato, 'dd.MM.yyyy', new Date()))
+                      : null,
+                  })) || [],
             },
           },
           behandlingVersjon: behandlingVersjon,
@@ -130,11 +153,7 @@ export const Yrkesskade = ({
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
-          form.reset(
-            grunnlag?.yrkesskadeVurdering
-              ? mapVurderingToDraftFormFields(grunnlag.yrkesskadeVurdering)
-              : emptyDraftFormFields()
-          );
+          form.reset(grunnlag?.yrkesskadeVurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields());
         });
       }}
       readOnly={readOnly}
@@ -149,36 +168,7 @@ export const Yrkesskade = ({
               manuelt. Dersom denne yrkesskaden er aktuell for saken, kan den ikke behandles videre pr nå.
             </Alert>
           )}
-          <FormField form={form} formField={formFields.relevanteSaker}>
-            <TableStyled>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell textSize={'small'}>Tilknytt yrkesskade</Table.HeaderCell>
-                  <Table.HeaderCell textSize={'small'}>Saksnummer</Table.HeaderCell>
-                  <Table.HeaderCell textSize={'small'}>Kilde</Table.HeaderCell>
-                  <Table.HeaderCell textSize={'small'}>Skadedato</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              {grunnlag.opplysninger.innhentedeYrkesskader.length > 0 && (
-                <Table.Body>
-                  {grunnlag.opplysninger.innhentedeYrkesskader.map((yrkesskade) => (
-                    <Table.Row key={yrkesskade.ref}>
-                      <Table.DataCell textSize={'small'}>
-                        <Checkbox size={'small'} hideLabel value={yrkesskade.ref}>
-                          Tilknytt yrkesskade til vurdering
-                        </Checkbox>
-                      </Table.DataCell>
-                      <Table.DataCell textSize={'small'}>{yrkesskade.saksnummer}</Table.DataCell>
-                      <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
-                      <Table.DataCell textSize={'small'}>
-                        {yrkesskade.skadedato ? formaterDatoForFrontend(yrkesskade.skadedato) : 'Ukjent'}
-                      </Table.DataCell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              )}
-            </TableStyled>
-          </FormField>
+          <YrkesskadeVurderingTabell form={form} readOnly={readOnly} />
           <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
         </>
       )}
@@ -186,12 +176,13 @@ export const Yrkesskade = ({
   );
 };
 
-function mapVurderingToDraftFormFields(vurdering?: YrkesskadeVurderingResponse): DraftFormFields {
+function mapVurderingToDraftFormFields(grunnlag?: YrkesskadeVurderingGrunnlag): DraftFormFields {
   return {
-    begrunnelse: vurdering?.begrunnelse,
-    erÅrsakssammenheng: getJaNeiEllerUndefined(vurdering?.erÅrsakssammenheng),
-    relevanteSaker: vurdering?.relevanteSaker,
-    andelAvNedsettelsen: vurdering?.andelAvNedsettelsen ?? undefined,
+    begrunnelse: grunnlag?.yrkesskadeVurdering?.begrunnelse,
+    erÅrsakssammenheng: getJaNeiEllerUndefined(grunnlag?.yrkesskadeVurdering?.erÅrsakssammenheng),
+    relevanteSaker: grunnlag?.yrkesskadeVurdering?.relevanteSaker,
+    relevanteYrkesskadeSaker: hentDefaultYrkesskadesakerFraVurderingerEllerGrunnlag(grunnlag),
+    andelAvNedsettelsen: grunnlag?.yrkesskadeVurdering?.andelAvNedsettelsen ?? undefined,
   };
 }
 
@@ -200,6 +191,24 @@ function emptyDraftFormFields(): DraftFormFields {
     begrunnelse: '',
     erÅrsakssammenheng: '',
     relevanteSaker: [],
+    relevanteYrkesskadeSaker: [],
     andelAvNedsettelsen: undefined,
   };
+}
+
+function hentDefaultYrkesskadesakerFraVurderingerEllerGrunnlag(
+  grunnlag?: YrkesskadeVurderingGrunnlag
+): YrkesskadeMedSkadeDatoSak[] {
+  return (
+    grunnlag?.opplysninger?.innhentedeYrkesskader?.map((skade) => {
+      const alleredeTilknyttetYrkesskade = grunnlag?.yrkesskadeVurdering?.relevanteYrkesskadeSaker.find(
+        (e) => e.referanse === skade.ref
+      );
+      return {
+        ...skade,
+        erTilknyttet: !!alleredeTilknyttetYrkesskade,
+        manuellYrkesskadeDato: alleredeTilknyttetYrkesskade?.manuellYrkesskadeDato,
+      };
+    }) || []
+  );
 }

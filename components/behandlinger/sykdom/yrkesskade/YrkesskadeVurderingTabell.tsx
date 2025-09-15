@@ -4,12 +4,15 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { Checkbox, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { YrkesskadeFormFields, YrkesskadeSak } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
+import {
+  YrkesskadeMedSkadeDatoFormFields,
+  YrkesskadeMedSkadeDatoSak,
+} from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedManuellYrkesskadeDato';
 
 interface Props {
-  form: UseFormReturn<YrkesskadeFormFields>;
+  form: UseFormReturn<YrkesskadeMedSkadeDatoFormFields>;
   readOnly: boolean;
 }
 
@@ -19,7 +22,7 @@ export const YrkesskadeVurderingTabell = ({ form, readOnly }: Props) => {
     control: form.control,
   });
 
-  function oppdaterTilknytning(index: number, erTilknyttet: boolean, yrkesskade: YrkesskadeSak) {
+  function oppdaterTilknytning(index: number, erTilknyttet: boolean, yrkesskade: YrkesskadeMedSkadeDatoSak) {
     update(index, {
       ref: yrkesskade.ref,
       kilde: yrkesskade.kilde,
