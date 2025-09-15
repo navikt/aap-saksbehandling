@@ -69,6 +69,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Revurder meldeplikt rimelig grunn';
     case 'AKTIVITETSPLIKT_11_7':
       return 'Aktivitetsplikt $ 11-7';
+    case 'AKTIVITETSPLIKT_11_9':
+      return 'Aktivitetsplikt $ 11-9';
     case 'EFFEKTUER_AKTIVITETSPLIKT':
       return 'Effektuer aktivitetsplikt';
     case 'OVERGANG_UFORE':

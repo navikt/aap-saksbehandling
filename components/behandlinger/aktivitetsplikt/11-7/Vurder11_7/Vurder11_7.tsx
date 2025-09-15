@@ -58,6 +58,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
           behov: {
             behovstype: Behovstype.VURDER_BRUDD_11_7_KODE,
             aktivitetsplikt11_7Vurdering: {
+              skalIgnorereVarselFrist: false, //TODO: Fiks denne
               erOppfylt: data.erOppfylt === JaEllerNei.Ja,
               utfall: data.erOppfylt === JaEllerNei.Ja ? null : data.utfall,
               begrunnelse: data.begrunnelse,
