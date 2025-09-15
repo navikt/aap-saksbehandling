@@ -30,6 +30,7 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsReferanse, stegData
   }
 
   return isDev() ? (
+    // TODO: rydd opp her etter etter prodsetting
     <YrkesskadeMedManuellYrkesskadeDato
       grunnlag={yrkesskadeVurderingGrunnlag.data}
       readOnly={stegData.readOnly || !yrkesskadeVurderingGrunnlag.data.harTilgangTilÅSaksbehandle}
