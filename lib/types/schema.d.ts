@@ -3922,6 +3922,7 @@ export interface components {
       skalFinnesIPDL: boolean;
     };
     'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7GrunnlagDto': {
+      'harSendtForh\u00E5ndsvarsel': boolean;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'];
@@ -3934,6 +3935,7 @@ export interface components {
        * @example 2025-04-01
        */
       gjelderFra: string;
+      skalIgnorereVarselFrist: boolean;
       /** @enum {string|null} */
       utfall?: 'STANS' | 'OPPHØR' | null;
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
@@ -4027,6 +4029,7 @@ export interface components {
       /** @enum {string} */
       definisjon:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4098,6 +4101,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4166,6 +4170,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4234,6 +4239,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4302,6 +4308,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4370,6 +4377,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4438,6 +4446,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4507,6 +4516,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4575,6 +4585,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4642,6 +4653,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4710,6 +4722,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4778,6 +4791,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4846,6 +4860,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4914,6 +4929,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -4982,6 +4998,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5050,6 +5067,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5118,6 +5136,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5186,6 +5205,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5254,6 +5274,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5322,6 +5343,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5390,6 +5412,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5458,6 +5481,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5574,6 +5598,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.UtenlandskVideref\u00F8ringL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VentP\u00E5Oppf\u00F8lgingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VenteP\u00E5FristEffektuer11_7L\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VenteP\u00E5FristForh\u00E5ndsvarselAktivitetsplikt11_7L\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VenteP\u00E5FristForh\u00E5ndsvarselKlageFormkravL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VenteP\u00E5KlageimplementasjonL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderBrudd11_7L\u00F8sning']
@@ -5585,6 +5610,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5653,6 +5679,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5721,6 +5748,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5788,6 +5816,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5856,6 +5885,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5924,6 +5954,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -5992,6 +6023,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6060,6 +6092,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6128,6 +6161,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6195,6 +6229,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6262,6 +6297,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6335,6 +6371,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6444,6 +6481,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6512,6 +6550,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6580,6 +6619,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6647,6 +6687,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6715,6 +6756,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6783,6 +6825,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6850,6 +6893,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6917,6 +6961,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -6989,6 +7034,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7061,6 +7107,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7133,6 +7180,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7205,6 +7253,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7273,6 +7322,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7341,6 +7391,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7410,6 +7461,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7477,6 +7529,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7544,6 +7597,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7611,6 +7665,75 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5056'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004';
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VenteP\u00E5FristForh\u00E5ndsvarselAktivitetsplikt11_7L\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7678,6 +7801,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7745,6 +7869,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7813,6 +7938,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7880,6 +8006,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -7948,6 +8075,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -8016,6 +8144,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -8084,6 +8213,7 @@ export interface components {
       /** @enum {string} */
       behovstype:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -8569,6 +8699,7 @@ export interface components {
       /** @enum {string} */
       avklaringsbehovKode:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -9358,6 +9489,7 @@ export interface components {
       /** @enum {string} */
       avklaringsbehovkode:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'
@@ -9976,6 +10108,7 @@ export interface components {
        * @example 2025-04-01
        */
       gjelderFra: string;
+      skalIgnorereVarselFrist: boolean;
       /** @enum {string|null} */
       utfall?: 'STANS' | 'OPPHØR' | null;
     };
@@ -11449,6 +11582,7 @@ export interface components {
       /** @enum {string} */
       kode:
         | '4101'
+        | '4102'
         | '5001'
         | '5002'
         | '5003'

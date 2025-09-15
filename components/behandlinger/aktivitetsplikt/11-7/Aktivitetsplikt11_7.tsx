@@ -5,6 +5,7 @@ import { getStegSomSkalVises } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { Vurder11_7MedDataFetching } from './Vurder11_7/Vurder11_7MedDataFetching';
+import { BrevKortMedDataFetching } from 'components/brev/BrevKortMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -26,6 +27,7 @@ export const Aktivitetsplikt11_7 = async ({ behandlingsreferanse }: Props) => {
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={behandlingVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
+      brevForhåndsvisning={flyt.data.aktivGruppe !== 'AKTIVITETSPLIKT_11_7'}
     >
       {stegSomSkalVises.includes('VURDER_AKTIVITETSPLIKT_11_7') && (
         <StegSuspense>
@@ -35,6 +37,14 @@ export const Aktivitetsplikt11_7 = async ({ behandlingsreferanse }: Props) => {
             readOnly={flyt.data.visning.saksbehandlerReadOnly}
           />
         </StegSuspense>
+      )}
+      {flyt.data.visning.visBrevkort && flyt.data.aktivGruppe === 'AKTIVITETSPLIKT_11_7' && (
+        <BrevKortMedDataFetching
+          behandlingReferanse={behandlingsreferanse}
+          visAvbryt={false}
+          behandlingVersjon={behandlingVersjon}
+          aktivtSteg={flyt.data.aktivtSteg}
+        />
       )}
     </GruppeSteg>
   );
