@@ -26,6 +26,8 @@ export function formaterUtfall(utfall: KabalUtfall): string {
       return 'Innstilling avvist';
     case 'MEDHOLD_ETTER_FVL_35':
       return 'Medhold etter forvaltningsloven § 35';
+    case 'HENLAGT':
+      return 'Henlagt';
     default:
       return 'Ukjent utfall';
   }

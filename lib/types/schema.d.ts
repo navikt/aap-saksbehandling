@@ -9625,6 +9625,7 @@ export interface components {
         | 'INNSTILLING_STADFESTELSE'
         | 'INNSTILLING_AVVIST'
         | 'MEDHOLD_ETTER_FVL_35'
+        | 'HENLAGT'
         | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansGrunnlagDto': {
@@ -11651,6 +11652,7 @@ export interface components {
         | 'DELVIS_MEDHOLD'
         | 'INNSTILLING_STADFESTELSE'
         | 'INNSTILLING_AVVIST'
+        | 'HENLAGT'
         | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnkebehandlingAvsluttetDetaljer': {
@@ -11670,7 +11672,8 @@ export interface components {
         | 'STADFESTELSE'
         | 'UGUNST'
         | 'AVVIST'
-        | 'HEVET';
+        | 'HEVET'
+        | 'HENLAGT';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnkebehandlingOpprettetDetaljer': {
       /**
@@ -11750,7 +11753,16 @@ export interface components {
       avsluttet: string;
       journalpostReferanser: string[];
       /** @enum {string} */
-      utfall: 'TRUKKET' | 'RETUR' | 'OPPHEVET' | 'MEDHOLD' | 'DELVIS_MEDHOLD' | 'STADFESTELSE' | 'UGUNST' | 'AVVIST';
+      utfall:
+        | 'TRUKKET'
+        | 'RETUR'
+        | 'OPPHEVET'
+        | 'MEDHOLD'
+        | 'DELVIS_MEDHOLD'
+        | 'STADFESTELSE'
+        | 'UGUNST'
+        | 'AVVIST'
+        | 'HENLAGT';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.BehandlingFeilregistrertDetaljer': {
       /**
@@ -11831,7 +11843,16 @@ export interface components {
       avsluttet: string;
       journalpostReferanser: string[];
       /** @enum {string} */
-      utfall: 'TRUKKET' | 'RETUR' | 'OPPHEVET' | 'MEDHOLD' | 'DELVIS_MEDHOLD' | 'STADFESTELSE' | 'UGUNST' | 'AVVIST';
+      utfall:
+        | 'TRUKKET'
+        | 'RETUR'
+        | 'OPPHEVET'
+        | 'MEDHOLD'
+        | 'DELVIS_MEDHOLD'
+        | 'STADFESTELSE'
+        | 'UGUNST'
+        | 'AVVIST'
+        | 'HENLAGT';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurdering': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurderingV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurderingV0': {
