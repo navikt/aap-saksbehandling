@@ -9,8 +9,11 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-//import { formaterDatoForBackend } from '../../../../lib/utils/date';
-//import { parse } from 'date-fns';
+import { TidligereVurderinger } from '../../../tidligerevurderinger/TidligereVurderinger';
+import { formaterDatoForFrontend } from '../../../../lib/utils/date';
+import { formaterDatoForBackend } from '../../../../lib/utils/date';
+import { parse } from 'date-fns';
+import { deepEqual } from '../../../tidligerevurderinger/TidligereVurderingerUtils';
 
 interface Props {
   behandlingVersjon: number;
@@ -83,7 +86,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
               dokumenterBruktIVurdering: [],
               harRettPå: data.erOppfylt === JaEllerNei.Ja,
               grunn: data.grunn,
-              //vurderingGjelderFra: formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date())),
+              vurderingGjelderFra: formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date())),
             },
           },
           referanse: behandlingsReferanse,
@@ -113,6 +116,16 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       }}
       readOnly={readOnly}
     >
+      {!!historiskeVurderinger?.length && (
+        <TidligereVurderinger
+          data={historiskeVurderinger}
+          buildFelter={byggFelter}
+          //getErGjeldende={(v) => grunnlag?.vurdering..some((gjeldendeVurdering) => deepEqual(v, gjeldendeVurdering))}
+          getFomDato={(v) => v.vurderingGjelderFra}
+          getVurdertAvIdent={(v) => v.vurdertAv.ident}
+          getVurdertDato={(v) => v.vurdertAv.dato}
+        />
+      )}
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.gjelderFra} className="gjelderFra" />
       <FormField form={form} formField={formFields.erOppfylt} horizontalRadio />
@@ -128,6 +141,7 @@ function mapVurderingToDraftFormFields(vurdering: SykepengeerstatningGrunnlag['v
     begrunnelse: vurdering?.begrunnelse,
     erOppfylt: getJaNeiEllerUndefined(vurdering?.harRettPå),
     grunn: vurdering?.grunn,
+    gjelderFra: formaterDatoForFrontend(vurdering?.vurderingGjelderFra),
   };
 }
 
@@ -160,5 +174,24 @@ const grunnOptions: ValuePair<NonNullable<SykepengeerstatningVurderingGrunn>>[] 
     label:
       'Brukeren har mottatt arbeidsavklaringspenger og deretter foreldrepenger og innen seks måneder etter foreldrepengene opphørte, blir arbeidsufør på grunn av sykdom eller skade, se § 8-2 andre ledd',
     value: 'FORELDREPENGER_INNEN_SEKS_MND',
+  },
+];
+
+const byggFelter = (grunnlag: SykepengeerstatningGrunnlag['vurdering']): ValuePair[] => [
+  {
+    label: 'Vilkårsvurdering',
+    value: grunnlag?.begrunnelse ? 'Ja' : 'Nei',
+  },
+  {
+    label: 'Gjelder fra',
+    value: `${grunnlag.vurderingGjelderFra ? formaterDatoForFrontend(grunnlag.vurderingGjelderFra) : ''}`,
+  },
+  {
+    label: 'Har brukeren krav på sykepengeerstatning?',
+    value: grunnlag?.harRettPå ? 'Ja' : 'Nei',
+  },
+  {
+    label: 'Grunn',
+    value: grunnOptions.find((option) => option.value === grunnlag?.grunn)?.label ?? '',
   },
 ];
