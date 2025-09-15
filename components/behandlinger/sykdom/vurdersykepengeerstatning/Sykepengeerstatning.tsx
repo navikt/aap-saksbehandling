@@ -9,6 +9,8 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+//import { formaterDatoForBackend } from '../../../../lib/utils/date';
+//import { parse } from 'date-fns';
 
 interface Props {
   behandlingVersjon: number;
@@ -20,6 +22,7 @@ interface Props {
 interface FormFields {
   begrunnelse: string;
   erOppfylt: string;
+  gjelderFra?: string;
   grunn?: SykepengeerstatningVurderingGrunn;
 }
 
@@ -44,6 +47,11 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
         label: 'Vilkårsvurdering',
         rules: { required: 'Du må begrunne avgjørelsen din.' },
         defaultValue: defaultValues?.begrunnelse,
+      },
+      gjelderFra: {
+        type: 'date_input',
+        label: 'Gjelder fra',
+        rules: { required: 'Du må sette dato' },
       },
       erOppfylt: {
         type: 'radio',
@@ -75,6 +83,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
               dokumenterBruktIVurdering: [],
               harRettPå: data.erOppfylt === JaEllerNei.Ja,
               grunn: data.grunn,
+              //vurderingGjelderFra: formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date())),
             },
           },
           referanse: behandlingsReferanse,
@@ -105,6 +114,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       readOnly={readOnly}
     >
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+      <FormField form={form} formField={formFields.gjelderFra} className="gjelderFra" />
       <FormField form={form} formField={formFields.erOppfylt} horizontalRadio />
       {form.watch('erOppfylt') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.grunn} className={'radio'} />
