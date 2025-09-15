@@ -2,7 +2,7 @@ import { Box, Page as AkselPage } from '@navikt/ds-react';
 
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { OpprettAktivitetsPliktBrudd } from 'components/saksoversikt/opprettAktivitetsPliktBrudd/OpprettAktivitetsPlikt';
+import { OpprettAktivitetspliktBehandling } from 'components/saksoversikt/opprettAktivitetspliktBehandling/OpprettAktivitetspliktBehandling';
 
 export default async function Page(props: { params: Promise<{ saksId: string }> }) {
   const params = await props.params;
@@ -13,7 +13,7 @@ export default async function Page(props: { params: Promise<{ saksId: string }> 
       <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
 
       <Box marginBlock="8">
-        <OpprettAktivitetsPliktBrudd sak={sak} />
+        <OpprettAktivitetspliktBehandling sak={sak} />
       </Box>
     </AkselPage>
   );

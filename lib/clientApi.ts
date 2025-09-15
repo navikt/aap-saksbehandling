@@ -14,6 +14,7 @@ import {
   MellomlagretVurderingResponse,
   NavEnheterResponse,
   NavEnhetRequest,
+  OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
   SaksInfo,
@@ -87,8 +88,8 @@ export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandlin
   return clientFetch(`${BASE_URL}/api/behandling/los-behov/`, 'POST', avklaringsBehov);
 }
 
-export function clientOpprettAktivitetsplikt(saksnummer: string) {
-  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling`, 'POST');
+export function clientOpprettAktivitetsplikt(saksnummer: string, data: OpprettAktivitetspliktBehandlingDto) {
+  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling`, 'POST', data);
 }
 
 export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {

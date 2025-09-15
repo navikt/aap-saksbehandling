@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
-import { SaksInfo } from 'lib/types/types';
+import { OpprettAktivitetspliktBehandlingDto, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { clientOpprettAktivitetsplikt } from 'lib/clientApi';
 import { useState } from 'react';
@@ -16,14 +16,13 @@ export interface AktivitetspliktbruddFormFields {
   aktivitetspliktBruddType: 'AKTIVITETSPLIKT_11_7';
 }
 
-export const OpprettAktivitetsPliktBrudd = ({ sak }: { sak: SaksInfo }) => {
+export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function postOpprettAktivitetspliktBrudd(data: any) {
-    const res = await clientOpprettAktivitetsplikt(sak.saksnummer);
+  async function postOpprettAktivitetspliktBrudd(data: OpprettAktivitetspliktBehandlingDto) {
+    const res = await clientOpprettAktivitetsplikt(sak.saksnummer, data);
     setIsLoading(true);
     if (isSuccess(res)) {
       router.push(`/saksbehandling/sak/${sak.saksnummer}`);
@@ -42,6 +41,10 @@ export const OpprettAktivitetsPliktBrudd = ({ sak }: { sak: SaksInfo }) => {
           label: '§ 11-7',
           value: 'AKTIVITETSPLIKT_11_7',
         },
+        {
+          label: '§ 11-9',
+          value: 'AKTIVITETSPLIKT_11_9',
+        },
       ],
       rules: { required: 'Velg ' },
     },
@@ -55,7 +58,9 @@ export const OpprettAktivitetsPliktBrudd = ({ sak }: { sak: SaksInfo }) => {
     <Page.Block width="md">
       <form
         onSubmit={(event) => {
-          form.handleSubmit((data) => postOpprettAktivitetspliktBrudd(data))(event);
+          form.handleSubmit((data) =>
+            postOpprettAktivitetspliktBrudd({ vurderingsbehov: data.aktivitetspliktBruddType })
+          )(event);
         }}
       >
         <VStack gap="4">
