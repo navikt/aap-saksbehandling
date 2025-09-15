@@ -375,7 +375,8 @@ export interface paths {
             | 'Klage'
             | 'SvarFraAndreinstans'
             | 'OppfølgingsBehandling'
-            | 'Aktivitetsplikt';
+            | 'Aktivitetsplikt'
+            | 'Aktivitetsplikt11_9';
         };
       };
       responses: {
@@ -9306,7 +9307,8 @@ export interface components {
         | 'Klage'
         | 'SvarFraAndreinstans'
         | 'OppfølgingsBehandling'
-        | 'Aktivitetsplikt';
+        | 'Aktivitetsplikt'
+        | 'Aktivitetsplikt11_9';
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
@@ -9351,6 +9353,7 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'OVERGANG_UFORE'
         | 'OVERGANG_ARBEID'
@@ -9618,6 +9621,7 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'OVERGANG_UFORE'
         | 'OVERGANG_ARBEID'
@@ -9670,6 +9674,7 @@ export interface components {
             | 'MOTTATT_KABAL_HENDELSE'
             | 'OPPFØLGINGSOPPGAVE'
             | 'AKTIVITETSPLIKT_11_7'
+            | 'AKTIVITETSPLIKT_11_9'
             | 'EFFEKTUER_AKTIVITETSPLIKT'
             | 'OVERGANG_UFORE'
             | 'OVERGANG_ARBEID'
@@ -11021,7 +11026,8 @@ export interface components {
         | 'IVERKSETT_KONSEKVENS'
         | 'START_OPPFØLGINGSBEHANDLING'
         | 'AVKLAR_OPPPFØLGING'
-        | 'AKTIVITETSPLIKT_11_7';
+        | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9';
       /** @enum {string} */
       aktivtSteg:
         | 'START_BEHANDLING'
@@ -11084,6 +11090,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'VURDER_AKTIVITETSPLIKT_11_7'
         | 'IVERKSETT_BRUDD'
+        | 'VURDER_AKTIVITETSPLIKT_11_9'
         | 'UDEFINERT';
       aktivtStegDefinisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'][];
       /** Format: int64 */
@@ -11127,6 +11134,7 @@ export interface components {
         | 'START_OPPFØLGINGSBEHANDLING'
         | 'AVKLAR_OPPPFØLGING'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
         | null;
       /** @enum {string|null} */
       vurdertSteg?:
@@ -11190,6 +11198,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'VURDER_AKTIVITETSPLIKT_11_7'
         | 'IVERKSETT_BRUDD'
+        | 'VURDER_AKTIVITETSPLIKT_11_9'
         | 'UDEFINERT'
         | null;
     };
@@ -11265,6 +11274,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'VURDER_AKTIVITETSPLIKT_11_7'
         | 'IVERKSETT_BRUDD'
+        | 'VURDER_AKTIVITETSPLIKT_11_9'
         | 'UDEFINERT';
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
       /**
@@ -11292,7 +11302,8 @@ export interface components {
         | 'Klage'
         | 'SvarFraAndreinstans'
         | 'OppfølgingsBehandling'
-        | 'Aktivitetsplikt';
+        | 'Aktivitetsplikt'
+        | 'Aktivitetsplikt11_9';
       /**
        * Format: date
        * @example 2025-04-01
@@ -11365,7 +11376,8 @@ export interface components {
         | 'IVERKSETT_KONSEKVENS'
         | 'START_OPPFØLGINGSBEHANDLING'
         | 'AVKLAR_OPPPFØLGING'
-        | 'AKTIVITETSPLIKT_11_7';
+        | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9';
     };
     'no.nav.aap.behandlingsflyt.flyt.FlytSteg': {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
@@ -11431,6 +11443,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'VURDER_AKTIVITETSPLIKT_11_7'
         | 'IVERKSETT_BRUDD'
+        | 'VURDER_AKTIVITETSPLIKT_11_9'
         | 'UDEFINERT';
       'vilk\u00E5rDTO'?: components['schemas']['no.nav.aap.behandlingsflyt.flyt.Vilk\u00E5rDTO'];
     };
@@ -11560,7 +11573,8 @@ export interface components {
         | 'Klage'
         | 'SvarFraAndreinstans'
         | 'OppfølgingsBehandling'
-        | 'Aktivitetsplikt';
+        | 'Aktivitetsplikt'
+        | 'Aktivitetsplikt11_9';
       visBeslutterKort: boolean;
       visBrevkort: boolean;
       visKvalitetssikringKort: boolean;
@@ -11718,6 +11732,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'VURDER_AKTIVITETSPLIKT_11_7'
         | 'IVERKSETT_BRUDD'
+        | 'VURDER_AKTIVITETSPLIKT_11_9'
         | 'UDEFINERT';
       /** @enum {string} */
       type: 'MANUELT_PÅKREVD' | 'MANUELT_FRIVILLIG' | 'BREV' | 'BREV_VENTEPUNKT' | 'VENTEPUNKT' | 'OVERSTYR';
@@ -11851,6 +11866,7 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
         | 'OVERGANG_UFORE'
         | 'OVERGANG_ARBEID'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
@@ -12024,6 +12040,7 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
         | 'OVERGANG_UFORE'
         | 'OVERGANG_ARBEID'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
@@ -12091,6 +12108,7 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
         | 'OVERGANG_UFORE'
         | 'OVERGANG_ARBEID'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
@@ -12144,6 +12162,7 @@ export interface components {
         | 'HELHETLIG_VURDERING'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
         | 'OVERGANG_UFORE'
         | 'OVERGANG_ARBEID'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
@@ -12265,6 +12284,7 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'OVERGANG_UFORE'
         | 'OVERGANG_ARBEID';
@@ -12375,6 +12395,7 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'OVERGANG_UFORE'
         | 'OVERGANG_ARBEID'
@@ -12430,6 +12451,7 @@ export interface components {
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
         | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'OVERGANG_UFORE'
         | 'OVERGANG_ARBEID'

@@ -5,7 +5,7 @@ import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/op
 const behovskodeMap = {
   // Behandlingsflyt
   '4101': '§ 11-7 Aktivitetsplikt',
-  '4102': 'Venter på uttalelse fra brukeren på aktivitetsplikt forhåndsvarsel',
+  '4102': 'Venter på uttalelse fra brukeren på forhåndsvarsel aktivitetsplikt § 11-7',
   '5001': '§ 11-14 Student',
   '5002': '§ 11-10 andre ledd. Perioder uten overholdt meldeplikt',
   '5003': '§ 11-5 Nedsatt arbeidsevne',
