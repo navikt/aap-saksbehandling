@@ -207,9 +207,9 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
     case 'OPPFØLGINGSBEHANDLING':
       return 'Oppfølgingsoppgave';
     case 'AKTIVITETSPLIKT':
-      return 'Aktivitetsplikt';
+      return 'Aktivitetsplikt § 11-7';
     case 'AKTIVITETSPLIKT_11_9':
-      return 'Aktivitetsplikt 11-9';
+      return 'Aktivitetsplikt § 11-9';
   }
   exhaustiveCheck(behandlingsType);
 }
@@ -244,6 +244,8 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Klage';
     case 'ENDRING_I_REGISTERDATA':
       return 'Endring i register';
+    case 'AKTIVITETSPLIKT':
+      return 'Aktivitetsplikt';
   }
 }
 
