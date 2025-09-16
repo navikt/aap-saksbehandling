@@ -12512,7 +12512,17 @@ export interface components {
       status: string;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SakPersoninfoDTO': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'd\u00F8dsdato'?: string | null;
       fnr: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'f\u00F8dselsdato'?: string | null;
       navn: string;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksinfoDTO': {
