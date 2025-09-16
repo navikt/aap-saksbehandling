@@ -570,6 +570,28 @@ describe('Oppgitte barn', () => {
     expect(screen.getByText('Forsørgeransvar opphører fra')).toBeInTheDocument();
   });
 
+  it('skal vise dato felt når man besvarer nei på fosterhjem så lenge det ikke er første vurdering', async () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+
+    await user.click(screen.getAllByRole('radio', { name: /ja/i })[0]);
+    await user.click(screen.getAllByRole('radio', { name: /ja/i })[1]);
+
+    await user.click(screen.getByRole('button', { name: 'Legg til vurdering' }));
+
+    const radioNos = screen.getAllByRole('radio', { name: /nei/i });
+    await user.click(radioNos[2]);
+
+    expect(screen.getByText('Forsørgeransvar opphører fra')).toBeInTheDocument();
+  });
+
   it('skal ikke vise dato felt når man besvarer nei på forsørgeransvar i første vurdering', async () => {
     render(
       <BarnetilleggVurdering
