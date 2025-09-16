@@ -35,10 +35,12 @@ export const OppgitteBarnVurderingFelterV2 = ({
     `barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.erFosterforelder`
   );
 
-  const skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt = harForeldreAnsvar === JaEllerNei.Nei && vurderingIndex !== 0;
+  const skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt =
+    (harForeldreAnsvar === JaEllerNei.Nei || erFosterforelder === JaEllerNei.Nei) && vurderingIndex !== 0;
 
   const skalSetteEnFraOgMedDato =
-    (harForeldreAnsvar === JaEllerNei.Nei && vurderingIndex !== 0) || harForeldreAnsvar === JaEllerNei.Ja;
+    ((harForeldreAnsvar === JaEllerNei.Nei || erFosterforelder === JaEllerNei.Nei) && vurderingIndex !== 0) ||
+    harForeldreAnsvar === JaEllerNei.Ja;
 
   return (
     <div className={'flex-column'}>

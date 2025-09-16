@@ -28,6 +28,8 @@ export const oppgaveBehandlingstyper = Object.keys(
         return { label: 'Oppfølgingsoppgave', value: 'OPPFØLGINGSBEHANDLING' };
       case 'AKTIVITETSPLIKT':
         return { label: 'Aktivitetsplikt', value: 'AKTIVITETSPLIKT' };
+      case 'AKTIVITETSPLIKT_11_9':
+        return { label: 'Aktivitetsplikt 11-9', value: 'AKTIVITETSPLIKT_11_9' };
     }
     exhaustiveCheck(key);
   });

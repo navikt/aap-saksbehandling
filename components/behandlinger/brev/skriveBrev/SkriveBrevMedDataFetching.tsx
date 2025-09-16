@@ -46,7 +46,17 @@ export const SkriveBrevMedDataFetching = async ({
     isError(fullmektigGrunnlag) ||
     isError(aktivitetsplikt11_7Grunnlag)
   ) {
-    return <ApiException apiResponses={[refusjonGrunnlag, brevGrunnlag]} />;
+    return (
+      <ApiException
+        apiResponses={[
+          refusjonGrunnlag,
+          brevGrunnlag,
+          sykdomsvurderingBrevGrunnlag,
+          fullmektigGrunnlag,
+          aktivitetsplikt11_7Grunnlag,
+        ]}
+      />
+    );
   }
 
   const brev = brevGrunnlag.data.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');

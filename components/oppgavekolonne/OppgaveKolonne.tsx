@@ -29,6 +29,7 @@ import { AvklarOppfolgingsSteg } from 'components/behandlinger/oppfolgingsbehand
 import { Aktivitetsplikt11_7 } from 'components/behandlinger/aktivitetsplikt/11-7/Aktivitetsplikt11_7';
 import { KansellerRevurdering } from '../behandlinger/revurdering/kansellerVurdering/KansellerRevurdering';
 import { Lovvalg } from '../behandlinger/lovvalg/Lovvalg';
+import { Aktivitetsplikt11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Aktivitetsplikt11_9';
 
 interface Props {
   behandlingsReferanse: string;
@@ -92,6 +93,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       )}
       {/* Aktivitetsplikt */}
       {aktivGruppe === 'AKTIVITETSPLIKT_11_7' && <Aktivitetsplikt11_7 behandlingsreferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'AKTIVITETSPLIKT_11_9' && <Aktivitetsplikt11_9 behandlingsreferanse={behandlingsReferanse} />}
     </section>
   );
 };

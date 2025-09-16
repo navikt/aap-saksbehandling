@@ -39,7 +39,7 @@ export const OppgitteBarnVurderingV2 = ({
   const kanLeggeTilNyVurdering =
     form
       .watch(`barnetilleggVurderinger.${barnetilleggIndex}`)
-      .vurderinger.every((vurdering) => vurdering.harForeldreAnsvar !== JaEllerNei.Nei) && !readOnly;
+      ?.vurderinger?.every((vurdering) => vurdering.harForeldreAnsvar !== JaEllerNei.Nei) && !readOnly;
 
   return (
     <section className={`flex-column`}>

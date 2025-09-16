@@ -67,12 +67,15 @@ export const BarnetilleggVurdering = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.vurderteBarn, grunnlag.barnSomTrengerVurdering, behandlingPersonInfo);
 
-  const { form } = useConfigForm<BarnetilleggFormFields>({
-    barnetilleggVurderinger: {
-      type: 'fieldArray',
-      defaultValue: defaultValue.barnetilleggVurderinger,
+  const { form } = useConfigForm<BarnetilleggFormFields>(
+    {
+      barnetilleggVurderinger: {
+        type: 'fieldArray',
+        defaultValue: defaultValue.barnetilleggVurderinger,
+      },
     },
-  });
+    { shouldUnregister: true }
+  );
 
   const { fields: barnetilleggVurderinger } = useFieldArray({
     control: form.control,
