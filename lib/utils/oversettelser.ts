@@ -179,6 +179,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Avklar oppfølging';
     case 'AKTIVITETSPLIKT_11_7':
       return '§ 11-7 Aktivitetsplikt';
+    case 'AKTIVITETSPLIKT_11_9':
+      return '§ 11-9 Aktivitetsplikt';
     case 'UDEFINERT':
       return 'Udefinert';
     default:
