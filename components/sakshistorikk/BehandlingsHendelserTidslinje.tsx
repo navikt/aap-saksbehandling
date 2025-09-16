@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BehandlingsHistorikk } from 'lib/types/types';
 import { BehandlingsHendelse } from 'components/sakshistorikk/BehandlingsHendelse';
-import { Link, Process } from '@navikt/ds-react';
+import { BodyShort, Link, Process } from '@navikt/ds-react';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
 interface Props {
@@ -37,7 +37,9 @@ export const BehandlingsHendelserTidslinje = ({ hendelser, defaultKollapset }: P
                 style={{ border: '0', margin: '0', padding: '0', backgroundColor: 'white' }}
                 onClick={() => toggleCollapsed && toggleCollapsed()}
               >
-                {isCollapsed ? `Se all historikk i behandlingen` : `Skjul all historikk i behandlingen`}
+                <BodyShort size={'small'}>
+                  {isCollapsed ? `Se all historikk i behandlingen` : `Skjul all historikk i behandlingen`}
+                </BodyShort>
               </Link>
             </Process.Event>
           )}
