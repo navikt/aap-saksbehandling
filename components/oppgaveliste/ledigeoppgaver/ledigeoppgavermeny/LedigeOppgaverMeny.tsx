@@ -6,7 +6,6 @@ import { plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgav
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
-import { isDev } from '../../../../lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
@@ -54,15 +53,13 @@ export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal }: P
           </ActionMenu.Trigger>
           <ActionMenu.Content>
             <ActionMenu.Item onSelect={() => plukkOgGåTilOppgave(oppgave)}>Behandle</ActionMenu.Item>
-            {isDev() && (
-              <ActionMenu.Item
-                onSelect={async () => {
-                  await synkroniserEnhetPåOppgave(oppgave);
-                }}
-              >
-                Synkroniser enhet på oppgave
-              </ActionMenu.Item>
-            )}
+            <ActionMenu.Item
+              onSelect={async () => {
+                await synkroniserEnhetPåOppgave(oppgave);
+              }}
+            >
+              Synkroniser enhet
+            </ActionMenu.Item>
           </ActionMenu.Content>
         </ActionMenu>
       ) : (
