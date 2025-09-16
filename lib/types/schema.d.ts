@@ -99,7 +99,11 @@ export interface paths {
         };
         cookie?: never;
       };
-      requestBody?: never;
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.OpprettAktivitetspliktBehandlingDto'];
+        };
+      };
       responses: {
         /** @description OK */
         200: {
@@ -3923,6 +3927,7 @@ export interface components {
       skalFinnesIPDL: boolean;
     };
     'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7GrunnlagDto': {
+      'harSendtForh\u00E5ndsvarsel': boolean;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'];
@@ -3935,6 +3940,7 @@ export interface components {
        * @example 2025-04-01
        */
       gjelderFra: string;
+      skalIgnorereVarselFrist: boolean;
       /** @enum {string|null} */
       utfall?: 'STANS' | 'OPPHØR' | null;
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
@@ -12494,6 +12500,10 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.NullableSakOgBehandlingDTO': {
       sakOgBehandlingDTO?: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SakOgBehandlingDTO'];
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.OpprettAktivitetspliktBehandlingDto': {
+      /** @enum {string} */
+      vurderingsbehov: 'AKTIVITETSPLIKT_11_7' | 'AKTIVITETSPLIKT_11_9';
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SakOgBehandlingDTO': {
       personIdent: string;

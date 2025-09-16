@@ -28,6 +28,7 @@ interface FormFields {
   utfall: Utfall;
   begrunnelse: string;
   gjelderFra: string;
+  skalIgnorereVarselFrist: string;
 }
 
 type Utfall = 'STANS' | 'OPPHØR';
@@ -58,11 +59,12 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
           behov: {
             behovstype: Behovstype.VURDER_BRUDD_11_7_KODE,
             aktivitetsplikt11_7Vurdering: {
-              skalIgnorereVarselFrist: false, //TODO: Fiks denne
               erOppfylt: data.erOppfylt === JaEllerNei.Ja,
               utfall: data.erOppfylt === JaEllerNei.Ja ? null : data.utfall,
               begrunnelse: data.begrunnelse,
               gjelderFra: formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date())),
+              skalIgnorereVarselFrist:
+                data.erOppfylt === JaEllerNei.Nei ? data.skalIgnorereVarselFrist === JaEllerNei.Ja : false,
             },
           },
         },
@@ -117,6 +119,14 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
           },
         },
       },
+      skalIgnorereVarselFrist: {
+        type: 'radio',
+        label: 'Gå videre selv om fristen for svar fra bruker ikke er utløpt?',
+        description: 'Dersom bruker har svart i løpet av fristen kan du velge Ja her og komme videre i prosessen.',
+        rules: { required: 'Du må svare' },
+        defaultValue: defaultValue.skalIgnorereVarselFrist,
+        options: JaEllerNeiOptions,
+      },
     },
     { readOnly }
   );
@@ -156,6 +166,9 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       <FormField form={form} formField={formFields.erOppfylt} />
       {form.watch('erOppfylt') === JaEllerNei.Nei && <FormField form={form} formField={formFields.utfall} />}
       <FormField form={form} formField={formFields.gjelderFra} />
+      {form.watch('erOppfylt') === JaEllerNei.Nei && grunnlag.harSendtForhåndsvarsel && (
+        <FormField form={form} formField={formFields.skalIgnorereVarselFrist} />
+      )}
     </VilkårskortMedFormOgMellomlagring>
   );
 };
@@ -166,6 +179,7 @@ function mapVurderingToDraftFormFields(vurdering?: Aktivitetsplikt11_7Vurdering)
     utfall: vurdering?.utfall || undefined,
     begrunnelse: vurdering?.begrunnelse || undefined,
     gjelderFra: vurdering?.gjelderFra ? formaterDatoForFrontend(vurdering?.gjelderFra) : undefined,
+    skalIgnorereVarselFrist: getJaNeiEllerUndefined(vurdering?.skalIgnorereVarselFrist),
   };
 }
 
@@ -175,6 +189,7 @@ function emptyDraftFormFields(): DraftFormFields {
     gjelderFra: '',
     begrunnelse: '',
     utfall: '' as Utfall, // Vi caster denne da vi ikke ønsker å ødelegge typen på den i løs-behov
+    skalIgnorereVarselFrist: '',
   };
 }
 

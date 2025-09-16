@@ -230,7 +230,7 @@ describe('Førstegangsbehandling', () => {
 
   it('Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?', async () => {
     render(<OvergangUfore readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
-
+    await velgJa(finnGruppeForSoktOmUforetrygd());
     expect(finnGruppeForRettPåAAP()).toBeVisible();
   });
 

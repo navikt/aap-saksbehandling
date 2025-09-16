@@ -2,10 +2,11 @@ import { ActionMenu, Button, Loader } from '@navikt/ds-react';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { Oppgave } from 'lib/types/oppgaveTypes';
-import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
+import { plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
+import { isDev } from '../../../../lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
@@ -34,6 +35,12 @@ export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal }: P
     });
   }
 
+  async function synkroniserEnhetPåOppgave(oppgave: Oppgave) {
+    if (oppgave.id) {
+      await synkroniserOppgaveMedEnhetClient(oppgave.id);
+    }
+  }
+
   return (
     <>
       {!isPendingBehandle ? (
@@ -47,6 +54,15 @@ export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal }: P
           </ActionMenu.Trigger>
           <ActionMenu.Content>
             <ActionMenu.Item onSelect={() => plukkOgGåTilOppgave(oppgave)}>Behandle</ActionMenu.Item>
+            {isDev() && (
+              <ActionMenu.Item
+                onSelect={async () => {
+                  await synkroniserEnhetPåOppgave(oppgave);
+                }}
+              >
+                Synkroniser enhet på oppgave
+              </ActionMenu.Item>
+            )}
           </ActionMenu.Content>
         </ActionMenu>
       ) : (
