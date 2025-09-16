@@ -3,7 +3,7 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
-import { Alert } from '@navikt/ds-react';
+import { Label, VStack } from '@navikt/ds-react';
 import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -56,8 +56,6 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag);
-
-  const yrkesskadeManglerSkadedato = grunnlag.opplysninger.innhentedeYrkesskader.find((ys) => !ys.skadedato);
 
   const { form, formFields } = useConfigForm<YrkesskadeMedSkadeDatoFormFields>(
     {
@@ -162,13 +160,12 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
       {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
         <>
-          {yrkesskadeManglerSkadedato && (
-            <Alert variant={'warning'}>
-              En eller flere av yrkesskadene har ukjent skadedato. Det jobbes med funksjonalitet for å kunne sette denne
-              manuelt. Dersom denne yrkesskaden er aktuell for saken, kan den ikke behandles videre pr nå.
-            </Alert>
-          )}
-          <YrkesskadeVurderingTabell form={form} readOnly={readOnly} />
+          <VStack>
+            <Label size={'small'}>
+              Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.
+            </Label>
+            <YrkesskadeVurderingTabell form={form} readOnly={readOnly} />
+          </VStack>
           <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
         </>
       )}
