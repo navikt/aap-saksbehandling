@@ -6,8 +6,8 @@ import { EnhetSynkroniseringOppgave } from 'lib/types/oppgaveTypes';
 
 export async function POST(req: NextRequest) {
   try {
-    const oppgaveId: EnhetSynkroniseringOppgave = await req.json();
-    const res = await synkroniserEnhetPåOppgave(oppgaveId);
+    const data: EnhetSynkroniseringOppgave = await req.json();
+    const res = await synkroniserEnhetPåOppgave(data);
     if (isError(res)) {
       logError(`/oppgave/api/synkroniser-enhet-paa-oppgave`, res.apiException);
       return new Response(JSON.stringify(res), { status: 500 });

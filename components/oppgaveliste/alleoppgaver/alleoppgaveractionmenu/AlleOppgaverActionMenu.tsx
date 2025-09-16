@@ -6,6 +6,7 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { useState, useTransition } from 'react';
+import { isDev } from '../../../../lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
@@ -59,13 +60,15 @@ export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) =
           >
             Åpne oppgave
           </ActionMenu.Item>
-          <ActionMenu.Item
-            onSelect={async () => {
-              await synkroniserEnhetPåOppgave(oppgave);
-            }}
-          >
-            Synkroniser enhet på oppgave
-          </ActionMenu.Item>
+          {isDev() && (
+            <ActionMenu.Item
+              onSelect={async () => {
+                await synkroniserEnhetPåOppgave(oppgave);
+              }}
+            >
+              Synkroniser enhet på oppgave
+            </ActionMenu.Item>
+          )}
           {erReservert && (
             <ActionMenu.Item
               onSelect={async () => {
