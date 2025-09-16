@@ -52,6 +52,7 @@ describe('DigitaliserSøknad', () => {
     expect(screen.getByRole('textbox', { name: /fødselsnummer/i })).toBeVisible();
     expect(screen.getByRole('textbox', { name: /fornavn/i })).toBeVisible();
     expect(screen.getByRole('textbox', { name: /etternavn/i })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: /fødselsdato/i })).toBeVisible();
     expect(screen.getByRole('combobox', { name: /relasjon/i })).toBeVisible();
   });
 
@@ -61,7 +62,7 @@ describe('DigitaliserSøknad', () => {
     const leggTilBarnKnapp = screen.getByRole('button', { name: /legg til/i });
     await user.click(leggTilBarnKnapp);
 
-    const slettKnapp = screen.getByRole('img', { name: /Slett/i });
+    const slettKnapp = screen.getByRole('img', { name: /Fjern barn/i });
     await user.click(slettKnapp);
   });
 });
