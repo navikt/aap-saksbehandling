@@ -7,46 +7,46 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
-import { KansellertRevurderingGrunnlag } from 'lib/types/types';
+import { AvbrytRevurderingGrunnlag } from 'lib/types/types';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
-  grunnlag: KansellertRevurderingGrunnlag;
+  grunnlag: AvbrytRevurderingGrunnlag;
 }
 
 interface FormFields {
   aarsak?:
-    | 'FEILREGISTRERING'
-    | 'START_REVURDERING_PAA_NYTT';
+    | 'REVURDERINGEN_BLE_OPPRETTET_VED_EN_FEIL'
+    | 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT';
   begrunnelse: string;
 }
 
-export const KansellerRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
+export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('KANSELLER_REVURDERING');
+    useLøsBehovOgGåTilNesteSteg('AVBRYT_REVURDERING');
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
       aarsak: {
         type: 'combobox',
-        label: 'Hva er årsaken til kansellering?',
+        label: 'Hva er årsaken til at revurderingsbehandlingen skal avbrytes?',
         options: [
-          { value: 'FEILREGISTRERING', label: 'Feilregistrering' },
-          { value: 'START_REVURDERING_PAA_NYTT', label: 'Start revurdering på nytt' },
+          { value: 'REVURDERINGEN_BLE_OPPRETTET_VED_EN_FEIL', label: 'Revurderingen ble opprettet ved en feil' },
+          { value: 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT', label: 'Det har oppstått en feil og behandlingen må startes på nytt' },
         ],
         defaultValue: grunnlag?.vurdering?.årsak ?? undefined,
         rules: {
-          required: 'Velg årsak til kansellering av revurdering',
+          required: 'Velg en årsak for å avbryte revurderingen',
         },
       },
       begrunnelse: {
         type: 'textarea',
         label: 'Begrunnelse (obligatorisk)',
-        description: 'Utdyp hvorfor revurderingen kanselleres',
+        description: 'Utdyp hvorfor revurderingen avbrytes',
         defaultValue: grunnlag?.vurdering?.begrunnelse,
-        rules: { required: 'Du må begrunne hvorfor revurdering kanselleres' },
+        rules: { required: 'Du må begrunne hvorfor revurdering avbrytes' },
       },
     },
     { readOnly: readOnly }
@@ -57,7 +57,7 @@ export const KansellerRevurderingVurdering = ({ grunnlag, readOnly, behandlingVe
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
         behov: {
-          behovstype: Behovstype.KANSELLER_REVURDERING_KODE,
+          behovstype: Behovstype.AVBRYT_REVURDERING_KODE,
           vurdering: {
             begrunnelse: data.begrunnelse,
             årsak: data.aarsak,
@@ -70,8 +70,8 @@ export const KansellerRevurderingVurdering = ({ grunnlag, readOnly, behandlingVe
 
   return (
     <VilkårskortMedForm
-      heading={'Kanseller revurdering'}
-      steg={'KANSELLER_REVURDERING'}
+      heading={'Avbryt revurdering'}
+      steg={'AVBRYT_REVURDERING'}
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}

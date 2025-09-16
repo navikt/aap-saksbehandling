@@ -53,8 +53,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Starttidspunkt';
     case 'KLAGE_TRUKKET':
       return 'Klage trukket';
-    case 'REVURDERING_KANSELLERT':
-      return 'Revurdering kansellert';
+    case 'REVURDERING_AVBRUTT':
+      return 'Revurdering avbrutt';
     case 'MOTTATT_KABAL_HENDELSE':
       return 'Mottatt svar fra Nav Klageinstans';
     case 'FRITAK_MELDEPLIKT':

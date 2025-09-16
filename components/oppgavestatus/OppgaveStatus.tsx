@@ -4,7 +4,7 @@ import { HourglassTopFilledIcon, PadlockLockedFillIcon, XMarkOctagonIcon } from 
 import styles from './OppgaveStatus.module.css';
 
 export interface OppgaveStatusType {
-  status: 'PÅ_VENT' | 'RESERVERT' | 'TRUKKET' | 'KANSELLERT';
+  status: 'PÅ_VENT' | 'RESERVERT' | 'TRUKKET' | 'AVBRUTT';
   label: string;
 }
 
@@ -29,7 +29,7 @@ export const OppgaveStatus = ({ oppgaveStatus, size = 'small', showLabel = true 
         </Tag>
       );
     case 'TRUKKET':
-    case 'KANSELLERT':
+    case 'AVBRUTT':
       return (
         <Tag variant={'neutral-moderate'} icon={<XMarkOctagonIcon />} size={size}>
           {showLabel && oppgaveStatus.label}
