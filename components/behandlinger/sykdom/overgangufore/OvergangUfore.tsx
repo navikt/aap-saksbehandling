@@ -138,7 +138,9 @@ export const OvergangUfore = ({
               brukerHarSøktOmUføretrygd: data.brukerHarSøktUføretrygd === JaEllerNei.Ja,
               brukerHarFåttVedtakOmUføretrygd: data.brukerHarFåttVedtakOmUføretrygd,
               brukerRettPåAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
-              virkningsdato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
+              virkningsdato: data.virkningsdato
+                ? formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date()))
+                : undefined,
             },
           },
           referanse: behandlingsReferanse,
@@ -208,18 +210,22 @@ export const OvergangUfore = ({
           uføretrygdvedtaket.
         </Alert>
       )}
-      <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
-      <DateInputWrapper
-        name={`virkningsdato`}
-        control={form.control}
-        label={'Virkningsdato for vurderingen'}
-        rules={{
-          validate: {
-            gyldigDato: (value) => validerDato(value as string),
-          },
-        }}
-        readOnly={readOnly}
-      />
+      {brukerHarSoktOmUforetrygd && form.watch('brukerHarSøktUføretrygd') !== 'NEI' && (
+        <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
+      )}
+      {brukerHarSoktOmUforetrygd && (
+        <DateInputWrapper
+          name={`virkningsdato`}
+          control={form.control}
+          label={'Virkningsdato for vurderingen'}
+          rules={{
+            validate: {
+              gyldigDato: (value) => validerDato(value as string),
+            },
+          }}
+          readOnly={readOnly}
+        />
+      )}
     </VilkårskortMedFormOgMellomlagring>
   );
 

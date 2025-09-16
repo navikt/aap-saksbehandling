@@ -130,7 +130,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5051':
       return 'Skriv brev';
     case '5052':
-      return 'Skriv brev';
+      return 'Skriv forhåndsvarsel aktivitetsplikt';
     case '5053':
       return 'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev';
     case '5029':

@@ -72,6 +72,7 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
   SøkPåSakInfo,
+  OpprettAktivitetspliktBehandlingDto,
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
@@ -125,9 +126,12 @@ export const hentBehandlingPersoninfo = async (behandlingsreferanse: string) => 
   return await apiFetch<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const opprettAktivitetspliktBehandling = async (saksnummer: string) => {
+export const opprettAktivitetspliktBehandling = async (
+  saksnummer: string,
+  data: OpprettAktivitetspliktBehandlingDto
+) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling`;
-  return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST');
+  return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST', data);
 };
 
 export const finnSakerForIdent = async (ident: string) => {
