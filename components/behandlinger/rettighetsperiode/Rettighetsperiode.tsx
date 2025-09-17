@@ -30,8 +30,7 @@ export const Rettighetsperiode = async ({ behandlingsReferanse }: Props) => {
         <StegSuspense>
           <VurderRettighetsperiodeMedDataFetching
             behandlingsreferanse={behandlingsReferanse}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            behandlingVersjon={flyt.data.behandlingVersjon}
+            stegData={rettighetsperiodeSteg}
           />
         </StegSuspense>
       )}
