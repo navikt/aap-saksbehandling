@@ -74,7 +74,7 @@ export const BarnetilleggVurdering = ({
         defaultValue: defaultValue.barnetilleggVurderinger,
       },
     },
-    { shouldUnregister: true }
+    {}
   );
 
   const { fields: barnetilleggVurderinger } = useFieldArray({
