@@ -21,12 +21,13 @@ export const Barnetillegg = ({ form, readOnly }: Props) => {
         <>
           {fields.map((_, i) => {
             return (
-              <VStack key={`div-${i}`} gap={'2'} className={styles.barn}>
+              <VStack key={`div-${i}`} gap={'4'} className={styles.barn}>
                 <HStack gap={'4'}>
                   <VStack>
                     <TextFieldWrapper
                       label={'Fornavn og mellomnavn'}
                       type={'text'}
+                      className={styles.input}
                       name={`oppgitteBarn.${i}.fornavn`}
                       control={form.control}
                       readOnly={readOnly}
@@ -39,6 +40,7 @@ export const Barnetillegg = ({ form, readOnly }: Props) => {
                     <TextFieldWrapper
                       label={'Etternavn'}
                       type={'text'}
+                      className={styles.input}
                       name={`oppgitteBarn.${i}.etternavn`}
                       control={form.control}
                       readOnly={readOnly}
@@ -53,6 +55,7 @@ export const Barnetillegg = ({ form, readOnly }: Props) => {
                     <TextFieldWrapper
                       label={'Fødselsnummer eller D-nummer (Valgfritt)'}
                       type={'text'}
+                      className={styles.input}
                       name={`oppgitteBarn.${i}.fnr`}
                       control={form.control}
                       readOnly={readOnly}
@@ -84,6 +87,7 @@ export const Barnetillegg = ({ form, readOnly }: Props) => {
                     name={`oppgitteBarn.${i}.relasjon`}
                     control={form.control}
                     readOnly={readOnly}
+                    className={styles.input}
                     rules={{
                       required: 'Du må velge en relasjon.',
                     }}
