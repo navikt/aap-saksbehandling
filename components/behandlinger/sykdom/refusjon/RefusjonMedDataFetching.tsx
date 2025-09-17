@@ -3,6 +3,8 @@ import { hentMellomlagring, hentRefusjonGrunnlag } from 'lib/services/saksbehand
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { isDev } from 'lib/utils/environment';
+import { RefusjonNyVising } from 'components/behandlinger/sykdom/refusjon/RefusjonNyVisning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -20,7 +22,14 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, behandling
     return <ApiException apiResponses={[refusjonGrunnlag]} />;
   }
 
-  return (
+  return isDev() ? (
+    <RefusjonNyVising
+      grunnlag={refusjonGrunnlag.data}
+      readOnly={readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
+    />
+  ) : (
     <Refusjon
       grunnlag={refusjonGrunnlag.data}
       readOnly={readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}

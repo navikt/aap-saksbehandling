@@ -46,7 +46,7 @@ interface Refusjon {
 
 type DraftFormFields = Partial<FormFields>;
 
-export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
+export const RefusjonNyVising = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const { sak } = useSak();
   const behandlingsreferanse = useBehandlingsReferanse();
 

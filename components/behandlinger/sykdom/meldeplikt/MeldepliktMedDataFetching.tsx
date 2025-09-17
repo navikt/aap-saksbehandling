@@ -6,6 +6,8 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { isDev } from 'lib/utils/environment';
+import { MeldepliktNyVisning } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktNyVisning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -23,7 +25,14 @@ export const MeldepliktMedDataFetching = async ({ behandlingsReferanse, behandli
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  return (
+  return isDev() ? (
+    <MeldepliktNyVisning
+      grunnlag={grunnlag.data}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
+    />
+  ) : (
     <Meldeplikt
       grunnlag={grunnlag.data}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
