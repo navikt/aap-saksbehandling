@@ -4,18 +4,18 @@ import { getStegSomSkalVises } from 'lib/utils/steg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { KansellerRevurderingMedDatafetching } from 'components/behandlinger/revurdering/kansellerVurdering/vurdering/KansellerRevurderingMedDatafetching';
+import { AvbrytRevurderingMedDatafetching } from 'components/behandlinger/revurdering/avbrytVurdering/vurdering/AvbrytRevurderingMedDatafetching';
 
 interface props {
   behandlingsreferanse: string;
 }
 
-export const KansellerRevurdering = async ({ behandlingsreferanse }: props) => {
+export const AvbrytRevurdering = async ({ behandlingsreferanse }: props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
-  const stegSomSkalVises = getStegSomSkalVises('KANSELLER_REVURDERING', flyt.data);
+  const stegSomSkalVises = getStegSomSkalVises('AVBRYT_REVURDERING', flyt.data);
   const behandlingVersjon = flyt.data.behandlingVersjon;
 
   return (
@@ -26,9 +26,9 @@ export const KansellerRevurdering = async ({ behandlingsreferanse }: props) => {
       behandlingVersjon={behandlingVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {stegSomSkalVises.includes('KANSELLER_REVURDERING') && (
+      {stegSomSkalVises.includes('AVBRYT_REVURDERING') && (
         <StegSuspense>
-          <KansellerRevurderingMedDatafetching
+          <AvbrytRevurderingMedDatafetching
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.data.visning.saksbehandlerReadOnly}

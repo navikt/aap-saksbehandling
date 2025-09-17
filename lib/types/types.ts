@@ -103,8 +103,8 @@ export type TrukketSøknadGrunnlag =
 export type TrukketSøknadVudering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadVurderingDto'];
 
-export type KansellertRevurderingGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.revurdering.KansellertRevurderingGrunnlagDto'];
+export type AvbrytRevurderingGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.revurdering.AvbrytRevurderingGrunnlagDto'];
 
 export type RettighetsperiodeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeGrunnlagResponse'];

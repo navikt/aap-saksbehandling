@@ -1549,7 +1549,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/behandling/{referanse}/grunnlag/kansellert-revurdering': {
+  '/api/behandling/{referanse}/grunnlag/avbryt-revurdering': {
     parameters: {
       query?: never;
       header?: never;
@@ -1574,7 +1574,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.revurdering.KansellertRevurderingGrunnlagDto'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.revurdering.AvbrytRevurderingGrunnlagDto'];
           };
         };
       };
@@ -3989,6 +3989,14 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.SimulertArbeidsevneResultatDto': {
       gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneVurderingDto'][];
     };
+    'no.nav.aap.behandlingsflyt.behandling.avbrytrevurdering.flate.AvbrytRevurderingVurderingDto': {
+      begrunnelse: string;
+      /** @enum {string|null} */
+      '\u00E5rsak'?:
+        | 'REVURDERINGEN_BLE_OPPRETTET_VED_EN_FEIL'
+        | 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT'
+        | null;
+    };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.BeslutterDto': {
       ident: string;
       kontor: string;
@@ -4101,6 +4109,75 @@ export interface components {
       grunner?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.\u00C5rsakTilRetur'][]
         | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvbrytRevurderingL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '4102'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5056'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004';
+      vurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avbrytrevurdering.flate.AvbrytRevurderingVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarBarnetilleggL\u00F8sning': {
       /** @enum {string} */
@@ -5552,6 +5629,7 @@ export interface components {
       yrkesskadesvurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.YrkesskadevurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklaringsbehovL\u00F8sning':
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvbrytRevurderingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarBarnetilleggL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarBistandsbehovL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarForutg\u00E5endeMedlemskapL\u00F8sning']
@@ -5585,7 +5663,6 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Foresl\u00E5VedtakL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FritakMeldepliktL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.H\u00E5ndterSvarFraAndreinstansL\u00F8sning']
-      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KansellerRevurderingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KvalitetssikringL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Legeerkl\u00E6ringBestillingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.OverstyrIkkeOppfyltMeldepliktL\u00F8sning']
@@ -6481,75 +6558,6 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
       )[];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KansellerRevurderingL\u00F8sning': {
-      /** @enum {string} */
-      behovstype:
-        | '4101'
-        | '4102'
-        | '5001'
-        | '5002'
-        | '5003'
-        | '5004'
-        | '5005'
-        | '5006'
-        | '5007'
-        | '5008'
-        | '5009'
-        | '5010'
-        | '5011'
-        | '5012'
-        | '5013'
-        | '5014'
-        | '5015'
-        | '5016'
-        | '5017'
-        | '5018'
-        | '5019'
-        | '5020'
-        | '5021'
-        | '5022'
-        | '5023'
-        | '5024'
-        | '5025'
-        | '5026'
-        | '5027'
-        | '5028'
-        | '5029'
-        | '5030'
-        | '5031'
-        | '5032'
-        | '5033'
-        | '5050'
-        | '5051'
-        | '5052'
-        | '5053'
-        | '5056'
-        | '5096'
-        | '5097'
-        | '5098'
-        | '5099'
-        | '5999'
-        | '6000'
-        | '6001'
-        | '6002'
-        | '6003'
-        | '6004'
-        | '6005'
-        | '6006'
-        | '6007'
-        | '6008'
-        | '6009'
-        | '6010'
-        | '7001'
-        | '8001'
-        | '8002'
-        | '8003'
-        | '9001'
-        | '9002'
-        | '9003'
-        | '9004';
-      vurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.kansellerrevurdering.flate.KansellerRevurderingVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KvalitetssikringL\u00F8sning': {
       /** @enum {string} */
@@ -9078,11 +9086,6 @@ export interface components {
        */
       ytelseIverksattTom?: string | null;
     };
-    'no.nav.aap.behandlingsflyt.behandling.kansellerrevurdering.flate.KansellerRevurderingVurderingDto': {
-      begrunnelse: string;
-      /** @enum {string|null} */
-      '\u00E5rsak'?: 'REVURDERINGEN_ER_FEILREGISTRERT' | 'REVURDERINGEN_ER_AVBRUTT_PÅ_GRUNN_AV_FEIL' | null;
-    };
     'no.nav.aap.behandlingsflyt.behandling.klage.behandlendeenhet.BehandlendeEnhetGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.behandlendeenhet.BehandlendeEnhetVurderingDto'];
@@ -9333,7 +9336,7 @@ export interface components {
         | 'MOTTATT_DIALOGMELDING'
         | 'MOTATT_KLAGE'
         | 'SØKNAD_TRUKKET'
-        | 'REVURDERING_KANSELLERT'
+        | 'REVURDERING_AVBRUTT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MEDLEMSKAP'
         | 'REVURDER_SAMORDNING'
@@ -9601,7 +9604,7 @@ export interface components {
         | 'MOTTATT_DIALOGMELDING'
         | 'MOTATT_KLAGE'
         | 'SØKNAD_TRUKKET'
-        | 'REVURDERING_KANSELLERT'
+        | 'REVURDERING_AVBRUTT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MEDLEMSKAP'
         | 'REVURDER_SAMORDNING'
@@ -9654,7 +9657,7 @@ export interface components {
             | 'MOTTATT_DIALOGMELDING'
             | 'MOTATT_KLAGE'
             | 'SØKNAD_TRUKKET'
-            | 'REVURDERING_KANSELLERT'
+            | 'REVURDERING_AVBRUTT'
             | 'KLAGE_TRUKKET'
             | 'REVURDER_MEDLEMSKAP'
             | 'REVURDER_SAMORDNING'
@@ -9706,8 +9709,8 @@ export interface components {
       startDato?: string | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.revurdering.KansellertRevurderingGrunnlagDto': {
-      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.kansellerrevurdering.flate.KansellerRevurderingVurderingDto'];
+    'no.nav.aap.behandlingsflyt.behandling.revurdering.AvbrytRevurderingGrunnlagDto': {
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avbrytrevurdering.flate.AvbrytRevurderingVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -11001,7 +11004,7 @@ export interface components {
         | 'SEND_FORVALTNINGSMELDING'
         | 'RETTIGHETSPERIODE'
         | 'SØKNAD'
-        | 'KANSELLER_REVURDERING'
+        | 'AVBRYT_REVURDERING'
         | 'ALDER'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -11076,7 +11079,7 @@ export interface components {
         | 'FATTE_VEDTAK'
         | 'IVERKSETT_VEDTAK'
         | 'OPPRETT_REVURDERING'
-        | 'KANSELLER_REVURDERING'
+        | 'AVBRYT_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
         | 'FULLMEKTIG'
@@ -11108,7 +11111,7 @@ export interface components {
         | 'SEND_FORVALTNINGSMELDING'
         | 'RETTIGHETSPERIODE'
         | 'SØKNAD'
-        | 'KANSELLER_REVURDERING'
+        | 'AVBRYT_REVURDERING'
         | 'ALDER'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -11184,7 +11187,7 @@ export interface components {
         | 'FATTE_VEDTAK'
         | 'IVERKSETT_VEDTAK'
         | 'OPPRETT_REVURDERING'
-        | 'KANSELLER_REVURDERING'
+        | 'AVBRYT_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
         | 'FULLMEKTIG'
@@ -11260,7 +11263,7 @@ export interface components {
         | 'FATTE_VEDTAK'
         | 'IVERKSETT_VEDTAK'
         | 'OPPRETT_REVURDERING'
-        | 'KANSELLER_REVURDERING'
+        | 'AVBRYT_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
         | 'FULLMEKTIG'
@@ -11351,7 +11354,7 @@ export interface components {
         | 'SEND_FORVALTNINGSMELDING'
         | 'RETTIGHETSPERIODE'
         | 'SØKNAD'
-        | 'KANSELLER_REVURDERING'
+        | 'AVBRYT_REVURDERING'
         | 'ALDER'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -11429,7 +11432,7 @@ export interface components {
         | 'FATTE_VEDTAK'
         | 'IVERKSETT_VEDTAK'
         | 'OPPRETT_REVURDERING'
-        | 'KANSELLER_REVURDERING'
+        | 'AVBRYT_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
         | 'FULLMEKTIG'
@@ -11566,7 +11569,7 @@ export interface components {
         | 'KLAGE_DELVIS_OMGJØRES'
         | 'KLAGE_AVSLÅTT'
         | 'KLAGE_TRUKKET'
-        | 'KANSELLERT'
+        | 'AVBRUTT'
         | null;
       saksbehandlerReadOnly: boolean;
       /** @enum {string} */
@@ -11718,7 +11721,7 @@ export interface components {
         | 'FATTE_VEDTAK'
         | 'IVERKSETT_VEDTAK'
         | 'OPPRETT_REVURDERING'
-        | 'KANSELLER_REVURDERING'
+        | 'AVBRYT_REVURDERING'
         | 'BREV'
         | 'PÅKLAGET_BEHANDLING'
         | 'FULLMEKTIG'
@@ -11861,7 +11864,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'SØKNAD_TRUKKET'
-        | 'REVURDERING_KANSELLERT'
+        | 'REVURDERING_AVBRUTT'
         | 'FRITAK_MELDEPLIKT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MANUELL_INNTEKT'
@@ -12035,7 +12038,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'SØKNAD_TRUKKET'
-        | 'REVURDERING_KANSELLERT'
+        | 'REVURDERING_AVBRUTT'
         | 'FRITAK_MELDEPLIKT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MANUELL_INNTEKT'
@@ -12103,7 +12106,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'SØKNAD_TRUKKET'
-        | 'REVURDERING_KANSELLERT'
+        | 'REVURDERING_AVBRUTT'
         | 'FRITAK_MELDEPLIKT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MANUELL_INNTEKT'
@@ -12157,7 +12160,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'SØKNAD_TRUKKET'
-        | 'REVURDERING_KANSELLERT'
+        | 'REVURDERING_AVBRUTT'
         | 'FRITAK_MELDEPLIKT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MANUELL_INNTEKT'
@@ -12264,7 +12267,7 @@ export interface components {
         | 'MOTTATT_DIALOGMELDING'
         | 'MOTATT_KLAGE'
         | 'SØKNAD_TRUKKET'
-        | 'REVURDERING_KANSELLERT'
+        | 'REVURDERING_AVBRUTT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MEDLEMSKAP'
         | 'REVURDER_SAMORDNING'
@@ -12375,7 +12378,7 @@ export interface components {
         | 'MOTTATT_DIALOGMELDING'
         | 'MOTATT_KLAGE'
         | 'SØKNAD_TRUKKET'
-        | 'REVURDERING_KANSELLERT'
+        | 'REVURDERING_AVBRUTT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MEDLEMSKAP'
         | 'REVURDER_SAMORDNING'
@@ -12431,7 +12434,7 @@ export interface components {
         | 'MOTTATT_DIALOGMELDING'
         | 'MOTATT_KLAGE'
         | 'SØKNAD_TRUKKET'
-        | 'REVURDERING_KANSELLERT'
+        | 'REVURDERING_AVBRUTT'
         | 'KLAGE_TRUKKET'
         | 'REVURDER_MEDLEMSKAP'
         | 'REVURDER_SAMORDNING'
@@ -12543,7 +12546,7 @@ export interface components {
         | 'KLAGE_DELVIS_OMGJØRES'
         | 'KLAGE_AVSLÅTT'
         | 'KLAGE_TRUKKET'
-        | 'KANSELLERT'
+        | 'AVBRUTT'
         | null;
       saksnummer: string;
     };

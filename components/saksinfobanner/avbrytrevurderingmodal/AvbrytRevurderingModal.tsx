@@ -5,7 +5,7 @@ import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 
-import styles from './KansellerRevurderingModal.module.css';
+import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal.module.css';
 
 interface Props {
   saksnummer: string;
@@ -14,21 +14,21 @@ interface Props {
   behandlingReferanse: string;
 }
 
-export const KansellerRevurderingModal = ({ saksnummer, isOpen, onClose, behandlingReferanse }: Props) => {
+export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose, behandlingReferanse }: Props) => {
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   return (
     <Modal
       header={{
         icon: <XMarkOctagonIcon title="" fontSize="1.5rem" />,
-        heading: 'Er du sikker på at du vil kansellere revurderingen?',
+        heading: 'Er du sikker på at du vil avbryte revurderingen?',
       }}
       open={isOpen}
       onClose={onClose}
       className={styles.modal}
     >
       <Modal.Body>
-        <BodyLong>Når du kansellerer revurderingen vil saken avsluttes.</BodyLong>
+        <BodyLong>Når du avbryter revurderingen vil behandlingen avsluttes og ingen endringer vil blir lagret på saken.</BodyLong>
         {sendHendelseError && (
           <Alert variant={'error'} size={'small'}>
             {sendHendelseError.message}
@@ -53,7 +53,7 @@ export const KansellerRevurderingModal = ({ saksnummer, isOpen, onClose, behandl
                 mottattTidspunkt: new Date().toISOString(),
                 melding: {
                   meldingType: 'NyÅrsakTilBehandlingV0',
-                  årsakerTilBehandling: ['REVURDERING_KANSELLERT'],
+                  årsakerTilBehandling: ['REVURDERING_AVBRUTT'],
                 } as NyÅrsakTilBehandlingV0,
               },
               onClose
@@ -61,10 +61,7 @@ export const KansellerRevurderingModal = ({ saksnummer, isOpen, onClose, behandl
           }}
           loading={isLoading}
         >
-          Kanseller revurdering
-        </Button>
-        <Button variant={'secondary'} onClick={onClose} type="button">
-          Avbryt
+          Bekreft
         </Button>
       </Modal.Footer>
     </Modal>

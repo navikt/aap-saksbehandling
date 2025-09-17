@@ -22,38 +22,36 @@ export const ÅrsakTilRevurdering = ({ vurderingsbehovOgÅrsaker }: Props) => {
       style={{ backgroundColor: 'var(--a-surface-info-subtle)' }}
     >
       <ExpansionCard.Header>
-        <>
-          <HStack wrap={false} gap="4" align="center">
-            <TasklistStartIcon aria-hidden fontSize={'1.5rem'} />
-            <ExpansionCard.Title size={'small'}>
-              <Label>{tittel}</Label>
-            </ExpansionCard.Title>
-          </HStack>
-        </>
+        <HStack wrap={false} gap="4" align="center">
+          <TasklistStartIcon aria-hidden fontSize={'1.5rem'} />
+          <ExpansionCard.Title size={'small'}>
+            <Label>{tittel}</Label>
+          </ExpansionCard.Title>
+        </HStack>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
         <VStack gap={'3'}>
-          {vurderingsbehovOgÅrsaker.map((vurderingsbehovOgÅrsak, index) => {
-            const opprettetTid = formaterDatoForFrontend(vurderingsbehovOgÅrsak.opprettet ?? '');
-
-            return (
-              <Box key={index}>
-                <HStack gap={'2'} align={'end'}>
-                  <Label size={'small'}>
-                    {vurderingsbehovOgÅrsak.vurderingsbehov
-                      .map((vurderingsbehov) => formaterVurderingsbehov(vurderingsbehov.type))
-                      .join(', ')}
-                  </Label>
-                  <Detail textColor={'subtle'}>
-                    {mapTilÅrsakTilOpprettelseTilTekst(vurderingsbehovOgÅrsak.årsak)} {opprettetTid}
-                  </Detail>
-                </HStack>
-                {vurderingsbehovOgÅrsak.beskrivelse && (
-                  <BodyLong size={'small'}>Begrunnelse: {vurderingsbehovOgÅrsak.beskrivelse}</BodyLong>
-                )}
-              </Box>
-            );
-          })}
+          {vurderingsbehovOgÅrsaker
+            .filter(({ vurderingsbehov }) =>
+              !vurderingsbehov.some((v) => v.type === 'REVURDERING_AVBRUTT')
+            )
+            .map(({ vurderingsbehov, opprettet, årsak, beskrivelse }, index) => {
+              return (
+                <Box key={index}>
+                  <HStack gap="2" align="end">
+                    <Label size="small">
+                      {vurderingsbehov.map((v) => formaterVurderingsbehov(v.type)).join(', ')}
+                    </Label>
+                    <Detail textColor="subtle">
+                      {mapTilÅrsakTilOpprettelseTilTekst(årsak)} {formaterDatoForFrontend(opprettet)}
+                    </Detail>
+                  </HStack>
+                  {beskrivelse && (
+                    <BodyLong size="small">Begrunnelse: {beskrivelse}</BodyLong>
+                  )}
+                </Box>
+              );
+            })}
         </VStack>
       </ExpansionCard.Content>
     </ExpansionCard>
