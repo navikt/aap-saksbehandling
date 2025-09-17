@@ -15,7 +15,7 @@ interface Props {
 export const Barnetillegg = ({ form, readOnly }: Props) => {
   const { fields, append, remove } = useFieldArray({ control: form.control, name: 'oppgitteBarn' });
   return (
-    <VStack gap={'10'}>
+    <VStack gap={'2'}>
       <Label size={'small'}>Har søker barn?</Label>
       {fields.length > 0 && (
         <>
@@ -23,52 +23,60 @@ export const Barnetillegg = ({ form, readOnly }: Props) => {
             return (
               <VStack key={`div-${i}`} gap={'2'} className={styles.barn}>
                 <HStack gap={'4'}>
-                  <TextFieldWrapper
-                    label={'Fornavn og mellomnavn'}
-                    type={'text'}
-                    name={`oppgitteBarn.${i}.fornavn`}
-                    control={form.control}
-                    readOnly={readOnly}
-                    rules={{
-                      required: 'Fornavn er påkrevd.',
-                    }}
-                  />
-                  <TextFieldWrapper
-                    label={'Etternavn'}
-                    type={'text'}
-                    name={`oppgitteBarn.${i}.etternavn`}
-                    control={form.control}
-                    readOnly={readOnly}
-                    rules={{
-                      required: 'Etternavn er påkrevd.',
-                    }}
-                  />
+                  <VStack>
+                    <TextFieldWrapper
+                      label={'Fornavn og mellomnavn'}
+                      type={'text'}
+                      name={`oppgitteBarn.${i}.fornavn`}
+                      control={form.control}
+                      readOnly={readOnly}
+                      rules={{
+                        required: 'Fornavn er påkrevd.',
+                      }}
+                    />
+                  </VStack>
+                  <VStack>
+                    <TextFieldWrapper
+                      label={'Etternavn'}
+                      type={'text'}
+                      name={`oppgitteBarn.${i}.etternavn`}
+                      control={form.control}
+                      readOnly={readOnly}
+                      rules={{
+                        required: 'Etternavn er påkrevd.',
+                      }}
+                    />
+                  </VStack>
                 </HStack>
                 <HStack gap={'4'}>
-                  <TextFieldWrapper
-                    label={'Fødselsnummer eller D-nummer (Valgfritt)'}
-                    type={'text'}
-                    name={`oppgitteBarn.${i}.fnr`}
-                    control={form.control}
-                    readOnly={readOnly}
-                  />
-                  <DateInputWrapper
-                    label={'Fødselsdato'}
-                    name={`oppgitteBarn.${i}.fødselsdato`}
-                    control={form.control}
-                    readOnly={readOnly}
-                    rules={{
-                      required: 'Du må oppgi fødselsdato for barnet.',
-                      validate: {
-                        validerDato: (value) => validerDato(value as string),
-                        validerIkkeFørDato: (value) => {
-                          if (erDatoIFremtiden(value as string)) {
-                            return 'Fødselsdato kan ikke være i fremtiden';
-                          }
+                  <VStack>
+                    <TextFieldWrapper
+                      label={'Fødselsnummer eller D-nummer (Valgfritt)'}
+                      type={'text'}
+                      name={`oppgitteBarn.${i}.fnr`}
+                      control={form.control}
+                      readOnly={readOnly}
+                    />
+                  </VStack>
+                  <VStack>
+                    <DateInputWrapper
+                      label={'Fødselsdato'}
+                      name={`oppgitteBarn.${i}.fødselsdato`}
+                      control={form.control}
+                      readOnly={readOnly}
+                      rules={{
+                        required: 'Du må oppgi fødselsdato for barnet.',
+                        validate: {
+                          validerDato: (value) => validerDato(value as string),
+                          validerIkkeFørDato: (value) => {
+                            if (erDatoIFremtiden(value as string)) {
+                              return 'Fødselsdato kan ikke være i fremtiden';
+                            }
+                          },
                         },
-                      },
-                    }}
-                  />
+                      }}
+                    />
+                  </VStack>
                 </HStack>
                 <HStack>
                   <SelectWrapper
