@@ -138,7 +138,6 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
       }
       if (status === 'POLLING') {
         setStatus(status);
-        setIsLoading(false);
       }
     };
     eventSource.onerror = (event: any) => {
