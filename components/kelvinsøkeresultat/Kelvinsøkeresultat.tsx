@@ -10,7 +10,6 @@ import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/Ad
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
 import { MarkeringStatus } from 'components/markeringstatus/MarkeringStatus';
-import {isProd} from "lib/utils/environment";
 
 interface Props {
   søkeresultat: SøkeResultat;
@@ -19,15 +18,14 @@ interface Props {
 export const Kelvinsøkeresultat = ({
   søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang, harAdressebeskyttelse },
 }: Props) => {
-
-  if (!isProd() && (!saker || saker.length === 0)) {
+  if (!saker || saker.length === 0) {
     return (
-        <HStack>
-          <Alert variant={'info'} size={'small'} className={styles.info}>
-            Fant ingen saker for søketeksten.
-          </Alert>
-        </HStack>
-    )
+      <HStack>
+        <Alert variant={'info'} size={'small'} className={styles.info}>
+          Fant ingen saker for søketeksten.
+        </Alert>
+      </HStack>
+    );
   }
 
   return (

@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link } from '@navikt/ds-react';
+import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link, Tag } from '@navikt/ds-react';
 import { DetaljertBehandling, FlytGruppe, FlytVisning, SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
@@ -24,6 +24,7 @@ import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfobok
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
 import { isProd } from 'lib/utils/environment';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -133,6 +134,12 @@ export const SaksinfoBanner = ({
             iconPosition="right"
             className={styles.copybutton}
           />
+
+          {personInformasjon.dødsdato && (
+            <Tag variant="alt1" size="small">
+              &#10013; {formaterDatoForFrontend(personInformasjon.dødsdato)}
+            </Tag>
+          )}
 
           {erPåBehandlingSiden && behandling && (
             <>
