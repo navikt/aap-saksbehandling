@@ -36,7 +36,6 @@ export const ÅrsakTilRevurdering = ({ vurderingsbehovOgÅrsaker }: Props) => {
               !vurderingsbehov.some((v) => v.type === 'REVURDERING_AVBRUTT')
             )
             .map(({ vurderingsbehov, opprettet, årsak, beskrivelse }, index) => {
-              const opprettetTid = opprettet ? formaterDatoForFrontend(opprettet) : '';
               return (
                 <Box key={index}>
                   <HStack gap="2" align="end">
@@ -44,7 +43,7 @@ export const ÅrsakTilRevurdering = ({ vurderingsbehovOgÅrsaker }: Props) => {
                       {vurderingsbehov.map((v) => formaterVurderingsbehov(v.type)).join(', ')}
                     </Label>
                     <Detail textColor="subtle">
-                      {mapTilÅrsakTilOpprettelseTilTekst(årsak)} {opprettetTid}
+                      {mapTilÅrsakTilOpprettelseTilTekst(årsak)} {formaterDatoForFrontend(opprettet)}
                     </Detail>
                   </HStack>
                   {beskrivelse && (

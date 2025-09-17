@@ -122,7 +122,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5032':
       return '§ 11-17 AAP i perioden som arbeidssøker';
     case '5033':
-      return 'avbryt revurdering';
+      return 'Avbryt revurdering';
     case '5022':
       return 'Overstyr § 11-2 forutgående medlemskap';
     case '5050':

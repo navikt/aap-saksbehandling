@@ -28,7 +28,7 @@ export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose, behandling
       className={styles.modal}
     >
       <Modal.Body>
-        <BodyLong>Når du avbryte revurderingen vil behandlingen avsluttes og ingen endringer vil blir lagret på saken.</BodyLong>
+        <BodyLong>Når du avbryter revurderingen vil behandlingen avsluttes og ingen endringer vil blir lagret på saken.</BodyLong>
         {sendHendelseError && (
           <Alert variant={'error'} size={'small'}>
             {sendHendelseError.message}
