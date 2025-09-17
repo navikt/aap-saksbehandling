@@ -1,5 +1,4 @@
 import { Vurderingsbehov } from 'lib/types/types';
-import { exhaustiveCheck } from 'lib/utils/typescript';
 
 export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): string => {
   switch (vurderingsbehov) {
@@ -77,8 +76,9 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Overgang til uføre';
     case 'OVERGANG_ARBEID':
       return 'Overgang arbeidssøker';
+    default:
+      return vurderingsbehov;
   }
-  exhaustiveCheck(vurderingsbehov);
 };
 
 /*
