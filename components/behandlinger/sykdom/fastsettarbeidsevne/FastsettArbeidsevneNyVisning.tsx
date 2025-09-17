@@ -1,0 +1,243 @@
+'use client';
+
+import { FormEvent } from 'react';
+
+import { TrashIcon } from '@navikt/aksel-icons';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+
+import { useFieldArray } from 'react-hook-form';
+import { validerDato } from 'lib/validation/dateValidation';
+import { ArbeidsevneGrunnlag, MellomlagretVurdering } from 'lib/types/types';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { Behovstype } from 'lib/utils/form';
+import { parse } from 'date-fns';
+
+import styles from './FastsettArbeidsevne.module.css';
+import { Button, Link } from '@navikt/ds-react';
+import { pipe } from 'lib/utils/functional';
+import { erProsent } from 'lib/utils/validering';
+import { useConfigForm } from 'components/form/FormHook';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+
+interface Props {
+  grunnlag: ArbeidsevneGrunnlag;
+  behandlingVersjon: number;
+  readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
+}
+
+interface Arbeidsevnevurderinger {
+  begrunnelse: string;
+  arbeidsevne: string;
+  fom: string;
+}
+
+interface FastsettArbeidsevneFormFields {
+  arbeidsevnevurderinger: Arbeidsevnevurderinger[];
+}
+
+type DraftFormFields = Partial<FastsettArbeidsevneFormFields>;
+
+const ANTALL_TIMER_FULL_UKE = 37.5;
+
+const prosentTilTimer = (prosent: string): number => (Number.parseInt(prosent, 10) / 100) * ANTALL_TIMER_FULL_UKE;
+const rundNedTilNaermesteHalve = (tall: number): number => Math.floor(tall * 2) / 2;
+const tilNorskDesimalFormat = (tall: number): string => tall.toLocaleString('no-NB');
+const tilAvrundetTimetall = pipe<string>(prosentTilTimer, rundNedTilNaermesteHalve, tilNorskDesimalFormat);
+
+const regnOmTilTimer = (value: string) => {
+  if (!value) {
+    return undefined;
+  }
+  return `(${tilAvrundetTimetall(value)} timer)`;
+};
+
+export const FastsettArbeidsevneNyVisning = ({
+  grunnlag,
+  behandlingVersjon,
+  readOnly,
+  initialMellomlagretVurdering,
+}: Props) => {
+  const behandlingsreferanse = useBehandlingsReferanse();
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
+
+  const { mellomlagretVurdering, lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.FASTSETT_ARBEIDSEVNE_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'FASTSETT_ARBEIDSEVNE',
+    mellomlagretVurdering
+  );
+
+  const defaultValues: DraftFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : mapVurderingerToDraftFormFields(grunnlag.vurderinger);
+
+  const { form } = useConfigForm<FastsettArbeidsevneFormFields>({
+    arbeidsevnevurderinger: {
+      type: 'fieldArray',
+      defaultValue: defaultValues.arbeidsevnevurderinger,
+    },
+  });
+
+  const {
+    fields: arbeidsevneVurderinger,
+    append,
+    remove,
+  } = useFieldArray({
+    control: form.control,
+    name: 'arbeidsevnevurderinger',
+  });
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          referanse: behandlingsreferanse,
+          behov: {
+            behovstype: Behovstype.FASTSETT_ARBEIDSEVNE_KODE,
+            arbeidsevneVurderinger: data.arbeidsevnevurderinger.map((vurdering) => ({
+              arbeidsevne: Number.parseInt(vurdering.arbeidsevne, 10),
+              begrunnelse: vurdering.begrunnelse,
+              fraDato: formaterDatoForBackend(parse(vurdering.fom, 'dd.MM.yyyy', new Date())),
+            })),
+          },
+        },
+        () => nullstillMellomlagretVurdering()
+      );
+    })(event);
+  };
+
+  const showAsOpen =
+    (!!grunnlag?.vurderinger && grunnlag.vurderinger.length >= 1) || initialMellomlagretVurdering !== undefined;
+
+  return (
+    <VilkårskortMedFormOgMellomlagringNyVisning
+      heading={'§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet'}
+      steg={'FASTSETT_ARBEIDSEVNE'}
+      vilkårTilhørerNavKontor={true}
+      defaultOpen={showAsOpen}
+      onSubmit={handleSubmit}
+      status={status}
+      isLoading={isLoading}
+      visBekreftKnapp={false}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vurdertAvAnsatt={grunnlag?.vurderinger?.[0]?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() => {
+          form.reset(
+            grunnlag.vurderinger ? mapVurderingerToDraftFormFields(grunnlag.vurderinger) : emptyDraftFormFields()
+          );
+        });
+      }}
+      visningModus={visningModus}
+      visningActions={visningActions}
+    >
+      <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
+        Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
+      </Link>
+      {arbeidsevneVurderinger.map((vurdering, index) => (
+        <div key={vurdering.id} className={`${styles.vurdering} flex-column`}>
+          <TextAreaWrapper
+            label={'Vilkårsvurdering'}
+            description={
+              'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett på full ytelse.'
+            }
+            control={form.control}
+            name={`arbeidsevnevurderinger.${index}.begrunnelse`}
+            rules={{ required: 'Du må begrunne vurderingen din' }}
+            className={'begrunnelse'}
+            readOnly={formReadOnly}
+          />
+          <div className={styles.rad}>
+            <div>
+              <TextFieldWrapper
+                control={form.control}
+                name={`arbeidsevnevurderinger.${index}.arbeidsevne`}
+                type={'text'}
+                label={'Oppgi arbeidsevnen som ikke er utnyttet i prosent'}
+                rules={{
+                  required: 'Du må angi hvor stor arbeidsevne brukeren har',
+                  validate: (value) => {
+                    const valueAsNumber = Number(value);
+                    if (isNaN(valueAsNumber)) {
+                      return 'Prosent må være et tall';
+                    } else if (!erProsent(valueAsNumber)) {
+                      return 'Prosent kan bare være mellom 0 og 100';
+                    }
+                  },
+                }}
+                readOnly={formReadOnly}
+                className="prosent_input"
+              />
+              <div className={styles.timekolonne}>
+                {regnOmTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`))}
+              </div>
+            </div>
+          </div>
+          <DateInputWrapper
+            control={form.control}
+            name={`arbeidsevnevurderinger.${index}.fom`}
+            label={'Vurderingen gjelder fra'}
+            rules={{
+              required: 'Du må angi datoen arbeidsevnen gjelder fra',
+              validate: (value) => validerDato(value as string),
+            }}
+            readOnly={formReadOnly}
+          />
+          {!formReadOnly && (
+            <div>
+              <Button
+                onClick={() => remove(index)}
+                type={'button'}
+                variant={'tertiary'}
+                size={'small'}
+                icon={<TrashIcon aria-hidden />}
+              >
+                Fjern vurdering
+              </Button>
+            </div>
+          )}
+        </div>
+      ))}
+      {!formReadOnly && (
+        <div>
+          <Button
+            onClick={() => append({ begrunnelse: '', arbeidsevne: '', fom: '' })}
+            type={'button'}
+            variant={'secondary'}
+            size={'small'}
+          >
+            Legg til ny vurdering
+          </Button>
+        </div>
+      )}
+    </VilkårskortMedFormOgMellomlagringNyVisning>
+  );
+};
+
+function mapVurderingerToDraftFormFields(vurderinger?: ArbeidsevneGrunnlag['vurderinger']): DraftFormFields {
+  return {
+    arbeidsevnevurderinger:
+      vurderinger?.map((vurdering) => ({
+        begrunnelse: vurdering.begrunnelse,
+        arbeidsevne: vurdering.arbeidsevne.toString(),
+        fom: formaterDatoForFrontend(vurdering.fraDato),
+      })) || [],
+  };
+}
+
+function emptyDraftFormFields(): DraftFormFields {
+  return { arbeidsevnevurderinger: [] };
+}
