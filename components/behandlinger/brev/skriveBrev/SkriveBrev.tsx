@@ -173,7 +173,6 @@ export const SkriveBrev = ({
                     },
                     referanse: behandlingsReferanse,
                   });
-                  await revalidateFlyt(behandlingsReferanse);
                 }
               }}
               className={'fit-content'}
