@@ -89,6 +89,11 @@ export const OppgitteBarnVurderingFelterV2 = ({
               ? 'Forsørgeransvar opphører fra'
               : 'Oppgi dato for når barnetillegget skal gis fra'
           }
+          description={
+            skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt
+              ? null
+              : 'Barnetillegg skal i hovedsak gis fra dato brukeren søkte om barnetillegg'
+          }
           control={form.control}
           name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`}
           rules={{
