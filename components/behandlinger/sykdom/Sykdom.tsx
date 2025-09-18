@@ -12,10 +12,6 @@ import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
-import { OvergangArbeidMedDataFetching } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMedDataFetching';
-import { OvergangUforeMedDataFetching } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeMedDataFetching';
-import { BistandsbehovutenovergangMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehovutenovergang/BistandsbehovutenovergangMedDataFetching';
-import { isDev, isLocal, isProd } from 'lib/utils/environment';
 
 interface Props {
   behandlingsReferanse: string;
@@ -36,8 +32,8 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const sykdomsvurderingBrevSteg = getStegData(aktivStegGruppe, 'SYKDOMSVURDERING_BREV', flyt.data);
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
-  const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data);
-  const overgangarbeidSteg = getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data);
+  /*const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data);
+  const overgangarbeidSteg = getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data);*/
 
   return (
     <GruppeSteg
@@ -52,15 +48,15 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <SykdomsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={sykdomSteg} />
         </StegSuspense>
       )}
-      {(isDev() || isLocal()) && vurderBistandsbehovSteg.skalViseSteg && (
+      {/*vurderBistandsbehovSteg.skalViseSteg && (
         <StegSuspense>
           <BistandsbehovutenovergangMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             stegData={vurderBistandsbehovSteg}
           />
         </StegSuspense>
-      )}
-      {isProd() && vurderBistandsbehovSteg.skalViseSteg && (
+      )*/}
+      {vurderBistandsbehovSteg.skalViseSteg && (
         <StegSuspense>
           <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
@@ -86,7 +82,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />
         </StegSuspense>
       )}
-      {(isDev() || isLocal()) && overganguføreSteg.skalViseSteg && (
+      {/*(isDev() || isLocal()) && overganguføreSteg.skalViseSteg && (
         <StegSuspense>
           <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
         </StegSuspense>
@@ -95,7 +91,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
         <StegSuspense>
           <OvergangArbeidMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overgangarbeidSteg} />
         </StegSuspense>
-      )}
+      )*/}
       {sykdomsvurderingBrevSteg.skalViseSteg && (
         <StegSuspense>
           <SykdomsvurderingBrevMedDataFetching

@@ -10,6 +10,7 @@ interface RadioProps<FormFieldValues extends FieldValues> {
   control: Control<FormFieldValues, any, any>;
   children: ReactNode;
   hideLabel?: boolean;
+  shouldUnregister?: boolean;
   label?: string;
   size?: 'small' | 'medium';
   rules?: RegisterOptions<FormFieldValues>;
@@ -30,6 +31,7 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
   label,
   size = 'small',
   horisontal = false,
+  shouldUnregister = false,
   readOnly,
   className,
   onChangeCustom,
@@ -41,6 +43,7 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
         name={name}
         control={control}
         rules={rules}
+        shouldUnregister={shouldUnregister}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
           const handleChange = (val: string) => {
             onChange(val);
