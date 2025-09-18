@@ -52,22 +52,24 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <SykdomsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={sykdomSteg} />
         </StegSuspense>
       )}
-      {(isDev() || isLocal()) && vurderBistandsbehovSteg.skalViseSteg && (
+      {/*vurderBistandsbehovSteg.skalViseSteg && (
         <StegSuspense>
           <BistandsbehovutenovergangMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             stegData={vurderBistandsbehovSteg}
           />
         </StegSuspense>
-      )}
-      {isProd() && vurderBistandsbehovSteg.skalViseSteg && (
-        <StegSuspense>
-          <BistandsbehovMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            stegData={vurderBistandsbehovSteg}
-          />
-        </StegSuspense>
-      )}
+      )*/}
+      {isDev() ||
+        isLocal() ||
+        (isProd() && vurderBistandsbehovSteg.skalViseSteg && (
+          <StegSuspense>
+            <BistandsbehovMedDataFetching
+              behandlingsReferanse={behandlingsReferanse}
+              stegData={vurderBistandsbehovSteg}
+            />
+          </StegSuspense>
+        ))}
       {fritakMeldepliktSteg.skalViseSteg && (
         <StegSuspense>
           <MeldepliktMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={fritakMeldepliktSteg} />
