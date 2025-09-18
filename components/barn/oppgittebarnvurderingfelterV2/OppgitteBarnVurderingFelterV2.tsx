@@ -9,6 +9,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { useEffect, useState } from 'react';
 
 interface Props {
   ident: string | null | undefined;
@@ -28,12 +29,15 @@ export const OppgitteBarnVurderingFelterV2 = ({
   fødselsdato,
   harOppgittFosterforelderRelasjon,
 }: Props) => {
+  const [prevHarForeldreAnsvar, setPrevHarForeldreAnsvar] = useState<string | undefined>(undefined);
+  const [prevDato, setPrevDato] = useState<string | undefined>(undefined);
   const harForeldreAnsvar = form.watch(
     `barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`
   );
   const erFosterforelder = form.watch(
     `barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.erFosterforelder`
   );
+  const datoFelt = form.watch(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`);
 
   const skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt =
     (harForeldreAnsvar === JaEllerNei.Nei || erFosterforelder === JaEllerNei.Nei) && vurderingIndex !== 0;
@@ -41,6 +45,27 @@ export const OppgitteBarnVurderingFelterV2 = ({
   const skalSetteEnFraOgMedDato =
     ((harForeldreAnsvar === JaEllerNei.Nei || erFosterforelder === JaEllerNei.Nei) && vurderingIndex !== 0) ||
     harForeldreAnsvar === JaEllerNei.Ja;
+
+  useEffect(() => {
+    if (prevHarForeldreAnsvar) {
+      form.setValue(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`, '');
+    }
+    if (prevDato) {
+      console.log('resetter fraDato');
+      form.setValue(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`, '');
+    }
+  }, [erFosterforelder]);
+
+  useEffect(() => {
+    if (prevDato) {
+      form.setValue(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`, '');
+    }
+    setPrevHarForeldreAnsvar(harForeldreAnsvar);
+  }, [harForeldreAnsvar]);
+
+  useEffect(() => {
+    setPrevDato(datoFelt);
+  }, [datoFelt]);
 
   return (
     <div className={'flex-column'}>
@@ -59,7 +84,6 @@ export const OppgitteBarnVurderingFelterV2 = ({
           label={'Har fosterhjemsordningen vart i to år eller er den av varig karakter?'}
           control={form.control}
           name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.erFosterforelder`}
-          shouldUnregister={true}
           readOnly={readOnly}
           rules={{
             required: 'Du må besvare om fosterhjemsordingen har vart i to år eller om den er av varig karakter',
@@ -74,7 +98,6 @@ export const OppgitteBarnVurderingFelterV2 = ({
         <RadioGroupWrapper
           label={'Skal brukeren få barnetillegg for barnet?'}
           control={form.control}
-          shouldUnregister={true}
           name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`}
           readOnly={readOnly}
           rules={{ required: 'Du må besvare om det skal beregnes barnetillegg for barnet' }}
@@ -91,7 +114,6 @@ export const OppgitteBarnVurderingFelterV2 = ({
               ? 'Forsørgeransvar opphører fra'
               : 'Oppgi dato for når barnetillegget skal gis fra'
           }
-          shouldUnregister={true}
           description={
             skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt
               ? null
