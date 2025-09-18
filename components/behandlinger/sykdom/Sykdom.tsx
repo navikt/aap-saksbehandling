@@ -59,7 +59,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )*/}
-      {(isDev() || isLocal() || isProd()) && vurderBistandsbehovSteg.skalViseSteg && (
+      {vurderBistandsbehovSteg.skalViseSteg && (
         <StegSuspense>
           <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
