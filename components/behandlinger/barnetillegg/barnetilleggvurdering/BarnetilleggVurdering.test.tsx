@@ -904,3 +904,77 @@ describe('mellomlagring', () => {
     ).toBeVisible();
   });
 });
+
+describe('reset felter ved endringer som påvirker visningslogikk', () => {
+  async function svarPåOmFosteroppholdErVarig(svar: 'Ja' | 'Nei') {
+    const fosterFelt = screen.getByRole('group', {
+      name: 'Har fosterhjemsordningen vart i to år eller er den av varig karakter?',
+    });
+    const jaVerdi = within(fosterFelt).getByRole('radio', { name: svar });
+
+    await user.click(jaVerdi);
+  }
+  async function svarPåOmDetSkalBeregnesBarnetillegg(svar: 'Ja' | 'Nei') {
+    const skalBeregnesBarnetilleggFelt = screen.getByRole('group', {
+      name: 'Skal brukeren få barnetillegg for barnet?',
+    });
+    const jaVerdi = within(skalBeregnesBarnetilleggFelt).getByRole('radio', { name: svar });
+
+    await user.click(jaVerdi);
+  }
+
+  it('dato blir resatt hvis foreldreansvar endres', async () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    await svarPåOmFosteroppholdErVarig('Ja');
+    await svarPåOmDetSkalBeregnesBarnetillegg('Ja');
+    const mindato = '01.01.2000';
+    const datofelt = screen.getByRole('textbox', {
+      name: 'Oppgi dato for når barnetillegget skal gis fra',
+    });
+    await user.type(datofelt, mindato);
+
+    // endrer svar og så tilbake sånn at datofelt vises igjen
+    await svarPåOmDetSkalBeregnesBarnetillegg('Nei');
+    await svarPåOmDetSkalBeregnesBarnetillegg('Ja');
+
+    expect(await screen.queryByDisplayValue(mindato)).not.toBeInTheDocument();
+  });
+
+  it('foreldreansvar og dato blir resatt hvis erFosterhjem endres', async () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    await svarPåOmFosteroppholdErVarig('Ja');
+    await svarPåOmDetSkalBeregnesBarnetillegg('Ja');
+    const mindato = '01.01.2000';
+    const datofelt = screen.getByRole('textbox', {
+      name: 'Oppgi dato for når barnetillegget skal gis fra',
+    });
+    await user.type(datofelt, mindato);
+
+    // endrer svar og så tilbake sånn at foreldreansvar radio og datofelt vises igjen
+    await svarPåOmFosteroppholdErVarig('Nei');
+    await svarPåOmFosteroppholdErVarig('Ja');
+
+    expect(await screen.queryByDisplayValue(mindato)).not.toBeInTheDocument();
+    const foreldreAnsvarRadio = screen.getByRole('group', {
+      name: 'Skal brukeren få barnetillegg for barnet?',
+    });
+    const radios = within(foreldreAnsvarRadio).getAllByRole('radio');
+    radios.forEach((radio) => expect(radio).toHaveProperty('checked', false));
+  });
+});
