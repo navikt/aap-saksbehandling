@@ -12,6 +12,7 @@ export type DateInputWrapperProps<FormFieldValues extends FieldValues> = {
   label?: string;
   hideLabel?: boolean;
   size?: 'small' | 'medium';
+  shouldUnregister?: boolean;
   description?: ReactNode;
   rules?: RegisterOptions<FormFieldValues>;
   readOnly?: boolean;
@@ -27,6 +28,7 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
   description,
   rules,
   readOnly,
+  shouldUnregister = false,
   size = 'small',
   className,
   hideLabel,
@@ -41,6 +43,7 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
       name={name}
       control={control}
       rules={rules}
+      shouldUnregister={shouldUnregister}
       render={({ field: { name, value, onChange }, fieldState: { error } }) => {
         const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
           onChange(transform(e));

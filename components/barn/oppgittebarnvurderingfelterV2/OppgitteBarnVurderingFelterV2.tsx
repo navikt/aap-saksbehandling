@@ -59,6 +59,7 @@ export const OppgitteBarnVurderingFelterV2 = ({
           label={'Har fosterhjemsordningen vart i to år eller er den av varig karakter?'}
           control={form.control}
           name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.erFosterforelder`}
+          shouldUnregister={true}
           readOnly={readOnly}
           rules={{
             required: 'Du må besvare om fosterhjemsordingen har vart i to år eller om den er av varig karakter',
@@ -73,6 +74,7 @@ export const OppgitteBarnVurderingFelterV2 = ({
         <RadioGroupWrapper
           label={'Skal brukeren få barnetillegg for barnet?'}
           control={form.control}
+          shouldUnregister={true}
           name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`}
           readOnly={readOnly}
           rules={{ required: 'Du må besvare om det skal beregnes barnetillegg for barnet' }}
@@ -89,6 +91,7 @@ export const OppgitteBarnVurderingFelterV2 = ({
               ? 'Forsørgeransvar opphører fra'
               : 'Oppgi dato for når barnetillegget skal gis fra'
           }
+          shouldUnregister={true}
           description={
             skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt
               ? null
