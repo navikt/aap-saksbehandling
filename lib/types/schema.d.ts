@@ -9983,8 +9983,8 @@ export interface components {
        * @example 2025-04-01
        */
       opphoerstidspunkt?: string | null;
-      /** @enum {string} */
-      status:
+      /** @enum {string|null} */
+      status?:
         | 'bosatt'
         | 'utflyttet'
         | 'forsvunnet'
@@ -9993,7 +9993,8 @@ export interface components {
         | 'foedselsregistrert'
         | 'ikkeBosatt'
         | 'midlertidig'
-        | 'inaktiv';
+        | 'inaktiv'
+        | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering': {
       kanBehandlesAutomatisk: boolean;
