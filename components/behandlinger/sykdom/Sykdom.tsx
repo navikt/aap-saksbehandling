@@ -59,16 +59,14 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )*/}
-      {isDev() ||
-        isLocal() ||
-        (isProd() && vurderBistandsbehovSteg.skalViseSteg && (
-          <StegSuspense>
-            <BistandsbehovMedDataFetching
-              behandlingsReferanse={behandlingsReferanse}
-              stegData={vurderBistandsbehovSteg}
-            />
-          </StegSuspense>
-        ))}
+      {(isDev() || isLocal() || isProd()) && vurderBistandsbehovSteg.skalViseSteg && (
+        <StegSuspense>
+          <BistandsbehovMedDataFetching
+            behandlingsReferanse={behandlingsReferanse}
+            stegData={vurderBistandsbehovSteg}
+          />
+        </StegSuspense>
+      )}
       {fritakMeldepliktSteg.skalViseSteg && (
         <StegSuspense>
           <MeldepliktMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={fritakMeldepliktSteg} />
