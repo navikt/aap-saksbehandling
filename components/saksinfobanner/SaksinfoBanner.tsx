@@ -84,6 +84,7 @@ export const SaksinfoBanner = ({
 
   const visValgForÅAvbryteRevurdering =
     !isProd() &&
+    behandlingErIkkeIverksatt &&
     brukerErBeslutter &&
     !behandlerRevurderingSomSkalAvbrytes &&
     brukerKanSaksbehandle &&
