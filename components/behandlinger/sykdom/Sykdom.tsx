@@ -14,7 +14,6 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
 import { OvergangArbeidMedDataFetching } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMedDataFetching';
 import { OvergangUforeMedDataFetching } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeMedDataFetching';
-import { BistandsbehovutenovergangMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehovutenovergang/BistandsbehovutenovergangMedDataFetching';
 import { isDev, isLocal, isProd } from 'lib/utils/environment';
 
 interface Props {
