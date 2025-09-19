@@ -13,6 +13,7 @@ import { FormEvent } from 'react';
 import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
+import { useFieldArray } from 'react-hook-form';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -106,6 +107,23 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
     { readOnly }
   );
 
+  let { fields: relevanteYrkesskadeSaker, update } = useFieldArray({
+    name: 'relevanteYrkesskadeSaker',
+    control: form.control,
+    rules: {
+      validate: (fields) => {
+        const ingenYrkesskadeErTilknyttet = fields.every((yrkesskade) => !yrkesskade.erTilknyttet);
+        if (ingenYrkesskadeErTilknyttet) {
+          form.setError('relevanteYrkesskadeSaker', {
+            type: 'custom',
+            message: 'Du må velge minst én yrkesskade',
+          });
+          return false;
+        }
+      },
+    },
+  });
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(
       (data) => {
@@ -164,7 +182,12 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
             <Label size={'small'}>
               Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.
             </Label>
-            <YrkesskadeVurderingTabell form={form} readOnly={readOnly} />
+            <YrkesskadeVurderingTabell
+              form={form}
+              readOnly={readOnly}
+              yrkesskader={relevanteYrkesskadeSaker}
+              update={update}
+            />
           </VStack>
           <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
         </>

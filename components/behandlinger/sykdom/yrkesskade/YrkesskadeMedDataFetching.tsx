@@ -7,7 +7,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { isDev } from 'lib/utils/environment';
+import { isProd } from 'lib/utils/environment';
 import { YrkesskadeMedManuellYrkesskadeDato } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedManuellYrkesskadeDato';
 
 interface Props {
@@ -29,7 +29,7 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsReferanse, stegData
     return null;
   }
 
-  return isDev() ? (
+  return !isProd() ? (
     // TODO: rydd opp her etter etter prodsetting
     <YrkesskadeMedManuellYrkesskadeDato
       grunnlag={yrkesskadeVurderingGrunnlag.data}
