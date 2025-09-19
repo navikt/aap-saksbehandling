@@ -61,7 +61,7 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
           <Table.ColumnHeader sortKey={'avklaringsbehovKode'} sortable={true}>
             Oppgave
           </Table.ColumnHeader>
-          <Table.ColumnHeader sortKey={'reservertAv'} sortable={true}>
+          <Table.ColumnHeader sortKey={'reservertAvNavn'} sortable={true}>
             Saksbehandler
           </Table.ColumnHeader>
           <Table.HeaderCell></Table.HeaderCell>
