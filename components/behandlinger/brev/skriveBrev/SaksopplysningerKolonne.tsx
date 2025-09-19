@@ -1,7 +1,12 @@
 import { SaksopplysningerKort } from 'components/behandlinger/brev/skriveBrev/SaksopplysningerKort';
 import styles from './SaksopplysningerKolonne.module.css';
 import { Label } from '@navikt/ds-react';
-import { Aktivitetsplikt11_7Grunnlag, RefusjonskravGrunnlag, SykdomsvurderingBrevGrunnlag } from 'lib/types/types';
+import {
+  RefusjonkravVurderingResponse,
+  Aktivitetsplikt11_7Grunnlag,
+  RefusjonskravGrunnlag,
+  SykdomsvurderingBrevGrunnlag,
+} from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
@@ -11,14 +16,31 @@ interface Props {
   aktivitetsplikt11_7Grunnlag?: Aktivitetsplikt11_7Grunnlag;
 }
 
+// Using own groupBy for now. replace with ES2024's Map.groupBy() later.
+function groupByPreES2024<T, K>(array: T[], getKey: (item: T) => K): Map<K, T[]> {
+  const result = new Map<K, T[]>();
+  for (const item of array) {
+    const key = getKey(item);
+    if (!result.has(key)) {
+      result.set(key, []);
+    }
+    result.get(key)!.push(item);
+  }
+  return result;
+}
+
 export const SaksopplysningerKolonne = ({
   refusjonGrunnlag,
   sykdomsvurderingBrevGrunnlag,
   aktivitetsplikt11_7Grunnlag,
 }: Props) => {
   const gjeldendeSykdomsvurderingForBrev = sykdomsvurderingBrevGrunnlag?.vurdering?.vurdering;
-  const refusjonVurdering = refusjonGrunnlag.gjeldendeVurdering;
   const aktivitetspliktVurdering = aktivitetsplikt11_7Grunnlag?.vurdering;
+  const refusjonVurderinger = refusjonGrunnlag?.gjeldendeVurderinger?.filter((vurdering) => vurdering.harKrav === true);
+  const refusjonVurderingerGruppertPerNavKontor: Map<string, RefusjonkravVurderingResponse[]> =
+    refusjonVurderinger && refusjonVurderinger.length > 0
+      ? groupByPreES2024(refusjonVurderinger, (vurdering) => vurdering.navKontor)
+      : new Map();
 
   return (
     <div className={styles.kolonne}>
@@ -30,21 +52,22 @@ export const SaksopplysningerKolonne = ({
           begrunnelse={gjeldendeSykdomsvurderingForBrev}
         />
       )}
-      {refusjonVurdering?.harKrav && (
-        <SaksopplysningerKort
-          tittel="Refusjonskrav"
-          begrunnelse={`Det er refusjonskrav mot sosialstønad. Refusjonskravet gjelder fra 
-                  ${
-                    refusjonVurdering.fom
-                      ? formaterDatoForFrontend(parse(refusjonVurdering.fom, 'yyyy-MM-dd', new Date()))
-                      : '-'
-                  }
-                  ${
-                    refusjonVurdering.tom
-                      ? `til ${formaterDatoForFrontend(parse(refusjonVurdering.tom, 'yyyy-MM-dd', new Date()))}`
-                      : ''
-                  }`}
-        />
+      {refusjonVurderinger && refusjonVurderinger.length > 0 && (
+        <SaksopplysningerKort tittel={`Refusjonskrav`}>
+          <dl>
+            {Array.from(refusjonVurderingerGruppertPerNavKontor.entries()).map(([navKontor, vurderinger]) => (
+              <div className={styles.refusjonskrav} key={navKontor}>
+                <dt className={styles.liste_tittel}>{navKontor}</dt>
+                {vurderinger.map((vurdering, index) => (
+                  <dd key={index}>
+                    {vurdering.fom ? formaterDatoForFrontend(parse(vurdering.fom, 'yyyy-MM-dd', new Date())) : '-'} til{' '}
+                    {vurdering.tom ? formaterDatoForFrontend(parse(vurdering.tom, 'yyyy-MM-dd', new Date())) : ''}
+                  </dd>
+                ))}
+              </div>
+            ))}
+          </dl>
+        </SaksopplysningerKort>
       )}
       {aktivitetspliktVurdering && (
         <SaksopplysningerKort tittel="Vurdering § 11-7" begrunnelse={aktivitetspliktVurdering.begrunnelse} />
