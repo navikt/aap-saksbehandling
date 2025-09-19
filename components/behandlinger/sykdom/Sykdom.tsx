@@ -55,7 +55,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             stegData={vurderBistandsbehovSteg}
           />
         </StegSuspense>
-      )*/}
+      )   //TODO: Bytte ut bistandsBehovMedDataFetching med BistandsbehovutenovergangMedDataFetching ved innføring av 11-17 og 11-18*/}
       {vurderBistandsbehovSteg.skalViseSteg && (
         <StegSuspense>
           <BistandsbehovMedDataFetching
