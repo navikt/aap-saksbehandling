@@ -12415,6 +12415,7 @@ export interface components {
       hendelser: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingHendelseDTO'][];
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
+      avklaringsDefinisjon?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00

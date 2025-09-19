@@ -52,7 +52,9 @@ export const OpprettOppfølgingsBehandling = ({
   const erOppfølgingsoppgaveForSamordningGradering = behovsType === Behovstype.AVKLAR_SAMORDNING_GRADERING;
   const defaultValues: DefaultValues = {
     datoForOppfølging: finnTidligsteVirkningstidspunkt ? finnTidligsteVirkningstidspunkt : '',
-    hvaSkalFølgesOpp: erOppfølgingsoppgaveForSamordningGradering ? 'Vurder virkningstidspunkt etter samordning' : '',
+    hvaSkalFølgesOpp: erOppfølgingsoppgaveForSamordningGradering
+      ? 'Vurder om virkningstidspunkt etter samordning må endres'
+      : '',
     hvemSkalFølgeOpp: erOppfølgingsoppgaveForSamordningGradering ? 'NasjonalEnhet' : '',
     reserverTilMeg: erOppfølgingsoppgaveForSamordningGradering ? [] : ['RESERVER_TIL_MEG'],
   };

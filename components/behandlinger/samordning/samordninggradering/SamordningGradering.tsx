@@ -198,7 +198,7 @@ export const SamordningGradering = ({
       {bruker && visModalForOppfølgingsoppgaveState && (
         <Modal
           ref={ref}
-          header={{ heading: 'Opprett oppfølgningsoppgave' }}
+          header={{ heading: 'Vurder konsekvens' }}
           onClose={() => setModalForOppfølgingsoppgaveState(false)}
           open={true}
         >
