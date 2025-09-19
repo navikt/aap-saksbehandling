@@ -16,19 +16,6 @@ interface Props {
   aktivitetsplikt11_7Grunnlag?: Aktivitetsplikt11_7Grunnlag;
 }
 
-// Using own groupBy for now. replace with ES2024's Map.groupBy() later.
-function groupByPreES2024<T, K>(array: T[], getKey: (item: T) => K): Map<K, T[]> {
-  const result = new Map<K, T[]>();
-  for (const item of array) {
-    const key = getKey(item);
-    if (!result.has(key)) {
-      result.set(key, []);
-    }
-    result.get(key)!.push(item);
-  }
-  return result;
-}
-
 export const SaksopplysningerKolonne = ({
   refusjonGrunnlag,
   sykdomsvurderingBrevGrunnlag,
@@ -39,7 +26,7 @@ export const SaksopplysningerKolonne = ({
   const refusjonVurderinger = refusjonGrunnlag?.gjeldendeVurderinger?.filter((vurdering) => vurdering.harKrav === true);
   const refusjonVurderingerGruppertPerNavKontor: Map<string, RefusjonkravVurderingResponse[]> =
     refusjonVurderinger && refusjonVurderinger.length > 0
-      ? groupByPreES2024(refusjonVurderinger, (vurdering) => vurdering.navKontor)
+      ? Map.groupBy(refusjonVurderinger, (vurdering) => vurdering.navKontor)
       : new Map();
 
   return (
