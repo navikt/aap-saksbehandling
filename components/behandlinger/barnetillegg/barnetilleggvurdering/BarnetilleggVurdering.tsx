@@ -56,7 +56,6 @@ export const BarnetilleggVurdering = ({
   visManuellVurdering,
   initialMellomlagretVurdering,
 }: Props) => {
-  console.log(grunnlag);
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
@@ -101,7 +100,10 @@ export const BarnetilleggVurdering = ({
                       begrunnelse: vurdering.begrunnelse,
                       harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
                       fraDato: getFraDato(vurdering.fraDato),
-                      erFosterForelder: vurdering.erFosterforelder === JaEllerNei.Ja,
+                      erFosterForelder:
+                        vurdering.erFosterforelder === JaEllerNei.Ja || vurdering.erFosterforelder === JaEllerNei.Nei
+                          ? vurdering.erFosterforelder === JaEllerNei.Ja
+                          : null,
                     };
                   }),
                 };
@@ -214,10 +216,7 @@ function mapVurderingToDraftFormFields(
     return {
       ident: barn.ident,
       navn: barn.ident ? behandlingPersonInfo?.info[barn.ident] : navn,
-      // hvis det finnes en vurdering med svar på erFosterforelder vet vi at dette er oppgitt relasjon FOSTERFORELDER
-      oppgittForelderRelasjon: barn.vurderinger.find((e) => e.erFosterForelder === true || e.erFosterForelder === false)
-        ? 'FOSTERFORELDER'
-        : null,
+      oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
       fødselsdato: barn.fødselsdato,
       vurderinger: barn.vurderinger.map((value) => {
         return {

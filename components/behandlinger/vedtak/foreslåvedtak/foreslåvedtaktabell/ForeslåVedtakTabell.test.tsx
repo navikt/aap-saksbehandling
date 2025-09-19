@@ -12,6 +12,10 @@ const foreslåVedtakGrunnlag: ForeslåVedtakGrunnlag = {
       },
       utfall: 'OPPFYLT',
       rettighetsType: 'BISTANDSBEHOV',
+      avslagsårsak: {
+        underveisavslag: null,
+        vilkårsavslag: [],
+      },
     },
     {
       periode: {
@@ -20,6 +24,10 @@ const foreslåVedtakGrunnlag: ForeslåVedtakGrunnlag = {
       },
       utfall: 'IKKE_OPPFYLT',
       rettighetsType: 'BISTANDSBEHOV',
+      avslagsårsak: {
+        underveisavslag: null,
+        vilkårsavslag: [],
+      },
     },
   ],
 };
@@ -44,13 +52,11 @@ describe('Foreslå vedtak', () => {
     );
     const avslåttPeriode = screen.getByText('Ikke rett på AAP');
     expect(avslåttPeriode).toBeVisible();
-
   });
 
   it('Skal vise rettighetstype på innvilget AAP', () => {
     render(<ForeslåVedtakTabell grunnlag={foreslåVedtakGrunnlag} />);
-    const innvilgetÅrsak = screen.getByText('§ 11-6 Bistandsbehov')
+    const innvilgetÅrsak = screen.getByText('§ 11-6 Bistandsbehov');
     expect(innvilgetÅrsak).toBeVisible();
-
   });
 });

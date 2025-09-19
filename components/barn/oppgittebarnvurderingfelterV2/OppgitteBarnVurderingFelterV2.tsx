@@ -51,7 +51,6 @@ export const OppgitteBarnVurderingFelterV2 = ({
       form.setValue(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`, '');
     }
     if (prevDato) {
-      console.log('resetter fraDato');
       form.setValue(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`, '');
     }
   }, [erFosterforelder]);
@@ -77,9 +76,7 @@ export const OppgitteBarnVurderingFelterV2 = ({
         rules={{ required: 'Du må gi en begrunnelse' }}
         className="begrunnelse"
       />
-      {(harOppgittFosterforelderRelasjon ||
-        erFosterforelder === JaEllerNei.Ja ||
-        erFosterforelder === JaEllerNei.Nei) && (
+      {harOppgittFosterforelderRelasjon && (
         <RadioGroupWrapper
           label={'Har fosterhjemsordningen vart i to år eller er den av varig karakter?'}
           control={form.control}

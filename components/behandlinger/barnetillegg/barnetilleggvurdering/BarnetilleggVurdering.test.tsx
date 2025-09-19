@@ -30,6 +30,7 @@ const vurdertBarnFosterForelder: BarnetilleggGrunnlag['vurderteBarn'][number] = 
   fødselsdato: '2023-05-05',
   ident: '1234567890',
   navn: 'Snill Såpe',
+  oppgittForeldreRelasjon: 'FOSTERFORELDER',
   vurderinger: [
     {
       begrunnelse: 'en god begrunnelse',
