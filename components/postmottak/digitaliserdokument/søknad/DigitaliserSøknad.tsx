@@ -31,6 +31,7 @@ export type Barn = {
   etternavn: string;
   fødselsdato: string;
   relasjon: 'FORELDER' | 'FOSTERFORELDER';
+  checkboxList: string[];
 };
 
 export interface SøknadFormFields {
@@ -63,7 +64,7 @@ function mapTilSøknadKontrakt(data: SøknadFormFields) {
       barn: data.oppgitteBarn.map((barn) => {
         return {
           fødselsdato: formaterDatoForBackend(parse(barn.fødselsdato, 'dd.MM.yyyy', new Date())),
-          ident: barn.fnr
+          ident: barn.fnr && !barn.checkboxList.includes('manglerIdent')
             ? {
                 identifikator: barn.fnr,
               }
