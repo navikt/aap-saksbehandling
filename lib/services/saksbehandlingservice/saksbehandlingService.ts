@@ -577,7 +577,7 @@ async function ventTilProsesseringErFerdig(
     const response = await hentFlytUtenRequestMemoization(behandlingsreferanse);
     if (response.type === 'ERROR') {
       logError(
-        `ventTilProssesering hentFlyt ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
+        `ventTilProssesering hentFlyt: Behandlingsreferanse: [${behandlingsreferanse}] - ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
       );
       prosessering = { status: 'FEILET', ventendeOppgaver: [] };
       break;
@@ -592,7 +592,10 @@ async function ventTilProsesseringErFerdig(
     }
 
     if (status === 'FEILET') {
-      logError('Prosessering av flyt feilet!', Error(JSON.stringify(response.data.prosessering.ventendeOppgaver)));
+      logError(
+        'Prosessering av flyt feilet. Behandlingsreferanse: [${behandlingsreferanse}]',
+        Error(JSON.stringify(response.data.prosessering.ventendeOppgaver))
+      );
       prosessering = response.data.prosessering;
       break;
     }
