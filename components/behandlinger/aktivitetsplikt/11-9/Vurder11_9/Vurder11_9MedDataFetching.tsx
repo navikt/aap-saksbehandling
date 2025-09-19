@@ -9,16 +9,17 @@ interface Props {
 // TODO: Erstatt typer når backend er klar
 
 export type Vurdering11_9 = {
+  id: string;
   begrunnelse: string;
   dato: string;
   brudd: Brudd;
   grunn: Grunn;
-  status: string;
 };
 
 export type Vurder11_9Grunnlag = {
   harTilgangTilÅSaksbehandle: boolean;
   tidligereVurderinger: Vurdering11_9[];
+  ikkeIverksatteVurderinger: Vurdering11_9[];
 };
 
 export type Brudd =
@@ -36,18 +37,27 @@ export const Vurder11_9MedDataFetching = async ({ behandlingVersjon, readOnly }:
       harTilgangTilÅSaksbehandle: true,
       tidligereVurderinger: [
         {
+          id: '1',
           begrunnelse: 'Noe',
           dato: '2025-05-01',
           brudd: 'IKKE_MØTT_TIL_TILTAK',
           grunn: 'IKKE_RIMELIG_GRUNN',
-          status: 'Ferdigbehandlet',
         },
         {
+          id: '2',
           begrunnelse: 'Noe annet',
           dato: '2025-05-02',
           brudd: 'IKKE_MØTT_TIL_BEHANDLING',
           grunn: 'IKKE_RIMELIG_GRUNN',
-          status: 'Ferdigbehandlet',
+        },
+      ],
+      ikkeIverksatteVurderinger: [
+        {
+          id: '3',
+          begrunnelse: 'En mer utfyllende begrunnelse',
+          dato: '2025-05-02',
+          brudd: 'IKKE_MØTT_TIL_BEHANDLING',
+          grunn: 'IKKE_RIMELIG_GRUNN',
         },
       ],
     },

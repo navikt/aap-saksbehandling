@@ -8,20 +8,21 @@ describe('Vurder11_9', () => {
     harTilgangTilÅSaksbehandle: true,
     tidligereVurderinger: [
       {
+        id: '1',
         begrunnelse: 'Noe',
         dato: '2025-05-01',
         brudd: 'IKKE_MØTT_TIL_TILTAK',
         grunn: 'IKKE_RIMELIG_GRUNN',
-        status: 'Ferdigbehandlet',
       },
       {
+        id: '2',
         begrunnelse: 'Noe annet',
         dato: '2025-05-02',
         brudd: 'IKKE_MØTT_TIL_BEHANDLING',
         grunn: 'IKKE_RIMELIG_GRUNN',
-        status: 'Ferdigbehandlet',
       },
     ],
+    ikkeIverksatteVurderinger: [],
   };
 
   it('viser overskrift og tabell med tidligere vurderinger', () => {
@@ -35,9 +36,9 @@ describe('Vurder11_9', () => {
     expect(førsteRad).toHaveTextContent(/DatoBruddGrunnStatus/);
 
     const andreRad = screen.getAllByRole('row')[1];
-    expect(andreRad).toHaveTextContent(/01.05.2025Ikke møtt til tiltakUten rimelig grunnFerdigbehandlet/);
+    expect(andreRad).toHaveTextContent(/Vis mer01.05.2025Ikke møtt til tiltakUten rimelig grunnIverksattEndre/);
 
     const tredjeRad = screen.getAllByRole('row')[2];
-    expect(tredjeRad).toHaveTextContent(/02.05.2025Ikke møtt til behandlingUten rimelig grunnFerdigbehandlet/);
+    expect(tredjeRad).toHaveTextContent(/Vis mer02.05.2025Ikke møtt til behandlingUten rimelig grunnIverksattEndre/);
   });
 });

@@ -32,6 +32,10 @@ export function sorterEtterNyesteDato(a: string, b: string) {
   return new Date(b).getTime() - new Date(a).getTime();
 }
 
+export function sorterEtterEldsteDato(a: string, b: string) {
+  return new Date(a).getTime() - new Date(b).getTime();
+}
+
 export const parseDatoFraDatePicker = (value?: string | Date): Date | undefined => {
   if (value instanceof Date) {
     return value;
