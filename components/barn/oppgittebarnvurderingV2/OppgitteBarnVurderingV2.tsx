@@ -5,7 +5,7 @@ import { BodyShort, Button, Detail } from '@navikt/ds-react';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { JaEllerNei } from 'lib/utils/form';
 
-import styles from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
+import styles from 'components/barn/oppgittebarnvurderingV2/OppgitteBarnVurdering.module.css';
 import { OppgitteBarnVurderingFelterV2 } from 'components/barn/oppgittebarnvurderingfelterV2/OppgitteBarnVurderingFelterV2';
 
 interface Props {

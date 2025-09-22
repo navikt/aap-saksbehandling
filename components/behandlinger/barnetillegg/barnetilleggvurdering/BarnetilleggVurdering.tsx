@@ -9,11 +9,9 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useFieldArray } from 'react-hook-form';
 import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
 import { FormEvent } from 'react';
 import styles from './BarnetilleggVurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
-import { isProd } from 'lib/utils/environment';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OppgitteBarnVurderingV2 } from 'components/barn/oppgittebarnvurderingV2/OppgitteBarnVurderingV2';
@@ -160,7 +158,7 @@ export const BarnetilleggVurdering = ({
             </div>
 
             {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
-              return !isProd() ? (
+              return (
                 <OppgitteBarnVurderingV2
                   key={vurdering.id}
                   form={form}
@@ -169,16 +167,6 @@ export const BarnetilleggVurdering = ({
                   fødselsdato={vurdering.fødselsdato}
                   navn={vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
                   harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
-                  readOnly={readOnly}
-                />
-              ) : (
-                <OppgitteBarnVurdering
-                  key={vurdering.id}
-                  form={form}
-                  barnetilleggIndex={barnetilleggIndex}
-                  ident={vurdering.ident}
-                  fødselsdato={vurdering.fødselsdato}
-                  navn={vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
                   readOnly={readOnly}
                 />
               );
