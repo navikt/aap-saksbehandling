@@ -37,7 +37,7 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
             control={form.control}
             readOnly={readOnly}
             rules={{
-              required: 'Fornavn er påkrevd.',
+              required: 'Du må oppgi fornavn på barnet',
             }}
           />
         </VStack>
@@ -50,7 +50,7 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
             control={form.control}
             readOnly={readOnly}
             rules={{
-              required: 'Etternavn er påkrevd.',
+              required: 'Du må oppgi etternavn på barnet',
             }}
           />
         </VStack>
@@ -78,7 +78,7 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
             control={form.control}
             readOnly={readOnly}
             rules={{
-              required: 'Du må oppgi fødselsdato for barnet.',
+              required: 'Du må oppgi fødselsdatoen på barnet',
               validate: {
                 validerDato: (value) => validerDato(value as string),
                 validerIkkeFørDato: (value) => {
@@ -102,6 +102,7 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
               control={form.control}
               readOnly={readOnly}
               rules={{
+                required: 'Du må oppgi fødselsnummer eller D-nummer på barnet',
                 validate: (value) => validerIdentLengde(value as string),
               }}
             />
