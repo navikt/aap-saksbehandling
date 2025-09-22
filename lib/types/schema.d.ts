@@ -9407,6 +9407,7 @@ export interface components {
         | 'MELDEKORT'
         | 'AKTIVITETSMELDING'
         | 'OPPFØLGINGSOPPGAVE'
+        | 'OPPFØLGINGSOPPGAVE_SAMORDNING_GRADERING'
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'KLAGE'
         | 'AKTIVITETSPLIKT'
@@ -12351,6 +12352,7 @@ export interface components {
         | 'MELDEKORT'
         | 'AKTIVITETSMELDING'
         | 'OPPFØLGINGSOPPGAVE'
+        | 'OPPFØLGINGSOPPGAVE_SAMORDNING_GRADERING'
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'KLAGE'
         | 'AKTIVITETSPLIKT';
@@ -12510,6 +12512,7 @@ export interface components {
         | 'MELDEKORT'
         | 'AKTIVITETSMELDING'
         | 'OPPFØLGINGSOPPGAVE'
+        | 'OPPFØLGINGSOPPGAVE_SAMORDNING_GRADERING'
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'KLAGE'
         | 'AKTIVITETSPLIKT'
