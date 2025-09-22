@@ -23,13 +23,15 @@ import { FormField } from 'components/form/FormField';
 import { isBefore, parse, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 
 export type Barn = {
   fnr?: string;
-  fornavn?: string;
-  etternavn?: string;
-  relasjon?: 'FORELDER' | 'FOSTERFORELDER';
+  fornavn: string;
+  etternavn: string;
+  fødselsdato: string;
+  relasjon: 'FORELDER' | 'FOSTERFORELDER';
+  checkboxList: string[];
 };
 
 export interface SøknadFormFields {
@@ -57,9 +59,21 @@ function mapTilSøknadKontrakt(data: SøknadFormFields) {
             kommeTilbake: data.studentKommeTilbake || null,
           },
     yrkesskade: data.yrkesSkade,
-    oppgitteBarn: data.oppgitteBarn?.length
-      ? { identer: data.oppgitteBarn.map((barn) => ({ identifikator: barn.fnr! })), barn: [] }
-      : undefined,
+    oppgitteBarn: {
+      identer: [],
+      barn: data.oppgitteBarn.map((barn) => {
+        return {
+          fødselsdato: formaterDatoForBackend(parse(barn.fødselsdato, 'dd.MM.yyyy', new Date())),
+          ident: barn.fnr && !barn.checkboxList.includes('manglerIdent')
+            ? {
+                identifikator: barn.fnr,
+              }
+            : undefined,
+          navn: barn.fornavn + ' ' + barn.etternavn,
+          relasjon: barn.relasjon,
+        };
+      }),
+    },
   };
   return JSON.stringify(søknad);
 }
@@ -117,10 +131,6 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
       },
       oppgitteBarn: {
         type: 'fieldArray',
-        defaultValue:
-          søknadGrunnlag.oppgitteBarn?.identer?.map((barn: { identifikator: string }) => ({
-            fnr: barn.identifikator,
-          })) || [],
       },
     },
     { readOnly }
