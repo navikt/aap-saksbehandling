@@ -111,10 +111,7 @@ const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): string => {
   }
 };
 
-const formatterÅrsakTilOpprettelseTilTekst = (
-  årsakTilOpprettelse: ÅrsakTilOpprettelse,
-  stegType?: string | null
-): string => {
+const formatterÅrsakTilOpprettelseTilTekst = (årsakTilOpprettelse: ÅrsakTilOpprettelse): string => {
   switch (årsakTilOpprettelse) {
     case 'SØKNAD':
       return 'Søknad';
@@ -137,10 +134,9 @@ const formatterÅrsakTilOpprettelseTilTekst = (
     case 'AKTIVITETSMELDING':
       return 'Aktivitetsmelding';
     case 'OPPFØLGINGSOPPGAVE':
-      if (!stegType) {
-        return 'Manuelt opprettet'; // <-- your fallback
-      }
-      return avklaringsbehovLabels[stegType] ?? 'Manuelt opprettet';
+      return 'Manuelt opprettet';
+    case 'OPPFØLGINGSOPPGAVE_SAMORDNING_GRADERING':
+      return 'Maksdato annen full ytelse';
     case 'SVAR_FRA_KLAGEINSTANS':
       return 'Svar fra klageinstans';
     case 'KLAGE':
@@ -152,10 +148,6 @@ const formatterÅrsakTilOpprettelseTilTekst = (
     default:
       return 'Ukjent årsak';
   }
-};
-
-const avklaringsbehovLabels: Record<string, string> = {
-  SAMORDNING_GRADERING: 'Maksdato annen full ytelse',
 };
 
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
@@ -235,12 +227,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             <Table.Row key={behandling.referanse}>
               <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
               <Table.DataCell>{formaterBehandlingType(behandling.type)}</Table.DataCell>
-              <Table.DataCell>
-                {formatterÅrsakTilOpprettelseTilTekst(
-                  behandling.årsakTilOpprettelse,
-                  behandling.avklaringsDefinisjon?.løsesISteg
-                )}
-              </Table.DataCell>
+              <Table.DataCell>{formatterÅrsakTilOpprettelseTilTekst(behandling.årsakTilOpprettelse)}</Table.DataCell>
               <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
               <Table.DataCell>
                 {behandling.vurderingsbehov.map((behov) => formaterVurderingsbehov(behov)).join(', ')}
