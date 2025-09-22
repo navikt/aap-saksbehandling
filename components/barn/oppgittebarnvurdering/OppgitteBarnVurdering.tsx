@@ -5,8 +5,8 @@ import { BodyShort, Button, Detail } from '@navikt/ds-react';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { JaEllerNei } from 'lib/utils/form';
 
-import styles from 'components/barn/oppgittebarnvurderingV2/OppgitteBarnVurdering.module.css';
-import { OppgitteBarnVurderingFelterV2 } from 'components/barn/oppgittebarnvurderingfelterV2/OppgitteBarnVurderingFelterV2';
+import styles from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
+import { OppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter';
 
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
@@ -18,7 +18,7 @@ interface Props {
   readOnly: boolean;
 }
 
-export const OppgitteBarnVurderingV2 = ({
+export const OppgitteBarnVurdering = ({
   form,
   barnetilleggIndex,
   ident,
@@ -61,7 +61,7 @@ export const OppgitteBarnVurderingV2 = ({
           const kanFjernePeriode = vurderingIndex !== 0;
           return (
             <div key={vurdering.id} className={styles.vurdering}>
-              <OppgitteBarnVurderingFelterV2
+              <OppgitteBarnVurderingFelter
                 form={form}
                 readOnly={readOnly}
                 ident={ident}

@@ -21,7 +21,7 @@ interface Props {
   harOppgittFosterforelderRelasjon: boolean;
 }
 
-export const OppgitteBarnVurderingFelterV2 = ({
+export const OppgitteBarnVurderingFelter = ({
   readOnly,
   barneTilleggIndex,
   vurderingIndex,

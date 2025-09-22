@@ -14,7 +14,7 @@ import styles from './BarnetilleggVurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { OppgitteBarnVurderingV2 } from 'components/barn/oppgittebarnvurderingV2/OppgitteBarnVurderingV2';
+import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
 
 interface Props {
   behandlingsversjon: number;
@@ -159,7 +159,7 @@ export const BarnetilleggVurdering = ({
 
             {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
               return (
-                <OppgitteBarnVurderingV2
+                <OppgitteBarnVurdering
                   key={vurdering.id}
                   form={form}
                   barnetilleggIndex={barnetilleggIndex}
