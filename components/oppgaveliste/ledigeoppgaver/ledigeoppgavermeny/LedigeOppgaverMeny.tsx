@@ -11,9 +11,17 @@ interface Props {
   oppgave: Oppgave;
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
   setÅpenModal: Dispatch<SetStateAction<boolean>>;
+  setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
+  revaliderOppgaver: () => void;
 }
 
-export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal }: Props) => {
+export const LedigeOppgaverMeny = ({
+  revaliderOppgaver,
+  oppgave,
+  setFeilmelding,
+  setÅpenModal,
+  setVisSynkroniserEnhetModal,
+}: Props) => {
   const router = useRouter();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
 
@@ -35,9 +43,13 @@ export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal }: P
   }
 
   async function synkroniserEnhetPåOppgave(oppgave: Oppgave) {
-    if (oppgave.id) {
-      await synkroniserOppgaveMedEnhetClient(oppgave.id);
-    }
+    startTransitionBehandle(async () => {
+      if (oppgave.id) {
+        await synkroniserOppgaveMedEnhetClient(oppgave.id);
+        revaliderOppgaver();
+        setVisSynkroniserEnhetModal(true);
+      }
+    });
   }
 
   return (
@@ -53,13 +65,7 @@ export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal }: P
           </ActionMenu.Trigger>
           <ActionMenu.Content>
             <ActionMenu.Item onSelect={() => plukkOgGåTilOppgave(oppgave)}>Behandle</ActionMenu.Item>
-            <ActionMenu.Item
-              onSelect={async () => {
-                await synkroniserEnhetPåOppgave(oppgave);
-              }}
-            >
-              Synkroniser enhet
-            </ActionMenu.Item>
+            <ActionMenu.Item onSelect={() => synkroniserEnhetPåOppgave(oppgave)}>Synkroniser enhet</ActionMenu.Item>
           </ActionMenu.Content>
         </ActionMenu>
       ) : (

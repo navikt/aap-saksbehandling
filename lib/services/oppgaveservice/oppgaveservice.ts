@@ -80,7 +80,7 @@ export async function hentEnheter() {
 }
 export async function synkroniserEnhetPåOppgave(data: EnhetSynkroniseringOppgave) {
   const url = `${oppgaveApiBaseURL}/synkroniser-enhet-paa-oppgave`;
-  return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { oppgaveId: data.oppgaveId });
+  return await apiFetch<void>(url, oppgaveApiScope, 'POST', { oppgaveId: data.oppgaveId });
 }
 export async function oppgaveSøk(
   avklaringsbehovKoder: OppgaveAvklaringsbehovKode[],

@@ -88,7 +88,9 @@ export async function plukkOppgaveClient(oppgaveId: number, versjon: number) {
   return await clientFetch<Oppgave>('/oppgave/api/oppgave/plukk-oppgave', 'POST', payload);
 }
 export async function synkroniserOppgaveMedEnhetClient(oppgaveId: number) {
-  return await clientFetch('/oppgave/api/oppgave/synkroniser-enhet-paa-oppgave', 'POST', { oppgaveId: oppgaveId });
+  return await clientFetch<void>('/oppgave/api/oppgave/synkroniser-enhet-paa-oppgave', 'POST', {
+    oppgaveId: oppgaveId,
+  });
 }
 export function clientMottattDokumenterLest(behandlingsreferanse: string) {
   return clientFetch(`/oppgave/api/oppgave/mottatt-dokumenter-lest`, 'POST', {

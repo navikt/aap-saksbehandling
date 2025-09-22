@@ -16,6 +16,7 @@ import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { LedigeOppgaverMeny } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavermeny/LedigeOppgaverMeny';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
+import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -26,6 +27,7 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
   const [feilmelding, setFeilmelding] = useState<string>();
   const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
   return (
     <>
@@ -33,6 +35,10 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         revalidateFunction={revalidateFunction}
+      />
+      <SynkroniserEnhetModal
+        visSynkroniserEnhetModal={visSynkroniserEnhetModal}
+        setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
       />
       {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
       <TableStyled
@@ -131,7 +137,13 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
               </Table.DataCell>
 
               <Table.DataCell textSize={'small'} align={'right'}>
-                <LedigeOppgaverMeny oppgave={oppgave} setFeilmelding={setFeilmelding} setÅpenModal={setIsModalOpen} />
+                <LedigeOppgaverMeny
+                  oppgave={oppgave}
+                  setFeilmelding={setFeilmelding}
+                  setÅpenModal={setIsModalOpen}
+                  setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
+                  revaliderOppgaver={revalidateFunction}
+                />
               </Table.DataCell>
             </Table.Row>
           ))}
