@@ -12,7 +12,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { Alert, BodyShort, Link } from '@navikt/ds-react';
+import { Alert, Link } from '@navikt/ds-react';
 
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -40,13 +40,7 @@ interface FormFields {
   virkningsdato: string;
 }
 
-export const OvergangUfore = ({
-  behandlingVersjon,
-  grunnlag,
-  readOnly,
-  typeBehandling,
-  initialMellomlagretVurdering,
-}: Props) => {
+export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
@@ -153,8 +147,6 @@ export const OvergangUfore = ({
   const brukerHarSoktOmUforetrygd = form.watch('brukerHarSøktUføretrygd') === JaEllerNei.Ja;
   const brukerHarFattAvslagPaUforetrygd = form.watch('brukerHarFåttVedtakOmUføretrygd') === 'JA_AVSLAG';
 
-  const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
-  const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
@@ -196,23 +188,8 @@ export const OvergangUfore = ({
           </div>
         }
       />
-      {typeBehandling === 'Revurdering' && (
-        <BodyShort>
-          Vurderingen gjelder fra {vurderingenGjelderFra && formaterDatoForFrontend(vurderingenGjelderFra)}
-        </BodyShort>
-      )}
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.brukerHarSøktUføretrygd} horizontalRadio />
-      {brukerHarSoktOmUforetrygd && <FormField form={form} formField={formFields.brukerHarFåttVedtakOmUføretrygd} />}
-      {brukerHarFattAvslagPaUforetrygd && (
-        <Alert variant="warning">
-          Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurderes til oppfylt fra dato på
-          uføretrygdvedtaket.
-        </Alert>
-      )}
-      {brukerHarSoktOmUforetrygd && form.watch('brukerHarSøktUføretrygd') !== 'NEI' && (
-        <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
-      )}
       {brukerHarSoktOmUforetrygd && (
         <DateInputWrapper
           name={`virkningsdato`}
@@ -225,6 +202,16 @@ export const OvergangUfore = ({
           }}
           readOnly={readOnly}
         />
+      )}
+      {brukerHarSoktOmUforetrygd && <FormField form={form} formField={formFields.brukerHarFåttVedtakOmUføretrygd} />}
+      {brukerHarFattAvslagPaUforetrygd && (
+        <Alert variant="warning">
+          Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurderes til oppfylt fra dato på
+          uføretrygdvedtaket.
+        </Alert>
+      )}
+      {brukerHarSoktOmUforetrygd && form.watch('brukerHarSøktUføretrygd') !== 'NEI' && (
+        <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
       )}
     </VilkårskortMedFormOgMellomlagring>
   );
