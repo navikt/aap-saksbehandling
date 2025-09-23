@@ -39,12 +39,15 @@ import {
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
+  OppfølgningOppgaveOpprinnelseResponse,
   OpprettDummySakDto,
   OpprettTestcase,
+  OvergangUforeGrunnlag,
+  OvergangArbeidGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
-  RimeligGrunnMeldepliktGrunnlag,
+  OverstyringMeldepliktGrunnlag,
   SakPersoninfo,
   SaksInfo,
   SamordningAndreStatligeYtelserGrunnlag,
@@ -62,11 +65,14 @@ import {
   TilkjentYtelseGrunnlag,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
+  AvbrytRevurderingGrunnlag,
   UnderveisGrunnlag,
   UtbetalingOgSimuleringGrunnlag,
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
+  SøkPåSakInfo,
+  OpprettAktivitetspliktBehandlingDto,
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
@@ -94,6 +100,11 @@ export const hentSak = async (saksnummer: string) => {
   }
 };
 
+export const søkPåSak = async (søketekst: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/sok`;
+  return await apiFetch<SøkPåSakInfo[]>(url, saksbehandlingApiScope, 'POST', { søketekst });
+};
+
 export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
   const res = await apiFetch<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
@@ -115,9 +126,12 @@ export const hentBehandlingPersoninfo = async (behandlingsreferanse: string) => 
   return await apiFetch<BehandlingPersoninfo>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const opprettAktivitetspliktBehandling = async (saksnummer: string) => {
+export const opprettAktivitetspliktBehandling = async (
+  saksnummer: string,
+  data: OpprettAktivitetspliktBehandlingDto
+) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling`;
-  return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST');
+  return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST', data);
 };
 
 export const finnSakerForIdent = async (ident: string) => {
@@ -190,8 +204,8 @@ export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string)
 };
 
 export const hentRimeligGrunnMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/meldeplikt-rimelig-grunn`;
-  return await apiFetch<RimeligGrunnMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/meldeplikt-overstyring`;
+  return await apiFetch<OverstyringMeldepliktGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSykdomsvurderingBrevGrunnlag = async (behandlingsReferanse: string) => {
@@ -207,6 +221,16 @@ export const hentFastsettArbeidsevneGrunnlag = async (behandlingsReferanse: stri
 export const hentBistandsbehovGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/bistand`;
   return await apiFetch<BistandsGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentOvergangUforeGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/overgangufore`;
+  return await apiFetch<OvergangUforeGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentOvergangArbeidGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/overgangarbeid`;
+  return await apiFetch<OvergangArbeidGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFatteVedtakGrunnlang = async (behandlingsReferanse: string) => {
@@ -287,6 +311,11 @@ export const hentTilkjentYtelse = async (behandlingsReferanse: string) => {
 export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/trukket-søknad`;
   return await apiFetch<TrukketSøknadGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentAvbruttRevurdering = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/avbryt-revurdering`;
+  return await apiFetch<AvbrytRevurderingGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentRettighetsperiodeGrunnlag = async (behandlingsreferanse: string) => {
@@ -497,6 +526,16 @@ export const hentMellomlagring = async (behandlingsReferanse: string, kode: stri
   }
 };
 
+export const hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse = async (
+  behandlingsReferanse: string,
+  kode: string
+) => {
+  return apiFetch<OppfølgningOppgaveOpprinnelseResponse>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/oppfølgningOppgaveOpprinnelse/${behandlingsReferanse}/${kode}`,
+    saksbehandlingApiScope
+  );
+};
+
 export const lagreMellomlagring = async (request: MellomlagretVurderingRequest) => {
   return apiFetch<MellomlagretVurderingResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering`,
@@ -538,7 +577,7 @@ async function ventTilProsesseringErFerdig(
     const response = await hentFlytUtenRequestMemoization(behandlingsreferanse);
     if (response.type === 'ERROR') {
       logError(
-        `ventTilProssesering hentFlyt ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
+        `ventTilProssesering hentFlyt: Behandlingsreferanse: [${behandlingsreferanse}] - ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
       );
       prosessering = { status: 'FEILET', ventendeOppgaver: [] };
       break;
@@ -553,7 +592,10 @@ async function ventTilProsesseringErFerdig(
     }
 
     if (status === 'FEILET') {
-      logError('Prosessering av flyt feilet!', Error(JSON.stringify(response.data.prosessering.ventendeOppgaver)));
+      logError(
+        `Prosessering av flyt feilet. Behandlingsreferanse: [${behandlingsreferanse}]`,
+        Error(JSON.stringify(response.data.prosessering.ventendeOppgaver))
+      );
       prosessering = response.data.prosessering;
       break;
     }

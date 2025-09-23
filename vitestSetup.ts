@@ -11,19 +11,34 @@ export const defaultFlytResponse: BehandlingFlytOgTilstand = {
   prosessering: {
     status: 'FERDIG',
     ventendeOppgaver: [],
-  },
-  visning: {
-    beslutterReadOnly: false,
-    kvalitetssikringReadOnly: false,
-    saksbehandlerReadOnly: false,
-    brukerHarBesluttet: false,
-    brukerHarKvalitetssikret: false,
-    typeBehandling: 'Førstegangsbehandling',
-    visBeslutterKort: false,
-    visBrevkort: false,
-    visKvalitetssikringKort: false,
-    visVentekort: false,
-  },
+
+    
+const flytResponse: FetchResponse<BehandlingFlytOgTilstand> = {
+  type: 'SUCCESS',
+  status: 200,
+  data: {
+    behandlingVersjon: 5,
+    aktivGruppe: 'START_BEHANDLING',
+    aktivtSteg: 'START_BEHANDLING',
+    aktivtStegDefinisjon: [],
+    flyt: [],
+    prosessering: {
+      status: 'FERDIG',
+      ventendeOppgaver: [],
+    },
+    visning: {
+      beslutterReadOnly: false,
+      kvalitetssikringReadOnly: false,
+      saksbehandlerReadOnly: false,
+      brukerHarBesluttet: false,
+      brukerHarKvalitetssikret: false,
+      typeBehandling: 'Førstegangsbehandling',
+      visBeslutterKort: false,
+      visBrevkort: false,
+      visKvalitetssikringKort: false,
+      visVentekort: false,
+      resultatKode: null
+    },
 };
 
 let mockFlytResponse: BehandlingFlytOgTilstand = defaultFlytResponse;

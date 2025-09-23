@@ -11,7 +11,11 @@ export async function POST(req: NextRequest) {
     const løsbehovRes = await løsAvklaringsbehov(body);
 
     if (isError(løsbehovRes)) {
-      logError(`/løs-behov, behovstype: ${body.behov?.behovstype}, message: ${løsbehovRes.apiException.message}`);
+      if (løsbehovRes.status >= 500) {
+        logError(`/løs-behov, behovstype: ${body.behov?.behovstype}, message: ${løsbehovRes.apiException.message}`);
+      } else {
+        logWarning(`/løs-behov, behovstype: ${body.behov?.behovstype}, message: ${løsbehovRes.apiException.message}`);
+      }
     }
     return new Response(JSON.stringify(løsbehovRes), { status: løsbehovRes.status });
   } catch (error) {

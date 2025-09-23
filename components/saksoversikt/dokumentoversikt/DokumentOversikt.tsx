@@ -1,5 +1,5 @@
 import styles from './DokumentOversikt.module.css';
-import { Box, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Alert, Box, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { Spinner } from 'components/felles/Spinner';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
@@ -29,6 +29,7 @@ interface HentDokumentoversiktBrukerRequest {
 
 export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>();
   const [journalposter, setJournalposter] = useState<Journalpost[]>([]);
 
   const hent = async (request: HentDokumentoversiktBrukerRequest) => {
@@ -37,7 +38,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
     await clientHentAlleDokumenterPåBruker(request)
       .then((res) => {
         if (isSuccess(res)) setJournalposter(res.data);
-        else throw Error(res.apiException.message);
+        else setError(res.apiException.message);
       })
       .finally(() => setIsLoading(false));
   };
@@ -50,6 +51,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
       options: [
         { value: 'AAP', label: 'Arbeidsavklaringspenger' },
         { value: 'SYK', label: 'Sykepenger' },
+        { value: 'SYM', label: 'Sykmelding' },
         { value: 'OPP', label: 'Arbeidsoppfølging' },
       ],
     },
@@ -86,6 +88,8 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
 
   if (isLoading) {
     return <Spinner label="Henter dokumenter" />;
+  } else if (error) {
+    return <Alert variant="error">{error || 'Ukjent feil oppsto'}</Alert>;
   }
 
   return (
@@ -100,55 +104,63 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
         </HStack>
       </Box>
 
-      <TableStyled size="small">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>ID</Table.HeaderCell>
-            <Table.HeaderCell>Tittel</Table.HeaderCell>
-            <Table.HeaderCell>Opprettet</Table.HeaderCell>
-            <Table.HeaderCell>Avsender / mottaker</Table.HeaderCell>
-            <Table.HeaderCell>Tema</Table.HeaderCell>
-            <Table.HeaderCell>Type</Table.HeaderCell>
-            <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Sak</Table.HeaderCell>
-            <Table.HeaderCell />
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          {journalposter.map((journalpost) => (
-            <Table.Row key={journalpost.journalpostId}>
-              <Table.DataCell>{journalpost.journalpostId}</Table.DataCell>
-              <Table.DataCell title={journalpost.tittel || ''} className={styles.ellipsis}>
-                {journalpost.tittel}
-              </Table.DataCell>
-              <Table.DataCell>
-                {journalpost.datoOpprettet && formaterDatoMedTidspunktForFrontend(journalpost.datoOpprettet)}
-              </Table.DataCell>
-              <Table.DataCell title={journalpost.avsenderMottaker?.navn || ''} className={styles.ellipsis}>
-                {journalpost.avsenderMottaker?.navn}
-              </Table.DataCell>
-              <Table.DataCell title={journalpost.temanavn || ''}>{journalpost.tema}</Table.DataCell>
-              <Table.DataCell>
-                {journalpost.journalposttype && formaterJournalpostType(journalpost.journalposttype)}
-              </Table.DataCell>
-              <Table.DataCell>
-                {journalpost.journalstatus && formaterJournalstatus(journalpost.journalstatus)}
-              </Table.DataCell>
-              <Table.DataCell>{journalpost.sak?.fagsakId}</Table.DataCell>
-              <Table.DataCell>
-                <HStack gap="2" wrap={false}>
-                  <ÅpneDokumentButton journalpost={journalpost} />
-                  {/* TODO: Fjerne sjekk når vi har støtte for redigering av journalpost */}
-                  {erFerdigstilt(journalpost.journalstatus) && (
-                    <HandlingerDokumentButton sak={sak} journalpost={journalpost} />
-                  )}
-                </HStack>
-              </Table.DataCell>
+      <HStack>
+        <TableStyled size="small">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell textSize={'small'}>ID</Table.HeaderCell>
+              <Table.HeaderCell textSize={'small'}>Tittel</Table.HeaderCell>
+              <Table.HeaderCell textSize={'small'}>Opprettet</Table.HeaderCell>
+              <Table.HeaderCell textSize={'small'}>Avsender / mottaker</Table.HeaderCell>
+              <Table.HeaderCell textSize={'small'}>Tema</Table.HeaderCell>
+              <Table.HeaderCell textSize={'small'}>Type</Table.HeaderCell>
+              <Table.HeaderCell textSize={'small'}>Status</Table.HeaderCell>
+              <Table.HeaderCell textSize={'small'}>Sak</Table.HeaderCell>
+              <Table.HeaderCell />
             </Table.Row>
-          ))}
-        </Table.Body>
-      </TableStyled>
+          </Table.Header>
+
+          <Table.Body>
+            {journalposter?.map((journalpost) => (
+              <Table.Row key={journalpost.journalpostId}>
+                <Table.DataCell textSize={'small'}>{journalpost.journalpostId}</Table.DataCell>
+                <Table.DataCell title={journalpost.tittel || ''} className={styles.ellipsis} textSize={'small'}>
+                  {journalpost.tittel}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {journalpost.datoOpprettet && formaterDatoMedTidspunktForFrontend(journalpost.datoOpprettet)}
+                </Table.DataCell>
+                <Table.DataCell
+                  textSize={'small'}
+                  title={journalpost.avsenderMottaker?.navn || ''}
+                  className={styles.ellipsis}
+                >
+                  {journalpost.avsenderMottaker?.navn}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'} title={journalpost.temanavn || ''}>
+                  {journalpost.tema}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {journalpost.journalposttype && formaterJournalpostType(journalpost.journalposttype)}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {journalpost.journalstatus && formaterJournalstatus(journalpost.journalstatus)}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>{journalpost.sak?.fagsakId}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  <HStack gap="2" wrap={false}>
+                    <ÅpneDokumentButton journalpost={journalpost} />
+                    {/* TODO: Fjerne sjekk når vi har støtte for redigering av journalpost */}
+                    {erFerdigstilt(journalpost.journalstatus) && (
+                      <HandlingerDokumentButton sak={sak} journalpost={journalpost} />
+                    )}
+                  </HStack>
+                </Table.DataCell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </TableStyled>
+      </HStack>
     </VStack>
   );
 };

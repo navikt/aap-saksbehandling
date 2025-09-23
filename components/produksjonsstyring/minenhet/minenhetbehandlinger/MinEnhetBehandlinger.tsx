@@ -1,4 +1,4 @@
-import { Box, Heading } from '@navikt/ds-react';
+import { Box, Heading, VStack } from '@navikt/ds-react';
 import styles from 'components/produksjonsstyring/totaloversiktbehandlinger/TotaloversiktBehandlinger.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { BehandlingerInnUt } from 'components/produksjonsstyring/behandlingerinnut/BehandlingerInnUt';
@@ -10,6 +10,7 @@ import { VenteÅrsaker } from 'components/produksjonsstyring/venteårsaker/Vente
 import { VurderingsbehovPåBehandlinger } from 'components/produksjonsstyring/vurderingsbehov/VurderingsbehovPåBehandlinger';
 import useSWR from 'swr';
 import {
+  antallÅpneBehandlingerMedReturPerAvklaringsbehovClient,
   antallÅpneBehandlingerPerBehandlingstypeClient,
   behandlingerUtviklingClient,
   fordelingLukkedeBehandlingerClient,
@@ -20,24 +21,25 @@ import {
 import { useMemo } from 'react';
 import { statistikkQueryparams } from 'lib/utils/request';
 import { useProduksjonsstyringFilter } from 'hooks/produksjonsstyring/ProduksjonsstyringFilterHook';
+import { AvklaringsbehovReturer } from 'components/produksjonsstyring/avklaringsbehovreturer/AvklaringsbehovReturer';
 
 interface Props {
   listeVisning: boolean;
-  aktivEnhet: string;
+  aktiveEnheter: string[];
 }
 
 const antallDager = 14;
 
-export const MinEnhetBehandlinger = ({ listeVisning, aktivEnhet }: Props) => {
+export const MinEnhetBehandlinger = ({ listeVisning, aktiveEnheter }: Props) => {
   const { filter } = useProduksjonsstyringFilter();
 
   const behandlingstyperQuery = useMemo(
     () =>
       statistikkQueryparams({
         behandlingstyper: filter.behandlingstyper,
-        ...(aktivEnhet ? { enheter: [aktivEnhet] } : {}),
+        ...(aktiveEnheter.length ? { enheter: [...aktiveEnheter] } : {}),
       }),
-    [filter, aktivEnhet]
+    [filter, aktiveEnheter]
   );
 
   const { data: antallÅpneBehandlinger } = useSWR(
@@ -64,6 +66,10 @@ export const MinEnhetBehandlinger = ({ listeVisning, aktivEnhet }: Props) => {
     `/oppgave/api/statistikk/behandlinger/arsak-til-behandling?${behandlingstyperQuery}`,
     årsakTilBehandlingClient
   ).data;
+  const { data: fordelingReturerPerAvklaringsbehov } = useSWR(
+    `/oppgave/api/statistikk/behandlinger/retur?${behandlingstyperQuery}`,
+    antallÅpneBehandlingerMedReturPerAvklaringsbehovClient
+  );
 
   return (
     <Box
@@ -73,28 +79,37 @@ export const MinEnhetBehandlinger = ({ listeVisning, aktivEnhet }: Props) => {
       padding={'8'}
       borderRadius={'medium'}
     >
-      <Heading size={'large'} spacing>
-        Behandlinger
-      </Heading>
-      <div className={listeVisning ? styles.plotList : styles.plotGrid}>
-        {isSuccess(behandlingerUtvikling) && (
-          <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
+      <VStack gap={'4'}>
+        <Heading size={'large'} spacing>
+          Behandlinger
+        </Heading>
+        <div className={listeVisning ? styles.plotList : styles.plotGrid}>
+          {isSuccess(behandlingerUtvikling) && (
+            <BehandlingerInnUt behandlingerEndringer={behandlingerUtvikling.data || []} />
+          )}
+          <ApneBehandlinger behandlingstyperQuery={behandlingstyperQuery} />
+          {isSuccess(antallÅpneBehandlinger) && (
+            <TypeBehandlinger åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
+          )}
+          {isSuccess(fordelingÅpneBehandlinger) && (
+            <FordelingÅpneBehandlingerPerDag fordelingÅpneBehandlingerPerDag={fordelingÅpneBehandlinger.data || []} />
+          )}
+          {isSuccess(fordelingLukkedeBehandlinger) && (
+            <FordelingLukkedeBehandlingerPerDag
+              fordelingLukkedeBehandlinger={fordelingLukkedeBehandlinger.data || []}
+            />
+          )}
+          {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
+        </div>
+        {isSuccess(fordelingReturerPerAvklaringsbehov) && (
+          <AvklaringsbehovReturer data={fordelingReturerPerAvklaringsbehov.data || []} />
         )}
-        <ApneBehandlinger behandlingstyperQuery={behandlingstyperQuery} />
-        {isSuccess(antallÅpneBehandlinger) && (
-          <TypeBehandlinger åpneOgGjennomsnitt={antallÅpneBehandlinger.data || []} />
-        )}
-        {isSuccess(fordelingÅpneBehandlinger) && (
-          <FordelingÅpneBehandlingerPerDag fordelingÅpneBehandlingerPerDag={fordelingÅpneBehandlinger.data || []} />
-        )}
-        {isSuccess(fordelingLukkedeBehandlinger) && (
-          <FordelingLukkedeBehandlingerPerDag fordelingLukkedeBehandlinger={fordelingLukkedeBehandlinger.data || []} />
-        )}
-        {isSuccess(venteÅrsaker) && <VenteÅrsaker venteÅrsaker={venteÅrsaker.data || []} />}
-        {isSuccess(årsakerTilBehandling) && (
-          <VurderingsbehovPåBehandlinger vurderingsbehov={årsakerTilBehandling.data || []} />
-        )}
-      </div>
+        <div className={listeVisning ? styles.plotList : styles.plotGrid}>
+          {isSuccess(årsakerTilBehandling) && (
+            <VurderingsbehovPåBehandlinger vurderingsbehov={årsakerTilBehandling.data || []} />
+          )}
+        </div>
+      </VStack>
     </Box>
   );
 };

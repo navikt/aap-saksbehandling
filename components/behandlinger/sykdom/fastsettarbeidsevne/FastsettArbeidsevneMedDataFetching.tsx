@@ -8,18 +8,15 @@ import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { FastsettArbeidsevneNyVisning } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevneNyVisning';
 import { isDev } from 'lib/utils/environment';
+import { StegData } from 'lib/utils/steg';
+
 
 interface Props {
   behandlingsReferanse: string;
-  behandlingVersjon: number;
-  readOnly: boolean;
+  stegData: StegData;
 }
 
-export const FastsettArbeidsevneMedDataFetching = async ({
-  behandlingsReferanse,
-  behandlingVersjon,
-  readOnly,
-}: Props) => {
+export const FastsettArbeidsevneMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentFastsettArbeidsevneGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.FASTSETT_ARBEIDSEVNE_KODE),
@@ -39,8 +36,8 @@ export const FastsettArbeidsevneMedDataFetching = async ({
   ) : (
     <FastsettArbeidsevne
       grunnlag={grunnlag.data}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

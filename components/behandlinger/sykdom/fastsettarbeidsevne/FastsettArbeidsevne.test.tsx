@@ -123,7 +123,7 @@ describe('FastsettArbeidsevne', () => {
       expect(screen.getByText('Du må angi hvor stor arbeidsevne brukeren har')).toBeVisible();
     });
 
-    it('viser feilmelding dersom dato når arbeidsevnen gjelder fra ikke er besvart', async () => {
+    it('viser feilmelding dersom datoen da arbeidsevnen gjelder fra ikke er besvart', async () => {
       render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
       await åpneVilkårskort();
       await klikkPåNyVurdering();

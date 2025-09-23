@@ -25,7 +25,7 @@ describe('Sykepengeerstatning', () => {
   });
 
   it('har felt for krav på sykepengeerstatning', () => {
-    expect(screen.getByRole('group', { name: 'Krav på sykepengeerstatning?' })).toBeVisible();
+    expect(screen.getByRole('group', { name: 'Har brukeren krav på sykepengeerstatning?' })).toBeVisible();
   });
 
   it('skal vise valg for grunn når krav på sykeerstatning er oppfylt', async () => {

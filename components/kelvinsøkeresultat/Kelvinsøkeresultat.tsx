@@ -18,11 +18,21 @@ interface Props {
 export const Kelvinsøkeresultat = ({
   søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang, harAdressebeskyttelse },
 }: Props) => {
+  if (!saker || saker.length === 0) {
+    return (
+      <HStack>
+        <Alert variant={'info'} size={'small'} className={styles.info}>
+          Fant ingen saker for søketeksten.
+        </Alert>
+      </HStack>
+    );
+  }
+
   return (
     <VStack gap={'2'}>
       {!harTilgang && (
         <HStack>
-          <Alert variant={'info'} size={'small'} style={{ color: 'black' }}>
+          <Alert variant={'info'} size={'small'} className={styles.info}>
             {harAdressebeskyttelse
               ? 'Du har ikke tilgang til saken fordi personen er egen ansatt eller har adressebeskyttelse.'
               : 'Du har ikke tilgang til saken.'}

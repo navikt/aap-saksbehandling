@@ -1,5 +1,4 @@
 import { Vurderingsbehov } from 'lib/types/types';
-import { exhaustiveCheck } from 'lib/utils/typescript';
 
 export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): string => {
   switch (vurderingsbehov) {
@@ -53,6 +52,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Starttidspunkt';
     case 'KLAGE_TRUKKET':
       return 'Klage trukket';
+    case 'REVURDERING_AVBRUTT':
+      return 'Revurdering avbrutt';
     case 'MOTTATT_KABAL_HENDELSE':
       return 'Mottatt svar fra Nav Klageinstans';
     case 'FRITAK_MELDEPLIKT':
@@ -67,10 +68,17 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Revurder meldeplikt rimelig grunn';
     case 'AKTIVITETSPLIKT_11_7':
       return 'Aktivitetsplikt $ 11-7';
+    case 'AKTIVITETSPLIKT_11_9':
+      return 'Aktivitetsplikt $ 11-9';
     case 'EFFEKTUER_AKTIVITETSPLIKT':
       return 'Effektuer aktivitetsplikt';
+    case 'OVERGANG_UFORE':
+      return 'Overgang til uføre';
+    case 'OVERGANG_ARBEID':
+      return 'Overgang arbeidssøker';
+    default:
+      return vurderingsbehov;
   }
-  exhaustiveCheck(vurderingsbehov);
 };
 
 /*
@@ -144,6 +152,10 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
       return 'Rimelig grunn til ikke overholdt meldeplikt';
     case 'AKTIVITETSPLIKT_11_7':
       return 'Aktivitetsplikt $ 11-7';
+    case 'OVERGANG_ARBEID':
+      return 'Overgang til arbeid';
+    case 'OVERGANG_UFORE':
+      return 'Overgang til uføre';
     default:
       return vurderingsbehov;
   }

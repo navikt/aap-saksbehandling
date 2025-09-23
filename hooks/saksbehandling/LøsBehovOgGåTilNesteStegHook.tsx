@@ -102,7 +102,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
             kanFortsetteSaksbehandling = kanFortsetteSaksbehandlingRespons.data.harTilgangTilÅKvalitetssikre;
           }
         } else {
-          if (skalBytteSteg && aktivtStegBehovsKode) {
+          if (aktivtStegBehovsKode) {
             kanFortsetteSaksbehandling = (
               await Promise.all(
                 aktivtStegBehovsKode.map((kode) => clientSjekkTilgang(params.behandlingsReferanse, kode))
@@ -138,7 +138,6 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
       }
       if (status === 'POLLING') {
         setStatus(status);
-        setIsLoading(false);
       }
     };
     eventSource.onerror = (event: any) => {

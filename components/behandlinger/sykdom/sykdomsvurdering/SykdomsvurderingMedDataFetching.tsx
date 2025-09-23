@@ -3,31 +3,25 @@ import { hentMellomlagring, hentSykdomsGrunnlag } from 'lib/services/saksbehandl
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
-import { TypeBehandling } from 'lib/types/types';
 import { ValuePair } from 'components/form/FormField';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { isDev } from 'lib/utils/environment';
 import { SykdomsvurderingNyVisning } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedNyVisning';
+import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
-  behandlingVersjon: number;
-  readOnly: boolean;
-  typeBehandling: TypeBehandling;
+  stegData: StegData;
 }
 
-export const SykdomsvurderingMedDataFetching = async ({
-  behandlingsReferanse,
-  behandlingVersjon,
-  readOnly,
-  typeBehandling,
-}: Props) => {
+export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentSykdomsGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_SYKDOM_KODE),
   ]);
+  const typeBehandling = stegData.typeBehandling;
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
@@ -42,6 +36,14 @@ export const SykdomsvurderingMedDataFetching = async ({
     finnDiagnosegrunnlag(typeBehandling, grunnlag.data)?.hoveddiagnose,
     finnDiagnosegrunnlag(typeBehandling, grunnlag.data)?.kodeverk as DiagnoseSystem
   );
+  
+  const harTidligereVurderinger =
+    grunnlag.data.gjeldendeVedtatteSykdomsvurderinger != null &&
+    grunnlag.data.gjeldendeVedtatteSykdomsvurderinger.length > 0;
+
+  if (!skalViseSteg(stegData, harTidligereVurderinger)) {
+    return null;
+  }
 
   return isDev() ? (
     <SykdomsvurderingNyVisning
@@ -56,8 +58,8 @@ export const SykdomsvurderingMedDataFetching = async ({
   ) : (
     <Sykdomsvurdering
       grunnlag={grunnlag.data}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
       hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
       typeBehandling={typeBehandling}

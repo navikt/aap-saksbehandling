@@ -1,17 +1,23 @@
 'use client';
 
-import { MellomlagretVurdering, Periode, SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  OppfølgningOppgaveOpprinnelseResponse,
+  Periode,
+  SamordningGraderingGrunnlag,
+  SamordningYtelsestype,
+  SamordningYtelseVurdering,
+} from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyLong, Box, Button, Detail, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import { FormEvent, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { addDays, format, isValid, parse } from 'date-fns';
 import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
-import { validerDato } from 'lib/validation/dateValidation';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
 import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
@@ -21,6 +27,8 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
 import { useSak } from 'hooks/SakHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { capitalize } from 'lodash';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 
 interface Props {
   bruker: BrukerInformasjon;
@@ -28,6 +36,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  oppfølgningOppgave?: OppfølgningOppgaveOpprinnelseResponse;
 }
 
 interface SamordnetYtelse {
@@ -42,8 +51,6 @@ interface SamordnetYtelse {
 
 export interface SamordningGraderingFormfields {
   begrunnelse: string;
-  maksDatoEndelig: string;
-  fristNyRevurdering?: string;
   vurderteSamordninger: SamordnetYtelse[];
 }
 
@@ -55,6 +62,7 @@ export const SamordningGradering = ({
   behandlingVersjon,
   readOnly,
   initialMellomlagretVurdering,
+  oppfølgningOppgave,
 }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const [errorMessage, setErrorMessage] = useState<String | undefined>(undefined);
@@ -83,27 +91,6 @@ export const SamordningGradering = ({
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
         defaultValue: defaultValue.begrunnelse,
       },
-      maksDatoEndelig: {
-        type: 'radio',
-        label: 'Skal virkningstidspunkt revurderes nærmere?',
-        options: [
-          { label: 'Ja, virkningstidspunkt må vurderes på nytt', value: 'false' },
-          { label: 'Nei, virkningstidspunkt er bekreftet', value: 'true' },
-        ],
-        rules: { required: 'Du må ta stilling til om virkningstidspunkt er endelig' },
-        defaultValue: defaultValue.maksDatoEndelig,
-      },
-      fristNyRevurdering: {
-        type: 'date_input',
-        label: 'Sett dato for ny revurdering',
-        rules: {
-          required: 'Du må sette en dato for revurdering',
-          validate: {
-            gyldigDato: (v) => validerDato(v as string),
-          },
-        },
-        defaultValue: defaultValue.fristNyRevurdering,
-      },
       vurderteSamordninger: {
         type: 'fieldArray',
         defaultValue: defaultValue.vurderteSamordninger,
@@ -131,10 +118,8 @@ export const SamordningGradering = ({
               behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
               vurderingerForSamordning: {
                 begrunnelse: data.begrunnelse,
-                maksDatoEndelig: data.maksDatoEndelig !== 'false',
-                fristNyRevurdering:
-                  data.fristNyRevurdering &&
-                  formaterDatoForBackend(parse(data.fristNyRevurdering, 'dd.MM.yyyy', new Date())),
+                maksDatoEndelig: true, // hardkodes til true - var påkrevd tidligere pga opprettelse av revurdering
+                fristNyRevurdering: null, // hardkodes til null - var et valg tidligere pga opprettelse av revurdering
                 vurderteSamordningerData: (data.vurderteSamordninger || []).map((vurdertSamordning) => ({
                   manuell: vurdertSamordning.manuell,
                   gradering: vurdertSamordning.gradering,
@@ -174,6 +159,10 @@ export const SamordningGradering = ({
     return format(addDays(new Date(senesteDato), 1), 'dd.MM.yyyy');
   };
 
+  const historiskeVurderinger = grunnlag.historiskeVurderinger;
+
+  const erAllereddeOppfølgningsOppgave = oppfølgningOppgave && oppfølgningOppgave?.data.length > 0;
+
   const sak = useSak();
   const [visModalForOppfølgingsoppgaveState, setModalForOppfølgingsoppgaveState] = useState<boolean>(false);
   const ref = useRef<HTMLDialogElement>(null);
@@ -183,12 +172,14 @@ export const SamordningGradering = ({
       {bruker && visModalForOppfølgingsoppgaveState && (
         <Modal
           ref={ref}
-          header={{ heading: 'Opprett oppfølgningsoppgave' }}
+          header={{ heading: 'Vurder konsekvens' }}
           onClose={() => setModalForOppfølgingsoppgaveState(false)}
           open={true}
         >
           <Modal.Body>
             <OpprettOppfølgingsBehandling
+              behovsType={Behovstype.AVKLAR_SAMORDNING_GRADERING}
+              behandlingsreferanse={behandlingsreferanse}
               saksnummer={sak.sak.saksnummer}
               brukerInformasjon={bruker}
               modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
@@ -217,17 +208,23 @@ export const SamordningGradering = ({
         }}
         mellomlagretVurdering={mellomlagretVurdering}
       >
+        {!!historiskeVurderinger && !!historiskeVurderinger.length && (
+          /* TODO: <TidligereVurderinger/> er ikke ideelt for visning av denne typen data (samordning, inst, m.m.).
+              Burde på sikt utformes litt annerledes, men dette får fungere som en slags "MVP" */
+          <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
+        )}
+
         {visForm && (
           <VStack gap={'6'}>
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell ytelser={grunnlag.ytelser} />
             <Ytelsesvurderinger form={form} readOnly={readOnly} />
-            {success && (
+            {(success || erAllereddeOppfølgningsOppgave) && (
               <Box maxWidth={'80ch'}>
                 <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
               </Box>
             )}
-            {visRevurderVirkningstidspunkt && !success && (
+            {!erAllereddeOppfølgningsOppgave && visRevurderVirkningstidspunkt && !success && (
               <Box maxWidth={'90ch'}>
                 <Alert variant="info">
                   <Heading spacing size="small" level="3">
@@ -286,13 +283,6 @@ export const SamordningGradering = ({
 function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): DraftFormFields {
   return {
     begrunnelse: grunnlag.vurdering?.begrunnelse || undefined,
-    fristNyRevurdering:
-      (grunnlag.vurdering?.fristNyRevurdering && formaterDatoForFrontend(grunnlag.vurdering?.fristNyRevurdering)) ||
-      undefined,
-    maksDatoEndelig:
-      grunnlag.vurdering?.maksDatoEndelig === undefined || grunnlag.vurdering?.maksDatoEndelig === null
-        ? undefined
-        : grunnlag.vurdering?.maksDatoEndelig.toString(),
     vurderteSamordninger: grunnlag.vurdering?.vurderinger.map((ytelse) => ({
       ytelseType: ytelse.ytelseType,
       kilde: '',
@@ -310,8 +300,12 @@ function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): D
 function emptyDraftFormFields(): DraftFormFields {
   return {
     begrunnelse: '',
-    fristNyRevurdering: '',
-    maksDatoEndelig: '',
     vurderteSamordninger: [],
   };
 }
+
+const byggFelter = (vurdering: SamordningYtelseVurdering): ValuePair[] =>
+  vurdering.vurderinger.map((v) => ({
+    label: `${capitalize(v.ytelseType)} (${formaterDatoForFrontend(v.periode.fom)} - ${formaterDatoForFrontend(v.periode.tom)})`,
+    value: `${v.gradering}% samordningsgrad`,
+  }));

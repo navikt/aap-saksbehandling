@@ -117,13 +117,15 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
     case Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP:
       return 'LOVVALG';
     case Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER:
-      return 'SAMORDNING';
+      return 'SAMORDNING/#SAMORDNING_ANDRE_STATLIGE_YTELSER';
     case Behovstype.AVKLAR_SAMORDNING_GRADERING:
-      return 'SAMORDNING';
+      return 'SAMORDNING/#SAMORDNING_GRADERING';
     case Behovstype.SAMORDNING_REFUSJONS_KRAV:
-      return 'SAMORDNING';
+      return 'SAMORDNING/#SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV';
     case Behovstype.AVKLAR_SAMORDNING_UFORE:
-      return 'SAMORDNING';
+      return 'SAMORDNING/#SAMORDNING_UFØRE';
+    case Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER:
+      return 'SAMORDNING/#SAMORDNING_ARBEIDSGIVER';
     case Behovstype.FASTSETT_MANUELL_INNTEKT:
       return 'GRUNNLAG/#FASTSETT_MANUELL_INNTEKT';
     case Behovstype.VURDER_RETTIGHETSPERIODE:
@@ -131,7 +133,7 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
     case Behovstype.EFFEKTUER_11_7_KODE:
       return 'UNDERVEIS';
     case Behovstype.OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT_KODE:
-      return 'OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT';
+      return 'UNDERVEIS';
     case Behovstype.VURDER_BRUDD_11_7_KODE:
       return 'AKTIVITETSPLIKT_11_7';
     default:

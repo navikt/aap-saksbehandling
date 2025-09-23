@@ -1,7 +1,7 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegSomSkalVises } from 'lib/utils/steg';
+import { getStegData } from 'lib/utils/steg';
 import { BistandsbehovMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
 import { SykepengeerstatningMedDataFetching } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningMedDataFetching';
@@ -12,10 +12,16 @@ import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
+import { isLocal } from 'lib/utils/environment';
+import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
+import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
 }
+
+export const overgangUføreFeature = () => isLocal();
+export const overgangArbeidFeature = ()=> false;
 
 export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
@@ -23,90 +29,87 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
     return <ApiException apiResponses={[flyt]} />;
   }
 
-  const stegSomSkalVises = getStegSomSkalVises('SYKDOM', flyt.data);
-  const saksBehandlerReadOnly = flyt.data.visning.saksbehandlerReadOnly;
-  const behandlingVersjon = flyt.data.behandlingVersjon;
+  const aktivStegGruppe = 'SYKDOM';
+  const sykdomSteg = getStegData(aktivStegGruppe, 'AVKLAR_SYKDOM', flyt.data);
+  const vurderBistandsbehovSteg = getStegData(aktivStegGruppe, 'VURDER_BISTANDSBEHOV', flyt.data);
+  const fritakMeldepliktSteg = getStegData(aktivStegGruppe, 'FRITAK_MELDEPLIKT', flyt.data);
+  const fastsettArbeidsevneSteg = getStegData(aktivStegGruppe, 'FASTSETT_ARBEIDSEVNE', flyt.data);
+  const refusjonskravSteg = getStegData(aktivStegGruppe, 'REFUSJON_KRAV', flyt.data);
+  const sykdomsvurderingBrevSteg = getStegData(aktivStegGruppe, 'SYKDOMSVURDERING_BREV', flyt.data);
+  const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
+  const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
+  const overganguføreSteg = overgangUføreFeature() ? getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data) : null;
+  const overgangarbeidSteg = overgangArbeidFeature() ? getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data) : null;
 
   return (
     <GruppeSteg
-      behandlingVersjon={behandlingVersjon}
       behandlingReferanse={behandlingsReferanse}
+      behandlingVersjon={flyt.data.behandlingVersjon}
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {stegSomSkalVises.includes('AVKLAR_SYKDOM') && (
+      {sykdomSteg.skalViseSteg && (
         <StegSuspense>
-          <SykdomsvurderingMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-            typeBehandling={flyt.data.visning.typeBehandling}
-          />
+          <SykdomsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={sykdomSteg} />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('VURDER_BISTANDSBEHOV') && (
+      {vurderBistandsbehovSteg.skalViseSteg && (
         <StegSuspense>
           <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-            typeBehandling={flyt.data.visning.typeBehandling}
+            stegData={vurderBistandsbehovSteg}
+            overgangUføreEnabled={overgangUføreFeature()}
+            overgangArbeidEnabled={overgangArbeidFeature()}
           />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('FRITAK_MELDEPLIKT') && (
+      {fritakMeldepliktSteg.skalViseSteg && (
         <StegSuspense>
-          <MeldepliktMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-          />
+          <MeldepliktMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={fritakMeldepliktSteg} />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('FASTSETT_ARBEIDSEVNE') && (
+      {fastsettArbeidsevneSteg.skalViseSteg && (
         <StegSuspense>
           <FastsettArbeidsevneMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
+            stegData={fastsettArbeidsevneSteg}
           />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('REFUSJON_KRAV') && (
+      {refusjonskravSteg.skalViseSteg && (
         <StegSuspense>
-          <RefusjonMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-          />
+          <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('SYKDOMSVURDERING_BREV') && (
+      {overgangUføreFeature() && overganguføreSteg !== null && overganguføreSteg.skalViseSteg && (
+        <StegSuspense>
+          <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
+        </StegSuspense>
+      )}
+      {overgangArbeidFeature() && overgangarbeidSteg !== null && overgangarbeidSteg.skalViseSteg && (
+        <StegSuspense>
+          <OvergangArbeidMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overgangarbeidSteg} />
+        </StegSuspense>
+      )}
+      {sykdomsvurderingBrevSteg.skalViseSteg && (
         <StegSuspense>
           <SykdomsvurderingBrevMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
-            typeBehandling={flyt.data.visning.typeBehandling}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
+            stegData={sykdomsvurderingBrevSteg}
           />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('VURDER_YRKESSKADE') && (
+      {vurderYrkesskadeSteg.skalViseSteg && (
         <StegSuspense>
-          <YrkesskadeMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
-          />
+          <YrkesskadeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={vurderYrkesskadeSteg} />
         </StegSuspense>
       )}
-      {stegSomSkalVises.includes('VURDER_SYKEPENGEERSTATNING') && (
+      {vurderSykepengeerstatningSteg.skalViseSteg && (
         <StegSuspense>
           <SykepengeerstatningMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
-            readOnly={saksBehandlerReadOnly}
-            behandlingVersjon={behandlingVersjon}
+            stegData={vurderSykepengeerstatningSteg}
           />
         </StegSuspense>
       )}

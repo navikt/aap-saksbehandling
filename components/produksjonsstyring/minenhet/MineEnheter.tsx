@@ -5,24 +5,28 @@ import { useState } from 'react';
 import { FilterSamling } from '../filtersamling/FilterSamling';
 import { BulletListIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
-import { useLagreAktivEnhet } from 'hooks/oppgave/aktivEnhetHook';
 import { MinEnhetOppgaver } from 'components/produksjonsstyring/minenhet/minenhetoppgaver/MinEnhetOppgaver';
 import { MinEnhetBehandlinger } from 'components/produksjonsstyring/minenhet/minenhetbehandlinger/MinEnhetBehandlinger';
+import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
+import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
+
+export type ComboOption = { label?: string; value: string };
 
 interface Props {
   enheter: Array<Enhet>;
 }
 
-export const MinEnhet = ({ enheter }: Props) => {
-  const { hentLagretAktivEnhet, lagreAktivEnhet } = useLagreAktivEnhet();
+export const MineEnheter = ({ enheter }: Props) => {
+  const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
 
   const [listeVisning, setListeVisning] = useState<boolean>(false);
-  const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
+  const [aktiveEnheter, setAktiveEnheter] = useState<ComboOption[]>(
+    hentLagredeAktiveEnheter() ?? førsteEnhetTilComboOption(enheter) ?? []
+  );
 
-  const oppdaterEnhet = (enhetsnr: string) => {
-    setAktivEnhet(enhetsnr);
-    lagreAktivEnhet(enhetsnr);
+  const oppdaterEnheter = (enheter: ComboOption[]) => {
+    setAktiveEnheter(enheter);
+    lagreAktiveEnheter(enheter);
   };
 
   return (
@@ -37,7 +41,7 @@ export const MinEnhet = ({ enheter }: Props) => {
           borderRadius={'medium'}
         >
           <HStack justify={'space-between'} align={'center'}>
-            <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} setAktivEnhet={oppdaterEnhet} />
+            <EnheterSelect enheter={enheter} aktiveEnheter={aktiveEnheter} setAktiveEnheter={oppdaterEnheter} />
             <Button
               variant={'secondary'}
               icon={listeVisning ? <MenuGridIcon /> : <BulletListIcon />}
@@ -50,10 +54,18 @@ export const MinEnhet = ({ enheter }: Props) => {
           </HStack>
         </Box>
         <VStack gap={'4'}>
-          <MinEnhetBehandlinger listeVisning={listeVisning} aktivEnhet={aktivEnhet} />
-          <MinEnhetOppgaver listeVisning={listeVisning} aktivEnhet={aktivEnhet} />
+          <MinEnhetBehandlinger listeVisning={listeVisning} aktiveEnheter={aktiveEnheter.map((e) => e.value)} />
+          <MinEnhetOppgaver listeVisning={listeVisning} aktiveEnheter={aktiveEnheter.map((e) => e.value)} />
         </VStack>
       </VStack>
     </HGrid>
   );
 };
+
+function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
+  const førsteEnhet = enheter.find((e) => e);
+  if (førsteEnhet) {
+    return [{ value: førsteEnhet.enhetNr, label: førsteEnhet.navn }];
+  }
+  return null;
+}

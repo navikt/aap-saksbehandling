@@ -10,7 +10,6 @@ import { Barnetillegg } from 'components/behandlinger/barnetillegg/Barnetillegg'
 import { EtAnnetSted } from 'components/behandlinger/etannetsted/EtAnnetSted';
 import { Brev } from 'components/behandlinger/brev/Brev';
 import { Underveis } from 'components/behandlinger/underveis/Underveis';
-import { Lovvalg } from 'components/behandlinger/lovvalg/Lovvalg';
 import { ForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/ForutgåendeMedlemskap';
 import { Samordning } from 'components/behandlinger/samordning/Samordning';
 import { Rettighetsperiode } from '../behandlinger/rettighetsperiode/Rettighetsperiode';
@@ -28,6 +27,9 @@ import { StartBehandling } from '../behandlinger/startbehandling/StartBehandling
 import { KabalIverksettKonsekvensSteg } from 'components/behandlinger/klage/kabaliverksettkonsekvens/KabalIverksettKonsekvensMedDataFetching';
 import { AvklarOppfolgingsSteg } from 'components/behandlinger/oppfolgingsbehandling/AvklarOppfolgingsSteg';
 import { Aktivitetsplikt11_7 } from 'components/behandlinger/aktivitetsplikt/11-7/Aktivitetsplikt11_7';
+import { AvbrytRevurdering } from 'components/behandlinger/revurdering/avbrytVurdering/AvbrytRevurdering';
+import { Lovvalg } from '../behandlinger/lovvalg/Lovvalg';
+import { Aktivitetsplikt11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Aktivitetsplikt11_9';
 
 interface Props {
   behandlingsReferanse: string;
@@ -40,6 +42,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
     <section className={className}>
       {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'AVBRYT_REVURDERING' && <AvbrytRevurdering behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'LOVVALG' && (
         <StegSuspense>
           <Lovvalg behandlingsReferanse={behandlingsReferanse} />
@@ -90,6 +93,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       )}
       {/* Aktivitetsplikt */}
       {aktivGruppe === 'AKTIVITETSPLIKT_11_7' && <Aktivitetsplikt11_7 behandlingsreferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'AKTIVITETSPLIKT_11_9' && <Aktivitetsplikt11_9 behandlingsreferanse={behandlingsReferanse} />}
     </section>
   );
 };

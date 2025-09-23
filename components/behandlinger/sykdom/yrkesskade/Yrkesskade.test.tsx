@@ -125,6 +125,7 @@ describe('Yrkesskade', () => {
           dato: '2025-10-08',
         },
         relevanteSaker: [],
+        relevanteYrkesskadeSaker: [],
       },
       opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
     };

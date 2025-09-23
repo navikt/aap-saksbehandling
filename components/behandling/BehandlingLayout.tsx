@@ -70,6 +70,7 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   const brukerKanSaksbehandle = roller.some((rolle) =>
     [Roller.SAKSBEHANDLER_OPPFØLGING, Roller.SAKSBEHANDLER_NASJONAL].includes(rolle)
   );
+  const brukerErBeslutter = roller.includes(Roller.BESLUTTER);
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.data.flyt
     .filter((steg) => steg.skalVises)
@@ -99,11 +100,11 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
             behandling={behandling.data}
             sak={sak}
             oppgave={oppgave.data}
-            påVent={flytResponse.data.visning.visVentekort}
             brukerInformasjon={brukerInformasjon}
-            typeBehandling={flytResponse.data.visning.typeBehandling}
             brukerKanSaksbehandle={brukerKanSaksbehandle}
             flyt={flytResponse.data.flyt}
+            visning={flytResponse.data.visning}
+            brukerErBeslutter={brukerErBeslutter}
           />
 
           <StegGruppeIndikatorAksel flytRespons={flytResponse.data} stegGrupperSomSkalVises={stegGrupperSomSkalVises} />

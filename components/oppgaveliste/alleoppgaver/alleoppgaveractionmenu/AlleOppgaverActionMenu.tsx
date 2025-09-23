@@ -3,7 +3,7 @@ import { ActionMenu, Button } from '@navikt/ds-react';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { byggKelvinURL } from 'lib/utils/request';
 import { Oppgave } from 'lib/types/oppgaveTypes';
-import { avreserverOppgaveClient } from 'lib/oppgaveClientApi';
+import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { useState, useTransition } from 'react';
 
@@ -30,6 +30,15 @@ export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) =
     });
   }
 
+  async function synkroniserEnhetPåOppgave(oppgave: Oppgave) {
+    if (oppgave.id) {
+      const res = await synkroniserOppgaveMedEnhetClient(oppgave.id);
+      if (isSuccess(res)) {
+        await revalidateFunction();
+      }
+    }
+  }
+
   return (
     <>
       <ActionMenu>
@@ -49,6 +58,13 @@ export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) =
             }}
           >
             Åpne oppgave
+          </ActionMenu.Item>
+          <ActionMenu.Item
+            onSelect={async () => {
+              await synkroniserEnhetPåOppgave(oppgave);
+            }}
+          >
+            Synkroniser enhet
           </ActionMenu.Item>
           {erReservert && (
             <ActionMenu.Item

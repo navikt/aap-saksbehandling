@@ -13,6 +13,7 @@ import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { isProd } from 'lib/utils/environment';
 import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 
+
 /**
  * Slett denne komponenten og flytt disse propsene til VilkårskortMedFormOgMellomlagring
  */
@@ -89,7 +90,7 @@ export const VilkårskortMedForm = ({
                     {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
                   </Detail>
                 )}
-                {kvalitetssikretAv && !isProd() && (
+                {kvalitetssikretAv && (
                   <Detail>
                     {`Kvalitetssikret av ${utledVurdertAv(kvalitetssikretAv)}, ${formaterDatoForFrontend(kvalitetssikretAv.dato)}`}
                   </Detail>

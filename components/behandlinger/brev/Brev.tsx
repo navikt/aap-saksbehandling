@@ -37,6 +37,7 @@ export const Brev = async ({ behandlingsReferanse }: Props) => {
           <SkriveBrevMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             behandlingVersjon={flyt.data.behandlingVersjon}
+            behandlingstype={typeBehandling}
             aktivtSteg={flyt.data.aktivtSteg}
           />
         )}

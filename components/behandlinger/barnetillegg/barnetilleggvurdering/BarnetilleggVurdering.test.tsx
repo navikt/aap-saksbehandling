@@ -30,6 +30,7 @@ const vurdertBarnFosterForelder: BarnetilleggGrunnlag['vurderteBarn'][number] = 
   fødselsdato: '2023-05-05',
   ident: '1234567890',
   navn: 'Snill Såpe',
+  oppgittForeldreRelasjon: 'FOSTERFORELDER',
   vurderinger: [
     {
       begrunnelse: 'en god begrunnelse',
@@ -570,6 +571,28 @@ describe('Oppgitte barn', () => {
     expect(screen.getByText('Forsørgeransvar opphører fra')).toBeInTheDocument();
   });
 
+  it('skal vise dato felt når man besvarer nei på fosterhjem så lenge det ikke er første vurdering', async () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+
+    await user.click(screen.getAllByRole('radio', { name: /ja/i })[0]);
+    await user.click(screen.getAllByRole('radio', { name: /ja/i })[1]);
+
+    await user.click(screen.getByRole('button', { name: 'Legg til vurdering' }));
+
+    const radioNos = screen.getAllByRole('radio', { name: /nei/i });
+    await user.click(radioNos[2]);
+
+    expect(screen.getByText('Forsørgeransvar opphører fra')).toBeInTheDocument();
+  });
+
   it('skal ikke vise dato felt når man besvarer nei på forsørgeransvar i første vurdering', async () => {
     render(
       <BarnetilleggVurdering
@@ -880,5 +903,79 @@ describe('mellomlagring', () => {
         name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
       })
     ).toBeVisible();
+  });
+});
+
+describe('reset felter ved endringer som påvirker visningslogikk', () => {
+  async function svarPåOmFosteroppholdErVarig(svar: 'Ja' | 'Nei') {
+    const fosterFelt = screen.getByRole('group', {
+      name: 'Har fosterhjemsordningen vart i to år eller er den av varig karakter?',
+    });
+    const jaVerdi = within(fosterFelt).getByRole('radio', { name: svar });
+
+    await user.click(jaVerdi);
+  }
+  async function svarPåOmDetSkalBeregnesBarnetillegg(svar: 'Ja' | 'Nei') {
+    const skalBeregnesBarnetilleggFelt = screen.getByRole('group', {
+      name: 'Skal brukeren få barnetillegg for barnet?',
+    });
+    const jaVerdi = within(skalBeregnesBarnetilleggFelt).getByRole('radio', { name: svar });
+
+    await user.click(jaVerdi);
+  }
+
+  it('dato blir resatt hvis foreldreansvar endres', async () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    await svarPåOmFosteroppholdErVarig('Ja');
+    await svarPåOmDetSkalBeregnesBarnetillegg('Ja');
+    const mindato = '01.01.2000';
+    const datofelt = screen.getByRole('textbox', {
+      name: 'Oppgi dato for når barnetillegget skal gis fra',
+    });
+    await user.type(datofelt, mindato);
+
+    // endrer svar og så tilbake sånn at datofelt vises igjen
+    await svarPåOmDetSkalBeregnesBarnetillegg('Nei');
+    await svarPåOmDetSkalBeregnesBarnetillegg('Ja');
+
+    expect(await screen.queryByDisplayValue(mindato)).not.toBeInTheDocument();
+  });
+
+  it('foreldreansvar og dato blir resatt hvis erFosterhjem endres', async () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+    await svarPåOmFosteroppholdErVarig('Ja');
+    await svarPåOmDetSkalBeregnesBarnetillegg('Ja');
+    const mindato = '01.01.2000';
+    const datofelt = screen.getByRole('textbox', {
+      name: 'Oppgi dato for når barnetillegget skal gis fra',
+    });
+    await user.type(datofelt, mindato);
+
+    // endrer svar og så tilbake sånn at foreldreansvar radio og datofelt vises igjen
+    await svarPåOmFosteroppholdErVarig('Nei');
+    await svarPåOmFosteroppholdErVarig('Ja');
+
+    expect(await screen.queryByDisplayValue(mindato)).not.toBeInTheDocument();
+    const foreldreAnsvarRadio = screen.getByRole('group', {
+      name: 'Skal brukeren få barnetillegg for barnet?',
+    });
+    const radios = within(foreldreAnsvarRadio).getAllByRole('radio');
+    radios.forEach((radio) => expect(radio).toHaveProperty('checked', false));
   });
 });

@@ -15,13 +15,11 @@ export const OmgjøringMedDataFetching = async ({
   typeBehandling: TypeBehandling;
   readOnly: boolean;
 }) => {
-  const klageresultat = await hentKlageresultat(behandlingsreferanse);
+  const [klageresultat, sak] = await Promise.all([hentKlageresultat(behandlingsreferanse), hentSak(saksnummer)]);
 
   if (isError(klageresultat)) {
     return <ApiException apiResponses={[klageresultat]} />;
   }
-
-  const sak = await hentSak(saksnummer);
 
   return <OmgjøringVurdering sak={sak} klageresultat={klageresultat.data} />;
 };

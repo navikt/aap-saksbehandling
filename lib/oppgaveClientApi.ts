@@ -10,6 +10,7 @@ import {
 } from './types/oppgaveTypes';
 import {
   AntallÅpneOgGjennomsnitt,
+  BehandlingAvklaringsbehovReturDTO,
   BehandlingPerSteggruppe,
   BehandlingÅrsakAntallGjennomsnitt,
   FordelingLukkedeBehandlinger,
@@ -54,6 +55,10 @@ export async function årsakTilBehandlingClient(url: string) {
   return clientFetch<Array<BehandlingÅrsakAntallGjennomsnitt>>(url, 'GET');
 }
 
+export async function antallÅpneBehandlingerMedReturPerAvklaringsbehovClient(url: string) {
+  return clientFetch<Array<BehandlingAvklaringsbehovReturDTO>>(url, 'GET');
+}
+
 // oppgave
 export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
   return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', oppgavelisteRequest);
@@ -82,7 +87,11 @@ export async function plukkOppgaveClient(oppgaveId: number, versjon: number) {
   const payload: PlukkOppgaveDto = { oppgaveId, versjon };
   return await clientFetch<Oppgave>('/oppgave/api/oppgave/plukk-oppgave', 'POST', payload);
 }
-
+export async function synkroniserOppgaveMedEnhetClient(oppgaveId: number) {
+  return await clientFetch<void>('/oppgave/api/oppgave/synkroniser-enhet-paa-oppgave', 'POST', {
+    oppgaveId: oppgaveId,
+  });
+}
 export function clientMottattDokumenterLest(behandlingsreferanse: string) {
   return clientFetch(`/oppgave/api/oppgave/mottatt-dokumenter-lest`, 'POST', {
     behandlingRef: behandlingsreferanse,

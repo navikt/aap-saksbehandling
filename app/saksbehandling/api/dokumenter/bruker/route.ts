@@ -6,5 +6,5 @@ export async function POST(req: NextRequest) {
 
   const data = await hentAlleDokumenterPåBruker(body);
 
-  return new Response(JSON.stringify(data), { status: 200 });
+  return new Response(JSON.stringify(data), { status: data.status });
 }

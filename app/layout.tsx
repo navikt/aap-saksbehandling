@@ -10,8 +10,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const brukerInformasjon = await hentBrukerInformasjon();
-  const roller = await hentRollerForBruker();
+  const [brukerInformasjon, roller] = await Promise.all([hentBrukerInformasjon(), hentRollerForBruker()]);
 
   return (
     <html lang="nb">

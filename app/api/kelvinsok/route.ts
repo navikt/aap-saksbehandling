@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { finnSakerForIdent, hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Behandlingsstatus, SaksInfo } from 'lib/types/types';
+import { søkPåSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { Behandlingsstatus, SøkPåSakInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
 import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
@@ -44,21 +44,28 @@ export async function POST(req: Request, brukerinformasjon: Props) {
   }
 
   const søketekst = body.søketekst;
-  let sakData: SaksInfo[] = [];
-  const isFnr = søketekst.length === 11;
-  const isSaksnummer = søketekst.length === 7;
+  const data = await utledSøkeresultat(søketekst, brukerinformasjon.brukerInformasjon);
 
-  // Saker
+  return NextResponse.json(data, {
+    status: 200,
+  });
+}
+
+async function utledSøkeresultat(søketekst: string, brukerinformasjon?: BrukerInformasjon): Promise<SøkeResultat> {
+  let sakData: SøkPåSakInfo[] = [];
+  let personData: SøkeResultat['person'] = [];
+
+  // Hent sak fra behandlingsflyt
   try {
-    if (isFnr) {
-      const sakRes = await finnSakerForIdent(søketekst);
-
-      if (isSuccess(sakRes)) {
-        sakData = sakRes.data;
-      }
-    } else if (isSaksnummer) {
-      const sak = await hentSak(formaterSaksnummer(søketekst));
-      sakData = [sak];
+    const sakRes = await søkPåSak(formaterSaksnummer(søketekst));
+    if (isSuccess(sakRes)) {
+      sakData = sakRes.data;
+      sakData.forEach((sak) => {
+        personData.push({
+          href: `/saksbehandling/sak/${sak.saksnummer}`,
+          label: `${sak.navn}`,
+        });
+      });
     }
   } catch (err) {
     logError('/api/kelvinsøk saker', err);
@@ -67,18 +74,14 @@ export async function POST(req: Request, brukerinformasjon: Props) {
   // Oppgaver
   let oppgaveData: SøkeResultat['oppgaver'] = [];
   let kontorData: SøkeResultat['kontor'] = [];
-  let personData: SøkeResultat['person'] = [];
   let behandlingsStatusData: SøkeResultat['behandlingsStatus'] = [];
-  let harTilgang: boolean = false;
   let harAdressebeskyttelse: boolean = true;
   try {
     const oppgavesøkRes = await oppgaveTekstSøk(søketekst);
     if (isSuccess(oppgavesøkRes)) {
-      harTilgang = oppgavesøkRes.data.harTilgang;
       harAdressebeskyttelse = oppgavesøkRes.data.harAdressebeskyttelse;
       oppgavesøkRes.data.oppgaver.forEach((oppgave) => {
-        const isReservert =
-          Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon.brukerInformasjon?.NAVident;
+        const isReservert = Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon?.NAVident;
         const isPåVent = oppgave.påVentÅrsak != null;
         oppgaveData.push({
           href: byggKelvinURL(oppgave),
@@ -87,34 +90,28 @@ export async function POST(req: Request, brukerinformasjon: Props) {
           markeringer: oppgave.markeringer.map((markering) => markering.markeringType),
         });
         kontorData.push({ enhet: `${oppgave.enhet}` });
-        personData.push({
-          href: byggKelvinURL(oppgave),
-          label: `${oppgave.personNavn}`,
-        });
         behandlingsStatusData.push({ status: `${oppgave.status}` });
       });
     }
   } catch (err) {
     logError('/api/kelvinsøk oppgaver', err);
   }
-  const data = {
+
+  const saker = sakData?.map((sak) => ({
+    href: `/saksbehandling/sak/${sak.saksnummer}`,
+    label: `${sak.saksnummer} (${formaterDatoForFrontend(sak.opprettetTidspunkt)})`,
+  }));
+
+  return {
     oppgaver: oppgaveData,
-    saker: sakData?.map((sak) => ({
-      href: `/saksbehandling/sak/${sak.saksnummer}`,
-      label: `${sak.saksnummer} (${formaterDatoForFrontend(sak.periode.fom)})`,
-    })),
-    harTilgang: harTilgang,
+    saker: saker,
+    harTilgang: sakData[0]?.harTilgang ?? true,
     harAdressebeskyttelse: harAdressebeskyttelse,
     kontor: kontorData,
     person: personData,
     behandlingsStatus: behandlingsStatusData,
   };
-
-  return NextResponse.json(data, {
-    status: 200,
-  });
 }
-
 function buildSaksbehandlingsURL(oppgave: Oppgave): string {
   return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef}`;
 }

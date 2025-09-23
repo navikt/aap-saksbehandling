@@ -5,8 +5,9 @@ import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/op
 const behovskodeMap = {
   // Behandlingsflyt
   '4101': '§ 11-7 Aktivitetsplikt',
+  '4102': 'Venter på uttalelse fra brukeren på forhåndsvarsel aktivitetsplikt § 11-7',
   '5001': '§ 11-14 Student',
-  '5002': '§ 11-10 Rimelig grunn',
+  '5002': '§ 11-10 andre ledd. Perioder uten overholdt meldeplikt',
   '5003': '§ 11-5 Nedsatt arbeidsevne',
   '5004': '§ 11-23 Arbeidsevne som ikke er utnyttet',
   '5005': '§ 11-10 Fritak fra meldeplikt',
@@ -35,6 +36,9 @@ const behovskodeMap = {
   '5028': 'Vurder trekk av søknad',
   '5029': 'Vurder starttidspunkt',
   '5030': 'Samordning arbeidsgiver',
+  '5031': '§ 11-18 AAP under behandling av krav om uføretrygd',
+  '5032': '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker',
+  '5033': 'Avbryt revurdering',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
@@ -107,6 +111,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
   switch (steggruppe) {
     case 'SØKNAD':
       return 'Trekk søknad';
+    case 'AVBRYT_REVURDERING':
+      return 'Avbryt revurdering';
     case 'ALDER':
       return 'Alder';
     case 'LOVVALG':
@@ -173,6 +179,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Avklar oppfølging';
     case 'AKTIVITETSPLIKT_11_7':
       return '§ 11-7 Aktivitetsplikt';
+    case 'AKTIVITETSPLIKT_11_9':
+      return '§ 11-9 Aktivitetsplikt';
     case 'UDEFINERT':
       return 'Udefinert';
     default:
@@ -199,7 +207,9 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
     case 'OPPFØLGINGSBEHANDLING':
       return 'Oppfølgingsoppgave';
     case 'AKTIVITETSPLIKT':
-      return 'Aktivitetsplikt';
+      return 'Aktivitetsplikt § 11-7';
+    case 'AKTIVITETSPLIKT_11_9':
+      return 'Aktivitetsplikt § 11-9';
   }
   exhaustiveCheck(behandlingsType);
 }
@@ -234,6 +244,8 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Klage';
     case 'ENDRING_I_REGISTERDATA':
       return 'Endring i register';
+    case 'AKTIVITETSPLIKT':
+      return 'Aktivitetsplikt';
   }
 }
 
@@ -318,5 +330,16 @@ export function mapStatusTilTekst(
       return 'Retur fra beslutter';
     case 'ER_HASTESAK':
       return 'Hastesak';
+  }
+}
+
+export function mapReturFraStatusTilTekst(status: string): string {
+  switch (status) {
+    case 'SENDT_TILBAKE_FRA_BESLUTTER':
+      return 'Sendt tilbake fra beslutter';
+    case 'SENDT_TILBAKE_FRA_KVALITETSSIKRER':
+      return 'Sendt tilbake fra kvalitetssikrer';
+    default:
+      return status;
   }
 }
