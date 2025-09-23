@@ -27,6 +27,8 @@ interface Props {
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  overgangUføreEnabled?: Boolean,
+  overgangArbeidEnabled?: Boolean,
 }
 
 interface FormFields {
@@ -47,6 +49,8 @@ export const Bistandsbehov = ({
   readOnly,
   typeBehandling,
   initialMellomlagretVurdering,
+  overgangArbeidEnabled = false,
+  overgangUføreEnabled = false,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -228,7 +232,9 @@ export const Bistandsbehov = ({
         form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
         )}
-      {(typeBehandling === 'Førstegangsbehandling' || (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
+      {!overgangUføreEnabled &&
+        (typeBehandling === 'Førstegangsbehandling' ||
+          (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
         bistandsbehovErIkkeOppfylt && (
           <VStack gap={'4'} as={'section'}>
             <Heading level={'3'} size="small">
@@ -243,20 +249,23 @@ export const Bistandsbehov = ({
             )}
           </VStack>
         )}
-      {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
-        <VStack gap={'4'} as={'section'}>
-          <Heading level={'3'} size="small">
-            § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
-          </Heading>
-          <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-          <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilArbeid} horizontalRadio />
-          {form.watch('skalVurdereAapIOvergangTilArbeid') === JaEllerNei.Ja && (
-            <Alert variant="warning">
-              Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17-sak.
-            </Alert>
-          )}
-        </VStack>
-      )}
+      {!overgangArbeidEnabled &&
+        typeBehandling === 'Revurdering' &&
+        !grunnlag?.harOppfylt11_5 &&
+        bistandsbehovErIkkeOppfylt && (
+          <VStack gap={'4'} as={'section'}>
+            <Heading level={'3'} size="small">
+              § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
+            </Heading>
+            <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
+            <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilArbeid} horizontalRadio />
+            {form.watch('skalVurdereAapIOvergangTilArbeid') === JaEllerNei.Ja && (
+              <Alert variant="warning">
+                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17-sak.
+              </Alert>
+            )}
+          </VStack>
+        )}
     </VilkårskortMedFormOgMellomlagring>
   );
 
