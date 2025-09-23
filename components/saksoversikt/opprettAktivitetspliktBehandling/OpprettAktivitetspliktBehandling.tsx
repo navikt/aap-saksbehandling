@@ -8,7 +8,6 @@ import { useState } from 'react';
 import { Spinner } from 'components/felles/Spinner';
 import styles from './OpprettAktivitetsplikt.module.css';
 import { FormField } from 'components/form/FormField';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { isSuccess } from 'lib/utils/api';
 import { useRouter } from 'next/navigation';
 
