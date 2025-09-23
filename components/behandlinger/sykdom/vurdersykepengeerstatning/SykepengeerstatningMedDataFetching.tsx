@@ -28,12 +28,12 @@ export const SykepengeerstatningMedDataFetching = async ({ behandlingsReferanse,
   if (!skalViseSteg(stegData, grunnlag.data.vurdering != null)) {
     return null;
   }
-  
+
   return isDev() ? (
     <SykepengeerstatningNyVisning
       grunnlag={grunnlag.data}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   ) : (

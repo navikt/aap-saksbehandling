@@ -4,8 +4,8 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { isDev } from 'lib/utils/environment';
-import { RefusjonNyVising } from 'components/behandlinger/sykdom/refusjon/RefusjonNyVisning';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { RefusjonNyVisning } from 'components/behandlinger/sykdom/refusjon/RefusjonNyVisning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -21,16 +21,16 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, stegData }
   if (isError(refusjonGrunnlag)) {
     return <ApiException apiResponses={[refusjonGrunnlag]} />;
   }
-  
+
   if (!skalViseSteg(stegData, refusjonGrunnlag.data.gjeldendeVurdering != null)) {
     return null;
   }
 
   return isDev() ? (
-    <RefusjonNyVising
+    <RefusjonNyVisning
       grunnlag={refusjonGrunnlag.data}
-      readOnly={readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      readOnly={stegData.readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   ) : (

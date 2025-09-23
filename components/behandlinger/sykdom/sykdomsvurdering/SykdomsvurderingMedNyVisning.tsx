@@ -36,7 +36,6 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { isDev } from 'lib/utils/environment';
 
 export interface SykdomsvurderingFormFields {
   begrunnelse: string;
@@ -218,7 +217,7 @@ export const SykdomsvurderingNyVisning = ({
         defaultValue: defaultValues?.yrkesskadeBegrunnelse,
       },
     },
-    { shouldUnregister: false, readOnly: isDev() ? formReadOnly : readOnly }
+    { shouldUnregister: false, readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

@@ -77,6 +77,7 @@ export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
       knappTekst={'Bekreft og send til beslutter'}
       isLoading={false}
       status={'DONE'}
+      løsBehovOgGåTilNesteStegError={undefined}
     >
       <VStack gap={'4'}>
         <Heading level={'3'} size={'xsmall'}>

@@ -10,7 +10,6 @@ import { FastsettArbeidsevneNyVisning } from 'components/behandlinger/sykdom/fas
 import { isDev } from 'lib/utils/environment';
 import { StegData } from 'lib/utils/steg';
 
-
 interface Props {
   behandlingsReferanse: string;
   stegData: StegData;
@@ -29,8 +28,8 @@ export const FastsettArbeidsevneMedDataFetching = async ({ behandlingsReferanse,
   return isDev() ? (
     <FastsettArbeidsevneNyVisning
       grunnlag={grunnlag.data}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   ) : (

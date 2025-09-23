@@ -28,21 +28,21 @@ export const BistandsbehovMedDataFetching = async ({
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
-  
+
   const harTidligereVurderinger =
     grunnlag.data.gjeldendeVedtatteVurderinger != null && grunnlag.data.gjeldendeVedtatteVurderinger.length > 0;
 
   if (!skalViseSteg(stegData, harTidligereVurderinger)) {
     return null;
   }
-  
+
   return isDev() ? (
     <BistandsbehovNyVisning
       grunnlag={grunnlag.data}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      typeBehandling={typeBehandling}
+      typeBehandling={stegData.typeBehandling}
     />
   ) : (
     <Bistandsbehov

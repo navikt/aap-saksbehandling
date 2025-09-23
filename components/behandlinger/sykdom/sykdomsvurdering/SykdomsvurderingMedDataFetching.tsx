@@ -36,7 +36,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
     finnDiagnosegrunnlag(typeBehandling, grunnlag.data)?.hoveddiagnose,
     finnDiagnosegrunnlag(typeBehandling, grunnlag.data)?.kodeverk as DiagnoseSystem
   );
-  
+
   const harTidligereVurderinger =
     grunnlag.data.gjeldendeVedtatteSykdomsvurderinger != null &&
     grunnlag.data.gjeldendeVedtatteSykdomsvurderinger.length > 0;
@@ -48,8 +48,8 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
   return isDev() ? (
     <SykdomsvurderingNyVisning
       grunnlag={grunnlag.data}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
       hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
       typeBehandling={typeBehandling}

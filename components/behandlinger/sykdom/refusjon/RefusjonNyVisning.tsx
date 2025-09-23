@@ -4,7 +4,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { isBefore, parse, startOfDay } from 'date-fns';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { MellomlagretVurdering, RefusjonskravGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, RefusjonkravVurderingResponse, RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerNullableDato } from 'lib/validation/dateValidation';
@@ -23,6 +23,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Sak } from 'context/saksbehandling/SakContext';
 
 import styles from './Refusjon.module.css';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
@@ -46,7 +47,7 @@ interface Refusjon {
 
 type DraftFormFields = Partial<FormFields>;
 
-export const RefusjonNyVising = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
+export const RefusjonNyVisning = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const { sak } = useSak();
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -56,6 +57,12 @@ export const RefusjonNyVising = ({ behandlingVersjon, grunnlag, readOnly, initia
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.REFUSJON_KRAV_KODE, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'REFUSJON_KRAV',
+    mellomlagretVurdering
+  );
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag, sak);
@@ -63,12 +70,6 @@ export const RefusjonNyVising = ({ behandlingVersjon, grunnlag, readOnly, initia
   const defaultOptions: ValuePair[] = (grunnlag.gjeldendeVurderinger ?? [])
     .filter((vurdering) => vurdering.navKontor != null)
     .map((vurdering) => mapToValuePair(vurdering.navKontor!));
-
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
-    readOnly,
-    'REFUSJON_KRAV',
-    mellomlagretVurdering
-  );
 
   const { form } = useConfigForm<FormFields>({
     harKrav: {
@@ -115,15 +116,15 @@ export const RefusjonNyVising = ({ behandlingVersjon, grunnlag, readOnly, initia
       return [];
     }
 
-    const res = response.data.map((kontor) => ({
+    return response.data.map((kontor) => ({
       label: `${kontor.navn} - ${kontor.enhetsnummer}`,
       value: `${kontor.navn} - ${kontor.enhetsnummer}`,
     }));
-
-    return res;
   };
 
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'refusjoner' });
+
+  const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -133,10 +134,10 @@ export const RefusjonNyVising = ({ behandlingVersjon, grunnlag, readOnly, initia
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={false}
+      visBekreftKnapp={!formReadOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag.gjeldendeVurderinger?.[0]?.vurdertAv}
-      readOnly={readOnly}
+      readOnly={formReadOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
@@ -145,6 +146,10 @@ export const RefusjonNyVising = ({ behandlingVersjon, grunnlag, readOnly, initia
       visningModus={visningModus}
       visningActions={visningActions}
     >
+      {!!historiskeVurderinger?.length && (
+        <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
+      )}
+
       <RadioGroupWrapper
         name={`harKrav`}
         control={form.control}
@@ -280,3 +285,18 @@ function mapVurderingToDraftFormFields(grunnlag: RefusjonskravGrunnlag, sak: Sak
           ],
   };
 }
+
+const byggFelter = (vurdering: RefusjonkravVurderingResponse): ValuePair[] => [
+  {
+    label: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
+    value: vurdering.harKrav ? 'Ja' : 'Nei',
+  },
+  {
+    label: 'Nav-kontor',
+    value: vurdering.navKontor ?? '-',
+  },
+  {
+    label: 'Refusjonen gjelder periode',
+    value: `${vurdering.fom ? formaterDatoForFrontend(vurdering.fom) : 'mangler'} - ${vurdering.tom ? formaterDatoForFrontend(vurdering.tom) : 'mangler'}`,
+  },
+];
