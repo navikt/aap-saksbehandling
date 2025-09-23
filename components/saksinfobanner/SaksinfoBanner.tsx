@@ -21,7 +21,6 @@ import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbeha
 import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
 import { isProd } from 'lib/utils/environment';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -114,7 +113,6 @@ export const SaksinfoBanner = ({
     }
   };
 
-  const behandlingsreferanse = useBehandlingsReferanse();
   const oppgaveStatus = hentOppgaveStatus();
 
   const erPåBehandlingSiden = referanse !== undefined;
@@ -250,7 +248,6 @@ export const SaksinfoBanner = ({
               isOpen={visAvbrytRevurderingModal}
               onClose={() => settVisAvbrytRevurderingModal(false)}
               saksnummer={sak.saksnummer}
-              behandlingReferanse={behandlingsreferanse}
             />
             <VurderRettighetsperiodeModal
               isOpen={visVurderRettighetsperiodeModal}

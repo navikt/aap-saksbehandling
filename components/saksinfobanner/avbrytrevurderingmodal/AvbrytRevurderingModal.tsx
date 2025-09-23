@@ -1,7 +1,8 @@
 import { Alert, BodyLong, Button, Modal } from '@navikt/ds-react';
+import { v4 as uuid } from 'uuid';
 
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
+import { ManuellRevurderingV0 } from 'lib/types/types';
 
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 
@@ -11,10 +12,9 @@ interface Props {
   saksnummer: string;
   isOpen: boolean;
   onClose: () => void;
-  behandlingReferanse: string;
 }
 
-export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose, behandlingReferanse }: Props) => {
+export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose }: Props) => {
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   return (
@@ -28,7 +28,9 @@ export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose, behandling
       className={styles.modal}
     >
       <Modal.Body>
-        <BodyLong>Når du avbryter revurderingen vil behandlingen avsluttes og ingen endringer vil blir lagret på saken.</BodyLong>
+        <BodyLong>
+          Når du avbryter revurderingen vil behandlingen avsluttes og ingen endringer vil blir lagret på saken.
+        </BodyLong>
         {sendHendelseError && (
           <Alert variant={'error'} size={'small'}>
             {sendHendelseError.message}
@@ -45,16 +47,17 @@ export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose, behandling
               {
                 saksnummer: saksnummer,
                 referanse: {
-                  type: 'BEHANDLING_REFERANSE',
-                  verdi: behandlingReferanse,
+                  type: 'REVURDERING_ID',
+                  verdi: uuid(),
                 },
-                type: 'NY_ÅRSAK_TIL_BEHANDLING',
+                type: 'MANUELL_REVURDERING',
                 kanal: 'DIGITAL',
                 mottattTidspunkt: new Date().toISOString(),
                 melding: {
-                  meldingType: 'NyÅrsakTilBehandlingV0',
+                  meldingType: 'ManuellRevurderingV0',
                   årsakerTilBehandling: ['REVURDERING_AVBRUTT'],
-                } as NyÅrsakTilBehandlingV0,
+                  beskrivelse: 'Revurdering avbrutt',
+                } satisfies ManuellRevurderingV0,
               },
               onClose
             );

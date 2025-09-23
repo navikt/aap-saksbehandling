@@ -4,7 +4,7 @@ import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurder
 
 describe('Avbryt revurdering', () => {
   beforeEach(() =>
-    render(<AvbrytRevurderingModal saksnummer={'1'} behandlingReferanse={'1'} isOpen={true} onClose={vi.fn} />)
+    render(<AvbrytRevurderingModal saksnummer={'1'} isOpen={true} onClose={vi.fn} />)
   );
   it('har en overskrift', () => {
     expect(screen.getByRole('heading', { name: 'Er du sikker på at du vil avbryte revurderingen?' })).toBeVisible();
