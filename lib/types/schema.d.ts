@@ -11805,7 +11805,7 @@ export interface components {
         | 'BRUDD_AKTIVITETSPLIKT_INNSENDING_ID'
         | 'AVVIST_LEGEERKLÆRING_ID'
         | 'REVURDERING_ID'
-        | 'BEHANDLING_REFERANSE'
+        | 'SAKSBEHANDLER_KELVIN_REFERANSE'
         | 'MANUELL_OPPRETTELSE'
         | 'KABAL_HENDELSE_ID';
       verdi: string;
@@ -12116,6 +12116,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knad'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandling': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandlingV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandlingV0': {
+      behandlingReferanse: string;
       '\u00E5rsakerTilBehandling': (
         | 'SØKNAD'
         | 'AKTIVITETSMELDING'

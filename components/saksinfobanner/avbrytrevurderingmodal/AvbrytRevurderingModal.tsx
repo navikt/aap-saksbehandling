@@ -1,4 +1,5 @@
 import { Alert, BodyLong, Button, Modal } from '@navikt/ds-react';
+import { v4 as uuid } from 'uuid';
 
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
@@ -28,7 +29,9 @@ export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose, behandling
       className={styles.modal}
     >
       <Modal.Body>
-        <BodyLong>Når du avbryter revurderingen vil behandlingen avsluttes og ingen endringer vil blir lagret på saken.</BodyLong>
+        <BodyLong>
+          Når du avbryter revurderingen vil behandlingen avsluttes og ingen endringer vil bli lagret på saken.
+        </BodyLong>
         {sendHendelseError && (
           <Alert variant={'error'} size={'small'}>
             {sendHendelseError.message}
@@ -45,8 +48,8 @@ export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose, behandling
               {
                 saksnummer: saksnummer,
                 referanse: {
-                  type: 'BEHANDLING_REFERANSE',
-                  verdi: behandlingReferanse,
+                  type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
+                  verdi: uuid(),
                 },
                 type: 'NY_ÅRSAK_TIL_BEHANDLING',
                 kanal: 'DIGITAL',
@@ -54,7 +57,8 @@ export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose, behandling
                 melding: {
                   meldingType: 'NyÅrsakTilBehandlingV0',
                   årsakerTilBehandling: ['REVURDERING_AVBRUTT'],
-                } as NyÅrsakTilBehandlingV0,
+                  behandlingReferanse: behandlingReferanse,
+                } satisfies NyÅrsakTilBehandlingV0,
               },
               onClose
             );

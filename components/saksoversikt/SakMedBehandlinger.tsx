@@ -116,7 +116,7 @@ const formatterÅrsakTilOpprettelseTilTekst = (årsakTilOpprettelse: ÅrsakTilOp
     case 'SØKNAD':
       return 'Søknad';
     case 'MANUELL_OPPRETTELSE':
-      return 'Manuell opprettelse';
+      return 'Manuelt opprettet';
     case 'HELSEOPPLYSNINGER':
       return 'Helseopplysninger';
     case 'ANNET_RELEVANT_DOKUMENT':

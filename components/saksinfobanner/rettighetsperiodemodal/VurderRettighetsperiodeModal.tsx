@@ -7,6 +7,7 @@ import { DetaljertBehandling, NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 import styles from './VurderRettighetsperiodeModal.module.css';
 import { Behovstype } from 'lib/utils/form';
+import { v4 as uuid } from 'uuid';
 
 interface Props {
   saksnummer: string;
@@ -39,8 +40,8 @@ export const VurderRettighetsperiodeModal = ({
         {
           saksnummer: saksnummer,
           referanse: {
-            type: 'BEHANDLING_REFERANSE',
-            verdi: behandlingReferanse,
+            type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
+            verdi: uuid(),
           },
           type: 'NY_ÅRSAK_TIL_BEHANDLING',
           kanal: 'DIGITAL',
@@ -48,7 +49,8 @@ export const VurderRettighetsperiodeModal = ({
           melding: {
             meldingType: 'NyÅrsakTilBehandlingV0',
             årsakerTilBehandling: ['VURDER_RETTIGHETSPERIODE'],
-          } as NyÅrsakTilBehandlingV0,
+            behandlingReferanse: behandlingReferanse,
+          } satisfies NyÅrsakTilBehandlingV0,
         },
         onClose
       );
