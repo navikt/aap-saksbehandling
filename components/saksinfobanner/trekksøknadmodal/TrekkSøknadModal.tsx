@@ -6,6 +6,7 @@ import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 
 import styles from './TrekkSøknadModal.module.css';
+import { v4 as uuid } from 'uuid';
 
 interface Props {
   saksnummer: string;
@@ -45,8 +46,8 @@ export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingRefer
               {
                 saksnummer: saksnummer,
                 referanse: {
-                  type: 'BEHANDLING_REFERANSE',
-                  verdi: behandlingReferanse,
+                  type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
+                  verdi: uuid(),
                 },
                 type: 'NY_ÅRSAK_TIL_BEHANDLING',
                 kanal: 'DIGITAL',
@@ -54,7 +55,8 @@ export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingRefer
                 melding: {
                   meldingType: 'NyÅrsakTilBehandlingV0',
                   årsakerTilBehandling: ['SØKNAD_TRUKKET'],
-                } as NyÅrsakTilBehandlingV0,
+                  behandlingReferanse: behandlingReferanse,
+                } satisfies NyÅrsakTilBehandlingV0,
               },
               onClose
             );
