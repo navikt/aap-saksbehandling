@@ -8,9 +8,16 @@ import { skalViseSteg, StegData } from 'lib/utils/steg';
 interface Props {
   behandlingsReferanse: string;
   stegData: StegData;
+  overgangUføreEnabled: Boolean;
+  overgangArbeidEnabled: Boolean;
 }
 
-export const BistandsbehovMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const BistandsbehovMedDataFetching = async ({
+  behandlingsReferanse,
+  stegData,
+  overgangArbeidEnabled,
+  overgangUføreEnabled,
+}: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentBistandsbehovGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_BISTANDSBEHOV_KODE),
@@ -34,6 +41,8 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsReferanse, stegD
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       typeBehandling={stegData.typeBehandling}
+      overgangArbeidEnabled={overgangArbeidEnabled}
+      overgangUføreEnabled={overgangUføreEnabled}
     />
   );
 };

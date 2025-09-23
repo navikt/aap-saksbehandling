@@ -12,10 +12,16 @@ import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
+import { isLocal } from 'lib/utils/environment';
+import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
+import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
 }
+
+export const overgangUføreFeature = () => isLocal();
+export const overgangArbeidFeature = ()=> false;
 
 export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
@@ -32,8 +38,8 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const sykdomsvurderingBrevSteg = getStegData(aktivStegGruppe, 'SYKDOMSVURDERING_BREV', flyt.data);
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
-  /*const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data);
-  const overgangarbeidSteg = getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data);*/
+  const overganguføreSteg = overgangUføreFeature() ? getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data) : null;
+  const overgangarbeidSteg = overgangArbeidFeature() ? getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data) : null;
 
   return (
     <GruppeSteg
@@ -48,19 +54,13 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <SykdomsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={sykdomSteg} />
         </StegSuspense>
       )}
-      {/*vurderBistandsbehovSteg.skalViseSteg && (
-        <StegSuspense>
-          <BistandsbehovutenovergangMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
-            stegData={vurderBistandsbehovSteg}
-          />
-        </StegSuspense>
-      )   //TODO: Bytte ut bistandsBehovMedDataFetching med BistandsbehovutenovergangMedDataFetching ved innføring av 11-17 og 11-18*/}
       {vurderBistandsbehovSteg.skalViseSteg && (
         <StegSuspense>
           <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             stegData={vurderBistandsbehovSteg}
+            overgangUføreEnabled={overgangUføreFeature()}
+            overgangArbeidEnabled={overgangArbeidFeature()}
           />
         </StegSuspense>
       )}
@@ -82,16 +82,16 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />
         </StegSuspense>
       )}
-      {/*(isDev() || isLocal()) && overganguføreSteg.skalViseSteg && (
+      {overgangUføreFeature() && overganguføreSteg !== null && overganguføreSteg.skalViseSteg && (
         <StegSuspense>
           <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
         </StegSuspense>
       )}
-      {(isDev() || isLocal()) && overgangarbeidSteg.skalViseSteg && (
+      {overgangArbeidFeature() && overgangarbeidSteg !== null && overgangarbeidSteg.skalViseSteg && (
         <StegSuspense>
           <OvergangArbeidMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overgangarbeidSteg} />
         </StegSuspense>
-      )*/}
+      )}
       {sykdomsvurderingBrevSteg.skalViseSteg && (
         <StegSuspense>
           <SykdomsvurderingBrevMedDataFetching
