@@ -76,6 +76,10 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Overgang til uføre';
     case 'OVERGANG_ARBEID':
       return 'Overgang arbeidssøker';
+    case 'DØDSFALL_BARN':
+      return 'Dødsfall barn';
+    case 'DØDSFALL_BRUKER':
+      return 'Dødsfall bruker';
     default:
       return vurderingsbehov;
   }
