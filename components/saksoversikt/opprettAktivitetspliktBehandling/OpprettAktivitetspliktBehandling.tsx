@@ -64,9 +64,9 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
         }}
       >
         <VStack gap="4">
-          <ExpansionCard aria-label="Opprett Aktivitetspliktbrudd" size={'small'} defaultOpen={true}>
+          <ExpansionCard aria-label="Opprett vurdering av aktivitetsplikten" size={'small'} defaultOpen={true}>
             <ExpansionCard.Header className={styles.header}>
-              <ExpansionCard.Title size="small">Opprett Aktivitetspliktbrudd</ExpansionCard.Title>
+              <ExpansionCard.Title size="small">Opprett vurdering av aktivitetsplikten</ExpansionCard.Title>
             </ExpansionCard.Header>
 
             <ExpansionCard.Content className={styles.content}>
@@ -83,18 +83,16 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
           )}
 
           <HStack gap="4">
+            <Button type="submit">Bekreft</Button>
             <Button
               as="a"
               href={`/saksbehandling/sak/${sak.saksnummer}`}
               rel="noreferrer noopener"
               size="small"
               variant="secondary"
-              icon={<ExternalLinkIcon aria-hidden />}
             >
               Avbryt
             </Button>
-
-            <Button type="submit">Opprett Aktivitetspliktbrudd</Button>
           </HStack>
         </VStack>
       </form>
