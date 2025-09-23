@@ -12,7 +12,7 @@ import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
-import { isLocal } from 'lib/utils/environment';
+import { isDev, isLocal } from 'lib/utils/environment';
 import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
 import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
 
@@ -20,7 +20,7 @@ interface Props {
   behandlingsReferanse: string;
 }
 
-export const overgangUføreFeature = () => isLocal();
+export const overgangUføreFeature = () => isLocal() || isDev();
 export const overgangArbeidFeature = ()=> false;
 
 export const Sykdom = async ({ behandlingsReferanse }: Props) => {
