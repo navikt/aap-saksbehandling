@@ -12,6 +12,8 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
   { label: 'Samordning og avregning', value: 'SAMORDNING_OG_AVREGNING' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
+  { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' },
+  { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' },
   { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
   { label: 'Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
   // TODO: For at denne skal fungere må det gjøres litt justering i data som sendes i melding.
