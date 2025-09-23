@@ -219,7 +219,7 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
     case 'SØKNAD':
       return 'Søknad';
     case 'MANUELL_OPPRETTELSE':
-      return 'Manuell opprettelse';
+      return 'Manuelt opprettet';
     case 'HELSEOPPLYSNINGER':
       return 'Helseopplysninger';
     case 'ANNET_RELEVANT_DOKUMENT':
