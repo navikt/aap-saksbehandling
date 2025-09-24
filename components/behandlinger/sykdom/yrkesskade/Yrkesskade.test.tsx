@@ -6,6 +6,7 @@ import { userEvent } from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { YrkesskadeMedManuellYrkesskadeDato } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedManuellYrkesskadeDato';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -18,7 +19,7 @@ const grunnlag: YrkesskadeVurderingGrunnlag = {
       {
         ref: 'YRK',
         kilde: 'Yrkesskaderegisteret',
-        skadedato: '2024-10-10',
+        skadedato: null,
       },
     ],
     oppgittYrkesskadeISøknad: false,
@@ -28,7 +29,14 @@ const grunnlag: YrkesskadeVurderingGrunnlag = {
 describe('Yrkesskade', () => {
   describe('Generelt', () => {
     it('skal har korrekt heading', () => {
-      render(<Yrkesskade grunnlag={grunnlag} behandlingVersjon={1} readOnly={false} behandlingsReferanse={'123'} />);
+      render(
+        <YrkesskadeMedManuellYrkesskadeDato
+          grunnlag={grunnlag}
+          behandlingVersjon={1}
+          readOnly={false}
+          behandlingsReferanse={'123'}
+        />
+      );
       const heading = screen.getByRole('heading', { name: '§ 11-22 AAP ved yrkesskade' });
       expect(heading).toBeVisible();
     });
@@ -36,7 +44,14 @@ describe('Yrkesskade', () => {
 
   describe('felter', () => {
     beforeEach(() => {
-      render(<Yrkesskade grunnlag={grunnlag} behandlingVersjon={1} readOnly={false} behandlingsReferanse={'123'} />);
+      render(
+        <YrkesskadeMedManuellYrkesskadeDato
+          grunnlag={grunnlag}
+          behandlingVersjon={1}
+          readOnly={false}
+          behandlingsReferanse={'123'}
+        />
+      );
     });
 
     it('skal være synlig', () => {
@@ -82,6 +97,26 @@ describe('Yrkesskade', () => {
       await user.click(checkbox);
 
       expect(screen.getByRole('checkbox', { name: 'Tilknytt yrkesskade til vurdering' })).toBeChecked();
+    });
+
+    it('skal vise en feilmelding dersom yrkesskade er valgt, men skadedato mangler', async () => {
+      await velgJaPåÅrsakssammenheng();
+
+      const checkbox = screen.getByRole('checkbox', { name: 'Tilknytt yrkesskade til vurdering' });
+      await user.click(checkbox);
+
+      await velgBekreft();
+
+      const feilmelding = screen.getByText('Du må angi dato for yrkesskade');
+      expect(feilmelding).toBeVisible();
+    });
+
+    it('skal vise en feilmelding dersom det ikke er tilknyttet noen yrkesskade', async () => {
+      await velgJaPåÅrsakssammenheng();
+      await velgBekreft();
+
+      const feilmelding = screen.getByText('Du må velge minst én yrkesskade');
+      expect(feilmelding).toBeVisible();
     });
 
     it('skal være synlig dersom det finnes en årsakssammenheng', async () => {
