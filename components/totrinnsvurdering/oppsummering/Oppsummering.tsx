@@ -34,7 +34,9 @@ export const Oppsummering = ({ vurderinger, link, erKvalitetssikrer }: Props) =>
           {vurdering.begrunnelse != '' && (
             <div>
               <Label size={'small'}>Begrunnelse</Label>
-              <BodyShort size={'small'}>{vurdering.begrunnelse}</BodyShort>
+              <BodyShort size={'small'} className={styles.begrunnelse}>
+                {vurdering.begrunnelse}
+              </BodyShort>
             </div>
           )}
 

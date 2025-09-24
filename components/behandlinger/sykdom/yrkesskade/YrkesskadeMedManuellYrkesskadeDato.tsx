@@ -9,10 +9,11 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
+import { useFieldArray } from 'react-hook-form';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -103,8 +104,40 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
         },
       },
     },
-    { readOnly }
+    { readOnly, shouldUnregister: true }
   );
+
+  const { fields: relevanteYrkesskadeSaker, update } = useFieldArray({
+    name: 'relevanteYrkesskadeSaker',
+    control: form.control,
+    rules: {
+      validate: (fields) => {
+        // skip validering hvis erÅrsaksammenheng er Nei. Da skulle egentlig denne vært unmounted
+        const erÅrsakssammenheng = form.getValues('erÅrsakssammenheng');
+        if (erÅrsakssammenheng === JaEllerNei.Nei) {
+          return;
+        }
+        const ingenYrkesskadeErTilknyttet = fields.every((yrkesskade) => !yrkesskade.erTilknyttet);
+        if (ingenYrkesskadeErTilknyttet) {
+          form.setError('relevanteYrkesskadeSaker', {
+            type: 'custom',
+            message: 'Du må velge minst én yrkesskade',
+          });
+          return false;
+        }
+      },
+    },
+  });
+
+  const erÅrsakssammenheng = form.watch('erÅrsakssammenheng');
+  useEffect(() => {
+    if (erÅrsakssammenheng === JaEllerNei.Nei) {
+      form.setValue(
+        'relevanteYrkesskadeSaker',
+        relevanteYrkesskadeSaker.map((sak) => ({ ...sak, erTilknyttet: false }))
+      );
+    }
+  }, [erÅrsakssammenheng]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(
@@ -158,13 +191,18 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
     >
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
-      {form.watch('erÅrsakssammenheng') === JaEllerNei.Ja && (
+      {erÅrsakssammenheng === JaEllerNei.Ja && (
         <>
           <VStack>
             <Label size={'small'}>
               Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.
             </Label>
-            <YrkesskadeVurderingTabell form={form} readOnly={readOnly} />
+            <YrkesskadeVurderingTabell
+              form={form}
+              readOnly={readOnly}
+              yrkesskader={relevanteYrkesskadeSaker}
+              update={update}
+            />
           </VStack>
           <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
         </>
