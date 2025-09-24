@@ -11,3 +11,7 @@
   border: 2px solid black;
   padding: 1rem;
 }
+
+.begrunnelse {
+  white-space: pre-wrap;
+}
