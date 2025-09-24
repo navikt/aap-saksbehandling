@@ -11801,7 +11801,6 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.InnsendingReferanse': {
       'asAvvistLegeerkl\u00E6ringId': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.AvvistLegeerkl\u00E6ringId'];
-      asBehandlingReferanse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.behandling.BehandlingReferanse'];
       asInnsendingId: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.InnsendingId'];
       asJournalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
       asKabalHendelseId: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.KabalHendelseId'];
@@ -11811,6 +11810,7 @@ export interface components {
         | 'BRUDD_AKTIVITETSPLIKT_INNSENDING_ID'
         | 'AVVIST_LEGEERKLÆRING_ID'
         | 'REVURDERING_ID'
+        | 'BEHANDLING_REFERANSE'
         | 'SAKSBEHANDLER_KELVIN_REFERANSE'
         | 'MANUELL_OPPRETTELSE'
         | 'KABAL_HENDELSE_ID';
