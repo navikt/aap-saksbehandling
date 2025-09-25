@@ -19,7 +19,8 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { Veiledning } from 'components/veiledning/Veiledning';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -27,8 +28,6 @@ interface Props {
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  overgangUføreEnabled?: Boolean,
-  overgangArbeidEnabled?: Boolean,
 }
 
 interface FormFields {
@@ -43,14 +42,12 @@ interface FormFields {
 
 type DraftFormFields = Partial<FormFields>;
 
-export const Bistandsbehov = ({
+export const BistandsbehovNyVisning = ({
   behandlingVersjon,
   grunnlag,
   readOnly,
   typeBehandling,
   initialMellomlagretVurdering,
-  overgangArbeidEnabled = false,
-  overgangUføreEnabled = false,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -58,6 +55,12 @@ export const Bistandsbehov = ({
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'VURDER_BISTANDSBEHOV',
+    mellomlagretVurdering
+  );
 
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
   const erBehovForAktivBehandlingLabel = 'a: Har brukeren behov for aktiv behandling?';
@@ -128,7 +131,7 @@ export const Bistandsbehov = ({
         },
       },
     },
-    { readOnly, shouldUnregister: true }
+    { readOnly: formReadOnly, shouldUnregister: true }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -156,6 +159,7 @@ export const Bistandsbehov = ({
         },
         () => {
           nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
         }
       );
     })(event);
@@ -173,7 +177,7 @@ export const Bistandsbehov = ({
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
       steg={'VURDER_BISTANDSBEHOV'}
       onSubmit={handleSubmit}
@@ -190,8 +194,9 @@ export const Bistandsbehov = ({
         });
       }}
       mellomlagretVurdering={mellomlagretVurdering}
-      visBekreftKnapp={!readOnly}
-      readOnly={readOnly}
+      visBekreftKnapp={false}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
@@ -234,9 +239,7 @@ export const Bistandsbehov = ({
         form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
         )}
-      {!overgangUføreEnabled &&
-        (typeBehandling === 'Førstegangsbehandling' ||
-          (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
+      {(typeBehandling === 'Førstegangsbehandling' || (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
         bistandsbehovErIkkeOppfylt && (
           <VStack gap={'4'} as={'section'}>
             <Heading level={'3'} size="small">
@@ -251,24 +254,21 @@ export const Bistandsbehov = ({
             )}
           </VStack>
         )}
-      {!overgangArbeidEnabled &&
-        typeBehandling === 'Revurdering' &&
-        !grunnlag?.harOppfylt11_5 &&
-        bistandsbehovErIkkeOppfylt && (
-          <VStack gap={'4'} as={'section'}>
-            <Heading level={'3'} size="small">
-              § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
-            </Heading>
-            <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-            <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilArbeid} horizontalRadio />
-            {form.watch('skalVurdereAapIOvergangTilArbeid') === JaEllerNei.Ja && (
-              <Alert variant="warning">
-                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17-sak.
-              </Alert>
-            )}
-          </VStack>
-        )}
-    </VilkårskortMedFormOgMellomlagring>
+      {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
+        <VStack gap={'4'} as={'section'}>
+          <Heading level={'3'} size="small">
+            § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
+          </Heading>
+          <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
+          <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilArbeid} horizontalRadio />
+          {form.watch('skalVurdereAapIOvergangTilArbeid') === JaEllerNei.Ja && (
+            <Alert variant="warning">
+              Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17-sak.
+            </Alert>
+          )}
+        </VStack>
+      )}
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 
   function mapVurderingToDraftFormFields(vurdering?: BistandsbehovVurdering): DraftFormFields {

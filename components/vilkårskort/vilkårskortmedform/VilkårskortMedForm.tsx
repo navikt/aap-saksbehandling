@@ -10,7 +10,11 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 
+/**
+ * Slett denne komponenten og flytt disse propsene til VilkårskortMedFormOgMellomlagring
+ */
 export interface VilkårsKortMedFormProps {
   heading: string;
   steg: StegType;
@@ -18,15 +22,17 @@ export interface VilkårsKortMedFormProps {
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
-  visBekreftKnapp: boolean;
-  readOnly?: boolean;
-  løsBehovOgGåTilNesteStegError?: ApiException;
+  løsBehovOgGåTilNesteStegError: ApiException | undefined;
+  visBekreftKnapp: boolean; // TODO Denne kan mest sannsynlig slettes når ny visning kommer på plass
+  readOnly?: boolean; // TODO Denne kan mest sannsynlig slettes når ny visning kommer på plass
   knappTekst?: string;
   defaultOpen?: boolean;
   vilkårTilhørerNavKontor: boolean;
   vurdertAvAnsatt?: VurdertAvAnsatt;
   vurdertAutomatisk?: boolean;
   kvalitetssikretAv?: VurdertAvAnsatt;
+  visningModus?: VisningModus; // TODO Gjør disse feltene required når den er klar til å implementeres i vilkårskortene
+  visningActions?: VisningActions; // TODO Gjør disse feltene required når den er klar til å implementeres i vilkårskortene
 }
 
 export const VilkårskortMedForm = ({

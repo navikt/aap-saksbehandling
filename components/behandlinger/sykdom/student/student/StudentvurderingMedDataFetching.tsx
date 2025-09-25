@@ -4,6 +4,8 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StudentvurderingNyVisning } from 'components/behandlinger/sykdom/student/student/StudentvurderingNyVisning';
+import { isDev } from 'lib/utils/environment';
 
 interface Props {
   behandlingsreferanse: string;
@@ -24,7 +26,14 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
     return null;
   }
 
-  return (
+  return isDev() ? (
+    <StudentvurderingNyVisning
+      grunnlag={grunnlag.data}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
+    />
+  ) : (
     <Studentvurdering
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}

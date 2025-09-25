@@ -3,6 +3,8 @@ import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bist
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { isDev } from 'lib/utils/environment';
+import { BistandsbehovNyVisning } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovNyVisning';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
@@ -34,7 +36,15 @@ export const BistandsbehovMedDataFetching = async ({
     return null;
   }
 
-  return (
+  return isDev() ? (
+    <BistandsbehovNyVisning
+      grunnlag={grunnlag.data}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
+      typeBehandling={stegData.typeBehandling}
+    />
+  ) : (
     <Bistandsbehov
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}

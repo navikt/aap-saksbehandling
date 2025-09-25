@@ -66,6 +66,7 @@ const defaultProps: VilkårsKortMedFormProps = {
   vurdertAvAnsatt: { ident: 'Lokalsaksbehandler', dato: '2025-04-25' },
   kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26' },
   children: undefined,
+  løsBehovOgGåTilNesteStegError: undefined,
 };
 
 function renderComponent(skalViseBekreftKnapp?: boolean, error?: ApiException) {
