@@ -65,7 +65,9 @@ export const LedigeOppgaverMeny = ({
           </ActionMenu.Trigger>
           <ActionMenu.Content>
             <ActionMenu.Item onSelect={() => plukkOgGåTilOppgave(oppgave)}>Behandle</ActionMenu.Item>
-            <ActionMenu.Item onSelect={() => synkroniserEnhetPåOppgave(oppgave)}>Synkroniser enhet</ActionMenu.Item>
+            <ActionMenu.Item onSelect={() => synkroniserEnhetPåOppgave(oppgave)}>
+              Sjekk kontortilhørighet
+            </ActionMenu.Item>
           </ActionMenu.Content>
         </ActionMenu>
       ) : (

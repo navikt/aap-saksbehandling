@@ -5,14 +5,15 @@ import { byggKelvinURL } from 'lib/utils/request';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
-import { useState, useTransition } from 'react';
+import { Dispatch, SetStateAction, useState, useTransition } from 'react';
 
 interface Props {
   oppgave: Oppgave;
   revalidateFunction: () => Promise<unknown>;
+  setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) => {
+export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, revalidateFunction }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
@@ -31,12 +32,15 @@ export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) =
   }
 
   async function synkroniserEnhetPåOppgave(oppgave: Oppgave) {
-    if (oppgave.id) {
-      const res = await synkroniserOppgaveMedEnhetClient(oppgave.id);
-      if (isSuccess(res)) {
-        await revalidateFunction();
+    startTransitionFrigi(async () => {
+      if (oppgave.id) {
+        const res = await synkroniserOppgaveMedEnhetClient(oppgave.id);
+        if (isSuccess(res)) {
+          await revalidateFunction();
+          setVisSynkroniserEnhetModal(true);
+        }
       }
-    }
+    });
   }
 
   return (
@@ -64,7 +68,7 @@ export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) =
               await synkroniserEnhetPåOppgave(oppgave);
             }}
           >
-            Synkroniser enhet
+            Sjekk kontortilhørighet
           </ActionMenu.Item>
           {erReservert && (
             <ActionMenu.Item
