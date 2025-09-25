@@ -8439,7 +8439,14 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.\u00C5rsakTilRetur': {
       /** @enum {string} */
-      '\u00E5rsak': 'MANGELFULL_BEGRUNNELSE' | 'MANGLENDE_UTREDNING' | 'FEIL_LOVANVENDELSE' | 'ANNET';
+      '\u00E5rsak':
+        | 'MANGELFULL_BEGRUNNELSE'
+        | 'MANGLENDE_UTREDNING'
+        | 'FEIL_LOVANVENDELSE'
+        | 'ANNET'
+        | 'SKRIVEFEIL'
+        | 'FOR_DETALJERT'
+        | 'IKKE_INDIVIDUELL_OG_KONKRET';
       '\u00E5rsakFritekst'?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.barnetillegg.BarnetilleggDto': {
