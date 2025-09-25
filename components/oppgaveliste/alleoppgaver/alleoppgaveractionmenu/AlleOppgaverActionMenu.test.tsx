@@ -23,11 +23,15 @@ const oppgave: Oppgave = {
   markeringer: [],
 };
 
+const setSync = () => undefined;
+
 describe('AlleOppgaverActionMenu', () => {
   const user = userEvent.setup();
 
   it('skal ha en knapp for å åpne oppgaven', async () => {
-    render(<AlleOppgaverActionMenu oppgave={oppgave} revalidateFunction={vi.fn()} />);
+    render(
+      <AlleOppgaverActionMenu oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />
+    );
     const menu = screen.getByRole('button', { name: 'Oppgavemeny' });
     await user.click(menu);
     const åpneOppgave = screen.getByText('Åpne oppgave');
@@ -36,7 +40,13 @@ describe('AlleOppgaverActionMenu', () => {
 
   it('skal ha en knapp for å frigi oppgaven hvis oppgaven er reservert', async () => {
     const reservertOppgave = { ...oppgave, reservertAv: 'saksbehandler' };
-    render(<AlleOppgaverActionMenu oppgave={reservertOppgave} revalidateFunction={vi.fn()} />);
+    render(
+      <AlleOppgaverActionMenu
+        oppgave={reservertOppgave}
+        setVisSynkroniserEnhetModal={setSync}
+        revalidateFunction={vi.fn()}
+      />
+    );
     const menu = screen.getByRole('button', { name: 'Oppgavemeny' });
     await user.click(menu);
     const frigiOppgave = screen.getByText('Frigi oppgave');
@@ -44,7 +54,9 @@ describe('AlleOppgaverActionMenu', () => {
   });
 
   it('skal ikke ha knapp for å frigi hvis oppgave ikke er reservert', async () => {
-    render(<AlleOppgaverActionMenu oppgave={oppgave} revalidateFunction={vi.fn()} />);
+    render(
+      <AlleOppgaverActionMenu oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />
+    );
     const menu = screen.getByRole('button', { name: 'Oppgavemeny' });
     await user.click(menu);
     const frigiOppgave = screen.queryByText('Frigi oppgave');
