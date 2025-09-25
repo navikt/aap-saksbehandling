@@ -1,4 +1,3 @@
-import { Yrkesskade } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
 import {
   hentMellomlagring,
   hentYrkesskadeVurderingGrunnlag,
@@ -7,7 +6,6 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { isProd } from 'lib/utils/environment';
 import { YrkesskadeMedManuellYrkesskadeDato } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedManuellYrkesskadeDato';
 
 interface Props {
@@ -29,17 +27,8 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsReferanse, stegData
     return null;
   }
 
-  return !isProd() ? (
-    // TODO: rydd opp her etter etter prodsetting
+  return (
     <YrkesskadeMedManuellYrkesskadeDato
-      grunnlag={yrkesskadeVurderingGrunnlag.data}
-      readOnly={stegData.readOnly || !yrkesskadeVurderingGrunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      behandlingsReferanse={behandlingsReferanse}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
-    <Yrkesskade
       grunnlag={yrkesskadeVurderingGrunnlag.data}
       readOnly={stegData.readOnly || !yrkesskadeVurderingGrunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
