@@ -31,6 +31,8 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
   const vurderLovvalgSteg = getStegData('LOVVALG', 'VURDER_LOVVALG', flyt.data);
   const behandlingsVersjon = flyt.data.behandlingVersjon;
   const readOnly = vurderLovvalgSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const erOverstyrtTilbakeførtVurdering =
+    vurderingAutomatisk.data.kanBehandlesAutomatisk && grunnlag.data.vurdering == null;
 
   const visManuellVurdering = skalViseSteg(vurderLovvalgSteg, !!grunnlag.data.vurdering);
   const visOverstyrKnapp = kanViseOverstyrKnapp(
@@ -61,7 +63,7 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
             behandlingVersjon={behandlingsVersjon}
             grunnlag={grunnlag.data}
             readOnly={readOnly}
-            overstyring={!!grunnlag?.data.vurdering?.overstyrt}
+            overstyring={!!grunnlag?.data.vurdering?.overstyrt || erOverstyrtTilbakeførtVurdering}
             initialMellomlagretVurdering={initialMellomlagretVurdering}
           />
         )}
