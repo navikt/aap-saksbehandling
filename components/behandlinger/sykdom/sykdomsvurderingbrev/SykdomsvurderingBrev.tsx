@@ -148,7 +148,7 @@ export const SykdomsvurderingBrev = ({
                 <Heading size={'xsmall'}>Hvem kan få AAP?</Heading>
                 <BodyLong size={'small'}>
                   For å ha rett til AAP må arbeidsevnen din være nedsatt med minst halvparten på grunn av sykdom eller
-                  skade, og du må ha aktiv behandling eller bistand fra NAV for å kunne bedre arbeidsevnen din. Dette
+                  skade, og du må ha aktiv behandling eller bistand fra Nav for å kunne bedre arbeidsevnen din. Dette
                   går fram av folketrygdlovens §§ 11-5 og 11-6.
                 </BodyLong>
               </Box>
