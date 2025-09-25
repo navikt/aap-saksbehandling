@@ -1,6 +1,7 @@
 import { ValuePair } from 'components/form/FormField';
 import type { Vurderingsbehov } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+import { isDev, isLocal } from 'lib/utils/environment';
 
 export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
@@ -12,12 +13,15 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
   { label: 'Samordning og avregning', value: 'SAMORDNING_OG_AVREGNING' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
-  { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' },
-  { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' },
   { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
   { label: 'Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
-  // TODO: For at denne skal fungere må det gjøres litt justering i data som sendes i melding.
-  // { label: 'Utenlandsopphold før søknadstidspunkt', value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT' },
+  // TODO: Fjerne miljøsjekk når testet OK
+  ...(isDev() || isLocal()
+    ? [
+        { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' } as ValuePair<Vurderingsbehov>,
+        { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' } as ValuePair<Vurderingsbehov>,
+      ]
+    : []),
 ];
 
 export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [

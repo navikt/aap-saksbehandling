@@ -46,7 +46,7 @@ describe('Relevante dokumenter', () => {
     render(<RelevanteDokumenter />);
     expect(
       screen.getByText(
-        'NAV har tidligere mottatt følgende helseopplysninger som kan være relevant for brukers AAP sak. Velg dokumenter som er aktuelle for å koble de til saken.'
+        'Nav har tidligere mottatt følgende helseopplysninger som kan være relevant for brukers AAP sak. Velg dokumenter som er aktuelle for å koble de til saken.'
       )
     ).toBeVisible();
   });

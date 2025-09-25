@@ -1,14 +1,19 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { BistandsGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+});
 
 describe('Generelt', () => {
   it('Skal ha en overskrift', () => {
@@ -52,6 +57,7 @@ describe('mellomlagring i bistandsbehov', () => {
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
+
     const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
     expect(tekst).toBeVisible();
   });

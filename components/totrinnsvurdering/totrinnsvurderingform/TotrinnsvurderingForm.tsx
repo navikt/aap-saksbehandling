@@ -20,6 +20,7 @@ import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
+import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -120,17 +121,32 @@ export const TotrinnsvurderingForm = ({
       className={'flex-column'}
       autoComplete={'off'}
     >
-      {fields.map((field, index) => (
-        <TotrinnnsvurderingFelter
-          key={field.id}
-          form={form}
-          index={index}
-          field={field}
-          erKvalitetssikring={erKvalitetssikring}
-          link={`${link}/${behovstypeTilVilkårskortLink(field.definisjon as Behovstype)}`}
-          readOnly={readOnly}
-        />
-      ))}
+      {fields.map((field, index) => {
+        if (field.definisjon === Behovstype.SYKDOMSVURDERING_BREV_KODE) {
+          return (
+            <TotrinnsvurderingVedtaksbrevFelter
+              key={field.id}
+              form={form}
+              index={index}
+              field={field}
+              erKvalitetssikring={erKvalitetssikring}
+              link={`${link}/${behovstypeTilVilkårskortLink(field.definisjon as Behovstype)}`}
+              readOnly={readOnly}
+            />
+          );
+        }
+        return (
+          <TotrinnnsvurderingFelter
+            key={field.id}
+            form={form}
+            index={index}
+            field={field}
+            erKvalitetssikring={erKvalitetssikring}
+            link={`${link}/${behovstypeTilVilkårskortLink(field.definisjon as Behovstype)}`}
+            readOnly={readOnly}
+          />
+        );
+      })}
       {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
       <LøsBehovOgGåTilNesteStegStatusAlert
         status={status}

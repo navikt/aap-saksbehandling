@@ -212,6 +212,32 @@ describe('totrinnsvurderingform', () => {
   });
 });
 
+describe('Totrinnsvurdering av vedtaksbrev', () => {
+  const grunnlaget: FatteVedtakGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    vurderinger: [
+      {
+        definisjon: Behovstype.SYKDOMSVURDERING_BREV_KODE,
+      },
+    ],
+    historikk: [],
+  };
+  it('har en egen beskrivelse for kvalitetssikring av vedtaksbrev', () => {
+    render(<TotrinnsvurderingForm grunnlag={grunnlaget} erKvalitetssikring={true} link={link} readOnly={false} />);
+    expect(screen.getByText('Godkjenner du begrunnelsen?')).toBeVisible();
+  });
+
+  it('har egne grunner for retur', async () => {
+    render(<TotrinnsvurderingForm grunnlag={grunnlaget} erKvalitetssikring={true} link={link} readOnly={false} />);
+
+    await user.click(screen.getByRole('radio', { name: /Nei/ }));
+
+    expect(screen.getByRole('checkbox', { name: /Skrivefeil/ })).toBeVisible();
+    expect(screen.getByRole('checkbox', { name: /For detaljerte beskrivelser/ })).toBeVisible();
+    expect(screen.getByRole('checkbox', { name: /Ikke individuell og konkret nok/ })).toBeVisible();
+  });
+});
+
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
