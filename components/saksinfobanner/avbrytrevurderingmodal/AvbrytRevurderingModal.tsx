@@ -13,9 +13,10 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   behandlingReferanse: string;
+  brukerInformasjon?: { NAVident: string } | null;
 }
 
-export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose, behandlingReferanse }: Props) => {
+export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose, behandlingReferanse, brukerInformasjon }: Props) => {
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   return (
@@ -58,6 +59,7 @@ export const AvbrytRevurderingModal = ({ saksnummer, isOpen, onClose, behandling
                   meldingType: 'NyÅrsakTilBehandlingV0',
                   årsakerTilBehandling: ['REVURDERING_AVBRUTT'],
                   behandlingReferanse: behandlingReferanse,
+                  reserverTilBruker: brukerInformasjon?.NAVident,
                 } satisfies NyÅrsakTilBehandlingV0,
               },
               onClose
