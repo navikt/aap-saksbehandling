@@ -9,7 +9,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgVentPåProsessering } from 'hooks/saksbehandling/LøsBehovOgVentPåProsessering';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
-import { isDev, isLocal } from '../../lib/utils/environment';
+import { isDev, isLocal } from 'lib/utils/environment';
 
 interface Props {
   behandlingVersjon: number;
