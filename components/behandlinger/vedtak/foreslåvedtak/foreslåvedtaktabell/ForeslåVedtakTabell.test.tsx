@@ -26,7 +26,24 @@ const foreslåVedtakGrunnlag: ForeslåVedtakGrunnlag = {
       rettighetsType: 'BISTANDSBEHOV',
       avslagsårsak: {
         underveisavslag: null,
-        vilkårsavslag: [],
+        vilkårsavslag: ['ANNEN_FULL_YTELSE'],
+      },
+    },
+  ],
+};
+
+const foreslåVedtakGrunnlagUgyldigAvslagsårsak: ForeslåVedtakGrunnlag = {
+  perioder: [
+    {
+      periode: {
+        fom: '2025-05-13',
+        tom: '2025-06-12',
+      },
+      utfall: 'IKKE_OPPFYLT',
+      rettighetsType: 'BISTANDSBEHOV',
+      avslagsårsak: {
+        underveisavslag: null,
+        vilkårsavslag: ['MANGLENDE_DOKUMENTASJON', 'ANNEN_FULL_YTELSE'],
       },
     },
   ],
@@ -58,5 +75,27 @@ describe('Foreslå vedtak', () => {
     render(<ForeslåVedtakTabell grunnlag={foreslåVedtakGrunnlag} />);
     const innvilgetÅrsak = screen.getByText('§ 11-6 Bistandsbehov');
     expect(innvilgetÅrsak).toBeVisible();
+  });
+
+  it('Skal vise avslagsårsak når den finnes', () => {
+    render(<ForeslåVedtakTabell grunnlag={foreslåVedtakGrunnlag} />);
+    const innvilgetÅrsak = screen.getByText('§ 11-6 Bistandsbehov');
+    expect(innvilgetÅrsak).toBeVisible();
+
+    const avslagsÅrsak = screen.getByText("Annen full ytelse")
+    expect(avslagsÅrsak).toBeVisible()
+  });
+
+  it('Skal ikke vise avslagsårsak vi ikke vet om er riktig', () => {
+    render(<ForeslåVedtakTabell grunnlag={foreslåVedtakGrunnlagUgyldigAvslagsårsak} />);
+    const avslåttPeriode = screen.getByText('Ikke rett på AAP');
+    expect(avslåttPeriode).toBeVisible();
+
+    const avslagsÅrsak = screen.getByText("-")
+    expect(avslagsÅrsak).toBeVisible()
+
+    const annenFullYtelse = screen.queryByText("Annen full ytelse")
+    expect(annenFullYtelse).not.toBeInTheDocument()
+
   });
 });

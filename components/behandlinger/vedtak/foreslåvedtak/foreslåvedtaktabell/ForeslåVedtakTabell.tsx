@@ -1,9 +1,10 @@
-import { ForeslåVedtakGrunnlag } from 'lib/types/types';
+import { AvslagÅrsak, ForeslåVedtakGrunnlag } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { HStack, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from './ForeslåVedtakTabell.module.css';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   grunnlag: ForeslåVedtakGrunnlag;
@@ -49,7 +50,9 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
                 {formaterDatoForFrontend(vedtaksPeriode.periode.tom)}
               </Table.DataCell>
               <Table.DataCell>
-                {vedtaksPeriode.utfall == 'OPPFYLT' ? mapRettighetsTypeTilTekst(vedtaksPeriode.rettighetsType) : '-'}
+                {vedtaksPeriode.utfall == 'OPPFYLT'
+                  ? mapRettighetsTypeTilTekst(vedtaksPeriode.rettighetsType)
+                  : utledAvslagsårsak(vedtaksPeriode.avslagsårsak.vilkårsavslag)}
               </Table.DataCell>
             </Table.Row>
           ))
@@ -93,3 +96,46 @@ function mapRettighetsTypeTilTekst(
       return '-';
   }
 }
+
+// Det finnes flere avslagsårsaker enn disse, men de lagres ikke alltid riktig og bør derfor ikke vises
+function mapAvslagsårsakTilTekst(avslagsårsak: AvslagÅrsak): String {
+  switch (avslagsårsak) {
+    case 'ANNEN_FULL_YTELSE':
+      return 'Annen full ytelse';
+    case 'IKKE_BEHOV_FOR_OPPFOLGING':
+      return 'Ikke behov for oppfølging';
+    case 'BRUKER_OVER_67':
+      return 'Bruker er over 67 år';
+    case 'IKKE_MEDLEM_FORUTGÅENDE':
+      return 'Oppfyller ikke krav til forutgående medlemskap';
+    case 'BRUKER_UNDER_18':
+      return 'Bruker er under 18 år';
+    case 'IKKE_MEDLEM':
+      return 'Oppfyller ikke krav til meldemskap';
+    case 'IKKE_NOK_REDUSERT_ARBEIDSEVNE':
+      return 'Ikke nok redusert arbeidsevne';
+    case 'IKKE_SYKDOM_AV_VISS_VARIGHET':
+      return 'Ikke sykdom av viss varighet';
+    case 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL':
+      return 'Sykdom er ikke vesentlig medvirkende årsak til nedsatt arbeidsevne';
+    case 'NORGE_IKKE_KOMPETENT_STAT':
+      return 'Norge er ikke kompetent stat';
+    default:
+      return '-';
+  }
+}
+
+const utledAvslagsårsak = (vilkårAvslag: AvslagÅrsak[]) => {
+  console.log(vilkårAvslag)
+
+  if (isProd()) {
+    return '-';
+  }
+
+  const vilkårAvslagTekst = [...new Set(vilkårAvslag)].map((årsak) => mapAvslagsårsakTilTekst(årsak)).join(', ');
+  // Skal kun vises når vi er sikre på alle årsakene til avslag på vilkår
+  if (vilkårAvslagTekst.includes('-') || vilkårAvslagTekst.length == 0) {
+    return '-';
+  }
+  return vilkårAvslagTekst;
+};
