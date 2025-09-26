@@ -251,6 +251,7 @@ export const SaksinfoBanner = ({
               onClose={() => settVisAvbrytRevurderingModal(false)}
               saksnummer={sak.saksnummer}
               behandlingReferanse={behandlingsreferanse}
+              navIdent={brukerInformasjon?.NAVident ? brukerInformasjon.NAVident : null}
             />
             <VurderRettighetsperiodeModal
               isOpen={visVurderRettighetsperiodeModal}
