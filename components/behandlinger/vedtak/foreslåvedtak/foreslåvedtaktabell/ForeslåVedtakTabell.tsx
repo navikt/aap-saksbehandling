@@ -126,8 +126,6 @@ function mapAvslagsårsakTilTekst(avslagsårsak: AvslagÅrsak): String {
 }
 
 const utledAvslagsårsak = (vilkårAvslag: AvslagÅrsak[]) => {
-  console.log(vilkårAvslag)
-
   if (isProd()) {
     return '-';
   }
