@@ -22,6 +22,9 @@ export const BehandlingPåVentKort = ({ informasjon }: Props) => {
   const { løsBehovOgVentPåProsessering, isLoading, løsBehovError } = useLøsBehovOgVentPåProsessering();
   const [errorMessage, setErrorMessage] = useState<string>();
 
+  const isDevOrLocal = isDev() || isLocal();
+  const skalViseKnapp = informasjon?.grunn !== 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING' || isDevOrLocal;
+
   return (
     <SideProsessKort heading={'Behandling på vent'} icon={<HourglassBottomFilledIcon aria-hidden />}>
       <div className={'flex-column'}>
@@ -52,7 +55,7 @@ export const BehandlingPåVentKort = ({ informasjon }: Props) => {
                 {errorMessage}
               </Alert>
             )}
-            {(isDev() || isLocal()) && (
+            {skalViseKnapp && (
               <Button
                 size={'medium'}
                 loading={isLoading}

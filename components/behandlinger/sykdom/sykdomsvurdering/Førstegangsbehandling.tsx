@@ -23,7 +23,7 @@ export const Førstegangsbehandling = ({ form, formFields, skalVurdereYrkesskade
       )}
       {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei && (
         <Alert variant={'info'} size={'small'} className={'fit-content'}>
-          brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
+          Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
         </Alert>
       )}
 

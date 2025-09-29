@@ -12267,6 +12267,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandling': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandlingV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandlingV0': {
       behandlingReferanse: string;
+      reserverTilBruker?: string | null;
       '\u00E5rsakerTilBehandling': (
         | 'SØKNAD'
         | 'AKTIVITETSMELDING'
