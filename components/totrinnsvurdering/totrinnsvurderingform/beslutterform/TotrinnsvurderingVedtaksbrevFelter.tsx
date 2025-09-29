@@ -1,4 +1,4 @@
-import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
+import { Behovstype, JaEllerNei, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
 import { Checkbox, Radio } from '@navikt/ds-react';
@@ -34,7 +34,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
     { label: 'Ikke individuell og konkret nok', value: 'IKKE_INDIVIDUELL_OG_KONKRET' },
   ];
 
-  const vurderingErIkkeGodkjent = form.watch(`totrinnsvurderinger.${index}.godkjent`) === 'false';
+  const vurderingErIkkeGodkjent = form.watch(`totrinnsvurderinger.${index}.godkjent`) === JaEllerNei.Nei;
 
   return (
     <div className={styles.totrinnsvurderingform}>
