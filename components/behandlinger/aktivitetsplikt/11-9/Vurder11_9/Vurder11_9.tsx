@@ -25,39 +25,18 @@ export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
   const tidligereVurderinger = grunnlag?.tidligereVurderinger ?? [];
   const vurderingerSendtTilBeslutter = grunnlag?.ikkeIverksatteVurderinger ?? [];
 
-  // TODO: Hent mellomlagrede vurderinger når backend er klar
-  const [mellomlagredeVurderinger, setMellomlagredeVurderinger] = useState<Vurdering11_9[]>([]);
-  const [ikkeVedtatteVurrderingerSomSkalSlettes, setIkkeVedtatteVurderingerSomSkalSlettes] = useState<string[]>([]);
+  const {
+    valgtRad,
+    velgRad,
+    lagre,
+    fjernRad,
+    angreFjerning,
+    mellomlagredeVurderinger,
+    ikkeVedtatteVurrderingerSomSkalSlettes,
+  } = useBruddRader(tidligereVurderinger, vurderingerSendtTilBeslutter);
 
   const handleSubmit = () => {
     console.log('Submitter mellomlagrede vurderinger', mellomlagredeVurderinger);
-  };
-
-  const [valgtRad, velgRad] = useState<BruddRad>();
-
-  const lagre = (vurdering: Vurdering11_9) => {
-    velgRad(undefined);
-    const duplikat = [...tidligereVurderinger, ...vurderingerSendtTilBeslutter].find((eksisterende) =>
-      isEqual(omit(eksisterende, 'id'), omit(vurdering, 'id'))
-    );
-    if (duplikat) {
-      return;
-    }
-    setMellomlagredeVurderinger([...mellomlagredeVurderinger.filter((v) => v.dato !== vurdering.dato), vurdering]);
-  };
-
-  const fjernRad = (rad: BruddRad) => {
-    if (rad.status === BruddStatus.SENDT_TIL_BESLUTTER) {
-      setIkkeVedtatteVurderingerSomSkalSlettes([...ikkeVedtatteVurrderingerSomSkalSlettes, rad.id]);
-    } else {
-      setMellomlagredeVurderinger(mellomlagredeVurderinger.filter((v) => v.dato !== rad.dato));
-    }
-  };
-
-  const angreFjerning = (id: string) => {
-    setIkkeVedtatteVurderingerSomSkalSlettes(
-      ikkeVedtatteVurrderingerSomSkalSlettes.filter((slettetId) => slettetId !== id)
-    );
   };
 
   return (
@@ -118,3 +97,45 @@ export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
     </VilkårsKort>
   );
 };
+
+function useBruddRader(tidligereVurderinger: Vurdering11_9[], vurderingerSendtTilBeslutter: Vurdering11_9[]) {
+  const [mellomlagredeVurderinger, setMellomlagredeVurderinger] = useState<Vurdering11_9[]>([]);
+  const [ikkeVedtatteVurrderingerSomSkalSlettes, setIkkeVedtatteVurderingerSomSkalSlettes] = useState<string[]>([]);
+
+  const [valgtRad, velgRad] = useState<BruddRad>();
+
+  const lagre = (vurdering: Vurdering11_9) => {
+    velgRad(undefined);
+    const duplikat = [...tidligereVurderinger, ...vurderingerSendtTilBeslutter].find((eksisterende) =>
+      isEqual(omit(eksisterende, 'id'), omit(vurdering, 'id'))
+    );
+    if (duplikat) {
+      return;
+    }
+    setMellomlagredeVurderinger([...mellomlagredeVurderinger.filter((v) => v.dato !== vurdering.dato), vurdering]);
+  };
+
+  const fjernRad = (rad: BruddRad) => {
+    if (rad.status === BruddStatus.SENDT_TIL_BESLUTTER) {
+      setIkkeVedtatteVurderingerSomSkalSlettes([...ikkeVedtatteVurrderingerSomSkalSlettes, rad.id]);
+    } else {
+      setMellomlagredeVurderinger(mellomlagredeVurderinger.filter((v) => v.dato !== rad.dato));
+    }
+  };
+
+  const angreFjerning = (id: string) => {
+    setIkkeVedtatteVurderingerSomSkalSlettes(
+      ikkeVedtatteVurrderingerSomSkalSlettes.filter((slettetId) => slettetId !== id)
+    );
+  };
+
+  return {
+    valgtRad,
+    velgRad,
+    lagre,
+    fjernRad,
+    angreFjerning,
+    mellomlagredeVurderinger,
+    ikkeVedtatteVurrderingerSomSkalSlettes,
+  };
+}
