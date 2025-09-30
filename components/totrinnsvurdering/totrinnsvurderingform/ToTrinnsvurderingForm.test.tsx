@@ -210,6 +210,53 @@ describe('totrinnsvurderingform', () => {
 
     expect(screen.getByText('Du må gjøre minst én vurdering.')).toBeInTheDocument();
   });
+
+  it('skal vise en feilmelding dersom det er vurdering(er) som ikke er tatt stilling til og forrige vurdering er godkjent', async () => {
+    render(
+      <TotrinnsvurderingForm
+        grunnlag={{
+          ...grunnlagUtenVurdering,
+          vurderinger: [...grunnlagUtenVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY }],
+        }}
+        erKvalitetssikring={false}
+        link={link}
+        readOnly={false}
+      />
+    );
+    const radioJa = screen.getAllByRole('radio', { name: /ja/i });
+    await user.click(radioJa[0]);
+
+    const sendInnButton = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(sendInnButton);
+
+    expect(
+      screen.getByText('Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.')
+    ).toBeInTheDocument();
+  });
+
+  it('skal ikke vise vise en feilmelding dersom det er flere vurderinger og man underkjenner kun den første', async () => {
+    render(
+      <TotrinnsvurderingForm
+        grunnlag={{
+          ...grunnlagUtenVurdering,
+          vurderinger: [...grunnlagUtenVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY }],
+        }}
+        erKvalitetssikring={false}
+        link={link}
+        readOnly={false}
+      />
+    );
+    const radioJa = screen.getAllByRole('radio', { name: /nei/i });
+    await user.click(radioJa[0]);
+
+    const sendInnButton = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(sendInnButton);
+
+    expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.')
+    ).not.toBeInTheDocument();
+  });
 });
 
 describe('Totrinnsvurdering av vedtaksbrev', () => {
