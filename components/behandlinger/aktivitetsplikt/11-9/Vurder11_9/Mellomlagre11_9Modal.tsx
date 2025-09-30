@@ -12,7 +12,6 @@ interface Props {
 }
 
 export const Mellomlagre11_9Modal = ({ valgtRad, lagre, avbryt }: Props) => {
-  console.log(valgtRad);
   return (
     <Modal
       open={valgtRad != undefined}

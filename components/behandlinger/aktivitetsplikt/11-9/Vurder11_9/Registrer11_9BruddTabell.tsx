@@ -6,12 +6,19 @@ import {
   Vurdering11_9,
 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
 import styles from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/rimeliggrunn.module.css';
-import { formaterBrudd, formaterGrunn } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/utils';
+import {
+  BruddStatus,
+  erNy,
+  erOverskrevet,
+  formaterBrudd,
+  formaterGrunn,
+  formaterStatus,
+} from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/utils';
 
 type Props = {
   readOnly?: boolean;
   tidligereVurderinger: Vurdering11_9[];
-  ikkeIverksatteVurderinger: Vurdering11_9[];
+  vurderingerSendtTilBeslutter: Vurdering11_9[];
   ikkeIverksatteVurderingerSomSkalSlettes: string[];
   angreFjerning: (id: string) => void;
   mellomlagredeVurderinger: Vurdering11_9[];
@@ -23,7 +30,7 @@ type Props = {
 export const Registrer11_9BruddTabell = ({
   readOnly = false,
   tidligereVurderinger,
-  ikkeIverksatteVurderinger,
+  vurderingerSendtTilBeslutter,
   mellomlagredeVurderinger,
   ikkeIverksatteVurderingerSomSkalSlettes,
   angreFjerning,
@@ -33,7 +40,7 @@ export const Registrer11_9BruddTabell = ({
 }: Props) => {
   const rader = konstruerRader(
     tidligereVurderinger,
-    ikkeIverksatteVurderinger,
+    vurderingerSendtTilBeslutter,
     mellomlagredeVurderinger,
     ikkeIverksatteVurderingerSomSkalSlettes
   );
@@ -58,8 +65,8 @@ export const Registrer11_9BruddTabell = ({
               <Table.ExpandableRow
                 key={rad.id}
                 className={`
-                  ${['Iverksatt - overskrevet', 'Ny - slettet', 'Ny - overskrevet'].includes(rad.status) ? styles.overskrevetRad : ''} 
-                  ${['Ny', 'Ny - ikke lagret'].includes(rad.status) ? styles.ny : ''}
+                  ${erOverskrevet(rad) ? styles.overskrevetRad : ''} 
+                  ${erNy(rad) ? styles.ny : ''}
                   ${erValgt ? styles.valgtRad : ''}
                 `}
                 content={rad.begrunnelse}
@@ -96,13 +103,13 @@ const Rad = ({
   angreFjerning: (id: string) => void;
   readOnly: boolean;
 }) => {
-  const klasse = `${['Iverksatt - overskrevet', 'Ny - slettet', 'Ny - overskrevet'].includes(rad.status) ? styles.overskrevetCelle : ''}`;
+  const klasse = `${erOverskrevet(rad) ? styles.overskrevetCelle : ''}`;
   return (
     <>
       <Table.DataCell className={klasse}>{formaterDatoForFrontend(rad.dato)}</Table.DataCell>
-      <Table.DataCell className={klasse}>{formaterBrudd(rad.brudd)}</Table.DataCell>
+      <Table.DataCell className={klasse}>{formaterBrudd(rad.brudd!!)}</Table.DataCell>
       <Table.DataCell className={klasse}>{formaterGrunn(rad.grunn)}</Table.DataCell>
-      <Table.DataCell className={klasse}>{rad.status}</Table.DataCell>
+      <Table.DataCell className={klasse}>{formaterStatus(rad.status!!)}</Table.DataCell>
       <Table.DataCell>
         <HStack gap="1">
           <Button
@@ -114,12 +121,12 @@ const Rad = ({
           >
             {erValgt ? 'Avbryt' : 'Endre'}
           </Button>
-          {['Ny', 'Ny - ikke lagret'].includes(rad.status) && (
+          {[BruddStatus.SENDT_TIL_BESLUTTER, BruddStatus.NY].includes(rad.status!!) && (
             <Button size="small" type="button" variant="secondary" disabled={readOnly} onClick={() => fjernRad(rad)}>
               Fjern
             </Button>
           )}
-          {rad.status === 'Ny - slettet' && (
+          {rad.status === BruddStatus.SENDT_TIL_BESLUTTER_SLETTET && (
             <Button
               size="small"
               type="button"
@@ -139,17 +146,17 @@ const Rad = ({
 export interface BruddRad {
   id: string;
   dato: string;
-  brudd: Brudd;
+  brudd: Brudd | undefined;
   grunn: string;
-  status: string;
+  status: BruddStatus | undefined;
   begrunnelse: string;
 }
 
 function konstruerRader(
   tidligereVurderinger: Vurdering11_9[],
-  ikkeIverksatteVurderinger: Vurdering11_9[],
+  vurderingerSendtTilBeslutter: Vurdering11_9[],
   mellomlagredeVurderinger: Vurdering11_9[],
-  ikkeIverksatteVurderingerSomSkalSlettes: string[]
+  vurderingerSendTilBeslutterSomSkalSlettes: string[]
 ): BruddRad[] {
   const utledStatus = (vurdering: Vurdering11_9) => {
     const erIverksatt = tidligereVurderinger.some((v) => v.id === vurdering.id);
@@ -157,22 +164,26 @@ function konstruerRader(
     if (erIverksatt) {
       const finnesNyRadMedSammeDato = [
         ...mellomlagredeVurderinger,
-        ...ikkeIverksatteVurderinger.filter((v) => !ikkeIverksatteVurderingerSomSkalSlettes.includes(v.id)),
+        ...vurderingerSendtTilBeslutter.filter((v) => !vurderingerSendTilBeslutterSomSkalSlettes.includes(v.id)),
       ].some((v) => v.dato === vurdering.dato);
 
-      return finnesNyRadMedSammeDato ? 'Iverksatt - overskrevet' : 'Iverksatt';
+      return finnesNyRadMedSammeDato ? BruddStatus.IVERKSATT_OVERSKREVET : BruddStatus.IVERKSATT;
     } else {
-      const erIkkeIverksatt = ikkeIverksatteVurderinger.some((v) => v.id === vurdering.id);
-      const erSlettet = ikkeIverksatteVurderingerSomSkalSlettes.includes(vurdering.id);
+      const erSendTilBeslutter = vurderingerSendtTilBeslutter.some((v) => v.id === vurdering.id);
+      const erSlettet = vurderingerSendTilBeslutterSomSkalSlettes.includes(vurdering.id);
       if (erSlettet) {
-        return 'Ny - slettet';
+        return BruddStatus.SENDT_TIL_BESLUTTER_SLETTET;
       }
       const finnesMellomlagretRadMedSammeDato = mellomlagredeVurderinger.some((v) => v.dato === vurdering.dato);
-      return erIkkeIverksatt ? (finnesMellomlagretRadMedSammeDato ? 'Ny - overskrevet' : 'Ny') : 'Ny - ikke lagret';
+      return erSendTilBeslutter
+        ? finnesMellomlagretRadMedSammeDato
+          ? BruddStatus.SENDT_TIL_BESLUTTER_OVERSKREVET
+          : BruddStatus.SENDT_TIL_BESLUTTER
+        : BruddStatus.NY;
     }
   };
 
-  return [...tidligereVurderinger, ...ikkeIverksatteVurderinger, ...mellomlagredeVurderinger]
+  return [...tidligereVurderinger, ...vurderingerSendtTilBeslutter, ...mellomlagredeVurderinger]
     .sort((a, b) => sorterEtterEldsteDato(a.dato, b.dato))
     .map((vurdering) => ({ ...vurdering, status: utledStatus(vurdering) }));
 }

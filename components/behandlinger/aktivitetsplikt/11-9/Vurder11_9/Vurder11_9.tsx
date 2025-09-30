@@ -12,6 +12,8 @@ import {
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { Mellomlagre11_9Modal } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Mellomlagre11_9Modal';
+import { BruddStatus } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/utils';
+import { isEqual, omit } from 'lodash';
 
 type Props = {
   grunnlag?: Vurder11_9Grunnlag;
@@ -20,7 +22,8 @@ type Props = {
 };
 
 export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
-  const tidligereVurderinger = grunnlag?.tidligereVurderinger || [];
+  const tidligereVurderinger = grunnlag?.tidligereVurderinger ?? [];
+  const vurderingerSendtTilBeslutter = grunnlag?.ikkeIverksatteVurderinger ?? [];
 
   // TODO: Hent mellomlagrede vurderinger når backend er klar
   const [mellomlagredeVurderinger, setMellomlagredeVurderinger] = useState<Vurdering11_9[]>([]);
@@ -34,11 +37,17 @@ export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
 
   const lagre = (vurdering: Vurdering11_9) => {
     velgRad(undefined);
+    const duplikat = [...tidligereVurderinger, ...vurderingerSendtTilBeslutter].find((eksisterende) =>
+      isEqual(omit(eksisterende, 'id'), omit(vurdering, 'id'))
+    );
+    if (duplikat) {
+      return;
+    }
     setMellomlagredeVurderinger([...mellomlagredeVurderinger.filter((v) => v.dato !== vurdering.dato), vurdering]);
   };
 
   const fjernRad = (rad: BruddRad) => {
-    if (rad.status === 'Ny') {
+    if (rad.status === BruddStatus.SENDT_TIL_BESLUTTER) {
       setIkkeVedtatteVurderingerSomSkalSlettes([...ikkeVedtatteVurrderingerSomSkalSlettes, rad.id]);
     } else {
       setMellomlagredeVurderinger(mellomlagredeVurderinger.filter((v) => v.dato !== rad.dato));
@@ -63,7 +72,7 @@ export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
         <VStack gap={'10'}>
           <Registrer11_9BruddTabell
             tidligereVurderinger={tidligereVurderinger}
-            ikkeIverksatteVurderinger={grunnlag?.ikkeIverksatteVurderinger ?? []}
+            vurderingerSendtTilBeslutter={vurderingerSendtTilBeslutter}
             ikkeIverksatteVurderingerSomSkalSlettes={ikkeVedtatteVurrderingerSomSkalSlettes}
             angreFjerning={angreFjerning}
             mellomlagredeVurderinger={mellomlagredeVurderinger}
@@ -84,9 +93,9 @@ export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
                   velgRad({
                     id: '',
                     dato: '',
-                    brudd: 'IKKE_MØTT_TIL_TILTAK',
+                    brudd: undefined,
                     grunn: '',
-                    status: 'Ny',
+                    status: BruddStatus.NY,
                     begrunnelse: '',
                   })
                 }
