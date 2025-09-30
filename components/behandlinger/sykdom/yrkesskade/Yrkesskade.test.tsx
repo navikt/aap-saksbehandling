@@ -6,7 +6,6 @@ import { userEvent } from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
-import { YrkesskadeMedManuellYrkesskadeDato } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedManuellYrkesskadeDato';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -29,14 +28,7 @@ const grunnlag: YrkesskadeVurderingGrunnlag = {
 describe('Yrkesskade', () => {
   describe('Generelt', () => {
     it('skal har korrekt heading', () => {
-      render(
-        <YrkesskadeMedManuellYrkesskadeDato
-          grunnlag={grunnlag}
-          behandlingVersjon={1}
-          readOnly={false}
-          behandlingsReferanse={'123'}
-        />
-      );
+      render(<Yrkesskade grunnlag={grunnlag} behandlingVersjon={1} readOnly={false} behandlingsReferanse={'123'} />);
       const heading = screen.getByRole('heading', { name: '§ 11-22 AAP ved yrkesskade' });
       expect(heading).toBeVisible();
     });
@@ -44,14 +36,7 @@ describe('Yrkesskade', () => {
 
   describe('felter', () => {
     beforeEach(() => {
-      render(
-        <YrkesskadeMedManuellYrkesskadeDato
-          grunnlag={grunnlag}
-          behandlingVersjon={1}
-          readOnly={false}
-          behandlingsReferanse={'123'}
-        />
-      );
+      render(<Yrkesskade grunnlag={grunnlag} behandlingVersjon={1} readOnly={false} behandlingsReferanse={'123'} />);
     });
 
     it('skal være synlig', () => {

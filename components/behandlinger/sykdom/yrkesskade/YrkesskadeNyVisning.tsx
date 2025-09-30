@@ -42,7 +42,7 @@ export interface YrkesskadeMedSkadeDatoSak {
 
 type DraftFormFields = Partial<YrkesskadeMedSkadeDatoFormFields>;
 
-export const YrkesskadeMedManuellYrkesskadeDato = ({
+export const YrkesskadeNyVising = ({
   grunnlag,
   behandlingVersjon,
   behandlingsReferanse,
