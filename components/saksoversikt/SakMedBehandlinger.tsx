@@ -22,9 +22,9 @@ const formaterBehandlingType = (behandlingtype: string) => {
     case 'oppfølgingsbehandling':
       return 'Oppfølgingsoppgave';
     case 'aktivitetsplikt':
-      return 'Aktivitetsplikt $ 11-7';
+      return 'Aktivitetsplikt § 11-7';
     case 'aktivitetsplikt11-9':
-      return 'Aktivitetsplikt $ 11-9';
+      return 'Aktivitetsplikt § 11-9';
     default:
       return `Ukjent behandlingtype (${behandlingtype})`;
   }
@@ -97,9 +97,9 @@ const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): string => {
     case 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN':
       return 'Revurder meldeplikt rimelig grunn';
     case 'AKTIVITETSPLIKT_11_7':
-      return 'Aktivitetsplikt $ 11-7';
+      return 'Aktivitetsplikt § 11-7';
     case 'AKTIVITETSPLIKT_11_9':
-      return 'Aktivitetsplikt $ 11-9';
+      return 'Aktivitetsplikt § 11-9';
     case 'EFFEKTUER_AKTIVITETSPLIKT':
       return 'Effektuer aktivitetsplikt';
     case 'OVERGANG_UFORE':
@@ -184,7 +184,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
               size="small"
               onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
             >
-              Registrer brudd på aktivitetsplikten
+              Vurder aktivitetsplikt
             </Button>
           )}
 
