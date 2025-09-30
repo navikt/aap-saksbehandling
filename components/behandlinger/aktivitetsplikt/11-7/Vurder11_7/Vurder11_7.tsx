@@ -3,7 +3,7 @@
 import { useConfigForm } from 'components/form/FormHook';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { isBefore, parse, startOfDay } from 'date-fns';
+import { addDays, isBefore, parse, startOfDay } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { useSak } from 'hooks/SakHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
@@ -139,6 +139,11 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       visBekreftKnapp={!readOnly}
       isLoading={isLoading}
       status={status}
+      knappTekst={
+        grunnlag.harSendtForhåndsvarsel || form.watch('erOppfylt') === JaEllerNei.Ja
+          ? 'Send til beslutter'
+          : 'Opprett forhåndsvarsel'
+      }
       vilkårTilhørerNavKontor={true}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -178,7 +183,9 @@ function mapVurderingToDraftFormFields(vurdering?: Aktivitetsplikt11_7Vurdering)
     erOppfylt: getJaNeiEllerUndefined(vurdering?.erOppfylt),
     utfall: vurdering?.utfall || undefined,
     begrunnelse: vurdering?.begrunnelse || undefined,
-    gjelderFra: vurdering?.gjelderFra ? formaterDatoForFrontend(vurdering?.gjelderFra) : undefined,
+    gjelderFra: vurdering?.gjelderFra
+      ? formaterDatoForFrontend(vurdering?.gjelderFra)
+      : formaterDatoForFrontend(addDays(new Date(), 21)),
     skalIgnorereVarselFrist: getJaNeiEllerUndefined(vurdering?.skalIgnorereVarselFrist),
   };
 }
