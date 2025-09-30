@@ -1,10 +1,10 @@
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
-import { LovvalgOgMedlemskapVedSøknadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
 import { LovvalgMedlemskapGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { LovvalgOgMedlemskapVedSøknadstidspunkt } from './LovvalgOgMedlemskapVedSøknadstidspunkt';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
