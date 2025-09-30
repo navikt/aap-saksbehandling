@@ -85,6 +85,8 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       utfall: {
         type: 'radio',
         label: 'Skal ytelsen stanses eller opphøres?',
+        description:
+          'Det er kun ved gjentatte brudd på aktivitetsplikten at AAP skal opphøre. Ved brudd av mindre omfang bør AAP stanses.',
         rules: { required: 'Du må svare på om ytelsen skal stanses eller opphøres' },
         defaultValue: defaultValue.utfall,
         options: [
@@ -95,7 +97,6 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       begrunnelse: {
         type: 'textarea',
         label: 'Vilkårsvurdering',
-        description: 'Teksten benyttes i vedtaksbrevet',
         defaultValue: defaultValue.begrunnelse,
         rules: { required: 'Du må begrunne' },
       },
