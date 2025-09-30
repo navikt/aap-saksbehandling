@@ -120,7 +120,7 @@ const Rad = ({
               disabled={readOnly}
               onClick={() => velgRad(erValgt ? undefined : rad)}
             >
-              {erValgt ? 'Avbryt' : 'Endre'}
+              Endre
             </Button>
           )}
           {[BruddStatus.SENDT_TIL_BESLUTTER, BruddStatus.NY].includes(rad.status!!) && (
