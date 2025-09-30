@@ -6,6 +6,7 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
+import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 
 interface Props {
   oppgave: Oppgave;
@@ -17,6 +18,7 @@ export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, r
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
+  const [åpenTildelModal, settÅpenTildelModal] = useState(false);
   const erReservert = oppgave.reservertAv != null;
 
   async function frigiOppgave(oppgave: Oppgave) {
@@ -79,8 +81,25 @@ export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, r
               Frigi oppgave
             </ActionMenu.Item>
           )}
+          <ActionMenu.Item
+            onSelect={() => {
+              settÅpenTildelModal(true);
+            }}
+          >
+            Tildel oppgave
+          </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>
+      {oppgave.id && (
+        <TildelOppgaveModal
+          oppgaver={[oppgave.id]}
+          isOpen={åpenTildelModal}
+          onClose={async () => {
+            settÅpenTildelModal(false);
+            await revalidateFunction();
+          }}
+        />
+      )}
     </>
   );
 };
