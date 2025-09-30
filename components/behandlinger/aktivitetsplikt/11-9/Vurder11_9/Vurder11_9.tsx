@@ -102,6 +102,11 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering }:
   );
 };
 
+interface MellomlagretData {
+  mellomlagredeVurderinger: Vurdering11_9[];
+  vurderingerSendtTilBeslutterSomSkalSlettes: string[];
+}
+
 function useBruddRader(
   tidligereVurderinger: Vurdering11_9[],
   vurderingerSendtTilBeslutter: Vurdering11_9[],
@@ -112,13 +117,10 @@ function useBruddRader(
     initialMellomlagretVurdering
   );
 
-  const mellomlagredeVurderinger: Vurdering11_9[] = mellomlagretVurdering?.data
-    ? JSON.parse(mellomlagretVurdering.data)
-    : ([] as Vurdering11_9[]);
-
-  const [vurderingerSendtTilBeslutterSomSkalSlettes, setVurderingerSendtTilBeslutterSomSkalSlettes] = useState<
-    string[]
-  >([]);
+  const { mellomlagredeVurderinger, vurderingerSendtTilBeslutterSomSkalSlettes }: MellomlagretData =
+    mellomlagretVurdering?.data
+      ? JSON.parse(mellomlagretVurdering.data)
+      : { mellomlagredeVurderinger: [], vurderingerSendtTilBeslutterSomSkalSlettes: [] };
 
   const [valgtRad, velgRad] = useState<BruddRad>();
 
@@ -130,21 +132,33 @@ function useBruddRader(
     if (duplikat) {
       return;
     }
-    lagreMellomlagring([...mellomlagredeVurderinger.filter((v) => v.dato !== vurdering.dato), vurdering]);
+    lagreMellomlagring({
+      mellomlagredeVurderinger: [...mellomlagredeVurderinger.filter((v) => v.dato !== vurdering.dato), vurdering],
+      vurderingerSendtTilBeslutterSomSkalSlettes: vurderingerSendtTilBeslutterSomSkalSlettes,
+    });
   };
 
   const fjernRad = (rad: BruddRad) => {
     if (rad.status === BruddStatus.SENDT_TIL_BESLUTTER) {
-      setVurderingerSendtTilBeslutterSomSkalSlettes([...vurderingerSendtTilBeslutterSomSkalSlettes, rad.id]);
+      lagreMellomlagring({
+        mellomlagredeVurderinger: mellomlagredeVurderinger,
+        vurderingerSendtTilBeslutterSomSkalSlettes: [...vurderingerSendtTilBeslutterSomSkalSlettes, rad.id],
+      });
     } else {
-      lagreMellomlagring(mellomlagredeVurderinger.filter((v) => v.dato !== rad.dato));
+      lagreMellomlagring({
+        mellomlagredeVurderinger: mellomlagredeVurderinger.filter((v) => v.dato !== rad.dato),
+        vurderingerSendtTilBeslutterSomSkalSlettes: vurderingerSendtTilBeslutterSomSkalSlettes,
+      });
     }
   };
 
   const angreFjerning = (id: string) => {
-    setVurderingerSendtTilBeslutterSomSkalSlettes(
-      vurderingerSendtTilBeslutterSomSkalSlettes.filter((slettetId) => slettetId !== id)
-    );
+    lagreMellomlagring({
+      mellomlagredeVurderinger: mellomlagredeVurderinger,
+      vurderingerSendtTilBeslutterSomSkalSlettes: vurderingerSendtTilBeslutterSomSkalSlettes.filter(
+        (slettetId) => slettetId !== id
+      ),
+    });
   };
 
   return {
