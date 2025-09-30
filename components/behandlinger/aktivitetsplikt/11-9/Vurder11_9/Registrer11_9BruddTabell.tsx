@@ -112,15 +112,17 @@ const Rad = ({
       <Table.DataCell className={klasse}>{formaterStatus(rad.status!!)}</Table.DataCell>
       <Table.DataCell>
         <HStack gap="1">
-          <Button
-            size="small"
-            type="button"
-            variant="secondary"
-            disabled={readOnly}
-            onClick={() => velgRad(erValgt ? undefined : rad)}
-          >
-            {erValgt ? 'Avbryt' : 'Endre'}
-          </Button>
+          {!erOverskrevet(rad) && (
+            <Button
+              size="small"
+              type="button"
+              variant="secondary"
+              disabled={readOnly}
+              onClick={() => velgRad(erValgt ? undefined : rad)}
+            >
+              {erValgt ? 'Avbryt' : 'Endre'}
+            </Button>
+          )}
           {[BruddStatus.SENDT_TIL_BESLUTTER, BruddStatus.NY].includes(rad.status!!) && (
             <Button size="small" type="button" variant="secondary" disabled={readOnly} onClick={() => fjernRad(rad)}>
               Fjern
