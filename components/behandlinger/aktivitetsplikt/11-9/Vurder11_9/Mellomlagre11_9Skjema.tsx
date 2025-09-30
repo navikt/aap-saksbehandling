@@ -8,8 +8,8 @@ import {
 import { formaterBrudd, formaterGrunn } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/utils';
 import { BruddRad } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Registrer11_9BruddTabell';
 import { FormField } from 'components/form/FormField';
-import { Button, HStack, VStack } from '@navikt/ds-react';
-import { FormEvent, useEffect } from 'react';
+import { VStack } from '@navikt/ds-react';
+import { FormEvent } from 'react';
 import { parse } from 'date-fns';
 
 export type Vurdering11_9FormFields = {
@@ -22,17 +22,11 @@ export type Vurdering11_9FormFields = {
 export const Mellomlagre11_9Skjema = ({
   valgtRad,
   lagre,
-  avbryt,
 }: {
   valgtRad?: BruddRad;
   lagre: (vurdering: Vurdering11_9) => void;
   avbryt: () => void;
 }) => {
-  useEffect(() => {
-    form.reset();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [valgtRad]);
-
   const { form, formFields } = useConfigForm<Vurdering11_9FormFields>(
     {
       begrunnelse: {
@@ -78,25 +72,12 @@ export const Mellomlagre11_9Skjema = ({
   };
 
   return (
-    <form
-      onSubmit={onSubmit}
-      autoComplete={'off'}
-      id={'11-9' + (valgtRad?.id ?? 'Ny')}
-      key={'11-9' + (valgtRad?.id ?? 'Ny')}
-    >
+    <form onSubmit={onSubmit} autoComplete={'off'} id={'11-9-brudd'}>
       <VStack gap="4">
         <FormField form={form} formField={formFields.dato} />
         <FormField form={form} formField={formFields.brudd} />
         <FormField form={form} formField={formFields.grunn} />
         <FormField form={form} formField={formFields.begrunnelse} />
-        <HStack gap="2">
-          <Button type="submit" variant="primary" className="fit-content">
-            Lagre brudd
-          </Button>
-          <Button type="button" variant="secondary" className="fit-content" onClick={avbryt}>
-            Forkast
-          </Button>
-        </HStack>
       </VStack>
     </form>
   );

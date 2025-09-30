@@ -9,9 +9,9 @@ import {
   Vurder11_9Grunnlag,
   Vurdering11_9,
 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
-import { Mellomlagre11_9Skjema } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Mellomlagre11_9Skjema';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { PlusIcon } from '@navikt/aksel-icons';
+import { Mellomlagre11_9Modal } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Mellomlagre11_9Modal';
 
 type Props = {
   grunnlag?: Vurder11_9Grunnlag;
@@ -72,7 +72,7 @@ export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
             fjernRad={fjernRad}
             readOnly={readOnly}
           ></Registrer11_9BruddTabell>
-          {valgtRad && <Mellomlagre11_9Skjema valgtRad={valgtRad} lagre={lagre} avbryt={() => velgRad(undefined)} />}
+          {valgtRad && <Mellomlagre11_9Modal valgtRad={valgtRad} lagre={lagre} avbryt={() => velgRad(undefined)} />}
           {!valgtRad && !readOnly && (
             <>
               <Button
