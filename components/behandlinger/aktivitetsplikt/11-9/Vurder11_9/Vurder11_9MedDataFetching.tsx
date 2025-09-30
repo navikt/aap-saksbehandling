@@ -1,4 +1,6 @@
 import { Vurder11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9';
+import { hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsreferanse: string;
@@ -30,7 +32,7 @@ export type Brudd =
 
 export type Grunn = 'IKKE_RIMELIG_GRUNN' | 'RIMELIG_GRUNN';
 
-export const Vurder11_9MedDataFetching = async ({ behandlingVersjon, readOnly }: Props) => {
+export const Vurder11_9MedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
   // TODO: Hent inn reelt grunnlag
   const grunnlag: { data: Vurder11_9Grunnlag } = {
     data: {
@@ -63,9 +65,12 @@ export const Vurder11_9MedDataFetching = async ({ behandlingVersjon, readOnly }:
     },
   };
 
+  const initialMellomlagretVurdering = await hentMellomlagring(behandlingsreferanse, Behovstype.VURDER_BRUDD_11_9_KODE);
+
   return (
     <Vurder11_9
       grunnlag={grunnlag.data}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
       behandlingVersjon={behandlingVersjon}
       readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
     />

@@ -19,7 +19,7 @@ type Props = {
   readOnly?: boolean;
   tidligereVurderinger: Vurdering11_9[];
   vurderingerSendtTilBeslutter: Vurdering11_9[];
-  ikkeIverksatteVurderingerSomSkalSlettes: string[];
+  vurderingerSendtTilBeslutterSomSkalSlettes: string[];
   angreFjerning: (id: string) => void;
   mellomlagredeVurderinger: Vurdering11_9[];
   velgRad: (rad: BruddRad | undefined) => void;
@@ -32,7 +32,7 @@ export const Registrer11_9BruddTabell = ({
   tidligereVurderinger,
   vurderingerSendtTilBeslutter,
   mellomlagredeVurderinger,
-  ikkeIverksatteVurderingerSomSkalSlettes,
+  vurderingerSendtTilBeslutterSomSkalSlettes,
   angreFjerning,
   valgtRad,
   velgRad,
@@ -42,7 +42,7 @@ export const Registrer11_9BruddTabell = ({
     tidligereVurderinger,
     vurderingerSendtTilBeslutter,
     mellomlagredeVurderinger,
-    ikkeIverksatteVurderingerSomSkalSlettes
+    vurderingerSendtTilBeslutterSomSkalSlettes
   );
 
   return (

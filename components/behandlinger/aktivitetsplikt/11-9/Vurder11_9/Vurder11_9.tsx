@@ -14,14 +14,18 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { Mellomlagre11_9Modal } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Mellomlagre11_9Modal';
 import { BruddStatus } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/utils';
 import { isEqual, omit } from 'lodash';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { Behovstype } from 'lib/utils/form';
+import { MellomlagretVurdering } from 'lib/types/types';
 
 type Props = {
   grunnlag?: Vurder11_9Grunnlag;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
   behandlingVersjon: number;
   readOnly: boolean;
 };
 
-export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
+export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
   const tidligereVurderinger = grunnlag?.tidligereVurderinger ?? [];
   const vurderingerSendtTilBeslutter = grunnlag?.ikkeIverksatteVurderinger ?? [];
 
@@ -32,8 +36,8 @@ export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
     fjernRad,
     angreFjerning,
     mellomlagredeVurderinger,
-    ikkeVedtatteVurrderingerSomSkalSlettes,
-  } = useBruddRader(tidligereVurderinger, vurderingerSendtTilBeslutter);
+    vurderingerSendtTilBeslutterSomSkalSlettes,
+  } = useBruddRader(tidligereVurderinger, vurderingerSendtTilBeslutter, initialMellomlagretVurdering);
 
   const handleSubmit = () => {
     console.log('Submitter mellomlagrede vurderinger', mellomlagredeVurderinger);
@@ -52,7 +56,7 @@ export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
           <Registrer11_9BruddTabell
             tidligereVurderinger={tidligereVurderinger}
             vurderingerSendtTilBeslutter={vurderingerSendtTilBeslutter}
-            ikkeIverksatteVurderingerSomSkalSlettes={ikkeVedtatteVurrderingerSomSkalSlettes}
+            vurderingerSendtTilBeslutterSomSkalSlettes={vurderingerSendtTilBeslutterSomSkalSlettes}
             angreFjerning={angreFjerning}
             mellomlagredeVurderinger={mellomlagredeVurderinger}
             valgtRad={valgtRad}
@@ -98,9 +102,23 @@ export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
   );
 };
 
-function useBruddRader(tidligereVurderinger: Vurdering11_9[], vurderingerSendtTilBeslutter: Vurdering11_9[]) {
-  const [mellomlagredeVurderinger, setMellomlagredeVurderinger] = useState<Vurdering11_9[]>([]);
-  const [ikkeVedtatteVurrderingerSomSkalSlettes, setIkkeVedtatteVurderingerSomSkalSlettes] = useState<string[]>([]);
+function useBruddRader(
+  tidligereVurderinger: Vurdering11_9[],
+  vurderingerSendtTilBeslutter: Vurdering11_9[],
+  initialMellomlagretVurdering?: MellomlagretVurdering
+) {
+  const { mellomlagretVurdering, lagreMellomlagring } = useMellomlagring(
+    Behovstype.VURDER_BRUDD_11_9_KODE,
+    initialMellomlagretVurdering
+  );
+
+  const mellomlagredeVurderinger: Vurdering11_9[] = mellomlagretVurdering?.data
+    ? JSON.parse(mellomlagretVurdering.data)
+    : ([] as Vurdering11_9[]);
+
+  const [vurderingerSendtTilBeslutterSomSkalSlettes, setVurderingerSendtTilBeslutterSomSkalSlettes] = useState<
+    string[]
+  >([]);
 
   const [valgtRad, velgRad] = useState<BruddRad>();
 
@@ -112,20 +130,20 @@ function useBruddRader(tidligereVurderinger: Vurdering11_9[], vurderingerSendtTi
     if (duplikat) {
       return;
     }
-    setMellomlagredeVurderinger([...mellomlagredeVurderinger.filter((v) => v.dato !== vurdering.dato), vurdering]);
+    lagreMellomlagring([...mellomlagredeVurderinger.filter((v) => v.dato !== vurdering.dato), vurdering]);
   };
 
   const fjernRad = (rad: BruddRad) => {
     if (rad.status === BruddStatus.SENDT_TIL_BESLUTTER) {
-      setIkkeVedtatteVurderingerSomSkalSlettes([...ikkeVedtatteVurrderingerSomSkalSlettes, rad.id]);
+      setVurderingerSendtTilBeslutterSomSkalSlettes([...vurderingerSendtTilBeslutterSomSkalSlettes, rad.id]);
     } else {
-      setMellomlagredeVurderinger(mellomlagredeVurderinger.filter((v) => v.dato !== rad.dato));
+      lagreMellomlagring(mellomlagredeVurderinger.filter((v) => v.dato !== rad.dato));
     }
   };
 
   const angreFjerning = (id: string) => {
-    setIkkeVedtatteVurderingerSomSkalSlettes(
-      ikkeVedtatteVurrderingerSomSkalSlettes.filter((slettetId) => slettetId !== id)
+    setVurderingerSendtTilBeslutterSomSkalSlettes(
+      vurderingerSendtTilBeslutterSomSkalSlettes.filter((slettetId) => slettetId !== id)
     );
   };
 
@@ -136,6 +154,6 @@ function useBruddRader(tidligereVurderinger: Vurdering11_9[], vurderingerSendtTi
     fjernRad,
     angreFjerning,
     mellomlagredeVurderinger,
-    ikkeVedtatteVurrderingerSomSkalSlettes,
+    vurderingerSendtTilBeslutterSomSkalSlettes,
   };
 }
