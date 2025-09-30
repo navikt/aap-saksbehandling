@@ -2,21 +2,8 @@
   max-width: 350px;
 }
 
-.overskrevetRad {
-  background-color: var(--a-grayalpha-50);
-  color: var(--a-text-subtle);
-}
-
-.overskrevetCelle {
-  text-decoration: line-through;
-}
-
-.ny {
-  background-color: var(--a-green-50);
-}
-
 .valgtRad {
-  background-color: var(--a-surface-action-subtle);
+  background: var(--a-surface-action-subtle);
 }
 
 .skjemaContainer {

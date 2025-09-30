@@ -5,7 +5,7 @@ import {
   Brudd,
   Vurdering11_9,
 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
-import styles from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/rimeliggrunn.module.css';
+import styles from './vurder-11-9.module.css';
 import {
   BruddStatus,
   erNy,
