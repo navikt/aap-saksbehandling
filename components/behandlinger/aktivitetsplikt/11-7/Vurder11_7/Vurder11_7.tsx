@@ -50,6 +50,10 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.vurdering);
 
+  const harPassertVarselFrist = grunnlag.varsel?.svarfrist
+    ? isBefore(grunnlag.varsel.svarfrist, startOfDay(new Date()))
+    : null;
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -132,6 +136,24 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
     { readOnly }
   );
 
+  const knapptekst = () => {
+    if (
+      grunnlag.harSendtForhåndsvarsel &&
+      harPassertVarselFrist === false &&
+      form.watch('skalIgnorereVarselFrist') === JaEllerNei.Nei
+    ) {
+      return 'Sett på vent';
+    } else if (
+      grunnlag.harSendtForhåndsvarsel ||
+      form.watch('erOppfylt') === JaEllerNei.Ja ||
+      form.watch('skalIgnorereVarselFrist') === JaEllerNei.Ja
+    ) {
+      return 'Send til beslutter';
+    } else {
+      return 'Opprett forhåndsvarsel';
+    }
+  };
+
   return (
     <VilkårskortMedFormOgMellomlagring
       heading="§ 11-7 Medlemmets aktivitetsplikt"
@@ -140,11 +162,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       visBekreftKnapp={!readOnly}
       isLoading={isLoading}
       status={status}
-      knappTekst={
-        grunnlag.harSendtForhåndsvarsel || form.watch('erOppfylt') === JaEllerNei.Ja
-          ? 'Send til beslutter'
-          : 'Opprett forhåndsvarsel'
-      }
+      knappTekst={knapptekst()}
       vilkårTilhørerNavKontor={true}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -172,9 +190,9 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       <FormField form={form} formField={formFields.erOppfylt} />
       {form.watch('erOppfylt') === JaEllerNei.Nei && <FormField form={form} formField={formFields.utfall} />}
       <FormField form={form} formField={formFields.gjelderFra} />
-      {form.watch('erOppfylt') === JaEllerNei.Nei && grunnlag.harSendtForhåndsvarsel && (
-        <FormField form={form} formField={formFields.skalIgnorereVarselFrist} />
-      )}
+      {form.watch('erOppfylt') === JaEllerNei.Nei &&
+        grunnlag.harSendtForhåndsvarsel &&
+        harPassertVarselFrist === false && <FormField form={form} formField={formFields.skalIgnorereVarselFrist} />}
     </VilkårskortMedFormOgMellomlagring>
   );
 };

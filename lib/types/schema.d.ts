@@ -3929,8 +3929,21 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7GrunnlagDto': {
       'harSendtForh\u00E5ndsvarsel': boolean;
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      varsel?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VarselDto'];
       vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VarselDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      sendtDato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      svarfrist?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto': {
       begrunnelse: string;
