@@ -166,12 +166,10 @@ test('skal ha et felt for å kunne søke etter tittel på dokument', async () =>
 
 test('skal ha en tabell med type, tittel, brevkode og journalført i header', async () => {
   render(<Saksdokumenter />);
-  const type = await screen.findByRole('columnheader', { name: /type/i });
   const tittel = await screen.findByRole('columnheader', { name: /tittel/i });
   const brevkode = await screen.findByRole('columnheader', { name: /brevkode/i });
   const journalført = await screen.findByRole('columnheader', { name: /journalført/i });
 
-  expect(type).toBeVisible();
   expect(tittel).toBeVisible();
   expect(brevkode).toBeVisible();
   expect(journalført).toBeVisible();

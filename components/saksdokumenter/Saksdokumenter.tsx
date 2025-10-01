@@ -1,5 +1,5 @@
-import { BodyShort, Button, HStack, Link, Pagination, Table, VStack } from '@navikt/ds-react';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { BodyShort, Button, HStack, Link, Pagination, Table, Tooltip, VStack } from '@navikt/ds-react';
+import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import useSWR from 'swr';
 import { useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
@@ -9,10 +9,8 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { clientHentAlleDokumenterPåSak } from 'lib/dokumentClientApi';
 import { isError } from 'lib/utils/api';
 import { useState } from 'react';
-import { ArrowDownRightIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
+import { ArrowDownRightIcon, ExternalLinkIcon, InboxDownIcon, InboxUpIcon } from '@navikt/aksel-icons';
 import { Journalposttype } from 'lib/types/journalpost';
-import { ArrowOrange } from 'components/icons/ArrowOrange';
-import { ArrowGreen } from 'components/icons/ArrowGreen';
 
 interface FormFields {
   dokumentnavn: string;
@@ -77,7 +75,7 @@ export const Saksdokumenter = () => {
       <TableStyled size={'small'}>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell textSize={'small'}>Type</Table.HeaderCell>
+            <Table.HeaderCell />
             <Table.HeaderCell textSize={'small'}>Tittel</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Brevkode</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Journalført</Table.HeaderCell>
@@ -147,10 +145,16 @@ const HoveddokumentRow = ({
 }) => (
   <>
     <Table.DataCell>
-      <div style={{ minWidth: '3rem' }}>
-        {journalposttype === Journalposttype.U && <ArrowOrange title={'Utgående dokument'} />}
-        {journalposttype === Journalposttype.I && <ArrowGreen title={'Inngående dokument'} />}
-      </div>
+      {journalposttype === Journalposttype.U && (
+        <Tooltip content="Utgående dokument">
+          <InboxUpIcon style={{ color: 'var(--a-orange-600)' }} />
+        </Tooltip>
+      )}
+      {journalposttype === Journalposttype.I && (
+        <Tooltip content="Inngående dokument">
+          <InboxDownIcon style={{ color: 'var(--a-green-500)' }} />
+        </Tooltip>
+      )}
     </Table.DataCell>
     <Table.DataCell>
       <HStack gap="1" wrap={false}>
@@ -163,7 +167,11 @@ const HoveddokumentRow = ({
       <BodyShort size={'small'}>{brevkode}</BodyShort>
     </Table.DataCell>
     <Table.DataCell>
-      <BodyShort size={'small'}>{datoOpprettet && formaterDatoForFrontend(datoOpprettet)}</BodyShort>
+      {datoOpprettet && (
+        <Tooltip content={formaterDatoMedTidspunktForFrontend(datoOpprettet)}>
+          <BodyShort size={'small'}>{formaterDatoForFrontend(datoOpprettet)}</BodyShort>
+        </Tooltip>
+      )}
     </Table.DataCell>
   </>
 );
