@@ -11,6 +11,8 @@ import { validerNullableDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 import { useSak } from 'hooks/SakHook';
 import { Button, HStack, Radio, VStack } from '@navikt/ds-react';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { Button, Detail, Heading, HStack, Radio, VStack } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { useFieldArray } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
@@ -149,6 +151,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
         <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
       )}
 
+      <Detail>Er det refusjonskrav fra Nav-kontor?</Detail>
       <RadioGroupWrapper
         name={`harKrav`}
         control={form.control}
