@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Label, Search, VStack } from '@navikt/ds-react';
+import { Alert, Search, VStack } from '@navikt/ds-react';
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { clientSøkPåSaksbehandler } from 'lib/clientApi';
 
@@ -37,11 +37,9 @@ export const SaksbehandlerSøk = ({ oppgaver, setSaksbehandlere, søketekst, set
   return (
     <VStack>
       <form id={'saksbehandlerSøk'} onSubmit={handleSaksbehandlerSøk}>
-        <Label as="p" size={'medium'}>
-          Søk etter saksbehandler:
-        </Label>
         <Search
           label={'Søk etter saksbehandler'}
+          hideLabel={false}
           value={søketekst}
           onChange={setSøketekst}
           id={'saksbehandlerSøkefelt'}

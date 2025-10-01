@@ -25,6 +25,7 @@ export const TildelOppgaveModal = ({ oppgaver, isOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [pageState, setPageState] = useState(1);
   const [error, setError] = useState<string>();
+  const [success, setSuccess] = useState<string>();
 
   const saksbehandlerePerPage = 7;
   const skalVisePaginering = saksbehandlere.length > saksbehandlerePerPage;
@@ -43,6 +44,7 @@ export const TildelOppgaveModal = ({ oppgaver, isOpen, onClose }: Props) => {
         setError(res.apiException.message);
       } else {
         setError(undefined);
+        setSuccess(`Oppgave(r) ble tildelt saksbehandler med ident ${data.saksbehandlerIdent}`);
       }
       setIsLoading(false);
     })(event);
@@ -55,81 +57,106 @@ export const TildelOppgaveModal = ({ oppgaver, isOpen, onClose }: Props) => {
         setSaksbehandlere([]);
         setSøketekst('');
         setError(undefined);
+        setSuccess(undefined);
         onClose();
       }}
       header={{ heading: 'Tildel oppgave' }}
       className={styles.tildelOppgaveModal}
     >
-      <Modal.Body>
-        <SaksbehandlerSøk
-          oppgaver={oppgaver}
-          setSaksbehandlere={setSaksbehandlere}
-          søketekst={søketekst}
-          setSøketekst={setSøketekst}
-        />
-        <VStack gap={'2'}>
-          <form id="tildelSaksbehandler" onSubmit={handleSubmit}>
-            {saksbehandlere.length > 0 && (
-              <Label as="p" size={'medium'}>
-                {`Søkeresultat (${saksbehandlere.length} treff)`}
-              </Label>
-            )}
-            {error && (
-              <Alert variant={'error'} size={'small'}>
-                {error}
-              </Alert>
-            )}
-            <RadioGroupWrapper name={'saksbehandlerIdent'} control={form.control}>
-              {saksbehandlereForValgtSide.map((saksbehandler) => {
-                return (
-                  <Radio
-                    value={saksbehandler.navIdent}
-                    key={saksbehandler.navIdent}
-                  >{`${saksbehandler.navn} (${saksbehandler.navIdent})`}</Radio>
-                );
-              })}
-            </RadioGroupWrapper>
-          </form>
-        </VStack>
-      </Modal.Body>
+      {success ? (
+        <>
+          <Modal.Body>
+            <Alert variant={'success'}>{success}</Alert>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant={'primary'}
+              onClick={() => {
+                setSaksbehandlere([]);
+                setSøketekst('');
+                setError(undefined);
+                setSuccess(undefined);
+                onClose();
+              }}
+            >
+              Tilbake til oppgavelisten
+            </Button>
+          </Modal.Footer>
+        </>
+      ) : (
+        <>
+          <Modal.Body>
+            <VStack gap={'2'}>
+            <SaksbehandlerSøk
+              oppgaver={oppgaver}
+              setSaksbehandlere={setSaksbehandlere}
+              søketekst={søketekst}
+              setSøketekst={setSøketekst}
+            />
+              <form id="tildelSaksbehandler" onSubmit={handleSubmit}>
+                {saksbehandlere.length > 0 && (
+                  <Label as="p" size={'medium'}>
+                    {`Søkeresultat (${saksbehandlere.length} treff)`}
+                  </Label>
+                )}
+                {error && (
+                  <Alert variant={'error'} size={'small'}>
+                    {error}
+                  </Alert>
+                )}
+                <RadioGroupWrapper name={'saksbehandlerIdent'} control={form.control}>
+                  {saksbehandlereForValgtSide.map((saksbehandler) => {
+                    return (
+                      <Radio
+                        value={saksbehandler.navIdent}
+                        key={saksbehandler.navIdent}
+                      >{`${saksbehandler.navn} (${saksbehandler.navIdent})`}</Radio>
+                    );
+                  })}
+                </RadioGroupWrapper>
+              </form>
+            </VStack>
+          </Modal.Body>
 
-      {saksbehandlere.length > 0 && (
-        <Modal.Footer>
-          <HStack justify={'start'}>
-            {skalVisePaginering && (
-              <VStack align={'start'}>
-                <Pagination
-                  page={pageState}
-                  onPageChange={setPageState}
-                  count={antallSider}
-                  boundaryCount={1}
-                  siblingCount={1}
-                  size={'small'}
-                  srHeading={{
-                    tag: 'h2',
-                    text: 'Paginering av søkeresultater',
-                  }}
-                />
-              </VStack>
-            )}
-            <HStack gap={'2'}>
-              <Button form={'tildelSaksbehandler'} loading={isLoading}>
-                Tildel
-              </Button>
-              <Button
-                variant={'secondary'}
-                onClick={() => {
-                  setSaksbehandlere([]);
-                  setSøketekst('');
-                  setError(undefined);
-                  onClose();
-                }}
-              >
-                Avbryt
-              </Button>
-            </HStack>
-          </HStack>
-        </Modal.Footer>
+          {saksbehandlere.length > 0 && (
+            <Modal.Footer>
+              <HStack justify={'start'}>
+                {skalVisePaginering && (
+                  <VStack align={'start'}>
+                    <Pagination
+                      page={pageState}
+                      onPageChange={setPageState}
+                      count={antallSider}
+                      boundaryCount={1}
+                      siblingCount={1}
+                      size={'small'}
+                      srHeading={{
+                        tag: 'h2',
+                        text: 'Paginering av søkeresultater',
+                      }}
+                    />
+                  </VStack>
+                )}
+                <HStack gap={'2'}>
+                  <Button form={'tildelSaksbehandler'} loading={isLoading}>
+                    Tildel
+                  </Button>
+                  <Button
+                    variant={'secondary'}
+                    onClick={() => {
+                      setSaksbehandlere([]);
+                      setSøketekst('');
+                      setError(undefined);
+                      onClose();
+                    }}
+                  >
+                    Avbryt
+                  </Button>
+                </HStack>
+              </HStack>
+            </Modal.Footer>
+          )}
+        </>
       )}
     </Modal>
   );
