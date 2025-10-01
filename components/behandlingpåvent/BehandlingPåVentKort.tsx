@@ -9,7 +9,6 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgVentPåProsessering } from 'hooks/saksbehandling/LøsBehovOgVentPåProsessering';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
-import { isDev, isLocal } from 'lib/utils/environment';
 
 interface Props {
   behandlingVersjon: number;
@@ -21,9 +20,6 @@ export const BehandlingPåVentKort = ({ informasjon }: Props) => {
   const { flyt } = useFlyt();
   const { løsBehovOgVentPåProsessering, isLoading, løsBehovError } = useLøsBehovOgVentPåProsessering();
   const [errorMessage, setErrorMessage] = useState<string>();
-
-  const isDevOrLocal = isDev() || isLocal();
-  const skalViseKnapp = informasjon?.grunn !== 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING' || isDevOrLocal;
 
   return (
     <SideProsessKort heading={'Behandling på vent'} icon={<HourglassBottomFilledIcon aria-hidden />}>
@@ -55,30 +51,29 @@ export const BehandlingPåVentKort = ({ informasjon }: Props) => {
                 {errorMessage}
               </Alert>
             )}
-            {skalViseKnapp && (
-              <Button
-                size={'medium'}
-                loading={isLoading}
-                onClick={async () => {
-                  setErrorMessage(undefined);
-                  if (!flyt?.behandlingVersjon) {
-                    setErrorMessage('Mangler behandlingsversjon');
-                    return;
-                  }
 
-                  løsBehovOgVentPåProsessering({
-                    behandlingVersjon: flyt.behandlingVersjon,
-                    behov: {
-                      behovstype: informasjon?.definisjon.kode,
-                    },
-                    referanse: behandlingsReferanse,
-                  });
-                }}
-                className={'fit-content'}
-              >
-                Åpne behandling
-              </Button>
-            )}
+            <Button
+              size={'medium'}
+              loading={isLoading}
+              onClick={async () => {
+                setErrorMessage(undefined);
+                if (!flyt?.behandlingVersjon) {
+                  setErrorMessage('Mangler behandlingsversjon');
+                  return;
+                }
+
+                løsBehovOgVentPåProsessering({
+                  behandlingVersjon: flyt.behandlingVersjon,
+                  behov: {
+                    behovstype: informasjon?.definisjon.kode,
+                  },
+                  referanse: behandlingsReferanse,
+                });
+              }}
+              className={'fit-content'}
+            >
+              Åpne behandling
+            </Button>
           </>
         )}
       </div>
