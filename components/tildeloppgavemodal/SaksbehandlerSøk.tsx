@@ -1,7 +1,7 @@
 'use client';
 
-import { Label, Search, VStack } from '@navikt/ds-react';
-import { Dispatch, SetStateAction } from 'react';
+import { Alert, Label, Search, VStack } from '@navikt/ds-react';
+import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { clientSøkPåSaksbehandler } from 'lib/clientApi';
 
 interface Props {
@@ -14,31 +14,43 @@ interface Props {
       }[]
     >
   >;
-  søketekst: string,
-  setSøketekst: Dispatch<SetStateAction<string>>
+  søketekst: string;
+  setSøketekst: Dispatch<SetStateAction<string>>;
 }
 
 export const SaksbehandlerSøk = ({ oppgaver, setSaksbehandlere, søketekst, setSøketekst }: Props) => {
+  const [error, setError] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSaksbehandlerSøk = async () => {
+  const handleSaksbehandlerSøk = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setIsLoading(true)
     const res = await clientSøkPåSaksbehandler(oppgaver, søketekst);
     if (res.type == 'SUCCESS') {
       setSaksbehandlere(res.data.saksbehandlere);
+    } else {
+      setError(res.apiException.message);
     }
+    setIsLoading(false)
   };
 
   return (
     <VStack>
-      <Label as="p" size={'medium'}>
-        Søk etter saksbehandler:
-      </Label>
-    <Search
-      label={'Søk etter saksbehandler'}
-      value={søketekst}
-      onChange={setSøketekst}
-      onSearchClick={handleSaksbehandlerSøk}
-      id={'saksbehandlerSøkefelt'}
-    />
+      <form id={'saksbehandlerSøk'} onSubmit={handleSaksbehandlerSøk}>
+        <Label as="p" size={'medium'}>
+          Søk etter saksbehandler:
+        </Label>
+        <Search
+          label={'Søk etter saksbehandler'}
+          value={søketekst}
+          onChange={setSøketekst}
+          id={'saksbehandlerSøkefelt'}
+          variant={'secondary'}
+        >
+          <Search.Button loading={isLoading} />
+        </Search>
+      </form>
+      {error && <Alert variant={'error'}>{error}</Alert>}
     </VStack>
   );
 };

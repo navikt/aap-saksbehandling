@@ -67,60 +67,70 @@ export const TildelOppgaveModal = ({ oppgaver, isOpen, onClose }: Props) => {
           søketekst={søketekst}
           setSøketekst={setSøketekst}
         />
-
-        <form id='tildelSaksbehandler' onSubmit={handleSubmit}>
-          {saksbehandlere.length > 0 && (
-            <Label as="p" size={'medium'}>
-              {`Søkeresultat (${saksbehandlere.length} treff)`}
-            </Label>
-          )}
-          {error && (
-            <Alert variant={'error'} size={'small'}>
-              {error}
-            </Alert>
-          )}
-          <RadioGroupWrapper name={'saksbehandlerIdent'} control={form.control}>
-            {saksbehandlereForValgtSide.map((saksbehandler) => {
-              return (
-                <Radio
-                  value={saksbehandler.navIdent}
-                  key={saksbehandler.navIdent}
-                >{`${saksbehandler.navn} (${saksbehandler.navIdent})`}</Radio>
-              );
-            })}
-          </RadioGroupWrapper>
-          {saksbehandlere.length > 0 && (
-            <Modal.Footer>
-              <HStack justify={'start'}>
-                {skalVisePaginering && (
-                  <VStack align={'start'}>
-                    <Pagination
-                      page={pageState}
-                      onPageChange={setPageState}
-                      count={antallSider}
-                      boundaryCount={1}
-                      siblingCount={1}
-                      size={'small'}
-                      srHeading={{
-                        tag: 'h2',
-                        text: 'Tabellpaginering',
-                      }}
-                    />
-                  </VStack>
-                )}
-                <HStack gap={'2'}>
-                  <Button form={'tildelSaksbehandler'} loading={isLoading}>
-                    Tildel
-                  </Button>
-                  <Button variant={'secondary'} onClick={onClose}>
-                    Avbryt
-                  </Button>
-                </HStack>
-              </HStack>
-            </Modal.Footer>
-          )}
-        </form>
+        <VStack gap={'2'}>
+          <form id="tildelSaksbehandler" onSubmit={handleSubmit}>
+            {saksbehandlere.length > 0 && (
+              <Label as="p" size={'medium'}>
+                {`Søkeresultat (${saksbehandlere.length} treff)`}
+              </Label>
+            )}
+            {error && (
+              <Alert variant={'error'} size={'small'}>
+                {error}
+              </Alert>
+            )}
+            <RadioGroupWrapper name={'saksbehandlerIdent'} control={form.control}>
+              {saksbehandlereForValgtSide.map((saksbehandler) => {
+                return (
+                  <Radio
+                    value={saksbehandler.navIdent}
+                    key={saksbehandler.navIdent}
+                  >{`${saksbehandler.navn} (${saksbehandler.navIdent})`}</Radio>
+                );
+              })}
+            </RadioGroupWrapper>
+          </form>
+        </VStack>
       </Modal.Body>
+
+      {saksbehandlere.length > 0 && (
+        <Modal.Footer>
+          <HStack justify={'start'}>
+            {skalVisePaginering && (
+              <VStack align={'start'}>
+                <Pagination
+                  page={pageState}
+                  onPageChange={setPageState}
+                  count={antallSider}
+                  boundaryCount={1}
+                  siblingCount={1}
+                  size={'small'}
+                  srHeading={{
+                    tag: 'h2',
+                    text: 'Paginering av søkeresultater',
+                  }}
+                />
+              </VStack>
+            )}
+            <HStack gap={'2'}>
+              <Button form={'tildelSaksbehandler'} loading={isLoading}>
+                Tildel
+              </Button>
+              <Button
+                variant={'secondary'}
+                onClick={() => {
+                  setSaksbehandlere([]);
+                  setSøketekst('');
+                  setError(undefined);
+                  onClose();
+                }}
+              >
+                Avbryt
+              </Button>
+            </HStack>
+          </HStack>
+        </Modal.Footer>
+      )}
     </Modal>
   );
 };
