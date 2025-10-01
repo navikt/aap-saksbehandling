@@ -106,7 +106,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       },
       gjelderFra: {
         type: 'date_input',
-        label: 'Vurderingen gjelder fra',
+        label: 'Datoen for når AAP skal stanses.',
         description:
           'Hvis § 11-7 ikke er oppfylt, bør dato settes 3 uker fram i tid for å gi bruker tid til å svare på forhåndsvarsel',
         defaultValue: defaultValue.gjelderFra,
@@ -127,7 +127,6 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       skalIgnorereVarselFrist: {
         type: 'radio',
         label: 'Gå videre selv om fristen for svar fra bruker ikke er utløpt?',
-        description: 'Dersom bruker har svart i løpet av fristen kan du velge Ja her og komme videre i prosessen.',
         rules: { required: 'Du må svare' },
         defaultValue: defaultValue.skalIgnorereVarselFrist,
         options: JaEllerNeiOptions,
