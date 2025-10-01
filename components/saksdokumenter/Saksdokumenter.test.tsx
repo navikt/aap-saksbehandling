@@ -4,89 +4,137 @@ import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { userEvent } from '@testing-library/user-event';
 import { FetchResponse } from 'lib/utils/api';
 import { mockSWRImplementation } from 'lib/test/testUtil';
-import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
+import { Journalpost, Journalposttype, Journalstatus } from 'lib/types/journalpost';
 
-const toDokument: FetchResponse<RelevantDokumentType[]> = {
+const toDokument: FetchResponse<Journalpost[]> = {
   data: [
     {
       tittel: 'søknad.pdf',
-      dokumentInfoId: '123',
       journalpostId: '456',
+      journalstatus: Journalstatus.FERDIGSTILT,
       tema: 'AAP',
-      variantformat: 'ARKIV',
-      brevkode: 'arkiv',
       datoOpprettet: '2024-12-12',
-      erUtgående: true,
+      journalposttype: Journalposttype.U,
+      dokumenter: [
+        {
+          dokumentInfoId: '123',
+          tittel: 'søknad.pdf',
+          brevkode: 'arkiv',
+          dokumentvarianter: [],
+        },
+      ],
     },
     {
       tittel: 'legeerklæring.pdf',
-      dokumentInfoId: '456',
       journalpostId: '123',
+      journalstatus: Journalstatus.FERDIGSTILT,
       tema: 'AAP',
-      variantformat: 'ARKIV',
-      brevkode: 'arkiv',
       datoOpprettet: '2024-12-12',
-      erUtgående: true,
+      journalposttype: Journalposttype.U,
+      dokumenter: [
+        {
+          dokumentInfoId: '456',
+          tittel: 'legeerklæring.pdf',
+          brevkode: 'arkiv',
+          dokumentvarianter: [],
+        },
+      ],
     },
     {
       tittel: 'annet_dokument.pdf',
-      dokumentInfoId: '111',
       journalpostId: '222',
+      journalstatus: Journalstatus.FERDIGSTILT,
       tema: 'AAP',
-      variantformat: 'ARKIV',
-      brevkode: 'arkiv',
       datoOpprettet: '2024-12-12',
-      erUtgående: true,
+      journalposttype: Journalposttype.U,
+      dokumenter: [
+        {
+          dokumentInfoId: '111',
+          tittel: 'annet_dokument.pdf',
+          brevkode: 'arkiv',
+          dokumentvarianter: [],
+        },
+      ],
     },
     {
       tittel: 'forvaltningsmelding.pdf',
-      dokumentInfoId: '222',
       journalpostId: '333',
+      journalstatus: Journalstatus.JOURNALFOERT,
       tema: 'AAP',
-      variantformat: 'ARKIV',
-      brevkode: 'arkiv',
       datoOpprettet: '2024-12-12',
-      erUtgående: false,
+      journalposttype: Journalposttype.I,
+      dokumenter: [
+        {
+          dokumentInfoId: '222',
+          tittel: 'forvaltningsmelding.pdf',
+          brevkode: 'arkiv',
+          dokumentvarianter: [],
+        },
+      ],
     },
     {
       tittel: 'enda_en.pdf',
-      dokumentInfoId: '444',
       journalpostId: '555',
+      journalstatus: Journalstatus.FERDIGSTILT,
       tema: 'AAP',
-      variantformat: 'ARKIV',
-      brevkode: 'arkiv',
       datoOpprettet: '2024-12-12',
-      erUtgående: true,
+      journalposttype: Journalposttype.U,
+      dokumenter: [
+        {
+          dokumentInfoId: '444',
+          tittel: 'enda_en.pdf',
+          brevkode: 'arkiv',
+          dokumentvarianter: [],
+        },
+      ],
     },
     {
       tittel: 'blabla.pdf',
-      dokumentInfoId: '4566',
       journalpostId: '7897',
+      journalstatus: Journalstatus.FERDIGSTILT,
       tema: 'AAP',
-      variantformat: 'ARKIV',
-      brevkode: 'arkiv',
       datoOpprettet: '2024-12-12',
-      erUtgående: true,
+      journalposttype: Journalposttype.U,
+      dokumenter: [
+        {
+          dokumentInfoId: '4566',
+          tittel: 'blabla.pdf',
+          brevkode: 'arkiv',
+          dokumentvarianter: [],
+        },
+      ],
     },
     {
       tittel: 'digitalisert_dokument.pdf',
-      dokumentInfoId: '666',
       journalpostId: '666',
+      journalstatus: Journalstatus.FERDIGSTILT,
       tema: 'AAP',
-      variantformat: 'ARKIV',
-      brevkode: 'arkiv',
       datoOpprettet: '2024-12-12',
-      erUtgående: true,
+      journalposttype: Journalposttype.U,
+      dokumenter: [
+        {
+          dokumentInfoId: '666',
+          tittel: 'digitalisert_dokument.pdf',
+          brevkode: 'arkiv',
+          dokumentvarianter: [],
+        },
+      ],
     },
     {
       tittel: 'siste_dokument.pdf',
-      dokumentInfoId: '777',
       journalpostId: '777',
+      journalstatus: Journalstatus.FERDIGSTILT,
       tema: 'AAP',
-      variantformat: 'ARKIV',
-      brevkode: 'arkiv',
       datoOpprettet: '2024-12-12',
-      erUtgående: true,
+      journalposttype: Journalposttype.U,
+      dokumenter: [
+        {
+          dokumentInfoId: '777',
+          tittel: 'siste_dokument.pdf',
+          brevkode: 'arkiv',
+          dokumentvarianter: [],
+        },
+      ],
     },
   ],
   type: 'SUCCESS',
@@ -103,7 +151,7 @@ test('skal være mulig å søke etter et dokument', async () => {
   expect(await screen.findByRole('link', { name: /søknad\.pdf/i })).toBeVisible();
   expect(await screen.findByRole('link', { name: /legeerklæring\.pdf/i })).toBeVisible();
 
-  const søkefelt = screen.getByRole('textbox', { name: /søk i dokumenter/i });
+  const søkefelt = screen.getByRole('textbox', { name: /søk i dokumenttitler/i });
 
   await user.type(søkefelt, 'sø');
 
@@ -113,18 +161,18 @@ test('skal være mulig å søke etter et dokument', async () => {
 
 test('skal ha et felt for å kunne søke etter tittel på dokument', async () => {
   render(<Saksdokumenter />);
-  expect(await screen.findByRole('textbox', { name: /søk i dokumenter/i })).toBeVisible();
+  expect(await screen.findByRole('textbox', { name: /søk i dokumenttitler/i })).toBeVisible();
 });
 
-test('skal ha en tabell med inn/ut, dokument, type og journalført i header', async () => {
+test('skal ha en tabell med type, tittel, brevkode og journalført i header', async () => {
   render(<Saksdokumenter />);
-  const innUt = await screen.findByRole('columnheader', { name: /inn \/ ut/i });
-  const dokument = await screen.findByRole('columnheader', { name: /dokument/i });
+  const type = await screen.findByRole('columnheader', { name: /type/i });
+  const tittel = await screen.findByRole('columnheader', { name: /tittel/i });
   const brevkode = await screen.findByRole('columnheader', { name: /brevkode/i });
   const journalført = await screen.findByRole('columnheader', { name: /journalført/i });
 
-  expect(innUt).toBeVisible();
-  expect(dokument).toBeVisible();
+  expect(type).toBeVisible();
+  expect(tittel).toBeVisible();
   expect(brevkode).toBeVisible();
   expect(journalført).toBeVisible();
 });
