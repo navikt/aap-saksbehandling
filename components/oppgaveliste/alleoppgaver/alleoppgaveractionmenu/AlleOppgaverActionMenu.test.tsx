@@ -30,7 +30,13 @@ describe('AlleOppgaverActionMenu', () => {
 
   it('skal ha en knapp for å åpne oppgaven', async () => {
     render(
-      <AlleOppgaverActionMenu oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />
+      <AlleOppgaverActionMenu
+        oppgave={oppgave}
+        setVisSynkroniserEnhetModal={setSync}
+        revalidateFunction={vi.fn()}
+        setOppgaverSomSkalTildeles={vi.fn()}
+        setVisTildelOppgaveModal={vi.fn()}
+      />
     );
     const menu = screen.getByRole('button', { name: 'Oppgavemeny' });
     await user.click(menu);
@@ -45,6 +51,8 @@ describe('AlleOppgaverActionMenu', () => {
         oppgave={reservertOppgave}
         setVisSynkroniserEnhetModal={setSync}
         revalidateFunction={vi.fn()}
+        setOppgaverSomSkalTildeles={vi.fn()}
+        setVisTildelOppgaveModal={vi.fn()}
       />
     );
     const menu = screen.getByRole('button', { name: 'Oppgavemeny' });
@@ -55,7 +63,13 @@ describe('AlleOppgaverActionMenu', () => {
 
   it('skal ikke ha knapp for å frigi hvis oppgave ikke er reservert', async () => {
     render(
-      <AlleOppgaverActionMenu oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />
+      <AlleOppgaverActionMenu
+        oppgave={oppgave}
+        setVisSynkroniserEnhetModal={setSync}
+        revalidateFunction={vi.fn()}
+        setOppgaverSomSkalTildeles={vi.fn()}
+        setVisTildelOppgaveModal={vi.fn()}
+      />
     );
     const menu = screen.getByRole('button', { name: 'Oppgavemeny' });
     await user.click(menu);
