@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MellomlagretVurderingResponse, SamordningAndreStatligeYtelserGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { render, screen } from 'lib/test/CustomRender';
@@ -6,6 +6,7 @@ import { FetchResponse } from 'lib/utils/api';
 import userEvent from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
 import { SamordningAndreStatligeYtelser } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelser';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -21,6 +22,10 @@ const grunnlagMedVurdering: SamordningAndreStatligeYtelserGrunnlag = {
 };
 
 const grunnlagUtenVurdering: SamordningAndreStatligeYtelserGrunnlag = { harTilgangTilÅSaksbehandle: false };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_ANDRE_STATLIGE_YTELSER' });
+});
 
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
