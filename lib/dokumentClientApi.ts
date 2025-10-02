@@ -6,7 +6,7 @@ import { Journalpost } from 'lib/types/journalpost';
 const BASE_URL = '/saksbehandling';
 
 export function clientHentAlleDokumenterPåSak(saksnummer: string) {
-  return clientFetch<RelevantDokumentType[]>(`${BASE_URL}/api/dokumenter/sak/${saksnummer}`, 'GET');
+  return clientFetch<Journalpost[]>(`${BASE_URL}/api/dokumenter/sak/${saksnummer}`, 'GET');
 }
 
 export function clientHentAlleDokumenterPåBruker(request: object) {
