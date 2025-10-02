@@ -1,5 +1,5 @@
 import createFetchMock from 'vitest-fetch-mock';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { MellomlagretVurderingResponse, SamordningArbeidsgiverGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
@@ -7,6 +7,7 @@ import { render, screen } from 'lib/test/CustomRender';
 import { FetchResponse } from 'lib/utils/api';
 import { SamordningArbeidsgiver } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiver';
 import userEvent from '@testing-library/user-event';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -17,6 +18,10 @@ const grunnlagMedVurdering: SamordningArbeidsgiverGrunnlag = {
   vurdering: { begrunnelse: 'Dette er min vurdering som er bekreftet', tom: '2025-10-10', fom: '2025-11-11' },
 };
 const grunnlagUtenVurdering: SamordningArbeidsgiverGrunnlag = { harTilgangTilÅSaksbehandle: true };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_ARBEIDSGIVER' });
+});
 
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
