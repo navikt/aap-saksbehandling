@@ -14,6 +14,7 @@ import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
+import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -25,6 +26,8 @@ interface Props {
 export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRader, valgteRader }: Props) => {
   const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
+  const [oppgaverSomSkalTildeles, setOppgaverSomSkalTildeles] = useState<number[]>([]);
+  const [visTildelOppgaveModal, setVisTildelOppgaveModal] = useState<boolean>(false);
 
   const toggleValgtRad = (oppgaveId: number) => {
     if (oppgaveId) {
@@ -42,6 +45,14 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
       <SynkroniserEnhetModal
         visSynkroniserEnhetModal={visSynkroniserEnhetModal}
         setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
+      />
+      <TildelOppgaveModal
+        oppgaveIder={oppgaverSomSkalTildeles}
+        isOpen={visTildelOppgaveModal}
+        onClose={async () => {
+          setVisTildelOppgaveModal(false);
+          await revalidateFunction();
+        }}
       />
       <TableStyled
         size={'small'}
@@ -138,6 +149,8 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
                   oppgave={oppgave}
                   revalidateFunction={revalidateFunction}
                   setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
+                  setOppgaverSomSkalTildeles={setOppgaverSomSkalTildeles}
+                  setVisTildelOppgaveModal={setVisTildelOppgaveModal}
                 />
               </Table.DataCell>
             </Table.Row>

@@ -6,20 +6,26 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
-import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 import { isProd } from 'lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
   revalidateFunction: () => Promise<unknown>;
   setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
+  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
+  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, revalidateFunction }: Props) => {
+export const AlleOppgaverActionMenu = ({
+  setVisSynkroniserEnhetModal,
+  oppgave,
+  revalidateFunction,
+  setOppgaverSomSkalTildeles,
+  setVisTildelOppgaveModal,
+}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
-  const [åpenTildelModal, settÅpenTildelModal] = useState(false);
   const erReservert = oppgave.reservertAv != null;
 
   async function frigiOppgave(oppgave: Oppgave) {
@@ -82,25 +88,18 @@ export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, r
               Frigi oppgave
             </ActionMenu.Item>
           )}
-          <ActionMenu.Item
-            onSelect={() => {
-              settÅpenTildelModal(true);
-            }}
-          >
-            Tildel oppgave
-          </ActionMenu.Item>
+          {!isProd() && (
+            <ActionMenu.Item
+              onSelect={() => {
+                oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
+                setVisTildelOppgaveModal(true);
+              }}
+            >
+              Tildel oppgave
+            </ActionMenu.Item>
+          )}
         </ActionMenu.Content>
       </ActionMenu>
-      {oppgave.id && åpenTildelModal && !isProd() && (
-        <TildelOppgaveModal
-          oppgaver={[oppgave.id]}
-          isOpen={åpenTildelModal}
-          onClose={async () => {
-            settÅpenTildelModal(false);
-            await revalidateFunction();
-          }}
-        />
-      )}
     </>
   );
 };

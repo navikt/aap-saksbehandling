@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   const saksbehandlerResponse = await søkPåSaksbehandler(body)
   if (isError(saksbehandlerResponse)) {
     logError(
-      `/api/saksbehandler/finn ${saksbehandlerResponse.status}, ${saksbehandlerResponse.apiException.code}: ${saksbehandlerResponse.apiException.message}`
+      `/api/saksbehandler/finn-saksbehandler ${saksbehandlerResponse.status}, ${saksbehandlerResponse.apiException.code}: ${saksbehandlerResponse.apiException.message}`
     );
   }
   return new Response(JSON.stringify(saksbehandlerResponse), { status: saksbehandlerResponse.status });

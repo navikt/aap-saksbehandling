@@ -16,34 +16,49 @@ interface Props {
   >;
   søketekst: string;
   setSøketekst: Dispatch<SetStateAction<string>>;
+  setInfomelding: Dispatch<SetStateAction<string | undefined>>;
+  setPageState: Dispatch<SetStateAction<number>>;
 }
 
-export const SaksbehandlerSøk = ({ oppgaver, setSaksbehandlere, søketekst, setSøketekst }: Props) => {
+export const SaksbehandlerSøk = ({
+  oppgaver,
+  setSaksbehandlere,
+  søketekst,
+  setSøketekst,
+  setInfomelding,
+  setPageState,
+}: Props) => {
   const [error, setError] = useState<string>();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSaksbehandlerSøk = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setIsLoading(true)
+    event.preventDefault();
+    setIsLoading(true);
+    setInfomelding(undefined);
+    setError(undefined)
+
     const res = await clientSøkPåSaksbehandler(oppgaver, søketekst);
     if (res.type == 'SUCCESS') {
       setSaksbehandlere(res.data.saksbehandlere);
+      if (res.data.saksbehandlere.length == 0) {
+        setInfomelding('Fant ingen veiledere eller saksbehandlere.');
+      }
     } else {
       setError(res.apiException.message);
     }
-    setIsLoading(false)
+    setPageState(1);
+    setIsLoading(false);
   };
 
   return (
     <VStack>
       <form id={'saksbehandlerSøk'} onSubmit={handleSaksbehandlerSøk}>
         <Search
-          label={'Søk etter saksbehandler'}
+          label={'Søk etter veileder/saksbehandler'}
           hideLabel={false}
           value={søketekst}
           onChange={setSøketekst}
           id={'saksbehandlerSøkefelt'}
-          variant={'secondary'}
         >
           <Search.Button loading={isLoading} />
         </Search>

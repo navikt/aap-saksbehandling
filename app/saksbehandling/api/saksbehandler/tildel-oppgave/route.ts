@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const saksbehandlerResponse = await tildelTilSaksbehandler(body)
     if (isError(saksbehandlerResponse)) {
         logError(
-            `/api/saksbehandler/tildel ${saksbehandlerResponse.status}, ${saksbehandlerResponse.apiException.code}: ${saksbehandlerResponse.apiException.message}`
+            `/api/saksbehandler/tildel-oppgave ${saksbehandlerResponse.status}, ${saksbehandlerResponse.apiException.code}: ${saksbehandlerResponse.apiException.message}`
         );
     }
     return new Response(JSON.stringify(saksbehandlerResponse), { status: saksbehandlerResponse.status });
