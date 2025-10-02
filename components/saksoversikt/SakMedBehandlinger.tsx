@@ -1,13 +1,14 @@
 'use client';
 
 import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { SaksInfo, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { SaksInfo, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
 import { useRouter } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
 import { isLocal, isProd } from 'lib/utils/environment';
+import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
 const formaterBehandlingType = (behandlingtype: string) => {
   switch (behandlingtype) {
@@ -27,87 +28,6 @@ const formaterBehandlingType = (behandlingtype: string) => {
       return 'Aktivitetsplikt § 11-9';
     default:
       return `Ukjent behandlingtype (${behandlingtype})`;
-  }
-};
-
-const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): string => {
-  switch (vurderingsbehov) {
-    case 'MOTTATT_SØKNAD':
-      return 'Søknad';
-    case 'MOTTATT_AKTIVITETSMELDING':
-      return 'Aktivitetsmelding';
-    case 'FASTSATT_PERIODE_PASSERT':
-      return 'Fastsatt periode passert';
-    case 'MOTTATT_MELDEKORT':
-      return 'Meldekort';
-    case 'MOTTATT_LEGEERKLÆRING':
-      return 'Legeerklæring';
-    case 'MOTTATT_AVVIST_LEGEERKLÆRING':
-      return 'Avvist legeerklæring';
-    case 'MOTTATT_DIALOGMELDING':
-      return 'Dialogmelding';
-    case 'G_REGULERING':
-      return 'G-regulering';
-    case 'REVURDER_MEDLEMSKAP':
-      return 'Revurder medlemskap';
-    case 'REVURDER_YRKESSKADE':
-      return 'Revurder yrkesskade';
-    case 'REVURDER_BEREGNING':
-      return 'Revurder beregning';
-    case 'REVURDER_LOVVALG':
-      return 'Revurder lovvalg';
-    case 'REVURDER_SAMORDNING':
-      return 'Revurder samordning';
-    case 'MOTATT_KLAGE':
-      return 'Klage';
-    case 'LOVVALG_OG_MEDLEMSKAP':
-      return 'Lovvalg og medlemskap';
-    case 'FORUTGAENDE_MEDLEMSKAP':
-      return 'Forutgående medlemskap';
-    case 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND':
-      return 'Sykdom arbeidsevne behov for bistand';
-    case 'BARNETILLEGG':
-      return 'Barnetillegg';
-    case 'INSTITUSJONSOPPHOLD':
-      return 'Institusjonsopphold';
-    case 'SAMORDNING_OG_AVREGNING':
-      return 'Samordning og avregning';
-    case 'REFUSJONSKRAV':
-      return 'Refusjonskrav';
-    case 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT':
-      return 'Utenlandsopphold for soknadstidspunkt';
-    case 'SØKNAD_TRUKKET':
-      return 'Trukket søknad';
-    case 'VURDER_RETTIGHETSPERIODE':
-      return 'Starttidspunkt';
-    case 'KLAGE_TRUKKET':
-      return 'Klage trukket';
-    case 'REVURDERING_AVBRUTT':
-      return 'Revurdering avbrutt';
-    case 'MOTTATT_KABAL_HENDELSE':
-      return 'Mottatt svar fra Nav Klageinstans';
-    case 'FRITAK_MELDEPLIKT':
-      return 'Fritak meldeplikt';
-    case 'REVURDER_MANUELL_INNTEKT':
-      return 'Revurder manuell inntekt';
-    case 'OPPFØLGINGSOPPGAVE':
-      return 'Vurder konsekvens';
-    case 'HELHETLIG_VURDERING':
-      return 'Helhetlig vurdering';
-    case 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN':
-      return 'Revurder meldeplikt rimelig grunn';
-    case 'AKTIVITETSPLIKT_11_7':
-      return 'Aktivitetsplikt § 11-7';
-    case 'AKTIVITETSPLIKT_11_9':
-      return 'Aktivitetsplikt § 11-9';
-    case 'EFFEKTUER_AKTIVITETSPLIKT':
-      return 'Effektuer aktivitetsplikt';
-    case 'OVERGANG_UFORE':
-      return 'Overgang til uføre';
-    case 'OVERGANG_ARBEID':
-      return 'Overgang arbeidssøker';
-    default:
-      return vurderingsbehov;
   }
 };
 
