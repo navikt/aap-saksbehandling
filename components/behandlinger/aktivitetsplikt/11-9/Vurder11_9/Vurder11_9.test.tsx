@@ -1,28 +1,26 @@
 import { describe, expect, it } from 'vitest';
-import { Vurder11_9Grunnlag } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
 import { render, screen } from 'lib/test/CustomRender';
 import { Vurder11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9';
+import { Aktivitetsplikt11_9Grunnlag } from 'lib/types/types';
 
 describe('Vurder11_9', () => {
-  const grunnlag: Vurder11_9Grunnlag = {
+  const grunnlag: Aktivitetsplikt11_9Grunnlag = {
     harTilgangTilÅSaksbehandle: true,
-    tidligereVurderinger: [
+    vedtatteVurderinger: [
       {
-        id: '1',
         begrunnelse: 'Noe',
         dato: '2025-05-01',
         brudd: 'IKKE_MØTT_TIL_TILTAK',
         grunn: 'IKKE_RIMELIG_GRUNN',
       },
       {
-        id: '2',
         begrunnelse: 'Noe annet',
         dato: '2025-05-02',
         brudd: 'IKKE_MØTT_TIL_BEHANDLING',
         grunn: 'IKKE_RIMELIG_GRUNN',
       },
     ],
-    ikkeIverksatteVurderinger: [],
+    vurderinger: [],
   };
 
   it('viser overskrift og tabell med tidligere vurderinger', () => {

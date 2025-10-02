@@ -1,10 +1,7 @@
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { Button, HStack, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend, sorterEtterEldsteDato } from 'lib/utils/date';
-import {
-  Brudd,
-  Vurdering11_9,
-} from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
+import { Vurdering11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
 import styles from './vurder-11-9.module.css';
 import {
   BruddStatus,
@@ -14,6 +11,7 @@ import {
   formaterGrunn,
   formaterStatus,
 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/utils';
+import { Brudd } from 'lib/types/types';
 
 type Props = {
   readOnly?: boolean;

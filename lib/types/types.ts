@@ -376,6 +376,15 @@ export type OppfølgingsoppgaveV0 =
 export type Aktivitetsplikt11_7Grunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7GrunnlagDto'];
 
+export type Aktivitetsplikt11_9Grunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.Aktivitetsplikt11_9GrunnlagDto'];
+
+export type Aktivitetsplikt11_9Løsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.aktivitetsplikt.Aktivitetsplikt11_9L\u00F8sningDto'];
+
+export type Brudd =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.aktivitetsplikt.Aktivitetsplikt11_9L\u00F8sningDto']['brudd'];
+
 export type Aktivitetsplikt11_7Vurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7VurderingDto'];
 

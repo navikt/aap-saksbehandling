@@ -73,6 +73,7 @@ import {
   YrkesskadeVurderingGrunnlag,
   SøkPåSakInfo,
   OpprettAktivitetspliktBehandlingDto,
+  Aktivitetsplikt11_9Grunnlag,
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
@@ -377,6 +378,11 @@ export const hentKabalKlageresultat = async (behandlingsReferanse: string) => {
 export const hentAktivitetsplikt11_7Grunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${behandlingsreferanse}/grunnlag/brudd-11-7`;
   return await apiFetch<Aktivitetsplikt11_7Grunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentAktivitetsplikt11_9Grunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${behandlingsreferanse}/grunnlag/brudd-11-9`;
+  return await apiFetch<Aktivitetsplikt11_9Grunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSvarFraAndreinstansGrunnlag = async (behandlingsReferanse: string) => {

@@ -1,5 +1,5 @@
-import { Brudd } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
 import { BruddRad } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Registrer11_9BruddTabell';
+import { Brudd } from 'lib/types/types';
 
 export function formaterBrudd(brudd: Brudd) {
   switch (brudd) {

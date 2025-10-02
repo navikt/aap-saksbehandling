@@ -1,7 +1,6 @@
 import { useConfigForm } from 'components/form/FormHook';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import {
-  Brudd,
   Grunn,
   Vurdering11_9,
 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
@@ -11,6 +10,8 @@ import { FormField } from 'components/form/FormField';
 import { VStack } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { parse } from 'date-fns';
+import { uuidv4 } from 'unleash-client/lib/uuidv4';
+import { Brudd } from 'lib/types/types';
 
 export type Vurdering11_9FormFields = {
   begrunnelse: string;
@@ -62,7 +63,7 @@ export const Mellomlagre11_9Skjema = ({
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       lagre({
-        id: data.dato, // TODO: Verifiser at dette flyr
+        id: uuidv4(),
         begrunnelse: data.begrunnelse,
         dato: formaterDatoForBackend(parse(data.dato, 'dd.MM.yyyy', new Date())),
         brudd: data.brudd as Brudd,
