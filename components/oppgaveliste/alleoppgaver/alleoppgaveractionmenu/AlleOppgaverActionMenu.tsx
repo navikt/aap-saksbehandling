@@ -7,6 +7,7 @@ import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/o
 import { isSuccess } from 'lib/utils/api';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
@@ -90,7 +91,7 @@ export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, r
           </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>
-      {oppgave.id && (
+      {oppgave.id && åpenTildelModal && !isProd() && (
         <TildelOppgaveModal
           oppgaver={[oppgave.id]}
           isOpen={åpenTildelModal}

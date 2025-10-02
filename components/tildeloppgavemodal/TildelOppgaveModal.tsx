@@ -53,13 +53,7 @@ export const TildelOppgaveModal = ({ oppgaver, isOpen, onClose }: Props) => {
   return (
     <Modal
       open={isOpen}
-      onClose={() => {
-        setSaksbehandlere([]);
-        setSøketekst('');
-        setError(undefined);
-        setSuccess(undefined);
-        onClose();
-      }}
+      onClose={onClose}
       header={{ heading: 'Tildel oppgave' }}
       className={styles.tildelOppgaveModal}
     >
@@ -69,16 +63,7 @@ export const TildelOppgaveModal = ({ oppgaver, isOpen, onClose }: Props) => {
             <Alert variant={'success'}>{success}</Alert>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant={'primary'}
-              onClick={() => {
-                setSaksbehandlere([]);
-                setSøketekst('');
-                setError(undefined);
-                setSuccess(undefined);
-                onClose();
-              }}
-            >
+            <Button variant={'primary'} onClick={onClose}>
               Tilbake til oppgavelisten
             </Button>
           </Modal.Footer>
@@ -87,13 +72,13 @@ export const TildelOppgaveModal = ({ oppgaver, isOpen, onClose }: Props) => {
         <>
           <Modal.Body>
             <VStack gap={'2'}>
-            <SaksbehandlerSøk
-              oppgaver={oppgaver}
-              setSaksbehandlere={setSaksbehandlere}
-              søketekst={søketekst}
-              setSøketekst={setSøketekst}
-            />
-              <form id="tildelSaksbehandler" onSubmit={handleSubmit}>
+              <SaksbehandlerSøk
+                oppgaver={oppgaver}
+                setSaksbehandlere={setSaksbehandlere}
+                søketekst={søketekst}
+                setSøketekst={setSøketekst}
+              />
+              <form id={'tildelSaksbehandler'} onSubmit={handleSubmit}>
                 {saksbehandlere.length > 0 && (
                   <Label as="p" size={'medium'}>
                     {`Søkeresultat (${saksbehandlere.length} treff)`}
@@ -104,7 +89,11 @@ export const TildelOppgaveModal = ({ oppgaver, isOpen, onClose }: Props) => {
                     {error}
                   </Alert>
                 )}
-                <RadioGroupWrapper name={'saksbehandlerIdent'} control={form.control}>
+                <RadioGroupWrapper
+                  name={'saksbehandlerIdent'}
+                  control={form.control}
+                  rules={{ required: 'Du må velge en veileder / saksbehandler.' }}
+                >
                   {saksbehandlereForValgtSide.map((saksbehandler) => {
                     return (
                       <Radio
@@ -120,9 +109,7 @@ export const TildelOppgaveModal = ({ oppgaver, isOpen, onClose }: Props) => {
 
           {saksbehandlere.length > 0 && (
             <Modal.Footer>
-              <HStack justify={'start'}>
                 {skalVisePaginering && (
-                  <VStack align={'start'}>
                     <Pagination
                       page={pageState}
                       onPageChange={setPageState}
@@ -135,25 +122,15 @@ export const TildelOppgaveModal = ({ oppgaver, isOpen, onClose }: Props) => {
                         text: 'Paginering av søkeresultater',
                       }}
                     />
-                  </VStack>
                 )}
                 <HStack gap={'2'}>
-                  <Button form={'tildelSaksbehandler'} loading={isLoading}>
+                  <Button form={'tildelSaksbehandler'} loading={isLoading} type={'submit'}>
                     Tildel
                   </Button>
-                  <Button
-                    variant={'secondary'}
-                    onClick={() => {
-                      setSaksbehandlere([]);
-                      setSøketekst('');
-                      setError(undefined);
-                      onClose();
-                    }}
-                  >
+                  <Button variant={'secondary'} onClick={onClose}>
                     Avbryt
                   </Button>
                 </HStack>
-              </HStack>
             </Modal.Footer>
           )}
         </>
