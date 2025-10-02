@@ -107,8 +107,9 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       gjelderFra: {
         type: 'date_input',
         label: 'Datoen for når AAP skal stanses.',
-        description:
-          'Hvis § 11-7 ikke er oppfylt, bør dato settes 3 uker fram i tid for å gi bruker tid til å svare på forhåndsvarsel',
+        description: !grunnlag.harSendtForhåndsvarsel
+          ? 'Hvis § 11-7 ikke er oppfylt, bør dato settes 3 uker fram i tid for å gi bruker tid til å svare på forhåndsvarsel'
+          : undefined,
         defaultValue: defaultValue.gjelderFra,
         rules: {
           required: 'Du må velge når vurderingen gjelder fra',
@@ -126,10 +127,13 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       },
       skalIgnorereVarselFrist: {
         type: 'radio',
-        label: 'Gå videre selv om fristen for svar fra bruker ikke er utløpt?',
+        label: 'Fristen i forhåndsvarslet er ikke utløpt. Ønsker du å behandle saken?',
         rules: { required: 'Du må svare' },
         defaultValue: defaultValue.skalIgnorereVarselFrist,
-        options: JaEllerNeiOptions,
+        options: [
+          { value: JaEllerNei.Ja, label: 'Ja, behandle saken' },
+          { value: JaEllerNei.Nei, label: 'Nei, sett tilbake på vent' },
+        ],
       },
     },
     { readOnly }
@@ -139,7 +143,8 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
     if (
       grunnlag.harSendtForhåndsvarsel &&
       harPassertVarselFrist === false &&
-      form.watch('skalIgnorereVarselFrist') === JaEllerNei.Nei
+      form.watch('skalIgnorereVarselFrist') === JaEllerNei.Nei &&
+      form.watch('erOppfylt') === JaEllerNei.Nei
     ) {
       return 'Sett på vent';
     } else if (
