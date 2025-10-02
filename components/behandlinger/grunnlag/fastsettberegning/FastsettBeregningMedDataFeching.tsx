@@ -7,6 +7,8 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { isProd } from 'lib/utils/environment';
+import { FastsettBeregningNyVising } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregningNyVisning';
 
 interface Props {
   behandlingsReferanse: string;
@@ -27,7 +29,14 @@ export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, st
     return null;
   }
 
-  return (
+  return !isProd() ? (
+    <FastsettBeregningNyVising
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      grunnlag={grunnlag.data}
+      behandlingVersjon={stegData.behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
+    />
+  ) : (
     <FastsettBeregning
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       grunnlag={grunnlag.data}
