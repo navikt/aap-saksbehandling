@@ -28,6 +28,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Revurder lovvalg';
     case 'REVURDER_SAMORDNING':
       return 'Revurder samordning';
+    case 'REVURDER_STUDENT':
+      return 'Revurder student';
     case 'MOTATT_KLAGE':
       return 'Klage';
     case 'LOVVALG_OG_MEDLEMSKAP':

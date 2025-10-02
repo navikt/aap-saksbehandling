@@ -40,6 +40,7 @@ const behovskodeMap = {
   '5031': '§ 11-18 AAP under behandling av krav om uføretrygd',
   '5032': '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker',
   '5033': 'Avbryt revurdering',
+  '5035': 'Avklar oppholdskrav',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
