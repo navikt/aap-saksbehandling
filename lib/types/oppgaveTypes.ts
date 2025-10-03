@@ -26,6 +26,11 @@ export type SøkResponse = oppgave['schemas']['no.nav.aap.oppgave.SøkResponse']
 export type AvreserverOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.AvreserverOppgaveDto'];
 export type Markering = oppgave['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'];
 export type EnhetSynkroniseringOppgave = oppgave['schemas']['no.nav.aap.oppgave.enhet.EnhetSynkroniseringOppgave'];
+export type SaksbehandlerSøkRespons = oppgave['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerSøkResponse'];
+export type SaksbehandlerSøkRequest = oppgave['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerSøkRequest'];
+export type SaksbehandlerFraSøk = oppgave['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerDto'];
+export type TildelOppgaveRequest = oppgave['schemas']['no.nav.aap.oppgave.tildel.TildelOppgaveRequest'];
+export type TildelOppgaveResponse = oppgave['schemas']['no.nav.aap.oppgave.tildel.TildelOppgaveResponse'];
 
 // typer fra enums
 export type OppgaveBehandlingstype = `${NoNavAapOppgaveOppgaveDtoBehandlingstype}`;

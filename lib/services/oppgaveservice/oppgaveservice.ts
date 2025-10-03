@@ -11,7 +11,11 @@ import {
   OppgaveBehandlingstype,
   OppgavelisteRequest,
   OppgavelisteResponse,
+  SaksbehandlerSøkRequest,
+  SaksbehandlerSøkRespons,
   SøkResponse,
+  TildelOppgaveRequest,
+  TildelOppgaveResponse,
 } from 'lib/types/oppgaveTypes';
 import { queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
@@ -94,6 +98,20 @@ export async function oppgaveSøk(
     enheter,
   });
 }
+
+export async function søkPåSaksbehandler(data: SaksbehandlerSøkRequest) {
+  const url = `${oppgaveApiBaseURL}/saksbehandler-sok`;
+  return await apiFetch<SaksbehandlerSøkRespons>(url, oppgaveApiScope, 'POST', {
+    oppgaver: data.oppgaver,
+    søketekst: data.søketekst
+  });
+}
+
+export async function tildelTilSaksbehandler(data: TildelOppgaveRequest) {
+  const url = `${oppgaveApiBaseURL}/tildel-oppgaver`;
+  return await apiFetch<TildelOppgaveResponse>(url, oppgaveApiScope, 'POST', data);
+}
+
 export async function avreserverOppgave({ oppgaver }: AvreserverOppgaveDto) {
   const url = `${oppgaveApiBaseURL}/avreserver-oppgaver`;
   return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { oppgaver: oppgaver });
