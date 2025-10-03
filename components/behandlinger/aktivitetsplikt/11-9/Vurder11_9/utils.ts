@@ -44,9 +44,9 @@ export function formaterStatus(status: BruddStatus) {
 }
 
 export function erOverskrevet(rad: BruddRad) {
-  return [BruddStatus.IVERKSATT_OVERSKREVET].includes(rad.status!!);
+  return rad.status === BruddStatus.IVERKSATT_OVERSKREVET;
 }
 
 export function erNy(rad: BruddRad) {
-  return [BruddStatus.NY].includes(rad.status!!);
+  return rad.status === BruddStatus.NY;
 }

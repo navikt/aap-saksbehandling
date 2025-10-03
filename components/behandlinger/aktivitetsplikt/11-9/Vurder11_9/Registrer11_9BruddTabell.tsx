@@ -1,5 +1,5 @@
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { Button, HStack, Table } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend, sorterEtterEldsteDato } from 'lib/utils/date';
 import { Vurdering11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
 import styles from './vurder-11-9.module.css';
@@ -32,7 +32,9 @@ export const Registrer11_9BruddTabell = ({
 }: Props) => {
   const rader = konstruerRader(tidligereVurderinger, mellomlagredeVurderinger);
 
-  return (
+  return rader.length === 0 ? (
+    <BodyShort>Det finnes ingen tidligere vurderinger</BodyShort>
+  ) : (
     <div>
       <TableStyled size="medium">
         <Table.Header>
@@ -87,7 +89,7 @@ const Rad = ({
       <Table.DataCell className={klasse}>{formaterDatoForFrontend(rad.dato)}</Table.DataCell>
       <Table.DataCell className={klasse}>{formaterBrudd(rad.brudd!!)}</Table.DataCell>
       <Table.DataCell className={klasse}>{formaterGrunn(rad.grunn)}</Table.DataCell>
-      <Table.DataCell className={klasse}>{formaterStatus(rad.status!!)}</Table.DataCell>
+      <Table.DataCell className={klasse}>{formaterStatus(rad.status)}</Table.DataCell>
       <Table.DataCell>
         {!readOnly && (
           <HStack gap="1">
@@ -102,7 +104,7 @@ const Rad = ({
                 Endre
               </Button>
             )}
-            {[BruddStatus.NY].includes(rad.status!!) && (
+            {[BruddStatus.NY].includes(rad.status) && (
               <Button size="small" type="button" variant="secondary" disabled={readOnly} onClick={() => fjernRad(rad)}>
                 Fjern
               </Button>
@@ -119,7 +121,7 @@ export interface BruddRad {
   dato: string;
   brudd: Brudd | undefined;
   grunn: string;
-  status: BruddStatus | undefined;
+  status: BruddStatus;
   begrunnelse: string;
 }
 

@@ -35,31 +35,24 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
     })) ?? [];
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const {
-    valgtRad,
-    velgRad,
-    mellomlagreVurdering,
-    fjernRad,
-    mellomlagredeVurderinger,
-    nullstillMellomlagretVurdering,
-  } = useMellomlagre11_9(vurderingerSendtTilBeslutter, initialMellomlagretVurdering);
+  const { valgtRad, velgRad, mellomlagreVurdering, fjernRad, mellomlagredeVurderinger } = useMellomlagre11_9(
+    vurderingerSendtTilBeslutter,
+    initialMellomlagretVurdering
+  );
 
   const handleSubmit = () => {
     const vurderingerSomSendesInn: Aktivitetsplikt11_9Løsning[] = mellomlagredeVurderinger.map((vurdering) => ({
       ...omit(vurdering, 'id'),
     }));
 
-    løsBehovOgGåTilNesteSteg(
-      {
-        behandlingVersjon: behandlingVersjon,
-        referanse: behandlingsreferanse,
-        behov: {
-          behovstype: Behovstype.VURDER_BRUDD_11_9_KODE,
-          aktivitetsplikt11_9Vurderinger: vurderingerSomSendesInn,
-        },
+    løsBehovOgGåTilNesteSteg({
+      behandlingVersjon: behandlingVersjon,
+      referanse: behandlingsreferanse,
+      behov: {
+        behovstype: Behovstype.VURDER_BRUDD_11_9_KODE,
+        aktivitetsplikt11_9Vurderinger: vurderingerSomSendesInn,
       },
-      () => nullstillMellomlagretVurdering()
-    );
+    });
   };
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
