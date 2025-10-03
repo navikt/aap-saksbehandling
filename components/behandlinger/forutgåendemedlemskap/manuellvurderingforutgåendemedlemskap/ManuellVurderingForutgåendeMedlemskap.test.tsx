@@ -17,7 +17,7 @@ const grunnlagUtenVurdering: ForutgåendeMedlemskapGrunnlag = {
 };
 
 beforeEach(() => {
-  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_LOVVALG' });
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_MEDLEMSKAP' });
 });
 
 describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
