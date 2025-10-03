@@ -67,7 +67,7 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose }: Props) => {
     <Modal
       open={isOpen}
       onClose={lukkOgResetModal}
-      header={{ heading: 'Tildel oppgave' }}
+      header={{ heading: 'Tildel' }}
       className={styles.tildelOppgaveModal}
     >
       {success ? (
@@ -112,7 +112,7 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose }: Props) => {
                 <RadioGroupWrapper
                   name={'saksbehandlerIdent'}
                   control={form.control}
-                  rules={{ required: 'Du må velge en veileder / saksbehandler.' }}
+                  rules={{ required: 'Du må velge en veileder/saksbehandler.' }}
                 >
                   {saksbehandlereForValgtSide.map((saksbehandler) => {
                     return (

@@ -51,7 +51,7 @@ export const SaksbehandlerSøk = ({
   };
 
   return (
-    <VStack>
+    <VStack gap={'2'}>
       <form id={'saksbehandlerSøk'} onSubmit={handleSaksbehandlerSøk}>
         <Search
           label={'Søk etter veileder/saksbehandler'}
