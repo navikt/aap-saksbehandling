@@ -10,6 +10,7 @@ import styles from './OpprettAktivitetsplikt.module.css';
 import { FormField } from 'components/form/FormField';
 import { isSuccess } from 'lib/utils/api';
 import { useRouter } from 'next/navigation';
+import { isLocal } from 'lib/utils/environment';
 
 export interface AktivitetspliktbruddFormFields {
   aktivitetspliktBruddType: 'AKTIVITETSPLIKT_11_7';
@@ -40,10 +41,14 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
           label: '§ 11-7',
           value: 'AKTIVITETSPLIKT_11_7',
         },
-        {
-          label: '§ 11-9',
-          value: 'AKTIVITETSPLIKT_11_9',
-        },
+        ...(isLocal() // TODO: Oppdater når 11-9 skal i henholdsvis dev og prod
+          ? [
+              {
+                label: '§ 11-9',
+                value: 'AKTIVITETSPLIKT_11_9',
+              },
+            ]
+          : []),
       ],
       rules: { required: 'Velg ' },
     },
