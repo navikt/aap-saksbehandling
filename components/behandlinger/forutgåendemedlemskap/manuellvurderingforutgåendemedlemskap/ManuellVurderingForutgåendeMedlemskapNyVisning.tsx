@@ -69,14 +69,14 @@ export const ManuellVurderingForutgåendeMedlemskapNyVisning = ({
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { isLoading, status, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+    useLøsBehovOgGåTilNesteSteg('VURDER_MEDLEMSKAP');
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP, initialMellomlagretVurdering);
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
-    'VURDER_LOVVALG',
+    'VURDER_MEDLEMSKAP',
     mellomlagretVurdering
   );
 
