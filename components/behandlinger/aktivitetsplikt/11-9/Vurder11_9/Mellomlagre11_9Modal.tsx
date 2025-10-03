@@ -18,9 +18,7 @@ export const Mellomlagre11_9Modal = ({ valgtRad, lagre, avbryt }: Props) => {
       header={{
         heading: 'Registrer brudd § 11-9',
       }}
-      onClose={() => {
-        avbryt();
-      }}
+      onClose={avbryt}
       onBeforeClose={() => {
         avbryt();
         return true;

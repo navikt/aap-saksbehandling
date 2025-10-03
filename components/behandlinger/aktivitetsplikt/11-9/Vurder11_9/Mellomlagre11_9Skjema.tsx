@@ -10,8 +10,9 @@ import { FormField } from 'components/form/FormField';
 import { VStack } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { parse } from 'date-fns';
-import { uuidv4 } from 'unleash-client/lib/uuidv4';
+import { v4 as uuidv4 } from 'uuid';
 import { Brudd } from 'lib/types/types';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 export type Vurdering11_9FormFields = {
   begrunnelse: string;
@@ -75,7 +76,13 @@ export const Mellomlagre11_9Skjema = ({
   return (
     <form onSubmit={onSubmit} autoComplete={'off'} id={'11-9-brudd'}>
       <VStack gap="4">
-        <FormField form={form} formField={formFields.dato} />
+        <DateInputWrapper
+          name={formFields.dato.name}
+          control={form.control}
+          label={formFields.dato.label}
+          rules={formFields.dato.rules}
+          readOnly={!!valgtRad?.dato}
+        />
         <FormField form={form} formField={formFields.brudd} />
         <FormField form={form} formField={formFields.grunn} />
         <FormField form={form} formField={formFields.begrunnelse} />

@@ -28,12 +28,9 @@ export function formaterGrunn(grunn: string) {
 }
 
 export enum BruddStatus {
-  IVERKSATT,
-  IVERKSATT_OVERSKREVET,
-  SENDT_TIL_BESLUTTER,
-  SENDT_TIL_BESLUTTER_OVERSKREVET,
-  SENDT_TIL_BESLUTTER_SLETTET,
-  NY,
+  IVERKSATT = 'IVERKSATT',
+  IVERKSATT_OVERSKREVET = 'IVERKSATT_OVERSKREVET',
+  NY = 'NY',
 }
 
 export function formaterStatus(status: BruddStatus) {
@@ -41,23 +38,15 @@ export function formaterStatus(status: BruddStatus) {
     case BruddStatus.IVERKSATT:
     case BruddStatus.IVERKSATT_OVERSKREVET:
       return 'Iverksatt';
-    case BruddStatus.SENDT_TIL_BESLUTTER:
-    case BruddStatus.SENDT_TIL_BESLUTTER_OVERSKREVET:
-    case BruddStatus.SENDT_TIL_BESLUTTER_SLETTET:
-      return 'Sendt til beslutter';
     case BruddStatus.NY:
       return 'Ny';
   }
 }
 
 export function erOverskrevet(rad: BruddRad) {
-  return [
-    BruddStatus.IVERKSATT_OVERSKREVET,
-    BruddStatus.SENDT_TIL_BESLUTTER_SLETTET,
-    BruddStatus.SENDT_TIL_BESLUTTER_OVERSKREVET,
-  ].includes(rad.status!!);
+  return [BruddStatus.IVERKSATT_OVERSKREVET].includes(rad.status!!);
 }
 
 export function erNy(rad: BruddRad) {
-  return [BruddStatus.SENDT_TIL_BESLUTTER, BruddStatus.NY].includes(rad.status!!);
+  return [BruddStatus.NY].includes(rad.status!!);
 }

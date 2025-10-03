@@ -13,7 +13,7 @@ import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Vurdering11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
 import { omit } from 'lodash';
-import { uuidv4 } from 'unleash-client/lib/uuidv4';
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   grunnlag?: Aktivitetsplikt11_9Grunnlag;
@@ -38,21 +38,16 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
   const {
     valgtRad,
     velgRad,
-    lagre,
+    mellomlagreVurdering,
     fjernRad,
-    angreFjerning,
     mellomlagredeVurderinger,
-    vurderingerSendtTilBeslutterSomSkalSlettes,
     nullstillMellomlagretVurdering,
-  } = useMellomlagre11_9(vedtatteGjeldendeVurderinger, vurderingerSendtTilBeslutter, initialMellomlagretVurdering);
+  } = useMellomlagre11_9(vurderingerSendtTilBeslutter, initialMellomlagretVurdering);
 
   const handleSubmit = () => {
-    const gjeldendeVurderinger: Aktivitetsplikt11_9Løsning[] = [
-      ...mellomlagredeVurderinger,
-      ...vurderingerSendtTilBeslutter
-        .filter((v) => !vurderingerSendtTilBeslutterSomSkalSlettes.some((id) => id === v.id))
-        .filter((v) => !mellomlagredeVurderinger.some((vurdering) => vurdering.dato === v.dato)), // Nye vurderinger overskriver de sendt til beslutter
-    ].map((vurdering) => ({ ...omit(vurdering, 'id') }));
+    const vurderingerSomSendesInn: Aktivitetsplikt11_9Løsning[] = mellomlagredeVurderinger.map((vurdering) => ({
+      ...omit(vurdering, 'id'),
+    }));
 
     løsBehovOgGåTilNesteSteg(
       {
@@ -60,7 +55,7 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
         referanse: behandlingsreferanse,
         behov: {
           behovstype: Behovstype.VURDER_BRUDD_11_9_KODE,
-          aktivitetsplikt11_9Vurderinger: gjeldendeVurderinger,
+          aktivitetsplikt11_9Vurderinger: vurderingerSomSendesInn,
         },
       },
       () => nullstillMellomlagretVurdering()
@@ -81,16 +76,15 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
       <VStack gap={'4'}>
         <Registrer11_9BruddTabell
           tidligereVurderinger={vedtatteGjeldendeVurderinger}
-          vurderingerSendtTilBeslutter={vurderingerSendtTilBeslutter}
-          vurderingerSendtTilBeslutterSomSkalSlettes={vurderingerSendtTilBeslutterSomSkalSlettes}
-          angreFjerning={angreFjerning}
           mellomlagredeVurderinger={mellomlagredeVurderinger}
           valgtRad={valgtRad}
           velgRad={velgRad}
           fjernRad={fjernRad}
           readOnly={readOnly}
-        ></Registrer11_9BruddTabell>
-        {valgtRad && <Mellomlagre11_9Modal valgtRad={valgtRad} lagre={lagre} avbryt={() => velgRad(undefined)} />}
+        />
+        {valgtRad && (
+          <Mellomlagre11_9Modal valgtRad={valgtRad} lagre={mellomlagreVurdering} avbryt={() => velgRad(undefined)} />
+        )}
         <Button
           type="button"
           variant="tertiary"

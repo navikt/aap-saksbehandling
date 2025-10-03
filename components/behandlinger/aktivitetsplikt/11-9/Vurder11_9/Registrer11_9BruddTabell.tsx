@@ -16,9 +16,6 @@ import { Brudd } from 'lib/types/types';
 type Props = {
   readOnly?: boolean;
   tidligereVurderinger: Vurdering11_9[];
-  vurderingerSendtTilBeslutter: Vurdering11_9[];
-  vurderingerSendtTilBeslutterSomSkalSlettes: string[];
-  angreFjerning: (id: string) => void;
   mellomlagredeVurderinger: Vurdering11_9[];
   velgRad: (rad: BruddRad | undefined) => void;
   fjernRad: (rad: BruddRad) => void;
@@ -28,20 +25,12 @@ type Props = {
 export const Registrer11_9BruddTabell = ({
   readOnly = false,
   tidligereVurderinger,
-  vurderingerSendtTilBeslutter,
   mellomlagredeVurderinger,
-  vurderingerSendtTilBeslutterSomSkalSlettes,
-  angreFjerning,
   valgtRad,
   velgRad,
   fjernRad,
 }: Props) => {
-  const rader = konstruerRader(
-    tidligereVurderinger,
-    vurderingerSendtTilBeslutter,
-    mellomlagredeVurderinger,
-    vurderingerSendtTilBeslutterSomSkalSlettes
-  );
+  const rader = konstruerRader(tidligereVurderinger, mellomlagredeVurderinger);
 
   return (
     <div>
@@ -69,14 +58,7 @@ export const Registrer11_9BruddTabell = ({
                 `}
                 content={rad.begrunnelse}
               >
-                <Rad
-                  rad={rad}
-                  erValgt={erValgt}
-                  readOnly={readOnly}
-                  velgRad={velgRad}
-                  fjernRad={fjernRad}
-                  angreFjerning={angreFjerning}
-                />
+                <Rad rad={rad} erValgt={erValgt} readOnly={readOnly} velgRad={velgRad} fjernRad={fjernRad} />
               </Table.ExpandableRow>
             );
           })}
@@ -91,14 +73,12 @@ const Rad = ({
   erValgt,
   velgRad,
   fjernRad,
-  angreFjerning,
   readOnly,
 }: {
   rad: BruddRad;
   erValgt: boolean;
   velgRad: (rad: BruddRad | undefined) => void;
   fjernRad: (rad: BruddRad) => void;
-  angreFjerning: (id: string) => void;
   readOnly: boolean;
 }) => {
   const klasse = `${erOverskrevet(rad) ? styles.overskrevetCelle : ''}`;
@@ -109,35 +89,26 @@ const Rad = ({
       <Table.DataCell className={klasse}>{formaterGrunn(rad.grunn)}</Table.DataCell>
       <Table.DataCell className={klasse}>{formaterStatus(rad.status!!)}</Table.DataCell>
       <Table.DataCell>
-        <HStack gap="1">
-          {!erOverskrevet(rad) && (
-            <Button
-              size="small"
-              type="button"
-              variant="secondary"
-              disabled={readOnly}
-              onClick={() => velgRad(erValgt ? undefined : rad)}
-            >
-              Endre
-            </Button>
-          )}
-          {[BruddStatus.SENDT_TIL_BESLUTTER, BruddStatus.NY].includes(rad.status!!) && (
-            <Button size="small" type="button" variant="secondary" disabled={readOnly} onClick={() => fjernRad(rad)}>
-              Fjern
-            </Button>
-          )}
-          {rad.status === BruddStatus.SENDT_TIL_BESLUTTER_SLETTET && (
-            <Button
-              size="small"
-              type="button"
-              variant="secondary"
-              disabled={readOnly}
-              onClick={() => angreFjerning(rad.id)}
-            >
-              Angre
-            </Button>
-          )}
-        </HStack>
+        {!readOnly && (
+          <HStack gap="1">
+            {!erOverskrevet(rad) && (
+              <Button
+                size="small"
+                type="button"
+                variant="secondary"
+                disabled={readOnly}
+                onClick={() => velgRad(erValgt ? undefined : rad)}
+              >
+                Endre
+              </Button>
+            )}
+            {[BruddStatus.NY].includes(rad.status!!) && (
+              <Button size="small" type="button" variant="secondary" disabled={readOnly} onClick={() => fjernRad(rad)}>
+                Fjern
+              </Button>
+            )}
+          </HStack>
+        )}
       </Table.DataCell>
     </>
   );
@@ -152,38 +123,19 @@ export interface BruddRad {
   begrunnelse: string;
 }
 
-function konstruerRader(
-  tidligereVurderinger: Vurdering11_9[],
-  vurderingerSendtTilBeslutter: Vurdering11_9[],
-  mellomlagredeVurderinger: Vurdering11_9[],
-  vurderingerSendTilBeslutterSomSkalSlettes: string[]
-): BruddRad[] {
+function konstruerRader(tidligereVurderinger: Vurdering11_9[], mellomlagredeVurderinger: Vurdering11_9[]): BruddRad[] {
   const utledStatus = (vurdering: Vurdering11_9) => {
     const erIverksatt = tidligereVurderinger.some((v) => v.id === vurdering.id);
 
     if (erIverksatt) {
-      const finnesNyRadMedSammeDato = [
-        ...mellomlagredeVurderinger,
-        ...vurderingerSendtTilBeslutter.filter((v) => !vurderingerSendTilBeslutterSomSkalSlettes.includes(v.id)),
-      ].some((v) => v.dato === vurdering.dato);
-
+      const finnesNyRadMedSammeDato = mellomlagredeVurderinger.some((v) => v.dato === vurdering.dato);
       return finnesNyRadMedSammeDato ? BruddStatus.IVERKSATT_OVERSKREVET : BruddStatus.IVERKSATT;
     } else {
-      const erSendTilBeslutter = vurderingerSendtTilBeslutter.some((v) => v.id === vurdering.id);
-      const erSlettet = vurderingerSendTilBeslutterSomSkalSlettes.includes(vurdering.id);
-      if (erSlettet) {
-        return BruddStatus.SENDT_TIL_BESLUTTER_SLETTET;
-      }
-      const finnesMellomlagretRadMedSammeDato = mellomlagredeVurderinger.some((v) => v.dato === vurdering.dato);
-      return erSendTilBeslutter
-        ? finnesMellomlagretRadMedSammeDato
-          ? BruddStatus.SENDT_TIL_BESLUTTER_OVERSKREVET
-          : BruddStatus.SENDT_TIL_BESLUTTER
-        : BruddStatus.NY;
+      return BruddStatus.NY;
     }
   };
 
-  return [...tidligereVurderinger, ...vurderingerSendtTilBeslutter, ...mellomlagredeVurderinger]
+  return [...tidligereVurderinger, ...mellomlagredeVurderinger]
     .sort((a, b) => sorterEtterEldsteDato(a.dato, b.dato))
     .map((vurdering) => ({ ...vurdering, status: utledStatus(vurdering) }));
 }
