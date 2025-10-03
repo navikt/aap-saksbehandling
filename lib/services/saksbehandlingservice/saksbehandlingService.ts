@@ -1,8 +1,10 @@
 import {
   Aktivitetsplikt11_7Grunnlag,
+  Aktivitetsplikt11_9Grunnlag,
   AlderGrunnlag,
   ArbeidsevneGrunnlag,
   AutomatiskLovvalgOgMedlemskapVurdering,
+  AvbrytRevurderingGrunnlag,
   AvklarOppfolgingsoppgaveGrunnlagResponse,
   BarnetilleggGrunnlag,
   BehandlendeEnhetGrunnlag,
@@ -40,14 +42,15 @@ import {
   MellomlagretVurderingResponse,
   NavEnhetRequest,
   OppfølgningOppgaveOpprinnelseResponse,
+  OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
-  OvergangUforeGrunnlag,
   OvergangArbeidGrunnlag,
+  OvergangUforeGrunnlag,
+  OverstyringMeldepliktGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
-  OverstyringMeldepliktGrunnlag,
   SakPersoninfo,
   SaksInfo,
   SamordningAndreStatligeYtelserGrunnlag,
@@ -62,18 +65,15 @@ import {
   SykdomsGrunnlag,
   SykdomsvurderingBrevGrunnlag,
   SykepengeerstatningGrunnlag,
+  SøkPåSakInfo,
   TilkjentYtelseGrunnlag,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
-  AvbrytRevurderingGrunnlag,
   UnderveisGrunnlag,
   UtbetalingOgSimuleringGrunnlag,
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
-  SøkPåSakInfo,
-  OpprettAktivitetspliktBehandlingDto,
-  Aktivitetsplikt11_9Grunnlag,
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
@@ -517,11 +517,14 @@ export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsReferanse: stri
   );
 };
 
-export const hentMellomlagring = async (behandlingsReferanse: string, kode: string) => {
-  const res = await apiFetch<MellomlagretVurderingResponse>(
+export const hentMellomlagringMedStatus = (behandlingsReferanse: string, kode: string) => {
+  return apiFetch<MellomlagretVurderingResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsReferanse}/${kode}`,
     saksbehandlingApiScope
   );
+};
+export const hentMellomlagring = async (behandlingsReferanse: string, kode: string) => {
+  const res = await hentMellomlagringMedStatus(behandlingsReferanse, kode);
 
   if (isSuccess(res)) {
     if (res.data.mellomlagretVurdering !== null) {
