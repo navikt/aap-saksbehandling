@@ -5,7 +5,7 @@ import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveM
 describe('tildelOppgaveModalTest', () => {
   it('skal ha en heading', () => {
     render(<TildelOppgaveModal oppgaveIder={[1]} isOpen={true} onClose={vi.fn()} />);
-    const heading = screen.getByText('Tildel oppgave');
+    const heading = screen.getByText('Tildel');
     expect(heading).toBeVisible();
   });
 
