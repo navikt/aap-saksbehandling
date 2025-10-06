@@ -7,7 +7,7 @@ import { SakDevTools } from 'components/saksoversikt/SakDevTools';
 import { useRouter } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
-import { isLocal, isProd } from 'lib/utils/environment';
+import { isLocal } from 'lib/utils/environment';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
 const formaterBehandlingType = (behandlingtype: string) => {
@@ -98,7 +98,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           >
             Opprett klage
           </Button>
-          {kanRegistrerebrudd && !isProd() && (
+          {kanRegistrerebrudd && (
             <Button
               variant="secondary"
               size="small"
