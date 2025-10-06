@@ -3,6 +3,7 @@ import { ValuePair } from 'components/form/FormField';
 export enum Behovstype {
   MANUELT_SATT_PÅ_VENT_KODE = '9001',
   VURDER_BRUDD_11_7_KODE = '4101',
+  VURDER_BRUDD_11_9_KODE = '4201',
   AVKLAR_STUDENT_KODE = '5001',
   OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT_KODE = '5002',
   AVKLAR_SYKDOM_KODE = '5003',
@@ -61,6 +62,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
   switch (kode) {
     case '4101':
       return '§ 11-7 Medlemmets aktivitetsplikt';
+    case '4201':
+      return '§ 11-9 Aktivitetsplikt';
     case '5001':
       return '§ 11-14 Student';
     case '5002':

@@ -1,4 +1,5 @@
-import { Brudd } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
+import { BruddRad } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Registrer11_9BruddTabell';
+import { Brudd } from 'lib/types/types';
 
 export function formaterBrudd(brudd: Brudd) {
   switch (brudd) {
@@ -24,4 +25,28 @@ export function formaterGrunn(grunn: string) {
     default:
       return grunn;
   }
+}
+
+export enum BruddStatus {
+  IVERKSATT = 'IVERKSATT',
+  IVERKSATT_OVERSKREVET = 'IVERKSATT_OVERSKREVET',
+  NY = 'NY',
+}
+
+export function formaterStatus(status: BruddStatus) {
+  switch (status) {
+    case BruddStatus.IVERKSATT:
+    case BruddStatus.IVERKSATT_OVERSKREVET:
+      return 'Iverksatt';
+    case BruddStatus.NY:
+      return 'Ny';
+  }
+}
+
+export function erOverskrevet(rad: BruddRad) {
+  return rad.status === BruddStatus.IVERKSATT_OVERSKREVET;
+}
+
+export function erNy(rad: BruddRad) {
+  return rad.status === BruddStatus.NY;
 }

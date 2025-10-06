@@ -2950,6 +2950,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/aktivitetsplikt/{referanse}/grunnlag/brudd-11-9': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.Aktivitetsplikt11_9GrunnlagDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/brev': {
     parameters: {
       query?: never;
@@ -3994,6 +4032,24 @@ export interface components {
       skalIgnorereVarselFrist: boolean;
       /** @enum {string|null} */
       utfall?: 'STANS' | 'OPPHØR' | null;
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.Aktivitetsplikt11_9GrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.Aktivitetsplikt11_9VurderingDto'][];
+      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.Aktivitetsplikt11_9VurderingDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.Aktivitetsplikt11_9VurderingDto': {
+      begrunnelse: string;
+      /** @enum {string} */
+      brudd: 'IKKE_MØTT_TIL_TILTAK' | 'IKKE_MØTT_TIL_BEHANDLING' | 'IKKE_MØTT_TIL_MØTE' | 'IKKE_SENDT_DOKUMENTASJON';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dato: string;
+      /** @enum {string} */
+      grunn: 'IKKE_RIMELIG_GRUNN' | 'RIMELIG_GRUNN';
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto': {
@@ -8252,6 +8308,7 @@ export interface components {
         | '9004';
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderBrudd11_9L\u00F8sning': {
+      aktivitetsplikt11_9Vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.aktivitetsplikt.Aktivitetsplikt11_9L\u00F8sningDto'][];
       /** @enum {string} */
       behovstype:
         | '4101'
@@ -10548,6 +10605,18 @@ export interface components {
       skalIgnorereVarselFrist: boolean;
       /** @enum {string|null} */
       utfall?: 'STANS' | 'OPPHØR' | null;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.aktivitetsplikt.Aktivitetsplikt11_9L\u00F8sningDto': {
+      begrunnelse: string;
+      /** @enum {string} */
+      brudd: 'IKKE_MØTT_TIL_TILTAK' | 'IKKE_MØTT_TIL_BEHANDLING' | 'IKKE_MØTT_TIL_MØTE' | 'IKKE_SENDT_DOKUMENTASJON';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dato: string;
+      /** @enum {string} */
+      grunn: 'IKKE_RIMELIG_GRUNN' | 'RIMELIG_GRUNN';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingDto': {
       begrunnelse: string;
