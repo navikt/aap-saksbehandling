@@ -1,5 +1,5 @@
 import { AvklaringsbehovKode, Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { BodyShort, Checkbox, Table, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Checkbox, CopyButton, Table, Tooltip } from '@navikt/ds-react';
 import {
   mapBehovskodeTilBehovstype,
   mapTilOppgaveBehandlingstypeTekst,
@@ -64,6 +64,9 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
           <Table.Row>
             <Table.HeaderCell />
             <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.ColumnHeader sortKey={'personIdent'} sortable={true} textSize={'small'}>
+              Fnr
+            </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'behandlingstype'} sortable={true}>
               Behandlingstype
             </Table.ColumnHeader>
@@ -103,6 +106,18 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
                   <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{oppgave.saksnummer}</Link>
                 ) : (
                   <span>{oppgave.journalpostId}</span>
+                )}
+              </Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                {oppgave.personIdent ? (
+                  <CopyButton
+                    copyText={oppgave?.personIdent}
+                    size="xsmall"
+                    text={oppgave?.personIdent}
+                    iconPosition="right"
+                  />
+                ) : (
+                  'Ukjent'
                 )}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
