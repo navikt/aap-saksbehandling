@@ -329,7 +329,7 @@ export const Sykdomsvurdering = ({
         <Revurdering
           form={form}
           formFields={formFields}
-          skalVurdereYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
+          erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
           diagnosesøker={
             <Diagnosesøk
               form={form}

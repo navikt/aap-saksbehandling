@@ -8,11 +8,11 @@ import { FieldPath, UseFormReturn } from 'react-hook-form';
 interface Props {
   form: UseFormReturn<SykdomsvurderingFormFields>;
   formFields: FormFields<FieldPath<SykdomsvurderingFormFields>, SykdomsvurderingFormFields>;
-  skalVurdereYrkesskade: boolean;
+  erÅrsakssammenhengYrkesskade: boolean;
   diagnosesøker: ReactNode;
 }
 
-export const Revurdering = ({ form, formFields, skalVurdereYrkesskade, diagnosesøker }: Props) => {
+export const Revurdering = ({ form, formFields, erÅrsakssammenhengYrkesskade, diagnosesøker }: Props) => {
   return (
     <>
       <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
@@ -20,10 +20,10 @@ export const Revurdering = ({ form, formFields, skalVurdereYrkesskade, diagnoses
       {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
       )}
-      {!skalVurdereYrkesskade && form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
+      {!erÅrsakssammenhengYrkesskade && form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneMerEnnFørtiProsent} horizontalRadio />
       )}
-      {skalVurdereYrkesskade && form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
+      {erÅrsakssammenhengYrkesskade && form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense} horizontalRadio />
       )}
       {form.watch('erNedsettelseIArbeidsevneMerEnnFørtiProsent') === JaEllerNei.Ja && (
