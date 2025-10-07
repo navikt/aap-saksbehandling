@@ -89,7 +89,7 @@ async function utledSøkeresultat(søketekst: string, brukerinformasjon?: Bruker
           status: isReservert ? 'RESERVERT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
           markeringer: oppgave.markeringer.map((markering) => markering.markeringType),
         });
-        kontorData.push({ enhet: `${oppgave.enhet}` });
+        kontorData.push({ enhet: `${oppgave.oppfølgingsenhet ?? oppgave.enhet}` });
         behandlingsStatusData.push({ status: `${oppgave.status}` });
       });
     }
