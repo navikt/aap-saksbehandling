@@ -33,6 +33,8 @@ describe('MineOppgaverMeny', () => {
         setFeilmelding={vi.fn()}
         revalidateFunction={vi.fn()}
         setÅpenModal={vi.fn()}
+        setVisTildelOppgaveModal={vi.fn()}
+        setOppgaverSomSkalTildeles={vi.fn()}
       />
     );
     const button = screen.getByRole('button', { name: 'Behandle' });
@@ -46,6 +48,8 @@ describe('MineOppgaverMeny', () => {
         setFeilmelding={vi.fn()}
         revalidateFunction={vi.fn()}
         setÅpenModal={vi.fn()}
+        setVisTildelOppgaveModal={vi.fn()}
+        setOppgaverSomSkalTildeles={vi.fn()}
       />
     );
     const menu = screen.getByRole('img', { name: 'Meny' });
