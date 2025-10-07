@@ -23,7 +23,7 @@
     "@navikt/ds-react": "7.31.0",
     "@navikt/oasis": "^3.8.0",
     "@opentelemetry/api": "^1.9.0",
-    "@opentelemetry/api-logs": "^0.205.0",
+    "@opentelemetry/api-logs": "^0.206.0",
     "@testing-library/user-event": "14.6.1",
     "@unleash/nextjs": "^1.6.2",
     "@vercel/otel": "^1.13.1",
