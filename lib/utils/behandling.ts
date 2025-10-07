@@ -16,7 +16,7 @@ export function erFørstegangsbehandling(behandling: BehandlingInfo): boolean {
 }
 
 export function erAvsluttet(behandling: BehandlingInfo) {
-  return behandling.status in ['IVERKSETTES', 'AVSLUTTET'];
+  return ['IVERKSETTES', 'AVSLUTTET'].includes(behandling.status);
 }
 
 export function erTrukket(behandling: BehandlingInfo) {
