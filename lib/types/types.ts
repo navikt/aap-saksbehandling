@@ -393,6 +393,9 @@ export type OpprettAktivitetspliktBehandlingDto =
 
 export type DokumentÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
 
+export type BehandlingInfo =
+  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO'];
+
 export type Vurderingsbehov =
   components['schemas'][`no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO`]['vurderingsbehov'][number];
 
