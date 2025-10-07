@@ -22,6 +22,9 @@ interface Props {
   valgteRader: number[];
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   revalidateFunction: () => void;
+  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
+  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
+  setSkalFjerneValgteRaderEtterTildeling: Dispatch<SetStateAction<boolean>>;
 }
 
 export const AlleOppgaverFiltrering = ({
@@ -33,6 +36,9 @@ export const AlleOppgaverFiltrering = ({
   valgteRader,
   revalidateFunction,
   setValgteRader,
+  setVisTildelOppgaveModal,
+  setOppgaverSomSkalTildeles,
+  setSkalFjerneValgteRaderEtterTildeling,
 }: Props) => {
   const [åpneFilter, setÅpneFilter] = useState(false);
   const [kanBrukerFiltrere, setKanBrukerFiltrere] = useState<boolean>();
@@ -74,6 +80,18 @@ export const AlleOppgaverFiltrering = ({
                   variant={'secondary'}
                 >
                   Frigi valgte oppgaver
+                </Button>
+                <Button
+                  onClick={() => {
+                    setOppgaverSomSkalTildeles(valgteRader);
+                    setSkalFjerneValgteRaderEtterTildeling(true);
+                    setVisTildelOppgaveModal(true);
+                  }}
+                  type={'button'}
+                  size={'small'}
+                  variant={'secondary'}
+                >
+                  Tildel valgte oppgaver
                 </Button>
               </HStack>
               <div className={styles.divider} />

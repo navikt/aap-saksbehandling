@@ -4,13 +4,29 @@ import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveM
 
 describe('tildelOppgaveModalTest', () => {
   it('skal ha en heading', () => {
-    render(<TildelOppgaveModal oppgaveIder={[1]} isOpen={true} onClose={vi.fn()} />);
+    render(
+      <TildelOppgaveModal
+        oppgaveIder={[1]}
+        isOpen={true}
+        onClose={vi.fn()}
+        setValgteRader={vi.fn()}
+        skalFjerneValgteRader={false}
+      />
+    );
     const heading = screen.getByText('Tildel');
     expect(heading).toBeVisible();
   });
 
   it('skal ha søkefelt med søkeknapp', () => {
-    render(<TildelOppgaveModal oppgaveIder={[1]} isOpen={true} onClose={vi.fn()} />);
+    render(
+      <TildelOppgaveModal
+        oppgaveIder={[1]}
+        isOpen={true}
+        onClose={vi.fn()}
+        setValgteRader={vi.fn()}
+        skalFjerneValgteRader={false}
+      />
+    );
     const searchButton = screen.getByRole('button', { name: /søk/i });
     expect(searchButton).toBeInTheDocument();
   });

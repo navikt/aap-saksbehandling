@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FormEvent, useState } from 'react';
+import React, { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { Alert, Button, HStack, Label, Modal, Pagination, Radio, VStack } from '@navikt/ds-react';
 import { SaksbehandlerSøk } from 'components/tildeloppgavemodal/SaksbehandlerSøk';
 import { SaksbehandlerFraSøk } from 'lib/types/oppgaveTypes';
@@ -13,13 +13,15 @@ interface Props {
   oppgaveIder: number[];
   isOpen: boolean;
   onClose: () => void;
+  setValgteRader?: Dispatch<SetStateAction<number[]>>;
+  skalFjerneValgteRader?: boolean;
 }
 
 interface FormFields {
   saksbehandlerIdent: string;
 }
 
-export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose }: Props) => {
+export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRader, skalFjerneValgteRader }: Props) => {
   const [saksbehandlere, setSaksbehandlere] = useState<SaksbehandlerFraSøk[]>([]);
   const [søketekst, setSøketekst] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -58,6 +60,9 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose }: Props) => {
       } else {
         setError(undefined);
         setSuccess(`Oppgave(r) ble tildelt veileder/saksbehandler med ident ${data.saksbehandlerIdent}`);
+        if (setValgteRader) {
+          skalFjerneValgteRader && setValgteRader([]);
+        }
       }
       setIsLoading(false);
     })(event);

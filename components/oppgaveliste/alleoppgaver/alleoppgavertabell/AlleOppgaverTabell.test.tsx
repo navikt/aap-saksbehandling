@@ -48,6 +48,12 @@ describe('AlleOppgaverTabell', () => {
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
+        visTildelOppgaveModal={false}
+        setVisTildelOppgaveModal={vi.fn()}
+        oppgaverSomSkalTildeles={[]}
+        setOppgaverSomSkalTildeles={vi.fn()}
+        skalFjerneValgteRaderEtterTildeling={false}
+        setSkalFjerneValgteRaderEtterTildeling={vi.fn()}
       />
     );
     const saksbehandlernavn = screen.getByText('Test Testesen');
@@ -64,6 +70,12 @@ describe('AlleOppgaverTabell', () => {
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
+        visTildelOppgaveModal={false}
+        setVisTildelOppgaveModal={vi.fn()}
+        oppgaverSomSkalTildeles={[]}
+        setOppgaverSomSkalTildeles={vi.fn()}
+        skalFjerneValgteRaderEtterTildeling={false}
+        setSkalFjerneValgteRaderEtterTildeling={vi.fn()}
       />
     );
     const saksbehandlerIdent = screen.getByText('ident2');

@@ -21,13 +21,28 @@ interface Props {
   revalidateFunction: () => Promise<unknown>;
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   valgteRader: number[];
+  visTildelOppgaveModal: boolean;
+  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
+  oppgaverSomSkalTildeles: number[];
+  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
+  skalFjerneValgteRaderEtterTildeling: boolean;
+  setSkalFjerneValgteRaderEtterTildeling: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRader, valgteRader }: Props) => {
+export const AlleOppgaverTabell = ({
+  oppgaver,
+  revalidateFunction,
+  setValgteRader,
+  valgteRader,
+  visTildelOppgaveModal,
+  setVisTildelOppgaveModal,
+  oppgaverSomSkalTildeles,
+  setOppgaverSomSkalTildeles,
+  skalFjerneValgteRaderEtterTildeling,
+  setSkalFjerneValgteRaderEtterTildeling,
+}: Props) => {
   const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
-  const [oppgaverSomSkalTildeles, setOppgaverSomSkalTildeles] = useState<number[]>([]);
-  const [visTildelOppgaveModal, setVisTildelOppgaveModal] = useState<boolean>(false);
 
   const toggleValgtRad = (oppgaveId: number) => {
     if (oppgaveId) {
@@ -49,8 +64,11 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
       <TildelOppgaveModal
         oppgaveIder={oppgaverSomSkalTildeles}
         isOpen={visTildelOppgaveModal}
+        setValgteRader={setValgteRader}
+        skalFjerneValgteRader={skalFjerneValgteRaderEtterTildeling}
         onClose={async () => {
           setVisTildelOppgaveModal(false);
+          setSkalFjerneValgteRaderEtterTildeling(false);
           await revalidateFunction();
         }}
       />
