@@ -11,7 +11,6 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
   { label: 'Barnetillegg', value: 'BARNETILLEGG' },
   { label: 'Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
-  { label: 'Samordning og avregning', value: 'SAMORDNING_OG_AVREGNING' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
   { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
   { label: 'Student', value: 'REVURDER_STUDENT' },
