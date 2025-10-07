@@ -5,7 +5,7 @@ import { LovvalgMedlemskapGrunnlag, MellomlagretVurderingResponse } from 'lib/ty
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { LovvalgOgMedlemskapVedSøknadstidspunkt } from './LovvalgOgMedlemskapVedSøknadstidspunkt';
-import { Behovstype } from '../../../../lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();

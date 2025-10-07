@@ -2,7 +2,7 @@ import { LovvalgOgMedlemskapVedSøknadstidspunktNyVisning } from 'components/beh
 import { LovvalgMedlemskapGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { LovvalgOgMedlemskapVedSøknadstidspunktGammelVising } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunktGammelVising';
 import { isDev } from 'lib/utils/environment';
-import { Behovstype } from '../../../../lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingVersjon: number;
