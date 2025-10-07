@@ -13,8 +13,8 @@ interface Props {
   oppgaveIder: number[];
   isOpen: boolean;
   onClose: () => void;
-  setValgteRader: Dispatch<SetStateAction<number[]>>;
-  skalFjerneValgteRader: boolean;
+  setValgteRader?: Dispatch<SetStateAction<number[]>>;
+  skalFjerneValgteRader?: boolean;
 }
 
 interface FormFields {
@@ -60,7 +60,9 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
       } else {
         setError(undefined);
         setSuccess(`Oppgave(r) ble tildelt veileder/saksbehandler med ident ${data.saksbehandlerIdent}`);
-        skalFjerneValgteRader && setValgteRader([]);
+        if (setValgteRader) {
+          skalFjerneValgteRader && setValgteRader([]);
+        }
       }
       setIsLoading(false);
     })(event);
