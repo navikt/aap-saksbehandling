@@ -28,6 +28,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Revurder lovvalg';
     case 'REVURDER_SAMORDNING':
       return 'Revurder samordning';
+    case 'REVURDER_STUDENT':
+      return 'Revurder student';
     case 'MOTATT_KLAGE':
       return 'Klage';
     case 'LOVVALG_OG_MEDLEMSKAP':
@@ -67,9 +69,9 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
     case 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN':
       return 'Revurder meldeplikt rimelig grunn';
     case 'AKTIVITETSPLIKT_11_7':
-      return 'Aktivitetsplikt $ 11-7';
+      return 'Aktivitetsplikt § 11-7';
     case 'AKTIVITETSPLIKT_11_9':
-      return 'Aktivitetsplikt $ 11-9';
+      return 'Aktivitetsplikt § 11-9';
     case 'EFFEKTUER_AKTIVITETSPLIKT':
       return 'Effektuer aktivitetsplikt';
     case 'OVERGANG_UFORE':
@@ -155,7 +157,7 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
     case 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN':
       return 'Rimelig grunn til ikke overholdt meldeplikt';
     case 'AKTIVITETSPLIKT_11_7':
-      return 'Aktivitetsplikt $ 11-7';
+      return 'Aktivitetsplikt § 11-7';
     case 'OVERGANG_ARBEID':
       return 'Overgang til arbeid';
     case 'OVERGANG_UFORE':

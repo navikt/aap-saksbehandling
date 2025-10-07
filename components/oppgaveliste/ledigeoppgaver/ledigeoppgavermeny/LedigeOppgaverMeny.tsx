@@ -6,6 +6,7 @@ import { plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgav
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
@@ -13,6 +14,8 @@ interface Props {
   setÅpenModal: Dispatch<SetStateAction<boolean>>;
   setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
   revaliderOppgaver: () => void;
+  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
+  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
 }
 
 export const LedigeOppgaverMeny = ({
@@ -21,6 +24,8 @@ export const LedigeOppgaverMeny = ({
   setFeilmelding,
   setÅpenModal,
   setVisSynkroniserEnhetModal,
+  setVisTildelOppgaveModal,
+  setOppgaverSomSkalTildeles,
 }: Props) => {
   const router = useRouter();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
@@ -68,6 +73,16 @@ export const LedigeOppgaverMeny = ({
             <ActionMenu.Item onSelect={() => synkroniserEnhetPåOppgave(oppgave)}>
               Sjekk kontortilhørighet
             </ActionMenu.Item>
+            {!isProd() && (
+              <ActionMenu.Item
+                onSelect={() => {
+                  oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
+                  setVisTildelOppgaveModal(true);
+                }}
+              >
+                Tildel oppgave
+              </ActionMenu.Item>
+            )}
           </ActionMenu.Content>
         </ActionMenu>
       ) : (

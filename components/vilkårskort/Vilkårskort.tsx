@@ -10,16 +10,18 @@ interface Props {
   steg: StegType;
   children: ReactNode;
   defaultOpen?: boolean;
+  aktivMarkering?: boolean;
 }
 
-export const VilkårsKort = ({ heading, steg, children, defaultOpen = true }: Props) => {
+export const VilkårsKort = ({ heading, steg, children, defaultOpen = true, aktivMarkering = false }: Props) => {
+  const classNameBasertPåEnhet = aktivMarkering === true ? styles.vilkårsKortNAV : styles.vilkårsKort;
   return (
     <ExpansionCard
       aria-label={heading}
       size={'small'}
       defaultOpen={defaultOpen}
       id={steg}
-      className={styles.vilkårsKort}
+      className={classNameBasertPåEnhet}
     >
       <ExpansionCard.Header className={styles.header}>
         <div className={styles.title}>

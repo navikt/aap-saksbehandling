@@ -1,106 +1,108 @@
 'use client';
-import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
-import { FormEvent } from 'react';
-import { Heading, VStack } from '@navikt/ds-react';
+import React from 'react';
+import { Button, Heading, VStack } from '@navikt/ds-react';
 import { Registrer11_9BruddTabell } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Registrer11_9BruddTabell';
-import { useFieldArray } from 'react-hook-form';
-import { useConfigForm } from 'components/form/FormHook';
-import { Vurder11_9Grunnlag } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
-import { Vurdering11_9Skjema } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurdering11_9Skjerma';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { PlusIcon } from '@navikt/aksel-icons';
+import { Mellomlagre11_9Modal } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Mellomlagre11_9Modal';
+import { Aktivitetsplikt11_9Grunnlag, Aktivitetsplikt11_9Løsning, MellomlagretVurdering } from 'lib/types/types';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { defaultRad, useMellomlagre11_9 } from './Mellomlagre11_9Hook';
+import { Behovstype } from 'lib/utils/form';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { Vurdering11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
+import { omit } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
-  grunnlag?: Vurder11_9Grunnlag;
+  grunnlag?: Aktivitetsplikt11_9Grunnlag;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
   behandlingVersjon: number;
   readOnly: boolean;
 };
 
-export type Vurdering11_9FormFields = {
-  vurderinger: {
-    begrunnelse: string;
-    dato: string;
-    brudd: string;
-    grunn: string;
-  }[];
-};
+export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, behandlingVersjon }: Props) => {
+  const vedtatteGjeldendeVurderinger: Vurdering11_9[] =
+    grunnlag?.vedtatteVurderinger.map((v) => ({
+      ...v,
+      id: uuidv4(),
+    })) ?? [];
+  const vurderingerSendtTilBeslutter =
+    grunnlag?.vurderinger.map((v) => ({
+      ...v,
+      id: v.dato,
+    })) ?? [];
+  const behandlingsreferanse = useBehandlingsReferanse();
 
-export const Vurder11_9 = ({ readOnly, grunnlag }: Props) => {
-  const tidligereVurderinger = grunnlag?.tidligereVurderinger || [];
+  const { valgtRad, velgRad, mellomlagreVurdering, fjernRad, mellomlagredeVurderinger } = useMellomlagre11_9(
+    vurderingerSendtTilBeslutter,
+    initialMellomlagretVurdering
+  );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    console.log(event);
+  const handleSubmit = () => {
+    const vurderingerSomSendesInn: Aktivitetsplikt11_9Løsning[] = mellomlagredeVurderinger.map((vurdering) => ({
+      ...omit(vurdering, 'id'),
+    }));
+
+    løsBehovOgGåTilNesteSteg({
+      behandlingVersjon: behandlingVersjon,
+      referanse: behandlingsreferanse,
+      behov: {
+        behovstype: Behovstype.VURDER_BRUDD_11_9_KODE,
+        aktivitetsplikt11_9Vurderinger: vurderingerSomSendesInn,
+      },
+    });
   };
 
-  const { form } = useConfigForm<Vurdering11_9FormFields>({
-    vurderinger: {
-      type: 'fieldArray',
-      defaultValue:
-        grunnlag?.tidligereVurderinger?.map((v) => ({
-          begrunnelse: v.begrunnelse,
-          dato: v.dato,
-          brudd: v.brudd,
-          grunn: v.grunn,
-        })) ?? [],
-    },
-  });
-
-  const finnDefaultVerdierForVurdering = (dato: string) => {
-    const vurdering = tidligereVurderinger.find((v) => v.dato === dato);
-    return {
-      begrunnelse: vurdering?.begrunnelse || '',
-      dato: vurdering?.dato || dato,
-      brudd: vurdering?.brudd || '',
-      grunn: vurdering?.grunn || '',
-    };
-  };
-
-  const { fields: vurderinger, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
-
-  const handleChange = (checked: boolean, dato: string) => {
-    if (checked) {
-      append(finnDefaultVerdierForVurdering(dato));
-      return;
-    } else {
-      const eksisterendeIndex = vurderinger.findIndex((v) => v.dato === dato);
-      remove(eksisterendeIndex);
-    }
-  };
-
-  const valgteRader = vurderinger.map((v) => v.dato).sort((a, b) => a.localeCompare(b));
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('VURDER_AKTIVITETSPLIKT_11_9');
 
   return (
-    <VilkårskortMedForm
+    <VilkårsKort
       heading={'§ 11-9 Reduksjon av AAP etter brudd på aktivitetsplikt'}
       steg={'VURDER_AKTIVITETSPLIKT_11_9'}
-      vilkårTilhørerNavKontor={true}
-      onSubmit={handleSubmit}
-      visBekreftKnapp={!readOnly}
-      knappTekst={'Bekreft og send til beslutter'}
-      isLoading={false}
-      status={'DONE'}
-      løsBehovOgGåTilNesteStegError={undefined}
     >
+      <Heading level={'3'} size={'xsmall'}>
+        Brudd på aktivitetsplikten § 11-9
+      </Heading>
       <VStack gap={'4'}>
-        <Heading level={'3'} size={'xsmall'}>
-          Tidligere brudd på aktivitetsplikten § 11-9
-        </Heading>
-        <VStack gap={'10'}>
-          <Registrer11_9BruddTabell
-            tidligereVurderinger={tidligereVurderinger}
-            valgteRader={valgteRader}
-            onClickRad={handleChange}
-            readOnly={readOnly}
-          ></Registrer11_9BruddTabell>
-          {valgteRader.map((dato) => (
-            <Vurdering11_9Skjema
-              key={dato}
-              control={form.control}
-              index={vurderinger.findIndex((field) => field.dato === dato)}
-              field={vurderinger.find((field) => field.dato === dato)!}
-              readOnly={readOnly}
-            />
-          ))}
-        </VStack>
+        <Registrer11_9BruddTabell
+          tidligereVurderinger={vedtatteGjeldendeVurderinger}
+          mellomlagredeVurderinger={mellomlagredeVurderinger}
+          valgtRad={valgtRad}
+          velgRad={velgRad}
+          fjernRad={fjernRad}
+          readOnly={readOnly}
+        />
+        {valgtRad && (
+          <Mellomlagre11_9Modal valgtRad={valgtRad} lagre={mellomlagreVurdering} avbryt={() => velgRad(undefined)} />
+        )}
+        <Button
+          type="button"
+          variant="tertiary"
+          className="fit-content"
+          icon={<PlusIcon aria-hidden />}
+          onClick={() => velgRad(defaultRad)}
+          disabled={readOnly}
+        >
+          Legg til brudd
+        </Button>
+        <LøsBehovOgGåTilNesteStegStatusAlert
+          løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+          status={status}
+        />
+        <Button
+          type="button"
+          variant="primary"
+          onClick={handleSubmit}
+          disabled={readOnly}
+          className={'fit-content'}
+          loading={isLoading}
+        >
+          Bekreft
+        </Button>
       </VStack>
-    </VilkårskortMedForm>
+    </VilkårsKort>
   );
 };

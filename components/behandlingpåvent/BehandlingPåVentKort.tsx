@@ -9,7 +9,6 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgVentPåProsessering } from 'hooks/saksbehandling/LøsBehovOgVentPåProsessering';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
-import { isDev, isLocal } from 'lib/utils/environment';
 
 interface Props {
   behandlingVersjon: number;
@@ -52,30 +51,29 @@ export const BehandlingPåVentKort = ({ informasjon }: Props) => {
                 {errorMessage}
               </Alert>
             )}
-            {(isDev() || isLocal()) && (
-              <Button
-                size={'medium'}
-                loading={isLoading}
-                onClick={async () => {
-                  setErrorMessage(undefined);
-                  if (!flyt?.behandlingVersjon) {
-                    setErrorMessage('Mangler behandlingsversjon');
-                    return;
-                  }
 
-                  løsBehovOgVentPåProsessering({
-                    behandlingVersjon: flyt.behandlingVersjon,
-                    behov: {
-                      behovstype: informasjon?.definisjon.kode,
-                    },
-                    referanse: behandlingsReferanse,
-                  });
-                }}
-                className={'fit-content'}
-              >
-                Åpne behandling
-              </Button>
-            )}
+            <Button
+              size={'medium'}
+              loading={isLoading}
+              onClick={async () => {
+                setErrorMessage(undefined);
+                if (!flyt?.behandlingVersjon) {
+                  setErrorMessage('Mangler behandlingsversjon');
+                  return;
+                }
+
+                løsBehovOgVentPåProsessering({
+                  behandlingVersjon: flyt.behandlingVersjon,
+                  behov: {
+                    behovstype: informasjon?.definisjon.kode,
+                  },
+                  referanse: behandlingsReferanse,
+                });
+              }}
+              className={'fit-content'}
+            >
+              Åpne behandling
+            </Button>
           </>
         )}
       </div>

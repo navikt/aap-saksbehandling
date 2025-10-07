@@ -7,13 +7,14 @@ import { Label, VStack } from '@navikt/ds-react';
 import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { FormEvent, useEffect } from 'react';
 import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -41,7 +42,7 @@ export interface YrkesskadeMedSkadeDatoSak {
 
 type DraftFormFields = Partial<YrkesskadeMedSkadeDatoFormFields>;
 
-export const YrkesskadeMedManuellYrkesskadeDato = ({
+export const YrkesskadeNyVising = ({
   grunnlag,
   behandlingVersjon,
   behandlingsReferanse,
@@ -53,6 +54,12 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.YRKESSKADE_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'VURDER_YRKESSKADE',
+    mellomlagretVurdering
+  );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -104,7 +111,7 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
         },
       },
     },
-    { readOnly, shouldUnregister: true }
+    { readOnly: formReadOnly, shouldUnregister: true }
   );
 
   const { fields: relevanteYrkesskadeSaker, update } = useFieldArray({
@@ -170,7 +177,7 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-22 AAP ved yrkesskade'}
       steg={'VURDER_YRKESSKADE'}
       vilkårTilhørerNavKontor={false}
@@ -188,6 +195,8 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
         });
       }}
       readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
@@ -199,7 +208,7 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
             </Label>
             <YrkesskadeVurderingTabell
               form={form}
-              readOnly={readOnly}
+              readOnly={formReadOnly}
               yrkesskader={relevanteYrkesskadeSaker}
               update={update}
             />
@@ -207,7 +216,7 @@ export const YrkesskadeMedManuellYrkesskadeDato = ({
           <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
         </>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

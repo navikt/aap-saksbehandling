@@ -37,9 +37,8 @@ export const SamordningArbeidsgiver = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
-    'SAMORDNING_ANDRE_STATLIGE_YTELSER'
-  );
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('SAMORDNING_ARBEIDSGIVER');
 
   const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER, initialMellomlagretVurdering);

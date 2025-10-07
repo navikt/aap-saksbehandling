@@ -9,7 +9,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import {
   YrkesskadeMedSkadeDatoFormFields,
   YrkesskadeMedSkadeDatoSak,
-} from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedManuellYrkesskadeDato';
+} from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
 import { ErrorMessage } from '@navikt/ds-react';
 
 interface Props {

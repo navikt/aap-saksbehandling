@@ -1,5 +1,5 @@
 import { AvklaringsbehovKode, Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { BodyShort, Checkbox, Table, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Checkbox, CopyButton, Table, Tooltip } from '@navikt/ds-react';
 import {
   mapBehovskodeTilBehovstype,
   mapTilOppgaveBehandlingstypeTekst,
@@ -14,15 +14,33 @@ import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
+import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 
 interface Props {
   oppgaver: Oppgave[];
   revalidateFunction: () => Promise<unknown>;
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   valgteRader: number[];
+  visTildelOppgaveModal: boolean;
+  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
+  oppgaverSomSkalTildeles: number[];
+  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
+  skalFjerneValgteRaderEtterTildeling: boolean;
+  setSkalFjerneValgteRaderEtterTildeling: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRader, valgteRader }: Props) => {
+export const AlleOppgaverTabell = ({
+  oppgaver,
+  revalidateFunction,
+  setValgteRader,
+  valgteRader,
+  visTildelOppgaveModal,
+  setVisTildelOppgaveModal,
+  oppgaverSomSkalTildeles,
+  setOppgaverSomSkalTildeles,
+  skalFjerneValgteRaderEtterTildeling,
+  setSkalFjerneValgteRaderEtterTildeling,
+}: Props) => {
   const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
@@ -43,6 +61,17 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
         visSynkroniserEnhetModal={visSynkroniserEnhetModal}
         setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
       />
+      <TildelOppgaveModal
+        oppgaveIder={oppgaverSomSkalTildeles}
+        isOpen={visTildelOppgaveModal}
+        setValgteRader={setValgteRader}
+        skalFjerneValgteRader={skalFjerneValgteRaderEtterTildeling}
+        onClose={async () => {
+          setVisTildelOppgaveModal(false);
+          setSkalFjerneValgteRaderEtterTildeling(false);
+          await revalidateFunction();
+        }}
+      />
       <TableStyled
         size={'small'}
         zebraStripes
@@ -53,6 +82,9 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
           <Table.Row>
             <Table.HeaderCell />
             <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.ColumnHeader sortKey={'personIdent'} sortable={true} textSize={'small'}>
+              Fnr
+            </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'behandlingstype'} sortable={true}>
               Behandlingstype
             </Table.ColumnHeader>
@@ -69,7 +101,7 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
               Oppgave
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'reservertAvNavn'} sortable={true}>
-              Saksbehandler
+              Veileder/Saksbehandler
             </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
@@ -92,6 +124,18 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
                   <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{oppgave.saksnummer}</Link>
                 ) : (
                   <span>{oppgave.journalpostId}</span>
+                )}
+              </Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                {oppgave.personIdent ? (
+                  <CopyButton
+                    copyText={oppgave?.personIdent}
+                    size="xsmall"
+                    text={oppgave?.personIdent}
+                    iconPosition="right"
+                  />
+                ) : (
+                  'Ukjent'
                 )}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
@@ -138,6 +182,8 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
                   oppgave={oppgave}
                   revalidateFunction={revalidateFunction}
                   setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
+                  setOppgaverSomSkalTildeles={setOppgaverSomSkalTildeles}
+                  setVisTildelOppgaveModal={setVisTildelOppgaveModal}
                 />
               </Table.DataCell>
             </Table.Row>

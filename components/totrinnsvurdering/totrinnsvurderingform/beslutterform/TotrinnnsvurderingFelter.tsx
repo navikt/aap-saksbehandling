@@ -1,4 +1,4 @@
-import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
+import { Behovstype, JaEllerNei, JaEllerNeiOptions, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
 import { Checkbox, Radio } from '@navikt/ds-react';
@@ -26,10 +26,10 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
     { label: 'Mangler i utredning før vilkårsvurderingen', value: 'MANGLENDE_UTREDNING' },
     { label: 'Mangler i vilkårsvurderingen', value: 'MANGELFULL_BEGRUNNELSE' },
     { label: 'Feil resultat i vedtaket', value: 'FEIL_LOVANVENDELSE' },
-    { label: 'Annen returgrunn', value: 'ANNET' },
+    { label: 'Annen returårsak', value: 'ANNET' },
   ];
 
-  const vurderingErIkkeGodkjent = form.watch(`totrinnsvurderinger.${index}.godkjent`) === 'false';
+  const vurderingErIkkeGodkjent = form.watch(`totrinnsvurderinger.${index}.godkjent`) === JaEllerNei.Nei;
   const annetGrunnErValgt =
     form.watch(`totrinnsvurderinger.${index}.grunner`) &&
     form.watch(`totrinnsvurderinger.${index}.grunner`)?.includes('ANNET');
@@ -48,14 +48,17 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
           name={`totrinnsvurderinger.${index}.godkjent`}
           readOnly={readOnly}
         >
-          <Radio value={'true'}>Ja</Radio>
-          <Radio value={'false'}>Nei</Radio>
+          {JaEllerNeiOptions.map((option) => (
+            <Radio value={option.value} key={option.value}>
+              {option.label}
+            </Radio>
+          ))}
         </RadioGroupWrapper>
 
         {vurderingErIkkeGodkjent && (
           <>
             <TextAreaWrapper
-              label={'Beskriv returårsak'}
+              label={'Begrunnelse for retur'}
               readOnly={readOnly}
               control={form.control}
               name={`totrinnsvurderinger.${index}.begrunnelse`}
@@ -67,7 +70,7 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
               readOnly={readOnly}
               control={form.control}
               name={`totrinnsvurderinger.${index}.grunner`}
-              rules={{ required: 'Du må oppgi en grunn' }}
+              rules={{ required: 'Du må oppgi en årsak' }}
             >
               {grunnOptions.map((option) => (
                 <Checkbox value={option.value} key={option.value}>
@@ -78,12 +81,19 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
 
             {annetGrunnErValgt && (
               <TextFieldWrapper
-                label={'Annen returgrunn'}
+                label={'Annen returårsak'}
+                description={'Kort beskrivelse (maks 50 tegn)'}
                 readOnly={readOnly}
                 control={form.control}
                 name={`totrinnsvurderinger.${index}.årsakFritekst`}
                 type={'text'}
-                rules={{ required: 'Du må skrive en grunn' }}
+                rules={{
+                  required: 'Annen returårsak må fylles ut',
+                  maxLength: {
+                    value: 50,
+                    message: 'Kan bestå av maks 50 tegn. Utfyllende begrunnelse skal i feltet over.',
+                  },
+                }}
               />
             )}
           </>

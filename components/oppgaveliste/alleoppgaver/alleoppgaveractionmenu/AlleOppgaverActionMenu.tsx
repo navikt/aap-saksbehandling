@@ -6,14 +6,23 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
   revalidateFunction: () => Promise<unknown>;
   setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
+  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
+  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, revalidateFunction }: Props) => {
+export const AlleOppgaverActionMenu = ({
+  setVisSynkroniserEnhetModal,
+  oppgave,
+  revalidateFunction,
+  setOppgaverSomSkalTildeles,
+  setVisTildelOppgaveModal,
+}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
@@ -77,6 +86,16 @@ export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, r
               }}
             >
               Frigi oppgave
+            </ActionMenu.Item>
+          )}
+          {!isProd() && (
+            <ActionMenu.Item
+              onSelect={() => {
+                oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
+                setVisTildelOppgaveModal(true);
+              }}
+            >
+              Tildel oppgave
             </ActionMenu.Item>
           )}
         </ActionMenu.Content>

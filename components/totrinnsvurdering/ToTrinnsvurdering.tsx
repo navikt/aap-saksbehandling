@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Behovstype } from 'lib/utils/form';
+import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useParams } from 'next/navigation';
 import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsummering';
 import {
@@ -26,7 +26,7 @@ interface Props {
 }
 
 export interface ToTrinnsVurderingFormFields {
-  godkjent?: string;
+  godkjent?: JaEllerNei;
   begrunnelse?: string;
   grunner?: ToTrinnsVurderingGrunn[];
   årsakFritekst?: string;

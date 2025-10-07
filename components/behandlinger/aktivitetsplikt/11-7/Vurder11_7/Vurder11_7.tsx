@@ -3,7 +3,7 @@
 import { useConfigForm } from 'components/form/FormHook';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { isBefore, parse, startOfDay } from 'date-fns';
+import { addDays, isBefore, parse, startOfDay } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { useSak } from 'hooks/SakHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
@@ -50,6 +50,10 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.vurdering);
 
+  const harPassertVarselFrist = grunnlag.varsel?.svarfrist
+    ? isBefore(grunnlag.varsel.svarfrist, startOfDay(new Date()))
+    : null;
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -85,6 +89,8 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       utfall: {
         type: 'radio',
         label: 'Skal ytelsen stanses eller opphøres?',
+        description:
+          'Det er kun ved gjentatte brudd på aktivitetsplikten at AAP skal opphøre. Ved brudd av mindre omfang bør AAP stanses.',
         rules: { required: 'Du må svare på om ytelsen skal stanses eller opphøres' },
         defaultValue: defaultValue.utfall,
         options: [
@@ -95,15 +101,15 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       begrunnelse: {
         type: 'textarea',
         label: 'Vilkårsvurdering',
-        description: 'Teksten benyttes i vedtaksbrevet',
         defaultValue: defaultValue.begrunnelse,
         rules: { required: 'Du må begrunne' },
       },
       gjelderFra: {
         type: 'date_input',
-        label: 'Vurderingen gjelder fra',
-        description:
-          'Hvis § 11-7 ikke er oppfylt, bør dato settes 3 uker fram i tid for å gi bruker tid til å svare på forhåndsvarsel',
+        label: 'Datoen for når AAP skal stanses.',
+        description: !grunnlag.harSendtForhåndsvarsel
+          ? 'Hvis § 11-7 ikke er oppfylt, bør dato settes 3 uker fram i tid for å gi bruker tid til å svare på forhåndsvarsel'
+          : undefined,
         defaultValue: defaultValue.gjelderFra,
         rules: {
           required: 'Du må velge når vurderingen gjelder fra',
@@ -121,15 +127,36 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       },
       skalIgnorereVarselFrist: {
         type: 'radio',
-        label: 'Gå videre selv om fristen for svar fra bruker ikke er utløpt?',
-        description: 'Dersom bruker har svart i løpet av fristen kan du velge Ja her og komme videre i prosessen.',
+        label: 'Fristen i forhåndsvarslet er ikke utløpt. Ønsker du å behandle saken?',
         rules: { required: 'Du må svare' },
         defaultValue: defaultValue.skalIgnorereVarselFrist,
-        options: JaEllerNeiOptions,
+        options: [
+          { value: JaEllerNei.Ja, label: 'Ja, behandle saken' },
+          { value: JaEllerNei.Nei, label: 'Nei, sett tilbake på vent' },
+        ],
       },
     },
     { readOnly }
   );
+
+  const knapptekst = () => {
+    if (
+      grunnlag.harSendtForhåndsvarsel &&
+      harPassertVarselFrist === false &&
+      form.watch('skalIgnorereVarselFrist') === JaEllerNei.Nei &&
+      form.watch('erOppfylt') === JaEllerNei.Nei
+    ) {
+      return 'Sett på vent';
+    } else if (
+      grunnlag.harSendtForhåndsvarsel ||
+      form.watch('erOppfylt') === JaEllerNei.Ja ||
+      form.watch('skalIgnorereVarselFrist') === JaEllerNei.Ja
+    ) {
+      return 'Send til beslutter';
+    } else {
+      return 'Opprett forhåndsvarsel';
+    }
+  };
 
   return (
     <VilkårskortMedFormOgMellomlagring
@@ -139,6 +166,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       visBekreftKnapp={!readOnly}
       isLoading={isLoading}
       status={status}
+      knappTekst={knapptekst()}
       vilkårTilhørerNavKontor={true}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -166,9 +194,9 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       <FormField form={form} formField={formFields.erOppfylt} />
       {form.watch('erOppfylt') === JaEllerNei.Nei && <FormField form={form} formField={formFields.utfall} />}
       <FormField form={form} formField={formFields.gjelderFra} />
-      {form.watch('erOppfylt') === JaEllerNei.Nei && grunnlag.harSendtForhåndsvarsel && (
-        <FormField form={form} formField={formFields.skalIgnorereVarselFrist} />
-      )}
+      {form.watch('erOppfylt') === JaEllerNei.Nei &&
+        grunnlag.harSendtForhåndsvarsel &&
+        harPassertVarselFrist === false && <FormField form={form} formField={formFields.skalIgnorereVarselFrist} />}
     </VilkårskortMedFormOgMellomlagring>
   );
 };
@@ -178,7 +206,9 @@ function mapVurderingToDraftFormFields(vurdering?: Aktivitetsplikt11_7Vurdering)
     erOppfylt: getJaNeiEllerUndefined(vurdering?.erOppfylt),
     utfall: vurdering?.utfall || undefined,
     begrunnelse: vurdering?.begrunnelse || undefined,
-    gjelderFra: vurdering?.gjelderFra ? formaterDatoForFrontend(vurdering?.gjelderFra) : undefined,
+    gjelderFra: vurdering?.gjelderFra
+      ? formaterDatoForFrontend(vurdering?.gjelderFra)
+      : formaterDatoForFrontend(addDays(new Date(), 21)),
     skalIgnorereVarselFrist: getJaNeiEllerUndefined(vurdering?.skalIgnorereVarselFrist),
   };
 }

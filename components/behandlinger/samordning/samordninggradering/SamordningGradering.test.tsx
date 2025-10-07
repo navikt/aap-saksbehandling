@@ -2,12 +2,13 @@ import { render, screen } from 'lib/test/CustomRender';
 import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import { format, subWeeks } from 'date-fns';
 import { MellomlagretVurderingResponse, SamordningGraderingGrunnlag } from 'lib/types/types';
-import { describe, expect, it, test, vi } from 'vitest';
+import { beforeEach, describe, expect, it, test, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -54,6 +55,11 @@ const bruker: BrukerInformasjon = {
   navn: 'Iren Panikk',
   NAVident: 'z123456',
 };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_GRADERING' });
+});
+
 describe('Samordning gradering', () => {
   test('skal kunne redigere ytelse, periode og gradering for en manuell rad', () => {
     render(

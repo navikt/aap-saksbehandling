@@ -7,15 +7,25 @@ import { byggKelvinURL } from 'lib/utils/request';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './MineOppgaverMeny.module.css';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
   setÅpenModal: Dispatch<SetStateAction<boolean>>;
   revalidateFunction: () => void;
+  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
+  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
 }
 
-export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, revalidateFunction }: Props) => {
+export const MineOppgaverMeny = ({
+  oppgave,
+  setFeilmelding,
+  setÅpenModal,
+  revalidateFunction,
+  setVisTildelOppgaveModal,
+  setOppgaverSomSkalTildeles,
+}: Props) => {
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
 
@@ -77,6 +87,16 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
             <Dropdown.Menu.GroupedList.Item onClick={() => frigiOppgave(oppgave)}>
               Frigi oppgave
             </Dropdown.Menu.GroupedList.Item>
+            {!isProd() && (
+              <Dropdown.Menu.GroupedList.Item
+                onClick={() => {
+                  oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
+                  setVisTildelOppgaveModal(true);
+                }}
+              >
+                Tildel oppgave
+              </Dropdown.Menu.GroupedList.Item>
+            )}
           </Dropdown.Menu.GroupedList>
         </Dropdown.Menu>
       </Dropdown>
