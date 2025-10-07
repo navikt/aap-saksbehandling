@@ -4,6 +4,7 @@ import { AutomatiskLovvalgOgMedlemskapVurdering, MellomlagretVurdering } from 'l
 import { ReactNode, useState } from 'react';
 import { AutomatiskVurderingAvLovvalgOgMedlemskap } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/AutomatiskVurderingAvLovvalgOgMedlemskap';
 import { LovvalgOgMedlemskapVedSøknadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
+import { Behovstype } from '../../../lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -14,6 +15,7 @@ interface Props {
   visOverstyrKnapp?: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   children: ReactNode;
+  behovstype: Behovstype;
 }
 
 export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
@@ -24,6 +26,7 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
   readOnly,
   visOverstyrKnapp,
   initialMellomlagretVurdering,
+  behovstype,
 }: Props) => {
   const [overstyring, setOverstyring] = useState<boolean>(initialMellomlagretVurdering !== undefined);
 
@@ -42,6 +45,7 @@ export const LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper = ({
           readOnly={readOnly}
           overstyring={true}
           initialMellomlagretVurdering={initialMellomlagretVurdering}
+          behovstype={behovstype}
         />
       )}
     </>

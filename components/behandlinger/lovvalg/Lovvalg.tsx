@@ -16,6 +16,7 @@ import { LovvalgOgMedlemskapVedSøknadstidspunkt } from 'components/behandlinger
 interface Props {
   behandlingsReferanse: string;
 }
+
 export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
   const [flyt, vurderingAutomatisk, grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentFlyt(behandlingsReferanse),
@@ -41,6 +42,12 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
     vurderLovvalgSteg.avklaringsbehov
   );
 
+  const behovstype =
+    flyt.data.visning.typeBehandling === 'Førstegangsbehandling' &&
+    (!!grunnlag?.data.vurdering?.overstyrt || erOverstyrtTilbakeførtVurdering)
+      ? Behovstype.MANUELL_OVERSTYRING_LOVVALG
+      : Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP;
+
   return (
     <GruppeSteg
       prosessering={flyt.data.prosessering}
@@ -57,6 +64,7 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
         readOnly={readOnly}
         visOverstyrKnapp={visOverstyrKnapp}
         initialMellomlagretVurdering={initialMellomlagretVurdering}
+        behovstype={behovstype}
       >
         {visManuellVurdering && (
           <LovvalgOgMedlemskapVedSøknadstidspunkt
@@ -65,6 +73,7 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
             readOnly={readOnly}
             overstyring={!!grunnlag?.data.vurdering?.overstyrt || erOverstyrtTilbakeførtVurdering}
             initialMellomlagretVurdering={initialMellomlagretVurdering}
+            behovstype={behovstype}
           />
         )}
       </LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper>
