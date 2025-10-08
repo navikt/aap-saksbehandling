@@ -344,7 +344,7 @@ export const SykdomsvurderingNyVisning = ({
         <Revurdering
           form={form}
           formFields={formFields}
-          skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+          erÅrsakssammenhengYrkesskade={grunnlag.skalVurdereYrkesskade}
           diagnosesøker={
             <Diagnosesøk
               form={form}

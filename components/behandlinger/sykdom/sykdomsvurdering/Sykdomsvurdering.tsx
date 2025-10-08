@@ -12,7 +12,7 @@ import {
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent, useCallback } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { Alert, Link } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isBefore, parse, startOfDay } from 'date-fns';
@@ -305,11 +305,6 @@ export const Sykdomsvurdering = ({
           getVurdertDato={(v) => v.vurdertAv.dato}
         />
       )}
-      {grunnlag.skalVurdereYrkesskade && (
-        <Alert variant={'warning'} size={'small'}>
-          Det har blitt funnet én eller flere yrkesskader på brukeren
-        </Alert>
-      )}
       <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
         Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
       </Link>
@@ -334,7 +329,7 @@ export const Sykdomsvurdering = ({
         <Revurdering
           form={form}
           formFields={formFields}
-          skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+          erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
           diagnosesøker={
             <Diagnosesøk
               form={form}
