@@ -6,7 +6,6 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
-import { isProd } from 'lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
@@ -88,16 +87,14 @@ export const AlleOppgaverActionMenu = ({
               Frigi oppgave
             </ActionMenu.Item>
           )}
-          {!isProd() && (
-            <ActionMenu.Item
-              onSelect={() => {
-                oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
-                setVisTildelOppgaveModal(true);
-              }}
-            >
-              Tildel oppgave
-            </ActionMenu.Item>
-          )}
+          <ActionMenu.Item
+            onSelect={() => {
+              oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
+              setVisTildelOppgaveModal(true);
+            }}
+          >
+            Tildel oppgave
+          </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>
     </>
